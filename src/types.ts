@@ -7,7 +7,8 @@ import {
   Class,
   FunctionTarget,
   Program,
-  DecoratorFlags
+  DecoratorFlags,
+  ElementKind
 } from "./program";
 
 import {
@@ -176,6 +177,10 @@ export class Type {
   get isFunction(): bool {
     var signature = this.signatureReference;
     return signature != null && this.is(TypeFlags.REFERENCE);
+  }
+
+  get isInterface(): bool {
+    return this.classReference != null && this.classReference.kind == ElementKind.INTERFACE;
   }
 
   /** Computes the sign-extending shift in the target type. */

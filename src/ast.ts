@@ -1103,7 +1103,7 @@ export abstract class TypeNode extends Node {
     }
     return false;
   }
-  
+
   /** Method for determine type equality. */
   abstract equals(node: TypeNode): bool;
 
@@ -1171,7 +1171,7 @@ export class FunctionTypeNode extends TypeNode {
   }
 
   get parameterTypes(): TypeNode[] {
-    return this.parameters.map(param => param.type);
+    return this.parameters.map((param: ParameterNode): TypeNode => param.type);
   }
 }
 

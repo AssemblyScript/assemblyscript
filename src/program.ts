@@ -3158,7 +3158,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Instance Methods */
   get instanceMethods(): FunctionPrototype[] {
     if (!this.instanceMembers) return [];
-    return <FunctionPrototype[]> filter(this.instanceMembers.values(), mem => mem.kind == ElementKind.FUNCTION_PROTOTYPE);
+    return <FunctionPrototype[]> filter<FunctionPrototype>(this.instanceMembers.values(), (mem: Element): bool => mem.kind == ElementKind.FUNCTION_PROTOTYPE);
   }
 
   constructor(
@@ -3384,8 +3384,8 @@ export class Class extends TypedElement {
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
-    if (target.kind == ElementKind.INTERFACE) { 
-      return (<Interface>target).checkClass(this);
+    if (target.kind == ElementKind.INTERFACE) {
+       return true;
     }
     do if (current == target) return true;
     while (current = current.base);
@@ -3648,7 +3648,8 @@ export class Interface extends Class { // FIXME
 
   get methods(): FunctionPrototype[] {
     if (this.members == null) return [];
-    return <FunctionPrototype[]>filter(this.members.values(), v => v.kind == ElementKind.FUNCTION_PROTOTYPE)
+    return <FunctionPrototype[]>filter(this.members.values(),
+           (v: DeclaredElement): bool => v.kind == ElementKind.FUNCTION_PROTOTYPE);
   }
 
   get methodInstances(): Function[] {
@@ -3656,7 +3657,7 @@ export class Interface extends Class { // FIXME
     for (let func of this.methods) {
       if (func.instances == null) continue;
       map(func.instances.values(), (func: Function): void => {
-        if (funcs.findIndex(f => f.signature.id == func.signature.id) < 0) {
+        if (funcs.findIndex((f: Function): bool => f.signature.id == func.signature.id) < 0) {
           funcs.push(func);
         }
       });
@@ -3668,12 +3669,13 @@ export class Interface extends Class { // FIXME
     this.implementers.add(_class);
   }
 
-  checkClass(_class: Class): bool {
-    return this.methods.reduce<bool>((acc, ifunc) => {
+  checkClass(_class: Class): FunctionPrototype[] {
+    const res = [];
+    for (const ifunc of this.methods) {
       let func = this.getFunc(_class, ifunc);
-      if (func == null) return false;
-      return ifunc.equals(func) && acc;
-    }, true);
+      if (func == null || !(ifunc.equals(func))) res.push(ifunc);
+    }
+    return res;
   }
 
   private getFunc(_class: Class, ifunc: FunctionPrototype): FunctionPrototype | null {
@@ -3683,8 +3685,8 @@ export class Interface extends Class { // FIXME
 
   getFuncImplementations(ifunc: Function): FunctionPrototype[] {
     return <FunctionPrototype[]> map(this.implementers,
-          _class => this.getFunc(_class, ifunc.prototype))
-          .filter(func => func != null);
+          (_class: Class): FunctionPrototype | null => this.getFunc(_class, ifunc.prototype))
+          .filter((func: FunctionPrototype): bool => func != null);
   }
 
   get methodsToCompile(): FunctionPrototype[] {
@@ -3694,8 +3696,6 @@ export class Interface extends Class { // FIXME
     }
     return funcs;
   }
-
-
 }
 
 /** Registers a concrete element with a program. */

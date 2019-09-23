@@ -119,6 +119,7 @@ export enum DiagnosticCode {
   Multiple_constructor_implementations_are_not_allowed = 2392,
   Duplicate_function_implementation = 2393,
   Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
+  Class_0_incorrectly_implements_interface_1 = 2420,
   A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
   The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
   Type_0_has_no_property_1 = 2460,
@@ -139,6 +140,7 @@ export enum DiagnosticCode {
   Namespace_0_has_no_exported_member_1 = 2694,
   Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
   Duplicate_property_0 = 2718,
+  Property_0_is_missing_in_type_1_but_required_in_type_2 = 2741,
   Type_0_has_no_call_signatures = 2757,
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
@@ -262,6 +264,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2392: return "Multiple constructor implementations are not allowed.";
     case 2393: return "Duplicate function implementation.";
     case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
+    case 2420: return "Class '{0}' incorrectly implements interface '{1}'.";
     case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
     case 2453: return "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.";
     case 2460: return "Type '{0}' has no property '{1}'.";
@@ -282,6 +285,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2694: return "Namespace '{0}' has no exported member '{1}'.";
     case 2706: return "Required type parameters may not follow optional type parameters.";
     case 2718: return "Duplicate property '{0}'.";
+    case 2741: return "Property '{0}' is missing in type '{1}' but required in type '{2}'.";
     case 2757: return "Type '{0}' has no call signatures.";
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";

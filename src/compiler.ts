@@ -2944,7 +2944,60 @@ export class Compiler extends DiagnosticEmitter {
 
     if (this.currentFlow.isNonnull(expr, fromType)) fromType = fromType.nonNullableType;
 
-    if (!fromType.isAssignableTo(toType)) {
+    // Check if a converting to an Interface
+    if (toType.isInterface && !toType.isFunction) {
+      if (!fromType.isManaged || fromType.classReference == null) {
+        this.error(
+          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+          reportNode.range,
+          fromType.toString(),
+          toType.toString());
+      }else {
+        const _interface = (<Interface>toType.classReference!);
+        let _class = fromType.classReference!;
+        let incorrectMethods = _interface.checkClass(_class);
+        if (incorrectMethods.length == 0) {
+          _interface.implementers.add(fromType.classReference!);
+        } else {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            reportNode.range,
+            fromType.toString(),
+            toType.toString());
+          let missingMethods = false;
+          // tslint:disable-next-line: as-types
+          incorrectMethods.forEach(ifunc => {
+            if (_class.members == null || !_class.members.has(ifunc.name)) {
+              if (!missingMethods) {
+                missingMethods = true;
+                this.error(
+                  DiagnosticCode.Class_0_incorrectly_implements_interface_1,
+                   _class.identifierNode.range,
+                   fromType.toString(),
+                   toType.toString()
+                   );
+              }
+              this.error(
+                DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+                _class.identifierNode.range,
+                ifunc.name,
+                fromType.toString(),
+                toType.toString()
+              );
+            } else {
+              let otherFunc = _class.members.get(ifunc.name)!;
+              this.error(
+                DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+                otherFunc.identifierNode.range,
+                _class.name + "." + otherFunc.name,
+                _interface.name + "." + ifunc.name);
+            }
+          });
+        }
+
+      }
+    }
+    else if (!fromType.isAssignableTo(toType)) {
       if (!explicit) {
         if (fromType.nonNullableType == toType) {
           this.error(
@@ -2958,14 +3011,6 @@ export class Compiler extends DiagnosticEmitter {
           ); // recoverable
         }
       }
-    }
-    // Check if a converting to an Interface
-    if (toType.is(TypeFlags.REFERENCE) && !toType.isFunction) {
-      assert(toType.classReference != null && fromType.classReference != null);
-      if (toType.classReference!.kind == ElementKind.INTERFACE) {
-        (<Interface>toType.classReference!).implementers.add(fromType.classReference!);
-      }
-
     }
 
     if (fromType.is(TypeFlags.FLOAT)) {
@@ -9246,7 +9291,7 @@ export class Compiler extends DiagnosticEmitter {
 
     const callIndirect = module.call_indirect(
       callVirtual,
-      func.localsByIndex.map<number>(local =>
+      func.localsByIndex.map<usize>((local: Local): usize =>
         module.local_get(local.index, local.type.toNativeType())
       ),
       Signature.makeSignatureString(
@@ -9267,7 +9312,6 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
-
 
 function mangleImportName(
   element: Element,
@@ -9345,4 +9389,3 @@ export function flatten(module: Module, stmts: ExpressionRef[], type: NativeType
       : type
   );
 }
-

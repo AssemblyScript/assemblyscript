@@ -114,6 +114,7 @@
   "Multiple constructor implementations are not allowed.": 2392,
   "Duplicate function implementation.": 2393,
   "Individual declarations in merged declaration '{0}' must be all exported or all local.": 2395,
+  "Class '{0}' incorrectly implements interface '{1}'.": 2420,
   "A namespace declaration cannot be located prior to a class or function with which it is merged.": 2434,
   "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": 2453,
   "Type '{0}' has no property '{1}'.": 2460,
@@ -134,6 +135,7 @@
   "Namespace '{0}' has no exported member '{1}'.": 2694,
   "Required type parameters may not follow optional type parameters.": 2706,
   "Duplicate property '{0}'.": 2718,
+  "Property '{0}' is missing in type '{1}' but required in type '{2}'.": 2741,
   "Type '{0}' has no call signatures.": 2757,
 
   "File '{0}' not found.": 6054,

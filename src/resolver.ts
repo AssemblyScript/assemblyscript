@@ -2712,8 +2712,8 @@ export class Resolver extends DiagnosticEmitter {
     // Construct the instance and remember that it has been resolved already
     var nameInclTypeParamters = prototype.name;
     if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
-    instance = <Class>((prototype instanceof InterfacePrototype) ? 
-      new Interface(nameInclTypeParamters, prototype, typeArguments, baseClass) : 
+    instance = <Class>((prototype instanceof InterfacePrototype) ?
+      new Interface(nameInclTypeParamters, prototype, typeArguments, baseClass) :
       new Class(nameInclTypeParamters, prototype, typeArguments, baseClass));
     instance.contextualTypeArguments = ctxTypes;
     prototype.setResolvedInstance(instanceKey, instance);
