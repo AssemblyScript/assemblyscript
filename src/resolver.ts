@@ -771,6 +771,9 @@ export class Resolver extends DiagnosticEmitter {
   /** Gets the concrete type of an element. */
   getTypeOfElement(element: Element): Type | null {
     var kind = element.kind;
+    if (kind == ElementKind.GLOBAL) {
+      if (!this.ensureResolvedLazyGlobal(<Global>element, ReportMode.SWALLOW)) return null;
+    }
     if (isTypedElement(kind)) {
       let type = (<TypedElement>element).type;
       assert(type != Type.void);
@@ -1138,14 +1141,14 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   /** Resolves a lazily compiled global, i.e. a static class field or annotated `@lazy`. */
-  private ensureResolvedLazyGlobal(global: Global, ctxFlow: Flow, reportMode: ReportMode = ReportMode.REPORT): bool {
+  private ensureResolvedLazyGlobal(global: Global, reportMode: ReportMode = ReportMode.REPORT): bool {
     if (global.is(CommonFlags.RESOLVED)) return true;
     var type: Type | null;
     var typeNode = global.typeNode;
     if (typeNode) {
       type = this.resolveType(typeNode, global.parent, null, reportMode);
     } else {
-      type = this.resolveExpression(assert(global.initializerNode), ctxFlow, Type.auto, reportMode);
+      type = this.resolveExpression(assert(global.initializerNode), global.file.startFunction.flow, Type.auto, reportMode);
     }
     if (!type) return false;
     global.setType(type); // also sets resolved
@@ -1170,7 +1173,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Resolve variable-likes to their class type first
     switch (target.kind) {
-      case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, ctxFlow, reportMode)) return null;
+      case ElementKind.GLOBAL: if (!this.ensureResolvedLazyGlobal(<Global>target, reportMode)) return null;
       case ElementKind.ENUMVALUE:
       case ElementKind.LOCAL:
       case ElementKind.FIELD: { // someVar.prop
