@@ -2767,6 +2767,11 @@ export class FunctionPrototype extends DeclaredElement {
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
   }
+
+  equals(func: FunctionPrototype): bool {
+    return this.functionTypeNode.equals(func.functionTypeNode) &&
+           TypeNode.arrayEquals(func.typeParameterNodes, this.typeParameterNodes);
+  }
 }
 
 /** A resolved function. */
@@ -3379,7 +3384,7 @@ export class Class extends TypedElement {
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
-    if (target.kind == ElementKind.INTERFACE) {
+    if (target.kind == ElementKind.INTERFACE) { 
       return (<Interface>target).checkClass(this);
     }
     do if (current == target) return true;
@@ -3664,8 +3669,11 @@ export class Interface extends Class { // FIXME
   }
 
   checkClass(_class: Class): bool {
-    return this.methods.reduce<bool>((acc, ifunc) => 
-                  (this.getFunc(_class, ifunc) != null ) && acc, true);
+    return this.methods.reduce<bool>((acc, ifunc) => {
+      let func = this.getFunc(_class, ifunc);
+      if (func == null) return false;
+      return ifunc.equals(func) && acc;
+    }, true);
   }
 
   private getFunc(_class: Class, ifunc: FunctionPrototype): FunctionPrototype | null {
