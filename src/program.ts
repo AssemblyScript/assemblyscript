@@ -483,6 +483,16 @@ export class Program extends DiagnosticEmitter {
     this.resolver = new Resolver(this);
   }
 
+  /** Obtains the source matching the specified internal path. */
+  getSource(internalPath: string): string | null {
+    var sources = this.sources;
+    for (let i = 0; i < sources.length; ++i) {
+      let source = sources[i];
+      if (source.internalPath == internalPath) return source.text;
+    }
+    return null;
+  }
+
   /** Writes a common runtime header to the specified buffer. */
   writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void {
     // BLOCK {
@@ -1200,7 +1210,7 @@ export class Program extends DiagnosticEmitter {
           } else if (flags & flag) {
             this.error(
               DiagnosticCode.Duplicate_decorator,
-              decorator.range, decorator.name.range.toString()
+              decorator.range
             );
           } else {
             flags |= flag;
@@ -1985,6 +1995,8 @@ export enum ElementKind {
   FILE,
   /** A {@link TypeDefinition}.  */
   TYPEDEFINITION,
+  /** An {@link IndexSignature}. */
+  INDEXSIGNATURE
 }
 
 /** Indicates built-in decorators that are present. */
@@ -3081,6 +3093,33 @@ export class Property extends VariableLikeElement {
   }
 }
 
+/** An resolved index signature. */
+export class IndexSignature extends VariableLikeElement {
+
+  /** Constructs a new index prototype. */
+  constructor(
+    /** Parent class. */
+    parent: Class
+  ) {
+    super(ElementKind.INDEXSIGNATURE, parent.internalName + "[]", parent);
+  }
+
+  /** Obtains the getter instance. */
+  getGetterInstance(isUnchecked: bool): Function | null {
+    return (<Class>this.parent).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+  }
+
+  /** Obtains the setter instance. */
+  getSetterInstance(isUnchecked: bool): Function | null {
+    return (<Class>this.parent).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
+  }
+
+  /* @override */
+  lookup(name: string): Element | null {
+    return this.parent.lookup(name);
+  }
+}
+
 /** A yet unresolved class prototype. */
 export class ClassPrototype extends DeclaredElement {
 
@@ -3213,6 +3252,8 @@ export class Class extends TypedElement {
   constructorInstance: Function | null = null;
   /** Operator overloads. */
   overloads: Map<OperatorKind,Function> | null = null;
+  /** Index signature, if present. */
+  indexSignature: IndexSignature | null = null;
   /** Unique class id. */
   private _id: u32 = 0;
   /** Remembers acyclic state. */

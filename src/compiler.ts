@@ -78,6 +78,7 @@ import {
   OperatorKind,
   DecoratorFlags,
   PropertyPrototype,
+  IndexSignature,
   File,
   mangleInternalName
 } from "./program";
@@ -578,7 +579,8 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.ENUM:
       case ElementKind.NAMESPACE:
       case ElementKind.FILE:
-      case ElementKind.TYPEDEFINITION: break;
+      case ElementKind.TYPEDEFINITION:
+      case ElementKind.INDEXSIGNATURE: break;
 
       default: assert(false); // unexpected module export
     }
@@ -697,7 +699,8 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.NAMESPACE:
       case ElementKind.TYPEDEFINITION:
-      case ElementKind.ENUMVALUE: break;
+      case ElementKind.ENUMVALUE:
+      case ElementKind.INDEXSIGNATURE: break;
       default: assert(false, ElementKind[element.kind]);
     }
     if (compileMembers) this.compileMembers(element);
@@ -1663,9 +1666,9 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.EXPORT: {
-        if ((<ExportStatement>statement).normalizedPath != null) {
+        if ((<ExportStatement>statement).internalPath != null) {
           this.compileFileByPath(
-            <string>(<ExportStatement>statement).normalizedPath,
+            <string>(<ExportStatement>statement).internalPath,
             <StringLiteralExpression>(<ExportStatement>statement).path
           );
         }
@@ -1673,7 +1676,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.IMPORT: {
         this.compileFileByPath(
-          (<ImportStatement>statement).normalizedPath,
+          (<ImportStatement>statement).internalPath,
           (<ImportStatement>statement).path
         );
         break;
@@ -3640,8 +3643,8 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.V128: {
-            expr = module.unary(UnaryOp.AllTrueVecI8x16,
-              module.binary(BinaryOp.EqVecI8x16, leftExpr, rightExpr)
+            expr = module.unary(UnaryOp.AllTrueI8x16,
+              module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
             );
             break;
           }
@@ -3737,8 +3740,8 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.V128: {
-            expr = module.unary(UnaryOp.AnyTrueVecI8x16,
-              module.binary(BinaryOp.NeVecI8x16, leftExpr, rightExpr)
+            expr = module.unary(UnaryOp.AnyTrueI8x16,
+              module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
             );
             break;
           }
@@ -5220,44 +5223,30 @@ export class Compiler extends DiagnosticEmitter {
         if (setterInstance.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
-      case ElementKind.CLASS: {
-        if (elementExpression) { // indexed access
-          let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
-          // if (isUnchecked) {
-          //   let arrayType = this.program.determineBuiltinArrayType(<Class>target);
-          //   if (arrayType) {
-          //     return compileBuiltinArraySet(
-          //       this,
-          //       <Class>target,
-          //       assert(this.resolver.currentThisExpression),
-          //       elementExpression,
-          //       valueExpression,
-          //       contextualType
-          //     );
-          //   }
-          // }
-          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
-          if (!indexedSet) {
-            let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
-            if (!indexedGet) {
-              this.error(
-                DiagnosticCode.Index_signature_is_missing_in_type_0,
-                expression.range, (<Class>target).internalName
-              );
-            } else {
-              this.error(
-                DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-                expression.range, (<Class>target).internalName
-              );
-            }
-            return this.module.unreachable();
+      case ElementKind.INDEXSIGNATURE: {
+        let parent = (<IndexSignature>target).parent;
+        assert(parent.kind == ElementKind.CLASS);
+        let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
+        let indexedSet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
+        if (!indexedSet) {
+          let indexedGet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+          if (!indexedGet) {
+            this.error(
+              DiagnosticCode.Index_signature_is_missing_in_type_0,
+              expression.range, (<Class>parent).internalName
+            );
+          } else {
+            this.error(
+              DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+              expression.range, (<Class>parent).internalName
+            );
           }
-          assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
-          targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
-          if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
-          break;
+          return this.module.unreachable();
         }
-        // fall-through
+        assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
+        targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
+        if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
+        break;
       }
       default: {
         this.error(
@@ -5405,55 +5394,54 @@ export class Compiler extends DiagnosticEmitter {
           ], valueExpression)
         ], nativeReturnType);
       }
-      case ElementKind.CLASS: {
+      case ElementKind.INDEXSIGNATURE: {
         if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, flow); // (*)
-        if (indexExpression) {
-          let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
-          let indexedGet = (<Class>target).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
-          if (!indexedGet) {
-            this.error(
-              DiagnosticCode.Index_signature_is_missing_in_type_0,
-              valueExpression.range, target.internalName
-            );
-            return module.unreachable();
-          }
-          let indexedSet = (<Class>target).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
-          if (!indexedSet) {
-            this.error(
-              DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-              valueExpression.range, target.internalName
-            );
-            this.currentType = tee ? indexedGet.signature.returnType : Type.void;
-            return module.unreachable();
-          }
-          let targetType = (<Class>target).type;
-          let thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
-          let elementExpr = this.compileExpression(indexExpression, Type.i32, Constraints.CONV_IMPLICIT);
-          if (tee) {
-            let tempLocalTarget = flow.getTempLocal(targetType);
-            let tempLocalElement = flow.getAndFreeTempLocal(this.currentType);
-            let returnType = indexedGet.signature.returnType;
-            flow.freeTempLocal(tempLocalTarget);
-            return module.block(null, [
-              this.makeCallDirect(indexedSet, [
-                module.local_tee(tempLocalTarget.index, thisExpr),
-                module.local_tee(tempLocalElement.index, elementExpr),
-                valueExpr
-              ], valueExpression),
-              this.makeCallDirect(indexedGet, [
-                module.local_get(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
-                module.local_get(tempLocalElement.index, tempLocalElement.type.toNativeType())
-              ], valueExpression)
-            ], returnType.toNativeType());
-          } else {
-            return this.makeCallDirect(indexedSet, [
-              thisExpr,
-              elementExpr,
-              valueExpr
-            ], valueExpression);
-          }
+        let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
+        let parent = (<IndexSignature>target).parent;
+        assert(parent.kind == ElementKind.CLASS);
+        let indexedGet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+        if (!indexedGet) {
+          this.error(
+            DiagnosticCode.Index_signature_is_missing_in_type_0,
+            valueExpression.range, parent.internalName
+          );
+          return module.unreachable();
         }
-        // fall-through
+        let indexedSet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
+        if (!indexedSet) {
+          this.error(
+            DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+            valueExpression.range, parent.internalName
+          );
+          this.currentType = tee ? indexedGet.signature.returnType : Type.void;
+          return module.unreachable();
+        }
+        let targetType = (<Class>parent).type;
+        let thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
+        let elementExpr = this.compileExpression(assert(indexExpression), Type.i32, Constraints.CONV_IMPLICIT);
+        if (tee) {
+          let tempLocalTarget = flow.getTempLocal(targetType);
+          let tempLocalElement = flow.getAndFreeTempLocal(this.currentType);
+          let returnType = indexedGet.signature.returnType;
+          flow.freeTempLocal(tempLocalTarget);
+          return module.block(null, [
+            this.makeCallDirect(indexedSet, [
+              module.local_tee(tempLocalTarget.index, thisExpr),
+              module.local_tee(tempLocalElement.index, elementExpr),
+              valueExpr
+            ], valueExpression),
+            this.makeCallDirect(indexedGet, [
+              module.local_get(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
+              module.local_get(tempLocalElement.index, tempLocalElement.type.toNativeType())
+            ], valueExpression)
+          ], returnType.toNativeType());
+        } else {
+          return this.makeCallDirect(indexedSet, [
+            thisExpr,
+            elementExpr,
+            valueExpr
+          ], valueExpression);
+        }
       }
     }
     this.error(
@@ -8748,11 +8736,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case Token.TYPEOF: {
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          expression.range
-        );
-        return module.unreachable();
+        return this.compileTypeof(expression, contextualType, constraints);
       }
       default: {
         assert(false);
@@ -8771,6 +8755,88 @@ export class Compiler extends DiagnosticEmitter {
       resolver.currentElementExpression,
       contextualType != Type.void
     );
+  }
+
+  compileTypeof(
+    expression: UnaryPrefixExpression,
+    contextualType: Type,
+    constraints: Constraints
+  ): ExpressionRef {
+    var operand = expression.operand;
+    var expr: ExpressionRef = 0;
+    var stringInstance = this.program.stringInstance;
+    var typeString: string;
+    if (operand.kind == NodeKind.NULL) {
+      typeString = "object"; // special since `null` without type context is usize
+    } else {
+      let element = this.resolver.lookupExpression(operand, this.currentFlow, Type.auto, ReportMode.SWALLOW);
+      if (!element) {
+        switch (operand.kind) {
+          case NodeKind.PROPERTYACCESS:
+          case NodeKind.ELEMENTACCESS: {
+            operand = operand.kind == NodeKind.PROPERTYACCESS
+              ? (<PropertyAccessExpression>operand).expression
+              : (<ElementAccessExpression>operand).expression;
+            let targetType = this.resolver.resolveExpression(operand, this.currentFlow, Type.auto, ReportMode.REPORT);
+            if (!targetType) {
+              this.currentType = stringInstance.type;
+              return this.module.unreachable();
+            }
+            expr = this.compileExpression(operand, Type.auto); // might have side-effects
+            break;
+          }
+          case NodeKind.IDENTIFIER: break; // ignore error
+          default: expr = this.compileExpression(operand, Type.auto); // trigger error
+        }
+        typeString = "undefined";
+      } else {
+        switch (element.kind) {
+          case ElementKind.CLASS_PROTOTYPE:
+          case ElementKind.NAMESPACE:
+          case ElementKind.ENUM: {
+            typeString = "object";
+            break;
+          }
+          case ElementKind.FUNCTION_PROTOTYPE: {
+            typeString = "function";
+            break;
+          }
+          default: {
+            expr = this.compileExpression(operand, Type.auto);
+            let type = this.currentType;
+            expr = this.convertExpression(expr, type, Type.void, true, false, operand);
+            if (type.is(TypeFlags.REFERENCE)) {
+              let signatureReference = type.signatureReference;
+              if (signatureReference) {
+                typeString = "function";
+              } else {
+                let classReference = type.classReference;
+                if (classReference) {
+                  if (classReference.prototype === stringInstance.prototype) {
+                    typeString = "string";
+                  } else {
+                    typeString = "object";
+                  }
+                } else {
+                  typeString = "anyref"; // TODO?
+                }
+              }
+            } else if (type == Type.bool) {
+              typeString = "boolean";
+            } else if (type.isAny(TypeFlags.FLOAT | TypeFlags.INTEGER)) {
+              typeString = "number";
+            } else {
+              typeString = "undefined"; // failed to compile?
+            }
+            break;
+          }
+        }
+      }
+    }
+    this.currentType = stringInstance.type;
+    return expr
+      ? this.module.block(null, [ expr, this.ensureStaticString(typeString) ], this.options.nativeSizeType)
+      : this.ensureStaticString(typeString);
   }
 
   /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */

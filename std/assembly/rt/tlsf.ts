@@ -477,14 +477,31 @@ export function initializeRoot(): void {
   ROOT = root;
 }
 
+// @ts-ignore: decorator
+@lazy
+var collectLock: bool = false;
+
 /** Allocates a block of the specified size. */
 export function allocateBlock(root: Root, size: usize): Block {
+  if (DEBUG) assert(!collectLock); // must not allocate while collecting
   var payloadSize = prepareSize(size);
   var block = searchBlock(root, payloadSize);
   if (!block) {
-    growMemory(root, payloadSize);
-    block = <Block>searchBlock(root, payloadSize);
-    if (DEBUG) assert(block); // must be found now
+    if (gc.auto) {
+      if (DEBUG) collectLock = true;
+      __collect();
+      if (DEBUG) collectLock = false;
+      block = searchBlock(root, payloadSize);
+      if (!block) {
+        growMemory(root, payloadSize);
+        block = <Block>searchBlock(root, payloadSize);
+        if (DEBUG) assert(block); // must be found now
+      }
+    } else {
+      growMemory(root, payloadSize);
+      block = <Block>searchBlock(root, payloadSize);
+      if (DEBUG) assert(block); // must be found now
+    }
   }
   if (DEBUG) assert((block.mmInfo & ~TAGS_MASK) >= payloadSize); // must fit
   block.gcInfo = 0; // RC=0

@@ -266,8 +266,8 @@ export namespace BuiltinSymbols {
   export const i64_atomic_rmw16_or_u = "~lib/builtins/i64.atomic.rmw16.or_u";
   export const i64_atomic_rmw32_or_u = "~lib/builtins/i64.atomic.rmw32.or_u";
   export const i64_atomic_rmw_or = "~lib/builtins/i64.atomic.rmw.or";
-  export const i32_atomic_rmw8_u_xor = "~lib/builtins/i32.atomic.rmw8.xor_u";
-  export const i32_atomic_rmw16_u_xor = "~lib/builtins/i32.atomic.rmw16.xor_u";
+  export const i32_atomic_rmw8_xor_u = "~lib/builtins/i32.atomic.rmw8.xor_u";
+  export const i32_atomic_rmw16_xor_u = "~lib/builtins/i32.atomic.rmw16.xor_u";
   export const i32_atomic_rmw_xor = "~lib/builtins/i32.atomic.rmw.xor";
   export const i64_atomic_rmw8_xor_u = "~lib/builtins/i64.atomic.rmw8.xor_u";
   export const i64_atomic_rmw16_xor_u = "~lib/builtins/i64.atomic.rmw16.xor_u";
@@ -323,7 +323,10 @@ export namespace BuiltinSymbols {
   export const v128_gt = "~lib/builtins/v128.gt";
   export const v128_ge = "~lib/builtins/v128.ge";
   export const v128_convert = "~lib/builtins/v128.convert";
-  export const v128_trunc = "~lib/builtins/v128.trunc";
+  export const v128_trunc_sat = "~lib/builtins/v128.trunc_sat";
+  export const v128_narrow = "~lib/builtins/v128.narrow";
+  export const v128_widen_low = "~lib/builtins/v128.widen_low";
+  export const v128_widen_high = "~lib/builtins/v128.widen_high";
   export const v128_qfma = "~lib/builtins/v128.qfma";
   export const v128_qfms = "~lib/builtins/v128.qfms";
 
@@ -361,6 +364,8 @@ export namespace BuiltinSymbols {
   export const i8x16_gt_u = "~lib/builtins/i8x16.gt_u";
   export const i8x16_ge_s = "~lib/builtins/i8x16.ge_s";
   export const i8x16_ge_u = "~lib/builtins/i8x16.ge_u";
+  export const i8x16_narrow_i16x8_s = "~lib/builtins/i8x16.narrow_i16x8_s";
+  export const i8x16_narrow_i16x8_u = "~lib/builtins/i8x16.narrow_i16x8_u";
 
   export const i16x8_splat = "~lib/builtins/i16x8.splat";
   export const i16x8_extract_lane_s = "~lib/builtins/i16x8.extract_lane_s";
@@ -389,6 +394,12 @@ export namespace BuiltinSymbols {
   export const i16x8_gt_u = "~lib/builtins/i16x8.gt_u";
   export const i16x8_ge_s = "~lib/builtins/i16x8.ge_s";
   export const i16x8_ge_u = "~lib/builtins/i16x8.ge_u";
+  export const i16x8_narrow_i32x4_s = "~lib/builtins/i16x8.narrow_i32x4_s";
+  export const i16x8_narrow_i32x4_u = "~lib/builtins/i16x8.narrow_i32x4_u";
+  export const i16x8_widen_low_i8x16_s = "~lib/builtins/i16x8.widen_low_i8x16_s";
+  export const i16x8_widen_low_i8x16_u = "~lib/builtins/i16x8.widen_low_i8x16_u";
+  export const i16x8_widen_high_i8x16_s = "~lib/builtins/i16x8.widen_high_i8x16_s";
+  export const i16x8_widen_high_i8x16_u = "~lib/builtins/i16x8.widen_high_i8x16_u";
 
   export const i32x4_splat = "~lib/builtins/i32x4.splat";
   export const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
@@ -412,8 +423,12 @@ export namespace BuiltinSymbols {
   export const i32x4_gt_u = "~lib/builtins/i32x4.gt_u";
   export const i32x4_ge_s = "~lib/builtins/i32x4.ge_s";
   export const i32x4_ge_u = "~lib/builtins/i32x4.ge_u";
-  export const i32x4_trunc_s_f32x4_sat = "~lib/builtins/i32x4.trunc_s_f32x4_sat";
-  export const i32x4_trunc_u_f32x4_sat = "~lib/builtins/i32x4.trunc_u_f32x4_sat";
+  export const i32x4_trunc_sat_f32x4_s = "~lib/builtins/i32x4.trunc_sat_f32x4_s";
+  export const i32x4_trunc_sat_f32x4_u = "~lib/builtins/i32x4.trunc_sat_f32x4_u";
+  export const i32x4_widen_low_i16x8_s = "~lib/builtins/i32x4.widen_low_i16x8_s";
+  export const i32x4_widen_low_i16x8_u = "~lib/builtins/i32x4.widen_low_i16x8_u";
+  export const i32x4_widen_high_i16x8_s = "~lib/builtins/i32x4.widen_high_i16x8_s";
+  export const i32x4_widen_high_i16x8_u = "~lib/builtins/i32x4.widen_high_i16x8_u";
 
   export const i64x2_splat = "~lib/builtins/i64x2.splat";
   export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
@@ -426,8 +441,8 @@ export namespace BuiltinSymbols {
   export const i64x2_shr_u = "~lib/builtins/i64x2.shr_u";
   export const i64x2_any_true = "~lib/builtins/i64x2.any_true";
   export const i64x2_all_true = "~lib/builtins/i64x2.all_true"; // i64x2 has no .eq etc.
-  export const i64x2_trunc_s_f64x2_sat = "~lib/builtins/i64x2.trunc_s_f64x2_sat";
-  export const i64x2_trunc_u_f64x2_sat = "~lib/builtins/i64x2.trunc_u_f64x2_sat";
+  export const i64x2_trunc_sat_f64x2_s = "~lib/builtins/i64x2.trunc_sat_f64x2_s";
+  export const i64x2_trunc_sat_f64x2_u = "~lib/builtins/i64x2.trunc_sat_f64x2_u";
 
   export const f32x4_splat = "~lib/builtins/f32x4.splat";
   export const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
@@ -447,8 +462,8 @@ export namespace BuiltinSymbols {
   export const f32x4_le = "~lib/builtins/f32x4.le";
   export const f32x4_gt = "~lib/builtins/f32x4.gt";
   export const f32x4_ge = "~lib/builtins/f32x4.ge";
-  export const f32x4_convert_s_i32x4 = "~lib/builtins/f32x4.convert_s_i32x4";
-  export const f32x4_convert_u_i32x4 = "~lib/builtins/f32x4.convert_u_i32x4";
+  export const f32x4_convert_i32x4_s = "~lib/builtins/f32x4.convert_i32x4_s";
+  export const f32x4_convert_i32x4_u = "~lib/builtins/f32x4.convert_i32x4_u";
   export const f32x4_qfma = "~lib/builtins/f32x4.qfma";
   export const f32x4_qfms = "~lib/builtins/f32x4.qfms";
 
@@ -470,8 +485,8 @@ export namespace BuiltinSymbols {
   export const f64x2_le = "~lib/builtins/f64x2.le";
   export const f64x2_gt = "~lib/builtins/f64x2.gt";
   export const f64x2_ge = "~lib/builtins/f64x2.ge";
-  export const f64x2_convert_s_i64x2 = "~lib/builtins/f64x2.convert_s_i64x2";
-  export const f64x2_convert_u_i64x2 = "~lib/builtins/f64x2.convert_u_i64x2";
+  export const f64x2_convert_i64x2_s = "~lib/builtins/f64x2.convert_i64x2_s";
+  export const f64x2_convert_i64x2_u = "~lib/builtins/f64x2.convert_i64x2_u";
   export const f64x2_qfma = "~lib/builtins/f64x2.qfma";
   export const f64x2_qfms = "~lib/builtins/f64x2.qfms";
 
@@ -2842,22 +2857,22 @@ export function compileCall(
       let op: UnaryOp;
       switch (type.kind) {
         case TypeKind.I8:
-        case TypeKind.U8:  { op = UnaryOp.SplatVecI8x16; break; }
+        case TypeKind.U8:  { op = UnaryOp.SplatI8x16; break; }
         case TypeKind.I16:
-        case TypeKind.U16: { op = UnaryOp.SplatVecI16x8; break; }
+        case TypeKind.U16: { op = UnaryOp.SplatI16x8; break; }
         case TypeKind.I32:
-        case TypeKind.U32: { op = UnaryOp.SplatVecI32x4; break; }
+        case TypeKind.U32: { op = UnaryOp.SplatI32x4; break; }
         case TypeKind.I64:
-        case TypeKind.U64: { op = UnaryOp.SplatVecI64x2; break; }
+        case TypeKind.U64: { op = UnaryOp.SplatI64x2; break; }
         case TypeKind.ISIZE:
         case TypeKind.USIZE: {
           op = compiler.options.isWasm64
-            ? UnaryOp.SplatVecI64x2
-            : UnaryOp.SplatVecI32x4;
+            ? UnaryOp.SplatI64x2
+            : UnaryOp.SplatI32x4;
           break;
         }
-        case TypeKind.F32: { op = UnaryOp.SplatVecF32x4; break; }
-        case TypeKind.F64: { op = UnaryOp.SplatVecF64x2; break; }
+        case TypeKind.F32: { op = UnaryOp.SplatF32x4; break; }
+        case TypeKind.F64: { op = UnaryOp.SplatF64x2; break; }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
@@ -2888,23 +2903,23 @@ export function compileCall(
       }
       let op: SIMDExtractOp;
       switch (type.kind) {
-        case TypeKind.I8:  { op = SIMDExtractOp.ExtractLaneSVecI8x16; break; }
-        case TypeKind.U8:  { op = SIMDExtractOp.ExtractLaneUVecI8x16; break; }
-        case TypeKind.I16: { op = SIMDExtractOp.ExtractLaneSVecI16x8; break; }
-        case TypeKind.U16: { op = SIMDExtractOp.ExtractLaneUVecI16x8; break; }
+        case TypeKind.I8:  { op = SIMDExtractOp.ExtractLaneI8x16; break; }
+        case TypeKind.U8:  { op = SIMDExtractOp.ExtractLaneU8x16; break; }
+        case TypeKind.I16: { op = SIMDExtractOp.ExtractLaneI16x8; break; }
+        case TypeKind.U16: { op = SIMDExtractOp.ExtractLaneU16x8; break; }
         case TypeKind.I32:
-        case TypeKind.U32: { op = SIMDExtractOp.ExtractLaneVecI32x4; break; }
+        case TypeKind.U32: { op = SIMDExtractOp.ExtractLaneI32x4; break; }
         case TypeKind.I64:
-        case TypeKind.U64: { op = SIMDExtractOp.ExtractLaneVecI64x2; break; }
+        case TypeKind.U64: { op = SIMDExtractOp.ExtractLaneI64x2; break; }
         case TypeKind.ISIZE:
         case TypeKind.USIZE: {
           op = compiler.options.isWasm64
-            ? SIMDExtractOp.ExtractLaneVecI64x2
-            : SIMDExtractOp.ExtractLaneVecI32x4;
+            ? SIMDExtractOp.ExtractLaneI64x2
+            : SIMDExtractOp.ExtractLaneI32x4;
           break;
         }
-        case TypeKind.F32: { op = SIMDExtractOp.ExtractLaneVecF32x4; break; }
-        case TypeKind.F64: { op = SIMDExtractOp.ExtractLaneVecF64x2; break; }
+        case TypeKind.F32: { op = SIMDExtractOp.ExtractLaneF32x4; break; }
+        case TypeKind.F64: { op = SIMDExtractOp.ExtractLaneF64x2; break; }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
@@ -2957,22 +2972,22 @@ export function compileCall(
       let op: SIMDReplaceOp;
       switch (type.kind) {
         case TypeKind.I8:
-        case TypeKind.U8:  { op = SIMDReplaceOp.ReplaceLaneVecI8x16; break; }
+        case TypeKind.U8:  { op = SIMDReplaceOp.ReplaceLaneI8x16; break; }
         case TypeKind.I16:
-        case TypeKind.U16: { op = SIMDReplaceOp.ReplaceLaneVecI16x8; break; }
+        case TypeKind.U16: { op = SIMDReplaceOp.ReplaceLaneI16x8; break; }
         case TypeKind.I32:
-        case TypeKind.U32: { op = SIMDReplaceOp.ReplaceLaneVecI32x4; break; }
+        case TypeKind.U32: { op = SIMDReplaceOp.ReplaceLaneI32x4; break; }
         case TypeKind.I64:
-        case TypeKind.U64: { op = SIMDReplaceOp.ReplaceLaneVecI64x2; break; }
+        case TypeKind.U64: { op = SIMDReplaceOp.ReplaceLaneI64x2; break; }
         case TypeKind.ISIZE:
         case TypeKind.USIZE: {
           op = compiler.options.isWasm64
-            ? SIMDReplaceOp.ReplaceLaneVecI64x2
-            : SIMDReplaceOp.ReplaceLaneVecI32x4;
+            ? SIMDReplaceOp.ReplaceLaneI64x2
+            : SIMDReplaceOp.ReplaceLaneI32x4;
           break;
         }
-        case TypeKind.F32: { op = SIMDReplaceOp.ReplaceLaneVecF32x4; break; }
-        case TypeKind.F64: { op = SIMDReplaceOp.ReplaceLaneVecF64x2; break; }
+        case TypeKind.F32: { op = SIMDReplaceOp.ReplaceLaneF32x4; break; }
+        case TypeKind.F64: { op = SIMDReplaceOp.ReplaceLaneF64x2; break; }
         default: {
           compiler.error(
             DiagnosticCode.Operation_not_supported,
@@ -3132,7 +3147,8 @@ export function compileCall(
     case BuiltinSymbols.v128_lt:
     case BuiltinSymbols.v128_le:
     case BuiltinSymbols.v128_gt:
-    case BuiltinSymbols.v128_ge: {
+    case BuiltinSymbols.v128_ge:
+    case BuiltinSymbols.v128_narrow: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
@@ -3155,60 +3171,60 @@ export function compileCall(
         case BuiltinSymbols.v128_add: {
           switch (type.kind) {
             case TypeKind.I8:
-            case TypeKind.U8:  { op = BinaryOp.AddVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.AddI8x16; break; }
             case TypeKind.I16:
-            case TypeKind.U16: { op = BinaryOp.AddVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.AddI16x8; break; }
             case TypeKind.I32:
-            case TypeKind.U32: { op = BinaryOp.AddVecI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.AddI32x4; break; }
             case TypeKind.I64:
-            case TypeKind.U64: { op = BinaryOp.AddVecI64x2; break; }
+            case TypeKind.U64: { op = BinaryOp.AddI64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               op = compiler.options.isWasm64
-                ? BinaryOp.AddVecI64x2
-                : BinaryOp.AddVecI32x4;
+                ? BinaryOp.AddI64x2
+                : BinaryOp.AddI32x4;
               break;
             }
-            case TypeKind.F32: { op = BinaryOp.AddVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.AddVecF64x2; break; }
+            case TypeKind.F32: { op = BinaryOp.AddF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.AddF64x2; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_sub: {
           switch (type.kind) {
             case TypeKind.I8:
-            case TypeKind.U8:  { op = BinaryOp.SubVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.SubI8x16; break; }
             case TypeKind.I16:
-            case TypeKind.U16: { op = BinaryOp.SubVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.SubI16x8; break; }
             case TypeKind.I32:
-            case TypeKind.U32: { op = BinaryOp.SubVecI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.SubI32x4; break; }
             case TypeKind.I64:
-            case TypeKind.U64: { op = BinaryOp.SubVecI64x2; break; }
+            case TypeKind.U64: { op = BinaryOp.SubI64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               op = compiler.options.isWasm64
-                ? BinaryOp.SubVecI64x2
-                : BinaryOp.SubVecI32x4;
+                ? BinaryOp.SubI64x2
+                : BinaryOp.SubI32x4;
               break;
             }
-            case TypeKind.F32: { op = BinaryOp.SubVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.SubVecF64x2; break; }
+            case TypeKind.F32: { op = BinaryOp.SubF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.SubF64x2; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_mul: {
           switch (type.kind) {
             case TypeKind.I8:
-            case TypeKind.U8:  { op = BinaryOp.MulVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.MulI8x16; break; }
             case TypeKind.I16:
-            case TypeKind.U16: { op = BinaryOp.MulVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.MulI16x8; break; }
             case TypeKind.I32:
-            case TypeKind.U32: { op = BinaryOp.MulVecI32x4; break; }
-            case TypeKind.F32: { op = BinaryOp.MulVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.MulVecF64x2; break; }
+            case TypeKind.U32: { op = BinaryOp.MulI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.MulF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.MulF64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
-              if (!compiler.options.isWasm64) op = BinaryOp.MulVecI32x4;
+              if (!compiler.options.isWasm64) op = BinaryOp.MulI32x4;
               break;
             }
           }
@@ -3216,56 +3232,56 @@ export function compileCall(
         }
         case BuiltinSymbols.v128_div: {
           switch (type.kind) {
-            case TypeKind.F32: { op = BinaryOp.DivVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.DivVecF64x2; break; }
+            case TypeKind.F32: { op = BinaryOp.DivF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.DivF64x2; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_add_saturate: {
           switch (type.kind) {
-            case TypeKind.I8:  { op = BinaryOp.AddSatSVecI8x16; break; }
-            case TypeKind.U8:  { op = BinaryOp.AddSatUVecI8x16; break; }
-            case TypeKind.I16: { op = BinaryOp.AddSatSVecI16x8; break; }
-            case TypeKind.U16: { op = BinaryOp.AddSatUVecI16x8; break; }
+            case TypeKind.I8:  { op = BinaryOp.AddSatI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.AddSatU8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.AddSatI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.AddSatU16x8; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_sub_saturate: {
           switch (type.kind) {
-            case TypeKind.I8:  { op = BinaryOp.SubSatSVecI8x16; break; }
-            case TypeKind.U8:  { op = BinaryOp.SubSatUVecI8x16; break; }
-            case TypeKind.I16: { op = BinaryOp.SubSatSVecI16x8; break; }
-            case TypeKind.U16: { op = BinaryOp.SubSatUVecI16x8; break; }
+            case TypeKind.I8:  { op = BinaryOp.SubSatI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.SubSatU8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.SubSatI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.SubSatU16x8; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_min: {
           switch (type.kind) {
-            case TypeKind.F32: { op = BinaryOp.MinVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.MinVecF64x2; break; }
+            case TypeKind.F32: { op = BinaryOp.MinF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.MinF64x2; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_max: {
           switch (type.kind) {
-            case TypeKind.F32: { op = BinaryOp.MaxVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.MaxVecF64x2; break; }
+            case TypeKind.F32: { op = BinaryOp.MaxF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.MaxF64x2; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_eq: {
           switch (type.kind) {
             case TypeKind.I8:
-            case TypeKind.U8:  { op = BinaryOp.EqVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.EqI8x16; break; }
             case TypeKind.I16:
-            case TypeKind.U16: { op = BinaryOp.EqVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.EqI16x8; break; }
             case TypeKind.I32:
-            case TypeKind.U32: { op = BinaryOp.EqVecI32x4; break; }
-            case TypeKind.F32: { op = BinaryOp.EqVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.EqVecF64x2; break; }
+            case TypeKind.U32: { op = BinaryOp.EqI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.EqF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.EqF64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
-              if (!compiler.options.isWasm64) op = BinaryOp.EqVecI32x4;
+              if (!compiler.options.isWasm64) op = BinaryOp.EqI32x4;
               break;
             }
           }
@@ -3274,16 +3290,16 @@ export function compileCall(
         case BuiltinSymbols.v128_ne: {
           switch (type.kind) {
             case TypeKind.I8:
-            case TypeKind.U8:  { op = BinaryOp.NeVecI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.NeI8x16; break; }
             case TypeKind.I16:
-            case TypeKind.U16: { op = BinaryOp.NeVecI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.NeI16x8; break; }
             case TypeKind.I32:
-            case TypeKind.U32: { op = BinaryOp.NeVecI32x4; break; }
-            case TypeKind.F32: { op = BinaryOp.NeVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.NeVecF64x2; break; }
+            case TypeKind.U32: { op = BinaryOp.NeI32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.NeF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.NeF64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
-              if (!compiler.options.isWasm64) op = BinaryOp.NeVecI32x4;
+              if (!compiler.options.isWasm64) op = BinaryOp.NeI32x4;
               break;
             }
           }
@@ -3291,20 +3307,20 @@ export function compileCall(
         }
         case BuiltinSymbols.v128_lt: {
           switch (type.kind) {
-            case TypeKind.I8:  { op = BinaryOp.LtSVecI8x16; break; }
-            case TypeKind.U8:  { op = BinaryOp.LtUVecI8x16; break; }
-            case TypeKind.I16: { op = BinaryOp.LtSVecI16x8; break; }
-            case TypeKind.U16: { op = BinaryOp.LtUVecI16x8; break; }
-            case TypeKind.I32: { op = BinaryOp.LtSVecI32x4; break; }
-            case TypeKind.U32: { op = BinaryOp.LtUVecI32x4; break; }
-            case TypeKind.F32: { op = BinaryOp.LtVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.LtVecF64x2; break; }
+            case TypeKind.I8:  { op = BinaryOp.LtI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.LtU8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.LtI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.LtU16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.LtI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.LtU32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.LtF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.LtF64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               if (!compiler.options.isWasm64) {
                 op = type.kind == TypeKind.ISIZE
-                  ? BinaryOp.LtSVecI32x4
-                  : BinaryOp.LtUVecI32x4;
+                  ? BinaryOp.LtI32x4
+                  : BinaryOp.LtU32x4;
               }
               break;
             }
@@ -3313,20 +3329,20 @@ export function compileCall(
         }
         case BuiltinSymbols.v128_le: {
           switch (type.kind) {
-            case TypeKind.I8:  { op = BinaryOp.LeSVecI8x16; break; }
-            case TypeKind.U8:  { op = BinaryOp.LeUVecI8x16; break; }
-            case TypeKind.I16: { op = BinaryOp.LeSVecI16x8; break; }
-            case TypeKind.U16: { op = BinaryOp.LeUVecI16x8; break; }
-            case TypeKind.I32: { op = BinaryOp.LeSVecI32x4; break; }
-            case TypeKind.U32: { op = BinaryOp.LeUVecI32x4; break; }
-            case TypeKind.F32: { op = BinaryOp.LeVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.LeVecF64x2; break; }
+            case TypeKind.I8:  { op = BinaryOp.LeI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.LeU8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.LeI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.LeU16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.LeI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.LeU32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.LeF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.LeF64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               if (!compiler.options.isWasm64) {
                 op = type.kind == TypeKind.ISIZE
-                  ? BinaryOp.LeSVecI32x4
-                  : BinaryOp.LeUVecI32x4;
+                  ? BinaryOp.LeI32x4
+                  : BinaryOp.LeU32x4;
               }
               break;
             }
@@ -3335,20 +3351,20 @@ export function compileCall(
         }
         case BuiltinSymbols.v128_gt: {
           switch (type.kind) {
-            case TypeKind.I8:  { op = BinaryOp.GtSVecI8x16; break; }
-            case TypeKind.U8:  { op = BinaryOp.GtUVecI8x16; break; }
-            case TypeKind.I16: { op = BinaryOp.GtSVecI16x8; break; }
-            case TypeKind.U16: { op = BinaryOp.GtUVecI16x8; break; }
-            case TypeKind.I32: { op = BinaryOp.GtSVecI32x4; break; }
-            case TypeKind.U32: { op = BinaryOp.GtUVecI32x4; break; }
-            case TypeKind.F32: { op = BinaryOp.GtVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.GtVecF64x2; break; }
+            case TypeKind.I8:  { op = BinaryOp.GtI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.GtU8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.GtI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.GtU16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.GtI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.GtU32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.GtF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.GtF64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               if (!compiler.options.isWasm64) {
                 op = type.kind == TypeKind.ISIZE
-                  ? BinaryOp.GtSVecI32x4
-                  : BinaryOp.GtUVecI32x4;
+                  ? BinaryOp.GtI32x4
+                  : BinaryOp.GtU32x4;
               }
               break;
             }
@@ -3357,23 +3373,32 @@ export function compileCall(
         }
         case BuiltinSymbols.v128_ge: {
           switch (type.kind) {
-            case TypeKind.I8:  { op = BinaryOp.GeSVecI8x16; break; }
-            case TypeKind.U8:  { op = BinaryOp.GeUVecI8x16; break; }
-            case TypeKind.I16: { op = BinaryOp.GeSVecI16x8; break; }
-            case TypeKind.U16: { op = BinaryOp.GeUVecI16x8; break; }
-            case TypeKind.I32: { op = BinaryOp.GeSVecI32x4; break; }
-            case TypeKind.U32: { op = BinaryOp.GeUVecI32x4; break; }
-            case TypeKind.F32: { op = BinaryOp.GeVecF32x4; break; }
-            case TypeKind.F64: { op = BinaryOp.GeVecF64x2; break; }
+            case TypeKind.I8:  { op = BinaryOp.GeI8x16; break; }
+            case TypeKind.U8:  { op = BinaryOp.GeU8x16; break; }
+            case TypeKind.I16: { op = BinaryOp.GeI16x8; break; }
+            case TypeKind.U16: { op = BinaryOp.GeU16x8; break; }
+            case TypeKind.I32: { op = BinaryOp.GeI32x4; break; }
+            case TypeKind.U32: { op = BinaryOp.GeU32x4; break; }
+            case TypeKind.F32: { op = BinaryOp.GeF32x4; break; }
+            case TypeKind.F64: { op = BinaryOp.GeF64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               if (!compiler.options.isWasm64) {
                 op = type.kind == TypeKind.ISIZE
-                  ? BinaryOp.GeSVecI32x4
-                  : BinaryOp.GeUVecI32x4;
+                  ? BinaryOp.GeI32x4
+                  : BinaryOp.GeU32x4;
               }
               break;
             }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_narrow: {
+          switch (type.kind) {
+            case TypeKind.I16: { op = BinaryOp.NarrowI16x8ToI8x16; break; }
+            case TypeKind.U16: { op = BinaryOp.NarrowU16x8ToU8x16; break; }
+            case TypeKind.I32: { op = BinaryOp.NarrowI32x4ToI16x8; break; }
+            case TypeKind.U32: { op = BinaryOp.NarrowU32x4ToU16x8; break; }
           }
           break;
         }
@@ -3395,7 +3420,9 @@ export function compileCall(
     case BuiltinSymbols.v128_abs:
     case BuiltinSymbols.v128_sqrt:
     case BuiltinSymbols.v128_convert:
-    case BuiltinSymbols.v128_trunc: {
+    case BuiltinSymbols.v128_trunc_sat:
+    case BuiltinSymbols.v128_widen_low:
+    case BuiltinSymbols.v128_widen_high: {
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
@@ -3418,54 +3445,72 @@ export function compileCall(
         case BuiltinSymbols.v128_neg: {
           switch (type.kind) {
             case TypeKind.I8:
-            case TypeKind.U8:  { op = UnaryOp.NegVecI8x16; break; }
+            case TypeKind.U8:  { op = UnaryOp.NegI8x16; break; }
             case TypeKind.I16:
-            case TypeKind.U16: { op = UnaryOp.NegVecI16x8; break; }
+            case TypeKind.U16: { op = UnaryOp.NegI16x8; break; }
             case TypeKind.I32:
-            case TypeKind.U32: { op = UnaryOp.NegVecI32x4; break; }
+            case TypeKind.U32: { op = UnaryOp.NegI32x4; break; }
             case TypeKind.I64:
-            case TypeKind.U64: { op = UnaryOp.NegVecI64x2; break; }
+            case TypeKind.U64: { op = UnaryOp.NegI64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               op = compiler.options.isWasm64
-                ? UnaryOp.NegVecI64x2
-                : UnaryOp.NegVecI32x4;
+                ? UnaryOp.NegI64x2
+                : UnaryOp.NegI32x4;
               break;
             }
-            case TypeKind.F32: { op = UnaryOp.NegVecF32x4; break; }
-            case TypeKind.F64: { op = UnaryOp.NegVecF64x2; break; }
+            case TypeKind.F32: { op = UnaryOp.NegF32x4; break; }
+            case TypeKind.F64: { op = UnaryOp.NegF64x2; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_abs: {
           switch (type.kind) {
-            case TypeKind.F32: { op = UnaryOp.AbsVecF32x4; break; }
-            case TypeKind.F64: { op = UnaryOp.AbsVecF64x2; break; }
+            case TypeKind.F32: { op = UnaryOp.AbsF32x4; break; }
+            case TypeKind.F64: { op = UnaryOp.AbsF64x2; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_sqrt: {
           switch (type.kind) {
-            case TypeKind.F32: { op = UnaryOp.SqrtVecF32x4; break; }
-            case TypeKind.F64: { op = UnaryOp.SqrtVecF64x2; break; }
+            case TypeKind.F32: { op = UnaryOp.SqrtF32x4; break; }
+            case TypeKind.F64: { op = UnaryOp.SqrtF64x2; break; }
           }
           break;
         }
         case BuiltinSymbols.v128_convert: {
           switch (type.kind) {
-            case TypeKind.I32: { op = UnaryOp.ConvertSVecI32x4ToVecF32x4; break; }
-            case TypeKind.U32: { op = UnaryOp.ConvertUVecI32x4ToVecF32x4; break; }
-            case TypeKind.I64: { op = UnaryOp.ConvertSVecI64x2ToVecF64x2; break; }
-            case TypeKind.U64: { op = UnaryOp.ConvertUVecI64x2ToVecF64x2; break; }
+            case TypeKind.I32: { op = UnaryOp.ConvertI32x4ToF32x4; break; }
+            case TypeKind.U32: { op = UnaryOp.ConvertU32x4ToF32x4; break; }
+            case TypeKind.I64: { op = UnaryOp.ConvertI64x2ToF64x2; break; }
+            case TypeKind.U64: { op = UnaryOp.ConvertU64x2ToF64x2; break; }
           }
           break;
         }
-        case BuiltinSymbols.v128_trunc: {
+        case BuiltinSymbols.v128_trunc_sat: {
           switch (type.kind) {
-            case TypeKind.I32: { op = UnaryOp.TruncSatSVecF32x4ToVecI32x4; break; }
-            case TypeKind.U32: { op = UnaryOp.TruncSatUVecF32x4ToVecI32x4; break; }
-            case TypeKind.I64: { op = UnaryOp.TruncSatSVecF64x2ToVecI64x2; break; }
-            case TypeKind.U64: { op = UnaryOp.TruncSatUVecF64x2ToVecI64x2; break; }
+            case TypeKind.I32: { op = UnaryOp.TruncSatF32x4ToI32x4; break; }
+            case TypeKind.U32: { op = UnaryOp.TruncSatF32x4ToU32x4; break; }
+            case TypeKind.I64: { op = UnaryOp.TruncSatF64x2ToI64x2; break; }
+            case TypeKind.U64: { op = UnaryOp.TruncSatF64x2ToU64x2; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_widen_low: {
+          switch (type.kind) {
+            case TypeKind.I8: { op = UnaryOp.WidenLowI8x16ToI16x8; break; }
+            case TypeKind.U8: { op = UnaryOp.WidenLowU8x16ToU16x8; break; }
+            case TypeKind.I16: { op = UnaryOp.WidenLowI16x8ToI32x4; break; }
+            case TypeKind.U16: { op = UnaryOp.WidenLowU16x8ToU32x4; break; }
+          }
+          break;
+        }
+        case BuiltinSymbols.v128_widen_high: {
+          switch (type.kind) {
+            case TypeKind.I8: { op = UnaryOp.WidenHighI8x16ToI16x8; break; }
+            case TypeKind.U8: { op = UnaryOp.WidenHighU8x16ToU16x8; break; }
+            case TypeKind.I16: { op = UnaryOp.WidenHighI16x8ToI32x4; break; }
+            case TypeKind.U16: { op = UnaryOp.WidenHighU16x8ToU32x4; break; }
           }
           break;
         }
@@ -3506,18 +3551,18 @@ export function compileCall(
         case BuiltinSymbols.v128_shl: {
           switch (type.kind) {
             case TypeKind.I8:
-            case TypeKind.U8:  { op = SIMDShiftOp.ShlVecI8x16; break; }
+            case TypeKind.U8:  { op = SIMDShiftOp.ShlI8x16; break; }
             case TypeKind.I16:
-            case TypeKind.U16: { op = SIMDShiftOp.ShlVecI16x8; break; }
+            case TypeKind.U16: { op = SIMDShiftOp.ShlI16x8; break; }
             case TypeKind.I32:
-            case TypeKind.U32: { op = SIMDShiftOp.ShlVecI32x4; break; }
+            case TypeKind.U32: { op = SIMDShiftOp.ShlI32x4; break; }
             case TypeKind.I64:
-            case TypeKind.U64: { op = SIMDShiftOp.ShlVecI64x2; break; }
+            case TypeKind.U64: { op = SIMDShiftOp.ShlI64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               op = compiler.options.isWasm64
-                ? SIMDShiftOp.ShlVecI64x2
-                : SIMDShiftOp.ShlVecI32x4;
+                ? SIMDShiftOp.ShlI64x2
+                : SIMDShiftOp.ShlI32x4;
               break;
             }
           }
@@ -3525,24 +3570,24 @@ export function compileCall(
         }
         case BuiltinSymbols.v128_shr: {
           switch (type.kind) {
-            case TypeKind.I8:  { op = SIMDShiftOp.ShrSVecI8x16; break; }
-            case TypeKind.U8:  { op = SIMDShiftOp.ShrUVecI8x16; break; }
-            case TypeKind.I16: { op = SIMDShiftOp.ShrSVecI16x8; break; }
-            case TypeKind.U16: { op = SIMDShiftOp.ShrUVecI16x8; break; }
-            case TypeKind.I32: { op = SIMDShiftOp.ShrSVecI32x4; break; }
-            case TypeKind.U32: { op = SIMDShiftOp.ShrUVecI32x4; break; }
-            case TypeKind.I64: { op = SIMDShiftOp.ShrSVecI64x2; break; }
-            case TypeKind.U64: { op = SIMDShiftOp.ShrUVecI64x2; break; }
+            case TypeKind.I8:  { op = SIMDShiftOp.ShrI8x16; break; }
+            case TypeKind.U8:  { op = SIMDShiftOp.ShrU8x16; break; }
+            case TypeKind.I16: { op = SIMDShiftOp.ShrI16x8; break; }
+            case TypeKind.U16: { op = SIMDShiftOp.ShrU16x8; break; }
+            case TypeKind.I32: { op = SIMDShiftOp.ShrI32x4; break; }
+            case TypeKind.U32: { op = SIMDShiftOp.ShrU32x4; break; }
+            case TypeKind.I64: { op = SIMDShiftOp.ShrI64x2; break; }
+            case TypeKind.U64: { op = SIMDShiftOp.ShrU64x2; break; }
             case TypeKind.ISIZE: {
               op = compiler.options.isWasm64
-                ? SIMDShiftOp.ShrSVecI64x2
-                : SIMDShiftOp.ShrSVecI32x4;
+                ? SIMDShiftOp.ShrI64x2
+                : SIMDShiftOp.ShrI32x4;
               break;
             }
             case TypeKind.USIZE: {
               op = compiler.options.isWasm64
-                ? SIMDShiftOp.ShrUVecI64x2
-                : SIMDShiftOp.ShrUVecI32x4;
+                ? SIMDShiftOp.ShrU64x2
+                : SIMDShiftOp.ShrU32x4;
               break;
             }
           }
@@ -3576,9 +3621,9 @@ export function compileCall(
       let op: BinaryOp = -1;
       switch (prototype.internalName) {
         default: assert(false);
-        case BuiltinSymbols.v128_and: { op = BinaryOp.AndVec128; break; }
-        case BuiltinSymbols.v128_or:  { op = BinaryOp.OrVec128; break; }
-        case BuiltinSymbols.v128_xor: { op = BinaryOp.XorVec128; break; }
+        case BuiltinSymbols.v128_and: { op = BinaryOp.AndV128; break; }
+        case BuiltinSymbols.v128_or:  { op = BinaryOp.OrV128; break; }
+        case BuiltinSymbols.v128_xor: { op = BinaryOp.XorV128; break; }
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
@@ -3594,7 +3639,7 @@ export function compileCall(
         return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-      return module.unary(UnaryOp.NotVec128, arg0);
+      return module.unary(UnaryOp.NotV128, arg0);
     }
     case BuiltinSymbols.v128_bitselect: { // bitselect(v1: v128, v2: v128, c: v128) -> v128
       if (!compiler.options.hasFeature(Feature.SIMD)) break;
@@ -3634,18 +3679,18 @@ export function compileCall(
         case BuiltinSymbols.v128_any_true: {
           switch (type.kind) {
             case TypeKind.I8:
-            case TypeKind.U8:  { op = UnaryOp.AnyTrueVecI8x16; break; }
+            case TypeKind.U8:  { op = UnaryOp.AnyTrueI8x16; break; }
             case TypeKind.I16:
-            case TypeKind.U16: { op = UnaryOp.AnyTrueVecI16x8; break; }
+            case TypeKind.U16: { op = UnaryOp.AnyTrueI16x8; break; }
             case TypeKind.I32:
-            case TypeKind.U32: { op = UnaryOp.AnyTrueVecI32x4; break; }
+            case TypeKind.U32: { op = UnaryOp.AnyTrueI32x4; break; }
             case TypeKind.I64:
-            case TypeKind.U64: { op = UnaryOp.AnyTrueVecI64x2; break; }
+            case TypeKind.U64: { op = UnaryOp.AnyTrueI64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               op = compiler.options.isWasm64
-                ? UnaryOp.AnyTrueVecI64x2
-                : UnaryOp.AnyTrueVecI32x4;
+                ? UnaryOp.AnyTrueI64x2
+                : UnaryOp.AnyTrueI32x4;
               break;
             }
           }
@@ -3654,18 +3699,18 @@ export function compileCall(
         case BuiltinSymbols.v128_all_true: {
           switch (type.kind) {
             case TypeKind.I8:
-            case TypeKind.U8:  { op = UnaryOp.AllTrueVecI8x16; break; }
+            case TypeKind.U8:  { op = UnaryOp.AllTrueI8x16; break; }
             case TypeKind.I16:
-            case TypeKind.U16: { op = UnaryOp.AllTrueVecI16x8; break; }
+            case TypeKind.U16: { op = UnaryOp.AllTrueI16x8; break; }
             case TypeKind.I32:
-            case TypeKind.U32: { op = UnaryOp.AllTrueVecI32x4; break; }
+            case TypeKind.U32: { op = UnaryOp.AllTrueI32x4; break; }
             case TypeKind.I64:
-            case TypeKind.U64: { op = UnaryOp.AllTrueVecI64x2; break; }
+            case TypeKind.U64: { op = UnaryOp.AllTrueI64x2; break; }
             case TypeKind.ISIZE:
             case TypeKind.USIZE: {
               op = compiler.options.isWasm64
-                ? UnaryOp.AllTrueVecI64x2
-                : UnaryOp.AllTrueVecI32x4;
+                ? UnaryOp.AllTrueI64x2
+                : UnaryOp.AllTrueI32x4;
               break;
             }
           }
@@ -3910,8 +3955,8 @@ function tryDeferASM(
       case BuiltinSymbols.i64_atomic_rmw32_or_u: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.u32, operands, Type.i64, reportNode);
       case BuiltinSymbols.i64_atomic_rmw_or: return deferASM(BuiltinSymbols.atomic_or, compiler, Type.i64, operands, Type.i64, reportNode);
 
-      case BuiltinSymbols.i32_atomic_rmw8_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.i32, reportNode);
-      case BuiltinSymbols.i32_atomic_rmw16_u_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u16, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw8_xor_u: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.i32, reportNode);
+      case BuiltinSymbols.i32_atomic_rmw16_xor_u: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u16, operands, Type.i32, reportNode);
       case BuiltinSymbols.i32_atomic_rmw_xor: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.i32, operands, Type.i32, reportNode);
       case BuiltinSymbols.i64_atomic_rmw8_xor_u: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u8, operands, Type.i64, reportNode);
       case BuiltinSymbols.i64_atomic_rmw16_xor_u: return deferASM(BuiltinSymbols.atomic_xor, compiler, Type.u16, operands, Type.i64, reportNode);
@@ -3971,6 +4016,8 @@ function tryDeferASM(
       case BuiltinSymbols.i8x16_gt_u: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.u8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i8x16_ge_s: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.i8, operands, Type.v128, reportNode);
       case BuiltinSymbols.i8x16_ge_u: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.u8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_narrow_i16x8_s: return deferASM(BuiltinSymbols.v128_narrow, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i8x16_narrow_i16x8_u: return deferASM(BuiltinSymbols.v128_narrow, compiler, Type.u16, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.i16x8_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_extract_lane_s: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i16, operands, Type.i16, reportNode);
@@ -3999,6 +4046,12 @@ function tryDeferASM(
       case BuiltinSymbols.i16x8_gt_u: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.u16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_ge_s: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.i16, operands, Type.v128, reportNode);
       case BuiltinSymbols.i16x8_ge_u: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.u16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_narrow_i32x4_s: return deferASM(BuiltinSymbols.v128_narrow, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_narrow_i32x4_u: return deferASM(BuiltinSymbols.v128_narrow, compiler, Type.u32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_widen_low_i8x16_s: return deferASM(BuiltinSymbols.v128_widen_low, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_widen_low_i8x16_u: return deferASM(BuiltinSymbols.v128_widen_low, compiler, Type.u8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_widen_high_i8x16_s: return deferASM(BuiltinSymbols.v128_widen_high, compiler, Type.i8, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i16x8_widen_high_i8x16_u: return deferASM(BuiltinSymbols.v128_widen_high, compiler, Type.u8, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.i32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i32, operands, Type.i32, reportNode);
@@ -4022,8 +4075,12 @@ function tryDeferASM(
       case BuiltinSymbols.i32x4_gt_u: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.u32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_ge_s: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.i32, operands, Type.v128, reportNode);
       case BuiltinSymbols.i32x4_ge_u: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.u32, operands, Type.v128, reportNode);
-      case BuiltinSymbols.i32x4_trunc_s_f32x4_sat: return deferASM(BuiltinSymbols.v128_trunc, compiler, Type.i32, operands, Type.v128, reportNode);
-      case BuiltinSymbols.i32x4_trunc_u_f32x4_sat: return deferASM(BuiltinSymbols.v128_trunc, compiler, Type.u32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_trunc_sat_f32x4_s: return deferASM(BuiltinSymbols.v128_trunc_sat, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_trunc_sat_f32x4_u: return deferASM(BuiltinSymbols.v128_trunc_sat, compiler, Type.u32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_widen_low_i16x8_s: return deferASM(BuiltinSymbols.v128_widen_low, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_widen_low_i16x8_u: return deferASM(BuiltinSymbols.v128_widen_low, compiler, Type.u16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_widen_high_i16x8_s: return deferASM(BuiltinSymbols.v128_widen_high, compiler, Type.i16, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i32x4_widen_high_i16x8_u: return deferASM(BuiltinSymbols.v128_widen_high, compiler, Type.u16, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.i64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i64, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i64, operands, Type.i64, reportNode);
@@ -4036,8 +4093,8 @@ function tryDeferASM(
       case BuiltinSymbols.i64x2_shr_u: return deferASM(BuiltinSymbols.v128_shr, compiler, Type.u64, operands, Type.v128, reportNode);
       case BuiltinSymbols.i64x2_any_true: return deferASM(BuiltinSymbols.v128_any_true, compiler, Type.i64, operands, Type.i32, reportNode);
       case BuiltinSymbols.i64x2_all_true: return deferASM(BuiltinSymbols.v128_all_true, compiler, Type.i64, operands, Type.i32, reportNode);
-      case BuiltinSymbols.i64x2_trunc_s_f64x2_sat: return deferASM(BuiltinSymbols.v128_trunc, compiler, Type.i64, operands, Type.v128, reportNode);
-      case BuiltinSymbols.i64x2_trunc_u_f64x2_sat: return deferASM(BuiltinSymbols.v128_trunc, compiler, Type.u64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i64x2_trunc_sat_f64x2_s: return deferASM(BuiltinSymbols.v128_trunc_sat, compiler, Type.i64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.i64x2_trunc_sat_f64x2_u: return deferASM(BuiltinSymbols.v128_trunc_sat, compiler, Type.u64, operands, Type.v128, reportNode);
 
       case BuiltinSymbols.f32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f32, operands, Type.f32, reportNode);
@@ -4057,8 +4114,8 @@ function tryDeferASM(
       case BuiltinSymbols.f32x4_le: return deferASM(BuiltinSymbols.v128_le, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_gt: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_ge: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.f32, operands, Type.v128, reportNode);
-      case BuiltinSymbols.f32x4_convert_s_i32x4: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.i32, operands, Type.v128, reportNode);
-      case BuiltinSymbols.f32x4_convert_u_i32x4: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.u32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_convert_i32x4_s: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.i32, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f32x4_convert_i32x4_u: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.u32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_qfma: return deferASM(BuiltinSymbols.v128_qfma, compiler, Type.f32, operands, Type.v128, reportNode);
       case BuiltinSymbols.f32x4_qfms: return deferASM(BuiltinSymbols.v128_qfms, compiler, Type.f32, operands, Type.v128, reportNode);
 
@@ -4080,8 +4137,8 @@ function tryDeferASM(
       case BuiltinSymbols.f64x2_le: return deferASM(BuiltinSymbols.v128_le, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_gt: return deferASM(BuiltinSymbols.v128_gt, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_ge: return deferASM(BuiltinSymbols.v128_ge, compiler, Type.f64, operands, Type.v128, reportNode);
-      case BuiltinSymbols.f64x2_convert_s_i64x2: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.i64, operands, Type.v128, reportNode);
-      case BuiltinSymbols.f64x2_convert_u_i64x2: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.u64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_convert_i64x2_s: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.i64, operands, Type.v128, reportNode);
+      case BuiltinSymbols.f64x2_convert_i64x2_u: return deferASM(BuiltinSymbols.v128_convert, compiler, Type.u64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_qfma: return deferASM(BuiltinSymbols.v128_qfma, compiler, Type.f64, operands, Type.v128, reportNode);
       case BuiltinSymbols.f64x2_qfms: return deferASM(BuiltinSymbols.v128_qfms, compiler, Type.f64, operands, Type.v128, reportNode);
 

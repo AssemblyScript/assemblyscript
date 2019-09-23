@@ -603,8 +603,14 @@ declare namespace v128 {
   export function ge<T>(a: v128, b: v128): v128;
   /** Converts each lane of a 128-bit vector from integer to floating point. */
   export function convert<TFrom = i32 | u32 | i64 | u64>(a: v128): v128;
-  /** Truncates each lane of a 128-bit vector from floating point to integer with saturation. */
-  export function trunc<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+  /** Truncates each lane of a 128-bit vector from floating point to integer with saturation. Takes the target type. */
+  export function trunc_sat<TTo = i32 | u32 | i64 | u64>(a: v128): v128;
+  /** Narrows each lane of two 128-bit vectors to their respective narrower lanes. */
+  export function narrow<TFrom = i16 | i32>(a: v128, b: v128): v128;
+  /** Widens the low lanes of a 128-bit vector to their respective wider lanes. */
+  export function widen_low<TFrom = i8 | i16>(a: v128): v128;
+  /** Widens the high lanes of a 128-bit vector to their respective wider lanes. */
+  export function widen_high<TFrom = i8 | i16>(a: v128): v128;
   /** Computes `(a * b) + c` for each lane of the given 128-bit vectors. */
   export function qfma<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
   /** Computes `(a * b) - c` for each lane of the given 128-bit vectors. */
@@ -667,6 +673,10 @@ declare namespace i8x16 {
   export function ge_s(a: v128, b: v128): v128;
   /** Computes which 8-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_u(a: v128, b: v128): v128;
+  /** Narrows each 16-bit signed integer lane of two 128-bit vectors to 8-bit signed integer lanes. */
+  export function narrow_i16x8_s(a: v128, b: v128): v128;
+  /** Narrows each 16-bit signed integer lane of two 128-bit vectors to 8-bit unsigned integer lanes. */
+  export function narrow_i16x8_u(a: v128, b: v128): v128;
 }
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
 declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
@@ -725,6 +735,18 @@ declare namespace i16x8 {
   export function ge_s(a: v128, b: v128): v128;
   /** Computes which 16-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_u(a: v128, b: v128): v128;
+  /** Narrows each 32-bit signed integer lane of two 128-bit vectors to 16-bit signed integer lanes. */
+  export function narrow_i32x4_s(a: v128, b: v128): v128;
+  /** Narrows each 32-bit signed integer lane of two 128-bit vectors to 16-bit unsigned integer lanes. */
+  export function narrow_i32x4_u(a: v128, b: v128): v128;
+  /** Widens the low 8-bit signed integer lanes of a 128-bit vector to 16-bit signed integer lanes. */
+  export function widen_low_i8x16_s(a: v128): v128;
+  /** Widens the low 8-bit unsigned integer lanes of a 128-bit vector to 16-bit unsigned integer lanes. */
+  export function widen_low_i8x16_u(a: v128): v128;
+  /** Widens the high 8-bit signed integer lanes of a 128-bit vector to 16-bit signed integer lanes. */
+  export function widen_high_i8x16_s(a: v128): v128;
+  /** Widens the high 8-bit unsigned integer lanes of a 128-bit vector to 16-bit unsigned integer lanes. */
+  export function widen_high_i8x16_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -774,9 +796,17 @@ declare namespace i32x4 {
   /** Computes which 32-bit unsigned integer lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge_u(a: v128, b: v128): v128;
   /** Truncates each 32-bit float lane of a 128-bit vector to a signed integer with saturation. */
-  export function trunc_s_f32x4_sat(a: v128): v128;
+  export function trunc_sat_f32x4_s(a: v128): v128;
   /** Truncates each 32-bit float lane of a 128-bit vector to an unsigned integer with saturation. */
-  export function trunc_u_f32x4_sat(a: v128): v128;
+  export function trunc_sat_f32x4_u(a: v128): v128;
+  /** Widens the low 16-bit signed integer lanes of a 128-bit vector to 32-bit signed integer lanes. */
+  export function widen_low_i16x8_s(a: v128): v128;
+  /** Widens the low 16-bit unsigned integer lanes of a 128-bit vector to 32-bit unsigned integer lanes. */
+  export function widen_low_i16x8_u(a: v128): v128;
+  /** Widens the high 16-bit signed integer lanes of a 128-bit vector to 32-bit signed integer lanes. */
+  export function widen_high_i16x8_s(a: v128): v128;
+  /** Widens the high 16-bit unsigned integer lanes of a 128-bit vector to 32-bit unsigned integer lanes. */
+  export function widen_high_i16x8_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -806,9 +836,9 @@ declare namespace i64x2 {
   /** Reduces a 128-bit vector to a scalar indicating whether all 64-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
   /** Truncates each 64-bit float lane of a 128-bit vector to a signed integer with saturation. */
-  export function trunc_s_f64x2_sat(a: v128): v128;
+  export function trunc_sat_f64x2_s(a: v128): v128;
   /** Truncates each 64-bit float lane of a 128-bit vector to an unsigned integer with saturation. */
-  export function trunc_u_f64x2_sat(a: v128): v128;
+  export function trunc_sat_f64x2_u(a: v128): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -850,9 +880,9 @@ declare namespace f32x4 {
   /** Computes which 32-bit float lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
   /** Converts each 32-bit signed integer lane of a 128-bit vector to floating point. */
-  export function convert_s_i32x4(a: v128): v128;
+  export function convert_i32x4_s(a: v128): v128;
   /** Converts each 32-bit unsigned integer lane of a 128-bit vector to floating point. */
-  export function convert_u_i32x4(a: v128): v128;
+  export function convert_i32x4_u(a: v128): v128;
   /** Computes `(a * b) + c` for each 32-bit float lane of the given 128-bit vectors. */
   export function qfma(a: v128, b: v128, c: v128): v128;
   /** Computes `(a * b) - c` for each 32-bit float lane of the given 128-bit vectors. */
@@ -898,9 +928,9 @@ declare namespace f64x2 {
   /** Computes which 64-bit float lanes of the first 128-bit vector are greater than or equal those of the second. */
   export function ge(a: v128, b: v128): v128;
   /** Converts each 64-bit signed integer lane of a 128-bit vector to floating point. */
-  export function convert_s_i64x2(a: v128): v128;
+  export function convert_i64x2_s(a: v128): v128;
   /** Converts each 64-bit unsigned integer lane of a 128-bit vector to floating point. */
-  export function convert_u_i64x2(a: v128): v128;
+  export function convert_i64x2_u(a: v128): v128;
   /** Computes `(a * b) + c` for each 64-bit float lane of the given 128-bit vectors. */
   export function qfma(a: v128, b: v128, c: v128): v128;
   /** Computes `(a * b) - c` for each 64-bit float lane of the given 128-bit vectors. */
@@ -1032,16 +1062,12 @@ declare namespace memory {
   export function compare(vl: usize, vr: usize, n: usize): i32;
 }
 
-/** Garbage collector operations. */
+/** Garbage collector interface. */
 declare namespace gc {
-  /** Whether the garbage collector interface is implemented. */
-  export const implemented: bool;
+  /** Can be set to `false` to disable automatic collection. Defaults to `true`. */
+  export var auto: bool;
   /** Performs a full garbage collection cycle. */
   export function collect(): void;
-  /** Retains a reference, making sure that it doesn't become collected. */
-  export function retain(ref: usize): void;
-  /** Releases a reference, allowing it to become collected. */
-  export function release(ref: usize): void;
 }
 
 /** Table operations. */

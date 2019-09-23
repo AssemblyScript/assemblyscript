@@ -4,8 +4,7 @@ let asc = require("../../../../cli/asc");
 let argv = [
   "assembly/index.ts",
   "--noEmit",
-  "--runtime",
-  "stub",
+  "--runtime", "stub",
   "--validate",
   "--traceResolution"
 ];

@@ -683,19 +683,12 @@ export abstract class Node {
     if (path) {
       let normalizedPath = normalizePath(path.value);
       if (path.value.startsWith(".")) { // relative
-        stmt.normalizedPath = resolvePath(
-          normalizedPath,
-          range.source.normalizedPath
-        );
+        normalizedPath = resolvePath(normalizedPath, range.source.internalPath);
       } else { // absolute
-        if (!normalizedPath.startsWith(LIBRARY_PREFIX)) {
-          normalizedPath = LIBRARY_PREFIX + normalizedPath;
-        }
-        stmt.normalizedPath = normalizedPath;
+        if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
       }
-      stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
+      stmt.internalPath = mangleInternalPath(normalizedPath);
     } else {
-      stmt.normalizedPath = null;
       stmt.internalPath = null;
     }
     stmt.isDeclare = isDeclare;
@@ -772,17 +765,11 @@ export abstract class Node {
     stmt.path = path;
     var normalizedPath = normalizePath(path.value);
     if (path.value.startsWith(".")) { // relative in project
-      stmt.normalizedPath = resolvePath(
-        normalizedPath,
-        range.source.normalizedPath
-      );
+      normalizedPath = resolvePath(normalizedPath, range.source.internalPath);
     } else { // absolute in library
-      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) {
-        normalizedPath = LIBRARY_PREFIX + normalizedPath;
-      }
-      stmt.normalizedPath = normalizedPath;
+      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
     }
-    stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
+    stmt.internalPath = mangleInternalPath(normalizedPath);
     return stmt;
   }
 
@@ -798,17 +785,11 @@ export abstract class Node {
     stmt.path = path;
     var normalizedPath = normalizePath(path.value);
     if (path.value.startsWith(".")) {
-      stmt.normalizedPath = resolvePath(
-        normalizedPath,
-        range.source.normalizedPath
-      );
+      normalizedPath = resolvePath(normalizedPath, range.source.internalPath);
     } else {
-      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) {
-        normalizedPath = LIBRARY_PREFIX + normalizedPath;
-      }
-      stmt.normalizedPath = normalizedPath;
+      if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
     }
-    stmt.internalPath = mangleInternalPath(stmt.normalizedPath);
+    stmt.internalPath = mangleInternalPath(normalizedPath);
     return stmt;
   }
 
@@ -1636,7 +1617,7 @@ export class Source extends Node {
 
   /** Source kind. */
   sourceKind: SourceKind;
-  /** Normalized path. */
+  /** Normalized path with file extension. */
   normalizedPath: string;
   /** Path used internally. */
   internalPath: string;
@@ -1812,9 +1793,7 @@ export class ExportStatement extends Statement {
   members: ExportMember[] | null;
   /** Path being exported from, if applicable. */
   path: StringLiteralExpression | null;
-  /** Normalized path, if `path` is set. */
-  normalizedPath: string | null;
-  /** Mangled internal path being referenced, if `path` is set. */
+  /** Internal path being referenced, if `path` is set. */
   internalPath: string | null;
   /** Whether this is a declared export. */
   isDeclare: bool;
@@ -1934,9 +1913,7 @@ export class ImportStatement extends Statement {
   namespaceName: IdentifierExpression | null;
   /** Path being imported from. */
   path: StringLiteralExpression;
-  /** Normalized path. */
-  normalizedPath: string;
-  /** Mangled internal path being referenced. */
+  /** Internal path being referenced. */
   internalPath: string;
 }
 
