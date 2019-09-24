@@ -224,7 +224,11 @@ exports.main = function main(argv, options, callback) {
   }
   function applyTransform(name, ...args) {
     transforms.forEach(transform => {
-      if (typeof transform[name] === "function") transform[name](...args);
+      try {
+        if (typeof transform[name] === "function") transform[name](...args);
+      } catch (e) {
+        callback(e);
+      }
     });
   }
 
@@ -426,7 +430,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Call afterParse transform hook
-  applyTransform("afterParse", parser);
+  applyTransform("afterParse", parser, writeFile, baseDir);
 
   // Parse additional files, if any
   {
