@@ -32,8 +32,7 @@ export class DataView {
 
   getFloat32(byteOffset: i32, littleEndian: boolean = false): f32 {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 4 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     return littleEndian
       ? load<f32>(this.dataStart + <usize>byteOffset)
@@ -46,8 +45,7 @@ export class DataView {
 
   getFloat64(byteOffset: i32, littleEndian: boolean = false): f64 {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 8 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
      ) throw new RangeError(E_INDEXOUTOFRANGE);
     return littleEndian
       ? load<f64>(this.dataStart + <usize>byteOffset)
@@ -65,8 +63,7 @@ export class DataView {
 
   getInt16(byteOffset: i32, littleEndian: boolean = false): i16 {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 2 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
      ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i16 = load<i16>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i16>(result);
@@ -74,8 +71,7 @@ export class DataView {
 
   getInt32(byteOffset: i32, littleEndian: boolean = false): i32 {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 4 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
      ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i32 = load<i32>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i32>(result);
@@ -88,8 +84,7 @@ export class DataView {
 
   getUint16(byteOffset: i32, littleEndian: boolean = false): u16 {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 2 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: u16 = load<u16>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u16>(result);
@@ -97,8 +92,7 @@ export class DataView {
 
   getUint32(byteOffset: i32, littleEndian: boolean = false): u32 {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 4 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: u32 = load<u32>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u32>(result);
@@ -106,8 +100,7 @@ export class DataView {
 
   setFloat32(byteOffset: i32, value: f32, littleEndian: boolean = false): void {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 4 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     if (littleEndian) store<f32>(this.dataStart + <usize>byteOffset, value);
     else store<u32>(this.dataStart + <usize>byteOffset, bswap<u32>(reinterpret<u32>(value)));
@@ -115,8 +108,7 @@ export class DataView {
 
   setFloat64(byteOffset: i32, value: f64, littleEndian: boolean = false): void {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 8 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     if (littleEndian) store<f64>(this.dataStart + <usize>byteOffset, value);
     else store<u64>(this.dataStart + <usize>byteOffset, bswap<u64>(reinterpret<u64>(value)));
@@ -129,16 +121,14 @@ export class DataView {
 
   setInt16(byteOffset: i32, value: i16, littleEndian: boolean = false): void {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 2 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i16>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i16>(value));
   }
 
   setInt32(byteOffset: i32, value: i32, littleEndian: boolean = false): void {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 4 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i32>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i32>(value));
   }
@@ -150,16 +140,14 @@ export class DataView {
 
   setUint16(byteOffset: i32, value: u16, littleEndian: boolean = false): void {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 2 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u16>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u16>(value));
   }
 
   setUint32(byteOffset: i32, value: u32, littleEndian: boolean = false): void {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 4 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u32>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u32>(value));
   }
@@ -168,8 +156,7 @@ export class DataView {
 
   getInt64(byteOffset: i32, littleEndian: boolean = false): i64 {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 8 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i64 = load<i64>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i64>(result);
@@ -177,8 +164,7 @@ export class DataView {
 
   getUint64(byteOffset: i32, littleEndian: boolean = false): u64 {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 8 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result = load<u64>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<u64>(result);
@@ -186,16 +172,14 @@ export class DataView {
 
   setInt64(byteOffset: i32, value: i64, littleEndian: boolean = false): void {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 8 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<i64>(value));
   }
 
   setUint64(byteOffset: i32, value: u64, littleEndian: boolean = false): void {
     if (
-      i32(byteOffset < 0) |
-      i32(byteOffset + 8 > this.byteLength)
+      (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
     ) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u64>(this.dataStart + <usize>byteOffset, littleEndian ? value : bswap<u64>(value));
   }

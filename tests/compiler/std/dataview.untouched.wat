@@ -3753,8 +3753,8 @@
  )
  (func $~lib/dataview/DataView#getFloat32 (; 39 ;) (type $FUNCSIG$fiii) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -3765,7 +3765,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 37
+   i32.const 36
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -3828,8 +3828,8 @@
  )
  (func $~lib/dataview/DataView#getFloat64 (; 41 ;) (type $FUNCSIG$diii) (param $0 i32) (param $1 i32) (param $2 i32) (result f64)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -3840,7 +3840,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 51
+   i32.const 49
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -3870,7 +3870,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 62
+   i32.const 60
    i32.const 49
    call $~lib/builtins/abort
    unreachable
@@ -3900,8 +3900,8 @@
  (func $~lib/dataview/DataView#getInt16 (; 44 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 2
   i32.add
@@ -3912,7 +3912,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 70
+   i32.const 67
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -3948,8 +3948,8 @@
  (func $~lib/dataview/DataView#getInt32 (; 46 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -3960,7 +3960,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 79
+   i32.const 75
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -4021,8 +4021,8 @@
  (func $~lib/dataview/DataView#getInt64 (; 48 ;) (type $FUNCSIG$jiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i64)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -4033,7 +4033,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 173
+   i32.const 160
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4060,7 +4060,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 85
+   i32.const 81
    i32.const 49
    call $~lib/builtins/abort
    unreachable
@@ -4088,8 +4088,8 @@
  (func $~lib/dataview/DataView#getUint16 (; 51 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 2
   i32.add
@@ -4100,7 +4100,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 93
+   i32.const 88
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4122,8 +4122,8 @@
  (func $~lib/dataview/DataView#getUint32 (; 52 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -4134,7 +4134,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 102
+   i32.const 96
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4156,8 +4156,8 @@
  (func $~lib/dataview/DataView#getUint64 (; 53 ;) (type $FUNCSIG$jiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i64)
   (local $3 i64)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -4168,7 +4168,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 182
+   i32.const 168
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4189,8 +4189,8 @@
  )
  (func $~lib/dataview/DataView#setFloat32 (; 54 ;) (type $FUNCSIG$viifi) (param $0 i32) (param $1 i32) (param $2 f32) (param $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -4201,7 +4201,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 111
+   i32.const 104
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4227,8 +4227,8 @@
  )
  (func $~lib/dataview/DataView#setFloat64 (; 55 ;) (type $FUNCSIG$viidi) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -4239,7 +4239,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 120
+   i32.const 112
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4271,7 +4271,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 126
+   i32.const 118
    i32.const 49
    call $~lib/builtins/abort
    unreachable
@@ -4285,8 +4285,8 @@
  )
  (func $~lib/dataview/DataView#setInt16 (; 57 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 2
   i32.add
@@ -4297,7 +4297,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 134
+   i32.const 125
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4317,8 +4317,8 @@
  )
  (func $~lib/dataview/DataView#setInt32 (; 58 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -4329,7 +4329,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 142
+   i32.const 132
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4349,8 +4349,8 @@
  )
  (func $~lib/dataview/DataView#setInt64 (; 59 ;) (type $FUNCSIG$viiji) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -4361,7 +4361,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 191
+   i32.const 176
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4387,7 +4387,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 147
+   i32.const 137
    i32.const 49
    call $~lib/builtins/abort
    unreachable
@@ -4401,8 +4401,8 @@
  )
  (func $~lib/dataview/DataView#setUint16 (; 61 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 2
   i32.add
@@ -4413,7 +4413,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 155
+   i32.const 144
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4433,8 +4433,8 @@
  )
  (func $~lib/dataview/DataView#setUint32 (; 62 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 4
   i32.add
@@ -4445,7 +4445,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 163
+   i32.const 151
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4465,8 +4465,8 @@
  )
  (func $~lib/dataview/DataView#setUint64 (; 63 ;) (type $FUNCSIG$viiji) (param $0 i32) (param $1 i32) (param $2 i64) (param $3 i32)
   local.get $1
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.get $1
   i32.const 8
   i32.add
@@ -4477,7 +4477,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 199
+   i32.const 183
    i32.const 6
    call $~lib/builtins/abort
    unreachable
