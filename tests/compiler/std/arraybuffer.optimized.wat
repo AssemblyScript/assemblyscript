@@ -2094,7 +2094,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 14
+   i32.const 22
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -2247,7 +2247,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   i32.const 8
   i32.const 0
   call $~lib/rt/tlsf/__alloc
@@ -2391,10 +2390,10 @@
   i32.const -4
   i32.const 42
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $3
+  local.set $1
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $3
+  local.get $1
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 4
   i32.ne
@@ -2410,10 +2409,10 @@
   i32.const 42
   i32.const 1073741808
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $1
-  local.get $3
-  call $~lib/rt/pure/__release
+  local.set $0
   local.get $1
+  call $~lib/rt/pure/__release
+  local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   if
    i32.const 0
@@ -2423,7 +2422,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -2479,7 +2478,7 @@
   call $~lib/rt/pure/__retain
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.set $3
+  local.set $1
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $5
@@ -2492,7 +2491,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $1
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
@@ -2509,8 +2508,8 @@
   call $~lib/rt/pure/__retain
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $0
-  local.get $0
+  local.tee $3
+  local.get $3
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
@@ -2523,31 +2522,17 @@
   end
   i32.const 1
   global.set $~lib/argc
-  local.get $3
+  local.get $1
   i32.load
-  call $~lib/rt/pure/__retain
-  local.tee $0
-  local.set $7
-  block $2of2
-   block $1of2
-    block $outOfRange
-     global.get $~lib/argc
-     i32.const 1
-     i32.sub
-     br_table $1of2 $1of2 $2of2 $outOfRange
-    end
-    unreachable
-   end
-   local.get $0
-   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-   local.set $4
-  end
-  local.get $0
+  local.tee $3
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  local.set $4
+  local.get $3
   local.get $4
   call $~lib/dataview/DataView#constructor
-  local.tee $0
+  local.tee $3
   local.set $4
-  local.get $0
+  local.get $3
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
@@ -2560,14 +2545,12 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
-  local.get $3
+  local.get $1
   call $~lib/rt/pure/__release
   local.get $5
   call $~lib/rt/pure/__release
-  call $~lib/rt/pure/__release
-  local.get $7
   call $~lib/rt/pure/__release
   local.get $4
   call $~lib/rt/pure/__release
