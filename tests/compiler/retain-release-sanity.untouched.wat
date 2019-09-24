@@ -3548,7 +3548,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 22
+   i32.const 24
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -3587,7 +3587,7 @@
   local.get $3
   local.tee $5
   local.get $4
-  i32.load
+  i32.load offset=4
   local.tee $4
   i32.ne
   if
@@ -3598,10 +3598,10 @@
    call $~lib/rt/pure/__release
   end
   local.get $5
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $3
-  i32.store offset=4
+  i32.store
   local.get $0
   local.get $1
   i32.store offset=8
@@ -3835,7 +3835,7 @@
     unreachable
    end
    local.get $0
-   i32.load
+   i32.load offset=4
    local.set $4
    local.get $1
    local.get $2
@@ -3860,10 +3860,10 @@
     local.get $0
     local.get $6
     call $~lib/rt/pure/__retain
-    i32.store
+    i32.store offset=4
     local.get $0
     local.get $6
-    i32.store offset=4
+    i32.store
    end
    local.get $0
    local.get $5
@@ -3885,7 +3885,7 @@
   i32.const 2
   call $~lib/array/ensureSize
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $2
   i32.const 2
   i32.shl
@@ -3915,7 +3915,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 1
   i32.sub
@@ -3993,7 +3993,7 @@
   i32.const 2
   call $~lib/array/ensureSize
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $2
   i32.const 2
   i32.shl
@@ -4496,7 +4496,7 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.set $2
   local.get $2
   local.get $0
@@ -4535,7 +4535,7 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.set $2
   local.get $2
   local.get $0
@@ -4573,40 +4573,51 @@
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
-    block $switch$1$case$7
-     block $switch$1$case$6
-      block $switch$1$case$5
-       block $switch$1$case$4
-        block $switch$1$case$2
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+    block $switch$1$case$8
+     block $switch$1$case$7
+      block $switch$1$case$6
+       block $switch$1$case$5
+        block $switch$1$case$4
+         block $switch$1$case$2
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$8 $switch$1$case$8 $switch$1$default
+         end
+         return
         end
-        return
+        br $block$4$break
        end
+       local.get $0
+       local.get $1
+       call $~lib/array/Array<i32>#__visit_impl
        br $block$4$break
       end
       local.get $0
       local.get $1
-      call $~lib/array/Array<i32>#__visit_impl
+      call $~lib/array/Array<~lib/string/String>#__visit_impl
       br $block$4$break
      end
      local.get $0
      local.get $1
-     call $~lib/array/Array<~lib/string/String>#__visit_impl
+     call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__visit_impl
      br $block$4$break
     end
     local.get $0
-    local.get $1
-    call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__visit_impl
-    br $block$4$break
+    i32.load
+    local.tee $2
+    if
+     local.get $2
+     local.get $1
+     call $~lib/rt/pure/__visit
+    end
+    return
    end
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.tee $2
   if
    local.get $2

@@ -90,7 +90,7 @@
  )
  (func $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -151,7 +151,7 @@
  )
  (func $~lib/array/Array<assert-nonnull/Foo | null>#__unchecked_get (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl

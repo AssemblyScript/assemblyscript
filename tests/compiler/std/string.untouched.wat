@@ -5725,10 +5725,10 @@
   (local $1 i32)
   (local $2 i32)
   i32.const 1792
-  i32.load offset=4
+  i32.load
   local.set $1
   i32.const 2096
-  i32.load offset=4
+  i32.load
   local.set $2
   local.get $1
   local.get $0
@@ -8201,10 +8201,10 @@
   local.get $4
   local.get $6
   call $~lib/rt/pure/__retain
-  i32.store
+  i32.store offset=4
   local.get $4
   local.get $6
-  i32.store offset=4
+  i32.store
   local.get $4
   local.get $5
   i32.store offset=8
@@ -8512,7 +8512,7 @@
     unreachable
    end
    local.get $0
-   i32.load
+   i32.load offset=4
    local.set $4
    local.get $1
    local.get $2
@@ -8537,10 +8537,10 @@
     local.get $0
     local.get $6
     call $~lib/rt/pure/__retain
-    i32.store
+    i32.store offset=4
     local.get $0
     local.get $6
-    i32.store offset=4
+    i32.store
    end
    local.get $0
    local.get $5
@@ -8566,7 +8566,7 @@
   i32.const 2
   call $~lib/array/ensureSize
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $2
   i32.const 2
   i32.shl
@@ -8624,7 +8624,7 @@
    call $~lib/rt/__allocArray
    local.set $3
    local.get $3
-   i32.load offset=4
+   i32.load
    local.set $4
    local.get $4
    local.get $0
@@ -8685,7 +8685,7 @@
    call $~lib/rt/__allocArray
    local.set $4
    local.get $4
-   i32.load offset=4
+   i32.load
    local.set $3
    block $break|0
     i32.const 0
@@ -8744,7 +8744,7 @@
     call $~lib/rt/__allocArray
     local.set $3
     local.get $3
-    i32.load offset=4
+    i32.load
     i32.const 120
     i32.store
     local.get $3
@@ -8896,7 +8896,7 @@
  )
  (func $~lib/array/Array<~lib/string/String>#__unchecked_get (; 82 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -9011,7 +9011,7 @@
   (local $8 i64)
   (local $9 i64)
   i32.const 11584
-  i32.load offset=4
+  i32.load
   local.set $3
   block $break|0
    loop $continue|0
@@ -9320,7 +9320,7 @@
   (local $12 i64)
   (local $13 i64)
   i32.const 11584
-  i32.load offset=4
+  i32.load
   local.set $3
   block $break|0
    loop $continue|0
@@ -9595,7 +9595,7 @@
  )
  (func $~lib/array/Array<u64>#__unchecked_get (; 93 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 3
   i32.shl
@@ -9604,7 +9604,7 @@
  )
  (func $~lib/array/Array<i16>#__unchecked_get (; 94 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 1
   i32.shl
@@ -9667,7 +9667,7 @@
   local.get $6
   local.set $15
   i32.const 14232
-  i32.load offset=4
+  i32.load
   local.set $16
   block $break|0
    loop $continue|0
@@ -18326,7 +18326,7 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.set $2
   local.get $2
   local.get $0
@@ -18427,7 +18427,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.tee $2
   if
    local.get $2

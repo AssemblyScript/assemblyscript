@@ -422,7 +422,7 @@
   local.tee $7
   call $~lib/util/number/decimalCount32
   local.set $4
-  i32.const 1380
+  i32.const 1376
   i32.load
   local.set $13
   loop $continue|0
@@ -1324,7 +1324,7 @@
   i32.shl
   i32.sub
   global.set $~lib/util/number/_K
-  i32.const 1068
+  i32.const 1064
   i32.load
   local.get $3
   i32.const 3
@@ -1332,7 +1332,7 @@
   i32.add
   i64.load
   global.set $~lib/util/number/_frc_pow
-  i32.const 1292
+  i32.const 1288
   i32.load
   local.get $3
   i32.const 1

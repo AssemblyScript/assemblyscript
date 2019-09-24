@@ -247,7 +247,7 @@
   (local $8 i64)
   (local $9 i64)
   i32.const 464
-  i32.load offset=4
+  i32.load
   local.set $3
   block $break|0
    loop $continue|0
@@ -607,7 +607,7 @@
  )
  (func $~lib/array/Array<u64>#__unchecked_get (; 15 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 3
   i32.shl
@@ -616,7 +616,7 @@
  )
  (func $~lib/array/Array<i16>#__unchecked_get (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 1
   i32.shl
@@ -679,7 +679,7 @@
   local.get $6
   local.set $15
   i32.const 1704
-  i32.load offset=4
+  i32.load
   local.set $16
   block $break|0
    loop $continue|0

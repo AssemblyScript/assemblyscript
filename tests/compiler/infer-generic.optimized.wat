@@ -47,7 +47,7 @@
     i32.const 4
     global.set $~lib/argc
     local.get $3
-    i32.const 108
+    i32.const 104
     i32.load
     local.get $0
     i32.const 2

@@ -442,7 +442,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 22
+   i32.const 24
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -481,7 +481,7 @@
   local.get $3
   local.tee $5
   local.get $4
-  i32.load
+  i32.load offset=4
   local.tee $4
   i32.ne
   if
@@ -492,10 +492,10 @@
    call $~lib/rt/stub/__release
   end
   local.get $5
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $3
-  i32.store offset=4
+  i32.store
   local.get $0
   local.get $1
   i32.store offset=8
@@ -533,7 +533,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -557,7 +557,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -578,7 +578,7 @@
  )
  (func $~lib/array/Array<u64>#__unchecked_get (; 12 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 3
   i32.shl
@@ -587,7 +587,7 @@
  )
  (func $~lib/array/Array<i16>#__unchecked_get (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 1
   i32.shl
@@ -716,7 +716,7 @@
   local.get $6
   local.set $15
   i32.const 1384
-  i32.load offset=4
+  i32.load
   local.set $16
   block $break|0
    loop $continue|0
@@ -2424,7 +2424,7 @@
   (local $8 i64)
   (local $9 i64)
   i32.const 1832
-  i32.load offset=4
+  i32.load
   local.set $3
   block $break|0
    loop $continue|0

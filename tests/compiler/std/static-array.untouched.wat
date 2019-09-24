@@ -44,7 +44,7 @@
  )
  (func $~lib/array/Array<i32>#__unchecked_get (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -1865,7 +1865,7 @@
     unreachable
    end
    local.get $0
-   i32.load
+   i32.load offset=4
    local.set $4
    local.get $1
    local.get $2
@@ -1890,10 +1890,10 @@
     local.get $0
     local.get $6
     call $~lib/rt/stub/__retain
-    i32.store
+    i32.store offset=4
     local.get $0
     local.get $6
-    i32.store offset=4
+    i32.store
    end
    local.get $0
    local.get $5
@@ -1902,7 +1902,7 @@
  )
  (func $~lib/array/Array<i32>#__unchecked_set (; 12 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -1939,7 +1939,7 @@
  )
  (func $~lib/array/Array<i64>#__unchecked_get (; 15 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 3
   i32.shl
@@ -1968,7 +1968,7 @@
  )
  (func $~lib/array/Array<i64>#__unchecked_set (; 17 ;) (type $FUNCSIG$viij) (param $0 i32) (param $1 i32) (param $2 i64)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 3
   i32.shl
@@ -2005,7 +2005,7 @@
  )
  (func $~lib/array/Array<f32>#__unchecked_get (; 20 ;) (type $FUNCSIG$fii) (param $0 i32) (param $1 i32) (result f32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -2034,7 +2034,7 @@
  )
  (func $~lib/array/Array<f32>#__unchecked_set (; 22 ;) (type $FUNCSIG$viif) (param $0 i32) (param $1 i32) (param $2 f32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -2071,7 +2071,7 @@
  )
  (func $~lib/array/Array<f64>#__unchecked_get (; 25 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 3
   i32.shl
@@ -2100,7 +2100,7 @@
  )
  (func $~lib/array/Array<f64>#__unchecked_set (; 27 ;) (type $FUNCSIG$viid) (param $0 i32) (param $1 i32) (param $2 f64)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 3
   i32.shl

@@ -53,7 +53,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.add
   i32.load8_s
@@ -72,7 +72,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $1
   i32.const 2
   i32.shl
@@ -1615,10 +1615,10 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   call $~lib/rt/pure/__retain
-  i32.store
+  i32.store offset=4
   local.get $1
   local.get $2
-  i32.store offset=4
+  i32.store
   local.get $1
   local.get $0
   i32.store offset=8
@@ -1981,7 +1981,7 @@
   i32.const 3
   call $~lib/rt/__allocArray
   local.tee $1
-  i32.load offset=4
+  i32.load
   local.tee $0
   global.get $std/array-literal/i
   i32.store8
@@ -2057,7 +2057,7 @@
   i32.const 4
   call $~lib/rt/__allocArray
   local.tee $1
-  i32.load offset=4
+  i32.load
   local.tee $0
   global.get $std/array-literal/i
   i32.store
@@ -2131,7 +2131,7 @@
   i32.const 6
   call $~lib/rt/__allocArray
   local.tee $1
-  i32.load offset=4
+  i32.load
   local.tee $0
   call $std/array-literal/Ref#constructor
   local.tee $2
@@ -2166,7 +2166,7 @@
   i32.const 8
   call $~lib/rt/__allocArray
   local.tee $1
-  i32.load offset=4
+  i32.load
   local.tee $0
   call $std/array-literal/RefWithCtor#constructor
   local.tee $5
@@ -2337,7 +2337,7 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   local.tee $2
   local.get $0
   i32.load offset=12
@@ -2393,7 +2393,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.tee $0
   if
    local.get $0

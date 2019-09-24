@@ -6,9 +6,14 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
 
 export class DataView {
 
+  @unsafe readonly dataStart: usize;
+
   readonly buffer: ArrayBuffer;
-  readonly dataStart: usize;
   readonly byteLength: i32;
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.buffer));
+  }
 
   constructor(
     buffer: ArrayBuffer,
@@ -23,10 +28,6 @@ export class DataView {
     var dataStart = changetype<usize>(buffer) + <usize>byteOffset;
     this.dataStart = dataStart;
     this.byteLength = byteLength;
-  }
-
-  get byteOffset(): i32 {
-    return <i32>(this.dataStart - changetype<usize>(this.buffer));
   }
 
   getFloat32(byteOffset: i32, littleEndian: boolean = false): f32 {

@@ -53,7 +53,7 @@
  )
  (func $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.load offset=4
+  i32.load
   i32.load
  )
  (func $~lib/array/Array<assert-nonnull/Foo>#__get (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)

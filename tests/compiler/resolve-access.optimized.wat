@@ -291,10 +291,10 @@
   i32.const 0
   call $~lib/rt/stub/__alloc
   local.tee $1
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store
   local.get $0
   i32.const 8
   i32.store offset=8
@@ -319,7 +319,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   i64.load
  )
  (func $~lib/util/number/decimalCount32 (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
