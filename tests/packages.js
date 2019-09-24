@@ -14,6 +14,7 @@ const tests = [
 ]
 
 function performTest(args) {
+
   return new Promise((resolve) => {
     const result = {
       failed: false,

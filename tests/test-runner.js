@@ -40,11 +40,9 @@ function testParallel(suiteName, tests, performTest, postTests, workers) {
             }));
         });
 
-
-        console.log("Test processes", testPromises); 
-
         return Promise.all(testPromises).then((results) => {
             postTests(results);
+            return results;
         });
 
     } else {
@@ -52,24 +50,21 @@ function testParallel(suiteName, tests, performTest, postTests, workers) {
         cluster.worker.on('message', ({ chunks, workerSuiteName }) => {
 
             if (workerSuiteName === suiteName) {
-
                 const basedir = path.join(__dirname, suiteName);
-
-                // console.log(cluster.worker.id, suiteName, "recieved", chunks)
                 const results = {
-                    failedTests: new Set(),
-                    failedMessages: new Map(),
-                    skippedTests: new Set(),
-                    skippedMessages: new Map()
+                    failedTests: [],
+                    failedMessages: {},
+                    skippedTests: [],
+                    skippedMessages: {}
                 }
                 const resultPromises = [];
                 chunks.forEach(arg => {
                     resultPromises.push(
                         performTest({ basedir, arg }).then((result) => {
                             if (result.failed) {
-                                results.failedTests.add(arg);
+                                results.failedTests.push(arg);
                                 if (results.message) {
-                                    results.failedMessages.set(arg, results.message);
+                                    results.failedMessages[arg] = results.message;
                                 }
                             }
                             return result;
@@ -82,22 +77,47 @@ function testParallel(suiteName, tests, performTest, postTests, workers) {
                     process.exit();
                 });
             }
+
         });
     }
 }
 
 function runTestSuites(suites) {
-    const promises = []
+    const promises = [];
+
+    const workersToAllocate = suites.map((s) => s.workers).reduce((a, b) => a + b, 0) ;
+    const allocate = workersToAllocate <= numCPUs;
+
     suites.forEach((suite) => {
         if (cluster.isMaster) {
-            promises.push(testParallel(suite.suiteName, suite.tests, suite.performTest, suite.postTest, suite.workers));
+            promises.push(testParallel(suite.suiteName, suite.tests, suite.performTest, suite.postTest, allocate ? suite.workers : 1));
         } else {
-            testParallel(suite.suiteName, suite.tests, suite.performTest, suite.postTest, suite.workers);
+            testParallel(suite.suiteName, suite.tests, suite.performTest, suite.postTest);
         }
     });
-    Promise.all(promises).then(() => {
+    Promise.all(promises).then((results) => {
+        console.log("\n -------- TEST RESULTS -------- ");
+
+        let failed = false;
+
         if (cluster.isMaster) {
-            process.exit();
+            results.forEach((suite, i) => {
+
+                console.log("\n" + suites[i].suiteName + "\n");
+                const failures = suite.map((test) =>{
+                    return test.failedTests
+                });
+                // console.log("failures", failures);
+                const failedTests = [].concat.apply([], failures);
+                if (failedTests.length) {
+                    failed = true;
+                    console.log("\x1b[31m" + failedTests.join("\t\n") + "\x1b[0m");
+                } else {
+                    console.log("\x1b[32mAll tests passed ^^ \x1b[0m");
+                }
+            })
+            // console.log("\n\n\n", results)
+            process.exit(failed ? 1 : 0);
         }
     })
 }
