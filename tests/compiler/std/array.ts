@@ -18,7 +18,7 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
   }
   for (let i = 0; i < len; i++) {
     if (isFloat<T>()) {
-      if (isNaN(a[i]) == isNaN(b[i])) continue;
+      if (isNaN(a[i]) && isNaN(b[i])) continue;
     }
     if (a[i] != b[i]) return false;
   }

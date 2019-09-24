@@ -7459,11 +7459,14 @@
      local.get $3
      call $~lib/array/Array<f32>#__get
      call $~lib/number/isNaN<f32>
-     local.get $1
-     local.get $3
-     call $~lib/array/Array<f32>#__get
-     call $~lib/number/isNaN<f32>
-     i32.eq
+     if (result i32)
+      local.get $1
+      local.get $3
+      call $~lib/array/Array<f32>#__get
+      call $~lib/number/isNaN<f32>
+     else
+      i32.const 0
+     end
      if
       br $continue|0
      end
@@ -8103,11 +8106,14 @@
      local.get $3
      call $~lib/array/Array<f64>#__get
      call $~lib/number/isNaN<f64>
-     local.get $1
-     local.get $3
-     call $~lib/array/Array<f64>#__get
-     call $~lib/number/isNaN<f64>
-     i32.eq
+     if (result i32)
+      local.get $1
+      local.get $3
+      call $~lib/array/Array<f64>#__get
+      call $~lib/number/isNaN<f64>
+     else
+      i32.const 0
+     end
      if
       br $continue|0
      end

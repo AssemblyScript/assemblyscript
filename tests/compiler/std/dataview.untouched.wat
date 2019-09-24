@@ -3765,7 +3765,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 44
+   i32.const 36
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -3840,7 +3840,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 58
+   i32.const 50
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -3870,7 +3870,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 69
+   i32.const 61
    i32.const 49
    call $~lib/builtins/abort
    unreachable
@@ -3912,7 +3912,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 77
+   i32.const 69
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -3960,7 +3960,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 86
+   i32.const 78
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -4033,7 +4033,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 180
+   i32.const 172
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4060,7 +4060,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 92
+   i32.const 84
    i32.const 49
    call $~lib/builtins/abort
    unreachable
@@ -4100,7 +4100,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 100
+   i32.const 92
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4134,7 +4134,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 109
+   i32.const 101
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4168,7 +4168,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 189
+   i32.const 181
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4201,7 +4201,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 118
+   i32.const 110
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4239,7 +4239,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 127
+   i32.const 119
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4271,7 +4271,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 133
+   i32.const 125
    i32.const 49
    call $~lib/builtins/abort
    unreachable
@@ -4297,7 +4297,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 141
+   i32.const 133
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4329,7 +4329,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 149
+   i32.const 141
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4361,7 +4361,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 198
+   i32.const 190
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4387,7 +4387,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 154
+   i32.const 146
    i32.const 49
    call $~lib/builtins/abort
    unreachable
@@ -4413,7 +4413,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 162
+   i32.const 154
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4445,7 +4445,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 170
+   i32.const 162
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4477,7 +4477,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 206
+   i32.const 198
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4527,11 +4527,7 @@
   i32.load
   i32.sub
  )
- (func $~lib/dataview/DataView#get:byteLength (; 66 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load offset=8
- )
- (func $start:std/dataview (; 67 ;) (type $FUNCSIG$v)
+ (func $start:std/dataview (; 66 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -6243,7 +6239,7 @@
    unreachable
   end
   local.get $1
-  call $~lib/dataview/DataView#get:byteLength
+  i32.load offset=8
   i32.const 8
   i32.eq
   i32.eqz
@@ -6260,10 +6256,10 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $start (; 68 ;) (type $FUNCSIG$v)
+ (func $start (; 67 ;) (type $FUNCSIG$v)
   call $start:std/dataview
  )
- (func $~lib/rt/pure/__visit (; 69 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 68 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -6393,7 +6389,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 70 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 69 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4
@@ -6418,6 +6414,6 @@
   end
   unreachable
  )
- (func $null (; 71 ;) (type $FUNCSIG$v)
+ (func $null (; 70 ;) (type $FUNCSIG$v)
  )
 )
