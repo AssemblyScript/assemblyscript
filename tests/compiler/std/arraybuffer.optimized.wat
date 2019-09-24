@@ -2196,7 +2196,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 456
-   i32.const 22
+   i32.const 26
    i32.const 6
    call $~lib/builtins/abort
    unreachable
