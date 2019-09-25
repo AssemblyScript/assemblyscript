@@ -223,7 +223,7 @@
   (local $8 i64)
   (local $9 i64)
   i32.const 464
-  i32.load
+  i32.load offset=4
   local.set $3
   block $break|0
    loop $continue|0

@@ -3553,7 +3553,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 24
+   i32.const 23
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -3592,7 +3592,7 @@
   local.get $3
   local.tee $5
   local.get $4
-  i32.load offset=4
+  i32.load
   local.tee $4
   i32.ne
   if
@@ -3603,10 +3603,10 @@
    call $~lib/rt/pure/__release
   end
   local.get $5
-  i32.store offset=4
+  i32.store
   local.get $0
   local.get $3
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $1
   i32.store offset=8
@@ -3642,7 +3642,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $2
@@ -3676,7 +3676,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
-   i32.const 26
+   i32.const 25
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -3704,7 +3704,7 @@
   local.get $1
   local.tee $5
   local.get $4
-  i32.load offset=4
+  i32.load
   local.tee $4
   i32.ne
   if
@@ -3715,14 +3715,14 @@
    call $~lib/rt/pure/__release
   end
   local.get $5
-  i32.store offset=4
+  i32.store
   local.get $1
   local.get $2
   i32.add
   local.set $6
   local.get $0
   local.get $6
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $3
   i32.store offset=8
@@ -3732,9 +3732,9 @@
  )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.load
-  local.get $0
   i32.load offset=4
+  local.get $0
+  i32.load
   i32.sub
  )
  (func $~lib/polyfills/bswap<u32> (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -3765,7 +3765,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 36
+   i32.const 35
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -3773,13 +3773,13 @@
   local.get $2
   if (result f32)
    local.get $0
-   i32.load
+   i32.load offset=4
    local.get $1
    i32.add
    f32.load
   else
    local.get $0
-   i32.load
+   i32.load offset=4
    local.get $1
    i32.add
    i32.load
@@ -3840,7 +3840,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 49
+   i32.const 48
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -3848,13 +3848,13 @@
   local.get $2
   if (result f64)
    local.get $0
-   i32.load
+   i32.load offset=4
    local.get $1
    i32.add
    f64.load
   else
    local.get $0
-   i32.load
+   i32.load offset=4
    local.get $1
    i32.add
    i64.load
@@ -3870,13 +3870,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 60
+   i32.const 59
    i32.const 49
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i32.load8_s
@@ -3912,13 +3912,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 67
+   i32.const 66
    i32.const 7
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i32.load16_s
@@ -3960,13 +3960,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 75
+   i32.const 74
    i32.const 7
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i32.load
@@ -4033,13 +4033,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 160
+   i32.const 159
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i64.load
@@ -4060,13 +4060,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 81
+   i32.const 80
    i32.const 49
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i32.load8_u
@@ -4100,13 +4100,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 88
+   i32.const 87
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i32.load16_u
@@ -4134,13 +4134,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 96
+   i32.const 95
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i32.load
@@ -4168,13 +4168,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 168
+   i32.const 167
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i64.load
@@ -4201,7 +4201,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 104
+   i32.const 103
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4209,14 +4209,14 @@
   local.get $3
   if
    local.get $0
-   i32.load
+   i32.load offset=4
    local.get $1
    i32.add
    local.get $2
    f32.store
   else
    local.get $0
-   i32.load
+   i32.load offset=4
    local.get $1
    i32.add
    local.get $2
@@ -4239,7 +4239,7 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 112
+   i32.const 111
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4247,14 +4247,14 @@
   local.get $3
   if
    local.get $0
-   i32.load
+   i32.load offset=4
    local.get $1
    i32.add
    local.get $2
    f64.store
   else
    local.get $0
-   i32.load
+   i32.load offset=4
    local.get $1
    i32.add
    local.get $2
@@ -4271,13 +4271,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 118
+   i32.const 117
    i32.const 49
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $2
@@ -4297,13 +4297,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 125
+   i32.const 124
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $3
@@ -4329,13 +4329,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 132
+   i32.const 131
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $3
@@ -4361,13 +4361,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 176
+   i32.const 175
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $3
@@ -4387,13 +4387,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 137
+   i32.const 136
    i32.const 49
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $2
@@ -4413,13 +4413,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 144
+   i32.const 143
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $3
@@ -4445,13 +4445,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 151
+   i32.const 150
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $3
@@ -4477,13 +4477,13 @@
   if
    i32.const 280
    i32.const 432
-   i32.const 183
+   i32.const 182
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $3
@@ -4522,9 +4522,9 @@
  )
  (func $~lib/dataview/DataView#get:byteOffset (; 65 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.load
-  local.get $0
   i32.load offset=4
+  local.get $0
+  i32.load
   i32.sub
  )
  (func $start:std/dataview (; 66 ;) (type $FUNCSIG$v)
@@ -4569,7 +4569,7 @@
   call $~lib/typedarray/Uint8Array#__set
   i32.const 0
   local.get $0
-  i32.load offset=4
+  i32.load
   local.get $0
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $0
@@ -6216,7 +6216,7 @@
   global.set $~lib/argc
   i32.const 0
   local.get $0
-  i32.load offset=4
+  i32.load
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#constructor|trampoline
@@ -6403,7 +6403,7 @@
     return
    end
    local.get $0
-   i32.load offset=4
+   i32.load
    local.tee $2
    if
     local.get $2

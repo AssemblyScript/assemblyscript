@@ -2042,7 +2042,7 @@
   if
    i32.const 176
    i32.const 224
-   i32.const 54
+   i32.const 53
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -12658,7 +12658,7 @@
               return
              end
              local.get $0
-             i32.load offset=4
+             i32.load
              local.tee $2
              if
               local.get $2

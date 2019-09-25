@@ -2094,7 +2094,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 24
+   i32.const 23
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -2128,7 +2128,7 @@
   i32.store offset=8
   local.get $1
   local.get $0
-  i32.load offset=4
+  i32.load
   local.tee $3
   i32.ne
   if
@@ -2140,10 +2140,10 @@
   end
   local.get $0
   local.get $1
-  i32.store offset=4
+  i32.store
   local.get $0
   local.get $1
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $2
   i32.store offset=8
@@ -2161,10 +2161,10 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $1
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $0
   local.get $1
-  i32.store
+  i32.store offset=4
   local.get $0
   i32.const 8
   i32.store offset=8
@@ -2196,7 +2196,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 456
-   i32.const 26
+   i32.const 25
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -2215,7 +2215,7 @@
   i32.const 0
   i32.store offset=8
   local.get $2
-  i32.load offset=4
+  i32.load
   local.tee $3
   local.get $0
   i32.ne
@@ -2228,10 +2228,10 @@
   end
   local.get $2
   local.get $0
-  i32.store offset=4
+  i32.store
   local.get $2
   local.get $0
-  i32.store
+  i32.store offset=4
   local.get $2
   local.get $1
   i32.store offset=8
@@ -2523,7 +2523,7 @@
   i32.const 1
   global.set $~lib/argc
   local.get $1
-  i32.load offset=4
+  i32.load
   local.tee $3
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.set $4
@@ -2683,7 +2683,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.tee $0
   if
    local.get $0

@@ -1412,10 +1412,10 @@
   local.get $4
   local.get $6
   call $~lib/rt/stub/__retain
-  i32.store offset=4
+  i32.store
   local.get $4
   local.get $6
-  i32.store
+  i32.store offset=4
   local.get $4
   local.get $5
   i32.store offset=8
@@ -1433,7 +1433,7 @@
  )
  (func $~lib/array/Array<u64>#__unchecked_get (; 7 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 3
   i32.shl
@@ -1535,7 +1535,7 @@
   (local $8 i64)
   (local $9 i64)
   i32.const 592
-  i32.load
+  i32.load offset=4
   local.set $3
   block $break|0
    loop $continue|0
@@ -1754,7 +1754,7 @@
   (local $12 i64)
   (local $13 i64)
   i32.const 592
-  i32.load
+  i32.load offset=4
   local.set $3
   block $break|0
    loop $continue|0

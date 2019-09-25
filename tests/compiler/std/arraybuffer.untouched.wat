@@ -2034,7 +2034,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 54
+   i32.const 53
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3741,7 +3741,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 24
+   i32.const 23
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -3780,7 +3780,7 @@
   local.get $3
   local.tee $5
   local.get $4
-  i32.load offset=4
+  i32.load
   local.tee $4
   i32.ne
   if
@@ -3791,10 +3791,10 @@
    call $~lib/rt/pure/__release
   end
   local.get $5
-  i32.store offset=4
+  i32.store
   local.get $0
   local.get $3
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $1
   i32.store offset=8
@@ -3835,10 +3835,10 @@
   local.get $4
   local.get $6
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $4
   local.get $6
-  i32.store
+  i32.store offset=4
   local.get $4
   local.get $5
   i32.store offset=8
@@ -3892,7 +3892,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 456
-   i32.const 26
+   i32.const 25
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -3920,7 +3920,7 @@
   local.get $1
   local.tee $5
   local.get $4
-  i32.load offset=4
+  i32.load
   local.tee $4
   i32.ne
   if
@@ -3931,14 +3931,14 @@
    call $~lib/rt/pure/__release
   end
   local.get $5
-  i32.store offset=4
+  i32.store
   local.get $1
   local.get $2
   i32.add
   local.set $6
   local.get $0
   local.get $6
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $3
   i32.store offset=8
@@ -4302,7 +4302,7 @@
   global.set $~lib/argc
   i32.const 0
   local.get $2
-  i32.load offset=4
+  i32.load
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#constructor|trampoline
@@ -4491,7 +4491,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.tee $2
   if
    local.get $2

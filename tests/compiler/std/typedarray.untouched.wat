@@ -3659,7 +3659,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 24
+   i32.const 23
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -3698,7 +3698,7 @@
   local.get $3
   local.tee $5
   local.get $4
-  i32.load offset=4
+  i32.load
   local.tee $4
   i32.ne
   if
@@ -3709,10 +3709,10 @@
    call $~lib/rt/pure/__release
   end
   local.get $5
-  i32.store offset=4
+  i32.store
   local.get $0
   local.get $3
-  i32.store
+  i32.store offset=4
   local.get $0
   local.get $1
   i32.store offset=8
@@ -3736,9 +3736,9 @@
  )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.load
-  local.get $0
   i32.load offset=4
+  local.get $0
+  i32.load
   i32.sub
  )
  (func $~lib/typedarray/Int8Array#get:length (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -4507,7 +4507,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 2
   i32.shl
@@ -4531,7 +4531,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 2
   i32.shl
@@ -4620,17 +4620,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 2
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -4661,7 +4661,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 3
   i32.shl
@@ -4751,17 +4751,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 3
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -5187,7 +5187,7 @@
     br $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
    end
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $5
    local.get $4
    i32.const 2
@@ -5313,7 +5313,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 3
   i32.shl
@@ -5334,7 +5334,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $2
@@ -5366,7 +5366,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i32.load8_u
@@ -5385,7 +5385,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $2
@@ -5410,7 +5410,7 @@
   local.get $3
   local.set $4
   local.get $7
-  i32.load
+  i32.load offset=4
   local.set $8
   local.get $7
   call $~lib/typedarray/Int8Array#get:length
@@ -5499,10 +5499,10 @@
   local.get $4
   local.get $6
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $4
   local.get $6
-  i32.store
+  i32.store offset=4
   local.get $4
   local.get $5
   i32.store offset=8
@@ -5536,14 +5536,14 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i32.load8_s
  )
  (func $~lib/array/Array<i8>#__unchecked_get (; 75 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 0
   i32.shl
@@ -5722,17 +5722,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 0
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -5766,7 +5766,7 @@
   local.get $3
   local.set $4
   local.get $7
-  i32.load
+  i32.load offset=4
   local.set $8
   local.get $7
   call $~lib/typedarray/Int32Array#get:length
@@ -5851,7 +5851,7 @@
  )
  (func $~lib/array/Array<i32>#__unchecked_get (; 81 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 2
   i32.shl
@@ -6034,9 +6034,9 @@
   call $~lib/rt/pure/__retain
   local.set $8
   local.get $8
-  i32.load
+  i32.load offset=4
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 2
   i32.shl
@@ -6078,7 +6078,7 @@
   call $~lib/typedarray/Int32Array#get:length
   local.set $8
   local.get $7
-  i32.load
+  i32.load offset=4
   local.set $9
   local.get $4
   local.tee $10
@@ -6221,7 +6221,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -6325,7 +6325,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   local.get $2
@@ -6359,7 +6359,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -6475,7 +6475,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -6579,7 +6579,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 1
   i32.shl
@@ -6615,7 +6615,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -6721,7 +6721,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 1
   i32.shl
@@ -6757,7 +6757,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -6873,7 +6873,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -6975,7 +6975,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 2
   i32.shl
@@ -7011,7 +7011,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -7113,7 +7113,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 3
   i32.shl
@@ -7150,7 +7150,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -7252,7 +7252,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 3
   i32.shl
@@ -7289,7 +7289,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -7391,7 +7391,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 2
   i32.shl
@@ -7428,7 +7428,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -7543,7 +7543,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    i32.const 0
@@ -7656,7 +7656,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -7773,7 +7773,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -7888,7 +7888,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -8003,7 +8003,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -8120,7 +8120,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -8235,7 +8235,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -8348,7 +8348,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -8462,7 +8462,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -8576,7 +8576,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -8690,7 +8690,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -8804,7 +8804,7 @@
   local.get $2
   local.set $3
   local.get $5
-  i32.load
+  i32.load offset=4
   local.set $6
   block $break|0
    local.get $5
@@ -8921,7 +8921,7 @@
   call $~lib/typedarray/Int8Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 0
@@ -8973,10 +8973,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -9093,7 +9093,7 @@
   call $~lib/typedarray/Uint8Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 0
@@ -9145,10 +9145,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -9173,7 +9173,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.add
   i32.load8_u
@@ -9284,7 +9284,7 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 0
@@ -9336,10 +9336,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -9456,7 +9456,7 @@
   call $~lib/typedarray/Int16Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 1
@@ -9508,10 +9508,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -9538,7 +9538,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 1
   i32.shl
@@ -9651,7 +9651,7 @@
   call $~lib/typedarray/Uint16Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 1
@@ -9703,10 +9703,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -9733,7 +9733,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 1
   i32.shl
@@ -9846,7 +9846,7 @@
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 2
@@ -9898,10 +9898,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -10018,7 +10018,7 @@
   call $~lib/typedarray/Uint32Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 2
@@ -10070,10 +10070,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -10100,7 +10100,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 2
   i32.shl
@@ -10213,7 +10213,7 @@
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 3
@@ -10265,10 +10265,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -10295,7 +10295,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 3
   i32.shl
@@ -10408,7 +10408,7 @@
   call $~lib/typedarray/Uint64Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 3
@@ -10460,10 +10460,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -10490,7 +10490,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 3
   i32.shl
@@ -10603,7 +10603,7 @@
   call $~lib/typedarray/Float32Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 2
@@ -10655,10 +10655,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -10685,7 +10685,7 @@
    unreachable
   end
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 2
   i32.shl
@@ -10798,7 +10798,7 @@
   call $~lib/typedarray/Float64Array#get:length
   local.set $4
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $5
   local.get $4
   i32.const 3
@@ -10850,10 +10850,10 @@
   local.get $7
   local.get $8
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $8
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $6
   i32.store offset=8
@@ -11164,7 +11164,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -11224,13 +11224,13 @@
   local.get $5
   local.get $9
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $10
   i32.store offset=8
   local.get $5
   local.get $9
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $11
@@ -11392,7 +11392,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -11452,13 +11452,13 @@
   local.get $5
   local.get $9
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $10
   i32.store offset=8
   local.get $5
   local.get $9
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $11
@@ -11620,7 +11620,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -11680,13 +11680,13 @@
   local.get $5
   local.get $9
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $10
   i32.store offset=8
   local.get $5
   local.get $9
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $11
@@ -11850,7 +11850,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -11910,13 +11910,13 @@
   local.get $5
   local.get $9
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $10
   i32.store offset=8
   local.get $5
   local.get $9
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $11
@@ -12078,7 +12078,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -12138,13 +12138,13 @@
   local.get $5
   local.get $9
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $10
   i32.store offset=8
   local.get $5
   local.get $9
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $11
@@ -12304,7 +12304,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -12364,13 +12364,13 @@
   local.get $5
   local.get $9
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $10
   i32.store offset=8
   local.get $5
   local.get $9
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $11
@@ -12530,7 +12530,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -12590,13 +12590,13 @@
   local.get $5
   local.get $9
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $10
   i32.store offset=8
   local.get $5
   local.get $9
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $11
@@ -12757,7 +12757,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -12817,13 +12817,13 @@
   local.get $5
   local.get $11
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $9
   i32.store offset=8
   local.get $5
   local.get $11
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $12
@@ -12984,7 +12984,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -13044,13 +13044,13 @@
   local.get $5
   local.get $11
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $9
   i32.store offset=8
   local.get $5
   local.get $11
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $12
@@ -13211,7 +13211,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -13271,13 +13271,13 @@
   local.get $5
   local.get $11
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $9
   i32.store offset=8
   local.get $5
   local.get $11
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $12
@@ -13438,7 +13438,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $6
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $7
   i32.const 0
   local.set $8
@@ -13498,13 +13498,13 @@
   local.get $5
   local.get $11
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $5
   local.get $9
   i32.store offset=8
   local.get $5
   local.get $11
-  i32.store
+  i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
   local.set $12
@@ -13652,7 +13652,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -13808,7 +13808,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -13962,7 +13962,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -14118,7 +14118,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -14274,7 +14274,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -14426,7 +14426,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -14576,7 +14576,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -14726,7 +14726,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -14876,7 +14876,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -15026,7 +15026,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -15176,7 +15176,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -15330,7 +15330,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -15485,7 +15485,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -15638,7 +15638,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -15793,7 +15793,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -15948,7 +15948,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -16099,7 +16099,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -16248,7 +16248,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -16397,7 +16397,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -16546,7 +16546,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -16695,7 +16695,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -16844,7 +16844,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -16999,7 +16999,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -17160,7 +17160,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -17319,7 +17319,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -17480,7 +17480,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -17641,7 +17641,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -17798,7 +17798,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -17953,7 +17953,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -18108,7 +18108,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -18263,7 +18263,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -18670,7 +18670,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -19079,7 +19079,7 @@
    local.get $1
    local.set $2
    local.get $3
-   i32.load
+   i32.load offset=4
    local.set $4
    block $break|0
     i32.const 0
@@ -19277,7 +19277,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -19445,7 +19445,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -19607,7 +19607,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -19773,7 +19773,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -19941,7 +19941,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -20099,7 +20099,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -20251,7 +20251,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -20404,7 +20404,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -20560,7 +20560,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -20716,7 +20716,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -20872,7 +20872,7 @@
   local.get $1
   local.set $2
   local.get $3
-  i32.load
+  i32.load offset=4
   local.set $4
   block $break|0
    i32.const 0
@@ -20975,7 +20975,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -21225,7 +21225,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -21359,17 +21359,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 0
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -21576,7 +21576,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -21710,17 +21710,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 0
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -21927,7 +21927,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -22061,17 +22061,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 1
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -22284,7 +22284,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -22418,17 +22418,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 1
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -22635,7 +22635,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -22873,7 +22873,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -23007,17 +23007,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 2
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -23218,7 +23218,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -23352,17 +23352,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 3
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -23566,7 +23566,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -23700,17 +23700,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 3
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -23914,7 +23914,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -24048,17 +24048,17 @@
   local.set $7
   local.get $7
   local.get $5
-  i32.load offset=4
+  i32.load
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $7
   local.get $5
-  i32.load
+  i32.load offset=4
   local.get $4
   i32.const 2
   i32.shl
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $7
   local.get $3
   local.get $4
@@ -24262,7 +24262,7 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $2
   block $break|0
    i32.const 0
@@ -24547,7 +24547,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -24643,7 +24643,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -25236,7 +25236,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -25330,7 +25330,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -25919,7 +25919,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -26013,7 +26013,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -26602,7 +26602,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -26698,7 +26698,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -27291,7 +27291,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -27385,7 +27385,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -27974,7 +27974,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -28066,7 +28066,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -28651,7 +28651,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -28743,7 +28743,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -29328,7 +29328,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -29420,7 +29420,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -30006,7 +30006,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -30098,7 +30098,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -30684,7 +30684,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -30776,7 +30776,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -31362,7 +31362,7 @@
     local.set $6
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -31454,7 +31454,7 @@
     end
    end
    local.get $5
-   i32.load
+   i32.load offset=4
    local.set $8
    block $break|0
     loop $continue|0
@@ -32059,7 +32059,7 @@
   (local $8 i64)
   (local $9 i64)
   i32.const 2160
-  i32.load
+  i32.load offset=4
   local.set $3
   block $break|0
    loop $continue|0
@@ -32598,7 +32598,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Int8Array#get:length
   local.get $1
@@ -33059,7 +33059,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint8Array#get:length
   local.get $1
@@ -33149,7 +33149,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint8ClampedArray#get:length
   local.get $1
@@ -33469,7 +33469,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Int16Array#get:length
   local.get $1
@@ -33757,7 +33757,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint16Array#get:length
   local.get $1
@@ -34057,7 +34057,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Int32Array#get:length
   local.get $1
@@ -34337,7 +34337,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint32Array#get:length
   local.get $1
@@ -34507,7 +34507,7 @@
   (local $12 i64)
   (local $13 i64)
   i32.const 2160
-  i32.load
+  i32.load offset=4
   local.set $3
   block $break|0
    loop $continue|0
@@ -34950,7 +34950,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Int64Array#get:length
   local.get $1
@@ -35319,7 +35319,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Uint64Array#get:length
   local.get $1
@@ -35412,7 +35412,7 @@
  )
  (func $~lib/array/Array<u64>#__unchecked_get (; 541 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 3
   i32.shl
@@ -35421,7 +35421,7 @@
  )
  (func $~lib/array/Array<i16>#__unchecked_get (; 542 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 1
   i32.shl
@@ -35484,7 +35484,7 @@
   local.get $6
   local.set $15
   i32.const 3400
-  i32.load
+  i32.load offset=4
   local.set $16
   block $break|0
    loop $continue|0
@@ -36957,7 +36957,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Float32Array#get:length
   local.get $1
@@ -37195,7 +37195,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $0
   call $~lib/typedarray/Float64Array#get:length
   local.get $1
@@ -37467,7 +37467,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -37475,7 +37475,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -37558,7 +37558,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -37724,7 +37724,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -37732,7 +37732,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -37813,7 +37813,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -37979,7 +37979,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -37987,7 +37987,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -38068,7 +38068,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -38234,7 +38234,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -38242,7 +38242,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -38325,7 +38325,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -38491,7 +38491,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -38499,7 +38499,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -38580,7 +38580,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -38746,7 +38746,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -38754,7 +38754,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -38833,7 +38833,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -38999,7 +38999,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -39007,7 +39007,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -39086,7 +39086,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -39252,7 +39252,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -39260,7 +39260,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -39340,7 +39340,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -39506,7 +39506,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -39514,7 +39514,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -39594,7 +39594,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -39760,7 +39760,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -39768,7 +39768,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -39848,7 +39848,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -40014,7 +40014,7 @@
   local.get $8
   local.get $5
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $8
   local.get $7
   i32.store offset=8
@@ -40022,7 +40022,7 @@
   local.get $5
   local.get $4
   i32.add
-  i32.store
+  i32.store offset=4
   local.get $8
   call $~lib/rt/pure/__retain
   local.set $9
@@ -40102,7 +40102,7 @@
    unreachable
   end
   local.get $3
-  i32.load offset=4
+  i32.load
   local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   local.get $3
@@ -42321,7 +42321,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.tee $2
   if
    local.get $2

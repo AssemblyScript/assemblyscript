@@ -2032,7 +2032,7 @@
   (local $36 i64)
   (local $37 f64)
   i32.const 232
-  i32.load
+  i32.load offset=4
   local.set $2
   local.get $1
   i64.const 9223372036854775807
@@ -8683,7 +8683,7 @@
    local.get $9
    local.set $11
    i32.const 312
-   i32.load
+   i32.load offset=4
    local.set $13
    local.get $11
    i32.const 23
@@ -11483,7 +11483,7 @@
    local.get $9
    local.set $11
    i32.const 312
-   i32.load
+   i32.load offset=4
    local.set $13
    local.get $11
    i32.const 23
@@ -12261,7 +12261,7 @@
    local.get $11
    local.set $13
    i32.const 312
-   i32.load
+   i32.load offset=4
    local.set $15
    local.get $13
    i32.const 23

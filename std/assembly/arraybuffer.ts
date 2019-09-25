@@ -6,9 +6,8 @@ import { E_INVALIDLENGTH } from "./util/error";
 
 export abstract class ArrayBufferView {
 
-  @unsafe readonly dataStart: usize;
-
   readonly buffer: ArrayBuffer;
+  @unsafe readonly dataStart: usize;
   readonly byteLength: i32;
 
   get byteOffset(): i32 {

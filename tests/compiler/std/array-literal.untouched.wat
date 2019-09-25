@@ -55,7 +55,7 @@
  )
  (func $~lib/array/Array<i8>#__unchecked_get (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 0
   i32.shl
@@ -88,7 +88,7 @@
  )
  (func $~lib/array/Array<i32>#__unchecked_get (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
-  i32.load
+  i32.load offset=4
   local.get $1
   i32.const 2
   i32.shl
@@ -3110,10 +3110,10 @@
   local.get $4
   local.get $6
   call $~lib/rt/pure/__retain
-  i32.store offset=4
+  i32.store
   local.get $4
   local.get $6
-  i32.store
+  i32.store offset=4
   local.get $4
   local.get $5
   i32.store offset=8
@@ -3555,7 +3555,7 @@
   call $~lib/rt/__allocArray
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $0
   local.get $0
   global.get $std/array-literal/i
@@ -3641,7 +3641,7 @@
   call $~lib/rt/__allocArray
   local.set $0
   local.get $0
-  i32.load
+  i32.load offset=4
   local.set $1
   local.get $1
   global.get $std/array-literal/i
@@ -3725,7 +3725,7 @@
   call $~lib/rt/__allocArray
   local.set $1
   local.get $1
-  i32.load
+  i32.load offset=4
   local.set $0
   local.get $0
   i32.const 0
@@ -3768,7 +3768,7 @@
   call $~lib/rt/__allocArray
   local.set $0
   local.get $0
-  i32.load
+  i32.load offset=4
   local.set $1
   local.get $1
   i32.const 0
@@ -3971,7 +3971,7 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i32.load
+  i32.load offset=4
   local.set $2
   local.get $2
   local.get $0
@@ -4010,7 +4010,7 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i32.load
+  i32.load offset=4
   local.set $2
   local.get $2
   local.get $0
@@ -4087,7 +4087,7 @@
    unreachable
   end
   local.get $0
-  i32.load offset=4
+  i32.load
   local.tee $2
   if
    local.get $2

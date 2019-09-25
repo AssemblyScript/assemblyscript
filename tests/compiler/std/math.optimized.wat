@@ -3347,7 +3347,7 @@
   (local $10 i64)
   (local $11 i64)
   (local $12 f64)
-  i32.const 272
+  i32.const 276
   i32.load
   local.get $0
   i64.const 9223372036854775807
@@ -4079,7 +4079,7 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.0
    end
-   i32.const 352
+   i32.const 356
    i32.load
    local.get $2
    i32.const 23
@@ -9777,7 +9777,7 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.1
    end
-   i32.const 352
+   i32.const 356
    i32.load
    local.get $2
    i32.const 23
@@ -10636,7 +10636,7 @@
     i32.trunc_f64_s
     br $~lib/math/rempio2f|inlined.2
    end
-   i32.const 352
+   i32.const 356
    i32.load
    local.get $2
    i32.const 23
