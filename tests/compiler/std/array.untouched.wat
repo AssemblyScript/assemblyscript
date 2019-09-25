@@ -10600,11 +10600,6 @@
   if
    block $break|0
     loop $continue|0
-     local.get $4
-     i32.const 8
-     i32.ge_u
-     i32.eqz
-     br_if $break|0
      local.get $6
      i64.load
      local.get $7
@@ -10625,9 +10620,11 @@
      i32.const 8
      i32.sub
      local.set $4
-     br $continue|0
+     local.get $4
+     i32.const 8
+     i32.ge_u
+     br_if $continue|0
     end
-    unreachable
    end
   end
   block $break|1

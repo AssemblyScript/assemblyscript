@@ -252,17 +252,12 @@
   select
   if
    loop $continue|0
-    block $break|0
-     local.get $2
-     i32.const 8
-     i32.lt_u
-     br_if $break|0
-     local.get $0
-     i64.load
-     local.get $1
-     i64.load
-     i64.ne
-     br_if $break|0
+    local.get $0
+    i64.load
+    local.get $1
+    i64.load
+    i64.eq
+    if
      local.get $0
      i32.const 8
      i32.add
@@ -274,8 +269,10 @@
      local.get $2
      i32.const 8
      i32.sub
-     local.set $2
-     br $continue|0
+     local.tee $2
+     i32.const 8
+     i32.ge_u
+     br_if $continue|0
     end
    end
   end

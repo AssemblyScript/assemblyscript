@@ -267,12 +267,12 @@ export function memcmp(vl: usize, vr: usize, n: usize): i32 {
   if (vl == vr) return 0;
   if (ASC_SHRINK_LEVEL < 2) {
     if (n >= 8 && !((vl & 7) | (vr & 7))) {
-      while (n >= 8) {
+      do {
         if (load<u64>(vl) != load<u64>(vr)) break;
         vl += 8;
         vr += 8;
         n  -= 8;
-      }
+      } while (n >= 8);
     }
   }
   while (n--) {
