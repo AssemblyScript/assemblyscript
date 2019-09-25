@@ -87,7 +87,49 @@
  )
  (func $~lib/util/string/compareImpl (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  loop $continue|0
+  local.get $0
+  i32.const 7
+  i32.and
+  local.get $1
+  i32.const 7
+  i32.and
+  i32.or
+  i32.eqz
+  i32.const 0
+  local.get $2
+  i32.const 8
+  i32.ge_u
+  select
+  if
+   loop $continue|0
+    block $break|0
+     local.get $2
+     i32.const 8
+     i32.lt_u
+     br_if $break|0
+     local.get $0
+     i64.load
+     local.get $1
+     i64.load
+     i64.ne
+     br_if $break|0
+     local.get $0
+     i32.const 8
+     i32.add
+     local.set $0
+     local.get $1
+     i32.const 8
+     i32.add
+     local.set $1
+     local.get $2
+     i32.const 8
+     i32.sub
+     local.set $2
+     br $continue|0
+    end
+   end
+  end
+  loop $continue|1
    local.get $2
    if (result i32)
     local.get $0
@@ -113,7 +155,7 @@
     i32.const 2
     i32.add
     local.set $1
-    br $continue|0
+    br $continue|1
    end
   end
   local.get $3

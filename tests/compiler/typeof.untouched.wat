@@ -18,6 +18,7 @@
  (table $0 2 funcref)
  (elem (i32.const 0) $null $start:typeof~anonymous|0)
  (global $typeof/SomeNamespace.a i32 (i32.const 1))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $typeof/b (mut i32) (i32.const 1))
  (global $typeof/i (mut i32) (i32.const 1))
  (global $typeof/f (mut f32) (f32.const 1))
@@ -71,8 +72,56 @@
   i32.shl
   i32.add
   local.set $7
-  block $break|0
-   loop $continue|0
+  local.get $4
+  i32.const 8
+  i32.ge_u
+  if (result i32)
+   local.get $6
+   i32.const 7
+   i32.and
+   local.get $7
+   i32.const 7
+   i32.and
+   i32.or
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if
+   block $break|0
+    loop $continue|0
+     local.get $4
+     i32.const 8
+     i32.ge_u
+     i32.eqz
+     br_if $break|0
+     local.get $6
+     i64.load
+     local.get $7
+     i64.load
+     i64.ne
+     if
+      br $break|0
+     end
+     local.get $6
+     i32.const 8
+     i32.add
+     local.set $6
+     local.get $7
+     i32.const 8
+     i32.add
+     local.set $7
+     local.get $4
+     i32.const 8
+     i32.sub
+     local.set $4
+     br $continue|0
+    end
+    unreachable
+   end
+  end
+  block $break|1
+   loop $continue|1
     local.get $4
     if (result i32)
      local.get $6
@@ -86,7 +135,7 @@
      i32.const 0
     end
     i32.eqz
-    br_if $break|0
+    br_if $break|1
     local.get $4
     i32.const 1
     i32.sub
@@ -99,7 +148,7 @@
     i32.const 2
     i32.add
     local.set $7
-    br $continue|0
+    br $continue|1
    end
    unreachable
   end
