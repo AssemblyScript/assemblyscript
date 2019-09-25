@@ -134,35 +134,42 @@
    end
   end
   loop $continue|1
-   local.get $2
-   if (result i32)
-    local.get $1
-    i32.load16_u
-    local.get $3
-    i32.load16_u
-    i32.sub
-    local.tee $4
-    i32.eqz
-   else
-    i32.const 0
-   end
-   if
+   block $break|1
     local.get $2
+    local.tee $0
     i32.const 1
     i32.sub
     local.set $2
-    local.get $1
-    i32.const 2
-    i32.add
-    local.set $1
+    local.get $0
+    i32.eqz
+    br_if $break|1
     local.get $3
-    i32.const 2
-    i32.add
-    local.set $3
-    br $continue|1
+    i32.load16_u
+    local.tee $0
+    local.get $1
+    i32.load16_u
+    local.tee $4
+    i32.ne
+    if
+     local.get $4
+     local.get $0
+     i32.sub
+     return
+    else
+     local.get $1
+     i32.const 2
+     i32.add
+     local.set $1
+     local.get $3
+     i32.const 2
+     i32.add
+     local.set $3
+     br $continue|1
+    end
+    unreachable
    end
   end
-  local.get $4
+  i32.const 0
  )
  (func $~lib/string/String#startsWith (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)

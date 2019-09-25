@@ -2194,6 +2194,7 @@
  (func $~lib/util/string/compareImpl (; 34 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -2205,11 +2206,11 @@
   i32.shl
   local.get $0
   i32.add
-  local.tee $1
+  local.tee $4
   i32.const 7
   i32.and
   local.get $2
-  local.tee $4
+  local.tee $1
   i32.const 7
   i32.and
   i32.or
@@ -2221,20 +2222,20 @@
   select
   if
    loop $continue|0
-    local.get $1
-    i64.load
     local.get $4
+    i64.load
+    local.get $1
     i64.load
     i64.eq
     if
-     local.get $1
-     i32.const 8
-     i32.add
-     local.set $1
      local.get $4
      i32.const 8
      i32.add
      local.set $4
+     local.get $1
+     i32.const 8
+     i32.add
+     local.set $1
      local.get $3
      i32.const 8
      i32.sub
@@ -2246,39 +2247,50 @@
    end
   end
   loop $continue|1
-   local.get $3
-   if (result i32)
-    local.get $1
-    i32.load16_u
-    local.get $4
-    i32.load16_u
-    i32.sub
-    local.tee $5
-    i32.eqz
-   else
-    i32.const 0
-   end
-   if
+   block $break|1
     local.get $3
+    local.tee $5
     i32.const 1
     i32.sub
     local.set $3
+    local.get $5
+    i32.eqz
+    br_if $break|1
     local.get $1
-    i32.const 2
-    i32.add
-    local.set $1
+    i32.load16_u
+    local.tee $5
     local.get $4
-    i32.const 2
-    i32.add
-    local.set $4
-    br $continue|1
+    i32.load16_u
+    local.tee $6
+    i32.ne
+    if
+     local.get $0
+     call $~lib/rt/pure/__release
+     local.get $2
+     call $~lib/rt/pure/__release
+     local.get $6
+     local.get $5
+     i32.sub
+     return
+    else
+     local.get $4
+     i32.const 2
+     i32.add
+     local.set $4
+     local.get $1
+     i32.const 2
+     i32.add
+     local.set $1
+     br $continue|1
+    end
+    unreachable
    end
   end
   local.get $0
   call $~lib/rt/pure/__release
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $5
+  i32.const 0
  )
  (func $~lib/string/String.__eq (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

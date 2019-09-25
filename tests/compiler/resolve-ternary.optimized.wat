@@ -1913,6 +1913,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
@@ -1961,39 +1962,50 @@
    end
   end
   loop $continue|1
-   local.get $2
-   if (result i32)
-    local.get $3
-    i32.load16_u
-    local.get $4
-    i32.load16_u
-    i32.sub
-    local.tee $5
-    i32.eqz
-   else
-    i32.const 0
-   end
-   if
+   block $break|1
     local.get $2
+    local.tee $5
     i32.const 1
     i32.sub
     local.set $2
-    local.get $3
-    i32.const 2
-    i32.add
-    local.set $3
+    local.get $5
+    i32.eqz
+    br_if $break|1
     local.get $4
-    i32.const 2
-    i32.add
-    local.set $4
-    br $continue|1
+    i32.load16_u
+    local.tee $5
+    local.get $3
+    i32.load16_u
+    local.tee $6
+    i32.ne
+    if
+     local.get $0
+     call $~lib/rt/pure/__release
+     local.get $1
+     call $~lib/rt/pure/__release
+     local.get $6
+     local.get $5
+     i32.sub
+     return
+    else
+     local.get $3
+     i32.const 2
+     i32.add
+     local.set $3
+     local.get $4
+     i32.const 2
+     i32.add
+     local.set $4
+     br $continue|1
+    end
+    unreachable
    end
   end
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $5
+  i32.const 0
  )
  (func $~lib/string/String.__eq (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
