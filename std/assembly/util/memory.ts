@@ -268,7 +268,7 @@ export function memcmp(vl: usize, vr: usize, n: usize): i32 {
   if (ASC_SHRINK_LEVEL < 2) {
     if ((vl & 7) == (vr & 7)) {
       while (vl & 7) {
-        if (!n) return 0;
+        if (n == 0) return 0;
         let a = <i32>load<u8>(vl);
         let b = <i32>load<u8>(vr);
         if (a != b) return a - b;
