@@ -10,32 +10,34 @@ export enum DiagnosticCode {
   Operation_not_supported = 100,
   Operation_is_unsafe = 101,
   User_defined_0 = 102,
+  Not_implemented = 103,
   Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
-  Type_0_cannot_be_reinterpreted_as_type_1 = 203,
+  Operation_0_cannot_be_applied_to_type_1 = 203,
   Basic_type_0_cannot_be_nullable = 204,
   Cannot_export_a_mutable_global = 205,
   Mutable_value_cannot_be_inlined = 206,
   Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa = 207,
   Unmanaged_classes_cannot_implement_interfaces = 208,
   Invalid_regular_expression_flags = 209,
-  Implementation_0_must_match_the_signature_1 = 210,
+  Expression_is_never_null = 210,
   Class_0_is_sealed_and_cannot_be_extended = 211,
   Decorator_0_is_not_valid_here = 212,
   Duplicate_decorator = 213,
-  An_allocator_must_be_present_to_use_0 = 214,
+  Type_0_is_not_a_class_or_function_type = 214,
   Optional_parameter_must_have_an_initializer = 215,
   Constructor_of_class_0_must_not_require_any_arguments = 216,
   Function_0_cannot_be_inlined_into_itself = 217,
   Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set = 218,
   Optional_properties_are_not_supported = 219,
   Expression_must_be_a_compile_time_constant = 220,
-  Module_cannot_have_multiple_start_functions = 221,
+  Type_0_is_not_a_function_index_or_function_reference = 221,
   _0_must_be_a_value_between_1_and_2_inclusive = 222,
   _0_must_be_a_power_of_two = 223,
-  Expression_is_unsafe = 224,
-  Expression_is_never_null = 225,
+  _0_is_not_a_valid_operator = 224,
+  Expression_cannot_be_represented_by_a_type = 225,
+  Type_0_is_illegal_in_this_context = 226,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -105,7 +107,7 @@ export enum DiagnosticCode {
   Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors = 2337,
   Property_0_does_not_exist_on_type_1 = 2339,
   Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
-  Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature = 2351,
+  This_expression_is_not_constructable = 2351,
   A_function_whose_declared_type_is_not_void_must_return_a_value = 2355,
   The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
   The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
@@ -147,35 +149,37 @@ export enum DiagnosticCode {
 /** Translates a diagnostic code to its respective string. */
 export function diagnosticCodeToString(code: DiagnosticCode): string {
   switch (code) {
-    case 100: return "Operation not supported.";
+    case 100: return "Operation not supported";
     case 101: return "Operation is unsafe.";
     case 102: return "User-defined: {0}";
+    case 103: return "Not implemented.";
     case 200: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";
-    case 203: return "Type '{0}' cannot be reinterpreted as type '{1}'.";
+    case 203: return "Operation '{0}' cannot be applied to type '{1}'.";
     case 204: return "Basic type '{0}' cannot be nullable.";
     case 205: return "Cannot export a mutable global.";
     case 206: return "Mutable value cannot be inlined.";
     case 207: return "Unmanaged classes cannot extend managed classes and vice-versa.";
     case 208: return "Unmanaged classes cannot implement interfaces.";
     case 209: return "Invalid regular expression flags.";
-    case 210: return "Implementation '{0}' must match the signature '{1}'.";
+    case 210: return "Expression is never 'null'.";
     case 211: return "Class '{0}' is sealed and cannot be extended.";
     case 212: return "Decorator '{0}' is not valid here.";
     case 213: return "Duplicate decorator.";
-    case 214: return "An allocator must be present to use '{0}'.";
+    case 214: return "Type '{0}' is not a class or function type.";
     case 215: return "Optional parameter must have an initializer.";
     case 216: return "Constructor of class '{0}' must not require any arguments.";
     case 217: return "Function '{0}' cannot be inlined into itself.";
     case 218: return "Cannot access method '{0}' without calling it as it requires 'this' to be set.";
     case 219: return "Optional properties are not supported.";
     case 220: return "Expression must be a compile-time constant.";
-    case 221: return "Module cannot have multiple start functions.";
+    case 221: return "Type '{0}' is not a function index or function reference.";
     case 222: return "'{0}' must be a value between '{1}' and '{2}' inclusive.";
     case 223: return "'{0}' must be a power of two.";
-    case 224: return "Expression is unsafe.";
-    case 225: return "Expression is never 'null'.";
+    case 224: return "'{0}' is not a valid operator.";
+    case 225: return "Expression cannot be represented by a type.";
+    case 226: return "Type '{0}' is illegal in this context.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";
@@ -245,7 +249,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2337: return "Super calls are not permitted outside constructors or in nested functions inside constructors.";
     case 2339: return "Property '{0}' does not exist on type '{1}'.";
     case 2349: return "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.";
-    case 2351: return "Cannot use 'new' with an expression whose type lacks a construct signature.";
+    case 2351: return "This expression is not constructable.";
     case 2355: return "A function whose declared type is not 'void' must return a value.";
     case 2357: return "The operand of an increment or decrement operator must be a variable or a property access.";
     case 2364: return "The left-hand side of an assignment expression must be a variable or a property access.";

@@ -922,7 +922,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Not_implemented,
         node.range
       );
     }
@@ -1046,7 +1046,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Not_implemented,
         node.range
       );
     }
@@ -1132,7 +1132,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!type) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Expression_cannot_be_represented_by_a_type,
           node.range
         );
       }
@@ -1359,7 +1359,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!type) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Expression_cannot_be_represented_by_a_type,
           node.range
         );
       }
@@ -1418,7 +1418,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!type) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Expression_cannot_be_represented_by_a_type,
           node.range
         );
       }
@@ -1515,8 +1515,8 @@ export class Resolver extends DiagnosticEmitter {
     if (element) return element;
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
-        node.range
+        DiagnosticCode.Type_0_is_illegal_in_this_context,
+        node.range, type.toString()
       );
     }
     this.currentThisExpression = null;
@@ -1716,11 +1716,10 @@ export class Resolver extends DiagnosticEmitter {
         }
         return type;
       }
-      default: assert(false);
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Not_implemented,
         node.range
       );
     }
@@ -1744,8 +1743,8 @@ export class Resolver extends DiagnosticEmitter {
     if (element) return element; // otherwise void
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
-        node.range
+        DiagnosticCode.Type_0_is_illegal_in_this_context,
+        node.range, type.toString()
       );
     }
     return null;
@@ -1942,10 +1941,9 @@ export class Resolver extends DiagnosticEmitter {
         return this.resolveExpression(left, ctxFlow, ctxType, reportMode);
       }
     }
-
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Not_implemented,
         node.range
       );
     }
@@ -2003,7 +2001,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!type) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Expression_cannot_be_represented_by_a_type,
           node.range
         );
       }
@@ -2062,7 +2060,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!type) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Expression_cannot_be_represented_by_a_type,
           node.range
         );
       }
@@ -2111,7 +2109,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Not_implemented,
         node.range
       );
     }
@@ -2135,7 +2133,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!type) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Expression_cannot_be_represented_by_a_type,
           node.range
         );
       }
@@ -2160,8 +2158,8 @@ export class Resolver extends DiagnosticEmitter {
     if (!element) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
-          node.range
+          DiagnosticCode.Type_0_is_illegal_in_this_context,
+          node.range, type.toString()
         );
       }
     }
@@ -2299,8 +2297,8 @@ export class Resolver extends DiagnosticEmitter {
     if (!element) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
-          node.range
+          DiagnosticCode.Type_0_is_illegal_in_this_context,
+          node.range, type.toString()
         );
       }
     }
@@ -2359,7 +2357,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
-        DiagnosticCode.Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature,
+        DiagnosticCode.This_expression_is_not_constructable,
         node.range
       );
     }
@@ -2383,7 +2381,7 @@ export class Resolver extends DiagnosticEmitter {
     if (!type) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Expression_cannot_be_represented_by_a_type,
           node.range
         );
       }
@@ -2408,8 +2406,8 @@ export class Resolver extends DiagnosticEmitter {
     if (!element) {
       if (reportMode == ReportMode.REPORT) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
-          node.range
+          DiagnosticCode.Type_0_is_illegal_in_this_context,
+          node.range, type.toString()
         );
       }
     }

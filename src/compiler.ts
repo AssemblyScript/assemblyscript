@@ -6126,7 +6126,7 @@ export class Compiler extends DiagnosticEmitter {
     // Library files may always use unsafe features
     if (this.options.noUnsafe && !reportNode.range.source.isLibrary) {
       this.error(
-        DiagnosticCode.Expression_is_unsafe,
+        DiagnosticCode.Operation_is_unsafe,
         reportNode.range
       );
     }
@@ -7777,7 +7777,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return module.unreachable();
     if (target.kind != ElementKind.CLASS_PROTOTYPE) {
       this.error(
-        DiagnosticCode.Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature,
+        DiagnosticCode.This_expression_is_not_constructable,
         expression.expression.range
       );
       return this.module.unreachable();
