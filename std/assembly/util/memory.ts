@@ -266,13 +266,20 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
 export function memcmp(vl: usize, vr: usize, n: usize): i32 {
   if (vl == vr) return 0;
   if (ASC_SHRINK_LEVEL < 2) {
-    if (n >= 8 && !((vl & 7) | (vr & 7))) {
-      do {
+    if ((vl & 7) == (vr & 7)) {
+      while (vl & 7) {
+        if (!n) return 0;
+        let a = <i32>load<u8>(vl);
+        let b = <i32>load<u8>(vr);
+        if (a != b) return a - b;
+        vl++; vr++; n--;
+      }
+      while (n >= 8) {
         if (load<u64>(vl) != load<u64>(vr)) break;
         vl += 8;
         vr += 8;
         n  -= 8;
-      } while (n >= 8);
+      }
     }
   }
   while (n--) {
