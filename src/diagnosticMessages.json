@@ -18,7 +18,7 @@
   "Class '{0}' is sealed and cannot be extended.": 211,
   "Decorator '{0}' is not valid here.": 212,
   "Duplicate decorator.": 213,
-  "Type '{0}' is not a class or function type.": 214,
+  "Type '{0}' is illegal in this context.": 214,
   "Optional parameter must have an initializer.": 215,
   "Constructor of class '{0}' must not require any arguments.": 216,
   "Function '{0}' cannot be inlined into itself.": 217,
@@ -30,7 +30,6 @@
   "'{0}' must be a power of two.": 223,
   "'{0}' is not a valid operator.": 224,
   "Expression cannot be represented by a type.": 225,
-  "Type '{0}' is illegal in this context.": 226,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

@@ -25,7 +25,7 @@ export enum DiagnosticCode {
   Class_0_is_sealed_and_cannot_be_extended = 211,
   Decorator_0_is_not_valid_here = 212,
   Duplicate_decorator = 213,
-  Type_0_is_not_a_class_or_function_type = 214,
+  Type_0_is_illegal_in_this_context = 214,
   Optional_parameter_must_have_an_initializer = 215,
   Constructor_of_class_0_must_not_require_any_arguments = 216,
   Function_0_cannot_be_inlined_into_itself = 217,
@@ -37,7 +37,6 @@ export enum DiagnosticCode {
   _0_must_be_a_power_of_two = 223,
   _0_is_not_a_valid_operator = 224,
   Expression_cannot_be_represented_by_a_type = 225,
-  Type_0_is_illegal_in_this_context = 226,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -169,7 +168,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 211: return "Class '{0}' is sealed and cannot be extended.";
     case 212: return "Decorator '{0}' is not valid here.";
     case 213: return "Duplicate decorator.";
-    case 214: return "Type '{0}' is not a class or function type.";
+    case 214: return "Type '{0}' is illegal in this context.";
     case 215: return "Optional parameter must have an initializer.";
     case 216: return "Constructor of class '{0}' must not require any arguments.";
     case 217: return "Function '{0}' cannot be inlined into itself.";
@@ -181,7 +180,6 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 223: return "'{0}' must be a power of two.";
     case 224: return "'{0}' is not a valid operator.";
     case 225: return "Expression cannot be represented by a type.";
-    case 226: return "Type '{0}' is illegal in this context.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

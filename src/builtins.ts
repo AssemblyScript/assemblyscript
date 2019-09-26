@@ -561,16 +561,6 @@ export function compileCall(
 ): ExpressionRef {
   var module = compiler.module;
 
-  // NOTE that some implementations below make use of the select expression where straight-forward.
-  // whether worth or not should probably be tested once it's known if/how embedders handle it.
-  // search: createSelect
-
-  // NOTE that consolidation of individual instructions into a single case isn't exactly scientific
-  // below, but rather done to make this file easier to work with. If there was a general rule it'd
-  // most likely be "three or more instructions that only differ in their actual opcode".
-
-  var directize = false;
-
   switch (prototype.internalName) {
 
     // === Static type evaluation =================================================================
@@ -688,35 +678,31 @@ export function compileCall(
       compiler.currentType = Type.bool;
       return module.i32(getExpressionId(expr) == ExpressionId.Const ? 1 : 0);
     }
-    case BuiltinSymbols.isManaged: { // isManaged<T>() -> bool
+    case BuiltinSymbols.isManaged: { // isManaged<T!>() -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
       return module.i32(type.isManaged ? 1 : 0);
     }
-    case BuiltinSymbols.isVoid: { // isVoid<T>() -> bool
+    case BuiltinSymbols.isVoid: { // isVoid<T!>() -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
       return module.i32(type.kind == TypeKind.VOID ? 1 : 0);
     }
-    case BuiltinSymbols.lengthof: { // lengthof<T>() -> i32
+    case BuiltinSymbols.lengthof: { // lengthof<T!>() -> i32
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
       compiler.currentType = Type.i32;
       if (!type) return module.unreachable();
-
-      // Report if there is no call signature
       let signatureReference = type.signatureReference;
       if (!signatureReference) {
         compiler.error(
           DiagnosticCode.Type_0_has_no_call_signatures,
-          reportNode.range, "1", (typeArguments ? typeArguments.length : 1).toString(10)
+          reportNode.range, type.toString()
         );
         return module.unreachable();
       }
-
-      let parameterNames = signatureReference.parameterNames;
-      return module.i32(!parameterNames ? 0 : parameterNames.length);
+      return module.i32(signatureReference.parameterTypes.length);
     }
     case BuiltinSymbols.sizeof: { // sizeof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
@@ -724,26 +710,30 @@ export function compileCall(
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsRequired(operands, 0, reportNode, compiler)
       ) return module.unreachable();
-      let byteSize = (<Type[]>typeArguments)[0].byteSize;
-      let expr: ExpressionRef;
+      let type = typeArguments![0];
+      let byteSize = type.byteSize;
+      if (!byteSize) {
+        compiler.error(
+          DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+          reportNode.typeArgumentsRange, "sizeof", type.toString()
+        );
+        return module.unreachable();
+      }
       if (compiler.options.isWasm64) {
         // implicitly wrap if contextual type is a 32-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
           compiler.currentType = Type.u32;
-          expr = module.i32(byteSize);
-        } else {
-          expr = module.i64(byteSize, 0);
+          return module.i32(byteSize);
         }
+        return module.i64(byteSize, 0);
       } else {
         // implicitly extend if contextual type is a 64-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
           compiler.currentType = Type.u64;
-          expr = module.i64(byteSize, 0);
-        } else {
-          expr = module.i32(byteSize);
+          return module.i64(byteSize, 0);
         }
+        return module.i32(byteSize);
       }
-      return expr;
     }
     case BuiltinSymbols.alignof: { // alignof<T!>() -> usize
       compiler.currentType = compiler.options.usizeType;
@@ -751,28 +741,31 @@ export function compileCall(
         checkTypeRequired(typeArguments, reportNode, compiler) |
         checkArgsRequired(operands, 0, reportNode, compiler)
       ) return module.unreachable();
-      let byteSize = (<Type[]>typeArguments)[0].byteSize;
-      assert(isPowerOf2(byteSize));
+      let type = typeArguments![0];
+      let byteSize = type.byteSize;
+      if (!isPowerOf2(byteSize)) { // implies == 0
+        compiler.error(
+          DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+          reportNode.typeArgumentsRange, "alignof", type.toString()
+        );
+        return module.unreachable();
+      }
       let alignLog2 = ctz<i32>(byteSize);
-      let expr: ExpressionRef;
       if (compiler.options.isWasm64) {
         // implicitly wrap if contextual type is a 32-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
           compiler.currentType = Type.u32;
-          expr = module.i32(alignLog2);
-        } else {
-          expr = module.i64(alignLog2, 0);
+          return module.i32(alignLog2);
         }
+        return module.i64(alignLog2, 0);
       } else {
         // implicitly extend if contextual type is a 64-bit integer
         if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
           compiler.currentType = Type.u64;
-          expr = module.i64(alignLog2, 0);
-        } else {
-          expr = module.i32(alignLog2);
+          return module.i64(alignLog2, 0);
         }
+        return module.i32(alignLog2);
       }
-      return expr;
     }
     case BuiltinSymbols.offsetof: { // offsetof<T!>(fieldName?: string) -> usize
       compiler.currentType = compiler.options.usizeType;
@@ -840,9 +833,11 @@ export function compileCall(
       }
     }
     case BuiltinSymbols.nameof: {
-      // Check to make sure a parameter or a type was passed to the builtin
       let resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
-      if (!resultType) return module.unreachable();
+      if (!resultType) {
+        compiler.currentType = compiler.program.stringInstance.type;
+        return module.unreachable();
+      }
       let value: string;
       if (resultType.is(TypeFlags.REFERENCE)) {
         let classReference = resultType.classReference;
@@ -974,8 +969,10 @@ export function compileCall(
           case TypeKind.U16:
           case TypeKind.I32:
           case TypeKind.U32: return module.unary(UnaryOp.PopcntI32, arg0);
-          case TypeKind.USIZE:
-          case TypeKind.ISIZE: {
+          case TypeKind.I64:
+          case TypeKind.U64: return module.unary(UnaryOp.PopcntI64, arg0);
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
             return module.unary(
               compiler.options.isWasm64
                 ? UnaryOp.PopcntI64
@@ -983,8 +980,6 @@ export function compileCall(
               arg0
             );
           }
-          case TypeKind.I64:
-          case TypeKind.U64: return module.unary(UnaryOp.PopcntI64, arg0);
         }
       }
       compiler.error(
@@ -1119,20 +1114,20 @@ export function compileCall(
           case TypeKind.ISIZE: {
             let options = compiler.options;
             let flow = compiler.currentFlow;
-            let wasm64 = options.isWasm64;
+            let isWasm64 = options.isWasm64;
 
             let tempLocal1 = flow.getTempLocal(options.usizeType);
             let tempLocalIndex2 = flow.getAndFreeTempLocal(options.usizeType).index;
             let tempLocalIndex1 = tempLocal1.index;
             flow.freeTempLocal(tempLocal1);
 
-            return module.binary(wasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
-              module.binary(wasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32,
+            return module.binary(isWasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
+              module.binary(isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32,
                 module.local_tee(
                   tempLocalIndex2,
-                  module.binary(wasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32,
+                  module.binary(isWasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32,
                     module.local_tee(tempLocalIndex1, arg0),
-                    wasm64 ? module.i64(63) : module.i32(31)
+                    isWasm64 ? module.i64(63) : module.i32(31)
                   )
                 ),
                 module.local_get(tempLocalIndex1, options.nativeSizeType)
@@ -1301,8 +1296,7 @@ export function compileCall(
       );
       return module.unreachable();
     }
-    case BuiltinSymbols.ceil: // any_rounding<T?>(value: T) -> T
-    case BuiltinSymbols.floor: {
+    case BuiltinSymbols.ceil: { // ceil<T?>(value: T) -> T
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 1, reportNode, compiler)
@@ -1311,7 +1305,6 @@ export function compileCall(
         ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
         : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
       let type = compiler.currentType;
-      let isCeil = prototype.internalName == BuiltinSymbols.ceil;
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {
           case TypeKind.I8:
@@ -1325,13 +1318,45 @@ export function compileCall(
           case TypeKind.U64:
           case TypeKind.USIZE:
           case TypeKind.BOOL: return arg0; // considered rounded
-          case TypeKind.F32: return module.unary(isCeil ? UnaryOp.CeilF32 : UnaryOp.FloorF32, arg0);
-          case TypeKind.F64: return module.unary(isCeil ? UnaryOp.CeilF64 : UnaryOp.FloorF64, arg0);
+          case TypeKind.F32: return module.unary(UnaryOp.CeilF32, arg0);
+          case TypeKind.F64: return module.unary(UnaryOp.CeilF64, arg0);
         }
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, isCeil ? "ceil" : "floor", type.toString()
+        reportNode.typeArgumentsRange, "ceil", type.toString()
+      );
+      return module.unreachable();
+    }
+    case BuiltinSymbols.floor: { // floor<T?>(value: T) -> T
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler, true) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.unreachable();
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
+        : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
+      let type = compiler.currentType;
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.I64:
+          case TypeKind.ISIZE:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.U64:
+          case TypeKind.USIZE:
+          case TypeKind.BOOL: return arg0; // considered rounded
+          case TypeKind.F32: return module.unary(UnaryOp.FloorF32, arg0);
+          case TypeKind.F64: return module.unary(UnaryOp.FloorF64, arg0);
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "floor", type.toString()
       );
       return module.unreachable();
     }
@@ -1477,7 +1502,6 @@ export function compileCall(
       let type = compiler.currentType;
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {
-          // Nothing to do for integers
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
@@ -1488,15 +1512,14 @@ export function compileCall(
           case TypeKind.U32:
           case TypeKind.U64:
           case TypeKind.USIZE:
-          case TypeKind.BOOL: return arg0;
-          // TODO: truncate to contextual type directly?
+          case TypeKind.BOOL: return arg0; // considered truncated
           case TypeKind.F32: return module.unary(UnaryOp.TruncF32, arg0);
           case TypeKind.F64: return module.unary(UnaryOp.TruncF64, arg0);
         }
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.range, "trunc", type.toString()
+        reportNode.typeArgumentsRange, "trunc", type.toString()
       );
       return module.unreachable();
     }
@@ -1515,10 +1538,7 @@ export function compileCall(
         contextualType.is(TypeFlags.INTEGER) &&
         contextualType.size > type.size
       ) ? contextualType : type;
-      let arg0 = compiler.compileExpression(operands[0],
-        compiler.options.usizeType,
-        Constraints.CONV_IMPLICIT
-      );
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
       let numOperands = operands.length;
       let immOffset = numOperands >= 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
       if (immOffset < 0) {
@@ -1569,10 +1589,7 @@ export function compileCall(
         checkArgsOptional(operands, 2, 4, reportNode, compiler)
       ) return module.unreachable();
       let type = typeArguments![0];
-      let arg0 = compiler.compileExpression(operands[0],
-        compiler.options.usizeType,
-        Constraints.CONV_IMPLICIT
-      );
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
       let arg1 = isAsm
         ? compiler.compileExpression(operands[1],
             contextualType,
@@ -1658,10 +1675,7 @@ export function compileCall(
         compiler.currentType = outType;
         return module.unreachable();
       }
-      let arg0 = compiler.compileExpression(operands[0],
-        compiler.options.usizeType,
-        Constraints.CONV_IMPLICIT
-      );
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
       let immOffset = operands.length == 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
       if (immOffset < 0) {
         compiler.currentType = outType;
@@ -1690,10 +1704,7 @@ export function compileCall(
         compiler.currentType = Type.void;
         return module.unreachable();
       }
-      let arg0 = compiler.compileExpression(operands[0],
-        compiler.options.usizeType,
-        Constraints.CONV_IMPLICIT
-      );
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
       let arg1 = isAsm
         ? compiler.compileExpression(
             operands[1],
@@ -2228,7 +2239,7 @@ export function compileCall(
       if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return expr;
     }
-    case BuiltinSymbols.call_direct: directize = true;
+    case BuiltinSymbols.call_direct:
     case BuiltinSymbols.call_indirect: { // call_indirect<T?>(target: Function | u32, ...args: *[]) -> T
       if (
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
@@ -2262,7 +2273,7 @@ export function compileCall(
       let typeRef = module.getFunctionTypeBySignature(nativeReturnType, nativeParamTypes);
       if (!typeRef) typeRef = module.addFunctionType(typeName, nativeReturnType, nativeParamTypes);
       compiler.currentType = returnType;
-      if (directize) {
+      if (prototype.internalName == BuiltinSymbols.call_direct) {
         // if the index expression is precomputable to a constant value, emit a direct call
         if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
           assert(getExpressionType(arg0) == NativeType.I32);
@@ -2677,7 +2688,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "splat", type.toString()
+        reportNode.typeArgumentsRange, "v128.splat", type.toString()
       );
       return module.unreachable();
     }
@@ -2734,7 +2745,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "extract_lane", type.toString()
+        reportNode.typeArgumentsRange, "v128.extract_lane", type.toString()
       );
       return module.unreachable();
     }
@@ -2795,7 +2806,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "replace_lane", type.toString()
+        reportNode.typeArgumentsRange, "v128.replace_lane", type.toString()
       );
       return module.unreachable();
     }
@@ -2900,7 +2911,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "shuffle", type.toString()
+        reportNode.typeArgumentsRange, "v128.shuffle", type.toString()
       );
       compiler.currentType = Type.v128;
       return module.unreachable();
@@ -2942,7 +2953,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "add", type.toString()
+        reportNode.typeArgumentsRange, "v128.add", type.toString()
       );
       return module.unreachable();
     }
@@ -2983,7 +2994,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "sub", type.toString()
+        reportNode.typeArgumentsRange, "v128.sub", type.toString()
       );
       return module.unreachable();
     }
@@ -3020,7 +3031,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "mul", type.toString()
+        reportNode.typeArgumentsRange, "v128.mul", type.toString()
       );
       return module.unreachable();
     }
@@ -3044,7 +3055,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "div", type.toString()
+        reportNode.typeArgumentsRange, "v128.div", type.toString()
       );
       return module.unreachable();
     }
@@ -3070,7 +3081,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "add_saturate", type.toString()
+        reportNode.typeArgumentsRange, "v128.add_saturate", type.toString()
       );
       return module.unreachable();
     }
@@ -3096,7 +3107,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "sub_saturate", type.toString()
+        reportNode.typeArgumentsRange, "v128.sub_saturate", type.toString()
       );
       return module.unreachable();
     }
@@ -3120,7 +3131,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "min", type.toString()
+        reportNode.typeArgumentsRange, "v128.min", type.toString()
       );
       return module.unreachable();
     }
@@ -3144,7 +3155,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "max", type.toString()
+        reportNode.typeArgumentsRange, "v128.max", type.toString()
       );
       return module.unreachable();
     }
@@ -3181,7 +3192,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "eq", type.toString()
+        reportNode.typeArgumentsRange, "v128.eq", type.toString()
       );
       return module.unreachable();
     }
@@ -3218,7 +3229,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "ne", type.toString()
+        reportNode.typeArgumentsRange, "v128.ne", type.toString()
       );
       return module.unreachable();
     }
@@ -3260,7 +3271,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "lt", type.toString()
+        reportNode.typeArgumentsRange, "v128.lt", type.toString()
       );
       return module.unreachable();
     }
@@ -3302,7 +3313,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "le", type.toString()
+        reportNode.typeArgumentsRange, "v128.le", type.toString()
       );
       return module.unreachable();
     }
@@ -3344,7 +3355,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "gt", type.toString()
+        reportNode.typeArgumentsRange, "v128.gt", type.toString()
       );
       return module.unreachable();
     }
@@ -3386,7 +3397,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "ge", type.toString()
+        reportNode.typeArgumentsRange, "v128.ge", type.toString()
       );
       return module.unreachable();
     }
@@ -3412,7 +3423,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "narrow", type.toString()
+        reportNode.typeArgumentsRange, "v128.narrow", type.toString()
       );
       return module.unreachable();
     }
@@ -3452,7 +3463,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.range, "v128.neg", type.toString()
+        reportNode.typeArgumentsRange, "v128.neg", type.toString()
       );
       return module.unreachable();
     }
@@ -3475,7 +3486,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.range, "v128.abs", type.toString()
+        reportNode.typeArgumentsRange, "v128.abs", type.toString()
       );
       return module.unreachable();
     }
@@ -3498,7 +3509,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.range, "v128.sqrt", type.toString()
+        reportNode.typeArgumentsRange, "v128.sqrt", type.toString()
       );
       return module.unreachable();
     }
@@ -3523,7 +3534,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.range, "v128.convert", type.toString()
+        reportNode.typeArgumentsRange, "v128.convert", type.toString()
       );
       return module.unreachable();
     }
@@ -3548,7 +3559,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.range, "v128.trunc_sat", type.toString()
+        reportNode.typeArgumentsRange, "v128.trunc_sat", type.toString()
       );
       return module.unreachable();
     }
@@ -3573,7 +3584,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.range, "v128.widen_low", type.toString()
+        reportNode.typeArgumentsRange, "v128.widen_low", type.toString()
       );
       return module.unreachable();
     }
@@ -3598,7 +3609,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.range, "v128.widen_high", type.toString()
+        reportNode.typeArgumentsRange, "v128.widen_high", type.toString()
       );
       return module.unreachable();
     }
@@ -3669,7 +3680,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, isShl ? "shl" : "shr", type.toString()
+        reportNode.typeArgumentsRange, isShl ? "v128.shl" : "v128.shr", type.toString()
       );
       return module.unreachable();
     }
@@ -3810,7 +3821,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, isAnyTrue ? "any_true" : "all_true", type.toString()
+        reportNode.typeArgumentsRange, isAnyTrue ? "v128.any_true" : "v128.all_true", type.toString()
       );
       return module.unreachable();
     }
@@ -3844,7 +3855,7 @@ export function compileCall(
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, isQfma ? "qfma" : "qfms", type.toString()
+        reportNode.typeArgumentsRange, isQfma ? "v128.qfma" : "v128.qfms", type.toString()
       );
       return module.unreachable();
     }
@@ -3866,8 +3877,8 @@ export function compileCall(
         }
       }
       compiler.error(
-        DiagnosticCode.Type_0_is_not_a_class_or_function_type,
-        reportNode.typeArgumentsRange, type.toString()
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "idof", type.toString()
       );
       return module.unreachable();
     }
