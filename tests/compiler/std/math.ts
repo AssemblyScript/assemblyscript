@@ -30,7 +30,7 @@
   and src/math/crlibm/* for details
 */
 
-const js = true; // also test, and thus compare to, JS math?
+var js = true; // also test, and thus compare to, JS math?
 
 // these flags are unused, but kept in case these might just so happen to become useful
 const INEXACT   = 1 << 0;
@@ -1641,14 +1641,19 @@ assert(test_hypot(4.94065645841246544e-324, 0.0, 4.94065645841246544e-324, 0.0, 
 assert(test_hypot(4.94065645841246544e-324, -0.0, 4.94065645841246544e-324, 0.0, 0));
 assert(test_hypot(Infinity, 1.0, Infinity, 0.0, 0));
 assert(test_hypot(1.0, Infinity, Infinity, 0.0, 0));
-assert(test_hypot(Infinity, NaN, Infinity, 0.0, 0));
+js = false; assert(test_hypot(Infinity, NaN, Infinity, 0.0, 0)); js = true;
 assert(test_hypot(NaN, Infinity, Infinity, 0.0, 0));
 assert(test_hypot(-Infinity, 1.0, Infinity, 0.0, 0));
 assert(test_hypot(1.0, -Infinity, Infinity, 0.0, 0));
-assert(test_hypot(-Infinity, NaN, Infinity, 0.0, 0));
+js = false; assert(test_hypot(-Infinity, NaN, Infinity, 0.0, 0)); js = true;
 assert(test_hypot(NaN, -Infinity, Infinity, 0.0, 0));
 assert(test_hypot(NaN, 1.0, NaN, 0.0, 0));
 assert(test_hypot(1.0, NaN, NaN, 0.0, 0));
+js = false; assert(test_hypot(NaN, 0.0, NaN, 0.0, 0)); js = true;
+assert(test_hypot(0.0, NaN, NaN, 0.0, 0));
+
+// ^ FIXME: Math.hypot is broken in v8 7.7 (node 12.11) due to
+//   https://bugs.chromium.org/p/v8/issues/detail?id=9546
 
 // Mathf.hypot /////////////////////////////////////////////////////////////////////////////////////
 
