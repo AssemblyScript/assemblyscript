@@ -1749,7 +1749,12 @@
   local.get $6
   call $~lib/rt/stub/__release
  )
- (func $assembly/index/NBodySystem#advance (; 18 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
+ (func $~lib/array/Array<assembly/index/Body>#get:buffer (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  call $~lib/rt/stub/__retain
+ )
+ (func $assembly/index/NBodySystem#advance (; 19 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1985,7 +1990,7 @@
   local.get $2
   call $~lib/rt/stub/__release
  )
- (func $assembly/index/NBodySystem#energy (; 19 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 20 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -2155,14 +2160,14 @@
   call $~lib/rt/stub/__release
   local.get $13
  )
- (func $assembly/index/step (; 20 ;) (type $FUNCSIG$d) (result f64)
+ (func $assembly/index/step (; 21 ;) (type $FUNCSIG$d) (result f64)
   global.get $assembly/index/system
   f64.const 0.01
   call $assembly/index/NBodySystem#advance
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $assembly/index/bench (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   global.get $assembly/index/system
@@ -2193,7 +2198,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $assembly/index/getBody (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2223,7 +2228,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start (; 23 ;) (type $FUNCSIG$v)
+ (func $start (; 24 ;) (type $FUNCSIG$v)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -2235,6 +2240,6 @@
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
  )
- (func $null (; 24 ;) (type $FUNCSIG$v)
+ (func $null (; 25 ;) (type $FUNCSIG$v)
  )
 )
