@@ -77,7 +77,7 @@
  (data (i32.const 408) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
- (global $std/math/js i32 (i32.const 1))
+ (global $std/math/js i32 (i32.const 0))
  (global $std/math/INEXACT i32 (i32.const 1))
  (global $std/math/INVALID i32 (i32.const 2))
  (global $std/math/DIVBYZERO i32 (i32.const 4))

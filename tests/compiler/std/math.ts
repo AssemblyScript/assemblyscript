@@ -30,7 +30,7 @@
   and src/math/crlibm/* for details
 */
 
-const js = true; // also test, and thus compare to, JS math?
+const js = false; // also test, and thus compare to, JS math?
 
 // these flags are unused, but kept in case these might just so happen to become useful
 const INEXACT   = 1 << 0;
