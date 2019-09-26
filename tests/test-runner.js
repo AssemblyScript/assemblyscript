@@ -5,6 +5,7 @@ const packageSuite = require('./packages');
 const path = require("path");
 const cluster = require("cluster");
 const numCPUs = require('os').cpus().length;
+const asc = require("../cli/asc.js");
 
 function splitToChunks(array, parts) {
   let result = [];
@@ -60,7 +61,7 @@ function testParallel(suiteName, tests, performTest, postTests, workers) {
                 const resultPromises = [];
                 chunks.forEach(arg => {
                     resultPromises.push(
-                        performTest({ basedir, arg }).then((result) => {
+                        performTest({ asc, basedir, arg }).then((result) => {
                             if (result.failed) {
                                 results.failedTests.push(arg);
                                 if (results.message) {
@@ -117,6 +118,7 @@ function runTestSuites(suites) {
                 }
             })
             // console.log("\n\n\n", results)
+            console.log("\n ------------------------------ ")
             process.exit(failed ? 1 : 0);
         }
     })

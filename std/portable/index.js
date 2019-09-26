@@ -267,19 +267,19 @@ globalScope["JSMath"] = Math;
 Object.defineProperties(globalScope["JSMath"], {
   sincos_sin: { value: 0.0, writable: true },
   sincos_cos: { value: 0.0, writable: true },
-  // sincos: {
-  //   value: function sincos(x) {
-  //     this.sincos_sin = Math.sin(x);
-  //     this.sincos_cos = Math.cos(x);
-  //   },
-  //   writable: true
-  // },
-  // signbit: {
-  //   value: function signbit(x) {
-  //     F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
-  //   },
-  //   writable: true
-  // }
+  sincos: {
+    value: function sincos(x) {
+      this.sincos_sin = Math.sin(x);
+      this.sincos_cos = Math.cos(x);
+    },
+    writable: true
+  },
+  signbit: {
+    value: function signbit(x) {
+      F64[0] = x; return Boolean((U64[1] >>> 31) & (x == x));
+    },
+    writable: true
+  }
 });
 
 globalScope["memory"] = (() => {

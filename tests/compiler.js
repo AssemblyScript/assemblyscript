@@ -10,13 +10,13 @@ const diff = require("./util/diff");
 const rtrace = require("../lib/rtrace");
 const featuresConfig = require("./features.json");
 const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") : [];
-const asc = require("../cli/asc.js");
 
 // Get a list of all tests
 const basedir = path.join(__dirname, "compiler");
 const tests = glob.sync("**/!(_*).ts", { cwd: basedir });
 
 if (require.main === module) {
+  const asc = require("../cli/asc.js");
 
   const config = {
     "create": {
@@ -81,7 +81,7 @@ if (require.main === module) {
   }
 
   tests.forEach(filename => {
-    const result = performTest({ basedir, arg: filename, cliArgs });
+    const result = performTest({ asc, basedir, arg: filename, cliArgs });
 
     if (result.failed) {
       results.failedTests.add(filename);
@@ -102,7 +102,7 @@ if (require.main === module) {
 
 function performTest(passedArgs) {
 
-  const { basedir, arg, cliArgs } = passedArgs;
+  const { asc, basedir, arg, cliArgs } = passedArgs;
   const filename = arg;
 
   const result = {
@@ -272,12 +272,12 @@ function performTest(passedArgs) {
       var glue = {};
       if (fs.existsSync(gluePath)) glue = require(gluePath);
 
-      if (!testInstantiate(basename, untouchedBuffer, "untouched", glue, args, result)) {
+      if (!testInstantiate(asc, basename, untouchedBuffer, "untouched", glue, args, result)) {
         failed = true;
         result.failed = true;
       } else {
         console.log();
-        if (!testInstantiate(basename, optimizedBuffer, "optimized", glue, args, result)) {
+        if (!testInstantiate(asc, basename, optimizedBuffer, "optimized", glue, args, result)) {
           failed = true;
           result.failed = true;
         }
@@ -292,7 +292,7 @@ function performTest(passedArgs) {
   return Promise.resolve(result);
 }
 
-function testInstantiate(basename, binaryBuffer, name, glue, args, result) {
+function testInstantiate(asc, basename, binaryBuffer, name, glue, args, result) {
  
   try {
     let memory = new WebAssembly.Memory({ initial: 10 });
