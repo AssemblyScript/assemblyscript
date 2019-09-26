@@ -37,6 +37,16 @@
  (import "Math" "SQRT1_2" (global $~lib/bindings/Math/SQRT1_2 f64))
  (import "Math" "SQRT2" (global $~lib/bindings/Math/SQRT2 f64))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "Math" "abs" (func $~lib/bindings/Math/abs (param f64) (result f64)))
+ (import "Math" "acos" (func $~lib/bindings/Math/acos (param f64) (result f64)))
+ (import "Math" "acosh" (func $~lib/bindings/Math/acosh (param f64) (result f64)))
+ (import "Math" "asin" (func $~lib/bindings/Math/asin (param f64) (result f64)))
+ (import "Math" "asinh" (func $~lib/bindings/Math/asinh (param f64) (result f64)))
+ (import "Math" "atan" (func $~lib/bindings/Math/atan (param f64) (result f64)))
+ (import "Math" "atanh" (func $~lib/bindings/Math/atanh (param f64) (result f64)))
+ (import "Math" "atan2" (func $~lib/bindings/Math/atan2 (param f64 f64) (result f64)))
+ (import "Math" "cbrt" (func $~lib/bindings/Math/cbrt (param f64) (result f64)))
+ (import "Math" "ceil" (func $~lib/bindings/Math/ceil (param f64) (result f64)))
  (import "Math" "cos" (func $~lib/bindings/Math/cos (param f64) (result f64)))
  (import "Math" "cosh" (func $~lib/bindings/Math/cosh (param f64) (result f64)))
  (import "Math" "exp" (func $~lib/bindings/Math/exp (param f64) (result f64)))
@@ -51,8 +61,13 @@
  (import "math" "mod" (func $std/math/mod (param f64 f64) (result f64)))
  (import "Math" "pow" (func $~lib/bindings/Math/pow (param f64 f64) (result f64)))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
+ (import "Math" "sign" (func $~lib/bindings/Math/sign (param f64) (result f64)))
  (import "Math" "sin" (func $~lib/bindings/Math/sin (param f64) (result f64)))
+ (import "Math" "sinh" (func $~lib/bindings/Math/sinh (param f64) (result f64)))
+ (import "Math" "sqrt" (func $~lib/bindings/Math/sqrt (param f64) (result f64)))
  (import "Math" "tan" (func $~lib/bindings/Math/tan (param f64) (result f64)))
+ (import "Math" "tanh" (func $~lib/bindings/Math/tanh (param f64) (result f64)))
+ (import "Math" "trunc" (func $~lib/bindings/Math/trunc (param f64) (result f64)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00m\00a\00t\00h\00.\00t\00s")
  (data (i32.const 48) "\c0\00\00\00\01\00\00\00\00\00\00\00\c0\00\00\00n\83\f9\a2\00\00\00\00\d1W\'\fc)\15DN\99\95b\db\c0\dd4\f5\abcQ\feA\90C<:n$\b7a\c5\bb\de\ea.I\06\e0\d2MB\1c\eb\1d\fe\1c\92\d1\t\f55\82\e8>\a7)\b1&p\9c\e9\84D\bb.9\d6\919A~_\b4\8b_\84\9c\f49S\83\ff\97\f8\1f;(\f9\bd\8b\11/\ef\0f\98\05\de\cf~6m\1fm\nZf?FO\b7\t\cb\'\c7\ba\'u-\ea_\9e\f79\07={\f1\e5\eb\b1_\fbk\ea\92R\8aF0\03V\08]\8d\1f \bc\cf\f0\abk{\fca\91\e3\a9\1d6\f4\9a_\85\99e\08\1b\e6^\80\d8\ff\8d@h\a0\14W\15\06\061\'sM")
@@ -498,7 +513,11 @@
   f64.const 0
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/abs
+   local.get $1
+   f64.const 0
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -684,7 +703,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/acos
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -1261,7 +1284,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/acosh
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -1772,7 +1799,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/asin
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -1941,7 +1972,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/asinh
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -2250,7 +2285,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/atan
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -2521,7 +2560,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/atanh
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -2809,7 +2852,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   local.get $1
+   call $~lib/bindings/Math/atan2
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -3147,7 +3195,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/cbrt
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -3265,7 +3317,11 @@
   f64.const 0
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/ceil
+   local.get $1
+   f64.const 0
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -3916,7 +3972,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/cos
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -4693,7 +4753,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/cosh
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -5151,7 +5215,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/exp
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -5170,7 +5238,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/expm1
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -5189,7 +5261,11 @@
   f64.const 0
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/floor
+   local.get $1
+   f64.const 0
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -5500,7 +5576,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/log
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -5723,7 +5803,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/log10
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -5900,7 +5984,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/log1p
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -6116,7 +6204,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/log2
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -6286,7 +6378,12 @@
   f64.const 0
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   local.get $1
+   call $~lib/bindings/Math/max
+   local.get $2
+   f64.const 0
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -6307,7 +6404,12 @@
   f64.const 0
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   local.get $1
+   call $~lib/bindings/Math/min
+   local.get $2
+   f64.const 0
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -6531,7 +6633,12 @@
   f64.const 0
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   local.get $1
+   call $std/math/mod
+   local.get $2
+   f64.const 0
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -7651,7 +7758,12 @@
   local.get $3
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   local.get $1
+   call $~lib/bindings/Math/pow
+   local.get $2
+   local.get $3
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -8664,9 +8776,9 @@
   local.get $0
   local.set $2
   f64.const 1
-  local.get $0
+  local.get $2
   f64.copysign
-  local.get $0
+  local.get $2
   local.get $0
   f64.abs
   f64.const 0
@@ -8676,7 +8788,11 @@
   f64.const 0
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/sign
+   local.get $1
+   f64.const 0
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -9541,7 +9657,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/sin
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -9908,7 +10028,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/sinh
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -9999,7 +10123,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/sqrt
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -10379,7 +10507,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/tan
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -10732,7 +10864,11 @@
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/tanh
+   local.get $1
+   local.get $2
+   call $std/math/check<f64>
   else
    i32.const 0
   end
@@ -10825,7 +10961,11 @@
   f64.const 0
   call $std/math/check<f64>
   if (result i32)
-   i32.const 1
+   local.get $0
+   call $~lib/bindings/Math/trunc
+   local.get $1
+   f64.const 0
+   call $std/math/check<f64>
   else
    i32.const 0
   end
