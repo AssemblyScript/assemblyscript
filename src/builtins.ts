@@ -2302,7 +2302,7 @@ export function compileCall(
       if (!(typeArgument.is(TypeFlags.REFERENCE) && classInstance !== null)) {
         compiler.error(
           DiagnosticCode.This_expression_is_not_constructable,
-          reportNode.typeArgumentsRange
+          reportNode.expression.range
         );
         return module.unreachable();
       }
@@ -3613,8 +3613,7 @@ export function compileCall(
       );
       return module.unreachable();
     }
-    case BuiltinSymbols.v128_shl: // any_shift<T!>(a: v128, b: i32) -> v128
-    case BuiltinSymbols.v128_shr: {
+    case BuiltinSymbols.v128_shl: { // shl<T!>(a: v128, b: i32) -> v128
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
         checkTypeRequired(typeArguments, reportNode, compiler) |
@@ -3623,64 +3622,81 @@ export function compileCall(
         compiler.currentType = Type.v128;
         return module.unreachable();
       }
-      let isShl = prototype.internalName == BuiltinSymbols.v128_shl;
       let type = typeArguments![0];
       let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT);
       compiler.currentType = Type.v128;
       if (!type.is(TypeFlags.REFERENCE)) {
-        if (isShl) {
-          switch (type.kind) {
-            case TypeKind.I8:
-            case TypeKind.U8: return module.simd_shift(SIMDShiftOp.ShlI8x16, arg0, arg1);
-            case TypeKind.I16:
-            case TypeKind.U16: return module.simd_shift(SIMDShiftOp.ShlI16x8, arg0, arg1);
-            case TypeKind.I32:
-            case TypeKind.U32: return module.simd_shift(SIMDShiftOp.ShlI32x4, arg0, arg1);
-            case TypeKind.I64:
-            case TypeKind.U64: return module.simd_shift(SIMDShiftOp.ShlI64x2, arg0, arg1);
-            case TypeKind.ISIZE:
-            case TypeKind.USIZE: {
-              return module.simd_shift(
-                compiler.options.isWasm64
-                  ? SIMDShiftOp.ShlI64x2
-                  : SIMDShiftOp.ShlI32x4,
-                arg0, arg1
-              );
-            }
-          }
-        } else {
-          switch (type.kind) {
-            case TypeKind.I8: return module.simd_shift(SIMDShiftOp.ShrI8x16, arg0, arg1);
-            case TypeKind.U8: return module.simd_shift(SIMDShiftOp.ShrU8x16, arg0, arg1);
-            case TypeKind.I16: return module.simd_shift(SIMDShiftOp.ShrI16x8, arg0, arg1);
-            case TypeKind.U16: return module.simd_shift(SIMDShiftOp.ShrU16x8, arg0, arg1);
-            case TypeKind.I32: return module.simd_shift(SIMDShiftOp.ShrI32x4, arg0, arg1);
-            case TypeKind.U32: return module.simd_shift(SIMDShiftOp.ShrU32x4, arg0, arg1);
-            case TypeKind.I64: return module.simd_shift(SIMDShiftOp.ShrI64x2, arg0, arg1);
-            case TypeKind.U64: return module.simd_shift(SIMDShiftOp.ShrU64x2, arg0, arg1);
-            case TypeKind.ISIZE: {
-              return module.simd_shift(
-                compiler.options.isWasm64
-                  ? SIMDShiftOp.ShrI64x2
-                  : SIMDShiftOp.ShrI32x4,
-                arg0, arg1
-              );
-            }
-            case TypeKind.USIZE: {
-              return module.simd_shift(
-                compiler.options.isWasm64
-                  ? SIMDShiftOp.ShrU64x2
-                  : SIMDShiftOp.ShrU32x4,
-                arg0, arg1
-              );
-            }
+        switch (type.kind) {
+          case TypeKind.I8:
+          case TypeKind.U8: return module.simd_shift(SIMDShiftOp.ShlI8x16, arg0, arg1);
+          case TypeKind.I16:
+          case TypeKind.U16: return module.simd_shift(SIMDShiftOp.ShlI16x8, arg0, arg1);
+          case TypeKind.I32:
+          case TypeKind.U32: return module.simd_shift(SIMDShiftOp.ShlI32x4, arg0, arg1);
+          case TypeKind.I64:
+          case TypeKind.U64: return module.simd_shift(SIMDShiftOp.ShlI64x2, arg0, arg1);
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            return module.simd_shift(
+              compiler.options.isWasm64
+                ? SIMDShiftOp.ShlI64x2
+                : SIMDShiftOp.ShlI32x4,
+              arg0, arg1
+            );
           }
         }
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, isShl ? "v128.shl" : "v128.shr", type.toString()
+        reportNode.typeArgumentsRange, "v128.shl", type.toString()
+      );
+      return module.unreachable();
+    }
+    case BuiltinSymbols.v128_shr: { // shr<T!>(a: v128, b: i32) -> v128
+      if (
+        checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let type = typeArguments![0];
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.i32, Constraints.CONV_IMPLICIT);
+      compiler.currentType = Type.v128;
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          case TypeKind.I8: return module.simd_shift(SIMDShiftOp.ShrI8x16, arg0, arg1);
+          case TypeKind.U8: return module.simd_shift(SIMDShiftOp.ShrU8x16, arg0, arg1);
+          case TypeKind.I16: return module.simd_shift(SIMDShiftOp.ShrI16x8, arg0, arg1);
+          case TypeKind.U16: return module.simd_shift(SIMDShiftOp.ShrU16x8, arg0, arg1);
+          case TypeKind.I32: return module.simd_shift(SIMDShiftOp.ShrI32x4, arg0, arg1);
+          case TypeKind.U32: return module.simd_shift(SIMDShiftOp.ShrU32x4, arg0, arg1);
+          case TypeKind.I64: return module.simd_shift(SIMDShiftOp.ShrI64x2, arg0, arg1);
+          case TypeKind.U64: return module.simd_shift(SIMDShiftOp.ShrU64x2, arg0, arg1);
+          case TypeKind.ISIZE: {
+            return module.simd_shift(
+              compiler.options.isWasm64
+                ? SIMDShiftOp.ShrI64x2
+                : SIMDShiftOp.ShrI32x4,
+              arg0, arg1
+            );
+          }
+          case TypeKind.USIZE: {
+            return module.simd_shift(
+              compiler.options.isWasm64
+                ? SIMDShiftOp.ShrU64x2
+                : SIMDShiftOp.ShrU32x4,
+              arg0, arg1
+            );
+          }
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "v128.shr", type.toString()
       );
       return module.unreachable();
     }
@@ -3762,8 +3778,7 @@ export function compileCall(
       let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
       return module.simd_ternary(SIMDTernaryOp.Bitselect, arg0, arg1, arg2);
     }
-    case BuiltinSymbols.v128_any_true: // any_test<T!>(a: v128) -> bool
-    case BuiltinSymbols.v128_all_true: {
+    case BuiltinSymbols.v128_any_true: { // any_true<T!>(a: v128) -> bool
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
         checkTypeRequired(typeArguments, reportNode, compiler) |
@@ -3772,60 +3787,100 @@ export function compileCall(
         compiler.currentType = Type.bool;
         return module.unreachable();
       }
-      let isAnyTrue = prototype.internalName == BuiltinSymbols.v128_any_true;
       let type = typeArguments![0];
       let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
       compiler.currentType = Type.bool;
       if (!type.is(TypeFlags.REFERENCE)) {
-        if (isAnyTrue) {
-          switch (type.kind) {
-            case TypeKind.I8:
-            case TypeKind.U8: return module.unary(UnaryOp.AnyTrueI8x16, arg0);
-            case TypeKind.I16:
-            case TypeKind.U16: return module.unary(UnaryOp.AnyTrueI16x8, arg0);
-            case TypeKind.I32:
-            case TypeKind.U32: return module.unary(UnaryOp.AnyTrueI32x4, arg0);
-            case TypeKind.I64:
-            case TypeKind.U64: return module.unary(UnaryOp.AnyTrueI64x2, arg0);
-            case TypeKind.ISIZE:
-            case TypeKind.USIZE: {
-              return module.unary(
-                compiler.options.isWasm64
-                  ? UnaryOp.AnyTrueI64x2
-                  : UnaryOp.AnyTrueI32x4,
-                arg0
-              );
-            }
-          }
-        } else {
-          switch (type.kind) {
-            case TypeKind.I8:
-            case TypeKind.U8: return module.unary(UnaryOp.AllTrueI8x16, arg0);
-            case TypeKind.I16:
-            case TypeKind.U16: return module.unary(UnaryOp.AllTrueI16x8, arg0);
-            case TypeKind.I32:
-            case TypeKind.U32: return module.unary(UnaryOp.AllTrueI32x4, arg0);
-            case TypeKind.I64:
-            case TypeKind.U64: return module.unary(UnaryOp.AllTrueI64x2, arg0);
-            case TypeKind.ISIZE:
-            case TypeKind.USIZE: {
-              return module.unary(
-                compiler.options.isWasm64
-                  ? UnaryOp.AllTrueI64x2
-                  : UnaryOp.AllTrueI32x4,
-                arg0
-              );
-            }
+        switch (type.kind) {
+          case TypeKind.I8:
+          case TypeKind.U8: return module.unary(UnaryOp.AnyTrueI8x16, arg0);
+          case TypeKind.I16:
+          case TypeKind.U16: return module.unary(UnaryOp.AnyTrueI16x8, arg0);
+          case TypeKind.I32:
+          case TypeKind.U32: return module.unary(UnaryOp.AnyTrueI32x4, arg0);
+          case TypeKind.I64:
+          case TypeKind.U64: return module.unary(UnaryOp.AnyTrueI64x2, arg0);
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            return module.unary(
+              compiler.options.isWasm64
+                ? UnaryOp.AnyTrueI64x2
+                : UnaryOp.AnyTrueI32x4,
+              arg0
+            );
           }
         }
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, isAnyTrue ? "v128.any_true" : "v128.all_true", type.toString()
+        reportNode.typeArgumentsRange, "v128.any_true", type.toString()
       );
       return module.unreachable();
     }
-    case BuiltinSymbols.v128_qfma:   // qfma(a: v128, b: v128, c: v128) -> v128
+    case BuiltinSymbols.v128_all_true: { // all_true<T!>(a: v128) -> bool
+      if (
+        checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.bool;
+        return module.unreachable();
+      }
+      let type = typeArguments![0];
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+      compiler.currentType = Type.bool;
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          case TypeKind.I8:
+          case TypeKind.U8: return module.unary(UnaryOp.AllTrueI8x16, arg0);
+          case TypeKind.I16:
+          case TypeKind.U16: return module.unary(UnaryOp.AllTrueI16x8, arg0);
+          case TypeKind.I32:
+          case TypeKind.U32: return module.unary(UnaryOp.AllTrueI32x4, arg0);
+          case TypeKind.I64:
+          case TypeKind.U64: return module.unary(UnaryOp.AllTrueI64x2, arg0);
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            return module.unary(
+              compiler.options.isWasm64
+                ? UnaryOp.AllTrueI64x2
+                : UnaryOp.AllTrueI32x4,
+              arg0
+            );
+          }
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "v128.all_true", type.toString()
+      );
+      return module.unreachable();
+    }
+    case BuiltinSymbols.v128_qfma: { // qfma(a: v128, b: v128, c: v128) -> v128
+      if (
+        checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 3, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let type = typeArguments![0];
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.QFMAF32x4, arg0, arg1, arg2);
+          case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.QFMAF64x2, arg0, arg1, arg2);
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "v128.qfma", type.toString()
+      );
+      return module.unreachable();
+    }
     case BuiltinSymbols.v128_qfms: { // qfms(a: v128, b: v128, c: v128) -> v128
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
@@ -3835,27 +3890,19 @@ export function compileCall(
         compiler.currentType = Type.v128;
         return module.unreachable();
       }
-      let isQfma = prototype.internalName == BuiltinSymbols.v128_qfma;
       let type = typeArguments![0];
       let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
       let arg2 = compiler.compileExpression(operands[2], Type.v128, Constraints.CONV_IMPLICIT);
       if (!type.is(TypeFlags.REFERENCE)) {
-        if (isQfma) {
-          switch (type.kind) {
-            case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.QFMAF32x4, arg0, arg1, arg2);
-            case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.QFMAF64x2, arg0, arg1, arg2);
-          }
-        } else {
-          switch (type.kind) {
-            case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.QFMSF32x4, arg0, arg1, arg2);
-            case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.QFMSF64x2, arg0, arg1, arg2);
-          }
+        switch (type.kind) {
+          case TypeKind.F32: return module.simd_ternary(SIMDTernaryOp.QFMSF32x4, arg0, arg1, arg2);
+          case TypeKind.F64: return module.simd_ternary(SIMDTernaryOp.QFMSF64x2, arg0, arg1, arg2);
         }
       }
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, isQfma ? "v128.qfma" : "v128.qfms", type.toString()
+        reportNode.typeArgumentsRange, "v128.qfms", type.toString()
       );
       return module.unreachable();
     }
@@ -3925,8 +3972,8 @@ export function compileCall(
     }
   }
   compiler.error(
-    DiagnosticCode.Cannot_find_name_0,
-    reportNode.expression.range, prototype.internalName
+    DiagnosticCode.Not_implemented,
+    reportNode.expression.range
   );
   return module.unreachable();
 }
@@ -4236,11 +4283,7 @@ function tryDeferASM(
     case BuiltinSymbols.v8x16_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i8, operands, Type.v128, reportNode);
   }
   /* tslint:enable:max-line-length */
-  compiler.error(
-    DiagnosticCode.Not_implemented,
-    reportNode.range
-  );
-  return compiler.module.unreachable();
+  return 0;
 }
 
 /** A helper for deferring inline-assembler-like calls to built-in functions. */
