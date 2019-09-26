@@ -42,7 +42,20 @@ function testParallel(suiteName, tests, performTest, postTests, workers) {
         });
 
         return Promise.all(testPromises).then((results) => {
-            postTests(results);
+             const mergedResults = {
+                failedTests: [],
+                failedMessages: {},
+                skippedTests: [],
+                skippedMessages: {}
+            }
+            results.forEach((result) => {
+                mergedResults.failedTests = mergedResults.failedTests.concat(result.failedTests);
+                mergedResults.failedMessages = {...mergedResults.failedMessages, ...result.failedMessages};
+
+                mergedResults.skippedTests = mergedResults.skippedTests.concat(result.skippedTests);
+                mergedResults.skippedMessages = {...mergedResults.skippedMessages, ...result.skippedMessages};
+            });
+            postTests(mergedResults);
             return results;
         });
 
@@ -63,9 +76,10 @@ function testParallel(suiteName, tests, performTest, postTests, workers) {
                     resultPromises.push(
                         performTest({ asc, basedir, arg }).then((result) => {
                             if (result.failed) {
+                                console.log(arg);
                                 results.failedTests.push(arg);
-                                if (results.message) {
-                                    results.failedMessages[arg] = results.message;
+                                if (result.message) {
+                                    results.failedMessages[arg] = result.message;
                                 }
                             }
                             return result;
@@ -74,7 +88,6 @@ function testParallel(suiteName, tests, performTest, postTests, workers) {
                 });
                 Promise.all(resultPromises).then(() => {
                     process.send(results);
-                    console.log("worker process exit");
                     process.exit();
                 });
             }
@@ -112,7 +125,7 @@ function runTestSuites(suites) {
                 const failedTests = [].concat.apply([], failures);
                 if (failedTests.length) {
                     failed = true;
-                    console.log("\x1b[31m" + failedTests.join("\t\n") + "\x1b[0m");
+                    console.log("\x1b[31m FAILED: " + failedTests.join("\t\n FAILED: ") + "\x1b[0m");
                 } else {
                     console.log("\x1b[32mAll tests passed ^^ \x1b[0m");
                 }
@@ -125,7 +138,7 @@ function runTestSuites(suites) {
 }
 
 runTestSuites([
-    parserSuite,
+    // parserSuite,
     compilerSuite,
-    packageSuite
+    // packageSuite
 ]);

@@ -74,25 +74,25 @@ if (require.main === module) {
   }
 
   const results = {
-    failedTests: new Set(),
-    failedMessages: new Map(),
-    skippedTests: new Set(),
-    skippedMessages: new Map()
+    failedTests: [],
+    failedMessages: {},
+    skippedTests: [],
+    skippedMessages: {}
   }
 
   tests.forEach(filename => {
     const result = performTest({ asc, basedir, arg: filename, cliArgs });
 
     if (result.failed) {
-      results.failedTests.add(filename);
+      results.failedTests.push(filename);
       if (results.failedMessage) {
-        results.failedMessages.set(filname, results.message);
+        results.failedMessages[filename] = results.message;
       }
     }
     if (result.skipped) {
-      results.skippedTests.add(filename);
+      results.skippedTests.push(filename);
       if (results.skippedMessage) {
-        results.skippedMessages.set(filname, results.message);
+        results.skippedMessages[filname] = results.message;
       }
     }
   });
@@ -161,7 +161,7 @@ function performTest(passedArgs) {
     });
   }
 
-  var failed = false;
+  // var failed = false;
 
   // Build unoptimized
   var cmd = [
@@ -187,18 +187,18 @@ function performTest(passedArgs) {
       const stderrString = stderr.toString();
       if (typeof expectStderr === "string") expectStderr = [ expectStderr ];
       let lastIndex = 0;
-      let failed = false;
+      let localFailed = false;
       expectStderr.forEach((substr, i) => {
         var index = stderrString.indexOf(substr, lastIndex);
         if (index < 0) {
           console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
-          result.failed = true;
-          failed = true;
+          result.failed = true
+          localFailed = true;
         } else {
           lastIndex = index + substr.length;
         }
       });
-      if (failed) {
+      if (localFailed) {
         result.failed = true;
         result.message = "stderr mismatch";
         console.log("\n- " + colorsUtil.red("stderr MISMATCH") + "\n");
@@ -219,7 +219,7 @@ function performTest(passedArgs) {
       if (args.noDiff) {
         if (expected != actual) {
           console.log("- " + colorsUtil.red("compare ERROR"));
-          failed = true;
+          // failed = true;
           result.failed = true;
         } else {
           console.log("- " + colorsUtil.green("compare OK"));
@@ -229,7 +229,7 @@ function performTest(passedArgs) {
         if (diffs !== null) {
           console.log(diffs);
           console.log("- " + colorsUtil.red("diff ERROR"));
-          failed = true;
+          // failed = true;
           result.failed = true;
         } else {
           console.log("- " + colorsUtil.green("diff OK"));
@@ -261,7 +261,7 @@ function performTest(passedArgs) {
       console.log();
       if (err) {
         stderr.write(err.stack + os.EOL);
-        failed = true;
+
         result.failed = true;
         result.message = err.message;
         return Promise.resolve(result);
@@ -273,18 +273,16 @@ function performTest(passedArgs) {
       if (fs.existsSync(gluePath)) glue = require(gluePath);
 
       if (!testInstantiate(asc, basename, untouchedBuffer, "untouched", glue, args, result)) {
-        failed = true;
         result.failed = true;
       } else {
         console.log();
         if (!testInstantiate(asc, basename, optimizedBuffer, "optimized", glue, args, result)) {
-          failed = true;
           result.failed = true;
         }
       }
       console.log();
     });
-    if (failed) return Promise.resolve(result);
+    if (result.failed) return Promise.resolve(result);
   });
   if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
   if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".untouched.wasm"), err => {});
@@ -384,19 +382,20 @@ function testInstantiate(asc, basename, binaryBuffer, name, glue, args, result) 
 
 function postTest(results) {
 
-  if (results.skippedTests && results.skippedTests.size) {
-    console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(results.skippedTests.size + " compiler tests have been skipped:\n"));
+  if (results.skippedTests && results.skippedTests.length) {
+    console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(results.skippedTests.length + " compiler tests have been skipped:\n"));
     results.skippedTests.forEach(name => {
-      var message = results.skippedMessages.has(name) ? colorsUtil.gray("[" + results.skippedMessages.get(name) + "]") : "";
+      var message = results.skippedMessages[name] ? colorsUtil.gray("[" + results.skippedMessages[name] + "]") : "";
       console.log("  " + name + " " + message);
     });
     console.log();
   }
-  if (results.failedTests && results.failedTests.size) {
+
+  if (results.failedTests && results.failedTests.length) {
     process.exitCode = 1;
-    console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(results.failedTests.size + " compiler tests had failures:\n"));
+    console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(results.failedTests.length + " compiler tests had failures:\n"));
     results.failedTests.forEach(name => {
-      var message = failedMessages.has(name) ? colorsUtil.gray("[" + results.failedMessages.get(name) + "]") : "";
+      var message = results.failedMessages[name] ? colorsUtil.gray("[" + results.failedMessages[name] + "]") : "";
       console.log("  " + name + " " + message);
     });
     console.log();
