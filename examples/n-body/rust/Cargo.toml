@@ -7,6 +7,10 @@ authors = ["MaxGraey <maxgraey@gmail.com>"]
 path       = "src/lib.rs"
 crate-type = ["cdylib"]
 
+[profile.dev]
+panic = "abort"
+
 [profile.release]
+panic = "abort"
 lto = true
 opt-level = 3

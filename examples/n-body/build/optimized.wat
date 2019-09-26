@@ -17,11 +17,52 @@
  (export "bench" (func $assembly/index/bench))
  (export "getBody" (func $assembly/index/getBody))
  (start $start)
- (func $~lib/rt/stub/__alloc (; 0 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  memory.size
+  local.tee $2
+  i32.const 16
+  i32.shl
+  local.tee $1
+  i32.gt_u
+  if
+   local.get $2
+   local.get $0
+   local.get $1
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $1
+   local.get $2
+   local.get $1
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $1
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $0
+  global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $0
   i32.const 1073741808
   i32.gt_u
@@ -33,57 +74,29 @@
   i32.add
   local.tee $3
   local.get $0
-  i32.const 1
-  local.get $0
-  i32.const 1
-  i32.gt_u
-  select
-  i32.add
   i32.const 15
   i32.add
   i32.const -16
   i32.and
   local.tee $2
-  memory.size
-  local.tee $4
   i32.const 16
-  i32.shl
-  i32.gt_u
-  if
-   local.get $4
-   local.get $2
-   local.get $3
-   i32.sub
-   i32.const 65535
-   i32.add
-   i32.const -65536
-   i32.and
-   i32.const 16
-   i32.shr_u
-   local.tee $5
-   local.get $4
-   local.get $5
-   i32.gt_s
-   select
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    local.get $5
-    memory.grow
-    i32.const 0
-    i32.lt_s
-    if
-     unreachable
-    end
-   end
-  end
   local.get $2
-  global.set $~lib/rt/stub/offset
+  i32.const 16
+  i32.gt_u
+  select
+  local.tee $4
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
   local.get $3
   i32.const 16
   i32.sub
   local.tee $2
+  local.get $4
+  i32.store
+  local.get $2
+  i32.const -1
+  i32.store offset=4
+  local.get $2
   local.get $1
   i32.store offset=8
   local.get $2
@@ -91,7 +104,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $assembly/index/NBodySystem#constructor (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assembly/index/NBodySystem#constructor (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -174,7 +187,7 @@
   i32.store
   local.get $1
  )
- (func $assembly/index/Body#constructor (; 2 ;) (type $FUNCSIG$iddddddd) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (result i32)
+ (func $assembly/index/Body#constructor (; 3 ;) (type $FUNCSIG$iddddddd) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (result i32)
   (local $7 i32)
   i32.const 56
   i32.const 4
@@ -202,7 +215,7 @@
   f64.store offset=48
   local.get $7
  )
- (func $~lib/rt/__allocArray (; 3 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/__allocArray (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -225,7 +238,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $assembly/index/init (; 4 ;) (type $FUNCSIG$v)
+ (func $assembly/index/init (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   call $~lib/rt/__allocArray
@@ -285,7 +298,7 @@
   call $assembly/index/NBodySystem#constructor
   global.set $assembly/index/system
  )
- (func $assembly/index/NBodySystem#advance (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $assembly/index/NBodySystem#advance (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
@@ -485,7 +498,7 @@
    end
   end
  )
- (func $assembly/index/NBodySystem#energy (; 6 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 7 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -613,13 +626,13 @@
   end
   local.get $1
  )
- (func $assembly/index/step (; 7 ;) (type $FUNCSIG$d) (result f64)
+ (func $assembly/index/step (; 8 ;) (type $FUNCSIG$d) (result f64)
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#advance
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $assembly/index/bench (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
    loop $loop|0
@@ -638,7 +651,7 @@
    unreachable
   end
  )
- (func $assembly/index/getBody (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   global.get $assembly/index/system
@@ -654,17 +667,17 @@
    i32.shl
    i32.add
    i32.load
-  else   
+  else
    i32.const 0
   end
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
+  i32.const 16
   global.set $~lib/rt/stub/offset
  )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
   nop
  )
 )
