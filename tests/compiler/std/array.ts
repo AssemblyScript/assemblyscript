@@ -769,7 +769,7 @@ function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = COMPARATO
 }
 
 function createReverseOrderedArray(size: i32): Array<i32> {
-  var arr = Array.create<i32>(size);
+  var arr = new Array<i32>(size);
   for (let i = 0; i < size; i++) {
     arr[i] = size - 1 - i;
   }
@@ -779,7 +779,7 @@ function createReverseOrderedArray(size: i32): Array<i32> {
 NativeMath.seedRandom(reinterpret<u64>(JSMath.random()));
 
 function createRandomOrderedArray(size: i32): Array<i32> {
-  var arr = Array.create<i32>(size);
+  var arr = new Array<i32>(size);
   for (let i = 0; i < size; i++) {
     arr[i] = <i32>(NativeMath.random() * size);
   }
@@ -787,9 +787,9 @@ function createRandomOrderedArray(size: i32): Array<i32> {
 }
 
 function createReverseOrderedNestedArray(size: i32): Array<Array<i32>> {
-  var arr = Array.create<Array<i32>>(size);
+  var arr = new Array<Array<i32>>(size);
   for (let i: i32 = 0; i < size; i++) {
-    let inner = Array.create<i32>(1);
+    let inner = new Array<i32>(1);
     inner[0] = size - 1 - i;
     arr[i] = inner;
   }
@@ -801,7 +801,7 @@ class Proxy<T> {
 }
 
 function createReverseOrderedElementsArray(size: i32): Proxy<i32>[] {
-  var arr = Array.create<Proxy<i32>>(size);
+  var arr = new Array<Proxy<i32>>(size);
   for (let i: i32 = 0; i < size; i++) {
     arr[i] = new Proxy<i32>(size - 1 - i);
   }
@@ -820,7 +820,7 @@ function createRandomString(len: i32): string {
 }
 
 function createRandomStringArray(size: i32): string[] {
-  var arr = Array.create<string>(size);
+  var arr = new Array<string>(size);
   for (let i: i32 = 0; i < size; i++) {
     arr[i] = createRandomString(<i32>(NativeMath.random() * 32));
   }

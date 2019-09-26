@@ -308,15 +308,13 @@
  (func $~lib/array/Array<u64>#__get (; 5 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
   i32.const 0
   local.get $0
-  i32.load offset=8
-  i32.const 3
-  i32.shr_u
+  i32.load offset=12
   i32.ge_u
   if
    i32.const 48
    i32.const 104
-   i32.const 109
-   i32.const 61
+   i32.const 96
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end

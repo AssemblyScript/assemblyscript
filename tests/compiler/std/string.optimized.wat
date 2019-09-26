@@ -6199,24 +6199,10 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 10872
-   i32.const 10824
-   i32.const 106
-   i32.const 45
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.get $0
-  i32.load offset=8
-  i32.const 2
-  i32.shr_u
-  i32.ge_u
-  if
    i32.const 232
    i32.const 10824
-   i32.const 109
-   i32.const 61
+   i32.const 96
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
@@ -6228,6 +6214,19 @@
   i32.add
   i32.load
   call $~lib/rt/pure/__retain
+  local.tee $0
+  i32.eqz
+  if
+   local.get $0
+   call $~lib/rt/pure/__release
+   i32.const 10872
+   i32.const 10824
+   i32.const 100
+   i32.const 39
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
  )
  (func $~lib/util/number/decimalCount32 (; 77 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1

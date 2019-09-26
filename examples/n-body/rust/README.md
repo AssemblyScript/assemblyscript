@@ -1,7 +1,7 @@
 ### Build
 
 ```bash
-cargo +nightly build --release --target wasm32-unknown-unknown
+RUSTFLAGS='-C link-arg=-s' cargo +nightly build --release --target wasm32-unknown-unknown
 ```
 
-***Next step optimize target wasm via wasm-gc***
+***wasm-gc is deprecated. But the same strip effect we could get with RUSTFLAGS='-C link-arg=-s'***

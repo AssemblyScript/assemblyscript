@@ -5583,23 +5583,24 @@
   i32.load8_s
  )
  (func $~lib/array/Array<i8>#__get (; 77 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $1
   local.get $0
-  i32.load offset=8
-  i32.const 0
-  i32.shr_u
+  i32.load offset=12
   i32.ge_u
   if
    i32.const 280
    i32.const 512
-   i32.const 109
-   i32.const 61
+   i32.const 96
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   local.get $1
   call $~lib/array/Array<i8>#__unchecked_get
+  local.set $2
+  local.get $2
  )
  (func $std/typedarray/isInt8ArrayEqual (; 78 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -5904,23 +5905,24 @@
   i32.load
  )
  (func $~lib/array/Array<i32>#__get (; 83 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $1
   local.get $0
-  i32.load offset=8
-  i32.const 2
-  i32.shr_u
+  i32.load offset=12
   i32.ge_u
   if
    i32.const 280
    i32.const 512
-   i32.const 109
-   i32.const 61
+   i32.const 96
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   local.get $1
   call $~lib/array/Array<i32>#__unchecked_get
+  local.set $2
+  local.get $2
  )
  (func $std/typedarray/isInt32ArrayEqual (; 84 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
