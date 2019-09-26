@@ -1,8 +1,8 @@
 {
-  "Operation not supported": 100,
+  "Not implemented.": 100,
   "Operation is unsafe.": 101,
   "User-defined: {0}": 102,
-  "Not implemented.": 103,
+  "Feature '{0}' is not enabled.": 103,
 
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 200,
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,
@@ -116,6 +116,7 @@
   "Duplicate function implementation.": 2393,
   "Individual declarations in merged declaration '{0}' must be all exported or all local.": 2395,
   "A namespace declaration cannot be located prior to a class or function with which it is merged.": 2434,
+  "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": 2453,
   "Type '{0}' has no property '{1}'.": 2460,
   "The '{0}' operator cannot be applied to type '{1}'.": 2469,
   "In 'const' enum declarations member initializer must be constant expression.": 2474,
@@ -130,6 +131,7 @@
   "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": 2651,
   "Constructor of class '{0}' is private and only accessible within the class declaration.": 2673,
   "Constructor of class '{0}' is protected and only accessible within the class declaration.": 2674,
+  "The 'this' types of each signature are incompatible.": 2685,
   "Namespace '{0}' has no exported member '{1}'.": 2694,
   "Required type parameters may not follow optional type parameters.": 2706,
   "Duplicate property '{0}'.": 2718,

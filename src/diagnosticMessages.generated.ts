@@ -7,10 +7,10 @@
 
 /** Enum of available diagnostic codes. */
 export enum DiagnosticCode {
-  Operation_not_supported = 100,
+  Not_implemented = 100,
   Operation_is_unsafe = 101,
   User_defined_0 = 102,
-  Not_implemented = 103,
+  Feature_0_is_not_enabled = 103,
   Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
@@ -121,6 +121,7 @@ export enum DiagnosticCode {
   Duplicate_function_implementation = 2393,
   Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
   A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
+  The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
   Type_0_has_no_property_1 = 2460,
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
   In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
@@ -135,6 +136,7 @@ export enum DiagnosticCode {
   A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums = 2651,
   Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration = 2673,
   Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration = 2674,
+  The_this_types_of_each_signature_are_incompatible = 2685,
   Namespace_0_has_no_exported_member_1 = 2694,
   Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
   Duplicate_property_0 = 2718,
@@ -149,10 +151,10 @@ export enum DiagnosticCode {
 /** Translates a diagnostic code to its respective string. */
 export function diagnosticCodeToString(code: DiagnosticCode): string {
   switch (code) {
-    case 100: return "Operation not supported";
+    case 100: return "Not implemented.";
     case 101: return "Operation is unsafe.";
     case 102: return "User-defined: {0}";
-    case 103: return "Not implemented.";
+    case 103: return "Feature '{0}' is not enabled.";
     case 200: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";
@@ -263,6 +265,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2393: return "Duplicate function implementation.";
     case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
     case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
+    case 2453: return "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.";
     case 2460: return "Type '{0}' has no property '{1}'.";
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";
     case 2474: return "In 'const' enum declarations member initializer must be constant expression.";
@@ -277,6 +280,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2651: return "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.";
     case 2673: return "Constructor of class '{0}' is private and only accessible within the class declaration.";
     case 2674: return "Constructor of class '{0}' is protected and only accessible within the class declaration.";
+    case 2685: return "The 'this' types of each signature are incompatible.";
     case 2694: return "Namespace '{0}' has no exported member '{1}'.";
     case 2706: return "Required type parameters may not follow optional type parameters.";
     case 2718: return "Duplicate property '{0}'.";
