@@ -52,13 +52,14 @@ export function compareImpl(str1: string, index1: usize, str2: string, index2: u
   var ptr1 = changetype<usize>(str1) + (index1 << 1);
   var ptr2 = changetype<usize>(str2) + (index2 << 1);
   if (ASC_SHRINK_LEVEL < 2) {
-    if (len >= 8 && !((ptr1 & 7) | (ptr2 & 7))) {
+    if (len == 1) return <i32>load<u16>(ptr1) - <i32>load<u16>(ptr2);
+    if (len >= 4 && !((ptr1 & 7) | (ptr2 & 7))) {
       do {
         if (load<u64>(ptr1) != load<u64>(ptr2)) break;
         ptr1 += 8;
         ptr2 += 8;
         len  -= 4;
-      } while (len >= 8);
+      } while (len >= 4);
     }
   }
   while (len--) {
