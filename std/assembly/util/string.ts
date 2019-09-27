@@ -57,7 +57,7 @@ export function compareImpl(str1: string, index1: usize, str2: string, index2: u
         if (load<u64>(ptr1) != load<u64>(ptr2)) break;
         ptr1 += 8;
         ptr2 += 8;
-        len  -= 8;
+        len  -= 4;
       } while (len >= 8);
     }
   }
