@@ -9,7 +9,7 @@ const diff = require("./util/diff");
 const asc = require("../cli/asc.js");
 const rtrace = require("../lib/rtrace");
 const cluster = require("cluster");
-const numCPUs = require('os').cpus().length;
+const coreCount = require("physical-cpu-count");
 
 const config = {
   "create": {
@@ -72,16 +72,17 @@ var skippedMessages = new Map();
 
 const basedir = path.join(__dirname, "compiler");
 
-// Get a list of all tests
-var tests = glob.sync("**/!(_*).ts", { cwd: basedir }).map(name => name.replace(/\.ts$/, ""));
-
-// Run specific tests only if arguments are provided
-if (argv.length) {
-  tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
-  if (!tests.length) {
-    console.error("No matching tests: " + argv.join(" "));
-    process.exit(1);
+// Gets a list of all relevant tests
+function getTests() {
+  var tests =  glob.sync("**/!(_*).ts", { cwd: basedir }).map(name => name.replace(/\.ts$/, ""));
+  if (argv.length) { // run matching tests only
+    tests = tests.filter(filename => argv.indexOf(filename.replace(/\.ts$/, "")) >= 0);
+    if (!tests.length) {
+      console.error("No matching tests: " + argv.join(" "));
+      process.exit(1);
+    }
   }
+  return tests;
 }
 
 // Runs a single test
@@ -356,7 +357,7 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
 }
 
 // Evaluates the overall test result
-function evaluate() {
+function evaluateResult() {
   if (skippedTests.size) {
     console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.size + " compiler tests have been skipped:\n"));
     skippedTests.forEach(name => {
@@ -380,30 +381,28 @@ function evaluate() {
 }
 
 // Run tests in parallel if requested
-if (args.parallel && tests.length > 1) {
+if (args.parallel && coreCount > 1) {
   if (cluster.isWorker) {
     colorsUtil.supported = true;
     process.on("message", msg => {
-      if (msg.cmd == "run") {
-        try {
-          runTest(msg.test);
-        } catch (e) {
-          process.send({ cmd: "done", failed: true, message: e.message });
-        }
-        process.send({ cmd: "ready" });
-      } else {
-        throw Error("invalid command: " + msg.cmd);
+      if (msg.cmd != "run") throw Error("invalid command: " + msg.cmd);
+      try {
+        runTest(msg.test);
+      } catch (e) {
+        process.send({ cmd: "done", failed: true, message: e.message });
       }
+      process.send({ cmd: "ready" });
     });
     process.send({ cmd: "ready" });
   } else {
-    let workers = [];
-    let current = [];
-    let outputs = [];
-    let index = 0;
-    let numWorkers = Math.min(numCPUs, tests.length);
-    console.log("Spawning " + numWorkers + " workers ...");
+    const tests = getTests();
+    const workers = [];
+    const current = [];
+    const outputs = [];
+    let numWorkers = coreCount - 1;
+    console.log("Spawning " + numWorkers + " workers (detected " + coreCount + " physical CPUs ) ...");
     cluster.settings.silent = true;
+    let index = 0;
     for (let i = 0; i < numWorkers; ++i) {
       let worker = cluster.fork();
       workers[i] = worker;
@@ -418,10 +417,9 @@ if (args.parallel && tests.length > 1) {
             worker.kill();
             return;
           }
-          let testName = tests[index++];
-          current[i] = testName;
+          current[i] = tests[index++];
           outputs[i] = [];
-          worker.send({ cmd: "run", test: testName });
+          worker.send({ cmd: "run", test: current[i] });
         } else if (msg.cmd == "done") {
           process.stdout.write(Buffer.concat(outputs[i]).toString());
           if (msg.failed) failedTests.add(current[i]);
@@ -436,13 +434,13 @@ if (args.parallel && tests.length > 1) {
       });
       worker.on("disconnect", () => {
         if (workers[i]) throw Error("worker#" + i + " died unexpectedly");
-        if (workers.every(w => w == null)) evaluate();
+        if (!--numWorkers) evaluateResult();
       });
     }
   }
 
 // Otherwise run tests sequentially
 } else {
-  tests.forEach(runTest);
-  evaluate();
+  getTests().forEach(runTest);
+  evaluateResult();
 }
