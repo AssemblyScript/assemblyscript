@@ -8,6 +8,8 @@ const optionsUtil = require("../cli/util/options");
 const diff = require("./util/diff");
 const asc = require("../cli/asc.js");
 const rtrace = require("../lib/rtrace");
+const cluster = require("cluster");
+const numCPUs = require('os').cpus().length;
 
 const config = {
   "create": {
@@ -34,13 +36,18 @@ const config = {
       "Enables verbose rtrace output."
     ]
   },
+  "parallel": {
+    "description": [
+      "Runs tests in parallel."
+    ]
+  },
   "help": {
     "description": "Prints this message and exits.",
     "type": "b",
     "alias": "h"
   }
 };
-const opts = optionsUtil.parse(process.argv.slice(2),config);
+const opts = optionsUtil.parse(process.argv.slice(2), config);
 const args = opts.options;
 const argv = opts.arguments;
 
@@ -66,7 +73,7 @@ var skippedMessages = new Map();
 const basedir = path.join(__dirname, "compiler");
 
 // Get a list of all tests
-var tests = glob.sync("**/!(_*).ts", { cwd: basedir });
+var tests = glob.sync("**/!(_*).ts", { cwd: basedir }).map(name => name.replace(/\.ts$/, ""));
 
 // Run specific tests only if arguments are provided
 if (argv.length) {
@@ -77,11 +84,10 @@ if (argv.length) {
   }
 }
 
-// TODO: asc's callback is synchronous here. This might change.
-tests.forEach(filename => {
-  console.log(colorsUtil.white("Testing compiler/" + filename) + "\n");
+// Runs a single test
+function runTest(basename) {
+  console.log(colorsUtil.white("Testing compiler/" + basename) + "\n");
 
-  const basename = filename.replace(/\.ts$/, "");
   const configPath = path.join(basedir, basename + ".json");
   const config = fs.existsSync(configPath)
     ? require(configPath)
@@ -118,6 +124,7 @@ tests.forEach(filename => {
       console.log("- " + colorsUtil.yellow("feature SKIPPED") + " (" + missing_features.join(", ") + ")\n");
       skippedTests.add(basename);
       skippedMessages.set(basename, "feature not enabled");
+      if (cluster.isWorker) process.send({ cmd: "skipped", message: skippedMessages.get(basename) });
       return;
     }
   }
@@ -129,11 +136,9 @@ tests.forEach(filename => {
 
   var failed = false;
 
-  // TODO: also save stdout/stderr and diff it (-> expected failures)
-
   // Build unoptimized
   var cmd = [
-    filename,
+    basename + ".ts",
     "--baseDir", basedir,
     "--validate",
     "--measure",
@@ -142,10 +147,7 @@ tests.forEach(filename => {
   ];
   if (asc_flags)
     Array.prototype.push.apply(cmd, asc_flags);
-  if (args.createBinary)
-    cmd.push("--binaryFile", basename + ".untouched.wasm");
-  else
-    cmd.push("--binaryFile", "temp.wasm");
+  cmd.push("--binaryFile", basename + ".untouched.wasm");
   asc.main(cmd, {
     stdout: stdout,
     stderr: stderr
@@ -214,7 +216,7 @@ tests.forEach(filename => {
 
     // Build optimized
     var cmd = [
-      filename,
+      basename + ".ts",
       "--baseDir", basedir,
       "--validate",
       "--measure",
@@ -237,7 +239,7 @@ tests.forEach(filename => {
         failedTests.add(basename);
         return 1;
       }
-      let untouchedBuffer = fs.readFileSync(path.join(basedir, "temp.wasm"));
+      let untouchedBuffer = fs.readFileSync(path.join(basedir, basename + ".untouched.wasm"));
       let optimizedBuffer = stdout.toBuffer();
       const gluePath = path.join(basedir, basename + ".js");
       var glue = {};
@@ -258,29 +260,11 @@ tests.forEach(filename => {
     if (failed) return 1;
   });
   if (v8_no_flags) v8.setFlagsFromString(v8_no_flags);
-});
-
-if (skippedTests.size) {
-  console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.size + " compiler tests have been skipped:\n"));
-  skippedTests.forEach(name => {
-    var message = skippedMessages.has(name) ? colorsUtil.gray("[" + skippedMessages.get(name) + "]") : "";
-    console.log("  " + name + " " + message);
-  });
-  console.log();
-}
-if (failedTests.size) {
-  process.exitCode = 1;
-  console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.size + " compiler tests had failures:\n"));
-  failedTests.forEach(name => {
-    var message = failedMessages.has(name) ? colorsUtil.gray("[" + failedMessages.get(name) + "]") : "";
-    console.log("  " + name + " " + message);
-  });
-  console.log();
-}
-if (!process.exitCode) {
-  console.log("[ " + colorsUtil.white("OK") + " ]");
+  if (!args.createBinary) fs.unlink(path.join(basedir, basename + ".untouched.wasm"), err => {});
+  if (cluster.isWorker) process.send({ cmd: "done", failed: failed, message: failedMessages.get(basename) });
 }
 
+// Tests if instantiation of a module succeeds
 function testInstantiate(basename, binaryBuffer, name, glue) {
   var failed = false;
   try {
@@ -369,4 +353,96 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
     failedMessages.set(basename, e.message);
   }
   return false;
+}
+
+// Evaluates the overall test result
+function evaluate() {
+  if (skippedTests.size) {
+    console.log(colorsUtil.yellow("WARNING: ") + colorsUtil.white(skippedTests.size + " compiler tests have been skipped:\n"));
+    skippedTests.forEach(name => {
+      var message = skippedMessages.has(name) ? colorsUtil.gray("[" + skippedMessages.get(name) + "]") : "";
+      console.log("  " + name + " " + message);
+    });
+    console.log();
+  }
+  if (failedTests.size) {
+    process.exitCode = 1;
+    console.log(colorsUtil.red("ERROR: ") + colorsUtil.white(failedTests.size + " compiler tests had failures:\n"));
+    failedTests.forEach(name => {
+      var message = failedMessages.has(name) ? colorsUtil.gray("[" + failedMessages.get(name) + "]") : "";
+      console.log("  " + name + " " + message);
+    });
+    console.log();
+  }
+  if (!process.exitCode) {
+    console.log("[ " + colorsUtil.white("OK") + " ]");
+  }
+}
+
+// Run tests in parallel if requested
+if (args.parallel && tests.length > 1) {
+  if (cluster.isWorker) {
+    colorsUtil.supported = true;
+    process.on("message", msg => {
+      if (msg.cmd == "run") {
+        try {
+          runTest(msg.test);
+        } catch (e) {
+          process.send({ cmd: "done", failed: true, message: e.message });
+        }
+        process.send({ cmd: "ready" });
+      } else {
+        throw Error("invalid command: " + msg.cmd);
+      }
+    });
+    process.send({ cmd: "ready" });
+  } else {
+    let workers = [];
+    let current = [];
+    let outputs = [];
+    let index = 0;
+    let numWorkers = Math.min(numCPUs, tests.length);
+    console.log("Spawning " + numWorkers + " workers ...");
+    cluster.settings.silent = true;
+    for (let i = 0; i < numWorkers; ++i) {
+      let worker = cluster.fork();
+      workers[i] = worker;
+      current[i] = null;
+      outputs[i] = [];
+      worker.process.stdout.on("data", buf => outputs[i].push(buf));
+      worker.process.stderr.on("data", buf => outputs[i].push(buf));
+      worker.on("message", msg => {
+        if (msg.cmd == "ready") {
+          if (index >= tests.length) {
+            workers[i] = null;
+            worker.kill();
+            return;
+          }
+          let testName = tests[index++];
+          current[i] = testName;
+          outputs[i] = [];
+          worker.send({ cmd: "run", test: testName });
+        } else if (msg.cmd == "done") {
+          process.stdout.write(Buffer.concat(outputs[i]).toString());
+          if (msg.failed) failedTests.add(current[i]);
+          if (msg.message) failedMessages.set(current[i], msg.message);
+        } else if (msg.cmd == "skipped") {
+          process.stdout.write(Buffer.concat(outputs[i]).toString());
+          skippedTests.add(current[i]);
+          if (msg.message) skippedMessages.set(current[i], msg.message);
+        } else {
+          throw Error("invalid command: " + msg.cmd);
+        }
+      });
+      worker.on("disconnect", () => {
+        if (workers[i]) throw Error("worker#" + i + " died unexpectedly");
+        if (workers.every(w => w == null)) evaluate();
+      });
+    }
+  }
+
+// Otherwise run tests sequentially
+} else {
+  tests.forEach(runTest);
+  evaluate();
 }
