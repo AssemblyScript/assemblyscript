@@ -55,10 +55,10 @@ $> git clone https://github.com/AssemblyScript/assemblyscript.git
 $> cd assemblyscript
 $> npm install
 $> npm link
-$> npm clean
+$> npm run clean
 ```
 
-Note that a fresh clone of the compiler will use the distribution files in `dist/`, but after an `npm clean` it will run [the sources](./src) directly through ts-node, which is useful in development. This condition can also be checked by running `asc -v` (it is running the sources if it states `-dev`). Also please see our [contribution guidelines](./CONTRIBUTING.md) before making your first pull request.
+Note that a fresh clone of the compiler will use the distribution files in `dist/`, but after an `npm run clean` it will run [the sources](./src) directly through ts-node, which is useful in development. This condition can also be checked by running `asc -v` (it is running the sources if it states `-dev`). Also please see our [contribution guidelines](./CONTRIBUTING.md) before making your first pull request.
 
 Building
 --------
