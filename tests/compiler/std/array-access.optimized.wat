@@ -98,19 +98,7 @@
   i32.shl
   local.get $0
   i32.add
-  local.set $1
-  local.get $2
-  i32.const 1
-  i32.eq
-  if
-   local.get $1
-   i32.load16_u
-   i32.const 240
-   i32.load16_u
-   i32.sub
-   return
-  end
-  local.get $1
+  local.tee $1
   i32.const 7
   i32.and
   i32.eqz

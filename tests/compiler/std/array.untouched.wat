@@ -10582,23 +10582,6 @@
   i32.add
   local.set $6
   local.get $4
-  i32.const 1
-  i32.eq
-  if
-   local.get $5
-   i32.load16_u
-   local.get $6
-   i32.load16_u
-   i32.sub
-   local.set $7
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $2
-   call $~lib/rt/pure/__release
-   local.get $7
-   return
-  end
-  local.get $4
   i32.const 4
   i32.ge_u
   if (result i32)

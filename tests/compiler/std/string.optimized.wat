@@ -2206,28 +2206,11 @@
   i32.shl
   local.get $0
   i32.add
-  local.set $4
-  local.get $2
-  local.set $1
-  local.get $3
-  i32.const 1
-  i32.eq
-  if
-   local.get $4
-   i32.load16_u
-   local.get $1
-   i32.load16_u
-   i32.sub
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $2
-   call $~lib/rt/pure/__release
-   return
-  end
-  local.get $4
+  local.tee $4
   i32.const 7
   i32.and
-  local.get $1
+  local.get $2
+  local.tee $1
   i32.const 7
   i32.and
   i32.or
