@@ -47,7 +47,7 @@ class DiagnosticsWalker extends Lint.RuleWalker {
   }
 
   visitArrowFunction(node: ts.ArrowFunction) {
-    if (!isArgument(node)) {
+    if (requiresReturnType(node)) {
       this.checkFunctionReturnType(node);
     } else if (node.type) {
       this.addFailureAtNode(node.type, Rule.UNNECESSARY_RETURN_TYPE);
@@ -72,6 +72,10 @@ class DiagnosticsWalker extends Lint.RuleWalker {
   }
 }
 
-function isArgument(node: ts.Node) {
-  return ts.isCallLikeExpression(node.parent);
+function requiresReturnType(node: ts.ArrowFunction): boolean {
+  if (ts.isCallExpression(node.parent) && ts.isIdentifier(node.parent.expression)
+    && ["lengthof", "nameof"].includes(node.parent.expression.text)) {
+    return true;
+  }
+  return !ts.isCallLikeExpression(node.parent);
 }

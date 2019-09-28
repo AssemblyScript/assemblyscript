@@ -453,7 +453,7 @@ f64.trunc(1.0);
   assert(nameof<usize>() == "usize");
   assert(nameof<void>() == "void");
   assert(nameof("some value") == "String");
-  assert(nameof(() => {}) == "Function");
+  assert(nameof((): void => {}) == "Function");
 }
 
 assert(isVoid<void>());
@@ -475,7 +475,7 @@ assert(lengthof<() => void>() == 0);
 assert(lengthof<(a: i32) => void>() == 1);
 assert(lengthof<(a: i32, b: C) => void>() == 2);
 assert(lengthof<(a: i32, b: C, c: string) => void>() == 3);
-assert(lengthof((a: i32, b: i32, c: i32, d: i32) => {}) == 4);
+assert(lengthof((a: i32, b: i32, c: i32, d: i32): void => {}) == 4);
 
 assert(isInteger<ReturnType<() => i32>>());
 assert(isInteger<returnof<() => i32>>());
