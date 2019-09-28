@@ -1262,8 +1262,8 @@ export class Program extends DiagnosticEmitter {
       } else if (numImplementsTypes) {
         // remember classes that implement interfaces
         for (let i = 0; i < numImplementsTypes; ++i) {
-          this.warning( // TODO: not yet supported
-            DiagnosticCode.Operation_not_supported,
+          this.warning(
+            DiagnosticCode.Not_implemented,
             implementsTypes[i].range
           );
         }
@@ -1387,14 +1387,12 @@ export class Program extends DiagnosticEmitter {
                 firstArg.kind == NodeKind.LITERAL &&
                 (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
               ) {
-                let kind = OperatorKind.fromDecorator(
-                  decorator.decoratorKind,
-                  (<StringLiteralExpression>firstArg).value
-                );
+                let text = (<StringLiteralExpression>firstArg).value;
+                let kind = OperatorKind.fromDecorator(decorator.decoratorKind, text);
                 if (kind == OperatorKind.INVALID) {
                   this.error(
-                    DiagnosticCode.Operation_not_supported,
-                    firstArg.range
+                    DiagnosticCode._0_is_not_a_valid_operator,
+                    firstArg.range, text
                   );
                 } else {
                   let overloads = classPrototype.overloadPrototypes;

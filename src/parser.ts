@@ -647,7 +647,7 @@ export class Parser extends DiagnosticEmitter {
             if (!t) return null;
             if (t.kind != NodeKind.NAMEDTYPE) {
               this.error(
-                DiagnosticCode.Operation_not_supported,
+                DiagnosticCode.Identifier_expected,
                 t.range
               );
               this.tryParseSignatureIsSignature = true;
@@ -1085,7 +1085,7 @@ export class Parser extends DiagnosticEmitter {
         if (!t) return null;
         if (t.kind != NodeKind.NAMEDTYPE) {
           this.error(
-            DiagnosticCode.Operation_not_supported,
+            DiagnosticCode.Identifier_expected,
             t.range
           );
           return null;
@@ -1098,7 +1098,7 @@ export class Parser extends DiagnosticEmitter {
         if (!t) return null;
         if (t.kind != NodeKind.NAMEDTYPE) {
           this.error(
-            DiagnosticCode.Operation_not_supported,
+            DiagnosticCode.Identifier_expected,
             t.range
           );
           return null;
@@ -1145,7 +1145,7 @@ export class Parser extends DiagnosticEmitter {
           this.parseParametersThis = <NamedTypeNode>thisType;
         } else {
           this.error(
-            DiagnosticCode.Operation_not_supported,
+            DiagnosticCode.Identifier_expected,
             thisType.range
           );
         }
@@ -1605,7 +1605,7 @@ export class Parser extends DiagnosticEmitter {
       if (!t) return null;
       if (t.kind != NodeKind.NAMEDTYPE) {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Identifier_expected,
           t.range
         );
         return null;
@@ -2504,7 +2504,7 @@ export class Parser extends DiagnosticEmitter {
       if (tn.skip(Token.COMMA)) {
         // TODO: default + star, default + members
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Not_implemented,
           tn.range()
         );
         return null;
@@ -3276,8 +3276,8 @@ export class Parser extends DiagnosticEmitter {
           );
         } else {
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            tn.range()
+            DiagnosticCode.This_expression_is_not_constructable,
+            operand.range
           );
         }
         return null;

@@ -215,6 +215,6 @@ export namespace CommonSymbols {
 }
 
 // shared
-export { Feature } from "../std/assembly/shared/feature";
+export { Feature, featureToString } from "../std/assembly/shared/feature";
 export { Target } from "../std/assembly/shared/target";
 export { Typeinfo, TypeinfoFlags } from "../std/assembly/shared/typeinfo";
