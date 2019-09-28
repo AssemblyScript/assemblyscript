@@ -46,7 +46,9 @@ class DiagnosticsWalker extends Lint.RuleWalker {
   }
 
   visitArrowFunction(node: ts.ArrowFunction) {
-    this.checkFunctionReturnType(node);
+    if (!isArgument(node)) {
+      this.checkFunctionReturnType(node);
+    }
     super.visitArrowFunction(node);
   }
 
@@ -65,4 +67,8 @@ class DiagnosticsWalker extends Lint.RuleWalker {
       this.addFailureAtNode(node, Rule.MISSING_RETURN_TYPE);
     }
   }
+}
+
+function isArgument(node: ts.Node) {
+  return ts.isCallLikeExpression(node.parent);
 }
