@@ -14,7 +14,7 @@ import {
 } from "./diagnosticMessages.generated";
 
 import {
-  isLineBreak, CharCode
+  isLineBreak
 } from "./util";
 
 export {

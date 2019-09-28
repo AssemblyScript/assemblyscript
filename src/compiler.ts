@@ -878,8 +878,8 @@ export class Compiler extends DiagnosticEmitter {
       // Importing mutable globals is not supported in the MVP
       } else {
         this.error(
-          DiagnosticCode.Operation_not_supported,
-          global.declaration.range
+          DiagnosticCode.Feature_0_is_not_enabled,
+          global.declaration.range, "mutable-globals"
         );
       }
       return false;
@@ -1258,8 +1258,8 @@ export class Compiler extends DiagnosticEmitter {
         let decoratorNodes = instance.decoratorNodes;
         let decorator = assert(findDecorator(DecoratorKind.EXTERNAL, decoratorNodes));
         this.error(
-          DiagnosticCode.Operation_not_supported,
-          decorator.range
+          DiagnosticCode.Decorator_0_is_not_valid_here,
+          decorator.range, "external"
         );
       }
 
@@ -1447,7 +1447,7 @@ export class Compiler extends DiagnosticEmitter {
   ): void {
     // TODO
     this.error(
-      DiagnosticCode.Operation_not_supported,
+      DiagnosticCode.Not_implemented,
       declaration.range
     );
   }
@@ -1765,7 +1765,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.TYPEDECLARATION: {
         // TODO: integrate inner type declaration into flow
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Not_implemented,
           statement.range
         );
         stmt = module.unreachable();
@@ -1835,7 +1835,7 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     if (statement.label) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Not_implemented,
         statement.label.range
       );
       return module.unreachable();
@@ -1869,7 +1869,7 @@ export class Compiler extends DiagnosticEmitter {
     var label = statement.label;
     if (label) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Not_implemented,
         label.range
       );
       return module.unreachable();
@@ -2415,7 +2415,7 @@ export class Compiler extends DiagnosticEmitter {
     // TODO: can't yet support something like: try { return ... } finally { ... }
     // worthwhile to investigate lowering returns to block results (here)?
     this.error(
-      DiagnosticCode.Operation_not_supported,
+      DiagnosticCode.Not_implemented,
       statement.range
     );
     return this.module.unreachable();
@@ -2859,7 +2859,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Not_implemented,
           expression.range
         );
         expr = this.module.unreachable();
@@ -3651,7 +3651,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.ANYREF: {
             // TODO: ref.eq
             this.error(
-              DiagnosticCode.Operation_not_supported,
+              DiagnosticCode.Not_implemented,
               expression.range
             );
             expr = module.unreachable();
@@ -3748,7 +3748,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.ANYREF: {
             // TODO: !ref.eq
             this.error(
-              DiagnosticCode.Operation_not_supported,
+              DiagnosticCode.Not_implemented,
               expression.range
             );
             expr = module.unreachable();
@@ -5250,7 +5250,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: {
         this.error(
-          DiagnosticCode.Operation_not_supported,
+          DiagnosticCode.Not_implemented,
           expression.range
         );
         return this.module.unreachable();
@@ -5445,7 +5445,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.error(
-      DiagnosticCode.Operation_not_supported,
+      DiagnosticCode.Not_implemented,
       valueExpression.range
     );
     return module.unreachable();
@@ -5999,10 +5999,18 @@ export class Compiler extends DiagnosticEmitter {
 
       // not supported
       default: {
-        this.error(
-          DiagnosticCode.Operation_not_supported,
-          expression.range
-        );
+        let type = this.resolver.getTypeOfElement(target);
+        if (type) {
+          this.error(
+            DiagnosticCode.Type_0_has_no_call_signatures,
+            expression.range, type.toString()
+          );
+        } else {
+          this.error(
+            DiagnosticCode.Expression_cannot_be_represented_by_a_type,
+            expression.range
+          );
+        }
         return module.unreachable();
       }
     }
@@ -6046,7 +6054,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // now compile the builtin, which usually returns a block of code that replaces the call.
-    var expr = compileBuiltinCall(
+    return compileBuiltinCall(
       this,
       prototype,
       typeArguments,
@@ -6054,14 +6062,6 @@ export class Compiler extends DiagnosticEmitter {
       contextualType,
       expression
     );
-    if (!expr) {
-      this.error(
-        DiagnosticCode.Operation_not_supported,
-        expression.range
-      );
-      return this.module.unreachable();
-    }
-    return expr;
   }
 
   /**
@@ -6079,7 +6079,7 @@ export class Compiler extends DiagnosticEmitter {
     var thisType = signature.thisType;
     if (hasThis != (thisType != null)) {
       this.error(
-        DiagnosticCode.Operation_not_supported, // TODO: better message?
+        DiagnosticCode.The_this_types_of_each_signature_are_incompatible,
         reportNode.range
       );
       return false;
@@ -6089,7 +6089,7 @@ export class Compiler extends DiagnosticEmitter {
     var hasRest = signature.hasRest;
     if (hasRest) {
       this.error(
-        DiagnosticCode.Operation_not_supported,
+        DiagnosticCode.Not_implemented,
         reportNode.range
       );
       return false;
@@ -6126,7 +6126,7 @@ export class Compiler extends DiagnosticEmitter {
     // Library files may always use unsafe features
     if (this.options.noUnsafe && !reportNode.range.source.isLibrary) {
       this.error(
-        DiagnosticCode.Expression_is_unsafe,
+        DiagnosticCode.Operation_is_unsafe,
         reportNode.range
       );
     }
@@ -7312,7 +7312,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.error(
-      DiagnosticCode.Operation_not_supported,
+      DiagnosticCode.Not_implemented,
       expression.range
     );
     return this.module.unreachable();
@@ -7390,8 +7390,8 @@ export class Compiler extends DiagnosticEmitter {
           );
         } else {
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+            expression.range, "instanceof", actualType.toString(), expectedType.toString()
           );
         }
       }
@@ -7432,8 +7432,8 @@ export class Compiler extends DiagnosticEmitter {
           );
         } else {
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+            expression.range, "instanceof", actualType.toString(), expectedType.toString()
           );
         }
       }
@@ -7468,8 +7468,8 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         this.error(
-          DiagnosticCode.Operation_not_supported,
-          expression.range
+          DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
+          expression.range, "T"
         );
         return module.unreachable();
       }
@@ -7515,7 +7515,7 @@ export class Compiler extends DiagnosticEmitter {
       // case LiteralKind.REGEXP:
     }
     this.error(
-      DiagnosticCode.Operation_not_supported,
+      DiagnosticCode.Not_implemented,
       expression.range
     );
     this.currentType = contextualType;
@@ -7777,7 +7777,7 @@ export class Compiler extends DiagnosticEmitter {
     if (!target) return module.unreachable();
     if (target.kind != ElementKind.CLASS_PROTOTYPE) {
       this.error(
-        DiagnosticCode.Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature,
+        DiagnosticCode.This_expression_is_not_constructable,
         expression.expression.range
       );
       return this.module.unreachable();
@@ -8038,7 +8038,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.error(
-      DiagnosticCode.Operation_not_supported,
+      DiagnosticCode.Not_implemented,
       expression.range
     );
     return module.unreachable();
@@ -8190,8 +8190,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "++", this.currentType.toString()
           );
           if (tempLocal) flow.freeTempLocal(tempLocal);
           return module.unreachable();
@@ -8279,8 +8279,8 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.error(
-            DiagnosticCode.Operation_not_supported,
-            expression.range
+            DiagnosticCode.The_0_operator_cannot_be_applied_to_type_1,
+            expression.range, "--", this.currentType.toString()
           );
           if (tempLocal) flow.freeTempLocal(tempLocal);
           return module.unreachable();
