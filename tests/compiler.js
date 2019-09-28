@@ -393,26 +393,13 @@ if (args.parallel && coreCount > 1) {
       } catch (e) {
         process.send({ cmd: "done", failed: true, message: e.message });
       }
-      process.send({ cmd: "ready" });
     });
     process.send({ cmd: "ready" });
   } else {
     const tests = getTests();
-    for (let name of [ // Run tests known to take exceptionally long first
-      "std/libm",
-      "std/set",
-      "std/map",
-      "std/string",
-      "std/array",
-      "std/typedarray",
-      "std/math",
-    ]) {
-      let p = tests.indexOf(name);
-      if (p >= 0) {
-        tests.splice(p, 1);
-        tests.unshift(name);
-      }
-    }
+    // const sizes = new Map();
+    // tests.forEach(name => sizes.set(name, fs.statSync(path.join(basedir, name + ".ts")).size));
+    // tests.sort((a, b) => sizes.get(b) - sizes.get(a));
     const workers = [];
     const current = [];
     const outputs = [];
@@ -428,16 +415,7 @@ if (args.parallel && coreCount > 1) {
       worker.process.stdout.on("data", buf => outputs[i].push(buf));
       worker.process.stderr.on("data", buf => outputs[i].push(buf));
       worker.on("message", msg => {
-        if (msg.cmd == "ready") {
-          if (index >= tests.length) {
-            workers[i] = null;
-            worker.kill();
-            return;
-          }
-          current[i] = tests[index++];
-          outputs[i] = [];
-          worker.send({ cmd: "run", test: current[i] });
-        } else if (msg.cmd == "done") {
+        if (msg.cmd == "done") {
           process.stdout.write(Buffer.concat(outputs[i]).toString());
           if (msg.failed) failedTests.add(current[i]);
           if (msg.message) failedMessages.set(current[i], msg.message);
@@ -445,9 +423,17 @@ if (args.parallel && coreCount > 1) {
           process.stdout.write(Buffer.concat(outputs[i]).toString());
           skippedTests.add(current[i]);
           if (msg.message) skippedMessages.set(current[i], msg.message);
-        } else {
+        } else if (msg.cmd != "ready") {
           throw Error("invalid command: " + msg.cmd);
         }
+        if (index >= tests.length) {
+          workers[i] = null;
+          worker.kill();
+          return;
+        }
+        current[i] = tests[index++];
+        outputs[i] = [];
+        worker.send({ cmd: "run", test: current[i] });
       });
       worker.on("disconnect", () => {
         if (workers[i]) throw Error("worker#" + i + " died unexpectedly");
