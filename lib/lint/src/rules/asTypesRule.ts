@@ -5,6 +5,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 
   static MISSING_TYPE_OR_INITIALIZER = "Missing type or initializer.";
   static MISSING_RETURN_TYPE = "Missing return type.";
+  static UNNECESSARY_RETURN_TYPE = "Unnecessary return type.";
 
   apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
     return this.applyWithWalker(new DiagnosticsWalker(sourceFile, this.getOptions()));
@@ -48,6 +49,8 @@ class DiagnosticsWalker extends Lint.RuleWalker {
   visitArrowFunction(node: ts.ArrowFunction) {
     if (!isArgument(node)) {
       this.checkFunctionReturnType(node);
+    } else if (node.type) {
+      this.addFailureAtNode(node.type, Rule.UNNECESSARY_RETURN_TYPE);
     }
     super.visitArrowFunction(node);
   }
