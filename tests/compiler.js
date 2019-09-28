@@ -1,3 +1,4 @@
+const startTime = Date.now();
 const fs  = require("fs");
 const path = require("path");
 const os = require("os");
@@ -375,6 +376,7 @@ function evaluateResult() {
     });
     console.log();
   }
+  console.log("Time: " + (Date.now() - startTime) + " ms\n");
   if (!process.exitCode) {
     console.log("[ " + colorsUtil.white("OK") + " ]");
   }
@@ -396,11 +398,26 @@ if (args.parallel && coreCount > 1) {
     process.send({ cmd: "ready" });
   } else {
     const tests = getTests();
+    for (let name of [ // Run tests known to take exceptionally long first
+      "std/libm",
+      "std/set",
+      "std/map",
+      "std/string",
+      "std/array",
+      "std/typedarray",
+      "std/math",
+    ]) {
+      let p = tests.indexOf(name);
+      if (p >= 0) {
+        tests.splice(p, 1);
+        tests.unshift(name);
+      }
+    }
     const workers = [];
     const current = [];
     const outputs = [];
-    let numWorkers = coreCount - 1;
-    console.log("Spawning " + numWorkers + " workers (detected " + coreCount + " physical CPUs ) ...");
+    let numWorkers = Math.min(coreCount - 1, tests.length);
+    console.log("Spawning " + numWorkers + " workers ...");
     cluster.settings.silent = true;
     let index = 0;
     for (let i = 0; i < numWorkers; ++i) {
