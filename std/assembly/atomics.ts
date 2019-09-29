@@ -1,6 +1,7 @@
 import { ArrayBufferView } from "./arraybuffer";
 
 export namespace Atomics {
+
   // @ts-ignore: decorator
   @inline
   export function load<T>(array: ArrayBufferView, index: i32): T {
