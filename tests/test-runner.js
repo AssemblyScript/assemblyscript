@@ -127,10 +127,10 @@ function runTestSuites(suites) {
                     failed = true;
                     console.log("\x1b[31m FAILED: " + failedTests.join("\t\n FAILED: ") + "\x1b[0m");
                 } else {
-                    console.log("\x1b[32mAll tests passed ^^ \x1b[0m");
+                    console.log("\x1b[32mAll tests passed \x1b[0m");
                 }
             })
-            // console.log("\n\n\n", results)
+
             console.log("\n ------------------------------ ")
             process.exit(failed ? 1 : 0);
         }
@@ -138,7 +138,7 @@ function runTestSuites(suites) {
 }
 
 runTestSuites([
-    // parserSuite,
+    parserSuite,
     compilerSuite,
-    // packageSuite
+    packageSuite
 ]);

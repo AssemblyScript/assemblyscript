@@ -206,7 +206,7 @@ declare module 'assemblyscript/src/common' {
 	    const visit = "__visit";
 	    const allocArray = "__allocArray";
 	}
-	export { Feature } from 'assemblyscript/std/assembly/shared/feature';
+	export { Feature, featureToString } from 'assemblyscript/std/assembly/shared/feature';
 	export { Target } from 'assemblyscript/std/assembly/shared/target';
 	export { Typeinfo, TypeinfoFlags } from 'assemblyscript/std/assembly/shared/typeinfo';
 
@@ -218,35 +218,36 @@ declare module 'assemblyscript/src/diagnosticMessages.generated' {
 	 */ /***/
 	/** Enum of available diagnostic codes. */
 	export enum DiagnosticCode {
-	    Operation_not_supported = 100,
+	    Not_implemented = 100,
 	    Operation_is_unsafe = 101,
 	    User_defined_0 = 102,
+	    Feature_0_is_not_enabled = 103,
 	    Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
 	    Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
 	    Type_0_cannot_be_changed_to_type_1 = 202,
-	    Type_0_cannot_be_reinterpreted_as_type_1 = 203,
+	    Operation_0_cannot_be_applied_to_type_1 = 203,
 	    Basic_type_0_cannot_be_nullable = 204,
 	    Cannot_export_a_mutable_global = 205,
 	    Mutable_value_cannot_be_inlined = 206,
 	    Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa = 207,
 	    Unmanaged_classes_cannot_implement_interfaces = 208,
 	    Invalid_regular_expression_flags = 209,
-	    Implementation_0_must_match_the_signature_1 = 210,
+	    Expression_is_never_null = 210,
 	    Class_0_is_sealed_and_cannot_be_extended = 211,
 	    Decorator_0_is_not_valid_here = 212,
 	    Duplicate_decorator = 213,
-	    An_allocator_must_be_present_to_use_0 = 214,
+	    Type_0_is_illegal_in_this_context = 214,
 	    Optional_parameter_must_have_an_initializer = 215,
 	    Constructor_of_class_0_must_not_require_any_arguments = 216,
 	    Function_0_cannot_be_inlined_into_itself = 217,
 	    Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set = 218,
 	    Optional_properties_are_not_supported = 219,
 	    Expression_must_be_a_compile_time_constant = 220,
-	    Module_cannot_have_multiple_start_functions = 221,
+	    Type_0_is_not_a_function_index_or_function_reference = 221,
 	    _0_must_be_a_value_between_1_and_2_inclusive = 222,
 	    _0_must_be_a_power_of_two = 223,
-	    Expression_is_unsafe = 224,
-	    Expression_is_never_null = 225,
+	    _0_is_not_a_valid_operator = 224,
+	    Expression_cannot_be_represented_by_a_type = 225,
 	    Unterminated_string_literal = 1002,
 	    Identifier_expected = 1003,
 	    _0_expected = 1005,
@@ -316,7 +317,7 @@ declare module 'assemblyscript/src/diagnosticMessages.generated' {
 	    Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors = 2337,
 	    Property_0_does_not_exist_on_type_1 = 2339,
 	    Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
-	    Cannot_use_new_with_an_expression_whose_type_lacks_a_construct_signature = 2351,
+	    This_expression_is_not_constructable = 2351,
 	    A_function_whose_declared_type_is_not_void_must_return_a_value = 2355,
 	    The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access = 2357,
 	    The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access = 2364,
@@ -330,6 +331,7 @@ declare module 'assemblyscript/src/diagnosticMessages.generated' {
 	    Duplicate_function_implementation = 2393,
 	    Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
 	    A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
+	    The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
 	    Type_0_has_no_property_1 = 2460,
 	    The_0_operator_cannot_be_applied_to_type_1 = 2469,
 	    In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
@@ -344,6 +346,7 @@ declare module 'assemblyscript/src/diagnosticMessages.generated' {
 	    A_member_initializer_in_a_enum_declaration_cannot_reference_members_declared_after_it_including_members_defined_in_other_enums = 2651,
 	    Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration = 2673,
 	    Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration = 2674,
+	    The_this_types_of_each_signature_are_incompatible = 2685,
 	    Namespace_0_has_no_exported_member_1 = 2694,
 	    Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
 	    Duplicate_property_0 = 2718,
@@ -5906,6 +5909,8 @@ declare module 'assemblyscript/std/assembly/shared/feature' {
 	    /** Reference types. */
 	    REFERENCE_TYPES = 256
 	}
+	/** Gets the name of the specified feature one would specify on the command line. */
+	export function featureToString(feature: Feature): string;
 
 }
 declare module 'assemblyscript/std/assembly/shared/target' {

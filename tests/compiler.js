@@ -13,7 +13,7 @@ const features = process.env.ASC_FEATURES ? process.env.ASC_FEATURES.split(",") 
 
 // Get a list of all tests
 const basedir = path.join(__dirname, "compiler");
-const tests = glob.sync("**/!(_*).ts", { cwd: basedir });
+const tests = glob.sync("**/!(_*).ts", { cwd: basedir }).map(name => name.replace(/\.ts$/, ""));
 
 if (require.main === module) {
   const asc = require("../cli/asc.js");
@@ -103,7 +103,7 @@ if (require.main === module) {
 function performTest(passedArgs) {
 
   const { asc, basedir, arg, cliArgs } = passedArgs;
-  const filename = arg;
+  const basename = arg.split(".")[0];
 
   const result = {
     failed: false,
@@ -114,7 +114,7 @@ function performTest(passedArgs) {
 
   const args = cliArgs || {};
 
-  console.log(colorsUtil.white("Testing compiler/" + filename) + "\n");
+  console.log(colorsUtil.white("Testing compiler/" + basename) + "\n");
 
   const configPath = path.join(basedir, basename + ".json");
   const config = fs.existsSync(configPath)

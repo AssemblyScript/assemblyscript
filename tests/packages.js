@@ -28,21 +28,12 @@ function performTest(args) {
     const test = spawn(node, parts, {
       cwd: path.join(__dirname, args.arg[0])
     });
-    // test.stdout.on('data', (data) => {
-    //   console.log(`stdout: ${data}`);
-    // });
-    
-    // test.stderr.on('data', (data) => {
-    //   result.failed = true;
-    //   console.error(`stderr: ${data}`);
-    // });
-    
+ 
     test.on('close', (code) => {
       if (code > 0) {
         result.failed = true;
       }
       resolve(result);
-      // console.log(`child process exited with code ${code}`);
     });
   });
 }
