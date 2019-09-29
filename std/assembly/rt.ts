@@ -41,9 +41,9 @@ export function __allocArray(length: i32, alignLog2: usize, id: u32, data: usize
   var array = __alloc(offsetof<i32[]>(), id);
   var bufferSize = <usize>length << alignLog2;
   var buffer = __alloc(bufferSize, idof<ArrayBuffer>());
-  store<usize>(array, __retain(buffer), offsetof<ArrayBufferView>("data"));
-  changetype<ArrayBufferView>(array).dataStart = buffer;
-  changetype<ArrayBufferView>(array).dataLength = bufferSize;
+  store<usize>(array, __retain(buffer), offsetof<ArrayBufferView>("buffer"));
+  store<usize>(array, buffer, offsetof<ArrayBufferView>("dataStart"));
+  store<u32>(array, bufferSize, offsetof<ArrayBufferView>("byteLength"));
   store<i32>(changetype<usize>(array), length, offsetof<i32[]>("length_"));
   if (data) memory.copy(buffer, data, bufferSize);
   return array;

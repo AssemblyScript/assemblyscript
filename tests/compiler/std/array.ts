@@ -5,7 +5,7 @@ import { COMPARATOR } from "util/sort";
 function internalCapacity<T>(array: Array<T>): i32 {
   // the memory region used by the backing buffer might still be larger in that the ArrayBuffer
   // pre-allocates a power of 2 sized buffer itself and reuses it as long as it isn't exceeded.
-  var buffer: ArrayBuffer = array.data;
+  var buffer: ArrayBuffer = array.buffer;
   return buffer.byteLength >> alignof<T>();
 }
 
@@ -18,7 +18,7 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
   }
   for (let i = 0; i < len; i++) {
     if (isFloat<T>()) {
-      if (isNaN(a[i]) == isNaN(b[i])) continue;
+      if (isNaN(a[i]) && isNaN(b[i])) continue;
     }
     if (a[i] != b[i]) return false;
   }

@@ -1154,8 +1154,7 @@ interface ArrayLike<T> {
 }
 
 /** Interface for a typed view on an array buffer. */
-interface ArrayBufferView<T> {
-  [key: number]: T;
+interface ArrayBufferView {
   /** The {@link ArrayBuffer} referenced by this view. */
   readonly buffer: ArrayBuffer;
   /** The offset in bytes from the start of the referenced {@link ArrayBuffer}. */
@@ -1165,12 +1164,12 @@ interface ArrayBufferView<T> {
 }
 
 /* @internal */
-declare abstract class TypedArray<T> implements ArrayBufferView<T> {
+declare abstract class TypedArray<T> implements ArrayBufferView {
   [key: number]: T;
   /** Number of bytes per element. */
   static readonly BYTES_PER_ELEMENT: usize;
   /** Wrap an ArrayBuffer */
-  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): TypedArray<T>;
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): ArrayBufferView;
   /** Constructs a new typed array. */
   constructor(length: i32);
   /** The {@link ArrayBuffer} referenced by this view. */
