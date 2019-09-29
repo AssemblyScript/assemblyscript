@@ -319,7 +319,7 @@ function testReduce<ArrayType extends TypedArray<T>, T extends number>(): void {
   array[0] = <T>1;
   array[1] = <T>2;
   array[2] = <T>3;
-  var result = array.reduce<T>((acc: T, val: T): T => <T>(acc + val), <T>0);
+  var result = array.reduce<T>((acc: T, val: T) => <T>(acc + val), <T>0);
   assert(result == <T>6);
 }
 
@@ -340,7 +340,7 @@ function testReduceRight<ArrayType extends TypedArray<T>, T extends number>(): v
   array[0] = <T>1;
   array[1] = <T>2;
   array[2] = <T>3;
-  var result = array.reduceRight<T>((acc: T, val: T): T => <T>(acc + val), <T>0);
+  var result = array.reduceRight<T>((acc: T, val: T) => <T>(acc + val), <T>0);
   assert(result == <T>6);
 }
 
@@ -361,7 +361,7 @@ function testArrayMap<ArrayType extends TypedArray<T>, T extends number>(): void
   source[0] = <T>1;
   source[1] = <T>2;
   source[2] = <T>3;
-  var result = source.map((value: T): T => <T>(value * value));
+  var result = source.map((value: T) => <T>(value * value));
   assert(result[0] == <T>1);
   assert(result[1] == <T>4);
   assert(result[2] == <T>9);
@@ -386,7 +386,7 @@ function testArrayFilter<ArrayType extends TypedArray<T>, T extends number>(): v
   source[2] = <T>3;
   source[3] = <T>4;
   source[5] = <T>5;
-  var result = source.filter((value: T): bool => value > 2);
+  var result = source.filter((value: T) => value > 2);
   assert(result.byteOffset == 0);
   assert(result.length == 3);
   assert(result[0] == <T>3);
@@ -411,9 +411,9 @@ function testArraySome<ArrayType extends TypedArray<T>, T extends number>(): voi
   source[0] = <T>2;
   source[1] = <T>4;
   source[2] = <T>6;
-  var result: bool = source.some((value: T): bool => value == <T>2);
+  var result: bool = source.some((value: T) => value == <T>2);
   assert(result);
-  var failResult = source.some((value: T): bool => value == <T>0);
+  var failResult = source.some((value: T) => value == <T>0);
   assert(!failResult);
 }
 
@@ -434,9 +434,9 @@ function testArrayFindIndex<ArrayType extends TypedArray<T>, T extends number>()
   source[0] = <T>1;
   source[1] = <T>2;
   source[2] = <T>3;
-  var result = source.findIndex((value: T): bool => value == <T>2);
+  var result = source.findIndex((value: T) => value == <T>2);
   assert(result == 1);
-  var failResult = source.findIndex((value: T): bool => value == <T>4);
+  var failResult = source.findIndex((value: T) => value == <T>4);
   assert(failResult == -1);
 }
 
@@ -457,9 +457,9 @@ function testArrayEvery<ArrayType extends TypedArray<T>, T extends number>(): vo
   source[0] = <T>2;
   source[1] = <T>4;
   source[2] = <T>6;
-  var result = source.every((value: T): bool => value % <T>2 == <T>0);
+  var result = source.every((value: T) => value % <T>2 == <T>0);
   assert(result);
-  var failResult = source.every((value: T): bool => value == <T>2);
+  var failResult = source.every((value: T) => value == <T>2);
   assert(!failResult);
 }
 
@@ -485,7 +485,7 @@ function testArrayForEach<TArray extends TypedArray<T>, T extends number>(): voi
   array[0] = <T>forEachValues[0];
   array[1] = <T>forEachValues[1];
   array[2] = <T>forEachValues[2];
-  array.forEach((value: T, index: i32, self: TArray): void => {
+  array.forEach((value: T, index: i32, self: TArray) => {
     var matchedValue = forEachValues[index];
     assert(value == <T>matchedValue);
     assert(index == forEachCallCount);
