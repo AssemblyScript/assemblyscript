@@ -22,13 +22,12 @@
  (data (i32.const 320) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 360) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 408) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00A\00r\00r\00a\00y\00 \00i\00s\00 \00e\00m\00p\00t\00y")
- (data (i32.const 456) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
- (data (i32.const 572) "\01\00\00\00\01")
- (data (i32.const 584) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
- (data (i32.const 608) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00b")
- (data (i32.const 632) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l")
- (data (i32.const 656) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00d")
- (data (i32.const 680) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02")
+ (data (i32.const 460) "\01\00\00\00\01")
+ (data (i32.const 472) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
+ (data (i32.const 496) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00b")
+ (data (i32.const 520) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l")
+ (data (i32.const 544) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00d")
+ (data (i32.const 568) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
@@ -621,10 +620,10 @@
   if
    unreachable
   end
-  i32.const 752
+  i32.const 640
   i32.const 0
   i32.store
-  i32.const 2320
+  i32.const 2208
   i32.const 0
   i32.store
   i32.const 0
@@ -638,7 +637,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 752
+    i32.const 640
     i32.add
     i32.const 0
     i32.store offset=4
@@ -657,7 +656,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 752
+      i32.const 640
       i32.add
       i32.const 0
       i32.store offset=96
@@ -675,13 +674,13 @@
     br $loop|0
    end
   end
-  i32.const 752
-  i32.const 2336
+  i32.const 640
+  i32.const 2224
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 752
+  i32.const 640
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1582,7 +1581,7 @@
  )
  (func $~lib/rt/pure/__retain (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 748
+  i32.const 636
   i32.gt_u
   if
    local.get $0
@@ -1594,7 +1593,7 @@
  )
  (func $~lib/rt/__typeinfo (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 680
+  i32.const 568
   i32.load
   i32.gt_u
   if
@@ -1608,7 +1607,7 @@
   local.get $0
   i32.const 3
   i32.shl
-  i32.const 684
+  i32.const 572
   i32.add
   i32.load
  )
@@ -1980,7 +1979,7 @@
  )
  (func $~lib/rt/pure/__release (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 748
+  i32.const 636
   i32.gt_u
   if
    local.get $0
@@ -1998,7 +1997,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 14
+   i32.const 23
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -2299,7 +2298,7 @@
   if
    i32.const 424
    i32.const 376
-   i32.const 287
+   i32.const 270
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -2322,7 +2321,7 @@
  (func $~lib/array/Array<~lib/string/String>#push (; 37 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  i32.const 584
+  i32.const 472
   call $~lib/rt/pure/__retain
   drop
   local.get $0
@@ -2339,13 +2338,13 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.const 584
+  i32.const 472
   call $~lib/rt/pure/__retain
   i32.store
   local.get $0
   local.get $2
   i32.store offset=12
-  i32.const 584
+  i32.const 472
   call $~lib/rt/pure/__release
  )
  (func $~lib/string/String#get:length (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -2367,16 +2366,16 @@
   i32.eqz
   if
    local.get $1
-   i32.const 648
+   i32.const 536
    i32.ne
    if
-    i32.const 648
+    i32.const 536
     call $~lib/rt/pure/__retain
     drop
     local.get $1
     call $~lib/rt/pure/__release
    end
-   i32.const 648
+   i32.const 536
    local.set $1
   end
   local.get $0
@@ -2393,7 +2392,7 @@
   local.tee $2
   i32.eqz
   if
-   i32.const 584
+   i32.const 472
    call $~lib/rt/pure/__retain
    local.get $1
    call $~lib/rt/pure/__release
@@ -2426,7 +2425,7 @@
   call $~lib/rt/pure/__retain
   drop
   local.get $0
-  i32.const 648
+  i32.const 536
   local.get $0
   select
   local.get $1
@@ -2518,15 +2517,15 @@
    end
   end
   call $~lib/rt/pure/__release
-  i32.const 600
+  i32.const 488
   call $~lib/rt/pure/__retain
   local.tee $0
-  i32.const 624
+  i32.const 512
   call $~lib/string/String.__concat
   local.tee $1
   call $~lib/rt/pure/__retain
   local.tee $2
-  i32.const 672
+  i32.const 560
   call $~lib/string/String.__concat
   local.get $0
   call $~lib/rt/pure/__release
@@ -2652,7 +2651,7 @@
  )
  (func $~lib/rt/pure/__visit (; 43 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 748
+  i32.const 636
   i32.lt_u
   if
    return

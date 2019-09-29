@@ -2034,7 +2034,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 57
+   i32.const 53
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3741,7 +3741,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 14
+   i32.const 23
    i32.const 56
    call $~lib/builtins/abort
    unreachable
@@ -3892,7 +3892,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 456
-   i32.const 21
+   i32.const 25
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -3946,12 +3946,7 @@
   call $~lib/rt/pure/__release
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#get:buffer (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load
-  call $~lib/rt/pure/__retain
- )
- (func $~lib/dataview/DataView#constructor|trampoline (; 46 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 45 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -3976,14 +3971,13 @@
   local.get $3
   call $~lib/dataview/DataView#constructor
  )
- (func $start:std/arraybuffer (; 47 ;) (type $FUNCSIG$v)
+ (func $start:std/arraybuffer (; 46 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 8
   call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -4308,12 +4302,11 @@
   global.set $~lib/argc
   i32.const 0
   local.get $2
-  call $~lib/typedarray/Uint8Array#get:buffer
-  local.tee $5
+  i32.load
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#constructor|trampoline
-  local.tee $6
+  local.tee $5
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>
   i32.eqz
   if
@@ -4336,16 +4329,14 @@
   call $~lib/rt/pure/__release
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $6
-  call $~lib/rt/pure/__release
  )
- (func $start (; 48 ;) (type $FUNCSIG$v)
+ (func $start (; 47 ;) (type $FUNCSIG$v)
   call $start:std/arraybuffer
  )
- (func $~lib/array/Array<i32>#__visit_impl (; 49 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#__visit_impl (; 48 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/pure/__visit (; 50 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 49 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4475,7 +4466,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 51 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 50 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
@@ -4509,6 +4500,6 @@
   end
   return
  )
- (func $null (; 52 ;) (type $FUNCSIG$v)
+ (func $null (; 51 ;) (type $FUNCSIG$v)
  )
 )

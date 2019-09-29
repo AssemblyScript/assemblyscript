@@ -3727,59 +3727,114 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  i32.const 0
-  local.set $5
   local.get $0
   local.get $1
   i32.const 1
   i32.shl
   i32.add
-  local.set $6
+  local.set $5
   local.get $2
   local.get $3
   i32.const 1
   i32.shl
   i32.add
-  local.set $7
-  block $break|0
-   loop $continue|0
-    local.get $4
-    if (result i32)
+  local.set $6
+  local.get $4
+  i32.const 4
+  i32.ge_u
+  if (result i32)
+   local.get $5
+   i32.const 7
+   i32.and
+   local.get $6
+   i32.const 7
+   i32.and
+   i32.or
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if
+   block $break|0
+    loop $continue|0
+     local.get $5
+     i64.load
      local.get $6
-     i32.load16_u
-     local.get $7
-     i32.load16_u
+     i64.load
+     i64.ne
+     if
+      br $break|0
+     end
+     local.get $5
+     i32.const 8
+     i32.add
+     local.set $5
+     local.get $6
+     i32.const 8
+     i32.add
+     local.set $6
+     local.get $4
+     i32.const 4
      i32.sub
-     local.tee $5
-     i32.eqz
-    else
-     i32.const 0
+     local.set $4
+     local.get $4
+     i32.const 4
+     i32.ge_u
+     br_if $continue|0
     end
-    i32.eqz
-    br_if $break|0
+   end
+  end
+  block $break|1
+   loop $continue|1
     local.get $4
+    local.tee $7
     i32.const 1
     i32.sub
     local.set $4
+    local.get $7
+    i32.eqz
+    br_if $break|1
+    local.get $5
+    i32.load16_u
+    local.set $7
+    local.get $6
+    i32.load16_u
+    local.set $8
+    local.get $7
+    local.get $8
+    i32.ne
+    if
+     local.get $7
+     local.get $8
+     i32.sub
+     local.set $9
+     local.get $0
+     call $~lib/rt/pure/__release
+     local.get $2
+     call $~lib/rt/pure/__release
+     local.get $9
+     return
+    end
+    local.get $5
+    i32.const 2
+    i32.add
+    local.set $5
     local.get $6
     i32.const 2
     i32.add
     local.set $6
-    local.get $7
-    i32.const 2
-    i32.add
-    local.set $7
-    br $continue|0
+    br $continue|1
    end
    unreachable
   end
-  local.get $5
+  i32.const 0
   local.set $8
   local.get $0
   call $~lib/rt/pure/__release
@@ -8905,35 +8960,36 @@
   call $~lib/rt/pure/__retain
  )
  (func $~lib/array/Array<~lib/string/String>#__get (; 83 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
   local.get $1
   local.get $0
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 10872
-   i32.const 10824
-   i32.const 106
-   i32.const 45
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.get $0
-  i32.load offset=8
-  i32.const 2
-  i32.shr_u
-  i32.ge_u
-  if
    i32.const 232
    i32.const 10824
-   i32.const 109
-   i32.const 61
+   i32.const 92
+   i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   local.get $1
   call $~lib/array/Array<~lib/string/String>#__unchecked_get
+  local.set $2
+  local.get $2
+  i32.eqz
+  if
+   local.get $2
+   call $~lib/rt/pure/__release
+   i32.const 10872
+   i32.const 10824
+   i32.const 96
+   i32.const 39
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
  )
  (func $~lib/util/number/decimalCount32 (; 84 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)

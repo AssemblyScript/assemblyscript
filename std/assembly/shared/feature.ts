@@ -23,3 +23,20 @@ export const enum Feature {
   /** Reference types. */
   REFERENCE_TYPES = 1 << 8 // see: https://github.com/WebAssembly/reference-types
 }
+
+/** Gets the name of the specified feature one would specify on the command line. */
+export function featureToString(feature: Feature): string {
+  switch (feature) {
+    case Feature.SIGN_EXTENSION: return "sign-extension";
+    case Feature.MUTABLE_GLOBALS: return "mutable-globals";
+    case Feature.NONTRAPPING_F2I: return "nontrapping-f2i";
+    case Feature.BULK_MEMORY: return "bulk-memory";
+    case Feature.SIMD: return "simd";
+    case Feature.THREADS: return "threads";
+    case Feature.EXCEPTION_HANDLING: return "exception-handling";
+    case Feature.TAIL_CALLS: return "tail-calls";
+    case Feature.REFERENCE_TYPES: return "reference-types";
+  }
+  assert(false);
+  return "";
+}

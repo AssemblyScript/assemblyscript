@@ -9,27 +9,19 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
- (data (i32.const 32) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00-\001")
- (data (i32.const 56) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00r\00e\00s\00o\00l\00v\00e\00-\00u\00n\00a\00r\00y\00.\00t\00s")
- (data (i32.const 104) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
- (data (i32.const 128) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
- (data (i32.const 152) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e")
- (data (i32.const 176) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e")
- (data (i32.const 208) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00-\002")
- (data (i32.const 232) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00+")
- (data (i32.const 256) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00-")
- (data (i32.const 280) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00!")
- (data (i32.const 304) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00~")
- (data (i32.const 328) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00+\00+\00i")
- (data (i32.const 352) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00-\00-\00i")
- (data (i32.const 376) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\00+\00+")
- (data (i32.const 400) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\00-\00-")
+ (data (i32.const 32) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
+ (data (i32.const 56) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00p\00r\00o\00p\00e\00r\00t\00y\00a\00c\00c\00e\00s\00s\00.\00t\00s")
+ (data (i32.const 128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001")
+ (data (i32.const 152) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
+ (data (i32.const 176) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\002\002")
+ (data (i32.const 200) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003")
+ (data (i32.const 224) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\003\003")
+ (data (i32.const 248) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004")
+ (data (i32.const 272) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005")
+ (data (i32.const 296) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\005\005")
+ (data (i32.const 320) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $resolve-unary/a (mut i32) (i32.const 1))
- (global $resolve-unary/b (mut i32) (i32.const 1))
- (global $resolve-unary/foo (mut i32) (i32.const 0))
- (global $resolve-unary/bar (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/util/number/decimalCount32 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -355,19 +347,13 @@
   end
   i32.const 0
  )
- (func $~lib/number/Bool#toString (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 168
-  i32.const 192
-  local.get $0
-  select
- )
- (func $start:resolve-unary (; 10 ;) (type $FUNCSIG$v)
+ (func $start:resolve-propertyaccess (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  i32.const 432
+  i32.const 352
   global.set $~lib/rt/stub/startOffset
-  i32.const 432
+  i32.const 352
   global.set $~lib/rt/stub/offset
-  i32.const -1
+  i32.const 1
   call $~lib/util/number/itoa32
   i32.const 48
   call $~lib/string/String.__eq
@@ -375,29 +361,12 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 2
+   i32.const 6
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  call $~lib/util/number/itoa32
-  i32.const 120
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 7
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $resolve-unary/a
-  i32.const 1
-  i32.add
-  global.set $resolve-unary/a
-  global.get $resolve-unary/a
+  i32.const 11
   call $~lib/util/number/itoa32
   i32.const 144
   call $~lib/string/String.__eq
@@ -405,245 +374,127 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 13
+   i32.const 12
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-unary/a
-  i32.const 1
-  i32.sub
-  global.set $resolve-unary/a
-  global.get $resolve-unary/a
+  i32.const 2
   call $~lib/util/number/itoa32
-  i32.const 120
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 18
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $resolve-unary/a
-  i32.eqz
-  call $~lib/number/Bool#toString
-  i32.const 192
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 23
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $resolve-unary/a
-  i32.eqz
-  i32.eqz
-  call $~lib/number/Bool#toString
   i32.const 168
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 28
+   i32.const 24
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-unary/a
-  i32.const -1
-  i32.xor
+  i32.const 22
   call $~lib/util/number/itoa32
-  i32.const 224
+  i32.const 192
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 33
+   i32.const 30
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-unary/b
-  local.tee $0
-  i32.const 1
-  i32.add
-  global.set $resolve-unary/b
-  local.get $0
+  i32.const 3
   call $~lib/util/number/itoa32
-  i32.const 120
+  i32.const 216
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 41
+   i32.const 42
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-unary/b
-  local.tee $0
-  i32.const 1
-  i32.sub
-  global.set $resolve-unary/b
-  local.get $0
+  i32.const 33
   call $~lib/util/number/itoa32
-  i32.const 144
+  i32.const 240
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 46
+   i32.const 48
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
+  i32.const 4
+  call $~lib/util/number/itoa32
+  i32.const 264
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 58
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 5
+  call $~lib/util/number/itoa32
+  i32.const 288
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 70
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 55
+  call $~lib/util/number/itoa32
+  i32.const 312
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 76
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 4
   i32.const 3
   call $~lib/rt/stub/__alloc
-  global.set $resolve-unary/foo
-  i32.const 248
-  i32.const 248
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 91
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 272
-  i32.const 272
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 96
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 296
-  i32.const 296
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 111
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 320
-  i32.const 320
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 116
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $resolve-unary/foo
   local.tee $0
-  global.set $resolve-unary/foo
-  global.get $resolve-unary/foo
+  i32.const 6
+  i32.store
   local.get $0
-  i32.ne
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 121
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $resolve-unary/foo
-  local.tee $0
-  global.set $resolve-unary/foo
-  global.get $resolve-unary/foo
-  local.get $0
-  i32.ne
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 126
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  i32.const 4
-  call $~lib/rt/stub/__alloc
-  global.set $resolve-unary/bar
-  i32.const 344
-  i32.const 344
+  i32.load
+  call $~lib/util/number/itoa32
+  i32.const 336
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 151
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 368
-  i32.const 368
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 156
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 392
-  i32.const 392
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 161
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 416
-  i32.const 416
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 166
-   i32.const 0
+   i32.const 84
+   i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 11 ;) (type $FUNCSIG$v)
-  call $start:resolve-unary
+ (func $start (; 10 ;) (type $FUNCSIG$v)
+  call $start:resolve-propertyaccess
  )
- (func $null (; 12 ;) (type $FUNCSIG$v)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
   nop
  )
 )
