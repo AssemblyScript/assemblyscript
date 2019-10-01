@@ -7,6 +7,10 @@ export const E_INDEXOUTOFRANGE: string = "Index out of range";
 
 // @ts-ignore: decorator
 @lazy @inline
+export const E_ATOMICINVALIDINDEX: string = "Invalid atomic access index";
+
+// @ts-ignore: decorator
+@lazy @inline
 export const E_INVALIDLENGTH: string = "Invalid length";
 
 // @ts-ignore: decorator
