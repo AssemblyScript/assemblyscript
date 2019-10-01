@@ -80,9 +80,11 @@ export namespace Atomics {
 
   // @ts-ignore: decorator
   @inline
-  export function notify<T>(array: ArrayBufferView, index: i32, count: i32 = -1): i32 {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    return atomic.notify(changetype<usize>(array.buffer) + (index << alignof<T>()) + array.byteOffset, count);
+  export function notify<T extends ArrayBufferView>(array: T, index: i32, count: i32 = -1): i32 {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    return atomic.notify(changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset, count);
   }
 
   export function isLockFree(size: usize): bool {
