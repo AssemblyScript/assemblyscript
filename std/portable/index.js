@@ -207,11 +207,16 @@ if (!String.prototype.replaceAll) {
 }
 
 function defaultComparator(a, b) {
-  var isNanA = a != a, isNanB = b != b;
-  if (isNanA | isNanB) return isNanA - isNanB;
-  if (a == null) a = String(a);
-  if (b == null) b = String(b);
-  if (a === 0 && b === 0) { a = 1 / a, b = 1 / b; }
+  if (a === b) {
+    if (a !== 0) return 0;
+    a = 1 / a, b = 1 / b;
+  } else {
+    var nanA = a != a;
+    var nanB = b != b;
+    if (nanA | nanB) return nanA - nanB;
+    if (a == null) a = String(a);
+    if (b == null) b = String(b);
+  }
   return (a > b) - (a < b);
 }
 
