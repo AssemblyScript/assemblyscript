@@ -207,8 +207,7 @@ if (!String.prototype.replaceAll) {
 }
 
 function defaultComparator(a, b) {
-  var isNanA = a != a;
-  var isNanB = b != b;
+  var isNanA = a != a, isNanB = b != b;
   if (isNanA | isNanB) return isNanA - isNanB;
   if (a == null) a = String(a);
   if (b == null) b = String(b);
