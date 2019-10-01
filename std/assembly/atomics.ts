@@ -8,74 +8,117 @@ export namespace Atomics {
     if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
       throw new RangeError("Invalid atomic access index");
     }
-    return atomic.load<valueof<T>>(changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset);
-  }
-
-  // @ts-ignore: decorator
-  @inline
-  export function store<T>(array: ArrayBufferView, index: i32, value: T): void {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    atomic.store<T>(changetype<usize>(array.buffer) + (index << alignof<T>()) + array.byteOffset, value, index);
-  }
-
-  // @ts-ignore: decorator
-  @inline
-  export function add<T>(array: ArrayBufferView, index: i32, value: T): T {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    return atomic.add<T>(changetype<usize>(array.buffer) + (index << alignof<T>()) + array.byteOffset, value, index);
-  }
-
-  // @ts-ignore: decorator
-  @inline
-  export function sub<T>(array: ArrayBufferView, index: i32, value: T): T {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    return atomic.sub<T>(changetype<usize>(array.buffer) + (index << alignof<T>()) + array.byteOffset, value, index);
-  }
-
-  // @ts-ignore: decorator
-  @inline
-  export function and<T>(array: ArrayBufferView, index: i32, value: T): T {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    return atomic.and<T>(changetype<usize>(array.buffer) + (index << alignof<T>()) + array.byteOffset, value, index);
-  }
-
-  // @ts-ignore: decorator
-  @inline
-  export function or<T>(array: ArrayBufferView, index: i32, value: T): T {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    return atomic.or<T>(changetype<usize>(array.buffer) + (index << alignof<T>()) + array.byteOffset, value, index);
-  }
-
-  // @ts-ignore: decorator
-  @inline
-  export function xor<T>(array: ArrayBufferView, index: i32, value: T): T {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    return atomic.xor<T>(changetype<usize>(array.buffer) + (index << alignof<T>()) + array.byteOffset, value, index);
-  }
-
-  // @ts-ignore: decorator
-  @inline
-  export function exchange<T>(array: ArrayBufferView, index: i32, value: T): T {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    return atomic.xchg<T>(changetype<usize>(array.buffer) + (index << alignof<T>()) + array.byteOffset, value, index);
-  }
-
-  // @ts-ignore: decorator
-  @inline
-  export function compareExchange<T>(array: ArrayBufferView, index: i32, expectedValue: T, replacementValue: T): T {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    return atomic.cmpxchg<T>(
-      changetype<usize>(array.buffer) + (index << alignof<T>()) + array.byteOffset,
-      expectedValue,
-      replacementValue,
-      index
+    return atomic.load<valueof<T>>(
+      changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset
     );
   }
 
   // @ts-ignore: decorator
   @inline
-  export function wait<T>(array: ArrayBufferView, value: T, timeout: i64 = -1): AtomicWaitResult {
-    return atomic.wait<T>(changetype<usize>(array.buffer) + array.byteOffset, value, timeout);
+  export function store<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): void {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    atomic.store<valueof<T>>(
+      changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
+      value
+    );
+  }
+
+  // @ts-ignore: decorator
+  @inline
+  export function add<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    return atomic.add<valueof<T>>(
+      changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
+      value
+    );
+  }
+
+  // @ts-ignore: decorator
+  @inline
+  export function sub<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    return atomic.sub<valueof<T>>(
+      changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
+      value
+    );
+  }
+
+  // @ts-ignore: decorator
+  @inline
+  export function and<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    return atomic.and<valueof<T>>(
+      changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
+      value
+    );
+  }
+
+  // @ts-ignore: decorator
+  @inline
+  export function or<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    return atomic.or<valueof<T>>(
+      changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
+      value
+    );
+  }
+
+  // @ts-ignore: decorator
+  @inline
+  export function xor<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    return atomic.xor<valueof<T>>(
+      changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
+      value
+    );
+  }
+
+  // @ts-ignore: decorator
+  @inline
+  export function exchange<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    return atomic.xchg<valueof<T>>(
+      changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
+      value
+    );
+  }
+
+  // @ts-ignore: decorator
+  @inline
+  export function compareExchange<T extends ArrayBufferView>(
+    array: T,
+    index: i32,
+    expectedValue: valueof<T>,
+    replacementValue: valueof<T>
+  ): valueof<T> {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    return atomic.cmpxchg<valueof<T>>(
+      changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
+      expectedValue,
+      replacementValue
+    );
+  }
+
+  // @ts-ignore: decorator
+  @inline
+  export function wait<T extends ArrayBufferView>(array: T, value: valueof<T>, timeout: i64 = -1): AtomicWaitResult {
+    return atomic.wait<valueof<T>>(changetype<usize>(array.buffer) + array.byteOffset, value, timeout);
   }
 
   // @ts-ignore: decorator
