@@ -6,9 +6,7 @@ export namespace Atomics {
   // @ts-ignore: decorator
   @inline
   export function load<T extends ArrayBufferView>(array: T, index: i32): valueof<T> {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     return atomic.load<valueof<T>>(
       changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset
     );
@@ -17,9 +15,7 @@ export namespace Atomics {
   // @ts-ignore: decorator
   @inline
   export function store<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): void {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     atomic.store<valueof<T>>(
       changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
       value
@@ -29,9 +25,7 @@ export namespace Atomics {
   // @ts-ignore: decorator
   @inline
   export function add<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     return atomic.add<valueof<T>>(
       changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
       value
@@ -41,9 +35,7 @@ export namespace Atomics {
   // @ts-ignore: decorator
   @inline
   export function sub<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     return atomic.sub<valueof<T>>(
       changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
       value
@@ -53,9 +45,7 @@ export namespace Atomics {
   // @ts-ignore: decorator
   @inline
   export function and<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     return atomic.and<valueof<T>>(
       changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
       value
@@ -65,9 +55,7 @@ export namespace Atomics {
   // @ts-ignore: decorator
   @inline
   export function or<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     return atomic.or<valueof<T>>(
       changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
       value
@@ -77,9 +65,7 @@ export namespace Atomics {
   // @ts-ignore: decorator
   @inline
   export function xor<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     return atomic.xor<valueof<T>>(
       changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
       value
@@ -89,9 +75,7 @@ export namespace Atomics {
   // @ts-ignore: decorator
   @inline
   export function exchange<T extends ArrayBufferView>(array: T, index: i32, value: valueof<T>): valueof<T> {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     return atomic.xchg<valueof<T>>(
       changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
       value
@@ -106,9 +90,7 @@ export namespace Atomics {
     expectedValue: valueof<T>,
     replacementValue: valueof<T>
   ): valueof<T> {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     return atomic.cmpxchg<valueof<T>>(
       changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset,
       expectedValue,
@@ -125,9 +107,7 @@ export namespace Atomics {
   // @ts-ignore: decorator
   @inline
   export function notify<T extends ArrayBufferView>(array: T, index: i32, count: i32 = -1): i32 {
-    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
-      throw new RangeError(E_ATOMICINVALIDINDEX);
-    }
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) throw new RangeError(E_ATOMICINVALIDINDEX);
     return atomic.notify(changetype<usize>(array.buffer) + (index << alignof<valueof<T>>()) + array.byteOffset, count);
   }
 
