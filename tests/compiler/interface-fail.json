@@ -3,22 +3,42 @@
     "--runtime none"
   ],
   "stderr": [
-  "TS2322: Type 'interface-fail/BadFoo' is not assignable to type 'interface-fail/IFoo'.",
-   "const aBadFoo: IFoo =  new BadFoo();",
-  "TS2420: Class 'interface-fail/BadFoo' incorrectly implements interface 'interface-fail/IFoo'.",
-   "class BadFoo implements IFoo {",
-  "TS2741: Property 'foo' is missing in type 'interface-fail/BadFoo' but required in type 'interface-fail/IFoo'.",
-   "class BadFoo implements IFoo {",
-  "TS2322: Type 'BadFoo.faa' is not assignable to type 'IFoo.faa'.",
-     "faa(i: i32, i2: i32): i32 {",
-  "TS2322: Type 'interface-fail/AnotherBadFoo' is not assignable to type 'interface-fail/IFoo'.",
-   "const anotherBadFoo: IFoo = new AnotherBadFoo();",
+    "TS2741: Property 'foo' is missing in type 'BadFoo' but required in type 'IFoo'.",
+     "class BadFoo implements IFoo {",
+
+    "TS2322: Type '(i: i32, i2: i32) => i32' is not assignable to type '(i: i32, i2: i32) => ~lib/string/String'.",
+    "class BadFoo implements IFoo {",
+    
+    "TS2420: Class 'interface-fail/BadFoo' incorrectly implements interface 'interface-fail/IFoo'.",
+    "class BadFoo implements IFoo {",
+    
+    "TS2322: Type 'interface-fail/BadFoo' is not assignable to type 'interface-fail/IFoo'.",
+    "const aBadFoo: IFoo =  new BadFoo();",
+
+   "TS2741: Property 'foo' is missing in type 'AnotherBadFoo' but required in type 'IFoo'.",
+   "class AnotherBadFoo {}",
+
+  "TS2741: Property 'faa' is missing in type 'AnotherBadFoo' but required in type 'IFoo'.",
+   "class AnotherBadFoo {}",
+
   "TS2420: Class 'interface-fail/AnotherBadFoo' incorrectly implements interface 'interface-fail/IFoo'.",
    "class AnotherBadFoo {}",
-  "TS2741: Property 'foo' is missing in type 'interface-fail/AnotherBadFoo' but required in type 'interface-fail/IFoo'.",
-   "class AnotherBadFoo {}",
-  "TS2741: Property 'faa' is missing in type 'interface-fail/AnotherBadFoo' but required in type 'interface-fail/IFoo'.",
-   "class AnotherBadFoo {}",
+
+  "TS2322: Type 'interface-fail/AnotherBadFoo' is not assignable to type 'interface-fail/IFoo'.",
+   "const anotherBadFoo: IFoo = new AnotherBadFoo();",
+
   "TS2322: Type 'i32' is not assignable to type 'interface-fail/IFoo'.",
-  "const intFoo: IFoo = <i32>5;"]
+   "const intFoo: IFoo = <i32>5;",
+
+  "TS2741: Property 'get val' is missing in type 'BadProps' but required in type 'Properties'.",
+   "class BadProps implements Properties {",
+
+  "TS2420: Class 'interface-fail/BadProps' incorrectly implements interface 'interface-fail/Properties'.",
+   "class BadProps implements Properties {",
+
+  "TS2322: Type 'interface-fail/BadProps' is not assignable to type 'interface-fail/Properties'.",
+   "const badProp = <Properties> new BadProps();"
+    
+
+]
   }

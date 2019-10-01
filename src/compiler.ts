@@ -2956,7 +2956,15 @@ export class Compiler extends DiagnosticEmitter {
           fromType.toString(),
           toType.toString());
       } else {
-        this.checkInterfaceImplementation(toType, fromType, reportNode);
+        if (this.checkInterfaceImplementation(toType, fromType, reportNode)){
+          (<Interface>toType.classReference).implementers.add(fromType.classReference);
+        } else {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            reportNode.range,
+            fromType.toString(),
+            toType.toString());
+        }
       }
     }
     else if (!fromType.isAssignableTo(toType)) {
@@ -9274,30 +9282,23 @@ export class Compiler extends DiagnosticEmitter {
     return module.addFunction(func.internalName, typeRef, null, body);
   }
 
-  checkInterfaceImplementation(toType: Type, fromType: Type, reportNode: Node): void {
+  checkInterfaceImplementation(toType: Type, fromType: Type, reportNode: Node): bool {
     const _interface = (<Interface>toType.classReference!);
     const _class = fromType.classReference!;
     var imems: Map<string, Element>;
-    var mems: Map<string, Element>;
+    var mems: Map<string, Element> | null;
     if (_interface.prototype.instanceMembers == null) {
-      return;
-    } else {
-      imems = _interface.prototype.instanceMembers;
-      if (_class.prototype.instanceMembers == null) {
-        // All members missing
-
-        return;
-      } else {
-        mems = _class.prototype.instanceMembers;
-      }
+      return true;
     }
+    imems = _interface.prototype.instanceMembers;
+    mems = _class.prototype.instanceMembers;
+  
     var error = false;
     var incorrectMember = false;
     for (const [name, imem] of imems.entries()) {
       error = error || incorrectMember;
       incorrectMember = true;
-      let mem = mems.get(name);
-      if (mem == null) {
+      if (mems == null || mems.get(name) == null) {
         // Error!
         this.error(
           DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
@@ -9308,6 +9309,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         continue;
       }
+      let mem  = mems.get(name)!;
       if (imem.kind != mem.kind) {
         // Interfaces can't have properties
         if (!(mem.kind == ElementKind.PROPERTY_PROTOTYPE  && imem.kind == ElementKind.FIELD_PROTOTYPE)) {
@@ -9378,19 +9380,21 @@ export class Compiler extends DiagnosticEmitter {
           from.toString(),
           to.toString()
           );
-        continue;
-        // Error
-      }
-      incorrectMember = false;
+          continue;
+          // Error
+        }
+        incorrectMember = false;
     }
+      error = error || incorrectMember;// case where contiune skips the last check.
     if (error) {
       this.error(
         DiagnosticCode.Class_0_incorrectly_implements_interface_1,
           _class.identifierNode.range,
-          fromType.toString(),
-          toType.toString()
-          );
+            fromType.toString(),
+            toType.toString()
+            );
     }
+    return !error;
   }
 }
 
