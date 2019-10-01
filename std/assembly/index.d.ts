@@ -1081,17 +1081,17 @@ declare namespace table {
 }
 
 declare namespace Atomics {
-  export function load<T>(array: TypedArray<T>, index: i32): T;
-  export function store<T>(array: TypedArray<T>, index: i32, value: T): void;
-  export function add<T>(array: TypedArray<T>, index: i32, value: T): T;
-  export function sub<T>(array: TypedArray<T>, index: i32, value: T): T;
-  export function and<T>(array: TypedArray<T>, index: i32, value: T): T;
-  export function or<T>(array: TypedArray<T>, index: i32, value: T): T;
-  export function xor<T>(array: TypedArray<T>, index: i32, value: T): T;
-  export function exchange<T>(array: TypedArray<T>, index: i32, value: T): T;
-  export function compareExchange<T>(array: TypedArray<T>, index: i32, expectedValue: T, replacementValue: T): T;
-  export function wait<T>(array: TypedArray<T>, value: T, timeout?: i64): AtomicWaitResult;
-  export function notify<T>(array: TypedArray<T>, index: i32, count?: i32): i32;
+  export function load<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32): T;
+  export function store<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): void;
+  export function add<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
+  export function sub<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
+  export function and<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
+  export function or<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
+  export function xor<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
+  export function exchange<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, value: T): T;
+  export function compareExchange<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, expectedValue: T, replacementValue: T): T;
+  export function wait<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, value: T, timeout?: i64): AtomicWaitResult;
+  export function notify<T = i8 | u8 | i16 | u16 | i32 | u32 | i64 | u64>(array: TypedArray<T>, index: i32, count?: i32): i32;
   /** The static Atomics.isLockFree() method is used to determine whether to use locks or atomic operations. It returns true, if the given size is one of the BYTES_PER_ELEMENT */
   export function isLockFree(size: usize): bool;
 }
