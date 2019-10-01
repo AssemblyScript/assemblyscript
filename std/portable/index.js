@@ -217,7 +217,7 @@ function defaultComparator(a, b) {
     if (a == null) a = String(a);
     if (b == null) b = String(b);
   }
-  return (a > b) - (a < b);
+  return a > b ? 1 : -1;
 }
 
 const arraySort = Array.prototype.sort;
