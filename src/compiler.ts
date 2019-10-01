@@ -82,7 +82,10 @@ import {
   IndexSignature,
   File,
   mangleInternalName,
-  Interface
+  Interface,
+  TypedElement,
+  FieldPrototype,
+  DeclaredElement
 } from "./program";
 
 import {
@@ -2953,49 +2956,7 @@ export class Compiler extends DiagnosticEmitter {
           fromType.toString(),
           toType.toString());
       } else {
-        const _interface = (<Interface>toType.classReference!);
-        let _class = fromType.classReference!;
-        let incorrectMethods = _interface.checkClass(_class);
-        if (incorrectMethods.length == 0) {
-          _interface.implementers.add(fromType.classReference!);
-        } else {
-          this.error(
-            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-            reportNode.range,
-            fromType.toString(),
-            toType.toString());
-          let missingMethods = false;
-          // tslint:disable-next-line: as-types
-          for (let i: i32 = 0; i < incorrectMethods.length; i++) {
-            const ifunc = incorrectMethods[i];
-            if (_class.members == null || !_class.members.has(ifunc.name)) {
-              if (!missingMethods) {
-                missingMethods = true;
-                this.error(
-                  DiagnosticCode.Class_0_incorrectly_implements_interface_1,
-                   _class.identifierNode.range,
-                   fromType.toString(),
-                   toType.toString()
-                   );
-              }
-              this.error(
-                DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-                _class.identifierNode.range,
-                ifunc.name,
-                fromType.toString(),
-                toType.toString()
-              );
-            } else {
-              let otherFunc = _class.members.get(ifunc.name)!;
-              this.error(
-                DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-                otherFunc.identifierNode.range,
-                _class.name + "." + otherFunc.name,
-                _interface.name + "." + ifunc.name);
-            }
-          }
-        }
-
+        this.checkInterfaceImplementation(toType, fromType, reportNode);
       }
     }
     else if (!fromType.isAssignableTo(toType)) {
@@ -9311,6 +9272,125 @@ export class Compiler extends DiagnosticEmitter {
     );
     module.removeFunction(func.internalName);
     return module.addFunction(func.internalName, typeRef, null, body);
+  }
+
+  checkInterfaceImplementation(toType: Type, fromType: Type, reportNode: Node): void {
+    const _interface = (<Interface>toType.classReference!);
+    const _class = fromType.classReference!;
+    var imems: Map<string, Element>;
+    var mems: Map<string, Element>;
+    if (_interface.prototype.instanceMembers == null) {
+      return;
+    } else {
+      imems = _interface.prototype.instanceMembers;
+      if (_class.prototype.instanceMembers == null) {
+        // All members missing
+
+        return;
+      } else {
+        mems = _class.prototype.instanceMembers;
+      }
+    }
+    var error = false;
+    var incorrectMember = false;
+    for (const [name, imem] of imems.entries()) {
+      error = error || incorrectMember;
+      incorrectMember = true;
+      let mem = mems.get(name);
+      if (mem == null) {
+        // Error!
+        this.error(
+          DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+          _class.identifierNode.range,
+          name,
+          _class.name,
+          _interface.name
+        );
+        continue;
+      }
+      if (imem.kind != mem.kind) {
+        // Interfaces can't have properties
+        if (!(mem.kind == ElementKind.PROPERTY_PROTOTYPE  && imem.kind == ElementKind.FIELD_PROTOTYPE)) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+            (<DeclaredElement>mem).declaration.range,
+            mem.name,
+            name);
+          continue;
+        }
+        // Error
+      }
+      let from: Type = Type.void, to: Type = Type.void;
+      switch (mem.kind){
+        case ElementKind.FIELD_PROTOTYPE: {
+          from = this.resolver.resolveType((<FieldPrototype>mem).typeNode!, _class)!;
+          to = this.resolver.resolveType((<FieldPrototype>imem).typeNode!, _interface)!;
+          break;
+        }
+        case ElementKind.FUNCTION_PROTOTYPE: {
+          let func = (<FunctionPrototype>mem);
+          mem.parent = _class;
+          imem.parent = _interface;
+          from = this.resolver.resolveType(func.functionTypeNode, func,  _class.contextualTypeArguments)!;//, ReportMode.REPORT, false)!.type;
+          to = this.resolver.resolveType((<FunctionPrototype>imem).functionTypeNode, imem, _interface.contextualTypeArguments, ReportMode.REPORT)!;
+          break;
+        }
+        case ElementKind.PROPERTY_PROTOTYPE: {
+          const property = <PropertyPrototype> mem;
+          const iproperty = <FieldPrototype> imem;
+          if (!iproperty.is(CommonFlags.READONLY)) {
+            if (property.setterPrototype == null) {
+              this.error(
+                DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+                _class.identifierNode.range,
+                "set " + name,
+                _class.name,
+                _interface.name
+              );
+              error = true;
+            // Error
+              break;
+            }
+          }
+          if (property.getterPrototype == null) {
+            this.error(
+              DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+              _class.identifierNode.range,
+              "get " + name,
+              _class.name,
+              _interface.name
+            );
+            continue;
+          // Error
+          }
+          from = this.resolver.resolveType(property.getterPrototype.functionTypeNode, property.getterPrototype, _class.contextualTypeArguments, ReportMode.REPORT)!;
+          to = this.resolver.resolveType((<FieldPrototype>imem).typeNode!, _interface)!;
+        }
+        default: {
+          // Error
+          continue;
+        }
+      }
+      if (!from.isAssignableTo(to)) {
+        this.error(
+          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+          (<DeclaredElement>mem).declaration.range,
+          from.toString(),
+          to.toString()
+          );
+        continue;
+        // Error
+      }
+      incorrectMember = false;
+    }
+    if (error) {
+      this.error(
+        DiagnosticCode.Class_0_incorrectly_implements_interface_1,
+          _class.identifierNode.range,
+          fromType.toString(),
+          toType.toString()
+          );
+    }
   }
 }
 
