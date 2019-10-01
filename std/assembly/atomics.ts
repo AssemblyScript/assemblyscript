@@ -4,9 +4,11 @@ export namespace Atomics {
 
   // @ts-ignore: decorator
   @inline
-  export function load<T>(array: ArrayBufferView, index: i32): T {
-    if (index < 0 || (index << alignof<T>()) >= array.byteLength) throw new RangeError("Invalid atomic access index");
-    return atomic.load<T>(changetype<usize>(array.data) + (index << alignof<T>()) + array.byteOffset);
+  export function load<T extends ArrayBufferView>(array: T, index: i32): valueof<T> {
+    if (index < 0 || (index << alignof<valueof<T>>()) >= array.byteLength) {
+      throw new RangeError("Invalid atomic access index");
+    }
+    return atomic.load<valueof<T>>(changetype<usize>(array.data) + (index << alignof<valueof<T>>()) + array.byteOffset);
   }
 
   // @ts-ignore: decorator
