@@ -369,46 +369,26 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
   return result;
 }
 
-export function joinStringArray<T>(dataStart: usize, length: i32, separator: string): string {
+export function joinStringArray(dataStart: usize, length: i32, separator: string): string {
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";
-  var value: T;
+  var value: string;
   if (!lastIndex) {
-    if (isNullable<T>()) {
-      // @ts-ignore: type
-      return load<T>(dataStart)! || "";
-    } else {
-      // @ts-ignore: type
-      return load<string>(dataStart);
-    }
+    // @ts-ignore: type
+    return load<string>(dataStart) || "";
   }
   var sepLen = separator.length;
   var estLen = 0;
   for (let i = 0; i < length; ++i) {
-    value = load<T>(dataStart + (<usize>i << alignof<string>()));
-    if (isNullable<T>()) {
-      // @ts-ignore: type
-      if (value !== null) estLen += value.length;
-    } else {
-      // @ts-ignore: type
-      estLen += value.length;
-    }
+    value = load<string>(dataStart + (<usize>i << alignof<string>()));
+    // @ts-ignore: type
+    if (value !== null) estLen += value.length;
   }
   var offset = 0;
   var result = changetype<string>(__alloc((estLen + sepLen * lastIndex) << 1, idof<string>())); // retains
   for (let i = 0; i < lastIndex; ++i) {
-    value = load<T>(dataStart + (<usize>i << alignof<string>()));
-    if (isNullable<T>()) {
-      if (value !== null) {
-        let valueLen = changetype<string>(value).length;
-        memory.copy(
-          changetype<usize>(result) + (<usize>offset << 1),
-          changetype<usize>(value),
-          <usize>valueLen << 1
-        );
-        offset += valueLen;
-      }
-    } else {
+    value = load<string>(dataStart + (<usize>i << alignof<string>()));
+    if (value !== null) {
       let valueLen = changetype<string>(value).length;
       memory.copy(
         changetype<usize>(result) + (<usize>offset << 1),
@@ -426,16 +406,8 @@ export function joinStringArray<T>(dataStart: usize, length: i32, separator: str
       offset += sepLen;
     }
   }
-  value = load<T>(dataStart + (<usize>lastIndex << alignof<string>()));
-  if (isNullable<T>()) {
-    if (value !== null) {
-      memory.copy(
-        changetype<usize>(result) + (<usize>offset << 1),
-        changetype<usize>(value),
-        <usize>changetype<string>(value).length << 1
-      );
-    }
-  } else {
+  value = load<string>(dataStart + (<usize>lastIndex << alignof<string>()));
+  if (value !== null) {
     memory.copy(
       changetype<usize>(result) + (<usize>offset << 1),
       changetype<usize>(value),

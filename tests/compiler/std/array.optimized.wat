@@ -9086,7 +9086,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/util/string/joinStringArray<~lib/string/String | null> (; 173 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinStringArray (; 173 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9115,11 +9115,6 @@
    local.get $0
    i32.load
    local.tee $0
-   i32.eqz
-   if
-    unreachable
-   end
-   local.get $0
    i32.eqz
    if
     i32.const 4248
@@ -9300,7 +9295,7 @@
   local.get $0
   i32.load offset=12
   local.get $1
-  call $~lib/util/string/joinStringArray<~lib/string/String | null>
+  call $~lib/util/string/joinStringArray
   local.get $1
   call $~lib/rt/pure/__release
  )

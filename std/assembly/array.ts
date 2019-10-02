@@ -462,7 +462,7 @@ export class Array<T> extends ArrayBufferView {
   join(separator: string = ","): string {
     var dataStart = this.dataStart;
     var length = this.length_;
-    if (isString<T>())    return joinStringArray<T>(dataStart, length, separator);
+    if (isString<T>())    return joinStringArray(dataStart, length, separator);
     if (isBoolean<T>())   return joinBooleanArray(dataStart, length, separator);
     if (isInteger<T>())   return joinIntegerArray<T>(dataStart, length, separator);
     if (isFloat<T>())     return joinFloatArray<T>(dataStart, length, separator);
