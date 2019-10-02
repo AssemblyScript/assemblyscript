@@ -14469,7 +14469,6 @@
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
   local.set $11
   block $break|1
    i32.const 0
@@ -14582,6 +14581,7 @@
    call $~lib/memory/memory.copy
   end
   local.get $11
+  call $~lib/rt/pure/__retain
   local.set $7
   local.get $2
   call $~lib/rt/pure/__release

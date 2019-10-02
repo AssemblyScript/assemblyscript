@@ -9177,7 +9177,6 @@
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
   local.set $5
   i32.const 0
   local.set $6
@@ -9277,11 +9276,12 @@
    i32.shl
    call $~lib/memory/memory.copy
   end
+  local.get $5
+  call $~lib/rt/pure/__retain
   local.get $2
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $5
  )
  (func $~lib/array/Array<~lib/string/String | null>#join (; 174 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
