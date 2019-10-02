@@ -14915,7 +14915,15 @@
    local.get $4
    local.set $5
    local.get $5
-   call $std/array/Ref#toString
+   i32.const 0
+   i32.ne
+   if (result i32)
+    local.get $5
+    call $std/array/Ref#toString
+   else
+    i32.const 4248
+    call $~lib/rt/pure/__retain
+   end
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -14958,29 +14966,34 @@
     end
     local.get $6
     local.set $5
-    local.get $7
     local.get $5
-    call $std/array/Ref#toString
-    local.tee $6
-    call $~lib/string/String.__concat
-    local.tee $9
-    local.tee $10
-    local.get $7
-    local.tee $11
+    i32.const 0
     i32.ne
     if
+     local.get $7
+     local.get $5
+     call $std/array/Ref#toString
+     local.tee $6
+     call $~lib/string/String.__concat
+     local.tee $9
+     local.tee $10
+     local.get $7
+     local.tee $11
+     i32.ne
+     if
+      local.get $10
+      call $~lib/rt/pure/__retain
+      drop
+      local.get $11
+      call $~lib/rt/pure/__release
+     end
      local.get $10
-     call $~lib/rt/pure/__retain
-     drop
-     local.get $11
+     local.set $7
+     local.get $6
+     call $~lib/rt/pure/__release
+     local.get $9
      call $~lib/rt/pure/__release
     end
-    local.get $10
-    local.set $7
-    local.get $6
-    call $~lib/rt/pure/__release
-    local.get $9
-    call $~lib/rt/pure/__release
     local.get $8
     if
      local.get $7
@@ -15030,29 +15043,34 @@
   end
   local.get $10
   local.set $5
-  local.get $7
   local.get $5
-  call $std/array/Ref#toString
-  local.tee $10
-  call $~lib/string/String.__concat
-  local.tee $4
-  local.tee $6
-  local.get $7
-  local.tee $9
+  i32.const 0
   i32.ne
   if
+   local.get $7
+   local.get $5
+   call $std/array/Ref#toString
+   local.tee $10
+   call $~lib/string/String.__concat
+   local.tee $4
+   local.tee $6
+   local.get $7
+   local.tee $9
+   i32.ne
+   if
+    local.get $6
+    call $~lib/rt/pure/__retain
+    drop
+    local.get $9
+    call $~lib/rt/pure/__release
+   end
    local.get $6
-   call $~lib/rt/pure/__retain
-   drop
-   local.get $9
+   local.set $7
+   local.get $10
+   call $~lib/rt/pure/__release
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $6
-  local.set $7
-  local.get $10
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
   local.get $7
   local.set $4
   local.get $2
@@ -16486,7 +16504,15 @@
    local.get $4
    local.set $5
    local.get $5
-   call $~lib/array/Array<i32>#toString
+   i32.const 0
+   i32.ne
+   if (result i32)
+    local.get $5
+    call $~lib/array/Array<i32>#toString
+   else
+    i32.const 4248
+    call $~lib/rt/pure/__retain
+   end
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -16529,29 +16555,34 @@
     end
     local.get $6
     local.set $5
-    local.get $7
     local.get $5
-    call $~lib/array/Array<i32>#toString
-    local.tee $6
-    call $~lib/string/String.__concat
-    local.tee $9
-    local.tee $10
-    local.get $7
-    local.tee $11
+    i32.const 0
     i32.ne
     if
+     local.get $7
+     local.get $5
+     call $~lib/array/Array<i32>#toString
+     local.tee $6
+     call $~lib/string/String.__concat
+     local.tee $9
+     local.tee $10
+     local.get $7
+     local.tee $11
+     i32.ne
+     if
+      local.get $10
+      call $~lib/rt/pure/__retain
+      drop
+      local.get $11
+      call $~lib/rt/pure/__release
+     end
      local.get $10
-     call $~lib/rt/pure/__retain
-     drop
-     local.get $11
+     local.set $7
+     local.get $6
+     call $~lib/rt/pure/__release
+     local.get $9
      call $~lib/rt/pure/__release
     end
-    local.get $10
-    local.set $7
-    local.get $6
-    call $~lib/rt/pure/__release
-    local.get $9
-    call $~lib/rt/pure/__release
     local.get $8
     if
      local.get $7
@@ -16601,29 +16632,34 @@
   end
   local.get $10
   local.set $5
-  local.get $7
   local.get $5
-  call $~lib/array/Array<i32>#toString
-  local.tee $10
-  call $~lib/string/String.__concat
-  local.tee $4
-  local.tee $6
-  local.get $7
-  local.tee $9
+  i32.const 0
   i32.ne
   if
+   local.get $7
+   local.get $5
+   call $~lib/array/Array<i32>#toString
+   local.tee $10
+   call $~lib/string/String.__concat
+   local.tee $4
+   local.tee $6
+   local.get $7
+   local.tee $9
+   i32.ne
+   if
+    local.get $6
+    call $~lib/rt/pure/__retain
+    drop
+    local.get $9
+    call $~lib/rt/pure/__release
+   end
    local.get $6
-   call $~lib/rt/pure/__retain
-   drop
-   local.get $9
+   local.set $7
+   local.get $10
+   call $~lib/rt/pure/__release
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $6
-  local.set $7
-  local.get $10
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
   local.get $7
   local.set $4
   local.get $2
@@ -16936,7 +16972,15 @@
    local.get $4
    local.set $5
    local.get $5
-   call $~lib/array/Array<u8>#toString
+   i32.const 0
+   i32.ne
+   if (result i32)
+    local.get $5
+    call $~lib/array/Array<u8>#toString
+   else
+    i32.const 4248
+    call $~lib/rt/pure/__retain
+   end
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -16979,29 +17023,34 @@
     end
     local.get $6
     local.set $5
-    local.get $7
     local.get $5
-    call $~lib/array/Array<u8>#toString
-    local.tee $6
-    call $~lib/string/String.__concat
-    local.tee $9
-    local.tee $10
-    local.get $7
-    local.tee $11
+    i32.const 0
     i32.ne
     if
+     local.get $7
+     local.get $5
+     call $~lib/array/Array<u8>#toString
+     local.tee $6
+     call $~lib/string/String.__concat
+     local.tee $9
+     local.tee $10
+     local.get $7
+     local.tee $11
+     i32.ne
+     if
+      local.get $10
+      call $~lib/rt/pure/__retain
+      drop
+      local.get $11
+      call $~lib/rt/pure/__release
+     end
      local.get $10
-     call $~lib/rt/pure/__retain
-     drop
-     local.get $11
+     local.set $7
+     local.get $6
+     call $~lib/rt/pure/__release
+     local.get $9
      call $~lib/rt/pure/__release
     end
-    local.get $10
-    local.set $7
-    local.get $6
-    call $~lib/rt/pure/__release
-    local.get $9
-    call $~lib/rt/pure/__release
     local.get $8
     if
      local.get $7
@@ -17051,29 +17100,34 @@
   end
   local.get $10
   local.set $5
-  local.get $7
   local.get $5
-  call $~lib/array/Array<u8>#toString
-  local.tee $10
-  call $~lib/string/String.__concat
-  local.tee $4
-  local.tee $6
-  local.get $7
-  local.tee $9
+  i32.const 0
   i32.ne
   if
+   local.get $7
+   local.get $5
+   call $~lib/array/Array<u8>#toString
+   local.tee $10
+   call $~lib/string/String.__concat
+   local.tee $4
+   local.tee $6
+   local.get $7
+   local.tee $9
+   i32.ne
+   if
+    local.get $6
+    call $~lib/rt/pure/__retain
+    drop
+    local.get $9
+    call $~lib/rt/pure/__release
+   end
    local.get $6
-   call $~lib/rt/pure/__retain
-   drop
-   local.get $9
+   local.set $7
+   local.get $10
+   call $~lib/rt/pure/__release
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $6
-  local.set $7
-  local.get $10
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
   local.get $7
   local.set $4
   local.get $2
@@ -17165,7 +17219,15 @@
    local.get $4
    local.set $5
    local.get $5
-   call $~lib/array/Array<u32>#toString
+   i32.const 0
+   i32.ne
+   if (result i32)
+    local.get $5
+    call $~lib/array/Array<u32>#toString
+   else
+    i32.const 4248
+    call $~lib/rt/pure/__retain
+   end
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -17208,29 +17270,34 @@
     end
     local.get $6
     local.set $5
-    local.get $7
     local.get $5
-    call $~lib/array/Array<u32>#toString
-    local.tee $6
-    call $~lib/string/String.__concat
-    local.tee $9
-    local.tee $10
-    local.get $7
-    local.tee $11
+    i32.const 0
     i32.ne
     if
+     local.get $7
+     local.get $5
+     call $~lib/array/Array<u32>#toString
+     local.tee $6
+     call $~lib/string/String.__concat
+     local.tee $9
+     local.tee $10
+     local.get $7
+     local.tee $11
+     i32.ne
+     if
+      local.get $10
+      call $~lib/rt/pure/__retain
+      drop
+      local.get $11
+      call $~lib/rt/pure/__release
+     end
      local.get $10
-     call $~lib/rt/pure/__retain
-     drop
-     local.get $11
+     local.set $7
+     local.get $6
+     call $~lib/rt/pure/__release
+     local.get $9
      call $~lib/rt/pure/__release
     end
-    local.get $10
-    local.set $7
-    local.get $6
-    call $~lib/rt/pure/__release
-    local.get $9
-    call $~lib/rt/pure/__release
     local.get $8
     if
      local.get $7
@@ -17280,29 +17347,34 @@
   end
   local.get $10
   local.set $5
-  local.get $7
   local.get $5
-  call $~lib/array/Array<u32>#toString
-  local.tee $10
-  call $~lib/string/String.__concat
-  local.tee $4
-  local.tee $6
-  local.get $7
-  local.tee $9
+  i32.const 0
   i32.ne
   if
+   local.get $7
+   local.get $5
+   call $~lib/array/Array<u32>#toString
+   local.tee $10
+   call $~lib/string/String.__concat
+   local.tee $4
+   local.tee $6
+   local.get $7
+   local.tee $9
+   i32.ne
+   if
+    local.get $6
+    call $~lib/rt/pure/__retain
+    drop
+    local.get $9
+    call $~lib/rt/pure/__release
+   end
    local.get $6
-   call $~lib/rt/pure/__retain
-   drop
-   local.get $9
+   local.set $7
+   local.get $10
+   call $~lib/rt/pure/__release
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $6
-  local.set $7
-  local.get $10
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
   local.get $7
   local.set $4
   local.get $2
@@ -17389,7 +17461,15 @@
    local.get $4
    local.set $5
    local.get $5
-   call $~lib/array/Array<~lib/array/Array<u32>>#toString
+   i32.const 0
+   i32.ne
+   if (result i32)
+    local.get $5
+    call $~lib/array/Array<~lib/array/Array<u32>>#toString
+   else
+    i32.const 4248
+    call $~lib/rt/pure/__retain
+   end
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -17432,29 +17512,34 @@
     end
     local.get $6
     local.set $5
-    local.get $7
     local.get $5
-    call $~lib/array/Array<~lib/array/Array<u32>>#toString
-    local.tee $6
-    call $~lib/string/String.__concat
-    local.tee $9
-    local.tee $10
-    local.get $7
-    local.tee $11
+    i32.const 0
     i32.ne
     if
+     local.get $7
+     local.get $5
+     call $~lib/array/Array<~lib/array/Array<u32>>#toString
+     local.tee $6
+     call $~lib/string/String.__concat
+     local.tee $9
+     local.tee $10
+     local.get $7
+     local.tee $11
+     i32.ne
+     if
+      local.get $10
+      call $~lib/rt/pure/__retain
+      drop
+      local.get $11
+      call $~lib/rt/pure/__release
+     end
      local.get $10
-     call $~lib/rt/pure/__retain
-     drop
-     local.get $11
+     local.set $7
+     local.get $6
+     call $~lib/rt/pure/__release
+     local.get $9
      call $~lib/rt/pure/__release
     end
-    local.get $10
-    local.set $7
-    local.get $6
-    call $~lib/rt/pure/__release
-    local.get $9
-    call $~lib/rt/pure/__release
     local.get $8
     if
      local.get $7
@@ -17504,29 +17589,34 @@
   end
   local.get $10
   local.set $5
-  local.get $7
   local.get $5
-  call $~lib/array/Array<~lib/array/Array<u32>>#toString
-  local.tee $10
-  call $~lib/string/String.__concat
-  local.tee $4
-  local.tee $6
-  local.get $7
-  local.tee $9
+  i32.const 0
   i32.ne
   if
+   local.get $7
+   local.get $5
+   call $~lib/array/Array<~lib/array/Array<u32>>#toString
+   local.tee $10
+   call $~lib/string/String.__concat
+   local.tee $4
+   local.tee $6
+   local.get $7
+   local.tee $9
+   i32.ne
+   if
+    local.get $6
+    call $~lib/rt/pure/__retain
+    drop
+    local.get $9
+    call $~lib/rt/pure/__release
+   end
    local.get $6
-   call $~lib/rt/pure/__retain
-   drop
-   local.get $9
+   local.set $7
+   local.get $10
+   call $~lib/rt/pure/__release
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $6
-  local.set $7
-  local.get $10
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
   local.get $7
   local.set $4
   local.get $2

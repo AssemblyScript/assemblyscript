@@ -420,39 +420,23 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
 export function joinReferenceArray<T>(dataStart: usize, length: i32, separator: string): string {
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";
-
   var value: T;
   if (!lastIndex) {
     value = load<T>(dataStart);
-    if (isNullable<T>()) {
-      // @ts-ignore: type
-      return value !== null ? value.toString() : "";
-    } else {
-      // @ts-ignore: type
-      return value.toString();
-    }
+    // @ts-ignore: type
+    return value !== null ? value.toString() : "";
   }
   var result = "";
   var sepLen = separator.length;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
-    if (isNullable<T>()) {
-      // @ts-ignore: type
-      if (value !== null) result += value.toString();
-    } else {
-      // @ts-ignore: type
-      result += value.toString();
-    }
+    // @ts-ignore: type
+    if (value !== null) result += value.toString();
     if (sepLen) result += separator;
   }
   value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
-  if (isNullable<T>()) {
-    // @ts-ignore: type
-    if (value !== null) result += value.toString();
-  } else {
-    // @ts-ignore: type
-    result += value.toString();
-  }
+  // @ts-ignore: type
+  if (value !== null) result += value.toString();
   return result;
 }
 
