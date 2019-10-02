@@ -369,23 +369,46 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
   return result;
 }
 
-export function joinStringArray(dataStart: usize, length: i32, separator: string): string {
+export function joinStringArray<T>(dataStart: usize, length: i32, separator: string): string {
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";
-  if (!lastIndex) return load<string>(dataStart);
-
+  var value: T;
+  if (!lastIndex) {
+    if (isNullable<T>()) {
+      // @ts-ignore: type
+      return load<T>(dataStart)! || "";
+    } else {
+      // @ts-ignore: type
+      return load<string>(dataStart);
+    }
+  }
   var sepLen = separator.length;
   var estLen = 0;
-  var value: string | null;
-  for (let i = 0, len = lastIndex + 1; i < len; ++i) {
-    value = load<string>(dataStart + (<usize>i << alignof<string>()));
-    if (value !== null) estLen += value.length;
+  for (let i = 0; i < length; ++i) {
+    value = load<T>(dataStart + (<usize>i << alignof<string>()));
+    if (isNullable<T>()) {
+      // @ts-ignore: type
+      if (value !== null) estLen += value.length;
+    } else {
+      // @ts-ignore: type
+      estLen += value.length;
+    }
   }
   var offset = 0;
   var result = changetype<string>(__alloc((estLen + sepLen * lastIndex) << 1, idof<string>())); // retains
   for (let i = 0; i < lastIndex; ++i) {
-    value = load<string>(dataStart + (<usize>i << alignof<string>()));
-    if (value !== null) {
+    value = load<T>(dataStart + (<usize>i << alignof<string>()));
+    if (isNullable<T>()) {
+      if (value !== null) {
+        let valueLen = changetype<string>(value).length;
+        memory.copy(
+          changetype<usize>(result) + (<usize>offset << 1),
+          changetype<usize>(value),
+          <usize>valueLen << 1
+        );
+        offset += valueLen;
+      }
+    } else {
       let valueLen = changetype<string>(value).length;
       memory.copy(
         changetype<usize>(result) + (<usize>offset << 1),
@@ -403,8 +426,16 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
       offset += sepLen;
     }
   }
-  value = load<string>(dataStart + (<usize>lastIndex << alignof<string>()));
-  if (value !== null) {
+  value = load<T>(dataStart + (<usize>lastIndex << alignof<string>()));
+  if (isNullable<T>()) {
+    if (value !== null) {
+      memory.copy(
+        changetype<usize>(result) + (<usize>offset << 1),
+        changetype<usize>(value),
+        <usize>changetype<string>(value).length << 1
+      );
+    }
+  } else {
     memory.copy(
       changetype<usize>(result) + (<usize>offset << 1),
       changetype<usize>(value),
