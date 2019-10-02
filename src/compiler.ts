@@ -2956,7 +2956,7 @@ export class Compiler extends DiagnosticEmitter {
           fromType.toString(),
           toType.toString());
       } else {
-        if (this.checkInterfaceImplementation(toType, fromType, reportNode)){
+        if (this.checkInterfaceImplementation(toType, fromType, reportNode)) {
           (<Interface>toType.classReference).implementers.add(fromType.classReference);
         } else {
           this.error(
@@ -9292,7 +9292,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     imems = _interface.prototype.instanceMembers;
     mems = _class.prototype.instanceMembers;
-  
+
     var error = false;
     var incorrectMember = false;
     for (const [name, imem] of imems.entries()) {

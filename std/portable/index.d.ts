@@ -379,7 +379,7 @@ declare class DataView {
 declare class Array<T> {
 
   static isArray<U>(value: any): value is Array<any>;
-
+  static from<T>(iter: Iterable<T>): Array<T>;
   [key: number]: T;
   length: i32;
   constructor(capacity?: i32);
