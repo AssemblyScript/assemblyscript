@@ -466,7 +466,7 @@ export class Array<T> extends ArrayBufferView {
     if (isBoolean<T>())   return joinBooleanArray(dataStart, length, separator);
     if (isInteger<T>())   return joinIntegerArray<T>(dataStart, length, separator);
     if (isFloat<T>())     return joinFloatArray<T>(dataStart, length, separator);
-    if (isArray<T>())     return joinReferenceArray<T>(dataStart, length, separator);
+    // For rest objects and arrays use general join routine
     if (isReference<T>()) return joinReferenceArray<T>(dataStart, length, separator);
     ERROR("unspported element type");
     return <string>unreachable();
