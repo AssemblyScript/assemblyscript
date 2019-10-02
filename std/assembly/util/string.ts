@@ -418,14 +418,19 @@ export function joinReferenceArray<T>(dataStart: usize, length: i32, separator: 
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";
 
-  var result = "";
-  var sepLen = separator.length;
   var value: T;
   if (!lastIndex) {
     value = load<T>(dataStart);
-    // @ts-ignore: type
-    return value !== null ? value.toString() : "";
+    if (isNullable<T>()) {
+      // @ts-ignore: type
+      return value !== null ? value.toString() : "";
+    } else {
+      // @ts-ignore: type
+      return value.toString();
+    }
   }
+  var result = "";
+  var sepLen = separator.length;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
     if (isNullable<T>()) {
