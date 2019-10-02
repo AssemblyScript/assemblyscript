@@ -1635,8 +1635,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.ENUMDECLARATION: {
         let element = this.program.getElementByDeclaration(<EnumDeclaration>statement);
-        assert(element.kind == ElementKind.ENUM);
-        if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileEnum(<Enum>element);
+        if (element) {
+          assert(element.kind == ElementKind.ENUM);
+          if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileEnum(<Enum>element);
+        }
         break;
       }
       case NodeKind.NAMESPACEDECLARATION: {
@@ -1650,17 +1652,19 @@ export class Compiler extends DiagnosticEmitter {
         let declarations = (<VariableStatement>statement).declarations;
         for (let i = 0, k = declarations.length; i < k; ++i) {
           let element = this.program.getElementByDeclaration(declarations[i]);
-          assert(element.kind == ElementKind.GLOBAL);
-          if (
-            !element.is(CommonFlags.AMBIENT) && // delay imports
-            !element.hasDecorator(DecoratorFlags.LAZY)
-          ) this.compileGlobal(<Global>element);
+          if (element) {
+            assert(element.kind == ElementKind.GLOBAL);
+            if (
+              !element.is(CommonFlags.AMBIENT) && // delay imports
+              !element.hasDecorator(DecoratorFlags.LAZY)
+            ) this.compileGlobal(<Global>element);
+          }
         }
         break;
       }
       case NodeKind.FIELDDECLARATION: {
         let element = this.program.getElementByDeclaration(<FieldDeclaration>statement);
-        if (element.kind == ElementKind.GLOBAL) { // static
+        if (element !== null && element.kind == ElementKind.GLOBAL) { // static
           if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileGlobal(<Global>element);
         }
         break;
@@ -2524,9 +2528,12 @@ export class Compiler extends DiagnosticEmitter {
             let scopedLocals = flow.scopedLocals;
             if (!scopedLocals) flow.scopedLocals = scopedLocals = new Map();
             else if (scopedLocals.has(name)) {
-              this.error(
+              let existing = scopedLocals.get(name)!;
+              this.errorRelated(
                 DiagnosticCode.Duplicate_identifier_0,
-                declaration.name.range, name
+                declaration.name.range,
+                existing.declaration.name.range,
+                name
               );
               return this.module.unreachable();
             }
@@ -2550,20 +2557,32 @@ export class Compiler extends DiagnosticEmitter {
         ) { // here: not top-level
           let existingLocal = flow.getScopedLocal(name);
           if (existingLocal) {
-            this.error(
-              DiagnosticCode.Duplicate_identifier_0,
-              declaration.name.range, declaration.name.text
-            );
+            if (!existingLocal.declaration.range.source.isNative) {
+              this.errorRelated(
+                DiagnosticCode.Duplicate_identifier_0,
+                declaration.name.range,
+                existingLocal.declaration.name.range,
+                name
+              );
+            } else { // scoped locals are shared temps that don't track declarations
+              this.error(
+                DiagnosticCode.Duplicate_identifier_0,
+                declaration.name.range, name
+              );
+            }
             local = existingLocal;
           } else {
             local = flow.addScopedLocal(name, type);
           }
           if (isConst) flow.setLocalFlag(local.index, LocalFlags.CONSTANT);
         } else {
-          if (flow.lookupLocal(name)) {
-            this.error(
+          let existing = flow.lookupLocal(name);
+          if (existing) {
+            this.errorRelated(
               DiagnosticCode.Duplicate_identifier_0,
-              declaration.name.range, name
+              declaration.name.range,
+              existing.declaration.name.range,
+              name
             );
             continue;
           }

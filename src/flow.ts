@@ -416,10 +416,19 @@ export class Flow {
       let existingLocal = this.scopedLocals.get(name);
       if (existingLocal) {
         if (reportNode) {
-          this.parentFunction.program.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            reportNode.range
-          );
+          if (!existingLocal.declaration.range.source.isNative) {
+            this.parentFunction.program.errorRelated(
+              DiagnosticCode.Duplicate_identifier_0,
+              reportNode.range,
+              existingLocal.declaration.name.range,
+              name
+            );
+          } else {
+            this.parentFunction.program.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              reportNode.range, name
+            );
+          }
         }
         return existingLocal;
       }
