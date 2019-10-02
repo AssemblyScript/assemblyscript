@@ -414,7 +414,7 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
   return result;
 }
 
-export function joinArrays<T>(dataStart: usize, length: i32, separator: string): string {
+export function joinReferenceArray<T>(dataStart: usize, length: i32, separator: string): string {
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";
 
@@ -424,59 +424,27 @@ export function joinArrays<T>(dataStart: usize, length: i32, separator: string):
   if (!lastIndex) {
     value = load<T>(dataStart);
     // @ts-ignore: type
-    return value ? value.join(separator) : "";
+    return value !== null ? value.toString() : "";
   }
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
-    // @ts-ignore: type
-    if (value) result += value.join(separator);
+    if (isNullable<T>()) {
+      // @ts-ignore: type
+      if (value !== null) result += value.toString();
+    } else {
+      // @ts-ignore: type
+      result += value.toString();
+    }
     if (sepLen) result += separator;
   }
   value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
-  // @ts-ignore: type
-  if (value) result += value.join(separator);
-  return result; // registered by concatenation (FIXME: lots of garbage)
-}
-
-export function joinObjectArray<T>(dataStart: usize, length: i32, separator: string): string {
-  var lastIndex = length - 1;
-  if (lastIndex < 0) return "";
-  if (!lastIndex) return "[object Object]";
-
-  const valueLen = 15; // max possible length of element len("[object Object]")
-  var sepLen = separator.length;
-  var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-  var result = changetype<string>(__alloc(estLen << 1, idof<string>()));
-  var offset = 0;
-  var value: T;
-  for (let i = 0; i < lastIndex; ++i) {
-    value = load<T>(dataStart + (<usize>i << alignof<T>()));
-    if (value) {
-      memory.copy(
-        changetype<usize>(result) + (<usize>offset << 1),
-        changetype<usize>("[object Object]"),
-        <usize>valueLen << 1
-      );
-      offset += valueLen;
-    }
-    if (sepLen) {
-      memory.copy(
-        changetype<usize>(result) + (<usize>offset << 1),
-        changetype<usize>(separator),
-        <usize>sepLen << 1
-      );
-      offset += sepLen;
-    }
+  if (isNullable<T>()) {
+    // @ts-ignore: type
+    if (value !== null) result += value.toString();
+  } else {
+    // @ts-ignore: type
+    result += value.toString();
   }
-  if (load<T>(dataStart + (<usize>lastIndex << alignof<T>()))) {
-    memory.copy(
-      changetype<usize>(result) + (<usize>offset << 1),
-      changetype<usize>("[object Object]"),
-      <usize>valueLen << 1
-    );
-    offset += valueLen;
-  }
-  if (estLen > offset) return result.substring(0, offset);
   return result;
 }
 
