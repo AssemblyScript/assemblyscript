@@ -372,19 +372,19 @@ export function joinFloatArray<T>(dataStart: usize, length: i32, separator: stri
 export function joinStringArray(dataStart: usize, length: i32, separator: string): string {
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";
-  var value: string;
   if (!lastIndex) {
     // @ts-ignore: type
     return load<string>(dataStart) || "";
   }
-  var sepLen = separator.length;
   var estLen = 0;
+  var value: string;
   for (let i = 0; i < length; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));
     // @ts-ignore: type
     if (value !== null) estLen += value.length;
   }
   var offset = 0;
+  var sepLen = separator.length;
   var result = changetype<string>(__alloc((estLen + sepLen * lastIndex) << 1, idof<string>())); // retains
   for (let i = 0; i < lastIndex; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));

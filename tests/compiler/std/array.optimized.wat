@@ -9124,13 +9124,8 @@
    call $~lib/rt/pure/__retain
    local.get $2
    call $~lib/rt/pure/__release
-   i32.const 0
-   call $~lib/rt/pure/__release
    return
   end
-  local.get $2
-  call $~lib/string/String#get:length
-  local.set $8
   loop $loop|0
    block $break|0
     local.get $6
@@ -9171,8 +9166,10 @@
   end
   i32.const 0
   local.set $4
+  local.get $2
+  call $~lib/string/String#get:length
+  local.tee $8
   local.get $7
-  local.get $8
   i32.mul
   local.get $5
   i32.add
