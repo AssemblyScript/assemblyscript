@@ -803,6 +803,7 @@ export class Parser extends DiagnosticEmitter {
           expression = Node.createPropertyAccessExpression(
             expression,
             Node.createIdentifierExpression(name, tn.range()),
+            false,
             tn.range(startPos, tn.pos)
           );
         } else {
@@ -3651,6 +3652,7 @@ export class Parser extends DiagnosticEmitter {
       (nextPrecedence = determinePrecedence(token = tn.peek())) >= precedence
     ) { // precedence climbing
       tn.next();
+      let isOptionalChaining: bool = false;
       switch (token) {
         // AssertionExpression
         case Token.AS: {
@@ -3698,6 +3700,7 @@ export class Parser extends DiagnosticEmitter {
           expr = Node.createElementAccessExpression(
             expr,
             next,
+            false,
             tn.range(startPos, tn.pos)
           );
           break;
@@ -3746,6 +3749,17 @@ export class Parser extends DiagnosticEmitter {
           );
           break;
         }
+        // CoalesceExpression
+        case Token.QUESTION_QUESTION: {
+          let ifElse = this.parseExpression(tn);
+          if (!ifElse) return null;
+          expr = Node.createCoalesceExpression(
+            expr,
+            ifElse,
+            tn.range(startPos, tn.pos)
+          );
+          break;
+        }
         // CommaExpression
         case Token.COMMA: {
           let commaExprs: Expression[] = [ expr ];
@@ -3757,38 +3771,55 @@ export class Parser extends DiagnosticEmitter {
           expr = Node.createCommaExpression(commaExprs, tn.range(startPos, tn.pos));
           break;
         }
-        default: {
+        // Optional chaining
+        case Token.QUESTION_DOT: {
 
-          // PropertyAccessExpression
-          if (token == Token.DOT) {
-            if (tn.skipIdentifier()) {
-              next = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-            } else {
-              next = this.parseExpression(tn,
-                isRightAssociative(token)
-                  ? nextPrecedence
-                  : nextPrecedence + 1
-              );
-              if (!next) return null;
-            }
-            if (next.kind == NodeKind.IDENTIFIER) { // expr '.' Identifier
-              expr = Node.createPropertyAccessExpression(
-                expr,
-                <IdentifierExpression>next,
-                tn.range(startPos, tn.pos)
-              );
-            } else if (next.kind == NodeKind.CALL) { // expr '.' CallExpression
-              expr = this.joinPropertyCall(tn, startPos, expr, <CallExpression>next);
-              if (!expr) return null;
-            } else {
+          // ElementAccessExpression
+          if (tn.skip(Token.OPENBRACKET)) {
+            next = this.parseExpression(tn); // reports
+            if (!next) return null;
+            if (!tn.skip(Token.CLOSEBRACKET)) {
               this.error(
-                DiagnosticCode.Identifier_expected,
-                next.range
+                DiagnosticCode._0_expected,
+                tn.range(), "]"
               );
               return null;
             }
+            expr = Node.createElementAccessExpression(
+              expr,
+              next,
+              true,
+              tn.range(startPos, tn.pos)
+            );
+            break;
 
-          // BinaryExpression
+          // CallExpression?
+          } else {
+            let typeArguments: TypeNode[] | null = null;
+            if (
+              tn.skip(Token.OPENPAREN)
+              ||
+              nodeIsGenericCallable(expr.kind) && (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
+            ) {
+              let args = this.parseArguments(tn);
+              if (!args) return null;
+              expr = Node.createCallExpression(
+                expr,
+                typeArguments,
+                args,
+                true,
+                tn.range(expr.range.start, tn.pos)
+              );
+              break;
+            }
+          }
+          // otherwise fall-through
+          isOptionalChaining = true;
+        }
+        // PropertyAccessExpression
+        case Token.DOT: {
+          if (tn.skipIdentifier()) {
+            next = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
           } else {
             next = this.parseExpression(tn,
               isRightAssociative(token)
@@ -3796,8 +3827,35 @@ export class Parser extends DiagnosticEmitter {
                 : nextPrecedence + 1
             );
             if (!next) return null;
-            expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
           }
+          if (next.kind == NodeKind.IDENTIFIER) { // expr '.' Identifier
+            expr = Node.createPropertyAccessExpression(
+              expr,
+              <IdentifierExpression>next,
+              isOptionalChaining,
+              tn.range(startPos, tn.pos)
+            );
+          } else if (next.kind == NodeKind.CALL) { // expr '.' CallExpression
+            expr = this.joinPropertyCall(tn, startPos, expr, <CallExpression>next, isOptionalChaining);
+            if (!expr) return null;
+          } else {
+            this.error(
+              DiagnosticCode.Identifier_expected,
+              next.range
+            );
+            return null;
+          }
+          break;
+        }
+        // BinaryExpression
+        default: {
+          next = this.parseExpression(tn,
+            isRightAssociative(token)
+              ? nextPrecedence
+              : nextPrecedence + 1
+          );
+          if (!next) return null;
+          expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
           break;
         }
       }
@@ -3810,20 +3868,24 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     startPos: i32,
     expr: Expression,
-    call: CallExpression
+    call: CallExpression,
+    isOptionalChaining: bool
   ): Expression | null {
     var callee = call.expression;
     switch (callee.kind) {
       case NodeKind.IDENTIFIER: { // join property access and use as call target
+        // -> [ Identifier '.' foo ]()
         call.expression = Node.createPropertyAccessExpression(
           expr,
           <IdentifierExpression>callee,
+          isOptionalChaining,
           tn.range(startPos, tn.pos)
         );
         break;
       }
       case NodeKind.CALL: { // join call target und wrap the original call around it
-        let inner = this.joinPropertyCall(tn, startPos, expr, <CallExpression>callee);
+        // -> [ foo() '.' bar ]()
+        let inner = this.joinPropertyCall(tn, startPos, expr, <CallExpression>callee, isOptionalChaining);
         if (!inner) return null;
         call.expression = inner;
         call.range = tn.range(startPos, tn.pos);
@@ -3857,6 +3919,7 @@ export class Parser extends DiagnosticEmitter {
           expr,
           typeArguments,
           args,
+          false,
           tn.range(expr.range.start, tn.pos)
         );
       }
@@ -4010,7 +4073,8 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.AMPERSAND_EQUALS:
     case Token.CARET_EQUALS:
     case Token.BAR_EQUALS: return Precedence.ASSIGNMENT;
-    case Token.QUESTION: return Precedence.CONDITIONAL;
+    case Token.QUESTION:
+    case Token.QUESTION_QUESTION: return Precedence.CONDITIONAL;
     case Token.BAR_BAR: return Precedence.LOGICAL_OR;
     case Token.AMPERSAND_AMPERSAND: return Precedence.LOGICAL_AND;
     case Token.BAR: return Precedence.BITWISE_OR;
@@ -4041,7 +4105,8 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.DOT:
     case Token.NEW:
     case Token.OPENBRACKET:
-    case Token.EXCLAMATION: return Precedence.MEMBERACCESS;
+    case Token.EXCLAMATION:
+    case Token.QUESTION_DOT: return Precedence.MEMBERACCESS;
   }
   return Precedence.NONE;
 }

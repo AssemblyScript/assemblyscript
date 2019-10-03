@@ -70,13 +70,11 @@ export enum CommonFlags {
   TRAMPOLINE = 1 << 25,
   /** Is a virtual method. */
   VIRTUAL = 1 << 26,
-  /** Is the main function. */
-  MAIN = 1 << 27,
 
   // Other
 
   /** Is quoted. */
-  QUOTED = 1 << 28
+  QUOTED = 1 << 27
 }
 
 /** Path delimiter inserted between file system levels. */
@@ -133,6 +131,7 @@ export namespace CommonSymbols {
   export const void_ = "void";
   export const number = "number";
   export const boolean = "boolean";
+  export const auto = "auto";
   export const string = "string";
   export const native = "native";
   export const indexof = "indexof";

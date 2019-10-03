@@ -38,6 +38,7 @@ import {
   ParenthesizedExpression,
   PropertyAccessExpression,
   TernaryExpression,
+  CoalesceExpression,
   UnaryPostfixExpression,
   UnaryExpression,
   UnaryPrefixExpression,
@@ -198,6 +199,10 @@ export class ASTBuilder {
       }
       case NodeKind.TERNARY: {
         this.visitTernaryExpression(<TernaryExpression>node);
+        break;
+      }
+      case NodeKind.COALESCE: {
+        this.visitCoalesceExpression(<CoalesceExpression>node);
         break;
       }
       case NodeKind.UNARYPOSTFIX: {
@@ -545,6 +550,7 @@ export class ASTBuilder {
   visitCallExpression(node: CallExpression): void {
     var sb = this.sb;
     this.visitNode(node.expression);
+    if (node.isOptionalChaining) sb.push("?.");
     var typeArguments = node.typeArguments;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
@@ -577,6 +583,13 @@ export class ASTBuilder {
     this.visitClassDeclaration(declaration);
   }
 
+  visitCoalesceExpression(node: CoalesceExpression): void {
+    var sb = this.sb;
+    this.visitNode(node.ifThen);
+    sb.push(" ?? ");
+    this.visitNode(node.ifElse);
+  }
+
   visitCommaExpression(node: CommaExpression): void {
     var expressions = node.expressions;
     var numExpressions = assert(expressions.length);
@@ -591,6 +604,7 @@ export class ASTBuilder {
   visitElementAccessExpression(node: ElementAccessExpression): void {
     var sb = this.sb;
     this.visitNode(node.expression);
+    if (node.isOptionalChaining) sb.push("?.");
     sb.push("[");
     this.visitNode(node.elementExpression);
     sb.push("]");
@@ -769,7 +783,7 @@ export class ASTBuilder {
 
   visitPropertyAccessExpression(node: PropertyAccessExpression): void {
     this.visitNode(node.expression);
-    this.sb.push(".");
+    this.sb.push(node.isOptionalChaining ? "?." : ".");
     this.visitIdentifierExpression(node.property);
   }
 

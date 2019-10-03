@@ -636,6 +636,7 @@ export class Program extends DiagnosticEmitter {
     this.registerNativeType(CommonSymbols.void_, Type.void);
     this.registerNativeType(CommonSymbols.number, Type.f64); // alias
     this.registerNativeType(CommonSymbols.boolean, Type.bool); // alias
+    this.registerNativeType(CommonSymbols.auto, Type.auto); // internal
     this.nativeFile.add(CommonSymbols.native, new TypeDefinition(
       CommonSymbols.native,
       this.nativeFile,
@@ -1374,7 +1375,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
-        let decorator = decorators[i];
+        let decorator: DecoratorNode = decorators[i]; // FIXME: Why does TS 3.7 complain here?
         switch (decorator.decoratorKind) {
           case DecoratorKind.OPERATOR:
           case DecoratorKind.OPERATOR_BINARY:

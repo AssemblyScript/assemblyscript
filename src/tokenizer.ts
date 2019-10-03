@@ -137,6 +137,8 @@ export enum Token {
   AMPERSAND_AMPERSAND,
   BAR_BAR,
   QUESTION,
+  QUESTION_QUESTION,
+  QUESTION_DOT,
   COLON,
   EQUALS,
   PLUS_EQUALS,
@@ -413,6 +415,7 @@ export function operatorTokenToString(token: Token): string {
     case Token.TILDE: return "~";
     case Token.AMPERSAND_AMPERSAND: return "&&";
     case Token.BAR_BAR: return "||";
+    case Token.QUESTION_QUESTION: return "??";
     case Token.EQUALS: return "=";
     case Token.PLUS_EQUALS: return "+=";
     case Token.MINUS_EQUALS: return "-=";
@@ -878,6 +881,21 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         case CharCode.QUESTION: {
           ++this.pos;
+          if (maxTokenLength > 1 && this.pos < end) {
+            let chr = text.charCodeAt(this.pos);
+            if (chr == CharCode.QUESTION) {
+              ++this.pos;
+              return Token.QUESTION_QUESTION;
+            } else if (
+              chr == CharCode.DOT && (
+                this.pos + 1 == end ||
+                !isDecimalDigit(text.charCodeAt(this.pos + 1))
+              )
+            ) {
+              ++this.pos;
+              return Token.QUESTION_DOT;
+            }
+          }
           return Token.QUESTION;
         }
         case CharCode.OPENBRACKET: {

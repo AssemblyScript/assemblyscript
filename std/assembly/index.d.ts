@@ -37,6 +37,8 @@ declare type f64 = number;
 declare type v128 = object;
 /** A host reference. */
 declare type anyref = object;
+/** Special internal type used with builtins. Do not use. */
+declare type auto = boolean | number | object;
 
 // Compiler hints
 

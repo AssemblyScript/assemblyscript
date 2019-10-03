@@ -106,6 +106,7 @@ import {
   Range,
   DecoratorKind,
   AssertionKind,
+  SourceKind,
 
   Statement,
   BlockStatement,
@@ -135,6 +136,7 @@ import {
   WhileStatement,
 
   Expression,
+  ExportDefaultStatement,
   AssertionExpression,
   BinaryExpression,
   CallExpression,
@@ -151,6 +153,7 @@ import {
   ParenthesizedExpression,
   PropertyAccessExpression,
   TernaryExpression,
+  CoalesceExpression,
   ArrayLiteralExpression,
   StringLiteralExpression,
   UnaryPostfixExpression,
@@ -158,9 +161,7 @@ import {
 
   nodeIsConstantValue,
   findDecorator,
-  isTypeOmitted,
-  ExportDefaultStatement,
-  SourceKind
+  isTypeOmitted
 } from "./ast";
 
 import {
@@ -1146,7 +1147,7 @@ export class Compiler extends DiagnosticEmitter {
       assert(instance.prototype.arrowKind);
 
       // none of the following can be an arrow function
-      assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET | CommonFlags.MAIN));
+      assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET));
 
       let expr = this.compileExpression((<ExpressionStatement>bodyNode).expression, returnType,
         Constraints.CONV_IMPLICIT
@@ -2849,6 +2850,10 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.compileTernaryExpression(<TernaryExpression>expression, contextualType, constraints);
         break;
       }
+      case NodeKind.COALESCE: {
+        expr = this.compileCoalesceExpression(<CoalesceExpression>expression, contextualType, constraints);
+        break;
+      }
       case NodeKind.UNARYPOSTFIX: {
         expr = this.compileUnaryPostfixExpression(<UnaryPostfixExpression>expression, contextualType, constraints);
         break;
@@ -2892,9 +2897,13 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type,
     constraints: Constraints = Constraints.NONE
   ): ExpressionRef {
-    return this.module.precomputeExpression(
-      this.compileExpression(expression, contextualType, constraints)
-    );
+    var orig = this.compileExpression(expression, contextualType, constraints);
+    var expr = this.module.precomputeExpression(orig);
+    if (orig != expr) {
+      let skippedAutoreleases = this.skippedAutoreleases;
+      if (skippedAutoreleases.has(orig)) skippedAutoreleases.add(expr);
+    }
+    return expr;
   }
 
   convertExpression(
@@ -5734,9 +5743,41 @@ export class Compiler extends DiagnosticEmitter {
 
     var module = this.module;
     var flow = this.currentFlow;
+    var targetExpression = expression.expression;
+
+    // TODO: In these cases we compile the target of an element or property
+    // access, but not the element or property access itself, essentially
+    // skipping over optional chaining.
+    switch (targetExpression.kind) {
+      case NodeKind.ELEMENTACCESS: {
+        if ((<ElementAccessExpression>targetExpression).isOptionalChaining) {
+          this.error(
+            DiagnosticCode.Not_implemented,
+            (<ElementAccessExpression>targetExpression).expression.range.atEnd
+          );
+        }
+        break;
+      }
+      case NodeKind.PROPERTYACCESS: {
+        if ((<PropertyAccessExpression>targetExpression).isOptionalChaining) {
+          this.error(
+            DiagnosticCode.Not_implemented,
+            (<PropertyAccessExpression>targetExpression).expression.range.atEnd
+          );
+        }
+        break;
+      }
+    }
+    // TODO
+    if (expression.isOptionalChaining) {
+      this.error(
+        DiagnosticCode.Not_implemented,
+        targetExpression.range.atEnd
+      );
+    }
 
     // handle call to super
-    if (expression.expression.kind == NodeKind.SUPER) {
+    if (targetExpression.kind == NodeKind.SUPER) {
       let flow = this.currentFlow;
       let actualFunction = flow.actualFunction;
       if (!actualFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -5793,7 +5834,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // otherwise resolve normally
-    var target = this.resolver.lookupExpression(expression.expression, flow); // reports
+    var target = this.resolver.lookupExpression(targetExpression, flow); // reports
     if (!target) return module.unreachable();
 
     var signature: Signature | null;
@@ -5817,7 +5858,7 @@ export class Compiler extends DiagnosticEmitter {
           if (!prototype.is(CommonFlags.GENERIC)) {
             this.error(
               DiagnosticCode.Type_0_is_not_generic,
-              expression.expression.range, prototype.internalName
+              targetExpression.range, prototype.internalName
             );
             return module.unreachable();
           }
@@ -5879,7 +5920,7 @@ export class Compiler extends DiagnosticEmitter {
             // invalid because the type is effectively unknown inside the function body
             this.error(
               DiagnosticCode.Type_argument_expected,
-              expression.expression.range.atEnd
+              targetExpression.range.atEnd
             );
             return this.module.unreachable();
           }
@@ -5962,7 +6003,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FUNCTION_TARGET: {
         signature = (<FunctionTarget>target).signature;
-        indexArg = this.compileExpression(expression.expression, (<FunctionTarget>target).type, Constraints.CONV_IMPLICIT);
+        indexArg = this.compileExpression(targetExpression, (<FunctionTarget>target).type, Constraints.CONV_IMPLICIT);
         break;
       }
 
@@ -5970,7 +6011,7 @@ export class Compiler extends DiagnosticEmitter {
         let getterPrototype = assert((<PropertyPrototype>target).getterPrototype);
         let getterInstance = this.resolver.resolveFunction(getterPrototype, null);
         if (!getterInstance) return module.unreachable();
-        indexArg = this.compileCallDirect(getterInstance, [], expression.expression);
+        indexArg = this.compileCallDirect(getterInstance, [], targetExpression);
         signature = this.currentType.signatureReference;
         if (!signature) {
           this.error(
@@ -5983,7 +6024,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.PROPERTY: { // instance property
         let getterInstance = assert((<Property>target).getterInstance);
-        indexArg = this.compileCallDirect(getterInstance, [], expression.expression,
+        indexArg = this.compileCallDirect(getterInstance, [], targetExpression,
           this.compileExpression(assert(this.resolver.currentThisExpression), this.options.usizeType)
         );
         signature = this.currentType.signatureReference;
@@ -6948,6 +6989,14 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type,
     constraints: Constraints
   ): ExpressionRef {
+
+    if (expression.isOptionalChaining) {
+      this.error(
+        DiagnosticCode.Not_implemented,
+        expression.expression.range.atEnd
+      );
+    }
+
     var module = this.module;
     var targetExpression = expression.expression;
     var targetType = this.resolver.resolveExpression(targetExpression, this.currentFlow); // reports
@@ -7951,6 +8000,14 @@ export class Compiler extends DiagnosticEmitter {
     ctxType: Type,
     constraints: Constraints
   ): ExpressionRef {
+
+    if (expression.isOptionalChaining) {
+      this.error(
+        DiagnosticCode.Not_implemented,
+        expression.expression.range.atEnd
+      );
+    }
+
     var module = this.module;
     var flow = this.currentFlow;
 
@@ -8136,6 +8193,18 @@ export class Compiler extends DiagnosticEmitter {
     assert(IfThenAutoreleaseSkipped == ifElseAutoreleaseSkipped);
     if (IfThenAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
     return expr;
+  }
+
+  compileCoalesceExpression(
+    expression: CoalesceExpression,
+    ctxType: Type,
+    constraints: Constraints
+  ): ExpressionRef {
+    this.error(
+      DiagnosticCode.Not_implemented,
+      expression.range
+    );
+    return this.module.unreachable();
   }
 
   compileUnaryPostfixExpression(
