@@ -209,10 +209,9 @@ if (!String.prototype.replaceAll) {
 function defaultComparator(a, b) {
   if (a === b) {
     if (a !== 0) return 0;
-    a = 1 / a, b = 1 / b;
+    a = String(a), b = String(b);
   } else {
-    var nanA = a != a;
-    var nanB = b != b;
+    var nanA = a != a, nanB = b != b;
     if (nanA | nanB) return nanA - nanB;
     if (a == null) a = String(a);
     if (b == null) b = String(b);
