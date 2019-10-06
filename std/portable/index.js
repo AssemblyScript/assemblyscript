@@ -209,7 +209,7 @@ if (!String.prototype.replaceAll) {
 function defaultComparator(a, b) {
   if (a === b) {
     if (a !== 0) return 0;
-    a = String(a), b = String(b);
+    a = 1 / a, b = 1 / b;
   } else {
     var nanA = a != a, nanB = b != b;
     if (nanA | nanB) return nanA - nanB;
