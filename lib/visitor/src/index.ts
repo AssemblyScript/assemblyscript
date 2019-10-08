@@ -286,10 +286,11 @@ function isGeneric(_class: ClassDeclaration, field: FieldDeclaration): boolean {
   );
 }
 
-export class JSONTransformer extends Transformer {
+export default class JSONTransformer extends Transformer {
   afterParse(): void {
     const parser = this.parser;
     const writeFile = this.writeFile;
+    const baseDir = this.baseDir;
     let files = JSONBindingsBuilder.nearFiles(parser);
     files.forEach(source => {
       let writeOut = source.text
@@ -304,7 +305,6 @@ export class JSONTransformer extends Transformer {
       );
       // Build new Source
       let sourceText = JSONBindingsBuilder.build(parser, source);
-      console.log(sourceText);
       if (writeOut) {
         writeFile("out/" + source.normalizedPath, sourceText, baseDir);
       }

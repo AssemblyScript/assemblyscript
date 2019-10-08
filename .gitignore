@@ -4,3 +4,6 @@ node_modules/
 out/
 raw/
 .history
+lib/visitor/dist/lib/
+
+lib/visitor/dist/src/

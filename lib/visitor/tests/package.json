@@ -4,7 +4,7 @@
   "description": "Tests for near bindings",
   "main": "test.js",
   "scripts": {
-    "build": "../../../bin/asc assembly/test.ts --transform ../dist/lib/visitor/src/index.js --lib ../assembly/nearEntry.ts --validate --runtime stub --binaryFile out/test.wasm --textFile out/test.wat --runPasses dce --debug",
+    "build": "../../../bin/asc assembly/test.ts --transform ../dist/jsonbindings.js --lib ../assembly/nearEntry.ts --validate --runtime stub --binaryFile out/test.wasm --textFile out/test.wat --runPasses dce --debug",
     "test": "npm run build && node --experimental-wasm-bigint ./test.js"
   },
   "dependencies": {

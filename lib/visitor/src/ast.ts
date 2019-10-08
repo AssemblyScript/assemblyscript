@@ -78,7 +78,6 @@ export interface Node {
   kind: NodeKind;
   /** Source range. */
   range: Range;
-  
 }
 export interface TypeNode extends Node {
   /** Whether nullable or not. */
@@ -170,7 +169,7 @@ export namespace DecoratorKind {
   declare function fromNode(nameNode: Expression): DecoratorKind;
 }
 /** Represents a decorator. */
-export interface DecoratorNode extends Node{
+export interface DecoratorNode extends Node {
   /** Built-in kind, if applicable. */
   decoratorKind: DecoratorKind;
   /** Name expression. */
@@ -188,7 +187,7 @@ export const enum CommentKind {
   BLOCK = 2
 }
 /** Represents a comment. */
-export interface CommentNode extends Node{
+export interface CommentNode extends Node {
   /** Comment kind. */
   commentKind: CommentKind;
   /** Comment text. */
@@ -197,12 +196,11 @@ export interface CommentNode extends Node{
 
 // export type Type = "primitive" | "reference";
 
-// export type empty = []; 
+// export type empty = [];
 
 // export type Cons<T> = [T, List<T>]
 
 // export type List<T> = empty | Cons<T>
-
 
 // export type IntList = List<i32>;
 
@@ -210,287 +208,250 @@ export interface CommentNode extends Node{
 
 /** Base class of all expression nodes. */
 
-
 export interface Expression extends Node {
-_expressionBrand: void;
-// contextualType?: Type; // Used to temporarily assign a contextual type during overload resolution
+  _expressionBrand: void;
+  // contextualType?: Type; // Used to temporarily assign a contextual type during overload resolution
 }
-
-
 
 /** Indicates the kind of a literal. */
 export const enum LiteralKind {
-FLOAT = 0,
-INTEGER = 1,
-STRING = 2,
-REGEXP = 3,
-ARRAY = 4,
-OBJECT = 5
+  FLOAT = 0,
+  INTEGER = 1,
+  STRING = 2,
+  REGEXP = 3,
+  ARRAY = 4,
+  OBJECT = 5
 }
 
 /** Base class of all literal expressions. */
 export interface LiteralExpression extends Expression {
-/** Specific literal kind. */
-literalKind: LiteralKind;
+  /** Specific literal kind. */
+  literalKind: LiteralKind;
 }
 
 /** Represents an `[]` literal expression. */
 export interface ArrayLiteralExpression extends LiteralExpression {
-readonly literalKind: LiteralKind.ARRAY;
-/** Nested element expressions. */
-elementExpressions: Array<Expression>;
+  readonly literalKind: LiteralKind.ARRAY;
+  /** Nested element expressions. */
+  elementExpressions: Array<Expression>;
 }
-
 
 /** Represents an integer literal expression. */
 export interface IntegerLiteralExpression extends LiteralExpression {
-literalKind : LiteralKind.INTEGER;
-/** Integer value. */
-value: I64;
+  literalKind: LiteralKind.INTEGER;
+  /** Integer value. */
+  value: I64;
 }
-
 
 /** Represents an object literal expression. */
 export interface ObjectLiteralExpression extends LiteralExpression {
-literalKind : LiteralKind.OBJECT;
+  literalKind: LiteralKind.OBJECT;
 
-/** Field names. */
-names: Array<IdentifierExpression>
-/** Field values. */
-values: Array<Expression>;
+  /** Field names. */
+  names: Array<IdentifierExpression>;
+  /** Field values. */
+  values: Array<Expression>;
 }
 
 /** Represents a regular expression literal expression. */
 export interface RegexpLiteralExpression extends LiteralExpression {
-literalKind: LiteralKind.REGEXP;
+  literalKind: LiteralKind.REGEXP;
 
-/** Regular expression pattern. */
-pattern: string;
-/** Regular expression flags. */
-patternFlags: string;
+  /** Regular expression pattern. */
+  pattern: string;
+  /** Regular expression flags. */
+  patternFlags: string;
 }
 
 /** Represents a string literal expression. */
 export interface StringLiteralExpression extends LiteralExpression {
-literalKind: LiteralKind.STRING;
-/** String value without quotes. */
-value: string;
+  literalKind: LiteralKind.STRING;
+  /** String value without quotes. */
+  value: string;
 }
-
 
 /** Represents a float literal expression. */
 export interface FloatLiteralExpression extends LiteralExpression {
-literalKind: LiteralKind.FLOAT;
+  literalKind: LiteralKind.FLOAT;
 
-/** Float value. */
-value: f64;
+  /** Float value. */
+  value: f64;
 }
 
-export type Lit = IntegerLiteralExpression 
-| ArrayLiteralExpression
-| ObjectLiteralExpression
-| RegexpLiteralExpression
-| StringLiteralExpression
-| FloatLiteralExpression
-;
+export type Lit =
+  | IntegerLiteralExpression
+  | ArrayLiteralExpression
+  | ObjectLiteralExpression
+  | RegexpLiteralExpression
+  | StringLiteralExpression
+  | FloatLiteralExpression;
 
-type Symbol = CommonFlags | string
+type Symbol = CommonFlags | string;
 
 // Identifers
 /** Represents a `super` expression. */
 export interface SuperExpression extends IdentifierExpression {
-text: "super";
+  text: "super";
 }
 
 /** Represents a `this` expression. */
 export interface ThisExpression extends IdentifierExpression {
-text: "this";
+  text: "this";
 }
 
 /** Represents a `true` expression. */
 export interface TrueExpression extends IdentifierExpression {
-text: "true";
+  text: "true";
 }
 
 /** Represents a `false` expression. */
 export interface FalseExpression extends IdentifierExpression {
-text: "false";
+  text: "false";
 }
-
 
 /** Represents a `null` expression. */
 export interface NullExpression extends IdentifierExpression {
-text: "null";
+  text: "null";
 }
 
-type NULL = IdentifierExpression & {text: "null", symbol: "null"}
-
-
+type NULL = IdentifierExpression & { text: "null"; symbol: "null" };
 
 /** Represents an identifier expression. */
 export interface IdentifierExpression extends Expression {
-/** Textual name. */
-text: string;
-/** Symbol. */
-symbol: Symbol; // TODO: symbol
-/** Whether quoted or not. */
-isQuoted: bool;
+  /** Textual name. */
+  text: string;
+  /** Symbol. */
+  symbol: Symbol; // TODO: symbol
+  /** Whether quoted or not. */
+  isQuoted: bool;
 }
 
 /** Represents a `constructor` expression. */
 export interface ConstructorExpression extends IdentifierExpression {
-text: "constructor";
-isQuoted: false;
+  text: "constructor";
+  isQuoted: false;
 }
-
-
-
 
 /** Indicates the kind of an assertion. */
 export enum AssertionKind {
-PREFIX,
-AS,
-NONNULL
+  PREFIX,
+  AS,
+  NONNULL
 }
 
 /** Represents an assertion expression. */
 export interface AssertionExpression extends Expression {
-
-/** Specific kind of this assertion. */
-assertionKind: AssertionKind;
-/** Expression being asserted. */
-expression: Expression;
-/** Target type. */
-toType: TypeNode | null;
+  /** Specific kind of this assertion. */
+  assertionKind: AssertionKind;
+  /** Expression being asserted. */
+  expression: Expression;
+  /** Target type. */
+  toType: TypeNode | null;
 }
 
 /** Represents a binary expression. */
 export interface BinaryExpression extends Expression {
-/** Operator token. */
-operator: Token;
-/** Left-hand side expression */
-left: Expression;
-/** Right-hand side expression. */
-right: Expression;
+  /** Operator token. */
+  operator: Token;
+  /** Left-hand side expression */
+  left: Expression;
+  /** Right-hand side expression. */
+  right: Expression;
 }
 
 /** Represents a call expression. */
 export interface CallExpression extends Expression {
+  /** Called expression. Usually an identifier or property access expression. */
+  expression: Expression;
+  /** Provided type arguments. */
+  typeArguments: TypeNode[] | null;
+  /** Provided arguments. */
+  arguments: Expression[];
 
-/** Called expression. Usually an identifier or property access expression. */
-expression: Expression;
-/** Provided type arguments. */
-typeArguments: TypeNode[] | null;
-/** Provided arguments. */
-arguments: Expression[];
+  /** Gets the type arguments range for reporting. */
+  typeArgumentsRange(): Range;
 
-/** Gets the type arguments range for reporting. */
-typeArgumentsRange(): Range;
-
-/** Gets the arguments range for reporting. */
-argumentsRange(): Range;
+  /** Gets the arguments range for reporting. */
+  argumentsRange(): Range;
 }
 
 /** Represents a class expression using the 'class' keyword. */
 export interface ClassExpression extends Expression {
-
-/** Inline class declaration. */
-declaration: ClassDeclaration;
+  /** Inline class declaration. */
+  declaration: ClassDeclaration;
 }
 
 /** Represents a comma expression composed of multiple expressions. */
 export interface CommaExpression extends Expression {
-
-/** Sequential expressions. */
-expressions: Expression[];
+  /** Sequential expressions. */
+  expressions: Expression[];
 }
-
 
 /** Represents an element access expression, e.g., array access. */
 export interface ElementAccessExpression extends Expression {
-
-/** Expression being accessed. */
-expression: Expression;
-/** Element of the expression being accessed. */
-elementExpression: Expression;
+  /** Expression being accessed. */
+  expression: Expression;
+  /** Element of the expression being accessed. */
+  elementExpression: Expression;
 }
 
-
 /** Represents a function expression using the 'function' keyword. */
-export interface FunctionExpression extends Expression{
-
-/** Inline function declaration. */
-declaration: FunctionDeclaration;
+export interface FunctionExpression extends Expression {
+  /** Inline function declaration. */
+  declaration: FunctionDeclaration;
 }
 
 /** Represents an `instanceof` expression. */
-export interface InstanceOfExpression extends Expression{
-
-/** Expression being asserted. */
-expression: Expression;
-/** Type to test for. */
-isType: TypeNode;
+export interface InstanceOfExpression extends Expression {
+  /** Expression being asserted. */
+  expression: Expression;
+  /** Type to test for. */
+  isType: TypeNode;
 }
 
 /** Represents a `new` expression. Like a call but with its own kind. */
-export interface NewExpression extends CallExpression {
-}
-
+export interface NewExpression extends CallExpression {}
 
 /** Represents a parenthesized expression. */
-export interface ParenthesizedExpression extends Expression{
-
-/** Expression in parenthesis. */
-expression: Expression;
+export interface ParenthesizedExpression extends Expression {
+  /** Expression in parenthesis. */
+  expression: Expression;
 }
 
 /** Represents a property access expression. */
-export interface PropertyAccessExpression extends Expression{
-
-/** Expression being accessed. */
-expression: Expression;
-/** Property of the expression being accessed. */
-property: IdentifierExpression;
+export interface PropertyAccessExpression extends Expression {
+  /** Expression being accessed. */
+  expression: Expression;
+  /** Property of the expression being accessed. */
+  property: IdentifierExpression;
 }
-
 
 /** Represents a ternary expression, i.e., short if notation. */
-export interface TernaryExpression extends Expression{
-
-/** Condition expression. */
-condition: Expression;
-/** Expression executed when condition is `true`. */
-ifThen: Expression;
-/** Expression executed when condition is `false`. */
-ifElse: Expression;
+export interface TernaryExpression extends Expression {
+  /** Condition expression. */
+  condition: Expression;
+  /** Expression executed when condition is `true`. */
+  ifThen: Expression;
+  /** Expression executed when condition is `false`. */
+  ifElse: Expression;
 }
-
-
-
-
-
 
 /** Base class of all unary expressions. */
 export interface UnaryExpression extends Expression {
-/** Operator token. */
-operator: Token;
-/** Operand expression. */
-operand: Expression;
+  /** Operator token. */
+  operator: Token;
+  /** Operand expression. */
+  operand: Expression;
 }
 
 /** Represents a unary postfix expression, e.g. a postfix increment. */
-export interface UnaryPostfixExpression extends UnaryExpression{
-}
+export interface UnaryPostfixExpression extends UnaryExpression {}
 
 /** Represents a unary prefix expression, e.g. a negation. */
-export interface UnaryPrefixExpression extends UnaryExpression{
-}
-
+export interface UnaryPrefixExpression extends UnaryExpression {}
 
 /** Base cAlass of all statement nodes. */
-export interface Statement extends Node {
-}
-
+export interface Statement extends Node {}
 
 /** Indicates the specific kind of a source. */
 export enum SourceKind {
@@ -523,20 +484,20 @@ export interface Source extends Node {
   /** Re-exported sources. */
   exportPaths: Set<string> | null;
   /** Constructs a new source node. */
-  new(normalizedPath: string, text: string, kind: SourceKind): Source;
+  new (normalizedPath: string, text: string, kind: SourceKind): Source;
   readonly isLibrary: bool;
 }
 
 export interface Range {
-source: Source;
-start: i32;
-end: i32;
-readonly atStart: Range;
-readonly atEnd: Range;
-readonly line: i32;
-readonly column: i32;
-toString(): string;
-debugInfoRef: usize;
+  source: Source;
+  start: i32;
+  end: i32;
+  readonly atStart: Range;
+  readonly atEnd: Range;
+  readonly line: i32;
+  readonly column: i32;
+  toString(): string;
+  debugInfoRef: usize;
 }
 
 /** Base class of all declaration statements. */
@@ -555,7 +516,7 @@ export interface DeclarationStatement extends Statement {
   set(flag: CommonFlags): void;
 }
 /** Represents an index signature declaration. */
-export interface IndexSignatureDeclaration extends DeclarationStatement{
+export interface IndexSignatureDeclaration extends DeclarationStatement {
   /** Key type. */
   keyType: NamedTypeNode;
   /** Value type. */
@@ -569,17 +530,17 @@ export interface VariableLikeDeclarationStatement extends DeclarationStatement {
   initializer: Expression | null;
 }
 /** Represents a block statement. */
-export interface BlockStatement extends Statement{
+export interface BlockStatement extends Statement {
   /** Contained statements. */
   statements: Statement[];
 }
 /** Represents a `break` statement. */
-export interface BreakStatement extends Statement{
+export interface BreakStatement extends Statement {
   /** Target label, if applicable. */
   label: IdentifierExpression | null;
 }
 /** Represents a `class` declaration. */
-export interface ClassDeclaration extends DeclarationStatement{
+export interface ClassDeclaration extends DeclarationStatement {
   /** Accepted type parameters. */
   typeParameters: TypeParameterNode[] | null;
   /** Base class type being extended, if any. */
@@ -591,46 +552,45 @@ export interface ClassDeclaration extends DeclarationStatement{
   readonly isGeneric: bool;
 }
 /** Represents a `continue` statement. */
-export interface ContinueStatement extends Statement{
+export interface ContinueStatement extends Statement {
   /** Target label, if applicable. */
   label: IdentifierExpression | null;
 }
 /** Represents a `do` statement. */
-export interface DoStatement extends Statement{
+export interface DoStatement extends Statement {
   /** Statement being looped over. */
   statement: Statement;
   /** Condition when to repeat. */
   condition: Expression;
 }
 /** Represents an empty statement, i.e., a semicolon terminating nothing. */
-export interface EmptyStatement extends Statement{
-}
+export interface EmptyStatement extends Statement {}
 /** Represents an `enum` declaration. */
-export interface EnumDeclaration extends DeclarationStatement{
+export interface EnumDeclaration extends DeclarationStatement {
   /** Enum value declarations. */
   values: EnumValueDeclaration[];
 }
 /** Represents a value of an `enum` declaration. */
-export interface EnumValueDeclaration extends VariableLikeDeclarationStatement{
+export interface EnumValueDeclaration extends VariableLikeDeclarationStatement {
   /** Value expression. */
   value: Expression | null;
 }
 /** Represents an `export import` statement of an interface. */
-export interface ExportImportStatement extends Node{
+export interface ExportImportStatement extends Node {
   /** Identifier being imported. */
   name: IdentifierExpression;
   /** Identifier being exported. */
   externalName: IdentifierExpression;
 }
 /** Represents a member of an `export` statement. */
-export interface ExportMember extends Node{
+export interface ExportMember extends Node {
   /** Local identifier. */
   localName: IdentifierExpression;
   /** Exported identifier. */
   exportedName: IdentifierExpression;
 }
 /** Represents an `export` statement. */
-export interface ExportStatement extends Statement{
+export interface ExportStatement extends Statement {
   /** Array of members if a set of named exports, or `null` if a file export. */
   members: ExportMember[] | null;
   /** Path being exported from, if applicable. */
@@ -641,22 +601,22 @@ export interface ExportStatement extends Statement{
   isDeclare: bool;
 }
 /** Represents an `export default` statement. */
-export interface ExportDefaultStatement extends Statement{
+export interface ExportDefaultStatement extends Statement {
   /** Declaration being exported as default. */
   declaration: DeclarationStatement;
 }
 /** Represents an expression that is used as a statement. */
-export interface ExpressionStatement extends Statement{
+export interface ExpressionStatement extends Statement {
   /** Expression being used as a statement.*/
   expression: Expression;
 }
 /** Represents a field declaration within a `class`. */
-export interface FieldDeclaration extends VariableLikeDeclarationStatement{
+export interface FieldDeclaration extends VariableLikeDeclarationStatement {
   /** Parameter index if declared as a constructor parameter, otherwise `-1`. */
   parameterIndex: i32;
 }
 /** Represents a `for` statement. */
-export interface ForStatement extends Statement{
+export interface ForStatement extends Statement {
   /**
    * Initializer statement, if present.
    * Either a {@link VariableStatement} or {@link ExpressionStatement}.
@@ -679,7 +639,7 @@ export const enum ArrowKind {
   ARROW_SINGLE = 2
 }
 /** Represents a `function` declaration. */
-export interface FunctionDeclaration extends DeclarationStatement{
+export interface FunctionDeclaration extends DeclarationStatement {
   /** Type parameters, if any. */
   typeParameters: TypeParameterNode[] | null;
   /** Function signature. */
@@ -693,7 +653,7 @@ export interface FunctionDeclaration extends DeclarationStatement{
   clone(): FunctionDeclaration;
 }
 /** Represents an `if` statement. */
-export interface IfStatement extends Statement{
+export interface IfStatement extends Statement {
   /** Condition. */
   condition: Expression;
   /** Statement executed when condition is `true`. */
@@ -702,12 +662,12 @@ export interface IfStatement extends Statement{
   ifFalse: Statement | null;
 }
 /** Represents an `import` declaration part of an {@link ImportStatement}. */
-export interface ImportDeclaration extends DeclarationStatement{
+export interface ImportDeclaration extends DeclarationStatement {
   /** Identifier being imported. */
   foreignName: IdentifierExpression;
 }
 /** Represents an `import` statement. */
-export interface ImportStatement extends Statement{
+export interface ImportStatement extends Statement {
   /** Array of member declarations or `null` if an asterisk import. */
   declarations: ImportDeclaration[] | null;
   /** Name of the local namespace, if an asterisk import. */
@@ -718,42 +678,40 @@ export interface ImportStatement extends Statement{
   internalPath: string;
 }
 /** Represents an `interfarce` declaration. */
-export interface InterfaceDeclaration extends ClassDeclaration{
-}
+export interface InterfaceDeclaration extends ClassDeclaration {}
 /** Represents a method declaration within a `class`. */
-export interface MethodDeclaration extends FunctionDeclaration{
-}
+export interface MethodDeclaration extends FunctionDeclaration {}
 /** Represents a `namespace` declaration. */
-export interface NamespaceDeclaration extends DeclarationStatement{
+export interface NamespaceDeclaration extends DeclarationStatement {
   /** Array of namespace members. */
   members: Statement[];
 }
 /** Represents a `return` statement. */
-export interface ReturnStatement extends Statement{
+export interface ReturnStatement extends Statement {
   /** Value expression being returned, if present. */
   value: Expression | null;
 }
 /** Represents a single `case` within a `switch` statement. */
-export interface SwitchCase extends Node{
+export interface SwitchCase extends Node {
   /** Label expression. `null` indicates the default case. */
   label: Expression | null;
   /** Contained statements. */
   statements: Statement[];
 }
 /** Represents a `switch` statement. */
-export interface SwitchStatement extends Statement{
+export interface SwitchStatement extends Statement {
   /** Condition expression. */
   condition: Expression;
   /** Contained cases. */
   cases: SwitchCase[];
 }
 /** Represents a `throw` statement. */
-export interface ThrowStatement extends Statement{
+export interface ThrowStatement extends Statement {
   /** Value expression being thrown. */
   value: Expression;
 }
 /** Represents a `try` statement. */
-export interface TryStatement extends Statement{
+export interface TryStatement extends Statement {
   /** Contained statements. */
   statements: Statement[];
   /** Exception variable name, if a `catch` clause is present. */
@@ -771,22 +729,21 @@ export interface TypeDeclaration extends DeclarationStatement {
   type: TypeNode;
 }
 /** Represents a variable declaration part of a {@link VariableStatement}. */
-export interface VariableDeclaration extends VariableLikeDeclarationStatement{
-}
+export interface VariableDeclaration extends VariableLikeDeclarationStatement {}
 /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
-export interface VariableStatement extends Statement{
+export interface VariableStatement extends Statement {
   /** Array of decorators. */
   decorators: DecoratorNode[] | null;
   /** Array of member declarations. */
   declarations: VariableDeclaration[];
 }
 /** Represents a void statement dropping an expression's value. */
-export interface VoidStatement extends Statement{
+export interface VoidStatement extends Statement {
   /** Expression being dropped. */
   expression: Expression;
 }
 /** Represents a `while` statement. */
-export interface WhileStatement extends Statement{
+export interface WhileStatement extends Statement {
   /** Condition expression. */
   condition: Expression;
   /** Statement being looped over. */
@@ -794,7 +751,10 @@ export interface WhileStatement extends Statement{
 }
 
 /** Finds the first decorator matching the specified kind. */
-export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] | null): DecoratorNode | null {
+export function findDecorator(
+  kind: DecoratorKind,
+  decorators: DecoratorNode[] | null
+): DecoratorNode | null {
   if (decorators) {
     for (let i = 0, k = decorators.length; i < k; ++i) {
       let decorator = decorators[i];

@@ -212,20 +212,27 @@ exports.main = function main(argv, options, callback) {
   // Set up transforms
   const transforms = [];
   if (args.transform) {
-    args.transform.forEach(transform =>
-      transforms.push(
-        require(
-          path.isAbsolute(transform = transform.trim())
-            ? transform
-            : path.join(process.cwd(), transform)
-        )
-      )
-    );
+    args.transform.forEach(transform => {
+      const transformer = require(path.isAbsolute(transform = transform.trim())
+                                  ? transform : path.join(process.cwd(), transform));
+                                  debugger;
+      if (transformer.default){
+        transforms.push(transformer.default);
+      } else {
+        throw new Error("Transformer must have a default export.");
+      }
+    });
   }
   function applyTransform(name, ...args) {
     transforms.forEach(transform => {
       try {
-        if (typeof transform[name] === "function") transform[name](...args);
+        if (typeof transform === "function") {
+          const transformer = new transform(...args);
+          if (typeof transformer[name] !== "function") {
+            throw new Error("Transformer missing " + name + " method.");
+          }
+          transformer[name]();
+        }
       } catch (e) {
         callback(e);
       }
@@ -430,7 +437,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Call afterParse transform hook
-  applyTransform("afterParse", parser, writeFile, baseDir);
+  applyTransform("afterParse", parser, writeFile, baseDir, writeStdout);
 
   // Parse additional files, if any
   {
