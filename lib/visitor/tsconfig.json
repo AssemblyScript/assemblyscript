@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist",
+      "noLib": true,
+      "inlineSourceMap": true,
+      "inlineSources": true,
+      "target": "es5",
+      "module": "commonjs",
+      "allowJs": true,
+      "downlevelIteration": true,
+      "preserveConstEnums": true,
+      "alwaysStrict": true,
+      "noImplicitAny": true,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noEmitOnError": true,
+      "strictNullChecks": true,
+      "experimentalDecorators": true,
+      "typeRoots": ["./types"]
+      // "types": ["portable", ]
+    },
+    "include": ["src/**/*.ts"]
+}
+  

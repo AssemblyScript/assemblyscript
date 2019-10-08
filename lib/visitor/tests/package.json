@@ -1,0 +1,13 @@
+{
+  "name": "near-bindgen",
+  "version": "0.0.0",
+  "description": "Tests for near bindings",
+  "main": "test.js",
+  "scripts": {
+    "build": "../../../bin/asc assembly/test.ts --transform ../dist/lib/visitor/src/index.js --lib ../assembly/nearEntry.ts --validate --runtime stub --binaryFile out/test.wasm --textFile out/test.wat --runPasses dce --debug",
+    "test": "npm run build && node --experimental-wasm-bigint ./test.js"
+  },
+  "dependencies": {
+    "near-runtime-ts": "^0.3.1"
+  }
+}
