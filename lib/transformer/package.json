@@ -1,0 +1,14 @@
+{
+  "name": "as-transformer",
+  "description": "Tools for transforming the Abstract Syntax Tree (AST)",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "npm run webpack",
+    "webpack": "../../node_modules/.bin/webpack --config=./webpack.config.js",
+    "build:dev": "npm run webpack -- --mode=development",
+    "test": "cd tests && npm run test"
+  },
+  "author": "W",
+  "license": "MIT"
+}

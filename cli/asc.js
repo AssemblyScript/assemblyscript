@@ -213,21 +213,22 @@ exports.main = function main(argv, options, callback) {
   const transforms = [];
   if (args.transform) {
     args.transform.forEach(transform => {
-      const transformer = require(path.isAbsolute(transform = transform.trim())
-                                  ? transform : path.join(process.cwd(), transform));
-                                  debugger;
-      if (transformer.default){
-        transforms.push(transformer.default);
-      } else {
-        throw new Error("Transformer must have a default export.");
-      }
+      transforms.push(require(path.isAbsolute(transform = transform.trim()) ? 
+                                transform : path.join(process.cwd(), transform)));
     });
   }
   function applyTransform(name, ...args) {
     transforms.forEach(transform => {
       try {
-        if (typeof transform === "function") {
-          const transformer = new transform(...args);
+        // Export transform function function
+        if (transform[name] && typeof transform[name] === "function") {
+          transform[name](...args);
+        } else if (transform.default) {
+          // Export default class which needs to be constructor
+          if (!isConstructor(transform.default)){
+            throw new Error("default exported transformer must be a constructor");
+          }
+          const transformer = new transform.default(...args);
           if (typeof transformer[name] !== "function") {
             throw new Error("Transformer missing " + name + " method.");
           }
@@ -437,7 +438,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Call afterParse transform hook
-  applyTransform("afterParse", parser, writeFile, baseDir, writeStdout);
+  applyTransform("afterParse", parser, writeFile, readFile, baseDir, writeStdout, writeStderr);
 
   // Parse additional files, if any
   {
@@ -807,6 +808,20 @@ exports.main = function main(argv, options, callback) {
       }
     });
   }
+
+  function writeStderr(contents) {
+    if (!writeStderr.used) {
+      stats.writeCount++;
+      writeStderr.used = true;
+    }
+    stats.writeTime += measure(() => {
+      if (typeof contents === "string") {
+        stderr.write(contents, { encoding: "utf8" });
+      } else {
+        stderr.write(contents);
+      }
+    });
+  }
 }
 
 /** Checks diagnostics emitted so far for errors. */
@@ -950,3 +965,7 @@ exports.tscOptions = {
   types: [],
   allowJs: false
 };
+
+function isConstructor(func) {
+  return (func && typeof func === "function" && func.prototype && func.prototype.constructor) === func;
+}

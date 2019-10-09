@@ -1,0 +1,10 @@
+{
+  "name": "near-bindgen",
+  "version": "0.0.0",
+  "description": "Tests for near bindings",
+  "main": "test.js",
+  "scripts": {
+    "build": "../../../bin/asc assembly/index.ts --transform ../dist/ASTPrinter.js --runtime none --noEmit",
+    "test": "npm run build && node ./test.js && echo \"PASSED!\""
+  }
+}
