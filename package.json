@@ -67,7 +67,7 @@
     "lib/loader/README.md",
     "lib/transformer/dist/",
     "lib/transformer/types/",
-    "lib/transformer/tsconfig",
+    "lib/transformer/tsconfig.json",
     "lib/transformer/src/",
     "lib/transformer/webpack.base.js",
     "bin/",
