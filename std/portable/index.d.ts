@@ -410,15 +410,19 @@ declare class Array<T> {
   toString(): string;
 }
 
-declare class Uint8Array extends Array<u8> {}
-declare class Uint8ClampedArray extends Array<u8> {}
-declare class Uint16Array extends Array<u16> {}
-declare class Uint32Array extends Array<u32> {}
-declare class Int8Array extends Array<i8> {}
-declare class Int16Array extends Array<i16> {}
-declare class Int32Array extends Array<i32> {}
-declare class Float32Array extends Array<f32> {}
-declare class Float64Array extends Array<f64> {}
+declare class TypedArray<T> extends Array<T> {
+  set(array: TypedArray<T>, offset: i32): void;
+}
+
+declare class Uint8Array extends TypedArray<u8> {}
+declare class Uint8ClampedArray extends TypedArray<u8> {}
+declare class Uint16Array extends TypedArray<u16> {}
+declare class Uint32Array extends TypedArray<u32> {}
+declare class Int8Array extends TypedArray<i8> {}
+declare class Int16Array extends TypedArray<i16> {}
+declare class Int32Array extends TypedArray<i32> {}
+declare class Float32Array extends TypedArray<f32> {}
+declare class Float64Array extends TypedArray<f64> {}
 
 interface ArrayLike<T> {
   length: i32;

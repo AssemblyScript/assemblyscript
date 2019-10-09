@@ -1,0 +1,27 @@
+(module
+ (type $FUNCSIG$v (func))
+ (import "env" "memory" (memory $0 1))
+ (data (global.get $__memory_base) "\00\00\00\00\00\00\00\00\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\00\00\00\00\00\00\00\00\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\18\00\00\00\18\00\00\00\04\00\00\00\01\00\00\00")
+ (import "env" "memory_base" (global $__memory_base i32))
+ (import "env" "table_base" (global $__table_base i32))
+ (table $0 1 funcref)
+ (elem (i32.const 0) $null)
+ (global $relocatable/someStaticStuff i32 (i32.const 48))
+ (global $__memory_size i32 (i32.const 64))
+ (global $__table_size i32 (i32.const 1))
+ (export "memory" (memory $0))
+ (export "__memory_size" (global $__memory_size))
+ (export "__table_size" (global $__table_size))
+ (start $start)
+ (func $start:relocatable (; 0 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  (local $1 i32)
+  global.get $relocatable/someStaticStuff
+  drop
+ )
+ (func $start (; 1 ;) (type $FUNCSIG$v)
+  call $start:relocatable
+ )
+ (func $null (; 2 ;) (type $FUNCSIG$v)
+ )
+)

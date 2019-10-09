@@ -104,6 +104,11 @@ function i64_ne(left: I64, right: I64): bool {
 }
 
 @global
+function i64_gt(left: I64, right: I64): bool {
+  return left > right;
+}
+
+@global
 function i64_align(value: I64, alignment: i64): I64 {
   var mask: i64 = alignment - 1;
   assert(alignment && (alignment & mask) == 0);

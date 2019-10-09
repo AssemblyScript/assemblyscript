@@ -1167,22 +1167,45 @@ export class Module {
   ): void {
     var cStr = this.allocStringCached(exportName);
     var k = segments.length;
-    var segs = new Array<usize>(k);
-    var psvs = new Array<i8>(k);
-    var offs = new Array<ExpressionRef>(k);
-    var sizs = new Array<Index>(k);
-    for (let i = 0; i < k; ++i) {
-      let buffer = segments[i].buffer;
-      let offset = segments[i].offset;
-      segs[i] = allocU8Array(buffer);
-      psvs[i] = 0; // no passive segments currently
-      offs[i] = target == Target.WASM64
-        ? this.i64(i64_low(offset), i64_high(offset))
-        : this.i32(i64_low(offset));
-      sizs[i] = buffer.length;
-    }
     var mbase = this.mbase;
-    if (mbase) for (let i = 0; i < k; ++i) offs[i] = this.relocMem(offs[i]);
+    var segs: usize[], psvs: i8[], offs: ExpressionRef[], sizs: Index[];
+    if (mbase) {
+      // Offset expressions cannot currently use an addition but are restricted
+      // to a constant or a global.get, so make one large memory segment in the
+      // relocation case that starts exactly at the value of __memory_base.
+      let maxOffset = i64_zero;
+      for (let i = 0; i < k; ++i) {
+        let segment = segments[i];
+        let endOffset = i64_add(segment.offset, i64_new(segment.buffer.length));
+        if (i64_gt(endOffset, maxOffset)) maxOffset = endOffset;
+      }
+      assert(!i64_high(maxOffset)); // TODO: WASM64
+      let buffer = new Uint8Array(i64_low(maxOffset));
+      for (let i = 0; i < k; ++i) {
+        let segment = segments[i];
+        buffer.set(segment.buffer, i64_low(segment.offset));
+      }
+      segs = [ allocU8Array(buffer) ];
+      psvs = [ 0 ];
+      offs = [ _BinaryenGlobalGet(this.ref, mbase, target == Target.WASM64 ? NativeType.I64 : NativeType.I32) ];
+      sizs = [ buffer.length ];
+      k = 1;
+    } else {
+      segs = new Array<usize>(k);
+      psvs = new Array<i8>(k);
+      offs = new Array<ExpressionRef>(k);
+      sizs = new Array<Index>(k);
+      for (let i = 0; i < k; ++i) {
+        let buffer = segments[i].buffer;
+        let offset = segments[i].offset;
+        segs[i] = allocU8Array(buffer);
+        psvs[i] = 0; // no passive segments currently
+        offs[i] = target == Target.WASM64
+          ? this.i64(i64_low(offset), i64_high(offset))
+          : this.i32(i64_low(offset));
+        sizs[i] = buffer.length;
+      }
+    }
     var cArr1 = allocI32Array(segs);
     var cArr2 = allocU8Array(psvs);
     var cArr3 = allocI32Array(offs);
@@ -1796,7 +1819,7 @@ export class Relooper {
 // helpers
 // can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js
 
-function allocU8Array(u8s: Uint8Array | null): usize {
+function allocU8Array(u8s: u8[] | null): usize {
   if (!u8s) return 0;
   var numValues = u8s.length;
   var ptr = memory.allocate(numValues);

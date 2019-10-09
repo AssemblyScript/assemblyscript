@@ -80,6 +80,10 @@ global.i64_ne = function(left, right) {
   return left.ne(right);
 };
 
+global.i64_gt = function(left, right) {
+  return left.gt(right);
+};
+
 global.i64_align = function(value, alignment) {
   assert(alignment && (alignment & (alignment - 1)) == 0);
   var mask = Long.fromInt(alignment - 1);
