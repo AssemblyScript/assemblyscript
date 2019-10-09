@@ -472,6 +472,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
   assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
+  assemblyscript.setRelocatable(compilerOptions, args.relocatable);
 
   // Initialize default aliases
   assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");

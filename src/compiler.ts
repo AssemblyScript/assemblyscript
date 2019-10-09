@@ -206,6 +206,8 @@ export class Options {
   features: Feature = Feature.MUTABLE_GLOBALS;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
+  /** If true, emits a relocatable module. */
+  relocatable: bool = false;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -363,6 +365,15 @@ export class Compiler extends DiagnosticEmitter {
       module.addGlobal(BuiltinSymbols.rtti_base, NativeType.I32, true, module.i32(0));
     }
 
+    // add relocation globals
+    if (options.relocatable) {
+      let nativeSizeType = options.nativeSizeType;
+      module.addGlobalImport("__memory_base", "env", "memory_base", nativeSizeType, false);
+      module.setMemoryBase("__memory_base");
+      module.addGlobalImport("__table_base", "env", "table_base", nativeSizeType, false);
+      module.setTableBase("__table_base");
+    }
+
     // compile entry file(s) while traversing reachable elements
     var files = program.filesByName;
     for (let file of files.values()) {
@@ -459,6 +470,20 @@ export class Compiler extends DiagnosticEmitter {
     for (let file of this.program.filesByName.values()) {
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
+
+    // set up relocation hints
+    if (options.relocatable) {
+      let memorySize = i64_align(memoryOffset, 16);
+      if (options.isWasm64) {
+        module.addGlobal("__memory_size", NativeType.I64, false, module.i64(i64_low(memorySize), i64_high(memorySize)));
+      } else {
+        module.addGlobal("__memory_size", NativeType.I32, false, module.i32(i64_low(memorySize)));
+      }
+      module.addGlobalExport("__memory_size", "__memory_size");
+      module.addGlobal("__table_size", NativeType.I32, false, module.i32(functionTable.length));
+      module.addGlobalExport("__table_size", "__table_size");
+    }
+
     return module;
   }
 

@@ -107,6 +107,14 @@
     "type": "b",
     "default": false
   },
+  "relocatable": {
+    "description": [
+      "Emits a relocatable module. Imports a __memory_base and a",
+      "__table_base constant indicating where the module lives."
+    ],
+    "type": "b",
+    "default": false
+  },
   "noAssert": {
     "description": "Replaces assertions with just their value without trapping.",
     "type": "b",

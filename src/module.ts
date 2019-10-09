@@ -459,6 +459,37 @@ export class Module {
 
   private constructor() { }
 
+  // relocation
+
+  private mbase: usize = 0;
+  private tbase: usize = 0;
+
+  setMemoryBase(globalName: string | null): void {
+    this.mbase = globalName ? this.allocStringCached(globalName) : 0;
+  }
+
+  setTableBase(globalName: string | null): void {
+    this.tbase = globalName ? this.allocStringCached(globalName) : 0;
+  }
+
+  private relocMem(ptr: ExpressionRef): ExpressionRef {
+    var mbase = this.mbase;
+    if (!mbase) return ptr;
+    var ref = this.ref;
+    switch (_BinaryenExpressionGetType(ptr)) {
+      default: assert(false);
+      case NativeType.I32: return _BinaryenBinary(ref, BinaryOp.AddI32, _BinaryenGlobalGet(ref, mbase, NativeType.I32), ptr);
+      case NativeType.I64: return _BinaryenBinary(ref, BinaryOp.AddI64, _BinaryenGlobalGet(ref, mbase, NativeType.I64), ptr);
+    }
+  }
+
+  private relocTbl(idx: ExpressionRef): ExpressionRef {
+    var tbase = this.tbase;
+    if (!tbase) return idx;
+    var ref = this.ref;
+    return _BinaryenBinary(ref, BinaryOp.AddI32, _BinaryenGlobalGet(ref, tbase, NativeType.I32), idx);
+  }
+
   // types
 
   addFunctionType(
@@ -587,7 +618,7 @@ export class Module {
     offset: Index = 0,
     align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
-    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, align, type, ptr);
+    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, align, type, this.relocMem(ptr));
   }
 
   store(
@@ -598,8 +629,7 @@ export class Module {
     offset: Index = 0,
     align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
-    if (type < NativeType.None || type > NativeType.V128) throw new Error("here: " + type);
-    return _BinaryenStore(this.ref, bytes, offset, align, ptr, value, type);
+    return _BinaryenStore(this.ref, bytes, offset, align, this.relocMem(ptr), value, type);
   }
 
   atomic_load(
@@ -608,7 +638,7 @@ export class Module {
     type: NativeType,
     offset: Index = 0
   ): ExpressionRef {
-    return _BinaryenAtomicLoad(this.ref, bytes, offset, type, ptr);
+    return _BinaryenAtomicLoad(this.ref, bytes, offset, type, this.relocMem(ptr));
   }
 
   atomic_store(
@@ -618,7 +648,7 @@ export class Module {
     type: NativeType,
     offset: Index = 0
   ): ExpressionRef {
-    return _BinaryenAtomicStore(this.ref, bytes, offset, ptr, value, type);
+    return _BinaryenAtomicStore(this.ref, bytes, offset, this.relocMem(ptr), value, type);
   }
 
   atomic_rmw(
@@ -629,7 +659,7 @@ export class Module {
     value: ExpressionRef,
     type: NativeType
   ): ExpressionRef {
-    return _BinaryenAtomicRMW(this.ref, op, bytes, offset, ptr, value, type);
+    return _BinaryenAtomicRMW(this.ref, op, bytes, offset, this.relocMem(ptr), value, type);
   }
 
   atomic_cmpxchg(
@@ -640,7 +670,7 @@ export class Module {
     replacement: ExpressionRef,
     type: NativeType
   ): ExpressionRef {
-    return _BinaryenAtomicCmpxchg(this.ref, bytes, offset, ptr, expected, replacement, type);
+    return _BinaryenAtomicCmpxchg(this.ref, bytes, offset, this.relocMem(ptr), expected, replacement, type);
   }
 
   atomic_wait(
@@ -649,14 +679,14 @@ export class Module {
     timeout: ExpressionRef,
     expectedType: NativeType
   ): ExpressionRef {
-    return _BinaryenAtomicWait(this.ref, ptr, expected, timeout, expectedType);
+    return _BinaryenAtomicWait(this.ref, this.relocMem(ptr), expected, timeout, expectedType);
   }
 
   atomic_notify(
     ptr: ExpressionRef,
     notifyCount: ExpressionRef
   ): ExpressionRef {
-    return _BinaryenAtomicNotify(this.ref, ptr, notifyCount);
+    return _BinaryenAtomicNotify(this.ref, this.relocMem(ptr), notifyCount);
   }
 
   atomic_fence(): ExpressionRef {
@@ -798,8 +828,8 @@ export class Module {
     var cArr = allocPtrArray(operands);
     try {
       return isReturn
-        ? _BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr)
-        : _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
+        ? _BinaryenReturnCallIndirect(this.ref, this.relocTbl(index), cArr, operands && operands.length || 0, cStr)
+        : _BinaryenCallIndirect(this.ref, this.relocTbl(index), cArr, operands && operands.length || 0, cStr);
     } finally {
       memory.free(cArr);
     }
@@ -1151,6 +1181,8 @@ export class Module {
         : this.i32(i64_low(offset));
       sizs[i] = buffer.length;
     }
+    var mbase = this.mbase;
+    if (mbase) for (let i = 0; i < k; ++i) offs[i] = this.relocMem(offs[i]);
     var cArr1 = allocI32Array(segs);
     var cArr2 = allocU8Array(psvs);
     var cArr3 = allocI32Array(offs);
@@ -1176,6 +1208,8 @@ export class Module {
     for (let i = 0; i < numNames; ++i) {
       names[i] = this.allocStringCached(funcs[i]);
     }
+    // FIXME: Relocating the function table is not possible currently due to
+    // the C-API only accepting an array of names, but no offsets.
     var cArr = allocI32Array(names);
     try {
       _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames);

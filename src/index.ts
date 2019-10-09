@@ -121,6 +121,11 @@ export function setNoUnsafe(options: Options, noUnsafe: bool): void {
   options.noUnsafe = noUnsafe;
 }
 
+/** Sets the `relocatable` option. */
+export function setRelocatable(options: Options, relocatable: bool): void {
+  options.relocatable = relocatable;
+}
+
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */
