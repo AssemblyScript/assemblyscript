@@ -2738,9 +2738,11 @@ export class Resolver extends DiagnosticEmitter {
             let instanceMembers = instance.members;
             if (!instanceMembers) instance.members = instanceMembers = new Map();
             else if (instanceMembers.has(member.name)) {
-              this.error(
+              let existing = instanceMembers.get(member.name)!;
+              this.errorRelated(
                 DiagnosticCode.Duplicate_identifier_0,
                 (<FieldPrototype>member).identifierNode.range,
+                existing.declaration.name.range,
                 member.name
               );
               break;
