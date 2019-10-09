@@ -609,10 +609,11 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Gets the (possibly merged) program element linked to the specified declaration. */
-  getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement {
+  getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement | null {
     var elementsByDeclaration = this.elementsByDeclaration;
-    assert(elementsByDeclaration.has(declaration));
-    return elementsByDeclaration.get(declaration)!;
+    return elementsByDeclaration.has(declaration)
+      ? elementsByDeclaration.get(declaration)
+      : null;
   }
 
   /** Initializes the program and its elements prior to compilation. */
@@ -1088,19 +1089,28 @@ export class Program extends DiagnosticEmitter {
   ensureGlobal(name: string, element: DeclaredElement): DeclaredElement {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
-      let actual = elementsByName.get(name)!;
+      let existing = elementsByName.get(name)!;
       // NOTE: this is effectively only performed when merging native types with
       // their respective namespaces in std/builtins, but can also trigger when a
       // user has multiple global elements of the same name in different files,
       // which might result in unexpected shared symbols accross files. considering
       // this a wonky feature for now that we might want to revisit later.
-      if (actual !== element) {
-        let merged = tryMerge(elementsByName.get(name)!, element);
+      if (existing !== element) {
+        let merged = tryMerge(existing, element);
         if (!merged) {
-          this.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            element.identifierNode.range, name
-          );
+          if (isDeclaredElement(existing.kind)) {
+            this.errorRelated(
+              DiagnosticCode.Duplicate_identifier_0,
+              element.identifierNode.range,
+              (<DeclaredElement>existing).declaration.name.range,
+              name
+            );
+          } else {
+            this.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              element.identifierNode.range, name
+            );
+          }
           return element;
         }
         element = merged;
@@ -1675,12 +1685,17 @@ export class Program extends DiagnosticEmitter {
     if (element) {
       let exports = parent.exports;
       if (!exports) parent.exports = exports = new Map();
-      else if (exports.has("default")) {
-        this.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          declaration.name.range, "default"
-        );
-        return;
+      else {
+        if (exports.has("default")) {
+          let existing = exports.get("default")!;
+          this.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range,
+            existing.declaration.name.range,
+            "default"
+          );
+          return;
+        }
       }
       exports.set("default", element);
     }
@@ -2119,18 +2134,27 @@ export abstract class Element {
     var members = this.members;
     if (!members) this.members = members = new Map();
     else if (members.has(name)) {
-      let actual = members.get(name)!;
-      if (actual.parent !== this) {
+      let existing = members.get(name)!;
+      if (existing.parent !== this) {
         // override non-own element
       } else {
-        let merged = tryMerge(actual, element);
+        let merged = tryMerge(existing, element);
         if (merged) {
           element = merged; // use merged element
         } else {
-          this.program.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            element.identifierNode.range, element.identifierNode.text
-          );
+          if (isDeclaredElement(existing.kind)) {
+            this.program.errorRelated(
+              DiagnosticCode.Duplicate_identifier_0,
+              element.identifierNode.range,
+              (<DeclaredElement>existing).declaration.name.range,
+              element.identifierNode.text
+            );
+          } else {
+            this.program.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              element.identifierNode.range, element.identifierNode.text
+            );
+          }
           return false;
         }
       }
@@ -3188,12 +3212,22 @@ export class ClassPrototype extends DeclaredElement {
     var instanceMembers = this.instanceMembers;
     if (!instanceMembers) this.instanceMembers = instanceMembers = new Map();
     else if (instanceMembers.has(name)) {
-      let merged = tryMerge(instanceMembers.get(name)!, element);
+      let existing = instanceMembers.get(name)!;
+      let merged = tryMerge(existing, element);
       if (!merged) {
-        this.program.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          element.identifierNode.range, element.identifierNode.text
-        );
+        if (isDeclaredElement(existing.kind)) {
+          this.program.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            element.identifierNode.range,
+            (<DeclaredElement>existing).declaration.name.range,
+            element.identifierNode.text
+          );
+        } else {
+          this.program.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            element.identifierNode.range, element.identifierNode.text
+          );
+        }
         return false;
       }
       element = merged;

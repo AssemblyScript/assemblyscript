@@ -5,6 +5,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 
   static MISSING_TYPE_OR_INITIALIZER = "Missing type or initializer.";
   static MISSING_RETURN_TYPE = "Missing return type.";
+  static UNNECESSARY_RETURN_TYPE = "Unnecessary return type.";
 
   apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
     return this.applyWithWalker(new DiagnosticsWalker(sourceFile, this.getOptions()));
@@ -46,7 +47,11 @@ class DiagnosticsWalker extends Lint.RuleWalker {
   }
 
   visitArrowFunction(node: ts.ArrowFunction) {
-    this.checkFunctionReturnType(node);
+    if (requiresReturnType(node)) {
+      this.checkFunctionReturnType(node);
+    } else if (node.type) {
+      this.addFailureAtNode(node.type, Rule.UNNECESSARY_RETURN_TYPE);
+    }
     super.visitArrowFunction(node);
   }
 
@@ -65,4 +70,12 @@ class DiagnosticsWalker extends Lint.RuleWalker {
       this.addFailureAtNode(node, Rule.MISSING_RETURN_TYPE);
     }
   }
+}
+
+function requiresReturnType(node: ts.ArrowFunction): boolean {
+  if (ts.isCallExpression(node.parent) && ts.isIdentifier(node.parent.expression)
+    && ["lengthof", "nameof"].includes(node.parent.expression.text)) {
+    return true;
+  }
+  return !ts.isCallLikeExpression(node.parent);
 }

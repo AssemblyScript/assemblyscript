@@ -7,7 +7,8 @@ import {
   CommonFlags,
   CommonSymbols,
   PATH_DELIMITER,
-  LIBRARY_PREFIX
+  LIBRARY_PREFIX,
+  LIBRARY_SUBST
 } from "./common";
 
 import {
@@ -1648,6 +1649,12 @@ export class Source extends Node {
     this.text = text;
   }
 
+  /** Checks if this source represents native code. */
+  get isNative(): bool {
+    return this.internalPath == LIBRARY_SUBST;
+  }
+
+  /** Checks if this source is part of the (standard) library. */
   get isLibrary(): bool {
     var kind = this.sourceKind;
     return kind == SourceKind.LIBRARY || kind == SourceKind.LIBRARY_ENTRY;
