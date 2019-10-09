@@ -3,7 +3,7 @@
 import { BLOCK_MAXSIZE } from "./rt/common";
 import { COMPARATOR, SORT } from "./util/sort";
 import { ArrayBufferView } from "./arraybuffer";
-import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinArrays, joinObjectArray } from "./util/string";
+import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
@@ -462,12 +462,15 @@ export class Array<T> extends ArrayBufferView {
   join(separator: string = ","): string {
     var dataStart = this.dataStart;
     var length = this.length_;
-    if (isString<T>())    return joinStringArray(dataStart, length, separator);
     if (isBoolean<T>())   return joinBooleanArray(dataStart, length, separator);
     if (isInteger<T>())   return joinIntegerArray<T>(dataStart, length, separator);
     if (isFloat<T>())     return joinFloatArray<T>(dataStart, length, separator);
-    if (isArray<T>())     return joinArrays<T>(dataStart, length, separator);
-    if (isReference<T>()) return joinObjectArray<T>(dataStart, length, separator);
+
+    if (ASC_SHRINK_LEVEL < 1) {
+      if (isString<T>())  return joinStringArray(dataStart, length, separator);
+    }
+    // For rest objects and arrays use general join routine
+    if (isReference<T>()) return joinReferenceArray<T>(dataStart, length, separator);
     ERROR("unspported element type");
     return <string>unreachable();
   }

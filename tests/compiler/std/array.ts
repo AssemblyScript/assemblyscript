@@ -934,7 +934,12 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
 // Array#join //////////////////////////////////////////////////////////////////////////////////////
 
-class Ref { constructor() {} }
+class Ref {
+  constructor() {}
+  toString(): string {
+    return "[object Object]";
+  }
+}
 
 {
   assert((<bool[]>[true, false]).join() == "true,false");
@@ -945,6 +950,9 @@ class Ref { constructor() {} }
   assert((<Array<string | null>>["", "1", null]).join("") == "1");
   let refArr: (Ref | null)[] = [new Ref(), null, new Ref()];
   assert(refArr.join() == "[object Object],,[object Object]");
+
+  let refArr2: Ref[] = [new Ref(), new Ref()];
+  assert(refArr2.join() == "[object Object],[object Object]");
 }
 
 // Array#toString //////////////////////////////////////////////////////////////////////////////////
@@ -964,7 +972,7 @@ class Ref { constructor() {} }
   assert((<u64[]>[1, 0xFFFFFFFFFFFFFFFF, 0]).toString() == "1,18446744073709551615,0");
   assert((<i64[]>[-1, -1234567890123456, 0, i64.MAX_VALUE]).toString() == "-1,-1234567890123456,0,9223372036854775807");
 
-  let arrStr: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null]
+  let arrStr: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null];
 
   assert(arrStr.toString() == ",a,a,ab,b,ba,");
   assert((<Array<string | null>>["1", "2", null, "4"]).toString() == "1,2,,4");
