@@ -1,6 +1,5 @@
 // tslint:disable: as-internal-case
-import { indent } from "../../../src/util/text";
-import { CharCode } from "../../../src/util/charcode";
+import { indent , CharCode } from "./util";
 import { operatorTokenToString } from "./parsing";
 
 import {
