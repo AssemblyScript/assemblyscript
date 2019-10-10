@@ -212,26 +212,28 @@ exports.main = function main(argv, options, callback) {
   // Set up transforms
   const transforms = [];
   if (args.transform) {
-    class Transform {
-      baseDir = baseDir;
-      writeFile = writeFile;
-      readFile = readFile;
-      listFiles = listFiles;
-    }
     args.transform.forEach(filename => {
-      const ctor = require(
-        path.isAbsolute(filename = filename.trim())
-          ? filename
-          : path.join(process.cwd(), filename)
-      );
-      let impl;
-      if (typeof ctor === "function") {
-        Object.setPrototypeOf(ctor, Transform);
-        impl = new ctor();
+      filename = path.isAbsolute(filename = filename.trim())
+        ? filename
+        : path.join(process.cwd(), filename);
+      let classOrModule;
+      if (/\.ts$/.test(filename)) {
+        require("ts-node").register({ transpileOnly: true, skipProject: true });
+        classOrModule = require(filename);
       } else {
-        impl = ctor; // legacy module
+        classOrModule = require(filename);
       }
-      transforms.push(impl);
+      if (typeof classOrModule === "function") {
+        Object.defineProperties(classOrModule.prototype, {
+          baseDir: { value: baseDir },
+          readFile: { value: readFile },
+          writeFile: { value: writeFile },
+          listFiles: { value: listFiles }
+        });
+        transforms.push(new classOrModule());
+      } else {
+        transforms.push(classOrModule); // legacy module
+      }
     });
   }
   function applyTransform(name, ...args) {
