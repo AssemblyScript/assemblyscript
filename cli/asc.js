@@ -212,15 +212,27 @@ exports.main = function main(argv, options, callback) {
   // Set up transforms
   const transforms = [];
   if (args.transform) {
-    args.transform.forEach(transform =>
-      transforms.push(
-        require(
-          path.isAbsolute(transform = transform.trim())
-            ? transform
-            : path.join(process.cwd(), transform)
-        )
-      )
-    );
+    class Transform {
+      baseDir = baseDir;
+      writeFile = writeFile;
+      readFile = readFile;
+      listFiles = listFiles;
+    }
+    args.transform.forEach(filename => {
+      const ctor = require(
+        path.isAbsolute(filename = filename.trim())
+          ? filename
+          : path.join(process.cwd(), filename)
+      );
+      let impl;
+      if (typeof ctor === "function") {
+        Object.setPrototypeOf(ctor, Transform);
+        impl = new ctor();
+      } else {
+        impl = ctor; // legacy module
+      }
+      transforms.push(impl);
+    });
   }
   function applyTransform(name, ...args) {
     transforms.forEach(transform => {

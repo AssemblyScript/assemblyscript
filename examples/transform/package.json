@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "test": "asc assembly/index.ts --runtime none --transform mytransform.js"
+  }
+}
