@@ -7625,11 +7625,9 @@ export class Compiler extends DiagnosticEmitter {
             ? module.i64(elementType.alignLog2)
             : module.i32(elementType.alignLog2),
           module.i32(arrayInstance.id),
-          module.relocMem(
-            program.options.isWasm64
-              ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
-              : module.i32(i64_low(bufferAddress))
-          )
+          program.options.isWasm64
+            ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
+            : module.i32(i64_low(bufferAddress))
         ], reportNode);
         this.currentType = arrayType;
         return this.makeAutorelease(this.makeRetain(expr));
