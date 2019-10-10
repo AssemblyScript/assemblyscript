@@ -1512,12 +1512,11 @@ export class Compiler extends DiagnosticEmitter {
     this.currentType = stringInstance.type;
     var ptr: ExpressionRef;
     if (this.options.isWasm64) {
-      ptr = module.i64(i64_low(ref), i64_high(ref));
+      return module.i64(i64_low(ref), i64_high(ref));
     } else {
       assert(i64_is_u32(ref));
-      ptr = module.i32(i64_low(ref));
+      return module.i32(i64_low(ref));
     }
-    return module.relocMem(ptr);
   }
 
   ensureStaticArrayBuffer(elementType: Type, values: ExpressionRef[]): MemorySegment {
@@ -7611,12 +7610,11 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = arrayType;
         let ptr: ExpressionRef;
         if (program.options.isWasm64) {
-          ptr = module.i64(i64_low(arrayAddress), i64_high(arrayAddress));
+          return module.i64(i64_low(arrayAddress), i64_high(arrayAddress));
         } else {
           assert(i64_is_u32(arrayAddress));
-          ptr = module.i32(i64_low(arrayAddress));
+          return module.i32(i64_low(arrayAddress));
         }
-        return module.relocMem(ptr);
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
@@ -7627,9 +7625,11 @@ export class Compiler extends DiagnosticEmitter {
             ? module.i64(elementType.alignLog2)
             : module.i32(elementType.alignLog2),
           module.i32(arrayInstance.id),
-          program.options.isWasm64
-            ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
-            : module.i32(i64_low(bufferAddress))
+          module.relocMem(
+            program.options.isWasm64
+              ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
+              : module.i32(i64_low(bufferAddress))
+          )
         ], reportNode);
         this.currentType = arrayType;
         return this.makeAutorelease(this.makeRetain(expr));
