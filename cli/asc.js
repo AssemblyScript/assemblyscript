@@ -219,10 +219,8 @@ exports.main = function main(argv, options, callback) {
       let classOrModule;
       if (/\.ts$/.test(filename)) {
         require("ts-node").register({ transpileOnly: true, skipProject: true });
-        classOrModule = require(filename);
-      } else {
-        classOrModule = require(filename);
       }
+      classOrModule = require(filename);
       if (typeof classOrModule === "function") {
         Object.defineProperties(classOrModule.prototype, {
           baseDir: { value: baseDir },
