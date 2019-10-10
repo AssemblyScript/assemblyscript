@@ -1491,6 +1491,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Ensures that the specified string exists in static memory and returns a pointer to it. */
   ensureStaticString(stringValue: string): ExpressionRef {
     var program = this.program;
+    var module = this.module;
     var rtHeaderSize = program.runtimeHeaderSize;
     var stringInstance = assert(program.stringInstance);
     var stringSegment: MemorySegment;
@@ -1509,12 +1510,14 @@ export class Compiler extends DiagnosticEmitter {
     }
     var ref = i64_add(stringSegment.offset, i64_new(rtHeaderSize));
     this.currentType = stringInstance.type;
+    var ptr: ExpressionRef;
     if (this.options.isWasm64) {
-      return this.module.i64(i64_low(ref), i64_high(ref));
+      ptr = module.i64(i64_low(ref), i64_high(ref));
     } else {
       assert(i64_is_u32(ref));
-      return this.module.i32(i64_low(ref));
+      ptr = module.i32(i64_low(ref));
     }
+    return module.relocMem(ptr);
   }
 
   ensureStaticArrayBuffer(elementType: Type, values: ExpressionRef[]): MemorySegment {
@@ -7606,9 +7609,14 @@ export class Compiler extends DiagnosticEmitter {
         let arraySegment = this.ensureStaticArrayHeader(elementType, bufferSegment);
         let arrayAddress = i64_add(arraySegment.offset, i64_new(runtimeHeaderSize));
         this.currentType = arrayType;
-        return program.options.isWasm64
-          ? this.module.i64(i64_low(arrayAddress), i64_high(arrayAddress))
-          : this.module.i32(i64_low(arrayAddress));
+        let ptr: ExpressionRef;
+        if (program.options.isWasm64) {
+          ptr = module.i64(i64_low(arrayAddress), i64_high(arrayAddress));
+        } else {
+          assert(i64_is_u32(arrayAddress));
+          ptr = module.i32(i64_low(arrayAddress));
+        }
+        return module.relocMem(ptr);
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {

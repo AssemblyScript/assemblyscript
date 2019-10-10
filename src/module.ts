@@ -472,7 +472,7 @@ export class Module {
     this.tbase = globalName ? this.allocStringCached(globalName) : 0;
   }
 
-  private relocMem(ptr: ExpressionRef): ExpressionRef {
+  relocMem(ptr: ExpressionRef): ExpressionRef {
     var mbase = this.mbase;
     if (!mbase) return ptr;
     var ref = this.ref;
@@ -483,7 +483,7 @@ export class Module {
     }
   }
 
-  private relocTbl(idx: ExpressionRef): ExpressionRef {
+  relocTbl(idx: ExpressionRef): ExpressionRef {
     var tbase = this.tbase;
     if (!tbase) return idx;
     var ref = this.ref;
