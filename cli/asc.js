@@ -223,7 +223,9 @@ exports.main = function main(argv, options, callback) {
           baseDir: { value: baseDir },
           readFile: { value: readFile },
           writeFile: { value: writeFile },
-          listFiles: { value: listFiles }
+          listFiles: { value: listFiles },
+          log: { value: writeStdout },
+          error: { value: (str) => stderr.write(str)}
         });
         transforms.push(new classOrModule());
       } else {

@@ -19,6 +19,12 @@ export abstract class Transform {
   /** Lists all files in a directory. */
   listFiles(dirname: string, baseDir: string): string[] | null;
 
+  /** Prints to stdout */
+  log(s: string): void;
+
+  /** Prints to stderr */
+  error(s: string): void;
+
   /** Called when parsing is complete, before a program is instantiated from the AST. */
   afterParse?(parser: Parser): void;
 }
