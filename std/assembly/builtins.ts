@@ -222,6 +222,10 @@ export namespace atomic {
   // @ts-ignore: decorator
   @builtin
   export declare function notify(ptr: usize, count: i32): i32;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function fence(): void;
 }
 
 // @ts-ignore: decorator
@@ -1115,7 +1119,27 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function trunc<T>(a: v128): v128;
+  export declare function trunc_sat<T>(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function narrow<T>(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_low<T>(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_high<T>(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfma<T>(v1: v128, v2: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfms<T>(v1: v128, v2: v128, c: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1234,6 +1258,14 @@ export namespace i8x16 {
   // @ts-ignore: decorator
   @builtin
   export declare function ge_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function narrow_i16x8_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function narrow_i16x8_u(a: v128, b: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1349,6 +1381,30 @@ export namespace i16x8 {
   // @ts-ignore: decorator
   @builtin
   export declare function ge_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function narrow_i32x4_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function narrow_i32x4_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_low_i8x16_s(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_low_i8x16_u(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_high_i8x16_s(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_high_i8x16_u(a: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1447,11 +1503,27 @@ export namespace i32x4 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function trunc_s_f32x4_sat(a: v128): v128;
+  export declare function trunc_sat_f32x4_s(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function trunc_u_f32x4_sat(a: v128): v128;
+  export declare function trunc_sat_f32x4_u(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_low_i16x8_s(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_low_i16x8_u(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_high_i16x8_s(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function widen_high_i16x8_u(a: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1510,11 +1582,11 @@ export namespace i64x2 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function trunc_s_f64x2_sat(a: v128): v128;
+  export declare function trunc_sat_f64x2_s(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function trunc_u_f64x2_sat(a: v128): v128;
+  export declare function trunc_sat_f64x2_u(a: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1597,11 +1669,19 @@ export namespace f32x4 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function convert_s_i32x4(a: v128): v128;
+  export declare function convert_i32x4_s(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function convert_u_i32x4(a: v128): v128;
+  export declare function convert_i32x4_u(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfma(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfms(a: v128, b: v128, c: v128): v128;
 }
 
 // @ts-ignore: decorator
@@ -1684,11 +1764,19 @@ export namespace f64x2 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function convert_s_i64x2(a: v128): v128;
+  export declare function convert_i64x2_s(a: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function convert_u_i64x2(a: v128): v128;
+  export declare function convert_i64x2_u(a: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfma(a: v128, b: v128, c: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function qfms(a: v128, b: v128, c: v128): v128;
 }
 
 export namespace v8x16 {

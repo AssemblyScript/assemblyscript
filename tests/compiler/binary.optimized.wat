@@ -71,7 +71,7 @@
   i32.eq
   if (result i32)
    i32.const 1
-  else   
+  else
    i32.const 0
   end
   if
@@ -102,7 +102,7 @@
     i32.and
     i32.const 8388608
     i32.or
-   else    
+   else
     local.get $2
     i32.const 1
     local.get $3
@@ -132,7 +132,7 @@
       local.get $1
       i32.const 8388608
       i32.sub
-     else      
+     else
       local.get $1
      end
      i32.const 1
@@ -180,7 +180,7 @@
     i32.const 23
     i32.shl
     i32.or
-   else    
+   else
     local.get $2
     i32.const 1
     local.get $1
@@ -237,7 +237,7 @@
   i64.eq
   if (result i32)
    i32.const 1
-  else   
+  else
    i32.const 0
   end
   if
@@ -277,7 +277,7 @@
     i64.const 1
     i64.add
     i64.shl
-   else    
+   else
     local.get $2
     i64.const 4503599627370495
     i64.and
@@ -301,7 +301,7 @@
       local.get $1
       i64.const 4503599627370496
       i64.sub
-     else      
+     else
       local.get $1
      end
      i64.const 1
@@ -349,7 +349,7 @@
     i64.const 52
     i64.shl
     i64.or
-   else    
+   else
     local.get $2
     i64.const 0
     local.get $1

@@ -44,7 +44,6 @@
  (global $builtins/u (mut i32) (i32.const 0))
  (global $builtins/U (mut i64) (i64.const 0))
  (global $builtins/s (mut i32) (i32.const 0))
- (global $builtins/fn i32 (i32.const 1))
  (export "memory" (memory $0))
  (export "test" (func $start:builtins~anonymous|1))
  (start $start)
@@ -85,36 +84,83 @@
  )
  (func $~lib/util/string/compareImpl (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  loop $continue|0
-   local.get $2
-   if (result i32)
+  (local $4 i32)
+  local.get $0
+  i32.const 7
+  i32.and
+  local.get $1
+  i32.const 7
+  i32.and
+  i32.or
+  i32.eqz
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.ge_u
+  select
+  if
+   loop $continue|0
     local.get $0
-    i32.load16_u
+    i64.load
     local.get $1
-    i32.load16_u
-    i32.sub
-    local.tee $3
-    i32.eqz
-   else    
-    i32.const 0
+    i64.load
+    i64.eq
+    if
+     local.get $0
+     i32.const 8
+     i32.add
+     local.set $0
+     local.get $1
+     i32.const 8
+     i32.add
+     local.set $1
+     local.get $2
+     i32.const 4
+     i32.sub
+     local.tee $2
+     i32.const 4
+     i32.ge_u
+     br_if $continue|0
+    end
    end
-   if
+  end
+  loop $continue|1
+   block $break|1
     local.get $2
+    local.tee $3
     i32.const 1
     i32.sub
     local.set $2
+    local.get $3
+    i32.eqz
+    br_if $break|1
     local.get $0
-    i32.const 2
-    i32.add
-    local.set $0
+    i32.load16_u
+    local.tee $3
     local.get $1
-    i32.const 2
-    i32.add
-    local.set $1
-    br $continue|0
+    i32.load16_u
+    local.tee $4
+    i32.ne
+    if
+     local.get $3
+     local.get $4
+     i32.sub
+     return
+    else
+     local.get $0
+     i32.const 2
+     i32.add
+     local.set $0
+     local.get $1
+     i32.const 2
+     i32.add
+     local.set $1
+     br $continue|1
+    end
+    unreachable
    end
   end
-  local.get $3
+  i32.const 0
  )
  (func $~lib/string/String.__eq (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -167,43 +213,10 @@
   global.set $builtins/i
   i32.const 42
   global.set $builtins/i
-  global.get $builtins/i
-  i32.const 42
-  i32.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 67
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 2
   global.set $builtins/i
-  global.get $builtins/i
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 68
-   i32.const 20
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 1
   global.set $builtins/i
-  global.get $builtins/i
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 69
-   i32.const 20
-   call $~lib/builtins/abort
-   unreachable
-  end
   i64.const 63
   global.set $builtins/I
   i64.const 0
@@ -216,30 +229,8 @@
   global.set $builtins/I
   i64.const 42
   global.set $builtins/I
-  global.get $builtins/I
-  i64.const 42
-  i64.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 85
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
-  end
   i64.const 2
   global.set $builtins/I
-  global.get $builtins/I
-  i64.const 2
-  i64.ne
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 86
-   i32.const 20
-   call $~lib/builtins/abort
-   unreachable
-  end
   i64.const 1
   global.set $builtins/I
   global.get $builtins/i
@@ -627,15 +618,9 @@
   global.set $builtins/f
   f64.const 25
   global.set $builtins/F
-  global.get $builtins/i
-  i32.eqz
-  if
-   unreachable
-  end
   i32.const 1
   i32.const 2
-  global.get $builtins/fn
-  call_indirect (type $FUNCSIG$vii)
+  call $start:builtins~anonymous|0
   f32.const nan:0x400000
   call $~lib/number/isNaN<f32>
   i32.eqz
@@ -794,8 +779,8 @@
   f64.const 0
   f64.const 0
   f64.const 12
-  f64.const 27
-  f64.const 27
+  f64.const 25
+  f64.const 25
   call $~lib/builtins/trace
   i32.const 176
   i32.const 176

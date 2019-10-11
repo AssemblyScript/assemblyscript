@@ -174,13 +174,16 @@ export class Set<T> {
     // FIXME: this is preliminary, needs iterators/closures
     var start = changetype<usize>(this.entries);
     var size = this.entriesOffset;
-    var values = Array.create<T>(size);
+    var values = new Array<T>(size);
+    var length = 0;
     for (let i = 0; i < size; ++i) {
       let entry = changetype<SetEntry<T>>(start + <usize>i * ENTRY_SIZE<T>());
       if (!(entry.taggedNext & EMPTY)) {
         values.push(entry.key);
+        ++length;
       }
     }
+    values.length = length;
     return values;
   }
 

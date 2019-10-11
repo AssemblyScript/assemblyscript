@@ -5,7 +5,7 @@ import { COMPARATOR } from "util/sort";
 function internalCapacity<T>(array: Array<T>): i32 {
   // the memory region used by the backing buffer might still be larger in that the ArrayBuffer
   // pre-allocates a power of 2 sized buffer itself and reuses it as long as it isn't exceeded.
-  var buffer: ArrayBuffer = array.data;
+  var buffer: ArrayBuffer = array.buffer;
   return buffer.byteLength >> alignof<T>();
 }
 
@@ -18,7 +18,7 @@ function isArraysEqual<T>(a: Array<T>, b: Array<T>, len: i32 = 0): bool {
   }
   for (let i = 0; i < len; i++) {
     if (isFloat<T>()) {
-      if (isNaN(a[i]) == isNaN(b[i])) continue;
+      if (isNaN(a[i]) && isNaN(b[i])) continue;
     }
     if (a[i] != b[i]) return false;
   }
@@ -396,25 +396,25 @@ var i: i32;
   arr[2] = 2;
   arr[3] = 3;
 
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => value == 0);
+  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => value == 0);
 
   assert(i == 0);
 
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => value == 1);
+  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => value == 1);
   assert(i == 1);
 
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => value == 100);
+  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => value == 100);
   assert(i == -1);
 
   // Test side effect push
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => {
+  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => {
     array.push(100); // push side effect should not affect this method by spec
     return value == 100;
   });
   // array should be changed, but this method result should be calculated for old array length
   assert(i == -1);
   assert(arr.length == 8);
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => value == 100);
+  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => value == 100);
   assert(i != -1);
 
   arr.pop();
@@ -423,7 +423,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>): bool => {
+  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => {
     array.pop(); // popped items shouldn't be looked up, and we shouldn't go out of bounds
     return value == 100;
   });
@@ -438,21 +438,21 @@ var i: i32;
 // Array#every /////////////////////////////////////////////////////////////////////////////////////
 
 {
-  let every = arr.every((value: i32, index: i32, array: Array<i32>): bool => value >= 0);
+  let every = arr.every((value: i32, index: i32, array: Array<i32>) => value >= 0);
   assert(every == true);
 
-  every = arr.every((value: i32, index: i32, array: Array<i32>): bool => value <= 0);
+  every = arr.every((value: i32, index: i32, array: Array<i32>) => value <= 0);
   assert(every == false);
 
   // Test side effect push
-  every = arr.every((value: i32, index: i32, array: Array<i32>): bool => {
+  every = arr.every((value: i32, index: i32, array: Array<i32>) => {
     array.push(100); // push side effect should not affect this method by spec
     return value < 10;
   });
   // array should be changed, but this method result should be calculated for old array length
   assert(every == true);
   assert(arr.length == 8);
-  every = arr.every((value: i32, index: i32, array: Array<i32>): bool => value < 10);
+  every = arr.every((value: i32, index: i32, array: Array<i32>) => value < 10);
   assert(every == false);
 
   arr.pop();
@@ -461,7 +461,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  every = arr.every((value: i32, index: i32, array: Array<i32>): bool => {
+  every = arr.every((value: i32, index: i32, array: Array<i32>) => {
     array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
     return value < 3;
   });
@@ -476,21 +476,21 @@ var i: i32;
 // Array#some //////////////////////////////////////////////////////////////////////////////////////
 
 {
-  let some = arr.some((value: i32, index: i32, array: Array<i32>): bool => value >= 3);
+  let some = arr.some((value: i32, index: i32, array: Array<i32>) => value >= 3);
   assert(some == true);
 
-  some = arr.some((value: i32, index: i32, array: Array<i32>): bool => value <= -1);
+  some = arr.some((value: i32, index: i32, array: Array<i32>) => value <= -1);
   assert(some == false);
 
   // Test side effect push
-  some = arr.some((value: i32, index: i32, array: Array<i32>): bool => {
+  some = arr.some((value: i32, index: i32, array: Array<i32>) => {
     array.push(100); // push side effect should not affect this method by spec
     return value > 10;
   });
   // array should be changed, but this method result should be calculated for old array length
   assert(some == false);
   assert(arr.length == 8);
-  some = arr.some((value: i32, index: i32, array: Array<i32>): bool => value > 10);
+  some = arr.some((value: i32, index: i32, array: Array<i32>) => value > 10);
   assert(some == true);
 
   arr.pop();
@@ -499,7 +499,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  some = arr.some((value: i32, index: i32, array: Array<i32>): bool => {
+  some = arr.some((value: i32, index: i32, array: Array<i32>) => {
     array.pop(); // poped items shouldn't be looked up, and we shouldn't go out of bounds
     return value > 3;
   });
@@ -515,12 +515,12 @@ var i: i32;
 
 {
   i = 0;
-  arr.forEach((value: i32, index: i32, array: Array<i32>): void => { i += value; });
+  arr.forEach((value: i32, index: i32, array: Array<i32>) => { i += value; });
   assert(i == 6);
 
   // Test side effect push
   i = 0;
-  arr.forEach((value: i32, index: i32, array: Array<i32>): void => {
+  arr.forEach((value: i32, index: i32, array: Array<i32>) => {
     array.push(100); //push side effect should not affect this method by spec
     i += value;
   });
@@ -528,7 +528,7 @@ var i: i32;
   assert(i == 6);
   assert(arr.length == 8);
   i = 0;
-  arr.forEach((value: i32, index: i32, array: Array<i32>): void => { i += value; });
+  arr.forEach((value: i32, index: i32, array: Array<i32>) => { i += value; });
   assert(i == 406);
 
   arr.pop();
@@ -538,7 +538,7 @@ var i: i32;
 
   // Test side effect pop
   i = 0;
-  arr.forEach((value: i32, index: i32, array: Array<i32>): void => {
+  arr.forEach((value: i32, index: i32, array: Array<i32>) => {
     array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
     i += value;
   });
@@ -550,7 +550,7 @@ var i: i32;
   arr.push(3);
 
   // Test rehash action effec
-  arr.forEach((value: i32, index: i32, array: Array<i32>): void => {
+  arr.forEach((value: i32, index: i32, array: Array<i32>) => {
     if (index == 0) {
       for (let i = 0; i < 4; i++) {
         array.pop();
@@ -582,13 +582,13 @@ var i: i32;
 // Array#map ///////////////////////////////////////////////////////////////////////////////////////
 
 {
-  let newArr: f32[] = arr.map<f32>((value: i32, index: i32, array: Array<i32>): f32 => <f32>value);
+  let newArr: f32[] = arr.map<f32>((value: i32, index: i32, array: Array<i32>) => <f32>value);
   assert(newArr.length == 4);
   assert(newArr[0] == <f32>arr[0]);
 
   // Test side effect push
   i = 0;
-  arr.map<i32>((value: i32, index: i32, array: Array<i32>): i32 => {
+  arr.map<i32>((value: i32, index: i32, array: Array<i32>) => {
     array.push(100); //push side effect should not affect this method by spec
     i += value;
     return value;
@@ -597,7 +597,7 @@ var i: i32;
   assert(arr.length == 8);
 
   i = 0;
-  arr.map<i32>((value: i32, index: i32, array: Array<i32>): i32 => {
+  arr.map<i32>((value: i32, index: i32, array: Array<i32>) => {
     i += value;
     return value;
   });
@@ -610,7 +610,7 @@ var i: i32;
 
   // Test side effect pop
   i = 0;
-  arr.map<i32>((value: i32, index: i32, array: Array<i32>): i32 => {
+  arr.map<i32>((value: i32, index: i32, array: Array<i32>) => {
     array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
     i += value;
     return value;
@@ -626,12 +626,12 @@ var i: i32;
 // Array#filter ////////////////////////////////////////////////////////////////////////////////////
 
 {
-  let filteredArr: i32[] = arr.filter((value: i32, index: i32, array: Array<i32>): bool => value >= 2);
+  let filteredArr: i32[] = arr.filter((value: i32, index: i32, array: Array<i32>) => value >= 2);
   assert(filteredArr.length == 2);
 
   // Test side effect push
   i = 0;
-  arr.filter((value: i32, index: i32, array: Array<i32>): bool => {
+  arr.filter((value: i32, index: i32, array: Array<i32>) => {
     array.push(100); //push side effect should not affect this method by spec
     i += value;
     return value >= 2;
@@ -640,7 +640,7 @@ var i: i32;
   assert(arr.length == 8);
 
   i = 0;
-  arr.filter((value: i32, index: i32, array: Array<i32>): bool => {
+  arr.filter((value: i32, index: i32, array: Array<i32>) => {
     i += value;
     return value >= 2;
   });
@@ -653,7 +653,7 @@ var i: i32;
 
   // Test side effect pop
   i = 0;
-  arr.filter((value: i32, index: i32, array: Array<i32>): bool => {
+  arr.filter((value: i32, index: i32, array: Array<i32>) => {
     array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
     i += value;
     return value >= 2;
@@ -769,7 +769,7 @@ function isSorted<T>(data: Array<T>, comparator: (a: T, b: T) => i32 = COMPARATO
 }
 
 function createReverseOrderedArray(size: i32): Array<i32> {
-  var arr = Array.create<i32>(size);
+  var arr = new Array<i32>(size);
   for (let i = 0; i < size; i++) {
     arr[i] = size - 1 - i;
   }
@@ -779,7 +779,7 @@ function createReverseOrderedArray(size: i32): Array<i32> {
 NativeMath.seedRandom(reinterpret<u64>(JSMath.random()));
 
 function createRandomOrderedArray(size: i32): Array<i32> {
-  var arr = Array.create<i32>(size);
+  var arr = new Array<i32>(size);
   for (let i = 0; i < size; i++) {
     arr[i] = <i32>(NativeMath.random() * size);
   }
@@ -787,9 +787,9 @@ function createRandomOrderedArray(size: i32): Array<i32> {
 }
 
 function createReverseOrderedNestedArray(size: i32): Array<Array<i32>> {
-  var arr = Array.create<Array<i32>>(size);
+  var arr = new Array<Array<i32>>(size);
   for (let i: i32 = 0; i < size; i++) {
-    let inner = Array.create<i32>(1);
+    let inner = new Array<i32>(1);
     inner[0] = size - 1 - i;
     arr[i] = inner;
   }
@@ -801,7 +801,7 @@ class Proxy<T> {
 }
 
 function createReverseOrderedElementsArray(size: i32): Proxy<i32>[] {
-  var arr = Array.create<Proxy<i32>>(size);
+  var arr = new Array<Proxy<i32>>(size);
   for (let i: i32 = 0; i < size; i++) {
     arr[i] = new Proxy<i32>(size - 1 - i);
   }
@@ -820,7 +820,7 @@ function createRandomString(len: i32): string {
 }
 
 function createRandomStringArray(size: i32): string[] {
-  var arr = Array.create<string>(size);
+  var arr = new Array<string>(size);
   for (let i: i32 = 0; i < size; i++) {
     arr[i] = createRandomString(<i32>(NativeMath.random() * 32));
   }
@@ -900,23 +900,23 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   let randomized64  = createRandomOrderedArray(64);
   let randomized257 = createRandomOrderedArray(257);
 
-  assertSorted<i32>(randomized64, (a: i32, b: i32): i32 => a - b);
-  assertSorted<i32>(randomized64, (a: i32, b: i32): i32 => b - a);
+  assertSorted<i32>(randomized64, (a: i32, b: i32) => a - b);
+  assertSorted<i32>(randomized64, (a: i32, b: i32) => b - a);
 
-  assertSorted<i32>(randomized257, (a: i32, b: i32): i32 => a - b);
-  assertSorted<i32>(randomized257, (a: i32, b: i32): i32 => b - a);
+  assertSorted<i32>(randomized257, (a: i32, b: i32) => a - b);
+  assertSorted<i32>(randomized257, (a: i32, b: i32) => b - a);
 }
 
 // Test sorting complex objects
 {
   let reversedNested512 = createReverseOrderedNestedArray(2);
-  assertSorted<i32[]>(reversedNested512, (a: i32[], b: i32[]): i32 => a[0] - b[0]);
+  assertSorted<i32[]>(reversedNested512, (a: i32[], b: i32[]) => a[0] - b[0]);
 }
 
 // Test sorting reference elements
 {
   let reversedElements512 = createReverseOrderedElementsArray(512);
-  assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>): i32 => a.x - b.x);
+  assertSorted<Proxy<i32>>(reversedElements512, (a: Proxy<i32>, b: Proxy<i32>) => a.x - b.x);
 }
 
 // Test sorting strings
@@ -934,7 +934,12 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 
 // Array#join //////////////////////////////////////////////////////////////////////////////////////
 
-class Ref { constructor() {} }
+class Ref {
+  constructor() {}
+  toString(): string {
+    return "[object Object]";
+  }
+}
 
 {
   assert((<bool[]>[true, false]).join() == "true,false");
@@ -945,6 +950,9 @@ class Ref { constructor() {} }
   assert((<Array<string | null>>["", "1", null]).join("") == "1");
   let refArr: (Ref | null)[] = [new Ref(), null, new Ref()];
   assert(refArr.join() == "[object Object],,[object Object]");
+
+  let refArr2: Ref[] = [new Ref(), new Ref()];
+  assert(refArr2.join() == "[object Object],[object Object]");
 }
 
 // Array#toString //////////////////////////////////////////////////////////////////////////////////
@@ -964,7 +972,7 @@ class Ref { constructor() {} }
   assert((<u64[]>[1, 0xFFFFFFFFFFFFFFFF, 0]).toString() == "1,18446744073709551615,0");
   assert((<i64[]>[-1, -1234567890123456, 0, i64.MAX_VALUE]).toString() == "-1,-1234567890123456,0,9223372036854775807");
 
-  let arrStr: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null]
+  let arrStr: (string | null)[] = ["", "a", "a", "ab", "b", "ba", null];
 
   assert(arrStr.toString() == ",a,a,ab,b,ba,");
   assert((<Array<string | null>>["1", "2", null, "4"]).toString() == "1,2,,4");

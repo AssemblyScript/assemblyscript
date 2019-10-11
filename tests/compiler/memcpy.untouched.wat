@@ -26,7 +26,7 @@
      local.get $1
      i32.const 4
      i32.rem_u
-    else     
+    else
      i32.const 0
     end
     i32.eqz

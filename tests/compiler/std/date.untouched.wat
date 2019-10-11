@@ -4,6 +4,7 @@
  (type $FUNCSIG$d (func (result f64)))
  (type $FUNCSIG$iij (func (param i32 i64) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$ji (func (param i32) (result i64)))
  (type $FUNCSIG$jij (func (param i32 i64) (result i64)))
@@ -22,50 +23,23 @@
  (global $~lib/heap/__heap_base i32 (i32.const 48))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/__alloc (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  local.get $0
-  i32.const 1073741808
-  i32.gt_u
-  if
-   unreachable
-  end
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.set $2
-  local.get $2
-  local.get $0
-  local.tee $3
-  i32.const 1
-  local.tee $4
-  local.get $3
-  local.get $4
-  i32.gt_u
-  select
-  i32.add
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  local.set $5
   memory.size
-  local.set $6
-  local.get $5
-  local.get $6
+  local.set $1
+  local.get $1
   i32.const 16
   i32.shl
+  local.set $2
+  local.get $0
+  local.get $2
   i32.gt_u
   if
-   local.get $5
+   local.get $0
    local.get $2
    i32.sub
    i32.const 65535
@@ -77,12 +51,12 @@
    i32.const 16
    i32.shr_u
    local.set $3
-   local.get $6
+   local.get $1
    local.tee $4
    local.get $3
-   local.tee $7
+   local.tee $5
    local.get $4
-   local.get $7
+   local.get $5
    i32.gt_s
    select
    local.set $4
@@ -100,24 +74,66 @@
     end
    end
   end
-  local.get $5
+  local.get $0
   global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.const 1073741808
+  i32.gt_u
+  if
+   unreachable
+  end
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.set $2
+  local.get $0
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  local.tee $3
+  i32.const 16
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_u
+  select
+  local.set $5
+  local.get $2
+  local.get $5
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
   local.get $2
   i32.const 16
   i32.sub
-  local.set $8
-  local.get $8
+  local.set $6
+  local.get $6
+  local.get $5
+  i32.store
+  local.get $6
+  i32.const -1
+  i32.store offset=4
+  local.get $6
   local.get $1
   i32.store offset=8
-  local.get $8
+  local.get $6
   local.get $0
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/date/Date#constructor (; 5 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/date/Date#constructor (; 6 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   local.get $0
   i32.eqz
   if
@@ -135,17 +151,17 @@
   i64.store
   local.get $0
  )
- (func $~lib/date/Date#getTime (; 6 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
+ (func $~lib/date/Date#getTime (; 7 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
   local.get $0
   i64.load
  )
- (func $~lib/date/Date#setTime (; 7 ;) (type $FUNCSIG$jij) (param $0 i32) (param $1 i64) (result i64)
+ (func $~lib/date/Date#setTime (; 8 ;) (type $FUNCSIG$jij) (param $0 i32) (param $1 i64) (result i64)
   local.get $0
   local.get $1
   i64.store
   local.get $1
  )
- (func $start:std/date (; 8 ;) (type $FUNCSIG$v)
+ (func $start:std/date (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -322,9 +338,9 @@
    unreachable
   end
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:std/date
  )
- (func $null (; 10 ;) (type $FUNCSIG$v)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
  )
 )

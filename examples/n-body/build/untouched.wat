@@ -70,50 +70,23 @@
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $~lib/rt/stub/__alloc (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  local.get $0
-  i32.const 1073741808
-  i32.gt_u
-  if
-   unreachable
-  end
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.set $2
-  local.get $2
-  local.get $0
-  local.tee $3
-  i32.const 1
-  local.tee $4
-  local.get $3
-  local.get $4
-  i32.gt_u
-  select
-  i32.add
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  local.set $5
   memory.size
-  local.set $6
-  local.get $5
-  local.get $6
+  local.set $1
+  local.get $1
   i32.const 16
   i32.shl
+  local.set $2
+  local.get $0
+  local.get $2
   i32.gt_u
   if
-   local.get $5
+   local.get $0
    local.get $2
    i32.sub
    i32.const 65535
@@ -125,12 +98,12 @@
    i32.const 16
    i32.shr_u
    local.set $3
-   local.get $6
+   local.get $1
    local.tee $4
    local.get $3
-   local.tee $7
+   local.tee $5
    local.get $4
-   local.get $7
+   local.get $5
    i32.gt_s
    select
    local.set $4
@@ -148,21 +121,63 @@
     end
    end
   end
-  local.get $5
+  local.get $0
   global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.const 1073741808
+  i32.gt_u
+  if
+   unreachable
+  end
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.set $2
+  local.get $0
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  local.tee $3
+  i32.const 16
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_u
+  select
+  local.set $5
+  local.get $2
+  local.get $5
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
   local.get $2
   i32.const 16
   i32.sub
-  local.set $8
-  local.get $8
+  local.set $6
+  local.get $6
+  local.get $5
+  i32.store
+  local.get $6
+  i32.const -1
+  i32.store offset=4
+  local.get $6
   local.get $1
   i32.store offset=8
-  local.get $8
+  local.get $6
   local.get $0
   i32.store offset=12
   local.get $2
  )
- (func $assembly/index/NBodySystem#constructor (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $assembly/index/NBodySystem#constructor (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 f64)
   (local $3 f64)
   (local $4 f64)
@@ -254,6 +269,7 @@
   end
   local.get $0
   local.get $1
+  call $~lib/rt/stub/__retain
   i32.store
   local.get $8
   call $~lib/rt/stub/__release
@@ -261,7 +277,7 @@
   call $~lib/rt/stub/__release
   local.get $0
  )
- (func $assembly/index/Body#constructor (; 7 ;) (type $FUNCSIG$iiddddddd) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
+ (func $assembly/index/Body#constructor (; 8 ;) (type $FUNCSIG$iiddddddd) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64) (param $7 f64) (result i32)
   local.get $0
   i32.eqz
   if
@@ -294,7 +310,7 @@
   f64.store offset=48
   local.get $0
  )
- (func $assembly/index/Sun (; 8 ;) (type $FUNCSIG$i) (result i32)
+ (func $assembly/index/Sun (; 9 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 0
   f64.const 0
@@ -305,7 +321,7 @@
   global.get $assembly/index/SOLAR_MASS
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Jupiter (; 9 ;) (type $FUNCSIG$i) (result i32)
+ (func $assembly/index/Jupiter (; 10 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 4.841431442464721
   f64.const -1.1603200440274284
@@ -324,7 +340,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Saturn (; 10 ;) (type $FUNCSIG$i) (result i32)
+ (func $assembly/index/Saturn (; 11 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 8.34336671824458
   f64.const 4.124798564124305
@@ -343,7 +359,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Uranus (; 11 ;) (type $FUNCSIG$i) (result i32)
+ (func $assembly/index/Uranus (; 12 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 12.894369562139131
   f64.const -15.111151401698631
@@ -362,7 +378,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $assembly/index/Neptune (; 12 ;) (type $FUNCSIG$i) (result i32)
+ (func $assembly/index/Neptune (; 13 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
   f64.const 15.379697114850917
   f64.const -25.919314609987964
@@ -381,7 +397,7 @@
   f64.mul
   call $assembly/index/Body#constructor
  )
- (func $~lib/util/memory/memcpy (; 13 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 14 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -392,7 +408,7 @@
      local.get $1
      i32.const 3
      i32.and
-    else     
+    else
      i32.const 0
     end
     i32.eqz
@@ -1409,7 +1425,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 14 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 15 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1434,7 +1450,7 @@
    i32.le_u
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $5
     local.get $3
     i32.add
@@ -1549,7 +1565,7 @@
      end
      unreachable
     end
-   else    
+   else
     local.get $4
     i32.const 7
     i32.and
@@ -1634,7 +1650,7 @@
    end
   end
  )
- (func $~lib/rt/__allocArray (; 15 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/rt/__allocArray (; 16 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1672,7 +1688,7 @@
   end
   local.get $4
  )
- (func $assembly/index/init (; 16 ;) (type $FUNCSIG$v)
+ (func $assembly/index/init (; 17 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1733,7 +1749,7 @@
   local.get $6
   call $~lib/rt/stub/__release
  )
- (func $assembly/index/NBodySystem#advance (; 17 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
+ (func $assembly/index/NBodySystem#advance (; 18 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1966,7 +1982,7 @@
   local.get $2
   call $~lib/rt/stub/__release
  )
- (func $assembly/index/NBodySystem#energy (; 18 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 19 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -2136,14 +2152,14 @@
   call $~lib/rt/stub/__release
   local.get $13
  )
- (func $assembly/index/step (; 19 ;) (type $FUNCSIG$d) (result f64)
+ (func $assembly/index/step (; 20 ;) (type $FUNCSIG$d) (result f64)
   global.get $assembly/index/system
   f64.const 0.01
   call $assembly/index/NBodySystem#advance
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $assembly/index/bench (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   block $break|0
    i32.const 0
@@ -2166,7 +2182,7 @@
    unreachable
   end
  )
- (func $assembly/index/getBody (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2185,7 +2201,7 @@
    call $~lib/array/Array<assembly/index/Body>#__unchecked_get
    local.tee $2
    local.tee $3
-  else   
+  else
    i32.const 0
    call $~lib/rt/stub/__retain
    local.tee $4
@@ -2196,7 +2212,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start (; 22 ;) (type $FUNCSIG$v)
+ (func $start (; 23 ;) (type $FUNCSIG$v)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -2208,6 +2224,6 @@
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
  )
- (func $null (; 23 ;) (type $FUNCSIG$v)
+ (func $null (; 24 ;) (type $FUNCSIG$v)
  )
 )

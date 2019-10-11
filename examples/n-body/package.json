@@ -10,10 +10,10 @@
     "tsbuild": "tsc -p assembly -t ES2017 -m commonjs --outDir build",
     "build": "npm run asbuild && npm run tsbuild",
     "server": "http-server . -o -c-1",
-    "test": "node --noliftoff --nowasm-tier-up --wasm-lazy-compilation --wasm-no-bounds-checks --expose-gc tests"
+    "test": "node --wasm-lazy-compilation --wasm-no-bounds-checks --wasm-no-stack-checks --expose-gc tests"
   },
   "devDependencies": {
     "http-server": "^0.11.1",
-    "typescript": "^3.2.2"
+    "typescript": "^3.6.3"
   }
 }

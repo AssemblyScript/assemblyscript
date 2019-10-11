@@ -20,7 +20,7 @@
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
-  (local $12 i32)
+  (local $12 f64)
   local.get $0
   i64.reinterpret_f64
   local.set $1
@@ -36,7 +36,7 @@
   i32.lt_u
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $2
    i32.const 31
    i32.shr_u
@@ -82,14 +82,14 @@
    i64.shr_u
    i32.wrap_i64
    local.set $2
-  else   
+  else
    local.get $2
    i32.const 2146435072
    i32.ge_u
    if
     local.get $0
     return
-   else    
+   else
     local.get $2
     i32.const 1072693248
     i32.eq
@@ -99,7 +99,7 @@
      i64.shl
      i64.const 0
      i64.eq
-    else     
+    else
      i32.const 0
     end
     if
@@ -197,6 +197,7 @@
   f64.add
   local.set $11
   local.get $3
+  f64.convert_i32_s
   local.set $12
   local.get $6
   local.get $5
@@ -204,7 +205,6 @@
   f64.add
   f64.mul
   local.get $12
-  f64.convert_i32_s
   f64.const 1.9082149292705877e-10
   f64.mul
   f64.add
@@ -213,7 +213,6 @@
   local.get $4
   f64.add
   local.get $12
-  f64.convert_i32_s
   f64.const 0.6931471803691238
   f64.mul
   f64.add
@@ -250,7 +249,7 @@
   i32.lt_u
   if (result i32)
    i32.const 1
-  else   
+  else
    local.get $2
    i32.const 31
    i32.shr_u
@@ -296,14 +295,14 @@
    i64.shr_u
    i32.wrap_i64
    local.set $2
-  else   
+  else
    local.get $2
    i32.const 2146435072
    i32.ge_u
    if
     local.get $0
     return
-   else    
+   else
     local.get $2
     i32.const 1072693248
     i32.eq
@@ -313,7 +312,7 @@
      i64.shl
      i64.const 0
      i64.eq
-    else     
+    else
      i32.const 0
     end
     if

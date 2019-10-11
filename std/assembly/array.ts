@@ -2,25 +2,25 @@
 
 import { BLOCK_MAXSIZE } from "./rt/common";
 import { COMPARATOR, SORT } from "./util/sort";
-import { ArrayBuffer, ArrayBufferView } from "./arraybuffer";
-import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./util/number";
+import { ArrayBufferView } from "./arraybuffer";
+import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
 /** Ensures that the given array has _at least_ the specified backing size. */
 function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
-  var oldCapacity = changetype<ArrayBufferView>(array).dataLength;
-  if (minSize > oldCapacity >>> alignLog2) {
+  var oldCapacity = changetype<ArrayBufferView>(array).byteLength;
+  if (minSize > <usize>oldCapacity >>> alignLog2) {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
-    let oldData = changetype<usize>(changetype<ArrayBufferView>(array).data);
+    let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
     let newCapacity = minSize << alignLog2;
     let newData = __realloc(oldData, newCapacity);
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
-      store<usize>(changetype<usize>(array), __retain(newData), offsetof<ArrayBufferView>("data"));
-      changetype<ArrayBufferView>(array).dataStart = newData;
+      store<usize>(array, __retain(newData), offsetof<ArrayBufferView>("buffer"));
+      store<usize>(array, newData, offsetof<ArrayBufferView>("dataStart"));
     }
-    changetype<ArrayBufferView>(array).dataLength = <u32>newCapacity;
+    store<u32>(array, newCapacity, offsetof<ArrayBufferView>("byteLength"));
   }
 }
 
@@ -31,9 +31,9 @@ export class Array<T> extends ArrayBufferView {
   // to work with typed and normal arrays interchangeably. Technically, normal arrays do not need
   // `dataStart` (equals `data`) and `dataLength` (equals computed `data.byteLength`).
 
-  // Also note that Array<T> with non-nullable T must guard against implicit null values whenever
-  // length is modified in a way that a null value would exist. Otherwise, the compiler wouldn't be
-  // able to guarantee type-safety anymore. For lack of a better word, such an array is "holey".
+  // Also note that Array<T> with non-nullable T must guard against uninitialized null values
+  // whenever an element is accessed. Otherwise, the compiler wouldn't be able to guarantee
+  // type-safety anymore. For lack of a better word, such an array is "holey".
 
   private length_: i32;
 
@@ -42,25 +42,15 @@ export class Array<T> extends ArrayBufferView {
   }
 
   static create<T>(capacity: i32 = 0): Array<T> {
-    if (<u32>capacity > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
-    var array = changetype<Array<T>>(__allocArray(capacity, alignof<T>(), idof<T[]>())); // retains
-    changetype<Array<T>>(array).length_ = 0; // safe even if T is a non-nullable reference
-    memory.fill(array.dataStart, 0, <usize>array.dataLength);
+    WARNING("'Array.create' is deprecated. Use 'new Array' instead, making sure initial elements are initialized.");
+    var array = new Array<T>(capacity);
+    array.length = 0;
     return array;
   }
 
   constructor(length: i32 = 0) {
     super(length, alignof<T>());
-    if (isReference<T>()) {
-      if (!isNullable<T>()) {
-        if (length) throw new Error(E_HOLEYARRAY);
-      }
-    }
     this.length_ = length;
-  }
-
-  @unsafe get buffer(): ArrayBuffer {
-    return this.data;
   }
 
   get length(): i32 {
@@ -69,19 +59,17 @@ export class Array<T> extends ArrayBufferView {
 
   set length(newLength: i32) {
     var oldLength = this.length_;
-    if (isReference<T>()) {
-      if (!isNullable<T>()) {
-        if (<u32>newLength > <u32>oldLength) throw new Error(E_HOLEYARRAY);
+    if (isManaged<T>()) {
+      if (oldLength > newLength) { // release no longer used refs
+        let cur = (<usize>newLength << alignof<T>());
+        let end = (<usize>oldLength << alignof<T>());
+        do __release(load<usize>(cur));
+        while ((cur += sizeof<T>()) < end);
+      } else {
+        ensureSize(changetype<usize>(this), newLength, alignof<T>());
       }
-    }
-    ensureSize(changetype<usize>(this), newLength, alignof<T>());
-    if (isManaged<T>()) { // release no longer used refs
-      if (oldLength > newLength) {
-        let dataStart = this.dataStart;
-        do __release(load<usize>(dataStart + (<usize>--oldLength << alignof<T>())));
-        while (oldLength > newLength);
-        // no need to zero memory on shrink -> is zeroed on grow
-      }
+    } else {
+      ensureSize(changetype<usize>(this), newLength, alignof<T>());
     }
     this.length_ = newLength;
   }
@@ -101,35 +89,30 @@ export class Array<T> extends ArrayBufferView {
   }
 
   @operator("[]") private __get(index: i32): T {
+    if (<u32>index >= <u32>this.length_) throw new RangeError(E_INDEXOUTOFRANGE);
+    var value = this.__unchecked_get(index);
     if (isReference<T>()) {
       if (!isNullable<T>()) {
-        if (<u32>index >= <u32>this.length_) throw new Error(E_HOLEYARRAY);
+        if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
       }
     }
-    if (<u32>index >= <u32>this.dataLength >>> alignof<T>()) throw new RangeError(E_INDEXOUTOFRANGE);
-    return this.__unchecked_get(index);
+    return value;
   }
 
-  @operator("{}") private __unchecked_get(index: i32): T {
+  @unsafe @operator("{}") private __unchecked_get(index: i32): T {
     return load<T>(this.dataStart + (<usize>index << alignof<T>()));
   }
 
   @operator("[]=") private __set(index: i32, value: T): void {
-    var length = this.length_;
-    if (isReference<T>()) {
-      if (!isNullable<T>()) {
-        if (<u32>index > <u32>length) throw new Error(E_HOLEYARRAY);
-      }
-    }
     ensureSize(changetype<usize>(this), index + 1, alignof<T>());
     this.__unchecked_set(index, value);
-    if (index >= length) this.length_ = index + 1;
+    if (index >= this.length_) this.length_ = index + 1;
   }
 
-  @operator("{}=") private __unchecked_set(index: i32, value: T): void {
+  @unsafe @operator("{}=") private __unchecked_set(index: i32, value: T): void {
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>index << alignof<T>());
-      let oldRef: usize = load<usize>(offset);
+      let oldRef = load<usize>(offset);
       if (changetype<usize>(value) != oldRef) {
         store<usize>(offset, __retain(changetype<usize>(value)));
         __release(oldRef);
@@ -492,15 +475,17 @@ export class Array<T> extends ArrayBufferView {
     }
 
     // calculate the byteLength of the resulting backing ArrayBuffer
-    var byteLength = size << usize(alignof<valueof<T>>());
+    var byteLength = size << i32(alignof<valueof<T>>());
     var dataStart = __alloc(byteLength, idof<ArrayBuffer>());
 
     // create the return value and initialize it
     var result: valueof<T>[] = changetype<valueof<T>[]>(__alloc(offsetof<valueof<T>[]>(), idof<valueof<T>[]>()));
     result.length_ = size;
-    result.dataLength = byteLength;
-    result.dataStart = dataStart;
-    result.data = changetype<ArrayBuffer>(dataStart);  // retains
+
+    // byteLength, dataStart, and buffer are all readonly
+    store<i32>(changetype<usize>(result), byteLength, offsetof<T>("byteLength"));
+    store<usize>(changetype<usize>(result), dataStart, offsetof<T>("dataStart"));
+    store<usize>(changetype<usize>(result), __retain(dataStart), offsetof<T>("buffer"));
 
     // set the elements
     var resultIndex: i32 = -1;
@@ -514,7 +499,7 @@ export class Array<T> extends ArrayBufferView {
       resultIndex++;
 
       // copy the underlying buffer data to the result buffer
-      let childDataLength = child.dataLength;
+      let childDataLength = child.byteLength;
       let childDataStart = child.dataStart;
       memory.copy(
         dataStart + (<usize>resultIndex << usize(alignof<valueof<T>>())),
@@ -523,12 +508,12 @@ export class Array<T> extends ArrayBufferView {
       );
 
       // advance the result length
-      let childLength = childDataLength >> u32(alignof<valueof<T>>());
+      let childLength = <usize>childDataLength >> usize(alignof<valueof<T>>());
       resultIndex += childLength - 1;
 
       // if the `valueof<T>` type is managed, we must call __retain() on each reference
       if (isManaged<valueof<T>>()) {
-        for (let j: u32 = 0; j < childLength; j++) __retain(load<usize>(childDataStart + (j << usize(alignof<valueof<T>>()))));
+        for (let j: usize = 0; j < childLength; j++) __retain(load<usize>(childDataStart + (j << usize(alignof<valueof<T>>()))));
       }
     }
 
@@ -536,245 +521,19 @@ export class Array<T> extends ArrayBufferView {
   }
 
   join(separator: string = ","): string {
-    if (isBoolean<T>()) return this.join_bool(separator);
-    if (isInteger<T>()) return this.join_int(separator);
-    if (isFloat<T>()) return this.join_flt(separator);
-    if (isString<T>()) return this.join_str(separator);
-    if (isArray<T>()) return this.join_arr(separator);
-    if (isReference<T>()) return this.join_ref(separator);
+    var dataStart = this.dataStart;
+    var length = this.length_;
+    if (isBoolean<T>())   return joinBooleanArray(dataStart, length, separator);
+    if (isInteger<T>())   return joinIntegerArray<T>(dataStart, length, separator);
+    if (isFloat<T>())     return joinFloatArray<T>(dataStart, length, separator);
+
+    if (ASC_SHRINK_LEVEL < 1) {
+      if (isString<T>())  return joinStringArray(dataStart, length, separator);
+    }
+    // For rest objects and arrays use general join routine
+    if (isReference<T>()) return joinReferenceArray<T>(dataStart, length, separator);
     ERROR("unspported element type");
     return <string>unreachable();
-  }
-
-  private join_bool(separator: string = ","): string {
-    var lastIndex = this.length_ - 1;
-    if (lastIndex < 0) return "";
-    var dataStart = this.dataStart;
-    if (!lastIndex) return select("true", "false", load<bool>(dataStart));
-
-    var sepLen = separator.length;
-    var valueLen = 5; // max possible length of element len("false")
-    var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
-    var offset = 0;
-    var value: bool;
-    for (let i = 0; i < lastIndex; ++i) {
-      value = load<bool>(dataStart + i);
-      valueLen = 4 + i32(!value);
-      memory.copy(
-        changetype<usize>(result) + (<usize>offset << 1),
-        changetype<usize>(select("true", "false", value)),
-        <usize>valueLen << 1
-      );
-      offset += valueLen;
-      if (sepLen) {
-        memory.copy(
-          changetype<usize>(result) + (<usize>offset << 1),
-          changetype<usize>(separator),
-          <usize>sepLen << 1
-        );
-        offset += sepLen;
-      }
-    }
-    value = load<bool>(dataStart + <usize>lastIndex);
-    valueLen = 4 + i32(!value);
-    memory.copy(
-      changetype<usize>(result) + (<usize>offset << 1),
-      changetype<usize>(select("true", "false", value)),
-      valueLen << 1
-    );
-    offset += valueLen;
-
-    if (estLen > offset) return result.substring(0, offset);
-    return result;
-  }
-
-  private join_int(separator: string = ","): string {
-    var lastIndex = this.length_ - 1;
-    if (lastIndex < 0) return "";
-    var dataStart = this.dataStart;
-    // @ts-ignore: type
-    if (!lastIndex) return changetype<string>(itoa<T>(load<T>(dataStart))); // retains
-
-    var sepLen = separator.length;
-    const valueLen = (sizeof<T>() <= 4 ? 10 : 20) + i32(isSigned<T>());
-    var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
-    var offset = 0;
-    var value: T;
-    for (let i = 0; i < lastIndex; ++i) {
-      value = load<T>(dataStart + (<usize>i << alignof<T>()));
-      // @ts-ignore: type
-      offset += itoa_stream<T>(changetype<usize>(result), offset, value);
-      if (sepLen) {
-        memory.copy(
-          changetype<usize>(result) + (<usize>offset << 1),
-          changetype<usize>(separator),
-          <usize>sepLen << 1
-        );
-        offset += sepLen;
-      }
-    }
-    value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
-    // @ts-ignore: type
-    offset += itoa_stream<T>(changetype<usize>(result), offset, value);
-    if (estLen > offset) return result.substring(0, offset);
-    return result;
-  }
-
-  private join_flt(separator: string = ","): string {
-    var lastIndex = this.length_ - 1;
-    if (lastIndex < 0) return "";
-    var dataStart = this.dataStart;
-    if (!lastIndex) {
-      return changetype<string>(dtoa(
-        // @ts-ignore: type
-        load<T>(dataStart))
-      ); // retains
-    }
-
-    const valueLen = MAX_DOUBLE_LENGTH;
-    var sepLen = separator.length;
-    var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = changetype<string>(__alloc(estLen << 1, idof<string>())); // retains
-    var offset = 0;
-    var value: T;
-    for (let i = 0; i < lastIndex; ++i) {
-      value = load<T>(dataStart + (<usize>i << alignof<T>()));
-      offset += dtoa_stream(changetype<usize>(result), offset,
-        // @ts-ignore: type
-        value
-      );
-      if (sepLen) {
-        memory.copy(
-          changetype<usize>(result) + (<usize>offset << 1),
-          changetype<usize>(separator),
-          <usize>sepLen << 1
-        );
-        offset += sepLen;
-      }
-    }
-    value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
-    offset += dtoa_stream(changetype<usize>(result), offset,
-      // @ts-ignore: type
-      value
-    );
-    if (estLen > offset) return result.substring(0, offset);
-    return result;
-  }
-
-  private join_str(separator: string = ","): string {
-    var lastIndex = this.length_ - 1;
-    if (lastIndex < 0) return "";
-    var dataStart = this.dataStart;
-    if (!lastIndex) return load<string>(dataStart);
-
-    var sepLen = separator.length;
-    var estLen = 0;
-    var value: string | null;
-    for (let i = 0, len = lastIndex + 1; i < len; ++i) {
-      value = load<string>(dataStart + (<usize>i << alignof<T>()));
-      if (value !== null) estLen += value.length;
-    }
-    var offset = 0;
-    var result = changetype<string>(__alloc((estLen + sepLen * lastIndex) << 1, idof<string>())); // retains
-    for (let i = 0; i < lastIndex; ++i) {
-      value = load<string>(dataStart + (<usize>i << alignof<T>()));
-      if (value !== null) {
-        let valueLen = changetype<string>(value).length;
-        memory.copy(
-          changetype<usize>(result) + (<usize>offset << 1),
-          changetype<usize>(value),
-          <usize>valueLen << 1
-        );
-        offset += valueLen;
-      }
-      if (sepLen) {
-        memory.copy(
-          changetype<usize>(result) + (<usize>offset << 1),
-          changetype<usize>(separator),
-          <usize>sepLen << 1
-        );
-        offset += sepLen;
-      }
-    }
-    value = load<string>(dataStart + (<usize>lastIndex << alignof<T>()));
-    if (value !== null) {
-      memory.copy(
-        changetype<usize>(result) + (<usize>offset << 1),
-        changetype<usize>(value),
-        <usize>changetype<string>(value).length << 1
-      );
-    }
-    return result;
-  }
-
-  private join_arr(separator: string = ","): string {
-    var lastIndex = this.length_ - 1;
-    if (lastIndex < 0) return "";
-
-    var result = "";
-    var sepLen = separator.length;
-    var base = this.dataStart;
-    var value: T;
-    if (!lastIndex) {
-      value = load<T>(base);
-      // @ts-ignore: type
-      return value ? value.join(separator) : "";
-    }
-    for (let i = 0; i < lastIndex; ++i) {
-      value = load<T>(base + (<usize>i << alignof<T>()));
-      // @ts-ignore: type
-      if (value) result += value.join(separator);
-      if (sepLen) result += separator;
-    }
-    value = load<T>(base + (<usize>lastIndex << alignof<T>()));
-    // @ts-ignore: type
-    if (value) result += value.join(separator);
-    return result; // registered by concatenation (FIXME: lots of garbage)
-  }
-
-  private join_ref(separator: string = ","): string {
-    var lastIndex = this.length_ - 1;
-    if (lastIndex < 0) return "";
-    var base = this.dataStart;
-    if (!lastIndex) return "[object Object]";
-
-    const valueLen = 15; // max possible length of element len("[object Object]")
-    var sepLen = separator.length;
-    var estLen = (valueLen + sepLen) * lastIndex + valueLen;
-    var result = changetype<string>(__alloc(estLen << 1, idof<string>()));
-    var offset = 0;
-    var value: T;
-    for (let i = 0; i < lastIndex; ++i) {
-      value = load<T>(base + (<usize>i << alignof<T>()));
-      if (value) {
-        memory.copy(
-          changetype<usize>(result) + (<usize>offset << 1),
-          changetype<usize>("[object Object]"),
-          <usize>valueLen << 1
-        );
-        offset += valueLen;
-      }
-      if (sepLen) {
-        memory.copy(
-          changetype<usize>(result) + (<usize>offset << 1),
-          changetype<usize>(separator),
-          <usize>sepLen << 1
-        );
-        offset += sepLen;
-      }
-    }
-    if (load<T>(base + (<usize>lastIndex << alignof<T>()))) {
-      memory.copy(
-        changetype<usize>(result) + (<usize>offset << 1),
-        changetype<usize>("[object Object]"),
-        <usize>valueLen << 1
-      );
-      offset += valueLen;
-    }
-    if (estLen > offset) return result.substring(0, offset);
-    return result;
   }
 
   toString(): string {
@@ -793,6 +552,6 @@ export class Array<T> extends ArrayBufferView {
         cur += sizeof<usize>();
       }
     }
-    // automatically visits ArrayBufferView (.data) next
+    // automatically visits ArrayBufferView (.buffer) next
   }
 }

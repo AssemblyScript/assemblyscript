@@ -219,22 +219,88 @@ import { BLOCK_MAXSIZE } from "rt/common";
   multisubarr[5] = 6;
 
   let multisubarr1 = multisubarr.subarray(1, 6);
-  assert(multisubarr1[0] === 2);
-  assert(multisubarr1.length === 5);
-  assert(multisubarr1.byteOffset === 1);
-  assert(multisubarr1.byteLength === 5);
+  assert(multisubarr1[0] == 2);
+  assert(multisubarr1.length == 5);
+  assert(multisubarr1.byteOffset == 1);
+  assert(multisubarr1.byteLength == 5);
 
   let multisubarr2 = multisubarr1.subarray(1, 5);
-  assert(multisubarr2[0] === 3);
-  assert(multisubarr2.length === 4);
-  assert(multisubarr2.byteOffset === 2);
-  assert(multisubarr2.byteLength === 4);
+  assert(multisubarr2[0] == 3);
+  assert(multisubarr2.length == 4);
+  assert(multisubarr2.byteOffset == 2);
+  assert(multisubarr2.byteLength == 4);
 
   let multisubarr3 = multisubarr2.subarray(1, 4);
-  assert(multisubarr3[0] === 4);
-  assert(multisubarr3.length === 3);
-  assert(multisubarr3.byteOffset === 3);
-  assert(multisubarr3.byteLength === 3);
+  assert(multisubarr3[0] == 4);
+  assert(multisubarr3.length == 3);
+  assert(multisubarr3.byteOffset == 3);
+  assert(multisubarr3.byteLength == 3);
+}
+
+{
+  let cwAr = new Int32Array(5);
+  cwAr[0] = 1;
+  cwAr[1] = 2;
+  cwAr[2] = 3;
+  cwAr[3] = 4;
+  cwAr[4] = 5;
+  let copy = cwAr.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, 3), <i32[]>[4, 5, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 3), <i32[]>[1, 4, 5, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 2), <i32[]>[1, 3, 4, 5, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(2, 2), <i32[]>[1, 2, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, 3, 4), <i32[]>[4, 2, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 3, 4), <i32[]>[1, 4, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(1, 2, 4), <i32[]>[1, 3, 4, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, -2), <i32[]>[4, 5, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(0, -2, -1), <i32[]>[4, 2, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(-4, -3, -2), <i32[]>[1, 3, 3, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(-4, -3, -1), <i32[]>[1, 3, 4, 4, 5]));
+  cwAr = copy.slice(0);
+  assert(isInt32ArrayEqual(cwAr.copyWithin(-4, -3), <i32[]>[1, 3, 4, 5, 5]));
+}
+
+{
+  let arr = new Int32Array(5);
+  arr[0] = 1;
+  arr[1] = 2;
+  arr[2] = 3;
+  arr[3] = 4;
+  arr[4] = 5;
+
+  let sub = arr.subarray(1, 4);
+  assert(sub.length == 3);
+  assert(sub.byteOffset == 4);
+  assert(sub.byteLength == 12);
+
+  let sliced = arr.slice(1, 3);
+  assert(sliced[0] == 2);
+  assert(sliced[1] == 3);
+  assert(sliced.length == 2);
+  assert(sliced.byteOffset == 0);
+  assert(sliced.byteLength == 8);
+
+  let subsliced = sub.slice(1, 2);
+  assert(subsliced[0] == 3);
+  assert(subsliced.length == 1);
+  assert(subsliced.byteOffset == 0);
+  assert(subsliced.byteLength == 4);
+
+  let copy = arr.slice();
+  assert(copy !== arr);
+  assert(copy.length == arr.length);
+  assert(copy.byteOffset == arr.byteOffset);
+  assert(copy.byteLength == arr.byteLength);
 }
 
 // Reduce test suite:
@@ -253,7 +319,7 @@ function testReduce<ArrayType extends TypedArray<T>, T extends number>(): void {
   array[0] = <T>1;
   array[1] = <T>2;
   array[2] = <T>3;
-  var result = array.reduce<T>((acc: T, val: T): T => <T>(acc + val), <T>0);
+  var result = array.reduce<T>((acc: T, val: T) => <T>(acc + val), <T>0);
   assert(result == <T>6);
 }
 
@@ -274,7 +340,7 @@ function testReduceRight<ArrayType extends TypedArray<T>, T extends number>(): v
   array[0] = <T>1;
   array[1] = <T>2;
   array[2] = <T>3;
-  var result = array.reduceRight<T>((acc: T, val: T): T => <T>(acc + val), <T>0);
+  var result = array.reduceRight<T>((acc: T, val: T) => <T>(acc + val), <T>0);
   assert(result == <T>6);
 }
 
@@ -295,7 +361,7 @@ function testArrayMap<ArrayType extends TypedArray<T>, T extends number>(): void
   source[0] = <T>1;
   source[1] = <T>2;
   source[2] = <T>3;
-  var result = source.map((value: T): T => <T>(value * value));
+  var result = source.map((value: T) => <T>(value * value));
   assert(result[0] == <T>1);
   assert(result[1] == <T>4);
   assert(result[2] == <T>9);
@@ -313,14 +379,41 @@ testArrayMap<Uint64Array, u64>();
 testArrayMap<Float32Array, f32>();
 testArrayMap<Float64Array, f64>();
 
+function testArrayFilter<ArrayType extends TypedArray<T>, T extends number>(): void {
+  var source: ArrayType = instantiate<ArrayType>(6);
+  source[0] = <T>1;
+  source[1] = <T>2;
+  source[2] = <T>3;
+  source[3] = <T>4;
+  source[5] = <T>5;
+  var result = source.filter((value: T) => value > 2);
+  assert(result.byteOffset == 0);
+  assert(result.length == 3);
+  assert(result[0] == <T>3);
+  assert(result[1] == <T>4);
+  assert(result[2] == <T>5);
+}
+
+testArrayFilter<Int8Array, i8>();
+testArrayFilter<Uint8Array, u8>();
+testArrayFilter<Uint8ClampedArray, u8>();
+testArrayFilter<Int16Array, i16>();
+testArrayFilter<Uint16Array, u16>();
+testArrayFilter<Int32Array, i32>();
+testArrayFilter<Uint32Array, u32>();
+testArrayFilter<Int64Array, i64>();
+testArrayFilter<Uint64Array, u64>();
+testArrayFilter<Float32Array, f32>();
+testArrayFilter<Float64Array, f64>();
+
 function testArraySome<ArrayType extends TypedArray<T>, T extends number>(): void {
   var source: ArrayType = instantiate<ArrayType>(3);
   source[0] = <T>2;
   source[1] = <T>4;
   source[2] = <T>6;
-  var result: bool = source.some((value: T): bool => value == <T>2);
+  var result: bool = source.some((value: T) => value == <T>2);
   assert(result);
-  var failResult = source.some((value: T): bool => value == <T>0);
+  var failResult = source.some((value: T) => value == <T>0);
   assert(!failResult);
 }
 
@@ -341,9 +434,9 @@ function testArrayFindIndex<ArrayType extends TypedArray<T>, T extends number>()
   source[0] = <T>1;
   source[1] = <T>2;
   source[2] = <T>3;
-  var result = source.findIndex((value: T): bool => value == <T>2);
+  var result = source.findIndex((value: T) => value == <T>2);
   assert(result == 1);
-  var failResult = source.findIndex((value: T): bool => value == <T>4);
+  var failResult = source.findIndex((value: T) => value == <T>4);
   assert(failResult == -1);
 }
 
@@ -364,9 +457,9 @@ function testArrayEvery<ArrayType extends TypedArray<T>, T extends number>(): vo
   source[0] = <T>2;
   source[1] = <T>4;
   source[2] = <T>6;
-  var result = source.every((value: T): bool => value % <T>2 == <T>0);
+  var result = source.every((value: T) => value % <T>2 == <T>0);
   assert(result);
-  var failResult = source.every((value: T): bool => value == <T>2);
+  var failResult = source.every((value: T) => value == <T>2);
   assert(!failResult);
 }
 
@@ -392,7 +485,7 @@ function testArrayForEach<TArray extends TypedArray<T>, T extends number>(): voi
   array[0] = <T>forEachValues[0];
   array[1] = <T>forEachValues[1];
   array[2] = <T>forEachValues[2];
-  array.forEach((value: T, index: i32, self: TArray): void => {
+  array.forEach((value: T, index: i32, self: TArray) => {
     var matchedValue = forEachValues[index];
     assert(value == <T>matchedValue);
     assert(index == forEachCallCount);
@@ -505,6 +598,35 @@ testArrayIndexOfAndLastIndexOf<Int64Array, i64>();
 testArrayIndexOfAndLastIndexOf<Uint64Array, u64>();
 testArrayIndexOfAndLastIndexOf<Float32Array, f32>();
 testArrayIndexOfAndLastIndexOf<Float64Array, f64>();
+
+function testArrayJoinAndToString<TArray extends TypedArray<T>, T extends number>(): void {
+  var array = instantiate<TArray>(5);
+  array[0] = <T>1;
+  array[1] = <T>2;
+  array[2] = <T>3;
+  array[3] = <T>4;
+  array[4] = <T>5;
+
+  if (isFloat<T>()) {
+    assert(array.join() == "1.0,2.0,3.0,4.0,5.0");
+    assert(array.toString() == "1.0,2.0,3.0,4.0,5.0");
+  } else {
+    assert(array.join() == "1,2,3,4,5");
+    assert(array.toString() == "1,2,3,4,5");
+  }
+}
+
+testArrayJoinAndToString<Int8Array, i8>();
+testArrayJoinAndToString<Uint8Array, u8>();
+testArrayJoinAndToString<Uint8ClampedArray, u8>();
+testArrayJoinAndToString<Int16Array, i16>();
+testArrayJoinAndToString<Uint16Array, u16>();
+testArrayJoinAndToString<Int32Array, i32>();
+testArrayJoinAndToString<Uint32Array, u32>();
+testArrayJoinAndToString<Int64Array, i64>();
+testArrayJoinAndToString<Uint64Array, u64>();
+testArrayJoinAndToString<Float32Array, f32>();
+testArrayJoinAndToString<Float64Array, f64>();
 
 const testArrayWrapValues: i32[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 function testArrayWrap<TArray extends TypedArray<T>, T extends number>(): void {
