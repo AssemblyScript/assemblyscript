@@ -1231,11 +1231,14 @@ export class Module {
     for (let i = 0; i < numNames; ++i) {
       names[i] = this.allocStringCached(funcs[i]);
     }
-    // FIXME: Relocating the function table is not possible currently due to
-    // the C-API only accepting an array of names, but no offsets.
     var cArr = allocI32Array(names);
+    var tbase = this.tbase;
     try {
-      _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames);
+      _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames,
+        tbase
+          ? _BinaryenGlobalGet(this.ref, tbase, NativeType.I32)
+          : this.i32(0)
+      );
     } finally {
       memory.free(cArr);
     }

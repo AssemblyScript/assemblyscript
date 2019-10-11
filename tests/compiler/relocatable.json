@@ -1,7 +1,9 @@
 {
   "asc_flags": [
     "--runtime none",
-    "--relocatable",
-    "--importMemory"
+    "--explicitStart",
+    "--importMemory",
+    "--importTable",
+    "--relocatable"
   ]
 }

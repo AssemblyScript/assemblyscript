@@ -311,11 +311,12 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
         Date,
         Reflect
       };
+      var module = new WebAssembly.Module(binaryBuffer);
       if (glue.preInstantiate) {
         console.log(colorsUtil.white("  [preInstantiate]"));
-        glue.preInstantiate(imports, exports);
+        glue.preInstantiate(imports, exports, module);
       }
-      var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
+      var instance = new WebAssembly.Instance(module, imports);
       Object.setPrototypeOf(exports, instance.exports);
       if (exports.__start) {
         console.log(colorsUtil.white("  [start]"));

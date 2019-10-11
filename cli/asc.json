@@ -109,8 +109,8 @@
   },
   "relocatable": {
     "description": [
-      "Emits a relocatable module. Imports a __memory_base and a",
-      "__table_base constant indicating where the module lives."
+      "Emits a relocatable module. Imports memory and table base",
+      "offsets from the host."
     ],
     "type": "b",
     "default": false
