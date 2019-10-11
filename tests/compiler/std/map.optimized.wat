@@ -2163,10 +2163,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $5
   local.get $3
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 3
+  i32.shl
+  i32.const 3
+  i32.div_s
   local.tee $6
   i32.const 12
   i32.mul
@@ -2307,10 +2307,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -2388,7 +2388,7 @@
   if
    i32.const 416
    i32.const 472
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -2445,10 +2445,10 @@
    i32.load offset=20
    local.get $0
    i32.load offset=12
-   f64.convert_i32_s
-   f64.const 0.75
-   f64.mul
-   i32.trunc_f64_s
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -2861,10 +2861,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $5
   local.get $3
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 3
+  i32.shl
+  i32.const 3
+  i32.div_s
   local.tee $6
   i32.const 12
   i32.mul
@@ -3003,10 +3003,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -3082,7 +3082,7 @@
   if
    i32.const 416
    i32.const 472
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -3137,10 +3137,10 @@
    i32.load offset=20
    local.get $0
    i32.load offset=12
-   f64.convert_i32_s
-   f64.const 0.75
-   f64.mul
-   i32.trunc_f64_s
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -3601,10 +3601,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $5
   local.get $3
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 3
+  i32.shl
+  i32.const 3
+  i32.div_s
   local.tee $6
   i32.const 12
   i32.mul
@@ -3745,10 +3745,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -3826,7 +3826,7 @@
   if
    i32.const 416
    i32.const 472
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -3883,10 +3883,10 @@
    i32.load offset=20
    local.get $0
    i32.load offset=12
-   f64.convert_i32_s
-   f64.const 0.75
-   f64.mul
-   i32.trunc_f64_s
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -4299,10 +4299,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $5
   local.get $3
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 3
+  i32.shl
+  i32.const 3
+  i32.div_s
   local.tee $6
   i32.const 12
   i32.mul
@@ -4441,10 +4441,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -4520,7 +4520,7 @@
   if
    i32.const 416
    i32.const 472
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -4575,10 +4575,10 @@
    i32.load offset=20
    local.get $0
    i32.load offset=12
-   f64.convert_i32_s
-   f64.const 0.75
-   f64.mul
-   i32.trunc_f64_s
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -5049,10 +5049,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $5
   local.get $3
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 3
+  i32.shl
+  i32.const 3
+  i32.div_s
   local.tee $6
   i32.const 12
   i32.mul
@@ -5189,10 +5189,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -5266,7 +5266,7 @@
   if
    i32.const 416
    i32.const 472
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -5319,10 +5319,10 @@
    i32.load offset=20
    local.get $0
    i32.load offset=12
-   f64.convert_i32_s
-   f64.const 0.75
-   f64.mul
-   i32.trunc_f64_s
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -6193,10 +6193,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $5
   local.get $3
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 3
+  i32.shl
+  i32.const 3
+  i32.div_s
   local.tee $6
   i32.const 4
   i32.shl
@@ -6333,10 +6333,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -6410,7 +6410,7 @@
   if
    i32.const 416
    i32.const 472
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -6464,10 +6464,10 @@
    i32.load offset=20
    local.get $0
    i32.load offset=12
-   f64.convert_i32_s
-   f64.const 0.75
-   f64.mul
-   i32.trunc_f64_s
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -7254,10 +7254,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $5
   local.get $3
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 3
+  i32.shl
+  i32.const 3
+  i32.div_s
   local.tee $6
   i32.const 12
   i32.mul
@@ -7396,10 +7396,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -7474,7 +7474,7 @@
   if
    i32.const 416
    i32.const 472
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -7529,10 +7529,10 @@
    i32.load offset=20
    local.get $0
    i32.load offset=12
-   f64.convert_i32_s
-   f64.const 0.75
-   f64.mul
-   i32.trunc_f64_s
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
    i32.lt_s
   else
    i32.const 0
@@ -7966,10 +7966,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $5
   local.get $3
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 3
+  i32.shl
+  i32.const 3
+  i32.div_s
   local.tee $6
   i32.const 4
   i32.shl
@@ -8108,10 +8108,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -8186,7 +8186,7 @@
   if
    i32.const 416
    i32.const 472
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -8241,10 +8241,10 @@
    i32.load offset=20
    local.get $0
    i32.load offset=12
-   f64.convert_i32_s
-   f64.const 0.75
-   f64.mul
-   i32.trunc_f64_s
+   i32.const 3
+   i32.mul
+   i32.const 4
+   i32.div_s
    i32.lt_s
   else
    i32.const 0
