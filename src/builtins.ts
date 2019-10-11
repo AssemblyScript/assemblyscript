@@ -2037,10 +2037,10 @@ export function compileCall(
         checkArgsRequired(operands, 1, reportNode, compiler)
       ) return module.unreachable();
       let toType = typeArguments![0];
-      let arg0 = compiler.compileExpression(operands[0], toType);
+      let arg0 = compiler.compileExpression(operands[0], Type.auto);
       let fromType = compiler.currentType;
       compiler.currentType = toType;
-      if (fromType.size != toType.size) {
+      if (!fromType.isChangeableTo(toType)) {
         compiler.error(
           DiagnosticCode.Type_0_cannot_be_changed_to_type_1,
           reportNode.range, fromType.toString(), toType.toString()
