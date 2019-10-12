@@ -3,9 +3,9 @@ const { SourceKind } = require("../.."); // "assemblyscript"
 
 class MyTransform extends Transform {
   afterParse(parser) {
-    console.error("[mytransform.js] afterParse called, baseDir = " + this.baseDir);
+    this.log("[mytransform.js] afterParse called, baseDir = " + this.baseDir);
     var sources = parser.program.sources;
-    sources.forEach(source => console.error("  " + source.internalPath + " [" + SourceKind[source.sourceKind] + "]"));
+    sources.forEach(source => this.log("  " + source.internalPath + " [" + SourceKind[source.sourceKind] + "]"));
   }
 }
 

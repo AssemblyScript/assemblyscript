@@ -219,11 +219,14 @@ exports.main = function main(argv, options, callback) {
       if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
       const classOrModule = require(filename);
       if (typeof classOrModule === "function") {
-        Object.defineProperties(classOrModule.prototype, {
-          baseDir: { value: baseDir },
-          readFile: { value: readFile },
-          writeFile: { value: writeFile },
-          listFiles: { value: listFiles }
+        Object.assign(classOrModule.prototype, {
+          baseDir,
+          stdout,
+          stderr,
+          log: console.error || console.log,
+          readFile,
+          writeFile,
+          listFiles
         });
         transforms.push(new classOrModule());
       } else {

@@ -4,11 +4,21 @@
  *//***/
 
 import { Parser } from "..";
+import { OutputStream } from "./asc";
 
 export abstract class Transform {
 
   /** Base directory. */
   readonly baseDir: string;
+
+  /** Output stream used by the compiler. */
+  readonly stdout: OutputStream;
+
+  /** Error stream used by the compiler. */
+  readonly stderr: OutputStream;
+
+  /** Logs a message to console. */
+  readonly log: typeof console.log;
 
   /** Writes a file to disk. */
   writeFile(filename: string, contents: string | Uint8Array, baseDir: string): boolean;
