@@ -14,12 +14,8 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $__memory_size i32 (i32.const 304))
- (global $__table_size i32 (i32.const 2))
  (export "__start" (func $start))
  (export "memory" (memory $0))
- (export "__memory_size" (global $__memory_size))
- (export "__table_size" (global $__table_size))
  (func $start:relocatable~anonymous|0 (; 1 ;) (type $FUNCSIG$i) (result i32)
   i32.const 42
  )
@@ -134,4 +130,5 @@
  (func $null (; 5 ;) (type $FUNCSIG$v)
   nop
  )
+ ;; custom section "dylink", size 6
 )
