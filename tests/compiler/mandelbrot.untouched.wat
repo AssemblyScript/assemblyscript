@@ -473,19 +473,19 @@
  (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
-  (local $6 f64)
-  (local $7 f64)
+  (local $6 i32)
+  (local $7 i32)
   (local $8 f64)
-  (local $9 i32)
+  (local $9 f64)
   (local $10 f64)
-  (local $11 f64)
-  (local $12 i32)
-  (local $13 f64)
+  (local $11 i32)
+  (local $12 f64)
+  (local $13 i32)
   (local $14 f64)
   (local $15 f64)
   (local $16 f64)
   (local $17 f64)
-  (local $18 i32)
+  (local $18 f64)
   (local $19 f64)
   (local $20 i32)
   (local $21 f64)
@@ -507,141 +507,148 @@
   f64.mul
   local.set $5
   f64.const 10
-  f64.const 3
+  i32.const 3
   local.get $1
-  f64.convert_i32_u
-  f64.mul
-  f64.const 4
+  i32.mul
+  local.tee $6
+  i32.const 4
   local.get $2
-  f64.convert_i32_u
-  f64.mul
-  f64.min
+  i32.mul
+  local.tee $7
+  local.get $6
+  local.get $7
+  i32.lt_s
+  select
+  f64.convert_i32_s
   f64.div
-  local.set $6
+  local.set $8
   local.get $0
   f64.convert_i32_u
   local.get $5
   f64.sub
-  local.get $6
+  local.get $8
   f64.mul
-  local.set $7
+  local.set $9
   local.get $4
-  local.get $6
+  local.get $8
   f64.mul
-  local.set $8
+  local.set $10
   local.get $0
   local.get $1
   i32.mul
   i32.const 1
   i32.shl
-  local.set $9
+  local.set $11
   f64.const 1
   local.get $3
   f64.convert_i32_u
   f64.div
-  local.set $10
-  f64.const 8
+  local.set $12
+  i32.const 8
+  local.tee $6
   local.get $3
-  f64.convert_i32_u
-  f64.min
-  local.set $11
+  local.tee $7
+  local.get $6
+  local.get $7
+  i32.lt_u
+  select
+  local.set $13
   block $break|0
    i32.const 0
-   local.set $12
+   local.set $6
    loop $loop|0
-    local.get $12
+    local.get $6
     local.get $1
     i32.lt_u
     i32.eqz
     br_if $break|0
-    local.get $12
-    f64.convert_i32_u
     local.get $6
-    f64.mul
+    f64.convert_i32_u
     local.get $8
+    f64.mul
+    local.get $10
     f64.sub
-    local.set $13
-    f64.const 0
     local.set $14
     f64.const 0
     local.set $15
+    f64.const 0
+    local.set $16
     i32.const 0
-    local.set $18
+    local.set $7
     block $break|1
      loop $continue|1
-      local.get $14
-      local.get $14
-      f64.mul
-      local.tee $16
       local.get $15
       local.get $15
       f64.mul
       local.tee $17
+      local.get $16
+      local.get $16
+      f64.mul
+      local.tee $18
       f64.add
       f64.const 4
       f64.le
       i32.eqz
       br_if $break|1
       f64.const 2
-      local.get $14
-      f64.mul
       local.get $15
       f64.mul
-      local.get $7
+      local.get $16
+      f64.mul
+      local.get $9
+      f64.add
+      local.set $16
+      local.get $17
+      local.get $18
+      f64.sub
+      local.get $14
       f64.add
       local.set $15
-      local.get $16
-      local.get $17
-      f64.sub
-      local.get $13
-      f64.add
-      local.set $14
-      local.get $18
+      local.get $7
       local.get $3
       i32.ge_u
       if
        br $break|1
       end
-      local.get $18
+      local.get $7
       i32.const 1
       i32.add
-      local.set $18
+      local.set $7
       br $continue|1
      end
      unreachable
     end
     block $break|2
      loop $continue|2
-      local.get $18
-      f64.convert_i32_u
-      local.get $11
-      f64.lt
+      local.get $7
+      local.get $13
+      i32.lt_u
       i32.eqz
       br_if $break|2
-      local.get $14
-      local.get $14
+      local.get $15
+      local.get $15
       f64.mul
-      local.get $15
-      local.get $15
+      local.get $16
+      local.get $16
       f64.mul
       f64.sub
-      local.get $13
+      local.get $14
       f64.add
       local.set $19
       f64.const 2
-      local.get $14
-      f64.mul
       local.get $15
       f64.mul
-      local.get $7
+      local.get $16
+      f64.mul
+      local.get $9
       f64.add
-      local.set $15
+      local.set $16
       local.get $19
-      local.set $14
-      local.get $18
+      local.set $15
+      local.get $7
       i32.const 1
       i32.add
-      local.set $18
+      local.set $7
       br $continue|2
      end
      unreachable
@@ -650,11 +657,11 @@
     i32.const 1
     i32.sub
     local.set $20
-    local.get $14
-    local.get $14
+    local.get $15
+    local.get $15
     f64.mul
-    local.get $15
-    local.get $15
+    local.get $16
+    local.get $16
     f64.mul
     f64.add
     local.set $19
@@ -672,13 +679,13 @@
      i32.const 1
      i32.sub
      f64.convert_i32_s
-     local.get $18
+     local.get $7
      i32.const 1
      i32.add
      f64.convert_i32_u
      local.get $21
      f64.sub
-     local.get $10
+     local.get $12
      f64.mul
      local.set $24
      f64.const 0
@@ -694,17 +701,17 @@
      i32.trunc_f64_u
      local.set $20
     end
-    local.get $9
-    local.get $12
+    local.get $11
+    local.get $6
     i32.const 1
     i32.shl
     i32.add
     local.get $20
     i32.store16
-    local.get $12
+    local.get $6
     i32.const 1
     i32.add
-    local.set $12
+    local.set $6
     br $loop|0
    end
    unreachable
