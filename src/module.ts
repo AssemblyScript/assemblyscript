@@ -1168,7 +1168,7 @@ export class Module {
     var cStr = this.allocStringCached(exportName);
     var k = segments.length;
     var mbase = this.mbase;
-    var segs: usize[], psvs: i8[], offs: ExpressionRef[], sizs: Index[];
+    var segs: usize[], psvs: Uint8Array, offs: ExpressionRef[], sizs: Index[];
     if (mbase) {
       // Offset expressions cannot currently use an addition but are restricted
       // to a constant or a global.get, so make one large memory segment in the
@@ -1186,13 +1186,13 @@ export class Module {
         buffer.set(segment.buffer, i64_low(segment.offset));
       }
       segs = [ allocU8Array(buffer) ];
-      psvs = [ 0 ];
+      psvs = new Uint8Array(1);
       offs = [ _BinaryenGlobalGet(this.ref, mbase, target == Target.WASM64 ? NativeType.I64 : NativeType.I32) ];
       sizs = [ buffer.length ];
       k = 1;
     } else {
       segs = new Array<usize>(k);
-      psvs = new Array<i8>(k);
+      psvs = new Uint8Array(k);
       offs = new Array<ExpressionRef>(k);
       sizs = new Array<Index>(k);
       for (let i = 0; i < k; ++i) {
