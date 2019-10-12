@@ -1516,7 +1516,6 @@ export class Compiler extends DiagnosticEmitter {
     }
     var ref = i64_add(stringSegment.offset, i64_new(rtHeaderSize));
     this.currentType = stringInstance.type;
-    var ptr: ExpressionRef;
     if (this.options.isWasm64) {
       return module.i64(i64_low(ref), i64_high(ref));
     } else {
@@ -7614,7 +7613,6 @@ export class Compiler extends DiagnosticEmitter {
         let arraySegment = this.ensureStaticArrayHeader(elementType, bufferSegment);
         let arrayAddress = i64_add(arraySegment.offset, i64_new(runtimeHeaderSize));
         this.currentType = arrayType;
-        let ptr: ExpressionRef;
         if (program.options.isWasm64) {
           return module.i64(i64_low(arrayAddress), i64_high(arrayAddress));
         } else {

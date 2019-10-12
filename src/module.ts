@@ -1832,7 +1832,7 @@ export class Relooper {
 // helpers
 // can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js
 
-function allocU8Array(u8s: u8[] | null): usize {
+function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
   var numValues = u8s.length;
   var ptr = memory.allocate(numValues);
