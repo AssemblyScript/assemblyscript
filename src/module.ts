@@ -1248,6 +1248,16 @@ export class Module {
     _BinaryenSetStart(this.ref, func);
   }
 
+  addCustomSection(name: string, contents: Uint8Array): void {
+    var cStr = this.allocStringCached(name);
+    var cArr = allocU8Array(contents);
+    try {
+      _BinaryenAddCustomSection(this.ref, cStr, cArr, contents.length);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
   getOptimizeLevel(): i32 {
     return _BinaryenGetOptimizeLevel();
   }

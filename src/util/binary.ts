@@ -72,3 +72,24 @@ export function writeF64(value: f64, buffer: Uint8Array, offset: i32): void {
   writeI32(i64_low(valueI64), buffer, offset);
   writeI32(i64_high(valueI64), buffer, offset + 4);
 }
+
+/** Computes the length of a 32-bit unsigned integer when encoded as LEB128. */
+export function lengthU32Leb128(value: u32): i32 {
+  var length = 1;
+  while (value >>>= 7) ++length;
+  return length;
+}
+
+/** Writes a 32-bit unsigned integer to the specified buffer using LEB128 encoding. */
+export function writeU32Leb128(value: u32, buffer: Uint8Array, offset: i32): i32 {
+  do {
+    let b = value & 0x7f;
+    if (value >>>= 7) {
+      buffer[offset++] = b | 0x80;
+    } else {
+      buffer[offset++] = b;
+      break;
+    }
+  } while (true);
+  return offset;
+}

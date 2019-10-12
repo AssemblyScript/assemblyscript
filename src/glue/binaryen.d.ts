@@ -706,6 +706,8 @@ declare function _BinaryenModuleGetDebugInfoFileName(module: BinaryenModuleRef, 
 declare function _BinaryenModuleGetFeatures(module: BinaryenModuleRef): BinaryenFeatureFlags;
 declare function _BinaryenModuleSetFeatures(module: BinaryenModuleRef, featureFlags: BinaryenFeatureFlags): void;
 
+declare function _BinaryenAddCustomSection(module: BinaryenModuleRef, name: usize, contents: usize, contentsSize: BinaryenIndex): void;
+
 declare type BinaryenRelooperRef = usize;
 declare type BinaryenRelooperBlockRef = usize;
 

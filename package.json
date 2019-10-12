@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "89.0.0-nightly.20190918",
+    "binaryen": "89.0.0-nightly.20191012",
     "glob": "^7.1.4",
     "long": "^4.0.0",
     "opencollective-postinstall": "^2.0.0",

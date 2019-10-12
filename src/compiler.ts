@@ -178,7 +178,9 @@ import {
   writeI64,
   writeF32,
   writeF64,
-  makeMap
+  makeMap,
+  writeU32Leb128,
+  lengthU32Leb128
 } from "./util";
 
 /** Compiler options. */
@@ -471,17 +473,21 @@ export class Compiler extends DiagnosticEmitter {
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
 
-    // set up relocation hints
+    // add dylink section if relocatable
     if (options.relocatable) {
-      let memorySize = i64_align(memoryOffset, 16);
-      if (options.isWasm64) {
-        module.addGlobal("__memory_size", NativeType.I64, false, module.i64(i64_low(memorySize), i64_high(memorySize)));
-      } else {
-        module.addGlobal("__memory_size", NativeType.I32, false, module.i32(i64_low(memorySize)));
-      }
-      module.addGlobalExport("__memory_size", "__memory_size");
-      module.addGlobal("__table_size", NativeType.I32, false, module.i32(functionTable.length));
-      module.addGlobalExport("__table_size", "__table_size");
+      let memorySize64 = i64_align(memoryOffset, 16);
+      assert(i64_is_u32(memorySize64));
+      let msize = i64_low(memorySize64);
+      let tsize = functionTable.length;
+      let size = lengthU32Leb128(msize) + lengthU32Leb128(tsize) + 3;
+      let buffer = new Uint8Array(size);
+      let offset = writeU32Leb128(msize, buffer, 0);  // memory_size
+      offset = writeU32Leb128(4, buffer, offset);     // memory_align
+      offset = writeU32Leb128(tsize, buffer, offset); // table_size
+      offset = writeU32Leb128(0, buffer, offset);     // table_align
+      offset = writeU32Leb128(0, buffer, offset);     // lib_count
+      assert(offset == size);
+      module.addCustomSection("dylink", buffer);
     }
 
     return module;
