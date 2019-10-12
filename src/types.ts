@@ -280,6 +280,15 @@ export class Type {
     return this.kind == target.kind;
   }
 
+  /** Tests if a value of this type can be changed to the target type using `changetype`. */
+  isChangeableTo(target: Type): bool {
+    if (this.is(TypeFlags.INTEGER) && target.is(TypeFlags.INTEGER)) {
+      let size = this.size;
+      return size == target.size && (size >= 32 || this.is(TypeFlags.SIGNED) == target.is(TypeFlags.SIGNED));
+    }
+    return this.kind == target.kind;
+  }
+
   /** Determines the common denominator type of two types, if there is any. */
   static commonDenominator(left: Type, right: Type, signednessIsImportant: bool): Type | null {
     if (right.isAssignableTo(left, signednessIsImportant)) return left;
