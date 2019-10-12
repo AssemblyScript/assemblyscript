@@ -110,7 +110,7 @@
   "relocatable": {
     "description": [
       "Emits a relocatable module. Imports memory and table base",
-      "offsets from the host."
+      "offsets from the host and appends a dylink section."
     ],
     "type": "b",
     "default": false
