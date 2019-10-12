@@ -223,7 +223,7 @@ exports.main = function main(argv, options, callback) {
           baseDir,
           stdout,
           stderr,
-          log: console.error || console.log,
+          log: console.error,
           readFile,
           writeFile,
           listFiles
