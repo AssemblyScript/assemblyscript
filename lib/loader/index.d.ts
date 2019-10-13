@@ -7,9 +7,9 @@ interface ImportsObject extends Record<string, any> {
   env?: {
     memory?: WebAssembly.Memory,
     table?: WebAssembly.Table,
-    abort?: (msg: number, file: number, line: number, column: number) => void,
-    trace?: (msg: number, numArgs?: number, ...args: any[]) => void
-  }
+    abort?(msg: number, file: number, line: number, column: number): void,
+    trace?(msg: number, numArgs?: number, ...args: number[]): void
+  };
 }
 
 type TypedArray
@@ -54,9 +54,9 @@ interface ASUtil {
   /** Reads (copies) the values of Uint32Array from the module's memory. */
   __getUint32Array(ptr: number): Uint32Array;
   /** Reads (copies) the values of Int32Array from the module's memory. */
-  __getInt64Array(ptr: number): BigInt32Array;
+  __getInt64Array(ptr: number): BigInt64Array;
   /** Reads (copies) the values of Uint32Array from the module's memory. */
-  __getUint64Array(ptr: number): BigUint32Array;
+  __getUint64Array(ptr: number): BigUint64Array;
   /** Reads (copies) the values of Float32Array from the module's memory. */
   __getFloat32Array(ptr: number): Float32Array;
     /** Reads (copies) the values of Float64Array from the module's memory. */
