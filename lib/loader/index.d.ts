@@ -34,7 +34,7 @@ interface ASUtil {
   /** Reads (copies) the value of a string from the module's memory. */
   __getString(ptr: number): string;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
-  __allocArray(id: number, values: number[]): number;
+  __allocArray(id: number, values: ArrayLike<number>): number;
   /** Reads (copies) the values of an array from the module's memory. */
   __getArray(ptr: number): number[];
   /** Gets a view on the values of an array in the module's memory. */
@@ -79,10 +79,10 @@ interface ASUtil {
 export declare function instantiate<T extends {}>(module: WebAssembly.Module, imports?: ImportsObject): ASUtil & T;
 
 /** Instantiates an AssemblyScript module from a buffer using the specified imports. */
-export declare function instantiateBuffer<T extends {}>(buffer: Uint8Array, imports?: ImportsObject): ASUtil & T;
+export declare function instantiateBuffer<T extends {}>(buffer: BufferSource, imports?: ImportsObject): ASUtil & T;
 
 /** Instantiates an AssemblyScript module from a response using the specified imports. */
-export declare function instantiateStreaming<T extends {}>(result: Promise<Response>, imports?: ImportsObject): Promise<ASUtil & T>;
+export declare function instantiateStreaming<T extends {}>(result: Response | PromiseLike<Response>, imports?: ImportsObject): Promise<ASUtil & T>;
 
 /** Demangles an AssemblyScript module's exports to a friendly object structure. */
 export declare function demangle<T extends {}>(exports: {}, baseModule?: {}): T;
