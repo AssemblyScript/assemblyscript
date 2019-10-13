@@ -39,27 +39,27 @@ interface ASUtil {
   __getArray(ptr: number): number[];
   /** Gets a view on the values of an array in the module's memory. */
   __getArrayView(ptr: number): TypedArray;
-  /** Reads (copies) the values of Int8Array from the module's memory. */
+  /** Reads the values of Int8Array from the module's memory. */
   __getInt8Array(ptr: number): Int8Array;
-  /** Reads (copies) the values of Uint8Array from the module's memory. */
+  /** Reads the values of Uint8Array from the module's memory. */
   __getUint8Array(ptr: number): Uint8Array;
-  /** Reads (copies) the values of Uint8Array from the module's memory. */
+  /** Reads the values of Uint8Array from the module's memory. */
   __getUint8ClampedArray(ptr: number): Uint8ClampedArray;
-  /** Reads (copies) the values of Int16Array from the module's memory. */
+  /** Reads the values of Int16Array from the module's memory. */
   __getInt16Array(ptr: number): Int16Array;
-  /** Reads (copies) the values of Uint16Array from the module's memory. */
+  /** Reads the values of Uint16Array from the module's memory. */
   __getUint16Array(ptr: number): Uint16Array;
-  /** Reads (copies) the values of Int32Array from the module's memory. */
+  /** Reads the values of Int32Array from the module's memory. */
   __getInt32Array(ptr: number): Int32Array;
-  /** Reads (copies) the values of Uint32Array from the module's memory. */
+  /** Reads the values of Uint32Array from the module's memory. */
   __getUint32Array(ptr: number): Uint32Array;
-  /** Reads (copies) the values of Int32Array from the module's memory. */
+  /** Reads the values of Int32Array from the module's memory. */
   __getInt64Array(ptr: number): BigInt64Array;
-  /** Reads (copies) the values of Uint32Array from the module's memory. */
+  /** Reads the values of Uint32Array from the module's memory. */
   __getUint64Array(ptr: number): BigUint64Array;
-  /** Reads (copies) the values of Float32Array from the module's memory. */
+  /** Reads the values of Float32Array from the module's memory. */
   __getFloat32Array(ptr: number): Float32Array;
-    /** Reads (copies) the values of Float64Array from the module's memory. */
+    /** Reads the values of Float64Array from the module's memory. */
   __getFloat64Array(ptr: number): Float64Array;
   /** Reads (copies) the data of an ArrayBuffer from the module's memory. */
   __getArrayBuffer(ptr: number): ArrayBuffer;
