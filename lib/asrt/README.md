@@ -7,15 +7,14 @@ Interface
 
 * **alloc**(mbase: `usize`, size: `usize`, id: `u32`): `usize`
 * **realloc**(mbase: `usize`, size: `usize`, id: `u32`): `usize`
-* **free**(mbase: `usize`, global_ptr: `usize`): `void`
-* **retain**(mbase: `usize`, global_ptr: `usize`): `usize`
-* **release**(mbase: `usize`, global_ptr: `usize`, local_visit: `u32`): `usize`
-* **visit**(mbase: `usize`, global_ptr: `usize`, cookie: `u32`, local_visit: `u32`): `void`
-* **collect**(mbase: `usize`, local_visit: `u32`): `void`
+* **free**(mbase: `usize`, ptr: `usize`): `void`
+* **retain**(mbase: `usize`, ptr: `usize`): `usize`
+* **release**(mbase: `usize`, ptr: `usize`, visit: `u32`): `usize`
+* **visit**(mbase: `usize`, ptr: `usize`, cookie: `u32`, visit: `u32`): `void`
+* **collect**(mbase: `usize`, visit: `u32`): `void`
 
-Parameters prefixed `local_` indicate values local to the module (before relocation) and
-parameters prefixed `global_` indicate values global to the combined program (after relocation).
-Returned values are global to the combined program.
+Input values are local to the module (before relocation) while returned values are global to
+the combined program (after relocation).
 
 Proposed usage
 --------------
