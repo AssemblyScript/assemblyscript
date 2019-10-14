@@ -12,19 +12,6 @@ interface ImportsObject extends Record<string, any> {
   };
 }
 
-type TypedArray
-  = Int8Array
-  | Uint8Array
-  | Uint8ClampedArray
-  | Int16Array
-  | Uint16Array
-  | Int32Array
-  | Uint32Array
-  | Float32Array
-  | Float64Array
-  | BigInt64Array
-  | BigUint64Array;
-
 /** Utility mixed in by the loader. */
 interface ASUtil {
   /** Explicit start function, if requested. */
@@ -38,7 +25,7 @@ interface ASUtil {
   /** Reads (copies) the values of an array from the module's memory. */
   __getArray(ptr: number): number[];
   /** Gets a view on the values of an array in the module's memory. */
-  __getArrayView(ptr: number): TypedArray;
+  __getArrayView(ptr: number): ArrayBufferView;
   /** Reads the values of Int8Array from the module's memory. */
   __getInt8Array(ptr: number): Int8Array;
   /** Reads the values of Uint8Array from the module's memory. */
