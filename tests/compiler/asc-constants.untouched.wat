@@ -8,6 +8,7 @@
  (global $~lib/ASC_MEMORY_BASE i32 (i32.const 0))
  (global $~lib/ASC_OPTIMIZE_LEVEL i32 (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/ASC_RELOCATABLE i32 (i32.const 0))
  (global $~lib/ASC_FEATURE_SIGN_EXTENSION i32 (i32.const 0))
  (global $~lib/ASC_FEATURE_MUTABLE_GLOBALS i32 (i32.const 0))
  (global $~lib/ASC_FEATURE_NONTRAPPING_F2I i32 (i32.const 0))
@@ -20,6 +21,8 @@
  (export "memory" (memory $0))
  (start $start)
  (func $start:asc-constants (; 0 ;) (type $FUNCSIG$v)
+  i32.const 0
+  drop
   i32.const 0
   drop
   i32.const 0

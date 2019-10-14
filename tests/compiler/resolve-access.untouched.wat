@@ -24,7 +24,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/heap/__heap_base i32 (i32.const 608))
+ (global $~lib/rt/__heap_base i32 (i32.const 608))
  (export "memory" (memory $0))
  (export "arrayAccess" (func $resolve-access/arrayAccess))
  (export "fieldAccess" (func $resolve-access/fieldAccess))
@@ -2068,7 +2068,7 @@
   local.get $1
  )
  (func $start (; 25 ;) (type $FUNCSIG$v)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   i32.const 15
   i32.add
   i32.const 15

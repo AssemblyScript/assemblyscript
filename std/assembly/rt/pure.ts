@@ -63,7 +63,7 @@ import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 
 // @ts-ignore: decorator
 @global @unsafe
-function __visit(ref: usize, cookie: i32): void {
+export function __visit(ref: usize, cookie: i32): void {
   if (ref < __heap_base) return;
   var s = changetype<Block>(ref - BLOCK_OVERHEAD);
   switch (cookie) {

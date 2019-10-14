@@ -261,19 +261,6 @@ export const enum Constraints {
   PREFER_STATIC = 1 << 5
 }
 
-/** Runtime features to be activated by the compiler. */
-export const enum RuntimeFeatures {
-  NONE = 0,
-  /** Requires heap setup. */
-  HEAP = 1 << 0,
-  /** Requires runtime type information setup. */
-  RTTI = 1 << 1,
-  /** Requires the built-in globals visitor. */
-  visitGlobals = 1 << 2,
-  /** Requires the built-in members visitor. */
-  visitMembers = 1 << 3
-}
-
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
 
@@ -307,8 +294,6 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
-  /** Requires runtime features. */
-  runtimeFeatures: RuntimeFeatures = RuntimeFeatures.NONE;
   /** Expressions known to have skipped an autorelease. Usually function returns. */
   skippedAutoreleases: Set<ExpressionRef> = new Set();
 
@@ -358,22 +343,16 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = startFunctionInstance.flow;
     this.currentBody = startFunctionBody;
 
-    // add a mutable heap and rtti base dummies
-    if (options.isWasm64) {
-      module.addGlobal(BuiltinSymbols.heap_base, NativeType.I64, true, module.i64(0));
-      module.addGlobal(BuiltinSymbols.rtti_base, NativeType.I64, true, module.i64(0));
-    } else {
-      module.addGlobal(BuiltinSymbols.heap_base, NativeType.I32, true, module.i32(0));
-      module.addGlobal(BuiltinSymbols.rtti_base, NativeType.I32, true, module.i32(0));
-    }
-
     // add relocation globals
     if (options.relocatable) {
-      let nativeSizeType = options.nativeSizeType;
-      module.addGlobalImport("__memory_base", "env", "memory_base", nativeSizeType, false);
-      module.setMemoryBase("__memory_base");
-      module.addGlobalImport("__table_base", "env", "table_base", nativeSizeType, false);
-      module.setTableBase("__table_base");
+      let memoryBase = program.requireGlobal(BuiltinSymbols.memory_base);
+      assert(memoryBase.kind == ElementKind.GLOBAL);
+      this.compileGlobal(<Global>memoryBase);
+      module.setMemoryBase(BuiltinSymbols.memory_base);
+      let tableBase = program.requireGlobal(BuiltinSymbols.table_base);
+      assert(tableBase.kind == ElementKind.GLOBAL);
+      this.compileGlobal(<Global>tableBase);
+      module.setTableBase(BuiltinSymbols.table_base);
     }
 
     // compile entry file(s) while traversing reachable elements
@@ -416,27 +395,40 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile runtime features
-    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
-    if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
-    module.removeGlobal(BuiltinSymbols.rtti_base);
-    if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this);
+    var visitGlobals = program.requireGlobal(BuiltinSymbols.visit_globals);
+    assert(visitGlobals.kind == ElementKind.FUNCTION_PROTOTYPE);
+    if (visitGlobals.is(CommonFlags.COMPILED)) {
+      module.removeFunction(visitGlobals.internalName);
+      compileVisitGlobals(this);
+    }
+    var visitMembers = program.requireGlobal(BuiltinSymbols.visit_members);
+    if (visitMembers.is(CommonFlags.COMPILED)) {
+      module.removeFunction(visitMembers.internalName);
+      compileVisitMembers(this);
+    }
+    var rttiBase = program.requireGlobal(BuiltinSymbols.rtti_base);
+    if (rttiBase.is(CommonFlags.COMPILED)) {
+      module.removeGlobal(rttiBase.internalName);
+      compileRTTI(this);
+    }
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
     this.memoryOffset = memoryOffset;
-    module.removeGlobal(BuiltinSymbols.heap_base);
-    if (this.runtimeFeatures & RuntimeFeatures.HEAP) {
+    var heapBase = program.requireGlobal(BuiltinSymbols.heap_base);
+    if (heapBase.is(CommonFlags.COMPILED)) {
+      module.removeGlobal(heapBase.internalName);
       if (options.isWasm64) {
         module.addGlobal(
-          BuiltinSymbols.heap_base,
+          heapBase.internalName,
           NativeType.I64,
           false,
           module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
         );
       } else {
         module.addGlobal(
-          BuiltinSymbols.heap_base,
+          heapBase.internalName,
           NativeType.I32,
           false,
           module.i32(i64_low(memoryOffset))
@@ -875,13 +867,6 @@ export class Compiler extends DiagnosticEmitter {
         );
         return false;
       }
-    }
-
-    // Handle ambient builtins like '__heap_base' that need to be resolved but are added explicitly
-    if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
-      if (global.internalName == BuiltinSymbols.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
-      else if (global.internalName == BuiltinSymbols.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
-      return true;
     }
 
     var type = global.type;

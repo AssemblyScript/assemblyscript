@@ -6,7 +6,6 @@
  import {
   Compiler,
   Constraints,
-  RuntimeFeatures,
   flatten
 } from "./compiler";
 
@@ -494,8 +493,10 @@ export namespace BuiltinSymbols {
   export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
 
   // internals
-  export const heap_base = "~lib/heap/__heap_base";
+  export const heap_base = "~lib/rt/__heap_base";
   export const rtti_base = "~lib/rt/__rtti_base";
+  export const memory_base = "~lib/rt/__memory_base";
+  export const table_base = "~lib/rt/__table_base";
   export const visit_globals = "~lib/rt/__visit_globals";
   export const visit_members = "~lib/rt/__visit_members";
 
@@ -512,15 +513,6 @@ export namespace BuiltinSymbols {
   export const memory_allocate = "~lib/memory/memory.allocate";
   export const memory_free = "~lib/memory/memory.free";
   export const memory_reset = "~lib/memory/memory.reset";
-
-  // std/runtime.ts
-  export const runtime_instanceof = "~lib/runtime/runtime.instanceof";
-  export const runtime_flags = "~lib/runtime/runtime.flags";
-  export const runtime_allocate = "~lib/util/runtime/allocate";
-  export const runtime_reallocate = "~lib/util/runtime/reallocate";
-  export const runtime_register = "~lib/util/runtime/register";
-  export const runtime_discard = "~lib/util/runtime/discard";
-  export const runtime_makeArray = "~lib/util/runtime/makeArray";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";
@@ -3938,7 +3930,7 @@ export function compileCall(
         return module.unreachable();
       }
       let arg0 = compiler.compileExpression(operands[0], Type.u32, Constraints.CONV_IMPLICIT);
-      compiler.runtimeFeatures |= RuntimeFeatures.visitGlobals;
+      prototype.set(CommonFlags.COMPILED);
       compiler.currentType = Type.void;
       return module.call(BuiltinSymbols.visit_globals, [ arg0 ], NativeType.None);
     }
@@ -3952,7 +3944,7 @@ export function compileCall(
       }
       let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
       let arg1 = compiler.compileExpression(operands[1], Type.u32, Constraints.CONV_IMPLICIT);
-      compiler.runtimeFeatures |= RuntimeFeatures.visitMembers;
+      prototype.set(CommonFlags.COMPILED);
       compiler.currentType = Type.void;
       return module.call(BuiltinSymbols.visit_members, [ arg0, arg1 ], NativeType.None);
     }

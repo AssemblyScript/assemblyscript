@@ -11,7 +11,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/new/aClass (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 8))
+ (global $~lib/rt/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -152,7 +152,7 @@
   local.get $0
  )
  (func $start:std/new (; 4 ;) (type $FUNCSIG$v)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   i32.const 15
   i32.add
   i32.const 15

@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "asbuild:untouched": "asc empty.ts --baseDir assembly -b ../build/untouched.wasm -t ../build/untouched.wat --runtime asrt --use __visit_members=asrt/__visit_members --use __heap_base=asrt/__heap_base --importMemory --importTable --sourceMap --validate --debug",
+    "asbuild:optimized": "asc empty.ts --baseDir assembly -b ../build/optimized.wasm -t ../build/optimized.wat --runtime asrt --use __visit_members=asrt/__visit_members --use __heap_base=asrt/__heap_base --importMemory --importTable --sourceMap --validate --optimize",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized"
+  }
+}

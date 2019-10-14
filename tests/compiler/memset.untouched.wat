@@ -8,7 +8,7 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $memset/dest (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 44))
+ (global $~lib/rt/__heap_base i32 (i32.const 44))
  (export "memory" (memory $0))
  (start $start)
  (func $memset/memset (; 1 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -275,7 +275,7 @@
   local.get $3
  )
  (func $start:memset (; 2 ;) (type $FUNCSIG$v)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   global.set $memset/dest
   global.get $memset/dest
   i32.const 1

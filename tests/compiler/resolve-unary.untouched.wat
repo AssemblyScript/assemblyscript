@@ -35,7 +35,7 @@
  (global $resolve-unary/b (mut i32) (i32.const 1))
  (global $resolve-unary/foo (mut i32) (i32.const 0))
  (global $resolve-unary/bar (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 872))
+ (global $~lib/rt/__heap_base i32 (i32.const 872))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/__retain (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -785,7 +785,7 @@
   (local $30 i32)
   (local $31 i32)
   (local $32 i32)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   i32.const 15
   i32.add
   i32.const 15

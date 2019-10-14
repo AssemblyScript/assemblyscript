@@ -18,7 +18,7 @@
  (global $retain-release/TARGET (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 92))
+ (global $~lib/rt/__heap_base i32 (i32.const 92))
  (export "__start" (func $start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
@@ -193,7 +193,7 @@
   local.get $0
  )
  (func $start:retain-release (; 6 ;) (type $FUNCSIG$v)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   i32.const 15
   i32.add
   i32.const 15

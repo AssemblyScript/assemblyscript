@@ -58,7 +58,7 @@
  (global $resolve-ternary/f2 i32 (i32.const 2))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 2024))
- (global $~lib/heap/__heap_base i32 (i32.const 2076))
+ (global $~lib/rt/__heap_base i32 (i32.const 2076))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
@@ -785,7 +785,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   i32.const 15
   i32.add
   i32.const 15
@@ -1773,7 +1773,7 @@
  )
  (func $~lib/rt/pure/__retain (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -1794,7 +1794,7 @@
   if
    i32.const 176
    i32.const 232
-   i32.const 22
+   i32.const 34
    i32.const 27
    call $~lib/builtins/abort
    unreachable
@@ -3272,7 +3272,7 @@
  )
  (func $~lib/rt/pure/__release (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   i32.gt_u
   if
    local.get $0
@@ -5343,7 +5343,7 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   i32.lt_u
   if
    return

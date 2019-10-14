@@ -1,3 +1,7 @@
+declare const __heap_base: usize;
+declare const __rtti_base: usize;
+declare const __memory_base: usize;
+declare const __table_base: usize;
 declare function __alloc(size: usize, id: u32): usize;
 declare function __realloc(ref: usize, size: usize): usize;
 declare function __free(ref: usize): void;

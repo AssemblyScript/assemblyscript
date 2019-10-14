@@ -10,7 +10,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 8))
- (global $~lib/heap/__heap_base i32 (i32.const 36))
+ (global $~lib/rt/__heap_base i32 (i32.const 36))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/stub/__alloc))
  (export "__retain" (func $~lib/rt/stub/__retain))
@@ -135,7 +135,7 @@
   nop
  )
  (func $start (; 5 ;) (type $FUNCSIG$v)
-  global.get $~lib/heap/__heap_base
+  global.get $~lib/rt/__heap_base
   i32.const 15
   i32.add
   i32.const 15

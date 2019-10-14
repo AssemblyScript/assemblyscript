@@ -50,6 +50,8 @@ declare const ASC_MEMORY_BASE: i32;
 declare const ASC_OPTIMIZE_LEVEL: i32;
 /** Provided shrinkLevel option. */
 declare const ASC_SHRINK_LEVEL: i32;
+/** Provided relocatable option. */
+declare const ASC_RELOCATABLE: bool;
 /** Whether the sign extension feature is enabled. */
 declare const ASC_FEATURE_SIGN_EXTENSION: bool;
 /** Whether the mutable globals feature is enabled. */
@@ -114,8 +116,6 @@ declare function unreachable(): any; // sic
 declare const NaN: f32 | f64;
 /** Positive infinity as a 32-bit or 64-bit float depending on context. */
 declare const Infinity: f32 | f64;
-/** Heap base offset. */
-declare const __heap_base: usize;
 /** Determines the byte size of the specified underlying core type. Compiles to a constant. */
 declare function sizeof<T>(): usize;
 /** Determines the alignment (log2) of the specified underlying core type. Compiles to a constant. */

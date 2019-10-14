@@ -674,6 +674,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.optimizeLevelHint, 0));
     this.registerConstantInteger(CommonSymbols.ASC_SHRINK_LEVEL, Type.i32,
       i64_new(options.shrinkLevelHint, 0));
+    this.registerConstantInteger(CommonSymbols.ASC_RELOCATABLE, Type.bool,
+      i64_new(options.relocatable ? 1 : 0, 0));
 
     // register feature hints
     this.registerConstantInteger(CommonSymbols.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
@@ -939,10 +941,7 @@ export class Program extends DiagnosticEmitter {
           } else {
             let elementsByName = this.elementsByName;
             let element = elementsByName.get(name);
-            if (element) {
-              if (elementsByName.has(alias)) throw new Error("duplicate global element: " + name);
-              elementsByName.set(alias, element);
-            }
+            if (element) elementsByName.set(alias, element); // allows overrides
             else throw new Error("no such global element: " + name);
           }
         }

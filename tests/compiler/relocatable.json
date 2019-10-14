@@ -4,6 +4,7 @@
     "--explicitStart",
     "--importMemory",
     "--importTable",
-    "--relocatable"
+    "--relocatable",
+    "--runtime shared"
   ]
 }

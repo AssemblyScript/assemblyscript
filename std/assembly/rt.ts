@@ -5,15 +5,27 @@ import { ArrayBufferView } from "./arraybuffer";
 
 // @ts-ignore: decorator
 @builtin
-export declare const __rtti_base: usize;
+export declare var __heap_base: usize;
+
+// @ts-ignore: decorator
+@builtin
+export declare var __rtti_base: usize;
+
+// @ts-ignore: decorator
+@lazy @external("env", "__memory_base")
+export declare const __memory_base: usize;
+
+// @ts-ignore: decorator
+@lazy @external("env", "__table_base")
+export declare const __table_base: usize;
 
 // @ts-ignore: decorator
 @builtin @unsafe
-export declare function __visit_globals(cookie: u32): void;
+export function __visit_globals(cookie: u32): void { }
 
 // @ts-ignore: decorator
 @builtin @unsafe
-export declare function __visit_members(ref: usize, cookie: u32): void;
+export function __visit_members(ref: usize, cookie: u32): void { }
 
 // @ts-ignore: decorator
 @unsafe
