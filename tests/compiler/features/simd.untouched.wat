@@ -1,23 +1,196 @@
 (module
  (type $FUNCSIG$v (func))
+ (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s\00")
+ (data (i32.const 8) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00")
+ (data (i32.const 56) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/ASC_FEATURE_SIMD i32 (i32.const 0))
+ (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
+ (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/builtins/i16.MAX_VALUE i32 (i32.const 32767))
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/builtins/u16.MAX_VALUE i32 (i32.const 65535))
+ (global $~lib/heap/__heap_base i32 (i32.const 104))
  (export "memory" (memory $0))
  (start $start)
- (func $features/simd/test_v128 (; 1 ;) (type $FUNCSIG$v)
-  nop
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  memory.size
+  local.set $1
+  local.get $1
+  i32.const 16
+  i32.shl
+  local.set $2
+  local.get $0
+  local.get $2
+  i32.gt_u
+  if
+   local.get $0
+   local.get $2
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const 65535
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.set $3
+   local.get $1
+   local.tee $4
+   local.get $3
+   local.tee $5
+   local.get $4
+   local.get $5
+   i32.gt_s
+   select
+   local.set $4
+   local.get $4
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $3
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $0
+  global.set $~lib/rt/stub/offset
  )
- (func $features/simd/test_i8x16 (; 2 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.const 1073741808
+  i32.gt_u
+  if
+   unreachable
+  end
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.set $2
+  local.get $0
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  local.tee $3
+  i32.const 16
+  local.tee $4
+  local.get $3
+  local.get $4
+  i32.gt_u
+  select
+  local.set $5
+  local.get $2
+  local.get $5
+  i32.add
+  call $~lib/rt/stub/maybeGrowMemory
+  local.get $2
+  i32.const 16
+  i32.sub
+  local.set $6
+  local.get $6
+  local.get $5
+  i32.store
+  local.get $6
+  i32.const -1
+  i32.store offset=4
+  local.get $6
+  local.get $1
+  i32.store offset=8
+  local.get $6
+  local.get $0
+  i32.store offset=12
+  local.get $2
+ )
+ (func $~lib/rt/stub/__free (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 0
+  i32.ne
+  if (result i32)
+   local.get $0
+   i32.const 15
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 71
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 16
+  i32.sub
+  local.set $1
+  local.get $1
+  i32.load offset=4
+  i32.const -1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 73
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  i32.load
+  i32.add
+  global.get $~lib/rt/stub/offset
+  i32.eq
+  if
+   local.get $1
+   global.set $~lib/rt/stub/offset
+  end
+ )
+ (func $features/simd/test_v128 (; 4 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  i32.const 64
+  i32.const 0
+  call $~lib/rt/stub/__alloc
+  local.set $0
+  local.get $0
+  local.get $0
+  v128.load offset=16
+  v128.store offset=32
+  local.get $0
+  call $~lib/rt/stub/__free
+ )
+ (func $features/simd/test_i8x16 (; 5 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -36,8 +209,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 60
+   i32.const 72
+   i32.const 61
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -54,8 +227,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 62
+   i32.const 72
+   i32.const 63
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -73,8 +246,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 64
+   i32.const 72
+   i32.const 65
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -90,8 +263,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 65
+   i32.const 72
+   i32.const 66
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -107,8 +280,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 66
+   i32.const 72
+   i32.const 67
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -123,8 +296,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 67
+   i32.const 72
+   i32.const 68
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -140,8 +313,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
    i32.const 72
+   i32.const 73
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -157,8 +330,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 73
+   i32.const 72
+   i32.const 74
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -172,8 +345,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 74
+   i32.const 72
+   i32.const 75
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -189,8 +362,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 75
+   i32.const 72
+   i32.const 76
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -206,8 +379,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 80
+   i32.const 72
+   i32.const 81
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -238,8 +411,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 118
+   i32.const 72
+   i32.const 119
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -255,8 +428,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 119
+   i32.const 72
+   i32.const 120
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -272,8 +445,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 120
+   i32.const 72
+   i32.const 121
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -289,8 +462,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 121
+   i32.const 72
+   i32.const 122
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -306,8 +479,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 122
+   i32.const 72
+   i32.const 123
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -323,8 +496,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 123
+   i32.const 72
+   i32.const 124
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -340,8 +513,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 124
+   i32.const 72
+   i32.const 125
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -357,8 +530,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 125
+   i32.const 72
+   i32.const 126
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -374,8 +547,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 126
+   i32.const 72
+   i32.const 127
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -391,14 +564,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 127
+   i32.const 72
+   i32.const 128
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $features/simd/test_i16x8 (; 3 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_i16x8 (; 6 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -417,8 +590,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 134
+   i32.const 72
+   i32.const 135
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -435,8 +608,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 136
+   i32.const 72
+   i32.const 137
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -454,8 +627,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 138
+   i32.const 72
+   i32.const 139
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -471,8 +644,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 139
+   i32.const 72
+   i32.const 140
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -488,8 +661,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 140
+   i32.const 72
+   i32.const 141
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -504,8 +677,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 141
+   i32.const 72
+   i32.const 142
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -521,8 +694,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 146
+   i32.const 72
+   i32.const 147
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -538,8 +711,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 147
+   i32.const 72
+   i32.const 148
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -553,8 +726,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 148
+   i32.const 72
+   i32.const 149
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -570,8 +743,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 149
+   i32.const 72
+   i32.const 150
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -587,8 +760,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 154
+   i32.const 72
+   i32.const 155
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -619,8 +792,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 192
+   i32.const 72
+   i32.const 193
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -636,8 +809,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 193
+   i32.const 72
+   i32.const 194
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -653,8 +826,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 194
+   i32.const 72
+   i32.const 195
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -670,8 +843,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 195
+   i32.const 72
+   i32.const 196
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -687,8 +860,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 196
+   i32.const 72
+   i32.const 197
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -704,8 +877,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 197
+   i32.const 72
+   i32.const 198
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -721,8 +894,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 198
+   i32.const 72
+   i32.const 199
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -738,8 +911,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 199
+   i32.const 72
+   i32.const 200
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -755,8 +928,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 200
+   i32.const 72
+   i32.const 201
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -772,14 +945,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 201
+   i32.const 72
+   i32.const 202
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $features/simd/test_i32x4 (; 4 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_i32x4 (; 7 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -798,8 +971,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 212
+   i32.const 72
+   i32.const 236
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -816,8 +989,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 214
+   i32.const 72
+   i32.const 238
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -835,8 +1008,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 216
+   i32.const 72
+   i32.const 240
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -852,8 +1025,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 217
+   i32.const 72
+   i32.const 241
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -869,8 +1042,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 218
+   i32.const 72
+   i32.const 242
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -885,8 +1058,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 219
+   i32.const 72
+   i32.const 243
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -898,8 +1071,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 224
+   i32.const 72
+   i32.const 248
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -911,8 +1084,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 225
+   i32.const 72
+   i32.const 249
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -928,8 +1101,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 226
+   i32.const 72
+   i32.const 250
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -945,8 +1118,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 231
+   i32.const 72
+   i32.const 255
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -977,8 +1150,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 245
+   i32.const 72
+   i32.const 269
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -994,8 +1167,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 246
+   i32.const 72
+   i32.const 270
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1011,8 +1184,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 247
+   i32.const 72
+   i32.const 271
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1028,8 +1201,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 248
+   i32.const 72
+   i32.const 272
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1045,8 +1218,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 249
+   i32.const 72
+   i32.const 273
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1062,8 +1235,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 250
+   i32.const 72
+   i32.const 274
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1079,8 +1252,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 251
+   i32.const 72
+   i32.const 275
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1096,8 +1269,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 252
+   i32.const 72
+   i32.const 276
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1113,8 +1286,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 253
+   i32.const 72
+   i32.const 277
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1130,14 +1303,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 254
+   i32.const 72
+   i32.const 278
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $features/simd/test_i64x2 (; 5 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_i64x2 (; 8 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1152,8 +1325,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 273
+   i32.const 72
+   i32.const 316
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1170,8 +1343,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 275
+   i32.const 72
+   i32.const 318
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1189,8 +1362,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 277
+   i32.const 72
+   i32.const 320
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1206,8 +1379,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 278
+   i32.const 72
+   i32.const 321
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1222,8 +1395,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 279
+   i32.const 72
+   i32.const 322
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1235,8 +1408,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 284
+   i32.const 72
+   i32.const 327
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1248,8 +1421,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 285
+   i32.const 72
+   i32.const 328
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1265,8 +1438,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 286
+   i32.const 72
+   i32.const 329
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1282,14 +1455,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 291
+   i32.const 72
+   i32.const 334
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $features/simd/test_f32x4 (; 6 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_f32x4 (; 9 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1309,8 +1482,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 315
+   i32.const 72
+   i32.const 375
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1327,8 +1500,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 317
+   i32.const 72
+   i32.const 377
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1346,8 +1519,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 319
+   i32.const 72
+   i32.const 379
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1363,8 +1536,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 320
+   i32.const 72
+   i32.const 380
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1380,8 +1553,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 321
+   i32.const 72
+   i32.const 381
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1401,8 +1574,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 323
+   i32.const 72
+   i32.const 383
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1418,8 +1591,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 324
+   i32.const 72
+   i32.const 384
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1434,8 +1607,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 325
+   i32.const 72
+   i32.const 385
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1447,8 +1620,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 326
+   i32.const 72
+   i32.const 386
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1460,8 +1633,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 327
+   i32.const 72
+   i32.const 387
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1477,8 +1650,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 328
+   i32.const 72
+   i32.const 388
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1494,8 +1667,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 333
+   i32.const 72
+   i32.const 393
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1525,8 +1698,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 342
+   i32.const 72
+   i32.const 402
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1542,8 +1715,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 343
+   i32.const 72
+   i32.const 403
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1559,8 +1732,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 344
+   i32.const 72
+   i32.const 404
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1576,8 +1749,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 345
+   i32.const 72
+   i32.const 405
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1593,8 +1766,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 346
+   i32.const 72
+   i32.const 406
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1610,8 +1783,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 347
+   i32.const 72
+   i32.const 407
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1627,8 +1800,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 348
+   i32.const 72
+   i32.const 408
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1644,8 +1817,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 349
+   i32.const 72
+   i32.const 409
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1660,14 +1833,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 350
+   i32.const 72
+   i32.const 410
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $features/simd/test_f64x2 (; 7 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_f64x2 (; 10 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1687,8 +1860,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 377
+   i32.const 72
+   i32.const 437
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1705,8 +1878,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 379
+   i32.const 72
+   i32.const 439
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1724,8 +1897,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 381
+   i32.const 72
+   i32.const 441
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1741,8 +1914,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 382
+   i32.const 72
+   i32.const 442
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1758,8 +1931,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 383
+   i32.const 72
+   i32.const 443
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1779,8 +1952,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 385
+   i32.const 72
+   i32.const 445
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1796,8 +1969,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 386
+   i32.const 72
+   i32.const 446
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1812,8 +1985,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 387
+   i32.const 72
+   i32.const 447
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1825,8 +1998,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 388
+   i32.const 72
+   i32.const 448
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1838,8 +2011,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 389
+   i32.const 72
+   i32.const 449
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1855,8 +2028,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 390
+   i32.const 72
+   i32.const 450
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1872,8 +2045,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 395
+   i32.const 72
+   i32.const 455
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1903,8 +2076,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 404
+   i32.const 72
+   i32.const 464
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1920,8 +2093,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 405
+   i32.const 72
+   i32.const 465
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1937,8 +2110,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 406
+   i32.const 72
+   i32.const 466
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1954,8 +2127,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 407
+   i32.const 72
+   i32.const 467
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1971,8 +2144,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 408
+   i32.const 72
+   i32.const 468
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1988,8 +2161,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 409
+   i32.const 72
+   i32.const 469
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2005,8 +2178,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 410
+   i32.const 72
+   i32.const 470
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2022,8 +2195,8 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 411
+   i32.const 72
+   i32.const 471
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2038,16 +2211,17 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 412
+   i32.const 72
+   i32.const 472
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $features/simd/test_v8x16 (; 8 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_v8x16 (; 11 ;) (type $FUNCSIG$v)
   (local $0 v128)
   (local $1 v128)
+  (local $2 v128)
   v128.const i32x4 0x03020100 0x07060504 0x0b0a0908 0x0f0e0d0c
   local.set $0
   v128.const i32x4 0x13121110 0x17161514 0x1b1a1918 0x1f1e1d1c
@@ -2063,14 +2237,52 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
-   i32.const 440
+   i32.const 72
+   i32.const 500
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  v128.const i32x4 0x0c0d0e10 0x08090a0b 0x04050607 0x00010203
+  local.set $2
+  local.get $0
+  local.get $2
+  v8x16.swizzle
+  v128.const i32x4 0x0c0d0e00 0x08090a0b 0x04050607 0x00010203
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 506
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start:features/simd (; 9 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_v16x8 (; 12 ;) (type $FUNCSIG$v)
+  nop
+ )
+ (func $features/simd/test_v32x4 (; 13 ;) (type $FUNCSIG$v)
+  nop
+ )
+ (func $features/simd/test_v64x2 (; 14 ;) (type $FUNCSIG$v)
+  nop
+ )
+ (func $start:features/simd (; 15 ;) (type $FUNCSIG$v)
+  global.get $~lib/heap/__heap_base
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
   call $features/simd/test_v128
   call $features/simd/test_i8x16
   call $features/simd/test_i16x8
@@ -2079,10 +2291,13 @@
   call $features/simd/test_f32x4
   call $features/simd/test_f64x2
   call $features/simd/test_v8x16
+  call $features/simd/test_v16x8
+  call $features/simd/test_v32x4
+  call $features/simd/test_v64x2
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 16 ;) (type $FUNCSIG$v)
   call $start:features/simd
  )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 17 ;) (type $FUNCSIG$v)
  )
 )

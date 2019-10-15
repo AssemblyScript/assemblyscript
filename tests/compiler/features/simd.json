@@ -4,5 +4,6 @@
   ],
   "asc_flags": [
     "--runtime none"
-  ]
+  ],
+  "skipInstantiate": true
 }
