@@ -3,7 +3,7 @@
  * @module cli/transform
  *//***/
 
-import { Parser } from "..";
+import { Parser, Module } from "..";
 import { OutputStream } from "./asc";
 
 export abstract class Transform {
@@ -31,4 +31,7 @@ export abstract class Transform {
 
   /** Called when parsing is complete, before a program is instantiated from the AST. */
   afterParse?(parser: Parser): void;
+
+  /** Called when compilation is complete, before the module is being validated. */
+  afterCompile?(module: Module): void;
 }

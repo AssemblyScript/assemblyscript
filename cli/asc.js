@@ -542,6 +542,9 @@ exports.main = function main(argv, options, callback) {
     return callback(Error("Compile error"));
   }
 
+  // Call afterCompile transform hook
+  applyTransform("afterCompile", module);
+
   // Validate the module if requested
   if (args.validate) {
     stats.validateCount++;
