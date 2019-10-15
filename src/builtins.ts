@@ -21,7 +21,8 @@ import {
   LiteralKind,
   LiteralExpression,
   StringLiteralExpression,
-  CallExpression
+  CallExpression,
+  isNumericLiteral
 } from "./ast";
 
 import {
@@ -1081,7 +1082,7 @@ export function compileCall(
       ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-        : compiler.compileExpression(operands[0], Type.f64, Constraints.MUST_WRAP);
+        : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
       let type = compiler.currentType;
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {
@@ -1179,12 +1180,21 @@ export function compileCall(
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) return module.unreachable();
+      let left = operands[0];
       let arg0 = typeArguments
-        ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-        : compiler.compileExpression(operands[0], Type.f64, Constraints.MUST_WRAP);
+        ? compiler.compileExpression(left, typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
+        : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
       let type = compiler.currentType;
       if (!type.is(TypeFlags.REFERENCE)) {
-        let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+        let arg1: ExpressionRef;
+        if (!typeArguments && isNumericLiteral(left)) { // prefer right type
+          arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
+          if (compiler.currentType != type) {
+            arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+          }
+        } else {
+          arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+        }
         let op: BinaryOp = -1;
         switch (type.kind) {
           case TypeKind.I8:
@@ -1240,12 +1250,21 @@ export function compileCall(
         checkTypeOptional(typeArguments, reportNode, compiler, true) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) return module.unreachable();
+      let left = operands[0];
       let arg0 = typeArguments
-        ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
-        : compiler.compileExpression(operands[0], Type.f64, Constraints.MUST_WRAP);
+        ? compiler.compileExpression(left, typeArguments[0], Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP)
+        : compiler.compileExpression(operands[0], Type.auto, Constraints.MUST_WRAP);
       let type = compiler.currentType;
       if (!type.is(TypeFlags.REFERENCE)) {
-        let arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+        let arg1: ExpressionRef;
+        if (!typeArguments && isNumericLiteral(left)) { // prefer right type
+          arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
+          if (compiler.currentType != type) {
+            arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+          }
+        } else {
+          arg1 = compiler.compileExpression(operands[1], type, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
+        }
         let op: BinaryOp = -1;
         switch (type.kind) {
           case TypeKind.I8:
@@ -1303,7 +1322,7 @@ export function compileCall(
       ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-        : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
+        : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
       let type = compiler.currentType;
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {
@@ -1335,7 +1354,7 @@ export function compileCall(
       ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-        : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
+        : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
       let type = compiler.currentType;
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {
@@ -1390,7 +1409,7 @@ export function compileCall(
       ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-        : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
+        : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
       let type = compiler.currentType;
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {
@@ -1498,7 +1517,7 @@ export function compileCall(
       ) return module.unreachable();
       let arg0 = typeArguments
         ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
-        : compiler.compileExpression(operands[0], Type.f64, Constraints.NONE);
+        : compiler.compileExpression(operands[0], Type.auto, Constraints.NONE);
       let type = compiler.currentType;
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {

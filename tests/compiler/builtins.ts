@@ -158,6 +158,11 @@ F = trunc<f64>(1.25);
 b = isNaN<f64>(1.25);
 b = isFinite<f64>(1.25);
 
+// prefer right type if left is a numeric literal
+
+F = min(0, 1.0);
+f = max(0, f);
+
 // load and store
 
 i = load<i32>(8); store<i32>(8, i);
