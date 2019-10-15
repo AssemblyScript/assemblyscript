@@ -392,8 +392,13 @@ var i: i32;
   assert(isArraysEqual<i32>(sarr.splice(7, 5), <i32[]>[]));
   assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
 
-  var refArr: Ref[] = [new Ref(1), new Ref(2), new Ref(3), new Ref(4), new Ref(5)];
-  var spliced = refArr.splice(2, 2);
+  var refArr: Ref[] = [];
+  var spliced = refArr.splice(1, 2);
+  assert(spliced.length == 0);
+  assert(refArr.length == 0);
+
+  refArr = [new Ref(1), new Ref(2), new Ref(3), new Ref(4), new Ref(5)];
+  spliced = refArr.splice(2, 2);
 
   assert(spliced.length == 2);
   assert(spliced[0].v == 3);
@@ -403,6 +408,16 @@ var i: i32;
   assert(refArr[0].v == 1);
   assert(refArr[1].v == 2);
   assert(refArr[2].v == 5);
+
+  var refArr2: (Ref | null)[] = [new Ref(1), null, new Ref(2)];
+  var spliced2 = refArr2.splice(0, 1);
+
+  assert(spliced2.length == 1);
+  assert(spliced2[0]!.v == 1);
+
+  assert(refArr2.length == 2);
+  assert(refArr2[0] === null);
+  assert(refArr2[1]!.v == 2);
 }
 
 // Array#findIndex /////////////////////////////////////////////////////////////////////////////////
