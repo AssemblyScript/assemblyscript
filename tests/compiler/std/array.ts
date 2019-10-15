@@ -396,8 +396,8 @@ var i: i32;
   var spliced = refArr.splice(2, 2);
 
   assert(spliced.length == 2);
-  spliced[0].v = 3;
-  spliced[1].v = 4;
+  assert(spliced[0].v == 3);
+  assert(spliced[1].v == 4);
 
   assert(refArr.length == 3);
   assert(refArr[0].v == 1);

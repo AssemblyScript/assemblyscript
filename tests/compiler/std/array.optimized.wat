@@ -14445,14 +14445,32 @@
   i32.const 0
   call $~lib/array/Array<std/array/Ref>#__get
   local.tee $4
+  i32.load
   i32.const 3
-  i32.store
+  i32.ne
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 399
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $39
   i32.const 1
   call $~lib/array/Array<std/array/Ref>#__get
   local.tee $6
+  i32.load
   i32.const 4
-  i32.store
+  i32.ne
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 400
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $37
   i32.load offset=12
   i32.const 3

@@ -21171,14 +21171,34 @@
   i32.const 0
   call $~lib/array/Array<std/array/Ref>#__get
   local.tee $54
+  i32.load
   i32.const 3
-  i32.store
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 399
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $61
   i32.const 1
   call $~lib/array/Array<std/array/Ref>#__get
   local.tee $51
+  i32.load
   i32.const 4
-  i32.store
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 400
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $60
   call $~lib/array/Array<std/array/Ref>#get:length
   i32.const 3
