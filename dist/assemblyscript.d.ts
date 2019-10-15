@@ -6,6 +6,7 @@ declare type isize = number;
 declare type u8 = number;
 declare type u16 = number;
 declare type u32 = number;
+declare type u64 = number;
 declare type usize = number;
 declare type f32 = number;
 declare type f64 = number;
