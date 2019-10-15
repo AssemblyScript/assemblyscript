@@ -29,12 +29,17 @@ var arr = new Array<i32>();
 
 // Array.isArray ///////////////////////////////////////////////////////////////////////////////////
 
-class P {}
+class Ref {
+  constructor(public v: i32 = 0) {}
+  toString(): string {
+    return "[object Object]";
+  }
+}
 
 {
   assert(Array.isArray(<i32[] | null>null) == false);
   assert(Array.isArray(arr) == true);
-  assert(Array.isArray(new P()) == false);
+  assert(Array.isArray(new Ref()) == false);
   assert(Array.isArray(new Uint8Array(1)) == false);
   assert(Array.isArray(<i32>1) == false);
   assert(Array.isArray("abc") == false);
@@ -386,6 +391,18 @@ var i: i32;
   sarr = <i32[]>[1, 2, 3, 4, 5];
   assert(isArraysEqual<i32>(sarr.splice(7, 5), <i32[]>[]));
   assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+
+  var refArr: Ref[] = [new Ref(1), new Ref(2), new Ref(3), new Ref(4), new Ref(5)];
+  var spliced = refArr.splice(2, 2);
+
+  assert(spliced.length == 2);
+  spliced[0].v = 3;
+  spliced[1].v = 4;
+
+  assert(refArr.length == 3);
+  assert(refArr[0].v == 1);
+  assert(refArr[1].v == 2);
+  assert(refArr[2].v == 5);
 }
 
 // Array#findIndex /////////////////////////////////////////////////////////////////////////////////
@@ -933,13 +950,6 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 }
 
 // Array#join //////////////////////////////////////////////////////////////////////////////////////
-
-class Ref {
-  constructor() {}
-  toString(): string {
-    return "[object Object]";
-  }
-}
 
 {
   assert((<bool[]>[true, false]).join() == "true,false");
