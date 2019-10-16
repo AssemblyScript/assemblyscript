@@ -212,20 +212,45 @@ exports.main = function main(argv, options, callback) {
   // Set up transforms
   const transforms = [];
   if (args.transform) {
-    args.transform.forEach(transform =>
-      transforms.push(
-        require(
-          path.isAbsolute(transform = transform.trim())
-            ? transform
-            : path.join(process.cwd(), transform)
-        )
-      )
-    );
+    let transformArgs = args.transform;
+    for (let i = 0, k = transformArgs.length; i < k; ++i) {
+      let filename = transformArgs[i];
+      filename = path.isAbsolute(filename = filename.trim())
+        ? filename
+        : path.join(process.cwd(), filename);
+      if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
+      try {
+        const classOrModule = require(filename);
+        if (typeof classOrModule === "function") {
+          Object.assign(classOrModule.prototype, {
+            baseDir,
+            stdout,
+            stderr,
+            log: console.error,
+            readFile,
+            writeFile,
+            listFiles
+          });
+          transforms.push(new classOrModule());
+        } else {
+          transforms.push(classOrModule); // legacy module
+        }
+      } catch (e) {
+        return callback(e);
+      }
+    }
   }
   function applyTransform(name, ...args) {
-    transforms.forEach(transform => {
-      if (typeof transform[name] === "function") transform[name](...args);
-    });
+    for (let i = 0, k = transforms.length; i < k; ++i) {
+      let transform = transforms[i];
+      if (typeof transform[name] === "function") {
+        try {
+          transform[name](...args);
+        } catch (e) {
+          return e;
+        }
+      }
+    }
   }
 
   // Begin parsing
@@ -426,7 +451,10 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Call afterParse transform hook
-  applyTransform("afterParse", parser);
+  {
+    let error = applyTransform("afterParse", parser);
+    if (error) return callback(error);
+  }
 
   // Parse additional files, if any
   {
@@ -528,6 +556,12 @@ exports.main = function main(argv, options, callback) {
   if (checkDiagnostics(parser, stderr)) {
     if (module) module.dispose();
     return callback(Error("Compile error"));
+  }
+
+  // Call afterCompile transform hook
+  {
+    let error = applyTransform("afterCompile", module);
+    if (error) return callback(error);
   }
 
   // Validate the module if requested
