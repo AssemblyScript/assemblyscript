@@ -188,9 +188,9 @@ declare function lengthof<T extends (...args: any[]) => any>(func?: T): i32;
 /** Atomic operations. */
 declare namespace atomic {
   /** Atomically loads an integer value from memory and returns it. */
-  export function load<T>(offset: usize, immOffset?: usize): T;
+  export function load<T>(ptr: usize, immOffset?: usize): T;
   /** Atomically stores an integer value to memory. */
-  export function store<T>(offset: usize, value: T, immOffset?: usize): void;
+  export function store<T>(ptr: usize, value: T, immOffset?: usize): void;
   /** Atomically adds an integer value in memory. */
   export function add<T>(ptr: usize, value: T, immOffset?: usize): T;
   /** Atomically subtracts an integer value in memory. */
@@ -247,87 +247,87 @@ declare namespace i32 {
   /** Largest representable value. */
   export const MAX_VALUE: i32;
   /** Loads an 8-bit signed integer value from memory and returns it as a 32-bit integer. */
-  export function load8_s(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  export function load8_s(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
-  export function load8_u(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  export function load8_u(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads a 16-bit signed integer value from memory and returns it as a 32-bit integer. */
-  export function load16_s(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  export function load16_s(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads a 16-bit unsigned integer value from memory and returns it as a 32-bit integer. */
-  export function load16_u(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  export function load16_u(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Loads a 32-bit integer value from memory. */
-  export function load(offset: usize, immOffset?: usize, immAlign?: usize): i32;
+  export function load(ptr: usize, immOffset?: usize, immAlign?: usize): i32;
   /** Stores a 32-bit integer value to memory as an 8-bit integer. */
-  export function store8(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  export function store8(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 32-bit integer value to memory as a 16-bit integer. */
-  export function store16(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  export function store16(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 32-bit integer value to memory. */
-  export function store(offset: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
+  export function store(ptr: usize, value: i32, immOffset?: usize, immAlign?: usize): void;
   /** Atomic 32-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 32-bit integer. */
-    export function load8_u(offset: usize, immOffset?: usize): i32;
+    export function load8_u(ptr: usize, immOffset?: usize): i32;
     /** Atomically loads a 16-bit unsigned integer value from memory and returns it as a 32-bit integer. */
-    export function load16_u(offset: usize, immOffset?: usize): i32;
+    export function load16_u(ptr: usize, immOffset?: usize): i32;
     /** Atomically loads a 32-bit integer value from memory and returns it. */
-    export function load(offset: usize, immOffset?: usize): i32;
+    export function load(ptr: usize, immOffset?: usize): i32;
     /** Atomically stores a 32-bit integer value to memory as an 8-bit integer. */
-    export function store8(offset: usize, value: i32, immOffset?: usize): void;
+    export function store8(ptr: usize, value: i32, immOffset?: usize): void;
     /** Atomically stores a 32-bit integer value to memory as a 16-bit integer. */
-    export function store16(offset: usize, value: i32, immOffset?: usize): void;
+    export function store16(ptr: usize, value: i32, immOffset?: usize): void;
     /** Atomically stores a 32-bit integer value to memory. */
-    export function store(offset: usize, value: i32, immOffset?: usize): void;
+    export function store(ptr: usize, value: i32, immOffset?: usize): void;
     /** Performs a wait operation on a 32-bit integer value in memory suspending this agent if the condition is met. */
     export function wait(ptr: usize, expected: i32, timeout: i64): AtomicWaitResult;
     /** Atomic 32-bit integer read-modify-write operations on 8-bit values. */
     export namespace rmw8 {
       /** Atomically adds an 8-bit unsigned integer value in memory. */
-      export function add_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function add_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically subtracts an 8-bit unsigned integer value in memory. */
-      export function sub_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function sub_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically performs a bitwise AND operation an 8-bit unsigned integer value in memory. */
-      export function and_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function and_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically performs a bitwise OR operation an 8-bit unsigned integer value in memory. */
-      export function or_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function or_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically performs a bitwise XOR operation an 8-bit unsigned integer value in memory. */
-      export function xor_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function xor_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically exchanges an 8-bit unsigned integer value in memory. */
-      export function xchg_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function xchg_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically compares and exchanges an 8-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
+      export function cmpxchg_u(ptr: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
     }
     /** Atomic 32-bit integer read-modify-write operations on 16-bit values. */
     export namespace rmw16 {
       /** Atomically adds a 16-bit unsigned integer value in memory. */
-      export function add_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function add_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically adds a 16-bit unsigned integer value in memory. */
-      export function sub_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function sub_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically performs a bitwise AND operation a 16-bit unsigned integer value in memory. */
-      export function and_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function and_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically performs a bitwise OR operation a 16-bit unsigned integer value in memory. */
-      export function or_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function or_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically performs a bitwise XOR operation a 16-bit unsigned integer value in memory. */
-      export function xor_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function xor_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically exchanges a 16-bit unsigned integer value in memory. */
-      export function xchg_u(offset: usize, value: i32, immOffset?: usize): i32;
+      export function xchg_u(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically compares and exchanges a 16-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
+      export function cmpxchg_u(ptr: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
     }
     /** Atomic 32-bit integer read-modify-write operations. */
     export namespace rmw {
       /** Atomically adds a 32-bit integer value in memory. */
-      export function add(offset: usize, value: i32, immOffset?: usize): i32;
+      export function add(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically subtracts a 32-bit integer value in memory. */
-      export function sub(offset: usize, value: i32, immOffset?: usize): i32;
+      export function sub(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically performs a bitwise AND operation a 32-bit integer value in memory. */
-      export function and(offset: usize, value: i32, immOffset?: usize): i32;
+      export function and(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically performs a bitwise OR operation a 32-bit integer value in memory. */
-      export function or(offset: usize, value: i32, immOffset?: usize): i32;
+      export function or(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically performs a bitwise XOR operation a 32-bit integer value in memory. */
-      export function xor(offset: usize, value: i32, immOffset?: usize): i32;
+      export function xor(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically exchanges a 32-bit integer value in memory. */
-      export function xchg(offset: usize, value: i32, immOffset?: usize): i32;
+      export function xchg(ptr: usize, value: i32, immOffset?: usize): i32;
       /** Atomically compares and exchanges a 32-bit integer value in memory if the condition is met. */
-      export function cmpxchg(offset: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
+      export function cmpxchg(ptr: usize, expected: i32, replacement: i32, immOffset?: usize): i32;
     }
   }
 }
@@ -339,114 +339,114 @@ declare namespace i64 {
   /** Largest representable value. */
   export const MAX_VALUE: i64;
   /** Loads an 8-bit signed integer value from memory and returns it as a 64-bit integer. */
-  export function load8_s(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load8_s(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
-  export function load8_u(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load8_u(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads a 16-bit signed integer value from memory and returns it as a 64-bit integer. */
-  export function load16_s(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load16_s(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads a 16-bit unsigned integer value from memory and returns it as a 64-bit integer. */
-  export function load16_u(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load16_u(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads a 32-bit signed integer value from memory and returns it as a 64-bit integer. */
-  export function load32_s(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load32_s(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads a 32-bit unsigned integer value from memory and returns it as a 64-bit integer. */
-  export function load32_u(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load32_u(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Loads a 64-bit unsigned integer value from memory. */
-  export function load(offset: usize, immOffset?: usize, immAlign?: usize): i64;
+  export function load(ptr: usize, immOffset?: usize, immAlign?: usize): i64;
   /** Stores a 64-bit integer value to memory as an 8-bit integer. */
-  export function store8(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  export function store8(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 64-bit integer value to memory as a 16-bit integer. */
-  export function store16(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  export function store16(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 64-bit integer value to memory as a 32-bit integer. */
-  export function store32(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  export function store32(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Stores a 64-bit integer value to memory. */
-  export function store(offset: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
+  export function store(ptr: usize, value: i64, immOffset?: usize, immAlign?: usize): void;
   /** Atomic 64-bit integer operations. */
   export namespace atomic {
     /** Atomically loads an 8-bit unsigned integer value from memory and returns it as a 64-bit integer. */
-    export function load8_u(offset: usize, immOffset?: usize): i64;
+    export function load8_u(ptr: usize, immOffset?: usize): i64;
     /** Atomically loads a 16-bit unsigned integer value from memory and returns it as a 64-bit integer. */
-    export function load16_u(offset: usize, immOffset?: usize): i64;
+    export function load16_u(ptr: usize, immOffset?: usize): i64;
     /** Atomically loads a 32-bit unsigned integer value from memory and returns it as a 64-bit integer. */
-    export function load32_u(offset: usize, immOffset?: usize): i64;
+    export function load32_u(ptr: usize, immOffset?: usize): i64;
     /** Atomically loads a 64-bit integer value from memory and returns it. */
-    export function load(offset: usize, immOffset?: usize): i64;
+    export function load(ptr: usize, immOffset?: usize): i64;
     /** Atomically stores a 64-bit integer value to memory as an 8-bit integer. */
-    export function store8(offset: usize, value: i64, immOffset?: usize): void;
+    export function store8(ptr: usize, value: i64, immOffset?: usize): void;
     /** Atomically stores a 64-bit integer value to memory as a 16-bit integer. */
-    export function store16(offset: usize, value: i64, immOffset?: usize): void;
+    export function store16(ptr: usize, value: i64, immOffset?: usize): void;
     /** Atomically stores a 64-bit integer value to memory as a 32-bit integer. */
-    export function store32(offset: usize, value: i64, immOffset?: usize): void;
+    export function store32(ptr: usize, value: i64, immOffset?: usize): void;
     /** Atomically stores a 64-bit integer value to memory. */
-    export function store(offset: usize, value: i64, immOffset?: usize): void;
+    export function store(ptr: usize, value: i64, immOffset?: usize): void;
     /** Performs a wait operation on a 64-bit integer value in memory suspending this agent if the condition is met. */
     export function wait(ptr: usize, expected: i64, timeout: i64): AtomicWaitResult;
     /** Atomic 64-bit integer read-modify-write operations on 8-bit values. */
     export namespace rmw8 {
       /** Atomically adds an 8-bit unsigned integer value in memory. */
-      export function add_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function add_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically subtracts an 8-bit unsigned integer value in memory. */
-      export function sub_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function sub_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise AND operation on an 8-bit unsigned integer value in memory. */
-      export function and_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function and_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise OR operation on an 8-bit unsigned integer value in memory. */
-      export function or_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function or_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise XOR operation on an 8-bit unsigned integer value in memory. */
-      export function xor_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function xor_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically exchanges an 8-bit unsigned integer value in memory. */
-      export function xchg_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function xchg_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically compares and exchanges an 8-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+      export function cmpxchg_u(ptr: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
     /** Atomic 64-bit integer read-modify-write operations on 16-bit values. */
     export namespace rmw16 {
       /** Atomically adds a 16-bit unsigned integer value in memory. */
-      export function add_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function add_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically subtracts a 16-bit unsigned integer value in memory. */
-      export function sub_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function sub_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise AND operation on a 16-bit unsigned integer value in memory. */
-      export function and_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function and_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise OR operation on a 16-bit unsigned integer value in memory. */
-      export function or_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function or_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise XOR operation on a 16-bit unsigned integer value in memory. */
-      export function xor_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function xor_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically exchanges a 16-bit unsigned integer value in memory. */
-      export function xchg_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function xchg_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically compares and exchanges a 16-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+      export function cmpxchg_u(ptr: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
     /** Atomic 64-bit integer read-modify-write operations on 32-bit values. */
     export namespace rmw32 {
       /** Atomically adds a 32-bit unsigned integer value in memory. */
-      export function add_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function add_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically subtracts a 32-bit unsigned integer value in memory. */
-      export function sub_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function sub_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise AND operation on a 32-bit unsigned integer value in memory. */
-      export function and_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function and_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise OR operation on a 32-bit unsigned integer value in memory. */
-      export function or_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function or_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise XOR operation on a 32-bit unsigned integer value in memory. */
-      export function xor_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function xor_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically exchanges a 32-bit unsigned integer value in memory. */
-      export function xchg_u(offset: usize, value: i64, immOffset?: usize): i64;
+      export function xchg_u(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically compares and exchanges a 32-bit unsigned integer value in memory if the condition is met. */
-      export function cmpxchg_u(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+      export function cmpxchg_u(ptr: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
     /** Atomic 64-bit integer read-modify-write operations. */
     export namespace rmw {
       /** Atomically adds a 64-bit integer value in memory. */
-      export function add(offset: usize, value: i64, immOffset?: usize): i64;
+      export function add(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically subtracts a 64-bit integer value in memory. */
-      export function sub(offset: usize, value: i64, immOffset?: usize): i64;
+      export function sub(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise AND operation on a 64-bit integer value in memory. */
-      export function and(offset: usize, value: i64, immOffset?: usize): i64;
+      export function and(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise OR operation on a 64-bit integer value in memory. */
-      export function or(offset: usize, value: i64, immOffset?: usize): i64;
+      export function or(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically performs a bitwise XOR operation on a 64-bit integer value in memory. */
-      export function xor(offset: usize, value: i64, immOffset?: usize): i64;
+      export function xor(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically exchanges a 64-bit integer value in memory. */
-      export function xchg(offset: usize, value: i64, immOffset?: usize): i64;
+      export function xchg(ptr: usize, value: i64, immOffset?: usize): i64;
       /** Atomically compares and exchanges a 64-bit integer value in memory if the condition is met. */
-      export function cmpxchg(offset: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
+      export function cmpxchg(ptr: usize, expected: i64, replacement: i64, immOffset?: usize): i64;
     }
   }
 }
@@ -510,9 +510,9 @@ declare namespace f32 {
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f32;
   /** Loads a 32-bit float from memory. */
-  export function load(offset: usize, immOffset?: usize, immAlign?: usize): f32;
+  export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f32;
   /** Stores a 32-bit float to memory. */
-  export function store(offset: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
+  export function store(ptr: usize, value: f32, immOffset?: usize, immAlign?: usize): void;
 }
 /** Converts any other numeric value to a 64-bit float. */
 declare function f64(value: any): f64;
@@ -530,9 +530,9 @@ declare namespace f64 {
   /** Difference between 1 and the smallest representable value greater than 1. */
   export const EPSILON: f64;
   /** Loads a 64-bit float from memory. */
-  export function load(offset: usize, immOffset?: usize, immAlign?: usize): f64;
+  export function load(ptr: usize, immOffset?: usize, immAlign?: usize): f64;
   /** Stores a 64-bit float to memory. */
-  export function store(offset: usize, value: f64, immOffset?: usize, immAlign?: usize): void;
+  export function store(ptr: usize, value: f64, immOffset?: usize, immAlign?: usize): void;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
 declare function v128(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
@@ -545,10 +545,16 @@ declare namespace v128 {
   export function replace_lane<T>(x: v128, idx: u8, value: T): v128;
   /** Selects lanes from either 128-bit vector according to the specified lane indexes. */
   export function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): v128;
+  /** Selects 8-bit lanes from the first 128-bit vector according to the indexes [0-15] specified by the 8-bit lanes of the second 128-bit vector. */
+  export function swizzle(a: v128, s: v128): v128;
   /** Loads a 128-bit vector from memory. */
-  export function load(offset: usize, immOffset?: usize, immAlign?: usize): v128;
+  export function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+  /** Creates a 128-bit vector with identical lanes by loading the splatted value. */
+  export function load_splat<T>(ptr: usize, immOffset?: usize, immAlign?: usize): v128
+  /** Creates a 128-bit vector by loading the lanes of the specified type and extending each to the next larger type. */
+  export function load_ext<TFrom>(ptr: usize, immOffset?: usize, immAlign?: usize): v128
   /** Stores a 128-bit vector to memory. */
-  export function store(offset: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
+  export function store(ptr: usize, value: v128, immOffset?: usize, immAlign?: usize): void;
   /** Adds each lane of two 128-bit vectors. */
   export function add<T>(a: v128, b: v128): v128;
   /** Subtracts each lane of two 128-bit vectors. */
@@ -567,13 +573,15 @@ declare namespace v128 {
   export function shl<T>(a: v128, b: i32): v128;
   /** Performs a bitwise right shift on each lane of a 128-bit vector by a scalar. */
   export function shr<T>(a: v128, b: i32): v128;
-  /** Performs the bitwise AND operation on each lane of two 128-bit vectors. */
+  /** Performs the bitwise AND operation on two 128-bit vectors. */
   export function and(a: v128, b: v128): v128;
-  /** Performs the bitwise OR operation on each lane of two 128-bit vectors. */
+  /** Performs the bitwise OR operation on two 128-bit vectors. */
   export function or(a: v128, b: v128): v128;
-  /** Performs the bitwise XOR operation on each lane of two 128-bit vectors. */
+  /** Performs the bitwise XOR operation on two 128-bit vectors. */
   export function xor(a: v128, b: v128): v128;
-  /** Performs the bitwise NOT operation on each lane of a 128-bit vector. */
+  /** Performs the bitwise ANDNOT operation on two 128-bit vectors. */
+  export function andnot(a: v128, b: v128): v128;
+  /** Performs the bitwise NOT operation on a 128-bit vector. */
   export function not(a: v128): v128;
   /** Selects bits of either 128-bit vector according to the specified mask. */
   export function bitselect(v1: v128, v2: v128, mask: v128): v128;
@@ -747,6 +755,10 @@ declare namespace i16x8 {
   export function widen_high_i8x16_s(a: v128): v128;
   /** Widens the high 8-bit unsigned integer lanes of a 128-bit vector to 16-bit unsigned integer lanes. */
   export function widen_high_i8x16_u(a: v128): v128;
+  /** Creates a vector with eight 16-bit integer lanes by loading and sign extending eight 8-bit integers. */
+  export function load8x8_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with eight 16-bit integer lanes by loading and zero extending eight 8-bit integers. */
+  export function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
 declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
@@ -807,6 +819,10 @@ declare namespace i32x4 {
   export function widen_high_i16x8_s(a: v128): v128;
   /** Widens the high 16-bit unsigned integer lanes of a 128-bit vector to 32-bit unsigned integer lanes. */
   export function widen_high_i16x8_u(a: v128): v128;
+  /** Creates a vector with four 32-bit integer lanes by loading and sign extending four 16-bit integers. */
+  export function load16x4_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with four 32-bit integer lanes by loading and zero extending four 16-bit integers. */
+  export function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
 declare function i64x2(a: i64, b: i64): v128;
@@ -839,6 +855,10 @@ declare namespace i64x2 {
   export function trunc_sat_f64x2_s(a: v128): v128;
   /** Truncates each 64-bit float lane of a 128-bit vector to an unsigned integer with saturation. */
   export function trunc_sat_f64x2_u(a: v128): v128;
+  /** Creates a vector with two 64-bit integer lanes by loading and sign extending two 32-bit integers. */
+  export function load32x2_s(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
+  /** Creates a vector with two 64-bit integer lanes by loading and zero extending two 32-bit integers. */
+  export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
 declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
@@ -937,8 +957,24 @@ declare namespace f64x2 {
   export function qfms(a: v128, b: v128, c: v128): v128;
 }
 declare namespace v8x16 {
-  /** Selects 8-bit lanes from either 128-bit vector according to the specified lane indexes. */
+  /** Selects 8-bit lanes from either 128-bit vector according to the specified [0-15] respectively [16-31] lane indexes. */
   export function shuffle(a: v128, b: v128, l0: u8, l1: u8, l2: u8, l3: u8, l4: u8, l5: u8, l6: u8, l7: u8, l8: u8, l9: u8, l10: u8, l11: u8, l12: u8, l13: u8, l14: u8, l15: u8): v128;
+  /** Selects 8-bit lanes from the first 128-bit vector according to the indexes [0-15] specified by the 8-bit lanes of the second 128-bit vector. */
+  export function swizzle(a: v128, s: v128): v128;
+  /** Loads an 8-bit integer and splats it sixteen times forming a new 128-bit vector. */
+  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+}
+declare namespace v16x8 {
+  /** Loads a 16-bit integer and splats it eight times forming a new 128-bit vector. */
+  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+}
+declare namespace v32x4 {
+  /** Loads a 32-bit integer and splats it four times forming a new 128-bit vector. */
+  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
+}
+declare namespace v64x2 {
+  /** Loads a 64-bit integer and splats it two times forming a new 128-bit vector. */
+  export function load_splat(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
 }
 /** Macro type evaluating to the underlying native WebAssembly type. */
 declare type native<T> = T;

@@ -247,17 +247,21 @@ function runTest(basename) {
       var glue = {};
       if (fs.existsSync(gluePath)) glue = require(gluePath);
 
-      if (!testInstantiate(basename, untouchedBuffer, "untouched", glue)) {
-        failed = true;
-        failedTests.add(basename);
-      } else {
-        console.log();
-        if (!testInstantiate(basename, optimizedBuffer, "optimized", glue)) {
+      if (!config.skipInstantiate) {
+        if (!testInstantiate(basename, untouchedBuffer, "untouched", glue)) {
           failed = true;
           failedTests.add(basename);
+        } else {
+          console.log();
+          if (!testInstantiate(basename, optimizedBuffer, "optimized", glue)) {
+            failed = true;
+            failedTests.add(basename);
+          }
         }
+        console.log();
+      } else {
+        console.log("- " + colorsUtil.yellow("instantiate SKIPPED") + "\n");
       }
-      console.log();
     });
     if (failed) return 1;
   });

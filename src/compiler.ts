@@ -449,7 +449,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up function table
     var functionTable = this.functionTable;
-    module.setFunctionTable(functionTable.length, 0xffffffff, functionTable);
+    module.setFunctionTable(functionTable.length, 0xffffffff, functionTable, module.i32(0));
     module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.block(null, []));
 
     // import table if requested (default table is named '0' by Binaryen)
@@ -5830,6 +5830,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         let instance: Function | null = null;
+        let thisExpression = this.resolver.currentThisExpression;
 
         // resolve generic call if type arguments have been provided
         if (typeArguments) {
@@ -5917,7 +5918,7 @@ export class Compiler extends DiagnosticEmitter {
         // compile 'this' expression if an instance method
         let thisExpr: ExpressionRef = 0;
         if (instance.is(CommonFlags.INSTANCE)) {
-          thisExpr = this.compileExpression(assert(this.resolver.currentThisExpression), this.options.usizeType);
+          thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
         }
 
         return this.compileCallDirect(

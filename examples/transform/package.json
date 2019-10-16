@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "test:js": "asc assembly/index.ts --runtime none --transform mytransform.js",
+    "test:ts": "asc assembly/index.ts --runtime none --transform mytransform.ts",
+    "test:multi": "asc assembly/index.ts --runtime none --transform mytransform.js --transform mytransform.ts",
+    "test": "npm run test:js && npm run test:ts && npm run test:multi"
+  }
+}

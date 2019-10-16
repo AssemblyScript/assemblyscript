@@ -52,7 +52,8 @@ import {
   getConstValueF32,
   getConstValueF64,
   Relooper,
-  RelooperBlockRef
+  RelooperBlockRef,
+  SIMDLoadOp
 } from "./module";
 
 import {
@@ -296,6 +297,9 @@ export namespace BuiltinSymbols {
   export const v128_extract_lane = "~lib/builtins/v128.extract_lane";
   export const v128_replace_lane = "~lib/builtins/v128.replace_lane";
   export const v128_shuffle = "~lib/builtins/v128.shuffle";
+  export const v128_swizzle = "~lib/builtins/v128.swizzle";
+  export const v128_load_splat = "~lib/builtins/v128.load_splat";
+  export const v128_load_ext = "~lib/builtins/v128.load_ext";
   export const v128_load = "~lib/builtins/v128.load";
   export const v128_store = "~lib/builtins/v128.store";
   export const v128_add = "~lib/builtins/v128.add";
@@ -310,6 +314,7 @@ export namespace BuiltinSymbols {
   export const v128_and = "~lib/builtins/v128.and";
   export const v128_or = "~lib/builtins/v128.or";
   export const v128_xor = "~lib/builtins/v128.xor";
+  export const v128_andnot = "~lib/builtins/v128.andnot";
   export const v128_not = "~lib/builtins/v128.not";
   export const v128_bitselect = "~lib/builtins/v128.bitselect";
   export const v128_any_true = "~lib/builtins/v128.any_true";
@@ -402,6 +407,8 @@ export namespace BuiltinSymbols {
   export const i16x8_widen_low_i8x16_u = "~lib/builtins/i16x8.widen_low_i8x16_u";
   export const i16x8_widen_high_i8x16_s = "~lib/builtins/i16x8.widen_high_i8x16_s";
   export const i16x8_widen_high_i8x16_u = "~lib/builtins/i16x8.widen_high_i8x16_u";
+  export const i16x8_load8x8_s = "~lib/builtins/i16x8.load8x8_s";
+  export const i16x8_load8x8_u = "~lib/builtins/i16x8.load8x8_u";
 
   export const i32x4_splat = "~lib/builtins/i32x4.splat";
   export const i32x4_extract_lane = "~lib/builtins/i32x4.extract_lane";
@@ -431,6 +438,8 @@ export namespace BuiltinSymbols {
   export const i32x4_widen_low_i16x8_u = "~lib/builtins/i32x4.widen_low_i16x8_u";
   export const i32x4_widen_high_i16x8_s = "~lib/builtins/i32x4.widen_high_i16x8_s";
   export const i32x4_widen_high_i16x8_u = "~lib/builtins/i32x4.widen_high_i16x8_u";
+  export const i32x4_load16x4_s = "~lib/builtins/i32x4.load16x4_s";
+  export const i32x4_load16x4_u = "~lib/builtins/i32x4.load16x4_u";
 
   export const i64x2_splat = "~lib/builtins/i64x2.splat";
   export const i64x2_extract_lane = "~lib/builtins/i64x2.extract_lane";
@@ -445,6 +454,8 @@ export namespace BuiltinSymbols {
   export const i64x2_all_true = "~lib/builtins/i64x2.all_true"; // i64x2 has no .eq etc.
   export const i64x2_trunc_sat_f64x2_s = "~lib/builtins/i64x2.trunc_sat_f64x2_s";
   export const i64x2_trunc_sat_f64x2_u = "~lib/builtins/i64x2.trunc_sat_f64x2_u";
+  export const i64x2_load32x2_s = "~lib/builtins/i64x2.load32x2_s";
+  export const i64x2_load32x2_u = "~lib/builtins/i64x2.load32x2_u";
 
   export const f32x4_splat = "~lib/builtins/f32x4.splat";
   export const f32x4_extract_lane = "~lib/builtins/f32x4.extract_lane";
@@ -493,6 +504,11 @@ export namespace BuiltinSymbols {
   export const f64x2_qfms = "~lib/builtins/f64x2.qfms";
 
   export const v8x16_shuffle = "~lib/builtins/v8x16.shuffle";
+  export const v8x16_swizzle = "~lib/builtins/v8x16.swizzle";
+  export const v8x16_load_splat = "~lib/builtins/v8x16.load_splat";
+  export const v16x8_load_splat = "~lib/builtins/v16x8.load_splat";
+  export const v32x4_load_splat = "~lib/builtins/v32x4.load_splat";
+  export const v64x2_load_splat = "~lib/builtins/v64x2.load_splat";
 
   // internals
   export const heap_base = "~lib/heap/__heap_base";
@@ -2935,6 +2951,158 @@ export function compileCall(
       compiler.currentType = Type.v128;
       return module.unreachable();
     }
+    case BuiltinSymbols.v128_swizzle: { // swizzle(a: v128, b: v128) -> v128
+      if (
+        checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+      return module.binary(BinaryOp.SwizzleV8x16, arg0, arg1);
+    }
+    case BuiltinSymbols.v128_load_splat: { // load_splat<T!>(ptr: usize, immOffset?: usize, immAlign?: usize) -> v128
+      if (
+        checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
+        checkArgsOptional(operands, 1, 3, reportNode, compiler)
+      ) return module.unreachable();
+      let type = typeArguments![0];
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+      let numOperands = operands.length;
+      let immOffset = numOperands >= 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
+      if (immOffset < 0) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let immAlign: i32;
+      let naturalAlign = type.byteSize;
+      if (numOperands == 3) {
+        immAlign = evaluateImmediateOffset(operands[2], compiler);
+        if (immAlign < 0) {
+          compiler.currentType = Type.v128;
+          return module.unreachable();
+        }
+      } else {
+        immAlign = naturalAlign;
+      }
+      compiler.currentType = Type.v128;
+      if (!type.is(TypeFlags.REFERENCE)) {
+        if (immAlign > naturalAlign) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+            operands[2].range, "Alignment", "0", naturalAlign.toString()
+          );
+          return module.unreachable();
+        }
+        if (!isPowerOf2(immAlign)) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_power_of_two,
+            operands[2].range, "Alignment"
+          );
+          return module.unreachable();
+        }
+        switch (type.kind) {
+          case TypeKind.I8:
+          case TypeKind.U8: {
+            return module.simd_load(SIMDLoadOp.LoadSplatV8x16, arg0, immOffset, immAlign);
+          }
+          case TypeKind.I16:
+          case TypeKind.U16: {
+            return module.simd_load(SIMDLoadOp.LoadSplatV16x8, arg0, immOffset, immAlign);
+          }
+          case TypeKind.I32:
+          case TypeKind.U32:
+          case TypeKind.F32: {
+            return module.simd_load(SIMDLoadOp.LoadSplatV32x4, arg0, immOffset, immAlign);
+          }
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            if (!compiler.options.isWasm64) {
+              return module.simd_load(SIMDLoadOp.LoadSplatV32x4, arg0, immOffset, immAlign);
+            }
+            // fall-through
+          }
+          case TypeKind.I64:
+          case TypeKind.U64:
+          case TypeKind.F64: {
+            return module.simd_load(SIMDLoadOp.LoadSplatV64x2, arg0, immOffset, immAlign);
+          }
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "v128.load_splat", type.toString()
+      );
+      return module.unreachable();
+    }
+    case BuiltinSymbols.v128_load_ext: { // load_ext<TFrom!>(ptr: usize, immOffset?: usize, immAlign?: usize) -> v128
+      if (
+        checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
+        checkArgsOptional(operands, 1, 3, reportNode, compiler)
+      ) return module.unreachable();
+      let type = typeArguments![0];
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+      let numOperands = operands.length;
+      let immOffset = numOperands >= 2 ? evaluateImmediateOffset(operands[1], compiler) : 0; // reports
+      if (immOffset < 0) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let immAlign: i32;
+      let naturalAlign = type.byteSize;
+      if (numOperands == 3) {
+        immAlign = evaluateImmediateOffset(operands[2], compiler);
+        if (immAlign < 0) {
+          compiler.currentType = Type.v128;
+          return module.unreachable();
+        }
+      } else {
+        immAlign = naturalAlign;
+      }
+      compiler.currentType = Type.v128;
+      if (!type.is(TypeFlags.REFERENCE)) {
+        if (immAlign > naturalAlign) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+            operands[2].range, "Alignment", "0", naturalAlign.toString()
+          );
+          return module.unreachable();
+        }
+        if (!isPowerOf2(immAlign)) {
+          compiler.error(
+            DiagnosticCode._0_must_be_a_power_of_two,
+            operands[2].range, "Alignment"
+          );
+          return module.unreachable();
+        }
+        switch (type.kind) {
+          case TypeKind.I8: return module.simd_load(SIMDLoadOp.LoadI8ToI16x8, arg0, immOffset, immAlign);
+          case TypeKind.U8: return module.simd_load(SIMDLoadOp.LoadU8ToU16x8, arg0, immOffset, immAlign);
+          case TypeKind.I16: return module.simd_load(SIMDLoadOp.LoadI16ToI32x4, arg0, immOffset, immAlign);
+          case TypeKind.U16: return module.simd_load(SIMDLoadOp.LoadU16ToU32x4, arg0, immOffset, immAlign);
+          case TypeKind.ISIZE: {
+            if (compiler.options.isWasm64) break;
+            // fall-through
+          }
+          case TypeKind.I32: return module.simd_load(SIMDLoadOp.LoadI32ToI64x2, arg0, immOffset, immAlign);
+          case TypeKind.USIZE: {
+            if (compiler.options.isWasm64) break;
+            // fall-through
+          }
+          case TypeKind.U32: return module.simd_load(SIMDLoadOp.LoadU32ToU64x2, arg0, immOffset, immAlign);
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "v128.load_ext", type.toString()
+      );
+      return module.unreachable();
+    }
     case BuiltinSymbols.v128_add: { // add<T!>(a: v128, b: v128) -> v128
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
@@ -3758,6 +3926,19 @@ export function compileCall(
       let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
       return module.binary(BinaryOp.XorV128, arg0, arg1);
     }
+    case BuiltinSymbols.v128_andnot: { // andnot(a: v128, b: v128) -> v128
+      if (
+        checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+      return module.binary(BinaryOp.AndNotV128, arg0, arg1);
+    }
     case BuiltinSymbols.v128_not: { // not(a: v128) -> v128
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
@@ -3770,19 +3951,6 @@ export function compileCall(
       let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
       return module.unary(UnaryOp.NotV128, arg0);
     }
-    // case BuiltinSymbols.v128_andnot: { // andnot(a: v128, b: v128) -> v128
-    //   if (
-    //     checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
-    //     checkTypeAbsent(typeArguments, reportNode, prototype) |
-    //     checkArgsRequired(operands, 2, reportNode, compiler)
-    //   ) {
-    //     compiler.currentType = Type.v128;
-    //     return module.unreachable();
-    //   }
-    //   let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-    //   let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
-    //   return module.binary(BinaryOp.AndnotV128, arg0);
-    // }
     case BuiltinSymbols.v128_bitselect: { // bitselect(v1: v128, v2: v128, c: v128) -> v128
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
@@ -4209,6 +4377,8 @@ function tryDeferASM(
     case BuiltinSymbols.i16x8_widen_low_i8x16_u: return deferASM(BuiltinSymbols.v128_widen_low, compiler, Type.u8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_widen_high_i8x16_s: return deferASM(BuiltinSymbols.v128_widen_high, compiler, Type.i8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_widen_high_i8x16_u: return deferASM(BuiltinSymbols.v128_widen_high, compiler, Type.u8, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i16x8_load8x8_s: return deferASM(BuiltinSymbols.v128_load_ext, compiler, Type.i8, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i16x8_load8x8_u: return deferASM(BuiltinSymbols.v128_load_ext, compiler, Type.u8, operands, Type.v128, reportNode);
 
     case BuiltinSymbols.i32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i32, operands, Type.v128, reportNode);
     case BuiltinSymbols.i32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i32, operands, Type.i32, reportNode);
@@ -4238,6 +4408,8 @@ function tryDeferASM(
     case BuiltinSymbols.i32x4_widen_low_i16x8_u: return deferASM(BuiltinSymbols.v128_widen_low, compiler, Type.u16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i32x4_widen_high_i16x8_s: return deferASM(BuiltinSymbols.v128_widen_high, compiler, Type.i16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i32x4_widen_high_i16x8_u: return deferASM(BuiltinSymbols.v128_widen_high, compiler, Type.u16, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i32x4_load16x4_s: return deferASM(BuiltinSymbols.v128_load_ext, compiler, Type.i16, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i32x4_load16x4_u: return deferASM(BuiltinSymbols.v128_load_ext, compiler, Type.u16, operands, Type.v128, reportNode);
 
     case BuiltinSymbols.i64x2_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.i64, operands, Type.v128, reportNode);
     case BuiltinSymbols.i64x2_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.i64, operands, Type.i64, reportNode);
@@ -4252,6 +4424,8 @@ function tryDeferASM(
     case BuiltinSymbols.i64x2_all_true: return deferASM(BuiltinSymbols.v128_all_true, compiler, Type.i64, operands, Type.i32, reportNode);
     case BuiltinSymbols.i64x2_trunc_sat_f64x2_s: return deferASM(BuiltinSymbols.v128_trunc_sat, compiler, Type.i64, operands, Type.v128, reportNode);
     case BuiltinSymbols.i64x2_trunc_sat_f64x2_u: return deferASM(BuiltinSymbols.v128_trunc_sat, compiler, Type.u64, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i64x2_load32x2_s: return deferASM(BuiltinSymbols.v128_load_ext, compiler, Type.i32, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i64x2_load32x2_u: return deferASM(BuiltinSymbols.v128_load_ext, compiler, Type.u32, operands, Type.v128, reportNode);
 
     case BuiltinSymbols.f32x4_splat: return deferASM(BuiltinSymbols.v128_splat, compiler, Type.f32, operands, Type.v128, reportNode);
     case BuiltinSymbols.f32x4_extract_lane: return deferASM(BuiltinSymbols.v128_extract_lane, compiler, Type.f32, operands, Type.f32, reportNode);
@@ -4300,6 +4474,11 @@ function tryDeferASM(
     case BuiltinSymbols.f64x2_qfms: return deferASM(BuiltinSymbols.v128_qfms, compiler, Type.f64, operands, Type.v128, reportNode);
 
     case BuiltinSymbols.v8x16_shuffle: return deferASM(BuiltinSymbols.v128_shuffle, compiler, Type.i8, operands, Type.v128, reportNode);
+    case BuiltinSymbols.v8x16_swizzle: return deferASM(BuiltinSymbols.v128_swizzle, compiler, null, operands, Type.v128, reportNode);
+    case BuiltinSymbols.v8x16_load_splat: return deferASM(BuiltinSymbols.v128_load_splat, compiler, Type.u8, operands, Type.v128, reportNode);
+    case BuiltinSymbols.v16x8_load_splat: return deferASM(BuiltinSymbols.v128_load_splat, compiler, Type.u16, operands, Type.v128, reportNode);
+    case BuiltinSymbols.v32x4_load_splat: return deferASM(BuiltinSymbols.v128_load_splat, compiler, Type.u32, operands, Type.v128, reportNode);
+    case BuiltinSymbols.v64x2_load_splat: return deferASM(BuiltinSymbols.v128_load_splat, compiler, Type.u64, operands, Type.v128, reportNode);
   }
   /* tslint:enable:max-line-length */
   return 0;
@@ -4309,7 +4488,7 @@ function tryDeferASM(
 function deferASM(
   name: string,
   compiler: Compiler,
-  typeArgument: Type,
+  typeArgument: Type | null,
   operands: Expression[],
   contextualType: Type,
   reportNode: CallExpression
@@ -4320,7 +4499,7 @@ function deferASM(
   return compileCall(
     compiler,
     <FunctionPrototype>prototype,
-    [ typeArgument ],
+    typeArgument ? [ typeArgument ] : null,
     operands,
     contextualType,
     reportNode,
