@@ -1,7 +1,0 @@
-{
-    "scripts": {
-        "app1":"cd ./app1 && npm run asbuild:untouched",
-        "app2":"cd ./app2 && npm run asbuild:untouched",
-        "asbuild":"npm run app1 && npm run app2"
-    }
-  }

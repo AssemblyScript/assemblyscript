@@ -1,8 +1,14 @@
 import * as loader from "../../lib/loader"
+import * as rtrace from "../../lib/rtrace"
 const fs = require("fs")
 const nodePath = require("path")
 export class DynamicLinker {
-    asrt: ModuleDefinition = new ModuleDefinition("asrt", "")
+    asrt: ModuleDefinition = new ModuleDefinition("asrt", "./asrt.wasm")
+    rtrace = rtrace(e => {
+        console.log("trace error", e)
+    },i=>{
+        console.log("trace info",i)
+    })
     memory: WebAssembly.Memory = new WebAssembly.Memory({ initial: 1 })
     table: WebAssembly.Table = new WebAssembly.Table({ element: "anyfunc", initial: 10 })
     defaultImports: { env?: {} } = {
@@ -24,16 +30,16 @@ export class DynamicLinker {
         let mem_base = 1000
         let table_base = 0
         console.log("heap base", mem)
-        this.asrt.instantiate({ env: { "__heap_base": 2000 } }, this.defaultImports)
+        this.asrt.instantiate({ env: { "__heap_base": mem } }, this.defaultImports, { rtrace: this.rtrace })
         let rtImports = {}
         this.modules.forEach(m => {
-            console.log(m.id,"mem base",mem_base)
+            console.log(m.id, "mem base", mem_base)
             m.instantiate(this.defaultImports, { env: { __memory_base: mem_base, __table_base: table_base }, asrt: this.asrt.exports }, rtImports)
             mem_base += m.dylink.memory_size
             table_base += m.dylink.table_size
             rtImports[m.id] = m.exports
         })
-        console.log("final mem base",mem_base)
+        // console.log("final mem base",mem_base)
     }
 }
 
@@ -43,12 +49,31 @@ export class ModuleDefinition {
     dylink: DyLink
     imports: { env: any } = {
         env: {
-            log: (offset: number): void => {
-                console.log(this.id, offset)
+            _log: (type: number, offset: number): void => {
+                switch (type) {
+                    case 0:
+                        console.log(`Log [${this.id}] ${offset}`)
+                        break;
+                    case 1:
+                        console.log(`Log [${this.id}][${offset}] str:${this.exports.__getString(offset)}`)
+                        break;
+                    case 99:
+                        let view=new DataView(this.imports.env.memory.buffer,offset)
+                        let mmInfo:number=view.getUint32(0,true)
+                        let gcInfo:number=view.getUint32(4,true)
+                        let rtId:number=view.getUint32(8,true)
+                        let rtsize:number=view.getUint32(12,true)
+                        //block
+                        console.log(`Log [${this.id}][${offset}]${mmInfo} ${gcInfo} ${rtId} ${rtsize}`)
+                    default:
+                        console.log(`Log [${this.id}][${offset}] type:${type}`)
+                        break;
+                }
+
             },
             abort: (mesg, file, line, colm) => {
                 const memory = this.imports.env.memory // prefer exported, otherwise try imported
-                console.log(this.path,"abort: " + getString(memory, mesg) + " at " + getString(memory, file) + ":" + line + ":" + colm);
+                console.log(this.path, "abort: " + getString(memory, mesg) + " at " + getString(memory, file) + ":" + line + ":" + colm);
             },
         }
     }
@@ -61,8 +86,8 @@ export class ModuleDefinition {
         let custom = WebAssembly.Module.customSections(this.module, "dylink")
         if (custom && custom.length > 0) {
             this.dylink = readDylinkSection(custom[0])
-        }else{
-            this.dylink={memory_align:4,memory_size:1000,table_size:0, table_align:0}
+        } else {
+            this.dylink = { memory_align: 4, memory_size: 1000, table_size: 0, table_align: 0 }
         }
     }
 
