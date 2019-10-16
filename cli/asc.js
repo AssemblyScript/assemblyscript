@@ -235,9 +235,16 @@ exports.main = function main(argv, options, callback) {
     });
   }
   function applyTransform(name, ...args) {
-    transforms.forEach(transform => {
-      if (typeof transform[name] === "function") transform[name](...args);
-    });
+    for (let i = 0, k = transforms.length; i < k; ++i) {
+      let transform = transforms[i];
+      if (typeof transform[name] === "function") {
+        try {
+          transform[name](...args);
+        } catch (e) {
+          return e;
+        }
+      }
+    }
   }
 
   // Begin parsing
@@ -438,7 +445,10 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Call afterParse transform hook
-  applyTransform("afterParse", parser);
+  {
+    let error = applyTransform("afterParse", parser);
+    if (error) return callback(error);
+  }
 
   // Parse additional files, if any
   {
@@ -543,7 +553,10 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Call afterCompile transform hook
-  applyTransform("afterCompile", module);
+  {
+    let error = applyTransform("afterCompile", module);
+    if (error) return callback(error);
+  }
 
   // Validate the module if requested
   if (args.validate) {
