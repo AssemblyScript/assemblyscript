@@ -449,7 +449,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up function table
     var functionTable = this.functionTable;
-    module.setFunctionTable(functionTable.length, 0xffffffff, functionTable);
+    module.setFunctionTable(functionTable.length, 0xffffffff, functionTable, module.i32(0));
     module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.block(null, []));
 
     // import table if requested (default table is named '0' by Binaryen)

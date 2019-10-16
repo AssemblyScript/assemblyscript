@@ -4,7 +4,6 @@
  *//***/
 
 import { Target } from "./common";
-import { Type } from "./types";
 
 export type ModuleRef = usize;
 export type FunctionTypeRef = usize;
@@ -79,6 +78,7 @@ export enum ExpressionId {
   SIMDShuffle = _BinaryenSIMDShuffleId(),
   SIMDTernary = _BinaryenSIMDTernaryId(),
   SIMDShift = _BinaryenSIMDShiftId(),
+  SIMDLoad = _BinaryenSIMDLoadId(),
   MemoryInit = _BinaryenMemoryInitId(),
   DataDrop = _BinaryenDataDropId(),
   MemoryCopy = _BinaryenMemoryCopyId(),
@@ -325,6 +325,7 @@ export enum BinaryOp {
   AndV128 = _BinaryenAndVec128(),
   OrV128 = _BinaryenOrVec128(),
   XorV128 = _BinaryenXorVec128(),
+  AndNotV128 = _BinaryenAndNotVec128(),
   AddI8x16 = _BinaryenAddVecI8x16(),
   AddSatI8x16 = _BinaryenAddSatSVecI8x16(),
   AddSatU8x16 = _BinaryenAddSatUVecI8x16(),
@@ -359,7 +360,8 @@ export enum BinaryOp {
   NarrowI16x8ToI8x16 = _BinaryenNarrowSVecI16x8ToVecI8x16(),
   NarrowU16x8ToU8x16 = _BinaryenNarrowUVecI16x8ToVecI8x16(),
   NarrowI32x4ToI16x8 = _BinaryenNarrowSVecI32x4ToVecI16x8(),
-  NarrowU32x4ToU16x8 = _BinaryenNarrowUVecI32x4ToVecI16x8()
+  NarrowU32x4ToU16x8 = _BinaryenNarrowUVecI32x4ToVecI16x8(),
+  SwizzleV8x16 = _BinaryenSwizzleVec8x16()
 }
 
 export enum HostOp {
@@ -417,6 +419,19 @@ export enum SIMDTernaryOp {
   QFMSF32x4 = _BinaryenQFMSVecF32x4(),
   QFMAF64x2 = _BinaryenQFMAVecF64x2(),
   QFMSF64x2 = _BinaryenQFMSVecF64x2()
+}
+
+export enum SIMDLoadOp {
+  LoadSplatV8x16 = _BinaryenLoadSplatVec8x16(),
+  LoadSplatV16x8 = _BinaryenLoadSplatVec16x8(),
+  LoadSplatV32x4 = _BinaryenLoadSplatVec32x4(),
+  LoadSplatV64x2 = _BinaryenLoadSplatVec64x2(),
+  LoadI8ToI16x8 = _BinaryenLoadExtSVec8x8ToVecI16x8(),
+  LoadU8ToU16x8 = _BinaryenLoadExtUVec8x8ToVecI16x8(),
+  LoadI16ToI32x4 = _BinaryenLoadExtSVec16x4ToVecI32x4(),
+  LoadU16ToU32x4 = _BinaryenLoadExtUVec16x4ToVecI32x4(),
+  LoadI32ToI64x2 = _BinaryenLoadExtSVec32x2ToVecI64x2(),
+  LoadU32ToU64x2 = _BinaryenLoadExtUVec32x2ToVecI64x2()
 }
 
 export class MemorySegment {
@@ -921,7 +936,7 @@ export class Module {
   }
 
   simd_ternary(
-    op: BinaryenSIMDOp,
+    op: SIMDTernaryOp,
     a: ExpressionRef,
     b: ExpressionRef,
     c: ExpressionRef
@@ -937,6 +952,15 @@ export class Module {
     return _BinaryenSIMDShift(this.ref, op, vec, shift);
   }
 
+  simd_load(
+    op: SIMDLoadOp,
+    ptr: ExpressionRef,
+    offset: u32,
+    align: u32
+  ): ExpressionRef {
+    return _BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
+  }
+
   // meta
 
   addGlobal(
@@ -946,7 +970,7 @@ export class Module {
     initializer: ExpressionRef
   ): GlobalRef {
     var cStr = this.allocStringCached(name);
-    return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
+    return _BinaryenAddGlobal(this.ref, cStr, type, mutable, initializer);
   }
 
   removeGlobal(
@@ -1169,7 +1193,8 @@ export class Module {
   setFunctionTable(
     initial: Index,
     maximum: Index,
-    funcs: string[]
+    funcs: string[],
+    offset: ExpressionRef
   ): void {
     var numNames = funcs.length;
     var names = new Array<usize>(numNames);
@@ -1178,7 +1203,7 @@ export class Module {
     }
     var cArr = allocI32Array(names);
     try {
-      _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames);
+      _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames, offset);
     } finally {
       memory.free(cArr);
     }
@@ -1186,6 +1211,16 @@ export class Module {
 
   setStart(func: FunctionRef): void {
     _BinaryenSetStart(this.ref, func);
+  }
+
+  addCustomSection(name: string, contents: Uint8Array): void {
+    var cStr = this.allocStringCached(name);
+    var cArr = allocU8Array(contents);
+    try {
+      _BinaryenAddCustomSection(this.ref, cStr, cArr, contents.length);
+    } finally {
+      memory.free(cArr);
+    }
   }
 
   getOptimizeLevel(): i32 {
@@ -2061,6 +2096,10 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
     case ExpressionId.SIMDShift: {
       visit(_BinaryenSIMDShiftGetVec(expr), data);
       visit(_BinaryenSIMDShiftGetShift(expr), data);
+      break;
+    }
+    case ExpressionId.SIMDLoad: {
+      visit(_BinaryenSIMDLoadGetPtr(expr), data);
       break;
     }
     case ExpressionId.MemoryInit: {
