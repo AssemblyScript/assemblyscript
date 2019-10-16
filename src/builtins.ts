@@ -3915,11 +3915,13 @@ export function compileCall(
           return module.i32(classReference.id);
         }
       }
-      compiler.error(
-        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
-        reportNode.typeArgumentsRange, "idof", type.toString()
-      );
-      return module.unreachable();
+      //return 0 (i.e. non referenced type) rather than throwing an error
+      return module.i32(0)
+      // compiler.error(
+      //   DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+      //   reportNode.typeArgumentsRange, "idof", type.toString()
+      // );
+      // return module.unreachable();
     }
     case BuiltinSymbols.visit_globals: {
       if (
