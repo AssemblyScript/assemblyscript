@@ -936,7 +936,7 @@ export class Module {
   }
 
   simd_ternary(
-    op: BinaryenOp,
+    op: SIMDTernaryOp,
     a: ExpressionRef,
     b: ExpressionRef,
     c: ExpressionRef

@@ -545,6 +545,8 @@ declare namespace v128 {
   export function replace_lane<T>(x: v128, idx: u8, value: T): v128;
   /** Selects lanes from either 128-bit vector according to the specified lane indexes. */
   export function shuffle<T>(a: v128, b: v128, ...lanes: u8[]): v128;
+  /** Selects 8-bit lanes from the first 128-bit vector according to the indexes [0-15] specified by the 8-bit lanes of the second 128-bit vector. */
+  export function swizzle(a: v128, s: v128): v128;
   /** Loads a 128-bit vector from memory. */
   export function load(ptr: usize, immOffset?: usize, immAlign?: usize): v128;
   /** Creates a 128-bit vector with identical lanes by loading the splatted value. */
