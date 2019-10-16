@@ -212,27 +212,33 @@ exports.main = function main(argv, options, callback) {
   // Set up transforms
   const transforms = [];
   if (args.transform) {
-    args.transform.forEach(filename => {
+    let transformArgs = args.transform;
+    for (let i = 0, k = transformArgs.length; i < k; ++i) {
+      let filename = transformArgs[i];
       filename = path.isAbsolute(filename = filename.trim())
         ? filename
         : path.join(process.cwd(), filename);
       if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
-      const classOrModule = require(filename);
-      if (typeof classOrModule === "function") {
-        Object.assign(classOrModule.prototype, {
-          baseDir,
-          stdout,
-          stderr,
-          log: console.error,
-          readFile,
-          writeFile,
-          listFiles
-        });
-        transforms.push(new classOrModule());
-      } else {
-        transforms.push(classOrModule); // legacy module
+      try {
+        const classOrModule = require(filename);
+        if (typeof classOrModule === "function") {
+          Object.assign(classOrModule.prototype, {
+            baseDir,
+            stdout,
+            stderr,
+            log: console.error,
+            readFile,
+            writeFile,
+            listFiles
+          });
+          transforms.push(new classOrModule());
+        } else {
+          transforms.push(classOrModule); // legacy module
+        }
+      } catch (e) {
+        return callback(e);
       }
-    });
+    }
   }
   function applyTransform(name, ...args) {
     for (let i = 0, k = transforms.length; i < k; ++i) {
