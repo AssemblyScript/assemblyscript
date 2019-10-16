@@ -5830,6 +5830,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         let instance: Function | null = null;
+        let thisExpression = this.resolver.currentThisExpression;
 
         // resolve generic call if type arguments have been provided
         if (typeArguments) {
@@ -5917,7 +5918,7 @@ export class Compiler extends DiagnosticEmitter {
         // compile 'this' expression if an instance method
         let thisExpr: ExpressionRef = 0;
         if (instance.is(CommonFlags.INSTANCE)) {
-          thisExpr = this.compileExpression(assert(this.resolver.currentThisExpression), this.options.usizeType);
+          thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
         }
 
         return this.compileCallDirect(
