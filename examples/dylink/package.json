@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "asrt": "asc ../../../lib/asrt/assembly/empty.ts --baseDir ../../lib/asrt/assembly -b ../../../examples/dylink/asrt.wasm --runtime asrt --use __visit_members=asrt/__visit_members --use __heap_base=asrt/__heap_base --importMemory --importTable --validate --debug",
+        "asrt": "asc ../../../lib/asrt/assembly/empty.ts --baseDir ../../lib/asrt/assembly -b ../../../examples/dylink/asrt.wasm --runtime asrt --use __visit_members=asrt/__visit_members --use __heap_base=asrt/__heap_base --use ASC_RTRACE=1 --importMemory --importTable --validate --debug",
         "app1":"cd ./app1 && npm run asbuild:untouched",
         "app2":"cd ./app2 && npm run asbuild:untouched",
         "build":"npm run asrt && npm run app1 && npm run app2",
