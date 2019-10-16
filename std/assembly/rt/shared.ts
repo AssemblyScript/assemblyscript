@@ -1,5 +1,7 @@
 import * as asrt from "../bindings/asrt";
 
+
+
 function visit(ptr: usize, cookie: u32): void {
   __visit_members(ptr, cookie);
 }
@@ -7,13 +9,15 @@ function visit(ptr: usize, cookie: u32): void {
 // @ts-ignore: decorator
 @unsafe @global
 export function __alloc(size: usize, id: u32): usize {
-  return asrt.alloc(__memory_base, size, id);
+  let t=asrt.alloc(__memory_base, size, id);
+  return t;
 }
 
 // @ts-ignore: decorator
 @unsafe @global
 export function __realloc(ptr: usize, size: usize): usize {
-  return asrt.realloc(__memory_base, ptr, size);
+  let t= asrt.realloc(__memory_base, ptr, size);
+  return t
 }
 
 // @ts-ignore: decorator

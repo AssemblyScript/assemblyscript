@@ -472,7 +472,7 @@ export class Module {
     this.tbase = globalName ? this.allocStringCached(globalName) : 0;
   }
 
-  private relocMem(ptr: ExpressionRef): ExpressionRef {
+  relocMem(ptr: ExpressionRef): ExpressionRef {
     var mbase = this.mbase;
     if (!mbase) return ptr;
     var ref = this.ref;
@@ -618,7 +618,7 @@ export class Module {
     offset: Index = 0,
     align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
-    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, align, type, this.relocMem(ptr));
+    return _BinaryenLoad(this.ref, bytes, signed ? 1 : 0, offset, align, type, ptr);
   }
 
   store(
@@ -629,7 +629,7 @@ export class Module {
     offset: Index = 0,
     align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
-    return _BinaryenStore(this.ref, bytes, offset, align, this.relocMem(ptr), value, type);
+    return _BinaryenStore(this.ref, bytes, offset, align, ptr, value, type);
   }
 
   atomic_load(

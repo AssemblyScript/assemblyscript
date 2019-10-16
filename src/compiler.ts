@@ -1505,7 +1505,7 @@ export class Compiler extends DiagnosticEmitter {
       return module.i64(i64_low(ref), i64_high(ref));
     } else {
       assert(i64_is_u32(ref));
-      return module.i32(i64_low(ref));
+      return module.relocMem(module.i32(i64_low(ref)));
     }
   }
 
