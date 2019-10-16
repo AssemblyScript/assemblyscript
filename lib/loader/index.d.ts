@@ -14,6 +14,9 @@ interface ImportsObject extends Record<string, any> {
 
 /** Utility mixed in by the loader. */
 interface ASUtil {
+  memory?: WebAssembly.Memory;
+  table?: WebAssembly.Table;
+
   /** Explicit start function, if requested. */
   __start(): void;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
@@ -41,9 +44,9 @@ interface ASUtil {
   /** Reads the values of Uint32Array from the module's memory. */
   __getUint32Array(ptr: number): Uint32Array;
   /** Reads the values of Int32Array from the module's memory. */
-  __getInt64Array(ptr: number): BigInt64Array;
+  __getInt64Array?(ptr: number): BigInt64Array;
   /** Reads the values of Uint32Array from the module's memory. */
-  __getUint64Array(ptr: number): BigUint64Array;
+  __getUint64Array?(ptr: number): BigUint64Array;
   /** Reads the values of Float32Array from the module's memory. */
   __getFloat32Array(ptr: number): Float32Array;
     /** Reads the values of Float64Array from the module's memory. */
