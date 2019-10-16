@@ -58,7 +58,7 @@ export class ModuleDefinition {
                         console.log(`Log [${this.id}][${offset}] str:${this.exports.__getString(offset)}`)
                         break;
                     case 99:
-                        let view=new DataView(this.imports.env.memory.buffer,offset)
+                        let view=new DataView(this.imports.env.memory.buffer,offset-16)
                         let mmInfo:number=view.getUint32(0,true)
                         let gcInfo:number=view.getUint32(4,true)
                         let rtId:number=view.getUint32(8,true)
