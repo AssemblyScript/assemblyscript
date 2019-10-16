@@ -708,10 +708,10 @@ var i: i32;
   assert(i == 6);
 
   // init value
-  i = arr.reduce<i32>(((prev: i32, current: i32): i32 => prev + current), 4);
+  i = arr.reduce(((prev: i32, current: i32): i32 => prev + current), 4);
   assert(i == 10);
 
-  let boolVal = arr.reduce<bool>(((prev: bool, current: i32): bool => prev || current > 2), false);
+  let boolVal = arr.reduce(((prev: bool, current: i32): bool => prev || current > 2), false);
   assert(boolVal == true);
 
   boolVal = arr.reduce<bool>(((prev: bool, current: i32): bool => prev || current > 100), false);
@@ -725,7 +725,7 @@ var i: i32;
   // array should be changed, but this method result should be calculated for old array length
   assert(i == 6);
   assert(arr.length == 8);
-  i = arr.reduce<i32>(((prev: i32, current: i32): i32 => prev + current), 0);
+  i = arr.reduce(((prev: i32, current: i32): i32 => prev + current), 0);
   assert(i == 10);
 
   arr.pop();
@@ -734,7 +734,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  i = arr.reduce<i32>(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
+  i = arr.reduce(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
     array.pop(); //poped items shouldn't be reduced, and we shouldn't go out of bounds
     return prev + current;
   }), 0);
@@ -753,13 +753,13 @@ var i: i32;
   assert(i == 6);
 
   // init value
-  i = arr.reduceRight<i32>(((prev: i32, current: i32): i32 => prev + current), 4);
+  i = arr.reduceRight(((prev: i32, current: i32): i32 => prev + current), 4);
   assert(i == 10);
 
   let boolVal = arr.reduceRight<bool>(((prev: bool, current: i32): bool => prev || current > 2), false);
   assert(boolVal == true);
 
-  boolVal = arr.reduceRight<bool>(((prev: bool, current: i32): bool => prev || current > 100), false);
+  boolVal = arr.reduceRight(((prev: bool, current: i32): bool => prev || current > 100), false);
   assert(boolVal == false);
 
   // Test side effect push
@@ -770,7 +770,7 @@ var i: i32;
   // array should be changed, but this method result should be calculated for old array length
   assert(i == 6);
   assert(arr.length == 8);
-  i = arr.reduceRight<i32>(((prev: i32, current: i32): i32 => prev + current), 0);
+  i = arr.reduceRight(((prev: i32, current: i32): i32 => prev + current), 0);
   assert(i == 10);
 
   arr.pop();
@@ -779,7 +779,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  i = arr.reduceRight<i32>(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
+  i = arr.reduceRight(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
     array.pop(); // poped items should be reduced
     return prev + current;
   }), 0);
