@@ -2,11 +2,41 @@
 <script src="../index.js"></script>
 <script>
 (async () => {
-  var module = await exports.instantiate(fetch("./build/untouched.wasm"));
+  var module;
+
+  module = await exports.instantiate(fetch("./build/untouched.wasm"));
   console.log(module);
-})();
-(async () => {
-  var module = await exports.instantiateStreaming(fetch("./build/untouched.wasm"));
+
+  module = await exports.instantiate(await fetch("./build/untouched.wasm"));
   console.log(module);
+
+  module = await exports.instantiate((await fetch("./build/untouched.wasm")).arrayBuffer());
+  console.log(module);
+
+  module = await exports.instantiate(await (await fetch("./build/untouched.wasm")).arrayBuffer());
+  console.log(module);
+
+  module = await exports.instantiateStreaming(fetch("./build/untouched.wasm"));
+  console.log(module);
+
+  module = await exports.instantiateStreaming(await fetch("./build/untouched.wasm"));
+  console.log(module);
+
+  var instantiateStreaming = WebAssembly.instantiateStreaming;
+  delete WebAssembly.instantiateStreaming;
+
+  module = await exports.instantiate(fetch("./build/untouched.wasm"));
+  console.log(module);
+
+  module = await exports.instantiate(await fetch("./build/untouched.wasm"));
+  console.log(module);
+
+  module = await exports.instantiateStreaming(fetch("./build/untouched.wasm"));
+  console.log(module);
+
+  module = await exports.instantiateStreaming(await fetch("./build/untouched.wasm"));
+  console.log(module);
+
+  WebAssembly.instantiateStreaming = instantiateStreaming;
 })();
 </script>
