@@ -14,8 +14,8 @@ const loader = require("assemblyscript/lib/loader");
 API
 ---
 
-* **instantiate**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
-  Asynchronously instantiates an AssemblyScript module from a module or buffer using the specified imports.
+* **instantiate**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource | Response`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
+  Asynchronously instantiates an AssemblyScript module from a module, buffer or response using the specified imports.
 
 * **instantiateSync**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource`, imports?: `WasmImports`): `ASUtil & T`<br />
   Synchronously instantiates an AssemblyScript module from a module or buffer using the specified imports.

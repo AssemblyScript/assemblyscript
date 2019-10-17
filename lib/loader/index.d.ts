@@ -65,8 +65,8 @@ interface ASUtil {
   __collect(): void;
 }
 
-/** Asynchronously instantiates an AssemblyScript module from a module or buffer using the specified imports. */
-export declare function instantiate<T extends {}>(moduleOrBuffer: WebAssembly.Module | BufferSource, imports?: ImportsObject): Promise<ASUtil & T>;
+/** Asynchronously instantiates an AssemblyScript module from a module, buffer or response using the specified imports. */
+export declare function instantiate<T extends {}>(moduleOrBuffer: WebAssembly.Module | BufferSource | Response | PromiseLike<Response>, imports?: ImportsObject): Promise<ASUtil & T>;
 
 /** Synchronously instantiates an AssemblyScript module from a module or buffer using the specified imports. */
 export declare function instantiateSync<T extends {}>(moduleOrBuffer: WebAssembly.Module | BufferSource, imports?: ImportsObject): ASUtil & T;

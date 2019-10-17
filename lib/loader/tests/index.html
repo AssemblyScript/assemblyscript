@@ -2,6 +2,10 @@
 <script src="../index.js"></script>
 <script>
 (async () => {
+  var module = await exports.instantiate(fetch("./build/untouched.wasm"));
+  console.log(module);
+})();
+(async () => {
   var module = await exports.instantiateStreaming(fetch("./build/untouched.wasm"));
   console.log(module);
 })();
