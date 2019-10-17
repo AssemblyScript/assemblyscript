@@ -14,14 +14,14 @@ const loader = require("assemblyscript/lib/loader");
 API
 ---
 
-* **instantiate**<`T`>(module: `WebAssembly.Module`, imports?: `WasmImports`): `ASUtil & T`<br />
-  Instantiates an AssemblyScript module using the specified imports.
+* **instantiate**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
+  Asynchronously instantiates an AssemblyScript module from a module or buffer using the specified imports.
 
-* **instantiateBuffer**<`T`>(buffer: `Uint8Array`, imports?: `WasmImports`): `ASUtil & T`<br />
-  Instantiates an AssemblyScript module from a buffer using the specified imports.
+* **instantiateSync**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource`, imports?: `WasmImports`): `ASUtil & T`<br />
+  Synchronously instantiates an AssemblyScript module from a module or buffer using the specified imports.
 
 * **instantiateStreaming**<`T`>(response: `Response`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
-  Instantiates an AssemblyScript module from a response using the specified imports.
+  Asynchronously instantiates an AssemblyScript module from a response object using the specified imports.
 
 * **demangle**<`T`>(exports: `WasmExports`, baseModule?: `Object`): `T`<br />
   Demangles an AssemblyScript module's exports to a friendly object structure. You usually don't have to call this manually as instantiation does this implicitly.
@@ -141,10 +141,13 @@ Examples
 
 ```js
 // From a module provided as a buffer, i.e. as returned by fs.readFileSync
-const myModule = loader.instantiateBuffer(fs.readFileSync("myModule.wasm"), myImports);
+const myModule = await loader.instantiate(fs.readFileSync("myModule.wasm"), myImports);
 
 // From a response object, i.e. as returned by window.fetch
 const myModule = await loader.instantiateStreaming(fetch("myModule.wasm"), myImports);
+
+// Synchronously, i.e. if the goal is to immediately re-export as a node module
+const myModule = loader.instantiateSync(fs.readFileSync("myModule.wasm"), myImports);
 ```
 
 ### Usage with TypeScript definitions produced by the compiler
@@ -152,5 +155,5 @@ const myModule = await loader.instantiateStreaming(fetch("myModule.wasm"), myImp
 ```ts
 import MyModule from "myModule"; // pointing at the d.ts
 
-const myModule = loader.instatiateBuffer<typeof MyModule>(fs.readFileSync("myModule.wasm"), myImports);
+const myModule = await loader.instatiate<typeof MyModule>(fs.readFileSync("myModule.wasm"), myImports);
 ```

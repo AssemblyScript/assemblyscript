@@ -65,14 +65,14 @@ interface ASUtil {
   __collect(): void;
 }
 
-/** Instantiates an AssemblyScript module using the specified imports. */
-export declare function instantiate<T extends {}>(module: WebAssembly.Module, imports?: ImportsObject): ASUtil & T;
+/** Asynchronously instantiates an AssemblyScript module from a module or buffer using the specified imports. */
+export declare function instantiate<T extends {}>(moduleOrBuffer: WebAssembly.Module | BufferSource, imports?: ImportsObject): Promise<ASUtil & T>;
 
-/** Instantiates an AssemblyScript module from a buffer using the specified imports. */
-export declare function instantiateBuffer<T extends {}>(buffer: BufferSource, imports?: ImportsObject): ASUtil & T;
+/** Synchronously instantiates an AssemblyScript module from a module or buffer using the specified imports. */
+export declare function instantiateSync<T extends {}>(moduleOrBuffer: WebAssembly.Module | BufferSource, imports?: ImportsObject): ASUtil & T;
 
-/** Instantiates an AssemblyScript module from a response using the specified imports. */
-export declare function instantiateStreaming<T extends {}>(result: Response | PromiseLike<Response>, imports?: ImportsObject): Promise<ASUtil & T>;
+/** Asynchronously instantiates an AssemblyScript module from a response object using the specified imports. */
+export declare function instantiateStreaming<T extends {}>(response: Response | PromiseLike<Response>, imports?: ImportsObject): Promise<ASUtil & T>;
 
 /** Demangles an AssemblyScript module's exports to a friendly object structure. */
 export declare function demangle<T extends {}>(exports: {}, baseModule?: {}): T;
