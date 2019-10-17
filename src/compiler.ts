@@ -5822,110 +5822,22 @@ export class Compiler extends DiagnosticEmitter {
       // direct call: concrete function
       case ElementKind.FUNCTION_PROTOTYPE: {
         let prototype = <FunctionPrototype>target;
-        let typeArguments = expression.typeArguments;
 
         // builtins handle present respectively omitted type arguments on their own
         if (prototype.hasDecorator(DecoratorFlags.BUILTIN)) {
           return this.compileCallExpressionBuiltin(prototype, expression, contextualType);
         }
 
-        let instance: Function | null = null;
         let thisExpression = this.resolver.currentThisExpression;
-
-        // resolve generic call if type arguments have been provided
-        if (typeArguments) {
-          if (!prototype.is(CommonFlags.GENERIC)) {
-            this.error(
-              DiagnosticCode.Type_0_is_not_generic,
-              expression.expression.range, prototype.internalName
-            );
-            return module.unreachable();
-          }
-          instance = this.resolver.resolveFunctionInclTypeArguments(
-            prototype,
-            typeArguments,
-            flow.actualFunction.parent, // relative to caller
-            makeMap<string,Type>(flow.contextualTypeArguments),
-            expression
-          );
-
-        // infer generic call if type arguments have been omitted
-        } else if (prototype.is(CommonFlags.GENERIC)) {
-          let contextualTypeArguments = makeMap<string,Type>(flow.contextualTypeArguments);
-
-          // fill up contextual types with auto for each generic component
-          let typeParameterNodes = assert(prototype.typeParameterNodes);
-          let numTypeParameters = typeParameterNodes.length;
-          let typeParameterNames = new Set<string>();
-          for (let i = 0; i < numTypeParameters; ++i) {
-            let name = typeParameterNodes[i].name.text;
-            contextualTypeArguments.set(name, Type.auto);
-            typeParameterNames.add(name);
-          }
-
-          let parameterNodes = prototype.functionTypeNode.parameters;
-          let numParameters = parameterNodes.length;
-          let argumentNodes = expression.arguments;
-          let numArguments = argumentNodes.length;
-
-          // infer types with generic components while updating contextual types
-          for (let i = 0; i < numParameters; ++i) {
-            let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
-            if (!argumentExpression) { // missing initializer -> too few arguments
-              this.error(
-                DiagnosticCode.Expected_0_arguments_but_got_1,
-                expression.range, numParameters.toString(10), numArguments.toString(10)
-              );
-              return module.unreachable();
-            }
-            let typeNode = parameterNodes[i].type;
-            if (typeNode.hasGenericComponent(typeParameterNodes)) {
-              this.resolver.inferGenericType(typeNode, argumentExpression, flow, contextualTypeArguments, typeParameterNames);
-            }
-          }
-
-          // apply concrete types to the generic function signature
-          let resolvedTypeArguments = new Array<Type>(numTypeParameters);
-          for (let i = 0; i < numTypeParameters; ++i) {
-            let name = typeParameterNodes[i].name.text;
-            if (contextualTypeArguments.has(name)) {
-              let inferredType = contextualTypeArguments.get(name)!;
-              if (inferredType != Type.auto) {
-                resolvedTypeArguments[i] = inferredType;
-                continue;
-              }
-            }
-            // unused template, e.g. `function test<T>(): void {...}` called as `test()`
-            // invalid because the type is effectively unknown inside the function body
-            this.error(
-              DiagnosticCode.Type_argument_expected,
-              expression.expression.range.atEnd
-            );
-            return this.module.unreachable();
-          }
-          instance = this.resolver.resolveFunction(
-            prototype,
-            resolvedTypeArguments,
-            makeMap<string,Type>(flow.contextualTypeArguments)
-          );
-
-        // otherwise resolve the non-generic call as usual
-        } else {
-          instance = this.resolver.resolveFunction(prototype, null);
-        }
+        let instance = this.resolver.maybeInferCall(expression, prototype, flow);
         if (!instance) return this.module.unreachable();
-
-        // compile 'this' expression if an instance method
-        let thisExpr: ExpressionRef = 0;
-        if (instance.is(CommonFlags.INSTANCE)) {
-          thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
-        }
-
         return this.compileCallDirect(
           instance,
           expression.arguments,
           expression,
-          thisExpr,
+          instance.is(CommonFlags.INSTANCE)
+            ? this.compileExpression(assert(thisExpression), this.options.usizeType)
+            : 0,
           constraints
         );
       }
