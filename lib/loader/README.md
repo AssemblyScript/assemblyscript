@@ -14,14 +14,14 @@ const loader = require("assemblyscript/lib/loader");
 API
 ---
 
-* **instantiate**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource | Response`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
-  Asynchronously instantiates an AssemblyScript module from a module, buffer or response using the specified imports.
+* **instantiate**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource | Response | PromiseLike<WebAssembly.Module | BufferSource | Response>`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
+  Asynchronously instantiates an AssemblyScript module from anything that can be instantiated.
 
 * **instantiateSync**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource`, imports?: `WasmImports`): `ASUtil & T`<br />
-  Synchronously instantiates an AssemblyScript module from a module or buffer using the specified imports.
+  Synchronously instantiates an AssemblyScript module from a WebAssembly.Module or binary buffer.
 
-* **instantiateStreaming**<`T`>(response: `Response`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
-  Asynchronously instantiates an AssemblyScript module from a response object using the specified imports.
+* **instantiateStreaming**<`T`>(response: `Response | PromiseLike<Response>`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
+  Asynchronously instantiates an AssemblyScript module from a response, i.e. as obtained by `fetch`.
 
 * **demangle**<`T`>(exports: `WasmExports`, baseModule?: `Object`): `T`<br />
   Demangles an AssemblyScript module's exports to a friendly object structure. You usually don't have to call this manually as instantiation does this implicitly.
