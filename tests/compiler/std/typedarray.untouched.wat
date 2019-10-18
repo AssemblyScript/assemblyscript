@@ -37573,6 +37573,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -37624,6 +37625,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -37649,6 +37651,12 @@
     local.get $4
     call $~lib/typedarray/Int8Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Int8Array#__get
     i32.eq
@@ -37830,6 +37838,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -37879,6 +37888,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -37904,6 +37914,12 @@
     local.get $4
     call $~lib/typedarray/Uint8Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Uint8Array#__get
     i32.eq
@@ -38085,6 +38101,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -38134,6 +38151,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -38159,6 +38177,12 @@
     local.get $4
     call $~lib/typedarray/Uint8ClampedArray#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Uint8ClampedArray#__get
     i32.eq
@@ -38340,6 +38364,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -38391,6 +38416,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -38416,6 +38442,12 @@
     local.get $4
     call $~lib/typedarray/Int16Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Int16Array#__get
     i32.eq
@@ -38597,6 +38629,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -38646,6 +38679,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -38671,6 +38705,12 @@
     local.get $4
     call $~lib/typedarray/Uint16Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Uint16Array#__get
     i32.eq
@@ -38852,6 +38892,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -38899,6 +38940,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -38924,6 +38966,12 @@
     local.get $4
     call $~lib/typedarray/Int32Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Int32Array#__get
     i32.eq
@@ -39105,6 +39153,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -39152,6 +39201,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -39177,6 +39227,12 @@
     local.get $4
     call $~lib/typedarray/Uint32Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Uint32Array#__get
     i32.eq
@@ -39358,6 +39414,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -39406,6 +39463,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -39431,6 +39489,12 @@
     local.get $4
     call $~lib/typedarray/Int64Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Int64Array#__get
     i64.eq
@@ -39612,6 +39676,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -39660,6 +39725,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -39685,6 +39751,12 @@
     local.get $4
     call $~lib/typedarray/Uint64Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Uint64Array#__get
     i64.eq
@@ -39866,6 +39938,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -39914,6 +39987,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -39939,6 +40013,12 @@
     local.get $4
     call $~lib/typedarray/Float32Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Float32Array#__get
     f32.eq
@@ -40120,6 +40200,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   global.get $std/typedarray/testArrayWrapValues
   call $~lib/rt/pure/__retain
   local.set $0
@@ -40168,6 +40249,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $5
   i32.const 0
+  call $~lib/rt/pure/__retain
   local.set $6
   i32.const 1
   global.set $~lib/argc
@@ -40193,6 +40275,12 @@
     local.get $4
     call $~lib/typedarray/Float64Array#__get
     local.get $6
+    local.tee $7
+    if (result i32)
+     local.get $7
+    else
+     unreachable
+    end
     local.get $4
     call $~lib/typedarray/Float64Array#__get
     f64.eq

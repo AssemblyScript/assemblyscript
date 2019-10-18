@@ -183,7 +183,7 @@ declare function fmod(x: f64, y: f64): f64;
 /** Returns the 32-bit floating-point remainder of `x/y`. */
 declare function fmodf(x: f32, y: f32): f32;
 /** Returns the number of parameters in the given function signature type. */
-declare function lengthof<T extends (...args: any) => any>(func?: T): i32;
+declare function lengthof<T extends (...args: any[]) => any>(func?: T): i32;
 
 /** Atomic operations. */
 declare namespace atomic {
@@ -1356,6 +1356,7 @@ declare class String {
   split(separator?: string, limit?: i32): string[];
   toString(): string;
 }
+
 declare namespace String {
   /** Encoding helpers for UTF-8. */
   export namespace UTF8 {
@@ -1379,6 +1380,32 @@ declare namespace String {
     /** Decodes raw UTF-16 bytes to a string. */
     export function decodeUnsafe(buf: usize, len: usize): string;
   }
+}
+
+declare class Object {
+  /** The Object.is() method determines whether two values are the same value. */
+  static is<T>(value1: T, value2: T): bool;
+}
+
+declare class Date {
+  /** Returns the UTC timestamp in milliseconds of the specified date. */
+  static UTC(
+    year: i32,
+    month: i32,
+    day: i32,
+    hour: i32,
+    minute: i32,
+    second: i32,
+    millisecond: i32
+  ): i64;
+  /** Returns the current UTC timestamp in milliseconds. */
+  static now(): i64;
+  /** Constructs a new date object from an UTC timestamp in milliseconds. */
+  constructor(value: i64);
+  /** Returns the UTC timestamp of this date in milliseconds. */
+  getTime(): i64;
+  /** Sets the UTC timestamp of this date in milliseconds. */
+  setTime(value: i64): i64;
 }
 
 /** Class for representing a runtime error. Base class of all errors. */
@@ -1412,12 +1439,13 @@ declare class SyntaxError extends Error { }
 interface Boolean {
   toString(): string;
 }
-interface Function {}
-interface IArguments {}
+
 interface Number {
   toString(radix?: number): string;
 }
-interface Object {}
+
+interface Function {}
+interface IArguments {}
 interface RegExp {}
 
 declare class Map<K,V> {
@@ -1580,32 +1608,6 @@ declare const NativeMathf: INativeMath<f32>;
 declare const Math: IMath<f64>;
 /** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
 declare const Mathf: IMath<f32>;
-
-declare class Date {
-  /** Returns the UTC timestamp in milliseconds of the specified date. */
-  static UTC(
-    year: i32,
-    month: i32,
-    day: i32,
-    hour: i32,
-    minute: i32,
-    second: i32,
-    millisecond: i32
-  ): i64;
-  /** Returns the current UTC timestamp in milliseconds. */
-  static now(): i64;
-  /** Constructs a new date object from an UTC timestamp in milliseconds. */
-  constructor(value: i64);
-  /** Returns the UTC timestamp of this date in milliseconds. */
-  getTime(): i64;
-  /** Sets the UTC timestamp of this date in milliseconds. */
-  setTime(value: i64): i64;
-}
-
-declare class Object {
-  /** The Object.is() method determines whether two values are the same value. */
-  static is<T>(value1: T, value2: T): bool;
-}
 
 /** Environmental tracing function for debugging purposes. */
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;

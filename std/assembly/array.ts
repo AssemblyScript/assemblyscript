@@ -400,20 +400,12 @@ export class Array<T> extends ArrayBufferView {
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());
-    if (isManaged<T>()) {
-      for (let i = 0; i < deleteCount; ++i) {
-        store<usize>(resultStart + (<usize>i << alignof<T>()),
-          load<usize>(thisBase + (<usize>i << alignof<T>()))
-        );
-        // no need to retain -> is moved
-      }
-    } else {
-      memory.copy(
-        resultStart,
-        thisBase,
-        <usize>deleteCount << alignof<T>()
-      );
-    }
+    // no need to retain -> is moved
+    memory.copy(
+      resultStart,
+      thisBase,
+      <usize>deleteCount << alignof<T>()
+    );
     var offset = start + deleteCount;
     if (length != offset) {
       memory.copy(
