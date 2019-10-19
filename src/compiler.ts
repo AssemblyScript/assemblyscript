@@ -2032,6 +2032,18 @@ export class Compiler extends DiagnosticEmitter {
     }
     innerFlow.inheritNonnullIfTrue(condExpr);
 
+    // Compile the incrementor before the body in order to...
+    var incrementor = statement.incrementor;
+    var incrExpr: ExpressionRef = 0;
+    if (incrementor) {
+      let incrFlow = innerFlow.fork();
+      this.currentFlow = incrFlow;
+      incrExpr = this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP);
+      this.currentFlow = innerFlow;
+      // ...unify local states before and after the incrementor has been executed the first time
+      innerFlow.unifyLocalFlags(incrFlow);
+    }
+
     // Compile body (break: drop out, continue: fall through to incrementor, + loop)
     var bodyFlow = innerFlow.fork();
     this.currentFlow = bodyFlow;
@@ -2084,12 +2096,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     var expr: ExpressionRef;
     if (fallsThrough || continues) { // (3)
-      let incrementor = statement.incrementor;
-      if (incrementor) { // (7)
-        loop.push(
-          this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP)
-        );
-      }
+      if (incrExpr) loop.push(incrExpr); // (7)
       this.performAutoreleases(innerFlow, loop);
       loop.push(module.br(loopLabel)); // (8)
       if (initExpr) { // (2)

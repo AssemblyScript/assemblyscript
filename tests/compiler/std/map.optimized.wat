@@ -2483,6 +2483,10 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
     i32.const 10
     i32.add
     call $~lib/map/Map<i8,i32>#set
@@ -2502,6 +2506,10 @@
     local.get $0
     call $~lib/map/Map<i8,i32>#get
     local.get $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
     i32.const 10
     i32.add
     i32.ne
@@ -2557,6 +2565,10 @@
     local.get $0
     call $~lib/map/Map<i8,i32>#get
     local.get $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
     i32.const 10
     i32.add
     i32.ne
@@ -2571,6 +2583,10 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
     i32.const 20
     i32.add
     call $~lib/map/Map<i8,i32>#set
@@ -2590,6 +2606,10 @@
     local.get $0
     call $~lib/map/Map<i8,i32>#get
     local.get $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
     i32.const 20
     i32.add
     i32.ne
@@ -2645,6 +2665,10 @@
     local.get $0
     call $~lib/map/Map<i8,i32>#get
     local.get $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
     i32.const 20
     i32.add
     i32.ne
@@ -2712,6 +2736,10 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
     i32.const 10
     i32.add
     call $~lib/map/Map<i8,i32>#set
@@ -3147,6 +3175,8 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 255
+    i32.and
     i32.const 10
     i32.add
     call $~lib/map/Map<u8,i32>#set
@@ -3166,6 +3196,8 @@
     local.get $0
     call $~lib/map/Map<u8,i32>#get
     local.get $0
+    i32.const 255
+    i32.and
     i32.const 10
     i32.add
     i32.ne
@@ -3221,6 +3253,8 @@
     local.get $0
     call $~lib/map/Map<u8,i32>#get
     local.get $0
+    i32.const 255
+    i32.and
     i32.const 10
     i32.add
     i32.ne
@@ -3235,6 +3269,8 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 255
+    i32.and
     i32.const 20
     i32.add
     call $~lib/map/Map<u8,i32>#set
@@ -3254,6 +3290,8 @@
     local.get $0
     call $~lib/map/Map<u8,i32>#get
     local.get $0
+    i32.const 255
+    i32.and
     i32.const 20
     i32.add
     i32.ne
@@ -3309,6 +3347,8 @@
     local.get $0
     call $~lib/map/Map<u8,i32>#get
     local.get $0
+    i32.const 255
+    i32.and
     i32.const 20
     i32.add
     i32.ne
@@ -3376,6 +3416,8 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 255
+    i32.and
     i32.const 10
     i32.add
     call $~lib/map/Map<u8,i32>#set
@@ -3879,6 +3921,10 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
     i32.const 10
     i32.add
     call $~lib/map/Map<i16,i32>#set
@@ -3898,6 +3944,10 @@
     local.get $0
     call $~lib/map/Map<i16,i32>#get
     local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
     i32.const 10
     i32.add
     i32.ne
@@ -3953,6 +4003,10 @@
     local.get $0
     call $~lib/map/Map<i16,i32>#get
     local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
     i32.const 10
     i32.add
     i32.ne
@@ -3967,6 +4021,10 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
     i32.const 20
     i32.add
     call $~lib/map/Map<i16,i32>#set
@@ -3986,6 +4044,10 @@
     local.get $0
     call $~lib/map/Map<i16,i32>#get
     local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
     i32.const 20
     i32.add
     i32.ne
@@ -4041,6 +4103,10 @@
     local.get $0
     call $~lib/map/Map<i16,i32>#get
     local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
     i32.const 20
     i32.add
     i32.ne
@@ -4108,6 +4174,10 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
     i32.const 10
     i32.add
     call $~lib/map/Map<i16,i32>#set
@@ -4543,6 +4613,8 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 65535
+    i32.and
     i32.const 10
     i32.add
     call $~lib/map/Map<u16,i32>#set
@@ -4562,6 +4634,8 @@
     local.get $0
     call $~lib/map/Map<u16,i32>#get
     local.get $0
+    i32.const 65535
+    i32.and
     i32.const 10
     i32.add
     i32.ne
@@ -4617,6 +4691,8 @@
     local.get $0
     call $~lib/map/Map<u16,i32>#get
     local.get $0
+    i32.const 65535
+    i32.and
     i32.const 10
     i32.add
     i32.ne
@@ -4631,6 +4707,8 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 65535
+    i32.and
     i32.const 20
     i32.add
     call $~lib/map/Map<u16,i32>#set
@@ -4650,6 +4728,8 @@
     local.get $0
     call $~lib/map/Map<u16,i32>#get
     local.get $0
+    i32.const 65535
+    i32.and
     i32.const 20
     i32.add
     i32.ne
@@ -4705,6 +4785,8 @@
     local.get $0
     call $~lib/map/Map<u16,i32>#get
     local.get $0
+    i32.const 65535
+    i32.and
     i32.const 20
     i32.add
     i32.ne
@@ -4772,6 +4854,8 @@
     local.get $1
     local.get $0
     local.get $0
+    i32.const 65535
+    i32.and
     i32.const 10
     i32.add
     call $~lib/map/Map<u16,i32>#set

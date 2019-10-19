@@ -592,6 +592,20 @@ export class Flow {
     this.localFlags = combinedFlags;
   }
 
+  /** Unifies local flags between this and the other flow. */
+  unifyLocalFlags(other: Flow): void {
+    var numThisLocalFlags = this.localFlags.length;
+    var numOtherLocalFlags = other.localFlags.length;
+    for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
+      if (this.isLocalFlag(i, LocalFlags.WRAPPED) != other.isLocalFlag(i, LocalFlags.WRAPPED)) {
+        this.unsetLocalFlag(i, LocalFlags.WRAPPED);
+      }
+      if (this.isLocalFlag(i, LocalFlags.NONNULL) != other.isLocalFlag(i, LocalFlags.NONNULL)) {
+        this.unsetLocalFlag(i, LocalFlags.NONNULL);
+      }
+    }
+  }
+
   /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
   isNonnull(expr: ExpressionRef, type: Type): bool {
     if (!type.is(TypeFlags.NULLABLE)) return true;
