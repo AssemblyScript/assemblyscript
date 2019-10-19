@@ -217,6 +217,9 @@ function ensurePackageJson() {
         "asbuild:untouched": buildUntouched,
         "asbuild:optimized": buildOptimized,
         "asbuild": buildAll
+      },
+      "devDependencies": {
+        "assemblyscript": "github:AssemblyScript/assemblyscript"
       }
     }, null, 2));
     console.log(colors.green("  Created: ") + packageFile);
