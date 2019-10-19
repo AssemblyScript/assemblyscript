@@ -1402,6 +1402,8 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -1442,13 +1444,23 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  local.get $3
+  i32.add
+  local.set $4
+  local.get $1
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  local.set $5
   local.get $1
   local.get $3
   i32.gt_u
   if
-   local.get $0
-   local.get $3
-   i32.add
+   local.get $4
    global.get $~lib/rt/stub/offset
    i32.eq
    if
@@ -1458,76 +1470,50 @@
     if
      unreachable
     end
-    local.get $1
-    i32.const 15
-    i32.add
-    i32.const 15
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $3
     local.get $0
-    local.get $3
+    local.get $5
     i32.add
     call $~lib/rt/stub/maybeGrowMemory
     local.get $2
-    local.get $3
+    local.get $5
     i32.store
    else
-    local.get $1
-    i32.const 15
-    i32.add
-    i32.const 15
-    i32.const -1
-    i32.xor
-    i32.and
-    local.tee $4
+    local.get $5
+    local.tee $6
     local.get $3
     i32.const 1
     i32.shl
-    local.tee $5
-    local.get $4
-    local.get $5
+    local.tee $7
+    local.get $6
+    local.get $7
     i32.gt_u
     select
-    local.set $3
-    local.get $3
     local.get $2
     i32.load offset=8
     call $~lib/rt/stub/__alloc
-    local.set $4
-    local.get $4
+    local.set $6
+    local.get $6
     local.get $0
     local.get $2
     i32.load offset=12
     call $~lib/memory/memory.copy
-    local.get $4
+    local.get $6
     local.tee $0
     i32.const 16
     i32.sub
     local.set $2
    end
   else
-   local.get $0
-   local.get $3
-   i32.add
+   local.get $4
    global.get $~lib/rt/stub/offset
    i32.eq
    if
-    local.get $1
-    i32.const 15
-    i32.add
-    i32.const 15
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $3
     local.get $0
-    local.get $3
+    local.get $5
     i32.add
     global.set $~lib/rt/stub/offset
     local.get $2
-    local.get $3
+    local.get $5
     i32.store
    end
   end
@@ -1553,7 +1539,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 71
+   i32.const 70
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1570,7 +1556,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 73
+   i32.const 72
    i32.const 13
    call $~lib/builtins/abort
    unreachable
