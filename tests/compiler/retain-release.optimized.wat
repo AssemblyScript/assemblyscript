@@ -43,8 +43,11 @@
  (export "scopeWhile" (func $retain-release/takeRef))
  (export "scopeDo" (func $retain-release/takeRef))
  (export "scopeFor" (func $retain-release/takeRef))
+ (export "scopeForComplex" (func $retain-release/scopeForComplex))
  (export "scopeBreak" (func $retain-release/takeRef))
+ (export "scopeBreakNested" (func $retain-release/takeRef))
  (export "scopeContinue" (func $retain-release/takeRef))
+ (export "scopeContinueNested" (func $retain-release/takeRef))
  (export "scopeThrow" (func $retain-release/scopeThrow))
  (export "scopeUnreachable" (func $retain-release/scopeUnreachable))
  (export "callInline" (func $retain-release/receiveRef))
@@ -185,38 +188,64 @@
   (local $1 i32)
   nop
  )
- (func $retain-release/scopeThrow (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeForComplex (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  loop $loop|0
+   local.get $0
+   if
+    i32.const 0
+    local.set $1
+    loop $loop|1
+     local.get $0
+     if
+      local.get $1
+      i32.const 1
+      i32.add
+      local.set $1
+      br $loop|1
+     end
+    end
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $loop|0
+   end
+  end
+ )
+ (func $retain-release/scopeThrow (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   if
    i32.const 24
    i32.const 56
-   i32.const 313
+   i32.const 367
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $retain-release/scopeUnreachable (; 13 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/scopeUnreachable (; 14 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   if
    unreachable
   end
  )
- (func $retain-release/provideRefIndirect (; 14 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/provideRefIndirect (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 1
   global.set $~lib/argc
   global.get $retain-release/REF
   local.get $0
   call_indirect (type $FUNCSIG$vi)
  )
- (func $retain-release/receiveRefIndirect (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $retain-release/receiveRefIndirect (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
   call_indirect (type $FUNCSIG$i)
   drop
  )
- (func $start (; 16 ;) (type $FUNCSIG$v)
+ (func $start (; 17 ;) (type $FUNCSIG$v)
   (local $0 i32)
   global.get $~lib/started
   if
