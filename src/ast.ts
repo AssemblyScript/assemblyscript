@@ -1331,6 +1331,17 @@ export enum LiteralKind {
   OBJECT
 }
 
+/** Checks if the given node represents a numeric (float or integer) literal. */
+export function isNumericLiteral(node: Expression): bool {
+  if (node.kind == NodeKind.LITERAL) {
+    switch ((<LiteralExpression>node).literalKind) {
+      case LiteralKind.FLOAT:
+      case LiteralKind.INTEGER: return true;
+    }
+  }
+  return false;
+}
+
 /** Base class of all literal expressions. */
 export abstract class LiteralExpression extends Expression {
   kind = NodeKind.LITERAL;

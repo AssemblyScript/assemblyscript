@@ -29,12 +29,17 @@ var arr = new Array<i32>();
 
 // Array.isArray ///////////////////////////////////////////////////////////////////////////////////
 
-class P {}
+class Ref {
+  constructor(public v: i32 = 0) {}
+  toString(): string {
+    return "[object Object]";
+  }
+}
 
 {
   assert(Array.isArray(<i32[] | null>null) == false);
   assert(Array.isArray(arr) == true);
-  assert(Array.isArray(new P()) == false);
+  assert(Array.isArray(new Ref()) == false);
   assert(Array.isArray(new Uint8Array(1)) == false);
   assert(Array.isArray(<i32>1) == false);
   assert(Array.isArray("abc") == false);
@@ -45,38 +50,38 @@ class P {}
   let arr8: u8[] = [1, 2, 3, 4, 5];
 
   arr8.fill(1, 1, 3);
-  assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 1, 4, 5]));
+  assert(isArraysEqual<u8>(arr8, [1, 1, 1, 4, 5]));
 
   arr8.fill(0);
-  assert(isArraysEqual<u8>(arr8, <u8[]>[0, 0, 0, 0, 0]));
+  assert(isArraysEqual<u8>(arr8, [0, 0, 0, 0, 0]));
 
   arr8.fill(1, 0, -3);
-  assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 0, 0]));
+  assert(isArraysEqual<u8>(arr8, [1, 1, 0, 0, 0]));
 
   arr8.fill(2, -2);
-  assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 2, 2]));
+  assert(isArraysEqual<u8>(arr8, [1, 1, 0, 2, 2]));
 
   arr8.fill(0, 1, 0);
-  assert(isArraysEqual<u8>(arr8, <u8[]>[1, 1, 0, 2, 2]));
+  assert(isArraysEqual<u8>(arr8, [1, 1, 0, 2, 2]));
 }
 
 {
   let arr32: u32[] = [1, 2, 3, 4, 5];
 
   arr32.fill(1, 1, 3);
-  assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 1, 4, 5]));
+  assert(isArraysEqual<u32>(arr32, [1, 1, 1, 4, 5]));
 
   arr32.fill(0);
-  assert(isArraysEqual<u32>(arr32, <u32[]>[0, 0, 0, 0, 0]));
+  assert(isArraysEqual<u32>(arr32, [0, 0, 0, 0, 0]));
 
   arr32.fill(1, 0, -3);
-  assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 0, 0]));
+  assert(isArraysEqual<u32>(arr32, [1, 1, 0, 0, 0]));
 
   arr32.fill(2, -2);
-  assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 2, 2]));
+  assert(isArraysEqual<u32>(arr32, [1, 1, 0, 2, 2]));
 
   arr32.fill(0, 1, 0);
-  assert(isArraysEqual<u32>(arr32, <u32[]>[1, 1, 0, 2, 2]));
+  assert(isArraysEqual<u32>(arr32, [1, 1, 0, 2, 2]));
 }
 
 // Array#push/pop //////////////////////////////////////////////////////////////////////////////////
@@ -168,31 +173,30 @@ class P {}
 // Array#copyWithin ////////////////////////////////////////////////////////////////////////////////
 
 {
-  let cwArr: i32[];
+  let cwArr: i32[] = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3), [4, 5, 3, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3), <i32[]>[4, 5, 3, 4, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3), [1, 4, 5, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3), <i32[]>[1, 4, 5, 4, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2), [1, 3, 4, 5, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2), <i32[]>[1, 3, 4, 5, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(2, 2), [1, 2, 3, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(2, 2), <i32[]>[1, 2, 3, 4, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3, 4), [4, 2, 3, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(0, 3, 4), <i32[]>[4, 2, 3, 4, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3, 4), [1, 4, 3, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(1, 3, 4), <i32[]>[1, 4, 3, 4, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2, 4), [1, 3, 4, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(1, 2, 4), <i32[]>[1, 3, 4, 4, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2), [4, 5, 3, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2), <i32[]>[4, 5, 3, 4, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2, -1), [4, 2, 3, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(0, -2, -1), <i32[]>[4, 2, 3, 4, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -2), [1, 3, 3, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -2), <i32[]>[1, 3, 3, 4, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -1), [1, 3, 4, 4, 5]));
   cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3, -1), <i32[]>[1, 3, 4, 4, 5]));
-  cwArr = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3), <i32[]>[1, 3, 4, 5, 5]));
+  assert(isArraysEqual<i32>(cwArr.copyWithin(-4, -3), [1, 3, 4, 5, 5]));
 }
 
 // Array#unshift ///////////////////////////////////////////////////////////////////////////////////
@@ -336,56 +340,87 @@ var i: i32;
 
 {
   let sarr: i32[] = [1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(0), <i32[]>[1, 2, 3, 4, 5]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[]));
+  assert(isArraysEqual<i32>(sarr.splice(0), [1, 2, 3, 4, 5]));
+  assert(isArraysEqual<i32>(sarr, []));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(2), <i32[]>[3, 4, 5]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(0, 0), []));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 3, 4, 5]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(2, 2), <i32[]>[3, 4]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 5]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(2), [3, 4, 5]));
+  assert(isArraysEqual<i32>(sarr, [1, 2]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(0, 1), <i32[]>[1]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[2, 3, 4, 5]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(2, 2), [3, 4]));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 5]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(-1), <i32[]>[5]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(0, 1), [1]));
+  assert(isArraysEqual<i32>(sarr, [2, 3, 4, 5]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(-2), <i32[]>[4, 5]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(-1), [5]));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 3, 4]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(-2, 1), <i32[]>[4]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 5]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(-2), [4, 5]));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 3]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(-7, 1), <i32[]>[1]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[2, 3, 4, 5]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(-2, 1), [4]));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 3, 5]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(-2, -1), <i32[]>[]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(-7, 1), [1]));
+  assert(isArraysEqual<i32>(sarr, [2, 3, 4, 5]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(1, -2), <i32[]>[]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(-2, -1), []));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 3, 4, 5]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(4, 0), <i32[]>[]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(1, -2), []));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 3, 4, 5]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(7, 0), <i32[]>[]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(4, 0), []));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 3, 4, 5]));
 
-  sarr = <i32[]>[1, 2, 3, 4, 5];
-  assert(isArraysEqual<i32>(sarr.splice(7, 5), <i32[]>[]));
-  assert(isArraysEqual<i32>(sarr, <i32[]>[1, 2, 3, 4, 5]));
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(7, 0), []));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 3, 4, 5]));
+
+  sarr = [1, 2, 3, 4, 5];
+  assert(isArraysEqual<i32>(sarr.splice(7, 5), []));
+  assert(isArraysEqual<i32>(sarr, [1, 2, 3, 4, 5]));
+
+  var refArr: Ref[] = [];
+  var spliced = refArr.splice(1, 2);
+  assert(spliced.length == 0);
+  assert(refArr.length == 0);
+
+  refArr = [new Ref(1), new Ref(2), new Ref(3), new Ref(4), new Ref(5)];
+  spliced = refArr.splice(2, 2);
+
+  assert(spliced.length == 2);
+  assert(spliced[0].v == 3);
+  assert(spliced[1].v == 4);
+
+  assert(refArr.length == 3);
+  assert(refArr[0].v == 1);
+  assert(refArr[1].v == 2);
+  assert(refArr[2].v == 5);
+
+  var refArr2: (Ref | null)[] = [new Ref(1), null, new Ref(2)];
+  var spliced2 = refArr2.splice(0, 1);
+
+  assert(spliced2.length == 1);
+  assert(spliced2[0]!.v == 1);
+
+  assert(refArr2.length == 2);
+  assert(refArr2[0] === null);
+  assert(refArr2[1]!.v == 2);
 }
 
 // Array#findIndex /////////////////////////////////////////////////////////////////////////////////
@@ -396,25 +431,25 @@ var i: i32;
   arr[2] = 2;
   arr[3] = 3;
 
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => value == 0);
+  i = arr.findIndex((value: i32) => value == 0);
 
   assert(i == 0);
 
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => value == 1);
+  i = arr.findIndex((value: i32) => value == 1);
   assert(i == 1);
 
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => value == 100);
+  i = arr.findIndex((value: i32) => value == 100);
   assert(i == -1);
 
   // Test side effect push
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => {
+  i = arr.findIndex((value: i32, _: i32, array: Array<i32>) => {
     array.push(100); // push side effect should not affect this method by spec
     return value == 100;
   });
   // array should be changed, but this method result should be calculated for old array length
   assert(i == -1);
   assert(arr.length == 8);
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => value == 100);
+  i = arr.findIndex((value: i32) => value == 100);
   assert(i != -1);
 
   arr.pop();
@@ -423,7 +458,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  i = arr.findIndex((value: i32, index: i32, array: Array<i32>) => {
+  i = arr.findIndex((value: i32, _: i32, array: Array<i32>) => {
     array.pop(); // popped items shouldn't be looked up, and we shouldn't go out of bounds
     return value == 100;
   });
@@ -438,21 +473,21 @@ var i: i32;
 // Array#every /////////////////////////////////////////////////////////////////////////////////////
 
 {
-  let every = arr.every((value: i32, index: i32, array: Array<i32>) => value >= 0);
+  let every = arr.every((value: i32) => value >= 0);
   assert(every == true);
 
-  every = arr.every((value: i32, index: i32, array: Array<i32>) => value <= 0);
+  every = arr.every((value: i32) => value <= 0);
   assert(every == false);
 
   // Test side effect push
-  every = arr.every((value: i32, index: i32, array: Array<i32>) => {
+  every = arr.every((value: i32, _: i32, array: Array<i32>) => {
     array.push(100); // push side effect should not affect this method by spec
     return value < 10;
   });
   // array should be changed, but this method result should be calculated for old array length
   assert(every == true);
   assert(arr.length == 8);
-  every = arr.every((value: i32, index: i32, array: Array<i32>) => value < 10);
+  every = arr.every((value: i32) => value < 10);
   assert(every == false);
 
   arr.pop();
@@ -461,7 +496,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  every = arr.every((value: i32, index: i32, array: Array<i32>) => {
+  every = arr.every((value: i32, _: i32, array: Array<i32>) => {
     array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
     return value < 3;
   });
@@ -476,21 +511,21 @@ var i: i32;
 // Array#some //////////////////////////////////////////////////////////////////////////////////////
 
 {
-  let some = arr.some((value: i32, index: i32, array: Array<i32>) => value >= 3);
+  let some = arr.some((value: i32) => value >= 3);
   assert(some == true);
 
-  some = arr.some((value: i32, index: i32, array: Array<i32>) => value <= -1);
+  some = arr.some((value: i32) => value <= -1);
   assert(some == false);
 
   // Test side effect push
-  some = arr.some((value: i32, index: i32, array: Array<i32>) => {
+  some = arr.some((value: i32, _: i32, array: Array<i32>) => {
     array.push(100); // push side effect should not affect this method by spec
     return value > 10;
   });
   // array should be changed, but this method result should be calculated for old array length
   assert(some == false);
   assert(arr.length == 8);
-  some = arr.some((value: i32, index: i32, array: Array<i32>) => value > 10);
+  some = arr.some((value: i32) => value > 10);
   assert(some == true);
 
   arr.pop();
@@ -499,7 +534,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  some = arr.some((value: i32, index: i32, array: Array<i32>) => {
+  some = arr.some((value: i32, _: i32, array: Array<i32>) => {
     array.pop(); // poped items shouldn't be looked up, and we shouldn't go out of bounds
     return value > 3;
   });
@@ -515,12 +550,12 @@ var i: i32;
 
 {
   i = 0;
-  arr.forEach((value: i32, index: i32, array: Array<i32>) => { i += value; });
+  arr.forEach((value: i32) => { i += value; });
   assert(i == 6);
 
   // Test side effect push
   i = 0;
-  arr.forEach((value: i32, index: i32, array: Array<i32>) => {
+  arr.forEach((value: i32, _: i32, array: Array<i32>) => {
     array.push(100); //push side effect should not affect this method by spec
     i += value;
   });
@@ -528,7 +563,7 @@ var i: i32;
   assert(i == 6);
   assert(arr.length == 8);
   i = 0;
-  arr.forEach((value: i32, index: i32, array: Array<i32>) => { i += value; });
+  arr.forEach((value: i32) => { i += value; });
   assert(i == 406);
 
   arr.pop();
@@ -538,7 +573,7 @@ var i: i32;
 
   // Test side effect pop
   i = 0;
-  arr.forEach((value: i32, index: i32, array: Array<i32>) => {
+  arr.forEach((value: i32, _: i32, array: Array<i32>) => {
     array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
     i += value;
   });
@@ -582,13 +617,13 @@ var i: i32;
 // Array#map ///////////////////////////////////////////////////////////////////////////////////////
 
 {
-  let newArr: f32[] = arr.map<f32>((value: i32, index: i32, array: Array<i32>) => <f32>value);
+  let newArr = arr.map<f32>((value: i32) => <f32>value);
   assert(newArr.length == 4);
   assert(newArr[0] == <f32>arr[0]);
 
   // Test side effect push
   i = 0;
-  arr.map<i32>((value: i32, index: i32, array: Array<i32>) => {
+  arr.map<i32>((value: i32, _: i32, array: Array<i32>) => {
     array.push(100); //push side effect should not affect this method by spec
     i += value;
     return value;
@@ -597,7 +632,7 @@ var i: i32;
   assert(arr.length == 8);
 
   i = 0;
-  arr.map<i32>((value: i32, index: i32, array: Array<i32>) => {
+  arr.map<i32>((value: i32) => {
     i += value;
     return value;
   });
@@ -610,7 +645,7 @@ var i: i32;
 
   // Test side effect pop
   i = 0;
-  arr.map<i32>((value: i32, index: i32, array: Array<i32>) => {
+  arr.map<i32>((value: i32, _: i32, array: Array<i32>) => {
     array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
     i += value;
     return value;
@@ -626,12 +661,12 @@ var i: i32;
 // Array#filter ////////////////////////////////////////////////////////////////////////////////////
 
 {
-  let filteredArr: i32[] = arr.filter((value: i32, index: i32, array: Array<i32>) => value >= 2);
+  let filteredArr: i32[] = arr.filter((value: i32) => value >= 2);
   assert(filteredArr.length == 2);
 
   // Test side effect push
   i = 0;
-  arr.filter((value: i32, index: i32, array: Array<i32>) => {
+  arr.filter((value: i32, _: i32, array: Array<i32>) => {
     array.push(100); //push side effect should not affect this method by spec
     i += value;
     return value >= 2;
@@ -640,7 +675,7 @@ var i: i32;
   assert(arr.length == 8);
 
   i = 0;
-  arr.filter((value: i32, index: i32, array: Array<i32>) => {
+  arr.filter((value: i32) => {
     i += value;
     return value >= 2;
   });
@@ -653,7 +688,7 @@ var i: i32;
 
   // Test side effect pop
   i = 0;
-  arr.filter((value: i32, index: i32, array: Array<i32>) => {
+  arr.filter((value: i32, _: i32, array: Array<i32>) => {
     array.pop(); //poped items shouldn't be looked up, and we shouldn't go out of bounds
     i += value;
     return value >= 2;
@@ -669,28 +704,28 @@ var i: i32;
 // Array#reduce ////////////////////////////////////////////////////////////////////////////////////
 
 {
-  i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => prev + current), 0);
+  i = arr.reduce<i32>(((prev: i32, current: i32): i32 => prev + current), 0);
   assert(i == 6);
 
   // init value
-  i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => prev + current), 4);
+  i = arr.reduce(((prev: i32, current: i32): i32 => prev + current), 4);
   assert(i == 10);
 
-  let boolVal = arr.reduce<bool>(((prev: bool, current: i32, index: i32, array: Array<i32>): bool => prev || current > 2), false);
+  let boolVal = arr.reduce(((prev: bool, current: i32): bool => prev || current > 2), false);
   assert(boolVal == true);
 
-  boolVal = arr.reduce<bool>(((prev: bool, current: i32, index: i32, array: Array<i32>): bool => prev || current > 100), false);
+  boolVal = arr.reduce<bool>(((prev: bool, current: i32): bool => prev || current > 100), false);
   assert(boolVal == false);
 
   // Test side effect push
-  i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => {
+  i = arr.reduce<i32>(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
     array.push(1); // push side effect should not affect this method by spec
     return prev + current;
   }), 0);
   // array should be changed, but this method result should be calculated for old array length
   assert(i == 6);
   assert(arr.length == 8);
-  i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => prev + current), 0);
+  i = arr.reduce(((prev: i32, current: i32): i32 => prev + current), 0);
   assert(i == 10);
 
   arr.pop();
@@ -699,7 +734,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  i = arr.reduce<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => {
+  i = arr.reduce(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
     array.pop(); //poped items shouldn't be reduced, and we shouldn't go out of bounds
     return prev + current;
   }), 0);
@@ -714,28 +749,28 @@ var i: i32;
 // Array#reduceRight ///////////////////////////////////////////////////////////////////////////////
 
 {
-  i = arr.reduceRight<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => prev + current), 0);
+  i = arr.reduceRight<i32>(((prev: i32, current: i32): i32 => prev + current), 0);
   assert(i == 6);
 
   // init value
-  i = arr.reduceRight<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => prev + current), 4);
+  i = arr.reduceRight(((prev: i32, current: i32): i32 => prev + current), 4);
   assert(i == 10);
 
-  let boolVal = arr.reduceRight<bool>(((prev: bool, current: i32, index: i32, array: Array<i32>): bool => prev || current > 2), false);
+  let boolVal = arr.reduceRight<bool>(((prev: bool, current: i32): bool => prev || current > 2), false);
   assert(boolVal == true);
 
-  boolVal = arr.reduceRight<bool>(((prev: bool, current: i32, index: i32, array: Array<i32>): bool => prev || current > 100), false);
+  boolVal = arr.reduceRight(((prev: bool, current: i32): bool => prev || current > 100), false);
   assert(boolVal == false);
 
   // Test side effect push
-  i = arr.reduceRight<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => {
+  i = arr.reduceRight<i32>(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
     array.push(1); // push side effect should not affect this method by spec
     return prev + current;
   }), 0);
   // array should be changed, but this method result should be calculated for old array length
   assert(i == 6);
   assert(arr.length == 8);
-  i = arr.reduceRight<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => prev + current), 0);
+  i = arr.reduceRight(((prev: i32, current: i32): i32 => prev + current), 0);
   assert(i == 10);
 
   arr.pop();
@@ -744,7 +779,7 @@ var i: i32;
   arr.pop();
 
   // Test side effect pop
-  i = arr.reduceRight<i32>(((prev: i32, current: i32, index: i32, array: Array<i32>): i32 => {
+  i = arr.reduceRight(((prev: i32, current: i32, _: i32, array: Array<i32>): i32 => {
     array.pop(); // poped items should be reduced
     return prev + current;
   }), 0);
@@ -871,10 +906,10 @@ function assertSortedDefault<T>(arr: Array<T>): void {
   assertSortedDefault<i32>(reversed0);
 
   assertSortedDefault<i32>(reversed1);
-  assert(isArraysEqual<i32>(reversed1, <i32[]>[1]));
+  assert(isArraysEqual<i32>(reversed1, [1]));
 
   assertSortedDefault<i32>(reversed2);
-  assert(isArraysEqual<i32>(reversed2, <i32[]>[1, 2]));
+  assert(isArraysEqual<i32>(reversed2, [1, 2]));
 
   assertSortedDefault<i32>(reversed4);
   assert(isArraysEqual<i32>(reversed4, expected4));
@@ -933,13 +968,6 @@ function assertSortedDefault<T>(arr: Array<T>): void {
 }
 
 // Array#join //////////////////////////////////////////////////////////////////////////////////////
-
-class Ref {
-  constructor() {}
-  toString(): string {
-    return "[object Object]";
-  }
-}
 
 {
   assert((<bool[]>[true, false]).join() == "true,false");

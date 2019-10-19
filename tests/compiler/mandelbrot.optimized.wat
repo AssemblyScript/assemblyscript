@@ -378,7 +378,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 f64)
-  (local $9 f64)
+  (local $9 i32)
   (local $10 f64)
   (local $11 f64)
   (local $12 f64)
@@ -393,42 +393,48 @@
   f64.mul
   f64.sub
   f64.const 10
-  f64.const 3
   local.get $1
-  f64.convert_i32_u
-  f64.mul
-  f64.const 4
-  local.get $2
-  f64.convert_i32_u
-  f64.mul
-  f64.min
-  f64.div
+  i32.const 3
+  i32.mul
   local.tee $9
+  local.get $2
+  i32.const 2
+  i32.shl
+  local.tee $2
+  local.get $9
+  local.get $2
+  i32.lt_s
+  select
+  f64.convert_i32_s
+  f64.div
+  local.tee $10
   f64.mul
-  local.set $10
+  local.set $11
   local.get $1
   f64.convert_i32_u
   f64.const 0.625
   f64.mul
-  local.get $9
+  local.get $10
   f64.mul
-  local.set $12
+  local.set $13
   local.get $0
   local.get $1
   i32.mul
   i32.const 1
   i32.shl
-  local.set $0
+  local.set $2
   f64.const 1
   local.get $3
   f64.convert_i32_u
   f64.div
-  local.set $13
-  f64.const 8
-  local.get $3
-  f64.convert_i32_u
-  f64.min
   local.set $14
+  i32.const 8
+  local.get $3
+  i32.const 8
+  local.get $3
+  i32.lt_u
+  select
+  local.set $0
   loop $loop|0
    block $break|0
     local.get $7
@@ -437,11 +443,11 @@
     br_if $break|0
     local.get $7
     f64.convert_i32_u
-    local.get $9
+    local.get $10
     f64.mul
-    local.get $12
+    local.get $13
     f64.sub
-    local.set $11
+    local.set $12
     f64.const 0
     local.set $4
     f64.const 0
@@ -468,13 +474,13 @@
       f64.mul
       local.get $5
       f64.mul
-      local.get $10
+      local.get $11
       f64.add
       local.set $5
       local.get $15
       local.get $8
       f64.sub
-      local.get $11
+      local.get $12
       f64.add
       local.set $4
       local.get $6
@@ -490,9 +496,9 @@
     end
     loop $continue|2
      local.get $6
-     f64.convert_i32_u
-     local.get $14
-     f64.lt
+     local.get $0
+     i32.ge_u
+     i32.eqz
      if
       local.get $4
       local.get $4
@@ -501,14 +507,14 @@
       local.get $5
       f64.mul
       f64.sub
-      local.get $11
+      local.get $12
       f64.add
       f64.const 2
       local.get $4
       f64.mul
       local.get $5
       f64.mul
-      local.get $10
+      local.get $11
       f64.add
       local.set $5
       local.set $4
@@ -520,11 +526,11 @@
      end
     end
     i32.const 2047
-    local.set $2
+    local.set $9
     local.get $7
     i32.const 1
     i32.shl
-    local.get $0
+    local.get $2
     i32.add
     local.get $4
     local.get $4
@@ -548,7 +554,7 @@
      f64.mul
      call $~lib/math/NativeMath.log2
      f64.sub
-     local.get $13
+     local.get $14
      f64.mul
      f64.const 0
      f64.max

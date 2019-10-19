@@ -201,7 +201,7 @@ testInstantiate(5);
   assert(isInt32ArrayEqual(arr32, <i32[]>[1, 0, 0, 0, 2]));
 }
 
-import { BLOCK_MAXSIZE } from "rt/common";
+// import { BLOCK_MAXSIZE } from "rt/common";
 
 // FIXME: this does not work / failing assertion on insertBlock(addMemory)
 {
@@ -638,32 +638,32 @@ function testArrayWrap<TArray extends TypedArray<T>, T extends number>(): void {
     array[i] = <T>values[i];
   }
   var buffer = array.buffer.slice(array.byteOffset, array.byteOffset + array.byteLength);
-  var result: TArray;
+  var result: TArray | null = null;
   if (array instanceof Int8Array) {
-    result = Int8Array.wrap(buffer);
+    result = <TArray>Int8Array.wrap(buffer);
   } else if (array instanceof Uint8Array) {
-    result = Uint8Array.wrap(buffer);
+    result = <TArray>Uint8Array.wrap(buffer);
   } else if (array instanceof Uint8ClampedArray) {
-    result = Uint8ClampedArray.wrap(buffer);
+    result = <TArray>Uint8ClampedArray.wrap(buffer);
   } else if (array instanceof Int16Array) {
-    result = Int16Array.wrap(buffer);
+    result = <TArray>Int16Array.wrap(buffer);
   } else if (array instanceof Uint16Array) {
-    result = Uint16Array.wrap(buffer);
+    result = <TArray>Uint16Array.wrap(buffer);
   } else if (array instanceof Int32Array) {
-    result = Int32Array.wrap(buffer);
+    result = <TArray>Int32Array.wrap(buffer);
   } else if (array instanceof Uint32Array) {
-    result = Uint32Array.wrap(buffer);
+    result = <TArray>Uint32Array.wrap(buffer);
   } else if (array instanceof Int64Array) {
-    result = Int64Array.wrap(buffer);
+    result = <TArray>Int64Array.wrap(buffer);
   } else if (array instanceof Uint64Array) {
-    result = Uint64Array.wrap(buffer);
+    result = <TArray>Uint64Array.wrap(buffer);
   } else if (array instanceof Float32Array) {
-    result = Float32Array.wrap(buffer);
+    result = <TArray>Float32Array.wrap(buffer);
   } else if (array instanceof Float64Array) {
-    result = Float64Array.wrap(buffer);
+    result = <TArray>Float64Array.wrap(buffer);
   }
   for (let i = 0; i < length; i++) {
-    assert(array[i] == result[i]);
+    assert(array[i] == result![i]);
   }
 }
 
