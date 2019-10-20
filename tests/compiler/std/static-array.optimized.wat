@@ -351,9 +351,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/rt/stub/offset
   local.get $0
   local.get $4
   i32.add
+  i32.eq
   local.set $5
   local.get $1
   i32.const 15
@@ -365,9 +367,7 @@
   local.get $4
   i32.gt_u
   if
-   global.get $~lib/rt/stub/offset
    local.get $5
-   i32.eq
    if
     local.get $1
     i32.const 1073741808
@@ -407,9 +407,7 @@
     local.set $3
    end
   else
-   global.get $~lib/rt/stub/offset
    local.get $5
-   i32.eq
    if
     local.get $0
     local.get $2

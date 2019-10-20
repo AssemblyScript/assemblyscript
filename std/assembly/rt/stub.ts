@@ -44,10 +44,10 @@ export function __realloc(ptr: usize, size: usize): usize {
   var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
   var actualSize = block.mmInfo;
   if (DEBUG) assert(block.gcInfo == -1);
-  var end = ptr + actualSize;
+  var isLast = ptr + actualSize == offset;
   var alignedSize = (size + AL_MASK) & ~AL_MASK;
   if (size > actualSize) {
-    if (end == offset) { // last block: grow
+    if (isLast) { // last block: grow
       if (size > BLOCK_MAXSIZE) unreachable();
       maybeGrowMemory(ptr + alignedSize);
       block.mmInfo = alignedSize;
@@ -56,7 +56,7 @@ export function __realloc(ptr: usize, size: usize): usize {
       memory.copy(newPtr, ptr, block.rtSize);
       block = changetype<BLOCK>((ptr = newPtr) - BLOCK_OVERHEAD);
     }
-  } else if (end == offset) { // last block: shrink
+  } else if (isLast) { // last block: shrink
     offset = ptr + alignedSize;
     block.mmInfo = alignedSize;
   }

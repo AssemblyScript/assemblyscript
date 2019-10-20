@@ -1481,6 +1481,8 @@
   local.get $0
   local.get $3
   i32.add
+  global.get $~lib/rt/stub/offset
+  i32.eq
   local.set $4
   local.get $1
   i32.const 15
@@ -1495,8 +1497,6 @@
   i32.gt_u
   if
    local.get $4
-   global.get $~lib/rt/stub/offset
-   i32.eq
    if
     local.get $1
     i32.const 1073741808
@@ -1539,8 +1539,6 @@
    end
   else
    local.get $4
-   global.get $~lib/rt/stub/offset
-   i32.eq
    if
     local.get $0
     local.get $5
