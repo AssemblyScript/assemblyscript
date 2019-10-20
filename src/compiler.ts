@@ -1909,11 +1909,24 @@ export class Compiler extends DiagnosticEmitter {
     var outerFlow = this.currentFlow;
     var label = outerFlow.pushBreakLabel();
     var innerFlow = outerFlow.fork();
-    this.currentFlow = innerFlow;
     var breakLabel = "break|" + label;
     innerFlow.breakLabel = breakLabel;
     var continueLabel = "continue|" + label;
     innerFlow.continueLabel = continueLabel;
+
+    // Compile the condition before the body in order to...
+    var condFlow = outerFlow.fork();
+    this.currentFlow = condFlow;
+    var condExpr = module.precomputeExpression(
+      this.makeIsTrueish(
+        this.compileExpression(statement.condition, Type.i32),
+        this.currentType
+      )
+    );
+    assert(!condFlow.hasScopedLocals);
+    // ...unify local states before and after the condition has been executed the first time
+    innerFlow.unifyLocalFlags(condFlow);
+    this.currentFlow = innerFlow;
 
     var stmts = new Array<ExpressionRef>();
     if (statement.statement.kind == NodeKind.BLOCK) {
@@ -1923,12 +1936,6 @@ export class Compiler extends DiagnosticEmitter {
         this.compileStatement(statement.statement)
       );
     }
-    var condExpr = module.precomputeExpression(
-      this.makeIsTrueish(
-        this.compileExpression(statement.condition, Type.i32),
-        this.currentType
-      )
-    );
     var alwaysFalse = false;
     if (getExpressionId(condExpr) == ExpressionId.Const) {
       assert(getExpressionType(condExpr) == NativeType.I32);
@@ -2039,6 +2046,7 @@ export class Compiler extends DiagnosticEmitter {
       let incrFlow = innerFlow.fork();
       this.currentFlow = incrFlow;
       incrExpr = this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP);
+      assert(!incrFlow.hasScopedLocals);
       this.currentFlow = innerFlow;
       // ...unify local states before and after the incrementor has been executed the first time
       innerFlow.unifyLocalFlags(incrFlow);

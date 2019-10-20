@@ -440,6 +440,18 @@ export class Flow {
     return scopedAlias;
   }
 
+  /** Tests if this flow has any scoped locals that must be free'd. */
+  get hasScopedLocals(): bool {
+    if (this.scopedLocals) {
+      for (let scopedLocal of this.scopedLocals.values()) {
+        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   /** Frees this flow's scoped variables and returns its parent flow. */
   freeScopedLocals(): void {
     if (this.scopedLocals) {
@@ -598,11 +610,16 @@ export class Flow {
     var numOtherLocalFlags = other.localFlags.length;
     for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
       if (this.isLocalFlag(i, LocalFlags.WRAPPED) != other.isLocalFlag(i, LocalFlags.WRAPPED)) {
-        this.unsetLocalFlag(i, LocalFlags.WRAPPED);
+        this.unsetLocalFlag(i, LocalFlags.WRAPPED); // assume not wrapped
       }
       if (this.isLocalFlag(i, LocalFlags.NONNULL) != other.isLocalFlag(i, LocalFlags.NONNULL)) {
-        this.unsetLocalFlag(i, LocalFlags.NONNULL);
+        this.unsetLocalFlag(i, LocalFlags.NONNULL); // assume possibly null
       }
+      assert(
+        // having different retain states would be a problem because the compiler
+        // either can't release a retained local or would release a non-retained local
+        this.isAnyLocalFlag(i, LocalFlags.ANY_RETAINED) == other.isAnyLocalFlag(i, LocalFlags.ANY_RETAINED)
+      );
     }
   }
 
