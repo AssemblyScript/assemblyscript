@@ -94,7 +94,7 @@ export function __release(ref: usize): void {
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __visit(ref: usize, cookie: u32): void {
+function __visit(ref: usize, cookie: u32): void {
 }
 
 // @ts-ignore: decorator
