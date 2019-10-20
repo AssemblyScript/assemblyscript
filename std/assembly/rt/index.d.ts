@@ -1,6 +1,7 @@
 declare function __alloc(size: usize, id: u32): usize;
 declare function __realloc(ref: usize, size: usize): usize;
 declare function __free(ref: usize): void;
+declare function __reset(): void;
 declare function __retain(ref: usize): usize;
 declare function __release(ref: usize): void;
 declare function __collect(): void;

@@ -77,7 +77,7 @@ export function __free(ptr: usize): void {
 
 // @ts-ignore: decorator
 @unsafe @global
-function __reset(): void { // special
+export function __reset(): void { // special
   offset = startOffset;
 }
 
