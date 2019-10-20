@@ -260,3 +260,8 @@ export function __retain(ref: usize): usize {
 export function __release(ref: usize): void {
   if (ref > __heap_base) decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
 }
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __reset(): void {
+}
