@@ -46,9 +46,9 @@ import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 // @ts-ignore: decorator
 @inline const COLOR_PURPLE: u32 = 3 << COLOR_SHIFT;
 // @ts-ignore: decorator
-@inline const COLOR_RED: u32 = 4 << COLOR_SHIFT;
+// @inline const COLOR_RED: u32 = 4 << COLOR_SHIFT;
 // @ts-ignore: decorator
-@inline const COLOR_ORANGE: u32 = 5 << COLOR_SHIFT;
+// @inline const COLOR_ORANGE: u32 = 5 << COLOR_SHIFT;
 
 // @ts-ignore: decorator
 @inline const VISIT_DECREMENT = 1; // guard 0
@@ -259,4 +259,9 @@ export function __retain(ref: usize): usize {
 @global @unsafe
 export function __release(ref: usize): void {
   if (ref > __heap_base) decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
+}
+
+// @ts-ignore: decorator
+@global @unsafe
+export function __reset(): void {
 }

@@ -316,6 +316,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.const 15
   i32.and
@@ -337,7 +338,7 @@
   i32.sub
   local.tee $3
   i32.load
-  local.set $2
+  local.set $4
   local.get $3
   i32.load offset=4
   i32.const -1
@@ -350,15 +351,23 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/rt/stub/offset
+  local.get $0
+  local.get $4
+  i32.add
+  i32.eq
+  local.set $5
   local.get $1
-  local.get $2
+  i32.const 15
+  i32.add
+  i32.const -16
+  i32.and
+  local.set $2
+  local.get $1
+  local.get $4
   i32.gt_u
   if
-   global.get $~lib/rt/stub/offset
-   local.get $0
-   local.get $2
-   i32.add
-   i32.eq
+   local.get $5
    if
     local.get $1
     i32.const 1073741808
@@ -366,31 +375,21 @@
     if
      unreachable
     end
-    local.get $1
-    i32.const 15
-    i32.add
-    i32.const -16
-    i32.and
-    local.tee $2
     local.get $0
+    local.get $2
     i32.add
     call $~lib/rt/stub/maybeGrowMemory
     local.get $3
     local.get $2
     i32.store
    else
-    local.get $1
-    i32.const 15
-    i32.add
-    i32.const -16
-    i32.and
-    local.tee $4
     local.get $2
+    local.get $4
     i32.const 1
     i32.shl
-    local.tee $2
-    local.get $4
+    local.tee $4
     local.get $2
+    local.get $4
     i32.gt_u
     select
     local.get $3
@@ -408,19 +407,10 @@
     local.set $3
    end
   else
-   global.get $~lib/rt/stub/offset
-   local.get $0
-   local.get $2
-   i32.add
-   i32.eq
+   local.get $5
    if
-    local.get $1
-    i32.const 15
-    i32.add
-    i32.const -16
-    i32.and
-    local.tee $2
     local.get $0
+    local.get $2
     i32.add
     global.set $~lib/rt/stub/offset
     local.get $3
