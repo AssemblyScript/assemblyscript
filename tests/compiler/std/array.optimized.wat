@@ -4913,9 +4913,9 @@
     local.get $5
     f32.store
     i32.const 1
-    local.set $3
+    local.set $1
     loop $continue|3
-     local.get $3
+     local.get $1
      i32.const 5
      i32.shr_s
      i32.const 2
@@ -4923,35 +4923,35 @@
      local.get $6
      i32.add
      i32.load
-     local.get $3
+     local.get $1
      i32.const 31
      i32.and
      i32.shr_u
      i32.const 1
      i32.and
-     local.get $3
+     local.get $1
      i32.const 1
      i32.shl
      i32.add
-     local.tee $1
+     local.tee $3
      local.get $4
      i32.ge_s
      i32.eqz
      if
-      local.get $1
-      local.set $3
+      local.get $3
+      local.set $1
       br $continue|3
      end
     end
     loop $continue|4
-     local.get $3
+     local.get $1
      i32.const 0
      i32.gt_s
      if
       local.get $0
       f32.load
       local.set $5
-      local.get $3
+      local.get $1
       i32.const 2
       i32.shl
       local.get $0
@@ -4967,24 +4967,24 @@
       i32.const 0
       i32.lt_s
       if
-       local.get $3
+       local.get $1
        i32.const 5
        i32.shr_s
        i32.const 2
        i32.shl
        local.get $6
        i32.add
-       local.tee $1
-       local.get $1
+       local.tee $3
+       local.get $3
        i32.load
        i32.const 1
-       local.get $3
+       local.get $1
        i32.const 31
        i32.and
        i32.shl
        i32.xor
        i32.store
-       local.get $3
+       local.get $1
        i32.const 2
        i32.shl
        local.get $0
@@ -4995,10 +4995,10 @@
        local.get $7
        f32.store
       end
-      local.get $3
+      local.get $1
       i32.const 1
       i32.shr_s
-      local.set $3
+      local.set $1
       br $continue|4
      end
     end
@@ -5427,9 +5427,9 @@
     local.get $5
     f64.store
     i32.const 1
-    local.set $3
+    local.set $1
     loop $continue|3
-     local.get $3
+     local.get $1
      i32.const 5
      i32.shr_s
      i32.const 2
@@ -5437,35 +5437,35 @@
      local.get $6
      i32.add
      i32.load
-     local.get $3
+     local.get $1
      i32.const 31
      i32.and
      i32.shr_u
      i32.const 1
      i32.and
-     local.get $3
+     local.get $1
      i32.const 1
      i32.shl
      i32.add
-     local.tee $1
+     local.tee $3
      local.get $4
      i32.ge_s
      i32.eqz
      if
-      local.get $1
-      local.set $3
+      local.get $3
+      local.set $1
       br $continue|3
      end
     end
     loop $continue|4
-     local.get $3
+     local.get $1
      i32.const 0
      i32.gt_s
      if
       local.get $0
       f64.load
       local.set $5
-      local.get $3
+      local.get $1
       i32.const 3
       i32.shl
       local.get $0
@@ -5481,24 +5481,24 @@
       i32.const 0
       i32.lt_s
       if
-       local.get $3
+       local.get $1
        i32.const 5
        i32.shr_s
        i32.const 2
        i32.shl
        local.get $6
        i32.add
-       local.tee $1
-       local.get $1
+       local.tee $3
+       local.get $3
        i32.load
        i32.const 1
-       local.get $3
+       local.get $1
        i32.const 31
        i32.and
        i32.shl
        i32.xor
        i32.store
-       local.get $3
+       local.get $1
        i32.const 3
        i32.shl
        local.get $0
@@ -5509,10 +5509,10 @@
        local.get $7
        f64.store
       end
-      local.get $3
+      local.get $1
       i32.const 1
       i32.shr_s
-      local.set $3
+      local.set $1
       br $continue|4
      end
     end
@@ -5832,20 +5832,20 @@
   local.get $1
   i32.const 1
   i32.sub
-  local.set $3
+  local.set $4
   loop $loop|0
    block $break|0
-    local.get $3
+    local.get $4
     i32.const 0
     i32.le_s
     br_if $break|0
-    local.get $3
-    local.set $4
+    local.get $4
+    local.set $3
     loop $continue|1
-     local.get $4
+     local.get $3
      i32.const 1
      i32.and
-     local.get $4
+     local.get $3
      i32.const 6
      i32.shr_s
      i32.const 2
@@ -5853,7 +5853,7 @@
      local.get $5
      i32.add
      i32.load
-     local.get $4
+     local.get $3
      i32.const 1
      i32.shr_s
      i32.const 31
@@ -5864,14 +5864,14 @@
      i32.ne
      i32.eqz
      if
-      local.get $4
+      local.get $3
       i32.const 1
       i32.shr_s
-      local.set $4
+      local.set $3
       br $continue|1
      end
     end
-    local.get $4
+    local.get $3
     i32.const 1
     i32.shr_s
     local.tee $7
@@ -5880,8 +5880,8 @@
     local.get $0
     i32.add
     i32.load
-    local.set $4
-    local.get $3
+    local.set $3
+    local.get $4
     i32.const 2
     i32.shl
     local.get $0
@@ -5890,14 +5890,14 @@
     local.set $6
     i32.const 2
     global.set $~lib/argc
-    local.get $4
+    local.get $3
     local.get $6
     local.get $2
     call_indirect (type $FUNCSIG$iii)
     i32.const 0
     i32.lt_s
     if
-     local.get $3
+     local.get $4
      i32.const 5
      i32.shr_s
      i32.const 2
@@ -5908,18 +5908,18 @@
      local.get $8
      i32.load
      i32.const 1
-     local.get $3
+     local.get $4
      i32.const 31
      i32.and
      i32.shl
      i32.xor
      i32.store
-     local.get $3
+     local.get $4
      i32.const 2
      i32.shl
      local.get $0
      i32.add
-     local.get $4
+     local.get $3
      i32.store
      local.get $7
      i32.const 2
@@ -5929,10 +5929,10 @@
      local.get $6
      i32.store
     end
-    local.get $3
+    local.get $4
     i32.const 1
     i32.sub
-    local.set $3
+    local.set $4
     br $loop|0
    end
   end
@@ -6427,12 +6427,12 @@
     local.get $0
     local.get $2
     call $~lib/array/Array<~lib/array/Array<i32>>#__set
+    local.get $2
+    call $~lib/rt/pure/__release
     local.get $0
     i32.const 1
     i32.add
     local.set $0
-    local.get $2
-    call $~lib/rt/pure/__release
     br $loop|0
    end
   end
@@ -6536,12 +6536,12 @@
     i32.add
     local.get $6
     i32.store
+    local.get $6
+    call $~lib/rt/pure/__release
     local.get $3
     i32.const 1
     i32.add
     local.set $3
-    local.get $6
-    call $~lib/rt/pure/__release
     br $loop|0
    end
    unreachable
@@ -6651,14 +6651,14 @@
      i32.const 0
      return
     else
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
      local.get $3
      call $~lib/rt/pure/__release
      local.get $4
      call $~lib/rt/pure/__release
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
      br $loop|0
     end
     unreachable
@@ -6728,12 +6728,12 @@
     local.get $0
     local.get $2
     call $~lib/array/Array<~lib/array/Array<i32>>#__set
+    local.get $2
+    call $~lib/rt/pure/__release
     local.get $0
     i32.const 1
     i32.add
     local.set $0
-    local.get $2
-    call $~lib/rt/pure/__release
     br $loop|0
    end
   end
@@ -6801,14 +6801,14 @@
      i32.const 0
      return
     else
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
      local.get $3
      call $~lib/rt/pure/__release
      local.get $4
      call $~lib/rt/pure/__release
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
      br $loop|0
     end
     unreachable
@@ -7161,14 +7161,14 @@
      i32.const 0
      return
     else
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
      local.get $3
      call $~lib/rt/pure/__release
      local.get $4
      call $~lib/rt/pure/__release
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
      br $loop|0
     end
     unreachable
@@ -7323,14 +7323,14 @@
      local.get $3
      call $~lib/rt/pure/__release
     end
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
     local.get $4
     call $~lib/rt/pure/__release
     local.get $5
     call $~lib/rt/pure/__release
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
     br $loop|0
    end
   end
@@ -7367,12 +7367,12 @@
     call $std/array/createRandomString
     local.tee $2
     call $~lib/array/Array<~lib/array/Array<i32>>#__set
+    local.get $2
+    call $~lib/rt/pure/__release
     local.get $1
     i32.const 1
     i32.add
     local.set $1
-    local.get $2
-    call $~lib/rt/pure/__release
     br $loop|0
    end
   end

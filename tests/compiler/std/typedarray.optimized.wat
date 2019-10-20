@@ -3209,9 +3209,9 @@
     local.get $5
     f64.store
     i32.const 1
-    local.set $3
+    local.set $1
     loop $continue|3
-     local.get $3
+     local.get $1
      i32.const 5
      i32.shr_s
      i32.const 2
@@ -3219,35 +3219,35 @@
      local.get $6
      i32.add
      i32.load
-     local.get $3
+     local.get $1
      i32.const 31
      i32.and
      i32.shr_u
      i32.const 1
      i32.and
-     local.get $3
+     local.get $1
      i32.const 1
      i32.shl
      i32.add
-     local.tee $1
+     local.tee $3
      local.get $4
      i32.ge_s
      i32.eqz
      if
-      local.get $1
-      local.set $3
+      local.get $3
+      local.set $1
       br $continue|3
      end
     end
     loop $continue|4
-     local.get $3
+     local.get $1
      i32.const 0
      i32.gt_s
      if
       local.get $0
       f64.load
       local.set $5
-      local.get $3
+      local.get $1
       i32.const 3
       i32.shl
       local.get $0
@@ -3263,24 +3263,24 @@
       i32.const 0
       i32.lt_s
       if
-       local.get $3
+       local.get $1
        i32.const 5
        i32.shr_s
        i32.const 2
        i32.shl
        local.get $6
        i32.add
-       local.tee $1
-       local.get $1
+       local.tee $3
+       local.get $3
        i32.load
        i32.const 1
-       local.get $3
+       local.get $1
        i32.const 31
        i32.and
        i32.shl
        i32.xor
        i32.store
-       local.get $3
+       local.get $1
        i32.const 3
        i32.shl
        local.get $0
@@ -3291,10 +3291,10 @@
        local.get $7
        f64.store
       end
-      local.get $3
+      local.get $1
       i32.const 1
       i32.shr_s
-      local.set $3
+      local.set $1
       br $continue|4
      end
     end

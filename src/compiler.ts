@@ -1909,11 +1909,24 @@ export class Compiler extends DiagnosticEmitter {
     var outerFlow = this.currentFlow;
     var label = outerFlow.pushBreakLabel();
     var innerFlow = outerFlow.fork();
-    this.currentFlow = innerFlow;
     var breakLabel = "break|" + label;
     innerFlow.breakLabel = breakLabel;
     var continueLabel = "continue|" + label;
     innerFlow.continueLabel = continueLabel;
+
+    // Compile the condition before the body in order to...
+    var condFlow = outerFlow.fork();
+    this.currentFlow = condFlow;
+    var condExpr = module.precomputeExpression(
+      this.makeIsTrueish(
+        this.compileExpression(statement.condition, Type.i32),
+        this.currentType
+      )
+    );
+    assert(!condFlow.hasScopedLocals);
+    // ...unify local states before and after the condition has been executed the first time
+    innerFlow.unifyLocalFlags(condFlow);
+    this.currentFlow = innerFlow;
 
     var stmts = new Array<ExpressionRef>();
     if (statement.statement.kind == NodeKind.BLOCK) {
@@ -1923,12 +1936,6 @@ export class Compiler extends DiagnosticEmitter {
         this.compileStatement(statement.statement)
       );
     }
-    var condExpr = module.precomputeExpression(
-      this.makeIsTrueish(
-        this.compileExpression(statement.condition, Type.i32),
-        this.currentType
-      )
-    );
     var alwaysFalse = false;
     if (getExpressionId(condExpr) == ExpressionId.Const) {
       assert(getExpressionType(condExpr) == NativeType.I32);
@@ -1946,8 +1953,11 @@ export class Compiler extends DiagnosticEmitter {
     // )
     var fallsThrough = !terminates && !innerFlow.is(FlowFlags.BREAKS);
 
-    if (fallsThrough && !alwaysFalse) { // (4)
-      stmts.push(module.br(continueLabel, condExpr));
+    if (fallsThrough) {
+      this.performAutoreleases(innerFlow, stmts);
+      if (!alwaysFalse) { // (4)
+        stmts.push(module.br(continueLabel, condExpr));
+      }
     }
     var expr = flatten(module, stmts, NativeType.None);
     if (fallsThrough && !alwaysFalse || continues) { // (2)
@@ -1958,7 +1968,6 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Switch back to the parent flow
-    if (!terminates) this.performAutoreleases(innerFlow, stmts);
     innerFlow.freeScopedLocals();
     outerFlow.popBreakLabel();
     innerFlow.unset(
@@ -2030,16 +2039,26 @@ export class Compiler extends DiagnosticEmitter {
     }
     innerFlow.inheritNonnullIfTrue(condExpr);
 
-    // Compile incrementor
+    // Compile the incrementor before the body in order to...
     var incrementor = statement.incrementor;
     var incrExpr: ExpressionRef = 0;
-    if (incrementor) incrExpr = this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP);
+    if (incrementor) {
+      let incrFlow = innerFlow.fork();
+      this.currentFlow = incrFlow;
+      incrExpr = this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP);
+      assert(!incrFlow.hasScopedLocals);
+      this.currentFlow = innerFlow;
+      // ...unify local states before and after the incrementor has been executed the first time
+      innerFlow.unifyLocalFlags(incrFlow);
+    }
 
     // Compile body (break: drop out, continue: fall through to incrementor, + loop)
-    var breakLabel = innerFlow.breakLabel = "break|" + label; innerFlow.breakLabel = breakLabel;
-    innerFlow.breakLabel = breakLabel;
+    var bodyFlow = innerFlow.fork();
+    this.currentFlow = bodyFlow;
+    var breakLabel = innerFlow.breakLabel = "break|" + label; bodyFlow.breakLabel = breakLabel;
+    bodyFlow.breakLabel = breakLabel;
     var continueLabel = "continue|" + label;
-    innerFlow.continueLabel = continueLabel;
+    bodyFlow.continueLabel = continueLabel;
     var loopLabel = "loop|" + label;
     var bodyStatement = statement.statement;
     var stmts = new Array<ExpressionRef>();
@@ -2048,9 +2067,16 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       stmts.push(this.compileStatement(bodyStatement));
     }
-    var terminates = innerFlow.is(FlowFlags.TERMINATES);
-    var continues = innerFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
-    var breaks = innerFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS);
+    var terminates = bodyFlow.is(FlowFlags.TERMINATES);
+    var continues = bodyFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
+    var breaks = bodyFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS);
+    var fallsThrough = !terminates && !innerFlow.is(FlowFlags.BREAKS);
+
+    // Finalize body flow
+    if (fallsThrough) this.performAutoreleases(bodyFlow, stmts);
+    bodyFlow.freeScopedLocals();
+    innerFlow.inherit(bodyFlow);
+    this.currentFlow = innerFlow;
 
     // (block $break          ;; (1) skip label (needed anyway) if skipping (4) + no breaks
     //  (initializer)         ;; (2) [may be empty]
@@ -2063,7 +2089,6 @@ export class Compiler extends DiagnosticEmitter {
     //   (br $loop)           ;; (8) skip if skipping (3)
     //  )
     // )
-    var fallsThrough = !terminates && !innerFlow.is(FlowFlags.BREAKS);
     var needsLabel = !alwaysTrue || breaks;
 
     var loop = new Array<ExpressionRef>();

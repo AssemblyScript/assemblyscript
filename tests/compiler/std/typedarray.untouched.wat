@@ -1457,50 +1457,50 @@
   global.set $~lib/rt/pure/CUR
   block $break|1
    local.get $0
-   local.set $5
+   local.set $3
    loop $loop|1
-    local.get $5
+    local.get $3
     local.get $1
     i32.lt_u
     i32.eqz
     br_if $break|1
-    local.get $5
+    local.get $3
     i32.load
     call $~lib/rt/pure/scan
-    local.get $5
+    local.get $3
     i32.const 4
     i32.add
-    local.set $5
+    local.set $3
     br $loop|1
    end
    unreachable
   end
   block $break|2
    local.get $0
-   local.set $5
+   local.set $3
    loop $loop|2
-    local.get $5
+    local.get $3
     local.get $1
     i32.lt_u
     i32.eqz
     br_if $break|2
-    local.get $5
+    local.get $3
     i32.load
-    local.set $4
-    local.get $4
-    local.get $4
+    local.set $2
+    local.get $2
+    local.get $2
     i32.load offset=4
     i32.const -2147483648
     i32.const -1
     i32.xor
     i32.and
     i32.store offset=4
-    local.get $4
+    local.get $2
     call $~lib/rt/pure/collectWhite
-    local.get $5
+    local.get $3
     i32.const 4
     i32.add
-    local.set $5
+    local.set $3
     br $loop|2
    end
    unreachable
@@ -5010,9 +5010,9 @@
    local.get $1
    i32.const 1
    i32.sub
-   local.set $7
+   local.set $5
    loop $loop|2
-    local.get $7
+    local.get $5
     i32.const 2
     i32.ge_s
     i32.eqz
@@ -5022,55 +5022,55 @@
     local.set $9
     local.get $0
     local.get $0
-    local.get $7
+    local.get $5
     i32.const 3
     i32.shl
     i32.add
     f64.load
     f64.store
     local.get $0
-    local.get $7
+    local.get $5
     i32.const 3
     i32.shl
     i32.add
     local.get $9
     f64.store
     i32.const 1
-    local.set $6
+    local.set $7
     block $break|3
      loop $continue|3
-      local.get $6
+      local.get $7
       i32.const 1
       i32.shl
       local.get $4
-      local.get $6
+      local.get $7
       i32.const 5
       i32.shr_s
       i32.const 2
       i32.shl
       i32.add
       i32.load
-      local.get $6
+      local.get $7
       i32.const 31
       i32.and
       i32.shr_u
       i32.const 1
       i32.and
       i32.add
-      local.tee $5
-      local.get $7
+      local.tee $6
+      local.get $5
       i32.lt_s
       i32.eqz
       br_if $break|3
-      local.get $5
-      local.set $6
+      local.get $6
+      local.set $7
       br $continue|3
      end
      unreachable
     end
     block $break|4
      loop $continue|4
-      local.get $6
+      local.get $7
       i32.const 0
       i32.gt_s
       i32.eqz
@@ -5079,7 +5079,7 @@
       f64.load
       local.set $9
       local.get $0
-      local.get $6
+      local.get $7
       i32.const 3
       i32.shl
       i32.add
@@ -5095,14 +5095,14 @@
       i32.lt_s
       if
        local.get $4
-       local.get $6
+       local.get $7
        i32.const 5
        i32.shr_s
        i32.const 2
        i32.shl
        i32.add
        local.get $4
-       local.get $6
+       local.get $7
        i32.const 5
        i32.shr_s
        i32.const 2
@@ -5110,14 +5110,14 @@
        i32.add
        i32.load
        i32.const 1
-       local.get $6
+       local.get $7
        i32.const 31
        i32.and
        i32.shl
        i32.xor
        i32.store
        local.get $0
-       local.get $6
+       local.get $7
        i32.const 3
        i32.shl
        i32.add
@@ -5127,18 +5127,18 @@
        local.get $8
        f64.store
       end
-      local.get $6
+      local.get $7
       i32.const 1
       i32.shr_s
-      local.set $6
+      local.set $7
       br $continue|4
      end
      unreachable
     end
-    local.get $7
+    local.get $5
     i32.const 1
     i32.sub
-    local.set $7
+    local.set $5
     br $loop|2
    end
    unreachable
@@ -11216,20 +11216,20 @@
   local.get $8
   i32.const 0
   i32.shl
-  local.set $10
-  local.get $6
-  local.get $10
-  call $~lib/rt/tlsf/__realloc
   local.set $9
-  local.get $5
+  local.get $6
   local.get $9
+  call $~lib/rt/tlsf/__realloc
+  local.set $10
+  local.get $5
+  local.get $10
   call $~lib/rt/pure/__retain
   i32.store
   local.get $5
-  local.get $10
+  local.get $9
   i32.store offset=8
   local.get $5
-  local.get $9
+  local.get $10
   i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
@@ -11444,20 +11444,20 @@
   local.get $8
   i32.const 0
   i32.shl
-  local.set $10
-  local.get $6
-  local.get $10
-  call $~lib/rt/tlsf/__realloc
   local.set $9
-  local.get $5
+  local.get $6
   local.get $9
+  call $~lib/rt/tlsf/__realloc
+  local.set $10
+  local.get $5
+  local.get $10
   call $~lib/rt/pure/__retain
   i32.store
   local.get $5
-  local.get $10
+  local.get $9
   i32.store offset=8
   local.get $5
-  local.get $9
+  local.get $10
   i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
@@ -11672,20 +11672,20 @@
   local.get $8
   i32.const 0
   i32.shl
-  local.set $10
-  local.get $6
-  local.get $10
-  call $~lib/rt/tlsf/__realloc
   local.set $9
-  local.get $5
+  local.get $6
   local.get $9
+  call $~lib/rt/tlsf/__realloc
+  local.set $10
+  local.get $5
+  local.get $10
   call $~lib/rt/pure/__retain
   i32.store
   local.get $5
-  local.get $10
+  local.get $9
   i32.store offset=8
   local.get $5
-  local.get $9
+  local.get $10
   i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
@@ -11902,20 +11902,20 @@
   local.get $8
   i32.const 1
   i32.shl
-  local.set $10
-  local.get $6
-  local.get $10
-  call $~lib/rt/tlsf/__realloc
   local.set $9
-  local.get $5
+  local.get $6
   local.get $9
+  call $~lib/rt/tlsf/__realloc
+  local.set $10
+  local.get $5
+  local.get $10
   call $~lib/rt/pure/__retain
   i32.store
   local.get $5
-  local.get $10
+  local.get $9
   i32.store offset=8
   local.get $5
-  local.get $9
+  local.get $10
   i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
@@ -12130,20 +12130,20 @@
   local.get $8
   i32.const 1
   i32.shl
-  local.set $10
-  local.get $6
-  local.get $10
-  call $~lib/rt/tlsf/__realloc
   local.set $9
-  local.get $5
+  local.get $6
   local.get $9
+  call $~lib/rt/tlsf/__realloc
+  local.set $10
+  local.get $5
+  local.get $10
   call $~lib/rt/pure/__retain
   i32.store
   local.get $5
-  local.get $10
+  local.get $9
   i32.store offset=8
   local.get $5
-  local.get $9
+  local.get $10
   i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
@@ -12356,20 +12356,20 @@
   local.get $8
   i32.const 2
   i32.shl
-  local.set $10
-  local.get $6
-  local.get $10
-  call $~lib/rt/tlsf/__realloc
   local.set $9
-  local.get $5
+  local.get $6
   local.get $9
+  call $~lib/rt/tlsf/__realloc
+  local.set $10
+  local.get $5
+  local.get $10
   call $~lib/rt/pure/__retain
   i32.store
   local.get $5
-  local.get $10
+  local.get $9
   i32.store offset=8
   local.get $5
-  local.get $9
+  local.get $10
   i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
@@ -12582,20 +12582,20 @@
   local.get $8
   i32.const 2
   i32.shl
-  local.set $10
-  local.get $6
-  local.get $10
-  call $~lib/rt/tlsf/__realloc
   local.set $9
-  local.get $5
+  local.get $6
   local.get $9
+  call $~lib/rt/tlsf/__realloc
+  local.set $10
+  local.get $5
+  local.get $10
   call $~lib/rt/pure/__retain
   i32.store
   local.get $5
-  local.get $10
+  local.get $9
   i32.store offset=8
   local.get $5
-  local.get $9
+  local.get $10
   i32.store offset=4
   local.get $5
   call $~lib/rt/pure/__retain
