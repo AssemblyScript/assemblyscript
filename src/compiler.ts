@@ -1623,9 +1623,6 @@ export class Compiler extends DiagnosticEmitter {
   // === Statements ===============================================================================
 
   compileTopLevelStatement(statement: Statement, body: ExpressionRef[]): void {
-    if (statement.kind == NodeKind.EXPORTDEFAULT) {
-      statement = (<ExportDefaultStatement>statement).declaration;
-    }
     switch (statement.kind) {
       case NodeKind.CLASSDECLARATION: {
         let memberStatements = (<ClassDeclaration>statement).members;
@@ -1643,14 +1640,17 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.NAMESPACEDECLARATION: {
-        let element = assert(this.program.getElementByDeclaration(<NamespaceDeclaration>statement));
-        let previousParent = this.currentParent;
-        this.currentParent = element;
-        let memberStatements = (<NamespaceDeclaration>statement).members;
-        for (let i = 0, k = memberStatements.length; i < k; ++i) {
-          this.compileTopLevelStatement(memberStatements[i], body);
+        let element = this.program.getElementByDeclaration(<NamespaceDeclaration>statement);
+        if (element) {
+          // any potentiall merged element
+          let previousParent = this.currentParent;
+          this.currentParent = element;
+          let memberStatements = (<NamespaceDeclaration>statement).members;
+          for (let i = 0, k = memberStatements.length; i < k; ++i) {
+            this.compileTopLevelStatement(memberStatements[i], body);
+          }
+          this.currentParent = previousParent;
         }
-        this.currentParent = previousParent;
         break;
       }
       case NodeKind.VARIABLE: {
@@ -1681,6 +1681,10 @@ export class Compiler extends DiagnosticEmitter {
             <StringLiteralExpression>(<ExportStatement>statement).path
           );
         }
+        break;
+      }
+      case NodeKind.EXPORTDEFAULT: {
+        this.compileTopLevelStatement((<ExportDefaultStatement>statement).declaration, body);
         break;
       }
       case NodeKind.IMPORT: {
