@@ -7098,12 +7098,20 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.kind) {
       case NodeKind.NULL: {
         let options = this.options;
-        let classReference = contextualType.classReference;
-        if (contextualType.is(TypeFlags.REFERENCE) && classReference !== null) {
-          this.currentType = classReference.type.asNullable();
-        } else {
-          this.currentType = options.usizeType; // TODO: anyref context yields <usize>0
+        if (contextualType.is(TypeFlags.REFERENCE)) {
+          let classReference = contextualType.classReference;
+          if (classReference) {
+            this.currentType = classReference.type.asNullable();
+            return options.isWasm64 ? module.i64(0) : module.i32(0);
+          }
+          let signatureReference = contextualType.signatureReference;
+          if (signatureReference) {
+            this.currentType = signatureReference.type.asNullable();
+            return module.i32(0);
+          }
+          // TODO: anyref context yields <usize>0
         }
+        this.currentType = options.usizeType;
         return options.isWasm64
           ? module.i64(0)
           : module.i32(0);
