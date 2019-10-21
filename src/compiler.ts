@@ -285,8 +285,8 @@ export class Compiler extends DiagnosticEmitter {
   currentFlow: Flow;
   /** Current inline functions stack. */
   currentInlineFunctions: Function[] = [];
-  /** Current enum in compilation. */
-  currentEnum: Enum | null = null;
+  /** Current parent element if not a function, i.e. an enum or namespace. */
+  currentParent: Element | null = null;
   /** Current type in compilation. */
   currentType: Type = Type.void;
   /** Start function statements. */
@@ -987,7 +987,8 @@ export class Compiler extends DiagnosticEmitter {
     element.set(CommonFlags.COMPILED);
 
     var module = this.module;
-    this.currentEnum = element;
+    var previousParent = this.currentParent;
+    this.currentParent = element;
     var previousValue: EnumValue | null = null;
     var previousValueIsMut = false;
     var isInline = element.is(CommonFlags.CONST) || element.hasDecorator(DecoratorFlags.INLINE);
@@ -1066,7 +1067,7 @@ export class Compiler extends DiagnosticEmitter {
         previousValue = <EnumValue>val;
       }
     }
-    this.currentEnum = null;
+    this.currentParent = previousParent;
     return true;
   }
 
@@ -1622,9 +1623,6 @@ export class Compiler extends DiagnosticEmitter {
   // === Statements ===============================================================================
 
   compileTopLevelStatement(statement: Statement, body: ExpressionRef[]): void {
-    if (statement.kind == NodeKind.EXPORTDEFAULT) {
-      statement = (<ExportDefaultStatement>statement).declaration;
-    }
     switch (statement.kind) {
       case NodeKind.CLASSDECLARATION: {
         let memberStatements = (<ClassDeclaration>statement).members;
@@ -1642,9 +1640,16 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.NAMESPACEDECLARATION: {
-        let memberStatements = (<NamespaceDeclaration>statement).members;
-        for (let i = 0, k = memberStatements.length; i < k; ++i) {
-          this.compileTopLevelStatement(memberStatements[i], body);
+        let element = this.program.getElementByDeclaration(<NamespaceDeclaration>statement);
+        if (element) {
+          // any potentiall merged element
+          let previousParent = this.currentParent;
+          this.currentParent = element;
+          let memberStatements = (<NamespaceDeclaration>statement).members;
+          for (let i = 0, k = memberStatements.length; i < k; ++i) {
+            this.compileTopLevelStatement(memberStatements[i], body);
+          }
+          this.currentParent = previousParent;
         }
         break;
       }
@@ -1676,6 +1681,10 @@ export class Compiler extends DiagnosticEmitter {
             <StringLiteralExpression>(<ExportStatement>statement).path
           );
         }
+        break;
+      }
+      case NodeKind.EXPORTDEFAULT: {
+        this.compileTopLevelStatement((<ExportDefaultStatement>statement).declaration, body);
         break;
       }
       case NodeKind.IMPORT: {
@@ -7217,7 +7226,7 @@ export class Compiler extends DiagnosticEmitter {
     var target = this.resolver.lookupIdentifierExpression( // reports
       expression,
       flow,
-      this.currentEnum || actualFunction
+      this.currentParent || actualFunction
     );
     if (!target) return module.unreachable();
 

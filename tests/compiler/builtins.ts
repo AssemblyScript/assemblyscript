@@ -424,6 +424,14 @@ f64.store(8, 1.0);
 f32.trunc(1.0);
 f64.trunc(1.0);
 
+assert(Atomics.isLockFree(0) == false);
+assert(Atomics.isLockFree(1) == true);
+assert(Atomics.isLockFree(2) == true);
+assert(Atomics.isLockFree(3) == false);
+assert(Atomics.isLockFree(4) == true);
+assert(Atomics.isLockFree(5) == false);
+assert(Atomics.isLockFree(8) == false);
+
 {
   let a = idof<() => void>();
   let b = idof<() => void>();
