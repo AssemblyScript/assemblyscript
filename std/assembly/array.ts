@@ -61,8 +61,9 @@ export class Array<T> extends ArrayBufferView {
     var oldLength = this.length_;
     if (isManaged<T>()) {
       if (oldLength > newLength) { // release no longer used refs
-        let cur = (<usize>newLength << alignof<T>());
-        let end = (<usize>oldLength << alignof<T>());
+        let dataStart = this.dataStart;
+        let cur = dataStart + (<usize>newLength << alignof<T>());
+        let end = dataStart + (<usize>oldLength << alignof<T>());
         do __release(load<usize>(cur));
         while ((cur += sizeof<T>()) < end);
       } else {
