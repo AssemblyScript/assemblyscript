@@ -34,3 +34,12 @@ function testOmittedReturn3(): (a: i32, b: i32) => i32 {
 assert(testOmittedReturn1()(1, 2) == 3);
 assert(testOmittedReturn2()(1, 2) == 1);
 assert(testOmittedReturn3()(1, 2) == 42);
+
+function testNullable(b: boolean): (() => i32) | null {
+  if (b) {
+    return (): i32 => 1;
+  } else {
+    return null;
+  }
+}
+assert(testNullable(false) == null);
