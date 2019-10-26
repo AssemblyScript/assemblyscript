@@ -1282,7 +1282,7 @@ export class Compiler extends DiagnosticEmitter {
         let type = parameterTypes[i];
         if (type.isManaged) {
           stmts.push(
-            module.drop(
+            module.local_set(index,
               this.makeRetain(
                 module.local_get(index, type.toNativeType())
               )
@@ -6492,7 +6492,7 @@ export class Compiler extends DiagnosticEmitter {
           module.local_tee(temp2.index, oldExpr)
         ),
         module.block(null, [
-          module.drop(
+          module.local_set(temp1.index,
             this.makeRetain(module.local_get(temp1.index, nativeSizeType))
           ),
           this.makeRelease(module.local_get(temp2.index, nativeSizeType))

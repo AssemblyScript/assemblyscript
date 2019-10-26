@@ -3797,7 +3797,7 @@
   if
    local.get $5
    call $~lib/rt/pure/__retain
-   drop
+   local.set $5
    local.get $4
    call $~lib/rt/pure/__release
   end
@@ -3837,7 +3837,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   i32.const 1
   if (result i32)
    local.get $0
@@ -3855,7 +3855,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   i32.const 1
   if (result i32)
    local.get $0
@@ -3888,7 +3888,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   i32.const 0
   if (result i32)
    local.get $0
@@ -3922,7 +3922,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   i32.const 0
   if (result i32)
    local.get $0
@@ -3950,7 +3950,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   i32.const 0
   if (result i32)
    local.get $0
@@ -4117,10 +4117,10 @@
   (local $4 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $2
   i32.eqz
   if
@@ -4321,10 +4321,10 @@
   (local $4 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $2
   i32.eqz
   if
@@ -4416,7 +4416,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   i32.load
   call $~lib/rt/pure/__retain
@@ -4825,7 +4825,7 @@
   (local $8 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=12
   local.set $2
@@ -5022,10 +5022,10 @@
   (local $4 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $2
   i32.eqz
   if
@@ -5754,7 +5754,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 0
   i32.eq
@@ -5819,7 +5819,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 1
   i32.eq
@@ -5832,7 +5832,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 100
   i32.eq
@@ -5845,7 +5845,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -5862,7 +5862,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 100
   i32.eq
@@ -5875,7 +5875,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -5891,7 +5891,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 0
   i32.ge_s
@@ -5959,7 +5959,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 0
   i32.le_s
@@ -5972,7 +5972,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -5989,7 +5989,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 10
   i32.lt_s
@@ -6002,7 +6002,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -6018,7 +6018,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 3
   i32.ge_s
@@ -6083,7 +6083,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const -1
   i32.le_s
@@ -6096,7 +6096,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -6113,7 +6113,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 10
   i32.gt_s
@@ -6126,7 +6126,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -6141,7 +6141,7 @@
  (func $start:std/array~anonymous|16 (; 103 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   global.get $std/array/i
   local.get $0
   i32.add
@@ -6199,7 +6199,7 @@
  (func $start:std/array~anonymous|17 (; 105 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -6214,7 +6214,7 @@
  (func $start:std/array~anonymous|18 (; 106 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   global.get $std/array/i
   local.get $0
   i32.add
@@ -6225,7 +6225,7 @@
  (func $start:std/array~anonymous|19 (; 107 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -6240,7 +6240,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 0
   i32.eq
@@ -6356,7 +6356,7 @@
   (local $3 f32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   f32.convert_i32_s
   local.set $3
@@ -6470,7 +6470,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -6557,7 +6557,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   global.get $std/array/i
   local.get $0
   i32.add
@@ -6572,7 +6572,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -6590,7 +6590,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.const 2
   i32.ge_s
@@ -6667,7 +6667,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   i32.const 100
   call $~lib/array/Array<i32>#push
@@ -6688,7 +6688,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   global.get $std/array/i
   local.get $0
   i32.add
@@ -6705,7 +6705,7 @@
   (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $2
   call $~lib/array/Array<i32>#pop
   drop
@@ -6725,7 +6725,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   local.get $1
   i32.add
@@ -6791,7 +6791,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   local.get $1
   i32.add
@@ -6804,7 +6804,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   if (result i32)
    i32.const 1
@@ -6875,7 +6875,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   if (result i32)
    i32.const 1
@@ -6893,7 +6893,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $3
   i32.const 1
   call $~lib/array/Array<i32>#push
@@ -6910,7 +6910,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   local.get $1
   i32.add
@@ -6923,7 +6923,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $3
   call $~lib/array/Array<i32>#pop
   drop
@@ -6939,7 +6939,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   local.get $1
   i32.add
@@ -6994,7 +6994,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   local.get $1
   i32.add
@@ -7007,7 +7007,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   if (result i32)
    i32.const 1
@@ -7067,7 +7067,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   if (result i32)
    i32.const 1
@@ -7085,7 +7085,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $3
   i32.const 1
   call $~lib/array/Array<i32>#push
@@ -7102,7 +7102,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $0
   local.get $1
   i32.add
@@ -7115,7 +7115,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/pure/__retain
-  drop
+  local.set $3
   local.get $3
   call $~lib/array/Array<i32>#pop
   drop
@@ -7760,10 +7760,10 @@
   (local $4 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $2
   i32.eqz
   if
@@ -8407,10 +8407,10 @@
   (local $4 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $2
   i32.eqz
   if
@@ -9596,7 +9596,7 @@
   (local $4 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   block $break|0
    i32.const 1
    local.set $2
@@ -9649,7 +9649,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/array/Array<i32>#sort
@@ -9673,7 +9673,7 @@
  (func $std/array/assertSortedDefault<i32> (; 177 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   block $~lib/util/sort/COMPARATOR<i32>|inlined.1 (result i32)
    i32.const 48
@@ -9730,7 +9730,7 @@
   (local $4 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
@@ -9758,7 +9758,7 @@
  (func $~lib/array/Array<~lib/array/Array<i32>>#__set (; 184 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -9832,10 +9832,10 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.const 0
   call $~lib/array/Array<i32>#__get
@@ -10071,7 +10071,7 @@
   (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   block $break|0
    i32.const 1
    local.set $2
@@ -10134,7 +10134,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/array/Array<~lib/array/Array<i32>>#sort
@@ -10197,7 +10197,7 @@
   (local $4 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
@@ -10225,7 +10225,7 @@
  (func $~lib/array/Array<std/array/Proxy<i32>>#__set (; 197 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -10294,10 +10294,10 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load
   local.get $1
@@ -10531,7 +10531,7 @@
   (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   block $break|0
    i32.const 1
    local.set $2
@@ -10594,7 +10594,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/array/Array<std/array/Proxy<i32>>#sort
@@ -10824,7 +10824,7 @@
   (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   block $break|0
    i32.const 1
    local.set $2
@@ -10887,7 +10887,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/array/Array<~lib/string/String | null>#sort
@@ -10924,10 +10924,10 @@
   (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -11043,10 +11043,10 @@
   (local $5 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -11168,10 +11168,10 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -11240,10 +11240,10 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
@@ -11262,10 +11262,10 @@
   (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $2
   i32.eqz
   if
@@ -11409,7 +11409,7 @@
   (local $7 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $1
   i32.const 0
   i32.eq
@@ -11422,7 +11422,7 @@
    if
     local.get $2
     call $~lib/rt/pure/__retain
-    drop
+    local.set $2
     local.get $3
     call $~lib/rt/pure/__release
    end
@@ -11480,10 +11480,10 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.const 4472
   local.get $0
@@ -11541,7 +11541,7 @@
     if
      local.get $6
      call $~lib/rt/pure/__retain
-     drop
+     local.set $6
      local.get $7
      call $~lib/rt/pure/__release
     end
@@ -11566,7 +11566,7 @@
   (local $4 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
@@ -11594,7 +11594,7 @@
  (func $~lib/array/Array<~lib/string/String>#__set (; 227 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -11878,7 +11878,7 @@
   (local $6 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   block $break|0
    i32.const 1
    local.set $2
@@ -11941,7 +11941,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/array/Array<~lib/string/String>#sort
@@ -11969,10 +11969,10 @@
   (local $5 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -12207,7 +12207,7 @@
   (local $10 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -12381,7 +12381,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -12734,7 +12734,7 @@
   (local $10 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -12877,7 +12877,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -12982,7 +12982,7 @@
   (local $10 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -13125,7 +13125,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -14550,7 +14550,7 @@
   (local $10 f64)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -14693,7 +14693,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -14722,7 +14722,7 @@
   (local $11 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -14783,7 +14783,7 @@
     if
      local.get $7
      call $~lib/rt/pure/__retain
-     drop
+     local.set $7
      local.get $8
      call $~lib/rt/pure/__release
     end
@@ -14844,7 +14844,7 @@
     if
      local.get $8
      call $~lib/rt/pure/__retain
-     drop
+     local.set $8
      local.get $7
      call $~lib/rt/pure/__release
     end
@@ -14910,7 +14910,7 @@
   if
    local.get $7
    call $~lib/rt/pure/__retain
-   drop
+   local.set $7
    local.get $4
    call $~lib/rt/pure/__release
   end
@@ -14947,7 +14947,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -14980,7 +14980,7 @@
   (local $11 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -15011,7 +15011,7 @@
    if
     local.get $4
     call $~lib/rt/pure/__retain
-    drop
+    local.set $4
     local.get $6
     call $~lib/rt/pure/__release
    end
@@ -15063,7 +15063,7 @@
     if
      local.get $6
      call $~lib/rt/pure/__retain
-     drop
+     local.set $6
      local.get $9
      call $~lib/rt/pure/__release
     end
@@ -15086,7 +15086,7 @@
      if
       local.get $10
       call $~lib/rt/pure/__retain
-      drop
+      local.set $10
       local.get $11
       call $~lib/rt/pure/__release
      end
@@ -15110,7 +15110,7 @@
      if
       local.get $11
       call $~lib/rt/pure/__retain
-      drop
+      local.set $11
       local.get $6
       call $~lib/rt/pure/__release
      end
@@ -15140,7 +15140,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $4
    call $~lib/rt/pure/__release
   end
@@ -15163,7 +15163,7 @@
    if
     local.get $6
     call $~lib/rt/pure/__retain
-    drop
+    local.set $6
     local.get $9
     call $~lib/rt/pure/__release
    end
@@ -15188,7 +15188,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -15217,7 +15217,7 @@
   (local $11 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -15248,7 +15248,7 @@
    if
     local.get $4
     call $~lib/rt/pure/__retain
-    drop
+    local.set $4
     local.get $6
     call $~lib/rt/pure/__release
    end
@@ -15300,7 +15300,7 @@
     if
      local.get $6
      call $~lib/rt/pure/__retain
-     drop
+     local.set $6
      local.get $9
      call $~lib/rt/pure/__release
     end
@@ -15323,7 +15323,7 @@
      if
       local.get $10
       call $~lib/rt/pure/__retain
-      drop
+      local.set $10
       local.get $11
       call $~lib/rt/pure/__release
      end
@@ -15347,7 +15347,7 @@
      if
       local.get $11
       call $~lib/rt/pure/__retain
-      drop
+      local.set $11
       local.get $6
       call $~lib/rt/pure/__release
      end
@@ -15377,7 +15377,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $4
    call $~lib/rt/pure/__release
   end
@@ -15400,7 +15400,7 @@
    if
     local.get $6
     call $~lib/rt/pure/__retain
-    drop
+    local.set $6
     local.get $9
     call $~lib/rt/pure/__release
    end
@@ -15425,7 +15425,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -15540,7 +15540,7 @@
   (local $10 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -15683,7 +15683,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -15766,7 +15766,7 @@
   (local $10 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -15909,7 +15909,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -16273,7 +16273,7 @@
   (local $10 i64)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -16416,7 +16416,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -16624,7 +16624,7 @@
   (local $10 i64)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -16767,7 +16767,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -16806,7 +16806,7 @@
   (local $11 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -16837,7 +16837,7 @@
    if
     local.get $4
     call $~lib/rt/pure/__retain
-    drop
+    local.set $4
     local.get $6
     call $~lib/rt/pure/__release
    end
@@ -16889,7 +16889,7 @@
     if
      local.get $6
      call $~lib/rt/pure/__retain
-     drop
+     local.set $6
      local.get $9
      call $~lib/rt/pure/__release
     end
@@ -16912,7 +16912,7 @@
      if
       local.get $10
       call $~lib/rt/pure/__retain
-      drop
+      local.set $10
       local.get $11
       call $~lib/rt/pure/__release
      end
@@ -16936,7 +16936,7 @@
      if
       local.get $11
       call $~lib/rt/pure/__retain
-      drop
+      local.set $11
       local.get $6
       call $~lib/rt/pure/__release
      end
@@ -16966,7 +16966,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $4
    call $~lib/rt/pure/__release
   end
@@ -16989,7 +16989,7 @@
    if
     local.get $6
     call $~lib/rt/pure/__retain
-    drop
+    local.set $6
     local.get $9
     call $~lib/rt/pure/__release
    end
@@ -17014,7 +17014,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -17097,7 +17097,7 @@
   (local $10 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -17240,7 +17240,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -17274,7 +17274,7 @@
   (local $11 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -17305,7 +17305,7 @@
    if
     local.get $4
     call $~lib/rt/pure/__retain
-    drop
+    local.set $4
     local.get $6
     call $~lib/rt/pure/__release
    end
@@ -17357,7 +17357,7 @@
     if
      local.get $6
      call $~lib/rt/pure/__retain
-     drop
+     local.set $6
      local.get $9
      call $~lib/rt/pure/__release
     end
@@ -17380,7 +17380,7 @@
      if
       local.get $10
       call $~lib/rt/pure/__retain
-      drop
+      local.set $10
       local.get $11
       call $~lib/rt/pure/__release
      end
@@ -17404,7 +17404,7 @@
      if
       local.get $11
       call $~lib/rt/pure/__retain
-      drop
+      local.set $11
       local.get $6
       call $~lib/rt/pure/__release
      end
@@ -17434,7 +17434,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $4
    call $~lib/rt/pure/__release
   end
@@ -17457,7 +17457,7 @@
    if
     local.get $6
     call $~lib/rt/pure/__retain
-    drop
+    local.set $6
     local.get $9
     call $~lib/rt/pure/__release
    end
@@ -17482,7 +17482,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -17521,7 +17521,7 @@
   (local $11 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -17552,7 +17552,7 @@
    if
     local.get $4
     call $~lib/rt/pure/__retain
-    drop
+    local.set $4
     local.get $6
     call $~lib/rt/pure/__release
    end
@@ -17604,7 +17604,7 @@
     if
      local.get $6
      call $~lib/rt/pure/__retain
-     drop
+     local.set $6
      local.get $9
      call $~lib/rt/pure/__release
     end
@@ -17627,7 +17627,7 @@
      if
       local.get $10
       call $~lib/rt/pure/__retain
-      drop
+      local.set $10
       local.get $11
       call $~lib/rt/pure/__release
      end
@@ -17651,7 +17651,7 @@
      if
       local.get $11
       call $~lib/rt/pure/__retain
-      drop
+      local.set $11
       local.get $6
       call $~lib/rt/pure/__release
      end
@@ -17681,7 +17681,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $4
    call $~lib/rt/pure/__release
   end
@@ -17704,7 +17704,7 @@
    if
     local.get $6
     call $~lib/rt/pure/__retain
-    drop
+    local.set $6
     local.get $9
     call $~lib/rt/pure/__release
    end
@@ -17729,7 +17729,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -17763,7 +17763,7 @@
   (local $11 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $1
   i32.const 1
   i32.sub
@@ -17794,7 +17794,7 @@
    if
     local.get $4
     call $~lib/rt/pure/__retain
-    drop
+    local.set $4
     local.get $6
     call $~lib/rt/pure/__release
    end
@@ -17846,7 +17846,7 @@
     if
      local.get $6
      call $~lib/rt/pure/__retain
-     drop
+     local.set $6
      local.get $9
      call $~lib/rt/pure/__release
     end
@@ -17869,7 +17869,7 @@
      if
       local.get $10
       call $~lib/rt/pure/__retain
-      drop
+      local.set $10
       local.get $11
       call $~lib/rt/pure/__release
      end
@@ -17893,7 +17893,7 @@
      if
       local.get $11
       call $~lib/rt/pure/__retain
-      drop
+      local.set $11
       local.get $6
       call $~lib/rt/pure/__release
      end
@@ -17923,7 +17923,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $4
    call $~lib/rt/pure/__release
   end
@@ -17946,7 +17946,7 @@
    if
     local.get $6
     call $~lib/rt/pure/__retain
-    drop
+    local.set $6
     local.get $9
     call $~lib/rt/pure/__release
    end
@@ -17971,7 +17971,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=4
   local.set $2
@@ -19161,7 +19161,7 @@
   if
    local.get $7
    call $~lib/rt/pure/__retain
-   drop
+   local.set $7
    local.get $3
    call $~lib/rt/pure/__release
   end
@@ -19205,7 +19205,7 @@
   if
    local.get $3
    call $~lib/rt/pure/__retain
-   drop
+   local.set $3
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -19249,7 +19249,7 @@
   if
    local.get $9
    call $~lib/rt/pure/__retain
-   drop
+   local.set $9
    local.get $12
    call $~lib/rt/pure/__release
   end
@@ -19293,7 +19293,7 @@
   if
    local.get $12
    call $~lib/rt/pure/__retain
-   drop
+   local.set $12
    local.get $15
    call $~lib/rt/pure/__release
   end
@@ -19337,7 +19337,7 @@
   if
    local.get $15
    call $~lib/rt/pure/__retain
-   drop
+   local.set $15
    local.get $18
    call $~lib/rt/pure/__release
   end
@@ -19381,7 +19381,7 @@
   if
    local.get $18
    call $~lib/rt/pure/__retain
-   drop
+   local.set $18
    local.get $21
    call $~lib/rt/pure/__release
   end
@@ -19425,7 +19425,7 @@
   if
    local.get $21
    call $~lib/rt/pure/__retain
-   drop
+   local.set $21
    local.get $24
    call $~lib/rt/pure/__release
   end
@@ -19469,7 +19469,7 @@
   if
    local.get $24
    call $~lib/rt/pure/__retain
-   drop
+   local.set $24
    local.get $27
    call $~lib/rt/pure/__release
   end
@@ -19513,7 +19513,7 @@
   if
    local.get $27
    call $~lib/rt/pure/__retain
-   drop
+   local.set $27
    local.get $30
    call $~lib/rt/pure/__release
   end
@@ -19557,7 +19557,7 @@
   if
    local.get $30
    call $~lib/rt/pure/__retain
-   drop
+   local.set $30
    local.get $33
    call $~lib/rt/pure/__release
   end
@@ -19601,7 +19601,7 @@
   if
    local.get $33
    call $~lib/rt/pure/__retain
-   drop
+   local.set $33
    local.get $36
    call $~lib/rt/pure/__release
   end
@@ -20614,7 +20614,7 @@
   if
    local.get $36
    call $~lib/rt/pure/__retain
-   drop
+   local.set $36
    local.get $34
    call $~lib/rt/pure/__release
   end
@@ -20676,7 +20676,7 @@
   if
    local.get $1
    call $~lib/rt/pure/__retain
-   drop
+   local.set $1
    local.get $34
    call $~lib/rt/pure/__release
   end
@@ -20738,7 +20738,7 @@
   if
    local.get $5
    call $~lib/rt/pure/__retain
-   drop
+   local.set $5
    local.get $34
    call $~lib/rt/pure/__release
   end
@@ -20800,7 +20800,7 @@
   if
    local.get $2
    call $~lib/rt/pure/__retain
-   drop
+   local.set $2
    local.get $34
    call $~lib/rt/pure/__release
   end
@@ -20862,7 +20862,7 @@
   if
    local.get $0
    call $~lib/rt/pure/__retain
-   drop
+   local.set $0
    local.get $34
    call $~lib/rt/pure/__release
   end
@@ -20924,7 +20924,7 @@
   if
    local.get $6
    call $~lib/rt/pure/__retain
-   drop
+   local.set $6
    local.get $34
    call $~lib/rt/pure/__release
   end
@@ -20986,7 +20986,7 @@
   if
    local.get $7
    call $~lib/rt/pure/__retain
-   drop
+   local.set $7
    local.get $34
    call $~lib/rt/pure/__release
   end
@@ -21048,7 +21048,7 @@
   if
    local.get $4
    call $~lib/rt/pure/__retain
-   drop
+   local.set $4
    local.get $34
    call $~lib/rt/pure/__release
   end
@@ -21110,7 +21110,7 @@
   if
    local.get $34
    call $~lib/rt/pure/__retain
-   drop
+   local.set $34
    local.get $39
    call $~lib/rt/pure/__release
   end
@@ -21172,7 +21172,7 @@
   if
    local.get $39
    call $~lib/rt/pure/__retain
-   drop
+   local.set $39
    local.get $43
    call $~lib/rt/pure/__release
   end
@@ -21234,7 +21234,7 @@
   if
    local.get $43
    call $~lib/rt/pure/__retain
-   drop
+   local.set $43
    local.get $47
    call $~lib/rt/pure/__release
   end
@@ -21296,7 +21296,7 @@
   if
    local.get $47
    call $~lib/rt/pure/__retain
-   drop
+   local.set $47
    local.get $51
    call $~lib/rt/pure/__release
   end
@@ -21358,7 +21358,7 @@
   if
    local.get $51
    call $~lib/rt/pure/__retain
-   drop
+   local.set $51
    local.get $55
    call $~lib/rt/pure/__release
   end
@@ -21498,7 +21498,7 @@
   if
    local.get $55
    call $~lib/rt/pure/__retain
-   drop
+   local.set $55
    local.get $61
    call $~lib/rt/pure/__release
   end

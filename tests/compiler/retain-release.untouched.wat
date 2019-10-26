@@ -243,7 +243,7 @@
  (func $retain-release/takeRef (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   call $~lib/rt/stub/__release
  )
@@ -254,7 +254,7 @@
  (func $retain-release/takeReturnRef (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
  )
  (func $retain-release/provideReceiveRef (; 15 ;) (type $FUNCSIG$v)
@@ -283,7 +283,7 @@
   if
    local.get $0
    call $~lib/rt/stub/__retain
-   drop
+   local.set $0
    local.get $1
    call $~lib/rt/stub/__release
   end
@@ -304,7 +304,7 @@
   if
    local.get $1
    call $~lib/rt/stub/__retain
-   drop
+   local.set $1
    local.get $0
    call $~lib/rt/stub/__release
   end
@@ -337,7 +337,7 @@
   if
    local.get $2
    call $~lib/rt/stub/__retain
-   drop
+   local.set $2
    local.get $3
    call $~lib/rt/stub/__release
   end
@@ -367,7 +367,7 @@
   if
    local.get $2
    call $~lib/rt/stub/__retain
-   drop
+   local.set $2
    local.get $3
    call $~lib/rt/stub/__release
   end
@@ -395,7 +395,7 @@
    if
     local.get $2
     call $~lib/rt/stub/__retain
-    drop
+    local.set $2
     local.get $3
     call $~lib/rt/stub/__release
    end
@@ -413,7 +413,7 @@
   if
    local.get $3
    call $~lib/rt/stub/__retain
-   drop
+   local.set $3
    local.get $4
    call $~lib/rt/stub/__release
   end
@@ -455,7 +455,7 @@
    if
     local.get $2
     call $~lib/rt/stub/__retain
-    drop
+    local.set $2
     local.get $3
     call $~lib/rt/stub/__release
    end

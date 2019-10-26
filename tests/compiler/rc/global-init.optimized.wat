@@ -1774,6 +1774,7 @@
  )
  (func $start:rc/global-init (; 30 ;) (type $FUNCSIG$v)
   (local $0 i32)
+  (local $1 i32)
   i32.const 24
   call $~lib/rt/pure/__retain
   global.set $rc/global-init/a
@@ -1781,26 +1782,28 @@
   call $~lib/rt/pure/__retain
   global.set $rc/global-init/b
   global.get $rc/global-init/a
-  local.tee $0
+  local.tee $1
   if
    i32.const 0
    call $~lib/rt/pure/__retain
-   drop
-   local.get $0
+   local.set $0
+   local.get $1
    call $~lib/rt/pure/__release
   end
-  i32.const 0
+  local.get $0
   global.set $rc/global-init/a
+  i32.const 0
+  local.set $0
   global.get $rc/global-init/b
-  local.tee $0
+  local.tee $1
   if
    i32.const 0
    call $~lib/rt/pure/__retain
-   drop
-   local.get $0
+   local.set $0
+   local.get $1
    call $~lib/rt/pure/__release
   end
-  i32.const 0
+  local.get $0
   global.set $rc/global-init/b
  )
  (func $start (; 31 ;) (type $FUNCSIG$v)

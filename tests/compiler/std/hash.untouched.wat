@@ -32,7 +32,7 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   i32.const -2128831035
   local.set $1
   local.get $0

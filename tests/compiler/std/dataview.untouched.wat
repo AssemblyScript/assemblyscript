@@ -3598,7 +3598,7 @@
   if
    local.get $5
    call $~lib/rt/pure/__retain
-   drop
+   local.set $5
    local.get $4
    call $~lib/rt/pure/__release
   end
@@ -3660,7 +3660,7 @@
   (local $6 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $3
   i32.const 1073741808
   i32.gt_u
@@ -3710,7 +3710,7 @@
   if
    local.get $5
    call $~lib/rt/pure/__retain
-   drop
+   local.set $5
    local.get $4
    call $~lib/rt/pure/__release
   end

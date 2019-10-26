@@ -3835,7 +3835,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -3855,7 +3855,7 @@
   if
    local.get $11
    call $~lib/rt/pure/__retain
-   drop
+   local.set $11
    local.get $10
    call $~lib/rt/pure/__release
   end
@@ -4723,7 +4723,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -4743,7 +4743,7 @@
   if
    local.get $11
    call $~lib/rt/pure/__retain
-   drop
+   local.set $11
    local.get $10
    call $~lib/rt/pure/__release
   end
@@ -5617,7 +5617,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -5637,7 +5637,7 @@
   if
    local.get $11
    call $~lib/rt/pure/__retain
-   drop
+   local.set $11
    local.get $10
    call $~lib/rt/pure/__release
   end
@@ -6505,7 +6505,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -6525,7 +6525,7 @@
   if
    local.get $11
    call $~lib/rt/pure/__retain
-   drop
+   local.set $11
    local.get $10
    call $~lib/rt/pure/__release
   end
@@ -7411,7 +7411,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -7431,7 +7431,7 @@
   if
    local.get $11
    call $~lib/rt/pure/__retain
-   drop
+   local.set $11
    local.get $10
    call $~lib/rt/pure/__release
   end
@@ -8255,7 +8255,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -8275,7 +8275,7 @@
   if
    local.get $11
    call $~lib/rt/pure/__retain
-   drop
+   local.set $11
    local.get $10
    call $~lib/rt/pure/__release
   end
@@ -9188,7 +9188,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -9208,7 +9208,7 @@
   if
    local.get $12
    call $~lib/rt/pure/__retain
-   drop
+   local.set $12
    local.get $10
    call $~lib/rt/pure/__release
   end
@@ -10042,7 +10042,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -10062,7 +10062,7 @@
   if
    local.get $12
    call $~lib/rt/pure/__retain
-   drop
+   local.set $12
    local.get $10
    call $~lib/rt/pure/__release
   end
@@ -10898,7 +10898,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -10918,7 +10918,7 @@
   if
    local.get $12
    call $~lib/rt/pure/__retain
-   drop
+   local.set $12
    local.get $10
    call $~lib/rt/pure/__release
   end
@@ -11757,7 +11757,7 @@
   if
    local.get $10
    call $~lib/rt/pure/__retain
-   drop
+   local.set $10
    local.get $9
    call $~lib/rt/pure/__release
   end
@@ -11777,7 +11777,7 @@
   if
    local.get $12
    call $~lib/rt/pure/__retain
-   drop
+   local.set $12
    local.get $10
    call $~lib/rt/pure/__release
   end

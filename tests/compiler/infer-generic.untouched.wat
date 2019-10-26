@@ -37,7 +37,7 @@
   (local $4 i32)
   local.get $3
   call $~lib/rt/stub/__retain
-  drop
+  local.set $3
   local.get $0
   if (result i32)
    local.get $1
@@ -135,14 +135,14 @@
  (func $infer-generic/inferEncapsulatedClass<f32> (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
  )
  (func $infer-generic/test2 (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   call $infer-generic/inferEncapsulatedClass<f32>
   local.set $1
