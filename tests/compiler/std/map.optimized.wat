@@ -2290,7 +2290,7 @@
   i32.const 24
   i32.shr_s
   call $~lib/util/hash/hash8
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<i8,i32>#find
   local.tee $3
   if
@@ -2329,19 +2329,18 @@
    end
    local.get $0
    i32.load offset=8
-   call $~lib/rt/pure/__retain
-   local.set $4
+   local.set $3
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $5
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $5
    i32.const 12
    i32.mul
-   local.get $4
+   local.get $3
    i32.add
    local.tee $3
    local.get $1
@@ -2360,7 +2359,7 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
@@ -2371,8 +2370,6 @@
    local.get $0
    local.get $3
    i32.store
-   local.get $4
-   call $~lib/rt/pure/__release
   end
  )
  (func $~lib/map/Map<i8,i32>#get (; 39 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -2988,7 +2985,7 @@
   i32.const 255
   i32.and
   call $~lib/util/hash/hash8
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<i8,i32>#find
   local.tee $3
   if
@@ -3027,19 +3024,18 @@
    end
    local.get $0
    i32.load offset=8
-   call $~lib/rt/pure/__retain
-   local.set $4
+   local.set $3
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $5
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $5
    i32.const 12
    i32.mul
-   local.get $4
+   local.get $3
    i32.add
    local.tee $3
    local.get $1
@@ -3058,7 +3054,7 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
@@ -3069,8 +3065,6 @@
    local.get $0
    local.get $3
    i32.store
-   local.get $4
-   call $~lib/rt/pure/__release
   end
  )
  (func $~lib/map/Map<u8,i32>#get (; 46 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -3732,7 +3726,7 @@
   i32.const 16
   i32.shr_s
   call $~lib/util/hash/hash16
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<i16,i32>#find
   local.tee $3
   if
@@ -3771,19 +3765,18 @@
    end
    local.get $0
    i32.load offset=8
-   call $~lib/rt/pure/__retain
-   local.set $4
+   local.set $3
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $5
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $5
    i32.const 12
    i32.mul
-   local.get $4
+   local.get $3
    i32.add
    local.tee $3
    local.get $1
@@ -3802,7 +3795,7 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
@@ -3813,8 +3806,6 @@
    local.get $0
    local.get $3
    i32.store
-   local.get $4
-   call $~lib/rt/pure/__release
   end
  )
  (func $~lib/map/Map<i16,i32>#get (; 55 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -4430,7 +4421,7 @@
   i32.const 65535
   i32.and
   call $~lib/util/hash/hash16
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<i16,i32>#find
   local.tee $3
   if
@@ -4469,19 +4460,18 @@
    end
    local.get $0
    i32.load offset=8
-   call $~lib/rt/pure/__retain
-   local.set $4
+   local.set $3
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $5
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $5
    i32.const 12
    i32.mul
-   local.get $4
+   local.get $3
    i32.add
    local.tee $3
    local.get $1
@@ -4500,7 +4490,7 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
@@ -4511,8 +4501,6 @@
    local.get $0
    local.get $3
    i32.store
-   local.get $4
-   call $~lib/rt/pure/__release
   end
  )
  (func $~lib/map/Map<u16,i32>#get (; 62 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -5180,7 +5168,7 @@
   local.get $1
   local.get $1
   call $~lib/util/hash/hash32
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<i32,i32>#find
   local.tee $3
   if
@@ -5219,19 +5207,18 @@
    end
    local.get $0
    i32.load offset=8
-   call $~lib/rt/pure/__retain
-   local.set $4
+   local.set $3
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $5
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $5
    i32.const 12
    i32.mul
-   local.get $4
+   local.get $3
    i32.add
    local.tee $3
    local.get $1
@@ -5250,7 +5237,7 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
@@ -5261,8 +5248,6 @@
    local.get $0
    local.get $3
    i32.store
-   local.get $4
-   call $~lib/rt/pure/__release
   end
  )
  (func $~lib/map/Map<i32,i32>#get (; 71 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -6326,7 +6311,7 @@
   local.get $1
   local.get $1
   call $~lib/util/hash/hash64
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<i64,i32>#find
   local.tee $3
   if
@@ -6365,19 +6350,18 @@
    end
    local.get $0
    i32.load offset=8
-   call $~lib/rt/pure/__retain
-   local.set $4
+   local.set $3
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $5
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $5
    i32.const 4
    i32.shl
-   local.get $4
+   local.get $3
    i32.add
    local.tee $3
    local.get $1
@@ -6396,7 +6380,7 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
@@ -6407,8 +6391,6 @@
    local.get $0
    local.get $3
    i32.store
-   local.get $4
-   call $~lib/rt/pure/__release
   end
  )
  (func $~lib/map/Map<i64,i32>#get (; 83 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
@@ -7391,7 +7373,7 @@
   local.get $1
   i32.reinterpret_f32
   call $~lib/util/hash/hash32
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<f32,i32>#find
   local.tee $3
   if
@@ -7430,19 +7412,18 @@
    end
    local.get $0
    i32.load offset=8
-   call $~lib/rt/pure/__retain
-   local.set $4
+   local.set $3
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $5
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $5
    i32.const 12
    i32.mul
-   local.get $4
+   local.get $3
    i32.add
    local.tee $3
    local.get $1
@@ -7461,7 +7442,7 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
@@ -7472,8 +7453,6 @@
    local.get $0
    local.get $3
    i32.store
-   local.get $4
-   call $~lib/rt/pure/__release
   end
  )
  (func $~lib/map/Map<f32,i32>#get (; 93 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
@@ -8105,7 +8084,7 @@
   local.get $1
   i64.reinterpret_f64
   call $~lib/util/hash/hash64
-  local.tee $5
+  local.tee $4
   call $~lib/map/Map<f64,i32>#find
   local.tee $3
   if
@@ -8144,19 +8123,18 @@
    end
    local.get $0
    i32.load offset=8
-   call $~lib/rt/pure/__retain
-   local.set $4
+   local.set $3
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $3
+   local.tee $5
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $3
+   local.get $5
    i32.const 4
    i32.shl
-   local.get $4
+   local.get $3
    i32.add
    local.tee $3
    local.get $1
@@ -8175,7 +8153,7 @@
    i32.load
    local.get $0
    i32.load offset=4
-   local.get $5
+   local.get $4
    i32.and
    i32.const 2
    i32.shl
@@ -8186,8 +8164,6 @@
    local.get $0
    local.get $3
    i32.store
-   local.get $4
-   call $~lib/rt/pure/__release
   end
  )
  (func $~lib/map/Map<f64,i32>#get (; 101 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)

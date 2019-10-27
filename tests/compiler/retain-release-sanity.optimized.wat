@@ -2323,32 +2323,26 @@
  (func $~lib/array/Array<~lib/string/String>#push (; 37 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  i32.const 472
-  call $~lib/rt/pure/__retain
-  local.set $1
   local.get $0
   local.get $0
   i32.load offset=12
-  local.tee $2
+  local.tee $1
   i32.const 1
   i32.add
-  local.tee $3
+  local.tee $2
   call $~lib/array/ensureSize
   local.get $0
   i32.load offset=4
-  local.get $2
+  local.get $1
   i32.const 2
   i32.shl
   i32.add
-  local.get $1
+  i32.const 472
   call $~lib/rt/pure/__retain
   i32.store
   local.get $0
-  local.get $3
+  local.get $2
   i32.store offset=12
-  local.get $1
-  call $~lib/rt/pure/__release
  )
  (func $~lib/string/String#get:length (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -2374,7 +2368,6 @@
    i32.ne
    if
     i32.const 536
-    call $~lib/rt/pure/__retain
     local.set $2
     local.get $1
     call $~lib/rt/pure/__release
@@ -2397,7 +2390,6 @@
   i32.eqz
   if
    i32.const 472
-   call $~lib/rt/pure/__retain
    local.get $1
    call $~lib/rt/pure/__release
    return
@@ -2421,21 +2413,12 @@
   local.get $3
  )
  (func $~lib/string/String.__concat (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   local.get $0
-  call $~lib/rt/pure/__retain
-  local.tee $0
   i32.const 536
   local.get $0
   select
   local.get $1
-  call $~lib/rt/pure/__retain
-  local.tee $1
   call $~lib/string/String#concat
-  local.get $0
-  call $~lib/rt/pure/__release
-  local.get $1
-  call $~lib/rt/pure/__release
  )
  (func $start:retain-release-sanity (; 41 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -2520,19 +2503,11 @@
   local.get $1
   call $~lib/rt/pure/__release
   i32.const 488
-  call $~lib/rt/pure/__retain
-  local.tee $2
   i32.const 512
   call $~lib/string/String.__concat
-  local.tee $0
-  call $~lib/rt/pure/__retain
   local.tee $3
   i32.const 560
   call $~lib/string/String.__concat
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $0
-  call $~lib/rt/pure/__release
   local.get $3
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release

@@ -24,7 +24,7 @@ const mkdirp = require("./util/mkdirp");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
 
-// global.Binaryen = require("../lib/binaryen");
+global.Binaryen = require("../lib/binaryen");
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
 // useless code fragment on top of an actual error. suppress this:
@@ -614,9 +614,103 @@ exports.main = function main(argv, options, callback) {
 
   // Optimize the module if requested
   if (optimizeLevel > 0 || shrinkLevel > 0) {
+    let hasARC = args.runtime == "half" || args.runtime == "full";
     stats.optimizeCount++;
+    function add(pass) {
+      module.runPasses([ pass ]);
+    }
     stats.optimizeTime += measure(() => {
-      module.optimize();
+      // Binaryen's default passes with Post-AssemblyScript passes added.
+      // see: Binaryen/src/pass.cpp
+
+      // PassRunner::addDefaultGlobalOptimizationPrePasses
+      add("duplicate-function-elimination");
+
+      // PassRunner::addDefaultFunctionOptimizationPasses
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        add("ssa-nomerge");
+      }
+      if (optimizeLevel >= 4) {
+        add("flatten");
+        add("local-cse");
+      }
+      if (hasARC) {
+        if (optimizeLevel < 4) {
+          add("flatten");
+        }
+        add("post-assemblyscript");
+      }
+      add("dce");
+      add("remove-unused-brs");
+      add("remove-unused-names");
+      add("optimize-instructions");
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("pick-load-signs");
+      }
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        add("precompute-propagate");
+      } else {
+        add("precompute");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("code-pushing");
+      }
+      add("simplify-locals-nostructure");
+      add("vacuum");
+      add("reorder-locals");
+      add("remove-unused-brs");
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        add("merge-locals");
+      }
+      add("coalesce-locals");
+      add("simplify-locals");
+      add("vacuum");
+      add("reorder-locals");
+      add("coalesce-locals");
+      add("reorder-locals");
+      add("vacuum");
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        add("code-folding");
+      }
+      add("merge-blocks");
+      add("remove-unused-brs");
+      add("remove-unused-names");
+      add("merge-blocks");
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        add("precompute-propagate");
+      } else {
+        add("precompute");
+      }
+      add("optimize-instructions");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("rse");
+      }
+      if (hasARC) {
+        add("post-assemblyscript-finalize");
+      }
+      add("vacuum");
+
+      // PassRunner::addDefaultGlobalOptimizationPostPasses
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("dae-optimizing");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("inlining-optimizing");
+      }
+      add("duplicate-function-elimination");
+      add("duplicate-import-elimination");
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("simplify-globals-optimizing");
+      } else {
+        add("simplify-globals");
+      }
+      add("remove-unused-module-elements");
+      add("memory-packing");
+      add("directize");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("generate-stack-ir");
+        add("optimize-stack-ir");
+      }
     });
   }
 

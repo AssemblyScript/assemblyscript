@@ -1916,14 +1916,10 @@
   local.get $2
   i32.add
   local.get $0
-  call $~lib/rt/pure/__retain
-  local.tee $4
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.gt_u
   i32.or
   if
-   local.get $4
-   call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
    i32.const 25
@@ -1944,33 +1940,31 @@
   local.get $3
   i32.const 0
   i32.store offset=8
-  local.get $4
-  local.set $0
+  local.get $0
+  local.set $4
   local.get $3
   i32.load
   local.tee $5
-  local.get $4
+  local.get $0
   i32.ne
   if
-   local.get $0
+   local.get $4
    call $~lib/rt/pure/__retain
-   local.set $0
+   local.set $4
    local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $3
-  local.get $0
+  local.get $4
   i32.store
   local.get $3
+  local.get $0
   local.get $1
-  local.get $4
   i32.add
   i32.store offset=4
   local.get $3
   local.get $2
   i32.store offset=8
-  local.get $4
-  call $~lib/rt/pure/__release
   local.get $3
  )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)

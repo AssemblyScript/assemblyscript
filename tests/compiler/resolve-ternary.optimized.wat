@@ -1866,7 +1866,6 @@
   i32.eqz
   if
    i32.const 272
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -1912,18 +1911,10 @@
  (func $~lib/util/string/compareImpl (; 30 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   local.get $0
-  call $~lib/rt/pure/__retain
-  local.tee $4
-  local.tee $3
   i32.const 7
   i32.and
   local.get $1
-  call $~lib/rt/pure/__retain
-  local.tee $5
-  local.tee $1
   i32.const 7
   i32.and
   i32.or
@@ -1935,16 +1926,16 @@
   select
   if
    loop $continue|0
-    local.get $3
+    local.get $0
     i64.load
     local.get $1
     i64.load
     i64.eq
     if
-     local.get $3
+     local.get $0
      i32.const 8
      i32.add
-     local.set $3
+     local.set $0
      local.get $1
      i32.const 8
      i32.add
@@ -1962,34 +1953,30 @@
   loop $continue|1
    block $break|1
     local.get $2
-    local.tee $0
+    local.tee $3
     i32.const 1
     i32.sub
     local.set $2
-    local.get $0
+    local.get $3
     i32.eqz
     br_if $break|1
-    local.get $3
+    local.get $0
     i32.load16_u
-    local.tee $0
+    local.tee $3
     local.get $1
     i32.load16_u
-    local.tee $6
+    local.tee $4
     i32.ne
     if
+     local.get $3
      local.get $4
-     call $~lib/rt/pure/__release
-     local.get $5
-     call $~lib/rt/pure/__release
-     local.get $0
-     local.get $6
      i32.sub
      return
     else
-     local.get $3
+     local.get $0
      i32.const 2
      i32.add
-     local.set $3
+     local.set $0
      local.get $1
      i32.const 2
      i32.add
@@ -1999,63 +1986,41 @@
     unreachable
    end
   end
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
   i32.const 0
  )
  (func $~lib/string/String.__eq (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
-  call $~lib/rt/pure/__retain
-  local.tee $0
   local.get $1
-  call $~lib/rt/pure/__retain
-  local.tee $1
   i32.eq
   if
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   call $~lib/rt/pure/__release
    i32.const 1
    return
   end
-  block $folding-inner0
-   local.get $1
-   i32.eqz
-   i32.const 1
-   local.get $0
-   select
-   if
-    br $folding-inner0
-   end
-   local.get $0
-   call $~lib/string/String#get:length
-   local.tee $2
-   local.get $1
-   call $~lib/string/String#get:length
-   i32.ne
-   if
-    br $folding-inner0
-   end
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/util/string/compareImpl
-   i32.eqz
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   call $~lib/rt/pure/__release
+  local.get $1
+  i32.eqz
+  i32.const 1
+  local.get $0
+  select
+  if
+   i32.const 0
    return
   end
   local.get $0
-  call $~lib/rt/pure/__release
+  call $~lib/string/String#get:length
+  local.tee $2
   local.get $1
-  call $~lib/rt/pure/__release
-  i32.const 0
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/util/string/compareImpl
+  i32.eqz
  )
  (func $~lib/util/number/genDigits (; 32 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
@@ -3037,7 +3002,6 @@
   i32.eqz
   if
    i32.const 1552
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $3
@@ -3076,7 +3040,6 @@
   f64.eq
   if
    i32.const 376
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -3090,7 +3053,6 @@
    f64.ne
    if
     i32.const 400
-    call $~lib/rt/pure/__retain
     return
    end
    i32.const 424
