@@ -634,7 +634,7 @@ exports.main = function main(argv, options, callback) {
         add("flatten");
         add("local-cse");
       }
-      if (hasARC) {
+      if (hasARC) { // differs
         if (optimizeLevel < 4) {
           add("flatten");
         }
@@ -685,7 +685,7 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
       }
-      if (hasARC) {
+      if (hasARC) { // differs
         add("post-assemblyscript-finalize");
       }
       add("vacuum");
@@ -707,6 +707,7 @@ exports.main = function main(argv, options, callback) {
       add("remove-unused-module-elements");
       add("memory-packing");
       add("directize");
+      add("inlining-optimizing"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("generate-stack-ir");
         add("optimize-stack-ir");

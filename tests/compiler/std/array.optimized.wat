@@ -4071,9 +4071,7 @@
     i32.load offset=4
     i32.add
     i32.load
-    local.get $1
-    local.get $0
-    call $start:std/array~anonymous|21
+    f32.convert_i32_s
     local.set $6
     local.get $2
     local.get $5

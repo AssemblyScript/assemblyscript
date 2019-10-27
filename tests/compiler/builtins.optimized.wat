@@ -639,9 +639,6 @@
   global.set $builtins/f
   f64.const 25
   global.set $builtins/F
-  i32.const 1
-  i32.const 2
-  call $start:builtins~anonymous|0
   f32.const nan:0x400000
   call $~lib/number/isNaN<f32>
   i32.eqz
