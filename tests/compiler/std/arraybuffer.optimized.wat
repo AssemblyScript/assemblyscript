@@ -2060,30 +2060,15 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>> (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null> (; 33 ;) (type $FUNCSIG$i) (result i32)
+  i32.const 0
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
+  i32.const 0
   call $~lib/rt/pure/__release
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  drop
-  local.get $0
-  if
-   local.get $0
-   call $~lib/rt/pure/__release
-   i32.const 1
-   return
-  end
-  local.get $0
-  call $~lib/rt/pure/__release
-  i32.const 0
- )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 1
@@ -2149,7 +2134,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/rt/__allocArray (; 36 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/__allocArray (; 35 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -2176,6 +2161,14 @@
   i32.const 8
   call $~lib/memory/memory.copy
   local.get $0
+ )
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  drop
+  local.get $0
+  call $~lib/rt/pure/__release
+  i32.const 1
  )
  (func $~lib/dataview/DataView#constructor (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2390,10 +2383,10 @@
   i32.const -4
   i32.const 42
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $1
+  local.set $3
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $1
+  local.get $3
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 4
   i32.ne
@@ -2409,10 +2402,10 @@
   i32.const 42
   i32.const 1073741808
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $0
-  local.get $1
+  local.set $1
+  local.get $3
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $1
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   if
    i32.const 0
@@ -2422,7 +2415,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.eqz
   if
    i32.const 0
@@ -2433,27 +2426,11 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 40
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
+  call $~lib/rt/pure/__retain
+  drop
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 42
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
+  call $~lib/rt/pure/__release
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null>
   if
    i32.const 0
    i32.const 280
@@ -2462,12 +2439,20 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null>
   if
    i32.const 0
    i32.const 280
    i32.const 44
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null>
+  if
+   i32.const 0
+   i32.const 280
+   i32.const 45
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2478,38 +2463,15 @@
   call $~lib/rt/pure/__retain
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.set $1
+  local.set $0
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $5
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 47
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 48
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 12
-  i32.const 9
-  call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
-  i32.const 2
-  call $~lib/arraybuffer/ArrayBufferView#constructor
   local.tee $3
+  call $~lib/rt/pure/__retain
+  drop
   local.get $3
+  call $~lib/rt/pure/__release
+  local.get $0
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
@@ -2520,19 +2482,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  global.set $~lib/argc
-  local.get $1
-  i32.load
-  local.tee $3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $4
-  local.get $3
+  i32.const 12
+  i32.const 9
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $4
   local.get $4
-  call $~lib/dataview/DataView#constructor
-  local.tee $3
-  local.set $4
-  local.get $3
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
   i32.eqz
   if
@@ -2543,16 +2500,39 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1
+  global.set $~lib/argc
   local.get $0
+  i32.load
+  local.tee $4
+  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  local.set $5
+  local.get $4
+  local.get $5
+  call $~lib/dataview/DataView#constructor
+  local.tee $4
+  local.set $5
+  local.get $4
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 280
+   i32.const 51
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  call $~lib/rt/pure/__release
   local.get $5
-  call $~lib/rt/pure/__release
-  call $~lib/rt/pure/__release
-  local.get $4
   call $~lib/rt/pure/__release
  )
  (func $start (; 39 ;) (type $FUNCSIG$v)
