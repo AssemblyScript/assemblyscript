@@ -301,6 +301,9 @@ var i: i32;
 
   i = arr.indexOf(43, 2);
   assert(i == 3);
+
+  assert(([NaN] as f32[]).indexOf(NaN) == -1);
+  assert(([NaN] as f64[]).indexOf(NaN) == -1);
 }
 
 // Array#includes //////////////////////////////////////////////////////////////////////////////////
@@ -335,6 +338,9 @@ var i: i32;
 
   includes = arr.includes(43, 2);
   assert(includes == true);
+
+  assert(([NaN] as f32[]).includes(NaN));
+  assert(([NaN] as f64[]).includes(NaN));
 
   arr.splice(1, 1);
 
