@@ -37,11 +37,12 @@
   assert(sliced.byteLength == 0);
   assert(sliced != null);
 
-  assert(!ArrayBuffer.isView(changetype<i32[]>(null)));
-  assert(!ArrayBuffer.isView(changetype<usize>(null)));
-  assert(!ArrayBuffer.isView(changetype<Uint8Array>(null)));
-  assert(!ArrayBuffer.isView(changetype<Int32Array>(null)));
-  assert(!ArrayBuffer.isView(changetype<DataView>(null)));
+  assert(!ArrayBuffer.isView<i32[] | null>(null));
+  assert(!ArrayBuffer.isView<usize>(0));
+  assert(!ArrayBuffer.isView<usize>(1));
+  assert(!ArrayBuffer.isView<Uint8Array | null>(null));
+  assert(!ArrayBuffer.isView<Int32Array | null>(null));
+  assert(!ArrayBuffer.isView<DataView | null>(null));
 
   let arr8 = new Uint8Array(1);
   assert(!ArrayBuffer.isView(<i32[]>[1, 2]));
