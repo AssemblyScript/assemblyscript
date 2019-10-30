@@ -153,19 +153,20 @@ export class Array<T> extends ArrayBufferView {
   }
 
   includes(value: T, fromIndex: i32 = 0): bool {
-    var length = this.length_;
-    if (length == 0 || fromIndex >= length) return false;
-    if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
-    var dataStart = this.dataStart;
-    while (fromIndex < length) {
-      let elem = load<T>(dataStart + (<usize>fromIndex << alignof<T>()));
-      if (elem == value) return true;
-      if (isFloat<T>()) {
-        if (isNaN(elem) && isNaN(value)) return true;
+    if (isFloat<T>()) {
+      let length = this.length_;
+      if (length == 0 || fromIndex >= length) return false;
+      if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
+      let dataStart = this.dataStart;
+      while (fromIndex < length) {
+        let elem = load<T>(dataStart + (<usize>fromIndex << alignof<T>()));
+        if (elem == value || (isNaN(elem) && isNaN(value))) return true;
+        ++fromIndex;
       }
-      ++fromIndex;
+      return false;
+    } else {
+      return this.indexOf(value, fromIndex) >= 0;
     }
-    return false;
   }
 
   indexOf(value: T, fromIndex: i32 = 0): i32 {

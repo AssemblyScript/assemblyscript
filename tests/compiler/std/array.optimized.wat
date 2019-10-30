@@ -2928,7 +2928,7 @@
   if
    i32.const 872
    i32.const 488
-   i32.const 283
+   i32.const 284
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -3011,7 +3011,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 488
-   i32.const 213
+   i32.const 214
    i32.const 59
    call $~lib/builtins/abort
    unreachable
@@ -3191,7 +3191,7 @@
   if
    i32.const 872
    i32.const 488
-   i32.const 344
+   i32.const 345
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -3431,66 +3431,12 @@
   i32.const -1
  )
  (func $~lib/array/Array<i32>#includes (; 59 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
   local.get $0
-  i32.load offset=12
-  local.tee $3
-  if (result i32)
-   local.get $2
-   local.get $3
-   i32.ge_s
-  else
-   i32.const 1
-  end
-  if
-   i32.const 0
-   return
-  end
+  local.get $1
   local.get $2
+  call $~lib/array/Array<i32>#indexOf
   i32.const 0
-  i32.lt_s
-  if
-   local.get $2
-   local.get $3
-   i32.add
-   local.tee $2
-   i32.const 0
-   local.get $2
-   i32.const 0
-   i32.gt_s
-   select
-   local.set $2
-  end
-  local.get $0
-  i32.load offset=4
-  local.set $0
-  loop $continue|0
-   local.get $2
-   local.get $3
-   i32.lt_s
-   if
-    local.get $2
-    i32.const 2
-    i32.shl
-    local.get $0
-    i32.add
-    i32.load
-    local.get $1
-    i32.eq
-    if
-     i32.const 1
-     return
-    else
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
-     br $continue|0
-    end
-    unreachable
-   end
-  end
-  i32.const 0
+  i32.ge_s
  )
  (func $~lib/number/isNaN<f32> (; 60 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
@@ -3532,17 +3478,17 @@
     local.tee $3
     f32.const nan:0x400000
     f32.eq
-    if
-     i32.const 1
-     return
-    end
-    local.get $3
-    call $~lib/number/isNaN<f32>
     if (result i32)
-     f32.const nan:0x400000
-     call $~lib/number/isNaN<f32>
+     i32.const 1
     else
-     i32.const 0
+     local.get $3
+     call $~lib/number/isNaN<f32>
+     if (result i32)
+      f32.const nan:0x400000
+      call $~lib/number/isNaN<f32>
+     else
+      i32.const 0
+     end
     end
     if
      i32.const 1
@@ -3599,17 +3545,17 @@
     local.tee $3
     f64.const nan:0x8000000000000
     f64.eq
-    if
-     i32.const 1
-     return
-    end
-    local.get $3
-    call $~lib/number/isNaN<f64>
     if (result i32)
-     f64.const nan:0x8000000000000
-     call $~lib/number/isNaN<f64>
+     i32.const 1
     else
-     i32.const 0
+     local.get $3
+     call $~lib/number/isNaN<f64>
+     if (result i32)
+      f64.const nan:0x8000000000000
+      call $~lib/number/isNaN<f64>
+     else
+      i32.const 0
+     end
     end
     if
      i32.const 1
