@@ -612,14 +612,14 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  // Optimize the module if requested
-  if (optimizeLevel > 0 || shrinkLevel > 0) {
-    let hasARC = args.runtime == "half" || args.runtime == "full";
-    stats.optimizeCount++;
-    function add(pass) {
-      module.runPasses([ pass ]);
-    }
-    stats.optimizeTime += measure(() => {
+  function doOptimize() {
+
+    // Optimize the module if requested
+    if (optimizeLevel > 0 || shrinkLevel > 0) {
+      let hasARC = args.runtime == "half" || args.runtime == "full";
+      function add(pass) {
+        module.runPasses([ pass ]);
+      }
       // Binaryen's default passes with Post-AssemblyScript passes added.
       // see: Binaryen/src/pass.cpp
 
@@ -712,16 +712,33 @@ exports.main = function main(argv, options, callback) {
         add("generate-stack-ir");
         add("optimize-stack-ir");
       }
-    });
+    }
+
+    // Run additional passes if requested
+    if (runPasses.length) {
+      module.runPasses(runPasses.map(pass => pass.trim()));
+    }
   }
 
-  // Run additional passes if requested
-  if (runPasses.length) {
+  stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
-    stats.optimizeTime += measure(() => {
-      module.runPasses(runPasses.map(pass => pass.trim()));
-    });
-  }
+    doOptimize();
+    if (args.converge) {
+      let last = module.toBinary();
+      do {
+        stats.optimizeCount++;
+        doOptimize();
+        let next = module.toBinary();
+        if (next.output.length >= last.output.length) {
+          if (next.output.length > last.output.length) {
+            stderr.write("Last converge was suboptimial." + EOL);
+          }
+          break;
+        }
+        last = next;
+      } while (true);
+    }
+  });
 
   // Prepare output
   if (!args.noEmit) {
