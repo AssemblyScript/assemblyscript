@@ -37,12 +37,13 @@ class Ref {
 }
 
 {
-  assert(Array.isArray(<i32[] | null>null) == false);
-  assert(Array.isArray(arr) == true);
-  assert(Array.isArray(new Ref()) == false);
-  assert(Array.isArray(new Uint8Array(1)) == false);
-  assert(Array.isArray(<i32>1) == false);
-  assert(Array.isArray("abc") == false);
+  assert(!Array.isArray(<i32[] | null>null));
+  assert(!Array.isArray(new Ref()));
+  assert(!Array.isArray(new Uint8Array(1)));
+  assert(!Array.isArray(<i32>1));
+  assert(!Array.isArray("abc"));
+
+  assert(Array.isArray(arr));
 }
 
 // Array#fill //////////////////////////////////////////////////////////////////////////////////////
