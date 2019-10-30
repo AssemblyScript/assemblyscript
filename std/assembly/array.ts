@@ -160,7 +160,7 @@ export class Array<T> extends ArrayBufferView {
       let dataStart = this.dataStart;
       while (fromIndex < length) {
         let elem = load<T>(dataStart + (<usize>fromIndex << alignof<T>()));
-        if (elem == value || (isNaN(elem) && isNaN(value))) return true;
+        if (elem == value || bool(i32(isNaN(elem)) & i32(isNaN(value)))) return true;
         ++fromIndex;
       }
       return false;

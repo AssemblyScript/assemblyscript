@@ -1585,7 +1585,7 @@ function INCLUDES<TArray extends ArrayBufferView, T>(
     let dataStart = array.dataStart;
     while (index < length) {
       let elem = load<T>(dataStart + (index << alignof<T>()));
-      if (elem == searchElement || (isNaN(elem) && isNaN(searchElement))) return true;
+      if (elem == searchElement || bool(i32(isNaN(elem)) & i32(isNaN(searchElement)))) return true;
       ++index;
     }
     return false;

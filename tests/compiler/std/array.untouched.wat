@@ -5532,12 +5532,9 @@
     else
      local.get $6
      call $~lib/number/isNaN<f32>
-     if (result i32)
-      local.get $1
-      call $~lib/number/isNaN<f32>
-     else
-      i32.const 0
-     end
+     local.get $1
+     call $~lib/number/isNaN<f32>
+     i32.and
     end
     if
      i32.const 1
@@ -5622,12 +5619,9 @@
     else
      local.get $6
      call $~lib/number/isNaN<f64>
-     if (result i32)
-      local.get $1
-      call $~lib/number/isNaN<f64>
-     else
-      i32.const 0
-     end
+     local.get $1
+     call $~lib/number/isNaN<f64>
+     i32.and
     end
     if
      i32.const 1

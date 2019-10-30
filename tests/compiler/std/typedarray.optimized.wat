@@ -22984,12 +22984,9 @@
      else
       local.get $4
       call $~lib/number/isNaN<f64>
-      if (result i32)
-       f64.const nan:0x8000000000000
-       call $~lib/number/isNaN<f64>
-      else
-       i32.const 0
-      end
+      f64.const nan:0x8000000000000
+      call $~lib/number/isNaN<f64>
+      i32.and
      end
      if
       local.get $0
@@ -23057,12 +23054,9 @@
      else
       local.get $4
       call $~lib/number/isNaN<f32>
-      if (result i32)
-       f32.const nan:0x400000
-       call $~lib/number/isNaN<f32>
-      else
-       i32.const 0
-      end
+      f32.const nan:0x400000
+      call $~lib/number/isNaN<f32>
+      i32.and
      end
      if
       local.get $0
