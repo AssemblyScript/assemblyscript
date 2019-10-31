@@ -599,6 +599,21 @@ testArrayIndexOfAndLastIndexOf<Uint64Array, u64>();
 testArrayIndexOfAndLastIndexOf<Float32Array, f32>();
 testArrayIndexOfAndLastIndexOf<Float64Array, f64>();
 
+{
+  // special tests
+  let arrNaN64 = new Float64Array(1);
+  arrNaN64[0] = NaN;
+
+  assert(arrNaN64.indexOf(NaN) == -1);
+  assert(arrNaN64.includes(NaN) == true);
+
+  let arrNaN32 = new Float32Array(1);
+  arrNaN32[0] = NaN;
+
+  assert(arrNaN32.indexOf(NaN) == -1);
+  assert(arrNaN32.includes(NaN) == true);
+}
+
 function testArrayJoinAndToString<TArray extends TypedArray<T>, T extends number>(): void {
   var array = instantiate<TArray>(5);
   array[0] = <T>1;
