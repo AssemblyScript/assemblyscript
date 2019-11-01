@@ -4366,7 +4366,8 @@
     i32.const -342
     i32.lt_s
     local.get $2
-    i64.eqz
+    i64.const 0
+    i64.eq
     select
     if
      br $~lib/util/string/scientific|inlined.0
@@ -6507,7 +6508,8 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.eq
   if
    i32.const 1192
    call $~lib/rt/pure/__retain
@@ -6552,7 +6554,8 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.eq
   if
    i32.const 1192
    call $~lib/rt/pure/__retain

@@ -6672,7 +6672,9 @@
    i32.add
    local.set $16
    local.get $17
-   i64.eqz
+   i64.const 0
+   i64.ne
+   i32.eqz
    if (result i32)
     i32.const 1
    else
@@ -9498,7 +9500,9 @@
   (local $6 i32)
   (local $7 i64)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    i32.const 1192
    call $~lib/rt/pure/__retain
@@ -9564,7 +9568,9 @@
   (local $7 i32)
   (local $8 i64)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    i32.const 1192
    call $~lib/rt/pure/__retain

@@ -94,7 +94,8 @@
   i64.const 2
   global.set $unary/I
   global.get $unary/I
-  i64.eqz
+  i64.const 0
+  i64.eq
   i64.extend_i32_u
   global.set $unary/I
   global.get $unary/I
@@ -150,13 +151,12 @@
   global.get $unary/f
   local.tee $0
   f32.const 0
-  f32.eq
-  local.get $0
-  local.get $0
   f32.ne
-  i32.or
-  i32.const 0
-  i32.ne
+  local.get $0
+  local.get $0
+  f32.eq
+  i32.and
+  i32.eqz
   global.set $unary/i
   global.get $unary/f
   f32.const 1
@@ -207,13 +207,12 @@
   global.get $unary/F
   local.tee $1
   f64.const 0
-  f64.eq
-  local.get $1
-  local.get $1
   f64.ne
-  i32.or
-  i32.const 0
-  i32.ne
+  local.get $1
+  local.get $1
+  f64.eq
+  i32.and
+  i32.eqz
   i64.extend_i32_u
   global.set $unary/I
   global.get $unary/F

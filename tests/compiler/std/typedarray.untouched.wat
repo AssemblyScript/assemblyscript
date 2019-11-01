@@ -13762,8 +13762,6 @@
   call $~lib/typedarray/Int8Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -13916,8 +13914,6 @@
   call $~lib/typedarray/Uint8Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -14070,8 +14066,6 @@
   call $~lib/typedarray/Uint8ClampedArray#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -14228,8 +14222,6 @@
   call $~lib/typedarray/Int16Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -14382,8 +14374,6 @@
   call $~lib/typedarray/Uint16Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -14532,8 +14522,6 @@
   call $~lib/typedarray/Int32Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -14682,8 +14670,6 @@
   call $~lib/typedarray/Uint32Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -14832,8 +14818,6 @@
   call $~lib/typedarray/Int64Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -14982,8 +14966,6 @@
   call $~lib/typedarray/Uint64Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -15132,8 +15114,6 @@
   call $~lib/typedarray/Float32Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -15282,8 +15262,6 @@
   call $~lib/typedarray/Float64Array#some
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -17112,8 +17090,6 @@
   call $~lib/typedarray/Int8Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -17271,8 +17247,6 @@
   call $~lib/typedarray/Uint8Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -17430,8 +17404,6 @@
   call $~lib/typedarray/Uint8ClampedArray#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -17593,8 +17565,6 @@
   call $~lib/typedarray/Int16Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -17752,8 +17722,6 @@
   call $~lib/typedarray/Uint16Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -17907,8 +17875,6 @@
   call $~lib/typedarray/Int32Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -18062,8 +18028,6 @@
   call $~lib/typedarray/Uint32Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -18217,8 +18181,6 @@
   call $~lib/typedarray/Int64Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -18372,8 +18334,6 @@
   call $~lib/typedarray/Uint64Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -18779,8 +18739,6 @@
   call $~lib/typedarray/Float32Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -18884,7 +18842,9 @@
    return
   end
   local.get $4
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    local.get $4
    local.get $2
@@ -18916,7 +18876,9 @@
    local.set $2
   end
   local.get $5
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    local.get $5
    local.get $3
@@ -19188,8 +19150,6 @@
   call $~lib/typedarray/Float64Array#every
   local.set $3
   local.get $3
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.eqz
   if
@@ -34904,7 +34864,9 @@
   (local $7 i32)
   (local $8 i64)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    i32.const 1720
    call $~lib/rt/pure/__retain
@@ -35001,7 +34963,9 @@
   i32.add
   local.set $0
   local.get $2
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    local.get $0
    i32.const 48
@@ -35316,7 +35280,9 @@
   (local $6 i32)
   (local $7 i64)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    i32.const 1720
    call $~lib/rt/pure/__retain
@@ -35391,7 +35357,9 @@
   i32.add
   local.set $0
   local.get $2
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    local.get $0
    i32.const 48

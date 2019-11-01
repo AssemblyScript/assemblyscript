@@ -262,7 +262,8 @@
     return
    end
    local.get $3
-   i64.eqz
+   i64.const 0
+   i64.eq
    if (result i64)
     local.get $2
     i64.const 0

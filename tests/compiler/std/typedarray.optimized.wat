@@ -13105,7 +13105,8 @@
     return
    end
    local.get $2
-   i64.eqz
+   i64.const 0
+   i64.eq
    if (result i64)
     local.get $1
     i64.const 0
@@ -25053,7 +25054,8 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.eq
   if
    i32.const 1720
    call $~lib/rt/pure/__retain
@@ -25122,7 +25124,8 @@
   i32.add
   local.set $0
   local.get $2
-  i64.eqz
+  i64.const 0
+  i64.eq
   if
    local.get $0
    i32.const 48
@@ -25380,7 +25383,8 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.eq
   if
    i32.const 1720
    call $~lib/rt/pure/__retain
@@ -25428,7 +25432,8 @@
   i32.add
   local.set $0
   local.get $2
-  i64.eqz
+  i64.const 0
+  i64.eq
   if
    local.get $0
    i32.const 48

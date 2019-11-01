@@ -6259,8 +6259,6 @@
     local.get $0
     local.get $1
     call_indirect (type $FUNCSIG$iiii)
-    i32.const 0
-    i32.ne
     i32.eqz
     if
      i32.const 0
@@ -12588,8 +12586,6 @@
     local.set $10
     i32.const 4
     local.get $10
-    i32.const 0
-    i32.ne
     i32.eqz
     i32.add
     local.set $6
@@ -12642,8 +12638,6 @@
   local.set $10
   i32.const 4
   local.get $10
-  i32.const 0
-  i32.ne
   i32.eqz
   i32.add
   local.set $6
@@ -16451,7 +16445,9 @@
   (local $6 i32)
   (local $7 i64)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    i32.const 4768
    call $~lib/rt/pure/__retain
@@ -16526,7 +16522,9 @@
   i32.add
   local.set $0
   local.get $2
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    local.get $0
    i32.const 48
@@ -16759,7 +16757,9 @@
   (local $7 i32)
   (local $8 i64)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    i32.const 4768
    call $~lib/rt/pure/__retain
@@ -16856,7 +16856,9 @@
   i32.add
   local.set $0
   local.get $2
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    local.get $0
    i32.const 48

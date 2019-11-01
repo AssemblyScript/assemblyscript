@@ -2551,7 +2551,9 @@
    return
   end
   local.get $4
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    local.get $4
    local.get $2
@@ -2583,7 +2585,9 @@
    local.set $2
   end
   local.get $5
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    local.get $5
    local.get $3

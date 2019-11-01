@@ -8662,7 +8662,7 @@ export class Compiler extends DiagnosticEmitter {
           // allow '!' for references even without an overload
         }
 
-        expr = this.makeIsFalseish(expr, this.currentType);
+        expr = module.unary(UnaryOp.EqzI32, this.makeIsTrueish(expr, this.currentType));
         this.currentType = Type.bool;
         break;
       }
@@ -8913,68 +8913,6 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   // === Specialized code generation ==============================================================
-
-  /** Creates a comparison whether an expression is 'false' in a broader sense. */
-  makeIsFalseish(expr: ExpressionRef, type: Type): ExpressionRef {
-    var module = this.module;
-    switch (type.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        expr = this.ensureSmallIntegerWrap(expr, type);
-        // fall-through
-      }
-      case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.unary(UnaryOp.EqzI32, expr);
-      }
-      case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.unary(UnaryOp.EqzI64, expr);
-      }
-      case TypeKind.USIZE: if (this.skippedAutoreleases.has(expr)) expr = this.makeAutorelease(expr);
-      case TypeKind.ISIZE: {
-        return module.unary(type.size == 64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32, expr);
-      }
-      case TypeKind.F32: {
-        // (x == 0.0) | (x != x)
-        let flow = this.currentFlow;
-        let temp = flow.getTempLocal(Type.f32);
-        let ret = module.binary(BinaryOp.OrI32,
-          module.binary(BinaryOp.EqF32, module.local_tee(temp.index, expr), module.f32(0)),
-          module.binary(BinaryOp.NeF32,
-            module.local_get(temp.index, NativeType.F32),
-            module.local_get(temp.index, NativeType.F32)
-          )
-        );
-        flow.freeTempLocal(temp);
-        return ret;
-      }
-      case TypeKind.F64: {
-        // (x == 0.0) | (x != x)
-        let flow = this.currentFlow;
-        let temp = this.currentFlow.getTempLocal(Type.f64);
-        let ret = module.binary(BinaryOp.OrI32,
-          module.binary(BinaryOp.EqF64, module.local_tee(temp.index, expr), module.f64(0)),
-          module.binary(BinaryOp.NeF64,
-            module.local_get(temp.index, NativeType.F64),
-            module.local_get(temp.index, NativeType.F64)
-          )
-        );
-        flow.freeTempLocal(temp);
-        return ret;
-      }
-      // case TypeKind.ANYREF: {
-      //   TODO: ref.is_null
-      // }
-      default: {
-        assert(false);
-        return module.i32(1);
-      }
-    }
-  }
 
   /** Creates a comparison whether an expression is 'true' in a broader sense. */
   makeIsTrueish(expr: ExpressionRef, type: Type): ExpressionRef {
