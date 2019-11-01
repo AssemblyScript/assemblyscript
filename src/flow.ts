@@ -384,13 +384,6 @@ export class Flow {
     temps.push(local);
   }
 
-  /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type, except: Set<i32> | null = null): Local {
-    var local = this.getTempLocal(type, except);
-    this.freeTempLocal(local);
-    return local;
-  }
-
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
     var scopedLocals = this.scopedLocals;
