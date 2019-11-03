@@ -334,46 +334,46 @@
     i32.const 1072693248
     i32.ge_s
     if (result i32)
-     local.get $6
-     local.get $8
+     i32.const 52
+     i32.const 20
      local.get $8
      i32.const 20
      i32.shr_s
      i32.const 1023
      i32.sub
-     local.tee $12
+     local.tee $11
      i32.const 20
      i32.gt_s
-     local.tee $13
-     select
      local.tee $5
-     local.get $5
-     i32.const 52
-     i32.const 20
-     local.get $13
      select
-     local.get $12
+     local.get $11
      i32.sub
-     local.tee $13
-     i32.shr_u
+     local.set $12
+     local.get $6
+     local.get $8
+     local.get $5
+     select
      local.tee $5
-     local.get $13
+     local.get $12
+     i32.shr_u
+     local.set $11
+     i32.const 2
+     local.get $11
+     i32.const 1
+     i32.and
+     i32.sub
+     i32.const 0
+     local.get $11
+     local.get $12
      i32.shl
+     local.get $5
      i32.eq
-     if (result i32)
-      i32.const 2
-      local.get $5
-      i32.const 1
-      i32.and
-      i32.sub
-     else
-      i32.const 0
-     end
+     select
     else
      i32.const 0
     end
    end
-   local.set $11
+   local.set $13
   end
   local.get $6
   i32.eqz
@@ -491,13 +491,13 @@
      local.get $4
      i32.const 1072693248
      i32.sub
-     local.get $11
+     local.get $13
      i32.or
      if (result f64)
       local.get $3
       f64.neg
       local.get $3
-      local.get $11
+      local.get $13
       i32.const 1
       i32.eq
       select
@@ -521,7 +521,7 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $11
+   local.get $13
    i32.eqz
    if
     local.get $0
@@ -534,7 +534,7 @@
    end
    f64.const -1
    f64.const 1
-   local.get $11
+   local.get $13
    i32.const 1
    i32.eq
    select
@@ -964,7 +964,7 @@
     local.get $12
     i32.const 2147483647
     i32.and
-    local.tee $13
+    local.tee $11
     i32.const 20
     i32.shr_s
     i32.const 1023
@@ -972,7 +972,7 @@
     local.set $5
     i32.const 0
     local.set $6
-    local.get $13
+    local.get $11
     i32.const 1071644672
     i32.gt_s
     if
@@ -983,7 +983,7 @@
      i32.shr_s
      local.get $12
      i32.add
-     local.tee $13
+     local.tee $11
      i32.const 2147483647
      i32.and
      i32.const 20
@@ -996,14 +996,14 @@
      i32.shr_s
      i32.const -1
      i32.xor
-     local.get $13
+     local.get $11
      i32.and
      i64.extend_i32_s
      i64.const 32
      i64.shl
      f64.reinterpret_i64
      local.set $0
-     local.get $13
+     local.get $11
      i32.const 1048575
      i32.and
      i32.const 1048576
