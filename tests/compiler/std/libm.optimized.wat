@@ -3579,7 +3579,7 @@
      local.get $12
      i32.sub
      local.tee $13
-     i32.shr_s
+     i32.shr_u
      local.tee $5
      local.get $13
      i32.shl
@@ -7121,6 +7121,13 @@
   i32.const 1118743632
   i32.ge_u
   if
+   local.get $1
+   i32.const 2139095040
+   i32.gt_u
+   if
+    local.get $0
+    return
+   end
    local.get $1
    i32.const 1118925336
    i32.ge_u

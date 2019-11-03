@@ -4540,7 +4540,7 @@
      local.set $13
      local.get $13
      local.get $12
-     i32.shr_s
+     i32.shr_u
      local.set $14
      local.get $14
      local.get $12
@@ -9298,6 +9298,13 @@
   i32.const 1118743632
   i32.ge_u
   if
+   local.get $1
+   i32.const 2139095040
+   i32.gt_u
+   if
+    local.get $0
+    return
+   end
    local.get $1
    i32.const 1118925336
    i32.ge_u
