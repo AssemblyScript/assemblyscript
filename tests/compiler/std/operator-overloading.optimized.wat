@@ -355,7 +355,7 @@
      local.get $12
      i32.sub
      local.tee $13
-     i32.shr_s
+     i32.shr_u
      local.tee $5
      local.get $13
      i32.shl
