@@ -1,3 +1,4 @@
+import { casemap } from "./casemap";
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
 
@@ -574,4 +575,39 @@ function pow10(n: i32): f64 {
     load<f64>(hi + ((n >> 5) << alignof<f64>())) *
     load<f64>(lo + ((n & 31) << alignof<f64>()))
   );
+}
+
+@inline
+function isAscii(c: u32): bool {
+  return (c & -128) == 0;
+}
+
+@inline
+function isLower8(c: u32): bool {
+  return c - CharCode.a < 26;
+}
+
+@inline
+function isUpper8(c: u32): bool {
+  return c - CharCode.A < 26;
+}
+
+@inline
+function toLower8(c: u32): u32 {
+  return select<u32>(c | 32, c, isUpper8(c));
+}
+
+@inline
+function toUpper8(c: u32): u32 {
+  return select<u32>(c & 0x5F, c, isLower8(c));
+}
+
+@inline
+function toLower16(c: u32): u32 {
+  return casemap(c, 0);
+}
+
+@inline
+function toUpper16(c: u32): u32 {
+  return casemap(c, 1);
 }
