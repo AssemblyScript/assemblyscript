@@ -301,6 +301,8 @@
   /*{*/ 178, 215 /*}*/, /*{*/ 196, 216 /*}*/, /*{*/ 197, 217 /*}*/, /*{*/ 198, 218 /*}*/,
 ];
 
+@lazy const mt: i32[] = [2048, 342, 57];
+
 // See: musl/tree/src/ctype/towctrans.c
 export function casemap(c: u32, dir: i32): i32 {
   var b: u32, x: u32, y: u32, v: u32, rt: u32, xb: u32, xn: u32;
@@ -308,21 +310,27 @@ export function casemap(c: u32, dir: i32): i32 {
 
   if (c >= 0x20000) return c;
 
-  const mt: i32[] = [2048, 342, 57];
-
   b = c >> 8;
   c &= 255;
   x = c / 3;
   y = c % 3;
 
+  const mtPtr = mt.dataStart as usize;
+  const tabPtr = tab.dataStart as usize;
+  const ruleBasesPtr = ruleBases.dataStart as usize;
+  const rulesPtr = rules.dataStart as usize;
+
   /* lookup entry in two-level base-6 table */
-  v = tab[(tab[b] as i32) * 86 + x] as u32;
-  v = (v * mt[y] >> 11) % 6;
+  // v = tab[(tab[b] as i32) * 86 + x] as u32;
+  v = load<u8>(tabPtr + (load<u8>(tabPtr + b) as i32) * 86 + x) as u32;
+  // v = (v * mt[y] >> 11) % 6;
+  v = (v * load<i32>(mtPtr + (y << alignof<i32>())) >> 11) % 6;
 
   /* use the bit vector out of the tables as an index into
 	 * a block-specific set of rules and decode the rule into
 	 * a type and a case-mapping delta. */
-  r = rules[(ruleBases[b] as u32) + v];
+  // r = rules[(ruleBases[b] as u32) + v];
+  r = load<i32>(rulesPtr + ((load<u8>(ruleBasesPtr + b) as u32 + v) << alignof<i32>()));
   rt = r & 255;
   rd = r >> 8;
 
@@ -337,11 +345,15 @@ export function casemap(c: u32, dir: i32): i32 {
   xn = rd & 0xff;
   xb = rd >>> 8;
 
+  const exceptionsPtr = exceptions.dataStart as usize;
+
   while (xn) {
     let h = xn >> 1;
-    let t = exceptions[(xb + h) * 2 + 0] as u32;
+    // let t = exceptions[(xb + h) * 2 + 0] as u32;
+    let t = load<u8>(exceptionsPtr + (xb + h) * 2) as u32;
     if (t == c) {
-      r  = rules[exceptions[(xb + h) * 2 + 1]];
+      // r  = rules[exceptions[(xb + h) * 2 + 1]];
+      r = load<i32>(rulesPtr + (load<u8>(exceptionsPtr + (xb + h) * 2 + 1) << alignof<i32>()));
       rt = r & 255;
       rd = r >> 8;
       if (rt < 2) {
