@@ -579,7 +579,7 @@ function pow10(n: i32): f64 {
 
 @inline
 function isAscii(c: u32): bool {
-  return (c & -128) == 0;
+  return !(c & ~0x7F);
 }
 
 @inline
