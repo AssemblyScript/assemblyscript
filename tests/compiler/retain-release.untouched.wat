@@ -293,19 +293,20 @@
  (func $retain-release/assignField (; 18 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
   global.get $retain-release/TARGET
   local.tee $0
   global.get $retain-release/REF
   local.tee $1
   local.get $0
   i32.load
-  local.tee $0
+  local.tee $2
   i32.ne
   if
    local.get $1
    call $~lib/rt/stub/__retain
    local.set $1
-   local.get $0
+   local.get $2
    call $~lib/rt/stub/__release
   end
   local.get $1

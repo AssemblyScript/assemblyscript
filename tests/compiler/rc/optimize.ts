@@ -4,6 +4,13 @@ export function eliminated_v(): void {}
 export function eliminated_vi(a: i32): void {}
 export function eliminated_vii(a: i32, b: i32): void {}
 export function eliminated_viii(a: i32, b: i32, c: i32): void {}
+export function eliminated_rr(a: Ref): Ref { return getRef(); }
+
+class Ref {}
+
+export function getRef(): Ref { // don't inline
+  return new Ref();
+}
 
 export namespace OptimizeARC {
 
@@ -94,6 +101,15 @@ export namespace OptimizeARC {
         a = __retain(a);
       }
       __release(a);
+    }
+
+    export function replace(a: Ref, b: Ref): void {
+      a = b;
+    }
+
+    export function replaceAlreadyRetained(a: Ref): Ref {
+      a = getRef();
+      return a;
     }
   }
 

@@ -3540,6 +3540,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 1073741808
   local.get $2
@@ -3588,13 +3589,13 @@
   local.tee $5
   local.get $4
   i32.load
-  local.tee $4
+  local.tee $6
   i32.ne
   if
    local.get $5
    call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
+   local.get $6
    call $~lib/rt/pure/__release
   end
   local.get $5
@@ -4152,6 +4153,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   i32.const 0
   i32.const 3
   call $~lib/array/Array<i32>#constructor
@@ -4253,33 +4255,33 @@
   local.tee $0
   local.get $1
   i32.load
-  local.tee $1
+  local.tee $4
   i32.ne
   if
    local.get $0
    call $~lib/rt/pure/__retain
    local.set $0
-   local.get $1
+   local.get $4
    call $~lib/rt/pure/__release
   end
   local.get $0
   i32.store
   local.get $3
-  local.tee $0
-  local.get $2
   local.tee $1
-  local.get $0
+  local.get $2
+  local.tee $4
+  local.get $1
   i32.load
   local.tee $0
   i32.ne
   if
-   local.get $1
+   local.get $4
    call $~lib/rt/pure/__retain
-   local.set $1
+   local.set $4
    local.get $0
    call $~lib/rt/pure/__release
   end
-  local.get $1
+  local.get $4
   i32.store
   local.get $2
   local.tee $1
@@ -4287,67 +4289,67 @@
   local.tee $0
   local.get $1
   i32.load
-  local.tee $1
-  i32.ne
-  if
-   local.get $0
-   call $~lib/rt/pure/__retain
-   local.set $0
-   local.get $1
-   call $~lib/rt/pure/__release
-  end
-  local.get $0
-  i32.store
-  local.get $2
-  local.tee $0
-  local.get $3
-  local.tee $1
-  local.get $0
-  i32.load
-  local.tee $0
-  i32.ne
-  if
-   local.get $1
-   call $~lib/rt/pure/__retain
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-  end
-  local.get $1
-  i32.store
-  local.get $3
-  local.tee $1
-  local.get $2
-  local.tee $0
-  local.get $1
-  i32.load
-  local.tee $1
+  local.tee $4
   i32.ne
   if
    local.get $0
    call $~lib/rt/pure/__retain
    local.set $0
-   local.get $1
+   local.get $4
    call $~lib/rt/pure/__release
   end
   local.get $0
   i32.store
   local.get $2
-  local.tee $0
-  local.get $3
   local.tee $1
-  local.get $0
+  local.get $3
+  local.tee $4
+  local.get $1
   i32.load
   local.tee $0
   i32.ne
   if
-   local.get $1
+   local.get $4
    call $~lib/rt/pure/__retain
-   local.set $1
+   local.set $4
    local.get $0
    call $~lib/rt/pure/__release
   end
+  local.get $4
+  i32.store
+  local.get $3
+  local.tee $1
+  local.get $2
+  local.tee $0
   local.get $1
+  i32.load
+  local.tee $4
+  i32.ne
+  if
+   local.get $0
+   call $~lib/rt/pure/__retain
+   local.set $0
+   local.get $4
+   call $~lib/rt/pure/__release
+  end
+  local.get $0
+  i32.store
+  local.get $2
+  local.tee $1
+  local.get $3
+  local.tee $4
+  local.get $1
+  i32.load
+  local.tee $0
+  i32.ne
+  if
+   local.get $4
+   call $~lib/rt/pure/__retain
+   local.set $4
+   local.get $0
+   call $~lib/rt/pure/__release
+  end
+  local.get $4
   i32.store
   local.get $3
   call $~lib/rt/pure/__release
