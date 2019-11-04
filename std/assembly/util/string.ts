@@ -611,3 +611,13 @@ function toLower16(c: u32): u32 {
 function toUpper16(c: u32): u32 {
   return casemap(c, 1);
 }
+
+@inline
+export function toLower(c: u32): u32 {
+  return isAscii(c) ? toLower8(c) : toLower16(c);
+}
+
+@inline
+export function toUpper(c: u32): u32 {
+  return isAscii(c) ? toUpper8(c) : toUpper16(c);
+}

@@ -1,5 +1,5 @@
+// Total tables size: 4.4 kb (usually compressed to ~3.5 kb)
 // See musl/tree/src/ctype/casemap.h
-
 @lazy const tab: u8[] = [
   7, 8, 9, 10, 11, 12, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
   13, 6, 6, 14, 6, 6, 6, 6, 6, 6, 6, 6, 15, 16, 17, 18,
@@ -360,7 +360,7 @@ export function casemap(c: u32, dir: i32): i32 {
         return c0 + (rd & -(rt ^ dir));
       }
       /* Hard-coded for the four exceptional titlecase */
-      return c0 + (dir ? -1 : 1);
+      return c0 + 1 - (dir << 1); // (dir ? -1 : 1);
     } else if (t > c) {
       xn = h;
     } else {
