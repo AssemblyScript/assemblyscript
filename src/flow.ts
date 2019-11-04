@@ -144,41 +144,58 @@ export enum LocalFlags {
 
   /** Local is constant. */
   CONSTANT = 1 << 0,
+  /** Local is a function parameter. */
+  PARAMETER = 1 << 1,
   /** Local is properly wrapped. Relevant for small integers. */
-  WRAPPED = 1 << 1,
+  WRAPPED = 1 << 2,
   /** Local is non-null. */
-  NONNULL = 1 << 2,
+  NONNULL = 1 << 3,
   /** Local is read from. */
-  READFROM = 1 << 3,
+  READFROM = 1 << 4,
   /** Local is written to. */
-  WRITTENTO = 1 << 4,
+  WRITTENTO = 1 << 5,
   /** Local is retained. */
-  RETAINED = 1 << 5,
+  RETAINED = 1 << 6,
+  /** Local is returned. */
+  RETURNED = 1 << 7,
 
   /** Local is conditionally read from. */
-  CONDITIONALLY_READFROM = 1 << 6,
+  CONDITIONALLY_READFROM = 1 << 8,
   /** Local is conditionally written to. */
-  CONDITIONALLY_WRITTENTO = 1 << 7,
+  CONDITIONALLY_WRITTENTO = 1 << 9,
   /** Local must be conditionally retained. */
-  CONDITIONALLY_RETAINED = 1 << 8,
+  CONDITIONALLY_RETAINED = 1 << 10,
+  /** Local is conditionally returned. */
+  CONDITIONALLY_RETURNED = 1 << 11,
 
   /** Any categorical flag. */
   ANY_CATEGORICAL = CONSTANT
+                  | PARAMETER
                   | WRAPPED
                   | NONNULL
                   | READFROM
                   | WRITTENTO
-                  | RETAINED,
+                  | RETAINED
+                  | RETURNED,
 
   /** Any conditional flag. */
   ANY_CONDITIONAL = RETAINED
                   | CONDITIONALLY_READFROM
                   | CONDITIONALLY_WRITTENTO
-                  | CONDITIONALLY_RETAINED,
+                  | CONDITIONALLY_RETAINED
+                  | CONDITIONALLY_RETURNED,
+
+  /** Any written to flag. */
+  ANY_WRITTENTO = WRITTENTO
+                | CONDITIONALLY_WRITTENTO,
 
   /** Any retained flag. */
   ANY_RETAINED = RETAINED
-               | CONDITIONALLY_RETAINED
+               | CONDITIONALLY_RETAINED,
+
+  /** Any returned flag. */
+  ANY_RETURNED = RETURNED
+               | CONDITIONALLY_RETURNED
 }
 export namespace LocalFlags {
   export function join(left: LocalFlags, right: LocalFlags): LocalFlags {
@@ -565,6 +582,7 @@ export class Flow {
       if (flags & LocalFlags.RETAINED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETAINED);
       if (flags & LocalFlags.READFROM) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
       if (flags & LocalFlags.WRITTENTO) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_WRITTENTO);
+      if (flags & LocalFlags.RETURNED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETURNED);
     }
   }
 

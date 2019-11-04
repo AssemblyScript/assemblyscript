@@ -1288,7 +1288,7 @@ export class Compiler extends DiagnosticEmitter {
               )
             )
           );
-          flow.setLocalFlag(index, LocalFlags.RETAINED);
+          flow.setLocalFlag(index, LocalFlags.RETAINED | LocalFlags.PARAMETER);
         }
       }
 
@@ -2252,8 +2252,10 @@ export class Compiler extends DiagnosticEmitter {
       if (!this.skippedAutoreleases.has(expr)) {
         if (returnType.isManaged) {
           if (getExpressionId(expr) == ExpressionId.LocalGet) {
-            if (flow.isAnyLocalFlag(getLocalGetIndex(expr), LocalFlags.ANY_RETAINED)) {
-              flow.unsetLocalFlag(getLocalGetIndex(expr), LocalFlags.ANY_RETAINED);
+            let index = getLocalGetIndex(expr);
+            if (flow.isAnyLocalFlag(index, LocalFlags.ANY_RETAINED)) {
+              flow.unsetLocalFlag(index, LocalFlags.ANY_RETAINED);
+              flow.setLocalFlag(index, LocalFlags.RETURNED);
               this.skippedAutoreleases.add(expr);
             }
           }
@@ -6248,23 +6250,18 @@ export class Compiler extends DiagnosticEmitter {
       let initExpr = this.compileExpression(
         assert(instance.prototype.functionTypeNode.parameters[i].initializer),
         initType,
-        Constraints.CONV_IMPLICIT
+        Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
       );
       let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), initType);
       if (!flow.canOverflow(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
       if (flow.isNonnull(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
       if (initType.isManaged) {
         flow.setLocalFlag(argumentLocal.index, LocalFlags.RETAINED);
-        body.push(
-          module.local_set(argumentLocal.index,
-            this.makeRetain(initExpr)
-          )
-        );
-      } else {
-        body.push(
-          module.local_set(argumentLocal.index, initExpr)
-        );
+        if (!this.skippedAutoreleases.has(initExpr)) initExpr = this.makeRetain(initExpr);
       }
+      body.push(
+        module.local_set(argumentLocal.index, initExpr)
+      );
     }
 
     // Compile the called function's body in the scope of the inlined flow
