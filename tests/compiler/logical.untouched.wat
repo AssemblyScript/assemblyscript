@@ -1,7 +1,5 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$if (func (param f32) (result i32)))
- (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -14,17 +12,7 @@
  (global $logical/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/number/isNaN<f32> (; 1 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
-  local.get $0
-  local.get $0
-  f32.ne
- )
- (func $~lib/number/isNaN<f64> (; 2 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  local.get $0
-  f64.ne
- )
- (func $start:logical (; 3 ;) (type $FUNCSIG$v)
+ (func $start:logical (; 1 ;) (type $FUNCSIG$v)
   (local $0 f64)
   (local $1 f32)
   i32.const 0
@@ -410,7 +398,9 @@
   end
   global.set $logical/f
   global.get $logical/f
-  call $~lib/number/isNaN<f32>
+  local.tee $1
+  local.get $1
+  f32.ne
   i32.eqz
   if
    i32.const 0
@@ -435,7 +425,9 @@
   end
   global.set $logical/f
   global.get $logical/f
-  call $~lib/number/isNaN<f32>
+  local.tee $1
+  local.get $1
+  f32.ne
   i32.eqz
   if
    i32.const 0
@@ -460,7 +452,9 @@
   end
   global.set $logical/F
   global.get $logical/F
-  call $~lib/number/isNaN<f64>
+  local.tee $0
+  local.get $0
+  f64.ne
   i32.eqz
   if
    i32.const 0
@@ -485,7 +479,9 @@
   end
   global.set $logical/F
   global.get $logical/F
-  call $~lib/number/isNaN<f64>
+  local.tee $0
+  local.get $0
+  f64.ne
   i32.eqz
   if
    i32.const 0
@@ -496,9 +492,9 @@
    unreachable
   end
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;) (type $FUNCSIG$v)
   call $start:logical
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;) (type $FUNCSIG$v)
  )
 )

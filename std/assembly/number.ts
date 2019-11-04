@@ -9,18 +9,20 @@ export const NaN: f64 = 0 / 0;
 @builtin @inline
 export const Infinity: f64 = 1 / 0;
 
+// @ts-ignore: decorator
+@builtin
 export function isNaN<T extends number>(value: T): bool {
-  if (!isFloat<T>()) {
-    if (!isInteger<T>()) ERROR("numeric type expected");
-  }
-  return value != value;
+  if (isFloat<T>()) return value != value;
+  if (!isInteger<T>()) ERROR("numeric type expected");
+  return false;
 }
 
+// @ts-ignore: decorator
+@builtin
 export function isFinite<T extends number>(value: T): bool {
-  if (!isFloat<T>()) {
-    if (!isInteger<T>()) ERROR("numeric type expected");
-  }
-  return value - value == 0;
+  if (isFloat<T>()) return value - value == 0;
+  if (!isInteger<T>()) ERROR("numeric type expected");
+  return true;
 }
 
 @sealed @unmanaged

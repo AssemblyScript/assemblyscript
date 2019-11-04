@@ -2,9 +2,7 @@
  (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
  (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
  (type $FUNCSIG$fff (func (param f32 f32) (result f32)))
- (type $FUNCSIG$if (func (param f32) (result i32)))
  (type $FUNCSIG$ffi (func (param f32 i32) (result f32)))
- (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$v (func))
  (memory $0 0)
  (table $0 1 funcref)
@@ -1187,12 +1185,7 @@
   local.get $16
   f64.mul
  )
- (func $~lib/number/isNaN<f32> (; 2 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
-  local.get $0
-  local.get $0
-  f32.ne
- )
- (func $~lib/math/NativeMathf.mod (; 3 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 2 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1242,7 +1235,9 @@
    i32.const 1
   else
    local.get $1
-   call $~lib/number/isNaN<f32>
+   local.tee $8
+   local.get $8
+   f32.ne
   end
   if
    local.get $0
@@ -1439,7 +1434,7 @@
   local.get $2
   f32.reinterpret_i32
  )
- (func $~lib/math/NativeMathf.scalbn (; 4 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 3 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -1529,7 +1524,7 @@
   f32.reinterpret_i32
   f32.mul
  )
- (func $~lib/math/NativeMathf.pow (; 5 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 4 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2463,12 +2458,7 @@
   local.get $11
   f32.mul
  )
- (func $~lib/number/isNaN<f64> (; 6 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  local.get $0
-  f64.ne
- )
- (func $~lib/math/NativeMath.mod (; 7 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 5 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -2518,7 +2508,9 @@
    i32.const 1
   else
    local.get $1
-   call $~lib/number/isNaN<f64>
+   local.tee $8
+   local.get $8
+   f64.ne
   end
   if
    local.get $0
@@ -2721,7 +2713,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $start:binary (; 8 ;) (type $FUNCSIG$v)
+ (func $start:binary (; 6 ;) (type $FUNCSIG$v)
   global.get $binary/i
   i32.const 1
   i32.lt_s
@@ -3329,9 +3321,9 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 7 ;) (type $FUNCSIG$v)
   call $start:binary
  )
- (func $null (; 10 ;) (type $FUNCSIG$v)
+ (func $null (; 8 ;) (type $FUNCSIG$v)
  )
 )
