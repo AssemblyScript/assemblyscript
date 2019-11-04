@@ -305,15 +305,14 @@
 
 // See: musl/tree/src/ctype/towctrans.c
 export function casemap(c: u32, dir: i32): i32 {
-  var b: u32, x: u32, y: u32, v: u32, rt: u32, xb: u32, xn: u32;
-  var r: i32, rd: i32, c0 = c as i32;
-
   if (c >= 0x20000) return c;
 
-  b = c >> 8;
+  var c0 = c as i32;
+  var b = c >> 8;
   c &= 255;
-  x = c / 3;
-  y = c % 3;
+
+  var x = c / 3;
+  var y = c % 3;
 
   const mtPtr = mt.dataStart as usize;
   const tabPtr = tab.dataStart as usize;
@@ -322,7 +321,7 @@ export function casemap(c: u32, dir: i32): i32 {
 
   /* lookup entry in two-level base-6 table */
   // v = tab[(tab[b] as i32) * 86 + x] as u32;
-  v = load<u8>(tabPtr + (load<u8>(tabPtr + b) as i32) * 86 + x) as u32;
+  var v = load<u8>(tabPtr + (load<u8>(tabPtr + b) as i32) * 86 + x) as u32;
   // v = (v * mt[y] >> 11) % 6;
   v = (v * load<i32>(mtPtr + (y << alignof<i32>())) >> 11) % 6;
 
@@ -330,9 +329,9 @@ export function casemap(c: u32, dir: i32): i32 {
 	 * a block-specific set of rules and decode the rule into
 	 * a type and a case-mapping delta. */
   // r = rules[(ruleBases[b] as u32) + v];
-  r = load<i32>(rulesPtr + ((load<u8>(ruleBasesPtr + b) as u32 + v) << alignof<i32>()));
-  rt = r & 255;
-  rd = r >> 8;
+  var r = load<i32>(rulesPtr + ((load<u8>(ruleBasesPtr + b) as u32 + v) << alignof<i32>()));
+  var rt: u32 = r & 255;
+  var rd: i32 = r >> 8;
 
   /* rules 0/1 are simple lower/upper case with a delta.
 	 * apply according to desired mapping direction. */
@@ -342,8 +341,8 @@ export function casemap(c: u32, dir: i32): i32 {
 
   /* binary search. endpoints of the binary search for
 	 * this block are stored in the rule delta field. */
-  xn = rd & 0xff;
-  xb = rd >>> 8;
+  var xn: u32 = rd & 0xff;
+  var xb: u32 = rd >>> 8;
 
   const exceptionsPtr = exceptions.dataStart as usize;
 
