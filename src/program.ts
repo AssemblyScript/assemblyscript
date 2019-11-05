@@ -999,10 +999,10 @@ export class Program extends DiagnosticEmitter {
     return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
   }
 
-  /** Requires that a non-generic global function is present and returns it. */
-  private requireFunction(name: string): Function {
+  /** Requires that a global function is present and returns it. */
+  private requireFunction(name: string, typeArguments: Type[] | null = null): Function {
     var prototype = this.require(name, ElementKind.FUNCTION_PROTOTYPE);
-    var resolved = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+    var resolved = this.resolver.resolveFunction(<FunctionPrototype>prototype, typeArguments);
     if (!resolved) throw new Error("invalid " + name);
     return resolved;
   }

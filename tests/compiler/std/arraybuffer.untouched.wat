@@ -2034,7 +2034,7 @@
   if
    i32.const 24
    i32.const 72
-   i32.const 53
+   i32.const 54
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3647,14 +3647,21 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>> (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32> | null> (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
+  i32.const 0
+  i32.eq
   if
-   nop
+   i32.const 0
+   local.set $1
+   local.get $0
+   call $~lib/rt/pure/__release
+   local.get $1
+   return
   end
   i32.const 0
   local.set $1
@@ -3663,71 +3670,76 @@
   local.get $1
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<usize> (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  if
-   nop
-  end
   i32.const 0
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null> (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
+  i32.const 0
+  i32.eq
   if
-   i32.const 1
+   i32.const 0
    local.set $1
    local.get $0
    call $~lib/rt/pure/__release
    local.get $1
    return
   end
-  i32.const 0
+  i32.const 1
   local.set $1
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  return
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array> (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array | null> (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
+  i32.const 0
+  i32.eq
   if
-   i32.const 1
+   i32.const 0
    local.set $1
    local.get $0
    call $~lib/rt/pure/__release
    local.get $1
    return
   end
-  i32.const 0
+  i32.const 1
   local.set $1
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  return
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView> (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView | null> (; 39 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
+  i32.const 0
+  i32.eq
   if
-   i32.const 1
+   i32.const 0
    local.set $1
    local.get $0
    call $~lib/rt/pure/__release
    local.get $1
    return
   end
-  i32.const 0
+  i32.const 1
   local.set $1
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  return
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 40 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3855,7 +3867,30 @@
   end
   local.get $4
  )
- (func $~lib/typedarray/Int32Array#constructor (; 43 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>> (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  i32.const 0
+  local.set $1
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+ )
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 44 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  i32.const 1
+  local.set $1
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  return
+ )
+ (func $~lib/typedarray/Int32Array#constructor (; 45 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -3871,7 +3906,19 @@
   local.set $0
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 44 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array> (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  i32.const 1
+  local.set $1
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  return
+ )
+ (func $~lib/dataview/DataView#constructor (; 47 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3948,7 +3995,7 @@
   call $~lib/rt/pure/__release
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor|trampoline (; 45 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor|trampoline (; 48 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -3973,7 +4020,19 @@
   local.get $3
   call $~lib/dataview/DataView#constructor
  )
- (func $start:std/arraybuffer (; 46 ;) (type $FUNCSIG$v)
+ (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView> (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  i32.const 1
+  local.set $1
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  return
+ )
+ (func $start:std/arraybuffer (; 50 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4194,7 +4253,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32> | null>
   i32.eqz
   i32.eqz
   if
@@ -4217,8 +4276,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
+  i32.const 1
+  call $~lib/arraybuffer/ArrayBuffer.isView<usize>
   i32.eqz
   i32.eqz
   if
@@ -4230,7 +4289,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null>
   i32.eqz
   i32.eqz
   if
@@ -4242,13 +4301,25 @@
    unreachable
   end
   i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array | null>
   i32.eqz
   i32.eqz
   if
    i32.const 0
    i32.const 280
    i32.const 44
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView | null>
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 280
+   i32.const 45
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -4270,7 +4341,7 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 47
+   i32.const 48
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -4281,7 +4352,7 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 48
+   i32.const 49
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -4295,7 +4366,7 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 49
+   i32.const 50
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -4314,7 +4385,7 @@
   if
    i32.const 0
    i32.const 280
-   i32.const 50
+   i32.const 51
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -4332,13 +4403,13 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $start (; 47 ;) (type $FUNCSIG$v)
+ (func $start (; 51 ;) (type $FUNCSIG$v)
   call $start:std/arraybuffer
  )
- (func $~lib/array/Array<i32>#__visit_impl (; 48 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#__visit_impl (; 52 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/pure/__visit (; 49 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 53 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4468,7 +4539,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 50 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 54 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
@@ -4502,6 +4573,6 @@
   end
   return
  )
- (func $null (; 51 ;) (type $FUNCSIG$v)
+ (func $null (; 55 ;) (type $FUNCSIG$v)
  )
 )

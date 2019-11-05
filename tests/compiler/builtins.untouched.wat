@@ -1,7 +1,5 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$if (func (param f32) (result i32)))
- (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
@@ -81,34 +79,10 @@
  (export "memory" (memory $0))
  (export "test" (func $builtins/test))
  (start $start)
- (func $~lib/number/isNaN<f32> (; 2 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
-  local.get $0
-  local.get $0
-  f32.ne
- )
- (func $~lib/number/isFinite<f32> (; 3 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
-  local.get $0
-  local.get $0
-  f32.sub
-  f32.const 0
-  f32.eq
- )
- (func $~lib/number/isNaN<f64> (; 4 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  local.get $0
-  f64.ne
- )
- (func $~lib/number/isFinite<f64> (; 5 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  local.get $0
-  f64.sub
-  f64.const 0
-  f64.eq
- )
- (func $start:builtins~anonymous|0 (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $start:builtins~anonymous|0 (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/atomics/Atomics.isLockFree (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/atomics/Atomics.isLockFree (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.eq
@@ -127,13 +101,13 @@
    i32.eq
   end
  )
- (func $~lib/rt/stub/__retain (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $~lib/string/String#get:length (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -141,7 +115,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 11 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 7 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -261,7 +235,7 @@
   call $~lib/rt/stub/__release
   local.get $8
  )
- (func $~lib/string/String.__eq (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -334,20 +308,22 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:builtins~anonymous|1 (; 13 ;) (type $FUNCSIG$v)
+ (func $start:builtins~anonymous|1 (; 9 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start:builtins~anonymous|2 (; 14 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $start:builtins~anonymous|2 (; 10 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   nop
  )
- (func $start:builtins (; 15 ;) (type $FUNCSIG$v)
+ (func $start:builtins (; 11 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i32)
-  (local $5 i32)
+  (local $4 f32)
+  (local $5 f64)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   i32.const 1
   i32.clz
   drop
@@ -617,7 +593,9 @@
   f32.trunc
   drop
   f32.const 1.25
-  call $~lib/number/isNaN<f32>
+  local.tee $4
+  local.get $4
+  f32.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -630,7 +608,9 @@
    unreachable
   end
   f32.const nan:0x400000
-  call $~lib/number/isNaN<f32>
+  local.tee $4
+  local.get $4
+  f32.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -643,7 +623,11 @@
    unreachable
   end
   f32.const 1.25
-  call $~lib/number/isFinite<f32>
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.const 1
   i32.eq
   i32.eqz
@@ -656,7 +640,11 @@
    unreachable
   end
   f32.const inf
-  call $~lib/number/isFinite<f32>
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.const 0
   i32.eq
   i32.eqz
@@ -669,7 +657,11 @@
    unreachable
   end
   f32.const -inf
-  call $~lib/number/isFinite<f32>
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.const 0
   i32.eq
   i32.eqz
@@ -682,7 +674,11 @@
    unreachable
   end
   f32.const nan:0x400000
-  call $~lib/number/isFinite<f32>
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.const 0
   i32.eq
   i32.eqz
@@ -729,10 +725,16 @@
   f32.trunc
   global.set $builtins/f
   f32.const 1.25
-  call $~lib/number/isNaN<f32>
+  local.tee $4
+  local.get $4
+  f32.ne
   global.set $builtins/b
   f32.const 1.25
-  call $~lib/number/isFinite<f32>
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   global.set $builtins/b
   f64.const nan:0x8000000000000
   drop
@@ -773,7 +775,9 @@
   f64.trunc
   drop
   f64.const 1.25
-  call $~lib/number/isNaN<f64>
+  local.tee $5
+  local.get $5
+  f64.ne
   i32.const 0
   i32.eq
   i32.eqz
@@ -786,7 +790,9 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  call $~lib/number/isNaN<f64>
+  local.tee $5
+  local.get $5
+  f64.ne
   i32.const 1
   i32.eq
   i32.eqz
@@ -799,7 +805,11 @@
    unreachable
   end
   f64.const 1.25
-  call $~lib/number/isFinite<f64>
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   i32.const 1
   i32.eq
   i32.eqz
@@ -812,7 +822,11 @@
    unreachable
   end
   f64.const inf
-  call $~lib/number/isFinite<f64>
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   i32.const 0
   i32.eq
   i32.eqz
@@ -825,7 +839,11 @@
    unreachable
   end
   f64.const -inf
-  call $~lib/number/isFinite<f64>
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   i32.const 0
   i32.eq
   i32.eqz
@@ -838,7 +856,11 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  call $~lib/number/isFinite<f64>
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   i32.const 0
   i32.eq
   i32.eqz
@@ -885,10 +907,16 @@
   f64.trunc
   global.set $builtins/F
   f64.const 1.25
-  call $~lib/number/isNaN<f64>
+  local.tee $5
+  local.get $5
+  f64.ne
   global.set $builtins/b
   f64.const 1.25
-  call $~lib/number/isFinite<f64>
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   global.set $builtins/b
   f64.const 0
   f64.const 1
@@ -1151,7 +1179,9 @@
   i32.const 4
   drop
   f32.const nan:0x400000
-  call $~lib/number/isNaN<f32>
+  local.tee $4
+  local.get $4
+  f32.ne
   i32.eqz
   if
    i32.const 0
@@ -1162,7 +1192,9 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  call $~lib/number/isNaN<f64>
+  local.tee $5
+  local.get $5
+  f64.ne
   i32.eqz
   if
    i32.const 0
@@ -1173,7 +1205,11 @@
    unreachable
   end
   f32.const nan:0x400000
-  call $~lib/number/isFinite<f32>
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.eqz
   i32.eqz
   if
@@ -1185,7 +1221,11 @@
    unreachable
   end
   f32.const inf
-  call $~lib/number/isFinite<f32>
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.eqz
   i32.eqz
   if
@@ -1197,7 +1237,11 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  call $~lib/number/isFinite<f64>
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   i32.eqz
   i32.eqz
   if
@@ -1209,7 +1253,11 @@
    unreachable
   end
   f64.const inf
-  call $~lib/number/isFinite<f64>
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   i32.eqz
   i32.eqz
   if
@@ -1221,7 +1269,11 @@
    unreachable
   end
   f32.const 0
-  call $~lib/number/isFinite<f32>
+  local.tee $4
+  local.get $4
+  f32.sub
+  f32.const 0
+  f32.eq
   i32.eqz
   if
    i32.const 0
@@ -1232,7 +1284,11 @@
    unreachable
   end
   f64.const 0
-  call $~lib/number/isFinite<f64>
+  local.tee $5
+  local.get $5
+  f64.sub
+  f64.const 0
+  f64.eq
   i32.eqz
   if
    i32.const 0
@@ -1513,22 +1569,22 @@
   i32.const 0
   local.set $1
   i32.const 12
-  local.set $4
-  i32.const 25
-  local.set $5
-  i32.const 25
   local.set $6
+  i32.const 23
+  local.set $7
+  i32.const 23
+  local.set $8
   i32.const 104
   i32.const 5
   local.get $0
   f64.convert_i32_u
   local.get $1
   f64.convert_i32_u
-  local.get $4
-  f64.convert_i32_u
-  local.get $5
-  f64.convert_i32_u
   local.get $6
+  f64.convert_i32_u
+  local.get $7
+  f64.convert_i32_u
+  local.get $8
   f64.convert_i32_u
   call $~lib/builtins/trace
   local.get $0
@@ -1544,7 +1600,7 @@
    unreachable
   end
   local.get $0
-  local.get $4
+  local.get $6
   i32.ne
   i32.eqz
   if
@@ -1555,7 +1611,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $6
   i32.const 12
   i32.eq
   i32.eqz
@@ -1567,8 +1623,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
-  local.get $6
+  local.get $7
+  local.get $8
   i32.eq
   i32.eqz
   if
@@ -1820,12 +1876,12 @@
    unreachable
   end
  )
- (func $builtins/test (; 16 ;) (type $FUNCSIG$v)
+ (func $builtins/test (; 12 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start (; 17 ;) (type $FUNCSIG$v)
+ (func $start (; 13 ;) (type $FUNCSIG$v)
   call $start:builtins
  )
- (func $null (; 18 ;) (type $FUNCSIG$v)
+ (func $null (; 14 ;) (type $FUNCSIG$v)
  )
 )

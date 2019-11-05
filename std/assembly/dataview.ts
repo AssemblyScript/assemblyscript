@@ -45,7 +45,7 @@ export class DataView {
   getFloat64(byteOffset: i32, littleEndian: boolean = false): f64 {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 8 > this.byteLength)
-     ) throw new RangeError(E_INDEXOUTOFRANGE);
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     return littleEndian
       ? load<f64>(this.dataStart + <usize>byteOffset)
       : reinterpret<f64>(
@@ -63,7 +63,7 @@ export class DataView {
   getInt16(byteOffset: i32, littleEndian: boolean = false): i16 {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 2 > this.byteLength)
-     ) throw new RangeError(E_INDEXOUTOFRANGE);
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i16 = load<i16>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i16>(result);
   }
@@ -71,7 +71,7 @@ export class DataView {
   getInt32(byteOffset: i32, littleEndian: boolean = false): i32 {
     if (
       (byteOffset >>> 31) | i32(byteOffset + 4 > this.byteLength)
-     ) throw new RangeError(E_INDEXOUTOFRANGE);
+    ) throw new RangeError(E_INDEXOUTOFRANGE);
     var result: i32 = load<i32>(this.dataStart + <usize>byteOffset);
     return littleEndian ? result : bswap<i32>(result);
   }

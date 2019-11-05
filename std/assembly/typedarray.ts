@@ -1577,7 +1577,22 @@ function INCLUDES<TArray extends ArrayBufferView, T>(
   searchElement: T,
   fromIndex: i32,
 ): bool {
-  return INDEX_OF<TArray, T>(array, searchElement, fromIndex) >= 0;
+  if (isFloat<T>()) {
+    let index: isize = fromIndex;
+    let length: isize = array.length;
+    if (length == 0 || index >= length) return false;
+    if (index < 0) index = max(length + index, 0);
+    let dataStart = array.dataStart;
+    while (index < length) {
+      let elem = load<T>(dataStart + (index << alignof<T>()));
+      // @ts-ignore
+      if (elem == searchElement || isNaN(elem) & isNaN(searchElement)) return true;
+      ++index;
+    }
+    return false;
+  } else {
+    return INDEX_OF<TArray, T>(array, searchElement, fromIndex) >= 0;
+  }
 }
 
 // @ts-ignore: decorator

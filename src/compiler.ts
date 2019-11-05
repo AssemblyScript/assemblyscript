@@ -1161,11 +1161,12 @@ export class Compiler extends DiagnosticEmitter {
         let canOverflow = flow.canOverflow(expr, returnType);
         let nonNull = flow.isNonnull(expr, returnType);
         if (stmts.length > indexBefore) {
-          let temp = flow.getAndFreeTempLocal(returnType);
+          let temp = flow.getTempLocal(returnType);
           if (!canOverflow) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
           if (nonNull) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
           stmts[indexBefore - 1] = module.local_set(temp.index, expr);
           stmts.push(module.local_get(temp.index, returnType.toNativeType()));
+          flow.freeTempLocal(temp);
         }
         if (!canOverflow) flow.set(FlowFlags.RETURNS_WRAPPED);
         if (nonNull) flow.set(FlowFlags.RETURNS_NONNULL);
@@ -1288,7 +1289,7 @@ export class Compiler extends DiagnosticEmitter {
               )
             )
           );
-          flow.setLocalFlag(index, LocalFlags.RETAINED);
+          flow.setLocalFlag(index, LocalFlags.RETAINED | LocalFlags.PARAMETER);
         }
       }
 
@@ -2252,8 +2253,10 @@ export class Compiler extends DiagnosticEmitter {
       if (!this.skippedAutoreleases.has(expr)) {
         if (returnType.isManaged) {
           if (getExpressionId(expr) == ExpressionId.LocalGet) {
-            if (flow.isAnyLocalFlag(getLocalGetIndex(expr), LocalFlags.ANY_RETAINED)) {
-              flow.unsetLocalFlag(getLocalGetIndex(expr), LocalFlags.ANY_RETAINED);
+            let index = getLocalGetIndex(expr);
+            if (flow.isAnyLocalFlag(index, LocalFlags.ANY_RETAINED)) {
+              flow.unsetLocalFlag(index, LocalFlags.ANY_RETAINED);
+              flow.setLocalFlag(index, LocalFlags.RETURNED);
               this.skippedAutoreleases.add(expr);
             }
           }
@@ -2280,12 +2283,13 @@ export class Compiler extends DiagnosticEmitter {
     if (returnType.isManaged && !this.skippedAutoreleases.has(expr)) expr = this.makeRetain(expr);
 
     if (returnType != Type.void && stmts.length) {
-      let temp = flow.getAndFreeTempLocal(returnType);
+      let temp = flow.getTempLocal(returnType);
       if (flow.isNonnull(expr, returnType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
       stmts.unshift(
         module.local_set(temp.index, expr)
       );
       expr = module.local_get(temp.index, returnType.toNativeType());
+      flow.freeTempLocal(temp);
     }
     flow.freeScopedLocals();
 
@@ -3173,14 +3177,15 @@ export class Compiler extends DiagnosticEmitter {
         } else if (!this.options.noAssert) {
           let module = this.module;
           let flow = this.currentFlow;
-          let tempIndex = flow.getAndFreeTempLocal(type).index;
-          if (!flow.canOverflow(expr, type)) flow.setLocalFlag(tempIndex, LocalFlags.WRAPPED);
-          flow.setLocalFlag(tempIndex, LocalFlags.NONNULL);
+          let temp = flow.getTempLocal(type);
+          if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+          flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
           expr = module.if(
-            module.local_tee(tempIndex, expr),
-            module.local_get(tempIndex, type.toNativeType()),
+            module.local_tee(temp.index, expr),
+            module.local_get(temp.index, type.toNativeType()),
             module.unreachable()
           );
+          flow.freeTempLocal(temp);
         }
         this.currentType = this.currentType.nonNullableType;
         return expr;
@@ -5054,6 +5059,7 @@ export class Compiler extends DiagnosticEmitter {
               rightExpr,
               module.local_get(tempLocal.index, leftType.toNativeType())
             );
+            flow.freeTempLocal(tempLocal);
           }
         }
         this.currentType = leftType;
@@ -5146,14 +5152,15 @@ export class Compiler extends DiagnosticEmitter {
 
           // if not possible, tee left to a temp. local
           } else {
-            let tempLocal = flow.getAndFreeTempLocal(leftType);
-            if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.WRAPPED);
-            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.NONNULL);
+            let temp = flow.getTempLocal(leftType);
+            if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
             expr = module.if(
-              this.makeIsTrueish(module.local_tee(tempLocal.index, leftExpr), leftType),
-              module.local_get(tempLocal.index, leftType.toNativeType()),
+              this.makeIsTrueish(module.local_tee(temp.index, leftExpr), leftType),
+              module.local_get(temp.index, leftType.toNativeType()),
               rightExpr
             );
+            flow.freeTempLocal(temp);
           }
         }
         this.currentType = leftType;
@@ -5435,17 +5442,18 @@ export class Compiler extends DiagnosticEmitter {
         let returnType = getterInstance.signature.returnType;
         let nativeReturnType = returnType.toNativeType();
         let thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
-        let tempLocal = flow.getAndFreeTempLocal(returnType);
-        let tempLocalIndex = tempLocal.index;
-        return module.block(null, [
+        let temp = flow.getTempLocal(returnType);
+        let ret = module.block(null, [
           this.makeCallDirect(setterInstance, [ // set and remember the target
-            module.local_tee(tempLocalIndex, thisExpr),
+            module.local_tee(temp.index, thisExpr),
             valueExpr
           ], valueExpression),
           this.makeCallDirect(getterInstance, [ // get from remembered target
-            module.local_get(tempLocalIndex, nativeReturnType)
+            module.local_get(temp.index, nativeReturnType)
           ], valueExpression)
         ], nativeReturnType);
+        flow.freeTempLocal(temp);
+        return ret;
       }
       case ElementKind.INDEXSIGNATURE: {
         if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, flow); // (*)
@@ -5473,21 +5481,24 @@ export class Compiler extends DiagnosticEmitter {
         let thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
         let elementExpr = this.compileExpression(assert(indexExpression), Type.i32, Constraints.CONV_IMPLICIT);
         if (tee) {
-          let tempLocalTarget = flow.getTempLocal(targetType);
-          let tempLocalElement = flow.getAndFreeTempLocal(this.currentType);
+          let tempTarget = flow.getTempLocal(targetType);
+          let tempElement = flow.getTempLocal(this.currentType);
           let returnType = indexedGet.signature.returnType;
-          flow.freeTempLocal(tempLocalTarget);
-          return module.block(null, [
+          flow.freeTempLocal(tempTarget);
+          let ret = module.block(null, [
             this.makeCallDirect(indexedSet, [
-              module.local_tee(tempLocalTarget.index, thisExpr),
-              module.local_tee(tempLocalElement.index, elementExpr),
+              module.local_tee(tempTarget.index, thisExpr),
+              module.local_tee(tempElement.index, elementExpr),
               valueExpr
             ], valueExpression),
             this.makeCallDirect(indexedGet, [
-              module.local_get(tempLocalTarget.index, tempLocalTarget.type.toNativeType()),
-              module.local_get(tempLocalElement.index, tempLocalElement.type.toNativeType())
+              module.local_get(tempTarget.index, tempTarget.type.toNativeType()),
+              module.local_get(tempElement.index, tempElement.type.toNativeType())
             ], valueExpression)
           ], returnType.toNativeType());
+          flow.freeTempLocal(tempElement);
+          flow.freeTempLocal(tempTarget);
+          return ret;
         } else {
           return this.makeCallDirect(indexedSet, [
             thisExpr,
@@ -6178,23 +6189,18 @@ export class Compiler extends DiagnosticEmitter {
       let initExpr = this.compileExpression(
         assert(instance.prototype.functionTypeNode.parameters[i].initializer),
         initType,
-        Constraints.CONV_IMPLICIT
+        Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
       );
       let argumentLocal = flow.addScopedLocal(signature.getParameterName(i), initType);
       if (!flow.canOverflow(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.WRAPPED);
       if (flow.isNonnull(initExpr, initType)) flow.setLocalFlag(argumentLocal.index, LocalFlags.NONNULL);
       if (initType.isManaged) {
         flow.setLocalFlag(argumentLocal.index, LocalFlags.RETAINED);
-        body.push(
-          module.local_set(argumentLocal.index,
-            this.makeRetain(initExpr)
-          )
-        );
-      } else {
-        body.push(
-          module.local_set(argumentLocal.index, initExpr)
-        );
+        if (!this.skippedAutoreleases.has(initExpr)) initExpr = this.makeRetain(initExpr);
       }
+      body.push(
+        module.local_set(argumentLocal.index, initExpr)
+      );
     }
 
     // Compile the called function's body in the scope of the inlined flow
@@ -6544,7 +6550,7 @@ export class Compiler extends DiagnosticEmitter {
     this.performAutoreleases(flow, stmts, clearFlags);
     if (stmts.length > lengthBefore) {
       let nativeType = valueType.toNativeType();
-      let temp = flow.getAndFreeTempLocal(valueType);
+      let temp = flow.getTempLocal(valueType);
       if (!flow.canOverflow(valueExpr, valueType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
       if (flow.isNonnull(valueExpr, valueType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
       let module = this.module;
@@ -6552,7 +6558,9 @@ export class Compiler extends DiagnosticEmitter {
       stmts.push(
         module.local_get(temp.index, nativeType) // append get
       );
-      return module.block(null, stmts, nativeType);
+      let ret = module.block(null, stmts, nativeType);
+      flow.freeTempLocal(temp);
+      return ret;
     } else if (stmts.length > 1) {
       stmts[lengthBefore - 1] = valueExpr; // nop -> value
       return this.module.block(null, stmts, valueType.toNativeType());
@@ -7275,22 +7283,24 @@ export class Compiler extends DiagnosticEmitter {
         let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
           let flow = this.currentFlow;
-          let tempLocal = flow.getAndFreeTempLocal(actualType);
+          let temp = flow.getTempLocal(actualType);
           let instanceofInstance = assert(program.instanceofInstance);
           this.compileFunction(instanceofInstance);
-          return module.if(
+          let ret = module.if(
             module.unary(
               nativeSizeType == NativeType.I64
                 ? UnaryOp.EqzI64
                 : UnaryOp.EqzI32,
-              module.local_tee(tempLocal.index, expr),
+              module.local_tee(temp.index, expr),
             ),
             module.i32(0),
             this.makeCallDirect(instanceofInstance, [
-              module.local_get(tempLocal.index, nativeSizeType),
+              module.local_get(temp.index, nativeSizeType),
               module.i32(expectedType.classReference!.id)
             ], expression)
           );
+          flow.freeTempLocal(temp);
+          return ret;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -7317,22 +7327,24 @@ export class Compiler extends DiagnosticEmitter {
           // perform null checking, which would error earlier when checking
           // uninitialized (thus zero) `var a: A` to be an instance of something.
           let flow = this.currentFlow;
-          let tempLocal = flow.getAndFreeTempLocal(actualType);
+          let temp = flow.getTempLocal(actualType);
           let instanceofInstance = assert(program.instanceofInstance);
           this.compileFunction(instanceofInstance);
-          return module.if(
+          let ret = module.if(
             module.unary(
               nativeSizeType == NativeType.I64
                 ? UnaryOp.EqzI64
                 : UnaryOp.EqzI32,
-              module.local_tee(tempLocal.index, expr),
+              module.local_tee(temp.index, expr),
             ),
             module.i32(0),
             this.makeCallDirect(instanceofInstance, [
-              module.local_get(tempLocal.index, nativeSizeType),
+              module.local_get(temp.index, nativeSizeType),
               module.i32(expectedType.classReference!.id)
             ], expression)
           );
+          flow.freeTempLocal(temp);
+          return ret;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -8566,7 +8578,7 @@ export class Compiler extends DiagnosticEmitter {
           // allow '!' for references even without an overload
         }
 
-        expr = this.makeIsFalseish(expr, this.currentType);
+        expr = module.unary(UnaryOp.EqzI32, this.makeIsTrueish(expr, this.currentType));
         this.currentType = Type.bool;
         break;
       }
@@ -8818,46 +8830,6 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Specialized code generation ==============================================================
 
-  /** Creates a comparison whether an expression is 'false' in a broader sense. */
-  makeIsFalseish(expr: ExpressionRef, type: Type): ExpressionRef {
-    var module = this.module;
-    switch (type.kind) {
-      case TypeKind.I8:
-      case TypeKind.I16:
-      case TypeKind.U8:
-      case TypeKind.U16:
-      case TypeKind.BOOL: {
-        expr = this.ensureSmallIntegerWrap(expr, type);
-        // fall-through
-      }
-      case TypeKind.I32:
-      case TypeKind.U32: {
-        return module.unary(UnaryOp.EqzI32, expr);
-      }
-      case TypeKind.I64:
-      case TypeKind.U64: {
-        return module.unary(UnaryOp.EqzI64, expr);
-      }
-      case TypeKind.USIZE: if (this.skippedAutoreleases.has(expr)) expr = this.makeAutorelease(expr);
-      case TypeKind.ISIZE: {
-        return module.unary(type.size == 64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32, expr);
-      }
-      case TypeKind.F32: {
-        return module.binary(BinaryOp.EqF32, expr, module.f32(0));
-      }
-      case TypeKind.F64: {
-        return module.binary(BinaryOp.EqF64, expr, module.f64(0));
-      }
-      // case TypeKind.ANYREF: {
-      //   TODO: ref.is_null
-      // }
-      default: {
-        assert(false);
-        return module.i32(1);
-      }
-    }
-  }
-
   /** Creates a comparison whether an expression is 'true' in a broader sense. */
   makeIsTrueish(expr: ExpressionRef, type: Type): ExpressionRef {
     var module = this.module;
@@ -8885,10 +8857,32 @@ export class Compiler extends DiagnosticEmitter {
           : expr;
       }
       case TypeKind.F32: {
-        return module.binary(BinaryOp.NeF32, expr, module.f32(0));
+        // (x != 0.0) & (x == x)
+        let flow = this.currentFlow;
+        let temp = flow.getTempLocal(Type.f32);
+        let ret = module.binary(BinaryOp.AndI32,
+          module.binary(BinaryOp.NeF32, module.local_tee(temp.index, expr), module.f32(0)),
+          module.binary(BinaryOp.EqF32,
+            module.local_get(temp.index, NativeType.F32),
+            module.local_get(temp.index, NativeType.F32)
+          )
+        );
+        flow.freeTempLocal(temp);
+        return ret;
       }
       case TypeKind.F64: {
-        return module.binary(BinaryOp.NeF64, expr, module.f64(0));
+        // (x != 0.0) & (x == x)
+        let flow = this.currentFlow;
+        let temp = flow.getTempLocal(Type.f64);
+        let ret = module.binary(BinaryOp.AndI32,
+          module.binary(BinaryOp.NeF64, module.local_tee(temp.index, expr), module.f64(0)),
+          module.binary(BinaryOp.EqF64,
+            module.local_get(temp.index, NativeType.F64),
+            module.local_get(temp.index, NativeType.F64)
+          )
+        );
+        flow.freeTempLocal(temp);
+        return ret;
       }
       // case TypeKind.ANYREF: {
       //   TODO: !ref.is_null
