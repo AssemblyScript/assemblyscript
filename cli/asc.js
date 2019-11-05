@@ -599,27 +599,26 @@ exports.main = function main(argv, options, callback) {
   module.setShrinkLevel(shrinkLevel);
   module.setDebugInfo(args.debug);
 
-  var runPasses = [];
+  const runPasses = [];
   if (args.runPasses) {
     if (typeof args.runPasses === "string") {
       args.runPasses = args.runPasses.split(",");
     }
     if (args.runPasses.length) {
       args.runPasses.forEach(pass => {
-        if (runPasses.indexOf(pass) < 0)
+        if (runPasses.indexOf(pass = pass.trim()) < 0)
           runPasses.push(pass);
       });
     }
   }
 
   function doOptimize() {
+    const hasARC = args.runtime == "half" || args.runtime == "full";
+    const passes = [];
+    function add(pass) { passes.push(pass); }
 
     // Optimize the module if requested
     if (optimizeLevel > 0 || shrinkLevel > 0) {
-      let hasARC = args.runtime == "half" || args.runtime == "full";
-      function add(pass) {
-        module.runPasses([ pass ]);
-      }
       // Binaryen's default passes with Post-AssemblyScript passes added.
       // see: Binaryen/src/pass.cpp
 
@@ -714,10 +713,8 @@ exports.main = function main(argv, options, callback) {
       }
     }
 
-    // Run additional passes if requested
-    if (runPasses.length) {
-      module.runPasses(runPasses.map(pass => pass.trim()));
-    }
+    // Append additional passes if requested and execute
+    module.runPasses(passes.concat(runPasses));
   }
 
   stats.optimizeTime += measure(() => {
