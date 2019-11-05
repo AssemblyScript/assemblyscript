@@ -1235,8 +1235,7 @@
    i32.const 1
   else
    local.get $1
-   local.tee $8
-   local.get $8
+   local.get $1
    f32.ne
   end
   if
@@ -2508,8 +2507,7 @@
    i32.const 1
   else
    local.get $1
-   local.tee $8
-   local.get $8
+   local.get $1
    f64.ne
   end
   if

@@ -18398,8 +18398,7 @@
    i32.const 1
   else
    local.get $1
-   local.tee $8
-   local.get $8
+   local.get $1
    f32.ne
   end
   if
@@ -18800,8 +18799,7 @@
    i32.const 1
   else
    local.get $1
-   local.tee $8
-   local.get $8
+   local.get $1
    f64.ne
   end
   if
@@ -31946,7 +31944,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 f64)
-  (local $11 f64)
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float64Array,f64>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -32018,12 +32015,10 @@
       i32.const 1
      else
       local.get $10
-      local.tee $11
-      local.get $11
+      local.get $10
       f64.ne
       local.get $4
-      local.tee $11
-      local.get $11
+      local.get $4
       f64.ne
       i32.and
      end
@@ -32060,7 +32055,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 f32)
-  (local $11 f32)
   block $~lib/typedarray/INCLUDES<~lib/typedarray/Float32Array,f32>|inlined.0 (result i32)
    local.get $0
    call $~lib/rt/pure/__retain
@@ -32132,12 +32126,10 @@
       i32.const 1
      else
       local.get $10
-      local.tee $11
-      local.get $11
+      local.get $10
       f32.ne
       local.get $4
-      local.tee $11
-      local.get $11
+      local.get $4
       f32.ne
       i32.and
      end
@@ -36909,10 +36901,9 @@
   i32.add
  )
  (func $~lib/util/number/dtoa (; 545 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  (local $1 f64)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   f64.const 0
   f64.eq
@@ -36922,16 +36913,14 @@
    return
   end
   local.get $0
-  local.tee $1
-  local.get $1
+  local.get $0
   f64.sub
   f64.const 0
   f64.eq
   i32.eqz
   if
    local.get $0
-   local.tee $1
-   local.get $1
+   local.get $0
    f64.ne
    if
     i32.const 2280
@@ -36952,32 +36941,31 @@
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
-  local.set $2
-  local.get $2
+  local.set $1
+  local.get $1
   local.get $0
   call $~lib/util/number/dtoa_core
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.const 28
   i32.eq
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
    return
   end
-  local.get $2
+  local.get $1
   i32.const 0
-  local.get $3
-  call $~lib/string/String#substring
-  local.set $4
   local.get $2
+  call $~lib/string/String#substring
+  local.set $3
+  local.get $1
   call $~lib/rt/tlsf/__free
-  local.get $4
+  local.get $3
  )
  (func $~lib/util/number/dtoa_stream (; 546 ;) (type $FUNCSIG$iiid) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
-  (local $3 f64)
+  (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -37001,16 +36989,14 @@
    return
   end
   local.get $2
-  local.tee $3
-  local.get $3
+  local.get $2
   f64.sub
   f64.const 0
   f64.eq
   i32.eqz
   if
    local.get $2
-   local.tee $3
-   local.get $3
+   local.get $2
    f64.ne
    if
     local.get $0
@@ -37028,21 +37014,21 @@
     local.get $2
     f64.const 0
     f64.lt
-    local.set $4
+    local.set $3
     i32.const 8
-    local.get $4
+    local.get $3
     i32.add
-    local.set $5
+    local.set $4
     local.get $0
     i32.const 2304
     i32.const 2344
-    local.get $4
+    local.get $3
     select
-    local.get $5
+    local.get $4
     i32.const 1
     i32.shl
     call $~lib/memory/memory.copy
-    local.get $5
+    local.get $4
     return
    end
    unreachable

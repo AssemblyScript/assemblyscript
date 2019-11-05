@@ -3452,10 +3452,9 @@
   end
  )
  (func $~lib/util/number/dtoa (; 22 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  (local $1 f64)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   f64.const 0
   f64.eq
@@ -3465,16 +3464,14 @@
    return
   end
   local.get $0
-  local.tee $1
-  local.get $1
+  local.get $0
   f64.sub
   f64.const 0
   f64.eq
   i32.eqz
   if
    local.get $0
-   local.tee $1
-   local.get $1
+   local.get $0
    f64.ne
    if
     i32.const 264
@@ -3495,27 +3492,27 @@
   i32.shl
   i32.const 1
   call $~lib/rt/stub/__alloc
-  local.set $2
-  local.get $2
+  local.set $1
+  local.get $1
   local.get $0
   call $~lib/util/number/dtoa_core
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   i32.const 28
   i32.eq
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/stub/__retain
    return
   end
-  local.get $2
+  local.get $1
   i32.const 0
-  local.get $3
-  call $~lib/string/String#substring
-  local.set $4
   local.get $2
+  call $~lib/string/String#substring
+  local.set $3
+  local.get $1
   call $~lib/rt/stub/__free
-  local.get $4
+  local.get $3
  )
  (func $~lib/number/F32#toString (; 23 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0

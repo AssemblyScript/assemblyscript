@@ -53,7 +53,9 @@ import {
   getConstValueF64,
   Relooper,
   RelooperBlockRef,
-  SIMDLoadOp
+  SIMDLoadOp,
+  getLocalGetIndex,
+  hasSideEffects
 } from "./module";
 
 import {
@@ -4174,33 +4176,66 @@ export function compileCall(
         : compiler.compileExpression(operands[0], Type.auto);
       let type = compiler.currentType;
       compiler.currentType = Type.bool;
-      // (t = arg0) != t
-      switch (type.kind) {
-        case TypeKind.F32: {
-          let flow = compiler.currentFlow;
-          let temp = flow.getTempLocal(Type.f32);
-          let ret = module.binary(BinaryOp.NeF32,
-            module.local_tee(temp.index, arg0),
-            module.local_get(temp.index, NativeType.F32)
-          );
-          flow.freeTempLocal(temp);
-          return ret;
-        }
-        case TypeKind.F64: {
-          let flow = compiler.currentFlow;
-          let temp = flow.getTempLocal(Type.f64);
-          let ret = module.binary(BinaryOp.NeF64,
-            module.local_tee(temp.index, arg0),
-            module.local_get(temp.index, NativeType.F64)
-          );
-          flow.freeTempLocal(temp);
-          return ret;
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          // never NaN
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.I64:
+          case TypeKind.ISIZE:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.U64:
+          case TypeKind.USIZE: {
+            return hasSideEffects(arg0)
+              ? module.block(null, [
+                  module.drop(arg0),
+                  module.i32(0)
+                ], NativeType.I32)
+              : module.i32(0);
+          }
+          // (t = arg0) != t
+          case TypeKind.F32: {
+            if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+              return module.binary(BinaryOp.NeF32,
+                arg0,
+                module.local_get(getLocalGetIndex(arg0), NativeType.F32)
+              );
+            }
+            let flow = compiler.currentFlow;
+            let temp = flow.getTempLocal(Type.f32);
+            let ret = module.binary(BinaryOp.NeF32,
+              module.local_tee(temp.index, arg0),
+              module.local_get(temp.index, NativeType.F32)
+            );
+            flow.freeTempLocal(temp);
+            return ret;
+          }
+          case TypeKind.F64: {
+            if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+              return module.binary(BinaryOp.NeF64,
+                arg0,
+                module.local_get(getLocalGetIndex(arg0), NativeType.F64)
+              );
+            }
+            let flow = compiler.currentFlow;
+            let temp = flow.getTempLocal(Type.f64);
+            let ret = module.binary(BinaryOp.NeF64,
+              module.local_tee(temp.index, arg0),
+              module.local_get(temp.index, NativeType.F64)
+            );
+            flow.freeTempLocal(temp);
+            return ret;
+          }
         }
       }
-      return module.block(null, [
-        module.drop(arg0),
-        module.i32(0)
-      ], NativeType.I32);
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "isNaN", type.toString()
+      );
+      return module.unreachable();
     }
     case BuiltinSymbols.isFinite: {
       if (
@@ -4215,39 +4250,78 @@ export function compileCall(
         : compiler.compileExpression(operands[0], Type.auto);
       let type = compiler.currentType;
       compiler.currentType = Type.bool;
-      // (t = arg0) - t == 0
-      switch (type.kind) {
-        case TypeKind.F32: {
-          let flow = compiler.currentFlow;
-          let temp = flow.getTempLocal(Type.f32);
-          let ret = module.binary(BinaryOp.EqF32,
-            module.binary(BinaryOp.SubF32,
-              module.local_tee(temp.index, arg0),
-              module.local_get(temp.index, NativeType.F32)
-            ),
-            module.f32(0)
-          );
-          flow.freeTempLocal(temp);
-          return ret;
-        }
-        case TypeKind.F64: {
-          let flow = compiler.currentFlow;
-          let temp = flow.getTempLocal(Type.f64);
-          let ret = module.binary(BinaryOp.EqF64,
-            module.binary(BinaryOp.SubF64,
-              module.local_tee(temp.index, arg0),
-              module.local_get(temp.index, NativeType.F64)
-            ),
-            module.f64(0)
-          );
-          flow.freeTempLocal(temp);
-          return ret;
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          // always finite
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.I64:
+          case TypeKind.ISIZE:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.U64:
+          case TypeKind.USIZE: {
+            return hasSideEffects(arg0)
+              ? module.block(null, [
+                  module.drop(arg0),
+                  module.i32(1)
+                ], NativeType.I32)
+              : module.i32(1);
+          }
+          // (t = arg0) - t == 0
+          case TypeKind.F32: {
+            if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+              return module.binary(BinaryOp.EqF32,
+                module.binary(BinaryOp.SubF32,
+                  arg0,
+                  module.local_get(getLocalGetIndex(arg0), NativeType.F32)
+                ),
+                module.f32(0)
+              );
+            }
+            let flow = compiler.currentFlow;
+            let temp = flow.getTempLocal(Type.f32);
+            let ret = module.binary(BinaryOp.EqF32,
+              module.binary(BinaryOp.SubF32,
+                module.local_tee(temp.index, arg0),
+                module.local_get(temp.index, NativeType.F32)
+              ),
+              module.f32(0)
+            );
+            flow.freeTempLocal(temp);
+            return ret;
+          }
+          case TypeKind.F64: {
+            if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+              return module.binary(BinaryOp.EqF64,
+                module.binary(BinaryOp.SubF64,
+                  arg0,
+                  module.local_get(getLocalGetIndex(arg0), NativeType.F64)
+                ),
+                module.f64(0)
+              );
+            }
+            let flow = compiler.currentFlow;
+            let temp = flow.getTempLocal(Type.f64);
+            let ret = module.binary(BinaryOp.EqF64,
+              module.binary(BinaryOp.SubF64,
+                module.local_tee(temp.index, arg0),
+                module.local_get(temp.index, NativeType.F64)
+              ),
+              module.f64(0)
+            );
+            flow.freeTempLocal(temp);
+            return ret;
+          }
         }
       }
-      return module.block(null, [
-        module.drop(arg0),
-        module.i32(1)
-      ], NativeType.I32);
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "isFinite", type.toString()
+      );
+      return module.unreachable();
     }
   }
 

@@ -67,8 +67,7 @@
    i32.const 1
   else
    local.get $1
-   local.tee $8
-   local.get $8
+   local.get $1
    f64.ne
   end
   if
@@ -273,15 +272,12 @@
   f64.reinterpret_i64
  )
  (func $std/mod/check<f64> (; 3 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
-  (local $2 f64)
   local.get $1
-  local.tee $2
-  local.get $2
+  local.get $1
   f64.ne
   if
    local.get $0
-   local.tee $2
-   local.get $2
+   local.get $0
    f64.ne
    return
   end
@@ -375,8 +371,7 @@
    i32.const 1
   else
    local.get $1
-   local.tee $8
-   local.get $8
+   local.get $1
    f32.ne
   end
   if
@@ -575,15 +570,12 @@
   f32.reinterpret_i32
  )
  (func $std/mod/check<f32> (; 6 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
-  (local $2 f32)
   local.get $1
-  local.tee $2
-  local.get $2
+  local.get $1
   f32.ne
   if
    local.get $0
-   local.tee $2
-   local.get $2
+   local.get $0
    f32.ne
    return
   end

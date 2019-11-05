@@ -11,19 +11,11 @@ export const Infinity: f64 = 1 / 0;
 
 // @ts-ignore: decorator
 @builtin
-export function isNaN<T extends number>(value: T): bool {
-  if (isFloat<T>()) return value != value;
-  if (!isInteger<T>()) ERROR("numeric type expected");
-  return false;
-}
+export declare function isNaN<T extends number>(value: T): bool;
 
 // @ts-ignore: decorator
 @builtin
-export function isFinite<T extends number>(value: T): bool {
-  if (isFloat<T>()) return value - value == 0;
-  if (!isInteger<T>()) ERROR("numeric type expected");
-  return true;
-}
+export declare function isFinite<T extends number>(value: T): bool;
 
 @sealed @unmanaged
 export abstract class I8 {

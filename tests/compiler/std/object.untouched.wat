@@ -20,7 +20,6 @@
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/object/Object.is<f64> (; 1 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
-  (local $2 f64)
   local.get $0
   local.get $1
   f64.eq
@@ -33,18 +32,15 @@
    return
   end
   local.get $0
-  local.tee $2
-  local.get $2
+  local.get $0
   f64.ne
   local.get $1
-  local.tee $2
-  local.get $2
+  local.get $1
   f64.ne
   i32.and
   return
  )
  (func $~lib/object/Object.is<f32> (; 2 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
-  (local $2 f32)
   local.get $0
   local.get $1
   f32.eq
@@ -57,12 +53,10 @@
    return
   end
   local.get $0
-  local.tee $2
-  local.get $2
+  local.get $0
   f32.ne
   local.get $1
-  local.tee $2
-  local.get $2
+  local.get $1
   f32.ne
   i32.and
   return
