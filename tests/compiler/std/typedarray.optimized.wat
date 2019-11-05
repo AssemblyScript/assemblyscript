@@ -9988,8 +9988,7 @@
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64>~anonymous|1 (; 208 ;) (type $FUNCSIG$ijii) (param $0 i64) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
-  i64.const 0
-  i64.eq
+  i64.eqz
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64> (; 209 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -11708,8 +11707,7 @@
   local.get $0
   i64.const 2
   i64.rem_s
-  i64.const 0
-  i64.eq
+  i64.eqz
  )
  (func $~lib/typedarray/Int64Array#every (; 261 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -11803,8 +11801,7 @@
   local.get $0
   i64.const 2
   i64.rem_u
-  i64.const 0
-  i64.eq
+  i64.eqz
  )
  (func $std/typedarray/testArrayEvery<~lib/typedarray/Uint64Array,u64> (; 264 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -12140,8 +12137,7 @@
     return
    end
    local.get $2
-   i64.const 0
-   i64.eq
+   i64.eqz
    if (result i64)
     local.get $1
     i64.const 0
@@ -23363,8 +23359,7 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    i32.const 1720
    return
@@ -23432,8 +23427,7 @@
   i32.add
   local.set $0
   local.get $2
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    local.get $0
    i32.const 48
@@ -23669,8 +23663,7 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    i32.const 1720
    return
@@ -23717,8 +23710,7 @@
   i32.add
   local.set $0
   local.get $2
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    local.get $0
    i32.const 48
