@@ -485,7 +485,8 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.eq
   if
    i32.const 152
    return
