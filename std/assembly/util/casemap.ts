@@ -351,7 +351,7 @@ export function casemap(c: u32, dir: i32): i32 {
     // let t = exceptions[(xb + h) * 2 + 0] as u32;
     let t = load<u8>(exceptionsPtr + (xb + h) * 2) as u32;
     if (t == c) {
-      // r  = rules[exceptions[(xb + h) * 2 + 1]];
+      // r = rules[exceptions[(xb + h) * 2 + 1]];
       r = load<i32>(rulesPtr + (load<u8>(exceptionsPtr + (xb + h) * 2 + 1) << alignof<i32>()));
       rt = r & 255;
       rd = r >> 8;
