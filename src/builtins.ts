@@ -53,7 +53,9 @@ import {
   getConstValueF64,
   Relooper,
   RelooperBlockRef,
-  SIMDLoadOp
+  SIMDLoadOp,
+  getLocalGetIndex,
+  hasSideEffects
 } from "./module";
 
 import {
@@ -515,6 +517,10 @@ export namespace BuiltinSymbols {
   export const rtti_base = "~lib/rt/__rtti_base";
   export const visit_globals = "~lib/rt/__visit_globals";
   export const visit_members = "~lib/rt/__visit_members";
+
+  // std/number.ts
+  export const isNaN = "~lib/number/isNaN";
+  export const isFinite = "~lib/number/isFinite";
 
   // std/diagnostics.ts
   export const ERROR = "~lib/diagnostics/ERROR";
@@ -1108,72 +1114,72 @@ export function compileCall(
             let flow = compiler.currentFlow;
 
             // possibly overflows, e.g. abs<i8>(-128) == 128
-            let tempLocal1 = flow.getTempLocal(Type.i32);
-            let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i32).index;
-            let tempLocalIndex1 = tempLocal1.index;
-            flow.freeTempLocal(tempLocal1);
-
+            let temp1 = flow.getTempLocal(Type.i32);
+            let temp2 = flow.getTempLocal(Type.i32);
             // (x + (x >> 31)) ^ (x >> 31)
-            return module.binary(BinaryOp.XorI32,
+            let ret = module.binary(BinaryOp.XorI32,
               module.binary(BinaryOp.AddI32,
                 module.local_tee(
-                  tempLocalIndex2,
+                  temp2.index,
                   module.binary(BinaryOp.ShrI32,
-                    module.local_tee(tempLocalIndex1, arg0),
+                    module.local_tee(temp1.index, arg0),
                     module.i32(31)
                   )
                 ),
-                module.local_get(tempLocalIndex1, NativeType.I32)
+                module.local_get(temp1.index, NativeType.I32)
               ),
-              module.local_get(tempLocalIndex2, NativeType.I32)
+              module.local_get(temp2.index, NativeType.I32)
             );
+            flow.freeTempLocal(temp2);
+            flow.freeTempLocal(temp1);
+            return ret;
           }
           case TypeKind.ISIZE: {
             let options = compiler.options;
             let flow = compiler.currentFlow;
             let isWasm64 = options.isWasm64;
 
-            let tempLocal1 = flow.getTempLocal(options.usizeType);
-            let tempLocalIndex2 = flow.getAndFreeTempLocal(options.usizeType).index;
-            let tempLocalIndex1 = tempLocal1.index;
-            flow.freeTempLocal(tempLocal1);
-
-            return module.binary(isWasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
+            let temp1 = flow.getTempLocal(options.usizeType);
+            let temp2 = flow.getTempLocal(options.usizeType);
+            let ret = module.binary(isWasm64 ? BinaryOp.XorI64 : BinaryOp.XorI32,
               module.binary(isWasm64 ? BinaryOp.AddI64 : BinaryOp.AddI32,
                 module.local_tee(
-                  tempLocalIndex2,
+                  temp2.index,
                   module.binary(isWasm64 ? BinaryOp.ShrI64 : BinaryOp.ShrI32,
-                    module.local_tee(tempLocalIndex1, arg0),
+                    module.local_tee(temp1.index, arg0),
                     isWasm64 ? module.i64(63) : module.i32(31)
                   )
                 ),
-                module.local_get(tempLocalIndex1, options.nativeSizeType)
+                module.local_get(temp1.index, options.nativeSizeType)
               ),
-              module.local_get(tempLocalIndex2, options.nativeSizeType)
+              module.local_get(temp2.index, options.nativeSizeType)
             );
+            flow.freeTempLocal(temp2);
+            flow.freeTempLocal(temp1);
+            return ret;
           }
           case TypeKind.I64: {
             let flow = compiler.currentFlow;
 
-            let tempLocal1 = flow.getTempLocal(Type.i64);
-            let tempLocalIndex2 = flow.getAndFreeTempLocal(Type.i64).index;
-            let tempLocalIndex1 = tempLocal1.index;
-            flow.freeTempLocal(tempLocal1);
-
+            let temp1 = flow.getTempLocal(Type.i64);
+            let temp2 = flow.getTempLocal(Type.i64);
             // (x + (x >> 63)) ^ (x >> 63)
-            return module.binary(BinaryOp.XorI64,
+            let ret = module.binary(BinaryOp.XorI64,
               module.binary(BinaryOp.AddI64,
                 module.local_tee(
-                  tempLocalIndex2,
+                  temp2.index,
                   module.binary(BinaryOp.ShrI64,
-                    module.local_tee(tempLocalIndex1, arg0),
+                    module.local_tee(temp1.index, arg0),
                     module.i64(63)
                   )
                 ),
-                module.local_get(tempLocalIndex1, NativeType.I64)
+                module.local_get(temp1.index, NativeType.I64)
               ),
-              module.local_get(tempLocalIndex2, NativeType.I64)
+              module.local_get(temp2.index, NativeType.I64)
             );
+            flow.freeTempLocal(temp2);
+            flow.freeTempLocal(temp1);
+            return ret;
           }
           case TypeKind.USIZE:
           case TypeKind.U8:
@@ -1240,19 +1246,21 @@ export function compileCall(
         if (op != -1) {
           let flow = compiler.currentFlow;
           let nativeType = type.toNativeType();
-          let tempLocal0 = flow.getTempLocal(type);
-          flow.setLocalFlag(tempLocal0.index, LocalFlags.WRAPPED);
-          let tempLocal1 = flow.getAndFreeTempLocal(type);
-          flow.setLocalFlag(tempLocal1.index, LocalFlags.WRAPPED);
-          flow.freeTempLocal(tempLocal0);
-          return module.select(
-            module.local_tee(tempLocal0.index, arg0),
-            module.local_tee(tempLocal1.index, arg1),
+          let temp1 = flow.getTempLocal(type);
+          flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+          let temp2 = flow.getTempLocal(type);
+          flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+          let ret = module.select(
+            module.local_tee(temp1.index, arg0),
+            module.local_tee(temp2.index, arg1),
             module.binary(op,
-              module.local_get(tempLocal0.index, nativeType),
-              module.local_get(tempLocal1.index, nativeType)
+              module.local_get(temp1.index, nativeType),
+              module.local_get(temp2.index, nativeType)
             )
           );
+          flow.freeTempLocal(temp2);
+          flow.freeTempLocal(temp1);
+          return ret;
         }
       }
       compiler.error(
@@ -1310,19 +1318,21 @@ export function compileCall(
         if (op != -1) {
           let flow = compiler.currentFlow;
           let nativeType = type.toNativeType();
-          let tempLocal0 = flow.getTempLocal(type);
-          flow.setLocalFlag(tempLocal0.index, LocalFlags.WRAPPED);
-          let tempLocal1 = flow.getAndFreeTempLocal(type);
-          flow.setLocalFlag(tempLocal1.index, LocalFlags.WRAPPED);
-          flow.freeTempLocal(tempLocal0);
-          return module.select(
-            module.local_tee(tempLocal0.index, arg0),
-            module.local_tee(tempLocal1.index, arg1),
+          let temp1 = flow.getTempLocal(type);
+          flow.setLocalFlag(temp1.index, LocalFlags.WRAPPED);
+          let temp2 = flow.getTempLocal(type);
+          flow.setLocalFlag(temp2.index, LocalFlags.WRAPPED);
+          let ret = module.select(
+            module.local_tee(temp1.index, arg0),
+            module.local_tee(temp2.index, arg1),
             module.binary(op,
-              module.local_get(tempLocal0.index, nativeType),
-              module.local_get(tempLocal1.index, nativeType)
+              module.local_get(temp1.index, nativeType),
+              module.local_get(temp2.index, nativeType)
             )
           );
+          flow.freeTempLocal(temp2);
+          flow.freeTempLocal(temp1);
+          return ret;
         }
       }
       compiler.error(
@@ -2189,6 +2199,7 @@ export function compileCall(
         }
       } else {
         compiler.currentType = type.nonNullableType;
+        let flow = compiler.currentFlow;
         switch (compiler.currentType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -2197,61 +2208,70 @@ export function compileCall(
           case TypeKind.U16:
           case TypeKind.U32:
           case TypeKind.BOOL: {
-            let flow = compiler.currentFlow;
-            let tempLocal = flow.getAndFreeTempLocal(type);
-            flow.setLocalFlag(tempLocal.index, LocalFlags.WRAPPED); // arg0 is wrapped
-            return module.if(
-              module.local_tee(tempLocal.index, arg0),
-              module.local_get(tempLocal.index, NativeType.I32),
+            let temp = flow.getTempLocal(type);
+            flow.setLocalFlag(temp.index, LocalFlags.WRAPPED); // arg0 is wrapped
+            let ret = module.if(
+              module.local_tee(temp.index, arg0),
+              module.local_get(temp.index, NativeType.I32),
               abort
             );
+            flow.freeTempLocal(temp);
+            return ret;
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.i64);
-            return module.if(
+            let temp = flow.getTempLocal(Type.i64);
+            let ret = module.if(
               module.unary(UnaryOp.EqzI64,
-                module.local_tee(tempLocal.index, arg0)
+                module.local_tee(temp.index, arg0)
               ),
               abort,
-              module.local_get(tempLocal.index, NativeType.I64)
+              module.local_get(temp.index, NativeType.I64)
             );
+            flow.freeTempLocal(temp);
+            return ret;
           }
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(compiler.options.usizeType);
-            return module.if(
+            let temp = flow.getTempLocal(compiler.options.usizeType);
+            let ret = module.if(
               module.unary(
                 compiler.options.isWasm64
                   ? UnaryOp.EqzI64
                   : UnaryOp.EqzI32,
-                module.local_tee(tempLocal.index, arg0)
+                module.local_tee(temp.index, arg0)
               ),
               abort,
-              module.local_get(tempLocal.index, compiler.options.nativeSizeType)
+              module.local_get(temp.index, compiler.options.nativeSizeType)
             );
+            flow.freeTempLocal(temp);
+            return ret;
           }
           case TypeKind.F32: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f32);
-            return module.if(
+            let temp = flow.getTempLocal(Type.f32);
+            let ret = module.if(
               module.binary(BinaryOp.EqF32,
-                module.local_tee(tempLocal.index, arg0),
+                module.local_tee(temp.index, arg0),
                 module.f32(0)
               ),
               abort,
-              module.local_get(tempLocal.index, NativeType.F32)
+              module.local_get(temp.index, NativeType.F32)
             );
+            flow.freeTempLocal(temp);
+            return ret;
           }
           case TypeKind.F64: {
-            let tempLocal = compiler.currentFlow.getAndFreeTempLocal(Type.f64);
-            return module.if(
+            let temp = flow.getTempLocal(Type.f64);
+            let ret = module.if(
               module.binary(BinaryOp.EqF64,
-                module.local_tee(tempLocal.index, arg0),
+                module.local_tee(temp.index, arg0),
                 module.f64(0)
               ),
               abort,
-              module.local_get(tempLocal.index, NativeType.F64)
+              module.local_get(temp.index, NativeType.F64)
             );
+            flow.freeTempLocal(temp);
+            return ret;
           }
         }
       }
@@ -4142,6 +4162,166 @@ export function compileCall(
       compiler.runtimeFeatures |= RuntimeFeatures.visitMembers;
       compiler.currentType = Type.void;
       return module.call(BuiltinSymbols.visit_members, [ arg0, arg1 ], NativeType.None);
+    }
+    case BuiltinSymbols.isNaN: {
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.bool;
+        return module.unreachable();
+      }
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
+        : compiler.compileExpression(operands[0], Type.auto);
+      let type = compiler.currentType;
+      compiler.currentType = Type.bool;
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          // never NaN
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.I64:
+          case TypeKind.ISIZE:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.U64:
+          case TypeKind.USIZE: {
+            return hasSideEffects(arg0)
+              ? module.block(null, [
+                  module.drop(arg0),
+                  module.i32(0)
+                ], NativeType.I32)
+              : module.i32(0);
+          }
+          // (t = arg0) != t
+          case TypeKind.F32: {
+            if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+              return module.binary(BinaryOp.NeF32,
+                arg0,
+                module.local_get(getLocalGetIndex(arg0), NativeType.F32)
+              );
+            }
+            let flow = compiler.currentFlow;
+            let temp = flow.getTempLocal(Type.f32);
+            let ret = module.binary(BinaryOp.NeF32,
+              module.local_tee(temp.index, arg0),
+              module.local_get(temp.index, NativeType.F32)
+            );
+            flow.freeTempLocal(temp);
+            return ret;
+          }
+          case TypeKind.F64: {
+            if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+              return module.binary(BinaryOp.NeF64,
+                arg0,
+                module.local_get(getLocalGetIndex(arg0), NativeType.F64)
+              );
+            }
+            let flow = compiler.currentFlow;
+            let temp = flow.getTempLocal(Type.f64);
+            let ret = module.binary(BinaryOp.NeF64,
+              module.local_tee(temp.index, arg0),
+              module.local_get(temp.index, NativeType.F64)
+            );
+            flow.freeTempLocal(temp);
+            return ret;
+          }
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "isNaN", type.toString()
+      );
+      return module.unreachable();
+    }
+    case BuiltinSymbols.isFinite: {
+      if (
+        checkTypeOptional(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.bool;
+        return module.unreachable();
+      }
+      let arg0 = typeArguments
+        ? compiler.compileExpression(operands[0], typeArguments[0], Constraints.CONV_IMPLICIT)
+        : compiler.compileExpression(operands[0], Type.auto);
+      let type = compiler.currentType;
+      compiler.currentType = Type.bool;
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          // always finite
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.I64:
+          case TypeKind.ISIZE:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.U64:
+          case TypeKind.USIZE: {
+            return hasSideEffects(arg0)
+              ? module.block(null, [
+                  module.drop(arg0),
+                  module.i32(1)
+                ], NativeType.I32)
+              : module.i32(1);
+          }
+          // (t = arg0) - t == 0
+          case TypeKind.F32: {
+            if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+              return module.binary(BinaryOp.EqF32,
+                module.binary(BinaryOp.SubF32,
+                  arg0,
+                  module.local_get(getLocalGetIndex(arg0), NativeType.F32)
+                ),
+                module.f32(0)
+              );
+            }
+            let flow = compiler.currentFlow;
+            let temp = flow.getTempLocal(Type.f32);
+            let ret = module.binary(BinaryOp.EqF32,
+              module.binary(BinaryOp.SubF32,
+                module.local_tee(temp.index, arg0),
+                module.local_get(temp.index, NativeType.F32)
+              ),
+              module.f32(0)
+            );
+            flow.freeTempLocal(temp);
+            return ret;
+          }
+          case TypeKind.F64: {
+            if (getExpressionId(arg0) == ExpressionId.LocalGet) {
+              return module.binary(BinaryOp.EqF64,
+                module.binary(BinaryOp.SubF64,
+                  arg0,
+                  module.local_get(getLocalGetIndex(arg0), NativeType.F64)
+                ),
+                module.f64(0)
+              );
+            }
+            let flow = compiler.currentFlow;
+            let temp = flow.getTempLocal(Type.f64);
+            let ret = module.binary(BinaryOp.EqF64,
+              module.binary(BinaryOp.SubF64,
+                module.local_tee(temp.index, arg0),
+                module.local_get(temp.index, NativeType.F64)
+              ),
+              module.f64(0)
+            );
+            flow.freeTempLocal(temp);
+            return ret;
+          }
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "isFinite", type.toString()
+      );
+      return module.unreachable();
     }
   }
 
