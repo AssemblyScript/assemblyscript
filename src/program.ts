@@ -1384,7 +1384,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
-        let decorator = decorators[i];
+        let decorator: DecoratorNode = decorators[i]; // FIXME: why does tsc want a type here?
         switch (decorator.decoratorKind) {
           case DecoratorKind.OPERATOR:
           case DecoratorKind.OPERATOR_BINARY:

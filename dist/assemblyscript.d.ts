@@ -796,10 +796,10 @@ declare module "assemblyscript/src/tokenizer" {
         end: number;
         constructor(source: Source, start: number, end: number);
         static join(a: Range, b: Range): Range;
-        readonly atStart: Range;
-        readonly atEnd: Range;
-        readonly line: number;
-        readonly column: number;
+        get atStart(): Range;
+        get atEnd(): Range;
+        get line(): number;
+        get column(): number;
         toString(): string;
         debugInfoRef: number;
     }
@@ -1208,9 +1208,9 @@ declare module "assemblyscript/src/ast" {
         /** Provided arguments. */
         arguments: Expression[];
         /** Gets the type arguments range for reporting. */
-        readonly typeArgumentsRange: Range;
+        get typeArgumentsRange(): Range;
         /** Gets the arguments range for reporting. */
-        readonly argumentsRange: Range;
+        get argumentsRange(): Range;
     }
     /** Represents a class expression using the 'class' keyword. */
     export class ClassExpression extends Expression {
@@ -1398,9 +1398,9 @@ declare module "assemblyscript/src/ast" {
         /** Constructs a new source node. */
         constructor(normalizedPath: string, text: string, kind: SourceKind);
         /** Checks if this source represents native code. */
-        readonly isNative: boolean;
+        get isNative(): boolean;
         /** Checks if this source is part of the (standard) library. */
-        readonly isLibrary: boolean;
+        get isLibrary(): boolean;
     }
     /** Base class of all declaration statements. */
     export abstract class DeclarationStatement extends Statement {
@@ -1455,7 +1455,7 @@ declare module "assemblyscript/src/ast" {
         implementsTypes: NamedTypeNode[] | null;
         /** Class member declarations. */
         members: DeclarationStatement[];
-        readonly isGeneric: boolean;
+        get isGeneric(): boolean;
     }
     /** Represents a `continue` statement. */
     export class ContinueStatement extends Statement {
@@ -1568,7 +1568,7 @@ declare module "assemblyscript/src/ast" {
         body: Statement | null;
         /** Arrow function kind, if applicable. */
         arrowKind: ArrowKind;
-        readonly isGeneric: boolean;
+        get isGeneric(): boolean;
         /** Clones this function declaration. */
         clone(): FunctionDeclaration;
     }
@@ -2287,6 +2287,7 @@ declare module "assemblyscript/src/module" {
         addBranchForSwitch(from: number, to: number, indexes: number[], code?: ExpressionRef): void;
         renderAndDispose(entry: number, labelHelper: Index): ExpressionRef;
     }
+    export function hasSideEffects(expr: ExpressionRef): boolean;
     export function readString(ptr: number): string | null;
     /** Result structure of {@link Module#toBinary}. */
     export class BinaryModule {
@@ -2389,15 +2390,15 @@ declare module "assemblyscript/src/types" {
         /** Constructs a new resolved type. */
         constructor(kind: TypeKind, flags: TypeFlags, size: number);
         /** Returns the closest int type representing this type. */
-        readonly intType: Type;
+        get intType(): Type;
         /** Substitutes this type with the auto type if this type is void. */
-        readonly exceptVoid: Type;
+        get exceptVoid(): Type;
         /** Gets this type's logarithmic alignment in memory. */
-        readonly alignLog2: number;
+        get alignLog2(): number;
         /** Tests if this is a managed type that needs GC hooks. */
-        readonly isManaged: boolean;
+        get isManaged(): boolean;
         /** Tests if this is a class type explicitly annotated as unmanaged. */
-        readonly isUnmanaged: boolean;
+        get isUnmanaged(): boolean;
         /** Computes the sign-extending shift in the target type. */
         computeSmallIntegerShift(targetType: Type): number;
         /** Computes the truncating mask in the target type. */
@@ -2574,28 +2575,38 @@ declare module "assemblyscript/src/flow" {
         NONE = 0,
         /** Local is constant. */
         CONSTANT = 1,
+        /** Local is a function parameter. */
+        PARAMETER = 2,
         /** Local is properly wrapped. Relevant for small integers. */
-        WRAPPED = 2,
+        WRAPPED = 4,
         /** Local is non-null. */
-        NONNULL = 4,
+        NONNULL = 8,
         /** Local is read from. */
-        READFROM = 8,
+        READFROM = 16,
         /** Local is written to. */
-        WRITTENTO = 16,
+        WRITTENTO = 32,
         /** Local is retained. */
-        RETAINED = 32,
+        RETAINED = 64,
+        /** Local is returned. */
+        RETURNED = 128,
         /** Local is conditionally read from. */
-        CONDITIONALLY_READFROM = 64,
+        CONDITIONALLY_READFROM = 256,
         /** Local is conditionally written to. */
-        CONDITIONALLY_WRITTENTO = 128,
+        CONDITIONALLY_WRITTENTO = 512,
         /** Local must be conditionally retained. */
-        CONDITIONALLY_RETAINED = 256,
+        CONDITIONALLY_RETAINED = 1024,
+        /** Local is conditionally returned. */
+        CONDITIONALLY_RETURNED = 2048,
         /** Any categorical flag. */
-        ANY_CATEGORICAL = 63,
+        ANY_CATEGORICAL = 255,
         /** Any conditional flag. */
-        ANY_CONDITIONAL = 480,
+        ANY_CONDITIONAL = 3904,
+        /** Any written to flag. */
+        ANY_WRITTENTO = 544,
         /** Any retained flag. */
-        ANY_RETAINED = 288
+        ANY_RETAINED = 1088,
+        /** Any returned flag. */
+        ANY_RETURNED = 2176
     }
     export namespace LocalFlags {
         function join(left: LocalFlags, right: LocalFlags): LocalFlags;
@@ -2648,7 +2659,7 @@ declare module "assemblyscript/src/flow" {
         static createInline(parentFunction: Function, inlineFunction: Function): Flow;
         private constructor();
         /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
-        readonly actualFunction: Function;
+        get actualFunction(): Function;
         /** Tests if this flow has the specified flag or flags. */
         is(flag: FlowFlags): boolean;
         /** Tests if this flow has one of the specified flags. */
@@ -2665,14 +2676,14 @@ declare module "assemblyscript/src/flow" {
         getAutoreleaseLocal(type: Type, except?: Set<number> | null): Local;
         /** Frees the temporary local for reuse. */
         freeTempLocal(local: Local): void;
-        /** Gets and immediately frees a temporary local of the specified type. */
-        getAndFreeTempLocal(type: Type, except?: Set<number> | null): Local;
         /** Gets the scoped local of the specified name. */
         getScopedLocal(name: string): Local | null;
         /** Adds a new scoped local of the specified name. */
         addScopedLocal(name: string, type: Type, except?: Set<number> | null): Local;
         /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
         addScopedAlias(name: string, type: Type, index: number, reportNode?: Node | null): Local;
+        /** Tests if this flow has any scoped locals that must be free'd. */
+        get hasScopedLocals(): boolean;
         /** Frees this flow's scoped variables and returns its parent flow. */
         freeScopedLocals(): void;
         /** Looks up the local of the specified name in the current scope. */
@@ -2697,6 +2708,8 @@ declare module "assemblyscript/src/flow" {
         inheritConditional(other: Flow): void;
         /** Inherits mutual flags and local wrap states from the specified flows (e.g. then with else). */
         inheritMutual(left: Flow, right: Flow): void;
+        /** Unifies local flags between this and the other flow. */
+        unifyLocalFlags(other: Flow): void;
         /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
         isNonnull(expr: ExpressionRef, type: Type): boolean;
         /** Updates local states to reflect that this branch is only taken when `expr` is true-ish. */
@@ -2722,7 +2735,7 @@ declare module "assemblyscript/src/resolver" {
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
     import { Program, Element, Class, ClassPrototype, Function, FunctionPrototype } from "assemblyscript/src/program";
     import { Flow } from "assemblyscript/src/flow";
-    import { TypeNode, TypeName, TypeParameterNode, Node, IdentifierExpression, Expression } from "assemblyscript/src/ast";
+    import { TypeNode, TypeName, TypeParameterNode, Node, IdentifierExpression, CallExpression, Expression } from "assemblyscript/src/ast";
     import { Type } from "assemblyscript/src/types";
     /** Indicates whether errors are reported or not. */
     export enum ReportMode {
@@ -2783,18 +2796,8 @@ declare module "assemblyscript/src/resolver" {
         alternativeReportNode?: Node | null, 
         /** How to proceed with eventual diagnostics. */
         reportMode?: ReportMode): Type[] | null;
-        /** Infers the generic type(s) of an argument expression and updates `ctxTypes`. */
-        inferGenericType(
-        /** The generic type being inferred. */
-        typeNode: TypeNode, 
-        /** The respective argument expression. */
-        exprNode: Expression, 
-        /** Contextual flow. */
-        ctxFlow: Flow, 
-        /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
-        ctxTypes: Map<string, Type>, 
-        /** The names of the type parameters being inferred. */
-        typeParameterNames: Set<string>): void;
+        /** Resolves respectively infers the concrete instance of a function by call context. */
+        maybeInferCall(node: CallExpression, prototype: FunctionPrototype, ctxFlow: Flow, reportMode?: ReportMode): Function | null;
         /** Updates contextual types with a possibly encapsulated inferred type. */
         private propagateInferredGenericTypes;
         /** Gets the concrete type of an element. */
@@ -3107,7 +3110,7 @@ declare module "assemblyscript/src/program" {
         /** Writes a common runtime header to the specified buffer. */
         writeRuntimeHeader(buffer: Uint8Array, offset: number, classInstance: Class, payloadSize: number): void;
         /** Gets the size of a runtime header. */
-        readonly runtimeHeaderSize: number;
+        get runtimeHeaderSize(): number;
         /** Creates a native variable declaration. */
         makeNativeVariableDeclaration(
         /** The simple name of the variable */
@@ -3155,7 +3158,7 @@ declare module "assemblyscript/src/program" {
         private requireClass;
         /** Obtains a non-generic global function and returns it. Returns `null` if it does not exist. */
         private lookupFunction;
-        /** Requires that a non-generic global function is present and returns it. */
+        /** Requires that a global function is present and returns it. */
         private requireFunction;
         /** Marks an element and its children as a module export. */
         private markModuleExport;
@@ -3320,7 +3323,7 @@ declare module "assemblyscript/src/program" {
         /** Parent element. */
         parent: Element | null);
         /** Gets the enclosing file. */
-        readonly file: File;
+        get file(): File;
         /** Tests if this element has a specific flag or flags. */
         is(flag: CommonFlags): boolean;
         /** Tests if this element has any of the specified flags. */
@@ -3361,11 +3364,11 @@ declare module "assemblyscript/src/program" {
         /** Declaration reference. */
         declaration: DeclarationStatement);
         /** Tests if this element is a library element. */
-        readonly isDeclaredInLibrary: boolean;
+        get isDeclaredInLibrary(): boolean;
         /** Gets the associated identifier node. */
-        readonly identifierNode: IdentifierExpression;
+        get identifierNode(): IdentifierExpression;
         /** Gets the assiciated decorator nodes. */
-        readonly decoratorNodes: DecoratorNode[] | null;
+        get decoratorNodes(): DecoratorNode[] | null;
     }
     /** Checks if the specified element kind indicates a typed element. */
     export function isTypedElement(kind: ElementKind): boolean;
@@ -3430,9 +3433,9 @@ declare module "assemblyscript/src/program" {
         /** Pre-checked flags indicating built-in decorators. */
         decoratorFlags?: DecoratorFlags);
         /** Gets the associated type parameter nodes. */
-        readonly typeParameterNodes: TypeParameterNode[] | null;
+        get typeParameterNodes(): TypeParameterNode[] | null;
         /** Gets the associated type node. */
-        readonly typeNode: TypeNode;
+        get typeNode(): TypeNode;
         lookup(name: string): Element | null;
     }
     /** A namespace that differs from a file in being user-declared with a name. */
@@ -3491,9 +3494,9 @@ declare module "assemblyscript/src/program" {
         /** Declaration reference. Creates a native declaration if omitted. */
         declaration?: VariableLikeDeclarationStatement);
         /** Gets the associated type node.s */
-        readonly typeNode: TypeNode | null;
+        get typeNode(): TypeNode | null;
         /** Gets the associated initializer node. */
-        readonly initializerNode: Expression | null;
+        get initializerNode(): Expression | null;
         /** Applies a constant integer value to this element. */
         setConstantIntegerValue(value: I64, type: Type): void;
         /** Applies a constant float value to this element. */
@@ -3516,7 +3519,7 @@ declare module "assemblyscript/src/program" {
         /** Whether this enum value is immutable. */
         isImmutable: boolean;
         /** Gets the associated value node. */
-        readonly valueNode: Expression | null;
+        get valueNode(): Expression | null;
         lookup(name: string): Element | null;
     }
     /** A global variable. */
@@ -3585,15 +3588,15 @@ declare module "assemblyscript/src/program" {
         /** Pre-checked flags indicating built-in decorators. */
         decoratorFlags?: DecoratorFlags);
         /** Gets the associated type parameter nodes. */
-        readonly typeParameterNodes: TypeParameterNode[] | null;
+        get typeParameterNodes(): TypeParameterNode[] | null;
         /** Gets the associated function type node. */
-        readonly functionTypeNode: FunctionTypeNode;
+        get functionTypeNode(): FunctionTypeNode;
         /** Gets the associated body node. */
-        readonly bodyNode: Statement | null;
+        get bodyNode(): Statement | null;
         /** Gets the arrow function kind. */
-        readonly arrowKind: ArrowKind;
+        get arrowKind(): ArrowKind;
         /** Tests if this prototype is bound to a class. */
-        readonly isBound: boolean;
+        get isBound(): boolean;
         /** Creates a clone of this prototype that is bound to a concrete class instead. */
         toBound(classInstance: Class): FunctionPrototype;
         /** Gets the resolved instance for the specified instance key, if already resolved. */
@@ -3683,11 +3686,11 @@ declare module "assemblyscript/src/program" {
         /** Pre-checked flags indicating built-in decorators. */
         decoratorFlags?: DecoratorFlags);
         /** Gets the associated type node. */
-        readonly typeNode: TypeNode | null;
+        get typeNode(): TypeNode | null;
         /** Gets the associated initializer node. */
-        readonly initializerNode: Expression | null;
+        get initializerNode(): Expression | null;
         /** Gets the associated parameter index. Set if declared as a constructor parameter, otherwise `-1`. */
-        readonly parameterIndex: number;
+        get parameterIndex(): number;
         lookup(name: string): Element | null;
     }
     /** A resolved instance field. */
@@ -3771,13 +3774,13 @@ declare module "assemblyscript/src/program" {
         /** Pre-checked flags indicating built-in decorators. */
         decoratorFlags?: DecoratorFlags, _isInterface?: boolean);
         /** Gets the associated type parameter nodes. */
-        readonly typeParameterNodes: TypeParameterNode[] | null;
+        get typeParameterNodes(): TypeParameterNode[] | null;
         /** Gets the associated extends node. */
-        readonly extendsNode: NamedTypeNode | null;
+        get extendsNode(): NamedTypeNode | null;
         /** Gets the associated implements nodes. */
-        readonly implementsNodes: NamedTypeNode[] | null;
+        get implementsNodes(): NamedTypeNode[] | null;
         /** Tests if this prototype is of a builtin array type (Array/TypedArray). */
-        readonly isBuiltinArray: boolean;
+        get isBuiltinArray(): boolean;
         /** Tests if this prototype extends the specified. */
         extends(basePtototype: ClassPrototype | null): boolean;
         /** Adds an element as an instance member of this one. Returns the previous element if a duplicate. */
@@ -3815,11 +3818,11 @@ declare module "assemblyscript/src/program" {
         /** Wrapped type, if a wrapper for a basic type. */
         wrappedType: Type | null;
         /** Gets the unique runtime id of this class. */
-        readonly id: number;
+        get id(): number;
         /** Tests if this class is of a builtin array type (Array/TypedArray). */
-        readonly isBuiltinArray: boolean;
+        get isBuiltinArray(): boolean;
         /** Tests if this class is array-like. */
-        readonly isArrayLike: boolean;
+        get isArrayLike(): boolean;
         /** Constructs a new class. */
         constructor(
         /** Name incl. type parameters, i.e. `Foo<i32>`. */
@@ -3846,7 +3849,7 @@ declare module "assemblyscript/src/program" {
         /** Gets the value type of an array. Must be an array. */
         getArrayValueType(): Type;
         /** Tests if this class is inherently acyclic. */
-        readonly isAcyclic: boolean;
+        get isAcyclic(): boolean;
         /** Tests if this class potentially forms a reference cycle to another one. */
         private cyclesTo;
     }
@@ -3905,13 +3908,13 @@ declare module "assemblyscript/src/compiler" {
         /** Hinted shrink level. Not applied by the compiler itself. */
         shrinkLevelHint: number;
         /** Tests if the target is WASM64 or, otherwise, WASM32. */
-        readonly isWasm64: boolean;
+        get isWasm64(): boolean;
         /** Gets the unsigned size type matching the target. */
-        readonly usizeType: Type;
+        get usizeType(): Type;
         /** Gets the signed size type matching the target. */
-        readonly isizeType: Type;
+        get isizeType(): Type;
         /** Gets the native size type matching the target. */
-        readonly nativeSizeType: NativeType;
+        get nativeSizeType(): NativeType;
         /** Tests if a specific feature is activated. */
         hasFeature(feature: Feature): boolean;
     }
@@ -3948,7 +3951,7 @@ declare module "assemblyscript/src/compiler" {
         /** Program reference. */
         program: Program;
         /** Resolver reference. */
-        readonly resolver: Resolver;
+        get resolver(): Resolver;
         /** Provided options. */
         options: Options;
         /** Module instance being compiled. */
@@ -3957,8 +3960,8 @@ declare module "assemblyscript/src/compiler" {
         currentFlow: Flow;
         /** Current inline functions stack. */
         currentInlineFunctions: Function[];
-        /** Current enum in compilation. */
-        currentEnum: Enum | null;
+        /** Current parent element if not a function, i.e. an enum or namespace. */
+        currentParent: Element | null;
         /** Current type in compilation. */
         currentType: Type;
         /** Start function statements. */
@@ -4197,8 +4200,6 @@ declare module "assemblyscript/src/compiler" {
         ensureSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Adds the debug location of the specified expression at the specified range to the source map. */
         addDebugLocation(expr: ExpressionRef, range: Range): void;
-        /** Creates a comparison whether an expression is 'false' in a broader sense. */
-        makeIsFalseish(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Creates a comparison whether an expression is 'true' in a broader sense. */
         makeIsTrueish(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Makes an allocation suitable to hold the data of an instance of the given class. */
@@ -4626,6 +4627,8 @@ declare module "assemblyscript/src/builtins" {
         const rtti_base = "~lib/rt/__rtti_base";
         const visit_globals = "~lib/rt/__visit_globals";
         const visit_members = "~lib/rt/__visit_members";
+        const isNaN = "~lib/number/isNaN";
+        const isFinite = "~lib/number/isFinite";
         const ERROR = "~lib/diagnostics/ERROR";
         const WARNING = "~lib/diagnostics/WARNING";
         const INFO = "~lib/diagnostics/INFO";
@@ -4708,7 +4711,8 @@ declare module "assemblyscript/src/definitions" {
      */ /***/
     import { Program, Element, Global, Enum, Field, Function, Class, Namespace, Interface, File } from "assemblyscript/src/program";
     import { Type } from "assemblyscript/src/types";
-    abstract class ExportsWalker {
+    /** Walker base class. */
+    export abstract class ExportsWalker {
         /** Program reference. */
         program: Program;
         /** Whether to include private members */
@@ -4774,7 +4778,6 @@ declare module "assemblyscript/src/definitions" {
         typeToString(type: Type): string;
         build(): string;
     }
-    export {};
 }
 declare module "assemblyscript/src/parser" {
     /**
