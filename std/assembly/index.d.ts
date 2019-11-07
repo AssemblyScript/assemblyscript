@@ -1218,7 +1218,7 @@ interface ArrayBufferView {
 declare type Constructor<T> = new (...args: any) => T;
 
 /* @internal */
-declare class TypedArray<T> implements ArrayBufferView {
+declare abstract class TypedArray<T> implements ArrayBufferView {
   [key: number]: T;
   /** Number of bytes per element. */
   static readonly BYTES_PER_ELEMENT: usize;
