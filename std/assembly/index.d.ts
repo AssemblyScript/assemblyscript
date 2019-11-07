@@ -1223,7 +1223,7 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   /** Number of bytes per element. */
   static readonly BYTES_PER_ELEMENT: usize;
   /** Wrap an ArrayBuffer */
-  static wrap<T extends TypedArray<number>>(this: Constructor<T>, buffer: ArrayBuffer, byteOffset?: i32, length?: i32): T;
+  static wrap<_T = TypedArray<number>>(this: Constructor<_T>, buffer: ArrayBuffer, byteOffset?: i32, length?: i32): _T;
   /** Constructs a new typed array. */
   constructor(length: i32);
   /** The {@link ArrayBuffer} referenced by this view. */
