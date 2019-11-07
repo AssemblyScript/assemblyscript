@@ -24,6 +24,14 @@ const mkdirp = require("./util/mkdirp");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
 
+function _require(m) {
+  try {
+    return require(m);
+  } catch (e) {
+    return e;
+  }
+}
+
 // global.Binaryen = require("../lib/binaryen");
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
@@ -220,7 +228,11 @@ exports.main = function main(argv, options, callback) {
         : path.join(process.cwd(), filename);
       if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
       try {
-        const classOrModule = require(filename);
+        let classOrModule = _require(filename);
+        classOrModule = (classOrModule instanceof Error) ? _require(transformArgs[i]) : classOrModule;
+        if (classOrModule instanceof Error) {
+          return callback(classOrModule);
+        }
         if (typeof classOrModule === "function") {
           Object.assign(classOrModule.prototype, {
             baseDir,
