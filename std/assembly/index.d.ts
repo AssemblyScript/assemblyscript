@@ -1215,7 +1215,7 @@ interface ArrayBufferView {
   readonly byteLength: i32;
 }
 
-declare type Constructor<T> = new (...args: any) => T;
+declare type Constructor<T> = new (...args: any[]) => T;
 
 /* @internal */
 declare abstract class TypedArray<T> implements ArrayBufferView {
