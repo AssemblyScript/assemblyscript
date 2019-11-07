@@ -1215,7 +1215,7 @@ interface ArrayBufferView {
   readonly byteLength: i32;
 }
 
-declare type InstanceType<T extends new (...args: any) => any> = T extends new (...args: any) => infer R ? R : any;
+declare type Constructor<T> = new (...args: any) => T;
 
 /* @internal */
 declare class TypedArray<T> implements ArrayBufferView {
@@ -1223,7 +1223,7 @@ declare class TypedArray<T> implements ArrayBufferView {
   /** Number of bytes per element. */
   static readonly BYTES_PER_ELEMENT: usize;
   /** Wrap an ArrayBuffer */
-  static wrap<U extends typeof TypedArray>(this: U, buffer: ArrayBuffer, byteOffset?: i32, length?: i32): InstanceType<U>;
+  static wrap<T extends TypedArray<number>>(this: Constructor<T>, buffer: ArrayBuffer, byteOffset?: i32, length?: i32): T;
   /** Constructs a new typed array. */
   constructor(length: i32);
   /** The {@link ArrayBuffer} referenced by this view. */
