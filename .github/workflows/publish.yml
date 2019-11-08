@@ -1,7 +1,7 @@
 name: Publish
 on:
   schedule:
-  - cron: '40 2 * * *'
+  - cron: '40 3 * * *'
 jobs:
   publish:
     name: "Publish packages"
@@ -10,6 +10,9 @@ jobs:
     - uses: actions/checkout@v1
       with:
         ref: release
+    - uses: dcodeIO/setup-node-nvm@v1.0.0
+      with:
+        node-version: node
     - name: Merge master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -19,7 +22,6 @@ jobs:
         git remote set-url origin "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
         git fetch origin
         git merge origin/master
-    - uses: actions/setup-node@v1
     - name: Install dependencies
       run: npm ci
     - name: Build distribution files
@@ -57,21 +59,16 @@ jobs:
         git push origin release
         git push origin v$VERSION
     - name: Publish to npm
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
-        npm publish --tag $CHANNEL --access public
+        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+        npm publish --tag $CHANNEL
         cd ./lib/loader
         npm publish --tag $CHANNEL --access public
         cd ../..
-    - uses: actions/setup-node@v1
-      with:
-        registry-url: 'https://npm.pkg.github.com'
-        scope: '@AssemblyScript'
     - name: Publish to gpr
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+        sed -i 's/"assemblyscript"/"@assemblyscript\/assemblyscript"/' package.json
         npm publish --tag $CHANNEL --access public
         cd ./lib/loader
         npm publish --tag $CHANNEL --access public
