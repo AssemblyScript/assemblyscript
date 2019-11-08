@@ -30,6 +30,8 @@ jobs:
         npm run build
     - name: Test distribution files
       run: npm test
+    - name: Reconfigure for release
+      run: npm run release
     - name: Set up version
       run: |
         VERSION=$(node -e "console.log(require('./package.json').version)")
@@ -50,7 +52,7 @@ jobs:
           git commit --allow-empty -m "Release v$VERSION"
         fi
         echo ::set-env name=VERSION::$VERSION
-        cd ./lib/loader
+        cd lib/loader
         npm version $VERSION --no-git-tag-version --force
         cd ../..
     - name: Create tag and push distribution files
@@ -59,17 +61,24 @@ jobs:
         git push origin release
         git push origin v$VERSION
     - name: Publish to npm
+      env:
+        NPM_REGISTRY: "registry.npmjs.org"
+        NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
-        echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+        npm config set "//${NPM_REGISTRY}/:_authToken=${NPM_AUTH_TOKEN}"
         npm publish --tag $CHANNEL
-        cd ./lib/loader
+        cd lib/loader
         npm publish --tag $CHANNEL --access public
         cd ../..
     - name: Publish to gpr
+      env:
+        NPM_REGISTRY: "npm.pkg.github.com"
+        NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+        npm config set "//${NPM_REGISTRY}/:_authToken=${NPM_AUTH_TOKEN}""
         sed -i 's/"assemblyscript"/"@assemblyscript\/assemblyscript"/' package.json
-        npm publish --tag $CHANNEL --access public
-        cd ./lib/loader
-        npm publish --tag $CHANNEL --access public
+        sed -i 's/"assemblyscript"/"@assemblyscript\/assemblyscript"/' package-lock.json
+        npm publish --registry=https://${NPM_REGISTRY}
+        cd lib/loader
+        npm publish --registry=https://${NPM_REGISTRY}
         cd ../..
