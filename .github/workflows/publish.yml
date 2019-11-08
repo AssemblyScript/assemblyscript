@@ -1,7 +1,7 @@
 name: Publish
 on:
   schedule:
-  - cron: '40 3 * * *'
+  - cron: '0 0 * * *'
 jobs:
   publish:
     name: "Publish packages"
