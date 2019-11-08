@@ -48,29 +48,31 @@ jobs:
           git commit --allow-empty -m "Release v$VERSION"
         fi
         echo ::set-env name=VERSION::$VERSION
+        cd ./lib/loader
+        npm version $VERSION --no-git-tag-version --force
+        cd ../..
     - name: Create tag and push distribution files
       run: |
         git tag v$VERSION
         git push origin release
         git push origin v$VERSION
-    # - name: Publish to npm
-    #   env:
-    #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-    #   run: |
-    #     echo "npm publish --tag $CHANNEL"
-    #     cd ./lib/loader
-    #     npm version $VERSION --no-git-tag-version --force
-    #     echo "npm publish --tag $CHANNEL"
-    #     cd ../..
-    # - uses: actions/setup-node@v1
-    #   with:
-    #     registry-url: 'https://npm.pkg.github.com'
-    #     scope: '@AssemblyScript'
-    # - name: Publish to gpr
-    #   env:
-    #     NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   run: |
-    #     echo "npm publish --tag $CHANNEL"
-    #     cd ./lib/loader
-    #     echo "npm publish --tag $CHANNEL"
-    #     cd ../..
+    - name: Publish to npm
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: |
+        npm publish --tag $CHANNEL --access public
+        cd ./lib/loader
+        npm publish --tag $CHANNEL --access public
+        cd ../..
+    - uses: actions/setup-node@v1
+      with:
+        registry-url: 'https://npm.pkg.github.com'
+        scope: '@AssemblyScript'
+    - name: Publish to gpr
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        npm publish --tag $CHANNEL --access public
+        cd ./lib/loader
+        npm publish --tag $CHANNEL --access public
+        cd ../..
