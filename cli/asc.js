@@ -24,13 +24,8 @@ const mkdirp = require("./util/mkdirp");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
 
-function pathResolves(m) {
-  try {
-    require.resolve(m);
-    return true
-  } catch (e) {
-    return false;
-  }
+function _require(m, paths) {
+  return require(require.resolve(m, {paths}));
 }
 
 // global.Binaryen = require("../lib/binaryen");
@@ -223,13 +218,10 @@ exports.main = function main(argv, options, callback) {
   if (args.transform) {
     let transformArgs = args.transform;
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
-      let filename = transformArgs[i];
-      filename = path.isAbsolute(filename = filename.trim())
-        ? filename
-        : path.join(process.cwd(), filename);
+      let filename = transformArgs[i].trim();
       if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
       try {
-        const classOrModule = require(pathResolves(filename) ? filename : transformArgs[i]);
+        const classOrModule = _require(filename, [baseDir, process.cwd()]);
         if (typeof classOrModule === "function") {
           Object.assign(classOrModule.prototype, {
             baseDir,
