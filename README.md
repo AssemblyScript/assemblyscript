@@ -1,7 +1,7 @@
 ![](https://avatars1.githubusercontent.com/u/28916798?s=64) AssemblyScript
 =================
 
-[![Actions Status](https://github.com/AssemblyScript/assemblyscript/workflows/CI/badge.svg)](https://github.com/AssemblyScript/assemblyscript/actions) [![npm](https://img.shields.io/npm/v/assemblyscript.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript) [![npm (tag)](https://img.shields.io/npm/v/assemblyscript/nightly.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript)
+[![Actions Status](https://github.com/AssemblyScript/assemblyscript/workflows/CI/badge.svg)](https://github.com/AssemblyScript/assemblyscript/actions) [![npm](https://img.shields.io/npm/v/assemblyscript.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript) [![npm@nightly](https://img.shields.io/npm/v/assemblyscript/nightly.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript)
 
 **AssemblyScript** compiles a strict subset of [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
 
@@ -9,7 +9,7 @@ Check out the [documentation](https://docs.assemblyscript.org) or try it out in 
 
 ---
 
-<h3 align="center">Our Sponsors</h2>
+<h3 align="center">Our Sponsors</h3>
 <p align="center">
   <a href="https://opencollective.com/assemblyscript/tiers/sponsor/0/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/0/avatar.svg"></a>
   <a href="https://opencollective.com/assemblyscript/tiers/sponsor/1/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/1/avatar.svg"></a>
@@ -23,7 +23,7 @@ Check out the [documentation](https://docs.assemblyscript.org) or try it out in 
   <a href="https://opencollective.com/assemblyscript/tiers/sponsor/9/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/9/avatar.svg"></a>
 </p>
 <br />
-<h3 align="center">Our Backers</h2>
+<h3 align="center">Our Backers</h3>
 <p align="center">
   <a href="https://opencollective.com/assemblyscript#backers" target="_blank"><img src="https://opencollective.com/assemblyscript/backer.svg?avatarHeight=44" /></a>
 </p>

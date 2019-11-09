@@ -1,3 +1,6 @@
-require("ts-node").register({ project: path.join(__dirname, "src", "tsconfig.json") });
+require("ts-node").register({
+  project: require("path").join(__dirname, "src", "tsconfig.json"),
+  skipIgnore: true
+});
 require("./src/glue/js");
 module.exports = require("./src");
