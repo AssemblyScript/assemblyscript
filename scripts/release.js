@@ -14,15 +14,17 @@ fs.writeFileSync(path.join(__dirname, "..", "package.json"), [
   JSON.stringify(pkg, null, 2), '\n'
 ].join(""));
 
-console.log("Updating index.js ...");
-fs.writeFileSync(path.join(__dirname, "..", "index.js"), [
-  'module.exports = require("./dist/assemblyscript");\n'
-].join(""));
+console.log("Copying index.release.js -> index.js ...");
+fs.copyFileSync(
+  path.join(__dirname, "..", "index.release.js"),
+  path.join(__dirname, "..", "index.js")
+);
 
-console.log("Updating index.d.ts ...");
-fs.writeFileSync(path.join(__dirname, "..", "index.d.ts"), [
-  '/// <reference path="./dist/assemblyscript.d.ts" />\n',
-  'export * from "assemblyscript";\n'
-].join(""));
+console.log("Copying index.release.d.ts -> index.d.ts ...");
+fs.copyFileSync(
+  path.join(__dirname, "..", "index.release.d.ts"),
+  path.join(__dirname, "..", "index.d.ts")
+);
 
-console.log("OK");
+// We are going to use these immediately, so, to be sure:
+setTimeout(() => console.log("OK"), 2000);
