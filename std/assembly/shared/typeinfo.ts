@@ -13,7 +13,7 @@
 // │                              ...                              │
 
 /** Runtime type information data structure. */
-@unmanaged
+// @unmanaged
 export class Typeinfo {
   /** Flags describing the shape of this class type. */
   flags: TypeinfoFlags;
