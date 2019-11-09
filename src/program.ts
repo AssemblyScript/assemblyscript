@@ -612,7 +612,7 @@ export class Program extends DiagnosticEmitter {
   getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement | null {
     var elementsByDeclaration = this.elementsByDeclaration;
     return elementsByDeclaration.has(declaration)
-      ? elementsByDeclaration.get(declaration)
+      ? elementsByDeclaration.get(declaration)!
       : null;
   }
 
@@ -1123,7 +1123,7 @@ export class Program extends DiagnosticEmitter {
   /** Looks up the element of the specified name in the global scope. */
   lookupGlobal(name: string): Element | null {
     var elements = this.elementsByName;
-    if (elements.has(name)) return elements.get(name);
+    if (elements.has(name)) return elements.get(name)!;
     return null;
   }
 
@@ -2890,7 +2890,7 @@ export class Function extends TypedElement {
   /* @override */
   lookup(name: string): Element | null {
     var locals = this.localsByName;
-    if (locals.has(name)) return locals.get(name);
+    if (locals.has(name)) return locals.get(name)!;
     return this.parent.lookup(name);
   }
 
