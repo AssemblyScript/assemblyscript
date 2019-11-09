@@ -16,7 +16,8 @@
     "glob": "^7.1.5",
     "long": "^4.0.0",
     "source-map-support": "^0.5.16",
-    "ts-node": "^6.2.0"
+    "ts-node": "^6.2.0",
+    "typescript": "^3.7.2"
   },
   "devDependencies": {
     "@types/node": "^12.12.6",
@@ -24,10 +25,8 @@
     "diff": "^4.0.1",
     "physical-cpu-count": "^2.0.0",
     "ts-loader": "^6.2.1",
-    "ts-node": "^6.2.0",
     "tslint": "^5.20.1",
     "typedoc-plugin-external-module-name": "^2.1.0",
-    "typescript": "^3.7.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   },
