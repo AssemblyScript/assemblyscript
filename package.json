@@ -1,8 +1,17 @@
 {
   "name": "assemblyscript",
+  "description": "A TypeScript to WebAssembly compiler.",
+  "keywords": [
+    "typescript",
+    "webassembly",
+    "compiler",
+    "assemblyscript",
+    "wasm"
+  ],
   "version": "0.8.0",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "license": "Apache-2.0",
+  "homepage": "https://assemblyscript.org",
   "repository": {
     "type": "git",
     "url": "https://github.com/AssemblyScript/assemblyscript.git"
@@ -35,9 +44,6 @@
   "bin": {
     "asc": "bin/asc",
     "asinit": "bin/asinit"
-  },
-  "engines": {
-    "node": ">=8"
   },
   "scripts": {
     "build": "npm run build:bundle && npm run build:dts",
