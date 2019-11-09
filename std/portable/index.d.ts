@@ -1,6 +1,6 @@
 /**
  * Environment definitions for compiling AssemblyScript to JavaScript using tsc.
- * 
+ *
  * Note that semantic differences require additional explicit conversions for full compatibility.
  * For example, when casting an i32 to an u8, doing `<u8>(someI32 & 0xff)` will yield the same
  * result when compiling to WebAssembly or JS while `<u8>someI32` alone does nothing in JS.

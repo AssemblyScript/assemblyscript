@@ -488,6 +488,9 @@ const result = ts.transform(sourceFile, [
 ]);
 console.log("  replaced " + numReplaced + " AS types with JS types");
 
+if (!fs.existsSync(path.join(__dirname, "..", "dist"))) {
+    fs.mkdirSync(path.join(__dirname, "..", "dist"));
+}
 fs.writeFileSync(
     path.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
     ts.createPrinter().printFile(result.transformed[0]),
