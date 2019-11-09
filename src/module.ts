@@ -1162,7 +1162,7 @@ export class Module {
     var cStr = this.allocStringCached(exportName);
     var k = segments.length;
     var segs = new Array<usize>(k);
-    var psvs = new Array<i8>(k);
+    var psvs = new Uint8Array(k);
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {

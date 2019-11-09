@@ -1,2 +1,2 @@
-/// <reference path="./dist/assemblyscript.d.ts" />
-export * from "assemblyscript";
+import "./src/glue/js"
+export * from "./src";

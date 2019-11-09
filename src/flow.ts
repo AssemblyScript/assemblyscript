@@ -345,7 +345,7 @@ export class Flow {
       local = parentFunction.addLocal(type);
     } else {
       if (temps && temps.length) {
-        local = temps.pop();
+        local = temps.pop()!;
         local.type = type;
         local.flags = CommonFlags.NONE;
       } else {
@@ -404,7 +404,7 @@ export class Flow {
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
     var scopedLocals = this.scopedLocals;
-    if (scopedLocals && scopedLocals.has(name)) return scopedLocals.get(name);
+    if (scopedLocals && scopedLocals.has(name)) return scopedLocals.get(name)!;
     return null;
   }
 
@@ -478,9 +478,9 @@ export class Flow {
   lookupLocal(name: string): Local | null {
     var current: Flow | null = this;
     var scope: Map<String,Local> | null;
-    do if ((scope = current.scopedLocals) && (scope.has(name))) return scope.get(name);
+    do if ((scope = current.scopedLocals) && (scope.has(name))) return scope.get(name)!;
     while (current = current.parent);
-    return this.parentFunction.localsByName.get(name);
+    return this.parentFunction.localsByName.get(name)!;
   }
 
   /** Looks up the element with the specified name relative to the scope of this flow. */
@@ -868,7 +868,7 @@ export class Flow {
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
-        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
+        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr)))!);
         assert(global.kind == ElementKind.GLOBAL);
         return canConversionOverflow(assert((<Global>global).type), type);
       }
