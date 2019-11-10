@@ -5,12 +5,19 @@ const path = require("path");
 const pkg = require("../package.json");
 
 console.log("Updating package.json ...");
+
 delete pkg.dependencies["ts-node"]; // doesn't need ts-node
 delete pkg.dependencies.typescript; // or typescript
 delete pkg.devDependencies;         // or development dependencies
 delete pkg.scripts;                 // or scripts
 pkg.files = pkg["files.release"];   // but specifies files
 delete pkg["files.release"];        //
+
+// Parse contributors from NOTICE and put into contributors's array in package.json
+const notice = fs.readFileSync(path.join(__dirname, "..", "NOTICE"));
+const contributors = notice.match(/(?![\s.]+)([\p{L}\s.]+<[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+>)/ug);
+pkg.contributors = contributors;
+
 fs.writeFileSync(path.join(__dirname, "..", "package.json"), [
   JSON.stringify(pkg, null, 2), '\n'
 ].join(""));
