@@ -1,11 +1,20 @@
 {
   "name": "@assemblyscript/loader",
+  "description": "A convenient loader for AssemblyScript modules.",
+  "keywords": [
+    "assemblyscript",
+    "loader",
+    "webassembly",
+    "wasm"
+  ],
   "version": "0.0.0",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "license": "Apache-2.0",
+  "homepage": "https://assemblyscript.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AssemblyScript/assemblyscript.git"
+    "url": "https://github.com/AssemblyScript/assemblyscript.git",
+    "directory": "lib/loader"
   },
   "bugs": {
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"

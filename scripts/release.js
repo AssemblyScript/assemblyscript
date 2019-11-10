@@ -6,6 +6,7 @@ const pkg = require("../package.json");
 
 console.log("Updating package.json ...");
 delete pkg.dependencies["ts-node"]; // doesn't need ts-node
+delete pkg.dependencies.typescript; // or typescript
 delete pkg.devDependencies;         // or development dependencies
 delete pkg.scripts;                 // or scripts
 pkg.files = pkg["files.release"];   // but specifies files

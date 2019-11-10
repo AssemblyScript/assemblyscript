@@ -37,7 +37,10 @@ var assemblyscript, isDev = false;
     assemblyscript = require("../dist/assemblyscript.js");
   } catch (e) {
     try { // `asc` on the command line without dist files
-      require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
+      require("ts-node").register({
+        project: path.join(__dirname, "..", "src", "tsconfig.json"),
+        skipIgnore: true
+      });
       require("../src/glue/js");
       assemblyscript = require("../src");
       isDev = true;
