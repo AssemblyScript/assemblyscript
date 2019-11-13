@@ -323,6 +323,7 @@ export namespace BuiltinSymbols {
   export const v128_all_true = "~lib/builtins/v128.all_true";
   export const v128_min = "~lib/builtins/v128.min";
   export const v128_max = "~lib/builtins/v128.max";
+  export const v128_dot = "~lib/builtins/v128.dot";
   export const v128_abs = "~lib/builtins/v128.abs";
   export const v128_sqrt = "~lib/builtins/v128.sqrt";
   export const v128_eq = "~lib/builtins/v128.eq";
@@ -353,6 +354,10 @@ export namespace BuiltinSymbols {
   export const i8x16_add = "~lib/builtins/i8x16.add";
   export const i8x16_sub = "~lib/builtins/i8x16.sub";
   export const i8x16_mul = "~lib/builtins/i8x16.mul";
+  export const i8x16_min_s = "~lib/builtins/i8x16.min_s";
+  export const i8x16_min_u = "~lib/builtins/i8x16.min_u";
+  export const i8x16_max_s = "~lib/builtins/i8x16.max_s";
+  export const i8x16_max_u = "~lib/builtins/i8x16.max_u";
   export const i8x16_neg = "~lib/builtins/i8x16.neg";
   export const i8x16_add_saturate_s = "~lib/builtins/i8x16.add_saturate_s";
   export const i8x16_add_saturate_u = "~lib/builtins/i8x16.add_saturate_u";
@@ -383,6 +388,10 @@ export namespace BuiltinSymbols {
   export const i16x8_add = "~lib/builtins/i16x8.add";
   export const i16x8_sub = "~lib/builtins/i16x8.sub";
   export const i16x8_mul = "~lib/builtins/i16x8.mul";
+  export const i16x8_min_s = "~lib/builtins/i16x8.min_s";
+  export const i16x8_min_u = "~lib/builtins/i16x8.min_u";
+  export const i16x8_max_s = "~lib/builtins/i16x8.max_s";
+  export const i16x8_max_u = "~lib/builtins/i16x8.max_u";
   export const i16x8_neg = "~lib/builtins/i16x8.neg";
   export const i16x8_add_saturate_s = "~lib/builtins/i16x8.add_saturate_s";
   export const i16x8_add_saturate_u = "~lib/builtins/i16x8.add_saturate_u";
@@ -418,6 +427,11 @@ export namespace BuiltinSymbols {
   export const i32x4_add = "~lib/builtins/i32x4.add";
   export const i32x4_sub = "~lib/builtins/i32x4.sub";
   export const i32x4_mul = "~lib/builtins/i32x4.mul";
+  export const i32x4_min_s = "~lib/builtins/i32x4.min_s";
+  export const i32x4_min_u = "~lib/builtins/i32x4.min_u";
+  export const i32x4_max_s = "~lib/builtins/i32x4.max_s";
+  export const i32x4_max_u = "~lib/builtins/i32x4.max_u";
+  export const i32x4_dot_i16x8_s = "~lib/builtins/i32x4.dot_i16x8_s";
   export const i32x4_neg = "~lib/builtins/i32x4.neg";
   export const i32x4_shl = "~lib/builtins/i32x4.shl";
   export const i32x4_shr_s = "~lib/builtins/i32x4.shr_s";
@@ -3332,6 +3346,20 @@ export function compileCall(
       let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {
+          case TypeKind.I8: return module.binary(BinaryOp.MinI8x16, arg0, arg1);
+          case TypeKind.U8: return module.binary(BinaryOp.MinU8x16, arg0, arg1);
+          case TypeKind.I16: return module.binary(BinaryOp.MinI16x8, arg0, arg1);
+          case TypeKind.U16: return module.binary(BinaryOp.MinU16x8, arg0, arg1);
+          case TypeKind.ISIZE: {
+            if (compiler.options.isWasm64) break;
+            // fall-through
+          }
+          case TypeKind.I32: return module.binary(BinaryOp.MinI32x4, arg0, arg1);
+          case TypeKind.USIZE: {
+            if (compiler.options.isWasm64) break;
+            // fall-through
+          }
+          case TypeKind.U32: return module.binary(BinaryOp.MinU32x4, arg0, arg1);
           case TypeKind.F32: return module.binary(BinaryOp.MinF32x4, arg0, arg1);
           case TypeKind.F64: return module.binary(BinaryOp.MinF64x2, arg0, arg1);
         }
@@ -3356,6 +3384,20 @@ export function compileCall(
       let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {
+          case TypeKind.I8: return module.binary(BinaryOp.MaxI8x16, arg0, arg1);
+          case TypeKind.U8: return module.binary(BinaryOp.MaxU8x16, arg0, arg1);
+          case TypeKind.I16: return module.binary(BinaryOp.MaxI16x8, arg0, arg1);
+          case TypeKind.U16: return module.binary(BinaryOp.MaxU16x8, arg0, arg1);
+          case TypeKind.ISIZE: {
+            if (compiler.options.isWasm64) break;
+            // fall-through
+          }
+          case TypeKind.I32: return module.binary(BinaryOp.MaxI32x4, arg0, arg1);
+          case TypeKind.USIZE: {
+            if (compiler.options.isWasm64) break;
+            // fall-through
+          }
+          case TypeKind.U32: return module.binary(BinaryOp.MaxU32x4, arg0, arg1);
           case TypeKind.F32: return module.binary(BinaryOp.MaxF32x4, arg0, arg1);
           case TypeKind.F64: return module.binary(BinaryOp.MaxF64x2, arg0, arg1);
         }
@@ -3363,6 +3405,29 @@ export function compileCall(
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
         reportNode.typeArgumentsRange, "v128.max", type.toString()
+      );
+      return module.unreachable();
+    }
+    case BuiltinSymbols.v128_dot: { // dot<T!>(a: v128, b: v128) -> v128
+      if (
+        checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let type = typeArguments![0];
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          case TypeKind.I16: return module.binary(BinaryOp.DotI16x8, arg0, arg1);
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "v128.dot", type.toString()
       );
       return module.unreachable();
     }
@@ -4501,6 +4566,10 @@ function tryDeferASM(
     case BuiltinSymbols.i8x16_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_sub: return deferASM(BuiltinSymbols.v128_sub, compiler, Type.i8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_mul: return deferASM(BuiltinSymbols.v128_mul, compiler, Type.i8, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i8x16_min_s: return deferASM(BuiltinSymbols.v128_min, compiler, Type.i8, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i8x16_min_u: return deferASM(BuiltinSymbols.v128_min, compiler, Type.u8, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i8x16_max_s: return deferASM(BuiltinSymbols.v128_max, compiler, Type.i8, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i8x16_max_u: return deferASM(BuiltinSymbols.v128_max, compiler, Type.u8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_neg: return deferASM(BuiltinSymbols.v128_neg, compiler, Type.i8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_add_saturate_s: return deferASM(BuiltinSymbols.v128_add_saturate, compiler, Type.i8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_add_saturate_u: return deferASM(BuiltinSymbols.v128_add_saturate, compiler, Type.u8, operands, Type.v128, reportNode);
@@ -4531,6 +4600,10 @@ function tryDeferASM(
     case BuiltinSymbols.i16x8_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_sub: return deferASM(BuiltinSymbols.v128_sub, compiler, Type.i16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_mul: return deferASM(BuiltinSymbols.v128_mul, compiler, Type.i16, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i16x8_min_s: return deferASM(BuiltinSymbols.v128_min, compiler, Type.i16, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i16x8_min_u: return deferASM(BuiltinSymbols.v128_min, compiler, Type.u16, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i16x8_max_s: return deferASM(BuiltinSymbols.v128_max, compiler, Type.i16, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i16x8_max_u: return deferASM(BuiltinSymbols.v128_max, compiler, Type.u16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_neg: return deferASM(BuiltinSymbols.v128_neg, compiler, Type.i16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_add_saturate_s: return deferASM(BuiltinSymbols.v128_add_saturate, compiler, Type.i16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_add_saturate_u: return deferASM(BuiltinSymbols.v128_add_saturate, compiler, Type.u16, operands, Type.v128, reportNode);
@@ -4566,6 +4639,11 @@ function tryDeferASM(
     case BuiltinSymbols.i32x4_add: return deferASM(BuiltinSymbols.v128_add, compiler, Type.i32, operands, Type.v128, reportNode);
     case BuiltinSymbols.i32x4_sub: return deferASM(BuiltinSymbols.v128_sub, compiler, Type.i32, operands, Type.v128, reportNode);
     case BuiltinSymbols.i32x4_mul: return deferASM(BuiltinSymbols.v128_mul, compiler, Type.i32, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i32x4_min_s: return deferASM(BuiltinSymbols.v128_min, compiler, Type.i32, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i32x4_min_u: return deferASM(BuiltinSymbols.v128_min, compiler, Type.u32, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i32x4_max_s: return deferASM(BuiltinSymbols.v128_max, compiler, Type.i32, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i32x4_max_u: return deferASM(BuiltinSymbols.v128_max, compiler, Type.u32, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i32x4_dot_i16x8_s: return deferASM(BuiltinSymbols.v128_dot, compiler, Type.i16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i32x4_neg: return deferASM(BuiltinSymbols.v128_neg, compiler, Type.i32, operands, Type.v128, reportNode);
     case BuiltinSymbols.i32x4_shl: return deferASM(BuiltinSymbols.v128_shl, compiler, Type.i32, operands, Type.v128, reportNode);
     case BuiltinSymbols.i32x4_shr_s: return deferASM(BuiltinSymbols.v128_shr, compiler, Type.i32, operands, Type.v128, reportNode);
