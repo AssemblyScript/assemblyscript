@@ -95,6 +95,7 @@ import {
 import {
   BuiltinSymbols
 } from "./builtins";
+import { Feature } from "../std/assembly/shared/feature";
 
 /** Indicates whether errors are reported or not. */
 export enum ReportMode {
@@ -282,6 +283,10 @@ export class Resolver extends DiagnosticEmitter {
           case CommonSymbols.indexof: return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.valueof: return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.returnof: return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
+          case CommonSymbols.vectorof: {
+            if (!this.program.options.hasFeature(Feature.SIMD)) break;
+            return this.resolveBuiltinVectorofType(node, ctxElement, ctxTypes, reportMode);
+          }
         }
       }
 
@@ -537,6 +542,9 @@ export class Resolver extends DiagnosticEmitter {
     }
     var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
     if (!typeArgument) return null;
+    if (typeArgument.is(TypeFlags.VECTOR)) {
+      return typeArgument.subType;
+    }
     var classReference = typeArgument.classReference;
     if (!classReference) {
       if (reportMode == ReportMode.REPORT) {
@@ -547,7 +555,6 @@ export class Resolver extends DiagnosticEmitter {
       }
       return null;
     }
-
     var overload = classReference.lookupOverload(OperatorKind.INDEXED_GET);
     if (overload) return overload.signature.returnType;
     if (reportMode == ReportMode.REPORT) {
@@ -592,6 +599,61 @@ export class Resolver extends DiagnosticEmitter {
       return null;
     }
     return signatureReference.returnType;
+  }
+
+  private resolveBuiltinVectorofType(
+    /** The type to resolve. */
+    node: NamedTypeNode,
+    /** Contextual element. */
+    ctxElement: Element,
+    /** Contextual types, i.e. `T`. */
+    ctxTypes: Map<string,Type> | null = null,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Type | null {
+    var typeArgumentNodes = node.typeArguments;
+    if (!(typeArgumentNodes && typeArgumentNodes.length == 1)) {
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+        );
+      }
+      return null;
+    }
+    var typeArgument = this.resolveType(typeArgumentNodes[0], ctxElement, ctxTypes, reportMode);
+    if (!typeArgument) return null;
+    if (!typeArgument.isAny(TypeFlags.REFERENCE | TypeFlags.VECTOR)) {
+      switch (typeArgument.kind) {
+        case TypeKind.I8: return Type.i8x16;
+        case TypeKind.I16: return Type.i16x8;
+        case TypeKind.I32: return Type.i32x4;
+        case TypeKind.I64: return Type.i64x2;
+        case TypeKind.ISIZE: {
+          return this.program.options.isWasm64
+            ? Type.i64x2
+            : Type.i32x4;
+        }
+        case TypeKind.U8: return Type.u8x16;
+        case TypeKind.U16: return Type.u16x8;
+        case TypeKind.U32: return Type.u32x4;
+        case TypeKind.U64: return Type.u64x2;
+        case TypeKind.USIZE: {
+          return this.program.options.isWasm64
+            ? Type.u64x2
+            : Type.u32x4;
+        }
+        case TypeKind.F32: return Type.f32x4;
+        case TypeKind.F64: return Type.f64x2;
+      }
+    }
+    if (reportMode == ReportMode.REPORT) {
+      this.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        typeArgumentNodes[0].range, "vectorof", typeArgument.toString()
+      );
+    }
+    return null;
   }
 
   /** Resolves a type name to the program element it refers to. */

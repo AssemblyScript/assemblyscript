@@ -661,7 +661,25 @@ export class Program extends DiagnosticEmitter {
       this.makeNativeTypeDeclaration(CommonSymbols.returnof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
-    if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
+    if (options.hasFeature(Feature.SIMD)) {
+      this.nativeFile.add(CommonSymbols.vectorof, new TypeDefinition(
+        CommonSymbols.vectorof,
+        this.nativeFile,
+        this.makeNativeTypeDeclaration(CommonSymbols.vectorof, CommonFlags.EXPORT | CommonFlags.GENERIC),
+        DecoratorFlags.BUILTIN
+      ));
+      this.registerNativeType(CommonSymbols.v128, Type.v128);
+      this.registerNativeType(CommonSymbols.i8x16, Type.i8x16);
+      this.registerNativeType(CommonSymbols.u8x16, Type.u8x16);
+      this.registerNativeType(CommonSymbols.i16x8, Type.i16x8);
+      this.registerNativeType(CommonSymbols.u16x8, Type.u16x8);
+      this.registerNativeType(CommonSymbols.i32x4, Type.i32x4);
+      this.registerNativeType(CommonSymbols.u32x4, Type.u32x4);
+      this.registerNativeType(CommonSymbols.i64x2, Type.i64x2);
+      this.registerNativeType(CommonSymbols.u64x2, Type.u64x2);
+      this.registerNativeType(CommonSymbols.f32x4, Type.f32x4);
+      this.registerNativeType(CommonSymbols.f64x2, Type.f64x2);
+    }
     if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerNativeType(CommonSymbols.anyref, Type.anyref);
 
     // register compiler hints
@@ -879,7 +897,19 @@ export class Program extends DiagnosticEmitter {
     this.registerWrapperClass(Type.bool, CommonSymbols.Bool);
     this.registerWrapperClass(Type.f32, CommonSymbols.F32);
     this.registerWrapperClass(Type.f64, CommonSymbols.F64);
-    if (options.hasFeature(Feature.SIMD)) this.registerWrapperClass(Type.v128, CommonSymbols.V128);
+    if (options.hasFeature(Feature.SIMD)) {
+      this.registerWrapperClass(Type.v128, CommonSymbols.V128);
+      this.registerWrapperClass(Type.i8x16, CommonSymbols.I8x16);
+      this.registerWrapperClass(Type.u8x16, CommonSymbols.U8x16);
+      this.registerWrapperClass(Type.i16x8, CommonSymbols.I16x8);
+      this.registerWrapperClass(Type.u16x8, CommonSymbols.U16x8);
+      this.registerWrapperClass(Type.i32x4, CommonSymbols.I32x4);
+      this.registerWrapperClass(Type.u32x4, CommonSymbols.U32x4);
+      this.registerWrapperClass(Type.i64x2, CommonSymbols.I64x2);
+      this.registerWrapperClass(Type.u64x2, CommonSymbols.U64x2);
+      this.registerWrapperClass(Type.f32x4, CommonSymbols.F32x4);
+      this.registerWrapperClass(Type.f64x2, CommonSymbols.F64x2);
+    }
     if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerWrapperClass(Type.anyref, CommonSymbols.Anyref);
 
     // register views but don't instantiate them yet

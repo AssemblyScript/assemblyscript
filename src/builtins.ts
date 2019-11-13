@@ -341,9 +341,13 @@ export namespace BuiltinSymbols {
   export const v128_qfms = "~lib/builtins/v128.qfms";
 
   export const i8x16 = "~lib/builtins/i8x16";
+  export const u8x16 = "~lib/builtins/u8x16";
   export const i16x8 = "~lib/builtins/i16x8";
+  export const u16x8 = "~lib/builtins/u16x8";
   export const i32x4 = "~lib/builtins/i32x4";
+  export const u32x4 = "~lib/builtins/u32x4";
   export const i64x2 = "~lib/builtins/i64x2";
+  export const u64x2 = "~lib/builtins/u64x2";
   export const f32x4 = "~lib/builtins/f32x4";
   export const f64x2 = "~lib/builtins/f64x2";
 
@@ -597,6 +601,7 @@ export function compileCall(
   isAsm: bool = false
 ): ExpressionRef {
   var module = compiler.module;
+  var alt: bool = false;
 
   switch (prototype.internalName) {
 
@@ -2544,13 +2549,15 @@ export function compileCall(
     // === SIMD ===================================================================================
 
     case BuiltinSymbols.v128: // alias for now
-    case BuiltinSymbols.i8x16: {
+    case BuiltinSymbols.i8x16: alt = true;
+    case BuiltinSymbols.u8x16: {
+      let outType = alt ? Type.i8x16 : Type.u8x16;
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 16, reportNode, compiler)
       ) {
-        compiler.currentType = Type.v128;
+        compiler.currentType = outType;
         return module.unreachable();
       }
       let bytes = new Uint8Array(16);
@@ -2563,23 +2570,25 @@ export function compileCall(
               DiagnosticCode.Expression_must_be_a_compile_time_constant,
               value.range
             );
-            compiler.currentType = Type.v128;
+            compiler.currentType = outType;
             return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.I32);
           writeI8(getConstValueI32(expr), bytes, i);
         }
       }
-      compiler.currentType = Type.v128;
+      compiler.currentType = outType;
       return module.v128(bytes);
     }
-    case BuiltinSymbols.i16x8: {
+    case BuiltinSymbols.i16x8: alt = true;
+    case BuiltinSymbols.u16x8: {
+      let outType = alt ? Type.i16x8 : Type.u16x8;
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 8, reportNode, compiler)
       ) {
-        compiler.currentType = Type.v128;
+        compiler.currentType = outType;
         return module.unreachable();
       }
       let bytes = new Uint8Array(16);
@@ -2592,23 +2601,25 @@ export function compileCall(
               DiagnosticCode.Expression_must_be_a_compile_time_constant,
               value.range
             );
-            compiler.currentType = Type.v128;
+            compiler.currentType = outType;
             return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.I32);
           writeI16(getConstValueI32(expr), bytes, i << 1);
         }
       }
-      compiler.currentType = Type.v128;
+      compiler.currentType = outType;
       return module.v128(bytes);
     }
-    case BuiltinSymbols.i32x4: {
+    case BuiltinSymbols.i32x4: alt = true;
+    case BuiltinSymbols.u32x4: {
+      let outType = alt ? Type.i32x4 : Type.u32x4;
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 4, reportNode, compiler)
       ) {
-        compiler.currentType = Type.v128;
+        compiler.currentType = outType;
         return module.unreachable();
       }
       let bytes = new Uint8Array(16);
@@ -2621,23 +2632,25 @@ export function compileCall(
               DiagnosticCode.Expression_must_be_a_compile_time_constant,
               value.range
             );
-            compiler.currentType = Type.v128;
+            compiler.currentType = outType;
             return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.I32);
           writeI32(getConstValueI32(expr), bytes, i << 2);
         }
       }
-      compiler.currentType = Type.v128;
+      compiler.currentType = outType;
       return module.v128(bytes);
     }
-    case BuiltinSymbols.i64x2: {
+    case BuiltinSymbols.i64x2: alt = true;
+    case BuiltinSymbols.u64x2: {
+      let outType = alt ? Type.i64x2 : Type.u64x2;
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) {
-        compiler.currentType = Type.v128;
+        compiler.currentType = outType;
         return module.unreachable();
       }
       let bytes = new Uint8Array(16);
@@ -2650,7 +2663,7 @@ export function compileCall(
               DiagnosticCode.Expression_must_be_a_compile_time_constant,
               value.range
             );
-            compiler.currentType = Type.v128;
+            compiler.currentType = outType;
             return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.I64);
@@ -2659,7 +2672,7 @@ export function compileCall(
           writeI32(getConstValueI64High(expr), bytes, off + 4);
         }
       }
-      compiler.currentType = Type.v128;
+      compiler.currentType = outType;
       return module.v128(bytes);
     }
     case BuiltinSymbols.f32x4: {
@@ -2668,7 +2681,7 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 4, reportNode, compiler)
       ) {
-        compiler.currentType = Type.v128;
+        compiler.currentType = Type.f32x4;
         return module.unreachable();
       }
       let bytes = new Uint8Array(16);
@@ -2681,14 +2694,14 @@ export function compileCall(
               DiagnosticCode.Expression_must_be_a_compile_time_constant,
               value.range
             );
-            compiler.currentType = Type.v128;
+            compiler.currentType = Type.f32x4;
             return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.F32);
           writeF32(getConstValueF32(expr), bytes, i << 2);
         }
       }
-      compiler.currentType = Type.v128;
+      compiler.currentType = Type.f32x4;
       return module.v128(bytes);
     }
     case BuiltinSymbols.f64x2: {
@@ -2697,7 +2710,7 @@ export function compileCall(
         checkTypeAbsent(typeArguments, reportNode, prototype) |
         checkArgsRequired(operands, 2, reportNode, compiler)
       ) {
-        compiler.currentType = Type.v128;
+        compiler.currentType = Type.f64x2;
         return module.unreachable();
       }
       let bytes = new Uint8Array(16);
@@ -2710,14 +2723,14 @@ export function compileCall(
               DiagnosticCode.Expression_must_be_a_compile_time_constant,
               value.range
             );
-            compiler.currentType = Type.v128;
+            compiler.currentType = Type.f64x2;
             return module.unreachable();
           }
           assert(getExpressionType(expr) == NativeType.F64);
           writeF64(getConstValueF64(expr), bytes, i << 3);
         }
       }
-      compiler.currentType = Type.v128;
+      compiler.currentType = Type.f64x2;
       return module.v128(bytes);
     }
     case BuiltinSymbols.v128_splat: { // splat<T!>(x: T) -> v128
@@ -2731,30 +2744,67 @@ export function compileCall(
       }
       let type = typeArguments![0];
       let arg0 = compiler.compileExpression(operands[0], type, Constraints.CONV_IMPLICIT);
-      compiler.currentType = Type.v128;
       if (!type.is(TypeFlags.REFERENCE)) {
         switch (type.kind) {
-          case TypeKind.I8:
-          case TypeKind.U8: return module.unary(UnaryOp.SplatI8x16, arg0);
-          case TypeKind.I16:
-          case TypeKind.U16: return module.unary(UnaryOp.SplatI16x8, arg0);
-          case TypeKind.I32:
-          case TypeKind.U32: return module.unary(UnaryOp.SplatI32x4, arg0);
-          case TypeKind.I64:
-          case TypeKind.U64: return module.unary(UnaryOp.SplatI64x2, arg0);
-          case TypeKind.ISIZE:
-          case TypeKind.USIZE: {
-            return module.unary(
-              compiler.options.isWasm64
-                ? UnaryOp.SplatI64x2
-                : UnaryOp.SplatI32x4,
-              arg0
-            );
+          case TypeKind.I8: {
+            compiler.currentType = Type.i8x16;
+            return module.unary(UnaryOp.SplatI8x16, arg0);
           }
-          case TypeKind.F32: return module.unary(UnaryOp.SplatF32x4, arg0);
-          case TypeKind.F64: return module.unary(UnaryOp.SplatF64x2, arg0);
+          case TypeKind.U8: {
+            compiler.currentType = Type.u8x16;
+            return module.unary(UnaryOp.SplatI8x16, arg0);
+          }
+          case TypeKind.I16: {
+            compiler.currentType = Type.i16x8;
+            return module.unary(UnaryOp.SplatI16x8, arg0);
+          }
+          case TypeKind.U16: {
+            compiler.currentType = Type.u16x8;
+            return module.unary(UnaryOp.SplatI16x8, arg0);
+          }
+          case TypeKind.I32: {
+            compiler.currentType = Type.i32x4;
+            return module.unary(UnaryOp.SplatI32x4, arg0);
+          }
+          case TypeKind.U32: {
+            compiler.currentType = Type.u32x4;
+            return module.unary(UnaryOp.SplatI32x4, arg0);
+          }
+          case TypeKind.I64: {
+            compiler.currentType = Type.i64x2;
+            return module.unary(UnaryOp.SplatI64x2, arg0);
+          }
+          case TypeKind.U64: {
+            compiler.currentType = Type.u64x2;
+            return module.unary(UnaryOp.SplatI64x2, arg0);
+          }
+          case TypeKind.ISIZE: {
+            if (compiler.options.isWasm64) {
+              compiler.currentType = Type.i64x2;
+              return module.unary(UnaryOp.SplatI64x2, arg0);
+            }
+            compiler.currentType = Type.i32x4;
+            return module.unary(UnaryOp.SplatI32x4, arg0);
+          }
+          case TypeKind.USIZE: {
+            if (compiler.options.isWasm64) {
+              compiler.currentType = Type.u64x2;
+              return module.unary(UnaryOp.SplatI64x2, arg0);
+            }
+            compiler.currentType = Type.u32x4;
+            return module.unary(UnaryOp.SplatI32x4, arg0);
+          }
+          case TypeKind.F32: {
+            compiler.currentType = Type.f32x4;
+            return module.unary(UnaryOp.SplatF32x4, arg0);
+          }
+          case TypeKind.F64: {
+            compiler.currentType = Type.f64x2;
+            return module.unary(UnaryOp.SplatF64x2, arg0);
+          }
         }
       }
+      compiler.currentType = Type.v128;
       compiler.error(
         DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
         reportNode.typeArgumentsRange, "v128.splat", type.toString()

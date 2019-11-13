@@ -138,6 +138,7 @@ export namespace CommonSymbols {
   export const indexof = "indexof";
   export const valueof = "valueof";
   export const returnof = "returnof";
+  export const vectorof = "vectorof";
   // aliases
   export const null_ = "null";
   export const true_ = "true";
@@ -177,6 +178,16 @@ export namespace CommonSymbols {
   export const F32 = "F32";
   export const F64 = "F64";
   export const V128 = "V128";
+  export const I8x16 = "I8x16";
+  export const U8x16 = "U8x16";
+  export const I16x8 = "I16x8";
+  export const U16x8 = "U16x8";
+  export const I32x4 = "I32x4";
+  export const U32x4 = "U32x4";
+  export const I64x2 = "I64x2";
+  export const U64x2 = "U64x2";
+  export const F32x4 = "F32x4";
+  export const F64x2 = "F64x2";
   export const Anyref = "Anyref";
   export const String = "String";
   export const Array = "Array";

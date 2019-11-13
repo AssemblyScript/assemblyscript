@@ -34,7 +34,27 @@ declare type f32 = number;
 /** A 64-bit float. */
 declare type f64 = number;
 /** A 128-bit vector. */
-declare type v128 = object;
+declare type v128 = object & { __v128__: true };
+/** A vector of sixteen 8-bit signed integer lanes. */
+declare type i8x16 = v128 | {0: i8, 1: i8, 2: i8, 3: i8, 4: i8, 5: i8, 6: i8, 7: i8, 8: i8, 9: i8, 10: i8, 11: i8, 12: i8, 13: i8, 14: i8, 15: i8};
+/** A vector of sixteen 8-bit unsigned integer lanes. */
+declare type u8x16 = v128 | {0: u8, 1: u8, 2: u8, 3: u8, 4: u8, 5: u8, 6: u8, 7: u8, 8: u8, 9: u8, 10: u8, 11: u8, 12: u8, 13: u8, 14: u8, 15: u8};
+/** A vector of eight 16-bit signed integer lanes. */
+declare type i16x8 = v128 | {0: i16, 1: i16, 2: i16, 3: i16, 4: i16, 5: i16, 6: i16, 7: i16};
+/** A vector of eight 16-bit unsigned integer lanes. */
+declare type u16x8 = v128 | {0: u16, 1: u16, 2: u16, 3: u16, 4: u16, 5: u16, 6: u16, 7: u16};
+/** A vector of four 32-bit signed integer lanes. */
+declare type i32x4 = v128 | {0: i32, 1: i32, 2: i32, 3: i32};
+/** A vector of four 32-bit unsigned integer lanes. */
+declare type u32x4 = v128 | {0: u32, 1: u32, 2: u32, 3: u32};
+/** A vector of two 64-bit signed integer lanes. */
+declare type i64x2 = v128 | {0: i64, 1: i64};
+/** A vector of two 64-bit unsigned integer lanes. */
+declare type u64x2 = v128 | {0: u64, 1: u64};
+/** A vector of four 32-bit float lanes. */
+declare type f32x4 = v128 | {0: f32, 1: f32, 2: f32, 3: f32};
+/** A vector of two 64-bit float lanes. */
+declare type f64x2 = v128 | {0: f64, 1: f64};
 /** A host reference. */
 declare type anyref = object;
 
@@ -627,7 +647,7 @@ declare namespace v128 {
   export function qfms<T = f32 | f64>(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from sixteen 8-bit integer values. Arguments must be compile-time constants. */
-declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): v128;
+declare function i8x16(a: i8, b: i8, c: i8, d: i8, e: i8, f: i8, g: i8, h: i8, i: i8, j: i8, k: i8, l: i8, m: i8, n: i8, o: i8, p: i8): i8x16;
 declare namespace i8x16 {
   /** Creates a vector with sixteen identical 8-bit integer lanes. */
   export function splat(x: i8): v128;
@@ -697,7 +717,7 @@ declare namespace i8x16 {
   export function narrow_i16x8_u(a: v128, b: v128): v128;
 }
 /** Initializes a 128-bit vector from eight 16-bit integer values. Arguments must be compile-time constants. */
-declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): v128;
+declare function i16x8(a: i16, b: i16, c: i16, d: i16, e: i16, f: i16, g: i16, h: i16): i16x8;
 declare namespace i16x8 {
   /** Creates a vector with eight identical 16-bit integer lanes. */
   export function splat(x: i16): v128;
@@ -779,7 +799,7 @@ declare namespace i16x8 {
   export function load8x8_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit integer values. Arguments must be compile-time constants. */
-declare function i32x4(a: i32, b: i32, c: i32, d: i32): v128;
+declare function i32x4(a: i32, b: i32, c: i32, d: i32): i32x4;
 declare namespace i32x4 {
   /** Creates a vector with four identical 32-bit integer lanes. */
   export function splat(x: i32): v128;
@@ -853,7 +873,7 @@ declare namespace i32x4 {
   export function load16x4_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit integer values. Arguments must be compile-time constants. */
-declare function i64x2(a: i64, b: i64): v128;
+declare function i64x2(a: i64, b: i64): i64x2;
 declare namespace i64x2 {
   /** Creates a vector with two identical 64-bit integer lanes. */
   export function splat(x: i64): v128;
@@ -889,7 +909,7 @@ declare namespace i64x2 {
   export function load32x2_u(ptr: usize, immOffset?: u32, immAlign?: u32): v128;
 }
 /** Initializes a 128-bit vector from four 32-bit float values. Arguments must be compile-time constants. */
-declare function f32x4(a: f32, b: f32, c: f32, d: f32): v128;
+declare function f32x4(a: f32, b: f32, c: f32, d: f32): f32x4;
 declare namespace f32x4 {
   /** Creates a vector with four identical 32-bit float lanes. */
   export function splat(x: f32): v128;
@@ -937,7 +957,7 @@ declare namespace f32x4 {
   export function qfms(a: v128, b: v128, c: v128): v128;
 }
 /** Initializes a 128-bit vector from two 64-bit float values. Arguments must be compile-time constants. */
-declare function f64x2(a: f64, b: f64): v128;
+declare function f64x2(a: f64, b: f64): f64x2;
 declare namespace f64x2 {
   /** Creates a vector with two identical 64-bit float lanes. */
   export function splat(x: f64): v128;
@@ -1014,6 +1034,8 @@ declare type valueof<T extends unknown[]> = T[0];
 declare type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
 /** A special type evaluated to the return type of T if T is a callable function. */
 declare type returnof<T extends (...args: any) => any> = ReturnType<T>;
+/** Special type evaluating the corresponding vector type of the specified element type. */
+declare type vectorof<T> = v128;
 
 /** Pseudo-class representing the backing class of integer types. */
 declare class _Integer {

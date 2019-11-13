@@ -118,9 +118,11 @@ export class Type {
   nonNullableType: Type;
   /** Cached nullable type, if non-nullable. */
   private cachedNullableType: Type | null = null;
+  /** Subtype, if a specialized vector type. */
+  subType: Type | null;
 
   /** Constructs a new resolved type. */
-  constructor(kind: TypeKind, flags: TypeFlags, size: u32) {
+  constructor(kind: TypeKind, flags: TypeFlags, size: u32, subType: Type | null = null) {
     this.kind = kind;
     this.flags = flags;
     this.size = size;
@@ -128,6 +130,7 @@ export class Type {
     this.classReference = null;
     this.signatureReference = null;
     this.nonNullableType = this;
+    this.subType = subType;
   }
 
   /** Returns the closest int type representing this type. */
@@ -552,6 +555,86 @@ export class Type {
   static readonly v128: Type = new Type(TypeKind.V128,
     TypeFlags.VECTOR   |
     TypeFlags.VALUE, 128
+  );
+
+  /** A 128-bit vector of sixteen 8-bit signed integer lanes. */
+  static readonly i8x16: Type = new Type(TypeKind.V128,
+    TypeFlags.SIGNED   |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.i8
+  );
+
+  /** A 128-bit vector of sixteen 8-bit unsigned integer lanes. */
+  static readonly u8x16: Type = new Type(TypeKind.V128,
+    TypeFlags.UNSIGNED |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.u8
+  );
+
+  /** A 128-bit vector of eight 16-bit signed integer lanes. */
+  static readonly i16x8: Type = new Type(TypeKind.V128,
+    TypeFlags.SIGNED   |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.i16
+  );
+
+  /** A 128-bit vector of eight 16-bit unsigned integer lanes. */
+  static readonly u16x8: Type = new Type(TypeKind.V128,
+    TypeFlags.UNSIGNED |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.u16
+  );
+
+  /** A 128-bit vector of four 32-bit signed integer lanes. */
+  static readonly i32x4: Type = new Type(TypeKind.V128,
+    TypeFlags.SIGNED   |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.i32
+  );
+
+  /** A 128-bit vector of four 32-bit unsigned integer lanes. */
+  static readonly u32x4: Type = new Type(TypeKind.V128,
+    TypeFlags.UNSIGNED |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.u32
+  );
+
+  /** A 128-bit vector of two 32-bit signed integer lanes. */
+  static readonly i64x2: Type = new Type(TypeKind.V128,
+    TypeFlags.SIGNED   |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.i64
+  );
+
+  /** A 128-bit vector of two 32-bit unsigned integer lanes. */
+  static readonly u64x2: Type = new Type(TypeKind.V128,
+    TypeFlags.UNSIGNED |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.u64
+  );
+
+  /** A 128-bit vector of four 32-bit float lanes. */
+  static readonly f32x4: Type = new Type(TypeKind.V128,
+    TypeFlags.SIGNED   |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.f32
+  );
+
+  /** A 128-bit vector of two 64-bit float lanes. */
+  static readonly f64x2: Type = new Type(TypeKind.V128,
+    TypeFlags.SIGNED   |
+    TypeFlags.VECTOR   |
+    TypeFlags.VALUE, 128,
+    Type.f64
   );
 
   /** A host reference. */
