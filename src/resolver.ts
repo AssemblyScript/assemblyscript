@@ -880,7 +880,7 @@ export class Resolver extends DiagnosticEmitter {
     } else if (type != Type.void) {
       let wrapperClasses = this.program.wrapperClasses;
       assert(wrapperClasses.has(type));
-      return wrapperClasses.get(type);
+      return wrapperClasses.get(type)!;
     }
     return null;
   }
@@ -2171,7 +2171,7 @@ export class Resolver extends DiagnosticEmitter {
         );
         let wrapperClasses = this.program.wrapperClasses;
         assert(wrapperClasses.has(intType));
-        return wrapperClasses.get(intType);
+        return wrapperClasses.get(intType)!;
       }
       case LiteralKind.FLOAT: {
         this.currentThisExpression = node;
@@ -2179,7 +2179,7 @@ export class Resolver extends DiagnosticEmitter {
         let fltType = ctxType == Type.f32 ? Type.f32 : Type.f64;
         let wrapperClasses = this.program.wrapperClasses;
         assert(wrapperClasses.has(fltType));
-        return wrapperClasses.get(fltType);
+        return wrapperClasses.get(fltType)!;
       }
       case LiteralKind.STRING: {
         this.currentThisExpression = node;
@@ -2334,7 +2334,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Element | null {
     var wrapperClasses = this.program.wrapperClasses;
     assert(wrapperClasses.has(Type.bool));
-    return wrapperClasses.get(Type.bool);
+    return wrapperClasses.get(Type.bool)!;
   }
 
   /** Resolves an instanceof expression to its static type. */

@@ -17,10 +17,11 @@ if (process.browser) process.cwd = function() { return "."; };
 
 const fs = require("fs");
 const path = require("path");
-const utf8 = require("@protobufjs/utf8");
+const utf8 = require("./util/utf8");
 const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
+const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
 
@@ -41,7 +42,10 @@ var assemblyscript, isDev = false;
     assemblyscript = require("../dist/assemblyscript.js");
   } catch (e) {
     try { // `asc` on the command line without dist files
-      require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
+      require("ts-node").register({
+        project: path.join(__dirname, "..", "src", "tsconfig.json"),
+        skipIgnore: true
+      });
       require("../src/glue/js");
       assemblyscript = require("../src");
       isDev = true;
@@ -84,9 +88,9 @@ exports.defaultShrinkLevel = 1;
 /** Bundled library files. */
 exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if not a bundle
   const libDir = path.join(__dirname, "..", "std", "assembly");
-  const libFiles = require("glob").sync("**/!(*.d).ts", { cwd: libDir });
   const bundled = {};
-  libFiles.forEach(file => bundled[file.replace(/\.ts$/, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
+  find.files(libDir, find.TS_EXCEPT_DTS)
+      .forEach(file => bundled[file.replace(/\.ts$/, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
   return bundled;
 })();
 
