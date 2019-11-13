@@ -1091,11 +1091,15 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
-  export declare function min<T>(a: v128, b: v128): v128; // f32, f64 only
+  export declare function min<T>(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
-  export declare function max<T>(a: v128, b: v128): v128; // f32, f64 only
+  export declare function max<T>(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function dot<T>(a: v128, b: v128): v128; // i16 only
 
   // @ts-ignore: decorator
   @builtin
@@ -1194,6 +1198,22 @@ export namespace i8x16 {
   // @ts-ignore: decorator
   @builtin
   export declare function mul(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function min_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function min_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function max_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function max_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
@@ -1317,6 +1337,22 @@ export namespace i16x8 {
   // @ts-ignore: decorator
   @builtin
   export declare function mul(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function min_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function min_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function max_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function max_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
@@ -1460,6 +1496,26 @@ export namespace i32x4 {
   // @ts-ignore: decorator
   @builtin
   export declare function mul(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function min_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function min_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function max_s(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function max_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function dot_i16x8_s(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
