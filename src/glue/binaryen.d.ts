@@ -718,7 +718,7 @@ declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, initial: B
 
 declare function _BinaryenSetMemory(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, exportName: usize, segments: usize, segmentPassive: usize, segmentOffsets: usize, segmentSizes: usize, numSegments: BinaryenIndex, shared: bool): void;
 declare function _BinaryenGetNumMemorySegments(module: BinaryenModuleRef): BinaryenIndex;
-// declare function _BinaryenGetMemorySegmentByteOffset(module: BinaryenModuleRef, index: BinaryenIndex): i64;
+declare function _BinaryenGetMemorySegmentByteOffset(module: BinaryenModuleRef, index: BinaryenIndex): u32;
 declare function _BinaryenGetMemorySegmentByteLength(module: BinaryenModuleRef, id: BinaryenIndex): usize;
 declare function _BinaryenCopyMemorySegmentData(module: BinaryenModuleRef, id: BinaryenIndex, buffer: usize): void;
 
