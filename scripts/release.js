@@ -5,12 +5,27 @@ const path = require("path");
 const pkg = require("../package.json");
 
 console.log("Updating package.json ...");
-delete pkg.dependencies["ts-node"]; // doesn't need ts-node
-delete pkg.dependencies.typescript; // or typescript
-delete pkg.devDependencies;         // or development dependencies
-delete pkg.scripts;                 // or scripts
-pkg.files = pkg["files.release"];   // but specifies files
-delete pkg["files.release"];        //
+
+// Stuff we don't need in release
+Object.keys(pkg.devDependencies).forEach(dep => delete pkg.dependencies[dep]);
+delete pkg.devDependencies;
+delete pkg.scripts;
+
+// Stuff we want in release
+pkg.files = pkg.releaseFiles;
+delete pkg.releaseFiles;
+
+// Copy contributors from NOTICE to .contributors
+const notice = fs.readFileSync(path.join(__dirname, "..", "NOTICE"), "utf8");
+const noticeRange = ["dcode.io>", "Portions of this software"];
+const posStart = notice.indexOf(noticeRange[0]);
+const posEnd = notice.indexOf(noticeRange[1], posStart);
+if (posStart < 0 || posEnd < 0) throw Error("unexpected NOTICE format");
+pkg.contributors = [];
+for (let entry of notice.substring(posStart + noticeRange[0].length, posEnd).trim().matchAll(/^\* ([^<\n]+(?: <([^>\n]+)>))/mg)) {
+  pkg.contributors.push(entry[1]);
+}
+if (!pkg.contributors.length) throw Error("missing contributors");
 fs.writeFileSync(path.join(__dirname, "..", "package.json"), [
   JSON.stringify(pkg, null, 2), '\n'
 ].join(""));

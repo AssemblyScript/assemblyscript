@@ -14,7 +14,7 @@ if (~tailArgs) {
   return;
 }
 
-require("source-map-support").install();
+try { require("source-map-support").install(); } catch (e) {}
 
 const asc = module.exports = require("../cli/asc.js");
 if (/\basc$/.test(process.argv[1])) {
