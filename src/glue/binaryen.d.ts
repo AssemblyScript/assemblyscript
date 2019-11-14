@@ -331,6 +331,10 @@ declare function _BinaryenSubVecI8x16(): BinaryenOp;
 declare function _BinaryenSubSatSVecI8x16(): BinaryenOp;
 declare function _BinaryenSubSatUVecI8x16(): BinaryenOp;
 declare function _BinaryenMulVecI8x16(): BinaryenOp;
+declare function _BinaryenMinSVecI8x16(): BinaryenOp;
+declare function _BinaryenMinUVecI8x16(): BinaryenOp;
+declare function _BinaryenMaxSVecI8x16(): BinaryenOp;
+declare function _BinaryenMaxUVecI8x16(): BinaryenOp;
 declare function _BinaryenNegVecI16x8(): BinaryenOp;
 declare function _BinaryenAnyTrueVecI16x8(): BinaryenOp;
 declare function _BinaryenAllTrueVecI16x8(): BinaryenOp;
@@ -344,6 +348,10 @@ declare function _BinaryenSubVecI16x8(): BinaryenOp;
 declare function _BinaryenSubSatSVecI16x8(): BinaryenOp;
 declare function _BinaryenSubSatUVecI16x8(): BinaryenOp;
 declare function _BinaryenMulVecI16x8(): BinaryenOp;
+declare function _BinaryenMinSVecI16x8(): BinaryenOp;
+declare function _BinaryenMinUVecI16x8(): BinaryenOp;
+declare function _BinaryenMaxSVecI16x8(): BinaryenOp;
+declare function _BinaryenMaxUVecI16x8(): BinaryenOp;
 declare function _BinaryenNegVecI32x4(): BinaryenOp;
 declare function _BinaryenAnyTrueVecI32x4(): BinaryenOp;
 declare function _BinaryenAllTrueVecI32x4(): BinaryenOp;
@@ -353,6 +361,11 @@ declare function _BinaryenShrUVecI32x4(): BinaryenOp;
 declare function _BinaryenAddVecI32x4(): BinaryenOp;
 declare function _BinaryenSubVecI32x4(): BinaryenOp;
 declare function _BinaryenMulVecI32x4(): BinaryenOp;
+declare function _BinaryenMinSVecI32x4(): BinaryenOp;
+declare function _BinaryenMinUVecI32x4(): BinaryenOp;
+declare function _BinaryenMaxSVecI32x4(): BinaryenOp;
+declare function _BinaryenMaxUVecI32x4(): BinaryenOp;
+declare function _BinaryenDotSVecI16x8ToVecI32x4(): BinaryenOp;
 declare function _BinaryenNegVecI64x2(): BinaryenOp;
 declare function _BinaryenAnyTrueVecI64x2(): BinaryenOp;
 declare function _BinaryenAllTrueVecI64x2(): BinaryenOp;
@@ -650,6 +663,8 @@ declare type BinaryenFunctionRef = usize;
 declare function _BinaryenAddFunction(module: BinaryenModuleRef, name: usize, type: BinaryenFunctionTypeRef, varTypes: usize, numVarTypes: BinaryenIndex, body: BinaryenExpressionRef): BinaryenFunctionRef;
 declare function _BinaryenGetFunction(module: BinaryenModuleRef, name: usize): BinaryenFunctionRef;
 declare function _BinaryenRemoveFunction(module: BinaryenModuleRef, name: usize): void;
+declare function _BinaryenGetNumFunctions(module: BinaryenModuleRef): BinaryenIndex;
+declare function _BinaryenGetFunctionByIndex(module: BinaryenModuleRef, index: BinaryenIndex): BinaryenFunctionRef;
 
 declare function _BinaryenFunctionGetName(func: BinaryenFunctionRef): usize;
 declare function _BinaryenFunctionGetType(func: BinaryenFunctionRef): BinaryenFunctionTypeRef;
@@ -679,6 +694,8 @@ declare function _BinaryenAddMemoryExport(module: BinaryenModuleRef, internalNam
 declare function _BinaryenAddGlobalExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
 declare function _BinaryenAddEventExport(module: BinaryenModuleRef, internalName: usize, externalName: usize): BinaryenExportRef;
 declare function _BinaryenRemoveExport(module: BinaryenModuleRef, externalName: usize): void;
+declare function _BinaryenGetNumExports(module: BinaryenModuleRef): BinaryenIndex;
+declare function _BinaryenGetExportByIndex(module: BinaryenModuleRef, index: BinaryenIndex): BinaryenExportRef;
 
 declare type BinaryenGlobalRef = usize;
 
@@ -700,6 +717,10 @@ declare function _BinaryenEventGetParam(event: BinaryenEventRef, index: Binaryen
 declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, funcs: usize, numFuncs: BinaryenIndex, offset: BinaryenExpressionRef): void;
 
 declare function _BinaryenSetMemory(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, exportName: usize, segments: usize, segmentPassive: usize, segmentOffsets: usize, segmentSizes: usize, numSegments: BinaryenIndex, shared: bool): void;
+declare function _BinaryenGetNumMemorySegments(module: BinaryenModuleRef): BinaryenIndex;
+declare function _BinaryenGetMemorySegmentByteOffset(module: BinaryenModuleRef, index: BinaryenIndex): u32;
+declare function _BinaryenGetMemorySegmentByteLength(module: BinaryenModuleRef, id: BinaryenIndex): usize;
+declare function _BinaryenCopyMemorySegmentData(module: BinaryenModuleRef, id: BinaryenIndex, buffer: usize): void;
 
 declare function _BinaryenSetStart(module: BinaryenModuleRef, start: BinaryenFunctionRef): void;
 
