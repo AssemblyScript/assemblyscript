@@ -416,6 +416,22 @@
 
 @lazy const mt: i32[] = [2048, 342, 57];
 
+// Special binary search util for cpecial casing table
+@inline
+export function bsearch(arr: u16[], key: u32): i32 {
+  var min = 0;
+  var max = arr.length;
+  var ptr = arr.dataStart as usize;
+  while (min <= max) {
+    let mid = (min + max) >>> 3 << 2;
+    let keym = load<u16>(ptr + (mid << 1));
+    if (keym === key) return mid;
+    else if (keym < key) min = mid + 4;
+    else max = mid - 4;
+  }
+  return -1;
+}
+
 // See: musl/tree/src/ctype/towctrans.c
 export function casemap(c: u32, dir: i32): i32 {
   if (c >= 0x20000) return c;
