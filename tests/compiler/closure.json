@@ -1,5 +1,9 @@
 {
   "asc_flags": [
     "--runtime none"
+  ],
+  "stderr": [
+    "AS100: Not implemented.",
+    "EOF"
   ]
 }

@@ -7251,6 +7251,15 @@ export class Compiler extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.LOCAL: {
         let type = (<Local>target).type;
+        if (target.parent != flow.parentFunction) {
+          // Closures are not yet supported
+          this.error(
+            DiagnosticCode.Not_implemented,
+            expression.range
+          );
+          this.currentType = type;
+          return module.unreachable();
+        }
         assert(type != Type.void);
         if ((<Local>target).is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(<Local>target, contextualType, constraints);
