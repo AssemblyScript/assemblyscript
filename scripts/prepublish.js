@@ -1,8 +1,13 @@
-// Reconfigures the repository before publishing a release
+// Reconfigures the repository before publishing
 
 const fs = require("fs");
 const path = require("path");
 const pkg = require("../package.json");
+
+if (!pkg.releaseFiles) {
+  console.log("Package has already been updated");
+  return;
+}
 
 console.log("Updating package.json ...");
 
