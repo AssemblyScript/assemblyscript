@@ -2016,6 +2016,10 @@ declare module "assemblyscript/src/module" {
         SubSatI8x16,
         SubSatU8x16,
         MulI8x16,
+        MinI8x16,
+        MinU8x16,
+        MaxI8x16,
+        MaxU8x16,
         AddI16x8,
         AddSatI16x8,
         AddSatU16x8,
@@ -2023,9 +2027,18 @@ declare module "assemblyscript/src/module" {
         SubSatI16x8,
         SubSatU16x8,
         MulI16x8,
+        MinI16x8,
+        MinU16x8,
+        MaxI16x8,
+        MaxU16x8,
         AddI32x4,
         SubI32x4,
         MulI32x4,
+        MinI32x4,
+        MinU32x4,
+        MaxI32x4,
+        MaxU32x4,
+        DotI16x8,
         AddI64x2,
         SubI64x2,
         AddF32x4,
@@ -4443,6 +4456,7 @@ declare module "assemblyscript/src/builtins" {
         const v128_all_true = "~lib/builtins/v128.all_true";
         const v128_min = "~lib/builtins/v128.min";
         const v128_max = "~lib/builtins/v128.max";
+        const v128_dot = "~lib/builtins/v128.dot";
         const v128_abs = "~lib/builtins/v128.abs";
         const v128_sqrt = "~lib/builtins/v128.sqrt";
         const v128_eq = "~lib/builtins/v128.eq";
@@ -4471,6 +4485,10 @@ declare module "assemblyscript/src/builtins" {
         const i8x16_add = "~lib/builtins/i8x16.add";
         const i8x16_sub = "~lib/builtins/i8x16.sub";
         const i8x16_mul = "~lib/builtins/i8x16.mul";
+        const i8x16_min_s = "~lib/builtins/i8x16.min_s";
+        const i8x16_min_u = "~lib/builtins/i8x16.min_u";
+        const i8x16_max_s = "~lib/builtins/i8x16.max_s";
+        const i8x16_max_u = "~lib/builtins/i8x16.max_u";
         const i8x16_neg = "~lib/builtins/i8x16.neg";
         const i8x16_add_saturate_s = "~lib/builtins/i8x16.add_saturate_s";
         const i8x16_add_saturate_u = "~lib/builtins/i8x16.add_saturate_u";
@@ -4500,6 +4518,10 @@ declare module "assemblyscript/src/builtins" {
         const i16x8_add = "~lib/builtins/i16x8.add";
         const i16x8_sub = "~lib/builtins/i16x8.sub";
         const i16x8_mul = "~lib/builtins/i16x8.mul";
+        const i16x8_min_s = "~lib/builtins/i16x8.min_s";
+        const i16x8_min_u = "~lib/builtins/i16x8.min_u";
+        const i16x8_max_s = "~lib/builtins/i16x8.max_s";
+        const i16x8_max_u = "~lib/builtins/i16x8.max_u";
         const i16x8_neg = "~lib/builtins/i16x8.neg";
         const i16x8_add_saturate_s = "~lib/builtins/i16x8.add_saturate_s";
         const i16x8_add_saturate_u = "~lib/builtins/i16x8.add_saturate_u";
@@ -4534,6 +4556,11 @@ declare module "assemblyscript/src/builtins" {
         const i32x4_add = "~lib/builtins/i32x4.add";
         const i32x4_sub = "~lib/builtins/i32x4.sub";
         const i32x4_mul = "~lib/builtins/i32x4.mul";
+        const i32x4_min_s = "~lib/builtins/i32x4.min_s";
+        const i32x4_min_u = "~lib/builtins/i32x4.min_u";
+        const i32x4_max_s = "~lib/builtins/i32x4.max_s";
+        const i32x4_max_u = "~lib/builtins/i32x4.max_u";
+        const i32x4_dot_i16x8_s = "~lib/builtins/i32x4.dot_i16x8_s";
         const i32x4_neg = "~lib/builtins/i32x4.neg";
         const i32x4_shl = "~lib/builtins/i32x4.shl";
         const i32x4_shr_s = "~lib/builtins/i32x4.shr_s";
