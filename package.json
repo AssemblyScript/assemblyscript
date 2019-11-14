@@ -10,6 +10,7 @@
   ],
   "version": "0.8.0",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
+  "contributors": [],
   "license": "Apache-2.0",
   "homepage": "https://assemblyscript.org",
   "repository": {
@@ -20,22 +21,24 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "89.0.0-nightly.20191012",
-    "glob": "^7.1.5",
+    "binaryen": "89.0.0-nightly.20191113",
     "long": "^4.0.0",
     "source-map-support": "^0.5.16",
     "ts-node": "^6.2.0",
     "typescript": "^3.7.2"
   },
   "devDependencies": {
-    "@types/node": "^12.12.6",
+    "@types/node": "^12.12.7",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
+    "glob": "^7.1.6",
     "physical-cpu-count": "^2.0.0",
+    "source-map-support": "^0.5.16",
     "ts-loader": "^6.2.1",
+    "ts-node": "^6.2.0",
     "tslint": "^5.20.1",
     "typedoc-plugin-external-module-name": "^2.1.0",
+    "typescript": "^3.7.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   },
@@ -62,7 +65,7 @@
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
     "release": "node scripts/release"
   },
-  "files.release": [
+  "releaseFiles": [
     "lib/rtrace/index.d.ts",
     "lib/rtrace/index.js",
     "lib/rtrace/README.md",
