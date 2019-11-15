@@ -305,9 +305,9 @@
  * See: https://unicode.org/Public/UNIDATA/SpecialCasing.txt
  */
 
-@lazy const specialsLower: u16[] = [
-  0x0130,  0x0069, 0x0307, 0x0000,
-];
+// @lazy const specialsLower: u16[] = [
+//   0x0130,  0x0069, 0x0307, 0x0000,
+// ];
 
 @lazy const specialsUpper: u16[] = [
   0x00df,  0x0053, 0x0053, 0x0000,
@@ -423,8 +423,8 @@ export function bsearch(arr: u16[], key: u32): i32 {
   var max = arr.length;
   var ptr = arr.dataStart as usize;
   while (min <= max) {
-    let mid = (min + max) >>> 3 << 2;
-    let keym = load<u16>(ptr + (mid << 1));
+    let mid  = (min + max) >>> 3 << 2;
+    let keym = load<u16>(ptr + (mid << alignof<u16>()));
     if (keym === key) return mid;
     else if (keym < key) min = mid + 4;
     else max = mid - 4;
@@ -435,7 +435,6 @@ export function bsearch(arr: u16[], key: u32): i32 {
 // See: musl/tree/src/ctype/towctrans.c
 export function casemap(c: u32, dir: i32): i32 {
   if (c >= 0x20000) return c;
-
   var c0 = c as i32;
   var b = c >> 8;
   c &= 255;
@@ -453,7 +452,6 @@ export function casemap(c: u32, dir: i32): i32 {
   var v = load<u8>(tabPtr + (load<u8>(tabPtr + b) as i32) * 86 + x) as u32;
   // v = (v * mt[y] >> 11) % 6;
   v = (v * load<i32>(mtPtr + (y << alignof<i32>())) >> 11) % 6;
-
   /* use the bit vector out of the tables as an index into
    * a block-specific set of rules and decode the rule into
    * a type and a case-mapping delta. */
@@ -461,20 +459,14 @@ export function casemap(c: u32, dir: i32): i32 {
   var r = load<i32>(rulesPtr + ((load<u8>(ruleBasesPtr + b) as u32 + v) << alignof<i32>()));
   var rt: u32 = r & 255;
   var rd: i32 = r >> 8;
-
   /* rules 0/1 are simple lower/upper case with a delta.
    * apply according to desired mapping direction. */
-  if (rt < 2) {
-    return c0 + (rd & -(rt ^ dir));
-  }
-
+  if (rt < 2) return c0 + (rd & -(rt ^ dir));
   /* binary search. endpoints of the binary search for
    * this block are stored in the rule delta field. */
   var xn: u32 = rd & 0xff;
   var xb: u32 = rd >>> 8;
-
-  const exceptionsPtr = exceptions.dataStart as usize;
-
+  var exceptionsPtr = exceptions.dataStart as usize;
   while (xn) {
     let h = xn >> 1;
     // let t = exceptions[(xb + h) * 2 + 0] as u32;
@@ -484,9 +476,7 @@ export function casemap(c: u32, dir: i32): i32 {
       r = load<i32>(rulesPtr + (load<u8>(exceptionsPtr + (xb + h) * 2 + 1) << alignof<i32>()));
       rt = r & 255;
       rd = r >> 8;
-      if (rt < 2) {
-        return c0 + (rd & -(rt ^ dir));
-      }
+      if (rt < 2) return c0 + (rd & -(rt ^ dir));
       /* Hard-coded for the four exceptional titlecase */
       return c0 + 1 - (dir << 1); // (dir ? -1 : 1);
     } else if (t > c) {
