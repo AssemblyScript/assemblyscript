@@ -108,11 +108,9 @@ export class Array<T> extends ArrayBufferView {
     if (<u32>index >= <u32>this.length_) {
       if (index < 0) throw new RangeError(E_INDEXOUTOFRANGE);
       ensureSize(changetype<usize>(this), index + 1, alignof<T>());
-      this.__unchecked_set(index, value);
       this.length_ = index + 1;
-    } else {
-      this.__unchecked_set(index, value);
     }
+    this.__unchecked_set(index, value);
   }
 
   @unsafe @operator("{}=") private __unchecked_set(index: i32, value: T): void {

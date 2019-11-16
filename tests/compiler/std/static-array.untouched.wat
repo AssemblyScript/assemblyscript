@@ -1919,19 +1919,14 @@
    call $~lib/array/ensureSize
    local.get $0
    local.get $1
-   local.get $2
-   call $~lib/array/Array<i32>#__unchecked_set
-   local.get $0
-   local.get $1
    i32.const 1
    i32.add
    i32.store offset=12
-  else
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/array/Array<i32>#__unchecked_set
   end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<i32>#__unchecked_set
  )
  (func $~lib/array/Array<i64>#get:length (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -2001,19 +1996,14 @@
    call $~lib/array/ensureSize
    local.get $0
    local.get $1
-   local.get $2
-   call $~lib/array/Array<i64>#__unchecked_set
-   local.get $0
-   local.get $1
    i32.const 1
    i32.add
    i32.store offset=12
-  else
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/array/Array<i64>#__unchecked_set
   end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<i64>#__unchecked_set
  )
  (func $~lib/array/Array<f32>#get:length (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -2083,19 +2073,14 @@
    call $~lib/array/ensureSize
    local.get $0
    local.get $1
-   local.get $2
-   call $~lib/array/Array<f32>#__unchecked_set
-   local.get $0
-   local.get $1
    i32.const 1
    i32.add
    i32.store offset=12
-  else
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/array/Array<f32>#__unchecked_set
   end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<f32>#__unchecked_set
  )
  (func $~lib/array/Array<f64>#get:length (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -2165,19 +2150,14 @@
    call $~lib/array/ensureSize
    local.get $0
    local.get $1
-   local.get $2
-   call $~lib/array/Array<f64>#__unchecked_set
-   local.get $0
-   local.get $1
    i32.const 1
    i32.add
    i32.store offset=12
-  else
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/array/Array<f64>#__unchecked_set
   end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<f64>#__unchecked_set
  )
  (func $start:std/static-array (; 29 ;) (type $FUNCSIG$v)
   (local $0 i32)
