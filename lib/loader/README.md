@@ -1,4 +1,4 @@
-![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) loader
+![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) AssemblyScript Loader
 ======================
 
 A convenient loader for AssemblyScript modules. Demangles module exports to a friendly object structure compatible with WebIDL and TypeScript definitions and provides some useful utility to read/write data from/to memory.
@@ -7,7 +7,7 @@ Usage
 -----
 
 ```js
-const loader = require("assemblyscript/lib/loader");
+const loader = require("@assemblyscript/loader");
 ...
 ```
 

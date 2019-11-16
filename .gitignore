@@ -1,4 +1,5 @@
 npm-debug.*
+dist/
 docs/
 node_modules/
 out/
