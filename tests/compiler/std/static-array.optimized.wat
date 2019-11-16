@@ -819,7 +819,7 @@
   i32.const 0
   i32.const 60
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
    i32.const 48
    i32.const 2
@@ -882,7 +882,7 @@
   i32.const 0
   i32.const 124
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
    i32.const 112
    i32.const 3
@@ -945,7 +945,7 @@
   i32.const 0
   i32.const 180
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
    i32.const 168
    i32.const 2
@@ -1008,7 +1008,7 @@
   i32.const 0
   i32.const 244
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
    i32.const 232
    i32.const 3
