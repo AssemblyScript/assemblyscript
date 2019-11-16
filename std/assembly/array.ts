@@ -110,6 +110,7 @@ export class Array<T> extends ArrayBufferView {
       this.__unchecked_set(index, value);
       this.length_ = index + 1;
     } else {
+      if (index < 0) throw new RangeError(E_INDEXOUTOFRANGE);
       this.__unchecked_set(index, value);
     }
   }

@@ -1916,6 +1916,17 @@
    i32.add
    i32.store offset=12
   else
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 320
+    i32.const 376
+    i32.const 113
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $0
    local.get $1
    local.get $2
@@ -1987,6 +1998,17 @@
    i32.add
    i32.store offset=12
   else
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 320
+    i32.const 376
+    i32.const 113
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $0
    local.get $1
    local.get $2
@@ -2058,6 +2080,17 @@
    i32.add
    i32.store offset=12
   else
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 320
+    i32.const 376
+    i32.const 113
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $0
    local.get $1
    local.get $2
@@ -2129,6 +2162,17 @@
    i32.add
    i32.store offset=12
   else
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 320
+    i32.const 376
+    i32.const 113
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $0
    local.get $1
    local.get $2
