@@ -688,23 +688,11 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i32>#__set (; 8 ;) (type $FUNCSIG$v)
-  i32.const 48
-  i32.const 2
-  call $~lib/array/ensureSize
+ (func $~lib/array/Array<i32>#__unchecked_set (; 8 ;) (type $FUNCSIG$v)
   i32.const 52
   i32.load
   i32.const 2
   i32.store
-  i32.const 0
-  i32.const 60
-  i32.load
-  i32.ge_s
-  if
-   i32.const 60
-   i32.const 1
-   i32.store
-  end
  )
  (func $~lib/array/Array<i64>#__get (; 9 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
   local.get $0
@@ -727,23 +715,11 @@
   i32.add
   i64.load
  )
- (func $~lib/array/Array<i64>#__set (; 10 ;) (type $FUNCSIG$v)
-  i32.const 112
-  i32.const 3
-  call $~lib/array/ensureSize
+ (func $~lib/array/Array<i64>#__unchecked_set (; 10 ;) (type $FUNCSIG$v)
   i32.const 116
   i32.load
   i64.const 4
   i64.store
-  i32.const 0
-  i32.const 124
-  i32.load
-  i32.ge_s
-  if
-   i32.const 124
-   i32.const 1
-   i32.store
-  end
  )
  (func $~lib/array/Array<f32>#__get (; 11 ;) (type $FUNCSIG$fi) (param $0 i32) (result f32)
   local.get $0
@@ -766,23 +742,11 @@
   i32.add
   f32.load
  )
- (func $~lib/array/Array<f32>#__set (; 12 ;) (type $FUNCSIG$v)
-  i32.const 168
-  i32.const 2
-  call $~lib/array/ensureSize
+ (func $~lib/array/Array<f32>#__unchecked_set (; 12 ;) (type $FUNCSIG$v)
   i32.const 172
   i32.load
   f32.const 2.5
   f32.store
-  i32.const 0
-  i32.const 180
-  i32.load
-  i32.ge_s
-  if
-   i32.const 180
-   i32.const 1
-   i32.store
-  end
  )
  (func $~lib/array/Array<f64>#__get (; 13 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   local.get $0
@@ -805,23 +769,11 @@
   i32.add
   f64.load
  )
- (func $~lib/array/Array<f64>#__set (; 14 ;) (type $FUNCSIG$v)
-  i32.const 232
-  i32.const 3
-  call $~lib/array/ensureSize
+ (func $~lib/array/Array<f64>#__unchecked_set (; 14 ;) (type $FUNCSIG$v)
   i32.const 236
   i32.load
   f64.const 2.25
   f64.store
-  i32.const 0
-  i32.const 244
-  i32.load
-  i32.ge_s
-  if
-   i32.const 244
-   i32.const 1
-   i32.store
-  end
  )
  (func $start:std/static-array (; 15 ;) (type $FUNCSIG$v)
   i32.const 60
@@ -864,7 +816,21 @@
   global.set $~lib/rt/stub/startOffset
   i32.const 512
   global.set $~lib/rt/stub/offset
-  call $~lib/array/Array<i32>#__set
+  i32.const 0
+  i32.const 60
+  i32.load
+  i32.ge_s
+  if
+   i32.const 48
+   i32.const 2
+   call $~lib/array/ensureSize
+   call $~lib/array/Array<i32>#__unchecked_set
+   i32.const 60
+   i32.const 1
+   i32.store
+  else
+   call $~lib/array/Array<i32>#__unchecked_set
+  end
   i32.const 0
   call $~lib/array/Array<i32>#__get
   i32.const 2
@@ -913,7 +879,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/array/Array<i64>#__set
+  i32.const 0
+  i32.const 124
+  i32.load
+  i32.ge_s
+  if
+   i32.const 112
+   i32.const 3
+   call $~lib/array/ensureSize
+   call $~lib/array/Array<i64>#__unchecked_set
+   i32.const 124
+   i32.const 1
+   i32.store
+  else
+   call $~lib/array/Array<i64>#__unchecked_set
+  end
   i32.const 0
   call $~lib/array/Array<i64>#__get
   i64.const 4
@@ -962,7 +942,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/array/Array<f32>#__set
+  i32.const 0
+  i32.const 180
+  i32.load
+  i32.ge_s
+  if
+   i32.const 168
+   i32.const 2
+   call $~lib/array/ensureSize
+   call $~lib/array/Array<f32>#__unchecked_set
+   i32.const 180
+   i32.const 1
+   i32.store
+  else
+   call $~lib/array/Array<f32>#__unchecked_set
+  end
   i32.const 0
   call $~lib/array/Array<f32>#__get
   f32.const 2.5
@@ -1011,7 +1005,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/array/Array<f64>#__set
+  i32.const 0
+  i32.const 244
+  i32.load
+  i32.ge_s
+  if
+   i32.const 232
+   i32.const 3
+   call $~lib/array/ensureSize
+   call $~lib/array/Array<f64>#__unchecked_set
+   i32.const 244
+   i32.const 1
+   i32.store
+  else
+   call $~lib/array/Array<f64>#__unchecked_set
+  end
   i32.const 0
   call $~lib/array/Array<f64>#__get
   f64.const 2.25

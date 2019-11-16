@@ -105,9 +105,13 @@ export class Array<T> extends ArrayBufferView {
   }
 
   @operator("[]=") private __set(index: i32, value: T): void {
-    ensureSize(changetype<usize>(this), index + 1, alignof<T>());
-    this.__unchecked_set(index, value);
-    if (index >= this.length_) this.length_ = index + 1;
+    if (index >= this.length_) {
+      ensureSize(changetype<usize>(this), index + 1, alignof<T>());
+      this.__unchecked_set(index, value);
+      this.length_ = index + 1;
+    } else {
+      this.__unchecked_set(index, value);
+    }
   }
 
   @unsafe @operator("{}=") private __unchecked_set(index: i32, value: T): void {

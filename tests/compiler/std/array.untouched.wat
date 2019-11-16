@@ -4746,7 +4746,7 @@
   if
    i32.const 872
    i32.const 488
-   i32.const 285
+   i32.const 289
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -4854,7 +4854,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 488
-   i32.const 215
+   i32.const 219
    i32.const 59
    call $~lib/builtins/abort
    unreachable
@@ -5154,7 +5154,7 @@
   if
    i32.const 872
    i32.const 488
-   i32.const 346
+   i32.const 350
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -6042,16 +6042,6 @@
   i32.store
  )
  (func $~lib/array/Array<i32>#__set (; 87 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const 2
-  call $~lib/array/ensureSize
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<i32>#__unchecked_set
   local.get $1
   local.get $0
   i32.load offset=12
@@ -6061,7 +6051,22 @@
    local.get $1
    i32.const 1
    i32.add
+   i32.const 2
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/array/Array<i32>#__unchecked_set
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
    i32.store offset=12
+  else
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/array/Array<i32>#__unchecked_set
   end
  )
  (func $start:std/array~anonymous|0 (; 88 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -10071,16 +10076,6 @@
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const 2
-  call $~lib/array/ensureSize
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_set
   local.get $1
   local.get $0
   i32.load offset=12
@@ -10090,7 +10085,22 @@
    local.get $1
    i32.const 1
    i32.add
+   i32.const 2
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_set
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
    i32.store offset=12
+  else
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_set
   end
   local.get $2
   call $~lib/rt/pure/__release
@@ -10538,16 +10548,6 @@
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const 2
-  call $~lib/array/ensureSize
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<std/array/Proxy<i32>>#__unchecked_set
   local.get $1
   local.get $0
   i32.load offset=12
@@ -10557,7 +10557,22 @@
    local.get $1
    i32.const 1
    i32.add
+   i32.const 2
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/array/Array<std/array/Proxy<i32>>#__unchecked_set
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
    i32.store offset=12
+  else
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/array/Array<std/array/Proxy<i32>>#__unchecked_set
   end
   local.get $2
   call $~lib/rt/pure/__release
@@ -11907,16 +11922,6 @@
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const 2
-  call $~lib/array/ensureSize
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<~lib/string/String>#__unchecked_set
   local.get $1
   local.get $0
   i32.load offset=12
@@ -11926,7 +11931,22 @@
    local.get $1
    i32.const 1
    i32.add
+   i32.const 2
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/array/Array<~lib/string/String>#__unchecked_set
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
    i32.store offset=12
+  else
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/array/Array<~lib/string/String>#__unchecked_set
   end
   local.get $2
   call $~lib/rt/pure/__release
