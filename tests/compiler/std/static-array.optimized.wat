@@ -689,22 +689,22 @@
   end
  )
  (func $~lib/array/Array<i32>#__set (; 8 ;) (type $FUNCSIG$v)
-  i32.const 48
-  i32.const 2
-  call $~lib/array/ensureSize
-  i32.const 52
-  i32.load
-  i32.const 2
-  i32.store
   i32.const 0
   i32.const 60
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
+   i32.const 48
+   i32.const 2
+   call $~lib/array/ensureSize
    i32.const 60
    i32.const 1
    i32.store
   end
+  i32.const 52
+  i32.load
+  i32.const 2
+  i32.store
  )
  (func $~lib/array/Array<i64>#__get (; 9 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
   local.get $0
@@ -728,22 +728,22 @@
   i64.load
  )
  (func $~lib/array/Array<i64>#__set (; 10 ;) (type $FUNCSIG$v)
-  i32.const 112
-  i32.const 3
-  call $~lib/array/ensureSize
-  i32.const 116
-  i32.load
-  i64.const 4
-  i64.store
   i32.const 0
   i32.const 124
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
+   i32.const 112
+   i32.const 3
+   call $~lib/array/ensureSize
    i32.const 124
    i32.const 1
    i32.store
   end
+  i32.const 116
+  i32.load
+  i64.const 4
+  i64.store
  )
  (func $~lib/array/Array<f32>#__get (; 11 ;) (type $FUNCSIG$fi) (param $0 i32) (result f32)
   local.get $0
@@ -767,22 +767,22 @@
   f32.load
  )
  (func $~lib/array/Array<f32>#__set (; 12 ;) (type $FUNCSIG$v)
-  i32.const 168
-  i32.const 2
-  call $~lib/array/ensureSize
-  i32.const 172
-  i32.load
-  f32.const 2.5
-  f32.store
   i32.const 0
   i32.const 180
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
+   i32.const 168
+   i32.const 2
+   call $~lib/array/ensureSize
    i32.const 180
    i32.const 1
    i32.store
   end
+  i32.const 172
+  i32.load
+  f32.const 2.5
+  f32.store
  )
  (func $~lib/array/Array<f64>#__get (; 13 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   local.get $0
@@ -806,22 +806,22 @@
   f64.load
  )
  (func $~lib/array/Array<f64>#__set (; 14 ;) (type $FUNCSIG$v)
-  i32.const 232
-  i32.const 3
-  call $~lib/array/ensureSize
-  i32.const 236
-  i32.load
-  f64.const 2.25
-  f64.store
   i32.const 0
   i32.const 244
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
+   i32.const 232
+   i32.const 3
+   call $~lib/array/ensureSize
    i32.const 244
    i32.const 1
    i32.store
   end
+  i32.const 236
+  i32.load
+  f64.const 2.25
+  f64.store
  )
  (func $start:std/static-array (; 15 ;) (type $FUNCSIG$v)
   i32.const 60

@@ -1068,8 +1068,7 @@
    local.get $2
    i64.const 1
    i64.shl
-   i64.const 0
-   i64.eq
+   i64.eqz
    if
     f64.const -1
     local.get $0
@@ -1111,8 +1110,7 @@
     local.get $2
     i64.const 32
     i64.shl
-    i64.const 0
-    i64.eq
+    i64.eqz
     i32.const 0
     local.get $1
     i32.const 1072693248
@@ -5321,8 +5319,7 @@
   local.set $0
   i32.const 1
   local.get $2
-  i64.const 0
-  i64.eq
+  i64.eqz
   local.get $5
   i32.const 2047
   i32.eq
@@ -5613,8 +5610,7 @@
    local.get $3
    i64.const 1
    i64.shl
-   i64.const 0
-   i64.eq
+   i64.eqz
    if
     f64.const -1
     local.get $0
@@ -5656,8 +5652,7 @@
     local.get $3
     i64.const 32
     i64.shl
-    i64.const 0
-    i64.eq
+    i64.eqz
     i32.const 0
     local.get $2
     i32.const 1072693248
@@ -6020,8 +6015,7 @@
    local.get $3
    i64.const 1
    i64.shl
-   i64.const 0
-   i64.eq
+   i64.eqz
    if
     f64.const -1
     local.get $0
@@ -6063,8 +6057,7 @@
     local.get $3
     i64.const 32
     i64.shl
-    i64.const 0
-    i64.eq
+    i64.eqz
     i32.const 0
     local.get $2
     i32.const 1072693248
@@ -6446,8 +6439,7 @@
   i64.const 1
   i64.shl
   local.tee $6
-  i64.const 0
-  i64.eq
+  i64.eqz
   if (result i32)
    i32.const 1
   else
@@ -6487,8 +6479,7 @@
     return
    end
    local.get $4
-   i64.const 0
-   i64.eq
+   i64.eqz
    if (result i64)
     local.get $2
     i64.const 0
@@ -6512,8 +6503,7 @@
    end
    local.set $2
    local.get $5
-   i64.const 0
-   i64.eq
+   i64.eqz
    if (result i64)
     local.get $3
     i64.const 0
@@ -8846,8 +8836,7 @@
   local.get $4
   i64.const 1
   i64.shl
-  i64.const 0
-  i64.eq
+  i64.eqz
   select
   select
   if
@@ -8862,15 +8851,13 @@
   local.get $2
   i64.const 1
   i64.shl
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    local.get $0
    return
   end
   local.get $3
-  i64.const 0
-  i64.eq
+  i64.eqz
   if (result i64)
    local.get $2
    i64.const 0
@@ -8894,8 +8881,7 @@
   end
   local.set $2
   local.get $6
-  i64.const 0
-  i64.eq
+  i64.eqz
   if (result i64)
    local.get $4
    i64.const 0
@@ -8980,8 +8966,7 @@
     local.set $5
    end
    local.get $2
-   i64.const 0
-   i64.eq
+   i64.eqz
    if
     i64.const -60
     local.set $3
@@ -45417,8 +45402,8 @@
   i64.const 0
   i32.const 1
   call $~lib/math/ipow64
-  i64.const 0
-  i64.ne
+  i64.eqz
+  i32.eqz
   if
    i32.const 0
    i32.const 24
@@ -45430,8 +45415,8 @@
   i64.const 0
   i32.const 2
   call $~lib/math/ipow64
-  i64.const 0
-  i64.ne
+  i64.eqz
+  i32.eqz
   if
    i32.const 0
    i32.const 24
@@ -45443,8 +45428,8 @@
   i64.const 0
   i32.const 3
   call $~lib/math/ipow64
-  i64.const 0
-  i64.ne
+  i64.eqz
+  i32.eqz
   if
    i32.const 0
    i32.const 24
