@@ -25,10 +25,6 @@ const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
 
-function _require(m, paths) {
-  return require(require.resolve(m, {paths}));
-}
-
 // global.Binaryen = require("../lib/binaryen");
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
@@ -225,7 +221,7 @@ exports.main = function main(argv, options, callback) {
       let filename = transformArgs[i].trim();
       if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
       try {
-        const classOrModule = _require(filename, [baseDir, process.cwd()]);
+        const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
         if (typeof classOrModule === "function") {
           Object.assign(classOrModule.prototype, {
             baseDir,
