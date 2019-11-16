@@ -1248,8 +1248,6 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   [key: number]: T;
   /** Number of bytes per element. */
   static readonly BYTES_PER_ELEMENT: usize;
-  /** Wrap an ArrayBuffer */
-  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): ArrayBufferView;
   /** Constructs a new typed array. */
   constructor(length: i32);
   /** The {@link ArrayBuffer} referenced by this view. */
@@ -1301,27 +1299,60 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
 }
 
 /** An array of twos-complement 8-bit signed integers. */
-declare class Int8Array extends TypedArray<i8> {}
+declare class Int8Array extends TypedArray<i8> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int8Array;
+}
 /** An array of 8-bit unsigned integers. */
-declare class Uint8Array extends TypedArray<u8> {}
+declare class Uint8Array extends TypedArray<u8> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint8Array;
+}
 /** A clamped array of 8-bit unsigned integers. */
-declare class Uint8ClampedArray extends TypedArray<u8> {}
+declare class Uint8ClampedArray extends TypedArray<u8> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint8ClampedArray;
+}
 /** An array of twos-complement 16-bit signed integers. */
-declare class Int16Array extends TypedArray<i16> {}
+declare class Int16Array extends TypedArray<i16> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int16Array;
+}
 /** An array of 16-bit unsigned integers. */
-declare class Uint16Array extends TypedArray<u16> {}
+declare class Uint16Array extends TypedArray<u16> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint16Array;
+}
 /** An array of twos-complement 32-bit signed integers. */
-declare class Int32Array extends TypedArray<i32> {}
+declare class Int32Array extends TypedArray<i32> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int32Array;
+}
 /** An array of 32-bit unsigned integers. */
-declare class Uint32Array extends TypedArray<u32> {}
+declare class Uint32Array extends TypedArray<u32> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint32Array;
+}
 /** An array of twos-complement 64-bit signed integers. */
-declare class Int64Array extends TypedArray<i64> {}
+declare class Int64Array extends TypedArray<i64> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Int64Array;
+}
 /** An array of 64-bit unsigned integers. */
-declare class Uint64Array extends TypedArray<u64> {}
+declare class Uint64Array extends TypedArray<u64> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Uint64Array;
+}
 /** An array of 32-bit floating point numbers. */
-declare class Float32Array extends TypedArray<f32> {}
+declare class Float32Array extends TypedArray<f32> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float32Array;
+}
 /** An array of 64-bit floating point numbers. */
-declare class Float64Array extends TypedArray<f64> {}
+declare class Float64Array extends TypedArray<f64> {
+  /** Wrap an ArrayBuffer */
+  static wrap(buffer: ArrayBuffer, byteOffset?: i32, length?: i32): Float64Array;
+}
 
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {
