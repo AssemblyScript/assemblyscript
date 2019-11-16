@@ -2079,5 +2079,6 @@
   call $start:simd
  )
  (func $null (; 11 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

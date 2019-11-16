@@ -3323,5 +3323,6 @@
   call $start:binary
  )
  (func $null (; 8 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

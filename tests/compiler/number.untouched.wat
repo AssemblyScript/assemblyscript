@@ -4229,5 +4229,6 @@
   call $start:number
  )
  (func $null (; 31 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

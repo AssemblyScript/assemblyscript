@@ -11,6 +11,6 @@
   call $start:bool
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

@@ -60,7 +60,7 @@
        global.get $assembly/config/BGR_DEAD
        i32.const 16777215
        i32.and
-      else       
+      else
        global.get $assembly/config/BGR_ALIVE
        i32.const -16777216
        i32.or
@@ -134,7 +134,7 @@
     i32.eq
     if (result i32)
      local.get $0
-    else     
+    else
      local.get $2
      i32.const 1
      i32.sub
@@ -145,7 +145,7 @@
     i32.eq
     if (result i32)
      i32.const 0
-    else     
+    else
      local.get $2
      i32.const 1
      i32.add
@@ -165,7 +165,7 @@
       i32.eq
       if (result i32)
        local.get $1
-      else       
+      else
        local.get $5
        i32.const 1
        i32.sub
@@ -176,7 +176,7 @@
       i32.eq
       if (result i32)
        i32.const 0
-      else       
+      else
        local.get $5
        i32.const 1
        i32.add
@@ -367,7 +367,7 @@
         i32.shl
         local.get $14
         i32.store
-       else        
+       else
         local.get $5
         local.set $16
         local.get $2
@@ -388,7 +388,7 @@
         local.get $14
         i32.store
        end
-      else       
+      else
        local.get $9
        i32.const 3
        i32.eq
@@ -412,7 +412,7 @@
         i32.shl
         local.get $8
         i32.store
-       else        
+       else
         local.get $5
         local.set $15
         local.get $2
@@ -563,5 +563,6 @@
   end
  )
  (func $null (; 4 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

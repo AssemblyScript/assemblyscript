@@ -68,6 +68,6 @@
   global.set $enum/NonConstant.ONE
  )
  (func $null (; 1 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

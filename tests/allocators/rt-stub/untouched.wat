@@ -160,7 +160,7 @@
      local.get $1
      i32.const 3
      i32.and
-    else     
+    else
      i32.const 0
     end
     if
@@ -1365,7 +1365,7 @@
    i32.le_u
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $5
     local.get $3
     i32.add
@@ -1485,7 +1485,7 @@
       end
      end
     end
-   else    
+   else
     local.get $4
     i32.const 7
     i32.and
@@ -1626,7 +1626,7 @@
       local.get $4
       i32.load8_u
       i32.eq
-     else      
+     else
       i32.const 0
      end
      if
@@ -1653,7 +1653,7 @@
     local.get $4
     i32.load8_u
     i32.sub
-   else    
+   else
     i32.const 0
    end
   end
@@ -1678,5 +1678,6 @@
   global.set $~lib/rt/stub/offset
  )
  (func $null (; 14 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

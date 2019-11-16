@@ -410,5 +410,6 @@
   call $start:std/hash
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

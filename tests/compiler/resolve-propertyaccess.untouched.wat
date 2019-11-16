@@ -833,5 +833,6 @@
   call $start:resolve-propertyaccess
  )
  (func $null (; 16 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

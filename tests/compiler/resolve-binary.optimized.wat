@@ -2435,6 +2435,6 @@
   call $start:resolve-binary
  )
  (func $null (; 21 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

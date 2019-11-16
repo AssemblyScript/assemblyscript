@@ -8,9 +8,10 @@
  (memory $0 1)
  (data (i32.const 8) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
  (table $0 12 funcref)
- (elem (i32.const 0) $start:function-expression~someName $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|2)
+ (elem (i32.const 0) $null $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~someName)
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
+ (export "testNullFunction" (func $function-expression/testNullFunction))
  (start $start)
  (func $start:function-expression~anonymous|0 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -167,7 +168,15 @@
    unreachable
   end
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $function-expression/testNullFunction (; 9 ;) (type $FUNCSIG$v)
+  i32.const 0
+  global.set $~lib/argc
+  call $null
+ )
+ (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:function-expression
+ )
+ (func $null (; 11 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

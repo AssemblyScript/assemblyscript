@@ -644,6 +644,6 @@
   call $start:resolve-unary
  )
  (func $null (; 12 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

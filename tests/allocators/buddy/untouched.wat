@@ -88,7 +88,7 @@
      local.get $1
      i32.const 3
      i32.and
-    else     
+    else
      i32.const 0
     end
     if
@@ -1293,7 +1293,7 @@
    i32.le_u
    if (result i32)
     i32.const 1
-   else    
+   else
     local.get $5
     local.get $3
     i32.add
@@ -1413,7 +1413,7 @@
       end
      end
     end
-   else    
+   else
     local.get $4
     i32.const 7
     i32.and
@@ -1554,7 +1554,7 @@
       local.get $4
       i32.load8_u
       i32.eq
-     else      
+     else
       i32.const 0
      end
      if
@@ -1581,7 +1581,7 @@
     local.get $4
     i32.load8_u
     i32.sub
-   else    
+   else
     i32.const 0
    end
   end
@@ -2019,7 +2019,7 @@
       i32.ne
       if (result i32)
        i32.const 1
-      else       
+      else
        local.get $2
        i32.const 0
        i32.eq
@@ -2060,7 +2060,7 @@
       i32.div_u
       global.get $assembly/buddy/List.SIZE
       i32.add
-     else      
+     else
       local.get $3
      end
      local.set $4
@@ -2164,7 +2164,7 @@
      call $assembly/buddy/parent_is_split
      if (result i32)
       i32.const 1
-     else      
+     else
       local.get $1
       global.get $assembly/buddy/bucket_limit
       i32.eq
@@ -2207,5 +2207,6 @@
   call $start:assembly/index
  )
  (func $null (; 26 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

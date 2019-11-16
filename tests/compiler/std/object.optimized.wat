@@ -672,6 +672,6 @@
   call $start:std/object
  )
  (func $null (; 11 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

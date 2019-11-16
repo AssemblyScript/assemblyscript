@@ -664,5 +664,6 @@
   call $start:typeof
  )
  (func $null (; 12 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

@@ -416,5 +416,6 @@
   call $~lib/rt/stub/__release
  )
  (func $null (; 21 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

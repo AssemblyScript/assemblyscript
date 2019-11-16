@@ -10,5 +10,6 @@
   i32.const 3
  )
  (func $null (; 1 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

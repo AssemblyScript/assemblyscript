@@ -5508,5 +5508,6 @@
   return
  )
  (func $null (; 54 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

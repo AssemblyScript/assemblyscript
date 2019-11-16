@@ -1,0 +1,8 @@
+{
+  "features": [
+    "exception-handling"
+  ],
+  "asc_flags": [
+    "--runtime none"
+  ]
+}

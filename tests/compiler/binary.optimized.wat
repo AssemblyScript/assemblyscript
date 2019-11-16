@@ -260,8 +260,7 @@
     return
    end
    local.get $2
-   i64.const 0
-   i64.eq
+   i64.eqz
    if (result i64)
     local.get $1
     i64.const 0
@@ -708,6 +707,6 @@
   call $start:binary
  )
  (func $null (; 6 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

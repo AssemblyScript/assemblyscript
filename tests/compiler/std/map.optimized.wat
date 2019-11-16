@@ -8737,6 +8737,6 @@
   call $~lib/rt/pure/__visit
  )
  (func $null (; 107 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

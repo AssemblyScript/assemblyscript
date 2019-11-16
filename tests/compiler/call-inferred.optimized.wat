@@ -13,6 +13,6 @@
   call $start:call-inferred
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

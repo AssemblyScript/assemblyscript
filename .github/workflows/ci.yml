@@ -70,9 +70,9 @@ jobs:
       run: npm run clean
     - name: Test experimental features
       env:
-        ASC_FEATURES: mutable-globals,threads,reference-types,bigint-integration
+        ASC_FEATURES: mutable-globals,threads,reference-types,bigint-integration,exception-handling
       run: |
-        npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads
+        npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads features/exception-handling
   test-runtime:
     name: "Test runtimes on node: node"
     runs-on: ubuntu-latest

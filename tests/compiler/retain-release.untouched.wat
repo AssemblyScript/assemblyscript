@@ -793,5 +793,6 @@
   call $start:retain-release
  )
  (func $null (; 46 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

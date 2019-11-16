@@ -749,5 +749,6 @@
   global.set $assembly/i64/hi
  )
  (func $null (; 31 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

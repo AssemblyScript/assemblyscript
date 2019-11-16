@@ -802,5 +802,6 @@
   call $start:retain-i32
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

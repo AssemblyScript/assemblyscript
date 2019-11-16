@@ -26,6 +26,6 @@
   call $start:getter-setter
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

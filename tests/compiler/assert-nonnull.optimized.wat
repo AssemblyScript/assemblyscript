@@ -186,6 +186,6 @@
   end
  )
  (func $null (; 15 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

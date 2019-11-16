@@ -54554,5 +54554,6 @@
   call $start:std/math
  )
  (func $null (; 175 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

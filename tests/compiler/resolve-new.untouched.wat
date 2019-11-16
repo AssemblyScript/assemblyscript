@@ -166,5 +166,6 @@
   call $start:resolve-new
  )
  (func $null (; 8 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

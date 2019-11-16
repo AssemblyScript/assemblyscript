@@ -25282,5 +25282,6 @@
   return
  )
  (func $null (; 339 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

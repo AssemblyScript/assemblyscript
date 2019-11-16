@@ -26,7 +26,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 16
+   i32.const 19
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -42,11 +42,14 @@
  )
  (func $features/reference-types/internal (; 6 ;) (type $FUNCSIG$aa) (param $0 anyref) (result anyref)
   local.get $0
+  call $features/reference-types/external
+  call $features/reference-types/external
+  call $features/reference-types/external
  )
  (func $start (; 7 ;) (type $FUNCSIG$v)
   call $start:features/reference-types
  )
  (func $null (; 8 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

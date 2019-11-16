@@ -520,8 +520,7 @@
    local.get $2
    i64.const 1
    i64.shl
-   i64.const 0
-   i64.eq
+   i64.eqz
    if
     f64.const -1
     local.get $0
@@ -563,8 +562,7 @@
     local.get $2
     i64.const 32
     i64.shl
-    i64.const 0
-    i64.eq
+    i64.eqz
     i32.const 0
     local.get $1
     i32.const 1072693248
@@ -2883,8 +2881,7 @@
   local.set $0
   i32.const 1
   local.get $2
-  i64.const 0
-  i64.eq
+  i64.eqz
   local.get $5
   i32.const 2047
   i32.eq
@@ -3066,8 +3063,7 @@
    local.get $3
    i64.const 1
    i64.shl
-   i64.const 0
-   i64.eq
+   i64.eqz
    if
     f64.const -1
     local.get $0
@@ -3109,8 +3105,7 @@
     local.get $3
     i64.const 32
     i64.shl
-    i64.const 0
-    i64.eq
+    i64.eqz
     i32.const 0
     local.get $2
     i32.const 1072693248
@@ -3277,8 +3272,7 @@
    local.get $3
    i64.const 1
    i64.shl
-   i64.const 0
-   i64.eq
+   i64.eqz
    if
     f64.const -1
     local.get $0
@@ -3320,8 +3314,7 @@
     local.get $3
     i64.const 32
     i64.shl
-    i64.const 0
-    i64.eq
+    i64.eqz
     i32.const 0
     local.get $2
     i32.const 1072693248
@@ -9275,6 +9268,6 @@
   f32.trunc
  )
  (func $null (; 120 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

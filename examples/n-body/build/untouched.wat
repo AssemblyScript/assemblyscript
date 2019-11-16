@@ -2225,5 +2225,6 @@
   global.set $~lib/rt/stub/offset
  )
  (func $null (; 24 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

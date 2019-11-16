@@ -97,6 +97,6 @@
   global.set $~lib/rt/stub/offset
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

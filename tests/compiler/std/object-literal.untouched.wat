@@ -457,5 +457,6 @@
   call $start:std/object-literal
  )
  (func $null (; 13 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

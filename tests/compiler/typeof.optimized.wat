@@ -508,4 +508,7 @@
   end
   call $start:typeof
  )
+ (func $null (; 9 ;) (type $FUNCSIG$v)
+  unreachable
+ )
 )

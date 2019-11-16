@@ -300,6 +300,6 @@
   call $start:std/object-literal
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

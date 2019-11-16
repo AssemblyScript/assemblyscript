@@ -35,11 +35,16 @@ assert(testOmittedReturn1()(1, 2) == 3);
 assert(testOmittedReturn2()(1, 2) == 1);
 assert(testOmittedReturn3()(1, 2) == 42);
 
-function testNullable(b: boolean): (() => i32) | null {
+function testNullable(b: boolean): (() => void) | null {
   if (b) {
-    return (): i32 => 1;
+    return (): void => { };
   } else {
     return null;
   }
 }
 assert(testNullable(false) == null);
+
+export function testNullFunction(): void {
+  var fn = testNullable(false) as () => void;
+  fn();
+}

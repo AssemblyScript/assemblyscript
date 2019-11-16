@@ -13,6 +13,6 @@
  (export "three" (func $external/three))
  (export "var_" (global $external/var_))
  (func $null (; 4 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

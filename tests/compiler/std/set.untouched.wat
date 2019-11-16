@@ -11432,5 +11432,6 @@
   unreachable
  )
  (func $null (; 141 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

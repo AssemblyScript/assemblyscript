@@ -408,6 +408,11 @@ export class Compiler extends DiagnosticEmitter {
     module.removeGlobal(BuiltinSymbols.rtti_base);
     if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this);
 
+    // set up function table
+    var functionTable = this.functionTable;
+    module.setFunctionTable(functionTable.length, 0xffffffff, functionTable, module.i32(0));
+    this.addNullPointerExceptionHandling(module);
+
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
@@ -447,11 +452,6 @@ export class Compiler extends DiagnosticEmitter {
     // import memory if requested (default memory is named '0' by Binaryen)
     if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
-    // set up function table
-    var functionTable = this.functionTable;
-    module.setFunctionTable(functionTable.length, 0xffffffff, functionTable, module.i32(0));
-    module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.block(null, []));
-
     // import table if requested (default table is named '0' by Binaryen)
     if (options.importTable) module.addTableImport("0", "env", "table");
 
@@ -460,6 +460,36 @@ export class Compiler extends DiagnosticEmitter {
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
     return module;
+  }
+
+  addNullPointerExceptionHandling(module: Module) {
+    if (this.options.hasFeature(Feature.EXCEPTION_HANDLING)) {
+      let message = this.ensureStaticString("null is not a function");
+      let exceptionType = module.addFunctionType(
+        "NullPointerException",
+        NativeType.None,
+        [NativeType.I32]
+      );
+
+      module.addEvent("NullPointerException", 0, exceptionType);
+      module.addFunction(
+        "null",
+        this.ensureFunctionType(null, Type.void),
+        null,
+        module.block(null, [
+          module.throw("NullPointerException", [message])
+        ])
+      );
+    } else {
+      module.addFunction(
+        "null",
+        this.ensureFunctionType(null, Type.void),
+        null,
+        module.block(null, [
+          module.unreachable()
+        ])
+      );
+    }
   }
 
   // === Exports ==================================================================================

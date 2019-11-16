@@ -94,8 +94,7 @@
   i64.const 32
   i64.shl
   i64.or
-  i64.const 0
-  i64.eq
+  i64.eqz
   global.set $../../lib/i64/assembly/i64/lo
   i32.const 0
   global.set $../../lib/i64/assembly/i64/hi
@@ -691,6 +690,6 @@
   global.set $../../lib/i64/assembly/i64/hi
  )
  (func $null (; 31 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

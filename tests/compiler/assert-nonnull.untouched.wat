@@ -365,5 +365,6 @@
   local.get $2
  )
  (func $null (; 19 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

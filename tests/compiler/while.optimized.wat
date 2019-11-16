@@ -175,6 +175,6 @@
   call $start:while
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

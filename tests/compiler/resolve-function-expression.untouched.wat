@@ -692,5 +692,6 @@
   call $start:resolve-function-expression
  )
  (func $null (; 18 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

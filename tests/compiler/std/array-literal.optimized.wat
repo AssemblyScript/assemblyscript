@@ -2402,6 +2402,6 @@
   end
  )
  (func $null (; 40 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

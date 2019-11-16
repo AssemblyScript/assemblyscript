@@ -214,6 +214,6 @@
   call $inlining/test_ctor
  )
  (func $null (; 8 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

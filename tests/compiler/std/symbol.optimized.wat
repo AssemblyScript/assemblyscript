@@ -1716,6 +1716,6 @@
   call $start:std/symbol
  )
  (func $null (; 31 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

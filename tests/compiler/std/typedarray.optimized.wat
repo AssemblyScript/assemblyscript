@@ -10598,8 +10598,7 @@
   local.get $2
   call $~lib/rt/pure/__release
   local.get $0
-  i64.const 0
-  i64.eq
+  i64.eqz
  )
  (func $std/typedarray/testArraySome<~lib/typedarray/Int64Array,i64> (; 209 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -12619,8 +12618,7 @@
   local.get $0
   i64.const 2
   i64.rem_s
-  i64.const 0
-  i64.eq
+  i64.eqz
   local.get $2
   call $~lib/rt/pure/__release
  )
@@ -12730,8 +12728,7 @@
   local.get $0
   i64.const 2
   i64.rem_u
-  i64.const 0
-  i64.eq
+  i64.eqz
   local.get $2
   call $~lib/rt/pure/__release
  )
@@ -13088,8 +13085,7 @@
     return
    end
    local.get $2
-   i64.const 0
-   i64.eq
+   i64.eqz
    if (result i64)
     local.get $1
     i64.const 0
@@ -25033,8 +25029,7 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    i32.const 1720
    call $~lib/rt/pure/__retain
@@ -25103,8 +25098,7 @@
   i32.add
   local.set $0
   local.get $2
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    local.get $0
    i32.const 48
@@ -25362,8 +25356,7 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    i32.const 1720
    call $~lib/rt/pure/__retain
@@ -25411,8 +25404,7 @@
   i32.add
   local.set $0
   local.get $2
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    local.get $0
    i32.const 48
@@ -31457,6 +31449,6 @@
   end
  )
  (func $null (; 440 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

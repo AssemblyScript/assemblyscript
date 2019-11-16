@@ -15,6 +15,7 @@
  (global $function-expression/f3 (mut i32) (i32.const 3))
  (global $function-expression/f4 (mut i32) (i32.const 4))
  (export "memory" (memory $0))
+ (export "testNullFunction" (func $function-expression/testNullFunction))
  (start $start)
  (func $start:function-expression~anonymous|0 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -67,8 +68,8 @@
  (func $function-expression/testOmittedReturn3 (; 14 ;) (type $FUNCSIG$i) (result i32)
   i32.const 10
  )
- (func $function-expression/testNullable~anonymous|0 (; 15 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 1
+ (func $function-expression/testNullable~anonymous|0 (; 15 ;) (type $FUNCSIG$v)
+  nop
  )
  (func $function-expression/testNullable (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -237,9 +238,20 @@
    unreachable
   end
  )
- (func $start (; 18 ;) (type $FUNCSIG$v)
+ (func $function-expression/testNullFunction (; 18 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  i32.const 0
+  call $function-expression/testNullable
+  local.set $0
+  i32.const 0
+  global.set $~lib/argc
+  local.get $0
+  call_indirect (type $FUNCSIG$v)
+ )
+ (func $start (; 19 ;) (type $FUNCSIG$v)
   call $start:function-expression
  )
- (func $null (; 19 ;) (type $FUNCSIG$v)
+ (func $null (; 20 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )
