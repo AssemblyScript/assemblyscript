@@ -30,8 +30,5 @@
     "index.js",
     "package.json",
     "README.md"
-  ],
-  "dependencies": {
-    "@types/webassembly-js-api": "0.0.1"
-  }
+  ]
 }
