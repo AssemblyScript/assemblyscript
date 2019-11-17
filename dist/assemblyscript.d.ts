@@ -3666,6 +3666,7 @@ declare module "assemblyscript/src/program" {
         tempF32s: Local[] | null;
         tempF64s: Local[] | null;
         tempV128s: Local[] | null;
+        tempAnyrefs: Local[] | null;
         nextBreakId: number;
         breakStack: number[] | null;
         breakLabel: string | null;
