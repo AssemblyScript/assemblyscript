@@ -67,19 +67,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 53
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  call $~lib/reference/ref.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 55
+   i32.const 54
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -92,6 +80,18 @@
    i32.const 0
    i32.const 24
    i32.const 56
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/reference/ref.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 57
    i32.const 2
    call $~lib/builtins/abort
    unreachable

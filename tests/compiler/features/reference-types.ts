@@ -43,7 +43,8 @@ function testLocalFillers(): void {
   var a: anyref;
   var b: anyref = null;
   assert(!a);
-  // TODO: 'Assertion failed: false, at: ./src/literal.h,87,makeFromInt32' when optimizing?
+  // FIXME: 'Assertion failed: false, at: ./src/literal.h,87,makeFromInt32' as soon
+  // as 'a' is used twice
   // assert(a == b);
   // assert(!(a != b));
 }
