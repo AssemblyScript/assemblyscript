@@ -5,6 +5,7 @@
  (type $FUNCSIG$aaa (func (param anyref anyref) (result anyref)))
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$ia (func (param anyref) (result i32)))
+ (type $FUNCSIG$vaa (func (param anyref anyref)))
  (type $FUNCSIG$aa (func (param anyref) (result anyref)))
  (import "reference-types" "someObject" (global $features/reference-types/someObject anyref))
  (import "reference-types" "someKey" (global $features/reference-types/someKey anyref))
@@ -90,7 +91,50 @@
    unreachable
   end
  )
- (func $start:features/reference-types (; 9 ;) (type $FUNCSIG$v)
+ (func $features/reference-types/testLocalFillers2 (; 9 ;) (type $FUNCSIG$vaa) (param $0 anyref) (param $1 anyref)
+  local.get $0
+  call $~lib/reference/ref.is_null
+  i32.eqz
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 53
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/reference/ref.eq
+  i32.const 0
+  i32.ne
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 55
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/reference/ref.eq
+  i32.eqz
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 56
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $start:features/reference-types (; 10 ;) (type $FUNCSIG$v)
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -115,8 +159,11 @@
   call $~lib/bindings/console/log
   call $features/reference-types/testGlobalFillers
   call $features/reference-types/testLocalFillers
+  global.get $~lib/reference/ref.null
+  global.get $~lib/reference/ref.null
+  call $features/reference-types/testLocalFillers2
  )
- (func $features/reference-types/internal (; 10 ;) (type $FUNCSIG$aa) (param $0 anyref) (result anyref)
+ (func $features/reference-types/internal (; 11 ;) (type $FUNCSIG$aa) (param $0 anyref) (result anyref)
   (local $1 anyref)
   (local $2 anyref)
   (local $3 anyref)
@@ -131,9 +178,9 @@
   local.set $3
   local.get $3
  )
- (func $start (; 11 ;) (type $FUNCSIG$v)
+ (func $start (; 12 ;) (type $FUNCSIG$v)
   call $start:features/reference-types
  )
- (func $null (; 12 ;) (type $FUNCSIG$v)
+ (func $null (; 13 ;) (type $FUNCSIG$v)
  )
 )

@@ -48,3 +48,11 @@ function testLocalFillers(): void {
   // assert(!(a != b));
 }
 testLocalFillers();
+
+function testLocalFillers2(a: anyref, b: anyref): void {
+  assert(!a);
+  // TODO: Works when these are arguments
+  assert(a == b);
+  assert(!(a != b));
+}
+testLocalFillers2(null, null);
