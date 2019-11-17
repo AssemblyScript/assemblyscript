@@ -2664,7 +2664,7 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
         } else {
-          if (isManaged) {
+          if (type.is(TypeFlags.REFERENCE)) {
             // This is necessary because the first use (and assign) of the local could be taking place
             // in a loop, subsequently marking it retained, but the second iteration of the loop
             // still wouldn't release whatever is assigned in the first. Likewise, if the variable wasn't
@@ -2675,7 +2675,9 @@ export class Compiler extends DiagnosticEmitter {
                 type.toNativeZero(this)
               )
             );
-            flow.setLocalFlag(local.index, LocalFlags.CONDITIONALLY_RETAINED);
+            if (isManaged) {
+              flow.setLocalFlag(local.index, LocalFlags.CONDITIONALLY_RETAINED);
+            }
           } else if (local.type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
             flow.setLocalFlag(local.index, LocalFlags.WRAPPED);
           }

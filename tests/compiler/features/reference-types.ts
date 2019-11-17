@@ -25,3 +25,26 @@ import * as console from "bindings/console";
 console.log(someObject);
 console.log(someKey);
 console.log(Reflect.get(someObject, someKey));
+
+// can initialize and compare anyref globals and locals using fillers
+// for ref.null, ref.is_null and ref.eq
+
+var a: anyref;
+var b: anyref = null;
+
+function testGlobalFillers(): void {
+  assert(!a);
+  assert(a == b);
+  assert(!(a != b));
+}
+testGlobalFillers();
+
+function testLocalFillers(): void {
+  var a: anyref;
+  var b: anyref = null;
+  assert(!a);
+  // TODO: 'Assertion failed: false, at: ./src/literal.h,87,makeFromInt32' when optimizing?
+  // assert(a == b);
+  // assert(!(a != b));
+}
+testLocalFillers();
