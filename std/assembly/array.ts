@@ -105,9 +105,12 @@ export class Array<T> extends ArrayBufferView {
   }
 
   @operator("[]=") private __set(index: i32, value: T): void {
-    ensureSize(changetype<usize>(this), index + 1, alignof<T>());
+    if (<u32>index >= <u32>this.length_) {
+      if (index < 0) throw new RangeError(E_INDEXOUTOFRANGE);
+      ensureSize(changetype<usize>(this), index + 1, alignof<T>());
+      this.length_ = index + 1;
+    }
     this.__unchecked_set(index, value);
-    if (index >= this.length_) this.length_ = index + 1;
   }
 
   @unsafe @operator("{}=") private __unchecked_set(index: i32, value: T): void {
