@@ -218,13 +218,10 @@ exports.main = function main(argv, options, callback) {
   if (args.transform) {
     let transformArgs = args.transform;
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
-      let filename = transformArgs[i];
-      filename = path.isAbsolute(filename = filename.trim())
-        ? filename
-        : path.join(process.cwd(), filename);
+      let filename = transformArgs[i].trim();
       if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
       try {
-        const classOrModule = require(filename);
+        const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
         if (typeof classOrModule === "function") {
           Object.assign(classOrModule.prototype, {
             baseDir,

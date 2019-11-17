@@ -1430,6 +1430,10 @@ export class Module {
             // TODO
             return 0;
           }
+          // Not possible to clone an anyref as it is opaque
+          case NativeType.Anyref: {
+            return 0;
+          }
           default: {
             throw new Error("concrete type expected");
           }

@@ -94,8 +94,7 @@
   i64.const 2
   global.set $unary/I
   global.get $unary/I
-  i64.const 0
-  i64.eq
+  i64.eqz
   i64.extend_i32_u
   global.set $unary/I
   global.get $unary/I
