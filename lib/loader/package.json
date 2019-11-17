@@ -4,6 +4,8 @@
   "keywords": [
     "assemblyscript",
     "loader",
+    "glue",
+    "interop",
     "webassembly",
     "wasm"
   ],
