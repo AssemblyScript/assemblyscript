@@ -313,7 +313,12 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
         },
         Math,
         Date,
-        Reflect
+        Reflect,
+        ref: {
+          null: null,
+          is_null: (ref) => ref == null,
+          eq: (a, b) => a === b
+        }
       };
       if (glue.preInstantiate) {
         console.log(colorsUtil.white("  [preInstantiate]"));

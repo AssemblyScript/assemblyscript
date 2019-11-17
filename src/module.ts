@@ -976,6 +976,13 @@ export class Module {
 
   // meta
 
+  getGlobal(
+    name: string
+  ): GlobalRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetGlobal(this.ref, cStr);
+  }
+
   addGlobal(
     name: string,
     type: NativeType,
@@ -1554,6 +1561,10 @@ export function isLocalTee(expr: ExpressionRef): bool {
 
 export function getGlobalGetName(expr: ExpressionRef): string | null {
   return readString(_BinaryenGlobalGetGetName(expr));
+}
+
+export function globalIsMutable(global: GlobalRef): bool {
+  return _BinaryenGlobalIsMutable(global);
 }
 
 export function getBinaryOp(expr: ExpressionRef): BinaryOp {

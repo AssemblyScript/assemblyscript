@@ -101,6 +101,10 @@ import {
   Flow
 } from "./flow";
 
+import {
+  BuiltinSymbols
+} from "./builtins";
+
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
   constructor(
@@ -464,6 +468,13 @@ export class Program extends DiagnosticEmitter {
   instanceofInstance: Function;
   /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
   allocArrayInstance: Function;
+
+  /** Temporary filler for the `ref.null` instruction. */
+  refNull: Global | null = null;
+  /** Temporary filler for the `ref.is_null` instruction. */
+  refIsNullInstance: Function | null = null;
+  /** Temporary filler for the `ref.eq` instruction. */
+  refEqInstance: Function | null = null;
 
   /** Next class id. */
   nextClassId: u32 = 0;
@@ -966,6 +977,11 @@ export class Program extends DiagnosticEmitter {
     this.instanceofInstance = this.requireFunction(CommonSymbols.instanceof_);
     this.visitInstance = this.requireFunction(CommonSymbols.visit);
     this.allocArrayInstance = this.requireFunction(CommonSymbols.allocArray);
+    if (options.hasFeature(Feature.REFERENCE_TYPES)) {
+      this.refNull = <Global>this.require(BuiltinSymbols.ref_null, ElementKind.GLOBAL);
+      this.refIsNullInstance = this.requireFunction(BuiltinSymbols.ref_is_null);
+      this.refEqInstance = this.requireFunction(BuiltinSymbols.ref_eq);
+    }
 
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
     for (let file of this.filesByName.values()) {
@@ -1317,17 +1333,20 @@ export class Program extends DiagnosticEmitter {
     var name = declaration.name.text;
     var decorators = declaration.decorators;
     var element: DeclaredElement;
+    var acceptedFlags: DecoratorFlags = DecoratorFlags.UNSAFE;
+    if (parent.is(CommonFlags.AMBIENT)) {
+      acceptedFlags |= DecoratorFlags.EXTERNAL;
+    }
     if (declaration.is(CommonFlags.STATIC)) { // global variable
       assert(parent.kind != ElementKind.INTERFACE_PROTOTYPE);
+      acceptedFlags |= DecoratorFlags.LAZY;
+      if (declaration.is(CommonFlags.READONLY)) {
+        acceptedFlags |= DecoratorFlags.INLINE;
+      }
       element = new Global(
         name,
         parent,
-        this.checkDecorators(decorators,
-          (declaration.is(CommonFlags.READONLY)
-            ? DecoratorFlags.INLINE
-            : DecoratorFlags.NONE
-          ) | DecoratorFlags.LAZY | DecoratorFlags.UNSAFE
-        ),
+        this.checkDecorators(decorators, acceptedFlags),
         declaration
       );
       if (!parent.add(name, element)) return;
@@ -1337,7 +1356,7 @@ export class Program extends DiagnosticEmitter {
         name,
         parent,
         declaration,
-        this.checkDecorators(decorators, DecoratorFlags.UNSAFE)
+        this.checkDecorators(decorators, acceptedFlags)
       );
       if (!parent.addInstance(name, element)) return;
     }
@@ -1357,6 +1376,9 @@ export class Program extends DiagnosticEmitter {
       acceptedFlags |= DecoratorFlags.OPERATOR_BINARY
                     |  DecoratorFlags.OPERATOR_PREFIX
                     |  DecoratorFlags.OPERATOR_POSTFIX;
+    }
+    if (parent.is(CommonFlags.AMBIENT)) {
+      acceptedFlags |= DecoratorFlags.EXTERNAL;
     }
     var element = new FunctionPrototype(
       name,

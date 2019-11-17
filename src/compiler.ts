@@ -43,7 +43,9 @@ import {
   getLocalSetIndex,
   FeatureFlags,
   needsExplicitUnreachable,
-  getLocalSetValue
+  getLocalSetValue,
+  getGlobalGetName,
+  globalIsMutable
 } from "./module";
 
 import {
@@ -885,8 +887,8 @@ export class Compiler extends DiagnosticEmitter {
       return false;
     }
 
-    // The MVP does not yet support initializer expressions other than constant values (and constant
-    // get_globals), hence such initializations must be performed in the start function for now.
+    // The MVP does not yet support initializer expressions other than constants and gets of
+    // imported immutable globals, hence such initializations must be performed in the start.
     var initializeInStart = false;
 
     // Evaluate initializer if present
@@ -903,12 +905,25 @@ export class Compiler extends DiagnosticEmitter {
         this.currentFlow = previousFlow;
       }
 
+      // If not a constant, attempt to precompute
       if (getExpressionId(initExpr) != ExpressionId.Const) {
         if (isDeclaredConstant) {
           initExpr = module.precomputeExpression(initExpr);
           if (getExpressionId(initExpr) != ExpressionId.Const) initializeInStart = true;
         } else {
           initializeInStart = true;
+        }
+      }
+
+      // Handle special case of initializing from imported immutable global
+      if (initializeInStart && getExpressionId(initExpr) == ExpressionId.GlobalGet) {
+        let fromName = assert(getGlobalGetName(initExpr));
+        if (!globalIsMutable(module.getGlobal(fromName))) {
+          let elementsByName = this.program.elementsByName;
+          if (elementsByName.has(fromName)) {
+            let global = elementsByName.get(fromName)!;
+            if (global.is(CommonFlags.AMBIENT)) initializeInStart = false;
+          }
         }
       }
 
@@ -957,7 +972,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Initialize to zero if there's no initializer
     } else {
-      initExpr = type.toNativeZero(module);
+      initExpr = type.toNativeZero(this);
     }
 
     var internalName = global.internalName;
@@ -969,7 +984,7 @@ export class Compiler extends DiagnosticEmitter {
           assert(findDecorator(DecoratorKind.INLINE, global.decoratorNodes)).range, "inline"
         );
       }
-      module.addGlobal(internalName, nativeType, true, type.toNativeZero(module));
+      module.addGlobal(internalName, nativeType, true, type.toNativeZero(this));
       if (type.isManaged && !initAutoreleaseSkipped) initExpr = this.makeRetain(initExpr);
       this.currentBody.push(
         module.global_set(internalName, initExpr)
@@ -2657,7 +2672,7 @@ export class Compiler extends DiagnosticEmitter {
             // TODO: Detect this condition inside of a loop instead?
             initializers.push(
               module.local_set(local.index,
-                type.toNativeZero(module)
+                type.toNativeZero(this)
               )
             );
             flow.setLocalFlag(local.index, LocalFlags.CONDITIONALLY_RETAINED);
@@ -3707,12 +3722,9 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.ANYREF: {
-            // TODO: ref.eq
-            this.error(
-              DiagnosticCode.Not_implemented,
-              expression.range
-            );
-            expr = module.unreachable();
+            let ref_eq = assert(this.program.refEqInstance);
+            assert(this.compileFunction(ref_eq));
+            expr = module.call(ref_eq.internalName, [ leftExpr, rightExpr], NativeType.I32);
             break;
           }
           default: {
@@ -3804,12 +3816,11 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.ANYREF: {
-            // TODO: !ref.eq
-            this.error(
-              DiagnosticCode.Not_implemented,
-              expression.range
+            let ref_eq = assert(this.program.refEqInstance);
+            assert(this.compileFunction(ref_eq));
+            expr = module.unary(UnaryOp.EqzI32,
+              module.call(ref_eq.internalName, [ leftExpr, rightExpr], NativeType.I32)
             );
-            expr = module.unreachable();
             break;
           }
           default: {
@@ -6773,7 +6784,7 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
         }
-        operands.push(parameterTypes[i].toNativeZero(module));
+        operands.push(parameterTypes[i].toNativeZero(this));
         allOptionalsAreConstant = false;
       }
       if (!allOptionalsAreConstant) {
@@ -6887,7 +6898,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       let parameterTypes = signature.parameterTypes;
       for (let i = numArguments; i < maxArguments; ++i) {
-        operands.push(parameterTypes[i].toNativeZero(module));
+        operands.push(parameterTypes[i].toNativeZero(this));
       }
     }
 
@@ -7136,7 +7147,7 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = signatureReference.type.asNullable();
             return module.i32(0);
           }
-          // TODO: anyref context yields <usize>0
+          return contextualType.toNativeZero(this); // anyref
         }
         this.currentType = options.usizeType;
         return options.isWasm64
@@ -7364,7 +7375,7 @@ export class Compiler extends DiagnosticEmitter {
             ? BinaryOp.NeI64
             : BinaryOp.NeI32,
           expr,
-          actualType.toNativeZero(module)
+          actualType.toNativeZero(this)
         );
       }
 
@@ -7562,7 +7573,7 @@ export class Compiler extends DiagnosticEmitter {
               Constraints.CONV_IMPLICIT
             )
           )
-        : elementType.toNativeZero(module);
+        : elementType.toNativeZero(this);
       if (getExpressionId(expr) == ExpressionId.Const) {
         assert(getExpressionType(expr) == nativeElementType);
       } else {
@@ -7937,7 +7948,7 @@ export class Compiler extends DiagnosticEmitter {
       ctor,
       argumentExpressions,
       reportNode,
-      this.options.usizeType.toNativeZero(this.module),
+      this.options.usizeType.toNativeZero(this),
       constraints
     );
     if (getExpressionType(expr) != NativeType.None) { // possibly IMM_DROPPED
@@ -8225,7 +8236,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.AddI64
                 : BinaryOp.AddI32,
               getValue,
-              this.currentType.toNativeOne(module)
+              this.currentType.toNativeOne(this)
             );
             break;
           }
@@ -8314,7 +8325,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
               getValue,
-              this.currentType.toNativeOne(module)
+              this.currentType.toNativeOne(this)
             );
             break;
           }
@@ -8481,7 +8492,7 @@ export class Compiler extends DiagnosticEmitter {
               this.options.isWasm64
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
-              this.currentType.toNativeZero(module),
+              this.currentType.toNativeZero(this),
               expr
             );
             break;
@@ -8553,7 +8564,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.AddI64
                 : BinaryOp.AddI32,
               expr,
-              this.currentType.toNativeOne(module)
+              this.currentType.toNativeOne(this)
             );
             break;
           }
@@ -8624,7 +8635,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
               expr,
-              this.currentType.toNativeOne(module)
+              this.currentType.toNativeOne(this)
             );
             break;
           }
@@ -8721,7 +8732,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.XorI64
                 : BinaryOp.XorI32,
               expr,
-              this.currentType.toNativeNegOne(module)
+              this.currentType.toNativeNegOne(this)
             );
             break;
           }
@@ -8974,9 +8985,13 @@ export class Compiler extends DiagnosticEmitter {
         flow.freeTempLocal(temp);
         return ret;
       }
-      // case TypeKind.ANYREF: {
-      //   TODO: !ref.is_null
-      // }
+      case TypeKind.ANYREF: {
+        let ref_is_null = assert(this.program.refIsNullInstance);
+        assert(this.compileFunction(ref_is_null));
+        return module.unary(UnaryOp.EqzI32,
+          module.call(ref_is_null.internalName, [ expr ], NativeType.I32)
+        );
+      }
       default: {
         assert(false);
         return module.i32(0);
@@ -9053,7 +9068,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         if (fieldType.isManaged) initExpr = this.makeRetain(initExpr);
       } else { // initialize with zero
-        initExpr = fieldType.toNativeZero(module);
+        initExpr = fieldType.toNativeZero(this);
       }
       stmts.push(
         module.store(fieldType.byteSize,

@@ -12,9 +12,12 @@ import {
 
 import {
   NativeType,
-  ExpressionRef,
-  Module
+  ExpressionRef
 } from "./module";
+
+import {
+  Compiler
+} from "./compiler";
 
 /** Indicates the kind of a type. */
 export const enum TypeKind {
@@ -350,16 +353,16 @@ export class Type {
       case TypeKind.F64: return NativeType.F64;
       case TypeKind.V128: return NativeType.V128;
       case TypeKind.ANYREF: return NativeType.Anyref;
-      case TypeKind.VOID:  return NativeType.None;
+      case TypeKind.VOID: return NativeType.None;
     }
   }
 
   /** Converts this type to its native `0` value. */
-  toNativeZero(module: Module): ExpressionRef {
+  toNativeZero(compiler: Compiler): ExpressionRef {
+    var module = compiler.module;
     switch (this.kind) {
-      case TypeKind.ANYREF:
       case TypeKind.VOID: assert(false);
-      default: return module.i32(0);
+      default: return compiler.module.i32(0);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: if (this.size != 64) return module.i32(0);
       case TypeKind.I64:
@@ -367,11 +370,17 @@ export class Type {
       case TypeKind.F32: return module.f32(0);
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
+      case TypeKind.ANYREF: {
+        let ref_null = assert(compiler.program.refNull);
+        assert(compiler.compileGlobal(ref_null));
+        return module.global_get(ref_null.internalName, NativeType.Anyref);
+      }
     }
   }
 
   /** Converts this type to its native `1` value. */
-  toNativeOne(module: Module): ExpressionRef {
+  toNativeOne(compiler: Compiler): ExpressionRef {
+    var module = compiler.module;
     switch (this.kind) {
       case TypeKind.V128:
       case TypeKind.ANYREF:
@@ -387,10 +396,11 @@ export class Type {
   }
 
   /** Converts this type to its native `-1` value. */
-  toNativeNegOne(module: Module): ExpressionRef {
+  toNativeNegOne(compiler: Compiler): ExpressionRef {
+    var module = compiler.module;
     switch (this.kind) {
       case TypeKind.V128:
-          case TypeKind.ANYREF:
+      case TypeKind.ANYREF:
       case TypeKind.VOID: assert(false);
       default: return module.i32(-1);
       case TypeKind.ISIZE:

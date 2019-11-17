@@ -572,6 +572,11 @@ export namespace BuiltinSymbols {
   export const Float32Array = "~lib/typedarray/Float32Array";
   export const Float64Array = "~lib/typedarray/Float64Array";
 
+  // std/reference.ts
+  export const ref_null = "~lib/reference/ref.null";
+  export const ref_is_null = "~lib/reference/ref.is_null";
+  export const ref_eq = "~lib/reference/ref.eq";
+
   // compiler generated
   export const started = "~lib/started";
   export const argc = "~lib/argc";
@@ -4788,7 +4793,7 @@ export function compileAbort(
     // essentially ignoring the message GC-wise. Doesn't matter anyway on a crash.
     messageArg = compiler.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
   } else {
-    messageArg = stringInstance.type.toNativeZero(module);
+    messageArg = stringInstance.type.toNativeZero(compiler);
   }
 
   var filenameArg = compiler.ensureStaticString(reportNode.range.source.normalizedPath);
