@@ -1,9 +1,8 @@
 // Reconfigures the repository before publishing
 
-
-const fs = require("fs");	const fs = require("fs");
-const path = require("path");	const path = require("path");
-const pkg = require("../package.json");	const pkg = require("../package.json");
+const fs = require("fs");
+const path = require("path");
+const pkg = require("../package.json");
 const devFiles = require("./postpublish-files.json");
 
 if (!pkg.releaseFiles) {
