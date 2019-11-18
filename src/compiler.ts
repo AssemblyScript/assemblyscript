@@ -28,6 +28,8 @@ import {
   ExpressionId,
   FunctionTypeRef,
   GlobalRef,
+  EventRef,
+  FeatureFlags,
   getExpressionId,
   getExpressionType,
   getConstValueI32,
@@ -41,9 +43,10 @@ import {
   getLocalGetIndex,
   isLocalTee,
   getLocalSetIndex,
-  FeatureFlags,
   needsExplicitUnreachable,
-  getLocalSetValue
+  getLocalSetValue,
+  getGlobalGetName,
+  isGlobalMutable
 } from "./module";
 
 import {
@@ -307,6 +310,8 @@ export class Compiler extends DiagnosticEmitter {
   runtimeFeatures: RuntimeFeatures = RuntimeFeatures.NONE;
   /** Expressions known to have skipped an autorelease. Usually function returns. */
   skippedAutoreleases: Set<ExpressionRef> = new Set();
+  /** Registered event types. */
+  events: Map<string, EventRef> = new Map();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -885,8 +890,8 @@ export class Compiler extends DiagnosticEmitter {
       return false;
     }
 
-    // The MVP does not yet support initializer expressions other than constant values (and constant
-    // get_globals), hence such initializations must be performed in the start function for now.
+    // The MVP does not yet support initializer expressions other than constants and gets of
+    // imported immutable globals, hence such initializations must be performed in the start.
     var initializeInStart = false;
 
     // Evaluate initializer if present
@@ -903,12 +908,25 @@ export class Compiler extends DiagnosticEmitter {
         this.currentFlow = previousFlow;
       }
 
+      // If not a constant, attempt to precompute
       if (getExpressionId(initExpr) != ExpressionId.Const) {
         if (isDeclaredConstant) {
           initExpr = module.precomputeExpression(initExpr);
           if (getExpressionId(initExpr) != ExpressionId.Const) initializeInStart = true;
         } else {
           initializeInStart = true;
+        }
+      }
+
+      // Handle special case of initializing from imported immutable global
+      if (initializeInStart && getExpressionId(initExpr) == ExpressionId.GlobalGet) {
+        let fromName = assert(getGlobalGetName(initExpr));
+        if (!isGlobalMutable(module.getGlobal(fromName))) {
+          let elementsByName = this.program.elementsByName;
+          if (elementsByName.has(fromName)) {
+            let global = elementsByName.get(fromName)!;
+            if (global.is(CommonFlags.AMBIENT)) initializeInStart = false;
+          }
         }
       }
 
@@ -957,7 +975,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Initialize to zero if there's no initializer
     } else {
-      initExpr = type.toNativeZero(module);
+      initExpr = this.makeZero(type);
     }
 
     var internalName = global.internalName;
@@ -969,7 +987,7 @@ export class Compiler extends DiagnosticEmitter {
           assert(findDecorator(DecoratorKind.INLINE, global.decoratorNodes)).range, "inline"
         );
       }
-      module.addGlobal(internalName, nativeType, true, type.toNativeZero(module));
+      module.addGlobal(internalName, nativeType, true, this.makeZero(type));
       if (type.isManaged && !initAutoreleaseSkipped) initExpr = this.makeRetain(initExpr);
       this.currentBody.push(
         module.global_set(internalName, initExpr)
@@ -1122,6 +1140,20 @@ export class Compiler extends DiagnosticEmitter {
       typeRef = module.addFunctionType(name, resultType, paramTypes);
     }
     return typeRef;
+  }
+
+  /** Either reuses or creates the event type matching the specified name. */
+  ensureEventType(
+    name: string,
+    parameterTypes: Type[] | null
+  ): EventRef {
+    var events = this.events;
+    if (events.has(name)) return events.get(name)!;
+    var module = this.module;
+    var funcType = this.ensureFunctionType(parameterTypes, Type.void);
+    var eventType = module.addEvent(name, 0, funcType);
+    events.set(name, eventType);
+    return eventType;
   }
 
   /** Compiles the body of a function within the specified flow. */
@@ -2657,7 +2689,7 @@ export class Compiler extends DiagnosticEmitter {
             // TODO: Detect this condition inside of a loop instead?
             initializers.push(
               module.local_set(local.index,
-                type.toNativeZero(module)
+                this.makeZero(type)
               )
             );
             flow.setLocalFlag(local.index, LocalFlags.CONDITIONALLY_RETAINED);
@@ -6773,7 +6805,7 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
         }
-        operands.push(parameterTypes[i].toNativeZero(module));
+        operands.push(this.makeZero(parameterTypes[i]));
         allOptionalsAreConstant = false;
       }
       if (!allOptionalsAreConstant) {
@@ -6887,7 +6919,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       let parameterTypes = signature.parameterTypes;
       for (let i = numArguments; i < maxArguments; ++i) {
-        operands.push(parameterTypes[i].toNativeZero(module));
+        operands.push(this.makeZero(parameterTypes[i]));
       }
     }
 
@@ -7364,7 +7396,7 @@ export class Compiler extends DiagnosticEmitter {
             ? BinaryOp.NeI64
             : BinaryOp.NeI32,
           expr,
-          actualType.toNativeZero(module)
+          this.makeZero(actualType)
         );
       }
 
@@ -7562,7 +7594,7 @@ export class Compiler extends DiagnosticEmitter {
               Constraints.CONV_IMPLICIT
             )
           )
-        : elementType.toNativeZero(module);
+        : this.makeZero(elementType);
       if (getExpressionId(expr) == ExpressionId.Const) {
         assert(getExpressionType(expr) == nativeElementType);
       } else {
@@ -7937,7 +7969,7 @@ export class Compiler extends DiagnosticEmitter {
       ctor,
       argumentExpressions,
       reportNode,
-      this.options.usizeType.toNativeZero(this.module),
+      this.makeZero(this.options.usizeType),
       constraints
     );
     if (getExpressionType(expr) != NativeType.None) { // possibly IMM_DROPPED
@@ -8225,7 +8257,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.AddI64
                 : BinaryOp.AddI32,
               getValue,
-              this.currentType.toNativeOne(module)
+              this.makeOne(this.currentType)
             );
             break;
           }
@@ -8314,7 +8346,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
               getValue,
-              this.currentType.toNativeOne(module)
+              this.makeOne(this.currentType)
             );
             break;
           }
@@ -8481,7 +8513,7 @@ export class Compiler extends DiagnosticEmitter {
               this.options.isWasm64
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
-              this.currentType.toNativeZero(module),
+              this.makeZero(this.currentType),
               expr
             );
             break;
@@ -8553,7 +8585,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.AddI64
                 : BinaryOp.AddI32,
               expr,
-              this.currentType.toNativeOne(module)
+              this.makeOne(this.currentType)
             );
             break;
           }
@@ -8624,7 +8656,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.SubI64
                 : BinaryOp.SubI32,
               expr,
-              this.currentType.toNativeOne(module)
+              this.makeOne(this.currentType)
             );
             break;
           }
@@ -8721,7 +8753,7 @@ export class Compiler extends DiagnosticEmitter {
                 ? BinaryOp.XorI64
                 : BinaryOp.XorI32,
               expr,
-              this.currentType.toNativeNegOne(module)
+              this.makeNegOne(this.currentType)
             );
             break;
           }
@@ -8920,6 +8952,69 @@ export class Compiler extends DiagnosticEmitter {
 
   // === Specialized code generation ==============================================================
 
+  /** Makes a constant zero of the specified type. */
+  makeZero(type: Type): ExpressionRef {
+    var module = this.module;
+    switch (type.kind) {
+      default: assert(false);
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.BOOL: return module.i32(0);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: if (type.size != 64) return module.i32(0);
+      case TypeKind.I64:
+      case TypeKind.U64: return module.i64(0);
+      case TypeKind.F32: return module.f32(0);
+      case TypeKind.F64: return module.f64(0);
+      case TypeKind.V128: return module.v128(v128_zero);
+    }
+  }
+
+  /** Makes a constant one of the specified type. */
+  makeOne(type: Type): ExpressionRef {
+    var module = this.module;
+    switch (type.kind) {
+      default: assert(false);
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.BOOL: return module.i32(1);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: if (type.size != 64) return module.i32(1);
+      case TypeKind.I64:
+      case TypeKind.U64: return module.i64(1);
+      case TypeKind.F32: return module.f32(1);
+      case TypeKind.F64: return module.f64(1);
+    }
+  }
+
+  /** Makes a constant negative one of the specified type. */
+  makeNegOne(type: Type): ExpressionRef {
+    var module = this.module;
+    switch (type.kind) {
+      default: assert(false);
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32: return module.i32(-1);
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: if (type.size != 64) return module.i32(-1);
+      case TypeKind.I64:
+      case TypeKind.U64: return module.i64(-1, -1);
+      case TypeKind.F32: return module.f32(-1);
+      case TypeKind.F64: return module.f64(-1);
+    }
+  }
+
   /** Creates a comparison whether an expression is 'true' in a broader sense. */
   makeIsTrueish(expr: ExpressionRef, type: Type): ExpressionRef {
     var module = this.module;
@@ -9053,7 +9148,7 @@ export class Compiler extends DiagnosticEmitter {
         );
         if (fieldType.isManaged) initExpr = this.makeRetain(initExpr);
       } else { // initialize with zero
-        initExpr = fieldType.toNativeZero(module);
+        initExpr = this.makeZero(fieldType);
       }
       stmts.push(
         module.store(fieldType.byteSize,
@@ -9107,6 +9202,8 @@ export class Compiler extends DiagnosticEmitter {
 }
 
 // helpers
+
+const v128_zero = new Uint8Array(16);
 
 function mangleImportName(
   element: Element,

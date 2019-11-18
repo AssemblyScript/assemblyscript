@@ -88,7 +88,7 @@
   drop
   i32.const 0
   global.set $~lib/argc
-  call $getter-call/C#get:x~anonymous|0
+  i32.const 42
  )
  (func $start (; 4 ;) (type $FUNCSIG$v)
   i32.const 16

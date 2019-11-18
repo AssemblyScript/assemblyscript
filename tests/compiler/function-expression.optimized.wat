@@ -44,47 +44,11 @@
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  call $start:function-expression~anonymous|0
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 4
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
   global.set $~lib/argc
-  i32.const 2
-  call $start:function-expression~anonymous|0
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 9
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 0
   global.set $~lib/argc
-  call $start:function-expression~someName
   i32.const 0
   global.set $~lib/argc
-  call $start:function-expression~anonymous|2
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 16
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 5
   call $function-expression/testOmitted
   i32.const 3
@@ -138,34 +102,8 @@
   end
   i32.const 2
   global.set $~lib/argc
-  i32.const 1
-  i32.const 2
-  call $start:function-expression~anonymous|4
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 35
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 2
   global.set $~lib/argc
-  i32.const 1
-  i32.const 2
-  call $start:function-expression~anonymous|5
-  i32.const 42
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 36
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $start (; 9 ;) (type $FUNCSIG$v)
   call $start:function-expression

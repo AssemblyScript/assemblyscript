@@ -33,6 +33,11 @@
     "description": "How much to focus on shrinking code size. [0-2, s=1, z=2]",
     "type": "i"
   },
+  "converge": {
+    "description": "Re-optimizes until no further improvements can be made.",
+    "type": "b",
+    "default": false
+  },
   "validate": {
     "description": "Validates the module using Binaryen. Exits if invalid.",
     "type": "b",
