@@ -97,8 +97,8 @@
   f64.const 0
   call $~lib/bindings/Date/UTC
   i64.trunc_f64_s
-  i64.const 0
-  i64.ne
+  i64.eqz
+  i32.eqz
   if
    i32.const 0
    i32.const 24
@@ -116,8 +116,8 @@
   f64.const 0
   call $~lib/bindings/Date/UTC
   i64.trunc_f64_s
-  i64.const 0
-  i64.ne
+  i64.eqz
+  i32.eqz
   if
    i32.const 0
    i32.const 24

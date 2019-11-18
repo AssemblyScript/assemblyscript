@@ -2927,7 +2927,7 @@
   if
    i32.const 872
    i32.const 488
-   i32.const 285
+   i32.const 288
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -3010,7 +3010,7 @@
    call $~lib/rt/pure/__release
    i32.const 24
    i32.const 488
-   i32.const 215
+   i32.const 218
    i32.const 59
    call $~lib/builtins/abort
    unreachable
@@ -3190,7 +3190,7 @@
   if
    i32.const 872
    i32.const 488
-   i32.const 346
+   i32.const 349
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -3868,11 +3868,33 @@
   call $~lib/array/Array<std/array/Ref>#__unchecked_get
  )
  (func $~lib/array/Array<i32>#__set (; 68 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $0
+  (local $3 i32)
   local.get $1
-  i32.const 1
-  i32.add
-  call $~lib/array/ensureSize
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 488
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   local.tee $3
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $3
+   i32.store offset=12
+  end
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3881,17 +3903,6 @@
   i32.add
   local.get $2
   i32.store
-  local.get $1
-  local.get $0
-  i32.load offset=12
-  i32.ge_s
-  if
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.add
-   i32.store offset=12
-  end
  )
  (func $start:std/array~anonymous|0 (; 69 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
@@ -4926,7 +4937,7 @@
   if
    i32.const 0
    i32.const 3480
-   i32.const 1369
+   i32.const 1368
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -6439,7 +6450,7 @@
   if
    i32.const 4256
    i32.const 3480
-   i32.const 1376
+   i32.const 1375
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -6620,29 +6631,42 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/array/Array<~lib/array/Array<i32>>#__set (; 138 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
   local.get $2
   call $~lib/rt/pure/__retain
   drop
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  call $~lib/array/ensureSize
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_set
   local.get $1
   local.get $0
   i32.load offset=12
-  i32.ge_s
+  i32.ge_u
   if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $2
+    call $~lib/rt/pure/__release
+    i32.const 280
+    i32.const 488
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
    local.get $0
    local.get $1
    i32.const 1
    i32.add
+   local.tee $3
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $3
    i32.store offset=12
   end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_set
   local.get $2
   call $~lib/rt/pure/__release
  )
@@ -10325,8 +10349,7 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    i32.const 4768
    call $~lib/rt/pure/__retain
@@ -10374,8 +10397,7 @@
   i32.add
   local.set $0
   local.get $2
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    local.get $0
    i32.const 48
@@ -10535,8 +10557,7 @@
   (local $3 i32)
   (local $4 i32)
   local.get $0
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    i32.const 4768
    call $~lib/rt/pure/__retain
@@ -10605,8 +10626,7 @@
   i32.add
   local.set $0
   local.get $2
-  i64.const 0
-  i64.eq
+  i64.eqz
   if
    local.get $0
    i32.const 48
