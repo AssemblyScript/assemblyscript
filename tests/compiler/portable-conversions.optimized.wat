@@ -4,13 +4,10 @@
  (data (i32.const 8) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00p\00o\00r\00t\00a\00b\00l\00e\00-\00c\00o\00n\00v\00e\00r\00s\00i\00o\00n\00s\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $start:portable-conversions (; 0 ;) (type $FUNCSIG$v)
+ (func $start (; 0 ;) (type $FUNCSIG$v)
   nop
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
-  call $start:portable-conversions
- )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 1 ;) (type $FUNCSIG$v)
   nop
  )
 )

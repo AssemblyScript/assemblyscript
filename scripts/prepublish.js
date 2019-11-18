@@ -1,8 +1,25 @@
-// Reconfigures the repository before publishing a release
+// Reconfigures the repository before publishing
 
 const fs = require("fs");
 const path = require("path");
 const pkg = require("../package.json");
+const devFiles = require("./postpublish-files.json");
+
+if (!pkg.releaseFiles) {
+  console.log("Package has already been updated");
+  return;
+}
+
+console.log("Backing up development files ...");
+
+devFiles.forEach(originalName => {
+  const backupName = originalName + ".backup";
+  console.log("- " + originalName + " -> " + backupName);
+  fs.copyFileSync(
+    path.join(__dirname, "..", originalName),
+    path.join(__dirname, "..", backupName)
+  );
+});
 
 console.log("Updating package.json ...");
 

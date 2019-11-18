@@ -7,7 +7,7 @@
  (global $getter-setter/Foo._bar (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:getter-setter (; 1 ;) (type $FUNCSIG$v)
+ (func $start (; 1 ;) (type $FUNCSIG$v)
   global.get $getter-setter/Foo._bar
   if
    i32.const 0
@@ -22,10 +22,7 @@
   i32.const 2
   global.set $getter-setter/Foo._bar
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
-  call $start:getter-setter
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 2 ;) (type $FUNCSIG$v)
   nop
  )
 )
