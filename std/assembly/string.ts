@@ -488,7 +488,7 @@ import { idof } from "./builtins";
   toLowerCase(): String {
     var len = this.length;
     if (!len) return this;
-    var codes = __alloc(len << 1, idof<String>());
+    var codes = __alloc(len * 2 * 2, idof<String>());
     var j = 0;
     for (let i = 0; i < len; ++i) {
       let c = this.charCodeAt(i);
@@ -533,7 +533,7 @@ import { idof } from "./builtins";
   toUpperCase(): String {
     const len = this.length;
     if (!len) return this;
-    var codes = __alloc(len << 1, idof<String>());
+    var codes = __alloc(len * 3 * 2, idof<String>());
     var j = 0;
     for (let i = 0; i < len; ++i) {
       // let c = str.codePointAt(i)!;
