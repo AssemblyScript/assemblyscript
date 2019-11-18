@@ -508,7 +508,7 @@
    unreachable
   end
   i32.const 0
-  i32.const 3
+  i32.const 4
   call $~lib/rt/stub/__alloc
   global.set $resolve-unary/foo
   i32.const 248
@@ -588,7 +588,7 @@
    unreachable
   end
   i32.const 0
-  i32.const 4
+  i32.const 5
   call $~lib/rt/stub/__alloc
   global.set $resolve-unary/bar
   i32.const 344

@@ -418,7 +418,7 @@
  (func $~lib/map/Map<~lib/string/String,usize>#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 3
+  i32.const 4
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 0
@@ -445,7 +445,7 @@
  (func $~lib/map/Map<usize,~lib/string/String>#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 4
+  i32.const 5
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 0

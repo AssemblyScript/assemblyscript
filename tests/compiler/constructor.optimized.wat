@@ -111,11 +111,11 @@
   i32.const 16
   global.set $~lib/rt/stub/offset
   i32.const 0
-  i32.const 3
+  i32.const 4
   call $~lib/rt/stub/__alloc
   global.set $constructor/emptyCtor
   i32.const 4
-  i32.const 4
+  i32.const 5
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 1
@@ -123,7 +123,7 @@
   local.get $0
   global.set $constructor/emptyCtorWithFieldInit
   i32.const 4
-  i32.const 5
+  i32.const 6
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 0
@@ -131,11 +131,11 @@
   local.get $0
   global.set $constructor/emptyCtorWithFieldNoInit
   i32.const 0
-  i32.const 6
+  i32.const 7
   call $~lib/rt/stub/__alloc
   global.set $constructor/none
   i32.const 4
-  i32.const 7
+  i32.const 8
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 1
@@ -143,7 +143,7 @@
   local.get $0
   global.set $constructor/justFieldInit
   i32.const 4
-  i32.const 8
+  i32.const 9
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 0
@@ -155,18 +155,18 @@
   i32.const 0
   global.set $constructor/ctorConditionallyReturns
   i32.const 0
-  i32.const 11
+  i32.const 12
   call $~lib/rt/stub/__alloc
   global.set $constructor/ctorAllocates
   i32.const 0
-  i32.const 12
+  i32.const 13
   call $~lib/rt/stub/__alloc
   local.tee $0
   if (result i32)
    local.get $0
   else
    i32.const 0
-   i32.const 12
+   i32.const 13
    call $~lib/rt/stub/__alloc
   end
   global.set $constructor/ctorConditionallyAllocates

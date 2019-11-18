@@ -16,8 +16,8 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
- (global $exports/Car i32 (i32.const 3))
- (global $exports/vehicles.Car i32 (i32.const 4))
+ (global $exports/Car i32 (i32.const 4))
+ (global $exports/vehicles.Car i32 (i32.const 5))
  (export "memory" (memory $0))
  (export "add" (func $exports/add))
  (export "__setargc" (func $~lib/setargc))
@@ -187,7 +187,7 @@
   local.get $0
   i32.eqz
   if
-   i32.const 3
+   i32.const 4
    call $~lib/rt/stub/__alloc
    local.set $0
   end
@@ -214,7 +214,7 @@
   local.get $0
   i32.eqz
   if
-   i32.const 4
+   i32.const 5
    call $~lib/rt/stub/__alloc
    local.set $0
   end

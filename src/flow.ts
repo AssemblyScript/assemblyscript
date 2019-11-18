@@ -325,6 +325,7 @@ export class Flow {
       case NativeType.F64: { temps = parentFunction.tempF64s; break; }
       case NativeType.V128: { temps = parentFunction.tempV128s; break; }
       case NativeType.Anyref: { temps = parentFunction.tempAnyrefs; break; }
+      case NativeType.Exnref: { temps = parentFunction.tempExnrefs; break; }
       default: throw new Error("concrete type expected");
     }
     var local: Local;
@@ -398,6 +399,10 @@ export class Flow {
       }
       case NativeType.Anyref: {
         temps = parentFunction.tempAnyrefs || (parentFunction.tempAnyrefs = []);
+        break;
+      }
+      case NativeType.Exnref: {
+        temps = parentFunction.tempExnrefs || (parentFunction.tempExnrefs = []);
         break;
       }
       default: throw new Error("concrete type expected");

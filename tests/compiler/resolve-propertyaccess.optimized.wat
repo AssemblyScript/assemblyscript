@@ -471,7 +471,7 @@
    unreachable
   end
   i32.const 4
-  i32.const 3
+  i32.const 4
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 6

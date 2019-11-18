@@ -63,6 +63,8 @@ export const enum TypeKind {
 
   /** A host reference. */
   ANYREF,
+  /** An exception reference. */
+  EXNREF,
 
   // other
 
@@ -341,15 +343,23 @@ export class Type {
   /** Converts this type to its respective native type. */
   toNativeType(): NativeType {
     switch (this.kind) {
-      default: return NativeType.I32;
+      default: assert(false);
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.BOOL: return NativeType.I32;
+      case TypeKind.ISIZE:
+      case TypeKind.USIZE: if (this.size != 64) return NativeType.I32;
       case TypeKind.I64:
       case TypeKind.U64: return NativeType.I64;
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: return this.size == 64 ? NativeType.I64 : NativeType.I32;
       case TypeKind.F32: return NativeType.F32;
       case TypeKind.F64: return NativeType.F64;
       case TypeKind.V128: return NativeType.V128;
       case TypeKind.ANYREF: return NativeType.Anyref;
+      case TypeKind.EXNREF: return NativeType.Exnref;
       case TypeKind.VOID:  return NativeType.None;
     }
   }
@@ -357,9 +367,14 @@ export class Type {
   /** Converts this type to its native `0` value. */
   toNativeZero(module: Module): ExpressionRef {
     switch (this.kind) {
-      case TypeKind.ANYREF:
-      case TypeKind.VOID: assert(false);
-      default: return module.i32(0);
+      default: assert(false);
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.BOOL: return module.i32(0);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: if (this.size != 64) return module.i32(0);
       case TypeKind.I64:
@@ -373,10 +388,14 @@ export class Type {
   /** Converts this type to its native `1` value. */
   toNativeOne(module: Module): ExpressionRef {
     switch (this.kind) {
-      case TypeKind.V128:
-      case TypeKind.ANYREF:
-      case TypeKind.VOID: assert(false);
-      default: return module.i32(1);
+      default: assert(false);
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32:
+      case TypeKind.BOOL: return module.i32(1);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: if (this.size != 64) return module.i32(1);
       case TypeKind.I64:
@@ -389,10 +408,13 @@ export class Type {
   /** Converts this type to its native `-1` value. */
   toNativeNegOne(module: Module): ExpressionRef {
     switch (this.kind) {
-      case TypeKind.V128:
-          case TypeKind.ANYREF:
-      case TypeKind.VOID: assert(false);
-      default: return module.i32(-1);
+      default: assert(false);
+      case TypeKind.I8:
+      case TypeKind.I16:
+      case TypeKind.I32:
+      case TypeKind.U8:
+      case TypeKind.U16:
+      case TypeKind.U32: return module.i32(-1);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: if (this.size != 64) return module.i32(-1);
       case TypeKind.I64:
@@ -405,6 +427,7 @@ export class Type {
   /** Converts this type to its signature string. */
   toSignatureString(): string {
     switch (this.kind) {
+      default: assert(false);
       // same naming scheme as Binaryen
       case TypeKind.I8:
       case TypeKind.U8:
@@ -421,10 +444,9 @@ export class Type {
       case TypeKind.F64: return "d";
       case TypeKind.V128: return "V";
       case TypeKind.ANYREF: return "a";
+      case TypeKind.EXNREF: return "e";
       case TypeKind.VOID: return "v";
-      default: assert(false);
     }
-    return "i";
   }
 
   // Types
@@ -556,6 +578,11 @@ export class Type {
 
   /** A host reference. */
   static readonly anyref: Type = new Type(TypeKind.ANYREF,
+    TypeFlags.REFERENCE, 0
+  );
+
+  /** An internal expression reference. */
+  static readonly exnref: Type = new Type(TypeKind.EXNREF,
     TypeFlags.REFERENCE, 0
   );
 

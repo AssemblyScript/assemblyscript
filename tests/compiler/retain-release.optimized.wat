@@ -146,7 +146,7 @@
  )
  (func $retain-release/Ref#constructor (; 3 ;) (type $FUNCSIG$i) (result i32)
   i32.const 0
-  i32.const 3
+  i32.const 4
   call $~lib/rt/stub/__alloc
  )
  (func $retain-release/returnRef (; 4 ;) (type $FUNCSIG$i) (result i32)
@@ -261,7 +261,7 @@
   call $retain-release/Ref#constructor
   global.set $retain-release/REF
   i32.const 4
-  i32.const 4
+  i32.const 5
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 0

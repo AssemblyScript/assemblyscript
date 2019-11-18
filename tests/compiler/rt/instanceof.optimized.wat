@@ -8,7 +8,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00r\00t\00/\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s")
- (data (i32.const 56) "\06\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\03\00\00\00\10\00\00\00\04")
+ (data (i32.const 56) "\07\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\04\00\00\00\10\00\00\00\05")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $rt/instanceof/animal (mut i32) (i32.const 0))
@@ -93,7 +93,7 @@
   local.get $0
   i32.eqz
   if
-   i32.const 3
+   i32.const 4
    call $~lib/rt/stub/__alloc
    local.set $0
   end
@@ -103,7 +103,7 @@
   local.get $0
   i32.eqz
   if
-   i32.const 4
+   i32.const 5
    call $~lib/rt/stub/__alloc
    local.set $0
   end
@@ -111,7 +111,7 @@
   call $rt/instanceof/Animal#constructor
  )
  (func $rt/instanceof/BlackCat#constructor (; 5 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 5
+  i32.const 6
   call $~lib/rt/stub/__alloc
   call $rt/instanceof/Cat#constructor
  )
@@ -147,9 +147,9 @@
  )
  (func $start:rt/instanceof (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
-  i32.const 112
+  i32.const 128
   global.set $~lib/rt/stub/startOffset
-  i32.const 112
+  i32.const 128
   global.set $~lib/rt/stub/offset
   i32.const 0
   call $rt/instanceof/Animal#constructor
@@ -163,7 +163,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -180,7 +180,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -197,7 +197,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -215,7 +215,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -232,7 +232,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -250,7 +250,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -286,7 +286,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -303,7 +303,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -330,7 +330,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -348,7 +348,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -375,7 +375,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -393,7 +393,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -411,7 +411,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -428,7 +428,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -445,7 +445,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -462,7 +462,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -479,7 +479,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   else
    i32.const 0
@@ -496,7 +496,7 @@
   local.tee $0
   if (result i32)
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   else
    i32.const 0

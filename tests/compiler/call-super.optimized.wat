@@ -104,7 +104,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 3
+   i32.const 4
    call $~lib/rt/stub/__alloc
    local.set $0
   end
@@ -128,7 +128,7 @@
  (func $call-super/B#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  i32.const 4
+  i32.const 5
   call $~lib/rt/stub/__alloc
   call $call-super/A#constructor
   local.tee $0
@@ -191,13 +191,13 @@
  (func $call-super/D#constructor (; 6 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  i32.const 6
+  i32.const 7
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.eqz
   if
    i32.const 4
-   i32.const 5
+   i32.const 6
    call $~lib/rt/stub/__alloc
    local.set $0
   end
@@ -266,7 +266,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 7
+   i32.const 8
    call $~lib/rt/stub/__alloc
    local.set $0
   end
@@ -290,7 +290,7 @@
  (func $call-super/test3 (; 9 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 8
-  i32.const 8
+  i32.const 9
   call $~lib/rt/stub/__alloc
   call $call-super/E#constructor
   local.tee $0
@@ -324,13 +324,13 @@
  (func $call-super/H#constructor (; 10 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  i32.const 10
+  i32.const 11
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.eqz
   if
    i32.const 4
-   i32.const 9
+   i32.const 10
    call $~lib/rt/stub/__alloc
    local.set $0
   end
@@ -373,13 +373,13 @@
  (func $call-super/J#constructor (; 12 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  i32.const 12
+  i32.const 13
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.eqz
   if
    i32.const 4
-   i32.const 11
+   i32.const 12
    call $~lib/rt/stub/__alloc
    local.set $0
   end

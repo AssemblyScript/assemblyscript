@@ -493,7 +493,7 @@ export class Module {
     name: string,
     result: NativeType,
     paramTypes: NativeType[] | null
-  ): FunctionRef {
+  ): FunctionTypeRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocI32Array(paramTypes);
     try {
@@ -1000,6 +1000,13 @@ export class Module {
   ): EventRef {
     var cStr = this.allocStringCached(name);
     return _BinaryenAddEvent(this.ref, cStr, attribute, type);
+  }
+
+  getEvent(
+    name: string
+  ): EventRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetEvent(this.ref, cStr);
   }
 
   addFunction(
@@ -1700,6 +1707,13 @@ export function getHostName(expr: ExpressionRef): string | null {
   return readString(_BinaryenHostGetNameOperand(expr));
 }
 
+// function types
+
+export function getFunctionTypeName(ftype: FunctionTypeRef): string {
+  var cstr = assert(_BinaryenFunctionTypeGetName(ftype));
+  return assert(readString(cstr));
+}
+
 // functions
 
 export function getFunctionBody(func: FunctionRef): ExpressionRef {
@@ -1720,6 +1734,13 @@ export function getFunctionParamType(func: FunctionRef, index: Index): NativeTyp
 
 export function getFunctionResultType(func: FunctionRef): NativeType {
   return _BinaryenFunctionGetResult(func);
+}
+
+// events
+
+export function getEventName(event: EventRef): string {
+  var cStr = assert(_BinaryenEventGetName(event));
+  return assert(readString(cStr));
 }
 
 export class Relooper {

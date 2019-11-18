@@ -15,7 +15,7 @@
  (data (i32.const 112) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
  (data (i32.const 160) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00")
  (data (i32.const 216) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00")
- (data (i32.const 256) "\04\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
+ (data (i32.const 256) "\05\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -26,7 +26,7 @@
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 256))
- (global $~lib/heap/__heap_base i32 (i32.const 292))
+ (global $~lib/heap/__heap_base i32 (i32.const 300))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
@@ -3254,7 +3254,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3
+   i32.const 4
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -3408,18 +3408,45 @@
  (func $~lib/rt/__visit_members (; 33 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
-   block $switch$1$case$4
-    block $switch$1$case$2
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$default
+   block $switch$1$case$5
+    block $switch$1$case$4
+     block $switch$1$case$2
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$2 $switch$1$default
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $2
+    if
+     local.get $2
+     local.get $1
+     call $~lib/rt/pure/__visit
     end
     return
    end
    local.get $0
    i32.load
+   local.tee $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   local.get $0
+   i32.load offset=4
+   local.tee $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   local.get $0
+   i32.load offset=8
    local.tee $2
    if
     local.get $2

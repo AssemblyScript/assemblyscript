@@ -905,6 +905,7 @@ export function compileCall(
           case TypeKind.USIZE: { value = "usize"; break; }
           case TypeKind.V128: { value = "v128"; break; }
           case TypeKind.ANYREF: { value = "anyref"; break; }
+          case TypeKind.EXNREF: { value = "exnref"; break; }
           default: assert(false);
           case TypeKind.VOID: { value = "void"; break; }
         }

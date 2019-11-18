@@ -284,7 +284,7 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 16
-  i32.const 3
+  i32.const 4
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 8
@@ -530,7 +530,7 @@
  (func $resolve-access/Container#constructor (; 12 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 8
-  i32.const 5
+  i32.const 6
   call $~lib/rt/stub/__alloc
   local.tee $0
   i64.const 0

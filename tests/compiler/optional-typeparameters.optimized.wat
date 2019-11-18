@@ -83,10 +83,10 @@
   global.set $~lib/rt/stub/startOffset
   i32.const 16
   global.set $~lib/rt/stub/offset
-  i32.const 3
+  i32.const 4
   call $~lib/rt/stub/__alloc
   global.set $optional-typeparameters/tConcrete
-  i32.const 4
+  i32.const 5
   call $~lib/rt/stub/__alloc
   global.set $optional-typeparameters/tDerived
  )

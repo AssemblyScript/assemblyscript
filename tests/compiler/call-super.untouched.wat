@@ -129,7 +129,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 3
+   i32.const 4
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -158,7 +158,7 @@
    local.get $0
   else
    i32.const 8
-   i32.const 4
+   i32.const 5
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
   end
@@ -237,7 +237,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 5
+   i32.const 6
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -253,7 +253,7 @@
    local.get $0
   else
    i32.const 8
-   i32.const 6
+   i32.const 7
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
   end
@@ -329,7 +329,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 7
+   i32.const 8
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -357,7 +357,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 8
+   i32.const 9
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -409,7 +409,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 9
+   i32.const 10
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -424,7 +424,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 10
+   i32.const 11
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -476,7 +476,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 11
+   i32.const 12
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -491,7 +491,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 12
+   i32.const 13
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0

@@ -28,6 +28,8 @@ import {
   ExpressionId,
   FunctionTypeRef,
   GlobalRef,
+  FeatureFlags,
+  EventRef,
   getExpressionId,
   getExpressionType,
   getConstValueI32,
@@ -41,7 +43,6 @@ import {
   getLocalGetIndex,
   isLocalTee,
   getLocalSetIndex,
-  FeatureFlags,
   needsExplicitUnreachable,
   getLocalSetValue
 } from "./module";
@@ -307,6 +308,8 @@ export class Compiler extends DiagnosticEmitter {
   runtimeFeatures: RuntimeFeatures = RuntimeFeatures.NONE;
   /** Expressions known to have skipped an autorelease. Usually function returns. */
   skippedAutoreleases: Set<ExpressionRef> = new Set();
+  /** Registered event types. */
+  events: Map<string,EventRef> = new Map();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -1122,6 +1125,21 @@ export class Compiler extends DiagnosticEmitter {
       typeRef = module.addFunctionType(name, resultType, paramTypes);
     }
     return typeRef;
+  }
+
+  /** Either reuses or creates the event type matching the specified name. */
+  ensureEventType(
+    name: string,
+    parameterTypes: Type[] | null,
+    returnType: Type = Type.void
+  ): EventRef {
+    var events = this.events;
+    if (events.has(name)) return events.get(name)!;
+    var module = this.module;
+    var funcType = this.ensureFunctionType(parameterTypes, returnType);
+    var eventType = module.addEvent(name, 0, funcType);
+    events.set(name, eventType);
+    return eventType;
   }
 
   /** Compiles the body of a function within the specified flow. */
@@ -2428,9 +2446,15 @@ export class Compiler extends DiagnosticEmitter {
     return currentBlock;
   }
 
+  makeThrow(expr: ExpressionRef): ExpressionRef {
+    this.ensureEventType("exception", [ this.options.usizeType ]);
+    return this.module.throw("exception", [ expr ]);
+  }
+
   compileThrowStatement(
     statement: ThrowStatement
   ): ExpressionRef {
+    var module = this.module;
     var flow = this.currentFlow;
 
     // Remember that this branch throws
@@ -2439,28 +2463,151 @@ export class Compiler extends DiagnosticEmitter {
     var stmts = new Array<ExpressionRef>();
     this.finishAutoreleases(flow, stmts);
 
-    // TODO: requires exception-handling spec.
-    var value = statement.value;
-    var message: Expression | null = null;
-    if (value.kind == NodeKind.NEW) {
-      let newArgs = (<NewExpression>value).arguments;
-      if (newArgs.length) message = newArgs[0]; // FIXME: naively assumes type string
+    if (this.options.hasFeature(Feature.EXCEPTION_HANDLING)) {
+      let thrown = this.compileExpression(statement.value, Type.auto, Constraints.WILL_RETAIN | Constraints.MUST_WRAP);
+      let thrownType = this.currentType;
+      if (!(
+        thrownType.isManaged &&
+        assert(thrownType.classReference).extends(this.program.errorInstance.prototype))
+      ) {
+        this.error(
+          DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+          statement.value.range, "throw", thrownType.toString()
+        );
+        stmts.push(module.unreachable());
+      } else {
+        let expr = this.makeThrow(thrown);
+        if (!this.skippedAutoreleases.has(thrown)) expr = this.makeRetain(expr);
+        stmts.push(expr);
+      }
+    } else {
+      let value = statement.value;
+      let message: Expression | null = null;
+      if (value.kind == NodeKind.NEW) {
+        let newArgs = (<NewExpression>value).arguments;
+        if (newArgs.length) message = newArgs[0]; // FIXME: naively assumes type string
+      }
+      stmts.push(compileAbort(this, message, statement));
     }
-    stmts.push(compileAbort(this, message, statement));
 
-    return flatten(this.module, stmts, NativeType.None);
+    this.currentType = Type.void;
+    return flatten(module, stmts, NativeType.None);
+  }
+
+  makeCatch(): ExpressionRef {
+    var module = this.module;
+    this.ensureEventType("exception", [ this.options.usizeType ], Type.void);
+    this.currentFlow.pushBreakLabel();
+    return module.block("l", [
+      module.rethrow(
+        module.br_on_exn("l", "exception", module.pop(NativeType.Exnref))
+      )
+    ], this.options.nativeSizeType);
   }
 
   compileTryStatement(
     statement: TryStatement
   ): ExpressionRef {
-    // TODO: can't yet support something like: try { return ... } finally { ... }
-    // worthwhile to investigate lowering returns to block results (here)?
+    var module = this.module;
+
+    if (this.options.hasFeature(Feature.EXCEPTION_HANDLING)) {
+
+      // TODO: finally has various edge cases, for example when returning from
+      // a finally block or even executing when throwing/returning in try/catch
+      let finallyStatements = statement.finallyStatements;
+      if (finallyStatements) {
+        this.error(
+          DiagnosticCode.Not_implemented,
+          statement.range
+        );
+        return module.unreachable();
+      }
+
+      let errorType = this.program.errorInstance.type;
+      let outerFlow = this.currentFlow;
+
+      let tryFlow = outerFlow.fork();
+      this.currentFlow = tryFlow;
+      let tryStmts = this.compileStatements(statement.statements);
+      if (!tryFlow.is(FlowFlags.TERMINATES)) {
+        this.performAutoreleases(tryFlow, tryStmts);
+      }
+      tryFlow.freeScopedLocals();
+
+      let catchFlow = outerFlow.fork();
+      this.currentFlow = catchFlow;
+      let breakLabel = "catch|" + outerFlow.pushBreakLabel();
+      let exnTemp = catchFlow.getTempLocal(Type.exnref);
+      let catchStmts = new Array<ExpressionRef>();
+      catchStmts.push(
+        module.local_set(exnTemp.index,
+          module.pop(NativeType.Exnref)
+        )
+      );
+      let caughtExpr = module.block(breakLabel, [
+        module.rethrow(
+          module.br_on_exn(breakLabel, "exception",
+            module.local_get(exnTemp.index, NativeType.Exnref)
+          )
+        ),
+      ], errorType.toNativeType());
+      let catchStatements = statement.catchStatements;
+      if (catchStatements) {
+        let catchVariable = statement.catchVariable;
+        if (catchVariable) {
+          let temp = catchFlow.addScopedLocal(catchVariable.text, errorType);
+          catchStmts.push(
+            module.local_set(temp.index, caughtExpr)
+          );
+          catchFlow.setLocalFlag(temp.index, LocalFlags.RETAINED);
+        } else {
+          catchStmts.push(
+            module.drop(caughtExpr)
+          );
+        }
+        this.compileStatements(catchStatements, false, catchStmts);
+        if (!catchFlow.is(FlowFlags.TERMINATES)) {
+          this.performAutoreleases(catchFlow, catchStmts);
+        }
+        catchFlow.freeScopedLocals();
+      } else {
+        catchStmts.push(
+          module.drop(caughtExpr)
+        );
+      }
+      catchFlow.freeTempLocal(exnTemp);
+      outerFlow.inheritMutual(tryFlow, catchFlow);
+      // TODO: breaks?
+
+      // if (!outerFlow.is(FlowFlags.TERMINATES)) {
+      //   let finallyStatements = statement.finallyStatements;
+      //   if (finallyStatements) {
+      //     let finallyFlow = outerFlow.fork();
+      //     this.currentFlow = finallyFlow;
+      //     this.compileStatements(finallyStatements, false, WRONGcatchStmts);
+      //     if (!finallyFlow.is(FlowFlags.TERMINATES)) {
+      //       this.performAutoreleases(finallyFlow, WRONGcatchStmts);
+      //     }
+      //     finallyFlow.freeScopedLocals();
+      //     outerFlow.inherit(finallyFlow);
+      //   }
+      // }
+
+      this.currentFlow = outerFlow;
+      let ret = module.try(
+        flatten(module, tryStmts, NativeType.None),
+        flatten(module, catchStmts, NativeType.None)
+      );
+      outerFlow.popBreakLabel();
+      this.currentType = Type.void;
+      return ret;
+    }
+
     this.error(
       DiagnosticCode.Not_implemented,
       statement.range
     );
-    return this.module.unreachable();
+    return module.unreachable();
   }
 
   /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */

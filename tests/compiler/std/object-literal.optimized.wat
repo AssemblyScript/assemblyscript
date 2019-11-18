@@ -249,7 +249,7 @@
   i32.const 112
   global.set $~lib/rt/stub/offset
   i32.const 8
-  i32.const 3
+  i32.const 4
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 1
@@ -260,7 +260,7 @@
   local.get $0
   call $std/object-literal/bar
   i32.const 4
-  i32.const 4
+  i32.const 5
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 2
@@ -278,7 +278,7 @@
    unreachable
   end
   i32.const 4
-  i32.const 4
+  i32.const 5
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 3

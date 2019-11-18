@@ -30,7 +30,7 @@
  (data (i32.const 360) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 416) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
  (data (i32.const 464) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
- (data (i32.const 512) "\05\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\001\00\00\00\02\00\00\00\10")
+ (data (i32.const 512) "\06\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\001\00\00\00\02\00\00\00\10")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
@@ -624,10 +624,10 @@
   if
    unreachable
   end
-  i32.const 560
+  i32.const 576
   i32.const 0
   i32.store
-  i32.const 2128
+  i32.const 2144
   i32.const 0
   i32.store
   i32.const 0
@@ -641,7 +641,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 560
+    i32.const 576
     i32.add
     i32.const 0
     i32.store offset=4
@@ -660,7 +660,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 560
+      i32.const 576
       i32.add
       i32.const 0
       i32.store offset=96
@@ -678,13 +678,13 @@
     br $loop|0
    end
   end
-  i32.const 560
-  i32.const 2144
+  i32.const 576
+  i32.const 2160
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 560
+  i32.const 576
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1420,7 +1420,7 @@
  )
  (func $~lib/rt/pure/__retain (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 556
+  i32.const 564
   i32.gt_u
   if
    local.get $0
@@ -1818,7 +1818,7 @@
  )
  (func $~lib/rt/pure/__release (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 556
+  i32.const 564
   i32.gt_u
   if
    local.get $0
@@ -1929,7 +1929,7 @@
    unreachable
   end
   i32.const 12
-  i32.const 4
+  i32.const 5
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
@@ -2588,7 +2588,7 @@
   (local $1 i32)
   (local $2 i32)
   i32.const 12
-  i32.const 3
+  i32.const 4
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   call $~lib/arraybuffer/ArrayBufferView#constructor
@@ -4145,7 +4145,7 @@
  )
  (func $~lib/rt/pure/__visit (; 63 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 556
+  i32.const 564
   i32.lt_u
   if
    return
@@ -4254,19 +4254,47 @@
   end
  )
  (func $~lib/rt/__visit_members (; 64 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   block $switch$1$default
-   block $switch$1$case$4
-    block $switch$1$case$2
+   block $switch$1$case$5
+    block $switch$1$case$4
+     block $switch$1$case$2
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $0
+    if
      local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+     local.get $1
+     call $~lib/rt/pure/__visit
     end
     return
    end
    local.get $0
    i32.load
+   local.tee $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   local.get $0
+   i32.load offset=4
+   local.tee $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   local.get $0
+   i32.load offset=8
    local.tee $0
    if
     local.get $0

@@ -7,7 +7,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00r\00t\00/\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00")
- (data (i32.const 56) "\06\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\03\00\00\00\10\00\00\00\04\00\00\00")
+ (data (i32.const 56) "\07\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\04\00\00\00\10\00\00\00\05\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -23,7 +23,7 @@
  (global $rt/instanceof/nullBlackcat (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 56))
- (global $~lib/heap/__heap_base i32 (i32.const 108))
+ (global $~lib/heap/__heap_base i32 (i32.const 116))
  (export "__start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -141,7 +141,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 3
+   i32.const 4
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -153,7 +153,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -168,7 +168,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -243,7 +243,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -263,7 +263,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -283,7 +283,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -302,7 +302,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -322,7 +322,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -341,7 +341,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -381,7 +381,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -401,7 +401,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -433,7 +433,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -452,7 +452,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -484,7 +484,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -503,7 +503,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -535,7 +535,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -555,7 +555,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -588,7 +588,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -608,7 +608,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -641,7 +641,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 4
+   i32.const 5
    call $~lib/rt/__instanceof
   end
   i32.eqz
@@ -661,7 +661,7 @@
    i32.const 0
   else
    local.get $0
-   i32.const 5
+   i32.const 6
    call $~lib/rt/__instanceof
   end
   i32.eqz

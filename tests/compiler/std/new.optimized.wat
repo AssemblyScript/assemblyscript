@@ -70,7 +70,7 @@
   i32.const -1
   i32.store offset=4
   local.get $0
-  i32.const 3
+  i32.const 4
   i32.store offset=8
   local.get $0
   i32.const 8

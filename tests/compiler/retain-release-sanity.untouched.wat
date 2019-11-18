@@ -27,7 +27,7 @@
  (data (i32.const 496) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00b\00")
  (data (i32.const 520) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
  (data (i32.const 544) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00d\00")
- (data (i32.const 568) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 568) "\t\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -38,7 +38,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 568))
- (global $~lib/heap/__heap_base i32 (i32.const 636))
+ (global $~lib/heap/__heap_base i32 (i32.const 644))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -3613,7 +3613,7 @@
    local.get $0
   else
    i32.const 16
-   i32.const 3
+   i32.const 4
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
@@ -3936,7 +3936,7 @@
    local.get $0
   else
    i32.const 16
-   i32.const 5
+   i32.const 6
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
@@ -3958,7 +3958,7 @@
    local.get $0
   else
    i32.const 16
-   i32.const 4
+   i32.const 5
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
@@ -4122,7 +4122,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 6
+   i32.const 7
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -4137,7 +4137,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 7
+   i32.const 8
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -4573,20 +4573,47 @@
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
-    block $switch$1$case$7
-     block $switch$1$case$6
-      block $switch$1$case$5
-       block $switch$1$case$4
-        block $switch$1$case$2
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+    block $switch$1$case$8
+     block $switch$1$case$7
+      block $switch$1$case$6
+       block $switch$1$case$5
+        block $switch$1$case$4
+         block $switch$1$case$2
+          local.get $0
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$8 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+         end
+         return
         end
-        return
+        br $block$4$break
        end
-       br $block$4$break
+       local.get $0
+       i32.load
+       local.tee $2
+       if
+        local.get $2
+        local.get $1
+        call $~lib/rt/pure/__visit
+       end
+       local.get $0
+       i32.load offset=4
+       local.tee $2
+       if
+        local.get $2
+        local.get $1
+        call $~lib/rt/pure/__visit
+       end
+       local.get $0
+       i32.load offset=8
+       local.tee $2
+       if
+        local.get $2
+        local.get $1
+        call $~lib/rt/pure/__visit
+       end
+       return
       end
       local.get $0
       local.get $1

@@ -31,7 +31,7 @@
  (data (i32.const 360) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00t\00y\00p\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 416) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
  (data (i32.const 464) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s\00")
- (data (i32.const 512) "\05\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\001\00\00\00\02\00\00\00\10\00\00\00\00\00\00\00")
+ (data (i32.const 512) "\06\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\001\00\00\00\02\00\00\00\10\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -43,7 +43,7 @@
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 512))
- (global $~lib/heap/__heap_base i32 (i32.const 556))
+ (global $~lib/heap/__heap_base i32 (i32.const 564))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -3618,7 +3618,7 @@
    local.get $0
   else
    i32.const 12
-   i32.const 3
+   i32.const 4
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
@@ -3685,7 +3685,7 @@
   i32.eqz
   if
    i32.const 12
-   i32.const 4
+   i32.const 5
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -6392,18 +6392,45 @@
  (func $~lib/rt/__visit_members (; 69 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
-   block $switch$1$case$4
-    block $switch$1$case$2
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+   block $switch$1$case$5
+    block $switch$1$case$4
+     block $switch$1$case$2
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $2
+    if
+     local.get $2
+     local.get $1
+     call $~lib/rt/pure/__visit
     end
     return
    end
    local.get $0
    i32.load
+   local.tee $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   local.get $0
+   i32.load offset=4
+   local.tee $2
+   if
+    local.get $2
+    local.get $1
+    call $~lib/rt/pure/__visit
+   end
+   local.get $0
+   i32.load offset=8
    local.tee $2
    if
     local.get $2

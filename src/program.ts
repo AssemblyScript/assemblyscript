@@ -439,6 +439,8 @@ export class Program extends DiagnosticEmitter {
   f64ArrayPrototype: ClassPrototype;
   /** String instance reference. */
   stringInstance: Class;
+  /** Error instance reference. */
+  errorInstance: Class;
   /** Abort function reference, if not explicitly disabled. */
   abortInstance: Function | null;
 
@@ -856,7 +858,7 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2)
+    // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2), Error (id=3)
     assert(this.nextClassId == 0);
     this.arrayBufferInstance = this.requireClass(CommonSymbols.ArrayBuffer);
     assert(this.arrayBufferInstance.id == 0);
@@ -864,6 +866,8 @@ export class Program extends DiagnosticEmitter {
     assert(this.stringInstance.id == 1);
     this.arrayBufferViewInstance = this.requireClass(CommonSymbols.ArrayBufferView);
     assert(this.arrayBufferViewInstance.id == 2);
+    this.errorInstance = this.requireClass(CommonSymbols.Error);
+    assert(this.errorInstance.id == 3);
 
     // register classes backing basic types
     this.registerWrapperClass(Type.i8, CommonSymbols.I8);
@@ -2901,6 +2905,7 @@ export class Function extends TypedElement {
   tempF64s: Local[] | null = null;
   tempV128s: Local[] | null = null;
   tempAnyrefs: Local[] | null = null;
+  tempExnrefs: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;

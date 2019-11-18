@@ -150,7 +150,7 @@
  )
  (func $std/operator-overloading/Tester#constructor (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  i32.const 3
+  i32.const 4
   call $~lib/rt/stub/__alloc
   local.tee $2
   local.get $0
@@ -1198,7 +1198,7 @@
  )
  (func $std/operator-overloading/TesterInlineStatic#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  i32.const 4
+  i32.const 5
   call $~lib/rt/stub/__alloc
   local.tee $2
   local.get $0
@@ -1210,7 +1210,7 @@
  )
  (func $std/operator-overloading/TesterInlineInstance#constructor (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  i32.const 5
+  i32.const 6
   call $~lib/rt/stub/__alloc
   local.tee $2
   local.get $0

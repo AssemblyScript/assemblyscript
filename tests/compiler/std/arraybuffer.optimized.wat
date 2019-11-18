@@ -24,7 +24,7 @@
  (data (i32.const 376) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 416) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02")
  (data (i32.const 440) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
- (data (i32.const 488) "\10\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\001\04\00\00\02\00\00\001\00\00\00\02\00\00\001\00\00\00\02\00\00\00Q\04\00\00\02\00\00\00Q\00\00\00\02\00\00\00\91\04\00\00\02\00\00\00\91\00\00\00\02\00\00\00\11\05\00\00\02\00\00\00\11\01\00\00\02\00\00\00\91\0c\00\00\02\00\00\00\11\0d\00\00\02\00\00\00\10")
+ (data (i32.const 488) "\11\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\001\04\00\00\02\00\00\001\00\00\00\02\00\00\001\00\00\00\02\00\00\00Q\04\00\00\02\00\00\00Q\00\00\00\02\00\00\00\91\04\00\00\02\00\00\00\91\00\00\00\02\00\00\00\11\05\00\00\02\00\00\00\11\01\00\00\02\00\00\00\91\0c\00\00\02\00\00\00\11\0d\00\00\02\00\00\00\10")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
@@ -618,10 +618,10 @@
   if
    unreachable
   end
-  i32.const 624
+  i32.const 640
   i32.const 0
   i32.store
-  i32.const 2192
+  i32.const 2208
   i32.const 0
   i32.store
   i32.const 0
@@ -635,7 +635,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 624
+    i32.const 640
     i32.add
     i32.const 0
     i32.store offset=4
@@ -654,7 +654,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 624
+      i32.const 640
       i32.add
       i32.const 0
       i32.store offset=96
@@ -672,13 +672,13 @@
     br $loop|0
    end
   end
-  i32.const 624
-  i32.const 2208
+  i32.const 640
+  i32.const 2224
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 624
+  i32.const 640
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1579,7 +1579,7 @@
  )
  (func $~lib/rt/pure/__retain (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 620
+  i32.const 628
   i32.gt_u
   if
    local.get $0
@@ -2051,7 +2051,7 @@
  )
  (func $~lib/rt/pure/__release (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 620
+  i32.const 628
   i32.gt_u
   if
    local.get $0
@@ -2138,7 +2138,7 @@
   (local $0 i32)
   (local $1 i32)
   i32.const 16
-  i32.const 3
+  i32.const 4
   call $~lib/rt/tlsf/__alloc
   local.tee $0
   i32.const 8
@@ -2195,7 +2195,7 @@
    unreachable
   end
   i32.const 12
-  i32.const 15
+  i32.const 16
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $2
@@ -2458,7 +2458,7 @@
    unreachable
   end
   i32.const 12
-  i32.const 5
+  i32.const 6
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   i32.const 0
@@ -2483,7 +2483,7 @@
    unreachable
   end
   i32.const 12
-  i32.const 9
+  i32.const 10
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   i32.const 2
@@ -2540,7 +2540,7 @@
  )
  (func $~lib/rt/pure/__visit (; 40 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 620
+  i32.const 628
   i32.lt_u
   if
    return
@@ -2649,14 +2649,42 @@
   end
  )
  (func $~lib/rt/__visit_members (; 41 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   block $block$4$break
    block $switch$1$default
-    block $switch$1$case$2
+    block $switch$1$case$5
+     block $switch$1$case$2
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $switch$1$case$5 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $2
+    if
+     local.get $2
+     local.get $1
+     call $~lib/rt/pure/__visit
+    end
+    local.get $0
+    i32.load offset=4
+    local.tee $2
+    if
+     local.get $2
+     local.get $1
+     call $~lib/rt/pure/__visit
+    end
+    local.get $0
+    i32.load offset=8
+    local.tee $0
+    if
      local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+     local.get $1
+     call $~lib/rt/pure/__visit
     end
     return
    end

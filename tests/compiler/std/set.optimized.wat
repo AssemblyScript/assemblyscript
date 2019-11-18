@@ -32,7 +32,7 @@
  (data (i32.const 264) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 320) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 360) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
- (data (i32.const 400) "\0d\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\004\04\00\00\00\00\00\004\00\00\00\00\00\00\00T\04\00\00\00\00\00\00T\00\00\00\00\00\00\00\94\04\00\00\00\00\00\00\94\00\00\00\00\00\00\00\14\05\00\00\00\00\00\00\14\01\00\00\00\00\00\00\94\0c\00\00\00\00\00\00\14\0d")
+ (data (i32.const 400) "\0e\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\004\04\00\00\00\00\00\004\00\00\00\00\00\00\00T\04\00\00\00\00\00\00T\00\00\00\00\00\00\00\94\04\00\00\00\00\00\00\94\00\00\00\00\00\00\00\14\05\00\00\00\00\00\00\14\01\00\00\00\00\00\00\94\0c\00\00\00\00\00\00\14\0d")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
@@ -625,10 +625,10 @@
   if
    unreachable
   end
-  i32.const 512
+  i32.const 528
   i32.const 0
   i32.store
-  i32.const 2080
+  i32.const 2096
   i32.const 0
   i32.store
   i32.const 0
@@ -642,7 +642,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 512
+    i32.const 528
     i32.add
     i32.const 0
     i32.store offset=4
@@ -661,7 +661,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 512
+      i32.const 528
       i32.add
       i32.const 0
       i32.store offset=96
@@ -679,13 +679,13 @@
     br $loop|0
    end
   end
-  i32.const 512
-  i32.const 2096
+  i32.const 528
+  i32.const 2112
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 512
+  i32.const 528
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1377,7 +1377,7 @@
  )
  (func $~lib/rt/pure/__retain (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 508
+  i32.const 516
   i32.gt_u
   if
    local.get $0
@@ -2006,7 +2006,7 @@
  )
  (func $~lib/rt/pure/__release (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 508
+  i32.const 516
   i32.gt_u
   if
    local.get $0
@@ -2051,7 +2051,7 @@
  (func $~lib/set/Set<i8>#constructor (; 33 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 3
+  i32.const 4
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -2667,7 +2667,7 @@
  (func $~lib/set/Set<u8>#constructor (; 41 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 4
+  i32.const 5
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -3225,7 +3225,7 @@
  (func $~lib/set/Set<i16>#constructor (; 47 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 5
+  i32.const 6
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -3849,7 +3849,7 @@
  (func $~lib/set/Set<u16>#constructor (; 55 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 6
+  i32.const 7
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -4407,7 +4407,7 @@
  (func $~lib/set/Set<i32>#constructor (; 61 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 7
+  i32.const 8
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -5033,7 +5033,7 @@
  (func $~lib/set/Set<u32>#constructor (; 69 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 8
+  i32.const 9
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -5341,7 +5341,7 @@
  (func $~lib/set/Set<i64>#constructor (; 72 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 9
+  i32.const 10
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -6003,7 +6003,7 @@
  (func $~lib/set/Set<u64>#constructor (; 80 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 10
+  i32.const 11
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -6278,7 +6278,7 @@
  (func $~lib/set/Set<f32>#constructor (; 82 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 11
+  i32.const 12
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -6878,7 +6878,7 @@
  (func $~lib/set/Set<f64>#constructor (; 89 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 12
+  i32.const 13
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -7489,7 +7489,7 @@
  )
  (func $~lib/rt/pure/__visit (; 97 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 508
+  i32.const 516
   i32.lt_u
   if
    return
@@ -7598,20 +7598,48 @@
   end
  )
  (func $~lib/rt/__visit_members (; 98 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   block $folding-inner0
    block $switch$1$default
-    block $switch$1$case$4
-     block $switch$1$case$2
+    block $switch$1$case$5
+     block $switch$1$case$4
+      block $switch$1$case$2
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $switch$1$default
+      end
+      return
+     end
+     local.get $0
+     i32.load
+     local.tee $0
+     if
       local.get $0
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $switch$1$default
+      local.get $1
+      call $~lib/rt/pure/__visit
      end
      return
     end
     local.get $0
     i32.load
+    local.tee $2
+    if
+     local.get $2
+     local.get $1
+     call $~lib/rt/pure/__visit
+    end
+    local.get $0
+    i32.load offset=4
+    local.tee $2
+    if
+     local.get $2
+     local.get $1
+     call $~lib/rt/pure/__visit
+    end
+    local.get $0
+    i32.load offset=8
     local.tee $0
     if
      local.get $0
