@@ -2494,17 +2494,6 @@ export class Compiler extends DiagnosticEmitter {
     return flatten(module, stmts, NativeType.None);
   }
 
-  makeCatch(): ExpressionRef {
-    var module = this.module;
-    this.ensureEventType("exception", [ this.options.usizeType ], Type.void);
-    this.currentFlow.pushBreakLabel();
-    return module.block("l", [
-      module.rethrow(
-        module.br_on_exn("l", "exception", module.pop(NativeType.Exnref))
-      )
-    ], this.options.nativeSizeType);
-  }
-
   compileTryStatement(
     statement: TryStatement
   ): ExpressionRef {
