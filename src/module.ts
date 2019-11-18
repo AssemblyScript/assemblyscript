@@ -1597,10 +1597,6 @@ export function getGlobalGetName(expr: ExpressionRef): string | null {
   return readString(_BinaryenGlobalGetGetName(expr));
 }
 
-export function globalIsMutable(global: GlobalRef): bool {
-  return _BinaryenGlobalIsMutable(global);
-}
-
 export function getBinaryOp(expr: ExpressionRef): BinaryOp {
   return _BinaryenBinaryGetOp(expr);
 }

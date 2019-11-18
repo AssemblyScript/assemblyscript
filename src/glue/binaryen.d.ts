@@ -702,10 +702,6 @@ declare type BinaryenGlobalRef = usize;
 declare function _BinaryenAddGlobal(module: BinaryenModuleRef, name: usize, type: BinaryenType, mutable: bool, init: BinaryenExpressionRef): BinaryenGlobalRef;
 declare function _BinaryenGetGlobal(module: BinaryenModuleRef, name: usize): BinaryenGlobalRef;
 declare function _BinaryenRemoveGlobal(module: BinaryenModuleRef, name: usize): void;
-declare function _BinaryenGlobalGetName(global: BinaryenGlobalRef): usize;
-declare function _BinaryenGlobalGetType(global: BinaryenGlobalRef): BinaryenType;
-declare function _BinaryenGlobalIsMutable(global: BinaryenGlobalRef): bool;
-declare function _BinaryenGlobalGetInitExpr(global: BinaryenGlobalRef): BinaryenExpressionRef;
 
 declare function _BinaryenGlobalGetName(global: BinaryenGlobalRef): usize;
 declare function _BinaryenGlobalGetType(global: BinaryenGlobalRef): BinaryenType;
