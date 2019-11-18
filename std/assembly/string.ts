@@ -492,7 +492,7 @@ import { idof } from "./builtins";
     var j = 0;
     for (let i = 0; i < len; ++i) {
       let c = this.charCodeAt(i);
-      if (c >= 0xd800 && c < 0xdc00 && i < len - 1) {
+      if (c >= 0xD800 && c < 0xDC00 && i < len - 1) {
         let c1 = this.charCodeAt(i + 1);
         if (c1 >= 0xDC00 && c1 < 0xE000) {
           c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
@@ -500,13 +500,13 @@ import { idof } from "./builtins";
         }
       }
       if (!isAscii(c)) {
-        if (c >= 0x24b6 && c <= 0x24cf) {
-          // monkey patch
-          store<u16>(codes + (j << 1), c + 26);
-        } else if (c === 0x0130) {
+        if (c === 0x0130) {
           store<u16>(codes + (j << 1), 0x0069, 0);
           store<u16>(codes + (j << 1), 0x0307, 2);
           ++j;
+        } else if (c >= 0x24B6 && c <= 0x24CF) {
+          // monkey patch
+          store<u16>(codes + (j << 1), c + 26);
         } else {
           let code = casemap(c, 0) & 0x1FFFFF;
           let hasSur = code > 0xFFFF;
@@ -546,7 +546,7 @@ import { idof } from "./builtins";
         }
       }
       if (!isAscii(c)) {
-        if (c >= 0x24d0 && c <= 0x24e9) {
+        if (c >= 0x24D0 && c <= 0x24E9) {
           // monkey patch
           store<u16>(codes + (j << 1), c - 26);
         } else {
