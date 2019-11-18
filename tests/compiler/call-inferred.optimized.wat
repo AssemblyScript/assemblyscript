@@ -5,14 +5,11 @@
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:call-inferred (; 0 ;) (type $FUNCSIG$v)
+ (func $start (; 0 ;) (type $FUNCSIG$v)
   i32.const 0
   global.set $~lib/argc
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
-  call $start:call-inferred
- )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 1 ;) (type $FUNCSIG$v)
   nop
  )
 )

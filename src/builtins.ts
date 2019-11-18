@@ -4789,7 +4789,7 @@ export function compileAbort(
     // essentially ignoring the message GC-wise. Doesn't matter anyway on a crash.
     messageArg = compiler.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
   } else {
-    messageArg = stringInstance.type.toNativeZero(module);
+    messageArg = compiler.makeZero(stringInstance.type);
   }
 
   var filenameArg = compiler.ensureStaticString(reportNode.range.source.normalizedPath);

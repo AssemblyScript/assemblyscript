@@ -479,9 +479,6 @@
   global.set $builtins/f
   f64.const 25
   global.set $builtins/F
-  i32.const 1
-  i32.const 2
-  call $start:builtins~anonymous|0
   i32.const 8
   i32.load8_s
   drop

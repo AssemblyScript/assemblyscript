@@ -8,7 +8,7 @@
     "assemblyscript",
     "wasm"
   ],
-  "version": "0.8.0",
+  "version": "0.8.1",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "contributors": [],
   "license": "Apache-2.0",
@@ -63,7 +63,8 @@
     "make": "npm run clean && npm test && npm run build && npm test",
     "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
-    "release": "node scripts/release"
+    "prepublishOnly": "node scripts/prepublish",
+    "postpublish": "node scripts/postpublish"
   },
   "releaseFiles": [
     "lib/rtrace/index.d.ts",

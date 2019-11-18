@@ -1321,17 +1321,20 @@ export class Program extends DiagnosticEmitter {
     var name = declaration.name.text;
     var decorators = declaration.decorators;
     var element: DeclaredElement;
+    var acceptedFlags: DecoratorFlags = DecoratorFlags.UNSAFE;
+    if (parent.is(CommonFlags.AMBIENT)) {
+      acceptedFlags |= DecoratorFlags.EXTERNAL;
+    }
     if (declaration.is(CommonFlags.STATIC)) { // global variable
       assert(parent.kind != ElementKind.INTERFACE_PROTOTYPE);
+      acceptedFlags |= DecoratorFlags.LAZY;
+      if (declaration.is(CommonFlags.READONLY)) {
+        acceptedFlags |= DecoratorFlags.INLINE;
+      }
       element = new Global(
         name,
         parent,
-        this.checkDecorators(decorators,
-          (declaration.is(CommonFlags.READONLY)
-            ? DecoratorFlags.INLINE
-            : DecoratorFlags.NONE
-          ) | DecoratorFlags.LAZY | DecoratorFlags.UNSAFE
-        ),
+        this.checkDecorators(decorators, acceptedFlags),
         declaration
       );
       if (!parent.add(name, element)) return;
@@ -1341,7 +1344,7 @@ export class Program extends DiagnosticEmitter {
         name,
         parent,
         declaration,
-        this.checkDecorators(decorators, DecoratorFlags.UNSAFE)
+        this.checkDecorators(decorators, acceptedFlags)
       );
       if (!parent.addInstance(name, element)) return;
     }
@@ -1361,6 +1364,9 @@ export class Program extends DiagnosticEmitter {
       acceptedFlags |= DecoratorFlags.OPERATOR_BINARY
                     |  DecoratorFlags.OPERATOR_PREFIX
                     |  DecoratorFlags.OPERATOR_POSTFIX;
+    }
+    if (parent.is(CommonFlags.AMBIENT)) {
+      acceptedFlags |= DecoratorFlags.EXTERNAL;
     }
     var element = new FunctionPrototype(
       name,

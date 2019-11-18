@@ -376,7 +376,7 @@ export class Flow {
     var parentFunction = this.parentFunction;
     var temps: Local[];
     assert(local.type != null); // internal error
-    switch ((<Type>local.type).toNativeType()) {
+    switch (local.type.toNativeType()) {
       case NativeType.I32: {
         temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
         break;
