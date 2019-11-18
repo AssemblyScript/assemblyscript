@@ -14,10 +14,6 @@ import {
   NativeType
 } from "./module";
 
-import {
-  Compiler
-} from "./compiler";
-
 /** Indicates the kind of a type. */
 export const enum TypeKind {
 
