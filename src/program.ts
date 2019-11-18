@@ -612,7 +612,7 @@ export class Program extends DiagnosticEmitter {
   getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement | null {
     var elementsByDeclaration = this.elementsByDeclaration;
     return elementsByDeclaration.has(declaration)
-      ? elementsByDeclaration.get(declaration)
+      ? elementsByDeclaration.get(declaration)!
       : null;
   }
 
@@ -1123,7 +1123,7 @@ export class Program extends DiagnosticEmitter {
   /** Looks up the element of the specified name in the global scope. */
   lookupGlobal(name: string): Element | null {
     var elements = this.elementsByName;
-    if (elements.has(name)) return elements.get(name);
+    if (elements.has(name)) return elements.get(name)!;
     return null;
   }
 
@@ -1317,17 +1317,20 @@ export class Program extends DiagnosticEmitter {
     var name = declaration.name.text;
     var decorators = declaration.decorators;
     var element: DeclaredElement;
+    var acceptedFlags: DecoratorFlags = DecoratorFlags.UNSAFE;
+    if (parent.is(CommonFlags.AMBIENT)) {
+      acceptedFlags |= DecoratorFlags.EXTERNAL;
+    }
     if (declaration.is(CommonFlags.STATIC)) { // global variable
       assert(parent.kind != ElementKind.INTERFACE_PROTOTYPE);
+      acceptedFlags |= DecoratorFlags.LAZY;
+      if (declaration.is(CommonFlags.READONLY)) {
+        acceptedFlags |= DecoratorFlags.INLINE;
+      }
       element = new Global(
         name,
         parent,
-        this.checkDecorators(decorators,
-          (declaration.is(CommonFlags.READONLY)
-            ? DecoratorFlags.INLINE
-            : DecoratorFlags.NONE
-          ) | DecoratorFlags.LAZY | DecoratorFlags.UNSAFE
-        ),
+        this.checkDecorators(decorators, acceptedFlags),
         declaration
       );
       if (!parent.add(name, element)) return;
@@ -1337,7 +1340,7 @@ export class Program extends DiagnosticEmitter {
         name,
         parent,
         declaration,
-        this.checkDecorators(decorators, DecoratorFlags.UNSAFE)
+        this.checkDecorators(decorators, acceptedFlags)
       );
       if (!parent.addInstance(name, element)) return;
     }
@@ -1357,6 +1360,9 @@ export class Program extends DiagnosticEmitter {
       acceptedFlags |= DecoratorFlags.OPERATOR_BINARY
                     |  DecoratorFlags.OPERATOR_PREFIX
                     |  DecoratorFlags.OPERATOR_POSTFIX;
+    }
+    if (parent.is(CommonFlags.AMBIENT)) {
+      acceptedFlags |= DecoratorFlags.EXTERNAL;
     }
     var element = new FunctionPrototype(
       name,
@@ -1384,7 +1390,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
-        let decorator = decorators[i];
+        let decorator: DecoratorNode = decorators[i]; // FIXME: why does tsc want a type here?
         switch (decorator.decoratorKind) {
           case DecoratorKind.OPERATOR:
           case DecoratorKind.OPERATOR_BINARY:
@@ -2890,7 +2896,7 @@ export class Function extends TypedElement {
   /* @override */
   lookup(name: string): Element | null {
     var locals = this.localsByName;
-    if (locals.has(name)) return locals.get(name);
+    if (locals.has(name)) return locals.get(name)!;
     return this.parent.lookup(name);
   }
 
@@ -2900,6 +2906,8 @@ export class Function extends TypedElement {
   tempF32s: Local[] | null = null;
   tempF64s: Local[] | null = null;
   tempV128s: Local[] | null = null;
+  tempAnyrefs: Local[] | null = null;
+  tempExnrefs: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;

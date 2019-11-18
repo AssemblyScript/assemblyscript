@@ -333,6 +333,10 @@ export enum BinaryOp {
   SubSatI8x16 = _BinaryenSubSatSVecI8x16(),
   SubSatU8x16 = _BinaryenSubSatUVecI8x16(),
   MulI8x16 = _BinaryenMulVecI8x16(),
+  MinI8x16 = _BinaryenMinSVecI8x16(),
+  MinU8x16 = _BinaryenMinUVecI8x16(),
+  MaxI8x16 = _BinaryenMaxSVecI8x16(),
+  MaxU8x16 = _BinaryenMaxUVecI8x16(),
   AddI16x8 = _BinaryenAddVecI16x8(),
   AddSatI16x8 = _BinaryenAddSatSVecI16x8(),
   AddSatU16x8 = _BinaryenAddSatUVecI16x8(),
@@ -340,9 +344,18 @@ export enum BinaryOp {
   SubSatI16x8 = _BinaryenSubSatSVecI16x8(),
   SubSatU16x8 = _BinaryenSubSatUVecI16x8(),
   MulI16x8 = _BinaryenMulVecI16x8(),
+  MinI16x8 = _BinaryenMinSVecI16x8(),
+  MinU16x8 = _BinaryenMinUVecI16x8(),
+  MaxI16x8 = _BinaryenMaxSVecI16x8(),
+  MaxU16x8 = _BinaryenMaxUVecI16x8(),
   AddI32x4 = _BinaryenAddVecI32x4(),
   SubI32x4 = _BinaryenSubVecI32x4(),
   MulI32x4 = _BinaryenMulVecI32x4(),
+  MinI32x4 = _BinaryenMinSVecI32x4(),
+  MinU32x4 = _BinaryenMinUVecI32x4(),
+  MaxI32x4 = _BinaryenMaxSVecI32x4(),
+  MaxU32x4 = _BinaryenMaxUVecI32x4(),
+  DotI16x8 = _BinaryenDotSVecI16x8ToVecI32x4(),
   AddI64x2 = _BinaryenAddVecI64x2(),
   SubI64x2 = _BinaryenSubVecI64x2(),
   AddF32x4 = _BinaryenAddVecF32x4(),
@@ -473,39 +486,6 @@ export class Module {
   }
 
   private constructor() { }
-
-  // types
-
-  addFunctionType(
-    name: string,
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionRef {
-    var cStr = this.allocStringCached(name);
-    var cArr = allocI32Array(paramTypes);
-    try {
-      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
-    } finally {
-      memory.free(cArr);
-    }
-  }
-
-  getFunctionTypeBySignature(
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionTypeRef {
-    var cArr = allocI32Array(paramTypes);
-    try {
-      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
-    } finally {
-      memory.free(cArr);
-    }
-  }
-
-  removeFunctionType(name: string): void {
-    var cStr = this.allocStringCached(name);
-    _BinaryenRemoveFunctionType(this.ref, cStr);
-  }
 
   // constants
 
@@ -961,7 +941,40 @@ export class Module {
     return _BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
   }
 
-  // meta
+  // function types
+
+  addFunctionType(
+    name: string,
+    result: NativeType,
+    paramTypes: NativeType[] | null
+  ): FunctionTypeRef {
+    var cStr = this.allocStringCached(name);
+    var cArr = allocI32Array(paramTypes);
+    try {
+      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
+  getFunctionTypeBySignature(
+    result: NativeType,
+    paramTypes: NativeType[] | null
+  ): FunctionTypeRef {
+    var cArr = allocI32Array(paramTypes);
+    try {
+      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
+  removeFunctionType(name: string): void {
+    var cStr = this.allocStringCached(name);
+    _BinaryenRemoveFunctionType(this.ref, cStr);
+  }
+
+  // globals
 
   addGlobal(
     name: string,
@@ -973,6 +986,13 @@ export class Module {
     return _BinaryenAddGlobal(this.ref, cStr, type, mutable, initializer);
   }
 
+  getGlobal(
+    name: string
+  ): GlobalRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetGlobal(this.ref, cStr);
+  }
+
   removeGlobal(
     name: string
   ): void {
@@ -980,14 +1000,32 @@ export class Module {
     _BinaryenRemoveGlobal(this.ref, cStr);
   }
 
+  // events
+
   addEvent(
     name: string,
     attribute: u32,
-    type: FunctionRef
+    type: FunctionTypeRef
   ): EventRef {
     var cStr = this.allocStringCached(name);
     return _BinaryenAddEvent(this.ref, cStr, attribute, type);
   }
+
+  getEvent(
+    name: string
+  ): EventRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetEvent(this.ref, cStr);
+  }
+
+  removeEvent(
+    name: string
+  ): void {
+    var cStr = this.allocStringCached(name);
+    _BinaryenRemoveEvent(this.ref, cStr);
+  }
+
+  // functions
 
   addFunction(
     name: string,
@@ -1036,6 +1074,12 @@ export class Module {
     _BinaryenRemoveFunction(this.ref, tempName);
     _BinaryenRemoveFunctionType(this.ref, tempName);
   }
+
+  setStart(func: FunctionRef): void {
+    _BinaryenSetStart(this.ref, func);
+  }
+
+  // exports
 
   addFunctionExport(
     internalName: string,
@@ -1086,6 +1130,8 @@ export class Module {
     var cStr = this.allocStringCached(externalName);
     _BinaryenRemoveExport(this.ref, cStr);
   }
+
+  // imports
 
   addFunctionImport(
     internalName: string,
@@ -1148,6 +1194,8 @@ export class Module {
     _BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, eventType);
   }
 
+  // memory
+
   /** Unlimited memory constant. */
   static readonly UNLIMITED_MEMORY: Index = <Index>-1;
 
@@ -1162,7 +1210,7 @@ export class Module {
     var cStr = this.allocStringCached(exportName);
     var k = segments.length;
     var segs = new Array<usize>(k);
-    var psvs = new Array<i8>(k);
+    var psvs = new Uint8Array(k);
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {
@@ -1190,6 +1238,8 @@ export class Module {
     }
   }
 
+  // table
+
   setFunctionTable(
     initial: Index,
     maximum: Index,
@@ -1209,9 +1259,7 @@ export class Module {
     }
   }
 
-  setStart(func: FunctionRef): void {
-    _BinaryenSetStart(this.ref, func);
-  }
+  // sections
 
   addCustomSection(name: string, contents: Uint8Array): void {
     var cStr = this.allocStringCached(name);
@@ -1222,6 +1270,8 @@ export class Module {
       memory.free(cArr);
     }
   }
+
+  // meta
 
   getOptimizeLevel(): i32 {
     return _BinaryenGetOptimizeLevel();
@@ -1408,6 +1458,10 @@ export class Module {
           }
           case NativeType.V128: {
             // TODO
+            return 0;
+          }
+          // Not possible to clone an anyref as it is opaque
+          case NativeType.Anyref: {
             return 0;
           }
           default: {
@@ -1683,6 +1737,24 @@ export function getHostName(expr: ExpressionRef): string | null {
   return readString(_BinaryenHostGetNameOperand(expr));
 }
 
+// function types
+
+export function getFunctionTypeName(ftype: FunctionTypeRef): string | null {
+  return readString(_BinaryenFunctionTypeGetName(ftype));
+}
+
+export function getFunctionTypeParamCount(ftype: FunctionTypeRef): Index {
+  return _BinaryenFunctionTypeGetNumParams(ftype);
+}
+
+export function getFunctionTypeParam(ftype: FunctionTypeRef, index: Index): NativeType {
+  return _BinaryenFunctionTypeGetParam(ftype, index);
+}
+
+export function getFunctionTypeResult(ftype: FunctionTypeRef): NativeType {
+  return _BinaryenFunctionTypeGetResult(ftype);
+}
+
 // functions
 
 export function getFunctionBody(func: FunctionRef): ExpressionRef {
@@ -1703,6 +1775,46 @@ export function getFunctionParamType(func: FunctionRef, index: Index): NativeTyp
 
 export function getFunctionResultType(func: FunctionRef): NativeType {
   return _BinaryenFunctionGetResult(func);
+}
+
+// globals
+
+export function getGlobalName(global: GlobalRef): string | null {
+  return readString(_BinaryenGlobalGetName(global));
+}
+
+export function getGlobalType(global: GlobalRef): NativeType {
+  return _BinaryenGlobalGetType(global);
+}
+
+export function isGlobalMutable(global: GlobalRef): bool {
+  return _BinaryenGlobalIsMutable(global);
+}
+
+export function getGlobalInit(global: GlobalRef): ExpressionRef {
+  return _BinaryenGlobalGetInit(global);
+}
+
+// events
+
+export function getEventName(event: EventRef): string | null {
+  return readString(_BinaryenEventGetName(event));
+}
+
+export function getEventAttribute(event: EventRef): u32 {
+  return _BinaryenEventGetAttribute(event);
+}
+
+export function getEventType(event: EventRef): string | null {
+  return readString(_BinaryenEventGetType(event));
+}
+
+export function getEventParamCount(event: EventRef): Index {
+  return _BinaryenEventGetNumParams(event);
+}
+
+export function getEventParam(event: EventRef, index: Index): NativeType {
+  return _BinaryenEventGetParam(event, index);
 }
 
 export class Relooper {

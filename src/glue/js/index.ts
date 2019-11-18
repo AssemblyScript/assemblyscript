@@ -4,8 +4,6 @@
  * @preferred
  *//***/
 
-/// <reference path="./node.d.ts" />
-
 import "./binaryen"; // must be first so portable can pick up the memory implementation
 import "../../../std/portable/index";
 import "./float";

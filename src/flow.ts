@@ -324,6 +324,8 @@ export class Flow {
       case NativeType.F32: { temps = parentFunction.tempF32s; break; }
       case NativeType.F64: { temps = parentFunction.tempF64s; break; }
       case NativeType.V128: { temps = parentFunction.tempV128s; break; }
+      case NativeType.Anyref: { temps = parentFunction.tempAnyrefs; break; }
+      case NativeType.Exnref: { temps = parentFunction.tempExnrefs; break; }
       default: throw new Error("concrete type expected");
     }
     var local: Local;
@@ -345,7 +347,7 @@ export class Flow {
       local = parentFunction.addLocal(type);
     } else {
       if (temps && temps.length) {
-        local = temps.pop();
+        local = temps.pop()!;
         local.type = type;
         local.flags = CommonFlags.NONE;
       } else {
@@ -374,7 +376,7 @@ export class Flow {
     var parentFunction = this.parentFunction;
     var temps: Local[];
     assert(local.type != null); // internal error
-    switch ((<Type>local.type).toNativeType()) {
+    switch (local.type.toNativeType()) {
       case NativeType.I32: {
         temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
         break;
@@ -395,6 +397,14 @@ export class Flow {
         temps = parentFunction.tempV128s || (parentFunction.tempV128s = []);
         break;
       }
+      case NativeType.Anyref: {
+        temps = parentFunction.tempAnyrefs || (parentFunction.tempAnyrefs = []);
+        break;
+      }
+      case NativeType.Exnref: {
+        temps = parentFunction.tempExnrefs || (parentFunction.tempExnrefs = []);
+        break;
+      }
       default: throw new Error("concrete type expected");
     }
     assert(local.index >= 0);
@@ -404,7 +414,7 @@ export class Flow {
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
     var scopedLocals = this.scopedLocals;
-    if (scopedLocals && scopedLocals.has(name)) return scopedLocals.get(name);
+    if (scopedLocals && scopedLocals.has(name)) return scopedLocals.get(name)!;
     return null;
   }
 
@@ -478,9 +488,9 @@ export class Flow {
   lookupLocal(name: string): Local | null {
     var current: Flow | null = this;
     var scope: Map<String,Local> | null;
-    do if ((scope = current.scopedLocals) && (scope.has(name))) return scope.get(name);
+    do if ((scope = current.scopedLocals) && (scope.has(name))) return scope.get(name)!;
     while (current = current.parent);
-    return this.parentFunction.localsByName.get(name);
+    return this.parentFunction.localsByName.get(name)!;
   }
 
   /** Looks up the element with the specified name relative to the scope of this flow. */
@@ -868,7 +878,7 @@ export class Flow {
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
-        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
+        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr)))!);
         assert(global.kind == ElementKind.GLOBAL);
         return canConversionOverflow(assert((<Global>global).type), type);
       }

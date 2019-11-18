@@ -29,5 +29,13 @@
     "v8_flags": [
       "--experimental-wasm-bigint"
     ]
+  },
+  "exception-handling": {
+    "asc_flags": [
+      "--enable exception-handling"
+    ],
+    "v8_flags": [
+      "--experimental-wasm-eh"
+    ]
   }
 }

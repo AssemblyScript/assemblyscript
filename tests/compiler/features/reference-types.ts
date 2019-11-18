@@ -3,7 +3,10 @@
 export declare function external(a: anyref): anyref;
 
 export function internal(a: anyref): anyref {
-  return a;
+  const b = external(a);
+  let c = external(b);
+  var d = external(c);
+  return d;
 }
 
 // can use reflection to work with anyref values
