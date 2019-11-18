@@ -46,8 +46,7 @@
   i64.const 1
   i64.shl
   local.tee $6
-  i64.const 0
-  i64.eq
+  i64.eqz
   if (result i32)
    i32.const 1
   else
@@ -87,8 +86,7 @@
     return
    end
    local.get $4
-   i64.const 0
-   i64.eq
+   i64.eqz
    if (result i64)
     local.get $2
     i64.const 0
@@ -112,8 +110,7 @@
    end
    local.set $2
    local.get $5
-   i64.const 0
-   i64.eq
+   i64.eqz
    if (result i64)
     local.get $3
     i64.const 0

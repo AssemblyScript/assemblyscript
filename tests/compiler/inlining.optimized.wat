@@ -22,23 +22,7 @@
  (func $inlining/func_fe~anonymous|0 (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $inlining/test_funcs (; 3 ;) (type $FUNCSIG$v)
-  i32.const 1
-  global.set $~lib/argc
-  i32.const 2
-  call $inlining/func_fe~anonymous|0
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 68
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/rt/stub/maybeGrowMemory (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -80,7 +64,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -125,7 +109,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $inlining/test_ctor (; 6 ;) (type $FUNCSIG$v)
+ (func $inlining/test_ctor (; 5 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 16
   i32.const 5
@@ -205,15 +189,16 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
-  call $inlining/test_funcs
+ (func $start (; 6 ;) (type $FUNCSIG$v)
+  i32.const 1
+  global.set $~lib/argc
   i32.const 48
   global.set $~lib/rt/stub/startOffset
   i32.const 48
   global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
   nop
  )
 )

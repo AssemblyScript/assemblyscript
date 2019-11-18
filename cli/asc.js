@@ -218,13 +218,10 @@ exports.main = function main(argv, options, callback) {
   if (args.transform) {
     let transformArgs = args.transform;
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
-      let filename = transformArgs[i];
-      filename = path.isAbsolute(filename = filename.trim())
-        ? filename
-        : path.join(process.cwd(), filename);
+      let filename = transformArgs[i].trim();
       if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
       try {
-        const classOrModule = require(filename);
+        const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
         if (typeof classOrModule === "function") {
           Object.assign(classOrModule.prototype, {
             baseDir,
@@ -603,34 +600,143 @@ exports.main = function main(argv, options, callback) {
   module.setShrinkLevel(shrinkLevel);
   module.setDebugInfo(args.debug);
 
-  var runPasses = [];
+  const runPasses = [];
   if (args.runPasses) {
     if (typeof args.runPasses === "string") {
       args.runPasses = args.runPasses.split(",");
     }
     if (args.runPasses.length) {
       args.runPasses.forEach(pass => {
-        if (runPasses.indexOf(pass) < 0)
+        if (runPasses.indexOf(pass = pass.trim()) < 0)
           runPasses.push(pass);
       });
     }
   }
 
-  // Optimize the module if requested
-  if (optimizeLevel > 0 || shrinkLevel > 0) {
-    stats.optimizeCount++;
-    stats.optimizeTime += measure(() => {
-      module.optimize();
-    });
+  function doOptimize() {
+    const hasARC = args.runtime == "half" || args.runtime == "full";
+    const passes = [];
+    function add(pass) { passes.push(pass); }
+
+    // Optimize the module if requested
+    if (optimizeLevel > 0 || shrinkLevel > 0) {
+      // Binaryen's default passes with Post-AssemblyScript passes added.
+      // see: Binaryen/src/pass.cpp
+
+      // PassRunner::addDefaultGlobalOptimizationPrePasses
+      add("duplicate-function-elimination");
+
+      // PassRunner::addDefaultFunctionOptimizationPasses
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        add("ssa-nomerge");
+      }
+      if (optimizeLevel >= 4) {
+        add("flatten");
+        add("local-cse");
+      }
+      // if (hasARC) { // differs
+      //   if (optimizeLevel < 4) {
+      //     add("flatten");
+      //   }
+      //   add("post-assemblyscript");
+      // }
+      add("dce");
+      add("remove-unused-brs");
+      add("remove-unused-names");
+      add("optimize-instructions");
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("pick-load-signs");
+      }
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        add("precompute-propagate");
+      } else {
+        add("precompute");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("code-pushing");
+      }
+      add("simplify-locals-nostructure");
+      add("vacuum");
+      add("reorder-locals");
+      add("remove-unused-brs");
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        add("merge-locals");
+      }
+      add("coalesce-locals");
+      add("simplify-locals");
+      add("vacuum");
+      add("reorder-locals");
+      add("coalesce-locals");
+      add("reorder-locals");
+      add("vacuum");
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        add("code-folding");
+      }
+      add("merge-blocks");
+      add("remove-unused-brs");
+      add("remove-unused-names");
+      add("merge-blocks");
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        add("precompute-propagate");
+      } else {
+        add("precompute");
+      }
+      add("optimize-instructions");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("rse");
+      }
+      // if (hasARC) { // differs
+      //   add("post-assemblyscript-finalize");
+      // }
+      add("vacuum");
+
+      // PassRunner::addDefaultGlobalOptimizationPostPasses
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("dae-optimizing");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("inlining-optimizing");
+      }
+      add("duplicate-function-elimination");
+      add("duplicate-import-elimination");
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("simplify-globals-optimizing");
+      } else {
+        add("simplify-globals");
+      }
+      add("remove-unused-module-elements");
+      add("memory-packing");
+      add("directize");
+      add("inlining-optimizing"); // differs
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("generate-stack-ir");
+        add("optimize-stack-ir");
+      }
+    }
+
+    // Append additional passes if requested and execute
+    module.runPasses(passes.concat(runPasses));
   }
 
-  // Run additional passes if requested
-  if (runPasses.length) {
+  stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
-    stats.optimizeTime += measure(() => {
-      module.runPasses(runPasses.map(pass => pass.trim()));
-    });
-  }
+    doOptimize();
+    if (args.converge) {
+      let last = module.toBinary();
+      do {
+        stats.optimizeCount++;
+        doOptimize();
+        let next = module.toBinary();
+        if (next.output.length >= last.output.length) {
+          if (next.output.length > last.output.length) {
+            stderr.write("Last converge was suboptimial." + EOL);
+          }
+          break;
+        }
+        last = next;
+      } while (true);
+    }
+  });
 
   // Prepare output
   if (!args.noEmit) {

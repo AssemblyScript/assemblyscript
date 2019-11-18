@@ -7,7 +7,7 @@
  (global $instanceof/an (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:instanceof (; 1 ;) (type $FUNCSIG$v)
+ (func $start (; 1 ;) (type $FUNCSIG$v)
   global.get $instanceof/an
   if
    i32.const 0
@@ -20,10 +20,7 @@
   i32.const 1
   global.set $instanceof/an
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
-  call $start:instanceof
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 2 ;) (type $FUNCSIG$v)
   nop
  )
 )

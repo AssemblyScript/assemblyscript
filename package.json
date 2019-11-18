@@ -8,7 +8,7 @@
     "assemblyscript",
     "wasm"
   ],
-  "version": "0.8.0",
+  "version": "0.8.1",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "contributors": [],
   "license": "Apache-2.0",
@@ -21,7 +21,7 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "89.0.0-nightly.20191113",
+    "binaryen": "89.0.0-nightly.20191116",
     "long": "^4.0.0",
     "source-map-support": "^0.5.16",
     "ts-node": "^6.2.0",
