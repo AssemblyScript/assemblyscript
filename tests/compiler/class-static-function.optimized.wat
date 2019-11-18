@@ -16,17 +16,6 @@
  (func $start (; 2 ;) (type $FUNCSIG$v)
   i32.const 0
   global.set $~lib/argc
-  call $class-static-function/Example.staticFunc
-  i32.const 42
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 11
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
   nop

@@ -910,6 +910,7 @@ export function compileCall(
           case TypeKind.USIZE: { value = "usize"; break; }
           case TypeKind.V128: { value = "v128"; break; }
           case TypeKind.ANYREF: { value = "anyref"; break; }
+          case TypeKind.EXNREF: { value = "exnref"; break; }
           default: assert(false);
           case TypeKind.VOID: { value = "void"; break; }
         }
@@ -4793,7 +4794,7 @@ export function compileAbort(
     // essentially ignoring the message GC-wise. Doesn't matter anyway on a crash.
     messageArg = compiler.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
   } else {
-    messageArg = stringInstance.type.toNativeZero(compiler);
+    messageArg = compiler.makeZero(stringInstance.type);
   }
 
   var filenameArg = compiler.ensureStaticString(reportNode.range.source.normalizedPath);

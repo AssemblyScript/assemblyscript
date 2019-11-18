@@ -487,39 +487,6 @@ export class Module {
 
   private constructor() { }
 
-  // types
-
-  addFunctionType(
-    name: string,
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionRef {
-    var cStr = this.allocStringCached(name);
-    var cArr = allocI32Array(paramTypes);
-    try {
-      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
-    } finally {
-      memory.free(cArr);
-    }
-  }
-
-  getFunctionTypeBySignature(
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionTypeRef {
-    var cArr = allocI32Array(paramTypes);
-    try {
-      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
-    } finally {
-      memory.free(cArr);
-    }
-  }
-
-  removeFunctionType(name: string): void {
-    var cStr = this.allocStringCached(name);
-    _BinaryenRemoveFunctionType(this.ref, cStr);
-  }
-
   // constants
 
   i32(value: i32): ExpressionRef {
@@ -974,14 +941,40 @@ export class Module {
     return _BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
   }
 
-  // meta
+  // function types
 
-  getGlobal(
-    name: string
-  ): GlobalRef {
+  addFunctionType(
+    name: string,
+    result: NativeType,
+    paramTypes: NativeType[] | null
+  ): FunctionTypeRef {
     var cStr = this.allocStringCached(name);
-    return _BinaryenGetGlobal(this.ref, cStr);
+    var cArr = allocI32Array(paramTypes);
+    try {
+      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
+    } finally {
+      memory.free(cArr);
+    }
   }
+
+  getFunctionTypeBySignature(
+    result: NativeType,
+    paramTypes: NativeType[] | null
+  ): FunctionTypeRef {
+    var cArr = allocI32Array(paramTypes);
+    try {
+      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
+  removeFunctionType(name: string): void {
+    var cStr = this.allocStringCached(name);
+    _BinaryenRemoveFunctionType(this.ref, cStr);
+  }
+
+  // globals
 
   addGlobal(
     name: string,
@@ -993,6 +986,13 @@ export class Module {
     return _BinaryenAddGlobal(this.ref, cStr, type, mutable, initializer);
   }
 
+  getGlobal(
+    name: string
+  ): GlobalRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetGlobal(this.ref, cStr);
+  }
+
   removeGlobal(
     name: string
   ): void {
@@ -1000,14 +1000,32 @@ export class Module {
     _BinaryenRemoveGlobal(this.ref, cStr);
   }
 
+  // events
+
   addEvent(
     name: string,
     attribute: u32,
-    type: FunctionRef
+    type: FunctionTypeRef
   ): EventRef {
     var cStr = this.allocStringCached(name);
     return _BinaryenAddEvent(this.ref, cStr, attribute, type);
   }
+
+  getEvent(
+    name: string
+  ): EventRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetEvent(this.ref, cStr);
+  }
+
+  removeEvent(
+    name: string
+  ): void {
+    var cStr = this.allocStringCached(name);
+    _BinaryenRemoveEvent(this.ref, cStr);
+  }
+
+  // functions
 
   addFunction(
     name: string,
@@ -1056,6 +1074,12 @@ export class Module {
     _BinaryenRemoveFunction(this.ref, tempName);
     _BinaryenRemoveFunctionType(this.ref, tempName);
   }
+
+  setStart(func: FunctionRef): void {
+    _BinaryenSetStart(this.ref, func);
+  }
+
+  // exports
 
   addFunctionExport(
     internalName: string,
@@ -1106,6 +1130,8 @@ export class Module {
     var cStr = this.allocStringCached(externalName);
     _BinaryenRemoveExport(this.ref, cStr);
   }
+
+  // imports
 
   addFunctionImport(
     internalName: string,
@@ -1168,6 +1194,8 @@ export class Module {
     _BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, eventType);
   }
 
+  // memory
+
   /** Unlimited memory constant. */
   static readonly UNLIMITED_MEMORY: Index = <Index>-1;
 
@@ -1210,6 +1238,8 @@ export class Module {
     }
   }
 
+  // table
+
   setFunctionTable(
     initial: Index,
     maximum: Index,
@@ -1229,9 +1259,7 @@ export class Module {
     }
   }
 
-  setStart(func: FunctionRef): void {
-    _BinaryenSetStart(this.ref, func);
-  }
+  // sections
 
   addCustomSection(name: string, contents: Uint8Array): void {
     var cStr = this.allocStringCached(name);
@@ -1242,6 +1270,8 @@ export class Module {
       memory.free(cArr);
     }
   }
+
+  // meta
 
   getOptimizeLevel(): i32 {
     return _BinaryenGetOptimizeLevel();
@@ -1711,6 +1741,24 @@ export function getHostName(expr: ExpressionRef): string | null {
   return readString(_BinaryenHostGetNameOperand(expr));
 }
 
+// function types
+
+export function getFunctionTypeName(ftype: FunctionTypeRef): string | null {
+  return readString(_BinaryenFunctionTypeGetName(ftype));
+}
+
+export function getFunctionTypeParamCount(ftype: FunctionTypeRef): Index {
+  return _BinaryenFunctionTypeGetNumParams(ftype);
+}
+
+export function getFunctionTypeParam(ftype: FunctionTypeRef, index: Index): NativeType {
+  return _BinaryenFunctionTypeGetParam(ftype, index);
+}
+
+export function getFunctionTypeResult(ftype: FunctionTypeRef): NativeType {
+  return _BinaryenFunctionTypeGetResult(ftype);
+}
+
 // functions
 
 export function getFunctionBody(func: FunctionRef): ExpressionRef {
@@ -1731,6 +1779,46 @@ export function getFunctionParamType(func: FunctionRef, index: Index): NativeTyp
 
 export function getFunctionResultType(func: FunctionRef): NativeType {
   return _BinaryenFunctionGetResult(func);
+}
+
+// globals
+
+export function getGlobalName(global: GlobalRef): string | null {
+  return readString(_BinaryenGlobalGetName(global));
+}
+
+export function getGlobalType(global: GlobalRef): NativeType {
+  return _BinaryenGlobalGetType(global);
+}
+
+export function isGlobalMutable(global: GlobalRef): bool {
+  return _BinaryenGlobalIsMutable(global);
+}
+
+export function getGlobalInit(global: GlobalRef): ExpressionRef {
+  return _BinaryenGlobalGetInit(global);
+}
+
+// events
+
+export function getEventName(event: EventRef): string | null {
+  return readString(_BinaryenEventGetName(event));
+}
+
+export function getEventAttribute(event: EventRef): u32 {
+  return _BinaryenEventGetAttribute(event);
+}
+
+export function getEventType(event: EventRef): string | null {
+  return readString(_BinaryenEventGetType(event));
+}
+
+export function getEventParamCount(event: EventRef): Index {
+  return _BinaryenEventGetNumParams(event);
+}
+
+export function getEventParam(event: EventRef, index: Index): NativeType {
+  return _BinaryenEventGetParam(event, index);
 }
 
 export class Relooper {
