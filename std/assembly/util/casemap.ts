@@ -305,11 +305,13 @@
  * See: https://unicode.org/Public/UNIDATA/SpecialCasing.txt
  */
 
-// @lazy const specialsLower: u16[] = [
-//   0x0130,  0x0069, 0x0307, 0x0000,
-// ];
+ /*
+@lazy const specialsLower: u16[] = [
+  0x0130,  0x0069, 0x0307, 0x0000,
+];
+*/
 
-@lazy const specialsUpper: u16[] = [
+@lazy export const specialsUpper: u16[] = [
   0x00df,  0x0053, 0x0053, 0x0000,
   0x0149,  0x02bc, 0x004e, 0x0000,
   0x01f0,  0x004a, 0x030c, 0x0000,

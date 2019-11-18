@@ -1,7 +1,8 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
-import { compareImpl, strtol, strtod, isSpace } from "./util/string";
+import { compareImpl, strtol, strtod, isSpace, isAscii, toLower8, toUpper8 } from "./util/string";
+import { specialsUpper, casemap, bsearch } from "./util/casemap";
 import { E_INVALIDLENGTH } from "./util/error";
 import { ArrayBufferView } from "./arraybuffer";
 import { idof } from "./builtins";
@@ -482,6 +483,106 @@ import { idof } from "./builtins";
     }
     return changetype<Array<String>>(result); // retains
     // releases result
+  }
+
+  toLowerCase(): String {
+    var len = this.length;
+    if (!len) return this;
+    var codes = __alloc(len << 1, idof<String>());
+    var j = 0;
+    for (let i = 0; i < len; ++i) {
+      let c = this.charCodeAt(i);
+      if (c >= 0xd800 && c < 0xdc00 && i < len - 1) {
+        let c1 = this.charCodeAt(i + 1);
+        if (c1 >= 0xDC00 && c1 < 0xE000) {
+          c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
+          ++i;
+        }
+      }
+      if (!isAscii(c)) {
+        if (c >= 0x24b6 && c <= 0x24cf) {
+          // monkey patch
+          store<u16>(codes + (j << 1), c + 26);
+        } else if (c === 0x0130) {
+          store<u16>(codes + (j << 1), 0x0069, 0);
+          store<u16>(codes + (j << 1), 0x0307, 2);
+          ++j;
+        } else {
+          let code = casemap(c, 0) & 0x1FFFFF;
+          let hasSur = code > 0xFFFF;
+          if (!hasSur) {
+            store<u16>(codes + (j << 1), code);
+          } else {
+            code -= 0x10000;
+            let lo = (code & 0x3FF) + 0xDC00;
+            let hi = (code >>> 10) + 0xD800;
+            store<u16>(codes + (j << 1), hi & 0xFFFF, 0);
+            store<u16>(codes + (j << 1), lo & 0xFFFF, 2);
+            ++j;
+          }
+        }
+      } else {
+        store<u16>(codes + (j << 1), toLower8(c));
+      }
+      ++j;
+    }
+    __realloc(codes, j);
+    return changetype<String>(codes);
+  }
+
+  toUpperCase(): String {
+    const len = this.length;
+    if (!len) return this;
+    var codes = __alloc(len << 1, idof<String>());
+    var j = 0;
+    for (let i = 0; i < len; ++i) {
+      // let c = str.codePointAt(i)!;
+      let c = this.charCodeAt(i);
+      if (c >= 0xd800 && c < 0xdc00 && i < len - 1) {
+        let c1 = this.charCodeAt(i + 1);
+        if (c1 >= 0xDC00 && c1 < 0xE000) {
+          c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
+          ++i;
+        }
+      }
+      if (!isAscii(c)) {
+        if (c >= 0x24d0 && c <= 0x24e9) {
+          // monkey patch
+          store<u16>(codes + (j << 1), c - 26);
+        } else {
+          let index = bsearch(specialsUpper, c);
+          if (~index) {
+            // TODO optimize
+            const a = specialsUpper[index + 1];
+            const b = specialsUpper[index + 2];
+            const c = specialsUpper[index + 3];
+            store<u16>(codes + (j << 1), a, 0);
+            store<u16>(codes + (j << 1), b, 2);
+            if (c) store<u16>(codes + (j << 1), c, 4);
+            // @ts-ignore
+            j += 1 + <i32>(c !== 0);
+          } else {
+            let code = casemap(c, 1) & 0x1FFFFF;
+            let hasSur = code > 0xFFFF;
+            if (!hasSur) {
+              store<u16>(codes + (j << 1), code);
+            } else {
+              code -= 0x10000;
+              let lo = (code & 0x3FF) + 0xDC00;
+              let hi = (code >>> 10) + 0xD800;
+              store<u16>(codes + (j << 1), hi & 0xFFFF, 0);
+              store<u16>(codes + (j << 1), lo & 0xFFFF, 2);
+              ++j;
+            }
+          }
+        }
+      } else {
+        store<u16>(codes + (j << 1), toUpper8(c));
+      }
+      ++j;
+    }
+    __realloc(codes, j);
+    return changetype<String>(codes);
   }
 
   toString(): String {
