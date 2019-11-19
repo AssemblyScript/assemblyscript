@@ -11684,7 +11684,7 @@
   i32.const 1
   i32.shl
   call $~lib/rt/tlsf/__realloc
-  drop
+  local.set $2
   local.get $2
   call $~lib/rt/pure/__retain
  )
@@ -11913,7 +11913,7 @@
   i32.const 1
   i32.shl
   call $~lib/rt/tlsf/__realloc
-  drop
+  local.set $2
   local.get $2
   call $~lib/rt/pure/__retain
  )

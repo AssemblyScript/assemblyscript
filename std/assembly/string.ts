@@ -27,7 +27,7 @@ import { idof } from "./builtins";
       store<u16>(out, <u16>code);
     } else {
       code -= 0x10000;
-      let hi = (code & 0x3FF) | 0xDC00;
+      let hi = (code & 0x03FF) | 0xDC00;
       let lo = (code >>> 10) | 0xD800;
       store<u32>(out, (hi << 16) | lo);
     }
@@ -433,7 +433,7 @@ import { idof } from "./builtins";
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     if (!limit) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
-    if (separator === null) return <String[]>[this];
+    if (separator === null) return [this];
     var length: isize = this.length;
     var sepLen: isize = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;
@@ -522,7 +522,7 @@ import { idof } from "./builtins";
         }
       }
     }
-    __realloc(codes, j << 1);
+    codes = __realloc(codes, j << 1);
     return changetype<String>(codes);
   }
 
@@ -572,7 +572,7 @@ import { idof } from "./builtins";
         }
       }
     }
-    __realloc(codes, j << 1);
+    codes = __realloc(codes, j << 1);
     return changetype<String>(codes);
   }
 

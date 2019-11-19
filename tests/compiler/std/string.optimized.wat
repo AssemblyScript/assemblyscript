@@ -8209,8 +8209,6 @@
   i32.const 1
   i32.shl
   call $~lib/rt/tlsf/__realloc
-  drop
-  local.get $4
   call $~lib/rt/pure/__retain
  )
  (func $~lib/string/String#toLowerCase (; 94 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -8408,8 +8406,6 @@
   i32.const 1
   i32.shl
   call $~lib/rt/tlsf/__realloc
-  drop
-  local.get $4
   call $~lib/rt/pure/__retain
  )
  (func $~lib/string/String#codePointAt (; 95 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
