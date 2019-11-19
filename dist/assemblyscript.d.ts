@@ -181,6 +181,7 @@ declare module "assemblyscript/src/common" {
         const Uint64Array = "Uint64Array";
         const Float32Array = "Float32Array";
         const Float64Array = "Float64Array";
+        const Error = "Error";
         const abort = "abort";
         const pow = "pow";
         const mod = "mod";
@@ -2133,9 +2134,6 @@ declare module "assemblyscript/src/module" {
         static create(): Module;
         static createFrom(buffer: Uint8Array): Module;
         private constructor();
-        addFunctionType(name: string, result: NativeType, paramTypes: NativeType[] | null): FunctionRef;
-        getFunctionTypeBySignature(result: NativeType, paramTypes: NativeType[] | null): FunctionTypeRef;
-        removeFunctionType(name: string): void;
         i32(value: number): ExpressionRef;
         i64(valueLow: number, valueHigh?: number): ExpressionRef;
         f32(value: number): ExpressionRef;
@@ -2186,15 +2184,22 @@ declare module "assemblyscript/src/module" {
         simd_ternary(op: SIMDTernaryOp, a: ExpressionRef, b: ExpressionRef, c: ExpressionRef): ExpressionRef;
         simd_shift(op: SIMDShiftOp, vec: ExpressionRef, shift: ExpressionRef): ExpressionRef;
         simd_load(op: SIMDLoadOp, ptr: ExpressionRef, offset: number, align: number): ExpressionRef;
+        addFunctionType(name: string, result: NativeType, paramTypes: NativeType[] | null): FunctionTypeRef;
+        getFunctionTypeBySignature(result: NativeType, paramTypes: NativeType[] | null): FunctionTypeRef;
+        removeFunctionType(name: string): void;
         addGlobal(name: string, type: NativeType, mutable: boolean, initializer: ExpressionRef): GlobalRef;
+        getGlobal(name: string): GlobalRef;
         removeGlobal(name: string): void;
-        addEvent(name: string, attribute: number, type: FunctionRef): EventRef;
+        addEvent(name: string, attribute: number, type: FunctionTypeRef): EventRef;
+        getEvent(name: string): EventRef;
+        removeEvent(name: string): void;
         addFunction(name: string, type: FunctionTypeRef, varTypes: NativeType[] | null, body: ExpressionRef): FunctionRef;
         getFunction(name: string): FunctionRef;
         removeFunction(name: string): void;
         private hasTemporaryFunction;
         addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef;
         removeTemporaryFunction(): void;
+        setStart(func: FunctionRef): void;
         addFunctionExport(internalName: string, externalName: string): ExportRef;
         addTableExport(internalName: string, externalName: string): ExportRef;
         addMemoryExport(internalName: string, externalName: string): ExportRef;
@@ -2210,7 +2215,6 @@ declare module "assemblyscript/src/module" {
         static readonly UNLIMITED_MEMORY: Index;
         setMemory(initial: Index, maximum: Index, segments: MemorySegment[], target: Target, exportName?: string | null, shared?: boolean): void;
         setFunctionTable(initial: Index, maximum: Index, funcs: string[], offset: ExpressionRef): void;
-        setStart(func: FunctionRef): void;
         addCustomSection(name: string, contents: Uint8Array): void;
         getOptimizeLevel(): number;
         setOptimizeLevel(level?: number): void;
@@ -2284,11 +2288,24 @@ declare module "assemblyscript/src/module" {
     export function getHostOperandCount(expr: ExpressionRef): Index;
     export function getHostOperand(expr: ExpressionRef, index: Index): ExpressionRef;
     export function getHostName(expr: ExpressionRef): string | null;
+    export function getFunctionTypeName(ftype: FunctionTypeRef): string | null;
+    export function getFunctionTypeParamCount(ftype: FunctionTypeRef): Index;
+    export function getFunctionTypeParam(ftype: FunctionTypeRef, index: Index): NativeType;
+    export function getFunctionTypeResult(ftype: FunctionTypeRef): NativeType;
     export function getFunctionBody(func: FunctionRef): ExpressionRef;
     export function getFunctionName(func: FunctionRef): string | null;
     export function getFunctionParamCount(func: FunctionRef): Index;
     export function getFunctionParamType(func: FunctionRef, index: Index): NativeType;
     export function getFunctionResultType(func: FunctionRef): NativeType;
+    export function getGlobalName(global: GlobalRef): string | null;
+    export function getGlobalType(global: GlobalRef): NativeType;
+    export function isGlobalMutable(global: GlobalRef): boolean;
+    export function getGlobalInit(global: GlobalRef): ExpressionRef;
+    export function getEventName(event: EventRef): string | null;
+    export function getEventAttribute(event: EventRef): number;
+    export function getEventType(event: EventRef): string | null;
+    export function getEventParamCount(event: EventRef): Index;
+    export function getEventParam(event: EventRef, index: Index): NativeType;
     export class Relooper {
         module: Module;
         ref: number;
@@ -2320,7 +2337,7 @@ declare module "assemblyscript/src/types" {
      * @module types
      */ /***/
     import { Class, FunctionTarget, Program } from "assemblyscript/src/program";
-    import { NativeType, ExpressionRef, Module } from "assemblyscript/src/module";
+    import { NativeType } from "assemblyscript/src/module";
     /** Indicates the kind of a type. */
     export const enum TypeKind {
         /** An 8-bit signed integer. */
@@ -2353,8 +2370,10 @@ declare module "assemblyscript/src/types" {
         V128 = 13,
         /** A host reference. */
         ANYREF = 14,
+        /** An internal exception reference. */
+        EXNREF = 15,
         /** No return type. */
-        VOID = 15
+        VOID = 16
     }
     /** Indicates capabilities of a type. */
     export const enum TypeFlags {
@@ -2438,12 +2457,6 @@ declare module "assemblyscript/src/types" {
         toString(): string;
         /** Converts this type to its respective native type. */
         toNativeType(): NativeType;
-        /** Converts this type to its native `0` value. */
-        toNativeZero(module: Module): ExpressionRef;
-        /** Converts this type to its native `1` value. */
-        toNativeOne(module: Module): ExpressionRef;
-        /** Converts this type to its native `-1` value. */
-        toNativeNegOne(module: Module): ExpressionRef;
         /** Converts this type to its signature string. */
         toSignatureString(): string;
         /** An 8-bit signed integer. */
@@ -2480,6 +2493,8 @@ declare module "assemblyscript/src/types" {
         static readonly v128: Type;
         /** A host reference. */
         static readonly anyref: Type;
+        /** An internal exception reference. */
+        static readonly exnref: Type;
         /** No return type. */
         static readonly void: Type;
         /** Alias of i32 indicating type inference of locals and globals with just an initializer. */
@@ -3667,6 +3682,7 @@ declare module "assemblyscript/src/program" {
         tempF64s: Local[] | null;
         tempV128s: Local[] | null;
         tempAnyrefs: Local[] | null;
+        tempExnrefs: Local[] | null;
         nextBreakId: number;
         breakStack: number[] | null;
         breakLabel: string | null;
@@ -3886,7 +3902,7 @@ declare module "assemblyscript/src/compiler" {
      * @module compiler
      */ /***/
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
-    import { Module, MemorySegment, ExpressionRef, NativeType, FunctionRef, FunctionTypeRef, GlobalRef } from "assemblyscript/src/module";
+    import { Module, MemorySegment, ExpressionRef, NativeType, FunctionRef, FunctionTypeRef, GlobalRef, EventRef } from "assemblyscript/src/module";
     import { Feature, Target } from "assemblyscript/src/common";
     import { Program, ClassPrototype, Class, Element, Enum, Field, FunctionPrototype, Function, Global, VariableLikeElement, File } from "assemblyscript/src/program";
     import { Flow } from "assemblyscript/src/flow";
@@ -3996,6 +4012,8 @@ declare module "assemblyscript/src/compiler" {
         runtimeFeatures: RuntimeFeatures;
         /** Expressions known to have skipped an autorelease. Usually function returns. */
         skippedAutoreleases: Set<ExpressionRef>;
+        /** Registered event types. */
+        events: Map<string, EventRef>;
         /** Compiles a {@link Program} to a {@link Module} using the specified options. */
         static compile(program: Program, options?: Options | null): Module;
         /** Constructs a new compiler for a {@link Program} using the specified options. */
@@ -4026,6 +4044,8 @@ declare module "assemblyscript/src/compiler" {
         compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: NamedTypeNode[], contextualTypeArguments?: Map<string, Type>, alternativeReportNode?: Node | null): Function | null;
         /** Either reuses or creates the function type matching the specified signature. */
         ensureFunctionType(parameterTypes: Type[] | null, returnType: Type, thisType?: Type | null): FunctionTypeRef;
+        /** Either reuses or creates the event type matching the specified name. */
+        ensureEventType(name: string, parameterTypes: Type[] | null): EventRef;
         /** Compiles the body of a function within the specified flow. */
         compileFunctionBody(
         /** Function to compile. */
@@ -4214,6 +4234,12 @@ declare module "assemblyscript/src/compiler" {
         ensureSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Adds the debug location of the specified expression at the specified range to the source map. */
         addDebugLocation(expr: ExpressionRef, range: Range): void;
+        /** Makes a constant zero of the specified type. */
+        makeZero(type: Type): ExpressionRef;
+        /** Makes a constant one of the specified type. */
+        makeOne(type: Type): ExpressionRef;
+        /** Makes a constant negative one of the specified type. */
+        makeNegOne(type: Type): ExpressionRef;
         /** Creates a comparison whether an expression is 'true' in a broader sense. */
         makeIsTrueish(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Makes an allocation suitable to hold the data of an instance of the given class. */
