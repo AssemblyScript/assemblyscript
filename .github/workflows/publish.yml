@@ -30,8 +30,6 @@ jobs:
         npm run build
     - name: Test distribution files
       run: npm test
-    - name: Reconfigure for release
-      run: npm run release
     - name: Set up version
       run: |
         VERSION=$(node -e "console.log(require('./package.json').version)")
