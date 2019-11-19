@@ -27,9 +27,9 @@ import { idof } from "./builtins";
       store<u16>(out, <u16>code);
     } else {
       code -= 0x10000;
-      let lo: u32 = (code & 0x3FF) + 0xDC00;
-      let hi: u32 = (code >>> 10) + 0xD800;
-      store<u32>(out, hi | (lo << 16));
+      let hi = (code & 0x3FF) | 0xDC00;
+      let lo = (code >>> 10) | 0xD800;
+      store<u32>(out, (hi << 16) | lo);
     }
     return changetype<string>(out); // retains
   }
@@ -495,7 +495,7 @@ import { idof } from "./builtins";
       if ((<u32>c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
         let c1 = <i32>load<u16>(changetype<usize>(this) + (i << 1), 2);
         if (<u32>c1 - 0xDBFF < 0xE000 - 0xDBFF) {
-          c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
+          c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
           ++i;
         }
       }
@@ -513,9 +513,9 @@ import { idof } from "./builtins";
             store<u16>(codes + (j << 1), code);
           } else {
             code -= 0x10000;
-            let lo = (code & 0x3FF) + 0xDC00;
-            let hi = (code >>> 10) + 0xD800;
-            store<u32>(codes + (j << 1), hi | (lo << 16));
+            let lo = (code >>> 10) | 0xD800;
+            let hi = (code & 0x03FF) | 0xDC00;
+            store<u32>(codes + (j << 1), (hi << 16) | lo);
             ++j;
           }
         }
@@ -539,7 +539,7 @@ import { idof } from "./builtins";
       if ((<u32>c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
         let c1 = <i32>load<u16>(changetype<usize>(this) + (i << 1), 2);
         if (<u32>c1 - 0xDBFF < 0xE000 - 0xDBFF) {
-          c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
+          c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
           ++i;
         }
       }
@@ -563,9 +563,9 @@ import { idof } from "./builtins";
               store<u16>(codes + (j << 1), code);
             } else {
               code -= 0x10000;
-              let lo = (code & 0x3FF) + 0xDC00;
-              let hi = (code >>> 10) + 0xD800;
-              store<u32>(codes + (j << 1), hi | (lo << 16));
+              let lo = (code >>> 10) | 0xD800;
+              let hi = (code & 0x03FF) | 0xDC00;
+              store<u32>(codes + (j << 1), (hi << 16) | lo);
               ++j;
             }
           }

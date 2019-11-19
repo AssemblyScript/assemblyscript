@@ -2455,37 +2455,39 @@
   local.get $0
   i32.const 65535
   i32.gt_s
-  local.tee $2
+  local.tee $1
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
-  local.set $1
-  local.get $2
+  local.set $2
+  local.get $1
   if
-   local.get $1
    local.get $0
    i32.const 65536
    i32.sub
    local.tee $0
-   i32.const 10
-   i32.shr_u
-   i32.const 55296
-   i32.add
-   local.get $0
    i32.const 1023
    i32.and
    i32.const 56320
-   i32.add
+   i32.or
+   local.set $1
+   local.get $2
+   local.get $0
+   i32.const 10
+   i32.shr_u
+   i32.const 55296
+   i32.or
+   local.get $1
    i32.const 16
    i32.shl
    i32.or
    i32.store
   else
-   local.get $1
+   local.get $2
    local.get $0
    i32.store16
   end
-  local.get $1
+  local.get $2
   call $~lib/rt/pure/__retain
  )
  (func $~lib/string/String#startsWith (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -8146,24 +8148,26 @@
         local.get $2
         i32.store16
        else
+        local.get $2
+        i32.const 65536
+        i32.sub
+        local.tee $2
+        i32.const 1023
+        i32.and
+        i32.const 56320
+        i32.or
+        local.set $1
         local.get $3
         i32.const 1
         i32.shl
         local.get $4
         i32.add
         local.get $2
-        i32.const 65536
-        i32.sub
-        local.tee $2
         i32.const 10
         i32.shr_u
         i32.const 55296
-        i32.add
-        local.get $2
-        i32.const 1023
-        i32.and
-        i32.const 56320
-        i32.add
+        i32.or
+        local.get $1
         i32.const 16
         i32.shl
         i32.or
@@ -8345,24 +8349,26 @@
         local.get $1
         i32.store16
        else
+        local.get $1
+        i32.const 65536
+        i32.sub
+        local.tee $1
+        i32.const 1023
+        i32.and
+        i32.const 56320
+        i32.or
+        local.set $6
         local.get $2
         i32.const 1
         i32.shl
         local.get $4
         i32.add
         local.get $1
-        i32.const 65536
-        i32.sub
-        local.tee $1
         i32.const 10
         i32.shr_u
         i32.const 55296
-        i32.add
-        local.get $1
-        i32.const 1023
-        i32.and
-        i32.const 56320
-        i32.add
+        i32.or
+        local.get $6
         i32.const 16
         i32.shl
         i32.or
