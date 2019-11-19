@@ -11566,49 +11566,35 @@
        i32.const 1
        i32.shl
        i32.add
-       i32.load16_u offset=2
+       i32.load offset=2
        local.set $10
        local.get $3
        local.get $11
        i32.const 1
        i32.shl
        i32.add
-       i32.load16_u offset=4
-       local.set $9
-       local.get $3
-       local.get $11
-       i32.const 1
-       i32.shl
-       i32.add
        i32.load16_u offset=6
-       local.set $8
+       local.set $9
        local.get $2
        local.get $5
        i32.const 1
        i32.shl
        i32.add
        local.get $10
-       i32.store16
-       local.get $2
-       local.get $5
-       i32.const 1
-       i32.shl
-       i32.add
+       i32.store
        local.get $9
-       i32.store16 offset=2
-       local.get $8
        if
         local.get $2
         local.get $5
         i32.const 1
         i32.shl
         i32.add
-        local.get $8
+        local.get $9
         i32.store16 offset=4
        end
        local.get $5
        i32.const 1
-       local.get $8
+       local.get $9
        i32.const 0
        i32.ne
        i32.add
@@ -11620,12 +11606,12 @@
        call $~lib/util/casemap/casemap
        i32.const 2097151
        i32.and
-       local.set $8
-       local.get $8
-       i32.const 65535
-       i32.gt_s
        local.set $9
        local.get $9
+       i32.const 65535
+       i32.gt_s
+       local.set $10
+       local.get $10
        i32.eqz
        if
         local.get $2
@@ -11633,20 +11619,20 @@
         i32.const 1
         i32.shl
         i32.add
-        local.get $8
+        local.get $9
         i32.store16
        else
-        local.get $8
+        local.get $9
         i32.const 65536
         i32.sub
-        local.set $8
-        local.get $8
+        local.set $9
+        local.get $9
         i32.const 1023
         i32.and
         i32.const 56320
         i32.add
-        local.set $10
-        local.get $8
+        local.set $8
+        local.get $9
         i32.const 10
         i32.shr_u
         i32.const 55296
@@ -11658,14 +11644,11 @@
         i32.shl
         i32.add
         local.get $13
-        i32.store16
-        local.get $2
-        local.get $5
-        i32.const 1
+        local.get $8
+        i32.const 16
         i32.shl
-        i32.add
-        local.get $10
-        i32.store16 offset=2
+        i32.or
+        i32.store
         local.get $5
         i32.const 1
         i32.add
@@ -11686,8 +11669,8 @@
      i32.and
      local.get $12
      local.get $12
-     local.set $10
-     local.get $10
+     local.set $8
+     local.get $8
      i32.const 97
      i32.sub
      i32.const 26
@@ -11835,15 +11818,12 @@
       i32.const 1
       i32.shl
       i32.add
-      i32.const 105
-      i32.store16
-      local.get $2
-      local.get $3
-      i32.const 1
-      i32.shl
-      i32.add
       i32.const 775
-      i32.store16 offset=2
+      i32.const 105
+      i32.const 16
+      i32.shl
+      i32.or
+      i32.store
       local.get $3
       i32.const 1
       i32.add
@@ -11913,14 +11893,11 @@
         i32.shl
         i32.add
         local.get $9
-        i32.store16
-        local.get $2
-        local.get $3
-        i32.const 1
-        i32.shl
-        i32.add
         local.get $8
-        i32.store16 offset=2
+        i32.const 16
+        i32.shl
+        i32.or
+        i32.store
         local.get $3
         i32.const 1
         i32.add

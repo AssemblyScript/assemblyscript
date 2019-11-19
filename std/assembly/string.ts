@@ -501,8 +501,7 @@ import { idof } from "./builtins";
       }
       if (!isAscii(c)) {
         if (c == 0x0130) {
-          store<u16>(codes + (j << 1), 0x0069, 0);
-          store<u16>(codes + (j << 1), 0x0307, 2);
+          store<u32>(codes + (j << 1), 0x0307 | (0x0069 << 16));
           ++j;
         } else if (c >= 0x24B6 && c <= 0x24CF) {
           // monkey patch
@@ -516,8 +515,7 @@ import { idof } from "./builtins";
             code -= 0x10000;
             let lo = (code & 0x3FF) + 0xDC00;
             let hi = (code >>> 10) + 0xD800;
-            store<u16>(codes + (j << 1), hi, 0);
-            store<u16>(codes + (j << 1), lo, 2);
+            store<u32>(codes + (j << 1), hi | (lo << 16));
             ++j;
           }
         }
@@ -553,13 +551,12 @@ import { idof } from "./builtins";
         } else {
           let index = <usize>bsearch(specialsUpperPtr, specialsUpperLen, c);
           if (~index) {
-            let a = load<u16>(specialsUpperPtr + (index << 1), 2);
-            let b = load<u16>(specialsUpperPtr + (index << 1), 4);
-            let d = load<u16>(specialsUpperPtr + (index << 1), 6);
-            store<u16>(codes + (j << 1), a, 0);
-            store<u16>(codes + (j << 1), b, 2);
-            if (d) store<u16>(codes + (j << 1), d, 4);
-            j += 1 + usize(d != 0);
+            // load next 3 bytes from row with `index` offset for specialsUpper table
+            let ab = load<u32>(specialsUpperPtr + (index << 1), 2);
+            let ex = load<u16>(specialsUpperPtr + (index << 1), 6);
+            store<u32>(codes + (j << 1), ab);
+            if (ex) store<u16>(codes + (j << 1), ex, 4);
+            j += 1 + usize(ex != 0);
           } else {
             let code = casemap(c, 1) & 0x1FFFFF;
             let hasSur = code > 0xFFFF;
@@ -569,8 +566,7 @@ import { idof } from "./builtins";
               code -= 0x10000;
               let lo = (code & 0x3FF) + 0xDC00;
               let hi = (code >>> 10) + 0xD800;
-              store<u16>(codes + (j << 1), hi, 0);
-              store<u16>(codes + (j << 1), lo, 2);
+              store<u32>(codes + (j << 1), hi | (lo << 16));
               ++j;
             }
           }
