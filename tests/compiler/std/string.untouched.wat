@@ -11661,8 +11661,6 @@
         i32.shl
         i32.add
         local.get $13
-        i32.const 65535
-        i32.and
         i32.store16
         local.get $2
         local.get $5
@@ -11670,8 +11668,6 @@
         i32.shl
         i32.add
         local.get $10
-        i32.const 65535
-        i32.and
         i32.store16 offset=2
         local.get $5
         i32.const 1
@@ -11920,8 +11916,6 @@
         i32.shl
         i32.add
         local.get $9
-        i32.const 65535
-        i32.and
         i32.store16
         local.get $2
         local.get $3
@@ -11929,8 +11923,6 @@
         i32.shl
         i32.add
         local.get $8
-        i32.const 65535
-        i32.and
         i32.store16 offset=2
         local.get $3
         i32.const 1

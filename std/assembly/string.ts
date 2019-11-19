@@ -516,8 +516,8 @@ import { idof } from "./builtins";
             code -= 0x10000;
             let lo = (code & 0x3FF) + 0xDC00;
             let hi = (code >>> 10) + 0xD800;
-            store<u16>(codes + (j << 1), hi & 0xFFFF, 0);
-            store<u16>(codes + (j << 1), lo & 0xFFFF, 2);
+            store<u16>(codes + (j << 1), hi, 0);
+            store<u16>(codes + (j << 1), lo, 2);
             ++j;
           }
         }
@@ -569,8 +569,8 @@ import { idof } from "./builtins";
               code -= 0x10000;
               let lo = (code & 0x3FF) + 0xDC00;
               let hi = (code >>> 10) + 0xD800;
-              store<u16>(codes + (j << 1), hi & 0xFFFF, 0);
-              store<u16>(codes + (j << 1), lo & 0xFFFF, 2);
+              store<u16>(codes + (j << 1), hi, 0);
+              store<u16>(codes + (j << 1), lo, 2);
               ++j;
             }
           }
