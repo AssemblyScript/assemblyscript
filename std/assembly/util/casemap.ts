@@ -420,10 +420,8 @@
 
 // Special binary search util for cpecial casing table
 @inline
-export function bsearch(arr: u16[], key: u32): i32 {
+export function bsearch(ptr: usize, max: i32, key: u32): i32 {
   var min = 0;
-  var max = arr.length;
-  var ptr = arr.dataStart as usize;
   while (min <= max) {
     let mid  = (min + max) >>> 3 << 2;
     let keym = load<u16>(ptr + (mid << alignof<u16>()));

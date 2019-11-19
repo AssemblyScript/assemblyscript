@@ -531,9 +531,11 @@ import { idof } from "./builtins";
   }
 
   toUpperCase(): String {
-    const len = this.length;
+    var len = this.length;
     if (!len) return this;
     var codes = __alloc(len * 3 * 2, idof<String>());
+    var specialsUpperPtr = specialsUpper.dataStart as usize;
+    var specialsUpperLen = specialsUpper.length;
     var j = 0;
     for (let i = 0; i < len; ++i) {
       // let c = str.codePointAt(i)!;
@@ -550,12 +552,12 @@ import { idof } from "./builtins";
           // monkey patch
           store<u16>(codes + (j << 1), c - 26);
         } else {
-          let index = bsearch(specialsUpper, c);
+          let index = bsearch(specialsUpperPtr, specialsUpperLen, c);
           if (~index) {
             // TODO optimize
-            const a = specialsUpper[index + 1];
-            const b = specialsUpper[index + 2];
-            const c = specialsUpper[index + 3];
+            const a = load<u16>(specialsUpperPtr + (index << 1), 2);
+            const b = load<u16>(specialsUpperPtr + (index << 1), 4);
+            const c = load<u16>(specialsUpperPtr + (index << 1), 6);
             store<u16>(codes + (j << 1), a, 0);
             store<u16>(codes + (j << 1), b, 2);
             if (c) store<u16>(codes + (j << 1), c, 4);
