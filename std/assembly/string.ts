@@ -492,14 +492,16 @@ import { idof } from "./builtins";
     var j: usize = 0;
     for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <u32>load<u16>(changetype<usize>(this) + (i << 1));
-      if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
-        let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
-        if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
-          c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
-          ++i;
+      if (isAscii(c)) {
+        store<u16>(codes + (j << 1), toLower8(c));
+      } else {
+        if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
+          let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
+          if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
+            c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
+            ++i;
+          }
         }
-      }
-      if (!isAscii(c)) {
         if (c == 0x0130) {
           store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069);
           ++j;
@@ -518,8 +520,6 @@ import { idof } from "./builtins";
             ++j;
           }
         }
-      } else {
-        store<u16>(codes + (j << 1), toLower8(c));
       }
     }
     __realloc(codes, j << 1);
@@ -535,14 +535,16 @@ import { idof } from "./builtins";
     var j: usize = 0;
     for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <u32>load<u16>(changetype<usize>(this) + (i << 1));
-      if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
-        let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
-        if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
-          c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
-          ++i;
+      if (isAscii(c)) {
+        store<u16>(codes + (j << 1), toUpper8(c));
+      } else {
+        if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
+          let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
+          if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
+            c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
+            ++i;
+          }
         }
-      }
-      if (!isAscii(c)) {
         if (c - 0x24D0 <= 0x24E9 - 0x24D0) {
           // monkey patch
           store<u16>(codes + (<usize>j << 1), c - 26);
@@ -568,8 +570,6 @@ import { idof } from "./builtins";
             }
           }
         }
-      } else {
-        store<u16>(codes + (j << 1), toUpper8(c));
       }
     }
     __realloc(codes, j << 1);

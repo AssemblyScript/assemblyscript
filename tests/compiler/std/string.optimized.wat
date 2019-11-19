@@ -7979,54 +7979,52 @@
     i32.add
     i32.load16_u
     local.tee $1
-    i32.const 55295
-    i32.sub
-    i32.const 1025
-    i32.lt_u
-    if (result i32)
+    i32.const -128
+    i32.and
+    if
      local.get $5
      local.get $7
      i32.const 1
      i32.sub
      i32.lt_u
-    else
      i32.const 0
-    end
-    if
-     local.get $5
-     i32.const 1
-     i32.shl
-     local.get $0
-     i32.add
-     i32.load16_u offset=2
-     local.tee $2
-     i32.const 56319
+     local.get $1
+     i32.const 55295
      i32.sub
      i32.const 1025
      i32.lt_u
+     select
      if
       local.get $5
       i32.const 1
-      i32.add
-      local.set $5
-      local.get $2
-      i32.const 1023
-      i32.and
-      local.get $1
-      i32.const 1023
-      i32.and
-      i32.const 10
       i32.shl
-      i32.or
-      i32.const 65536
+      local.get $0
       i32.add
-      local.set $1
+      i32.load16_u offset=2
+      local.tee $2
+      i32.const 56319
+      i32.sub
+      i32.const 1025
+      i32.lt_u
+      if
+       local.get $5
+       i32.const 1
+       i32.add
+       local.set $5
+       local.get $2
+       i32.const 1023
+       i32.and
+       local.get $1
+       i32.const 1023
+       i32.and
+       i32.const 10
+       i32.shl
+       i32.or
+       i32.const 65536
+       i32.add
+       local.set $1
+      end
      end
-    end
-    local.get $1
-    i32.const -128
-    i32.and
-    if
      local.get $1
      i32.const 9424
      i32.sub
@@ -8250,54 +8248,52 @@
     i32.add
     i32.load16_u
     local.tee $1
-    i32.const 55295
-    i32.sub
-    i32.const 1025
-    i32.lt_u
-    if (result i32)
+    i32.const -128
+    i32.and
+    if
      local.get $3
      local.get $5
      i32.const 1
      i32.sub
      i32.lt_u
-    else
      i32.const 0
-    end
-    if
-     local.get $3
-     i32.const 1
-     i32.shl
-     local.get $0
-     i32.add
-     i32.load16_u offset=2
-     local.tee $6
-     i32.const 56319
+     local.get $1
+     i32.const 55295
      i32.sub
      i32.const 1025
      i32.lt_u
+     select
      if
       local.get $3
       i32.const 1
-      i32.add
-      local.set $3
-      local.get $6
-      i32.const 1023
-      i32.and
-      local.get $1
-      i32.const 1023
-      i32.and
-      i32.const 10
       i32.shl
-      i32.or
-      i32.const 65536
+      local.get $0
       i32.add
-      local.set $1
+      i32.load16_u offset=2
+      local.tee $6
+      i32.const 56319
+      i32.sub
+      i32.const 1025
+      i32.lt_u
+      if
+       local.get $3
+       i32.const 1
+       i32.add
+       local.set $3
+       local.get $6
+       i32.const 1023
+       i32.and
+       local.get $1
+       i32.const 1023
+       i32.and
+       i32.const 10
+       i32.shl
+       i32.or
+       i32.const 65536
+       i32.add
+       local.set $1
+      end
      end
-    end
-    local.get $1
-    i32.const -128
-    i32.and
-    if
      local.get $1
      i32.const 304
      i32.eq
