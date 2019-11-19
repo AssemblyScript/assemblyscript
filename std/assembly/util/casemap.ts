@@ -431,11 +431,11 @@ export function bsearch(key: u32, ptr: usize, max: i32): i32 {
   while (min <= max) {
     let mid  = (min + max) >>> 3 << 2;
     let cmp = load<u16>(ptr + (mid << alignof<u16>())) - key;
-    if (cmp == 0) return mid;
-    else if (cmp >>> 31) min = mid + 4;
-    else max = mid - 4;
+    if (cmp == 0) return mid; // found
+    else if (cmp >>> 31) min = mid + 4; // < 0
+    else max = mid - 4; // > 0
   }
-  return -1;
+  return -1; // not found
 }
 
 // See: musl/tree/src/ctype/towctrans.c

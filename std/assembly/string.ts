@@ -547,7 +547,7 @@ import { idof } from "./builtins";
         }
         if (c - 0x24D0 <= 0x24E9 - 0x24D0) {
           // monkey patch
-          store<u16>(codes + (<usize>j << 1), c - 26);
+          store<u16>(codes + (j << 1), c - 26);
         } else {
           let index = <usize>bsearch(c, specialsUpperPtr, specialsUpperLen);
           if (~index) {
