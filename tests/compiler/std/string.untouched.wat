@@ -18,12 +18,16 @@
  (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$iid (func (param i32 f64) (result i32)))
  (type $FUNCSIG$iijijiji (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
+ (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
  (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
+ (import "env" "toLowerCaseFromIndex" (func $std/string/toLowerCaseFromIndex (param i32 i32) (result i32)))
+ (import "env" "toUpperCaseFromIndex" (func $std/string/toUpperCaseFromIndex (param i32 i32) (result i32)))
+ (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00h\00i\00,\00 \00I\00\'\00m\00 \00a\00 \00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 56) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00.\00t\00s\00")
@@ -375,51 +379,55 @@
  (data (i32.const 20984) "\10\00\00\00\01\00\00\00\05\00\00\00\10\00\00\008N\00\008N\00\00\c0\03\00\00\f0\00\00\00")
  (data (i32.const 21016) "\90\01\00\00\01\00\00\00\00\00\00\00\90\01\00\000\0c1\0dx\0e\7f\0f\80\10\81\11\86\12\89\13\8a\13\8e\14\8f\15\90\16\93\13\94\17\95\18\96\19\97\1a\9a\1b\9c\19\9d\1c\9e\1d\9f\1e\a6\1f\a9\1f\ae\1f\b1 \b2 \b7!\bf\"\c5#\c8#\cb#\dd$\f2#\f6%\f7& -:.=/>0?1@1C2D3E4P5Q6R7S8T9Y:[;\\<a=c>e?f@hAiBj@kClDoBqErFuG}H\82I\87J\89K\8aL\8bL\8cM\92N\9dO\9ePEW{\1d|\1d}\1d\7fX\86Y\88Z\89Z\8aZ\8c[\8e\\\8f\\\ac]\ad^\ae^\af^\c2_\cc`\cda\cea\cfb\d0c\d1d\d5e\d6f\d7g\f0h\f1i\f2j\f3k\f4l\f5m\f9n\fd-\fe-\ff-PiQiRiSiTiUiViWiXiYiZi[i\\i]i^i_i\82\00\83\00\84\00\85\00\86\00\87\00\88\00\89\00\c0u\cfv\80\89\81\8a\82\8b\85\8c\86\8dp\9dq\9dv\9ew\9ex\9fy\9fz\a0{\a0|\a1}\a1\b3\a2\ba\a3\bb\a3\bc\a4\be\a5\c3\a2\cc\a4\da\a6\db\a6\e5j\ea\a7\eb\a7\ecn\f3\a2\f8\a8\f9\a8\fa\a9\fb\a9\fc\a4&\b0*\b1+\b2N\b3\84\08b\bac\bbd\bce\bdf\bem\bfn\c0o\c1p\c2~\c3\7f\c3}\cf\8d\d0\94\d1\ab\d2\ac\d3\ad\d4\b0\d5\b1\d6\b2\d7\c4\d8\c5\d9\c6\da")
  (data (i32.const 21432) "\10\00\00\00\01\00\00\00\n\00\00\00\10\00\00\00(R\00\00(R\00\00\90\01\00\00\90\01\00\00")
- (data (i32.const 21464) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\000\009\00_\00A\00Z\00 \00a\00z\00.\00!\00")
- (data (i32.const 21504) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\000\009\00_\00A\00Z\00 \00A\00Z\00.\00!\00")
- (data (i32.const 21544) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\000\009\00_\00a\00z\00 \00a\00z\00.\00!\00")
- (data (i32.const 21584) "J\00\00\00\01\00\00\00\01\00\00\00J\00\00\00D\00e\00r\00 \00W\00e\00c\00h\00s\00e\00l\00 \00a\00l\00l\00e\00i\00n\00 \00i\00s\00t\00 \00d\00a\00s\00 \00B\00e\00s\00t\00\e4\00n\00d\00i\00g\00e\00")
- (data (i32.const 21680) "J\00\00\00\01\00\00\00\01\00\00\00J\00\00\00D\00E\00R\00 \00W\00E\00C\00H\00S\00E\00L\00 \00A\00L\00L\00E\00I\00N\00 \00I\00S\00T\00 \00D\00A\00S\00 \00B\00E\00S\00T\00\c4\00N\00D\00I\00G\00E\00")
- (data (i32.const 21776) "J\00\00\00\01\00\00\00\01\00\00\00J\00\00\00d\00e\00r\00 \00w\00e\00c\00h\00s\00e\00l\00 \00a\00l\00l\00e\00i\00n\00 \00i\00s\00t\00 \00d\00a\00s\00 \00b\00e\00s\00t\00\e4\00n\00d\00i\00g\00e\00")
- (data (i32.const 21872) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00@\00 \00\14  \00\14\04@\04C\043\04 \00G\045\04;\04>\042\045\04:\040\04!\00")
- (data (i32.const 21928) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00@\00 \00\14  \00\14\04 \04#\04\13\04 \00\'\04\15\04\1b\04\1e\04\12\04\15\04\1a\04\10\04!\00")
- (data (i32.const 21984) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00@\00 \00\14  \004\04@\04C\043\04 \00G\045\04;\04>\042\045\04:\040\04!\00")
- (data (i32.const 22040) "D\00\00\00\01\00\00\00\01\00\00\00D\00\00\00.\" \00E\00\c5\"d\00a\00 \00=\00 \00Q\00,\00 \00n\00 \00\92! \00\1e\",\00 \00\11\" \00f\00(\00i\00)\00 \00=\00 \00\0f\" \00g\00(\00i\00)\00")
- (data (i32.const 22128) "D\00\00\00\01\00\00\00\01\00\00\00D\00\00\00.\" \00E\00\c5\"D\00A\00 \00=\00 \00Q\00,\00 \00N\00 \00\92! \00\1e\",\00 \00\11\" \00F\00(\00I\00)\00 \00=\00 \00\0f\" \00G\00(\00I\00)\00")
- (data (i32.const 22216) "D\00\00\00\01\00\00\00\01\00\00\00D\00\00\00.\" \00e\00\c5\"d\00a\00 \00=\00 \00q\00,\00 \00n\00 \00\92! \00\1e\",\00 \00\11\" \00f\00(\00i\00)\00 \00=\00 \00\0f\" \00g\00(\00i\00)\00")
- (data (i32.const 22304) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\00\f0\00i\00 \001\01n\00t\00Y\02\c8\02n\00\e6\00\83\02Y\02n\00Y\02l\00 \00f\00Y\02\c8\02n\00[\02t\001\01k\00 \00Y\02s\00o\00\8a\02s\00i\00\c8\02e\001\01\83\02n\00")
- (data (i32.const 22392) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\00\d0\00I\00 \00I\00N\00T\00\8f\01\c8\02N\00\c6\00\a9\01\8f\01N\00\8f\01L\00 \00F\00\8f\01\c8\02N\00\90\01T\00I\00K\00 \00\8f\01S\00O\00\b1\01S\00I\00\c8\02E\00I\00\a9\01N\00")
- (data (i32.const 22480) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\00\f0\00i\00 \00i\00n\00t\00Y\02\c8\02n\00\e6\00\83\02Y\02n\00Y\02l\00 \00f\00Y\02\c8\02n\00[\02t\00i\00k\00 \00Y\02s\00o\00\8a\02s\00i\00\c8\02e\00i\00\83\02n\00")
- (data (i32.const 22568) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\a3\03r\1f \00\b3\03\bd\03\c9\03\c1\03\af\03\b6\03\c9\03 \00\00\1f\c0\03x\1f \00\c4\03t\1f\bd\03 \00\ba\03\cc\03\c8\03\b7\03")
- (data (i32.const 22632) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\a3\03\c8\1f \00\93\03\9d\03\a9\03\a1\03\8a\03\96\03\a9\03 \00\08\1f\a0\03\f8\1f \00\a4\03\ca\1f\9d\03 \00\9a\03\8c\03\a8\03\97\03")
- (data (i32.const 22696) "0\00\00\00\01\00\00\00\01\00\00\000\00\00\00\c4\03\bf\03\e6\1f \00\c3\03\c0\03\b1\03\b8\03\b9\03\bf\03\e6\1f \00\c4\03t\1f\bd\03 \00\c4\03\c1\03\bf\03\bc\03\b5\03\c1\03\ae\03,\00")
- (data (i32.const 22760) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00\a4\03\9f\03\a5\03B\03 \00\a3\03\a0\03\91\03\98\03\99\03\9f\03\a5\03B\03 \00\a4\03\ca\1f\9d\03 \00\a4\03\a1\03\9f\03\9c\03\95\03\a1\03\89\03,\00")
- (data (i32.const 22832) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00\c3\03r\1f \00\b3\03\bd\03\c9\03\c1\03\af\03\b6\03\c9\03 \00\00\1f\c0\03x\1f \00\c4\03t\1f\bd\03 \00D\1f\c8\03\b7\03")
- (data (i32.const 22896) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00\a3\03\c8\1f \00\93\03\9d\03\a9\03\a1\03\8a\03\96\03\a9\03 \00\08\1f\a0\03\f8\1f \00\a4\03\ca\1f\9d\03 \00L\1f\a8\03\97\03")
- (data (i32.const 22960) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00\c0\03\bf\03z\1f \00\bc\03r\1f \00\b2\03\af\03\b1\03 \00\bc\03\b5\03\c4\03\c1\03\ac\03\b5\03\b9\03 \00\c4\03t\1f \00\b3\03\c6\1f.\00")
- (data (i32.const 23032) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00\a0\03\9f\03\ea\1f \00\9c\03\c8\1f \00\92\03\8a\03\91\03 \00\9c\03\95\03\a4\03\a1\03\86\03\95\03\99\03 \00\a4\03\ca\1f \00\93\03\97\03B\03.\00")
- (data (i32.const 23104) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\91\03\c0\03\bf\1f \00\c4\03p\1f \00\ba\03\cc\03\ba\03\ba\03\b1\03\bb\03\b1\03 \00\b2\03\b3\03\b1\03\bb\03\bc\03\ad\03\bd\03\b7\03")
- (data (i32.const 23168) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\91\03\a0\03\bf\1f \00\a4\03\ba\1f \00\9a\03\8c\03\9a\03\9a\03\91\03\9b\03\91\03 \00\92\03\93\03\91\03\9b\03\9c\03\88\03\9d\03\97\03")
- (data (i32.const 23232) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00\c4\03\f6\1f\bd\03 \00\fe\1f\95\03\bb\03\bb\03\ae\03\bd\03\c9\03\bd\03 \00\c4\03p\1f \001\1f\b5\03\c1\03\ac\03")
- (data (i32.const 23288) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\00\a4\03\a9\03B\03\9d\03 \00\fe\1f\95\03\9b\03\9b\03\89\03\9d\03\a9\03\9d\03 \00\a4\03\ba\1f \009\1f\95\03\a1\03\86\03")
- (data (i32.const 23352) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00\ba\03\b1\03v\1f \00\c3\03p\1f\bd\03 \00\c0\03\c1\03\f6\1f\c4\03\b1\03 \00\00\1f\bd\03\b4\03\c1\03\b5\03\b9\03\c9\03\bc\03\ad\03\bd\03\b7\03")
- (data (i32.const 23424) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00\9a\03\91\03\da\1f \00\a3\03\ba\1f\9d\03 \00\a0\03\a1\03\a9\03B\03\a4\03\91\03 \00\08\1f\9d\03\94\03\a1\03\95\03\99\03\a9\03\9c\03\88\03\9d\03\97\03")
- (data (i32.const 23496) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00\c7\03\b1\03\d6\1f\c1\03\b5\03,\00 \00f\1f \00\c7\03\b1\03\d6\1f\c1\03\b5\03,\00 \00\bf\1f\95\03\bb\03\b5\03\c5\03\b8\03\b5\03\c1\03\b9\03\ac\03!\00")
- (data (i32.const 23568) ":\00\00\00\01\00\00\00\01\00\00\00:\00\00\00\a7\03\91\03\99\03B\03\a1\03\95\03,\00 \00n\1f \00\a7\03\91\03\99\03B\03\a1\03\95\03,\00 \00\bf\1f\95\03\9b\03\95\03\a5\03\98\03\95\03\a1\03\99\03\86\03!\00")
- (data (i32.const 23648) "\80\00\00\00\01\00\00\00\01\00\00\00\80\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00 \00/\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00")
- (data (i32.const 23792) "\80\00\00\00\01\00\00\00\01\00\00\00\80\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00 \00/\000\001\002\003\004\005\006\007\008\009\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00")
- (data (i32.const 23936) "\80\00\00\00\01\00\00\00\01\00\00\00\80\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00 \00/\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00")
- (data (i32.const 24080) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\df\00")
- (data (i32.const 24104) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00S\00S\00")
- (data (i32.const 24128) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000\01")
- (data (i32.const 24152) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00i\00\07\03")
- (data (i32.const 24176) "\ae\00\00\00\01\00\00\00\01\00\00\00\ae\00\00\00\a3\00\a9\00\b5\00\c0\00\c6\00\d6\00\de\00\df\00\e9\00\f6\00\ff\00\13 \14 \18 \1c \1d \1e   \" & 0 \"!S\01`\01x\01~\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\b1\03\b2\03\b3\03\b4\03\c9\03 \00\10\04\11\04\12\04\13\04\14\040\041\042\043\044\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00\01\fb\fd\ff@$\82  \1f\02\1e\e5\04\84\1eP\02\d0\02N#\d0\051\05\d0\10")
- (data (i32.const 24368) "\b2\00\00\00\01\00\00\00\01\00\00\00\b2\00\00\00\a3\00\a9\00\9c\03\c0\00\c6\00\d6\00\de\00S\00S\00\c9\00\d6\00x\01\13 \14 \18 \1c \1d \1e   \" & 0 \"!R\01`\01x\01}\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\91\03\92\03\93\03\94\03\a9\03 \00\10\04\11\04\12\04\13\04\14\04\10\04\11\04\12\04\13\04\14\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00F\00I\00\fd\ff@$\82 (\1f\02\1e\e4\04\84\1eo,\d0\02N#\d0\051\05\90\1c")
- (data (i32.const 24568) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00s\00s\00")
- (data (i32.const 24592) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\01\fb")
- (data (i32.const 24616) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00f\00i\00")
- (data (i32.const 24640) "\b8\00\00\00\01\00\00\00\01\00\00\00\b8\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
- (data (i32.const 24840) "\0b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\93\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00S\00\00\00\02\00\00\003\00\00\00\02\00\00\00")
+ (data (i32.const 21464) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\000\009\00_\00A\00Z\00 \00a\00z\00.\00!\00\n\00")
+ (data (i32.const 21504) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\000\009\00_\00A\00Z\00 \00A\00Z\00.\00!\00\n\00")
+ (data (i32.const 21544) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\000\009\00_\00A\00Z\00 \00a\00z\00.\00!\00\t\00")
+ (data (i32.const 21584) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\000\009\00_\00a\00z\00 \00a\00z\00.\00!\00\t\00")
+ (data (i32.const 21624) "J\00\00\00\01\00\00\00\01\00\00\00J\00\00\00D\00e\00r\00 \00W\00e\00c\00h\00s\00e\00l\00 \00a\00l\00l\00e\00i\00n\00 \00i\00s\00t\00 \00d\00a\00s\00 \00B\00e\00s\00t\00\e4\00n\00d\00i\00g\00e\00")
+ (data (i32.const 21720) "J\00\00\00\01\00\00\00\01\00\00\00J\00\00\00D\00E\00R\00 \00W\00E\00C\00H\00S\00E\00L\00 \00A\00L\00L\00E\00I\00N\00 \00I\00S\00T\00 \00D\00A\00S\00 \00B\00E\00S\00T\00\c4\00N\00D\00I\00G\00E\00")
+ (data (i32.const 21816) "J\00\00\00\01\00\00\00\01\00\00\00J\00\00\00d\00e\00r\00 \00w\00e\00c\00h\00s\00e\00l\00 \00a\00l\00l\00e\00i\00n\00 \00i\00s\00t\00 \00d\00a\00s\00 \00b\00e\00s\00t\00\e4\00n\00d\00i\00g\00e\00")
+ (data (i32.const 21912) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00@\00 \00\14  \00\14\04@\04C\043\04 \00G\045\04;\04>\042\045\04:\040\04!\00")
+ (data (i32.const 21968) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00@\00 \00\14  \00\14\04 \04#\04\13\04 \00\'\04\15\04\1b\04\1e\04\12\04\15\04\1a\04\10\04!\00")
+ (data (i32.const 22024) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00@\00 \00\14  \004\04@\04C\043\04 \00G\045\04;\04>\042\045\04:\040\04!\00")
+ (data (i32.const 22080) "D\00\00\00\01\00\00\00\01\00\00\00D\00\00\00.\" \00E\00\c5\"d\00a\00 \00=\00 \00Q\00,\00 \00n\00 \00\92! \00\1e\",\00 \00\11\" \00f\00(\00i\00)\00 \00=\00 \00\0f\" \00g\00(\00i\00)\00")
+ (data (i32.const 22168) "D\00\00\00\01\00\00\00\01\00\00\00D\00\00\00.\" \00E\00\c5\"D\00A\00 \00=\00 \00Q\00,\00 \00N\00 \00\92! \00\1e\",\00 \00\11\" \00F\00(\00I\00)\00 \00=\00 \00\0f\" \00G\00(\00I\00)\00")
+ (data (i32.const 22256) "D\00\00\00\01\00\00\00\01\00\00\00D\00\00\00.\" \00e\00\c5\"d\00a\00 \00=\00 \00q\00,\00 \00n\00 \00\92! \00\1e\",\00 \00\11\" \00f\00(\00i\00)\00 \00=\00 \00\0f\" \00g\00(\00i\00)\00")
+ (data (i32.const 22344) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\00\f0\00i\00 \001\01n\00t\00Y\02\c8\02n\00\e6\00\83\02Y\02n\00Y\02l\00 \00f\00Y\02\c8\02n\00[\02t\001\01k\00 \00Y\02s\00o\00\8a\02s\00i\00\c8\02e\001\01\83\02n\00")
+ (data (i32.const 22432) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\00\d0\00I\00 \00I\00N\00T\00\8f\01\c8\02N\00\c6\00\a9\01\8f\01N\00\8f\01L\00 \00F\00\8f\01\c8\02N\00\90\01T\00I\00K\00 \00\8f\01S\00O\00\b1\01S\00I\00\c8\02E\00I\00\a9\01N\00")
+ (data (i32.const 22520) "H\00\00\00\01\00\00\00\01\00\00\00H\00\00\00\f0\00i\00 \00i\00n\00t\00Y\02\c8\02n\00\e6\00\83\02Y\02n\00Y\02l\00 \00f\00Y\02\c8\02n\00[\02t\00i\00k\00 \00Y\02s\00o\00\8a\02s\00i\00\c8\02e\00i\00\83\02n\00")
+ (data (i32.const 22608) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\a3\03r\1f \00\b3\03\bd\03\c9\03\c1\03\af\03\b6\03\c9\03 \00\00\1f\c0\03x\1f \00\c4\03t\1f\bd\03 \00\ba\03\cc\03\c8\03\b7\03")
+ (data (i32.const 22672) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\a3\03\c8\1f \00\93\03\9d\03\a9\03\a1\03\8a\03\96\03\a9\03 \00\08\1f\a0\03\f8\1f \00\a4\03\ca\1f\9d\03 \00\9a\03\8c\03\a8\03\97\03")
+ (data (i32.const 22736) "0\00\00\00\01\00\00\00\01\00\00\000\00\00\00\c4\03\bf\03\e6\1f \00\c3\03\c0\03\b1\03\b8\03\b9\03\bf\03\e6\1f \00\c4\03t\1f\bd\03 \00\c4\03\c1\03\bf\03\bc\03\b5\03\c1\03\ae\03,\00")
+ (data (i32.const 22800) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00\a4\03\9f\03\a5\03B\03 \00\a3\03\a0\03\91\03\98\03\99\03\9f\03\a5\03B\03 \00\a4\03\ca\1f\9d\03 \00\a4\03\a1\03\9f\03\9c\03\95\03\a1\03\89\03,\00")
+ (data (i32.const 22872) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00\c3\03r\1f \00\b3\03\bd\03\c9\03\c1\03\af\03\b6\03\c9\03 \00\00\1f\c0\03x\1f \00\c4\03t\1f\bd\03 \00D\1f\c8\03\b7\03")
+ (data (i32.const 22936) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00\a3\03\c8\1f \00\93\03\9d\03\a9\03\a1\03\8a\03\96\03\a9\03 \00\08\1f\a0\03\f8\1f \00\a4\03\ca\1f\9d\03 \00L\1f\a8\03\97\03")
+ (data (i32.const 23000) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00\c0\03\bf\03z\1f \00\bc\03r\1f \00\b2\03\af\03\b1\03 \00\bc\03\b5\03\c4\03\c1\03\ac\03\b5\03\b9\03 \00\c4\03t\1f \00\b3\03\c6\1f.\00")
+ (data (i32.const 23072) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00\a0\03\9f\03\ea\1f \00\9c\03\c8\1f \00\92\03\8a\03\91\03 \00\9c\03\95\03\a4\03\a1\03\86\03\95\03\99\03 \00\a4\03\ca\1f \00\93\03\97\03B\03.\00")
+ (data (i32.const 23144) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\91\03\c0\03\bf\1f \00\c4\03p\1f \00\ba\03\cc\03\ba\03\ba\03\b1\03\bb\03\b1\03 \00\b2\03\b3\03\b1\03\bb\03\bc\03\ad\03\bd\03\b7\03")
+ (data (i32.const 23208) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00\91\03\a0\03\bf\1f \00\a4\03\ba\1f \00\9a\03\8c\03\9a\03\9a\03\91\03\9b\03\91\03 \00\92\03\93\03\91\03\9b\03\9c\03\88\03\9d\03\97\03")
+ (data (i32.const 23272) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00\c4\03\f6\1f\bd\03 \00\fe\1f\95\03\bb\03\bb\03\ae\03\bd\03\c9\03\bd\03 \00\c4\03p\1f \001\1f\b5\03\c1\03\ac\03")
+ (data (i32.const 23328) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\00\a4\03\a9\03B\03\9d\03 \00\fe\1f\95\03\9b\03\9b\03\89\03\9d\03\a9\03\9d\03 \00\a4\03\ba\1f \009\1f\95\03\a1\03\86\03")
+ (data (i32.const 23392) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00\ba\03\b1\03v\1f \00\c3\03p\1f\bd\03 \00\c0\03\c1\03\f6\1f\c4\03\b1\03 \00\00\1f\bd\03\b4\03\c1\03\b5\03\b9\03\c9\03\bc\03\ad\03\bd\03\b7\03")
+ (data (i32.const 23464) "4\00\00\00\01\00\00\00\01\00\00\004\00\00\00\9a\03\91\03\da\1f \00\a3\03\ba\1f\9d\03 \00\a0\03\a1\03\a9\03B\03\a4\03\91\03 \00\08\1f\9d\03\94\03\a1\03\95\03\99\03\a9\03\9c\03\88\03\9d\03\97\03")
+ (data (i32.const 23536) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00\c7\03\b1\03\d6\1f\c1\03\b5\03,\00 \00f\1f \00\c7\03\b1\03\d6\1f\c1\03\b5\03,\00 \00\bf\1f\95\03\bb\03\b5\03\c5\03\b8\03\b5\03\c1\03\b9\03\ac\03!\00")
+ (data (i32.const 23608) ":\00\00\00\01\00\00\00\01\00\00\00:\00\00\00\a7\03\91\03\99\03B\03\a1\03\95\03,\00 \00n\1f \00\a7\03\91\03\99\03B\03\a1\03\95\03,\00 \00\bf\1f\95\03\9b\03\95\03\a5\03\98\03\95\03\a1\03\99\03\86\03!\00")
+ (data (i32.const 23688) "\80\00\00\00\01\00\00\00\01\00\00\00\80\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00 \00/\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00")
+ (data (i32.const 23832) "\80\00\00\00\01\00\00\00\01\00\00\00\80\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00 \00/\000\001\002\003\004\005\006\007\008\009\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00")
+ (data (i32.const 23976) "\80\00\00\00\01\00\00\00\01\00\00\00\80\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00 \00/\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00")
+ (data (i32.const 24120) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\df\00")
+ (data (i32.const 24144) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00S\00S\00")
+ (data (i32.const 24168) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000\01")
+ (data (i32.const 24192) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00i\00\07\03")
+ (data (i32.const 24216) "\ae\00\00\00\01\00\00\00\01\00\00\00\ae\00\00\00\a3\00\a9\00\b5\00\c0\00\c6\00\d6\00\de\00\df\00\e9\00\f6\00\ff\00\13 \14 \18 \1c \1d \1e   \" & 0 \"!S\01`\01x\01~\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\b1\03\b2\03\b3\03\b4\03\c9\03 \00\10\04\11\04\12\04\13\04\14\040\041\042\043\044\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00\01\fb\fd\ff@$\82  \1f\02\1e\e5\04\84\1eP\02\d0\02N#\d0\051\05\d0\10")
+ (data (i32.const 24408) "\b2\00\00\00\01\00\00\00\01\00\00\00\b2\00\00\00\a3\00\a9\00\9c\03\c0\00\c6\00\d6\00\de\00S\00S\00\c9\00\d6\00x\01\13 \14 \18 \1c \1d \1e   \" & 0 \"!R\01`\01x\01}\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\91\03\92\03\93\03\94\03\a9\03 \00\10\04\11\04\12\04\13\04\14\04\10\04\11\04\12\04\13\04\14\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00F\00I\00\fd\ff@$\82 (\1f\02\1e\e4\04\84\1eo,\d0\02N#\d0\051\05\90\1c")
+ (data (i32.const 24608) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00s\00s\00")
+ (data (i32.const 24632) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\01\fb")
+ (data (i32.const 24656) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00f\00i\00")
+ (data (i32.const 24680) "\b8\00\00\00\01\00\00\00\01\00\00\00\b8\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
+ (data (i32.const 24880) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00\00\d8\00\dc")
+ (data (i32.const 24904) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00L\00o\00w\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00L\00o\00w\00e\00r\00C\00o\00d\00e\00")
+ (data (i32.const 24984) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00")
+ (data (i32.const 25064) "\0b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\93\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00S\00\00\00\02\00\00\003\00\00\00\02\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/string/str (mut i32) (i32.const 24))
@@ -461,12 +469,12 @@
  (global $~lib/util/casemap/rules i32 (i32.const 21000))
  (global $~lib/util/casemap/exceptions i32 (i32.const 21448))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 24840))
- (global $~lib/heap/__heap_base i32 (i32.const 24932))
+ (global $~lib/rt/__rtti_base i32 (i32.const 25064))
+ (global $~lib/heap/__heap_base i32 (i32.const 25156))
  (export "__start" (func $start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
- (func $~lib/string/String#get:length (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -474,7 +482,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String#charCodeAt (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#charCodeAt (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   call $~lib/string/String#get:length
@@ -490,7 +498,7 @@
   i32.add
   i32.load16_u
  )
- (func $~lib/rt/pure/increment (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/increment (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -535,7 +543,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -547,7 +555,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/removeBlock (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -757,7 +765,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 10 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1107,7 +1115,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/freeBlock (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 14 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -1136,7 +1144,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/__typeinfo (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/__typeinfo (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/__rtti_base
   local.set $1
@@ -1161,7 +1169,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/addMemory (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (; 16 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1309,7 +1317,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/initializeRoot (; 14 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/tlsf/initializeRoot (; 17 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1454,7 +1462,7 @@
   local.get $3
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/tlsf/prepareSize (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1483,7 +1491,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 19 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1666,7 +1674,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/pure/markGray (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1693,7 +1701,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 18 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -1710,7 +1718,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 19 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1747,7 +1755,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 23 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1785,7 +1793,7 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__collect (; 21 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/pure/__collect (; 24 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1928,7 +1936,7 @@
   local.get $0
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/tlsf/growMemory (; 22 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (; 25 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2012,7 +2020,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 23 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2107,7 +2115,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 24 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 27 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -2215,7 +2223,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (; 28 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/rt/tlsf/ROOT
@@ -2238,7 +2246,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/util/memory/memcpy (; 26 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 29 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3266,7 +3274,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 27 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 30 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3491,7 +3499,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/__free (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/tlsf/__free (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -3528,7 +3536,7 @@
   i32.sub
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/pure/growRoots (; 29 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/pure/growRoots (; 32 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3586,7 +3594,7 @@
   i32.add
   global.set $~lib/rt/pure/END
  )
- (func $~lib/rt/pure/appendRoot (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/appendRoot (; 33 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   global.get $~lib/rt/pure/CUR
   local.set $1
@@ -3606,7 +3614,7 @@
   i32.add
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/pure/decrement (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 34 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3710,7 +3718,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__release (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 35 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -3721,7 +3729,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/string/String.__not (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.__not (; 36 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3741,7 +3749,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/string/String.fromCharCode (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromCharCode (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -3766,7 +3774,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String.fromCharCode|trampoline (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromCharCode|trampoline (; 38 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -3784,7 +3792,7 @@
   local.get $1
   call $~lib/string/String.fromCharCode
  )
- (func $~lib/util/string/compareImpl (; 36 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 39 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -3904,7 +3912,7 @@
   call $~lib/rt/pure/__release
   local.get $8
  )
- (func $~lib/string/String.__eq (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 40 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3977,7 +3985,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String.fromCodePoint (; 38 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.fromCodePoint (; 41 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4038,7 +4046,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#startsWith (; 39 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#startsWith (; 42 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4113,7 +4121,7 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/string/String#endsWith (; 40 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#endsWith (; 43 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4179,7 +4187,7 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/string/String#indexOf (; 41 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#indexOf (; 44 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4270,7 +4278,7 @@
   call $~lib/rt/pure/__release
   local.get $4
  )
- (func $~lib/string/String#includes (; 42 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#includes (; 45 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
   call $~lib/rt/pure/__retain
@@ -4286,7 +4294,7 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/memory/memory.repeat (; 43 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/memory/memory.repeat (; 46 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   i32.const 0
@@ -4317,7 +4325,7 @@
    unreachable
   end
  )
- (func $~lib/string/String#padStart (; 44 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#padStart (; 47 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4417,7 +4425,7 @@
   call $~lib/rt/pure/__release
   local.get $10
  )
- (func $~lib/string/String#padEnd (; 45 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#padEnd (; 48 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4521,7 +4529,7 @@
   call $~lib/rt/pure/__release
   local.get $10
  )
- (func $~lib/string/String#lastIndexOf (; 46 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#lastIndexOf (; 49 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4611,7 +4619,7 @@
   call $~lib/rt/pure/__release
   local.get $4
  )
- (func $~lib/util/string/isSpace (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/string/isSpace (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 255
@@ -4700,7 +4708,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String#trimStart (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#trimStart (; 51 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4766,7 +4774,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#trimEnd (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#trimEnd (; 52 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4827,7 +4835,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#trim (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#trim (; 53 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4929,7 +4937,7 @@
   local.get $4
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/string/strtol<f64> (; 51 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/util/string/strtol<f64> (; 54 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 f64)
   (local $4 i32)
@@ -5220,7 +5228,7 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/string/parseInt (; 52 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/string/parseInt (; 55 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
   (local $2 f64)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -5233,7 +5241,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/util/string/strtol<i32> (; 53 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/strtol<i32> (; 56 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5521,7 +5529,7 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/number/I32.parseInt (; 54 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/number/I32.parseInt (; 57 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -5534,7 +5542,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/util/string/strtol<i64> (; 55 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/util/string/strtol<i64> (; 58 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i32)
   (local $3 i64)
   (local $4 i32)
@@ -5825,7 +5833,7 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/number/I64.parseInt (; 56 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/number/I64.parseInt (; 59 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -5838,7 +5846,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/util/string/pow10 (; 57 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/util/string/pow10 (; 60 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 i32)
   i32.const 1792
@@ -5865,7 +5873,7 @@
   f64.load
   f64.mul
  )
- (func $~lib/math/ipow32 (; 58 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/math/ipow32 (; 61 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6063,7 +6071,7 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMath.scalbn (; 59 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 62 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -6154,7 +6162,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/util/string/strtod (; 60 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/util/string/strtod (; 63 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
@@ -7106,7 +7114,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/parseFloat (; 61 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/string/parseFloat (; 64 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   (local $1 f64)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -7118,7 +7126,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/string/String#concat (; 62 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 65 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7194,7 +7202,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String.__concat (; 63 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 66 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -7217,7 +7225,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String.__ne (; 64 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__ne (; 67 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -7236,7 +7244,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String.__gt (; 65 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gt (; 68 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7326,7 +7334,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String.__lt (; 66 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lt (; 69 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7416,7 +7424,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String.__gte (; 67 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__gte (; 70 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -7435,7 +7443,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String.__lte (; 68 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__lte (; 71 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -7454,7 +7462,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/string/String#repeat (; 69 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#repeat (; 72 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -7522,7 +7530,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#replace (; 70 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#replace (; 73 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -7656,7 +7664,7 @@
   call $~lib/rt/pure/__release
   local.get $5
  )
- (func $~lib/rt/tlsf/reallocateBlock (; 71 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/reallocateBlock (; 74 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -7794,7 +7802,7 @@
   call $~lib/rt/rtrace/onfree
   local.get $8
  )
- (func $~lib/rt/tlsf/__realloc (; 72 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__realloc (; 75 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -7834,7 +7842,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/string/String#replaceAll (; 73 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#replaceAll (; 76 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8207,7 +8215,7 @@
   call $~lib/rt/pure/__release
   local.get $6
  )
- (func $~lib/string/String#slice (; 74 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#slice (; 77 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8296,7 +8304,7 @@
   local.get $6
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/__allocArray (; 75 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/rt/__allocArray (; 78 ;) (type $FUNCSIG$iiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -8334,7 +8342,7 @@
   end
   local.get $4
  )
- (func $~lib/memory/memory.fill (; 76 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (; 79 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8598,7 +8606,7 @@
    end
   end
  )
- (func $~lib/array/ensureSize (; 77 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureSize (; 80 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8661,7 +8669,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<~lib/string/String>#push (; 78 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#push (; 81 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8697,7 +8705,7 @@
   call $~lib/rt/pure/__release
   local.get $4
  )
- (func $~lib/string/String#split (; 79 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#split (; 82 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9004,11 +9012,11 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/array/Array<~lib/string/String>#get:length (; 80 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#get:length (; 83 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<~lib/string/String>#__unchecked_get (; 81 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__unchecked_get (; 84 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -9018,7 +9026,7 @@
   i32.load
   call $~lib/rt/pure/__retain
  )
- (func $~lib/array/Array<~lib/string/String>#__get (; 82 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__get (; 85 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -9050,7 +9058,7 @@
   end
   local.get $2
  )
- (func $~lib/util/number/decimalCount32 (; 83 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 86 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -9116,7 +9124,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/utoa32_lut (; 84 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (; 87 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9258,7 +9266,7 @@
    i32.store16
   end
  )
- (func $~lib/util/number/itoa32 (; 85 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 88 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9313,7 +9321,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/utoa32 (; 86 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (; 89 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9348,7 +9356,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/decimalCount64 (; 87 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64 (; 90 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   local.get $0
   i64.const 1000000000000000
@@ -9421,7 +9429,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/utoa64_lut (; 88 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/util/number/utoa64_lut (; 91 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -9548,7 +9556,7 @@
   local.get $2
   call $~lib/util/number/utoa32_lut
  )
- (func $~lib/util/number/utoa64 (; 89 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/utoa64 (; 92 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9615,7 +9623,7 @@
   local.get $1
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/itoa64 (; 90 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/number/itoa64 (; 93 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9704,7 +9712,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/array/Array<u64>#__unchecked_get (; 91 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<u64>#__unchecked_get (; 94 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -9713,7 +9721,7 @@
   i32.add
   i64.load
  )
- (func $~lib/array/Array<i16>#__unchecked_get (; 92 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i16>#__unchecked_get (; 95 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -9722,7 +9730,7 @@
   i32.add
   i32.load16_s
  )
- (func $~lib/util/number/genDigits (; 93 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (; 96 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -10224,7 +10232,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/prettify (; 94 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 97 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -10543,7 +10551,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/dtoa_core (; 95 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (; 98 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10965,7 +10973,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/string/String#substring (; 96 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (; 99 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11072,7 +11080,7 @@
   local.get $10
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/dtoa (; 97 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (; 100 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11135,11 +11143,11 @@
   call $~lib/rt/tlsf/__free
   local.get $3
  )
- (func $~lib/array/Array<u16>#get:length (; 98 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u16>#get:length (; 101 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/util/casemap/casemap (; 99 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/casemap/casemap (; 102 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11358,7 +11366,7 @@
   end
   local.get $2
  )
- (func $~lib/string/String#toUpperCase (; 100 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toUpperCase (; 103 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11701,7 +11709,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#toLowerCase (; 101 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toLowerCase (; 104 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11950,7 +11958,84 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $start:std/string (; 102 ;) (type $FUNCSIG$v)
+ (func $~lib/string/String#codePointAt (; 105 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $1
+  local.get $0
+  call $~lib/string/String#get:length
+  i32.ge_u
+  if
+   i32.const -1
+   return
+  end
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u
+  local.set $2
+  local.get $2
+  i32.const 55296
+  i32.lt_s
+  if (result i32)
+   i32.const 1
+  else
+   local.get $2
+   i32.const 56319
+   i32.gt_s
+  end
+  if (result i32)
+   i32.const 1
+  else
+   local.get $1
+   i32.const 1
+   i32.add
+   local.get $0
+   call $~lib/string/String#get:length
+   i32.eq
+  end
+  if
+   local.get $2
+   return
+  end
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.add
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u
+  local.set $3
+  local.get $3
+  i32.const 56320
+  i32.lt_s
+  if (result i32)
+   i32.const 1
+  else
+   local.get $3
+   i32.const 57343
+   i32.gt_s
+  end
+  if
+   local.get $2
+   return
+  end
+  local.get $2
+  i32.const 55296
+  i32.sub
+  i32.const 10
+  i32.shl
+  local.get $3
+  i32.const 56320
+  i32.sub
+  i32.add
+  i32.const 65536
+  i32.add
+ )
+ (func $start:std/string (; 106 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -12174,6 +12259,20 @@
   (local $220 i32)
   (local $221 i32)
   (local $222 i32)
+  (local $223 i32)
+  (local $224 i32)
+  (local $225 i32)
+  (local $226 i32)
+  (local $227 i32)
+  (local $228 i32)
+  (local $229 i32)
+  (local $230 i32)
+  (local $231 i64)
+  (local $232 i64)
+  (local $233 i64)
+  (local $234 i64)
+  (local $235 i64)
+  (local $236 i64)
   global.get $std/string/str
   i32.const 24
   i32.eq
@@ -12181,7 +12280,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 8
+   i32.const 14
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12194,7 +12293,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 10
+   i32.const 16
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12208,7 +12307,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 11
+   i32.const 17
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12222,7 +12321,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 13
+   i32.const 19
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12236,7 +12335,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 14
+   i32.const 20
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12250,7 +12349,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 15
+   i32.const 21
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12267,7 +12366,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 17
+   i32.const 23
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12284,7 +12383,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 18
+   i32.const 24
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12301,7 +12400,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 19
+   i32.const 25
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12316,7 +12415,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 20
+   i32.const 26
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12330,7 +12429,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 22
+   i32.const 28
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12344,7 +12443,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 23
+   i32.const 29
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12358,7 +12457,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 24
+   i32.const 30
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12371,7 +12470,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 26
+   i32.const 32
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12384,7 +12483,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 27
+   i32.const 33
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12397,7 +12496,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 28
+   i32.const 34
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12413,7 +12512,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 30
+   i32.const 36
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12429,7 +12528,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 31
+   i32.const 37
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12445,7 +12544,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 32
+   i32.const 38
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12461,7 +12560,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 33
+   i32.const 39
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12477,7 +12576,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 34
+   i32.const 40
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12493,7 +12592,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 35
+   i32.const 41
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12509,7 +12608,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 36
+   i32.const 42
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12525,7 +12624,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 37
+   i32.const 43
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12541,7 +12640,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 39
+   i32.const 45
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12557,7 +12656,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 40
+   i32.const 46
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12573,7 +12672,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 41
+   i32.const 47
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12589,7 +12688,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 42
+   i32.const 48
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12605,7 +12704,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 43
+   i32.const 49
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12621,7 +12720,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 44
+   i32.const 50
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12637,7 +12736,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 45
+   i32.const 51
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12653,7 +12752,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 46
+   i32.const 52
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12668,7 +12767,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 48
+   i32.const 54
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12683,7 +12782,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 49
+   i32.const 55
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12698,7 +12797,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 50
+   i32.const 56
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12713,7 +12812,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 51
+   i32.const 57
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12728,7 +12827,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 52
+   i32.const 58
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12743,7 +12842,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 53
+   i32.const 59
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12758,7 +12857,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 54
+   i32.const 60
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12773,7 +12872,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 55
+   i32.const 61
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12788,7 +12887,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 56
+   i32.const 62
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12803,7 +12902,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 57
+   i32.const 63
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12818,7 +12917,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 59
+   i32.const 65
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12833,7 +12932,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 60
+   i32.const 66
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12849,7 +12948,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 61
+   i32.const 67
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12864,7 +12963,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 62
+   i32.const 68
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12879,7 +12978,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 63
+   i32.const 69
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12894,7 +12993,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 64
+   i32.const 70
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12909,7 +13008,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 65
+   i32.const 71
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12924,7 +13023,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 66
+   i32.const 72
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12939,7 +13038,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 67
+   i32.const 73
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12954,7 +13053,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 68
+   i32.const 74
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12969,7 +13068,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 69
+   i32.const 75
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12983,7 +13082,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 71
+   i32.const 77
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -12997,7 +13096,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 72
+   i32.const 78
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13011,7 +13110,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 73
+   i32.const 79
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13025,7 +13124,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 75
+   i32.const 81
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13039,7 +13138,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 76
+   i32.const 82
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13053,7 +13152,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 77
+   i32.const 83
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13067,7 +13166,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 79
+   i32.const 85
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13081,7 +13180,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 80
+   i32.const 86
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13095,7 +13194,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 81
+   i32.const 87
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13109,7 +13208,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 83
+   i32.const 89
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13123,7 +13222,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 84
+   i32.const 90
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13137,7 +13236,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 85
+   i32.const 91
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13151,7 +13250,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 86
+   i32.const 92
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13165,7 +13264,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 87
+   i32.const 93
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13179,7 +13278,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 88
+   i32.const 94
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13193,7 +13292,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 89
+   i32.const 95
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13207,7 +13306,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 90
+   i32.const 96
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13221,7 +13320,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 91
+   i32.const 97
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13235,7 +13334,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 92
+   i32.const 98
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13249,7 +13348,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 93
+   i32.const 99
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13263,7 +13362,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 94
+   i32.const 100
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13277,7 +13376,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 95
+   i32.const 101
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13291,7 +13390,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 97
+   i32.const 103
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13305,7 +13404,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 98
+   i32.const 104
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13319,7 +13418,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 100
+   i32.const 106
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13333,7 +13432,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 101
+   i32.const 107
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13346,7 +13445,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 104
+   i32.const 110
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13359,7 +13458,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 105
+   i32.const 111
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13372,7 +13471,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 106
+   i32.const 112
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13385,7 +13484,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 107
+   i32.const 113
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13398,7 +13497,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 108
+   i32.const 114
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13411,7 +13510,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 109
+   i32.const 115
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13424,7 +13523,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 110
+   i32.const 116
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13437,7 +13536,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 111
+   i32.const 117
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13450,7 +13549,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 112
+   i32.const 118
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13463,7 +13562,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 113
+   i32.const 119
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13476,7 +13575,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 114
+   i32.const 120
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13489,7 +13588,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 115
+   i32.const 121
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13502,7 +13601,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 116
+   i32.const 122
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13515,7 +13614,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 117
+   i32.const 123
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13528,7 +13627,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 118
+   i32.const 124
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13541,7 +13640,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 119
+   i32.const 125
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13554,7 +13653,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 120
+   i32.const 126
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13567,7 +13666,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 121
+   i32.const 127
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13581,7 +13680,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 122
+   i32.const 128
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13594,7 +13693,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 125
+   i32.const 131
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13607,7 +13706,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 126
+   i32.const 132
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13620,7 +13719,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 127
+   i32.const 133
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13633,7 +13732,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 128
+   i32.const 134
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13646,7 +13745,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 129
+   i32.const 135
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13659,7 +13758,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 130
+   i32.const 136
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13672,7 +13771,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 131
+   i32.const 137
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13685,7 +13784,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 132
+   i32.const 138
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13698,7 +13797,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 134
+   i32.const 140
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13711,7 +13810,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 135
+   i32.const 141
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13724,7 +13823,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 138
+   i32.const 144
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13737,7 +13836,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 139
+   i32.const 145
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13750,7 +13849,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 140
+   i32.const 146
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13763,7 +13862,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 141
+   i32.const 147
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13776,7 +13875,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 142
+   i32.const 148
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13789,7 +13888,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 143
+   i32.const 149
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13802,7 +13901,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 144
+   i32.const 150
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13815,7 +13914,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 145
+   i32.const 151
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13828,7 +13927,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 146
+   i32.const 152
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13841,7 +13940,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 147
+   i32.const 153
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13854,7 +13953,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 148
+   i32.const 154
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13867,7 +13966,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 149
+   i32.const 155
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13880,7 +13979,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 150
+   i32.const 156
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13893,7 +13992,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 151
+   i32.const 157
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13906,7 +14005,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 152
+   i32.const 158
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13919,7 +14018,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 153
+   i32.const 159
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13932,7 +14031,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 154
+   i32.const 160
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13945,7 +14044,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 155
+   i32.const 161
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13958,7 +14057,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 156
+   i32.const 162
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13971,7 +14070,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 157
+   i32.const 163
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13984,7 +14083,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 158
+   i32.const 164
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -13997,7 +14096,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 159
+   i32.const 165
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14010,7 +14109,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 160
+   i32.const 166
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14023,7 +14122,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 161
+   i32.const 167
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14036,7 +14135,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 162
+   i32.const 168
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14049,7 +14148,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 163
+   i32.const 169
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14062,7 +14161,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 164
+   i32.const 170
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14075,7 +14174,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 165
+   i32.const 171
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14088,7 +14187,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 166
+   i32.const 172
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14101,7 +14200,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 167
+   i32.const 173
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14114,7 +14213,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 168
+   i32.const 174
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14127,7 +14226,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 169
+   i32.const 175
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14140,7 +14239,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 170
+   i32.const 176
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14153,7 +14252,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 171
+   i32.const 177
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14166,7 +14265,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 172
+   i32.const 178
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14179,7 +14278,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 173
+   i32.const 179
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14192,7 +14291,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 174
+   i32.const 180
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14205,7 +14304,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 175
+   i32.const 181
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14218,7 +14317,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 176
+   i32.const 182
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14231,7 +14330,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 177
+   i32.const 183
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14244,7 +14343,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 178
+   i32.const 184
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14257,7 +14356,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 179
+   i32.const 185
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14270,7 +14369,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 180
+   i32.const 186
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14284,7 +14383,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 181
+   i32.const 187
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14298,7 +14397,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 182
+   i32.const 188
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14312,7 +14411,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 183
+   i32.const 189
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14326,7 +14425,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 184
+   i32.const 190
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14340,7 +14439,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 185
+   i32.const 191
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14354,7 +14453,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 186
+   i32.const 192
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14368,7 +14467,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 187
+   i32.const 193
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14382,7 +14481,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 188
+   i32.const 194
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14396,7 +14495,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 189
+   i32.const 195
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14410,7 +14509,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 190
+   i32.const 196
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14424,7 +14523,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 191
+   i32.const 197
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14438,7 +14537,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 192
+   i32.const 198
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14452,7 +14551,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 193
+   i32.const 199
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14466,7 +14565,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 194
+   i32.const 200
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14480,7 +14579,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 195
+   i32.const 201
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14494,7 +14593,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 196
+   i32.const 202
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14507,7 +14606,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 197
+   i32.const 203
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14520,7 +14619,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 198
+   i32.const 204
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14533,7 +14632,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 199
+   i32.const 205
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14546,7 +14645,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 200
+   i32.const 206
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14559,7 +14658,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 201
+   i32.const 207
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14572,7 +14671,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 202
+   i32.const 208
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14585,7 +14684,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 203
+   i32.const 209
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14598,7 +14697,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 204
+   i32.const 210
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14611,7 +14710,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 205
+   i32.const 211
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14624,7 +14723,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 206
+   i32.const 212
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14637,7 +14736,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 207
+   i32.const 213
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14650,7 +14749,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 208
+   i32.const 214
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14663,7 +14762,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 209
+   i32.const 215
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14676,7 +14775,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 210
+   i32.const 216
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14689,7 +14788,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 211
+   i32.const 217
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14702,7 +14801,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 212
+   i32.const 218
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14715,7 +14814,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 213
+   i32.const 219
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14729,7 +14828,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 214
+   i32.const 220
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14743,7 +14842,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 215
+   i32.const 221
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14757,7 +14856,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 216
+   i32.const 222
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14770,7 +14869,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 220
+   i32.const 226
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14783,7 +14882,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 233
+   i32.const 239
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14796,7 +14895,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 237
+   i32.const 243
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14821,7 +14920,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 240
+   i32.const 246
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14834,7 +14933,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 258
+   i32.const 264
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14847,7 +14946,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 259
+   i32.const 265
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14860,7 +14959,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 260
+   i32.const 266
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14873,7 +14972,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 261
+   i32.const 267
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14886,7 +14985,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 262
+   i32.const 268
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14899,7 +14998,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 263
+   i32.const 269
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14912,7 +15011,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 264
+   i32.const 270
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14925,7 +15024,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 265
+   i32.const 271
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14938,7 +15037,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 266
+   i32.const 272
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14951,7 +15050,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 267
+   i32.const 273
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14964,7 +15063,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 268
+   i32.const 274
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14977,7 +15076,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 269
+   i32.const 275
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -14990,7 +15089,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 270
+   i32.const 276
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15003,7 +15102,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 271
+   i32.const 277
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15016,7 +15115,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 272
+   i32.const 278
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15029,7 +15128,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 273
+   i32.const 279
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15042,7 +15141,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 274
+   i32.const 280
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15055,7 +15154,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 275
+   i32.const 281
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15068,7 +15167,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 276
+   i32.const 282
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15081,7 +15180,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 277
+   i32.const 283
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15094,7 +15193,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 278
+   i32.const 284
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15107,7 +15206,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 279
+   i32.const 285
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15120,7 +15219,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 280
+   i32.const 286
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15133,7 +15232,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 281
+   i32.const 287
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15147,7 +15246,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 284
+   i32.const 290
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15160,7 +15259,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 285
+   i32.const 291
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15178,7 +15277,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 289
+   i32.const 295
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15190,7 +15289,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 290
+   i32.const 296
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15206,7 +15305,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 292
+   i32.const 298
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15218,7 +15317,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 293
+   i32.const 299
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15230,7 +15329,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 294
+   i32.const 300
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15242,7 +15341,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 295
+   i32.const 301
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15254,7 +15353,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 296
+   i32.const 302
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15266,7 +15365,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 297
+   i32.const 303
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15278,7 +15377,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 298
+   i32.const 304
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15290,7 +15389,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 299
+   i32.const 305
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15302,7 +15401,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 300
+   i32.const 306
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15314,7 +15413,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 301
+   i32.const 307
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15326,7 +15425,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 302
+   i32.const 308
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15338,7 +15437,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 303
+   i32.const 309
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15350,7 +15449,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 305
+   i32.const 311
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15362,7 +15461,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 306
+   i32.const 312
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15374,64 +15473,13 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 307
+   i32.const 313
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 9720
   i32.const 9392
-  call $~lib/string/String.__gt
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 308
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 9720
-  i32.const 9392
-  call $~lib/string/String.__lt
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 309
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 9368
-  global.get $std/string/nullStr
-  call $~lib/string/String.__lt
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 311
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $std/string/nullStr
-  i32.const 9368
-  call $~lib/string/String.__lt
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 312
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 704
-  i32.const 120
   call $~lib/string/String.__gt
   i32.eqz
   if
@@ -15442,9 +15490,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 120
-  i32.const 704
+  i32.const 9720
+  i32.const 9392
   call $~lib/string/String.__lt
+  i32.eqz
   i32.eqz
   if
    i32.const 0
@@ -15454,21 +15503,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 704
-  i32.const 120
-  call $~lib/string/String.__gte
+  i32.const 9368
+  global.get $std/string/nullStr
+  call $~lib/string/String.__lt
   i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 316
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 120
-  i32.const 704
-  call $~lib/string/String.__lte
   i32.eqz
   if
    i32.const 0
@@ -15478,8 +15516,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 704
-  i32.const 120
+  global.get $std/string/nullStr
+  i32.const 9368
   call $~lib/string/String.__lt
   i32.eqz
   i32.eqz
@@ -15491,23 +15529,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 120
   i32.const 704
+  i32.const 120
   call $~lib/string/String.__gt
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 319
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 120
-  i32.const 120
-  call $~lib/string/String.__lt
-  i32.eqz
   i32.eqz
   if
    i32.const 0
@@ -15518,9 +15542,8 @@
    unreachable
   end
   i32.const 120
-  i32.const 120
-  call $~lib/string/String.__gt
-  i32.eqz
+  i32.const 704
+  call $~lib/string/String.__lt
   i32.eqz
   if
    i32.const 0
@@ -15530,7 +15553,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 120
+  i32.const 704
   i32.const 120
   call $~lib/string/String.__gte
   i32.eqz
@@ -15543,13 +15566,89 @@
    unreachable
   end
   i32.const 120
-  i32.const 120
+  i32.const 704
   call $~lib/string/String.__lte
   i32.eqz
   if
    i32.const 0
    i32.const 72
    i32.const 323
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 704
+  i32.const 120
+  call $~lib/string/String.__lt
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 324
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 120
+  i32.const 704
+  call $~lib/string/String.__gt
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 325
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 120
+  i32.const 120
+  call $~lib/string/String.__lt
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 326
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 120
+  i32.const 120
+  call $~lib/string/String.__gt
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 327
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 120
+  i32.const 120
+  call $~lib/string/String.__gte
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 328
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 120
+  i32.const 120
+  call $~lib/string/String.__lte
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 329
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15574,7 +15673,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 328
+   i32.const 334
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -15597,7 +15696,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 331
+   i32.const 337
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15612,7 +15711,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 333
+   i32.const 339
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15627,7 +15726,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 334
+   i32.const 340
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15642,7 +15741,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 335
+   i32.const 341
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15657,7 +15756,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 336
+   i32.const 342
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15672,7 +15771,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 337
+   i32.const 343
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15687,7 +15786,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 338
+   i32.const 344
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15702,7 +15801,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 339
+   i32.const 345
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15717,7 +15816,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 340
+   i32.const 346
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15732,7 +15831,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 341
+   i32.const 347
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15748,7 +15847,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 343
+   i32.const 349
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15764,7 +15863,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 344
+   i32.const 350
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15780,7 +15879,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 345
+   i32.const 351
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15796,7 +15895,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 346
+   i32.const 352
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15812,7 +15911,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 347
+   i32.const 353
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15828,7 +15927,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 348
+   i32.const 354
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15844,7 +15943,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 349
+   i32.const 355
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15860,7 +15959,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 350
+   i32.const 356
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15876,7 +15975,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 351
+   i32.const 357
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15892,7 +15991,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 352
+   i32.const 358
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15908,7 +16007,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 353
+   i32.const 359
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15924,7 +16023,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 354
+   i32.const 360
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15940,7 +16039,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 355
+   i32.const 361
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15956,7 +16055,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 357
+   i32.const 363
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15972,7 +16071,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 358
+   i32.const 364
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15988,7 +16087,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 360
+   i32.const 366
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16004,7 +16103,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 361
+   i32.const 367
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16020,7 +16119,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 362
+   i32.const 368
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16036,7 +16135,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 363
+   i32.const 369
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16052,7 +16151,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 364
+   i32.const 370
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16068,7 +16167,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 365
+   i32.const 371
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16084,7 +16183,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 366
+   i32.const 372
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16100,7 +16199,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 367
+   i32.const 373
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16116,7 +16215,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 368
+   i32.const 374
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16132,7 +16231,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 369
+   i32.const 375
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16148,7 +16247,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 370
+   i32.const 376
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16164,7 +16263,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 372
+   i32.const 378
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16180,7 +16279,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 373
+   i32.const 379
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16196,7 +16295,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 374
+   i32.const 380
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16212,7 +16311,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 375
+   i32.const 381
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16228,7 +16327,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 376
+   i32.const 382
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16244,7 +16343,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 377
+   i32.const 383
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16260,7 +16359,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 378
+   i32.const 384
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16276,7 +16375,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 379
+   i32.const 385
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16306,7 +16405,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 383
+   i32.const 389
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16322,7 +16421,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 384
+   i32.const 390
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16338,7 +16437,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 385
+   i32.const 391
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16354,7 +16453,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 386
+   i32.const 392
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16370,7 +16469,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 387
+   i32.const 393
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16386,7 +16485,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 388
+   i32.const 394
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16402,7 +16501,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 389
+   i32.const 395
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16442,7 +16541,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 395
+   i32.const 401
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16464,7 +16563,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 397
+   i32.const 403
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16502,7 +16601,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 399
+   i32.const 405
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16540,7 +16639,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 401
+   i32.const 407
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16610,7 +16709,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 403
+   i32.const 409
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16680,7 +16779,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 405
+   i32.const 411
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16766,7 +16865,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 407
+   i32.const 413
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16852,7 +16951,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 409
+   i32.const 415
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -16938,7 +17037,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 411
+   i32.const 417
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17008,7 +17107,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 413
+   i32.const 419
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17030,7 +17129,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 415
+   i32.const 421
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17068,7 +17167,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 417
+   i32.const 423
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17106,7 +17205,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 419
+   i32.const 425
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17176,7 +17275,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 421
+   i32.const 427
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17246,7 +17345,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 423
+   i32.const 429
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17316,7 +17415,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 425
+   i32.const 431
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -17332,7 +17431,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 428
+   i32.const 434
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17346,7 +17445,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 429
+   i32.const 435
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17360,7 +17459,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 430
+   i32.const 436
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17374,7 +17473,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 431
+   i32.const 437
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17388,7 +17487,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 432
+   i32.const 438
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17402,7 +17501,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 433
+   i32.const 439
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17416,7 +17515,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 434
+   i32.const 440
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17430,7 +17529,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 435
+   i32.const 441
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17444,7 +17543,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 436
+   i32.const 442
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17458,7 +17557,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 437
+   i32.const 443
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17472,7 +17571,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 438
+   i32.const 444
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17486,7 +17585,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 439
+   i32.const 445
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17500,7 +17599,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 440
+   i32.const 446
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17514,7 +17613,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 441
+   i32.const 447
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17528,7 +17627,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 442
+   i32.const 448
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17542,7 +17641,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 443
+   i32.const 449
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17556,7 +17655,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 444
+   i32.const 450
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17570,7 +17669,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 446
+   i32.const 452
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17584,7 +17683,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 447
+   i32.const 453
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17598,7 +17697,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 448
+   i32.const 454
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17612,7 +17711,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 449
+   i32.const 455
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17626,7 +17725,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 450
+   i32.const 456
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17640,7 +17739,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 452
+   i32.const 458
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17654,7 +17753,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 453
+   i32.const 459
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17668,7 +17767,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 454
+   i32.const 460
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17682,7 +17781,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 455
+   i32.const 461
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17696,7 +17795,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 456
+   i32.const 462
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17710,7 +17809,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 457
+   i32.const 463
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17724,7 +17823,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 458
+   i32.const 464
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17738,7 +17837,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 459
+   i32.const 465
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17752,7 +17851,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 460
+   i32.const 466
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17766,7 +17865,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 461
+   i32.const 467
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17780,7 +17879,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 462
+   i32.const 468
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17794,7 +17893,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 463
+   i32.const 469
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17808,7 +17907,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 464
+   i32.const 470
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17822,7 +17921,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 465
+   i32.const 471
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17836,7 +17935,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 466
+   i32.const 472
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17850,7 +17949,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 467
+   i32.const 473
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17864,7 +17963,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 468
+   i32.const 474
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17878,7 +17977,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 469
+   i32.const 475
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17892,7 +17991,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 470
+   i32.const 476
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17906,7 +18005,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 471
+   i32.const 477
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17920,7 +18019,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 472
+   i32.const 478
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17934,7 +18033,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 474
+   i32.const 480
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17948,7 +18047,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 475
+   i32.const 481
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17962,7 +18061,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 476
+   i32.const 482
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17976,7 +18075,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 477
+   i32.const 483
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -17990,7 +18089,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 478
+   i32.const 484
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18004,7 +18103,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 479
+   i32.const 485
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18018,7 +18117,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 480
+   i32.const 486
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18032,7 +18131,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 481
+   i32.const 487
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18046,7 +18145,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 482
+   i32.const 488
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18060,7 +18159,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 483
+   i32.const 489
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18074,7 +18173,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 484
+   i32.const 490
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18088,7 +18187,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 485
+   i32.const 491
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18102,7 +18201,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 488
+   i32.const 494
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18116,7 +18215,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 489
+   i32.const 495
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18130,7 +18229,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 490
+   i32.const 496
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18144,7 +18243,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 491
+   i32.const 497
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18158,7 +18257,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 492
+   i32.const 498
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18172,7 +18271,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 493
+   i32.const 499
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18186,7 +18285,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 494
+   i32.const 500
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18200,7 +18299,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 495
+   i32.const 501
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18214,7 +18313,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 496
+   i32.const 502
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18228,7 +18327,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 497
+   i32.const 503
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18242,7 +18341,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 498
+   i32.const 504
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18256,7 +18355,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 501
+   i32.const 507
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18270,7 +18369,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 502
+   i32.const 508
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18284,7 +18383,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 503
+   i32.const 509
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18298,7 +18397,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 504
+   i32.const 510
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18312,7 +18411,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 505
+   i32.const 511
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18326,7 +18425,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 511
+   i32.const 517
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18340,7 +18439,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 512
+   i32.const 518
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18354,7 +18453,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 513
+   i32.const 519
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18368,7 +18467,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 514
+   i32.const 520
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18382,7 +18481,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 516
+   i32.const 522
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18396,7 +18495,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 517
+   i32.const 523
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18410,7 +18509,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 518
+   i32.const 524
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18424,7 +18523,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 519
+   i32.const 525
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18438,7 +18537,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 520
+   i32.const 526
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18452,7 +18551,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 521
+   i32.const 527
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18466,7 +18565,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 523
+   i32.const 529
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18480,7 +18579,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 524
+   i32.const 530
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18494,7 +18593,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 525
+   i32.const 531
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18508,7 +18607,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 526
+   i32.const 532
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18522,7 +18621,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 527
+   i32.const 533
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18536,7 +18635,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 528
+   i32.const 534
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18550,7 +18649,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 529
+   i32.const 535
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18564,7 +18663,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 530
+   i32.const 536
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18578,7 +18677,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 531
+   i32.const 537
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18592,7 +18691,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 533
+   i32.const 539
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18606,7 +18705,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 534
+   i32.const 540
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18620,7 +18719,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 536
+   i32.const 542
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18634,7 +18733,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 537
+   i32.const 543
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18648,7 +18747,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 538
+   i32.const 544
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18662,7 +18761,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 539
+   i32.const 545
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18676,7 +18775,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 541
+   i32.const 547
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18690,7 +18789,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 542
+   i32.const 548
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18704,7 +18803,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 543
+   i32.const 549
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18718,7 +18817,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 544
+   i32.const 550
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18732,7 +18831,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 545
+   i32.const 551
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18746,7 +18845,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 546
+   i32.const 552
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18760,7 +18859,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 547
+   i32.const 553
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18774,7 +18873,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 548
+   i32.const 554
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18788,7 +18887,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 549
+   i32.const 555
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18802,7 +18901,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 554
+   i32.const 561
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18816,7 +18915,7 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 555
+   i32.const 562
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -18830,113 +18929,15 @@
   if
    i32.const 0
    i32.const 72
-   i32.const 556
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 21480
-  call $~lib/string/String#toLowerCase
-  local.tee $195
-  i32.const 21560
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 557
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 21600
-  call $~lib/string/String#toUpperCase
-  local.tee $196
-  i32.const 21696
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 558
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 21696
-  call $~lib/string/String#toLowerCase
-  local.tee $197
-  i32.const 21792
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 559
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 21888
-  call $~lib/string/String#toUpperCase
-  local.tee $198
-  i32.const 21944
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 560
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 21944
-  call $~lib/string/String#toLowerCase
-  local.tee $199
-  i32.const 22000
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 561
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 22056
-  call $~lib/string/String#toUpperCase
-  local.tee $200
-  i32.const 22144
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 562
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 22144
-  call $~lib/string/String#toLowerCase
-  local.tee $201
-  i32.const 22232
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
    i32.const 563
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 22320
-  call $~lib/string/String#toUpperCase
-  local.tee $202
-  i32.const 22408
+  i32.const 21560
+  call $~lib/string/String#toLowerCase
+  local.tee $195
+  i32.const 21600
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -18947,10 +18948,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 22408
-  call $~lib/string/String#toLowerCase
-  local.tee $203
-  i32.const 22496
+  i32.const 21640
+  call $~lib/string/String#toUpperCase
+  local.tee $196
+  i32.const 21736
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -18961,10 +18962,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 22584
-  call $~lib/string/String#toUpperCase
-  local.tee $204
-  i32.const 22648
+  i32.const 21736
+  call $~lib/string/String#toLowerCase
+  local.tee $197
+  i32.const 21832
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -18975,10 +18976,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 22712
+  i32.const 21928
   call $~lib/string/String#toUpperCase
-  local.tee $205
-  i32.const 22776
+  local.tee $198
+  i32.const 21984
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -18989,10 +18990,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 22848
-  call $~lib/string/String#toUpperCase
-  local.tee $206
-  i32.const 22912
+  i32.const 21984
+  call $~lib/string/String#toLowerCase
+  local.tee $199
+  i32.const 22040
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19003,10 +19004,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 22976
+  i32.const 22096
   call $~lib/string/String#toUpperCase
-  local.tee $207
-  i32.const 23048
+  local.tee $200
+  i32.const 22184
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19017,10 +19018,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 23120
-  call $~lib/string/String#toUpperCase
-  local.tee $208
-  i32.const 23184
+  i32.const 22184
+  call $~lib/string/String#toLowerCase
+  local.tee $201
+  i32.const 22272
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19031,10 +19032,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 23248
+  i32.const 22360
   call $~lib/string/String#toUpperCase
-  local.tee $209
-  i32.const 23304
+  local.tee $202
+  i32.const 22448
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19045,10 +19046,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 23368
-  call $~lib/string/String#toUpperCase
-  local.tee $210
-  i32.const 23440
+  i32.const 22448
+  call $~lib/string/String#toLowerCase
+  local.tee $203
+  i32.const 22536
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19059,10 +19060,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 23512
+  i32.const 22624
   call $~lib/string/String#toUpperCase
-  local.tee $211
-  i32.const 23584
+  local.tee $204
+  i32.const 22688
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19073,10 +19074,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 23664
+  i32.const 22752
   call $~lib/string/String#toUpperCase
-  local.tee $212
-  i32.const 23808
+  local.tee $205
+  i32.const 22816
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19087,10 +19088,52 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 23664
-  call $~lib/string/String#toLowerCase
-  local.tee $213
-  i32.const 23952
+  i32.const 22888
+  call $~lib/string/String#toUpperCase
+  local.tee $206
+  i32.const 22952
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 575
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 23016
+  call $~lib/string/String#toUpperCase
+  local.tee $207
+  i32.const 23088
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 576
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 23160
+  call $~lib/string/String#toUpperCase
+  local.tee $208
+  i32.const 23224
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 577
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 23288
+  call $~lib/string/String#toUpperCase
+  local.tee $209
+  i32.const 23344
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19101,70 +19144,66 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 24096
+  i32.const 23408
+  call $~lib/string/String#toUpperCase
+  local.tee $210
+  i32.const 23480
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 579
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 23552
+  call $~lib/string/String#toUpperCase
+  local.tee $211
+  i32.const 23624
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 580
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 23704
+  call $~lib/string/String#toUpperCase
+  local.tee $212
+  i32.const 23848
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 581
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 23704
+  call $~lib/string/String#toLowerCase
+  local.tee $213
+  i32.const 23992
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 585
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 24136
   call $~lib/string/String#toUpperCase
   local.tee $214
-  i32.const 24120
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 582
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 24144
-  call $~lib/string/String#toLowerCase
-  local.tee $215
-  i32.const 24168
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 583
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 24192
-  call $~lib/string/String#toUpperCase
-  local.tee $216
-  i32.const 24384
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 584
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 24096
-  call $~lib/string/String#toUpperCase
-  local.tee $217
-  call $~lib/string/String#toLowerCase
-  local.tee $218
-  i32.const 24584
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 588
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 24608
-  call $~lib/string/String#toUpperCase
-  local.tee $219
-  call $~lib/string/String#toLowerCase
-  local.tee $220
-  i32.const 24632
+  i32.const 24160
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19175,12 +19214,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 24656
-  call $~lib/string/String#toUpperCase
-  local.tee $221
+  i32.const 24184
   call $~lib/string/String#toLowerCase
-  local.tee $222
-  i32.const 24656
+  local.tee $215
+  i32.const 24208
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19189,6 +19226,328 @@
    i32.const 590
    i32.const 0
    call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 24232
+  call $~lib/string/String#toUpperCase
+  local.tee $216
+  i32.const 24424
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 591
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 24136
+  call $~lib/string/String#toUpperCase
+  local.tee $217
+  call $~lib/string/String#toLowerCase
+  local.tee $218
+  i32.const 24624
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 595
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 24648
+  call $~lib/string/String#toUpperCase
+  local.tee $219
+  call $~lib/string/String#toLowerCase
+  local.tee $220
+  i32.const 24672
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 596
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 24696
+  call $~lib/string/String#toUpperCase
+  local.tee $221
+  call $~lib/string/String#toLowerCase
+  local.tee $222
+  i32.const 24696
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 597
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 65536
+  call $~lib/string/String.fromCodePoint
+  local.tee $223
+  call $~lib/string/String#toLowerCase
+  local.tee $224
+  i32.const 24896
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 603
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 65536
+  call $~lib/string/String.fromCodePoint
+  local.tee $225
+  call $~lib/string/String#toUpperCase
+  local.tee $226
+  i32.const 24896
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 604
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|0
+   i32.const 0
+   local.set $227
+   loop $loop|0
+    local.get $227
+    i32.const 1114111
+    i32.le_s
+    i32.eqz
+    br_if $break|0
+    local.get $227
+    call $~lib/string/String.fromCodePoint
+    local.set $228
+    local.get $228
+    call $~lib/string/String#toLowerCase
+    local.set $229
+    local.get $228
+    call $~lib/string/String#toUpperCase
+    local.set $230
+    local.get $229
+    i32.const 0
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.set $233
+    local.get $229
+    i32.const 1
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $231
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $233
+     local.get $231
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $233
+    end
+    local.get $229
+    i32.const 2
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $232
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $233
+     local.get $232
+     i64.const 32
+     i64.shl
+     i64.add
+     local.set $233
+    end
+    local.get $230
+    i32.const 0
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.set $234
+    local.get $230
+    i32.const 1
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $231
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $234
+     local.get $231
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $234
+    end
+    local.get $230
+    i32.const 2
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $232
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $234
+     local.get $232
+     i64.const 32
+     i64.shl
+     i64.add
+     local.set $234
+    end
+    local.get $227
+    i32.const 0
+    call $std/string/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.set $235
+    local.get $227
+    i32.const 1
+    call $std/string/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.tee $231
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $235
+     local.get $231
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $235
+    end
+    local.get $227
+    i32.const 2
+    call $std/string/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.tee $232
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $235
+     local.get $232
+     i64.const 32
+     i64.shl
+     i64.add
+     local.set $235
+    end
+    local.get $227
+    i32.const 0
+    call $std/string/toUpperCaseFromIndex
+    i64.extend_i32_s
+    local.set $236
+    local.get $227
+    i32.const 1
+    call $std/string/toUpperCaseFromIndex
+    i64.extend_i32_s
+    local.tee $231
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $236
+     local.get $231
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $236
+    end
+    local.get $227
+    i32.const 2
+    call $std/string/toUpperCaseFromIndex
+    i64.extend_i32_s
+    local.tee $232
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $236
+     local.get $232
+     i64.const 32
+     i64.shl
+     i64.add
+     local.set $236
+    end
+    local.get $233
+    local.get $235
+    i64.ne
+    if
+     i32.const 24920
+     i32.const 3
+     local.get $227
+     f64.convert_i32_s
+     local.get $233
+     f64.convert_i64_u
+     local.get $235
+     f64.convert_i64_u
+     f64.const 0
+     f64.const 0
+     call $~lib/builtins/trace
+    end
+    local.get $233
+    local.get $235
+    i64.ne
+    if
+     i32.const 25000
+     i32.const 3
+     local.get $227
+     f64.convert_i32_s
+     local.get $234
+     f64.convert_i64_u
+     local.get $236
+     f64.convert_i64_u
+     f64.const 0
+     f64.const 0
+     call $~lib/builtins/trace
+    end
+    local.get $233
+    local.get $235
+    i64.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 72
+     i32.const 637
+     i32.const 2
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $234
+    local.get $236
+    i64.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 72
+     i32.const 638
+     i32.const 2
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $228
+    call $~lib/rt/pure/__release
+    local.get $229
+    call $~lib/rt/pure/__release
+    local.get $230
+    call $~lib/rt/pure/__release
+    local.get $227
+    i32.const 1
+    i32.add
+    local.set $227
+    br $loop|0
+   end
    unreachable
   end
   global.get $std/string/str
@@ -19637,12 +19996,20 @@
   call $~lib/rt/pure/__release
   local.get $222
   call $~lib/rt/pure/__release
+  local.get $223
+  call $~lib/rt/pure/__release
+  local.get $224
+  call $~lib/rt/pure/__release
+  local.get $225
+  call $~lib/rt/pure/__release
+  local.get $226
+  call $~lib/rt/pure/__release
  )
- (func $std/string/getString (; 103 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/string/getString (; 107 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
   call $~lib/rt/pure/__retain
  )
- (func $start (; 104 ;) (type $FUNCSIG$v)
+ (func $start (; 108 ;) (type $FUNCSIG$v)
   global.get $~lib/started
   if
    return
@@ -19652,10 +20019,10 @@
   end
   call $start:std/string
  )
- (func $~lib/array/Array<f64>#__visit_impl (; 105 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f64>#__visit_impl (; 109 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/pure/__visit (; 106 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 110 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -19785,7 +20152,7 @@
    end
   end
  )
- (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 107 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 111 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -19824,25 +20191,25 @@
    unreachable
   end
  )
- (func $~lib/array/Array<i32>#__visit_impl (; 108 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#__visit_impl (; 112 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u32>#__visit_impl (; 109 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>#__visit_impl (; 113 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u64>#__visit_impl (; 110 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u64>#__visit_impl (; 114 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<i16>#__visit_impl (; 111 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i16>#__visit_impl (; 115 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u16>#__visit_impl (; 112 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>#__visit_impl (; 116 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u8>#__visit_impl (; 113 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>#__visit_impl (; 117 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/__visit_members (; 114 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 118 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
@@ -19918,6 +20285,6 @@
   end
   return
  )
- (func $null (; 115 ;) (type $FUNCSIG$v)
+ (func $null (; 119 ;) (type $FUNCSIG$v)
  )
 )

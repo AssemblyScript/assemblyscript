@@ -449,14 +449,14 @@ export function casemap(c: u32, dir: i32): i32 {
 
   /* lookup entry in two-level base-6 table */
   // v = tab[(tab[b] as i32) * 86 + x] as u32;
-  var v = load<u8>(tabPtr + (load<u8>(tabPtr + b) as i32) * 86 + x) as u32;
+  var v = <usize>load<u8>(tabPtr + <usize>load<u8>(tabPtr + b) * 86 + x);
   // v = (v * mt[y] >> 11) % 6;
   v = (v * load<i32>(mtPtr + (y << alignof<i32>())) >> 11) % 6;
   /* use the bit vector out of the tables as an index into
    * a block-specific set of rules and decode the rule into
    * a type and a case-mapping delta. */
   // r = rules[(ruleBases[b] as u32) + v];
-  var r = load<i32>(rulesPtr + ((load<u8>(ruleBasesPtr + b) as u32 + v) << alignof<i32>()));
+  var r = load<i32>(rulesPtr + ((<usize>load<u8>(ruleBasesPtr + b) + v) << alignof<i32>()));
   var rt: u32 = r & 255;
   var rd: i32 = r >> 8;
   /* rules 0/1 are simple lower/upper case with a delta.
@@ -473,7 +473,7 @@ export function casemap(c: u32, dir: i32): i32 {
     let t = load<u8>(exceptionsPtr + (xb + h) * 2) as u32;
     if (t == c) {
       // r = rules[exceptions[(xb + h) * 2 + 1]];
-      r = load<i32>(rulesPtr + (load<u8>(exceptionsPtr + (xb + h) * 2 + 1) << alignof<i32>()));
+      r = load<i32>(rulesPtr + <usize>(load<u8>(exceptionsPtr + (xb + h) * 2 + 1) << alignof<i32>()));
       rt = r & 255;
       rd = r >> 8;
       if (rt < 2) return c0 + (rd & -(rt ^ dir));

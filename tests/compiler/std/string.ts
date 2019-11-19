@@ -1,5 +1,11 @@
 import { utoa32, itoa32, utoa64, itoa64, dtoa } from "util/number";
 
+@external("env", "toUpperCaseFromIndex")
+declare function toUpperCaseFromIndex(index: i32, codePointIndex: i32): i32;
+
+@external("env", "toLowerCaseFromIndex")
+declare function toLowerCaseFromIndex(index: i32, codePointIndex: i32): i32;
+
 // preliminary
 var str: string = "hi, I'm a string";
 var nullStr: string;
@@ -551,10 +557,11 @@ assert(dtoa(0.000035689) == "0.000035689");
 // assert(dtoa(f32.MAX_VALUE) == "3.4028234663852886e+38"); // FIXME
 // assert(dtoa(f32.EPSILON) == "1.1920928955078125e-7"); // FIXME
 
+// Basic case mapping tests
 assert("".toUpperCase() == "");
 assert("".toLowerCase() == "");
-assert("09_AZ az.!".toUpperCase() == "09_AZ AZ.!");
-assert("09_AZ az.!".toLowerCase() == "09_az az.!");
+assert("09_AZ az.!\n".toUpperCase() == "09_AZ AZ.!\n");
+assert("09_AZ az.!\t".toLowerCase() == "09_az az.!\t");
 assert("Der Wechsel allein ist das Beständige".toUpperCase() == "DER WECHSEL ALLEIN IST DAS BESTÄNDIGE");
 assert("DER WECHSEL ALLEIN IST DAS BESTÄNDIGE".toLowerCase() == "der wechsel allein ist das beständige");
 assert("@ — Друг человека!".toUpperCase() == "@ — ДРУГ ЧЕЛОВЕКА!");
@@ -592,6 +599,44 @@ assert(
   .toUpperCase().toLowerCase() ==
   "𠜎 𠜱 𠝹 𠱓 𠱸 𠲖 𠳏 𠳕 𠴕 𠵼 𠵿 𠸎 𠸏 𠹷 𠺝 𠺢 𠻗 𠻹 𠻺 𠼭 𠼮 𠽌 𠾴 𠾼 𠿪 𡁜 𡁯 𡁵 𡁶 𡁻 𡃁"
 );
+
+assert(String.fromCodePoint(0x10000).toLowerCase() == "𐀀");
+assert(String.fromCodePoint(0x10000).toUpperCase() == "𐀀");
+
+// test full unicode range with and assert by v8 engine.
+for (let i = 0; i <= 0x10FFFF; i++) {
+  let source = String.fromCodePoint(i);
+  let origLower = source.toLowerCase();
+  let origUpper = source.toUpperCase();
+  let code1: i64, code2: i64;
+
+  let origLowerCode = <u64>origLower.codePointAt(0);
+  if ((code1 = origLower.codePointAt(1)) >= 0) origLowerCode += <u64>code1 << 16;
+  if ((code2 = origLower.codePointAt(2)) >= 0) origLowerCode += <u64>code2 << 32;
+
+  let origUpperCode = <u64>origUpper.codePointAt(0);
+  if ((code1 = origUpper.codePointAt(1)) >= 0) origUpperCode += <u64>code1 << 16;
+  if ((code2 = origUpper.codePointAt(2)) >= 0) origUpperCode += <u64>code2 << 32;
+
+  let expectLowerCode = <u64>toLowerCaseFromIndex(i, 0);
+  if ((code1 = <i64>toLowerCaseFromIndex(i, 1)) >= 0) expectLowerCode += <u64>code1 << 16;
+  if ((code2 = <i64>toLowerCaseFromIndex(i, 2)) >= 0) expectLowerCode += <u64>code2 << 32;
+
+  let expectUpperCode = <u64>toUpperCaseFromIndex(i, 0);
+  if ((code1 = <i64>toUpperCaseFromIndex(i, 1)) >= 0) expectUpperCode += <u64>code1 << 16;
+  if ((code2 = <i64>toUpperCaseFromIndex(i, 2)) >= 0) expectUpperCode += <u64>code2 << 32;
+
+  if (origLowerCode != expectLowerCode) {
+    trace("origLowerCode != expectLowerCode", 3, i, <f64>origLowerCode, <f64>expectLowerCode);
+  }
+
+  if (origLowerCode != expectLowerCode) {
+    trace("origUpperCode != expectUpperCode", 3, i, <f64>origUpperCode, <f64>expectUpperCode);
+ }
+
+  assert(origLowerCode == expectLowerCode);
+  assert(origUpperCode == expectUpperCode);
+}
 
 export function getString(): string {
   return str;
