@@ -580,6 +580,7 @@ assert(
   "abcdefghijklmnopqrstuvwxyz /0123456789abcdefghijklmnopqrstuvwxyz"
 );
 assert("ß".toUpperCase() == "SS");
+assert("İ".toLowerCase() == "i̇"); // 0x0130
 assert(
   "£©µÀÆÖÞßéöÿ–—‘“”„†•…‰™œŠŸž€ ΑΒΓΔΩαβγδω АБВГДабвгд∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ ﬁ�⑀₂ἠḂӥẄɐː⍎אԱა".toUpperCase() ==
   "£©ΜÀÆÖÞSSÉÖŸ–—‘“”„†•…‰™ŒŠŸŽ€ ΑΒΓΔΩΑΒΓΔΩ АБВГДАБВГД∀∂∈ℝ∧∪≡∞ ↑↗↨↻⇣ ┐┼╔╘░►☺♀ FI�⑀₂ἨḂӤẄⱯː⍎אԱᲐ"

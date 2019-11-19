@@ -501,7 +501,7 @@ import { idof } from "./builtins";
       }
       if (!isAscii(c)) {
         if (c == 0x0130) {
-          store<u32>(codes + (j << 1), 0x0307 | (0x0069 << 16));
+          store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069, 0);
           ++j;
         } else if (c >= 0x24B6 && c <= 0x24CF) {
           // monkey patch

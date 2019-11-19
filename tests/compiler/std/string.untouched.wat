@@ -411,13 +411,15 @@
  (data (i32.const 23936) "\80\00\00\00\01\00\00\00\01\00\00\00\80\00\00\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00 \00/\000\001\002\003\004\005\006\007\008\009\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\00")
  (data (i32.const 24080) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\df\00")
  (data (i32.const 24104) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00S\00S\00")
- (data (i32.const 24128) "\ae\00\00\00\01\00\00\00\01\00\00\00\ae\00\00\00\a3\00\a9\00\b5\00\c0\00\c6\00\d6\00\de\00\df\00\e9\00\f6\00\ff\00\13 \14 \18 \1c \1d \1e   \" & 0 \"!S\01`\01x\01~\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\b1\03\b2\03\b3\03\b4\03\c9\03 \00\10\04\11\04\12\04\13\04\14\040\041\042\043\044\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00\01\fb\fd\ff@$\82  \1f\02\1e\e5\04\84\1eP\02\d0\02N#\d0\051\05\d0\10")
- (data (i32.const 24320) "\b2\00\00\00\01\00\00\00\01\00\00\00\b2\00\00\00\a3\00\a9\00\9c\03\c0\00\c6\00\d6\00\de\00S\00S\00\c9\00\d6\00x\01\13 \14 \18 \1c \1d \1e   \" & 0 \"!R\01`\01x\01}\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\91\03\92\03\93\03\94\03\a9\03 \00\10\04\11\04\12\04\13\04\14\04\10\04\11\04\12\04\13\04\14\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00F\00I\00\fd\ff@$\82 (\1f\02\1e\e4\04\84\1eo,\d0\02N#\d0\051\05\90\1c")
- (data (i32.const 24520) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00s\00s\00")
- (data (i32.const 24544) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\01\fb")
- (data (i32.const 24568) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00f\00i\00")
- (data (i32.const 24592) "\b8\00\00\00\01\00\00\00\01\00\00\00\b8\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
- (data (i32.const 24792) "\0b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\93\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00S\00\00\00\02\00\00\003\00\00\00\02\00\00\00")
+ (data (i32.const 24128) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000\01")
+ (data (i32.const 24152) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00i\00\07\03")
+ (data (i32.const 24176) "\ae\00\00\00\01\00\00\00\01\00\00\00\ae\00\00\00\a3\00\a9\00\b5\00\c0\00\c6\00\d6\00\de\00\df\00\e9\00\f6\00\ff\00\13 \14 \18 \1c \1d \1e   \" & 0 \"!S\01`\01x\01~\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\b1\03\b2\03\b3\03\b4\03\c9\03 \00\10\04\11\04\12\04\13\04\14\040\041\042\043\044\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00\01\fb\fd\ff@$\82  \1f\02\1e\e5\04\84\1eP\02\d0\02N#\d0\051\05\d0\10")
+ (data (i32.const 24368) "\b2\00\00\00\01\00\00\00\01\00\00\00\b2\00\00\00\a3\00\a9\00\9c\03\c0\00\c6\00\d6\00\de\00S\00S\00\c9\00\d6\00x\01\13 \14 \18 \1c \1d \1e   \" & 0 \"!R\01`\01x\01}\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\91\03\92\03\93\03\94\03\a9\03 \00\10\04\11\04\12\04\13\04\14\04\10\04\11\04\12\04\13\04\14\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00F\00I\00\fd\ff@$\82 (\1f\02\1e\e4\04\84\1eo,\d0\02N#\d0\051\05\90\1c")
+ (data (i32.const 24568) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00s\00s\00")
+ (data (i32.const 24592) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\01\fb")
+ (data (i32.const 24616) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00f\00i\00")
+ (data (i32.const 24640) "\b8\00\00\00\01\00\00\00\01\00\00\00\b8\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
+ (data (i32.const 24840) "\0b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\93\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00S\00\00\00\02\00\00\003\00\00\00\02\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/string/str (mut i32) (i32.const 24))
@@ -459,8 +461,8 @@
  (global $~lib/util/casemap/rules i32 (i32.const 21000))
  (global $~lib/util/casemap/exceptions i32 (i32.const 21448))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 24792))
- (global $~lib/heap/__heap_base i32 (i32.const 24884))
+ (global $~lib/rt/__rtti_base i32 (i32.const 24840))
+ (global $~lib/heap/__heap_base i32 (i32.const 24932))
  (export "__start" (func $start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
@@ -11819,9 +11821,9 @@
       i32.shl
       i32.add
       i32.const 775
-      i32.const 105
       i32.const 16
       i32.shl
+      i32.const 105
       i32.or
       i32.store
       local.get $3
@@ -12171,6 +12173,7 @@
   (local $219 i32)
   (local $220 i32)
   (local $221 i32)
+  (local $222 i32)
   global.get $std/string/str
   i32.const 24
   i32.eq
@@ -19113,9 +19116,9 @@
    unreachable
   end
   i32.const 24144
-  call $~lib/string/String#toUpperCase
+  call $~lib/string/String#toLowerCase
   local.tee $215
-  i32.const 24336
+  i32.const 24168
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -19126,27 +19129,25 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 24096
+  i32.const 24192
   call $~lib/string/String#toUpperCase
   local.tee $216
-  call $~lib/string/String#toLowerCase
-  local.tee $217
-  i32.const 24536
+  i32.const 24384
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
-   i32.const 587
+   i32.const 584
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 24560
+  i32.const 24096
   call $~lib/string/String#toUpperCase
-  local.tee $218
+  local.tee $217
   call $~lib/string/String#toLowerCase
-  local.tee $219
+  local.tee $218
   i32.const 24584
   call $~lib/string/String.__eq
   i32.eqz
@@ -19160,16 +19161,32 @@
   end
   i32.const 24608
   call $~lib/string/String#toUpperCase
-  local.tee $220
+  local.tee $219
   call $~lib/string/String#toLowerCase
-  local.tee $221
-  i32.const 24608
+  local.tee $220
+  i32.const 24632
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 72
    i32.const 589
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 24656
+  call $~lib/string/String#toUpperCase
+  local.tee $221
+  call $~lib/string/String#toLowerCase
+  local.tee $222
+  i32.const 24656
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 72
+   i32.const 590
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -19617,6 +19634,8 @@
   local.get $220
   call $~lib/rt/pure/__release
   local.get $221
+  call $~lib/rt/pure/__release
+  local.get $222
   call $~lib/rt/pure/__release
  )
  (func $std/string/getString (; 103 ;) (type $FUNCSIG$i) (result i32)
