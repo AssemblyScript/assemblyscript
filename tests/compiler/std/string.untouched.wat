@@ -19496,8 +19496,8 @@
      f64.const 0
      call $~lib/builtins/trace
     end
-    local.get $233
-    local.get $235
+    local.get $234
+    local.get $236
     i64.ne
     if
      i32.const 25000

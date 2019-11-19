@@ -630,7 +630,7 @@ for (let i = 0; i <= 0x10FFFF; i++) {
     trace("origLowerCode != expectLowerCode", 3, i, <f64>origLowerCode, <f64>expectLowerCode);
   }
 
-  if (origLowerCode != expectLowerCode) {
+  if (origUpperCode != expectUpperCode) {
     trace("origUpperCode != expectUpperCode", 3, i, <f64>origUpperCode, <f64>expectUpperCode);
  }
 

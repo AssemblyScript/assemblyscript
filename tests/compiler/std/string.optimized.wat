@@ -15512,43 +15512,8 @@
     i32.const 0
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
-    local.set $5
-    local.get $0
-    i32.const 1
-    call $~lib/string/String#codePointAt
-    i64.extend_i32_s
-    local.tee $4
-    i64.const 0
-    i64.ge_s
-    if
-     local.get $4
-     i64.const 16
-     i64.shl
-     local.get $5
-     i64.add
-     local.set $5
-    end
-    local.get $0
-    i32.const 2
-    call $~lib/string/String#codePointAt
-    i64.extend_i32_s
-    local.tee $4
-    i64.const 0
-    i64.ge_s
-    if
-     local.get $4
-     i64.const 32
-     i64.shl
-     local.get $5
-     i64.add
-     local.set $5
-    end
-    local.get $2
-    i32.const 0
-    call $~lib/string/String#codePointAt
-    i64.extend_i32_s
     local.set $7
-    local.get $2
+    local.get $0
     i32.const 1
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
@@ -15563,7 +15528,7 @@
      i64.add
      local.set $7
     end
-    local.get $2
+    local.get $0
     i32.const 2
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
@@ -15578,11 +15543,46 @@
      i64.add
      local.set $7
     end
-    local.get $1
+    local.get $2
     i32.const 0
-    call $std/string/toLowerCaseFromIndex
+    call $~lib/string/String#codePointAt
     i64.extend_i32_s
     local.set $4
+    local.get $2
+    i32.const 1
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $5
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $5
+     i64.const 16
+     i64.shl
+     local.get $4
+     i64.add
+     local.set $4
+    end
+    local.get $2
+    i32.const 2
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $5
+    i64.const 0
+    i64.ge_s
+    if
+     local.get $5
+     i64.const 32
+     i64.shl
+     local.get $4
+     i64.add
+     local.set $4
+    end
+    local.get $1
+    i32.const 0
+    call $std/string/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.set $5
     local.get $1
     i32.const 1
     call $std/string/toLowerCaseFromIndex
@@ -15594,9 +15594,9 @@
      local.get $6
      i64.const 16
      i64.shl
-     local.get $4
+     local.get $5
      i64.add
-     local.set $4
+     local.set $5
     end
     local.get $1
     i32.const 2
@@ -15609,9 +15609,9 @@
      local.get $6
      i64.const 32
      i64.shl
-     local.get $4
+     local.get $5
      i64.add
-     local.set $4
+     local.set $5
     end
     local.get $1
     i32.const 0
@@ -15648,31 +15648,31 @@
      i64.add
      local.set $6
     end
-    local.get $4
     local.get $5
+    local.get $7
     i64.ne
     if
      i32.const 24472
      i32.const 3
      local.get $1
      f64.convert_i32_s
-     local.get $5
+     local.get $7
      f64.convert_i64_u
-     local.get $4
+     local.get $5
      f64.convert_i64_u
      f64.const 0
      f64.const 0
      call $~lib/builtins/trace
     end
     local.get $4
-    local.get $5
+    local.get $6
     i64.ne
     if
      i32.const 24552
      i32.const 3
      local.get $1
      f64.convert_i32_s
-     local.get $7
+     local.get $4
      f64.convert_i64_u
      local.get $6
      f64.convert_i64_u
@@ -15680,8 +15680,8 @@
      f64.const 0
      call $~lib/builtins/trace
     end
-    local.get $4
     local.get $5
+    local.get $7
     i64.ne
     if
      i32.const 0
@@ -15691,8 +15691,8 @@
      call $~lib/builtins/abort
      unreachable
     end
+    local.get $4
     local.get $6
-    local.get $7
     i64.ne
     if
      i32.const 0
