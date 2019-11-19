@@ -430,9 +430,9 @@ export function bsearch(key: u32, ptr: usize, max: i32): i32 {
   var min = 0;
   while (min <= max) {
     let mid  = (min + max) >>> 3 << 2;
-    let keym = load<u16>(ptr + (mid << alignof<u16>()));
-    if (keym == key) return mid;
-    else if (keym < key) min = mid + 4;
+    let cmp = load<u16>(ptr + (mid << alignof<u16>())) - key;
+    if (cmp == 0) return mid;
+    else if (cmp >>> 31) min = mid + 4;
     else max = mid - 4;
   }
   return -1;

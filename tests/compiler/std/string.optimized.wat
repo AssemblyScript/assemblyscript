@@ -8064,13 +8064,14 @@
          local.get $9
          i32.add
          i32.load16_u
-         local.tee $11
          local.get $1
-         i32.eq
+         i32.sub
+         local.tee $11
+         i32.eqz
          br_if $~lib/util/casemap/bsearch|inlined.0
          local.get $11
-         local.get $1
-         i32.lt_u
+         i32.const 31
+         i32.shr_u
          if
           local.get $6
           i32.const 4

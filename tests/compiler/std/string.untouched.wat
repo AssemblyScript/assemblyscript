@@ -11540,17 +11540,19 @@
          i32.shl
          i32.add
          i32.load16_u
+         local.get $10
+         i32.sub
          local.set $13
          local.get $13
-         local.get $10
+         i32.const 0
          i32.eq
          if
           local.get $12
           br $~lib/util/casemap/bsearch|inlined.0
          else
           local.get $13
-          local.get $10
-          i32.lt_u
+          i32.const 31
+          i32.shr_u
           if
            local.get $12
            i32.const 4
