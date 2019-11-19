@@ -583,12 +583,12 @@ export function isAscii(c: i32): bool {
 
 @inline
 export function isLower8(c: i32): bool {
-  return <u32>(c - CharCode.a) < 26;
+  return <u32>c - CharCode.a < 26;
 }
 
 @inline
 export function isUpper8(c: i32): bool {
-  return <u32>(c - CharCode.A) < 26;
+  return <u32>c - CharCode.A < 26;
 }
 
 @inline

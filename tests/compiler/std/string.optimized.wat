@@ -441,11 +441,8 @@
  (data (i32.const 24072) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00s\00s")
  (data (i32.const 24096) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\01\fb")
  (data (i32.const 24120) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00f\00i")
- (data (i32.const 24144) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00I")
- (data (i32.const 24168) "\ac\00\00\00\01\00\00\00\01\00\00\00\ac\00\00\00\a3\00\a9\00\b5\00\c0\00\c6\00\d6\00\de\00\e9\00\f6\00\ff\00\13 \14 \18 \1c \1d \1e   \" & 0 \"!S\01`\01x\01~\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\b1\03\b2\03\b3\03\b4\03\c9\03 \00\10\04\11\04\12\04\13\04\14\040\041\042\043\044\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00\01\fb\fd\ff@$\82  \1f\02\1e\e5\04\84\1eP\02\d0\02N#\d0\051\05\d0\10")
- (data (i32.const 24360) "\ae\00\00\00\01\00\00\00\01\00\00\00\ae\00\00\00\a3\00\a9\00\9c\03\c0\00\c6\00\d6\00\de\00\c9\00\d6\00x\01\13 \14 \18 \1c \1d \1e   \" & 0 \"!R\01`\01x\01}\01\ac  \00\91\03\92\03\93\03\94\03\a9\03\91\03\92\03\93\03\94\03\a9\03 \00\10\04\11\04\12\04\13\04\14\04\10\04\11\04\12\04\13\04\14\04\00\"\02\"\08\"\1d!\'\"*\"a\"\1e\" \00\91!\97!\a8!\bb!\e3! \00\10%<%T%X%\91%\ba%:&@& \00F\00I\00\fd\ff@$\82 (\1f\02\1e\e4\04\84\1eo,\d0\02N#\d0\051\05\90\1c")
- (data (i32.const 24552) "\b8\00\00\00\01\00\00\00\01\00\00\00\b8\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
- (data (i32.const 24752) "\0b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\93\00\00\00\02\00\00\00S\00\00\00\02\00\00\003\00\00\00\02")
+ (data (i32.const 24144) "\b8\00\00\00\01\00\00\00\01\00\00\00\b8\00\00\00A\d8\0e\df \00A\d81\df \00A\d8y\df \00C\d8S\dc \00C\d8x\dc \00C\d8\96\dc \00C\d8\cf\dc \00C\d8\d5\dc \00C\d8\15\dd \00C\d8|\dd \00C\d8\7f\dd \00C\d8\0e\de \00C\d8\0f\de \00C\d8w\de \00C\d8\9d\de \00C\d8\a2\de \00C\d8\d7\de \00C\d8\f9\de \00C\d8\fa\de \00C\d8-\df \00C\d8.\df \00C\d8L\df \00C\d8\b4\df \00C\d8\bc\df \00C\d8\ea\df \00D\d8\\\dc \00D\d8o\dc \00D\d8u\dc \00D\d8v\dc \00D\d8{\dc \00D\d8\c1\dc")
+ (data (i32.const 24344) "\0b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\93\00\00\00\02\00\00\00S\00\00\00\02\00\00\003\00\00\00\02")
  (global $std/string/str (mut i32) (i32.const 24))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
@@ -515,7 +512,7 @@
  )
  (func $~lib/rt/pure/__retain (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 24844
+  i32.const 24436
   i32.gt_u
   if
    local.get $0
@@ -1004,7 +1001,7 @@
  )
  (func $~lib/rt/__typeinfo (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 24752
+  i32.const 24344
   i32.load
   i32.gt_u
   if
@@ -1018,7 +1015,7 @@
   local.get $0
   i32.const 3
   i32.shl
-  i32.const 24756
+  i32.const 24348
   i32.add
   i32.load
  )
@@ -1156,10 +1153,10 @@
   if
    unreachable
   end
-  i32.const 24848
+  i32.const 24448
   i32.const 0
   i32.store
-  i32.const 26416
+  i32.const 26016
   i32.const 0
   i32.store
   i32.const 0
@@ -1173,7 +1170,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 24848
+    i32.const 24448
     i32.add
     i32.const 0
     i32.store offset=4
@@ -1192,7 +1189,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 24848
+      i32.const 24448
       i32.add
       i32.const 0
       i32.store offset=96
@@ -1210,13 +1207,13 @@
     br $loop|0
    end
   end
-  i32.const 24848
-  i32.const 26432
+  i32.const 24448
+  i32.const 26032
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 24848
+  i32.const 24448
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -2207,7 +2204,7 @@
  )
  (func $~lib/rt/pure/__release (; 30 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 24844
+  i32.const 24436
   i32.gt_u
   if
    local.get $0
@@ -8668,8 +8665,6 @@
   (local $220 i32)
   (local $221 i32)
   (local $222 i32)
-  (local $223 i32)
-  (local $224 i32)
   global.get $std/string/str
   i32.const 24
   i32.ne
@@ -15356,9 +15351,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 24112
+  i32.const 24160
   call $~lib/string/String#toUpperCase
   local.tee $221
+  call $~lib/string/String#toLowerCase
+  local.tee $222
   i32.const 24160
   call $~lib/string/String.__eq
   i32.eqz
@@ -15366,36 +15363,6 @@
    i32.const 0
    i32.const 72
    i32.const 589
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 24184
-  call $~lib/string/String#toUpperCase
-  local.tee $222
-  i32.const 24376
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 590
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 24568
-  call $~lib/string/String#toUpperCase
-  local.tee $223
-  call $~lib/string/String#toLowerCase
-  local.tee $224
-  i32.const 24568
-  call $~lib/string/String.__eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 594
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15844,10 +15811,6 @@
   call $~lib/rt/pure/__release
   local.get $222
   call $~lib/rt/pure/__release
-  local.get $223
-  call $~lib/rt/pure/__release
-  local.get $224
-  call $~lib/rt/pure/__release
  )
  (func $std/string/getString (; 93 ;) (type $FUNCSIG$i) (result i32)
   global.get $std/string/str
@@ -15865,7 +15828,7 @@
  )
  (func $~lib/rt/pure/__visit (; 95 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 24844
+  i32.const 24436
   i32.lt_u
   if
    return
