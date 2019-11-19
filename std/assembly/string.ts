@@ -490,7 +490,7 @@ import { idof } from "./builtins";
     if (!len) return this;
     var codes = __alloc(len * 2 * 2, idof<String>());
     var j: usize = 0;
-    for (let i: usize = 0; i < len; ++i) {
+    for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <i32>load<u16>(changetype<usize>(this) + (i << 1));
       if (c >= 0xD800 && c < 0xDC00 && i < len - 1) {
         let c1 = <i32>load<u16>(changetype<usize>(this) + (i << 1), 2);
@@ -501,7 +501,7 @@ import { idof } from "./builtins";
       }
       if (!isAscii(c)) {
         if (c == 0x0130) {
-          store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069, 0);
+          store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069);
           ++j;
         } else if (c >= 0x24B6 && c <= 0x24CF) {
           // monkey patch
@@ -522,7 +522,6 @@ import { idof } from "./builtins";
       } else {
         store<u16>(codes + (j << 1), toLower8(c));
       }
-      ++j;
     }
     __realloc(codes, j << 1);
     return changetype<String>(codes);
@@ -535,7 +534,7 @@ import { idof } from "./builtins";
     var specialsUpperPtr = specialsUpper.dataStart as usize;
     var specialsUpperLen = specialsUpper.length;
     var j: usize = 0;
-    for (let i: usize = 0; i < len; ++i) {
+    for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <i32>load<u16>(changetype<usize>(this) + (i << 1));
       if (c >= 0xD800 && c < 0xDC00 && i < len - 1) {
         let c1 = <i32>load<u16>(changetype<usize>(this) + (i << 1), 2);
@@ -549,7 +548,7 @@ import { idof } from "./builtins";
           // monkey patch
           store<u16>(codes + (<usize>j << 1), c - 26);
         } else {
-          let index = <usize>bsearch(specialsUpperPtr, specialsUpperLen, c);
+          let index = <usize>bsearch(c, specialsUpperPtr, specialsUpperLen);
           if (~index) {
             // load next 3 bytes from row with `index` offset for specialsUpper table
             let ab = load<u32>(specialsUpperPtr + (index << 1), 2);
@@ -574,7 +573,6 @@ import { idof } from "./builtins";
       } else {
         store<u16>(codes + (j << 1), toUpper8(c));
       }
-      ++j;
     }
     __realloc(codes, j << 1);
     return changetype<String>(codes);

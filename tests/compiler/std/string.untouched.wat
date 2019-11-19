@@ -11500,30 +11500,30 @@
       i32.store16
      else
       block $~lib/util/casemap/bsearch|inlined.0 (result i32)
-       local.get $3
-       local.set $10
-       local.get $4
-       local.set $9
        local.get $7
+       local.set $10
+       local.get $3
+       local.set $9
+       local.get $4
        local.set $8
        i32.const 0
        local.set $11
        block $break|1
         loop $continue|1
          local.get $11
-         local.get $9
+         local.get $8
          i32.le_s
          i32.eqz
          br_if $break|1
          local.get $11
-         local.get $9
+         local.get $8
          i32.add
          i32.const 3
          i32.shr_u
          i32.const 2
          i32.shl
          local.set $12
-         local.get $10
+         local.get $9
          local.get $12
          i32.const 1
          i32.shl
@@ -11531,14 +11531,14 @@
          i32.load16_u
          local.set $13
          local.get $13
-         local.get $8
+         local.get $10
          i32.eq
          if
           local.get $12
           br $~lib/util/casemap/bsearch|inlined.0
          else
           local.get $13
-          local.get $8
+          local.get $10
           i32.lt_u
           if
            local.get $12
@@ -11549,7 +11549,7 @@
            local.get $12
            i32.const 4
            i32.sub
-           local.set $9
+           local.set $8
           end
          end
          br $continue|1
@@ -11680,14 +11680,14 @@
      select
      i32.store16
     end
-    local.get $5
-    i32.const 1
-    i32.add
-    local.set $5
     local.get $6
     i32.const 1
     i32.add
     local.set $6
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
     br $loop|0
    end
    unreachable
@@ -11929,14 +11929,14 @@
      select
      i32.store16
     end
-    local.get $3
-    i32.const 1
-    i32.add
-    local.set $3
     local.get $4
     i32.const 1
     i32.add
     local.set $4
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
     br $loop|0
    end
    unreachable

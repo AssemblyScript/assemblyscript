@@ -420,7 +420,7 @@
 
 // Special binary search routine for Special Casing Tables
 @inline
-export function bsearch(ptr: usize, max: i32, key: u32): i32 {
+export function bsearch(key: u32, ptr: usize, max: i32): i32 {
   var min = 0;
   while (min <= max) {
     let mid  = (min + max) >>> 3 << 2;
