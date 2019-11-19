@@ -3266,13 +3266,18 @@ export class Parser extends DiagnosticEmitter {
 
       // NewExpression
       if (token == Token.NEW) {
-        operand = this.parseExpression(tn, Precedence.CALL);
+        operand = this.parseExpression(tn, Precedence.GROUPING);
         if (!operand) return null;
         if (operand.kind == NodeKind.CALL) {
           return Node.createNewExpression(
             (<CallExpression>operand).expression,
             (<CallExpression>operand).typeArguments,
             (<CallExpression>operand).arguments,
+            tn.range(startPos, tn.pos)
+          );
+        } else if (operand.kind == NodeKind.IDENTIFIER) { // new Class;
+          return Node.createNewExpression(
+            operand, null, [],
             tn.range(startPos, tn.pos)
           );
         } else {
