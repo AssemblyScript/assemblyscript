@@ -553,7 +553,6 @@ import { idof } from "./builtins";
         } else {
           let index = bsearch(specialsUpperPtr, specialsUpperLen, c);
           if (~index) {
-            // TODO optimize
             const a = load<u16>(specialsUpperPtr + (index << 1), 2);
             const b = load<u16>(specialsUpperPtr + (index << 1), 4);
             const c = load<u16>(specialsUpperPtr + (index << 1), 6);
@@ -561,7 +560,7 @@ import { idof } from "./builtins";
             store<u16>(codes + (j << 1), b, 2);
             if (c) store<u16>(codes + (j << 1), c, 4);
             // @ts-ignore
-            j += 1 + <i32>(c !== 0);
+            j += 1 + <i32>(c != 0);
           } else {
             let code = casemap(c, 1) & 0x1FFFFF;
             let hasSur = code > 0xFFFF;
