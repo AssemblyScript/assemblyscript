@@ -418,7 +418,7 @@
 
 @lazy const mt: i32[] = [2048, 342, 57];
 
-// Special binary search util for cpecial casing table
+// Special binary search routine for Special Casing Tables
 @inline
 export function bsearch(ptr: usize, max: i32, key: u32): i32 {
   var min = 0;
