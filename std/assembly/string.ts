@@ -553,13 +553,13 @@ import { idof } from "./builtins";
         } else {
           let index = <usize>bsearch(specialsUpperPtr, specialsUpperLen, c);
           if (~index) {
-            const a = load<u16>(specialsUpperPtr + (index << 1), 2);
-            const b = load<u16>(specialsUpperPtr + (index << 1), 4);
-            const c = load<u16>(specialsUpperPtr + (index << 1), 6);
+            let a = load<u16>(specialsUpperPtr + (index << 1), 2);
+            let b = load<u16>(specialsUpperPtr + (index << 1), 4);
+            let d = load<u16>(specialsUpperPtr + (index << 1), 6);
             store<u16>(codes + (j << 1), a, 0);
             store<u16>(codes + (j << 1), b, 2);
-            if (c) store<u16>(codes + (j << 1), c, 4);
-            j += 1 + usize(c != 0);
+            if (d) store<u16>(codes + (j << 1), d, 4);
+            j += 1 + usize(d != 0);
           } else {
             let code = casemap(c, 1) & 0x1FFFFF;
             let hasSur = code > 0xFFFF;
