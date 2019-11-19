@@ -603,7 +603,7 @@ assert(
 assert(String.fromCodePoint(0x10000).toLowerCase() == "𐀀");
 assert(String.fromCodePoint(0x10000).toUpperCase() == "𐀀");
 
-// test full unicode range with and assert by v8 engine.
+// Test full unicode range `0x0 - 0x10FFFF` and asserting with v8 engine.
 for (let i = 0; i <= 0x10FFFF; i++) {
   let source = String.fromCodePoint(i);
   let origLower = source.toLowerCase();
