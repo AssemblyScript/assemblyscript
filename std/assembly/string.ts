@@ -492,9 +492,9 @@ import { idof } from "./builtins";
     var j: usize = 0;
     for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <i32>load<u16>(changetype<usize>(this) + (i << 1));
-      if (c >= 0xD800 && c < 0xDC00 && i < len - 1) {
+      if ((<u32>c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
         let c1 = <i32>load<u16>(changetype<usize>(this) + (i << 1), 2);
-        if (c1 >= 0xDC00 && c1 < 0xE000) {
+        if (<u32>c1 - 0xDBFF < 0xE000 - 0xDBFF) {
           c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
           ++i;
         }
@@ -503,7 +503,7 @@ import { idof } from "./builtins";
         if (c == 0x0130) {
           store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069);
           ++j;
-        } else if (c >= 0x24B6 && c <= 0x24CF) {
+        } else if (<u32>c - 0x24B6 <= 0x24CF - 0x24B6) {
           // monkey patch
           store<u16>(codes + (j << 1), c + 26);
         } else {
@@ -536,15 +536,15 @@ import { idof } from "./builtins";
     var j: usize = 0;
     for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <i32>load<u16>(changetype<usize>(this) + (i << 1));
-      if (c >= 0xD800 && c < 0xDC00 && i < len - 1) {
+      if ((<u32>c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
         let c1 = <i32>load<u16>(changetype<usize>(this) + (i << 1), 2);
-        if (c1 >= 0xDC00 && c1 < 0xE000) {
+        if (<u32>c1 - 0xDBFF < 0xE000 - 0xDBFF) {
           c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
           ++i;
         }
       }
       if (!isAscii(c)) {
-        if (c >= 0x24D0 && c <= 0x24E9) {
+        if (<u32>c - 0x24D0 <= 0x24E9 - 0x24D0) {
           // monkey patch
           store<u16>(codes + (<usize>j << 1), c - 26);
         } else {
