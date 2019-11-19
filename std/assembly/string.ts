@@ -526,7 +526,7 @@ import { idof } from "./builtins";
       }
       ++j;
     }
-    __realloc(codes, j);
+    __realloc(codes, j << 1);
     return changetype<String>(codes);
   }
 
@@ -538,9 +538,8 @@ import { idof } from "./builtins";
     var specialsUpperLen = specialsUpper.length;
     var j = 0;
     for (let i = 0; i < len; ++i) {
-      // let c = str.codePointAt(i)!;
       let c = this.charCodeAt(i);
-      if (c >= 0xd800 && c < 0xdc00 && i < len - 1) {
+      if (c >= 0xD800 && c < 0xDC00 && i < len - 1) {
         let c1 = this.charCodeAt(i + 1);
         if (c1 >= 0xDC00 && c1 < 0xE000) {
           c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
@@ -583,7 +582,7 @@ import { idof } from "./builtins";
       }
       ++j;
     }
-    __realloc(codes, j);
+    __realloc(codes, j << 1);
     return changetype<String>(codes);
   }
 
