@@ -1,5 +1,6 @@
 // Total tables size: ~5 kb (usually compressed to ~4 kb)
 // See musl/tree/src/ctype/casemap.h
+// @ts-ignore: decorator
 @lazy const tab: u8[] = [
   7, 8, 9, 10, 11, 12, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
   13, 6, 6, 14, 6, 6, 6, 6, 6, 6, 6, 6, 15, 16, 17, 18,
@@ -170,6 +171,7 @@
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
 
+// @ts-ignore: decorator
 @lazy const rules: i32[] = [
   0x0, 0x2001, -0x2000, 0x1dbf00, 0x2e700, 0x7900,
   0x2402, 0x101, -0x100, 0x0, 0x201, -0x200,
@@ -213,6 +215,7 @@
   0x0, 0x2001, -0x2000, 0x0, 0x2201, -0x2200,
 ];
 
+// @ts-ignore: decorator
 @lazy const ruleBases: u8[] = [
   0, 6, 39, 81, 111, 119, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   124, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 131, 142, 146, 151,
@@ -248,6 +251,7 @@
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 ];
 
+// @ts-ignore: decorator
 @lazy const exceptions: u8[] = [
   48, 12,  49, 13,  120, 14,  127, 15,
   128, 16,  129, 17,  134, 18,  137, 19,
@@ -310,7 +314,7 @@
   0x0130,  0x0069, 0x0307, 0x0000,
 ];
 */
-
+// @ts-ignore: decorator
 @lazy export const specialsUpper: u16[] = [
   0x00DF,  0x0053, 0x0053, 0x0000,
   0x0149,  0x02BC, 0x004E, 0x0000,
@@ -416,9 +420,11 @@
   0xFB17,  0x0544, 0x053D, 0x0000
 ];
 
+// @ts-ignore: decorator
 @lazy const mt: i32[] = [2048, 342, 57];
 
 // Special binary search routine for Special Casing Tables
+// @ts-ignore: decorator
 @inline
 export function bsearch(key: u32, ptr: usize, max: i32): i32 {
   var min = 0;
@@ -470,10 +476,10 @@ export function casemap(c: u32, dir: i32): i32 {
   while (xn) {
     let h = xn >> 1;
     // let t = exceptions[(xb + h) * 2 + 0] as u32;
-    let t = load<u8>(exceptionsPtr + (xb + h) * 2) as u32;
+    let t = <u32>load<u8>(exceptionsPtr + (xb + h) * 2, 0);
     if (t == c) {
       // r = rules[exceptions[(xb + h) * 2 + 1]];
-      r = load<i32>(rulesPtr + <usize>(load<u8>(exceptionsPtr + (xb + h) * 2 + 1) << alignof<i32>()));
+      r = load<i32>(rulesPtr + <usize>(load<u8>(exceptionsPtr + (xb + h) * 2, 1) << alignof<i32>()));
       rt = r & 255;
       rd = r >> 8;
       if (rt < 2) return c0 + (rd & -(rt ^ dir));

@@ -576,27 +576,32 @@ function pow10(n: i32): f64 {
   );
 }
 
+// @ts-ignore: decorator
 @inline
-export function isAscii(c: i32): bool {
+export function isAscii(c: u32): bool {
   return !(c & ~0x7F);
 }
 
+// @ts-ignore: decorator
 @inline
-export function isLower8(c: i32): bool {
-  return <u32>c - CharCode.a < 26;
+export function isLower8(c: u32): bool {
+  return c - CharCode.a < 26;
 }
 
+// @ts-ignore: decorator
 @inline
-export function isUpper8(c: i32): bool {
-  return <u32>c - CharCode.A < 26;
+export function isUpper8(c: u32): bool {
+  return c - CharCode.A < 26;
 }
 
+// @ts-ignore: decorator
 @inline
-export function toLower8(c: i32): i32 {
-  return select<i32>(c | 32, c, isUpper8(c));
+export function toLower8(c: u32): u32 {
+  return select<u32>(c | 32, c, isUpper8(c));
 }
 
+// @ts-ignore: decorator
 @inline
-export function toUpper8(c: i32): i32 {
-  return select<i32>(c & 0x5F, c, isLower8(c));
+export function toUpper8(c: u32): u32 {
+  return select<u32>(c & 0x5F, c, isLower8(c));
 }
