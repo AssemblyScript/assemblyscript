@@ -508,8 +508,7 @@ import { idof } from "./builtins";
           store<u16>(codes + (j << 1), c + 26);
         } else {
           let code = casemap(c, 0) & 0x1FFFFF;
-          let hasSur = code > 0xFFFF;
-          if (!hasSur) {
+          if (code <= 0xFFFF) {
             store<u16>(codes + (j << 1), code);
           } else {
             code -= 0x10000;
@@ -558,8 +557,7 @@ import { idof } from "./builtins";
             j += 1 + usize(ex != 0);
           } else {
             let code = casemap(c, 1) & 0x1FFFFF;
-            let hasSur = code > 0xFFFF;
-            if (!hasSur) {
+            if (code <= 0xFFFF) {
               store<u16>(codes + (j << 1), code);
             } else {
               code -= 0x10000;
