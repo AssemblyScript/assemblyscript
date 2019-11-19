@@ -486,21 +486,21 @@ import { idof } from "./builtins";
   }
 
   toLowerCase(): String {
-    var len = this.length;
+    var len = <usize>this.length;
     if (!len) return this;
     var codes = __alloc(len * 2 * 2, idof<String>());
-    var j = 0;
-    for (let i = 0; i < len; ++i) {
-      let c = this.charCodeAt(i);
+    var j: usize = 0;
+    for (let i: usize = 0; i < len; ++i) {
+      let c = <i32>load<u16>(changetype<usize>(this) + (i << 1));
       if (c >= 0xD800 && c < 0xDC00 && i < len - 1) {
-        let c1 = this.charCodeAt(i + 1);
+        let c1 = <i32>load<u16>(changetype<usize>(this) + (i << 1), 2);
         if (c1 >= 0xDC00 && c1 < 0xE000) {
           c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
           ++i;
         }
       }
       if (!isAscii(c)) {
-        if (c === 0x0130) {
+        if (c == 0x0130) {
           store<u16>(codes + (j << 1), 0x0069, 0);
           store<u16>(codes + (j << 1), 0x0307, 2);
           ++j;
@@ -531,16 +531,16 @@ import { idof } from "./builtins";
   }
 
   toUpperCase(): String {
-    var len = this.length;
+    var len = <usize>this.length;
     if (!len) return this;
     var codes = __alloc(len * 3 * 2, idof<String>());
     var specialsUpperPtr = specialsUpper.dataStart as usize;
     var specialsUpperLen = specialsUpper.length;
-    var j = 0;
-    for (let i = 0; i < len; ++i) {
-      let c = this.charCodeAt(i);
+    var j: usize = 0;
+    for (let i: usize = 0; i < len; ++i) {
+      let c = <i32>load<u16>(changetype<usize>(this) + (i << 1));
       if (c >= 0xD800 && c < 0xDC00 && i < len - 1) {
-        let c1 = this.charCodeAt(i + 1);
+        let c1 = <i32>load<u16>(changetype<usize>(this) + (i << 1), 2);
         if (c1 >= 0xDC00 && c1 < 0xE000) {
           c = (((c & 0x3FF) << 10) | (c1 & 0x3FF)) + 0x10000;
           ++i;
@@ -549,9 +549,9 @@ import { idof } from "./builtins";
       if (!isAscii(c)) {
         if (c >= 0x24D0 && c <= 0x24E9) {
           // monkey patch
-          store<u16>(codes + (j << 1), c - 26);
+          store<u16>(codes + (<usize>j << 1), c - 26);
         } else {
-          let index = bsearch(specialsUpperPtr, specialsUpperLen, c);
+          let index = <usize>bsearch(specialsUpperPtr, specialsUpperLen, c);
           if (~index) {
             const a = load<u16>(specialsUpperPtr + (index << 1), 2);
             const b = load<u16>(specialsUpperPtr + (index << 1), 4);
@@ -559,8 +559,7 @@ import { idof } from "./builtins";
             store<u16>(codes + (j << 1), a, 0);
             store<u16>(codes + (j << 1), b, 2);
             if (c) store<u16>(codes + (j << 1), c, 4);
-            // @ts-ignore
-            j += 1 + <i32>(c != 0);
+            j += 1 + usize(c != 0);
           } else {
             let code = casemap(c, 1) & 0x1FFFFF;
             let hasSur = code > 0xFFFF;

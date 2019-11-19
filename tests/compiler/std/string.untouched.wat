@@ -11405,12 +11405,15 @@
    loop $loop|0
     local.get $6
     local.get $1
-    i32.lt_s
+    i32.lt_u
     i32.eqz
     br_if $break|0
     local.get $0
     local.get $6
-    call $~lib/string/String#charCodeAt
+    i32.const 1
+    i32.shl
+    i32.add
+    i32.load16_u
     local.set $7
     local.get $7
     i32.const 55296
@@ -11427,7 +11430,7 @@
      local.get $1
      i32.const 1
      i32.sub
-     i32.lt_s
+     i32.lt_u
     else
      i32.const 0
     end
@@ -11435,8 +11438,9 @@
      local.get $0
      local.get $6
      i32.const 1
+     i32.shl
      i32.add
-     call $~lib/string/String#charCodeAt
+     i32.load16_u offset=2
      local.set $8
      local.get $8
      i32.const 56320
@@ -11755,12 +11759,15 @@
    loop $loop|0
     local.get $4
     local.get $1
-    i32.lt_s
+    i32.lt_u
     i32.eqz
     br_if $break|0
     local.get $0
     local.get $4
-    call $~lib/string/String#charCodeAt
+    i32.const 1
+    i32.shl
+    i32.add
+    i32.load16_u
     local.set $5
     local.get $5
     i32.const 55296
@@ -11777,7 +11784,7 @@
      local.get $1
      i32.const 1
      i32.sub
-     i32.lt_s
+     i32.lt_u
     else
      i32.const 0
     end
@@ -11785,8 +11792,9 @@
      local.get $0
      local.get $4
      i32.const 1
+     i32.shl
      i32.add
-     call $~lib/string/String#charCodeAt
+     i32.load16_u offset=2
      local.set $6
      local.get $6
      i32.const 56320
