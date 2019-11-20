@@ -2414,7 +2414,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    var element = this.lookupExpression(node.expression, ctxFlow, ctxType, reportMode);
+    var element = this.resolveTypeName(node.typeName, ctxFlow.actualFunction, reportMode);
     if (!element) return null;
     if (element.kind == ElementKind.CLASS_PROTOTYPE) {
       return this.resolveClassInclTypeArguments(

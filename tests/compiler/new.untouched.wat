@@ -10,6 +10,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $new/gen (mut i32) (i32.const 0))
+ (global $new/ref2 (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
  (start $start)
@@ -158,13 +159,31 @@
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $start:new (; 8 ;) (type $FUNCSIG$v)
+ (func $new/ns.Ref#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 5
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $new/ns.Ref#get:ref (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+ )
+ (func $start:new (; 10 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -232,6 +251,38 @@
   end
   local.get $4
   global.set $new/gen
+  i32.const 0
+  call $new/ns.Ref#constructor
+  local.set $5
+  global.get $new/ref2
+  call $~lib/rt/stub/__release
+  local.get $5
+  global.set $new/ref2
+  i32.const 0
+  call $new/ns.Ref#constructor
+  local.set $4
+  global.get $new/ref2
+  call $~lib/rt/stub/__release
+  local.get $4
+  global.set $new/ref2
+  i32.const 0
+  call $new/ns.Ref#constructor
+  local.tee $4
+  call $new/ns.Ref#get:ref
+  local.tee $5
+  local.tee $6
+  global.get $new/ref2
+  local.tee $7
+  i32.ne
+  if
+   local.get $6
+   call $~lib/rt/stub/__retain
+   drop
+   local.get $7
+   call $~lib/rt/stub/__release
+  end
+  local.get $6
+  global.set $new/ref2
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
@@ -240,10 +291,14 @@
   call $~lib/rt/stub/__release
   local.get $3
   call $~lib/rt/stub/__release
+  local.get $4
+  call $~lib/rt/stub/__release
+  local.get $5
+  call $~lib/rt/stub/__release
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   call $start:new
  )
- (func $null (; 10 ;) (type $FUNCSIG$v)
+ (func $null (; 12 ;) (type $FUNCSIG$v)
  )
 )

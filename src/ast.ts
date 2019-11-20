@@ -114,29 +114,6 @@ export function nodeIsConstantValue(kind: NodeKind): bool {
   return false;
 }
 
-/** Checks if a node might be callable. */
-export function nodeIsCallable(kind: NodeKind): bool {
-  switch (kind) {
-    case NodeKind.IDENTIFIER:
-    case NodeKind.ASSERTION: // if kind=NONNULL
-    case NodeKind.CALL:
-    case NodeKind.ELEMENTACCESS:
-    case NodeKind.PARENTHESIZED:
-    case NodeKind.PROPERTYACCESS:
-    case NodeKind.SUPER: return true;
-  }
-  return false;
-}
-
-/** Checks if a node might be callable with generic arguments. */
-export function nodeIsGenericCallable(kind: NodeKind): bool {
-  switch (kind) {
-    case NodeKind.IDENTIFIER:
-    case NodeKind.PROPERTYACCESS: return true;
-  }
-  return false;
-}
-
 /** Base class of all nodes. */
 export abstract class Node {
 
@@ -428,14 +405,14 @@ export abstract class Node {
   }
 
   static createNewExpression(
-    expression: Expression,
+    typeName: TypeName,
     typeArgs: TypeNode[] | null,
     args: Expression[],
     range: Range
   ): NewExpression {
     var expr = new NewExpression();
     expr.range = range;
-    expr.expression = expression;
+    expr.typeName = typeName;
     expr.typeArguments = typeArgs;
     expr.arguments = args;
     return expr;
@@ -1489,8 +1466,35 @@ export class IntegerLiteralExpression extends LiteralExpression {
 }
 
 /** Represents a `new` expression. Like a call but with its own kind. */
-export class NewExpression extends CallExpression {
+export class NewExpression extends Expression {
   kind = NodeKind.NEW;
+
+  /** Type being constructed. */
+  typeName: TypeName;
+  /** Provided type arguments. */
+  typeArguments: TypeNode[] | null;
+  /** Provided arguments. */
+  arguments: Expression[];
+
+  /** Gets the type arguments range for reporting. */
+  get typeArgumentsRange(): Range {
+    var typeArguments = this.typeArguments;
+    var numTypeArguments: i32;
+    if (typeArguments && (numTypeArguments = typeArguments.length)) {
+      return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
+    }
+    return this.typeName.range;
+  }
+
+  /** Gets the arguments range for reporting. */
+  get argumentsRange(): Range {
+    var args = this.arguments;
+    var numArguments = args.length;
+    if (numArguments) {
+      return Range.join(args[0].range, args[numArguments - 1].range);
+    }
+    return this.typeName.range;
+  }
 }
 
 /** Represents a `null` expression. */

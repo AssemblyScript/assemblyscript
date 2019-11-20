@@ -7807,15 +7807,12 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
 
     // obtain the class being instantiated
-    var target = this.resolver.lookupExpression( // reports
-      expression.expression,
-      flow
-    );
+    var target = this.resolver.resolveTypeName(expression.typeName, flow.actualFunction);
     if (!target) return module.unreachable();
     if (target.kind != ElementKind.CLASS_PROTOTYPE) {
       this.error(
         DiagnosticCode.This_expression_is_not_constructable,
-        expression.expression.range
+        expression.typeName.range
       );
       return this.module.unreachable();
     }

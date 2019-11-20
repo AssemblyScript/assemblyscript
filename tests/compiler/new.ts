@@ -14,3 +14,14 @@ class Gen<T> {
 var gen: Gen<i32>;
 gen = new Gen<i32>();
 gen = new Gen<i32>().gen;
+
+namespace ns {
+  export class Ref {
+    get ref(): Ref { return this; }
+  }
+}
+
+var ref2: ns.Ref;
+ref2 = new ns.Ref();
+ref2 = new ns.Ref;
+ref2 = new ns.Ref().ref;
