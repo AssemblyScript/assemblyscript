@@ -25,7 +25,7 @@ const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
 
-global.Binaryen = require("../lib/binaryen");
+// global.Binaryen = require("../lib/binaryen");
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
 // useless code fragment on top of an actual error. suppress this:
