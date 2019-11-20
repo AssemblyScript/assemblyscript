@@ -439,10 +439,10 @@
   (local $9 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $2
   call $~lib/rt/stub/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -556,10 +556,10 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -707,7 +707,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   i32.const 792
   call $~lib/rt/stub/__retain
   local.set $1
@@ -719,7 +719,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   i32.const 816
   call $~lib/rt/stub/__retain
   local.set $1
@@ -731,7 +731,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   i32.const 840
   call $~lib/rt/stub/__retain
   local.set $1
@@ -743,7 +743,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   i32.const 864
   call $~lib/rt/stub/__retain
   local.set $1
@@ -989,7 +989,7 @@
   if
    local.get $14
    call $~lib/rt/stub/__retain
-   drop
+   local.set $14
    local.get $15
    call $~lib/rt/stub/__release
   end
@@ -1019,7 +1019,7 @@
   if
    local.get $16
    call $~lib/rt/stub/__retain
-   drop
+   local.set $16
    local.get $17
    call $~lib/rt/stub/__release
   end
@@ -1082,7 +1082,7 @@
   if
    local.get $23
    call $~lib/rt/stub/__retain
-   drop
+   local.set $23
    local.get $24
    call $~lib/rt/stub/__release
   end
@@ -1113,7 +1113,7 @@
   if
    local.get $25
    call $~lib/rt/stub/__retain
-   drop
+   local.set $25
    local.get $26
    call $~lib/rt/stub/__release
   end

@@ -16,7 +16,7 @@
  (func $class-extends/test (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.load
   drop
