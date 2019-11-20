@@ -1830,6 +1830,7 @@
  (func $~lib/arraybuffer/ArrayBufferView#constructor (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   i32.const 8
   i32.const 0
   call $~lib/rt/tlsf/__alloc
@@ -1853,20 +1854,22 @@
   local.get $0
   i32.const 0
   i32.store offset=8
+  local.get $1
+  local.set $2
   local.get $0
   i32.load
-  local.tee $2
+  local.tee $3
   local.get $1
   i32.ne
   if
-   local.get $1
-   call $~lib/rt/pure/__retain
-   drop
    local.get $2
+   call $~lib/rt/pure/__retain
+   local.set $2
+   local.get $3
    call $~lib/rt/pure/__release
   end
   local.get $0
-  local.get $1
+  local.get $2
   i32.store
   local.get $0
   local.get $1
@@ -1905,9 +1908,7 @@
  (func $~lib/dataview/DataView#constructor (; 34 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  drop
+  (local $5 i32)
   local.get $2
   i32.const 1073741808
   i32.gt_u
@@ -1919,8 +1920,6 @@
   i32.gt_u
   i32.or
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 24
    i32.const 432
    i32.const 25
@@ -1941,20 +1940,22 @@
   local.get $3
   i32.const 0
   i32.store offset=8
+  local.get $0
+  local.set $4
   local.get $3
   i32.load
-  local.tee $4
+  local.tee $5
   local.get $0
   i32.ne
   if
-   local.get $0
-   call $~lib/rt/pure/__retain
-   drop
    local.get $4
+   call $~lib/rt/pure/__retain
+   local.set $4
+   local.get $5
    call $~lib/rt/pure/__release
   end
   local.get $3
-  local.get $0
+  local.get $4
   i32.store
   local.get $3
   local.get $0
@@ -1964,8 +1965,6 @@
   local.get $3
   local.get $2
   i32.store offset=8
-  local.get $0
-  call $~lib/rt/pure/__release
   local.get $3
  )
  (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 35 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)

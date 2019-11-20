@@ -634,12 +634,12 @@ exports.main = function main(argv, options, callback) {
         add("flatten");
         add("local-cse");
       }
-      // if (hasARC) { // differs
-      //   if (optimizeLevel < 4) {
-      //     add("flatten");
-      //   }
-      //   add("post-assemblyscript");
-      // }
+      if (hasARC) { // differs
+        if (optimizeLevel < 4) {
+          add("flatten");
+        }
+        add("post-assemblyscript");
+      }
       add("dce");
       add("remove-unused-brs");
       add("remove-unused-names");
@@ -685,9 +685,9 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
       }
-      // if (hasARC) { // differs
-      //   add("post-assemblyscript-finalize");
-      // }
+      if (hasARC) { // differs
+        add("post-assemblyscript-finalize");
+      }
       add("vacuum");
 
       // PassRunner::addDefaultGlobalOptimizationPostPasses
