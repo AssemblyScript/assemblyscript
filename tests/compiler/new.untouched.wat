@@ -220,7 +220,7 @@
   if
    local.get $2
    call $~lib/rt/stub/__retain
-   drop
+   local.set $2
    local.get $3
    call $~lib/rt/stub/__release
   end
@@ -245,7 +245,7 @@
   if
    local.get $4
    call $~lib/rt/stub/__retain
-   drop
+   local.set $4
    local.get $5
    call $~lib/rt/stub/__release
   end
@@ -277,7 +277,7 @@
   if
    local.get $6
    call $~lib/rt/stub/__retain
-   drop
+   local.set $6
    local.get $7
    call $~lib/rt/stub/__release
   end
