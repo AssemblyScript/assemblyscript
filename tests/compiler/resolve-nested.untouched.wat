@@ -39,22 +39,22 @@
  (func $resolve-nested/Outer.Inner.evenInner (; 2 ;) (type $FUNCSIG$viiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $2
   call $~lib/rt/stub/__retain
-  drop
+  local.set $2
   local.get $3
   call $~lib/rt/stub/__retain
-  drop
+  local.set $3
   local.get $4
   call $~lib/rt/stub/__retain
-  drop
+  local.set $4
   local.get $5
   call $~lib/rt/stub/__retain
-  drop
+  local.set $5
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
@@ -71,19 +71,19 @@
  (func $resolve-nested/Outer.inner (; 3 ;) (type $FUNCSIG$viiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $2
   call $~lib/rt/stub/__retain
-  drop
+  local.set $2
   local.get $3
   call $~lib/rt/stub/__retain
-  drop
+  local.set $3
   local.get $4
   call $~lib/rt/stub/__retain
-  drop
+  local.set $4
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
@@ -98,13 +98,13 @@
  (func $resolve-nested/outer (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $2
   call $~lib/rt/stub/__retain
-  drop
+  local.set $2
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1

@@ -111,7 +111,7 @@
   if
    local.get $0
    call $~lib/rt/stub/__retain
-   drop
+   local.set $0
    local.get $1
    call $~lib/rt/stub/__release
   end
