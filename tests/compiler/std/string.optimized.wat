@@ -2412,39 +2412,37 @@
   local.get $0
   i32.const 65535
   i32.gt_s
-  local.tee $1
+  local.tee $2
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   if
+   local.get $1
    local.get $0
    i32.const 65536
    i32.sub
    local.tee $0
-   i32.const 1023
-   i32.and
-   i32.const 56320
-   i32.or
-   local.set $1
-   local.get $2
-   local.get $0
    i32.const 10
    i32.shr_u
    i32.const 55296
    i32.or
-   local.get $1
+   local.get $0
+   i32.const 1023
+   i32.and
+   i32.const 56320
+   i32.or
    i32.const 16
    i32.shl
    i32.or
    i32.store
   else
-   local.get $2
+   local.get $1
    local.get $0
    i32.store16
   end
-  local.get $2
+  local.get $1
   call $~lib/rt/pure/__retain
  )
  (func $~lib/string/String#startsWith (; 40 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -7685,7 +7683,7 @@
     local.get $0
     i32.add
     i32.load16_u
-    local.tee $1
+    local.tee $2
     i32.const -128
     i32.and
     if
@@ -7695,7 +7693,7 @@
      i32.sub
      i32.lt_u
      i32.const 0
-     local.get $1
+     local.get $2
      i32.const 55295
      i32.sub
      i32.const 1025
@@ -7708,7 +7706,7 @@
       local.get $0
       i32.add
       i32.load16_u offset=2
-      local.tee $2
+      local.tee $1
       i32.const 56319
       i32.sub
       i32.const 1025
@@ -7718,10 +7716,10 @@
        i32.const 1
        i32.add
        local.set $5
-       local.get $2
+       local.get $1
        i32.const 1023
        i32.and
-       local.get $1
+       local.get $2
        i32.const 1023
        i32.and
        i32.const 10
@@ -7729,10 +7727,10 @@
        i32.or
        i32.const 65536
        i32.add
-       local.set $1
+       local.set $2
       end
      end
-     local.get $1
+     local.get $2
      i32.const 9424
      i32.sub
      i32.const 25
@@ -7743,22 +7741,22 @@
       i32.shl
       local.get $4
       i32.add
-      local.get $1
+      local.get $2
       i32.const 26
       i32.sub
       i32.store16
      else
       local.get $10
-      local.set $2
+      local.set $1
       i32.const 0
       local.set $8
       block $~lib/util/casemap/bsearch|inlined.0
        loop $continue|1
         local.get $8
-        local.get $2
+        local.get $1
         i32.le_s
         if
-         local.get $2
+         local.get $1
          local.get $8
          i32.add
          i32.const 3
@@ -7771,7 +7769,7 @@
          local.get $9
          i32.add
          i32.load16_u
-         local.get $1
+         local.get $2
          i32.sub
          local.tee $11
          i32.eqz
@@ -7788,7 +7786,7 @@
           local.get $6
           i32.const 4
           i32.sub
-          local.set $2
+          local.set $1
          end
          br $continue|1
         end
@@ -7805,28 +7803,28 @@
        i32.shl
        local.get $9
        i32.add
-       local.tee $1
+       local.tee $2
        i32.load16_u offset=6
-       local.set $2
+       local.set $1
        local.get $3
        i32.const 1
        i32.shl
        local.get $4
        i32.add
-       local.get $1
+       local.get $2
        i32.load offset=2
        i32.store
-       local.get $2
+       local.get $1
        if
         local.get $3
         i32.const 1
         i32.shl
         local.get $4
         i32.add
-        local.get $2
+        local.get $1
         i32.store16 offset=4
        end
-       local.get $2
+       local.get $1
        i32.const 0
        i32.ne
        i32.const 1
@@ -7835,12 +7833,12 @@
        i32.add
        local.set $3
       else
-       local.get $1
+       local.get $2
        i32.const 1
        call $~lib/util/casemap/casemap
        i32.const 2097151
        i32.and
-       local.tee $2
+       local.tee $1
        i32.const 65535
        i32.le_s
        if
@@ -7849,29 +7847,27 @@
         i32.shl
         local.get $4
         i32.add
-        local.get $2
+        local.get $1
         i32.store16
        else
-        local.get $2
-        i32.const 65536
-        i32.sub
-        local.tee $2
-        i32.const 1023
-        i32.and
-        i32.const 56320
-        i32.or
-        local.set $1
         local.get $3
         i32.const 1
         i32.shl
         local.get $4
         i32.add
-        local.get $2
+        local.get $1
+        i32.const 65536
+        i32.sub
+        local.tee $1
         i32.const 10
         i32.shr_u
         i32.const 55296
         i32.or
         local.get $1
+        i32.const 1023
+        i32.and
+        i32.const 56320
+        i32.or
         i32.const 16
         i32.shl
         i32.or
@@ -7889,11 +7885,11 @@
      i32.shl
      local.get $4
      i32.add
-     local.get $1
+     local.get $2
      i32.const 95
      i32.and
-     local.get $1
-     local.get $1
+     local.get $2
+     local.get $2
      i32.const 97
      i32.sub
      i32.const 26
@@ -8049,26 +8045,24 @@
         local.get $1
         i32.store16
        else
-        local.get $1
-        i32.const 65536
-        i32.sub
-        local.tee $1
-        i32.const 1023
-        i32.and
-        i32.const 56320
-        i32.or
-        local.set $6
         local.get $2
         i32.const 1
         i32.shl
         local.get $4
         i32.add
         local.get $1
+        i32.const 65536
+        i32.sub
+        local.tee $1
         i32.const 10
         i32.shr_u
         i32.const 55296
         i32.or
-        local.get $6
+        local.get $1
+        i32.const 1023
+        i32.and
+        i32.const 56320
+        i32.or
         i32.const 16
         i32.shl
         i32.or

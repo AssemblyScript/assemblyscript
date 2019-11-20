@@ -29,7 +29,7 @@ import { idof } from "./builtins";
       code -= 0x10000;
       let hi = (code & 0x03FF) | 0xDC00;
       let lo = (code >>> 10) | 0xD800;
-      store<u32>(out, (hi << 16) | lo);
+      store<u32>(out, lo | (hi << 16));
     }
     return changetype<string>(out); // retains
   }
@@ -516,7 +516,7 @@ import { idof } from "./builtins";
             code -= 0x10000;
             let lo = (code >>> 10) | 0xD800;
             let hi = (code & 0x03FF) | 0xDC00;
-            store<u32>(codes + (j << 1), (hi << 16) | lo);
+            store<u32>(codes + (j << 1), lo | (hi << 16));
             ++j;
           }
         }
@@ -551,7 +551,7 @@ import { idof } from "./builtins";
         } else {
           let index = <usize>bsearch(c, specialsUpperPtr, specialsUpperLen);
           if (~index) {
-            // load next 3 bytes from row with `index` offset for specialsUpper table
+            // load next 3 code points from row with `index` offset for specialsUpper table
             let ab = load<u32>(specialsUpperPtr + (index << 1), 2);
             let cc = load<u16>(specialsUpperPtr + (index << 1), 6);
             store<u32>(codes + (j << 1), ab);
@@ -565,7 +565,7 @@ import { idof } from "./builtins";
               code -= 0x10000;
               let lo = (code >>> 10) | 0xD800;
               let hi = (code & 0x03FF) | 0xDC00;
-              store<u32>(codes + (j << 1), (hi << 16) | lo);
+              store<u32>(codes + (j << 1), lo | (hi << 16));
               ++j;
             }
           }

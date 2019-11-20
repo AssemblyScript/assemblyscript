@@ -4044,10 +4044,10 @@
    i32.or
    local.set $4
    local.get $2
+   local.get $4
    local.get $3
    i32.const 16
    i32.shl
-   local.get $4
    i32.or
    i32.store
   end
@@ -11658,10 +11658,10 @@
         i32.const 1
         i32.shl
         i32.add
+        local.get $10
         local.get $8
         i32.const 16
         i32.shl
-        local.get $10
         i32.or
         i32.store
         local.get $5
@@ -11882,10 +11882,10 @@
         i32.const 1
         i32.shl
         i32.add
+        local.get $7
         local.get $8
         i32.const 16
         i32.shl
-        local.get $7
         i32.or
         i32.store
         local.get $3
