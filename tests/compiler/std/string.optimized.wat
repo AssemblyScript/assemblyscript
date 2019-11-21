@@ -15161,7 +15161,7 @@
     i64.extend_i32_s
     local.tee $4
     i64.const 0
-    i64.ge_s
+    i64.ge_u
     if
      local.get $4
      i64.const 16
@@ -15176,7 +15176,7 @@
     i64.extend_i32_s
     local.tee $4
     i64.const 0
-    i64.ge_s
+    i64.ge_u
     if
      local.get $4
      i64.const 32
@@ -15196,7 +15196,7 @@
     i64.extend_i32_s
     local.tee $5
     i64.const 0
-    i64.ge_s
+    i64.ge_u
     if
      local.get $5
      i64.const 16
@@ -15211,7 +15211,7 @@
     i64.extend_i32_s
     local.tee $5
     i64.const 0
-    i64.ge_s
+    i64.ge_u
     if
      local.get $5
      i64.const 32
@@ -15231,7 +15231,7 @@
     i64.extend_i32_s
     local.tee $6
     i64.const 0
-    i64.ge_s
+    i64.ge_u
     if
      local.get $6
      i64.const 16
@@ -15246,7 +15246,7 @@
     i64.extend_i32_s
     local.tee $6
     i64.const 0
-    i64.ge_s
+    i64.ge_u
     if
      local.get $6
      i64.const 32
@@ -15266,7 +15266,7 @@
     i64.extend_i32_s
     local.tee $9
     i64.const 0
-    i64.ge_s
+    i64.ge_u
     if
      local.get $9
      i64.const 16
@@ -15281,7 +15281,7 @@
     i64.extend_i32_s
     local.tee $9
     i64.const 0
-    i64.ge_s
+    i64.ge_u
     if
      local.get $9
      i64.const 32
@@ -15328,7 +15328,7 @@
     if
      i32.const 0
      i32.const 72
-     i32.const 637
+     i32.const 641
      i32.const 2
      call $~lib/builtins/abort
      unreachable
@@ -15339,7 +15339,7 @@
     if
      i32.const 0
      i32.const 72
-     i32.const 638
+     i32.const 642
      i32.const 2
      call $~lib/builtins/abort
      unreachable
