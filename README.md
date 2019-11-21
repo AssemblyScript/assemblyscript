@@ -5,7 +5,7 @@
 
 **AssemblyScript** compiles a strict subset of [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
 
-Check out the [documentation](https://docs.assemblyscript.org) or try it out in [WebAssembly Studio](https://webassembly.studio)!
+Check out the [documentation](https://docs.assemblyscript.dev) or try it out in [WebAssembly Studio](https://webassembly.studio)!
 
 ---
 
@@ -48,10 +48,10 @@ Motivation
 Further resources
 -----------------
 
-* [Documentation](https://docs.assemblyscript.org)<br />
+* [Documentation](https://docs.assemblyscript.dev)<br />
   Introduction, quick start, examples and general usage instructions.
 
-* [Development instructions](https://docs.assemblyscript.org/details/development)<br />
+* [Development instructions](https://docs.assemblyscript.dev/details/development)<br />
   How to set up a development environment (to submit a pull request).
 
 * [Project governance](https://github.com/AssemblyScript/meta)<br />
