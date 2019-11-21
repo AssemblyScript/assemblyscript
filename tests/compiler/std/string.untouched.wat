@@ -3663,7 +3663,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   i32.eq
@@ -3730,10 +3730,10 @@
   (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -3847,10 +3847,10 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -3984,7 +3984,7 @@
   (local $7 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $1
   i32.const 0
   i32.eq
@@ -3997,7 +3997,7 @@
    if
     local.get $3
     call $~lib/rt/pure/__retain
-    drop
+    local.set $3
     local.get $4
     call $~lib/rt/pure/__release
    end
@@ -4058,7 +4058,7 @@
   (local $6 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $1
   i32.const 0
   i32.eq
@@ -4125,7 +4125,7 @@
   (local $7 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $1
   call $~lib/string/String#get:length
   local.set $3
@@ -4212,7 +4212,7 @@
   (local $3 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   local.get $2
@@ -4266,7 +4266,7 @@
   (local $10 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
@@ -4366,7 +4366,7 @@
   (local $10 i32)
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
@@ -4467,7 +4467,7 @@
   (local $7 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $1
   call $~lib/string/String#get:length
   local.set $3
@@ -4877,7 +4877,7 @@
   (local $8 f64)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -5162,7 +5162,7 @@
   (local $2 f64)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/util/string/strtol<f64>
@@ -5180,7 +5180,7 @@
   (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -5463,7 +5463,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/util/string/strtol<i32>
@@ -5482,7 +5482,7 @@
   (local $8 i64)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $2
@@ -5767,7 +5767,7 @@
   (local $2 i64)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $1
   call $~lib/util/string/strtol<i64>
@@ -6118,7 +6118,7 @@
   (local $23 i64)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   call $~lib/string/String#get:length
   local.set $1
@@ -7048,7 +7048,7 @@
   (local $1 f64)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   call $~lib/util/string/strtod
   local.set $1
@@ -7065,7 +7065,7 @@
   (local $7 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $1
   i32.const 0
   i32.eq
@@ -7078,7 +7078,7 @@
    if
     local.get $2
     call $~lib/rt/pure/__retain
-    drop
+    local.set $2
     local.get $3
     call $~lib/rt/pure/__release
    end
@@ -7136,10 +7136,10 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.const 576
   local.get $0
@@ -7159,10 +7159,10 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
@@ -7181,10 +7181,10 @@
   (local $5 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -7271,10 +7271,10 @@
   (local $5 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -7358,10 +7358,10 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   call $~lib/string/String.__lt
@@ -7377,10 +7377,10 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   call $~lib/string/String.__gt
@@ -7470,10 +7470,10 @@
   (local $9 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
@@ -7787,10 +7787,10 @@
   (local $14 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
@@ -8605,7 +8605,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load offset=12
   local.set $2
@@ -8649,7 +8649,7 @@
   (local $13 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $2
   i32.eqz
   if
@@ -15381,7 +15381,7 @@
   if
    local.get $80
    call $~lib/rt/pure/__retain
-   drop
+   local.set $80
    local.get $81
    call $~lib/rt/pure/__release
   end

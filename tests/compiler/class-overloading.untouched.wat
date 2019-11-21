@@ -20,7 +20,7 @@
  (func $class-overloading/test (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   call $class-overloading/Foo#baz
   local.get $0

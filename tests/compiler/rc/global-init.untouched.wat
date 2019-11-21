@@ -3286,7 +3286,7 @@
   if
    local.get $0
    call $~lib/rt/pure/__retain
-   drop
+   local.set $0
    local.get $1
    call $~lib/rt/pure/__release
   end
@@ -3300,7 +3300,7 @@
   if
    local.get $1
    call $~lib/rt/pure/__retain
-   drop
+   local.set $1
    local.get $0
    call $~lib/rt/pure/__release
   end

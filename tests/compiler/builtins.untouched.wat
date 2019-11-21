@@ -123,10 +123,10 @@
   (local $9 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $2
   call $~lib/rt/stub/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -240,10 +240,10 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq

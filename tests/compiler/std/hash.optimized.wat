@@ -16,9 +16,12 @@
   i32.const -2128831035
   local.set $1
   local.get $0
+  local.tee $2
   if
    block $break|0
-    local.get $0
+    i32.const 0
+    local.set $0
+    local.get $2
     i32.const 16
     i32.sub
     i32.load offset=12
@@ -28,7 +31,7 @@
     i32.shl
     local.set $3
     loop $loop|0
-     local.get $2
+     local.get $0
      local.get $3
      i32.ge_u
      br_if $break|0
@@ -41,10 +44,10 @@
      i32.const 16777619
      i32.mul
      local.set $1
-     local.get $2
+     local.get $0
      i32.const 1
      i32.add
-     local.set $2
+     local.set $0
      br $loop|0
     end
     unreachable

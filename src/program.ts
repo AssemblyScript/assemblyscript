@@ -446,21 +446,21 @@ export class Program extends DiagnosticEmitter {
 
   /** RT `__alloc(size: usize, id: u32): usize` */
   allocInstance: Function;
-  /** RT `__realloc(ref: usize, newSize: usize): usize` */
+  /** RT `__realloc(ptr: usize, newSize: usize): usize` */
   reallocInstance: Function;
-  /** RT `__free(ref: usize): void` */
+  /** RT `__free(ptr: usize): void` */
   freeInstance: Function;
-  /** RT `__retain(ref: usize): usize` */
+  /** RT `__retain(ptr: usize): usize` */
   retainInstance: Function;
-  /** RT `__release(ref: usize): void` */
+  /** RT `__release(ptr: usize): void` */
   releaseInstance: Function;
   /** RT `__collect(): void` */
   collectInstance: Function;
-  /** RT `__visit(ref: usize, cookie: u32): void` */
+  /** RT `__visit(ptr: usize, cookie: u32): void` */
   visitInstance: Function;
   /** RT `__typeinfo(id: u32): RTTIFlags` */
   typeinfoInstance: Function;
-  /** RT `__instanceof(ref: usize, superId: u32): bool` */
+  /** RT `__instanceof(ptr: usize, superId: u32): bool` */
   instanceofInstance: Function;
   /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
   allocArrayInstance: Function;

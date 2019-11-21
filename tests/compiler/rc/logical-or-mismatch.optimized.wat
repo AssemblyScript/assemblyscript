@@ -1812,15 +1812,6 @@
   end
   call $~lib/rt/pure/__release
   global.get $rc/logical-or-mismatch/gloRef
-  local.tee $0
-  if (result i32)
-   local.get $0
-  else
-   global.get $rc/logical-or-mismatch/gloRef
-  end
-  call $~lib/rt/pure/__retain
-  call $~lib/rt/pure/__release
-  global.get $rc/logical-or-mismatch/gloRef
   call $~lib/rt/pure/__release
  )
  (func $start (; 32 ;) (type $FUNCSIG$v)
