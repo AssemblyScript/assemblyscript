@@ -549,7 +549,10 @@ import { idof } from "./builtins";
           // monkey patch
           store<u16>(codes + (j << 1), c - 26);
         } else {
-          let index = <usize>bsearch(c, specialsUpperPtr, specialsUpperLen);
+          let index = -1;
+          if (c <= 0xFB17) { // See last row in specialsUpper table
+            index = <usize>bsearch(c, specialsUpperPtr, specialsUpperLen);
+          }
           if (~index) {
             // load next 3 code points from row with `index` offset for specialsUpper table
             let ab = load<u32>(specialsUpperPtr + (index << 1), 2);
