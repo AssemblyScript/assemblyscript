@@ -1146,6 +1146,9 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         return this.readUnicodeEscape(); // \uDDDD
       }
+      case CharCode.x: {
+        return this.readHexadecimalEscape(); // \xDD
+      }
       case CharCode.CARRIAGERETURN: {
         if (
           this.pos < end &&
@@ -1537,8 +1540,7 @@ export class Tokenizer extends DiagnosticEmitter {
     throw new Error("not implemented"); // TBD
   }
 
-  readUnicodeEscape(): string {
-    var remain = 4;
+  private readEncodedSequenceEscape(remain: i32): string {
     var value = 0;
     var end = this.end;
     var text = this.source.text;
@@ -1567,6 +1569,14 @@ export class Tokenizer extends DiagnosticEmitter {
       return "";
     }
     return String.fromCharCode(value);
+  }
+
+  readHexadecimalEscape(): string {
+    return this.readEncodedSequenceEscape(2);
+  }
+
+  readUnicodeEscape(): string {
+    return this.readEncodedSequenceEscape(4);
   }
 
   private readExtendedUnicodeEscape(): string {
