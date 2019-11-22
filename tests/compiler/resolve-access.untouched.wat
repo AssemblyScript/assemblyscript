@@ -1449,7 +1449,7 @@
   if
    i32.const 48
    i32.const 104
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -1877,7 +1877,9 @@
   (local $6 i32)
   (local $7 i64)
   local.get $0
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   if
    i32.const 152
    call $~lib/rt/stub/__retain

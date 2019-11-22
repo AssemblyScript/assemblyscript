@@ -408,41 +408,40 @@
     exports.default = generate;
 });
 
-const prelude = `declare type bool = boolean;
-declare type i8 = number;
-declare type i16 = number;
-declare type i32 = number;
-declare type isize = number;
-declare type u8 = number;
-declare type u16 = number;
-declare type u32 = number;
-declare type usize = number;
-declare type f32 = number;
-declare type f64 = number;
-declare module 'assemblyscript' {
-  export * from 'assemblyscript/src/index';
-}
-`;
+const path = require("path");
+const fs = require("fs");
+const stream = require("stream");
+const util = require("util");
 
-var path = require("path");
-var fs = require("fs");
-var stdout = fs.createWriteStream(path.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"));
-stdout.write(prelude);
-stdout.write = (function(_write) {
-    return function(...args) {
-        if (typeof args[0] === "string") {
-            args[0] = args[0].replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
-        }
-        return _write.apply(stdout, args);
-    };
-})(stdout.write);
+function OutputStream(options) {
+    stream.Writable.call(this, options);
+    this.chunks = [];
+}
+util.inherits(OutputStream, stream.Writable);
+OutputStream.prototype._write = function(chunk, enc, cb) {
+    this.chunks.push(chunk);
+    cb();
+};
+OutputStream.prototype.toBuffer = function() {
+    return Buffer.concat(this.chunks);
+};
+OutputStream.prototype.toString = function() {
+    return this.toBuffer().toString("utf8");
+};
+
+const stdout = new OutputStream();
+stdout.write(`declare module 'assemblyscript' {
+    export * from 'assemblyscript/src/index';
+}
+`);
 
 module.exports.default({
     project: path.resolve(__dirname, "..", "src"),
     prefix: "assemblyscript",
     exclude: [
         "glue/js/index.ts",
-        "glue/js/node.d.ts"
+        "glue/js/node.d.ts",
+        "glue/binaryen.d.ts"
     ],
     verbose: true,
     sendMessage: console.log,
@@ -459,3 +458,41 @@ module.exports.default({
     sendMessage: console.log,
     stdout: stdout
 });
+
+var source = stdout.toString().replace(/\/\/\/ <reference[^>]*>\r?\n/g, "");
+
+const ts = require("typescript");
+const sourceFile = ts.createSourceFile("assemblyscript.d.ts", source, ts.ScriptTarget.ESNext, false, ts.ScriptKind.TS);
+
+console.log("transforming:");
+var numReplaced = 0;
+const result = ts.transform(sourceFile, [
+    function(context) {
+        const visit = node => {
+            node = ts.visitEachChild(node, visit, context);
+            if (ts.isTypeNode(node)) {
+                const name = node.getText(sourceFile);
+                switch (name) {
+                    // this is wrong, but works
+                    case "bool": ++numReplaced; return ts.createIdentifier("boolean");
+                    default: if (!/^(?:Binaryen|Relooper)/.test(name)) break;
+                    case "i8": case "i16": case "i32": case "isize":
+                    case "u8": case "u16": case "u32": case "usize":
+                    case "f32": case "f64": ++numReplaced; return ts.createIdentifier("number");
+                }
+            }
+            return node;
+        };
+        return node => ts.visitNode(node, visit);
+    }
+]);
+console.log("  replaced " + numReplaced + " AS types with JS types");
+
+if (!fs.existsSync(path.join(__dirname, "..", "dist"))) {
+    fs.mkdirSync(path.join(__dirname, "..", "dist"));
+}
+fs.writeFileSync(
+    path.resolve(__dirname, "..", "dist", "assemblyscript.d.ts"),
+    ts.createPrinter().printFile(result.transformed[0]),
+    "utf8"
+);

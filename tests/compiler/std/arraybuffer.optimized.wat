@@ -2060,32 +2060,10 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>> (; 33 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  drop
-  local.get $0
-  call $~lib/rt/pure/__release
-  i32.const 0
- )
- (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array> (; 34 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  drop
-  local.get $0
-  if
-   local.get $0
-   call $~lib/rt/pure/__release
-   i32.const 1
-   return
-  end
-  local.get $0
-  call $~lib/rt/pure/__release
-  i32.const 0
- )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 33 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   i32.const 1
   i32.const 1073741808
   local.get $1
@@ -2102,11 +2080,11 @@
   i32.const 1
   local.get $1
   i32.shl
-  local.tee $2
+  local.tee $3
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   local.tee $1
-  local.get $2
+  local.get $3
   call $~lib/memory/memory.fill
   local.get $0
   i32.eqz
@@ -2127,29 +2105,31 @@
   i32.const 0
   i32.store offset=8
   local.get $1
+  local.set $2
+  local.get $1
   local.get $0
   i32.load
-  local.tee $3
+  local.tee $4
   i32.ne
   if
-   local.get $1
+   local.get $2
    call $~lib/rt/pure/__retain
-   drop
-   local.get $3
+   local.set $2
+   local.get $4
    call $~lib/rt/pure/__release
   end
   local.get $0
-  local.get $1
+  local.get $2
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $0
-  local.get $2
+  local.get $3
   i32.store offset=8
   local.get $0
  )
- (func $~lib/rt/__allocArray (; 36 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/__allocArray (; 34 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -2177,12 +2157,10 @@
   call $~lib/memory/memory.copy
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 37 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 35 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  drop
+  (local $4 i32)
   local.get $1
   i32.const 1073741808
   i32.gt_u
@@ -2192,8 +2170,6 @@
   i32.gt_u
   i32.or
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 24
    i32.const 456
    i32.const 25
@@ -2214,20 +2190,22 @@
   local.get $2
   i32.const 0
   i32.store offset=8
+  local.get $0
+  local.set $3
   local.get $2
   i32.load
-  local.tee $3
+  local.tee $4
   local.get $0
   i32.ne
   if
-   local.get $0
-   call $~lib/rt/pure/__retain
-   drop
    local.get $3
+   call $~lib/rt/pure/__retain
+   local.set $3
+   local.get $4
    call $~lib/rt/pure/__release
   end
   local.get $2
-  local.get $0
+  local.get $3
   i32.store
   local.get $2
   local.get $0
@@ -2235,18 +2213,15 @@
   local.get $2
   local.get $1
   i32.store offset=8
-  local.get $0
-  call $~lib/rt/pure/__release
   local.get $2
  )
- (func $start:std/arraybuffer (; 38 ;) (type $FUNCSIG$v)
+ (func $start:std/arraybuffer (; 36 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   i32.const 8
   i32.const 0
   call $~lib/rt/tlsf/__alloc
@@ -2390,10 +2365,10 @@
   i32.const -4
   i32.const 42
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $1
+  local.set $3
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $1
+  local.get $3
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 4
   i32.ne
@@ -2409,10 +2384,10 @@
   i32.const 42
   i32.const 1073741808
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $0
-  local.get $1
+  local.set $1
+  local.get $3
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $1
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   if
    i32.const 0
@@ -2422,52 +2397,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.eqz
   if
    i32.const 0
    i32.const 280
    i32.const 38
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 40
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 42
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 43
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 44
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2478,87 +2413,41 @@
   call $~lib/rt/pure/__retain
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.set $1
+  local.set $0
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $5
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/array/Array<i32>>
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 47
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 48
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 12
   i32.const 9
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $3
-  local.get $3
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 49
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
+  local.set $5
   i32.const 1
   global.set $~lib/argc
-  local.get $1
+  local.get $0
   i32.load
   local.tee $3
+  local.get $3
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $4
-  local.get $3
-  local.get $4
   call $~lib/dataview/DataView#constructor
-  local.tee $3
-  local.set $4
-  local.get $3
-  call $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 280
-   i32.const 50
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
+  local.set $3
   local.get $2
+  call $~lib/rt/pure/__release
+  local.get $1
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $1
   call $~lib/rt/pure/__release
   local.get $5
   call $~lib/rt/pure/__release
-  call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
  )
- (func $start (; 39 ;) (type $FUNCSIG$v)
+ (func $start (; 37 ;) (type $FUNCSIG$v)
   call $start:std/arraybuffer
  )
- (func $~lib/rt/pure/__visit (; 40 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 38 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 620
   i32.lt_u
@@ -2668,7 +2557,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 41 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 39 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$2
@@ -2691,7 +2580,7 @@
    call $~lib/rt/pure/__visit
   end
  )
- (func $null (; 42 ;) (type $FUNCSIG$v)
+ (func $null (; 40 ;) (type $FUNCSIG$v)
   nop
  )
 )

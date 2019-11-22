@@ -7,7 +7,8 @@ import {
   CommonFlags,
   CommonSymbols,
   PATH_DELIMITER,
-  LIBRARY_PREFIX
+  LIBRARY_PREFIX,
+  LIBRARY_SUBST
 } from "./common";
 
 import {
@@ -1383,6 +1384,17 @@ export enum LiteralKind {
   OBJECT
 }
 
+/** Checks if the given node represents a numeric (float or integer) literal. */
+export function isNumericLiteral(node: Expression): bool {
+  if (node.kind == NodeKind.LITERAL) {
+    switch ((<LiteralExpression>node).literalKind) {
+      case LiteralKind.FLOAT:
+      case LiteralKind.INTEGER: return true;
+    }
+  }
+  return false;
+}
+
 /** Base class of all literal expressions. */
 export abstract class LiteralExpression extends Expression {
   kind = NodeKind.LITERAL;
@@ -1701,6 +1713,12 @@ export class Source extends Node {
     this.text = text;
   }
 
+  /** Checks if this source represents native code. */
+  get isNative(): bool {
+    return this.internalPath == LIBRARY_SUBST;
+  }
+
+  /** Checks if this source is part of the (standard) library. */
   get isLibrary(): bool {
     var kind = this.sourceKind;
     return kind == SourceKind.LIBRARY || kind == SourceKind.LIBRARY_ENTRY;

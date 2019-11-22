@@ -37,7 +37,7 @@
   if
    i32.const 320
    i32.const 376
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -316,6 +316,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.const 15
   i32.and
@@ -337,7 +338,7 @@
   i32.sub
   local.tee $3
   i32.load
-  local.set $2
+  local.set $4
   local.get $3
   i32.load offset=4
   i32.const -1
@@ -350,15 +351,23 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/rt/stub/offset
+  local.get $0
+  local.get $4
+  i32.add
+  i32.eq
+  local.set $5
   local.get $1
-  local.get $2
+  i32.const 15
+  i32.add
+  i32.const -16
+  i32.and
+  local.set $2
+  local.get $1
+  local.get $4
   i32.gt_u
   if
-   global.get $~lib/rt/stub/offset
-   local.get $0
-   local.get $2
-   i32.add
-   i32.eq
+   local.get $5
    if
     local.get $1
     i32.const 1073741808
@@ -366,31 +375,21 @@
     if
      unreachable
     end
-    local.get $1
-    i32.const 15
-    i32.add
-    i32.const -16
-    i32.and
-    local.tee $2
     local.get $0
+    local.get $2
     i32.add
     call $~lib/rt/stub/maybeGrowMemory
     local.get $3
     local.get $2
     i32.store
    else
-    local.get $1
-    i32.const 15
-    i32.add
-    i32.const -16
-    i32.and
-    local.tee $4
     local.get $2
+    local.get $4
     i32.const 1
     i32.shl
-    local.tee $2
-    local.get $4
+    local.tee $4
     local.get $2
+    local.get $4
     i32.gt_u
     select
     local.get $3
@@ -408,19 +407,10 @@
     local.set $3
    end
   else
-   global.get $~lib/rt/stub/offset
-   local.get $0
-   local.get $2
-   i32.add
-   i32.eq
+   local.get $5
    if
-    local.get $1
-    i32.const 15
-    i32.add
-    i32.const -16
-    i32.and
-    local.tee $2
     local.get $0
+    local.get $2
     i32.add
     global.set $~lib/rt/stub/offset
     local.get $3
@@ -699,22 +689,22 @@
   end
  )
  (func $~lib/array/Array<i32>#__set (; 8 ;) (type $FUNCSIG$v)
-  i32.const 48
-  i32.const 2
-  call $~lib/array/ensureSize
-  i32.const 52
-  i32.load
-  i32.const 2
-  i32.store
   i32.const 0
   i32.const 60
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
+   i32.const 48
+   i32.const 2
+   call $~lib/array/ensureSize
    i32.const 60
    i32.const 1
    i32.store
   end
+  i32.const 52
+  i32.load
+  i32.const 2
+  i32.store
  )
  (func $~lib/array/Array<i64>#__get (; 9 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
   local.get $0
@@ -724,7 +714,7 @@
   if
    i32.const 320
    i32.const 376
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -738,22 +728,22 @@
   i64.load
  )
  (func $~lib/array/Array<i64>#__set (; 10 ;) (type $FUNCSIG$v)
-  i32.const 112
-  i32.const 3
-  call $~lib/array/ensureSize
-  i32.const 116
-  i32.load
-  i64.const 4
-  i64.store
   i32.const 0
   i32.const 124
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
+   i32.const 112
+   i32.const 3
+   call $~lib/array/ensureSize
    i32.const 124
    i32.const 1
    i32.store
   end
+  i32.const 116
+  i32.load
+  i64.const 4
+  i64.store
  )
  (func $~lib/array/Array<f32>#__get (; 11 ;) (type $FUNCSIG$fi) (param $0 i32) (result f32)
   local.get $0
@@ -763,7 +753,7 @@
   if
    i32.const 320
    i32.const 376
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -777,22 +767,22 @@
   f32.load
  )
  (func $~lib/array/Array<f32>#__set (; 12 ;) (type $FUNCSIG$v)
-  i32.const 168
-  i32.const 2
-  call $~lib/array/ensureSize
-  i32.const 172
-  i32.load
-  f32.const 2.5
-  f32.store
   i32.const 0
   i32.const 180
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
+   i32.const 168
+   i32.const 2
+   call $~lib/array/ensureSize
    i32.const 180
    i32.const 1
    i32.store
   end
+  i32.const 172
+  i32.load
+  f32.const 2.5
+  f32.store
  )
  (func $~lib/array/Array<f64>#__get (; 13 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
   local.get $0
@@ -802,7 +792,7 @@
   if
    i32.const 320
    i32.const 376
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -816,22 +806,22 @@
   f64.load
  )
  (func $~lib/array/Array<f64>#__set (; 14 ;) (type $FUNCSIG$v)
-  i32.const 232
-  i32.const 3
-  call $~lib/array/ensureSize
-  i32.const 236
-  i32.load
-  f64.const 2.25
-  f64.store
   i32.const 0
   i32.const 244
   i32.load
-  i32.ge_s
+  i32.ge_u
   if
+   i32.const 232
+   i32.const 3
+   call $~lib/array/ensureSize
    i32.const 244
    i32.const 1
    i32.store
   end
+  i32.const 236
+  i32.load
+  f64.const 2.25
+  f64.store
  )
  (func $start:std/static-array (; 15 ;) (type $FUNCSIG$v)
   i32.const 60

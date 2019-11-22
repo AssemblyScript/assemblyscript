@@ -380,7 +380,7 @@ export class Parser extends DiagnosticEmitter {
   /** Obtains the next file to parse. */
   nextFile(): string | null {
     var backlog = this.backlog;
-    return backlog.length ? backlog.shift() : null;
+    return backlog.length ? backlog.shift()! : null;
   }
 
   /** Obtains the dependee of the given imported file. */
@@ -1011,6 +1011,7 @@ export class Parser extends DiagnosticEmitter {
 
     // at 'return': Expression | (';' | '}' | ...'\n')
 
+    var startPos = tn.tokenPos;
     var expr: Expression | null = null;
     if (
       tn.peek(true) != Token.SEMICOLON &&
@@ -1020,7 +1021,7 @@ export class Parser extends DiagnosticEmitter {
       if (!(expr = this.parseExpression(tn))) return null;
     }
 
-    var ret = Node.createReturnStatement(expr, tn.range());
+    var ret = Node.createReturnStatement(expr, tn.range(startPos, tn.pos));
     tn.skip(Token.SEMICOLON);
     return ret;
   }

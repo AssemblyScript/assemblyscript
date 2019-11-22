@@ -144,41 +144,58 @@ export enum LocalFlags {
 
   /** Local is constant. */
   CONSTANT = 1 << 0,
+  /** Local is a function parameter. */
+  PARAMETER = 1 << 1,
   /** Local is properly wrapped. Relevant for small integers. */
-  WRAPPED = 1 << 1,
+  WRAPPED = 1 << 2,
   /** Local is non-null. */
-  NONNULL = 1 << 2,
+  NONNULL = 1 << 3,
   /** Local is read from. */
-  READFROM = 1 << 3,
+  READFROM = 1 << 4,
   /** Local is written to. */
-  WRITTENTO = 1 << 4,
+  WRITTENTO = 1 << 5,
   /** Local is retained. */
-  RETAINED = 1 << 5,
+  RETAINED = 1 << 6,
+  /** Local is returned. */
+  RETURNED = 1 << 7,
 
   /** Local is conditionally read from. */
-  CONDITIONALLY_READFROM = 1 << 6,
+  CONDITIONALLY_READFROM = 1 << 8,
   /** Local is conditionally written to. */
-  CONDITIONALLY_WRITTENTO = 1 << 7,
+  CONDITIONALLY_WRITTENTO = 1 << 9,
   /** Local must be conditionally retained. */
-  CONDITIONALLY_RETAINED = 1 << 8,
+  CONDITIONALLY_RETAINED = 1 << 10,
+  /** Local is conditionally returned. */
+  CONDITIONALLY_RETURNED = 1 << 11,
 
   /** Any categorical flag. */
   ANY_CATEGORICAL = CONSTANT
+                  | PARAMETER
                   | WRAPPED
                   | NONNULL
                   | READFROM
                   | WRITTENTO
-                  | RETAINED,
+                  | RETAINED
+                  | RETURNED,
 
   /** Any conditional flag. */
   ANY_CONDITIONAL = RETAINED
                   | CONDITIONALLY_READFROM
                   | CONDITIONALLY_WRITTENTO
-                  | CONDITIONALLY_RETAINED,
+                  | CONDITIONALLY_RETAINED
+                  | CONDITIONALLY_RETURNED,
+
+  /** Any written to flag. */
+  ANY_WRITTENTO = WRITTENTO
+                | CONDITIONALLY_WRITTENTO,
 
   /** Any retained flag. */
   ANY_RETAINED = RETAINED
-               | CONDITIONALLY_RETAINED
+               | CONDITIONALLY_RETAINED,
+
+  /** Any returned flag. */
+  ANY_RETURNED = RETURNED
+               | CONDITIONALLY_RETURNED
 }
 export namespace LocalFlags {
   export function join(left: LocalFlags, right: LocalFlags): LocalFlags {
@@ -307,6 +324,8 @@ export class Flow {
       case NativeType.F32: { temps = parentFunction.tempF32s; break; }
       case NativeType.F64: { temps = parentFunction.tempF64s; break; }
       case NativeType.V128: { temps = parentFunction.tempV128s; break; }
+      case NativeType.Anyref: { temps = parentFunction.tempAnyrefs; break; }
+      case NativeType.Exnref: { temps = parentFunction.tempExnrefs; break; }
       default: throw new Error("concrete type expected");
     }
     var local: Local;
@@ -328,7 +347,7 @@ export class Flow {
       local = parentFunction.addLocal(type);
     } else {
       if (temps && temps.length) {
-        local = temps.pop();
+        local = temps.pop()!;
         local.type = type;
         local.flags = CommonFlags.NONE;
       } else {
@@ -357,7 +376,7 @@ export class Flow {
     var parentFunction = this.parentFunction;
     var temps: Local[];
     assert(local.type != null); // internal error
-    switch ((<Type>local.type).toNativeType()) {
+    switch (local.type.toNativeType()) {
       case NativeType.I32: {
         temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
         break;
@@ -378,23 +397,24 @@ export class Flow {
         temps = parentFunction.tempV128s || (parentFunction.tempV128s = []);
         break;
       }
+      case NativeType.Anyref: {
+        temps = parentFunction.tempAnyrefs || (parentFunction.tempAnyrefs = []);
+        break;
+      }
+      case NativeType.Exnref: {
+        temps = parentFunction.tempExnrefs || (parentFunction.tempExnrefs = []);
+        break;
+      }
       default: throw new Error("concrete type expected");
     }
     assert(local.index >= 0);
     temps.push(local);
   }
 
-  /** Gets and immediately frees a temporary local of the specified type. */
-  getAndFreeTempLocal(type: Type, except: Set<i32> | null = null): Local {
-    var local = this.getTempLocal(type, except);
-    this.freeTempLocal(local);
-    return local;
-  }
-
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
     var scopedLocals = this.scopedLocals;
-    if (scopedLocals && scopedLocals.has(name)) return scopedLocals.get(name);
+    if (scopedLocals && scopedLocals.has(name)) return scopedLocals.get(name)!;
     return null;
   }
 
@@ -416,10 +436,19 @@ export class Flow {
       let existingLocal = this.scopedLocals.get(name);
       if (existingLocal) {
         if (reportNode) {
-          this.parentFunction.program.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            reportNode.range
-          );
+          if (!existingLocal.declaration.range.source.isNative) {
+            this.parentFunction.program.errorRelated(
+              DiagnosticCode.Duplicate_identifier_0,
+              reportNode.range,
+              existingLocal.declaration.name.range,
+              name
+            );
+          } else {
+            this.parentFunction.program.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              reportNode.range, name
+            );
+          }
         }
         return existingLocal;
       }
@@ -429,6 +458,18 @@ export class Flow {
     // not flagged as SCOPED as it must not be free'd when the flow is finalized
     this.scopedLocals.set(name, scopedAlias);
     return scopedAlias;
+  }
+
+  /** Tests if this flow has any scoped locals that must be free'd. */
+  get hasScopedLocals(): bool {
+    if (this.scopedLocals) {
+      for (let scopedLocal of this.scopedLocals.values()) {
+        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /** Frees this flow's scoped variables and returns its parent flow. */
@@ -447,9 +488,9 @@ export class Flow {
   lookupLocal(name: string): Local | null {
     var current: Flow | null = this;
     var scope: Map<String,Local> | null;
-    do if ((scope = current.scopedLocals) && (scope.has(name))) return scope.get(name);
+    do if ((scope = current.scopedLocals) && (scope.has(name))) return scope.get(name)!;
     while (current = current.parent);
-    return this.parentFunction.localsByName.get(name);
+    return this.parentFunction.localsByName.get(name)!;
   }
 
   /** Looks up the element with the specified name relative to the scope of this flow. */
@@ -544,6 +585,7 @@ export class Flow {
       if (flags & LocalFlags.RETAINED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETAINED);
       if (flags & LocalFlags.READFROM) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
       if (flags & LocalFlags.WRITTENTO) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_WRITTENTO);
+      if (flags & LocalFlags.RETURNED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETURNED);
     }
   }
 
@@ -581,6 +623,25 @@ export class Flow {
       );
     }
     this.localFlags = combinedFlags;
+  }
+
+  /** Unifies local flags between this and the other flow. */
+  unifyLocalFlags(other: Flow): void {
+    var numThisLocalFlags = this.localFlags.length;
+    var numOtherLocalFlags = other.localFlags.length;
+    for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
+      if (this.isLocalFlag(i, LocalFlags.WRAPPED) != other.isLocalFlag(i, LocalFlags.WRAPPED)) {
+        this.unsetLocalFlag(i, LocalFlags.WRAPPED); // assume not wrapped
+      }
+      if (this.isLocalFlag(i, LocalFlags.NONNULL) != other.isLocalFlag(i, LocalFlags.NONNULL)) {
+        this.unsetLocalFlag(i, LocalFlags.NONNULL); // assume possibly null
+      }
+      assert(
+        // having different retain states would be a problem because the compiler
+        // either can't release a retained local or would release a non-retained local
+        this.isAnyLocalFlag(i, LocalFlags.ANY_RETAINED) == other.isAnyLocalFlag(i, LocalFlags.ANY_RETAINED)
+      );
+    }
   }
 
   /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
@@ -817,7 +878,7 @@ export class Flow {
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
-        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
+        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr)))!);
         assert(global.kind == ElementKind.GLOBAL);
         return canConversionOverflow(assert((<Global>global).type), type);
       }

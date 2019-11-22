@@ -307,16 +307,16 @@
     local.get $3
     i32.eqz
     br_if $break|1
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $3
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $3
      local.get $4
+     local.get $3
      i32.sub
      return
     else
@@ -367,19 +367,7 @@
   end
   i32.const 0
  )
- (func $~lib/number/isFinite<f64> (; 9 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  local.get $0
-  f64.sub
-  f64.const 0
-  f64.eq
- )
- (func $~lib/number/isNaN<f64> (; 10 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  local.get $0
-  f64.ne
- )
- (func $~lib/util/number/genDigits (; 11 ;) (type $FUNCSIG$iijijij) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
+ (func $~lib/util/number/genDigits (; 9 ;) (type $FUNCSIG$iijijij) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i64)
@@ -779,7 +767,7 @@
   i32.store16
   local.get $2
  )
- (func $~lib/memory/memory.copy (; 12 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 10 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -954,7 +942,7 @@
    end
   end
  )
- (func $~lib/util/number/prettify (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 11 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -1201,7 +1189,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/dtoa_core (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -1369,7 +1357,7 @@
   global.get $~lib/util/number/_K
   call $~lib/util/number/prettify
  )
- (func $~lib/string/String#substring (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 0
@@ -1442,7 +1430,7 @@
   call $~lib/memory/memory.copy
   local.get $1
  )
- (func $~lib/rt/stub/__free (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__free (; 14 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 15
@@ -1455,7 +1443,7 @@
   if
    i32.const 0
    i32.const 1304
-   i32.const 71
+   i32.const 70
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1470,7 +1458,7 @@
   if
    i32.const 0
    i32.const 1304
-   i32.const 73
+   i32.const 72
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1486,22 +1474,9 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~lib/util/number/dtoa (; 17 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/util/number/dtoa (; 15 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
-  f64.const 2
-  call $~lib/number/isFinite<f64>
-  i32.eqz
-  if
-   f64.const 2
-   call $~lib/number/isNaN<f64>
-   if
-    i32.const 136
-    return
-   end
-   i32.const 200
-   return
-  end
   i32.const 56
   call $~lib/rt/stub/__alloc
   local.tee $0
@@ -1519,13 +1494,13 @@
   local.get $0
   call $~lib/rt/stub/__free
  )
- (func $~lib/number/Bool#toString (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/number/Bool#toString (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1472
   i32.const 1496
   local.get $0
   select
  )
- (func $~lib/number/F32.isSafeInteger (; 19 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isSafeInteger (; 17 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   f32.trunc
   local.get $0
@@ -1537,7 +1512,7 @@
   f32.le
   select
  )
- (func $~lib/number/F32.isInteger (; 20 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isInteger (; 18 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
   local.get $0
   f32.trunc
   local.get $0
@@ -1550,7 +1525,7 @@
   f32.eq
   select
  )
- (func $~lib/number/F64.isSafeInteger (; 21 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isSafeInteger (; 19 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
   f64.trunc
   local.get $0
@@ -1562,19 +1537,20 @@
   f64.le
   select
  )
- (func $~lib/number/F64.isInteger (; 22 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isInteger (; 20 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   local.get $0
-  call $~lib/number/isFinite<f64>
-  if (result i32)
-   local.get $0
-   f64.trunc
-   local.get $0
-   f64.eq
-  else
-   i32.const 0
-  end
+  f64.trunc
+  local.get $0
+  f64.eq
+  i32.const 0
+  local.get $0
+  local.get $0
+  f64.sub
+  f64.const 0
+  f64.eq
+  select
  )
- (func $start:number (; 23 ;) (type $FUNCSIG$v)
+ (func $start:number (; 21 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 1520
   global.set $~lib/rt/stub/startOffset
@@ -1960,17 +1936,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const nan:0x8000000000000
-  call $~lib/number/isNaN<f64>
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 72
-   i32.const 46
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   f64.const -9007199254740992
   call $~lib/number/F64.isSafeInteger
   if
@@ -2192,10 +2157,10 @@
    unreachable
   end
  )
- (func $start (; 24 ;) (type $FUNCSIG$v)
+ (func $start (; 22 ;) (type $FUNCSIG$v)
   call $start:number
  )
- (func $null (; 25 ;) (type $FUNCSIG$v)
+ (func $null (; 23 ;) (type $FUNCSIG$v)
   nop
  )
 )

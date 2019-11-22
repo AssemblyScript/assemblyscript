@@ -1,8 +1,18 @@
 {
   "name": "assemblyscript",
-  "version": "0.7.0",
+  "description": "A TypeScript to WebAssembly compiler.",
+  "keywords": [
+    "typescript",
+    "webassembly",
+    "compiler",
+    "assemblyscript",
+    "wasm"
+  ],
+  "version": "0.8.1",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
+  "contributors": [],
   "license": "Apache-2.0",
+  "homepage": "https://assemblyscript.org",
   "repository": {
     "type": "git",
     "url": "https://github.com/AssemblyScript/assemblyscript.git"
@@ -11,25 +21,26 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "@protobufjs/utf8": "^1.1.0",
-    "binaryen": "89.0.0-nightly.20190918",
-    "glob": "^7.1.4",
+    "binaryen": "89.0.0-nightly.20191120",
     "long": "^4.0.0",
-    "opencollective-postinstall": "^2.0.0",
-    "source-map-support": "^0.5.13"
+    "source-map-support": "^0.5.16",
+    "ts-node": "^6.2.0",
+    "typescript": "^3.7.2"
   },
   "devDependencies": {
-    "@types/node": "^12.7.5",
+    "@types/node": "^12.12.7",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.1",
+    "glob": "^7.1.6",
     "physical-cpu-count": "^2.0.0",
-    "ts-loader": "^6.1.1",
+    "source-map-support": "^0.5.16",
+    "ts-loader": "^6.2.1",
     "ts-node": "^6.2.0",
-    "tslint": "^5.20.0",
+    "tslint": "^5.20.1",
     "typedoc-plugin-external-module-name": "^2.1.0",
-    "typescript": "^3.6.3",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.9"
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "main": "index.js",
   "types": "index.d.ts",
@@ -37,15 +48,12 @@
     "asc": "bin/asc",
     "asinit": "bin/asinit"
   },
-  "engines": {
-    "node": ">=8"
-  },
   "scripts": {
     "build": "npm run build:bundle && npm run build:dts",
     "build:bundle": "webpack --mode production --display-modules",
-    "build:dts": "node scripts/build-dts && tsc --noEmit tests/dts/index",
+    "build:dts": "node scripts/build-dts && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index-release",
     "clean": "node scripts/clean",
-    "check": "npm run check:config && npm run check:compiler",
+    "check": "npm run check:config && npm run check:compiler && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
     "check:compiler": "tslint -c tslint.json --project src --formatters-dir lib/lint/formatters --format as",
     "test": "npm run test:parser && npm run test:compiler && npm run test:packages",
@@ -55,9 +63,10 @@
     "make": "npm run clean && npm test && npm run build && npm test",
     "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
-    "postinstall": "opencollective-postinstall || exit 0"
+    "prepublishOnly": "node scripts/prepublish",
+    "postpublish": "node scripts/postpublish"
   },
-  "files": [
+  "releaseFiles": [
     "lib/rtrace/index.d.ts",
     "lib/rtrace/index.js",
     "lib/rtrace/README.md",
@@ -78,7 +87,7 @@
     "std/",
     "tsconfig-base.json"
   ],
-  "collective": {
+  "funding": {
     "type": "opencollective",
     "url": "https://opencollective.com/assemblyscript"
   }

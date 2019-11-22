@@ -1351,50 +1351,50 @@
   global.set $~lib/rt/pure/CUR
   block $break|1
    local.get $0
-   local.set $5
+   local.set $3
    loop $loop|1
-    local.get $5
+    local.get $3
     local.get $1
     i32.lt_u
     i32.eqz
     br_if $break|1
-    local.get $5
+    local.get $3
     i32.load
     call $~lib/rt/pure/scan
-    local.get $5
+    local.get $3
     i32.const 4
     i32.add
-    local.set $5
+    local.set $3
     br $loop|1
    end
    unreachable
   end
   block $break|2
    local.get $0
-   local.set $5
+   local.set $3
    loop $loop|2
-    local.get $5
+    local.get $3
     local.get $1
     i32.lt_u
     i32.eqz
     br_if $break|2
-    local.get $5
+    local.get $3
     i32.load
-    local.set $4
-    local.get $4
-    local.get $4
+    local.set $2
+    local.get $2
+    local.get $2
     i32.load offset=4
     i32.const -2147483648
     i32.const -1
     i32.xor
     i32.and
     i32.store offset=4
-    local.get $4
+    local.get $2
     call $~lib/rt/pure/collectWhite
-    local.get $5
+    local.get $3
     i32.const 4
     i32.add
-    local.set $5
+    local.set $3
     br $loop|2
    end
    unreachable
@@ -3545,6 +3545,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $1
   i32.const 1073741808
   local.get $2
@@ -3593,13 +3594,13 @@
   local.tee $5
   local.get $4
   i32.load
-  local.tee $4
+  local.tee $6
   i32.ne
   if
    local.get $5
    call $~lib/rt/pure/__retain
-   drop
-   local.get $4
+   local.set $5
+   local.get $6
    call $~lib/rt/pure/__release
   end
   local.get $5
@@ -3658,9 +3659,10 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $3
   i32.const 1073741808
   i32.gt_u
@@ -3705,13 +3707,13 @@
   local.tee $5
   local.get $4
   i32.load
-  local.tee $4
+  local.tee $6
   i32.ne
   if
    local.get $5
    call $~lib/rt/pure/__retain
-   drop
-   local.get $4
+   local.set $5
+   local.get $6
    call $~lib/rt/pure/__release
   end
   local.get $5
@@ -3719,9 +3721,9 @@
   local.get $1
   local.get $2
   i32.add
-  local.set $6
+  local.set $7
   local.get $0
-  local.get $6
+  local.get $7
   i32.store offset=4
   local.get $0
   local.get $3
@@ -3841,7 +3843,7 @@
    i32.const 280
    i32.const 432
    i32.const 48
-   i32.const 7
+   i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
@@ -3913,7 +3915,7 @@
    i32.const 280
    i32.const 432
    i32.const 66
-   i32.const 7
+   i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
@@ -3961,7 +3963,7 @@
    i32.const 280
    i32.const 432
    i32.const 74
-   i32.const 7
+   i32.const 6
    call $~lib/builtins/abort
    unreachable
   end

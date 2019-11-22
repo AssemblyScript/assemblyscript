@@ -163,7 +163,7 @@
  (func $interface/passAnInterface (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 1
   call $interface/IFoo#foo

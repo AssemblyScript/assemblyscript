@@ -3,7 +3,7 @@
 import { BLOCK_MAXSIZE } from "./rt/common";
 import { COMPARATOR, SORT } from "./util/sort";
 import { ArrayBufferView } from "./arraybuffer";
-import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinArrays, joinObjectArray } from "./util/string";
+import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
@@ -61,8 +61,9 @@ export class Array<T> extends ArrayBufferView {
     var oldLength = this.length_;
     if (isManaged<T>()) {
       if (oldLength > newLength) { // release no longer used refs
-        let cur = (<usize>newLength << alignof<T>());
-        let end = (<usize>oldLength << alignof<T>());
+        let dataStart = this.dataStart;
+        let cur = dataStart + (<usize>newLength << alignof<T>());
+        let end = dataStart + (<usize>oldLength << alignof<T>());
         do __release(load<usize>(cur));
         while ((cur += sizeof<T>()) < end);
       } else {
@@ -104,9 +105,12 @@ export class Array<T> extends ArrayBufferView {
   }
 
   @operator("[]=") private __set(index: i32, value: T): void {
-    ensureSize(changetype<usize>(this), index + 1, alignof<T>());
+    if (<u32>index >= <u32>this.length_) {
+      if (index < 0) throw new RangeError(E_INDEXOUTOFRANGE);
+      ensureSize(changetype<usize>(this), index + 1, alignof<T>());
+      this.length_ = index + 1;
+    }
     this.__unchecked_set(index, value);
-    if (index >= this.length_) this.length_ = index + 1;
   }
 
   @unsafe @operator("{}=") private __unchecked_set(index: i32, value: T): void {
@@ -152,7 +156,21 @@ export class Array<T> extends ArrayBufferView {
   }
 
   includes(value: T, fromIndex: i32 = 0): bool {
-    return this.indexOf(value, fromIndex) >= 0;
+    if (isFloat<T>()) {
+      let length = this.length_;
+      if (length == 0 || fromIndex >= length) return false;
+      if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
+      let dataStart = this.dataStart;
+      while (fromIndex < length) {
+        let elem = load<T>(dataStart + (<usize>fromIndex << alignof<T>()));
+        // @ts-ignore
+        if (elem == value || isNaN(elem) & isNaN(value)) return true;
+        ++fromIndex;
+      }
+      return false;
+    } else {
+      return this.indexOf(value, fromIndex) >= 0;
+    }
   }
 
   indexOf(value: T, fromIndex: i32 = 0): i32 {
@@ -400,20 +418,12 @@ export class Array<T> extends ArrayBufferView {
     var resultStart = result.dataStart;
     var thisStart = this.dataStart;
     var thisBase  = thisStart + (<usize>start << alignof<T>());
-    if (isManaged<T>()) {
-      for (let i = 0; i < deleteCount; ++i) {
-        store<usize>(resultStart + (<usize>i << alignof<T>()),
-          load<usize>(thisBase + (<usize>i << alignof<T>()))
-        );
-        // no need to retain -> is moved
-      }
-    } else {
-      memory.copy(
-        resultStart,
-        thisBase,
-        <usize>deleteCount << alignof<T>()
-      );
-    }
+    // no need to retain -> is moved
+    memory.copy(
+      resultStart,
+      thisBase,
+      <usize>deleteCount << alignof<T>()
+    );
     var offset = start + deleteCount;
     if (length != offset) {
       memory.copy(
@@ -462,12 +472,15 @@ export class Array<T> extends ArrayBufferView {
   join(separator: string = ","): string {
     var dataStart = this.dataStart;
     var length = this.length_;
-    if (isString<T>())    return joinStringArray(dataStart, length, separator);
     if (isBoolean<T>())   return joinBooleanArray(dataStart, length, separator);
     if (isInteger<T>())   return joinIntegerArray<T>(dataStart, length, separator);
     if (isFloat<T>())     return joinFloatArray<T>(dataStart, length, separator);
-    if (isArray<T>())     return joinArrays<T>(dataStart, length, separator);
-    if (isReference<T>()) return joinObjectArray<T>(dataStart, length, separator);
+
+    if (ASC_SHRINK_LEVEL < 1) {
+      if (isString<T>())  return joinStringArray(dataStart, length, separator);
+    }
+    // For rest objects and arrays use general join routine
+    if (isReference<T>()) return joinReferenceArray<T>(dataStart, length, separator);
     ERROR("unspported element type");
     return <string>unreachable();
   }

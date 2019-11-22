@@ -17,10 +17,11 @@ if (process.browser) process.cwd = function() { return "."; };
 
 const fs = require("fs");
 const path = require("path");
-const utf8 = require("@protobufjs/utf8");
+const utf8 = require("./util/utf8");
 const colorsUtil = require("./util/colors");
 const optionsUtil = require("./util/options");
 const mkdirp = require("./util/mkdirp");
+const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
 
@@ -37,7 +38,10 @@ var assemblyscript, isDev = false;
     assemblyscript = require("../dist/assemblyscript.js");
   } catch (e) {
     try { // `asc` on the command line without dist files
-      require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
+      require("ts-node").register({
+        project: path.join(__dirname, "..", "src", "tsconfig.json"),
+        skipIgnore: true
+      });
       require("../src/glue/js");
       assemblyscript = require("../src");
       isDev = true;
@@ -80,9 +84,9 @@ exports.defaultShrinkLevel = 1;
 /** Bundled library files. */
 exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if not a bundle
   const libDir = path.join(__dirname, "..", "std", "assembly");
-  const libFiles = require("glob").sync("**/!(*.d).ts", { cwd: libDir });
   const bundled = {};
-  libFiles.forEach(file => bundled[file.replace(/\.ts$/, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
+  find.files(libDir, find.TS_EXCEPT_DTS)
+      .forEach(file => bundled[file.replace(/\.ts$/, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
   return bundled;
 })();
 
@@ -212,20 +216,42 @@ exports.main = function main(argv, options, callback) {
   // Set up transforms
   const transforms = [];
   if (args.transform) {
-    args.transform.forEach(transform =>
-      transforms.push(
-        require(
-          path.isAbsolute(transform = transform.trim())
-            ? transform
-            : path.join(process.cwd(), transform)
-        )
-      )
-    );
+    let transformArgs = args.transform;
+    for (let i = 0, k = transformArgs.length; i < k; ++i) {
+      let filename = transformArgs[i].trim();
+      if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
+      try {
+        const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
+        if (typeof classOrModule === "function") {
+          Object.assign(classOrModule.prototype, {
+            baseDir,
+            stdout,
+            stderr,
+            log: console.error,
+            readFile,
+            writeFile,
+            listFiles
+          });
+          transforms.push(new classOrModule());
+        } else {
+          transforms.push(classOrModule); // legacy module
+        }
+      } catch (e) {
+        return callback(e);
+      }
+    }
   }
   function applyTransform(name, ...args) {
-    transforms.forEach(transform => {
-      if (typeof transform[name] === "function") transform[name](...args);
-    });
+    for (let i = 0, k = transforms.length; i < k; ++i) {
+      let transform = transforms[i];
+      if (typeof transform[name] === "function") {
+        try {
+          transform[name](...args);
+        } catch (e) {
+          return e;
+        }
+      }
+    }
   }
 
   // Begin parsing
@@ -426,7 +452,10 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Call afterParse transform hook
-  applyTransform("afterParse", parser);
+  {
+    let error = applyTransform("afterParse", parser);
+    if (error) return callback(error);
+  }
 
   // Parse additional files, if any
   {
@@ -530,6 +559,12 @@ exports.main = function main(argv, options, callback) {
     return callback(Error("Compile error"));
   }
 
+  // Call afterCompile transform hook
+  {
+    let error = applyTransform("afterCompile", module);
+    if (error) return callback(error);
+  }
+
   // Validate the module if requested
   if (args.validate) {
     stats.validateCount++;
@@ -565,34 +600,143 @@ exports.main = function main(argv, options, callback) {
   module.setShrinkLevel(shrinkLevel);
   module.setDebugInfo(args.debug);
 
-  var runPasses = [];
+  const runPasses = [];
   if (args.runPasses) {
     if (typeof args.runPasses === "string") {
       args.runPasses = args.runPasses.split(",");
     }
     if (args.runPasses.length) {
       args.runPasses.forEach(pass => {
-        if (runPasses.indexOf(pass) < 0)
+        if (runPasses.indexOf(pass = pass.trim()) < 0)
           runPasses.push(pass);
       });
     }
   }
 
-  // Optimize the module if requested
-  if (optimizeLevel > 0 || shrinkLevel > 0) {
-    stats.optimizeCount++;
-    stats.optimizeTime += measure(() => {
-      module.optimize();
-    });
+  function doOptimize() {
+    const hasARC = args.runtime == "half" || args.runtime == "full";
+    const passes = [];
+    function add(pass) { passes.push(pass); }
+
+    // Optimize the module if requested
+    if (optimizeLevel > 0 || shrinkLevel > 0) {
+      // Binaryen's default passes with Post-AssemblyScript passes added.
+      // see: Binaryen/src/pass.cpp
+
+      // PassRunner::addDefaultGlobalOptimizationPrePasses
+      add("duplicate-function-elimination");
+
+      // PassRunner::addDefaultFunctionOptimizationPasses
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        add("ssa-nomerge");
+      }
+      if (optimizeLevel >= 4) {
+        add("flatten");
+        add("local-cse");
+      }
+      if (hasARC) { // differs
+        if (optimizeLevel < 4) {
+          add("flatten");
+        }
+        add("post-assemblyscript");
+      }
+      add("dce");
+      add("remove-unused-brs");
+      add("remove-unused-names");
+      add("optimize-instructions");
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("pick-load-signs");
+      }
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        add("precompute-propagate");
+      } else {
+        add("precompute");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("code-pushing");
+      }
+      add("simplify-locals-nostructure");
+      add("vacuum");
+      add("reorder-locals");
+      add("remove-unused-brs");
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        add("merge-locals");
+      }
+      add("coalesce-locals");
+      add("simplify-locals");
+      add("vacuum");
+      add("reorder-locals");
+      add("coalesce-locals");
+      add("reorder-locals");
+      add("vacuum");
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        add("code-folding");
+      }
+      add("merge-blocks");
+      add("remove-unused-brs");
+      add("remove-unused-names");
+      add("merge-blocks");
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        add("precompute-propagate");
+      } else {
+        add("precompute");
+      }
+      add("optimize-instructions");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("rse");
+      }
+      if (hasARC) { // differs
+        add("post-assemblyscript-finalize");
+      }
+      add("vacuum");
+
+      // PassRunner::addDefaultGlobalOptimizationPostPasses
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("dae-optimizing");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("inlining-optimizing");
+      }
+      add("duplicate-function-elimination");
+      add("duplicate-import-elimination");
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        add("simplify-globals-optimizing");
+      } else {
+        add("simplify-globals");
+      }
+      add("remove-unused-module-elements");
+      add("memory-packing");
+      add("directize");
+      add("inlining-optimizing"); // differs
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("generate-stack-ir");
+        add("optimize-stack-ir");
+      }
+    }
+
+    // Append additional passes if requested and execute
+    module.runPasses(passes.concat(runPasses));
   }
 
-  // Run additional passes if requested
-  if (runPasses.length) {
+  stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
-    stats.optimizeTime += measure(() => {
-      module.runPasses(runPasses.map(pass => pass.trim()));
-    });
-  }
+    doOptimize();
+    if (args.converge) {
+      let last = module.toBinary();
+      do {
+        stats.optimizeCount++;
+        doOptimize();
+        let next = module.toBinary();
+        if (next.output.length >= last.output.length) {
+          if (next.output.length > last.output.length) {
+            stderr.write("Last converge was suboptimial." + EOL);
+          }
+          break;
+        }
+        last = next;
+      } while (true);
+    }
+  });
 
   // Prepare output
   if (!args.noEmit) {

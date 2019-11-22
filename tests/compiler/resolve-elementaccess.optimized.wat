@@ -1540,7 +1540,7 @@
   if
    i32.const 0
    i32.const 1432
-   i32.const 71
+   i32.const 70
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1555,7 +1555,7 @@
   if
    i32.const 0
    i32.const 1432
-   i32.const 73
+   i32.const 72
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1678,16 +1678,16 @@
     local.get $3
     i32.eqz
     br_if $break|1
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $3
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $3
      local.get $4
+     local.get $3
      i32.sub
      return
     else

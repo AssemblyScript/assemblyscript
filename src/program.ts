@@ -450,21 +450,21 @@ export class Program extends DiagnosticEmitter {
 
   /** RT `__alloc(size: usize, id: u32): usize` */
   allocInstance: Function;
-  /** RT `__realloc(ref: usize, newSize: usize): usize` */
+  /** RT `__realloc(ptr: usize, newSize: usize): usize` */
   reallocInstance: Function;
-  /** RT `__free(ref: usize): void` */
+  /** RT `__free(ptr: usize): void` */
   freeInstance: Function;
-  /** RT `__retain(ref: usize): usize` */
+  /** RT `__retain(ptr: usize): usize` */
   retainInstance: Function;
-  /** RT `__release(ref: usize): void` */
+  /** RT `__release(ptr: usize): void` */
   releaseInstance: Function;
   /** RT `__collect(): void` */
   collectInstance: Function;
-  /** RT `__visit(ref: usize, cookie: u32): void` */
+  /** RT `__visit(ptr: usize, cookie: u32): void` */
   visitInstance: Function;
   /** RT `__typeinfo(id: u32): RTTIFlags` */
   typeinfoInstance: Function;
-  /** RT `__instanceof(ref: usize, superId: u32): bool` */
+  /** RT `__instanceof(ptr: usize, superId: u32): bool` */
   instanceofInstance: Function;
   /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
   allocArrayInstance: Function;
@@ -627,10 +627,11 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Gets the (possibly merged) program element linked to the specified declaration. */
-  getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement {
+  getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement | null {
     var elementsByDeclaration = this.elementsByDeclaration;
-    assert(elementsByDeclaration.has(declaration));
-    return elementsByDeclaration.get(declaration)!;
+    return elementsByDeclaration.has(declaration)
+      ? elementsByDeclaration.get(declaration)!
+      : null;
   }
 
   /** Initializes the program and its elements prior to compilation. */
@@ -1016,10 +1017,10 @@ export class Program extends DiagnosticEmitter {
     return this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
   }
 
-  /** Requires that a non-generic global function is present and returns it. */
-  private requireFunction(name: string): Function {
+  /** Requires that a global function is present and returns it. */
+  private requireFunction(name: string, typeArguments: Type[] | null = null): Function {
     var prototype = this.require(name, ElementKind.FUNCTION_PROTOTYPE);
-    var resolved = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+    var resolved = this.resolver.resolveFunction(<FunctionPrototype>prototype, typeArguments);
     if (!resolved) throw new Error("invalid " + name);
     return resolved;
   }
@@ -1106,19 +1107,28 @@ export class Program extends DiagnosticEmitter {
   ensureGlobal(name: string, element: DeclaredElement): DeclaredElement {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
-      let actual = elementsByName.get(name)!;
+      let existing = elementsByName.get(name)!;
       // NOTE: this is effectively only performed when merging native types with
       // their respective namespaces in std/builtins, but can also trigger when a
       // user has multiple global elements of the same name in different files,
       // which might result in unexpected shared symbols accross files. considering
       // this a wonky feature for now that we might want to revisit later.
-      if (actual !== element) {
-        let merged = tryMerge(elementsByName.get(name)!, element);
+      if (existing !== element) {
+        let merged = tryMerge(existing, element);
         if (!merged) {
-          this.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            element.identifierNode.range, name
-          );
+          if (isDeclaredElement(existing.kind)) {
+            this.errorRelated(
+              DiagnosticCode.Duplicate_identifier_0,
+              element.identifierNode.range,
+              (<DeclaredElement>existing).declaration.name.range,
+              name
+            );
+          } else {
+            this.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              element.identifierNode.range, name
+            );
+          }
           return element;
         }
         element = merged;
@@ -1131,7 +1141,7 @@ export class Program extends DiagnosticEmitter {
   /** Looks up the element of the specified name in the global scope. */
   lookupGlobal(name: string): Element | null {
     var elements = this.elementsByName;
-    if (elements.has(name)) return elements.get(name);
+    if (elements.has(name)) return elements.get(name)!;
     return null;
   }
 
@@ -1325,17 +1335,20 @@ export class Program extends DiagnosticEmitter {
     var name = declaration.name.text;
     var decorators = declaration.decorators;
     var element: DeclaredElement;
+    var acceptedFlags: DecoratorFlags = DecoratorFlags.UNSAFE;
+    if (parent.is(CommonFlags.AMBIENT)) {
+      acceptedFlags |= DecoratorFlags.EXTERNAL;
+    }
     if (declaration.is(CommonFlags.STATIC)) { // global variable
       assert(parent.kind != ElementKind.INTERFACE_PROTOTYPE);
+      acceptedFlags |= DecoratorFlags.LAZY;
+      if (declaration.is(CommonFlags.READONLY)) {
+        acceptedFlags |= DecoratorFlags.INLINE;
+      }
       element = new Global(
         name,
         parent,
-        this.checkDecorators(decorators,
-          (declaration.is(CommonFlags.READONLY)
-            ? DecoratorFlags.INLINE
-            : DecoratorFlags.NONE
-          ) | DecoratorFlags.LAZY | DecoratorFlags.UNSAFE
-        ),
+        this.checkDecorators(decorators, acceptedFlags),
         declaration
       );
       if (!parent.add(name, element)) return;
@@ -1345,7 +1358,7 @@ export class Program extends DiagnosticEmitter {
         name,
         parent,
         declaration,
-        this.checkDecorators(decorators, DecoratorFlags.UNSAFE)
+        this.checkDecorators(decorators, acceptedFlags)
       );
       if (!parent.addInstance(name, element)) return;
     }
@@ -1365,6 +1378,9 @@ export class Program extends DiagnosticEmitter {
       acceptedFlags |= DecoratorFlags.OPERATOR_BINARY
                     |  DecoratorFlags.OPERATOR_PREFIX
                     |  DecoratorFlags.OPERATOR_POSTFIX;
+    }
+    if (parent.is(CommonFlags.AMBIENT)) {
+      acceptedFlags |= DecoratorFlags.EXTERNAL;
     }
     var element = new FunctionPrototype(
       name,
@@ -1392,7 +1408,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     if (decorators) {
       for (let i = 0, k = decorators.length; i < k; ++i) {
-        let decorator = decorators[i];
+        let decorator: DecoratorNode = decorators[i]; // FIXME: why does tsc want a type here?
         switch (decorator.decoratorKind) {
           case DecoratorKind.OPERATOR:
           case DecoratorKind.OPERATOR_BINARY:
@@ -1693,12 +1709,17 @@ export class Program extends DiagnosticEmitter {
     if (element) {
       let exports = parent.exports;
       if (!exports) parent.exports = exports = new Map();
-      else if (exports.has("default")) {
-        this.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          declaration.name.range, "default"
-        );
-        return;
+      else {
+        if (exports.has("default")) {
+          let existing = exports.get("default")!;
+          this.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            declaration.name.range,
+            existing.declaration.name.range,
+            "default"
+          );
+          return;
+        }
       }
       exports.set("default", element);
     }
@@ -2137,18 +2158,27 @@ export abstract class Element {
     var members = this.members;
     if (!members) this.members = members = new Map();
     else if (members.has(name)) {
-      let actual = members.get(name)!;
-      if (actual.parent !== this) {
+      let existing = members.get(name)!;
+      if (existing.parent !== this) {
         // override non-own element
       } else {
-        let merged = tryMerge(actual, element);
+        let merged = tryMerge(existing, element);
         if (merged) {
           element = merged; // use merged element
         } else {
-          this.program.error(
-            DiagnosticCode.Duplicate_identifier_0,
-            element.identifierNode.range, element.identifierNode.text
-          );
+          if (isDeclaredElement(existing.kind)) {
+            this.program.errorRelated(
+              DiagnosticCode.Duplicate_identifier_0,
+              element.identifierNode.range,
+              (<DeclaredElement>existing).declaration.name.range,
+              element.identifierNode.text
+            );
+          } else {
+            this.program.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              element.identifierNode.range, element.identifierNode.text
+            );
+          }
           return false;
         }
       }
@@ -2889,7 +2919,7 @@ export class Function extends TypedElement {
   /* @override */
   lookup(name: string): Element | null {
     var locals = this.localsByName;
-    if (locals.has(name)) return locals.get(name);
+    if (locals.has(name)) return locals.get(name)!;
     return this.parent.lookup(name);
   }
 
@@ -2899,6 +2929,8 @@ export class Function extends TypedElement {
   tempF32s: Local[] | null = null;
   tempF64s: Local[] | null = null;
   tempV128s: Local[] | null = null;
+  tempAnyrefs: Local[] | null = null;
+  tempExnrefs: Local[] | null = null;
 
   // used by flows to keep track of break labels
   nextBreakId: i32 = 0;
@@ -3158,7 +3190,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Instance Methods */
   get instanceMethods(): FunctionPrototype[] {
     if (!this.instanceMembers) return [];
-    return <FunctionPrototype[]> filter<FunctionPrototype>(this.instanceMembers.values(), (mem: Element): bool => mem.kind == ElementKind.FUNCTION_PROTOTYPE);
+    return <FunctionPrototype[]> filter(this.instanceMembers.values(), (mem: Element): bool => mem.kind == ElementKind.FUNCTION_PROTOTYPE);
   }
 
   constructor(
@@ -3217,12 +3249,22 @@ export class ClassPrototype extends DeclaredElement {
     var instanceMembers = this.instanceMembers;
     if (!instanceMembers) this.instanceMembers = instanceMembers = new Map();
     else if (instanceMembers.has(name)) {
-      let merged = tryMerge(instanceMembers.get(name)!, element);
+      let existing = instanceMembers.get(name)!;
+      let merged = tryMerge(existing, element);
       if (!merged) {
-        this.program.error(
-          DiagnosticCode.Duplicate_identifier_0,
-          element.identifierNode.range, element.identifierNode.text
-        );
+        if (isDeclaredElement(existing.kind)) {
+          this.program.errorRelated(
+            DiagnosticCode.Duplicate_identifier_0,
+            element.identifierNode.range,
+            (<DeclaredElement>existing).declaration.name.range,
+            element.identifierNode.text
+          );
+        } else {
+          this.program.error(
+            DiagnosticCode.Duplicate_identifier_0,
+            element.identifierNode.range, element.identifierNode.text
+          );
+        }
         return false;
       }
       element = merged;

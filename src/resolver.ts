@@ -190,15 +190,13 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
         if (node.isNullable) {
-          if (!type.is(TypeFlags.REFERENCE)) {
-            if (reportMode == ReportMode.REPORT) {
-              this.error(
-                DiagnosticCode.Basic_type_0_cannot_be_nullable,
-                node.range, type.toString()
-              );
-            }
+          if (type.is(TypeFlags.REFERENCE)) return type.asNullable();
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Basic_type_0_cannot_be_nullable,
+              node.range, type.toString()
+            );
           }
-          return type.asNullable();
         }
         return type;
       }
@@ -694,21 +692,105 @@ export class Resolver extends DiagnosticEmitter {
     return typeArguments;
   }
 
-  /** Infers the generic type(s) of an argument expression and updates `ctxTypes`. */
-  inferGenericType(
-    /** The generic type being inferred. */
-    typeNode: TypeNode,
-    /** The respective argument expression. */
-    exprNode: Expression,
-    /** Contextual flow. */
+  /** Resolves respectively infers the concrete instance of a function by call context. */
+  maybeInferCall(
+    node: CallExpression,
+    prototype: FunctionPrototype,
     ctxFlow: Flow,
-    /** Contextual types, i.e. `T`, with unknown types initialized to `auto`. */
-    ctxTypes: Map<string,Type>,
-    /** The names of the type parameters being inferred. */
-    typeParameterNames: Set<string>
-  ): void {
-    var type = this.resolveExpression(exprNode, ctxFlow, Type.auto, ReportMode.SWALLOW);
-    if (type) this.propagateInferredGenericTypes(typeNode, type, ctxFlow, ctxTypes, typeParameterNames);
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Function | null {
+    var typeArguments = node.typeArguments;
+
+    // resolve generic call if type arguments have been provided
+    if (typeArguments) {
+      if (!prototype.is(CommonFlags.GENERIC)) {
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_0_is_not_generic,
+            node.expression.range, prototype.internalName
+          );
+        }
+        return null;
+      }
+      return this.resolveFunctionInclTypeArguments(
+        prototype,
+        node.typeArguments,
+        ctxFlow.actualFunction,
+        makeMap(ctxFlow.contextualTypeArguments), // don't inherit
+        node,
+        reportMode
+      );
+    }
+
+    // infer generic call if type arguments have been omitted
+    if (prototype.is(CommonFlags.GENERIC)) {
+      let contextualTypeArguments = makeMap<string,Type>(ctxFlow.contextualTypeArguments);
+
+      // fill up contextual types with auto for each generic component
+      let typeParameterNodes = assert(prototype.typeParameterNodes);
+      let numTypeParameters = typeParameterNodes.length;
+      let typeParameterNames = new Set<string>();
+      for (let i = 0; i < numTypeParameters; ++i) {
+        let name = typeParameterNodes[i].name.text;
+        contextualTypeArguments.set(name, Type.auto);
+        typeParameterNames.add(name);
+      }
+
+      let parameterNodes = prototype.functionTypeNode.parameters;
+      let numParameters = parameterNodes.length;
+      let argumentNodes = node.arguments;
+      let numArguments = argumentNodes.length;
+
+      // infer types with generic components while updating contextual types
+      for (let i = 0; i < numParameters; ++i) {
+        let argumentExpression = i < numArguments ? argumentNodes[i] : parameterNodes[i].initializer;
+        if (!argumentExpression) { // missing initializer -> too few arguments
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Expected_0_arguments_but_got_1,
+              node.range, numParameters.toString(10), numArguments.toString(10)
+            );
+          }
+          return null;
+        }
+        let typeNode = parameterNodes[i].type;
+        if (typeNode.hasGenericComponent(typeParameterNodes)) {
+          let type = this.resolveExpression(argumentExpression, ctxFlow, Type.auto, ReportMode.SWALLOW);
+          if (type) this.propagateInferredGenericTypes(typeNode, type, ctxFlow, contextualTypeArguments, typeParameterNames);
+        }
+      }
+
+      // apply concrete types to the generic function signature
+      let resolvedTypeArguments = new Array<Type>(numTypeParameters);
+      for (let i = 0; i < numTypeParameters; ++i) {
+        let name = typeParameterNodes[i].name.text;
+        if (contextualTypeArguments.has(name)) {
+          let inferredType = contextualTypeArguments.get(name)!;
+          if (inferredType != Type.auto) {
+            resolvedTypeArguments[i] = inferredType;
+            continue;
+          }
+        }
+        // unused template, e.g. `function test<T>(): void {...}` called as `test()`
+        // invalid because the type is effectively unknown inside the function body
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_argument_expected,
+            node.expression.range.atEnd
+          );
+        }
+        return null;
+      }
+      return this.resolveFunction(
+        prototype,
+        resolvedTypeArguments,
+        makeMap<string,Type>(ctxFlow.contextualTypeArguments),
+        reportMode
+      );
+    }
+
+    // otherwise resolve the non-generic call as usual
+    return this.resolveFunction(prototype, null, makeMap<string,Type>(), reportMode);
   }
 
   /** Updates contextual types with a possibly encapsulated inferred type. */
@@ -800,7 +882,7 @@ export class Resolver extends DiagnosticEmitter {
     } else if (type != Type.void) {
       let wrapperClasses = this.program.wrapperClasses;
       assert(wrapperClasses.has(type));
-      return wrapperClasses.get(type);
+      return wrapperClasses.get(type)!;
     }
     return null;
   }
@@ -2091,7 +2173,7 @@ export class Resolver extends DiagnosticEmitter {
         );
         let wrapperClasses = this.program.wrapperClasses;
         assert(wrapperClasses.has(intType));
-        return wrapperClasses.get(intType);
+        return wrapperClasses.get(intType)!;
       }
       case LiteralKind.FLOAT: {
         this.currentThisExpression = node;
@@ -2099,7 +2181,7 @@ export class Resolver extends DiagnosticEmitter {
         let fltType = ctxType == Type.f32 ? Type.f32 : Type.f64;
         let wrapperClasses = this.program.wrapperClasses;
         assert(wrapperClasses.has(fltType));
-        return wrapperClasses.get(fltType);
+        return wrapperClasses.get(fltType)!;
       }
       case LiteralKind.STRING: {
         this.currentThisExpression = node;
@@ -2187,31 +2269,20 @@ export class Resolver extends DiagnosticEmitter {
       reportMode
     );
     if (!target) return null;
-
     switch (target.kind) {
       case ElementKind.FUNCTION_PROTOTYPE: {
-        // `unchecked(expr: *): *` is special
+        // `unchecked` behaves like parenthesized
         if (
           (<FunctionPrototype>target).internalName == BuiltinSymbols.unchecked &&
           node.arguments.length > 0
         ) {
           return this.resolveExpression(node.arguments[0], ctxFlow, ctxType, reportMode);
         }
-        // otherwise resolve normally
-        let instance = this.resolveFunctionInclTypeArguments(
-          <FunctionPrototype>target,
-          node.typeArguments,
-          ctxFlow.actualFunction,
-          makeMap(ctxFlow.contextualTypeArguments), // don't inherit
-          node,
-          reportMode
-        );
+        let instance = this.maybeInferCall(node, <FunctionPrototype>target, ctxFlow, reportMode);
         if (!instance) return null;
         return instance.signature.returnType;
       }
-      case ElementKind.FUNCTION_TARGET: {
-        return (<FunctionTarget>target).signature.returnType;
-      }
+      case ElementKind.FUNCTION_TARGET: return (<FunctionTarget>target).signature.returnType;
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
@@ -2265,7 +2336,7 @@ export class Resolver extends DiagnosticEmitter {
   ): Element | null {
     var wrapperClasses = this.program.wrapperClasses;
     assert(wrapperClasses.has(Type.bool));
-    return wrapperClasses.get(Type.bool);
+    return wrapperClasses.get(Type.bool)!;
   }
 
   /** Resolves an instanceof expression to its static type. */
@@ -2743,9 +2814,11 @@ export class Resolver extends DiagnosticEmitter {
             let instanceMembers = instance.members;
             if (!instanceMembers) instance.members = instanceMembers = new Map();
             else if (instanceMembers.has(member.name)) {
-              this.error(
+              let existing = instanceMembers.get(member.name)!;
+              this.errorRelated(
                 DiagnosticCode.Duplicate_identifier_0,
                 (<FieldPrototype>member).identifierNode.range,
+                existing.declaration.name.range,
                 member.name
               );
               break;

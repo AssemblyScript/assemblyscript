@@ -47,7 +47,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -63,7 +63,7 @@
    call $~lib/rt/stub/__release
    i32.const 128
    i32.const 80
-   i32.const 96
+   i32.const 97
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -88,7 +88,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -104,7 +104,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
@@ -137,7 +137,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -153,7 +153,7 @@
    call $~lib/rt/stub/__release
    i32.const 128
    i32.const 80
-   i32.const 96
+   i32.const 97
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -173,7 +173,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/string/String>#__get
@@ -194,10 +194,10 @@
   (local $9 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $2
   call $~lib/rt/stub/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -314,7 +314,7 @@
   (local $7 i32)
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $1
   i32.const 0
   i32.eq
@@ -327,7 +327,7 @@
    if
     local.get $3
     call $~lib/rt/stub/__retain
-    drop
+    local.set $3
     local.get $4
     call $~lib/rt/stub/__release
    end
@@ -386,7 +386,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/string/String>#__get
@@ -420,7 +420,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -436,7 +436,7 @@
    call $~lib/rt/stub/__release
    i32.const 128
    i32.const 80
-   i32.const 96
+   i32.const 97
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -449,7 +449,7 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get
@@ -473,7 +473,7 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get

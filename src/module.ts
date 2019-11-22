@@ -4,7 +4,6 @@
  *//***/
 
 import { Target } from "./common";
-import { Type } from "./types";
 
 export type ModuleRef = usize;
 export type FunctionTypeRef = usize;
@@ -79,6 +78,7 @@ export enum ExpressionId {
   SIMDShuffle = _BinaryenSIMDShuffleId(),
   SIMDTernary = _BinaryenSIMDTernaryId(),
   SIMDShift = _BinaryenSIMDShiftId(),
+  SIMDLoad = _BinaryenSIMDLoadId(),
   MemoryInit = _BinaryenMemoryInitId(),
   DataDrop = _BinaryenDataDropId(),
   MemoryCopy = _BinaryenMemoryCopyId(),
@@ -325,6 +325,7 @@ export enum BinaryOp {
   AndV128 = _BinaryenAndVec128(),
   OrV128 = _BinaryenOrVec128(),
   XorV128 = _BinaryenXorVec128(),
+  AndNotV128 = _BinaryenAndNotVec128(),
   AddI8x16 = _BinaryenAddVecI8x16(),
   AddSatI8x16 = _BinaryenAddSatSVecI8x16(),
   AddSatU8x16 = _BinaryenAddSatUVecI8x16(),
@@ -332,6 +333,10 @@ export enum BinaryOp {
   SubSatI8x16 = _BinaryenSubSatSVecI8x16(),
   SubSatU8x16 = _BinaryenSubSatUVecI8x16(),
   MulI8x16 = _BinaryenMulVecI8x16(),
+  MinI8x16 = _BinaryenMinSVecI8x16(),
+  MinU8x16 = _BinaryenMinUVecI8x16(),
+  MaxI8x16 = _BinaryenMaxSVecI8x16(),
+  MaxU8x16 = _BinaryenMaxUVecI8x16(),
   AddI16x8 = _BinaryenAddVecI16x8(),
   AddSatI16x8 = _BinaryenAddSatSVecI16x8(),
   AddSatU16x8 = _BinaryenAddSatUVecI16x8(),
@@ -339,9 +344,18 @@ export enum BinaryOp {
   SubSatI16x8 = _BinaryenSubSatSVecI16x8(),
   SubSatU16x8 = _BinaryenSubSatUVecI16x8(),
   MulI16x8 = _BinaryenMulVecI16x8(),
+  MinI16x8 = _BinaryenMinSVecI16x8(),
+  MinU16x8 = _BinaryenMinUVecI16x8(),
+  MaxI16x8 = _BinaryenMaxSVecI16x8(),
+  MaxU16x8 = _BinaryenMaxUVecI16x8(),
   AddI32x4 = _BinaryenAddVecI32x4(),
   SubI32x4 = _BinaryenSubVecI32x4(),
   MulI32x4 = _BinaryenMulVecI32x4(),
+  MinI32x4 = _BinaryenMinSVecI32x4(),
+  MinU32x4 = _BinaryenMinUVecI32x4(),
+  MaxI32x4 = _BinaryenMaxSVecI32x4(),
+  MaxU32x4 = _BinaryenMaxUVecI32x4(),
+  DotI16x8 = _BinaryenDotSVecI16x8ToVecI32x4(),
   AddI64x2 = _BinaryenAddVecI64x2(),
   SubI64x2 = _BinaryenSubVecI64x2(),
   AddF32x4 = _BinaryenAddVecF32x4(),
@@ -359,7 +373,8 @@ export enum BinaryOp {
   NarrowI16x8ToI8x16 = _BinaryenNarrowSVecI16x8ToVecI8x16(),
   NarrowU16x8ToU8x16 = _BinaryenNarrowUVecI16x8ToVecI8x16(),
   NarrowI32x4ToI16x8 = _BinaryenNarrowSVecI32x4ToVecI16x8(),
-  NarrowU32x4ToU16x8 = _BinaryenNarrowUVecI32x4ToVecI16x8()
+  NarrowU32x4ToU16x8 = _BinaryenNarrowUVecI32x4ToVecI16x8(),
+  SwizzleV8x16 = _BinaryenSwizzleVec8x16()
 }
 
 export enum HostOp {
@@ -419,6 +434,19 @@ export enum SIMDTernaryOp {
   QFMSF64x2 = _BinaryenQFMSVecF64x2()
 }
 
+export enum SIMDLoadOp {
+  LoadSplatV8x16 = _BinaryenLoadSplatVec8x16(),
+  LoadSplatV16x8 = _BinaryenLoadSplatVec16x8(),
+  LoadSplatV32x4 = _BinaryenLoadSplatVec32x4(),
+  LoadSplatV64x2 = _BinaryenLoadSplatVec64x2(),
+  LoadI8ToI16x8 = _BinaryenLoadExtSVec8x8ToVecI16x8(),
+  LoadU8ToU16x8 = _BinaryenLoadExtUVec8x8ToVecI16x8(),
+  LoadI16ToI32x4 = _BinaryenLoadExtSVec16x4ToVecI32x4(),
+  LoadU16ToU32x4 = _BinaryenLoadExtUVec16x4ToVecI32x4(),
+  LoadI32ToI64x2 = _BinaryenLoadExtSVec32x2ToVecI64x2(),
+  LoadU32ToU64x2 = _BinaryenLoadExtUVec32x2ToVecI64x2()
+}
+
 export class MemorySegment {
 
   buffer: Uint8Array;
@@ -458,39 +486,6 @@ export class Module {
   }
 
   private constructor() { }
-
-  // types
-
-  addFunctionType(
-    name: string,
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionRef {
-    var cStr = this.allocStringCached(name);
-    var cArr = allocI32Array(paramTypes);
-    try {
-      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
-    } finally {
-      memory.free(cArr);
-    }
-  }
-
-  getFunctionTypeBySignature(
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionTypeRef {
-    var cArr = allocI32Array(paramTypes);
-    try {
-      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
-    } finally {
-      memory.free(cArr);
-    }
-  }
-
-  removeFunctionType(name: string): void {
-    var cStr = this.allocStringCached(name);
-    _BinaryenRemoveFunctionType(this.ref, cStr);
-  }
 
   // constants
 
@@ -921,7 +916,7 @@ export class Module {
   }
 
   simd_ternary(
-    op: BinaryenSIMDOp,
+    op: SIMDTernaryOp,
     a: ExpressionRef,
     b: ExpressionRef,
     c: ExpressionRef
@@ -937,7 +932,49 @@ export class Module {
     return _BinaryenSIMDShift(this.ref, op, vec, shift);
   }
 
-  // meta
+  simd_load(
+    op: SIMDLoadOp,
+    ptr: ExpressionRef,
+    offset: u32,
+    align: u32
+  ): ExpressionRef {
+    return _BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
+  }
+
+  // function types
+
+  addFunctionType(
+    name: string,
+    result: NativeType,
+    paramTypes: NativeType[] | null
+  ): FunctionTypeRef {
+    var cStr = this.allocStringCached(name);
+    var cArr = allocI32Array(paramTypes);
+    try {
+      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
+  getFunctionTypeBySignature(
+    result: NativeType,
+    paramTypes: NativeType[] | null
+  ): FunctionTypeRef {
+    var cArr = allocI32Array(paramTypes);
+    try {
+      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
+    } finally {
+      memory.free(cArr);
+    }
+  }
+
+  removeFunctionType(name: string): void {
+    var cStr = this.allocStringCached(name);
+    _BinaryenRemoveFunctionType(this.ref, cStr);
+  }
+
+  // globals
 
   addGlobal(
     name: string,
@@ -946,7 +983,14 @@ export class Module {
     initializer: ExpressionRef
   ): GlobalRef {
     var cStr = this.allocStringCached(name);
-    return _BinaryenAddGlobal(this.ref, cStr, type, mutable ? 1 : 0, initializer);
+    return _BinaryenAddGlobal(this.ref, cStr, type, mutable, initializer);
+  }
+
+  getGlobal(
+    name: string
+  ): GlobalRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetGlobal(this.ref, cStr);
   }
 
   removeGlobal(
@@ -956,14 +1000,32 @@ export class Module {
     _BinaryenRemoveGlobal(this.ref, cStr);
   }
 
+  // events
+
   addEvent(
     name: string,
     attribute: u32,
-    type: FunctionRef
+    type: FunctionTypeRef
   ): EventRef {
     var cStr = this.allocStringCached(name);
     return _BinaryenAddEvent(this.ref, cStr, attribute, type);
   }
+
+  getEvent(
+    name: string
+  ): EventRef {
+    var cStr = this.allocStringCached(name);
+    return _BinaryenGetEvent(this.ref, cStr);
+  }
+
+  removeEvent(
+    name: string
+  ): void {
+    var cStr = this.allocStringCached(name);
+    _BinaryenRemoveEvent(this.ref, cStr);
+  }
+
+  // functions
 
   addFunction(
     name: string,
@@ -1012,6 +1074,12 @@ export class Module {
     _BinaryenRemoveFunction(this.ref, tempName);
     _BinaryenRemoveFunctionType(this.ref, tempName);
   }
+
+  setStart(func: FunctionRef): void {
+    _BinaryenSetStart(this.ref, func);
+  }
+
+  // exports
 
   addFunctionExport(
     internalName: string,
@@ -1062,6 +1130,8 @@ export class Module {
     var cStr = this.allocStringCached(externalName);
     _BinaryenRemoveExport(this.ref, cStr);
   }
+
+  // imports
 
   addFunctionImport(
     internalName: string,
@@ -1124,6 +1194,8 @@ export class Module {
     _BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, eventType);
   }
 
+  // memory
+
   /** Unlimited memory constant. */
   static readonly UNLIMITED_MEMORY: Index = <Index>-1;
 
@@ -1138,7 +1210,7 @@ export class Module {
     var cStr = this.allocStringCached(exportName);
     var k = segments.length;
     var segs = new Array<usize>(k);
-    var psvs = new Array<i8>(k);
+    var psvs = new Uint8Array(k);
     var offs = new Array<ExpressionRef>(k);
     var sizs = new Array<Index>(k);
     for (let i = 0; i < k; ++i) {
@@ -1166,10 +1238,13 @@ export class Module {
     }
   }
 
+  // table
+
   setFunctionTable(
     initial: Index,
     maximum: Index,
-    funcs: string[]
+    funcs: string[],
+    offset: ExpressionRef
   ): void {
     var numNames = funcs.length;
     var names = new Array<usize>(numNames);
@@ -1178,15 +1253,25 @@ export class Module {
     }
     var cArr = allocI32Array(names);
     try {
-      _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames);
+      _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames, offset);
     } finally {
       memory.free(cArr);
     }
   }
 
-  setStart(func: FunctionRef): void {
-    _BinaryenSetStart(this.ref, func);
+  // sections
+
+  addCustomSection(name: string, contents: Uint8Array): void {
+    var cStr = this.allocStringCached(name);
+    var cArr = allocU8Array(contents);
+    try {
+      _BinaryenAddCustomSection(this.ref, cStr, cArr, contents.length);
+    } finally {
+      memory.free(cArr);
+    }
   }
+
+  // meta
 
   getOptimizeLevel(): i32 {
     return _BinaryenGetOptimizeLevel();
@@ -1373,6 +1458,10 @@ export class Module {
           }
           case NativeType.V128: {
             // TODO
+            return 0;
+          }
+          // Not possible to clone an anyref as it is opaque
+          case NativeType.Anyref: {
             return 0;
           }
           default: {
@@ -1648,6 +1737,24 @@ export function getHostName(expr: ExpressionRef): string | null {
   return readString(_BinaryenHostGetNameOperand(expr));
 }
 
+// function types
+
+export function getFunctionTypeName(ftype: FunctionTypeRef): string | null {
+  return readString(_BinaryenFunctionTypeGetName(ftype));
+}
+
+export function getFunctionTypeParamCount(ftype: FunctionTypeRef): Index {
+  return _BinaryenFunctionTypeGetNumParams(ftype);
+}
+
+export function getFunctionTypeParam(ftype: FunctionTypeRef, index: Index): NativeType {
+  return _BinaryenFunctionTypeGetParam(ftype, index);
+}
+
+export function getFunctionTypeResult(ftype: FunctionTypeRef): NativeType {
+  return _BinaryenFunctionTypeGetResult(ftype);
+}
+
 // functions
 
 export function getFunctionBody(func: FunctionRef): ExpressionRef {
@@ -1668,6 +1775,46 @@ export function getFunctionParamType(func: FunctionRef, index: Index): NativeTyp
 
 export function getFunctionResultType(func: FunctionRef): NativeType {
   return _BinaryenFunctionGetResult(func);
+}
+
+// globals
+
+export function getGlobalName(global: GlobalRef): string | null {
+  return readString(_BinaryenGlobalGetName(global));
+}
+
+export function getGlobalType(global: GlobalRef): NativeType {
+  return _BinaryenGlobalGetType(global);
+}
+
+export function isGlobalMutable(global: GlobalRef): bool {
+  return _BinaryenGlobalIsMutable(global);
+}
+
+export function getGlobalInit(global: GlobalRef): ExpressionRef {
+  return _BinaryenGlobalGetInit(global);
+}
+
+// events
+
+export function getEventName(event: EventRef): string | null {
+  return readString(_BinaryenEventGetName(event));
+}
+
+export function getEventAttribute(event: EventRef): u32 {
+  return _BinaryenEventGetAttribute(event);
+}
+
+export function getEventType(event: EventRef): string | null {
+  return readString(_BinaryenEventGetType(event));
+}
+
+export function getEventParamCount(event: EventRef): Index {
+  return _BinaryenEventGetNumParams(event);
+}
+
+export function getEventParam(event: EventRef, index: Index): NativeType {
+  return _BinaryenEventGetParam(event, index);
 }
 
 export class Relooper {
@@ -1720,44 +1867,44 @@ export class Relooper {
   }
 }
 
-// export function hasSideEffects(expr: ExpressionRef): bool {
-//   // TODO: there's more
-//   switch (_BinaryenExpressionGetId(expr)) {
-//     case ExpressionId.LocalGet:
-//     case ExpressionId.GlobalGet:
-//     case ExpressionId.Const:
-//     case ExpressionId.Nop: {
-//       return false;
-//     }
-//     case ExpressionId.Block: {
-//       for (let i = 0, k = _BinaryenBlockGetNumChildren(expr); i < k; ++i) {
-//         if (hasSideEffects(_BinaryenBlockGetChild(expr, i))) return true;
-//       }
-//       return false;
-//     }
-//     case ExpressionId.If: {
-//       return hasSideEffects(_BinaryenIfGetCondition(expr))
-//           || hasSideEffects(_BinaryenIfGetIfTrue(expr))
-//           || hasSideEffects(_BinaryenIfGetIfFalse(expr));
-//     }
-//     case ExpressionId.Unary: {
-//       return hasSideEffects(_BinaryenUnaryGetValue(expr));
-//     }
-//     case ExpressionId.Binary: {
-//       return hasSideEffects(_BinaryenBinaryGetLeft(expr))
-//           || hasSideEffects(_BinaryenBinaryGetRight(expr));
-//     }
-//     case ExpressionId.Drop: {
-//       return hasSideEffects(_BinaryenDropGetValue(expr));
-//     }
-//     case ExpressionId.Select: {
-//       return hasSideEffects(_BinaryenSelectGetIfTrue(expr))
-//           || hasSideEffects(_BinaryenSelectGetIfFalse(expr))
-//           || hasSideEffects(_BinaryenSelectGetCondition(expr));
-//     }
-//   }
-//   return true;
-// }
+export function hasSideEffects(expr: ExpressionRef): bool {
+  // TODO: there's more
+  switch (_BinaryenExpressionGetId(expr)) {
+    case ExpressionId.LocalGet:
+    case ExpressionId.GlobalGet:
+    case ExpressionId.Const:
+    case ExpressionId.Nop: {
+      return false;
+    }
+    case ExpressionId.Block: {
+      for (let i = 0, k = _BinaryenBlockGetNumChildren(expr); i < k; ++i) {
+        if (hasSideEffects(_BinaryenBlockGetChild(expr, i))) return true;
+      }
+      return false;
+    }
+    case ExpressionId.If: {
+      return hasSideEffects(_BinaryenIfGetCondition(expr))
+          || hasSideEffects(_BinaryenIfGetIfTrue(expr))
+          || hasSideEffects(_BinaryenIfGetIfFalse(expr));
+    }
+    case ExpressionId.Unary: {
+      return hasSideEffects(_BinaryenUnaryGetValue(expr));
+    }
+    case ExpressionId.Binary: {
+      return hasSideEffects(_BinaryenBinaryGetLeft(expr))
+          || hasSideEffects(_BinaryenBinaryGetRight(expr));
+    }
+    case ExpressionId.Drop: {
+      return hasSideEffects(_BinaryenDropGetValue(expr));
+    }
+    case ExpressionId.Select: {
+      return hasSideEffects(_BinaryenSelectGetIfTrue(expr))
+          || hasSideEffects(_BinaryenSelectGetIfFalse(expr))
+          || hasSideEffects(_BinaryenSelectGetCondition(expr));
+    }
+  }
+  return true;
+}
 
 // helpers
 // can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js
@@ -2061,6 +2208,10 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
     case ExpressionId.SIMDShift: {
       visit(_BinaryenSIMDShiftGetVec(expr), data);
       visit(_BinaryenSIMDShiftGetShift(expr), data);
+      break;
+    }
+    case ExpressionId.SIMDLoad: {
+      visit(_BinaryenSIMDLoadGetPtr(expr), data);
       break;
     }
     case ExpressionId.MemoryInit: {

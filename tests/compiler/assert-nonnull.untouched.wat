@@ -36,7 +36,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -54,7 +54,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -73,7 +73,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.load
   local.tee $1
@@ -107,7 +107,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -123,7 +123,7 @@
    call $~lib/rt/stub/__release
    i32.const 128
    i32.const 80
-   i32.const 96
+   i32.const 97
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -134,7 +134,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -168,7 +168,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 92
+   i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -183,7 +183,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo | null>#__get
@@ -204,7 +204,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -235,7 +235,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -323,7 +323,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   i32.const 0
   global.set $~lib/argc
   local.get $0
@@ -343,7 +343,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   i32.const 0
   global.set $~lib/argc
   local.get $0

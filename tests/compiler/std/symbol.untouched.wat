@@ -69,7 +69,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   global.get $~lib/symbol/nextId
   local.tee $1
   i32.const 1
@@ -467,7 +467,7 @@
   if
    i32.const 96
    i32.const 144
-   i32.const 53
+   i32.const 54
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -503,15 +503,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $2
+  local.tee $1
   i32.const 0
   i32.const 48
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $1
-  local.get $2
+  local.set $2
+  local.get $1
   i32.load offset=8
   call $~lib/rt/stub/__release
-  local.get $1
+  local.get $2
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -575,15 +575,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $2
+  local.tee $1
   i32.const 0
   i32.const 48
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $1
-  local.get $2
+  local.set $2
+  local.get $1
   i32.load offset=8
   call $~lib/rt/stub/__release
-  local.get $1
+  local.get $2
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -641,7 +641,7 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   i32.const -2128831035
   local.set $1
   local.get $0
@@ -694,10 +694,10 @@
   (local $9 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $2
   call $~lib/rt/stub/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -811,10 +811,10 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -884,7 +884,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $0
   i32.load
   local.get $2
@@ -944,7 +944,7 @@
   (local $3 i32)
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.0 (result i32)
@@ -973,7 +973,7 @@
   (local $4 i32)
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.1 (result i32)
@@ -997,7 +997,7 @@
    call $~lib/rt/stub/__release
    i32.const 200
    i32.const 256
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -1032,10 +1032,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $3
   local.get $2
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
   local.set $4
   i32.const 0
   local.get $4
@@ -1128,13 +1128,13 @@
   local.tee $10
   local.get $9
   i32.load
-  local.tee $9
+  local.tee $12
   i32.ne
   if
    local.get $10
    call $~lib/rt/stub/__retain
-   drop
-   local.get $9
+   local.set $10
+   local.get $12
    call $~lib/rt/stub/__release
   end
   local.get $10
@@ -1143,17 +1143,17 @@
   local.get $1
   i32.store offset=4
   local.get $0
-  local.tee $10
+  local.tee $9
   local.get $5
   local.tee $11
-  local.get $10
+  local.get $9
   i32.load offset=8
   local.tee $10
   i32.ne
   if
    local.get $11
    call $~lib/rt/stub/__retain
-   drop
+   local.set $11
    local.get $10
    call $~lib/rt/stub/__release
   end
@@ -1178,7 +1178,7 @@
   (local $6 i32)
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.2 (result i32)
    local.get $1
    call $~lib/rt/stub/__retain
@@ -1214,10 +1214,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -1398,10 +1398,10 @@
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $3
   local.get $2
-  f64.convert_i32_s
-  f64.const 2.6666666666666665
-  f64.mul
-  i32.trunc_f64_s
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
   local.set $4
   i32.const 0
   local.get $4
@@ -1489,13 +1489,13 @@
   local.tee $10
   local.get $9
   i32.load
-  local.tee $9
+  local.tee $12
   i32.ne
   if
    local.get $10
    call $~lib/rt/stub/__retain
-   drop
-   local.get $9
+   local.set $10
+   local.get $12
    call $~lib/rt/stub/__release
   end
   local.get $10
@@ -1504,17 +1504,17 @@
   local.get $1
   i32.store offset=4
   local.get $0
-  local.tee $10
+  local.tee $9
   local.get $5
   local.tee $11
-  local.get $10
+  local.get $9
   i32.load offset=8
   local.tee $10
   i32.ne
   if
    local.get $11
    call $~lib/rt/stub/__retain
-   drop
+   local.set $11
    local.get $10
    call $~lib/rt/stub/__release
   end
@@ -1539,7 +1539,7 @@
   (local $6 i32)
   local.get $2
   call $~lib/rt/stub/__retain
-  drop
+  local.set $2
   block $~lib/util/hash/HASH<usize>|inlined.0 (result i32)
    local.get $1
    local.set $3
@@ -1581,10 +1581,10 @@
     i32.load offset=20
     local.get $0
     i32.load offset=12
-    f64.convert_i32_s
-    f64.const 0.75
-    f64.mul
-    i32.trunc_f64_s
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
     i32.lt_s
     if (result i32)
      local.get $0
@@ -1657,7 +1657,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   global.get $~lib/symbol/stringToId
   i32.eqz
   if
@@ -1750,7 +1750,7 @@
   if
    i32.const 200
    i32.const 256
-   i32.const 103
+   i32.const 111
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -3041,7 +3041,7 @@
   (local $7 i32)
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $1
   i32.const 0
   i32.eq
@@ -3054,7 +3054,7 @@
    if
     local.get $2
     call $~lib/rt/stub/__retain
-    drop
+    local.set $2
     local.get $3
     call $~lib/rt/stub/__release
    end
@@ -3112,10 +3112,10 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $0
   i32.const 752
   local.get $0
@@ -3211,7 +3211,7 @@
               if
                local.get $3
                call $~lib/rt/stub/__retain
-               drop
+               local.set $3
                local.get $4
                call $~lib/rt/stub/__release
               end
@@ -3227,7 +3227,7 @@
              if
               local.get $4
               call $~lib/rt/stub/__retain
-              drop
+              local.set $4
               local.get $3
               call $~lib/rt/stub/__release
              end
@@ -3243,7 +3243,7 @@
             if
              local.get $3
              call $~lib/rt/stub/__retain
-             drop
+             local.set $3
              local.get $4
              call $~lib/rt/stub/__release
             end
@@ -3259,7 +3259,7 @@
            if
             local.get $4
             call $~lib/rt/stub/__retain
-            drop
+            local.set $4
             local.get $3
             call $~lib/rt/stub/__release
            end
@@ -3275,7 +3275,7 @@
           if
            local.get $3
            call $~lib/rt/stub/__retain
-           drop
+           local.set $3
            local.get $4
            call $~lib/rt/stub/__release
           end
@@ -3291,7 +3291,7 @@
          if
           local.get $4
           call $~lib/rt/stub/__retain
-          drop
+          local.set $4
           local.get $3
           call $~lib/rt/stub/__release
          end
@@ -3307,7 +3307,7 @@
         if
          local.get $3
          call $~lib/rt/stub/__retain
-         drop
+         local.set $3
          local.get $4
          call $~lib/rt/stub/__release
         end
@@ -3323,7 +3323,7 @@
        if
         local.get $4
         call $~lib/rt/stub/__retain
-        drop
+        local.set $4
         local.get $3
         call $~lib/rt/stub/__release
        end
@@ -3339,7 +3339,7 @@
       if
        local.get $3
        call $~lib/rt/stub/__retain
-       drop
+       local.set $3
        local.get $4
        call $~lib/rt/stub/__release
       end
@@ -3355,7 +3355,7 @@
      if
       local.get $4
       call $~lib/rt/stub/__retain
-      drop
+      local.set $4
       local.get $3
       call $~lib/rt/stub/__release
      end
@@ -3371,7 +3371,7 @@
     if
      local.get $3
      call $~lib/rt/stub/__retain
-     drop
+     local.set $3
      local.get $4
      call $~lib/rt/stub/__release
     end

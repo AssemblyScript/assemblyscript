@@ -50,10 +50,10 @@
    local.get $0
    if
     local.get $1
-    local.get $0
-    local.get $1
-    select
-    local.set $0
+    if
+     local.get $1
+     local.set $0
+    end
     br $continue|0
    end
   end

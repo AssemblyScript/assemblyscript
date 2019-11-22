@@ -106,7 +106,9 @@
   i64.const 32
   i64.shl
   i64.or
-  i64.eqz
+  i64.const 0
+  i64.ne
+  i32.eqz
   local.set $2
   local.get $2
   global.set $../../lib/i64/assembly/i64/lo

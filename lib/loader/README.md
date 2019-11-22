@@ -1,4 +1,4 @@
-![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) loader
+![AS](https://avatars1.githubusercontent.com/u/28916798?s=48) AssemblyScript Loader
 ======================
 
 A convenient loader for AssemblyScript modules. Demangles module exports to a friendly object structure compatible with WebIDL and TypeScript definitions and provides some useful utility to read/write data from/to memory.
@@ -7,21 +7,21 @@ Usage
 -----
 
 ```js
-const loader = require("assemblyscript/lib/loader");
+const loader = require("@assemblyscript/loader");
 ...
 ```
 
 API
 ---
 
-* **instantiate**<`T`>(module: `WebAssembly.Module`, imports?: `WasmImports`): `ASUtil & T`<br />
-  Instantiates an AssemblyScript module using the specified imports.
+* **instantiate**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource | Response | PromiseLike<WebAssembly.Module | BufferSource | Response>`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
+  Asynchronously instantiates an AssemblyScript module from anything that can be instantiated.
 
-* **instantiateBuffer**<`T`>(buffer: `Uint8Array`, imports?: `WasmImports`): `ASUtil & T`<br />
-  Instantiates an AssemblyScript module from a buffer using the specified imports.
+* **instantiateSync**<`T`>(moduleOrBuffer: `WebAssembly.Module | BufferSource`, imports?: `WasmImports`): `ASUtil & T`<br />
+  Synchronously instantiates an AssemblyScript module from a WebAssembly.Module or binary buffer.
 
-* **instantiateStreaming**<`T`>(response: `Response`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
-  Instantiates an AssemblyScript module from a response using the specified imports.
+* **instantiateStreaming**<`T`>(response: `Response | PromiseLike<Response>`, imports?: `WasmImports`): `Promise<ASUtil & T>`<br />
+  Asynchronously instantiates an AssemblyScript module from a response, i.e. as obtained by `fetch`.
 
 * **demangle**<`T`>(exports: `WasmExports`, baseModule?: `Object`): `T`<br />
   Demangles an AssemblyScript module's exports to a friendly object structure. You usually don't have to call this manually as instantiation does this implicitly.
@@ -139,18 +139,37 @@ Examples
 
 ### Instantiating a module
 
-```js
-// From a module provided as a buffer, i.e. as returned by fs.readFileSync
-const myModule = loader.instantiateBuffer(fs.readFileSync("myModule.wasm"), myImports);
+The **asynchronous API** is analogous to [WebAssembly.instantiate](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiate) and [WebAssembly.instantiateStreaming](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/instantiateStreaming)
 
-// From a response object, i.e. as returned by window.fetch
+```js
+const myModule = await loader.instantiate(myModuleBuffer, myImports);
 const myModule = await loader.instantiateStreaming(fetch("myModule.wasm"), myImports);
 ```
 
+with `loader.instantiate` actually accepting anything that can be instantiated for convenience:
+
+```js
+const myModule = await loader.instantiate(fs.promises.readFile("myModule.wasm"), myImports);
+const myModule = await loader.instantiate(fetch("myModule.wasm"), myImports);
+...
+```
+
+If `WebAssembly.instantiateStreaming` is not supported by the environment a fallback is applied.
+
+The **synchronous API** utilizes [new WebAssembly.Instance](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Instance#Constructor_Syntax) and [new WebAssembly.Module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WebAssembly/Module#Constructor_Syntax), which is useful if the goal is to immediately re-export as a node module for example:
+
+```js
+module.exports = loader.instantiateSync(fs.readFileSync("myModule.wasm"), myImports);
+```
+
+Note, though, that browsers have relatively tight limits for synchronous compilation and instantiation because these block the main thread, hence it is recommended to use the asynchronous API in browsers.
+
 ### Usage with TypeScript definitions produced by the compiler
+
+The compiler is able to emit definitions using the `-d` command line option that are compatible with modules demangled by the loader, and these can be used for proper typings in development:
 
 ```ts
 import MyModule from "myModule"; // pointing at the d.ts
 
-const myModule = loader.instatiateBuffer<typeof MyModule>(fs.readFileSync("myModule.wasm"), myImports);
+const myModule = await loader.instatiate<typeof MyModule>(fs.promises.readFile("myModule.wasm"), myImports);
 ```

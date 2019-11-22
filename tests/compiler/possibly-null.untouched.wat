@@ -34,7 +34,7 @@
  (func $possibly-null/testTrue (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   if
    nop
@@ -45,7 +45,7 @@
  (func $possibly-null/testFalseElse (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.eqz
   if
@@ -61,7 +61,7 @@
  (func $possibly-null/testFalseContinuation (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.eqz
   if
@@ -75,7 +75,7 @@
  (func $possibly-null/testNeNull (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   i32.ne
@@ -88,7 +88,7 @@
  (func $possibly-null/testEqNullElse (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   i32.eq
@@ -105,7 +105,7 @@
  (func $possibly-null/testEqNullContinuation (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   i32.eq
@@ -120,7 +120,7 @@
  (func $possibly-null/testNotEqNull (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   i32.eq
@@ -134,7 +134,7 @@
  (func $possibly-null/testNotNeNullElse (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   i32.ne
@@ -152,7 +152,7 @@
  (func $possibly-null/testNotNeNullContinuation (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   i32.ne
@@ -170,7 +170,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   block $break|0
    loop $continue|0
     local.get $0
@@ -184,7 +184,7 @@
     if
      local.get $1
      call $~lib/rt/stub/__retain
-     drop
+     local.set $1
      local.get $2
      call $~lib/rt/stub/__release
     end
@@ -202,10 +202,10 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   block $break|0
    loop $continue|0
     local.get $0
@@ -219,7 +219,7 @@
     if
      local.get $2
      call $~lib/rt/stub/__retain
-     drop
+     local.set $2
      local.get $3
      call $~lib/rt/stub/__release
     end
@@ -239,10 +239,10 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   block $break|0
    loop $continue|0
     local.get $0
@@ -258,7 +258,7 @@
      if
       local.get $2
       call $~lib/rt/stub/__retain
-      drop
+      local.set $2
       local.get $3
       call $~lib/rt/stub/__release
      end
@@ -277,7 +277,7 @@
  (func $possibly-null/requireNonNull (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
  )
  (func $possibly-null/testLogicalAnd (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -285,7 +285,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   if (result i32)
    local.get $0
@@ -307,7 +307,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   i32.eqz
   if (result i32)
@@ -330,10 +330,10 @@
  (func $possibly-null/testLogicalAndMulti (; 17 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $0
   if (result i32)
    local.get $1
@@ -353,10 +353,10 @@
  (func $possibly-null/testLogicalOrMulti (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $0
   i32.eqz
   if (result i32)
@@ -380,10 +380,10 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
-  drop
+  local.set $1
   local.get $1
   local.tee $2
   local.get $0
@@ -392,7 +392,7 @@
   if
    local.get $2
    call $~lib/rt/stub/__retain
-   drop
+   local.set $2
    local.get $3
    call $~lib/rt/stub/__release
   end
@@ -406,7 +406,7 @@
  (func $possibly-null/testNeverNull (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
-  drop
+  local.set $0
   local.get $0
   if
    local.get $0

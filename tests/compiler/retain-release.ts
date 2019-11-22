@@ -278,6 +278,26 @@ export function scopeFor(cond: bool): void {
   }
 }
 
+export function scopeForComplex(cond: bool): void {
+
+  // Validates that complex `for` scopes behave properly
+
+  for (let i = 0; cond; ++i) {
+    let $0: Ref = /* __retain( */ REF /* ) */;
+    for (let j = 0; cond; ++j) {
+      let $1: Ref = /* __retain( */ REF /* ) */;
+      if (cond) {
+        let $2: Ref = /* __retain( */ REF /* ) */;
+        // __release($2)
+        // __release($1)
+        continue;
+      }
+      // __release($1)
+    }
+    // __release($0)
+  }
+}
+
 export function scopeBreak(cond: bool): void {
 
   // Validates that `break` statements terminate flows so that no further
@@ -290,6 +310,23 @@ export function scopeBreak(cond: bool): void {
   }
 }
 
+export function scopeBreakNested(cond: bool): void {
+
+  // Validates that nested `break` statements terminate flows so that no
+  // further releases are performed afterwards.
+
+  while (cond) {
+    let $0: Ref = /* __retain( */ REF /* ) */;
+    while (cond) {
+      let $1: Ref = /* __retain( */ REF /* ) */;
+      // __release($1)
+      // __release($0)
+      break;
+    }
+    // __release($0)
+  }
+}
+
 export function scopeContinue(cond: bool): void {
 
   // Validates that `continue` statements terminate flows so that no further
@@ -299,6 +336,23 @@ export function scopeContinue(cond: bool): void {
     let $0: Ref = /* __retain( */ REF /* ) */;
     // __release($0)
     continue;
+  }
+}
+
+export function scopeContinueNested(cond: bool): void {
+
+  // Validates that nested `continue` statements terminate flows so that no
+  // further releases are performed afterwards.
+
+  while (cond) {
+    let $0: Ref = /* __retain( */ REF /* ) */;
+    while (cond) {
+      let $1: Ref = /* __retain( */ REF /* ) */;
+      // __release($1)
+      // __release($0)
+      continue;
+    }
+    // __release($0)
   }
 }
 

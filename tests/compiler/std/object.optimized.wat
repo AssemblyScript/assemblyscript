@@ -1,9 +1,7 @@
 (module
  (type $FUNCSIG$idd (func (param f64 f64) (result i32)))
- (type $FUNCSIG$id (func (param f64) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$iff (func (param f32 f32) (result i32)))
- (type $FUNCSIG$if (func (param f32) (result i32)))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$v (func))
@@ -17,12 +15,7 @@
  (data (i32.const 132) "\01\00\00\00\01")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/number/isNaN<f64> (; 1 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
-  local.get $0
-  local.get $0
-  f64.ne
- )
- (func $~lib/object/Object.is<f64> (; 2 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/object/Object.is<f64> (; 1 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   f64.eq
@@ -35,17 +28,14 @@
    return
   end
   local.get $0
-  call $~lib/number/isNaN<f64>
+  local.get $0
+  f64.ne
   local.get $1
-  call $~lib/number/isNaN<f64>
+  local.get $1
+  f64.ne
   i32.and
  )
- (func $~lib/number/isNaN<f32> (; 3 ;) (type $FUNCSIG$if) (param $0 f32) (result i32)
-  local.get $0
-  local.get $0
-  f32.ne
- )
- (func $~lib/object/Object.is<f32> (; 4 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
+ (func $~lib/object/Object.is<f32> (; 2 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   f32.eq
@@ -58,17 +48,19 @@
    return
   end
   local.get $0
-  call $~lib/number/isNaN<f32>
+  local.get $0
+  f32.ne
   local.get $1
-  call $~lib/number/isNaN<f32>
+  local.get $1
+  f32.ne
   i32.and
  )
- (func $~lib/object/Object.is<i32> (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<i32> (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.eq
  )
- (func $~lib/object/Object.is<bool> (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<bool> (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -77,7 +69,7 @@
   i32.ne
   i32.eq
  )
- (func $~lib/string/String#get:length (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -85,7 +77,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 8 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 6 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -137,16 +129,16 @@
     local.get $3
     i32.eqz
     br_if $break|1
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $3
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $3
      local.get $4
+     local.get $3
      i32.sub
      return
     else
@@ -165,7 +157,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -197,12 +189,12 @@
   end
   i32.const 0
  )
- (func $~lib/object/Object.is<~lib/string/String> (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String> (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
  )
- (func $start:std/object (; 11 ;) (type $FUNCSIG$v)
+ (func $start:std/object (; 9 ;) (type $FUNCSIG$v)
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -676,10 +668,10 @@
    unreachable
   end
  )
- (func $start (; 12 ;) (type $FUNCSIG$v)
+ (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:std/object
  )
- (func $null (; 13 ;) (type $FUNCSIG$v)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
   nop
  )
 )

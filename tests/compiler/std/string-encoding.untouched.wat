@@ -1434,50 +1434,50 @@
   global.set $~lib/rt/pure/CUR
   block $break|1
    local.get $0
-   local.set $5
+   local.set $3
    loop $loop|1
-    local.get $5
+    local.get $3
     local.get $1
     i32.lt_u
     i32.eqz
     br_if $break|1
-    local.get $5
+    local.get $3
     i32.load
     call $~lib/rt/pure/scan
-    local.get $5
+    local.get $3
     i32.const 4
     i32.add
-    local.set $5
+    local.set $3
     br $loop|1
    end
    unreachable
   end
   block $break|2
    local.get $0
-   local.set $5
+   local.set $3
    loop $loop|2
-    local.get $5
+    local.get $3
     local.get $1
     i32.lt_u
     i32.eqz
     br_if $break|2
-    local.get $5
+    local.get $3
     i32.load
-    local.set $4
-    local.get $4
-    local.get $4
+    local.set $2
+    local.get $2
+    local.get $2
     i32.load offset=4
     i32.const -2147483648
     i32.const -1
     i32.xor
     i32.and
     i32.store offset=4
-    local.get $4
+    local.get $2
     call $~lib/rt/pure/collectWhite
-    local.get $5
+    local.get $3
     i32.const 4
     i32.add
-    local.set $5
+    local.set $3
     br $loop|2
    end
    unreachable
@@ -3282,7 +3282,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 16
   i32.sub
@@ -3313,7 +3313,7 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 16
   i32.sub
@@ -3542,7 +3542,7 @@
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -3568,10 +3568,10 @@
   (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $2
   call $~lib/rt/pure/__retain
-  drop
+  local.set $2
   local.get $0
   local.get $1
   i32.const 1
@@ -3685,10 +3685,10 @@
   (local $3 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
-  drop
+  local.set $1
   local.get $0
   local.get $1
   i32.eq
@@ -3934,7 +3934,7 @@
   (local $5 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.set $2
   local.get $2
@@ -4267,7 +4267,7 @@
   (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.set $2
   local.get $0
@@ -5066,7 +5066,7 @@
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
@@ -5441,7 +5441,7 @@
   (local $4 i32)
   local.get $0
   call $~lib/rt/pure/__retain
-  drop
+  local.set $0
   local.get $0
   i32.const 0
   call $~lib/string/String.UTF8.encode

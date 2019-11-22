@@ -1,7 +1,7 @@
 ![](https://avatars1.githubusercontent.com/u/28916798?s=64) AssemblyScript
 =================
 
-[![Actions Status](https://github.com/AssemblyScript/assemblyscript/workflows/CI/badge.svg)](https://github.com/AssemblyScript/assemblyscript/actions)
+[![Actions Status](https://github.com/AssemblyScript/assemblyscript/workflows/CI/badge.svg)](https://github.com/AssemblyScript/assemblyscript/actions) [![npm](https://img.shields.io/npm/v/assemblyscript.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript) [![npm@nightly](https://img.shields.io/npm/v/assemblyscript/nightly.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript)
 
 **AssemblyScript** compiles a strict subset of [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
 
@@ -9,7 +9,7 @@ Check out the [documentation](https://docs.assemblyscript.org) or try it out in 
 
 ---
 
-<h3 align="center">Our Sponsors</h2>
+<h3 align="center">Our Sponsors</h3>
 <p align="center">
   <a href="https://opencollective.com/assemblyscript/tiers/sponsor/0/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/0/avatar.svg"></a>
   <a href="https://opencollective.com/assemblyscript/tiers/sponsor/1/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/1/avatar.svg"></a>
@@ -23,7 +23,7 @@ Check out the [documentation](https://docs.assemblyscript.org) or try it out in 
   <a href="https://opencollective.com/assemblyscript/tiers/sponsor/9/website" target="_blank"><img src="https://opencollective.com/assemblyscript/tiers/sponsor/9/avatar.svg"></a>
 </p>
 <br />
-<h3 align="center">Our Backers</h2>
+<h3 align="center">Our Backers</h3>
 <p align="center">
   <a href="https://opencollective.com/assemblyscript#backers" target="_blank"><img src="https://opencollective.com/assemblyscript/backer.svg?avatarHeight=44" /></a>
 </p>
@@ -45,50 +45,17 @@ Motivation
 
 > I do think [compiling TypeScript into WASM] is tremendously useful. It allows JavaScript developers to create WASM modules without having to learn C. – Colin Eberhardt, [Exploring different approaches to building WebAssembly modules](http://blog.scottlogic.com/2017/10/17/wasm-mandelbrot.html) (Oct 17, 2017)
 
-Instructions
-------------
+Further resources
+-----------------
 
-For general usage instructions, please refer to the [documentation](https://docs.assemblyscript.org) instead. The following sets up a *development environment* of the compiler, for example if you plan to make a pull request:
+* [Documentation](https://docs.assemblyscript.org)<br />
+  Introduction, quick start, examples and general usage instructions.
 
-```
-$> git clone https://github.com/AssemblyScript/assemblyscript.git
-$> cd assemblyscript
-$> npm install
-$> npm link
-$> npm run clean
-```
+* [Development instructions](https://docs.assemblyscript.org/details/development)<br />
+  How to set up a development environment (to submit a pull request).
 
-Note that a fresh clone of the compiler will use the distribution files in `dist/`, but after an `npm run clean` it will run [the sources](./src) directly through ts-node, which is useful in development. This condition can also be checked by running `asc -v` (it is running the sources if it states `-dev`). Also please see our [contribution guidelines](./CONTRIBUTING.md) before making your first pull request.
+* [Project governance](https://github.com/AssemblyScript/meta)<br />
+  Meta information related to the AssemblyScript project.
 
-Building
---------
-
-To build an UMD bundle to `dist/assemblyscript.js` (depends on [binaryen.js](https://github.com/AssemblyScript/binaryen.js)), including a browser version of asc to `dist/asc.js` (depends on assemblyscript.js):
-
-```
-$> npm run build
-```
-
-Cleaning the distribution files (again):
-
-```
-$> npm run clean
-```
-
-Linting potential changes:
-
-```
-$> npm run check
-```
-
-Running the [tests](./tests):
-
-```
-$> npm test
-```
-
-Running everything in order (lint, clean, test, build, test):
-
-```
-$> npm run all
-```
+* [Media files](./media)<br />
+  Various media files, like logos etc.
