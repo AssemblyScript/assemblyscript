@@ -500,6 +500,14 @@ import { idof } from "./builtins";
           if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
             c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
             ++i;
+            if (c >= 0x20000) {
+              c -= 0x10000;
+              let lo = (c >>> 10) | 0xD800;
+              let hi = (c & 0x3FF) | 0xDC00;
+              store<u32>(codes + (j << 1), lo | (hi << 16));
+              ++j;
+              continue;
+            }
           }
         }
         if (c == 0x0130) {
@@ -543,6 +551,14 @@ import { idof } from "./builtins";
           if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
             c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
             ++i;
+            if (c >= 0x20000) {
+              c -= 0x10000;
+              let lo = (c >>> 10) | 0xD800;
+              let hi = (c & 0x3FF) | 0xDC00;
+              store<u32>(codes + (j << 1), lo | (hi << 16));
+              ++j;
+              continue;
+            }
           }
         }
         if (c - 0x24D0 <= 0x24E9 - 0x24D0) {

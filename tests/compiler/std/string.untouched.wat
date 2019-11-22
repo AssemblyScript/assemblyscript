@@ -11174,13 +11174,6 @@
   (local $17 i32)
   (local $18 i32)
   local.get $0
-  i32.const 131072
-  i32.ge_u
-  if
-   local.get $0
-   return
-  end
-  local.get $0
   local.set $2
   local.get $0
   i32.const 8
@@ -11422,262 +11415,301 @@
     i32.lt_u
     i32.eqz
     br_if $break|0
-    local.get $0
-    local.get $6
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_u
-    local.set $7
-    local.get $7
-    local.set $8
-    local.get $8
-    i32.const -128
-    i32.and
-    i32.eqz
-    if
-     local.get $2
-     local.get $5
+    block $continue|0
+     local.get $0
+     local.get $6
      i32.const 1
      i32.shl
      i32.add
-     block $~lib/util/string/toUpper8|inlined.0 (result i32)
-      local.get $7
-      local.set $8
-      global.get $~lib/util/string/upperTable127Ptr
-      local.get $8
-      i32.add
-      i32.load8_u
-      br $~lib/util/string/toUpper8|inlined.0
-     end
-     i32.store16
-    else
+     i32.load16_u
+     local.set $7
      local.get $7
-     i32.const 55295
-     i32.sub
-     i32.const 1025
-     i32.lt_u
-     if (result i32)
-      local.get $6
-      local.get $1
-      i32.const 1
-      i32.sub
-      i32.lt_u
-     else
-      i32.const 0
-     end
-     if
-      local.get $0
-      local.get $6
-      i32.const 1
-      i32.shl
-      i32.add
-      i32.load16_u offset=2
-      local.set $8
-      local.get $8
-      i32.const 56319
-      i32.sub
-      i32.const 1025
-      i32.lt_u
-      if
-       local.get $7
-       i32.const 1023
-       i32.and
-       i32.const 10
-       i32.shl
-       local.get $8
-       i32.const 1023
-       i32.and
-       i32.or
-       i32.const 65536
-       i32.add
-       local.set $7
-       local.get $6
-       i32.const 1
-       i32.add
-       local.set $6
-      end
-     end
-     local.get $7
-     i32.const 9424
-     i32.sub
-     i32.const 25
-     i32.le_u
+     local.set $8
+     local.get $8
+     i32.const -128
+     i32.and
+     i32.eqz
      if
       local.get $2
       local.get $5
       i32.const 1
       i32.shl
       i32.add
-      local.get $7
-      i32.const 26
-      i32.sub
+      block $~lib/util/string/toUpper8|inlined.0 (result i32)
+       local.get $7
+       local.set $8
+       global.get $~lib/util/string/upperTable127Ptr
+       local.get $8
+       i32.add
+       i32.load8_u
+       br $~lib/util/string/toUpper8|inlined.0
+      end
       i32.store16
      else
-      i32.const -1
-      local.set $8
       local.get $7
-      i32.const 223
+      i32.const 55295
       i32.sub
-      i32.const 64056
+      i32.const 1025
+      i32.lt_u
+      if (result i32)
+       local.get $6
+       local.get $1
+       i32.const 1
+       i32.sub
+       i32.lt_u
+      else
+       i32.const 0
+      end
+      if
+       local.get $0
+       local.get $6
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.load16_u offset=2
+       local.set $8
+       local.get $8
+       i32.const 56319
+       i32.sub
+       i32.const 1025
+       i32.lt_u
+       if
+        local.get $7
+        i32.const 1023
+        i32.and
+        i32.const 10
+        i32.shl
+        local.get $8
+        i32.const 1023
+        i32.and
+        i32.or
+        i32.const 65536
+        i32.add
+        local.set $7
+        local.get $6
+        i32.const 1
+        i32.add
+        local.set $6
+        local.get $7
+        i32.const 131072
+        i32.ge_u
+        if
+         local.get $7
+         i32.const 65536
+         i32.sub
+         local.set $7
+         local.get $7
+         i32.const 10
+         i32.shr_u
+         i32.const 55296
+         i32.or
+         local.set $9
+         local.get $7
+         i32.const 1023
+         i32.and
+         i32.const 56320
+         i32.or
+         local.set $10
+         local.get $2
+         local.get $5
+         i32.const 1
+         i32.shl
+         i32.add
+         local.get $9
+         local.get $10
+         i32.const 16
+         i32.shl
+         i32.or
+         i32.store
+         local.get $5
+         i32.const 1
+         i32.add
+         local.set $5
+         br $continue|0
+        end
+       end
+      end
+      local.get $7
+      i32.const 9424
+      i32.sub
+      i32.const 25
       i32.le_u
       if
-       block $~lib/util/casemap/bsearch|inlined.0 (result i32)
-        local.get $7
-        local.set $11
-        local.get $3
-        local.set $10
-        local.get $4
-        local.set $9
-        i32.const 0
-        local.set $12
-        block $break|1
-         loop $continue|1
-          local.get $12
-          local.get $9
-          i32.le_s
-          i32.eqz
-          br_if $break|1
-          local.get $12
-          local.get $9
-          i32.add
-          i32.const 3
-          i32.shr_u
-          i32.const 2
-          i32.shl
-          local.set $13
-          local.get $10
-          local.get $13
-          i32.const 1
-          i32.shl
-          i32.add
-          i32.load16_u
-          local.get $11
-          i32.sub
-          local.set $14
-          local.get $14
-          i32.const 0
-          i32.eq
-          if
-           local.get $13
-           br $~lib/util/casemap/bsearch|inlined.0
-          else
-           local.get $14
-           i32.const 31
-           i32.shr_u
-           if
-            local.get $13
-            i32.const 4
-            i32.add
-            local.set $12
-           else
-            local.get $13
-            i32.const 4
-            i32.sub
-            local.set $9
-           end
-          end
-          br $continue|1
-         end
-         unreachable
-        end
-        i32.const -1
-       end
-       local.set $8
-      end
-      local.get $8
-      i32.const -1
-      i32.xor
-      if
-       local.get $3
-       local.get $8
-       i32.const 1
-       i32.shl
-       i32.add
-       i32.load offset=2
-       local.set $12
-       local.get $3
-       local.get $8
-       i32.const 1
-       i32.shl
-       i32.add
-       i32.load16_u offset=6
-       local.set $11
        local.get $2
        local.get $5
        i32.const 1
        i32.shl
        i32.add
-       local.get $12
-       i32.store
-       local.get $11
-       if
-        local.get $2
-        local.get $5
-        i32.const 1
-        i32.shl
-        i32.add
-        local.get $11
-        i32.store16 offset=4
-       end
-       local.get $5
-       i32.const 1
-       local.get $11
-       i32.const 0
-       i32.ne
-       i32.add
-       i32.add
-       local.set $5
-      else
        local.get $7
-       i32.const 1
-       call $~lib/util/casemap/casemap
-       i32.const 2097151
-       i32.and
-       local.set $11
-       local.get $11
-       i32.const 65535
-       i32.le_s
+       i32.const 26
+       i32.sub
+       i32.store16
+      else
+       i32.const -1
+       local.set $8
+       local.get $7
+       i32.const 223
+       i32.sub
+       i32.const 64056
+       i32.le_u
        if
-        local.get $2
-        local.get $5
+        block $~lib/util/casemap/bsearch|inlined.0 (result i32)
+         local.get $7
+         local.set $11
+         local.get $3
+         local.set $10
+         local.get $4
+         local.set $9
+         i32.const 0
+         local.set $12
+         block $break|1
+          loop $continue|1
+           local.get $12
+           local.get $9
+           i32.le_s
+           i32.eqz
+           br_if $break|1
+           local.get $12
+           local.get $9
+           i32.add
+           i32.const 3
+           i32.shr_u
+           i32.const 2
+           i32.shl
+           local.set $13
+           local.get $10
+           local.get $13
+           i32.const 1
+           i32.shl
+           i32.add
+           i32.load16_u
+           local.get $11
+           i32.sub
+           local.set $14
+           local.get $14
+           i32.const 0
+           i32.eq
+           if
+            local.get $13
+            br $~lib/util/casemap/bsearch|inlined.0
+           else
+            local.get $14
+            i32.const 31
+            i32.shr_u
+            if
+             local.get $13
+             i32.const 4
+             i32.add
+             local.set $12
+            else
+             local.get $13
+             i32.const 4
+             i32.sub
+             local.set $9
+            end
+           end
+           br $continue|1
+          end
+          unreachable
+         end
+         i32.const -1
+        end
+        local.set $8
+       end
+       local.get $8
+       i32.const -1
+       i32.xor
+       if
+        local.get $3
+        local.get $8
         i32.const 1
         i32.shl
         i32.add
-        local.get $11
-        i32.store16
-       else
-        local.get $11
-        i32.const 65536
-        i32.sub
-        local.set $11
-        local.get $11
-        i32.const 10
-        i32.shr_u
-        i32.const 55296
-        i32.or
+        i32.load offset=2
         local.set $12
-        local.get $11
-        i32.const 1023
-        i32.and
-        i32.const 56320
-        i32.or
-        local.set $10
+        local.get $3
+        local.get $8
+        i32.const 1
+        i32.shl
+        i32.add
+        i32.load16_u offset=6
+        local.set $11
         local.get $2
         local.get $5
         i32.const 1
         i32.shl
         i32.add
         local.get $12
-        local.get $10
-        i32.const 16
-        i32.shl
-        i32.or
         i32.store
+        local.get $11
+        if
+         local.get $2
+         local.get $5
+         i32.const 1
+         i32.shl
+         i32.add
+         local.get $11
+         i32.store16 offset=4
+        end
         local.get $5
         i32.const 1
+        local.get $11
+        i32.const 0
+        i32.ne
+        i32.add
         i32.add
         local.set $5
+       else
+        local.get $7
+        i32.const 1
+        call $~lib/util/casemap/casemap
+        i32.const 2097151
+        i32.and
+        local.set $11
+        local.get $11
+        i32.const 65535
+        i32.le_s
+        if
+         local.get $2
+         local.get $5
+         i32.const 1
+         i32.shl
+         i32.add
+         local.get $11
+         i32.store16
+        else
+         local.get $11
+         i32.const 65536
+         i32.sub
+         local.set $11
+         local.get $11
+         i32.const 10
+         i32.shr_u
+         i32.const 55296
+         i32.or
+         local.set $12
+         local.get $11
+         i32.const 1023
+         i32.and
+         i32.const 56320
+         i32.or
+         local.set $10
+         local.get $2
+         local.get $5
+         i32.const 1
+         i32.shl
+         i32.add
+         local.get $12
+         local.get $10
+         i32.const 16
+         i32.shl
+         i32.or
+         i32.store
+         local.get $5
+         i32.const 1
+         i32.add
+         local.set $5
+        end
        end
       end
      end
@@ -11741,167 +11773,206 @@
     i32.lt_u
     i32.eqz
     br_if $break|0
-    local.get $0
-    local.get $4
-    i32.const 1
-    i32.shl
-    i32.add
-    i32.load16_u
-    local.set $5
-    local.get $5
-    local.set $6
-    local.get $6
-    i32.const -128
-    i32.and
-    i32.eqz
-    if
-     local.get $2
-     local.get $3
+    block $continue|0
+     local.get $0
+     local.get $4
      i32.const 1
      i32.shl
      i32.add
-     block $~lib/util/string/toLower8|inlined.0 (result i32)
-      local.get $5
-      local.set $6
-      global.get $~lib/util/string/lowerTable127Ptr
-      local.get $6
-      i32.add
-      i32.load8_u
-      br $~lib/util/string/toLower8|inlined.0
-     end
-     i32.store16
-    else
+     i32.load16_u
+     local.set $5
      local.get $5
-     i32.const 55295
-     i32.sub
-     i32.const 1025
-     i32.lt_u
-     if (result i32)
-      local.get $4
-      local.get $1
-      i32.const 1
-      i32.sub
-      i32.lt_u
-     else
-      i32.const 0
-     end
-     if
-      local.get $0
-      local.get $4
-      i32.const 1
-      i32.shl
-      i32.add
-      i32.load16_u offset=2
-      local.set $6
-      local.get $6
-      i32.const 56319
-      i32.sub
-      i32.const 1025
-      i32.lt_u
-      if
-       local.get $5
-       i32.const 1023
-       i32.and
-       i32.const 10
-       i32.shl
-       local.get $6
-       i32.const 1023
-       i32.and
-       i32.or
-       i32.const 65536
-       i32.add
-       local.set $5
-       local.get $4
-       i32.const 1
-       i32.add
-       local.set $4
-      end
-     end
-     local.get $5
-     i32.const 304
-     i32.eq
+     local.set $6
+     local.get $6
+     i32.const -128
+     i32.and
+     i32.eqz
      if
       local.get $2
       local.get $3
       i32.const 1
       i32.shl
       i32.add
-      i32.const 775
-      i32.const 16
-      i32.shl
-      i32.const 105
-      i32.or
-      i32.store
-      local.get $3
-      i32.const 1
-      i32.add
-      local.set $3
+      block $~lib/util/string/toLower8|inlined.0 (result i32)
+       local.get $5
+       local.set $6
+       global.get $~lib/util/string/lowerTable127Ptr
+       local.get $6
+       i32.add
+       i32.load8_u
+       br $~lib/util/string/toLower8|inlined.0
+      end
+      i32.store16
      else
       local.get $5
-      i32.const 9398
+      i32.const 55295
       i32.sub
-      i32.const 25
-      i32.le_u
+      i32.const 1025
+      i32.lt_u
+      if (result i32)
+       local.get $4
+       local.get $1
+       i32.const 1
+       i32.sub
+       i32.lt_u
+      else
+       i32.const 0
+      end
+      if
+       local.get $0
+       local.get $4
+       i32.const 1
+       i32.shl
+       i32.add
+       i32.load16_u offset=2
+       local.set $6
+       local.get $6
+       i32.const 56319
+       i32.sub
+       i32.const 1025
+       i32.lt_u
+       if
+        local.get $5
+        i32.const 1023
+        i32.and
+        i32.const 10
+        i32.shl
+        local.get $6
+        i32.const 1023
+        i32.and
+        i32.or
+        i32.const 65536
+        i32.add
+        local.set $5
+        local.get $4
+        i32.const 1
+        i32.add
+        local.set $4
+        local.get $5
+        i32.const 131072
+        i32.ge_u
+        if
+         local.get $5
+         i32.const 65536
+         i32.sub
+         local.set $5
+         local.get $5
+         i32.const 10
+         i32.shr_u
+         i32.const 55296
+         i32.or
+         local.set $7
+         local.get $5
+         i32.const 1023
+         i32.and
+         i32.const 56320
+         i32.or
+         local.set $8
+         local.get $2
+         local.get $3
+         i32.const 1
+         i32.shl
+         i32.add
+         local.get $7
+         local.get $8
+         i32.const 16
+         i32.shl
+         i32.or
+         i32.store
+         local.get $3
+         i32.const 1
+         i32.add
+         local.set $3
+         br $continue|0
+        end
+       end
+      end
+      local.get $5
+      i32.const 304
+      i32.eq
       if
        local.get $2
        local.get $3
        i32.const 1
        i32.shl
        i32.add
-       local.get $5
-       i32.const 26
+       i32.const 775
+       i32.const 16
+       i32.shl
+       i32.const 105
+       i32.or
+       i32.store
+       local.get $3
+       i32.const 1
        i32.add
-       i32.store16
+       local.set $3
       else
        local.get $5
-       i32.const 0
-       call $~lib/util/casemap/casemap
-       i32.const 2097151
-       i32.and
-       local.set $6
-       local.get $6
-       i32.const 65535
-       i32.le_s
+       i32.const 9398
+       i32.sub
+       i32.const 25
+       i32.le_u
        if
         local.get $2
         local.get $3
         i32.const 1
         i32.shl
         i32.add
-        local.get $6
+        local.get $5
+        i32.const 26
+        i32.add
         i32.store16
        else
-        local.get $6
-        i32.const 65536
-        i32.sub
+        local.get $5
+        i32.const 0
+        call $~lib/util/casemap/casemap
+        i32.const 2097151
+        i32.and
         local.set $6
         local.get $6
-        i32.const 10
-        i32.shr_u
-        i32.const 55296
-        i32.or
-        local.set $7
-        local.get $6
-        i32.const 1023
-        i32.and
-        i32.const 56320
-        i32.or
-        local.set $8
-        local.get $2
-        local.get $3
-        i32.const 1
-        i32.shl
-        i32.add
-        local.get $7
-        local.get $8
-        i32.const 16
-        i32.shl
-        i32.or
-        i32.store
-        local.get $3
-        i32.const 1
-        i32.add
-        local.set $3
+        i32.const 65535
+        i32.le_s
+        if
+         local.get $2
+         local.get $3
+         i32.const 1
+         i32.shl
+         i32.add
+         local.get $6
+         i32.store16
+        else
+         local.get $6
+         i32.const 65536
+         i32.sub
+         local.set $6
+         local.get $6
+         i32.const 10
+         i32.shr_u
+         i32.const 55296
+         i32.or
+         local.set $8
+         local.get $6
+         i32.const 1023
+         i32.and
+         i32.const 56320
+         i32.or
+         local.set $7
+         local.get $2
+         local.get $3
+         i32.const 1
+         i32.shl
+         i32.add
+         local.get $8
+         local.get $7
+         i32.const 16
+         i32.shl
+         i32.or
+         i32.store
+         local.get $3
+         i32.const 1
+         i32.add
+         local.set $3
+        end
        end
       end
      end

@@ -440,7 +440,7 @@ export function bsearch(key: u32, ptr: usize, max: i32): i32 {
 
 // See: musl/tree/src/ctype/towctrans.c
 export function casemap(c: u32, dir: i32): i32 {
-  if (c >= 0x20000) return c;
+  // if (c >= 0x20000) return c;
   var c0 = c as i32;
   var b = c >> 8;
   c &= 255;
