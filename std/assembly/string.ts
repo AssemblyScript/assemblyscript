@@ -11,18 +11,18 @@ import { idof } from "./builtins";
 
   @lazy static readonly MAX_LENGTH: i32 = BLOCK_MAXSIZE >>> alignof<u16>();
 
-  static fromCharCode(unit: i32, surr: i32 = -1): string {
+  static fromCharCode(unit: i32, surr: i32 = -1): String {
     var hasSur = surr > 0;
-    var out = __alloc(2 << i32(hasSur), idof<string>());
+    var out = __alloc(2 << i32(hasSur), idof<String>());
     store<u16>(out, <u16>unit);
     if (hasSur) store<u16>(out, <u16>surr, 2);
-    return changetype<string>(out); // retains
+    return changetype<String>(out); // retains
   }
 
-  static fromCodePoint(code: i32): string {
+  static fromCodePoint(code: i32): String {
     assert(<u32>code <= 0x10FFFF);
     var hasSur = code > 0xFFFF;
-    var out = __alloc(2 << i32(hasSur), idof<string>());
+    var out = __alloc(2 << i32(hasSur), idof<String>());
     if (!hasSur) {
       store<u16>(out, <u16>code);
     } else {
@@ -31,7 +31,7 @@ import { idof } from "./builtins";
       let lo = (code >>> 10) | 0xD800;
       store<u32>(out, lo | (hi << 16));
     }
-    return changetype<string>(out); // retains
+    return changetype<String>(out); // retains
   }
 
   get length(): i32 {
@@ -665,17 +665,17 @@ export namespace String {
       return changetype<ArrayBuffer>(buf); // retains
     }
 
-    export function decode(buf: ArrayBuffer, nullTerminated: bool = false): string {
+    export function decode(buf: ArrayBuffer, nullTerminated: bool = false): String {
       return decodeUnsafe(changetype<usize>(buf), buf.byteLength, nullTerminated);
     }
 
     // @ts-ignore: decorator
     @unsafe
-    export function decodeUnsafe(buf: usize, len: usize, nullTerminated: bool = false): string {
+    export function decodeUnsafe(buf: usize, len: usize, nullTerminated: bool = false): String {
       var bufOff = buf;
       var bufEnd = buf + len;
       assert(bufEnd >= bufOff); // guard wraparound
-      var str = __alloc(len << 1, idof<string>()); // max is one u16 char per u8 byte
+      var str = __alloc(len << 1, idof<String>()); // max is one u16 char per u8 byte
       var strOff = str;
       while (bufOff < bufEnd) {
         let cp = <u32>load<u8>(bufOff++);
@@ -709,7 +709,7 @@ export namespace String {
           bufOff += 2; strOff += 2;
         }
       }
-      return changetype<string>(__realloc(str, strOff - str)); // retains
+      return changetype<String>(__realloc(str, strOff - str)); // retains
     }
   }
 
@@ -726,16 +726,16 @@ export namespace String {
       return changetype<ArrayBuffer>(buf); // retains
     }
 
-    export function decode(buf: ArrayBuffer): string {
+    export function decode(buf: ArrayBuffer): String {
       return decodeUnsafe(changetype<usize>(buf), buf.byteLength);
     }
 
     // @ts-ignore: decorator
     @unsafe
-    export function decodeUnsafe(buf: usize, len: usize): string {
-      var str = __alloc(len &= ~1, idof<string>());
+    export function decodeUnsafe(buf: usize, len: usize): String {
+      var str = __alloc(len &= ~1, idof<String>());
       memory.copy(str, buf, len);
-      return changetype<string>(str); // retains
+      return changetype<String>(str); // retains
     }
   }
 }
