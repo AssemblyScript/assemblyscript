@@ -7749,7 +7749,9 @@
       i32.const -1
       local.set $1
       local.get $2
-      i32.const 64279
+      i32.const 223
+      i32.sub
+      i32.const 64056
       i32.le_u
       if
        block $~lib/util/casemap/bsearch|inlined.0 (result i32)

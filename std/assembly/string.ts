@@ -550,7 +550,8 @@ import { idof } from "./builtins";
           store<u16>(codes + (j << 1), c - 26);
         } else {
           let index = -1;
-          if (c <= 0xFB17) { // See last row in specialsUpper table
+          // Fast range check. See first and last rows in specialsUpper table
+          if (c - 0x00DF <= 0xFB17 - 0x00DF) {
             index = <usize>bsearch(c, specialsUpperPtr, specialsUpperLen);
           }
           if (~index) {
