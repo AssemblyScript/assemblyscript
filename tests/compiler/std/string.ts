@@ -603,6 +603,26 @@ assert(
 assert(String.fromCodePoint(0x10000).toLowerCase() == "𐀀");
 assert(String.fromCodePoint(0x10000).toUpperCase() == "𐀀");
 
+// Tests some special casing for lower case mapping
+assert("\u1F88".toLowerCase() == "\u1F80");
+assert("\u1F8F".toLowerCase() == "\u1F87");
+assert("\u1FFC".toLowerCase() == "\u1FF3");
+
+// Tests some special casing for upper case mapping
+assert("\uFB00".toUpperCase() == "FF");
+assert("\uFB01".toUpperCase() == "FI");
+assert("\uFB02".toUpperCase() == "FL");
+assert("\uFB03".toUpperCase() == "FFI");
+assert("\uFB04".toUpperCase() == "FFL");
+assert("\uFB05".toUpperCase() == "ST");
+assert("\uFB06".toUpperCase() == "ST");
+assert("\u01F0".toUpperCase() == "J\u030C");
+assert("\u1E96".toUpperCase() == "H\u0331");
+assert("\u1E97".toUpperCase() == "T\u0308");
+assert("\u1E98".toUpperCase() == "W\u030A");
+assert("\u1E99".toUpperCase() == "Y\u030A");
+assert("\u1E9A".toUpperCase() == "A\u02BE");
+
 // Test full unicode range `0x0 - 0x10FFFF` and asserting with v8 engine.
 for (let i = 0; i <= 0x10FFFF; i++) {
   let source = String.fromCodePoint(i);
