@@ -7,6 +7,10 @@ var nullStr: string;
 // exactly once in static memory
 assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));
 
+assert("\xDF" == "ß");
+assert("\xDF\xDF" == "ßß");
+assert("\xDFab" == "ßab");
+
 assert(str.length == 16);
 assert(str.charCodeAt(0) == 0x68);
 
