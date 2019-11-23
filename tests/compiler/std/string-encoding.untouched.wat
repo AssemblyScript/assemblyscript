@@ -4382,7 +4382,7 @@
         local.get $7
         i32.const 1023
         i32.and
-        i32.add
+        i32.or
         local.set $6
         local.get $5
         local.get $6
@@ -4999,14 +4999,14 @@
        local.get $7
        i32.const 10
        i32.shr_u
-       i32.add
+       i32.or
        i32.store16
        local.get $6
        i32.const 56320
        local.get $7
        i32.const 1023
        i32.and
-       i32.add
+       i32.or
        i32.store16 offset=2
        local.get $6
        i32.const 4

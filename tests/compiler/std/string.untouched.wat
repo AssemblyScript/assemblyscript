@@ -11699,8 +11699,8 @@
         i32.and
         local.set $11
         local.get $11
-        i32.const 65535
-        i32.le_s
+        i32.const 65536
+        i32.lt_s
         if
          local.get $2
          local.get $5
@@ -11962,8 +11962,8 @@
         i32.and
         local.set $6
         local.get $6
-        i32.const 65535
-        i32.le_s
+        i32.const 65536
+        i32.lt_s
         if
          local.get $2
          local.get $3

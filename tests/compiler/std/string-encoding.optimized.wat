@@ -2660,7 +2660,7 @@
         local.get $6
         i32.const 1023
         i32.and
-        i32.add
+        i32.or
         local.tee $3
         i32.const 18
         i32.shr_u
@@ -3213,14 +3213,14 @@
        i32.const 10
        i32.shr_u
        i32.const 55296
-       i32.add
+       i32.or
        i32.store16
        local.get $3
        local.get $1
        i32.const 1023
        i32.and
        i32.const 56320
-       i32.add
+       i32.or
        i32.store16 offset=2
        local.get $3
        i32.const 4

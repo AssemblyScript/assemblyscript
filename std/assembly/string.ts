@@ -503,7 +503,7 @@ import { idof } from "./builtins";
             if (c >= 0x20000) {
               c -= 0x10000;
               let lo = (c >>> 10) | 0xD800;
-              let hi = (c & 0x3FF) | 0xDC00;
+              let hi = (c & 0x03FF) | 0xDC00;
               store<u32>(codes + (j << 1), lo | (hi << 16));
               ++j;
               continue;
@@ -518,7 +518,7 @@ import { idof } from "./builtins";
           store<u16>(codes + (j << 1), c + 26);
         } else {
           let code = casemap(c, 0) & 0x1FFFFF;
-          if (code <= 0xFFFF) {
+          if (code < 0x10000) {
             store<u16>(codes + (j << 1), code);
           } else {
             code -= 0x10000;
@@ -554,7 +554,7 @@ import { idof } from "./builtins";
             if (c >= 0x20000) {
               c -= 0x10000;
               let lo = (c >>> 10) | 0xD800;
-              let hi = (c & 0x3FF) | 0xDC00;
+              let hi = (c & 0x03FF) | 0xDC00;
               store<u32>(codes + (j << 1), lo | (hi << 16));
               ++j;
               continue;
@@ -579,7 +579,7 @@ import { idof } from "./builtins";
             j += 1 + usize(cc != 0);
           } else {
             let code = casemap(c, 1) & 0x1FFFFF;
-            if (code <= 0xFFFF) {
+            if (code < 0x10000) {
               store<u16>(codes + (j << 1), code);
             } else {
               code -= 0x10000;
@@ -660,7 +660,7 @@ export namespace String {
           if ((c1 & 0xFC00) == 0xD800 && strOff + 2 < strEnd) {
             let c2 = <u32>load<u16>(strOff, 2);
             if ((c2 & 0xFC00) == 0xDC00) {
-              c1 = 0x10000 + ((c1 & 0x03FF) << 10) + (c2 & 0x03FF);
+              c1 = 0x10000 + ((c1 & 0x03FF) << 10) | (c2 & 0x03FF);
               store<u8>(bufOff, c1 >> 18      | 240);
               store<u8>(bufOff, c1 >> 12 & 63 | 128, 1);
               store<u8>(bufOff, c1 >> 6  & 63 | 128, 2);
@@ -716,8 +716,8 @@ export namespace String {
              load<u8>(bufOff, 2) & 63
           ) - 0x10000;
           bufOff += 3;
-          store<u16>(strOff, 0xD800 + (cp >> 10));
-          store<u16>(strOff, 0xDC00 + (cp & 1023), 2);
+          store<u16>(strOff, 0xD800 | (cp >> 10));
+          store<u16>(strOff, 0xDC00 | (cp & 1023), 2);
           strOff += 4;
         } else {
           if (bufEnd - bufOff < 2) break;

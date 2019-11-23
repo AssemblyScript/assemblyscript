@@ -7909,8 +7909,8 @@
         i32.const 2097151
         i32.and
         local.tee $1
-        i32.const 65535
-        i32.le_s
+        i32.const 65536
+        i32.lt_s
         if
          local.get $2
          i32.const 1
@@ -8137,8 +8137,8 @@
         i32.const 2097151
         i32.and
         local.tee $1
-        i32.const 65535
-        i32.le_s
+        i32.const 65536
+        i32.lt_s
         if
          local.get $2
          i32.const 1
