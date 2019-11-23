@@ -10,3 +10,8 @@ declare namespace binaryen {
   }
   function wrapModule(ptr: number): Module;
 }
+
+/** Stores an 8-bit value to Binaryen memory. */
+declare function store<T extends u8>(ptr: usize, value: T): void;
+/** Loads an 8-bit value from Binaryen memory. */
+declare function load<T extends u8>(ptr: usize): T;

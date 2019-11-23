@@ -469,20 +469,17 @@ export class Module {
   static create(): Module {
     var module = new Module();
     module.ref = _BinaryenModuleCreate();
-    module.lit = memory.allocate(_BinaryenSizeofLiteral());
+    module.lit = _malloc(_BinaryenSizeofLiteral());
     return module;
   }
 
   static createFrom(buffer: Uint8Array): Module {
+    var module = new Module();
     var cArr = allocU8Array(buffer);
-    try {
-      let module = new Module();
-      module.ref = _BinaryenModuleRead(cArr, buffer.length);
-      module.lit = memory.allocate(_BinaryenSizeofLiteral());
-      return module;
-    } finally {
-      memory.free(changetype<usize>(cArr));
-    }
+    module.ref = _BinaryenModuleRead(cArr, buffer.length);
+    _free(changetype<usize>(cArr));
+    module.lit = _malloc(_BinaryenSizeofLiteral());
+    return module;
   }
 
   private constructor() { }
@@ -545,11 +542,9 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocPtrArray(operands);
-    try {
-      return _BinaryenHost(this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = _BinaryenHost(this.ref, op, cStr, cArr, operands ? (<ExpressionRef[]>operands).length : 0);
+    _free(cArr);
+    return ret;
   }
 
   local_get(
@@ -682,11 +677,9 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(label);
     var cArr = allocPtrArray(children);
-    try {
-      return _BinaryenBlock(this.ref, cStr, cArr, children.length, type);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = _BinaryenBlock(this.ref, cStr, cArr, children.length, type);
+    _free(cArr);
+    return ret;
   }
 
   br(
@@ -751,11 +744,9 @@ export class Module {
     }
     var cArr = allocI32Array(strs);
     var cStr = this.allocStringCached(defaultName);
-    try {
-      return _BinaryenSwitch(this.ref, cArr, numNames, cStr, condition, value);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = _BinaryenSwitch(this.ref, cArr, numNames, cStr, condition, value);
+    _free(cArr);
+    return ret;
   }
 
   call(
@@ -766,13 +757,11 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(target);
     var cArr = allocPtrArray(operands);
-    try {
-      return isReturn
-        ? _BinaryenReturnCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType)
-        : _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = isReturn
+      ? _BinaryenReturnCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType)
+      : _BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
+    _free(cArr);
+    return ret;
   }
 
   return_call(
@@ -791,13 +780,11 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(typeName);
     var cArr = allocPtrArray(operands);
-    try {
-      return isReturn
-        ? _BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr)
-        : _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = isReturn
+      ? _BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr)
+      : _BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
+    _free(cArr);
+    return ret;
   }
 
   return_call_indirect(
@@ -845,11 +832,9 @@ export class Module {
   ): ExpressionRef {
     var cStr = this.allocStringCached(eventName);
     var cArr = allocPtrArray(operands);
-    try {
-      return _BinaryenThrow(this.ref, cStr, cArr, operands.length);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = _BinaryenThrow(this.ref, cStr, cArr, operands.length);
+    _free(cArr);
+    return ret;
   }
 
   rethrow(
@@ -908,11 +893,9 @@ export class Module {
   ): ExpressionRef {
     assert(mask.length == 16);
     var cArr = allocU8Array(mask);
-    try {
-      return _BinaryenSIMDShuffle(this.ref, vec1, vec2, cArr);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = _BinaryenSIMDShuffle(this.ref, vec1, vec2, cArr);
+    _free(cArr);
+    return ret;
   }
 
   simd_ternary(
@@ -950,11 +933,9 @@ export class Module {
   ): FunctionTypeRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocI32Array(paramTypes);
-    try {
-      return _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = _BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
+    _free(cArr);
+    return ret;
   }
 
   getFunctionTypeBySignature(
@@ -962,11 +943,9 @@ export class Module {
     paramTypes: NativeType[] | null
   ): FunctionTypeRef {
     var cArr = allocI32Array(paramTypes);
-    try {
-      return _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = _BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
+    _free(cArr);
+    return ret;
   }
 
   removeFunctionType(name: string): void {
@@ -1035,11 +1014,9 @@ export class Module {
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocI32Array(varTypes);
-    try {
-      return _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes ? varTypes.length : 0, body);
-    } finally {
-      memory.free(cArr);
-    }
+    var ret = _BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes ? varTypes.length : 0, body);
+    _free(cArr);
+    return ret;
   }
 
   getFunction(
@@ -1060,12 +1037,10 @@ export class Module {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
     var tempName = this.allocStringCached("");
     var cArr = allocI32Array(paramTypes);
-    try {
-      let typeRef = _BinaryenAddFunctionType(this.ref, tempName, result, cArr, paramTypes ? paramTypes.length : 0);
-      return _BinaryenAddFunction(this.ref, tempName, typeRef, 0, 0, body);
-    } finally {
-      memory.free(cArr);
-    }
+    var typeRef = _BinaryenAddFunctionType(this.ref, tempName, result, cArr, paramTypes ? paramTypes.length : 0);
+    var ret = _BinaryenAddFunction(this.ref, tempName, typeRef, 0, 0, body);
+    _free(cArr);
+    return ret;
   }
 
   removeTemporaryFunction(): void {
@@ -1227,15 +1202,12 @@ export class Module {
     var cArr2 = allocU8Array(psvs);
     var cArr3 = allocI32Array(offs);
     var cArr4 = allocI32Array(sizs);
-    try {
-      _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared);
-    } finally {
-      memory.free(cArr4);
-      memory.free(cArr3);
-      memory.free(cArr2);
-      memory.free(cArr1);
-      for (let i = k - 1; i >= 0; --i) memory.free(segs[i]);
-    }
+    _BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared);
+    _free(cArr4);
+    _free(cArr3);
+    _free(cArr2);
+    _free(cArr1);
+    for (let i = k - 1; i >= 0; --i) _free(segs[i]);
   }
 
   // table
@@ -1252,11 +1224,8 @@ export class Module {
       names[i] = this.allocStringCached(funcs[i]);
     }
     var cArr = allocI32Array(names);
-    try {
-      _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames, offset);
-    } finally {
-      memory.free(cArr);
-    }
+    _BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames, offset);
+    _free(cArr);
   }
 
   // sections
@@ -1264,11 +1233,8 @@ export class Module {
   addCustomSection(name: string, contents: Uint8Array): void {
     var cStr = this.allocStringCached(name);
     var cArr = allocU8Array(contents);
-    try {
-      _BinaryenAddCustomSection(this.ref, cStr, cArr, contents.length);
-    } finally {
-      memory.free(cArr);
-    }
+    _BinaryenAddCustomSection(this.ref, cStr, cArr, contents.length);
+    _free(cArr);
   }
 
   // meta
@@ -1316,16 +1282,13 @@ export class Module {
       names[i] = allocString(passes[i]);
     }
     var cArr = allocI32Array(names);
-    try {
-      if (func) {
-        _BinaryenFunctionRunPasses(func, this.ref, cArr, numNames);
-      } else {
-        _BinaryenModuleRunPasses(this.ref, cArr, numNames);
-      }
-    } finally {
-      memory.free(cArr);
-      for (let i = numNames; i >= 0; --i) memory.free(names[i]);
+    if (func) {
+      _BinaryenFunctionRunPasses(func, this.ref, cArr, numNames);
+    } else {
+      _BinaryenModuleRunPasses(this.ref, cArr, numNames);
     }
+    _free(cArr);
+    for (let i = numNames; i >= 0; --i) _free(names[i]);
   }
 
   private cachedPrecomputeNames: usize = 0;
@@ -1387,9 +1350,9 @@ export class Module {
       ret.sourceMap = readString(sourceMapPtr);
       return ret;
     } finally {
-      if (cStr) memory.free(cStr);
-      if (binaryPtr) memory.free(binaryPtr);
-      if (sourceMapPtr) memory.free(sourceMapPtr);
+      if (cStr) _free(cStr);
+      if (binaryPtr) _free(binaryPtr);
+      if (sourceMapPtr) _free(sourceMapPtr);
     }
   }
 
@@ -1414,10 +1377,10 @@ export class Module {
 
   dispose(): void {
     assert(this.ref);
-    for (let ptr of this.cachedStrings.values()) memory.free(ptr);
+    for (let ptr of this.cachedStrings.values()) _free(ptr);
     this.cachedStrings = new Map();
-    memory.free(this.lit);
-    memory.free(this.cachedPrecomputeNames);
+    _free(this.lit);
+    _free(this.cachedPrecomputeNames);
     this.cachedPrecomputeNames = 0;
     _BinaryenModuleDispose(this.ref);
     this.ref = 0;
@@ -1525,11 +1488,9 @@ export class Module {
 
   addDebugInfoFile(name: string): Index {
     var cStr = allocString(name);
-    try {
-      return _BinaryenModuleAddDebugInfoFileName(this.ref, cStr);
-    } finally {
-      memory.free(cStr);
-    }
+    var ret = _BinaryenModuleAddDebugInfoFileName(this.ref, cStr);
+    _free(cStr);
+    return ret;
   }
 
   getDebugInfoFile(index: Index): string | null {
@@ -1855,11 +1816,8 @@ export class Relooper {
     code: ExpressionRef = 0
   ): void {
     var cArr = allocI32Array(indexes);
-    try {
-      _RelooperAddBranchForSwitch(from, to, cArr, indexes.length, code);
-    } finally {
-      memory.free(cArr);
-    }
+    _RelooperAddBranchForSwitch(from, to, cArr, indexes.length, code);
+    _free(cArr);
   }
 
   renderAndDispose(entry: RelooperBlockRef, labelHelper: Index): ExpressionRef {
@@ -1912,7 +1870,7 @@ export function hasSideEffects(expr: ExpressionRef): bool {
 function allocU8Array(u8s: Uint8Array | null): usize {
   if (!u8s) return 0;
   var numValues = u8s.length;
-  var ptr = memory.allocate(numValues);
+  var ptr = _malloc(numValues);
   var idx = ptr;
   for (let i = 0; i < numValues; ++i) {
     store<u8>(idx++, u8s[i]);
@@ -1922,7 +1880,7 @@ function allocU8Array(u8s: Uint8Array | null): usize {
 
 function allocI32Array(i32s: i32[] | null): usize {
   if (!i32s) return 0;
-  var ptr = memory.allocate(i32s.length << 2);
+  var ptr = _malloc(i32s.length << 2);
   var idx = ptr;
   for (let i = 0, k = i32s.length; i < k; ++i) {
     let val = i32s[i];
@@ -1966,7 +1924,7 @@ function stringLengthUTF8(str: string): usize {
 
 function allocString(str: string | null): usize {
   if (str == null) return 0;
-  var ptr = memory.allocate(stringLengthUTF8(str) + 1);
+  var ptr = _malloc(stringLengthUTF8(str) + 1);
   // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
   for (let i = 0, k = str.length; i < k; ++i) {
