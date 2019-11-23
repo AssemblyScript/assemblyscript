@@ -574,8 +574,8 @@ import { idof } from "./builtins";
             // load next 3 code points from row with `index` offset for specialsUpper table
             let ab = load<u32>(specialsUpperPtr + (index << 1), 2);
             let cc = load<u16>(specialsUpperPtr + (index << 1), 6);
-            store<u32>(codes + (j << 1), ab);
-            if (cc) store<u16>(codes + (j << 1), cc, 4);
+            store<u32>(codes + (j << 1), ab, 0);
+            store<u16>(codes + (j << 1), cc, 4);
             j += 1 + usize(cc != 0);
           } else {
             let code = casemap(c, 1) & 0x1FFFFF;

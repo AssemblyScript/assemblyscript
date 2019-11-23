@@ -11673,16 +11673,13 @@
         i32.add
         local.get $12
         i32.store
+        local.get $2
+        local.get $5
+        i32.const 1
+        i32.shl
+        i32.add
         local.get $11
-        if
-         local.get $2
-         local.get $5
-         i32.const 1
-         i32.shl
-         i32.add
-         local.get $11
-         i32.store16 offset=4
-        end
+        i32.store16 offset=4
         local.get $5
         i32.const 1
         local.get $11
