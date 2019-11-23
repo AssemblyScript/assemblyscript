@@ -37,6 +37,7 @@ import {
   Source,
   SourceKind,
   TypeNode,
+  TypeName,
   NamedTypeNode,
   FunctionTypeNode,
   ArrowKind,
@@ -84,9 +85,7 @@ import {
   VoidStatement,
   WhileStatement,
 
-  mangleInternalPath,
-  nodeIsCallable,
-  nodeIsGenericCallable
+  mangleInternalPath
 } from "./ast";
 
 /** Parser interface. */
@@ -149,7 +148,6 @@ export class Parser extends DiagnosticEmitter {
     // tokenize and parse
     var tn = new Tokenizer(source, program.diagnostics);
     tn.onComment = this.onComment;
-    source.tokenizer = tn;
     var statements = source.statements;
     while (!tn.skip(Token.ENDOFFILE)) {
       let statement = this.parseTopLevelStatement(tn, null);
@@ -400,12 +398,41 @@ export class Parser extends DiagnosticEmitter {
     return this.program;
   }
 
+  // types
+
+  /** Parses a type name. */
+  parseTypeName(
+    tn: Tokenizer
+  ): TypeName | null {
+
+    // at: Identifier ('.' Identifier)*
+
+    var first = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
+    var current = first;
+    while (tn.skip(Token.DOT)) {
+      if (tn.skip(Token.IDENTIFIER)) {
+        let next = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
+        current.next = next;
+        current = next;
+      } else {
+        this.error(
+          DiagnosticCode.Identifier_expected,
+          tn.range(tn.pos)
+        );
+        return null;
+      }
+    }
+    return first;
+  }
+
   /** Parses a type. */
   parseType(
     tn: Tokenizer,
     acceptParenthesized: bool = true,
     suppressErrors: bool = false
   ): TypeNode | null {
+
+    // before: Type
 
     // NOTE: this parses our limited subset
     var token = tn.next();
@@ -504,25 +531,10 @@ export class Parser extends DiagnosticEmitter {
 
     // Identifier
     } else if (token == Token.IDENTIFIER) {
-      let first = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
-      let current = first;
+      let name = this.parseTypeName(tn);
+      if (!name) return null;
       let parameters: NamedTypeNode[] | null = null;
       let nullable = false;
-
-      // Identifier ('.' Identifier)+
-      while (tn.skip(Token.DOT)) {
-        if (tn.skip(Token.IDENTIFIER)) {
-          let next = Node.createSimpleTypeName(tn.readIdentifier(), tn.range());
-          current.next = next;
-          current = next;
-        } else {
-          this.error(
-            DiagnosticCode.Identifier_expected,
-            tn.range(tn.pos)
-          );
-          return null;
-        }
-      }
 
       // Name<T>
       if (tn.skip(Token.LESSTHAN)) {
@@ -556,7 +568,7 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      type = Node.createNamedType(first, parameters || [], nullable, tn.range(startPos, tn.pos));
+      type = Node.createNamedType(name, parameters || [], nullable, tn.range(startPos, tn.pos));
     } else {
       if (!suppressErrors) {
         this.error(
@@ -798,7 +810,7 @@ export class Parser extends DiagnosticEmitter {
       let name = tn.readIdentifier();
       let expression: Expression = Node.createIdentifierExpression(name, tn.range(startPos, tn.pos));
       while (tn.skip(Token.DOT)) {
-        if (tn.skipIdentifier()) {
+        if (tn.skipIdentifier(IdentifierHandling.PREFER)) {
           name = tn.readIdentifier();
           expression = Node.createPropertyAccessExpression(
             expression,
@@ -2357,8 +2369,9 @@ export class Parser extends DiagnosticEmitter {
           let ret = Node.createExportStatement(null, path, isDeclare, tn.range(startPos, tn.pos));
           let internalPath = assert(ret.internalPath);
           let source = tn.source;
-          if (!source.exportPaths) source.exportPaths = new Set();
-          source.exportPaths.add(internalPath);
+          let exportPaths = source.exportPaths;
+          if (!exportPaths) source.exportPaths = [ internalPath ];
+          else if (!exportPaths.includes(internalPath)) exportPaths.push(internalPath);
           if (!this.seenlog.has(internalPath)) {
             this.dependees.set(internalPath, this.currentSource);
             this.backlog.push(internalPath);
@@ -3250,68 +3263,87 @@ export class Parser extends DiagnosticEmitter {
   }
 
   // expressions
-  // see: http://www.engr.mun.ca/~theo/Misc/exp_parsing.htm#climbing
 
   parseExpressionStart(
     tn: Tokenizer
   ): Expression | null {
-
     var token = tn.next(IdentifierHandling.PREFER);
     var startPos = tn.tokenPos;
-    var precedence = determinePrecedenceStart(token);
-    if (precedence != Precedence.NONE) {
-      let operand: Expression | null;
-
-      // TODO: SpreadExpression, YieldExpression (currently become unsupported UnaryPrefixExpressions)
-
-      // NewExpression
-      if (token == Token.NEW) {
-        operand = this.parseExpression(tn, Precedence.CALL);
-        if (!operand) return null;
-        if (operand.kind == NodeKind.CALL) {
-          return Node.createNewExpression(
-            (<CallExpression>operand).expression,
-            (<CallExpression>operand).typeArguments,
-            (<CallExpression>operand).arguments,
-            tn.range(startPos, tn.pos)
-          );
-        } else {
-          this.error(
-            DiagnosticCode.This_expression_is_not_constructable,
-            operand.range
-          );
-        }
-        return null;
-      } else {
-        operand = this.parseExpression(tn, precedence);
-        if (!operand) return null;
-      }
-
-      // UnaryPrefixExpression
-      if (token == Token.PLUS_PLUS || token == Token.MINUS_MINUS) {
-        if (
-          operand.kind != NodeKind.IDENTIFIER &&
-          operand.kind != NodeKind.ELEMENTACCESS &&
-          operand.kind != NodeKind.PROPERTYACCESS
-        ) {
-          this.error(
-            DiagnosticCode.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access,
-            operand.range
-          );
-        }
-      }
-      return Node.createUnaryPrefixExpression(token, operand, tn.range(startPos, tn.pos));
-    }
-
-    var expr: Expression | null = null;
     switch (token) {
 
+      // TODO: SpreadExpression, YieldExpression
+      case Token.DOT_DOT_DOT:
+      case Token.YIELD: // fallthrough to unsupported UnaryPrefixExpression
+
+      // UnaryPrefixExpression
+      case Token.EXCLAMATION:
+      case Token.TILDE:
+      case Token.PLUS:
+      case Token.MINUS:
+      case Token.TYPEOF:
+      case Token.VOID:
+      case Token.DELETE: {
+        let operand = this.parseExpression(tn, Precedence.UNARY_PREFIX);
+        if (!operand) return null;
+        return Node.createUnaryPrefixExpression(token, operand, tn.range(startPos, tn.pos));
+      }
+      case Token.PLUS_PLUS:
+      case Token.MINUS_MINUS: {
+        let operand = this.parseExpression(tn, Precedence.UNARY_PREFIX);
+        if (!operand) return null;
+        switch (operand.kind) {
+          case NodeKind.IDENTIFIER:
+          case NodeKind.ELEMENTACCESS:
+          case NodeKind.PROPERTYACCESS: break;
+          default: {
+            this.error(
+              DiagnosticCode.The_operand_of_an_increment_or_decrement_operator_must_be_a_variable_or_a_property_access,
+              operand.range
+            );
+          }
+        }
+        return Node.createUnaryPrefixExpression(token, operand, tn.range(startPos, tn.pos));
+      }
+
+      // NewExpression
+      case Token.NEW: {
+        if (!tn.skipIdentifier()) {
+          this.error(
+            DiagnosticCode.Identifier_expected,
+            tn.range()
+          );
+          return null;
+        }
+        let typeName = this.parseTypeName(tn);
+        if (!typeName) return null;
+        let typeArguments: TypeNode[] | null = null;
+        let arguments_: Expression[] | null = null;
+        if (
+          tn.skip(Token.OPENPAREN)
+          ||
+          (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
+        ) {
+          arguments_ = this.parseArguments(tn);
+          if (!arguments_) return null;
+        } else {
+          arguments_ = []; // new Type;
+        }
+        return Node.createNewExpression(
+          typeName,
+          typeArguments,
+          arguments_,
+          tn.range(startPos, tn.pos)
+        );
+      }
+
+      // Special IdentifierExpression
       case Token.NULL: return Node.createNullExpression(tn.range());
       case Token.TRUE: return Node.createTrueExpression(tn.range());
       case Token.FALSE: return Node.createFalseExpression(tn.range());
+      case Token.THIS: return Node.createThisExpression(tn.range());
+      case Token.CONSTRUCTOR: return Node.createConstructorExpression(tn.range());
 
-      // ParenthesizedExpression
-      // FunctionExpression
+      // ParenthesizedExpression or FunctionExpression
       case Token.OPENPAREN: {
 
         // determine whether this is a function expression
@@ -3389,8 +3421,8 @@ export class Parser extends DiagnosticEmitter {
         tn.reset(state);
 
         // parse parenthesized
-        expr = this.parseExpression(tn);
-        if (!expr) return null;
+        let inner = this.parseExpression(tn);
+        if (!inner) return null;
         if (!tn.skip(Token.CLOSEPAREN)) {
           this.error(
             DiagnosticCode._0_expected,
@@ -3398,12 +3430,14 @@ export class Parser extends DiagnosticEmitter {
           );
           return null;
         }
-        return Node.createParenthesizedExpression(expr, tn.range(startPos, tn.pos));
+        inner = Node.createParenthesizedExpression(inner, tn.range(startPos, tn.pos));
+        return this.maybeParseCallExpression(tn, inner);
       }
       // ArrayLiteralExpression
       case Token.OPENBRACKET: {
         let elementExpressions = new Array<Expression | null>();
         while (!tn.skip(Token.CLOSEBRACKET)) {
+          let expr: Expression | null;
           if (tn.peek() == Token.COMMA) {
             expr = null; // omitted
           } else {
@@ -3484,7 +3518,7 @@ export class Parser extends DiagnosticEmitter {
           );
           return null;
         }
-        expr = this.parseExpression(tn, Precedence.CALL);
+        let expr = this.parseExpression(tn, Precedence.CALL);
         if (!expr) return null;
         return Node.createAssertionExpression(
           AssertionKind.PREFIX,
@@ -3514,13 +3548,7 @@ export class Parser extends DiagnosticEmitter {
             startPos
           );
         }
-        return identifier;
-      }
-      case Token.THIS: {
-        return Node.createThisExpression(tn.range(startPos, tn.pos));
-      }
-      case Token.CONSTRUCTOR: {
-        return Node.createConstructorExpression(tn.range(startPos, tn.pos));
+        return this.maybeParseCallExpression(tn, identifier, true);
       }
       case Token.SUPER: {
         if (tn.peek() != Token.DOT && tn.nextToken != Token.OPENPAREN) {
@@ -3529,7 +3557,8 @@ export class Parser extends DiagnosticEmitter {
             tn.range()
           );
         }
-        return Node.createSuperExpression(tn.range(startPos, tn.pos));
+        let expr = Node.createSuperExpression(tn.range(startPos, tn.pos));
+        return this.maybeParseCallExpression(tn, expr);
       }
       case Token.STRINGLITERAL: {
         return Node.createStringLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
@@ -3558,7 +3587,9 @@ export class Parser extends DiagnosticEmitter {
         );
       }
       case Token.FUNCTION: {
-        return this.parseFunctionExpression(tn);
+        let expr = this.parseFunctionExpression(tn);
+        if (!expr) return null;
+        return this.maybeParseCallExpression(tn, expr);
       }
       case Token.CLASS: {
         return this.parseClassExpression(tn);
@@ -3639,20 +3670,19 @@ export class Parser extends DiagnosticEmitter {
     precedence: Precedence = Precedence.COMMA
   ): Expression | null {
     assert(precedence != Precedence.NONE);
-
     var expr = this.parseExpressionStart(tn);
     if (!expr) return null;
-    expr = this.maybeParseCallExpression(tn, expr); // simple call like on an Identifier
-
     var startPos = expr.range.start;
-    var token: Token;
-    var next: Expression | null = null;
+
+    // precedence climbing
+    // see: http://www.engr.mun.ca/~theo/Misc/exp_parsing.htm#climbing
     var nextPrecedence: Precedence;
     while (
-      (nextPrecedence = determinePrecedence(token = tn.peek())) >= precedence
-    ) { // precedence climbing
-      tn.next();
+      (nextPrecedence = determinePrecedence(tn.peek())) >= precedence
+    ) {
+      let token = tn.next();
       switch (token) {
+
         // AssertionExpression
         case Token.AS: {
           let toType = this.parseType(tn); // reports
@@ -3672,6 +3702,7 @@ export class Parser extends DiagnosticEmitter {
             null,
             tn.range(startPos, tn.pos)
           );
+          expr = this.maybeParseCallExpression(tn, expr);
           break;
         }
         // InstanceOfExpression
@@ -3687,7 +3718,7 @@ export class Parser extends DiagnosticEmitter {
         }
         // ElementAccessExpression
         case Token.OPENBRACKET: {
-          next = this.parseExpression(tn); // reports
+          let next = this.parseExpression(tn); // reports
           if (!next) return null;
           if (!tn.skip(Token.CLOSEBRACKET)) {
             this.error(
@@ -3701,6 +3732,7 @@ export class Parser extends DiagnosticEmitter {
             next,
             tn.range(startPos, tn.pos)
           );
+          expr = this.maybeParseCallExpression(tn, expr);
           break;
         }
         // UnaryPostfixExpression
@@ -3758,27 +3790,19 @@ export class Parser extends DiagnosticEmitter {
           expr = Node.createCommaExpression(commaExprs, tn.range(startPos, tn.pos));
           break;
         }
-        default: {
-
-          // PropertyAccessExpression
-          if (token == Token.DOT) {
-            if (tn.skipIdentifier()) {
-              next = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
-            } else {
-              next = this.parseExpression(tn,
-                isRightAssociative(token)
-                  ? nextPrecedence
-                  : nextPrecedence + 1
-              );
-              if (!next) return null;
-            }
-            if (next.kind == NodeKind.IDENTIFIER) { // expr '.' Identifier
-              expr = Node.createPropertyAccessExpression(
-                expr,
-                <IdentifierExpression>next,
-                tn.range(startPos, tn.pos)
-              );
-            } else if (next.kind == NodeKind.CALL) { // expr '.' CallExpression
+        // PropertyAccessExpression
+        case Token.DOT: {
+          if (tn.skipIdentifier()) { // expr '.' Identifier
+            let next = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
+            expr = Node.createPropertyAccessExpression(
+              expr,
+              <IdentifierExpression>next,
+              tn.range(startPos, tn.pos)
+            );
+          } else {
+            let next = this.parseExpression(tn, nextPrecedence + 1);
+            if (!next) return null;
+            if (next.kind == NodeKind.CALL) { // expr '.' CallExpression
               expr = this.joinPropertyCall(tn, startPos, expr, <CallExpression>next);
               if (!expr) return null;
             } else {
@@ -3788,21 +3812,59 @@ export class Parser extends DiagnosticEmitter {
               );
               return null;
             }
-
-          // BinaryExpression
-          } else {
-            next = this.parseExpression(tn,
-              isRightAssociative(token)
-                ? nextPrecedence
-                : nextPrecedence + 1
-            );
-            if (!next) return null;
-            expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
           }
+          expr = this.maybeParseCallExpression(tn, expr, true);
           break;
         }
+        // BinaryExpression (right associative)
+        case Token.EQUALS:
+        case Token.PLUS_EQUALS:
+        case Token.MINUS_EQUALS:
+        case Token.ASTERISK_ASTERISK_EQUALS:
+        case Token.ASTERISK_EQUALS:
+        case Token.SLASH_EQUALS:
+        case Token.PERCENT_EQUALS:
+        case Token.LESSTHAN_LESSTHAN_EQUALS:
+        case Token.GREATERTHAN_GREATERTHAN_EQUALS:
+        case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
+        case Token.AMPERSAND_EQUALS:
+        case Token.CARET_EQUALS:
+        case Token.BAR_EQUALS:
+        case Token.ASTERISK_ASTERISK: {
+          let next = this.parseExpression(tn, nextPrecedence);
+          if (!next) return null;
+          expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
+          break;
+        }
+        // BinaryExpression
+        case Token.LESSTHAN:
+        case Token.GREATERTHAN:
+        case Token.LESSTHAN_EQUALS:
+        case Token.GREATERTHAN_EQUALS:
+        case Token.EQUALS_EQUALS:
+        case Token.EQUALS_EQUALS_EQUALS:
+        case Token.EXCLAMATION_EQUALS_EQUALS:
+        case Token.EXCLAMATION_EQUALS:
+        case Token.PLUS:
+        case Token.MINUS:
+        case Token.ASTERISK:
+        case Token.SLASH:
+        case Token.PERCENT:
+        case Token.LESSTHAN_LESSTHAN:
+        case Token.GREATERTHAN_GREATERTHAN:
+        case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN:
+        case Token.AMPERSAND:
+        case Token.BAR:
+        case Token.CARET:
+        case Token.AMPERSAND_AMPERSAND:
+        case Token.BAR_BAR: {
+          let next = this.parseExpression(tn, nextPrecedence + 1);
+          if (!next) return null;
+          expr = Node.createBinaryExpression(token, expr, next, tn.range(startPos, tn.pos));
+          break;
+        }
+        default: assert(false); // filtered by determinePrecedence
       }
-      expr = this.maybeParseCallExpression(tn, expr); // compound call like on an ElementAccess
     }
     return expr;
   }
@@ -3843,24 +3905,24 @@ export class Parser extends DiagnosticEmitter {
 
   private maybeParseCallExpression(
     tn: Tokenizer,
-    expr: Expression
+    expr: Expression,
+    potentiallyGeneric: bool = false
   ): Expression {
-    if (nodeIsCallable(expr.kind)) {
-      let typeArguments: TypeNode[] | null = null;
-      while (
-        tn.skip(Token.OPENPAREN)
-        ||
-        nodeIsGenericCallable(expr.kind) && (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
-      ) {
-        let args = this.parseArguments(tn);
-        if (!args) break;
-        expr = Node.createCallExpression( // is again callable
-          expr,
-          typeArguments,
-          args,
-          tn.range(expr.range.start, tn.pos)
-        );
-      }
+    var typeArguments: TypeNode[] | null = null;
+    while (
+      tn.skip(Token.OPENPAREN)
+      ||
+      potentiallyGeneric && (typeArguments = this.tryParseTypeArgumentsBeforeArguments(tn)) !== null
+    ) {
+      let args = this.parseArguments(tn);
+      if (!args) break;
+      expr = Node.createCallExpression( // is again callable
+        expr,
+        typeArguments,
+        args,
+        tn.range(expr.range.start, tn.pos)
+      );
+      potentiallyGeneric = false;
     }
     return expr;
   }
@@ -3975,25 +4037,6 @@ export const enum Precedence {
   GROUPING
 }
 
-/** Determines the precedence of a starting token. */
-function determinePrecedenceStart(kind: Token): Precedence {
-  switch (kind) {
-    case Token.DOT_DOT_DOT: return Precedence.SPREAD;
-    case Token.YIELD: return Precedence.YIELD;
-    case Token.EXCLAMATION:
-    case Token.TILDE:
-    case Token.PLUS:
-    case Token.MINUS:
-    case Token.PLUS_PLUS:
-    case Token.MINUS_MINUS:
-    case Token.TYPEOF:
-    case Token.VOID:
-    case Token.DELETE: return Precedence.UNARY_PREFIX;
-    case Token.NEW: return Precedence.MEMBERACCESS;
-  }
-  return Precedence.NONE;
-}
-
 /** Determines the precende of a non-starting token. */
 function determinePrecedence(kind: Token): Precedence {
   switch (kind) {
@@ -4045,26 +4088,4 @@ function determinePrecedence(kind: Token): Precedence {
     case Token.EXCLAMATION: return Precedence.MEMBERACCESS;
   }
   return Precedence.NONE;
-}
-
-/** Determines whether a non-starting token is right associative. */
-function isRightAssociative(kind: Token): bool {
-  switch (kind) {
-    case Token.EQUALS:
-    case Token.PLUS_EQUALS:
-    case Token.MINUS_EQUALS:
-    case Token.ASTERISK_ASTERISK_EQUALS:
-    case Token.ASTERISK_EQUALS:
-    case Token.SLASH_EQUALS:
-    case Token.PERCENT_EQUALS:
-    case Token.LESSTHAN_LESSTHAN_EQUALS:
-    case Token.GREATERTHAN_GREATERTHAN_EQUALS:
-    case Token.GREATERTHAN_GREATERTHAN_GREATERTHAN_EQUALS:
-    case Token.AMPERSAND_EQUALS:
-    case Token.CARET_EQUALS:
-    case Token.BAR_EQUALS:
-    case Token.QUESTION:
-    case Token.ASTERISK_ASTERISK: return true;
-    default: return false;
-  }
 }
