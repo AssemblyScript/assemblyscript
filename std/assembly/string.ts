@@ -531,13 +531,14 @@ import { idof } from "./builtins";
       }
     }
     codes = __realloc(codes, j << 1);
-    return changetype<String>(codes);
+    return changetype<String>(codes); // retains
   }
 
   toUpperCase(): String {
     var len = <usize>this.length;
     if (!len) return this;
     var codes = __alloc(len * 3 * 2, idof<String>());
+    // @ts-ignore: cast
     var specialsUpperPtr = specialsUpper.dataStart as usize;
     var specialsUpperLen = specialsUpper.length;
     var j: usize = 0;
@@ -593,7 +594,7 @@ import { idof } from "./builtins";
       }
     }
     codes = __realloc(codes, j << 1);
-    return changetype<String>(codes);
+    return changetype<String>(codes); // retains
   }
 
   toString(): String {
