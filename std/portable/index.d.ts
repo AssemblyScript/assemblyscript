@@ -294,16 +294,18 @@ declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
 
 /** Memory operations. */
 declare namespace memory {
-  /** Allocates a chunk of memory of the specified size and returns a pointer to it. */
-  function allocate(size: usize): usize;
-  /** Disposes a chunk of memory by its pointer. */
-  function free(ptr: usize): void;
+  /** Gets the size of the memory in pages. */
+  function size(): i32;
+  /** Grows the memory by the given size in pages and returns the previous size in pages. */
+  function grow(pages: i32): i32;
+  /** Fills a section in memory with the specified byte value. */
+  function fill(dst: usize, c: u8, n: usize): void;
   /** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
   function copy(dst: usize, src: usize, n: usize): void;
-  /** Fills size bytes from from the specified destination by same value in memory. */
-  function fill(dst: usize, value: u8, size: usize): void;
-  /** Resets the allocator to its initial state, if supported. */
-  function reset(): void;
+  /** Repeats a section of memory at a specific address. */
+  function repeat(dst: usize, src: usize, srcLength: usize, count: usize): void;
+  /** Compares a section of memory to another. */
+  function compare(vl: usize, vr: usize, n: usize): i32;
 }
 
 declare const Mathf: typeof Math;
