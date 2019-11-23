@@ -1534,7 +1534,7 @@ export class Tokenizer extends DiagnosticEmitter {
     throw new Error("not implemented"); // TBD
   }
 
-  private readSequenceEscape(remain: i32): string {
+  readHexadecimalEscape(remain: i32 = 2): string {
     var value = 0;
     var end = this.end;
     var text = this.source.text;
@@ -1565,12 +1565,8 @@ export class Tokenizer extends DiagnosticEmitter {
     return String.fromCharCode(value);
   }
 
-  readHexadecimalEscape(): string {
-    return this.readSequenceEscape(2);
-  }
-
   readUnicodeEscape(): string {
-    return this.readSequenceEscape(4);
+    return this.readHexadecimalEscape(4);
   }
 
   private readExtendedUnicodeEscape(): string {
