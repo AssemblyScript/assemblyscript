@@ -225,6 +225,6 @@
   call $~lib/string/String#startsWith
  )
  (func $null (; 11 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

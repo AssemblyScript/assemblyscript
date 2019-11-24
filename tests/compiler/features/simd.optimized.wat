@@ -139,6 +139,6 @@
   call $~lib/rt/stub/__free
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

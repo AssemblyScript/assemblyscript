@@ -150,8 +150,6 @@ export namespace BuiltinSymbols {
   export const changetype = "~lib/builtins/changetype";
   export const assert = "~lib/builtins/assert";
   export const unchecked = "~lib/builtins/unchecked";
-  export const call_direct = "~lib/builtins/call_direct";
-  export const call_indirect = "~lib/builtins/call_indirect";
   export const instantiate = "~lib/builtins/instantiate";
   export const idof = "~lib/builtins/idof";
 
@@ -576,6 +574,7 @@ export namespace BuiltinSymbols {
   export const started = "~lib/started";
   export const argc = "~lib/argc";
   export const setargc = "~lib/setargc";
+  export const closure = "~lib/closure";
   export const capabilities = "~lib/capabilities";
 }
 
@@ -2308,60 +2307,6 @@ export function compileCall(
       let expr = compiler.compileExpression(operands[0], contextualType);
       if (!alreadyUnchecked) flow.unset(FlowFlags.UNCHECKED_CONTEXT);
       return expr;
-    }
-    case BuiltinSymbols.call_direct:
-    case BuiltinSymbols.call_indirect: { // call_indirect<T?>(target: Function | u32, ...args: *[]) -> T
-      if (
-        checkTypeOptional(typeArguments, reportNode, compiler, true) |
-        checkArgsOptional(operands, 1, i32.MAX_VALUE, reportNode, compiler)
-      ) return module.unreachable();
-      let returnType = typeArguments ? typeArguments[0] : contextualType;
-      let arg0 = compiler.compileExpression(operands[0], Type.u32);
-      let arg0Type = compiler.currentType;
-      if (!(
-        arg0Type == Type.u32 ||                                      // either plain index
-        arg0Type.kind == TypeKind.U32 && arg0Type.signatureReference // or function reference
-      )) {
-        compiler.error(
-          DiagnosticCode.Type_0_is_not_a_function_index_or_function_reference,
-          operands[0].range, arg0Type.toString()
-        );
-        return module.unreachable();
-      }
-      let numOperands = operands.length - 1;
-      let operandExprs = new Array<ExpressionRef>(numOperands);
-      let nativeReturnType = returnType.toNativeType();
-      let parameterTypes = new Array<Type>(numOperands);
-      let nativeParamTypes = new Array<NativeType>(numOperands);
-      for (let i = 0; i < numOperands; ++i) {
-        operandExprs[i] = compiler.compileExpression(operands[1 + i], Type.i32);
-        let operandType = compiler.currentType;
-        parameterTypes[i] = operandType;
-        nativeParamTypes[i] = operandType.toNativeType();
-      }
-      let typeName = Signature.makeSignatureString(parameterTypes, returnType);
-      let typeRef = module.getFunctionTypeBySignature(nativeReturnType, nativeParamTypes);
-      if (!typeRef) typeRef = module.addFunctionType(typeName, nativeReturnType, nativeParamTypes);
-      compiler.currentType = returnType;
-      if (prototype.internalName == BuiltinSymbols.call_direct) {
-        // if the index expression is precomputable to a constant value, emit a direct call
-        if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
-          assert(getExpressionType(arg0) == NativeType.I32);
-          let index = getConstValueI32(arg0);
-          let functionTable = compiler.functionTable;
-          if (index >= 0 && index < functionTable.length) {
-            return module.call(functionTable[index], operandExprs, nativeReturnType);
-          }
-        }
-        compiler.error(
-          DiagnosticCode.Expression_must_be_a_compile_time_constant,
-          operands[0].range
-        );
-        return module.unreachable();
-      }
-      // of course this can easily result in a 'RuntimeError: function signature mismatch' trap and
-      // thus must be used with care. it exists because it *might* be useful in specific scenarios.
-      return module.call_indirect(arg0, operandExprs, typeName);
     }
     case BuiltinSymbols.instantiate: { // instantiate<T!>(...args: *[]) -> T
       if (

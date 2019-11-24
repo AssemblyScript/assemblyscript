@@ -46188,6 +46188,6 @@
   call $start:std/math
  )
  (func $null (; 173 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

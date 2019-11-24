@@ -32,4 +32,7 @@
  (func $export/ns.one (; 3 ;) (type $FUNCSIG$v)
   nop
  )
+ (func $null (; 4 ;) (type $FUNCSIG$v)
+  unreachable
+ )
 )

@@ -10,6 +10,7 @@
  (data (i32.const 112) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "testVar" (func $assert-nonnull/testVar))
@@ -21,9 +22,9 @@
  (export "testAll2" (func $assert-nonnull/testAll))
  (export "testFn" (func $assert-nonnull/testFn))
  (export "testFn2" (func $assert-nonnull/testFn2))
- (export "testRet" (func $assert-nonnull/testRet))
+ (export "testRet" (func $assert-nonnull/testFn))
  (export "testObjFn" (func $assert-nonnull/testObjFn))
- (export "testObjRet" (func $assert-nonnull/testObjRet))
+ (export "testObjRet" (func $assert-nonnull/testObjFn))
  (func $assert-nonnull/testVar (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
@@ -135,6 +136,17 @@
   local.get $0
  )
  (func $assert-nonnull/testFn (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
+  end
   i32.const 0
   global.set $~lib/argc
   local.get $0
@@ -146,46 +158,42 @@
   if
    unreachable
   end
-  i32.const 0
-  global.set $~lib/argc
   local.get $0
-  call_indirect (type $FUNCSIG$i)
- )
- (func $assert-nonnull/testRet (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  i32.const 0
-  global.set $~lib/argc
-  local.get $0
-  call_indirect (type $FUNCSIG$i)
-  local.tee $0
-  local.get $0
+  i32.const 15
+  i32.and
   i32.eqz
   if
-   unreachable
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
   end
- )
- (func $assert-nonnull/testObjFn (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
-  i32.load offset=4
   call_indirect (type $FUNCSIG$i)
  )
- (func $assert-nonnull/testObjRet (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  i32.const 0
-  global.set $~lib/argc
+ (func $assert-nonnull/testObjFn (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
-  call_indirect (type $FUNCSIG$i)
   local.tee $0
-  local.get $0
+  i32.const 15
+  i32.and
   i32.eqz
   if
-   unreachable
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
   end
+  i32.const 0
+  global.set $~lib/argc
+  local.get $0
+  call_indirect (type $FUNCSIG$i)
  )
- (func $null (; 15 ;) (type $FUNCSIG$v)
-  nop
+ (func $null (; 13 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

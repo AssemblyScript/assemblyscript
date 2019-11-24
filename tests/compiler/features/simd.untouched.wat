@@ -2299,5 +2299,6 @@
   call $start:features/simd
  )
  (func $null (; 17 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

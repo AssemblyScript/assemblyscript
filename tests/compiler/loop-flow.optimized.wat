@@ -160,6 +160,6 @@
   call $start:loop-flow
  )
  (func $null (; 11 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

@@ -148,7 +148,7 @@
   global.set $~lib/rt/stub/offset
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
  (func $exports/subOpt|trampoline (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1

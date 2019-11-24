@@ -16,6 +16,7 @@
  (global $retain-release/REF (mut i32) (i32.const 0))
  (global $retain-release/glo (mut i32) (i32.const 0))
  (global $retain-release/TARGET (mut i32) (i32.const 0))
+ (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 92))
@@ -758,29 +759,83 @@
   call $~lib/rt/stub/__release
  )
  (func $retain-release/provideRefIndirect (; 42 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/closure
+   local.get $1
+   i32.load
+   local.set $1
+  end
   i32.const 1
   global.set $~lib/argc
   global.get $retain-release/REF
-  local.get $0
+  local.get $1
   call_indirect (type $FUNCSIG$vi)
+  local.get $0
+  call $~lib/rt/stub/__release
  )
  (func $retain-release/receiveRefIndirect (; 43 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/closure
+   local.get $1
+   i32.load
+   local.set $1
+  end
   i32.const 0
   global.set $~lib/argc
-  local.get $0
+  local.get $1
   call_indirect (type $FUNCSIG$i)
-  local.tee $1
+  local.tee $2
   i32.eqz
   drop
-  local.get $1
+  local.get $2
+  call $~lib/rt/stub/__release
+  local.get $0
   call $~lib/rt/stub/__release
  )
  (func $retain-release/receiveRefIndirectDrop (; 44 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/closure
+   local.get $1
+   i32.load
+   local.set $1
+  end
   i32.const 0
   global.set $~lib/argc
-  local.get $0
+  local.get $1
   call_indirect (type $FUNCSIG$i)
+  call $~lib/rt/stub/__release
+  local.get $0
   call $~lib/rt/stub/__release
  )
  (func $start (; 45 ;) (type $FUNCSIG$v)
@@ -794,5 +849,6 @@
   call $start:retain-release
  )
  (func $null (; 46 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

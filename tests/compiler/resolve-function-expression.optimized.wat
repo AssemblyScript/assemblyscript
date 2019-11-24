@@ -406,6 +406,6 @@
   call $start:resolve-function-expression
  )
  (func $null (; 14 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

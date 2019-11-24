@@ -15,6 +15,7 @@
  (data (i32.const 560) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002\00")
  (table $0 4 funcref)
  (elem (i32.const 0) $null $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
+ (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -626,9 +627,21 @@
  (func $start:resolve-function-expression (; 16 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 1
+  local.tee $0
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
+  end
+  i32.const 1
   global.set $~lib/argc
   i32.const 2
-  i32.const 1
+  local.get $0
   call_indirect (type $FUNCSIG$ii)
   i32.const 42
   i32.eq
@@ -641,10 +654,22 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 2
+  local.tee $0
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
+  end
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  i32.const 2
+  local.get $0
   call_indirect (type $FUNCSIG$ii)
   i32.const 42
   i32.eq
@@ -667,10 +692,22 @@
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
+  i32.const 3
+  local.tee $0
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
+  end
   i32.const 1
   global.set $~lib/argc
   i32.const 0
-  i32.const 3
+  local.get $0
   call_indirect (type $FUNCSIG$ii)
   call $~lib/number/I32#toString
   local.tee $0
@@ -692,5 +729,6 @@
   call $start:resolve-function-expression
  )
  (func $null (; 18 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

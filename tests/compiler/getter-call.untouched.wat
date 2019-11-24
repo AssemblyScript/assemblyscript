@@ -9,6 +9,7 @@
  (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
@@ -141,6 +142,7 @@
  )
  (func $getter-call/C#get:x (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
+  call $~lib/rt/stub/__retain
  )
  (func $~lib/rt/stub/__release (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
@@ -148,18 +150,34 @@
  (func $getter-call/test (; 7 ;) (type $FUNCSIG$i) (result i32)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
   i32.const 0
   call $getter-call/C#constructor
   local.set $0
-  i32.const 0
-  global.set $~lib/argc
   local.get $0
   call $getter-call/C#get:x
+  local.tee $1
+  local.tee $2
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $2
+   global.set $~lib/closure
+   local.get $2
+   i32.load
+   local.set $2
+  end
+  i32.const 0
+  global.set $~lib/argc
+  local.get $2
   call_indirect (type $FUNCSIG$i)
-  local.set $1
+  local.set $2
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
  )
  (func $start (; 8 ;) (type $FUNCSIG$v)
   global.get $~lib/heap/__heap_base
@@ -174,5 +192,6 @@
   global.set $~lib/rt/stub/offset
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

@@ -6,5 +6,6 @@
  (global $~lib/ASC_FEATURE_SIMD i32 (i32.const 0))
  (export "memory" (memory $0))
  (func $null (; 0 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

@@ -1,6 +1,7 @@
 (module
  (type $FUNCSIG$i (func (result i32)))
  (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -8,19 +9,46 @@
  (data (i32.const 8) "0\00\00\00\01\00\00\00\01\00\00\000\00\00\00c\00l\00a\00s\00s\00-\00s\00t\00a\00t\00i\00c\00-\00f\00u\00n\00c\00t\00i\00o\00n\00.\00t\00s\00")
  (table $0 2 funcref)
  (elem (i32.const 0) $null $class-static-function/Example.staticFunc)
+ (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $class-static-function/Example.staticFunc (; 1 ;) (type $FUNCSIG$i) (result i32)
   i32.const 42
  )
- (func $class-static-function/call (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $~lib/rt/stub/__release (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+  nop
+ )
+ (func $class-static-function/call (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/closure
+   local.get $1
+   i32.load
+   local.set $1
+  end
   i32.const 0
   global.set $~lib/argc
-  local.get $0
+  local.get $1
   call_indirect (type $FUNCSIG$i)
+  local.set $1
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
  )
- (func $start:class-static-function (; 3 ;) (type $FUNCSIG$v)
+ (func $start:class-static-function (; 5 ;) (type $FUNCSIG$v)
   i32.const 1
   call $class-static-function/call
   i32.const 42
@@ -35,9 +63,10 @@
    unreachable
   end
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;) (type $FUNCSIG$v)
   call $start:class-static-function
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

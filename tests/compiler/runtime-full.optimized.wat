@@ -1356,9 +1356,14 @@
   end
  )
  (func $~lib/rt/pure/__retain (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 0
   local.get $0
   i32.const 284
   i32.gt_u
+  local.get $0
+  i32.const 15
+  i32.and
+  select
   if
    local.get $0
    i32.const 16
@@ -1744,9 +1749,14 @@
   end
  )
  (func $~lib/rt/pure/__release (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 0
   local.get $0
   i32.const 284
   i32.gt_u
+  local.get $0
+  i32.const 15
+  i32.and
+  select
   if
    local.get $0
    i32.const 16
@@ -1889,6 +1899,6 @@
   unreachable
  )
  (func $null (; 28 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

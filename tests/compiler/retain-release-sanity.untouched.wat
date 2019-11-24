@@ -2018,8 +2018,16 @@
  )
  (func $~lib/rt/pure/__retain (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
-  i32.gt_u
+  i32.const 15
+  i32.and
+  i32.eqz
+  if (result i32)
+   local.get $0
+   global.get $~lib/heap/__heap_base
+   i32.gt_u
+  else
+   i32.const 0
+  end
   if
    local.get $0
    i32.const 16
@@ -3527,8 +3535,16 @@
  )
  (func $~lib/rt/pure/__release (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  global.get $~lib/heap/__heap_base
-  i32.gt_u
+  i32.const 15
+  i32.and
+  i32.eqz
+  if (result i32)
+   local.get $0
+   global.get $~lib/heap/__heap_base
+   i32.gt_u
+  else
+   i32.const 0
+  end
   if
    local.get $0
    i32.const 16
@@ -4618,5 +4634,6 @@
   return
  )
  (func $null (; 54 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

@@ -46,6 +46,7 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
+ (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1576))
  (export "memory" (memory $0))
@@ -1385,9 +1386,14 @@
   end
  )
  (func $~lib/rt/pure/__retain (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 0
   local.get $0
   i32.const 1628
   i32.gt_u
+  local.get $0
+  i32.const 15
+  i32.and
+  select
   if
    local.get $0
    i32.const 16
@@ -1773,9 +1779,14 @@
   end
  )
  (func $~lib/rt/pure/__release (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
+  i32.const 0
   local.get $0
   i32.const 1628
   i32.gt_u
+  local.get $0
+  i32.const 15
+  i32.and
+  select
   if
    local.get $0
    i32.const 16
@@ -3125,9 +3136,7 @@
   end
   f64.const 1
   call $~lib/util/number/dtoa
-  local.tee $0
-  local.set $2
-  local.get $0
+  local.tee $2
   i32.const 1568
   call $~lib/string/String.__eq
   i32.eqz
@@ -3140,9 +3149,20 @@
    unreachable
   end
   i32.const 1
+  local.tee $0
+  i32.eqz
+  if
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
+  end
+  i32.const 1
   global.set $~lib/argc
   i32.const 1
-  call $start:resolve-ternary~anonymous|0
+  local.get $0
+  call_indirect (type $FUNCSIG$ii)
   i32.const 2
   i32.ne
   if
@@ -3153,10 +3173,21 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  local.tee $0
+  i32.eqz
+  if
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
+  end
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  call $resolve-ternary/g1
+  local.get $0
+  call_indirect (type $FUNCSIG$ii)
   i32.const 4
   i32.ne
   if
@@ -3167,10 +3198,21 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 2
+  local.tee $0
+  i32.eqz
+  if
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
+  end
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  call $start:resolve-ternary~anonymous|1
+  local.get $0
+  call_indirect (type $FUNCSIG$ii)
   i32.const 3
   i32.ne
   if
@@ -3322,6 +3364,6 @@
   end
  )
  (func $null (; 45 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

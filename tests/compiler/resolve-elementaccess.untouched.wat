@@ -3831,5 +3831,6 @@
   call $start:resolve-elementaccess
  )
  (func $null (; 28 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

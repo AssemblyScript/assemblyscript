@@ -12,60 +12,10 @@ import { Module } from "./module";
 import { Parser } from "./parser";
 import { Program } from "./program";
 
-/** Parses a source file. If `parser` has been omitted a new one is created. */
-export function parseFile(
-  /** Source text of the file. */
-  text: string,
-  /** Normalized path of the file. */
-  path: string,
-  /** Whether this is an entry file. */
-  isEntry: bool = false,
-  /** Parser reference. */
-  parser: Parser | null = null
-): Parser {
-  if (!parser) parser = new Parser();
-  parser.parseFile(text, path, isEntry);
-  return parser;
-}
-
-/** Obtains the next required file's path. Returns `null` once complete. */
-export function nextFile(parser: Parser): string | null {
-  return parser.nextFile();
-}
-
-/** Obtains the path of the dependee of a given imported file. */
-export function getDependee(parser: Parser, file: string): string | null {
-  return parser.getDependee(file);
-}
-
-/** Obtains the next diagnostic message. Returns `null` once complete. */
-export function nextDiagnostic(parser: Parser): DiagnosticMessage | null {
-  var program = parser.program;
-  return program.diagnosticsOffset < program.diagnostics.length
-    ? program.diagnostics[program.diagnosticsOffset++]
-    : null;
-}
-
-/** Formats a diagnostic message to a string. */
-export { formatDiagnosticMessage as formatDiagnostic };
-
-/** Tests whether a diagnostic is informatory. */
-export function isInfo(message: DiagnosticMessage): bool {
-  return message.category == DiagnosticCategory.INFO;
-}
-
-/** Tests whether a diagnostic is a warning. */
-export function isWarning(message: DiagnosticMessage): bool {
-  return message.category == DiagnosticCategory.WARNING;
-}
-
-/** Tests whether a diagnostic is an error. */
-export function isError(message: DiagnosticMessage): bool {
-  return message.category == DiagnosticCategory.ERROR;
-}
+// Options
 
 /** Creates a new set of compiler options. */
-export function createOptions(): Options {
+export function newOptions(): Options {
   return new Options();
 }
 
@@ -156,9 +106,18 @@ export function setOptimizeLevelHints(options: Options, optimizeLevel: i32, shri
   options.shrinkLevelHint = shrinkLevel;
 }
 
-/** Finishes parsing. */
-export function finishParsing(parser: Parser): Program {
-  return parser.finish();
+// Program
+
+/** Creates a new Program. */
+export function newProgram(options: Options): Program {
+  return new Program(options);
+}
+
+/** Obtains the next diagnostic message. Returns `null` once complete. */
+export function nextDiagnostic(program: Program): DiagnosticMessage | null {
+  return program.diagnosticsOffset < program.diagnostics.length
+    ? program.diagnostics[program.diagnosticsOffset++]
+    : null;
 }
 
 /** Obtains the source of the given file. */
@@ -166,13 +125,65 @@ export function getSource(program: Program, internalPath: string): string | null
   return program.getSource(internalPath);
 }
 
-/** Compiles the sources computed by the parser to a module. */
-export function compileProgram(program: Program, options: Options | null = null): Module {
-  return new Compiler(program, options).compile();
+/** Formats a diagnostic message to a string. */
+export { formatDiagnosticMessage as formatDiagnostic };
+
+/** Tests whether a diagnostic is informatory. */
+export function isInfo(message: DiagnosticMessage): bool {
+  return message.category == DiagnosticCategory.INFO;
+}
+
+/** Tests whether a diagnostic is a warning. */
+export function isWarning(message: DiagnosticMessage): bool {
+  return message.category == DiagnosticCategory.WARNING;
+}
+
+/** Tests whether a diagnostic is an error. */
+export function isError(message: DiagnosticMessage): bool {
+  return message.category == DiagnosticCategory.ERROR;
+}
+
+// Parser
+
+/** Creates a new Parser. */
+export function newParser(program: Program): Parser {
+  return new Parser(program);
+}
+
+/** Parses a source file. If `parser` has been omitted a new one is created. */
+export function parse(
+  /** The parser. */
+  parser: Parser,
+  /** Source text of the file. */
+  text: string,
+  /** Normalized path of the file. */
+  path: string,
+  /** Whether this is an entry file. */
+  isEntry: bool = false
+): void {
+  parser.parseFile(text, path, isEntry);
+}
+
+/** Obtains the next required file's path. Returns `null` once complete. */
+export function nextFile(parser: Parser): string | null {
+  return parser.nextFile();
+}
+
+/** Obtains the path of the dependee of a given imported file. */
+export function getDependee(parser: Parser, file: string): string | null {
+  return parser.getDependee(file);
+}
+
+// Compiler
+
+/** Compiles the parsed sources to a module. */
+export function compile(program: Program): Module {
+  program.parser.finish();
+  return new Compiler(program).compile();
 }
 
 /** Decompiles a module to its (low level) source. */
-export function decompileModule(module: Module): string {
+export function decompile(module: Module): string {
   var decompiler = new Decompiler();
   decompiler.decompile(module);
   return decompiler.finish();

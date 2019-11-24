@@ -707,6 +707,6 @@
   call $start:binary
  )
  (func $null (; 6 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

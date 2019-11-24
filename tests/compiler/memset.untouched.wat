@@ -380,5 +380,6 @@
   call $start:memset
  )
  (func $null (; 4 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

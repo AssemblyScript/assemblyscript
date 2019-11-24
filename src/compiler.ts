@@ -281,7 +281,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Resolver reference. */
   get resolver(): Resolver { return this.program.resolver; }
   /** Provided options. */
-  options: Options;
+  get options(): Options { return this.program.options; }
   /** Module instance being compiled. */
   module: Module;
   /** Current control flow. */
@@ -306,6 +306,8 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
+  /** Closure context helper global. */
+  closureVar: GlobalRef = 0;
   /** Requires runtime features. */
   runtimeFeatures: RuntimeFeatures = RuntimeFeatures.NONE;
   /** Expressions known to have skipped an autorelease. Usually function returns. */
@@ -314,33 +316,33 @@ export class Compiler extends DiagnosticEmitter {
   events: Map<string, EventRef> = new Map();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
-  static compile(program: Program, options: Options | null = null): Module {
-    return new Compiler(program, options).compile();
+  static compile(program: Program): Module {
+    return new Compiler(program).compile();
   }
 
   /** Constructs a new compiler for a {@link Program} using the specified options. */
-  constructor(program: Program, options: Options | null = null) {
+  constructor(program: Program) {
     super(program.diagnostics);
     this.program = program;
-    if (!options) options = new Options();
-    this.options = options;
+    var options = program.options;
     this.memoryOffset = i64_new(
       // leave space for `null`. also functions as a sentinel for erroneous stores at offset 0.
       // note that Binaryen's asm.js output utilizes the first 8 bytes for reinterpretations (#1547)
       max(options.memoryBase, 8)
     );
-    this.module = Module.create();
+    var module = Module.create();
+    this.module = module;
     var featureFlags: BinaryenFeatureFlags = 0;
-    if (this.options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
-    if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
-    if (this.options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.NontrappingFPToInt;
-    if (this.options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
-    if (this.options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD128;
-    if (this.options.hasFeature(Feature.THREADS)) featureFlags |= FeatureFlags.Atomics;
-    if (this.options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
-    if (this.options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;
-    if (this.options.hasFeature(Feature.REFERENCE_TYPES)) featureFlags |= FeatureFlags.ReferenceTypes;
-    this.module.setFeatures(featureFlags);
+    if (options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
+    if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
+    if (options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.NontrappingFPToInt;
+    if (options.hasFeature(Feature.BULK_MEMORY)) featureFlags |= FeatureFlags.BulkMemory;
+    if (options.hasFeature(Feature.SIMD)) featureFlags |= FeatureFlags.SIMD128;
+    if (options.hasFeature(Feature.THREADS)) featureFlags |= FeatureFlags.Atomics;
+    if (options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
+    if (options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;
+    if (options.hasFeature(Feature.REFERENCE_TYPES)) featureFlags |= FeatureFlags.ReferenceTypes;
+    module.setFeatures(featureFlags);
   }
 
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
@@ -455,7 +457,7 @@ export class Compiler extends DiagnosticEmitter {
     // set up function table
     var functionTable = this.functionTable;
     module.setFunctionTable(functionTable.length, 0xffffffff, functionTable, module.i32(0));
-    module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.block(null, []));
+    module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.unreachable());
 
     // import table if requested (default table is named '0' by Binaryen)
     if (options.importTable) module.addTableImport("0", "env", "table");
@@ -1644,6 +1646,13 @@ export class Compiler extends DiagnosticEmitter {
     }
     var functionTable = this.functionTable;
     var index = functionTable.length;
+    if (!(index & 15)) {
+      // reserve indexes that just so happen to be 16 byte aligned
+      // so we can easily distinguish between a function table index
+      // and a memory pointer, i.e. when passing closures.
+      functionTable.push("null");
+      ++index;
+    }
     if (!func.is(CommonFlags.TRAMPOLINE) && func.signature.requiredParameters < func.signature.parameterTypes.length) {
       // insert the trampoline if the function has optional parameters
       func = this.ensureTrampoline(func);
@@ -6431,6 +6440,21 @@ export class Compiler extends DiagnosticEmitter {
     return BuiltinSymbols.setargc;
   }
 
+  /** Makes sure that the closure context variable is present and returns its name. */
+  private ensureClosureVar(): string {
+    if (!this.closureVar) {
+      let module = this.module;
+      let isWasm64 = this.options.isWasm64;
+      this.closureVar = module.addGlobal(
+        BuiltinSymbols.closure,
+        isWasm64 ? NativeType.I64 : NativeType.I32,
+        true,
+        isWasm64 ? module.i64(0) : module.i32(0)
+      );
+    }
+    return BuiltinSymbols.closure;
+  }
+
   // <reference-counting>
 
   /** Makes retain call, retaining the expression's value. */
@@ -6843,7 +6867,42 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var returnType = signature.returnType;
-    var expr = module.call_indirect(indexArg, operands, signature.toSignatureString());
+    var flow = this.currentFlow;
+    var isWasm64 = this.options.isWasm64;
+    var temp = flow.getTempLocal(this.options.usizeType);
+    var expr = module.block(null, [
+      module.if(
+        module.unary(isWasm64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
+          module.binary(isWasm64 ? BinaryOp.AndI64 : BinaryOp.AndI32,
+            module.local_tee(temp.index, indexArg),
+            isWasm64 ? module.i64(15) : module.i32(15)
+          )
+        ),
+        module.block(null, [
+          module.global_set(this.ensureClosureVar(),
+            module.local_get(temp.index, isWasm64 ? NativeType.I64 : NativeType.I32)
+          ),
+          module.local_set(temp.index,
+            module.load(4, false,
+              module.local_get(temp.index, isWasm64 ? NativeType.I64 : NativeType.I32),
+              NativeType.I32
+            )
+          )
+        ])
+      ),
+      module.global_set(this.ensureArgcVar(), // might be calling a trampoline
+        module.i32(numArguments)
+      ),
+      module.call_indirect(
+        isWasm64
+          ? module.unary(UnaryOp.WrapI64,
+              module.local_get(temp.index, isWasm64 ? NativeType.I64 : NativeType.I32)
+            )
+          : module.local_get(temp.index, isWasm64 ? NativeType.I64 : NativeType.I32),
+        operands,
+        signature.toSignatureString()
+      )
+    ], returnType.toNativeType());
     this.currentType = returnType;
     if (returnType.isManaged) {
       if (immediatelyDropped) {
@@ -6853,12 +6912,8 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeAutorelease(expr);
       }
     }
-    return module.block(null, [
-      module.global_set(this.ensureArgcVar(), // might be calling a trampoline
-        module.i32(numArguments)
-      ),
-      expr
-    ], this.currentType.toNativeType()); // not necessarily wrapped
+    flow.freeTempLocal(temp);
+    return expr;
   }
 
   compileCommaExpression(

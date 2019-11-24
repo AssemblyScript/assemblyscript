@@ -38,5 +38,6 @@
   nop
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

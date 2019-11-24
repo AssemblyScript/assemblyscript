@@ -690,6 +690,6 @@
   global.set $../../lib/i64/assembly/i64/hi
  )
  (func $null (; 31 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

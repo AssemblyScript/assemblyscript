@@ -1045,6 +1045,6 @@
   call $start:memcpy
  )
  (func $null (; 4 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

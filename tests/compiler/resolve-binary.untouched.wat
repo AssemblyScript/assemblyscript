@@ -5806,5 +5806,6 @@
   call $start:resolve-binary
  )
  (func $null (; 46 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

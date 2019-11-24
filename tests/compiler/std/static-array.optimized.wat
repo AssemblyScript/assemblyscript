@@ -1029,6 +1029,6 @@
   call $start:std/static-array
  )
  (func $null (; 17 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

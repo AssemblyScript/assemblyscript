@@ -10,12 +10,13 @@
  (data (i32.const 8) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00e\00r\00r\00o\00r")
  (data (i32.const 40) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00r\00e\00t\00a\00i\00n\00-\00r\00e\00l\00e\00a\00s\00e\00.\00t\00s")
  (table $0 1 funcref)
- (elem (i32.const 0) $retain-release/receiveRef)
+ (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $retain-release/REF (mut i32) (i32.const 0))
  (global $retain-release/glo (mut i32) (i32.const 0))
  (global $retain-release/TARGET (mut i32) (i32.const 0))
+ (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (export "__start" (func $start))
@@ -232,6 +233,17 @@
   end
  )
  (func $retain-release/provideRefIndirect (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
+  end
   i32.const 1
   global.set $~lib/argc
   global.get $retain-release/REF
@@ -239,6 +251,17 @@
   call_indirect (type $FUNCSIG$vi)
  )
  (func $retain-release/receiveRefIndirect (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
+  local.get $0
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $0
+   global.set $~lib/closure
+   local.get $0
+   i32.load
+   local.set $0
+  end
   i32.const 0
   global.set $~lib/argc
   local.get $0
@@ -268,5 +291,8 @@
   i32.store
   local.get $0
   global.set $retain-release/TARGET
+ )
+ (func $null (; 18 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

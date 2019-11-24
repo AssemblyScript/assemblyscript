@@ -76,6 +76,6 @@
   call $start:features/mutable-globals
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

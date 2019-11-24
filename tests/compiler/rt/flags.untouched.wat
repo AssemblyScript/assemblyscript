@@ -1400,5 +1400,6 @@
   call $start:rt/flags
  )
  (func $null (; 63 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

@@ -12,6 +12,7 @@
  (data (i32.const 112) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
+ (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "testVar" (func $assert-nonnull/testVar))
@@ -264,21 +265,41 @@
  (func $assert-nonnull/testFn (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/closure
+   local.get $1
+   i32.load
+   local.set $1
+  end
   i32.const 0
   global.set $~lib/argc
-  local.get $0
-  call_indirect (type $FUNCSIG$i)
-  local.tee $1
-  call $~lib/rt/stub/__retain
-  local.set $2
   local.get $1
-  call $~lib/rt/stub/__release
+  call_indirect (type $FUNCSIG$i)
+  local.tee $2
+  call $~lib/rt/stub/__retain
+  local.set $1
   local.get $2
+  call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
  )
  (func $assert-nonnull/testFn2 (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
   local.get $0
   local.tee $1
   if (result i32)
@@ -286,37 +307,65 @@
   else
    unreachable
   end
+  call $~lib/rt/stub/__retain
   local.set $2
+  local.get $2
+  local.tee $1
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/closure
+   local.get $1
+   i32.load
+   local.set $1
+  end
   i32.const 0
   global.set $~lib/argc
-  local.get $2
-  call_indirect (type $FUNCSIG$i)
-  local.tee $1
-  call $~lib/rt/stub/__retain
-  local.set $3
   local.get $1
-  call $~lib/rt/stub/__release
+  call_indirect (type $FUNCSIG$i)
+  local.tee $3
+  call $~lib/rt/stub/__retain
+  local.set $1
   local.get $3
+  call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $2
+  call $~lib/rt/stub/__release
+  local.get $1
  )
  (func $assert-nonnull/testRet (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/closure
+   local.get $1
+   i32.load
+   local.set $1
+  end
   i32.const 0
   global.set $~lib/argc
-  local.get $0
-  call_indirect (type $FUNCSIG$i)
-  local.tee $1
-  local.tee $2
-  if (result i32)
-   local.get $2
-  else
-   unreachable
-  end
-  call $~lib/rt/stub/__retain
-  local.set $2
   local.get $1
-  call $~lib/rt/stub/__release
+  call_indirect (type $FUNCSIG$i)
+  local.tee $2
+  call $~lib/rt/stub/__retain
+  local.set $1
   local.get $2
+  call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
  )
  (func $assert-nonnull/testObjFn (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -324,19 +373,31 @@
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
-  i32.const 0
-  global.set $~lib/argc
   local.get $0
   i32.load offset=4
-  call_indirect (type $FUNCSIG$i)
   local.tee $1
-  call $~lib/rt/stub/__retain
-  local.set $2
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/closure
+   local.get $1
+   i32.load
+   local.set $1
+  end
+  i32.const 0
+  global.set $~lib/argc
   local.get $1
+  call_indirect (type $FUNCSIG$i)
+  local.tee $2
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $2
   call $~lib/rt/stub/__release
   local.get $0
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $1
  )
  (func $assert-nonnull/testObjRet (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -344,26 +405,33 @@
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
-  i32.const 0
-  global.set $~lib/argc
   local.get $0
   i32.load offset=4
-  call_indirect (type $FUNCSIG$i)
   local.tee $1
-  local.tee $2
-  if (result i32)
-   local.get $2
-  else
-   unreachable
+  i32.const 15
+  i32.and
+  i32.eqz
+  if
+   local.get $1
+   global.set $~lib/closure
+   local.get $1
+   i32.load
+   local.set $1
   end
-  call $~lib/rt/stub/__retain
-  local.set $2
+  i32.const 0
+  global.set $~lib/argc
   local.get $1
+  call_indirect (type $FUNCSIG$i)
+  local.tee $2
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $2
   call $~lib/rt/stub/__release
   local.get $0
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $1
  )
  (func $null (; 19 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

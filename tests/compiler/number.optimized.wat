@@ -2161,6 +2161,6 @@
   call $start:number
  )
  (func $null (; 23 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )
