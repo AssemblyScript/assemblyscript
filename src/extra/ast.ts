@@ -543,9 +543,12 @@ export class ASTBuilder {
   }
 
   visitCallExpression(node: CallExpression): void {
-    var sb = this.sb;
     this.visitNode(node.expression);
-    var typeArguments = node.typeArguments;
+    this.visitArguments(node.typeArguments, node.arguments);
+  }
+
+  private visitArguments(typeArguments: TypeNode[] | null, args: Expression[]): void {
+    var sb = this.sb;
     if (typeArguments) {
       let numTypeArguments = typeArguments.length;
       if (numTypeArguments) {
@@ -560,7 +563,6 @@ export class ASTBuilder {
     } else {
       sb.push("(");
     }
-    var args = node.arguments;
     var numArgs = args.length;
     if (numArgs) {
       this.visitNode(args[0]);
@@ -757,7 +759,8 @@ export class ASTBuilder {
 
   visitNewExpression(node: NewExpression): void {
     this.sb.push("new ");
-    this.visitCallExpression(node);
+    this.visitTypeName(node.typeName);
+    this.visitArguments(node.typeArguments, node.arguments);
   }
 
   visitParenthesizedExpression(node: ParenthesizedExpression): void {
