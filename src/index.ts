@@ -9,7 +9,6 @@ import { Decompiler } from "./decompiler";
 import { IDLBuilder, TSDBuilder } from "./definitions";
 import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
 import { Module } from "./module";
-import { Parser } from "./parser";
 import { Program } from "./program";
 
 // Options
@@ -145,15 +144,10 @@ export function isError(message: DiagnosticMessage): bool {
 
 // Parser
 
-/** Creates a new Parser. */
-export function newParser(program: Program): Parser {
-  return new Parser(program);
-}
-
 /** Parses a source file. If `parser` has been omitted a new one is created. */
 export function parse(
-  /** The parser. */
-  parser: Parser,
+  /** Program reference. */
+  program: Program,
   /** Source text of the file. */
   text: string,
   /** Normalized path of the file. */
@@ -161,17 +155,17 @@ export function parse(
   /** Whether this is an entry file. */
   isEntry: bool = false
 ): void {
-  parser.parseFile(text, path, isEntry);
+  program.parser.parseFile(text, path, isEntry);
 }
 
 /** Obtains the next required file's path. Returns `null` once complete. */
-export function nextFile(parser: Parser): string | null {
-  return parser.nextFile();
+export function nextFile(program: Program): string | null {
+  return program.parser.nextFile();
 }
 
 /** Obtains the path of the dependee of a given imported file. */
-export function getDependee(parser: Parser, file: string): string | null {
-  return parser.getDependee(file);
+export function getDependee(program: Program, file: string): string | null {
+  return program.parser.getDependee(file);
 }
 
 // Compiler

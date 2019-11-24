@@ -11,9 +11,6 @@ export abstract class Transform {
   /** Program reference. */
   readonly program: Program;
 
-  /** Parser reference. */
-  readonly parser: Parser;
-
   /** Base directory. */
   readonly baseDir: string;
 

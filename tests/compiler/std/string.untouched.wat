@@ -457,13 +457,10 @@
   i32.const 15
   i32.and
   i32.eqz
-  if (result i32)
-   local.get $0
-   global.get $~lib/heap/__heap_base
-   i32.gt_u
-  else
-   i32.const 0
-  end
+  local.get $0
+  global.get $~lib/heap/__heap_base
+  i32.gt_u
+  i32.and
   if
    local.get $0
    i32.const 16
@@ -3640,13 +3637,10 @@
   i32.const 15
   i32.and
   i32.eqz
-  if (result i32)
-   local.get $0
-   global.get $~lib/heap/__heap_base
-   i32.gt_u
-  else
-   i32.const 0
-  end
+  local.get $0
+  global.get $~lib/heap/__heap_base
+  i32.gt_u
+  i32.and
   if
    local.get $0
    i32.const 16

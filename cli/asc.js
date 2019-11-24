@@ -282,9 +282,8 @@ exports.main = function main(argv, options, callback) {
   shrinkLevel = Math.min(Math.max(shrinkLevel, 0), 2);
   assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
 
-  // Initialize the program and the parser
+  // Initialize the program
   const program = assemblyscript.newProgram(compilerOptions);
-  const parser = assemblyscript.newParser(program);
 
   // Set up transforms
   const transforms = [];
@@ -298,7 +297,6 @@ exports.main = function main(argv, options, callback) {
         if (typeof classOrModule === "function") {
           Object.assign(classOrModule.prototype, {
             program,
-            parser,
             baseDir,
             stdout,
             stderr,
@@ -334,7 +332,7 @@ exports.main = function main(argv, options, callback) {
     if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(parser, exports.libraryFiles[libPath], exports.libraryPrefix + libPath + ".ts", false);
+      assemblyscript.parse(program, exports.libraryFiles[libPath], exports.libraryPrefix + libPath + ".ts", false);
     });
   });
   const customLibDirs = [];
@@ -358,7 +356,7 @@ exports.main = function main(argv, options, callback) {
         stats.parseCount++;
         exports.libraryFiles[libPath.replace(/\.ts$/, "")] = libText;
         stats.parseTime += measure(() => {
-          assemblyscript.parse(parser, libText, exports.libraryPrefix + libPath, false);
+          assemblyscript.parse(program, libText, exports.libraryPrefix + libPath, false);
         });
       }
     }
@@ -464,12 +462,12 @@ exports.main = function main(argv, options, callback) {
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
     var internalPath;
-    while ((internalPath = parser.nextFile()) != null) {
-      let file = getFile(internalPath, assemblyscript.getDependee(parser, internalPath));
+    while ((internalPath = assemblyscript.nextFile(program)) != null) {
+      let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
       if (!file) return callback(Error("Import file '" + internalPath + ".ts' not found."))
       stats.parseCount++;
       stats.parseTime += measure(() => {
-        assemblyscript.parse(parser, file.sourceText, file.sourcePath, false);
+        assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
       });
     }
     if (checkDiagnostics(program, stderr)) return callback(Error("Parse error"));
@@ -489,7 +487,7 @@ exports.main = function main(argv, options, callback) {
     }
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(parser, runtimeText, runtimePath, true);
+      assemblyscript.parse(program, runtimeText, runtimePath, true);
     });
   }
 
@@ -513,7 +511,7 @@ exports.main = function main(argv, options, callback) {
 
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(parser, sourceText, sourcePath, true);
+      assemblyscript.parse(program, sourceText, sourcePath, true);
     });
   }
 
@@ -525,7 +523,7 @@ exports.main = function main(argv, options, callback) {
 
   // Call afterParse transform hook
   {
-    let error = applyTransform("afterParse", parser);
+    let error = applyTransform("afterParse", program.parser);
     if (error) return callback(error);
   }
 
