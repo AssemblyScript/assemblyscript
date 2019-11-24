@@ -842,6 +842,7 @@ declare module "assemblyscript/src/tokenizer" {
         readFloat(): number;
         readDecimalFloat(): number;
         readHexFloat(): number;
+        readHexadecimalEscape(remain?: number): string;
         readUnicodeEscape(): string;
         private readExtendedUnicodeEscape;
         finish(): void;
@@ -862,7 +863,7 @@ declare module "assemblyscript/src/ast" {
      * @module ast
      */ /***/
     import { CommonFlags } from "assemblyscript/src/common";
-    import { Token, Tokenizer, Range } from "assemblyscript/src/tokenizer";
+    import { Token, Range } from "assemblyscript/src/tokenizer";
     export { Token, Range };
     /** Indicates the kind of a node. */
     export enum NodeKind {
@@ -932,10 +933,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Checks if a node represents a constant value. */
     export function nodeIsConstantValue(kind: NodeKind): boolean;
-    /** Checks if a node might be callable. */
-    export function nodeIsCallable(kind: NodeKind): boolean;
-    /** Checks if a node might be callable with generic arguments. */
-    export function nodeIsGenericCallable(kind: NodeKind): boolean;
     /** Base class of all nodes. */
     export abstract class Node {
         /** Node kind indicator. */
@@ -966,7 +963,7 @@ declare module "assemblyscript/src/ast" {
         static createFunctionExpression(declaration: FunctionDeclaration): FunctionExpression;
         static createInstanceOfExpression(expression: Expression, isType: TypeNode, range: Range): InstanceOfExpression;
         static createIntegerLiteralExpression(value: I64, range: Range): IntegerLiteralExpression;
-        static createNewExpression(expression: Expression, typeArgs: TypeNode[] | null, args: Expression[], range: Range): NewExpression;
+        static createNewExpression(typeName: TypeName, typeArgs: TypeNode[] | null, args: Expression[], range: Range): NewExpression;
         static createNullExpression(range: Range): NullExpression;
         static createObjectLiteralExpression(names: IdentifierExpression[], values: Expression[], range: Range): ObjectLiteralExpression;
         static createParenthesizedExpression(expression: Expression, range: Range): ParenthesizedExpression;
@@ -1266,8 +1263,18 @@ declare module "assemblyscript/src/ast" {
         value: I64;
     }
     /** Represents a `new` expression. Like a call but with its own kind. */
-    export class NewExpression extends CallExpression {
+    export class NewExpression extends Expression {
         kind: NodeKind;
+        /** Type being constructed. */
+        typeName: TypeName;
+        /** Provided type arguments. */
+        typeArguments: TypeNode[] | null;
+        /** Provided arguments. */
+        arguments: Expression[];
+        /** Gets the type arguments range for reporting. */
+        get typeArgumentsRange(): Range;
+        /** Gets the arguments range for reporting. */
+        get argumentsRange(): Range;
     }
     /** Represents a `null` expression. */
     export class NullExpression extends IdentifierExpression {
@@ -1390,12 +1397,10 @@ declare module "assemblyscript/src/ast" {
         statements: Statement[];
         /** Full source text. */
         text: string;
-        /** Tokenizer reference. */
-        tokenizer: Tokenizer | null;
         /** Source map index. */
         debugInfoIndex: number;
         /** Re-exported sources. */
-        exportPaths: Set<string> | null;
+        exportPaths: string[] | null;
         /** Constructs a new source node. */
         constructor(normalizedPath: string, text: string, kind: SourceKind);
         /** Checks if this source represents native code. */
@@ -4840,7 +4845,7 @@ declare module "assemblyscript/src/parser" {
     import { Program } from "assemblyscript/src/program";
     import { Tokenizer, CommentHandler } from "assemblyscript/src/tokenizer";
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
-    import { Source, TypeNode, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from "assemblyscript/src/ast";
+    import { Source, TypeNode, TypeName, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from "assemblyscript/src/ast";
     /** Parser interface. */
     export class Parser extends DiagnosticEmitter {
         /** Program being created. */
@@ -4875,6 +4880,8 @@ declare module "assemblyscript/src/parser" {
         getDependee(dependent: string): string | null;
         /** Finishes parsing and returns the program. */
         finish(): Program;
+        /** Parses a type name. */
+        parseTypeName(tn: Tokenizer): TypeName | null;
         /** Parses a type. */
         parseType(tn: Tokenizer, acceptParenthesized?: boolean, suppressErrors?: boolean): TypeNode | null;
         private tryParseSignatureIsSignature;
@@ -5098,6 +5105,7 @@ declare module "assemblyscript/src/extra/ast" {
         visitAssertionExpression(node: AssertionExpression): void;
         visitBinaryExpression(node: BinaryExpression): void;
         visitCallExpression(node: CallExpression): void;
+        private visitArguments;
         visitClassExpression(node: ClassExpression): void;
         visitCommaExpression(node: CommaExpression): void;
         visitElementAccessExpression(node: ElementAccessExpression): void;
