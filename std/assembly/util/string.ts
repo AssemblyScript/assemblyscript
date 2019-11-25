@@ -602,9 +602,9 @@ function fixmul(a: u64, b: u32): u64 {
 // @ts-ignore: decorator
 function pow10(n: i32): f64 {
   // @ts-ignore: type
-  const hi = Powers10Hi.dataStart;
+  const hi = Powers10Hi.dataStart as usize;
   // @ts-ignore: type
-  const lo = Powers10Lo.dataStart;
+  const lo = Powers10Lo.dataStart as usize;
   return (
     load<f64>(hi + ((n >> 5) << alignof<f64>())) *
     load<f64>(lo + ((n & 31) << alignof<f64>()))
@@ -643,7 +643,7 @@ export function toLower8(c: i32): u32 {
 @inline
 export function toUpper8(c: i32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
-    return c & ~(i32(isLower8(c)) << 5);
+    return c & ~(u32(isLower8(c)) << 5);
   } else {
     return <u32>load<u8>(upperTable127Ptr + c);
   }
