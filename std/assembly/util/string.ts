@@ -633,7 +633,7 @@ export function isUpper8(c: u32): bool {
 @inline
 export function toLower8(c: i32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
-    return select<u32>(c | 32, c, isUpper8(c));
+    return c | u32(isUpper8(c)) << 5;
   } else {
     return <u32>load<u8>(lowerTable127Ptr + c);
   }
@@ -643,7 +643,7 @@ export function toLower8(c: i32): u32 {
 @inline
 export function toUpper8(c: i32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
-    return select<u32>(c & 0x5F, c, isLower8(c));
+    return c & ~(i32(isLower8(c)) << 5);
   } else {
     return <u32>load<u8>(upperTable127Ptr + c);
   }
