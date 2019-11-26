@@ -368,11 +368,11 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
 }
 
 function isUnicodeIdentifierStart(code: i32): bool {
-  return code < 0 || code > 0xFFFF ? false
+  return code < 170 || code > 65500 ? false
        : lookupInUnicodeMap(code as u16, unicodeIdentifierStart);
 }
 
 function isUnicodeIdentifierPart(code: i32): bool {
-  return code < 0 || code > 0xFFFF ? false
+  return code < 170 || code > 65500 ? false
        : lookupInUnicodeMap(code as u16, unicodeIdentifierPart);
 }
