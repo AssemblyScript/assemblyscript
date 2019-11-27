@@ -7525,7 +7525,7 @@
   if
    i32.const 9840
    i32.const 552
-   i32.const 300
+   i32.const 301
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -12030,9 +12030,12 @@
  (func $~lib/string/String#codePointAt (; 105 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $1
+  (local $4 i32)
   local.get $0
   call $~lib/string/String#get:length
+  local.set $2
+  local.get $1
+  local.get $2
   i32.ge_u
   if
    i32.const -1
@@ -12044,29 +12047,23 @@
   i32.shl
   i32.add
   i32.load16_u
-  local.set $2
-  local.get $2
+  local.set $3
+  local.get $3
+  i32.const 64512
+  i32.and
   i32.const 55296
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $2
-   i32.const 56319
-   i32.gt_s
-  end
+  i32.ne
   if (result i32)
    i32.const 1
   else
    local.get $1
    i32.const 1
    i32.add
-   local.get $0
-   call $~lib/string/String#get:length
+   local.get $2
    i32.eq
   end
   if
-   local.get $2
+   local.get $3
    return
   end
   local.get $0
@@ -12077,27 +12074,22 @@
   i32.shl
   i32.add
   i32.load16_u
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
+  i32.const 64512
+  i32.and
   i32.const 56320
-  i32.lt_s
-  if (result i32)
-   i32.const 1
-  else
-   local.get $3
-   i32.const 57343
-   i32.gt_s
-  end
+  i32.ne
   if
-   local.get $2
+   local.get $3
    return
   end
-  local.get $2
+  local.get $3
   i32.const 55296
   i32.sub
   i32.const 10
   i32.shl
-  local.get $3
+  local.get $4
   i32.const 56320
   i32.sub
   i32.add

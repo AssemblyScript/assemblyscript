@@ -51,12 +51,13 @@ import { idof } from "./builtins";
   }
 
   codePointAt(pos: i32): i32 {
-    if (<u32>pos >= <u32>this.length) return -1; // (undefined)
+    var len = this.length;
+    if (<u32>pos >= <u32>len) return -1; // (undefined)
     var first = <i32>load<u16>(changetype<usize>(this) + (<usize>pos << 1));
-    if (first < 0xD800 || first > 0xDBFF || pos + 1 == this.length) return first;
+    if ((first & 0xFC00) != 0xD800 || pos + 1 == len) return first;
     var second = <i32>load<u16>(changetype<usize>(this) + ((<usize>pos + 1) << 1));
-    if (second < 0xDC00 || second > 0xDFFF) return first;
-    return ((first - 0xD800) << 10) + (second - 0xDC00) + 0x10000;
+    if ((second & 0xFC00) != 0xDC00) return first;
+    return (first - 0xD800 << 10) + (second - 0xDC00) + 0x10000;
   }
 
   @operator("+") private static __concat(left: String, right: String): String {
