@@ -11507,6 +11507,8 @@
        i32.lt_u
        if
         local.get $7
+        local.set $9
+        local.get $7
         i32.const 1023
         i32.and
         i32.const 10
@@ -11526,29 +11528,13 @@
         i32.const 131072
         i32.ge_u
         if
-         local.get $7
-         i32.const 65536
-         i32.sub
-         local.set $7
-         local.get $7
-         i32.const 10
-         i32.shr_u
-         i32.const 55296
-         i32.or
-         local.set $9
-         local.get $7
-         i32.const 1023
-         i32.and
-         i32.const 56320
-         i32.or
-         local.set $10
          local.get $2
          local.get $5
          i32.const 1
          i32.shl
          i32.add
          local.get $9
-         local.get $10
+         local.get $8
          i32.const 16
          i32.shl
          i32.or
@@ -11862,6 +11848,8 @@
        i32.lt_u
        if
         local.get $5
+        local.set $7
+        local.get $5
         i32.const 1023
         i32.and
         i32.const 10
@@ -11881,29 +11869,13 @@
         i32.const 131072
         i32.ge_u
         if
-         local.get $5
-         i32.const 65536
-         i32.sub
-         local.set $5
-         local.get $5
-         i32.const 10
-         i32.shr_u
-         i32.const 55296
-         i32.or
-         local.set $7
-         local.get $5
-         i32.const 1023
-         i32.and
-         i32.const 56320
-         i32.or
-         local.set $8
          local.get $2
          local.get $3
          i32.const 1
          i32.shl
          i32.add
          local.get $7
-         local.get $8
+         local.get $6
          i32.const 16
          i32.shl
          i32.or
@@ -11979,20 +11951,20 @@
          i32.shr_u
          i32.const 55296
          i32.or
-         local.set $8
+         local.set $7
          local.get $6
          i32.const 1023
          i32.and
          i32.const 56320
          i32.or
-         local.set $7
+         local.set $8
          local.get $2
          local.get $3
          i32.const 1
          i32.shl
          i32.add
-         local.get $8
          local.get $7
+         local.get $8
          i32.const 16
          i32.shl
          i32.or

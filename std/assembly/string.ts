@@ -499,13 +499,11 @@ import { idof } from "./builtins";
         if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
           let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
           if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
+            let c0 = c;
             c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
             ++i;
             if (c >= 0x20000) {
-              c -= 0x10000;
-              let lo = (c >>> 10) | 0xD800;
-              let hi = (c & 0x03FF) | 0xDC00;
-              store<u32>(codes + (j << 1), lo | (hi << 16));
+              store<u32>(codes + (j << 1), c0 | (c1 << 16));
               ++j;
               continue;
             }
@@ -551,13 +549,11 @@ import { idof } from "./builtins";
         if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
           let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
           if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
+            let c0 = c;
             c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
             ++i;
             if (c >= 0x20000) {
-              c -= 0x10000;
-              let lo = (c >>> 10) | 0xD800;
-              let hi = (c & 0x03FF) | 0xDC00;
-              store<u32>(codes + (j << 1), lo | (hi << 16));
+              store<u32>(codes + (j << 1), c0 | (c1 << 16));
               ++j;
               continue;
             }
