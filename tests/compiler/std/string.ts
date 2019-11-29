@@ -401,7 +401,7 @@ assert(str.substr(4, 3) == "efg");
 assert(str.substr(0, -1) == "");
 assert(str.substr(0, 100) == "abcdefghijklmn");
 assert(str.substr(4, 4) == "efgh");
-assert(str.substr(4, 3) == "efg");
+assert(str.substr(4, -3) == "");
 
 assert(str.substring(0) == "abcdefghijklmn");
 assert(str.substring(-1) == "abcdefghijklmn");
@@ -412,7 +412,7 @@ assert(str.substring(4, 3) == "d");
 assert(str.substring(0, -1) == "");
 assert(str.substring(0, 100) == "abcdefghijklmn");
 assert(str.substring(4, 4) == "");
-assert(str.substring(4, 3) == "d");
+assert(str.substring(4, -3) == "abcd");
 
 {
   let sa: string[];

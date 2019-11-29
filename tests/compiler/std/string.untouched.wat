@@ -15782,10 +15782,10 @@
   end
   global.get $std/string/str
   i32.const 4
-  i32.const 3
+  i32.const -3
   call $~lib/string/String#substr
   local.tee $96
-  i32.const 10928
+  i32.const 440
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -15942,10 +15942,10 @@
   end
   global.get $std/string/str
   i32.const 4
-  i32.const 3
+  i32.const -3
   call $~lib/string/String#substring
   local.tee $106
-  i32.const 10976
+  i32.const 10040
   call $~lib/string/String.__eq
   i32.eqz
   if
