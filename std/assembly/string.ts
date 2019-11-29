@@ -174,12 +174,12 @@ import { idof } from "./builtins";
   substr(start: i32, length: i32 = i32.MAX_VALUE): String { // legacy
     var intStart: isize = start;
     var end: isize = length;
-    var size: isize = this.length;
-    if (intStart < 0) intStart = max(size + intStart, 0);
-    var resultLength = min(max(end, 0), size - intStart);
-    if (resultLength <= 0) return changetype<String>("");
-    var out = __alloc(resultLength << 1, idof<String>());
-    memory.copy(out, changetype<usize>(this) + intStart, resultLength);
+    var len: isize = this.length;
+    if (intStart < 0) intStart = max(len + intStart, 0);
+    var size = min(max(end, 0), len - intStart) << 1;
+    if (size <= 0) return changetype<String>("");
+    var out = __alloc(size, idof<String>());
+    memory.copy(out, changetype<usize>(this) + (intStart << 1), size);
     return changetype<String>(out); // retains
   }
 
@@ -189,17 +189,17 @@ import { idof } from "./builtins";
     var finalEnd = min<isize>(max(end, 0), len);
     var fromPos = min<isize>(finalStart, finalEnd) << 1;
     var toPos = max<isize>(finalStart, finalEnd) << 1;
-    len = toPos - fromPos;
-    if (!len) return changetype<String>("");
-    if (!fromPos && toPos == this.length << 1) return this;
-    var out = __alloc(len, idof<String>());
-    memory.copy(out, changetype<usize>(this) + fromPos, len);
+    var size = toPos - fromPos;
+    if (!size) return changetype<String>("");
+    if (!fromPos && toPos == len << 1) return this;
+    var out = __alloc(size, idof<String>());
+    memory.copy(out, changetype<usize>(this) + fromPos, size);
     return changetype<String>(out); // retains
   }
 
   trim(): String {
-    var length = this.length;
-    var size: usize = length << 1;
+    var len = this.length;
+    var size: usize = len << 1;
     while (size && isSpace(load<u16>(changetype<usize>(this) + size - 2))) {
       size -= 2;
     }
@@ -208,7 +208,7 @@ import { idof } from "./builtins";
       offset += 2; size -= 2;
     }
     if (!size) return changetype<String>("");
-    if (!offset && size == length << 1) return this;
+    if (!offset && size == len << 1) return this;
     var out = __alloc(size, idof<String>());
     memory.copy(out, changetype<usize>(this) + offset, size);
     return changetype<String>(out); // retains
