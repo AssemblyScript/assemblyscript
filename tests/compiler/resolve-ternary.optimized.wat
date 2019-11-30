@@ -46,7 +46,6 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1576))
  (export "memory" (memory $0))
@@ -3136,7 +3135,9 @@
   end
   f64.const 1
   call $~lib/util/number/dtoa
-  local.tee $2
+  local.tee $0
+  local.set $2
+  local.get $0
   i32.const 1568
   call $~lib/string/String.__eq
   i32.eqz
@@ -3149,20 +3150,9 @@
    unreachable
   end
   i32.const 1
-  local.tee $0
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
-  i32.const 1
   global.set $~lib/argc
   i32.const 1
-  local.get $0
-  call_indirect (type $FUNCSIG$ii)
+  call $start:resolve-ternary~anonymous|0
   i32.const 2
   i32.ne
   if
@@ -3173,21 +3163,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
-  local.tee $0
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  local.get $0
-  call_indirect (type $FUNCSIG$ii)
+  call $resolve-ternary/g1
   i32.const 4
   i32.ne
   if
@@ -3198,21 +3177,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  local.tee $0
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  local.get $0
-  call_indirect (type $FUNCSIG$ii)
+  call $start:resolve-ternary~anonymous|1
   i32.const 3
   i32.ne
   if

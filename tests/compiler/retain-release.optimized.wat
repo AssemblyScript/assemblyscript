@@ -16,7 +16,6 @@
  (global $retain-release/REF (mut i32) (i32.const 0))
  (global $retain-release/glo (mut i32) (i32.const 0))
  (global $retain-release/TARGET (mut i32) (i32.const 0))
- (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
  (export "__start" (func $start))
@@ -233,17 +232,6 @@
   end
  )
  (func $retain-release/provideRefIndirect (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
   i32.const 1
   global.set $~lib/argc
   global.get $retain-release/REF
@@ -251,17 +239,6 @@
   call_indirect (type $FUNCSIG$vi)
  )
  (func $retain-release/receiveRefIndirect (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
-  local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
   i32.const 0
   global.set $~lib/argc
   local.get $0

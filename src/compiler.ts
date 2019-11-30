@@ -1181,7 +1181,7 @@ export class Compiler extends DiagnosticEmitter {
       assert(instance.prototype.arrowKind);
 
       // none of the following can be an arrow function
-      assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET | CommonFlags.MAIN));
+      assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET));
 
       let expr = this.compileExpression((<ExpressionStatement>bodyNode).expression, returnType,
         Constraints.CONV_IMPLICIT
@@ -6440,21 +6440,6 @@ export class Compiler extends DiagnosticEmitter {
     return BuiltinSymbols.setargc;
   }
 
-  /** Makes sure that the closure context variable is present and returns its name. */
-  private ensureClosureVar(): string {
-    if (!this.closureVar) {
-      let module = this.module;
-      let isWasm64 = this.options.isWasm64;
-      this.closureVar = module.addGlobal(
-        BuiltinSymbols.closure,
-        isWasm64 ? NativeType.I64 : NativeType.I32,
-        true,
-        isWasm64 ? module.i64(0) : module.i32(0)
-      );
-    }
-    return BuiltinSymbols.closure;
-  }
-
   // <reference-counting>
 
   /** Makes retain call, retaining the expression's value. */
@@ -6871,34 +6856,13 @@ export class Compiler extends DiagnosticEmitter {
     var isWasm64 = this.options.isWasm64;
     var temp = flow.getTempLocal(this.options.usizeType);
     var expr = module.block(null, [
-      module.if(
-        module.unary(isWasm64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
-          module.binary(isWasm64 ? BinaryOp.AndI64 : BinaryOp.AndI32,
-            module.local_tee(temp.index, indexArg),
-            isWasm64 ? module.i64(15) : module.i32(15)
-          )
-        ),
-        module.block(null, [
-          module.global_set(this.ensureClosureVar(),
-            module.local_get(temp.index, isWasm64 ? NativeType.I64 : NativeType.I32)
-          ),
-          module.local_set(temp.index,
-            module.load(4, false,
-              module.local_get(temp.index, isWasm64 ? NativeType.I64 : NativeType.I32),
-              NativeType.I32
-            )
-          )
-        ])
-      ),
       module.global_set(this.ensureArgcVar(), // might be calling a trampoline
         module.i32(numArguments)
       ),
       module.call_indirect(
         isWasm64
-          ? module.unary(UnaryOp.WrapI64,
-              module.local_get(temp.index, isWasm64 ? NativeType.I64 : NativeType.I32)
-            )
-          : module.local_get(temp.index, isWasm64 ? NativeType.I64 : NativeType.I32),
+          ? module.unary(UnaryOp.WrapI64, indexArg)
+          : indexArg,
         operands,
         signature.toSignatureString()
       )
@@ -7257,15 +7221,6 @@ export class Compiler extends DiagnosticEmitter {
     switch (target.kind) {
       case ElementKind.LOCAL: {
         let type = (<Local>target).type;
-        if (target.parent != flow.parentFunction) {
-          // Closures are not yet supported
-          this.error(
-            DiagnosticCode.Not_implemented,
-            expression.range
-          );
-          this.currentType = type;
-          return module.unreachable();
-        }
         assert(type != Type.void);
         if ((<Local>target).is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(<Local>target, contextualType, constraints);
@@ -7276,7 +7231,16 @@ export class Compiler extends DiagnosticEmitter {
           type = type.nonNullableType;
         }
         this.currentType = type;
-        return this.module.local_get(localIndex, type.toNativeType());
+
+        if (target.parent != flow.parentFunction) {
+          // TODO: closures
+          this.error(
+            DiagnosticCode.Not_implemented,
+            expression.range
+          );
+          return module.unreachable();
+        }
+        return module.local_get(localIndex, type.toNativeType());
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field

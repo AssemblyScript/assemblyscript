@@ -11,7 +11,6 @@
  (table $0 2 funcref)
  (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
  (global $inlining/constantGlobal i32 (i32.const 1))
- (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -215,23 +214,9 @@
   i32.const 0
   local.set $2
   i32.const 1
-  call $~lib/rt/stub/__retain
-  local.tee $2
-  local.tee $3
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $3
-   global.set $~lib/closure
-   local.get $3
-   i32.load
-   local.set $3
-  end
-  i32.const 1
   global.set $~lib/argc
   i32.const 2
-  local.get $3
+  i32.const 1
   call_indirect (type $FUNCSIG$ii)
   i32.const 2
   i32.eq
@@ -247,9 +232,9 @@
   i32.const 42
   local.set $6
   i32.const 2
-  local.set $3
+  local.set $2
   local.get $6
-  local.get $3
+  local.get $2
   i32.add
   i32.const 44
   i32.eq
@@ -270,10 +255,10 @@
   i32.const 43
   local.set $5
   i32.const 3
-  local.set $3
+  local.set $2
   local.get $4
   call $~lib/rt/stub/__retain
-  local.tee $3
+  local.tee $2
   i32.const 123
   i32.eq
   i32.eqz
@@ -286,8 +271,6 @@
    unreachable
   end
   local.get $2
-  call $~lib/rt/stub/__release
-  local.get $3
   call $~lib/rt/stub/__release
   local.get $7
   call $~lib/rt/stub/__release

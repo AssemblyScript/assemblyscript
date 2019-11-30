@@ -166,7 +166,7 @@ export class Type {
     if (this.is(TypeFlags.INTEGER | TypeFlags.REFERENCE)) {
       let classReference = this.classReference;
       if (classReference) return !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
-      return this.signatureReference !== null; // potential closure
+      // return this.signatureReference !== null; // TODO: closures
     }
     return false;
   }

@@ -11,7 +11,6 @@
  (table $0 5 funcref)
  (elem (i32.const 0) $null $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/makeAdder<i32>~anonymous|0)
  (global $function-types/i32Adder (mut i32) (i32.const 0))
- (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -32,17 +31,6 @@
   f64.add
  )
  (func $function-types/doAddWithFn<i32> (; 4 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $2
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $2
-   global.set $~lib/closure
-   local.get $2
-   i32.load
-   local.set $2
-  end
   i32.const 2
   global.set $~lib/argc
   local.get $0
@@ -51,25 +39,13 @@
   call_indirect (type $FUNCSIG$iii)
  )
  (func $start:function-types (; 5 ;) (type $FUNCSIG$v)
-  (local $0 i32)
   i32.const 1
   global.set $function-types/i32Adder
-  i32.const 1
-  local.tee $0
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
   i32.const 2
   global.set $~lib/argc
   i32.const 1
   i32.const 2
-  local.get $0
-  call_indirect (type $FUNCSIG$iii)
+  call $function-types/makeAdder<i32>~anonymous|0
   i32.const 3
   i32.ne
   if
@@ -83,21 +59,10 @@
   i32.const 2
   global.set $function-types/i64Adder
   i32.const 2
-  local.tee $0
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
-  i32.const 2
   global.set $~lib/argc
   i64.const 10
   i64.const 20
-  local.get $0
-  call_indirect (type $FUNCSIG$jjj)
+  call $function-types/makeAdder<i64>~anonymous|0
   i64.const 30
   i64.ne
   if

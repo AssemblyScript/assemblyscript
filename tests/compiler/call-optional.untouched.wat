@@ -9,7 +9,6 @@
  (elem (i32.const 0) $null $call-optional/opt|trampoline)
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 1))
- (global $~lib/closure (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $call-optional/opt (; 1 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -93,24 +92,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $call-optional/optIndirect
-  local.tee $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
   i32.const 1
   global.set $~lib/argc
   i32.const 3
   i32.const 0
   i32.const 0
-  local.get $0
+  global.get $call-optional/optIndirect
   call_indirect (type $FUNCSIG$iiii)
   i32.const 0
   i32.eq
@@ -123,24 +110,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $call-optional/optIndirect
-  local.tee $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
   i32.const 2
   global.set $~lib/argc
   i32.const 3
   i32.const 4
   i32.const 0
-  local.get $0
+  global.get $call-optional/optIndirect
   call_indirect (type $FUNCSIG$iiii)
   i32.const 5
   i32.eq
@@ -153,24 +128,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $call-optional/optIndirect
-  local.tee $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $0
-   global.set $~lib/closure
-   local.get $0
-   i32.load
-   local.set $0
-  end
   i32.const 3
   global.set $~lib/argc
   i32.const 3
   i32.const 4
   i32.const 5
-  local.get $0
+  global.get $call-optional/optIndirect
   call_indirect (type $FUNCSIG$iiii)
   i32.const 12
   i32.eq

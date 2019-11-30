@@ -56,7 +56,6 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $resolve-ternary/f1 i32 (i32.const 1))
  (global $resolve-ternary/f2 i32 (i32.const 2))
- (global $~lib/closure (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 2024))
  (global $~lib/heap/__heap_base i32 (i32.const 2076))
@@ -5224,12 +5223,6 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
   global.get $resolve-ternary/b
   if (result i32)
    i32.const 1
@@ -5269,31 +5262,15 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-ternary/b
-  if (result i32)
-   i32.const 1
-   call $~lib/rt/pure/__retain
-   local.tee $2
-  else
-   i32.const 2
-   call $~lib/rt/pure/__retain
-   local.tee $3
-  end
-  local.tee $4
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $4
-   global.set $~lib/closure
-   local.get $4
-   i32.load
-   local.set $4
-  end
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  local.get $4
+  global.get $resolve-ternary/b
+  if (result i32)
+   i32.const 1
+  else
+   i32.const 2
+  end
   call_indirect (type $FUNCSIG$ii)
   i32.const 2
   i32.eq
@@ -5306,31 +5283,15 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-ternary/b
-  if (result i32)
-   i32.const 3
-   call $~lib/rt/pure/__retain
-   local.tee $4
-  else
-   i32.const 4
-   call $~lib/rt/pure/__retain
-   local.tee $5
-  end
-  local.tee $6
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $6
-   global.set $~lib/closure
-   local.get $6
-   i32.load
-   local.set $6
-  end
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  local.get $6
+  global.get $resolve-ternary/b
+  if (result i32)
+   i32.const 3
+  else
+   i32.const 4
+  end
   call_indirect (type $FUNCSIG$ii)
   i32.const 4
   i32.eq
@@ -5343,31 +5304,15 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $resolve-ternary/b
-  if (result i32)
-   i32.const 2
-   call $~lib/rt/pure/__retain
-   local.tee $6
-  else
-   i32.const 4
-   call $~lib/rt/pure/__retain
-   local.tee $7
-  end
-  local.tee $8
-  i32.const 15
-  i32.and
-  i32.eqz
-  if
-   local.get $8
-   global.set $~lib/closure
-   local.get $8
-   i32.load
-   local.set $8
-  end
   i32.const 1
   global.set $~lib/argc
   i32.const 1
-  local.get $8
+  global.get $resolve-ternary/b
+  if (result i32)
+   i32.const 2
+  else
+   i32.const 4
+  end
   call_indirect (type $FUNCSIG$ii)
   i32.const 3
   i32.eq
