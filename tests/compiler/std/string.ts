@@ -392,6 +392,28 @@ assert(str.slice(-11, -6) == "defgh");
 assert(str.slice(4, 3) == "");
 assert(str.slice(0, -1) == "abcdefghijklm");
 
+assert(str.substr(0) == "abcdefghijklmn");
+assert(str.substr(-1) == "n");
+assert(str.substr(-5) == "jklmn");
+assert(str.substr(2, 7) == "cdefghi");
+assert(str.substr(-11, -6) == "");
+assert(str.substr(4, 3) == "efg");
+assert(str.substr(0, -1) == "");
+assert(str.substr(0, 100) == "abcdefghijklmn");
+assert(str.substr(4, 4) == "efgh");
+assert(str.substr(4, -3) == "");
+
+assert(str.substring(0) == "abcdefghijklmn");
+assert(str.substring(-1) == "abcdefghijklmn");
+assert(str.substring(-5) == "abcdefghijklmn");
+assert(str.substring(2, 7) == "cdefg");
+assert(str.substring(-11, -6) == "");
+assert(str.substring(4, 3) == "d");
+assert(str.substring(0, -1) == "");
+assert(str.substring(0, 100) == "abcdefghijklmn");
+assert(str.substring(4, 4) == "");
+assert(str.substring(4, -3) == "abcd");
+
 {
   let sa: string[];
 

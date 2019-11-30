@@ -5034,6 +5034,7 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
   local.get $0
   call $~lib/string/String#get:length
   local.set $3
@@ -5094,8 +5095,8 @@
   local.get $9
   local.get $8
   i32.sub
-  local.set $3
-  local.get $3
+  local.set $10
+  local.get $10
   i32.eqz
   if
    i32.const 2000
@@ -5106,8 +5107,7 @@
   i32.eqz
   if (result i32)
    local.get $9
-   local.get $0
-   call $~lib/string/String#get:length
+   local.get $3
    i32.const 1
    i32.shl
    i32.eq
@@ -5119,17 +5119,17 @@
    call $~lib/rt/pure/__retain
    return
   end
-  local.get $3
+  local.get $10
   i32.const 1
   call $~lib/rt/tlsf/__alloc
-  local.set $10
-  local.get $10
+  local.set $11
+  local.get $11
   local.get $0
   local.get $8
   i32.add
-  local.get $3
-  call $~lib/memory/memory.copy
   local.get $10
+  call $~lib/memory/memory.copy
+  local.get $11
   call $~lib/rt/pure/__retain
  )
  (func $~lib/util/number/dtoa (; 41 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)

@@ -1546,6 +1546,7 @@
  (func $~lib/string/String#substring (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   i32.const 0
   local.get $0
   call $~lib/string/String#get:length
@@ -1567,55 +1568,52 @@
   local.get $2
   i32.lt_s
   select
-  local.tee $2
+  local.tee $1
   local.get $3
-  local.get $2
+  local.get $1
   i32.gt_s
   select
   i32.const 1
   i32.shl
-  local.tee $1
+  local.tee $4
   local.get $3
-  local.get $2
+  local.get $1
   local.get $3
-  local.get $2
+  local.get $1
   i32.lt_s
   select
   i32.const 1
   i32.shl
-  local.tee $3
+  local.tee $1
   i32.sub
-  local.tee $2
+  local.tee $3
   i32.eqz
   if
    i32.const 1408
    return
   end
-  local.get $3
-  if (result i32)
-   i32.const 0
-  else
-   local.get $0
-   call $~lib/string/String#get:length
-   i32.const 1
-   i32.shl
-   local.get $1
-   i32.eq
-  end
+  i32.const 0
+  local.get $2
+  i32.const 1
+  i32.shl
+  local.get $4
+  i32.eq
+  local.get $1
+  select
   if
    local.get $0
    return
   end
-  local.get $2
+  local.get $3
   i32.const 1
   call $~lib/rt/stub/__alloc
-  local.tee $1
+  local.tee $2
   local.get $0
-  local.get $3
-  i32.add
-  local.get $2
-  call $~lib/memory/memory.copy
   local.get $1
+  i32.add
+  local.get $3
+  call $~lib/memory/memory.copy
+  local.get $2
  )
  (func $~lib/rt/stub/__free (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
