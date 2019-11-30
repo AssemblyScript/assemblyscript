@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stdout": [
+    "TS2316: Generic functions or classes cannot be compiled to wasm", "export function genericExample<T>(a: T, b: T): Array<T> {",
+    "TS2316: Generic functions or classes cannot be compiled to wasm", "export class GenericNumber<T> {",
+    "TS2316: Generic functions or classes cannot be compiled to wasm", "export class GenericNumber2<T> {"
+  ]
+}

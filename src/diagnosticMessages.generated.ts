@@ -99,6 +99,7 @@ export enum DiagnosticCode {
   Module_0_has_no_exported_member_1 = 2305,
   Generic_type_0_requires_1_type_argument_s = 2314,
   Type_0_is_not_generic = 2315,
+  Generic_functions_or_classes_cannot_be_compiled_to_wasm = 2316,
   Type_0_is_not_assignable_to_type_1 = 2322,
   Index_signature_is_missing_in_type_0 = 2329,
   _this_cannot_be_referenced_in_current_location = 2332,
@@ -242,6 +243,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2305: return "Module '{0}' has no exported member '{1}'.";
     case 2314: return "Generic type '{0}' requires {1} type argument(s).";
     case 2315: return "Type '{0}' is not generic.";
+    case 2316: return "Generic functions or classes cannot be compiled to wasm";
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";
     case 2329: return "Index signature is missing in type '{0}'.";
     case 2332: return "'this' cannot be referenced in current location.";

@@ -156,32 +156,44 @@ function runTest(basename) {
   }, err => {
     console.log();
 
-    // check expected stderr patterns in order
+    // check expected stderr and stdout patterns in order
     let expectStderr = config.stderr;
-    if (expectStderr) {
-      const stderrString = stderr.toString();
-      if (typeof expectStderr === "string") expectStderr = [ expectStderr ];
-      let lastIndex = 0;
-      let failed = false;
-      expectStderr.forEach((substr, i) => {
-        var index = stderrString.indexOf(substr, lastIndex);
-        if (index < 0) {
-          console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
+    let expectStdout = config.stdout;
+    let hasExpected = false;
+    [
+     { expected: expectStderr, text: 'stderr' }, 
+     { expected: expectStdout, text: 'stdout' }
+    ].forEach((stdPatterns) => {
+      let expected = stdPatterns.expected;
+      if (expected) {
+        hasExpected = true;
+        const stderrString = stderr.toString();
+        if (typeof expected === "string") expected = [ expected ];
+        let lastIndex = 0;
+        let failed = false;
+        expected.forEach((substr, i) => {
+          var index = stderrString.indexOf(substr, lastIndex);
+          if (index < 0) {
+            console.log("Missing pattern #" + (i + 1) + " '" + substr + "' in stderr at " + lastIndex + "+.");
+            failedTests.add(basename);
+            failed = true;
+          } else {
+            lastIndex = index + substr.length;
+          }
+        });
+        let text = stdPatterns.text;
+        if (failed) {
           failedTests.add(basename);
-          failed = true;
+          failedMessages.set(basename, + text + " mismatch");
+          console.log("\n- " + colorsUtil.red(text + " MISMATCH") + "\n");
         } else {
-          lastIndex = index + substr.length;
+          console.log("- " + colorsUtil.green(text + " MATCH") + "\n");
         }
-      });
-      if (failed) {
-        failedTests.add(basename);
-        failedMessages.set(basename, "stderr mismatch");
-        console.log("\n- " + colorsUtil.red("stderr MISMATCH") + "\n");
-      } else {
-        console.log("- " + colorsUtil.green("stderr MATCH") + "\n");
+        return;
       }
+    })
+    if (hasExpected)
       return;
-    }
 
     if (err)
       stderr.write(err + os.EOL);

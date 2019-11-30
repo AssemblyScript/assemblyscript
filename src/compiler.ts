@@ -680,13 +680,23 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
-        if (!element.is(CommonFlags.GENERIC)) {
+        if (element.is(CommonFlags.GENERIC)) {
+          this.warning(
+            DiagnosticCode.Generic_functions_or_classes_cannot_be_compiled_to_wasm,
+            (<FunctionPrototype>element).identifierNode.range,
+          );
+        } else {
           this.compileFunctionUsingTypeArguments(<FunctionPrototype>element, []);
         }
         break;
       }
       case ElementKind.CLASS_PROTOTYPE: {
-        if (!element.is(CommonFlags.GENERIC)) {
+        if (element.is(CommonFlags.GENERIC)) {
+          this.warning(
+            DiagnosticCode.Generic_functions_or_classes_cannot_be_compiled_to_wasm,
+            (<ClassPrototype>element).identifierNode.range,
+          );
+        } else {
           this.compileClassUsingTypeArguments(<ClassPrototype>element, []);
         }
         break;
