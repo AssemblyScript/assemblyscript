@@ -43,3 +43,7 @@ export function map<T, R = T>(iter: Iterable<T>, func: (t: T) => R): R[] {
   }
   return res;
 }
+
+export function notNull<T>(t: T): bool {
+  return t != null;
+}

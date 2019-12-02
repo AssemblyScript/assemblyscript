@@ -2,10 +2,13 @@
 interface IFoo {
   foo(i: i32): i32;
   faa(i: i32, i2: i32): i32;
+  readonly x: bool;
 }
 
 class AFoo implements IFoo {
   i: i32 = 41;
+  get x(): bool{ return true; }
+  set x(b: bool){}
 
   foo(i: i32): i32 {
     return this.i + i;
@@ -19,7 +22,8 @@ class AFoo implements IFoo {
 
 class StructurallyImplementsIFoo {
   i: i32 = 41;
-
+  x: bool = false;
+  
   foo(i: i32): i32 {
     return this.i + i;
   }
@@ -40,3 +44,10 @@ function passAnInterface(foo: IFoo): void {
 
 passAnInterface(aFoo);
 passAnInterface(sFoo);
+
+function expectX(foo: IFoo, x: bool): void {
+  assert(foo.x == x);
+}
+
+expectX(aFoo, true);
+expectX(sFoo, false);

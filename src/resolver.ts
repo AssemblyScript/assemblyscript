@@ -1378,6 +1378,7 @@ export class Resolver extends DiagnosticEmitter {
     // Look up the member within
     switch (target.kind) {
       case ElementKind.CLASS_PROTOTYPE:
+      case ElementKind.INTERFACE:
       case ElementKind.CLASS: {
         do {
           let members = target.members;

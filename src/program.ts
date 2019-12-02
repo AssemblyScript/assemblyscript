@@ -76,7 +76,8 @@ import {
 
   ExportDefaultStatement,
   Token,
-  ParameterNode
+  ParameterNode,
+  ParameterKind
 } from "./ast";
 
 import {
@@ -92,7 +93,8 @@ import {
   writeF32,
   writeF64,
   filter,
-  map
+  map,
+  notNull
 } from "./util";
 
 import {
@@ -1841,8 +1843,29 @@ export class Program extends DiagnosticEmitter {
     );
     if (!parent.add(name, element)) return null;
     var memberDeclarations = declaration.members;
+    var instanceDeclarations = new Array();
+    /**
+     * Must convert field declarations to property declarations
+     */
     for (let i = 0, k = memberDeclarations.length; i < k; ++i) {
       let memberDeclaration = memberDeclarations[i];
+      if (memberDeclaration.kind == NodeKind.FIELDDECLARATION){
+        let fieldDecl = <FieldDeclaration> memberDeclaration;
+        if (!fieldDecl.is(CommonFlags.READONLY)){
+          const param = Node.createParameter(fieldDecl.name, fieldDecl.type!, null, ParameterKind.DEFAULT, fieldDecl.range)
+          const signature = Node.createFunctionType([param], Node.createOmittedType(fieldDecl.range), null, false, fieldDecl.range);
+          instanceDeclarations.push(Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.GET, fieldDecl.range));
+        }
+        const signature = Node.createFunctionType([], fieldDecl.type || Node.createOmittedType(fieldDecl.range), null, false, fieldDecl.range);
+        memberDeclaration = Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.GET, fieldDecl.range);
+      }else if (memberDeclaration.kind == NodeKind.METHODDECLARATION &&
+                (memberDeclaration.is(CommonFlags.GET) || memberDeclaration.is(CommonFlags.SET))) {
+        //TODO check that you can't have a property in an interface
+      }
+      instanceDeclarations.push(memberDeclaration);
+    }
+    for (let i = 0, k = instanceDeclarations.length; i < k; ++i) {
+      let memberDeclaration = instanceDeclarations[i];
       switch (memberDeclaration.kind) {
         case NodeKind.FIELDDECLARATION: {
           this.initializeField(<FieldDeclaration>memberDeclaration, element);
@@ -3688,10 +3711,19 @@ export class Interface extends Class { // FIXME
     );
   }
 
+  get memberValues(): Iterable<DeclaredElement> {
+    if (this.members != null) return this.members.values();
+    return [];
+  }
+
   get methods(): FunctionPrototype[] {
     if (this.members == null) return [];
     return <FunctionPrototype[]>filter(this.members.values(),
            (v: DeclaredElement): bool => v.kind == ElementKind.FUNCTION_PROTOTYPE);
+  }
+
+  get props(): Property[] {
+    return <Property[]>filter(this.memberValues, v => v.kind == ElementKind.PROPERTY);
   }
 
   get methodInstances(): Function[] {
@@ -3725,10 +3757,19 @@ export class Interface extends Class { // FIXME
     return <FunctionPrototype>_class.members.get(ifunc.name);
   }
 
+  private getProp(_class: Class, iprop: PropertyPrototype): PropertyPrototype  | null {
+    if (_class.members == null) return null;
+    return <PropertyPrototype>_class.members.get(iprop.name);
+  }
+
+  getPropImplementations(iprop: Property): PropertyPrototype[] {
+    return <PropertyPrototype[]> map(this.implementers, _class => this.getProp(_class, iprop.prototype))
+          .filter(notNull);
+  }
+
   getFuncImplementations(ifunc: Function): FunctionPrototype[] {
-    return <FunctionPrototype[]> map(this.implementers,
-          (_class: Class): FunctionPrototype | null => this.getFunc(_class, ifunc.prototype))
-          .filter((func: FunctionPrototype): bool => func != null);
+    return <FunctionPrototype[]> map(this.implementers, _class => this.getFunc(_class, ifunc.prototype))
+          .filter(notNull);
   }
 
   get methodsToCompile(): FunctionPrototype[] {
