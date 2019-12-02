@@ -216,10 +216,14 @@ exports.main = function main(argv, options, callback) {
   // Set up transforms
   const transforms = [];
   if (args.transform) {
+    let tsNodeRegistered = false;
     let transformArgs = args.transform;
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
-      if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
+      if (!tsNodeRegistered && filename.endsWith('.ts')) {
+        require("ts-node").register({ transpileOnly: true, skipProject: true });
+        tsNodeRegistered = true;
+      }
       try {
         const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
         if (typeof classOrModule === "function") {
@@ -302,8 +306,11 @@ exports.main = function main(argv, options, callback) {
     var sourceText = null; // text reported back to the compiler
     var sourcePath = null; // path reported back to the compiler
 
+    const libraryPrefix = exports.libraryPrefix;
+    const libraryFiles = exports.libraryFiles;
+
     // Try file.ts, file/index.ts
-    if (!internalPath.startsWith(exports.libraryPrefix)) {
+    if (!internalPath.startsWith(libraryPrefix)) {
       if ((sourceText = readFile(sourcePath = internalPath + ".ts", baseDir)) == null) {
         sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir);
       }
@@ -312,20 +319,20 @@ exports.main = function main(argv, options, callback) {
     } else {
       const plainName = internalPath.substring(exports.libraryPrefix.length);
       const indexName = plainName + "/index";
-      if (exports.libraryFiles.hasOwnProperty(plainName)) {
-        sourceText = exports.libraryFiles[plainName];
-        sourcePath = exports.libraryPrefix + plainName + ".ts";
-      } else if (exports.libraryFiles.hasOwnProperty(indexName)) {
-        sourceText = exports.libraryFiles[indexName];
-        sourcePath = exports.libraryPrefix + indexName + ".ts";
+      if (libraryFiles.hasOwnProperty(plainName)) {
+        sourceText = libraryFiles[plainName];
+        sourcePath = libraryPrefix + plainName + ".ts";
+      } else if (libraryFiles.hasOwnProperty(indexName)) {
+        sourceText = libraryFiles[indexName];
+        sourcePath = libraryPrefix + indexName + ".ts";
       } else { // custom lib dirs
         for (const libDir of customLibDirs) {
           if ((sourceText = readFile(plainName + ".ts", libDir)) != null) {
-            sourcePath = exports.libraryPrefix + plainName + ".ts";
+            sourcePath = libraryPrefix + plainName + ".ts";
             break;
           } else {
             if ((sourceText = readFile(indexName + ".ts", libDir)) != null) {
-              sourcePath = exports.libraryPrefix + indexName + ".ts";
+              sourcePath = libraryPrefix + indexName + ".ts";
               break;
             }
           }
@@ -341,7 +348,7 @@ exports.main = function main(argv, options, callback) {
             const absBasePath = path.isAbsolute(basePath) ? basePath : path.join(baseDir, basePath);
             const paths = [];
             for (let parts = absBasePath.split(SEP), i = parts.length, k = SEP == "/" ? 0 : 1; i >= k; --i) {
-              if (parts[i - 1] != "node_modules") paths.push(parts.slice(0, i).join(SEP) + SEP + "node_modules");
+              if (parts[i - 1] !== "node_modules") paths.push(parts.slice(0, i).join(SEP) + SEP + "node_modules");
             }
             for (const currentPath of paths.concat(...args.path).map(p => path.relative(baseDir, p))) {
               if (args.traceResolution) stderr.write("  in " + path.join(currentPath, packageName) + EOL);
@@ -364,14 +371,14 @@ exports.main = function main(argv, options, callback) {
               const mainDir = path.join(currentPath, packageName, mainPath);
               const plainName = filePath;
               if ((sourceText = readFile(path.join(mainDir, plainName + ".ts"), baseDir)) != null) {
-                sourcePath = exports.libraryPrefix + packageName + "/" + plainName + ".ts";
+                sourcePath = libraryPrefix + packageName + "/" + plainName + ".ts";
                 packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
                 if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + ".ts") + EOL);
                 break;
               } else if (!isPackageRoot) {
                 const indexName = filePath + "/index";
                 if ((sourceText = readFile(path.join(mainDir, indexName + ".ts"), baseDir)) !== null) {
-                  sourcePath = exports.libraryPrefix + packageName + "/" + indexName + ".ts";
+                  sourcePath = libraryPrefix + packageName + "/" + indexName + ".ts";
                   packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
                   if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, indexName + ".ts") + EOL);
                   break;
@@ -382,10 +389,8 @@ exports.main = function main(argv, options, callback) {
         }
       }
     }
-
     // No such file
     if (sourceText == null) return null;
-
     return { sourceText, sourcePath };
   }
 
