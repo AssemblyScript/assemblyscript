@@ -574,7 +574,6 @@ export namespace BuiltinSymbols {
   export const started = "~lib/started";
   export const argc = "~lib/argc";
   export const setargc = "~lib/setargc";
-  export const closure = "~lib/closure";
   export const capabilities = "~lib/capabilities";
 }
 

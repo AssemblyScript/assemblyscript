@@ -220,8 +220,8 @@
  (data (i32.const 7440) "\02\00\00\00\01\00\00\00\00\00\00\00\02\00\00\00\03\04")
  (data (i32.const 7464) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\01")
  (data (i32.const 7488) "\1a\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\10\00\00\00\00\00\00\001\00\00\00\02\00\00\003\00\00\00\02\00\00\00\93\00\00\00\02\00\00\00\93 \00\00\02\00\00\00\93\0c\00\00\02\00\00\00\13\0d\00\00\02\00\00\00\930\00\00\02\00\00\00\93 \00\00\02\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\930\00\00\02\00\00\00\93 \00\00\02\00\00\003\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\003\04\00\00\02\00\00\00S\00\00\00\02\00\00\00\13\05\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02")
- (table $0 60 funcref)
- (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|2 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $null $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|16 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $null $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $null $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0)
+ (table $0 57 funcref)
+ (elem (i32.const 0) $null $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|2 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|16 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
@@ -6352,7 +6352,7 @@
  )
  (func $std/array/assertSortedDefault<i32> (; 134 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 51
+  i32.const 48
   call $std/array/assertSorted<i32>
  )
  (func $start:std/array~anonymous|44 (; 135 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -14607,7 +14607,7 @@
   call $~lib/array/Array<i32>#pop
   drop
   global.get $std/array/arr
-  i32.const 17
+  i32.const 16
   call $~lib/array/Array<i32>#some
   if
    i32.const 0
@@ -14638,7 +14638,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 18
+  i32.const 17
   call $~lib/array/Array<i32>#forEach
   global.get $std/array/i
   i32.const 6
@@ -14654,7 +14654,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 19
+  i32.const 18
   call $~lib/array/Array<i32>#forEach
   global.get $std/array/i
   i32.const 6
@@ -14682,7 +14682,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 20
+  i32.const 19
   call $~lib/array/Array<i32>#forEach
   global.get $std/array/i
   i32.const 406
@@ -14710,7 +14710,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 21
+  i32.const 20
   call $~lib/array/Array<i32>#forEach
   global.get $std/array/i
   i32.const 1
@@ -14742,7 +14742,7 @@
   i32.const 3
   call $~lib/array/Array<i32>#push
   global.get $std/array/arr
-  i32.const 22
+  i32.const 21
   call $~lib/array/Array<i32>#forEach
   global.get $std/array/arr
   i32.load offset=12
@@ -14818,7 +14818,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 24
+  i32.const 23
   call $~lib/array/Array<i32>#map<i32>
   call $~lib/rt/pure/__release
   global.get $std/array/i
@@ -14847,7 +14847,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 25
+  i32.const 24
   call $~lib/array/Array<i32>#map<i32>
   call $~lib/rt/pure/__release
   global.get $std/array/i
@@ -14876,7 +14876,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 26
+  i32.const 25
   call $~lib/array/Array<i32>#map<i32>
   call $~lib/rt/pure/__release
   global.get $std/array/i
@@ -14911,7 +14911,7 @@
   local.get $0
   call $~lib/rt/pure/__release
   global.get $std/array/arr
-  i32.const 27
+  i32.const 26
   call $~lib/array/Array<i32>#filter
   local.tee $0
   i32.load offset=12
@@ -14928,7 +14928,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 28
+  i32.const 27
   call $~lib/array/Array<i32>#filter
   call $~lib/rt/pure/__release
   global.get $std/array/i
@@ -14957,7 +14957,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 29
+  i32.const 28
   call $~lib/array/Array<i32>#filter
   call $~lib/rt/pure/__release
   global.get $std/array/i
@@ -14986,7 +14986,7 @@
   i32.const 0
   global.set $std/array/i
   global.get $std/array/arr
-  i32.const 30
+  i32.const 29
   call $~lib/array/Array<i32>#filter
   call $~lib/rt/pure/__release
   global.get $std/array/i
@@ -15021,7 +15021,7 @@
   local.get $0
   call $~lib/rt/pure/__release
   global.get $std/array/arr
-  i32.const 31
+  i32.const 30
   i32.const 0
   call $~lib/array/Array<i32>#reduce<i32>
   global.set $std/array/i
@@ -15037,7 +15037,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 33
+  i32.const 31
   i32.const 4
   call $~lib/array/Array<i32>#reduce<i32>
   global.set $std/array/i
@@ -15053,7 +15053,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 34
+  i32.const 32
   i32.const 0
   call $~lib/array/Array<i32>#reduce<i32>
   i32.const 0
@@ -15069,7 +15069,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 35
+  i32.const 33
   i32.const 0
   call $~lib/array/Array<i32>#reduce<i32>
   if
@@ -15081,7 +15081,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 36
+  i32.const 34
   i32.const 0
   call $~lib/array/Array<i32>#reduce<i32>
   global.set $std/array/i
@@ -15109,7 +15109,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 37
+  i32.const 35
   i32.const 0
   call $~lib/array/Array<i32>#reduce<i32>
   global.set $std/array/i
@@ -15137,7 +15137,7 @@
   call $~lib/array/Array<i32>#pop
   drop
   global.get $std/array/arr
-  i32.const 38
+  i32.const 36
   i32.const 0
   call $~lib/array/Array<i32>#reduce<i32>
   global.set $std/array/i
@@ -15171,7 +15171,7 @@
   i32.const 3
   call $~lib/array/Array<i32>#push
   global.get $std/array/arr
-  i32.const 39
+  i32.const 37
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<i32>
   global.set $std/array/i
@@ -15187,7 +15187,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 40
+  i32.const 38
   i32.const 4
   call $~lib/array/Array<i32>#reduceRight<i32>
   global.set $std/array/i
@@ -15203,7 +15203,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 41
+  i32.const 39
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<i32>
   i32.const 0
@@ -15219,7 +15219,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 42
+  i32.const 40
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<i32>
   if
@@ -15231,7 +15231,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 43
+  i32.const 41
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<i32>
   global.set $std/array/i
@@ -15259,7 +15259,7 @@
    unreachable
   end
   global.get $std/array/arr
-  i32.const 44
+  i32.const 42
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<i32>
   global.set $std/array/i
@@ -15287,7 +15287,7 @@
   call $~lib/array/Array<i32>#pop
   drop
   global.get $std/array/arr
-  i32.const 45
+  i32.const 43
   i32.const 0
   call $~lib/array/Array<i32>#reduceRight<i32>
   global.set $std/array/i
@@ -15337,7 +15337,7 @@
   i32.const 0
   global.set $~lib/argc
   local.get $1
-  i32.const 46
+  i32.const 44
   call $~lib/array/Array<f32>#sort
   call $~lib/rt/pure/__release
   local.get $1
@@ -15368,7 +15368,7 @@
   i32.const 0
   global.set $~lib/argc
   local.get $3
-  i32.const 47
+  i32.const 45
   call $~lib/array/Array<f64>#sort
   call $~lib/rt/pure/__release
   local.get $3
@@ -15399,7 +15399,7 @@
   i32.const 0
   global.set $~lib/argc
   local.get $8
-  i32.const 49
+  i32.const 46
   call $~lib/array/Array<i32>#sort
   call $~lib/rt/pure/__release
   local.get $8
@@ -15431,7 +15431,7 @@
   i32.const 0
   global.set $~lib/argc
   local.get $10
-  i32.const 50
+  i32.const 47
   call $~lib/array/Array<i32>#sort
   call $~lib/rt/pure/__release
   local.get $10
@@ -15674,16 +15674,16 @@
   call $std/array/createRandomOrderedArray
   local.set $1
   local.get $0
-  i32.const 52
+  i32.const 49
   call $std/array/assertSorted<i32>
   local.get $0
-  i32.const 53
+  i32.const 50
   call $std/array/assertSorted<i32>
   local.get $1
-  i32.const 54
+  i32.const 51
   call $std/array/assertSorted<i32>
   local.get $1
-  i32.const 55
+  i32.const 52
   call $std/array/assertSorted<i32>
   local.get $0
   call $~lib/rt/pure/__release
@@ -15691,13 +15691,13 @@
   call $~lib/rt/pure/__release
   call $std/array/createReverseOrderedNestedArray
   local.tee $0
-  i32.const 56
+  i32.const 53
   call $std/array/assertSorted<~lib/array/Array<i32>>
   local.get $0
   call $~lib/rt/pure/__release
   call $std/array/createReverseOrderedElementsArray
   local.tee $0
-  i32.const 57
+  i32.const 54
   call $std/array/assertSorted<~lib/array/Array<i32>>
   local.get $0
   call $~lib/rt/pure/__release
@@ -15718,7 +15718,7 @@
   i32.const 1
   global.set $~lib/argc
   local.get $1
-  i32.const 58
+  i32.const 55
   call $std/array/assertSorted<~lib/string/String | null>
   local.get $1
   local.get $3
@@ -15737,7 +15737,7 @@
   i32.const 1
   global.set $~lib/argc
   local.get $0
-  i32.const 59
+  i32.const 56
   call $std/array/assertSorted<~lib/array/Array<i32>>
   local.get $1
   call $~lib/rt/pure/__release

@@ -306,8 +306,6 @@ export class Compiler extends DiagnosticEmitter {
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
   argcSet: FunctionRef = 0;
-  /** Closure context helper global. */
-  closureVar: GlobalRef = 0;
   /** Requires runtime features. */
   runtimeFeatures: RuntimeFeatures = RuntimeFeatures.NONE;
   /** Expressions known to have skipped an autorelease. Usually function returns. */
@@ -1646,13 +1644,6 @@ export class Compiler extends DiagnosticEmitter {
     }
     var functionTable = this.functionTable;
     var index = functionTable.length;
-    if (!(index & 15)) {
-      // reserve indexes that just so happen to be 16 byte aligned
-      // so we can easily distinguish between a function table index
-      // and a memory pointer, i.e. when passing closures.
-      functionTable.push("null");
-      ++index;
-    }
     if (!func.is(CommonFlags.TRAMPOLINE) && func.signature.requiredParameters < func.signature.parameterTypes.length) {
       // insert the trampoline if the function has optional parameters
       func = this.ensureTrampoline(func);
