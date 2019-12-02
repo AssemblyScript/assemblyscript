@@ -61,8 +61,6 @@ jobs:
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-      with:
-        node-mirror: https://nodejs.org/download/v8-canary/
     - name: Install node via nvm-windows
       run: |
         Invoke-WebRequest -Uri https://github.com/coreybutler/nvm-windows/releases/download/1.1.7/nvm-noinstall.zip -OutFile nvm.zip
