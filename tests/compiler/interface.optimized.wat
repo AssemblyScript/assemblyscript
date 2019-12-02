@@ -9,8 +9,6 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00.\00t\00s")
- (table $0 6 funcref)
- (elem (i32.const 0) $null $interface/AFoo#get:x $interface/AFoo#foo $interface/AFoo#foo $interface/AFoo#faa $interface/AFoo#faa)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $interface/aFoo (mut i32) (i32.const 0))
@@ -106,14 +104,7 @@
  )
  (func $interface/passAnInterface (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 1
-  i32.const 0
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  call $~virtual
-  call_indirect (type $FUNCSIG$iii)
+  call $interface/IFoo#foo
   i32.const 42
   i32.ne
   if
@@ -125,15 +116,7 @@
    unreachable
   end
   local.get $0
-  i32.const 1
-  i32.const 3
-  i32.const 1
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  call $~virtual
-  call_indirect (type $FUNCSIG$iiii)
+  call $interface/IFoo#faa
   i32.const 4
   i32.ne
   if
@@ -234,53 +217,66 @@
   local.get $1
   i32.add
  )
- (func $interface/AFoo#faa (; 10 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $interface/IFoo#foo (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load
+  local.tee $1
+  i32.const 3
+  i32.eq
+  if (result i32)
+   local.get $0
+   i32.const 1
+   call $interface/AFoo#foo
+  else
+   local.get $1
+   i32.const 4
+   i32.eq
+   if (result i32)
+    local.get $0
+    i32.const 1
+    call $interface/AFoo#foo
+   else
+    unreachable
+   end
+  end
+ )
+ (func $interface/AFoo#faa (; 11 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   local.get $2
   i32.add
  )
- (func $~virtual (; 11 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  block $block$2$break
-   block $switch$1$case$6
-    block $switch$1$case$3
-     local.get $0
-     br_table $switch$1$case$3 $switch$1$case$6 $block$2$break
-    end
-    local.get $1
+ (func $interface/IFoo#faa (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load
+  local.tee $1
+  i32.const 3
+  i32.eq
+  if (result i32)
+   local.get $0
+   i32.const 1
+   i32.const 3
+   call $interface/AFoo#faa
+  else
+   local.get $1
+   i32.const 4
+   i32.eq
+   if (result i32)
+    local.get $0
+    i32.const 1
     i32.const 3
-    i32.eq
-    if
-     i32.const 2
-     return
-    else
-     local.get $1
-     i32.const 4
-     i32.ne
-     br_if $block$2$break
-     i32.const 3
-     return
-    end
+    call $interface/AFoo#faa
+   else
     unreachable
    end
-   local.get $1
-   i32.const 3
-   i32.eq
-   if
-    i32.const 4
-    return
-   else
-    local.get $1
-    i32.const 4
-    i32.eq
-    if
-     i32.const 5
-     return
-    end
-   end
   end
-  unreachable
  )
- (func $null (; 12 ;) (type $FUNCSIG$v)
+ (func $null (; 13 ;) (type $FUNCSIG$v)
   nop
  )
 )

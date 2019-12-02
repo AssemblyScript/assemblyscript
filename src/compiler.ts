@@ -460,7 +460,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
     // set up virtual table
-    this.compileVirtualTable();
+    this.compileInterfaces();
 
     // set up function table
     var functionTable = this.functionTable;
@@ -9165,116 +9165,6 @@ export class Compiler extends DiagnosticEmitter {
     return module.block(label, conditions, NativeType.I32);
   }
 
-  compileVirtualTable(): void {
-    const interfaces = this.program.interfaces;
-    if (interfaces.length == 0) return; //Don't create table if no interfaces present
-    const instanceMethods: Map<number, Map<number, Function>> = new Map();
-    const interfaceMethods: Map<number, Function[]> = new Map();
-    // Gather all instatiated interface methods
-
-    for (let i: i32 = 0; i < interfaces.length; i++) {
-      const _interface = interfaces[i];
-      this.compileInterfaceProperties(_interface);
-      for (let j: i32 = 0; j < _interface.methodInstances.length; j++) {
-        const func = _interface.methodInstances[j];
-        const id = func.signature.id;
-        if (!interfaceMethods.has(id)) {
-          interfaceMethods.set(id, []);
-        }
-        interfaceMethods.get(id)!.push(func);
-        if (!instanceMethods.has(id)) {
-          instanceMethods.set(id, new Map());
-        }
-        const currentMap = instanceMethods.get(id)!;
-        const methods =  _interface.getFuncImplementations(func);
-        for (let k: i32 = 0; k < methods.length; k++) {
-          const funcP = methods[k];
-          // TODO: Better way to pass contextual type info
-          const newFunc = this.resolver.resolveFunction(funcP, null, func.contextualTypeArguments);
-          if (newFunc == null) {
-            throw new Error(`Couldn't resolve ${funcP.name}`);
-          }
-          this.compileFunction(newFunc);
-          this.ensureFunctionTableEntry(newFunc);
-          currentMap.set((<Class>newFunc.parent).id, newFunc);
-          }
-      }
-    }
-
-    const module = this.module;
-    // Create relooper to build table
-    const relooper = this.module.createRelooper();
-    const iFuncs: [number, Map<number, Function>][] = Array.from(instanceMethods.entries());
-    const getArg = (i: i32): ExpressionRef => module.local_get(i, Type.i32.toNativeType());
-    // Condition to switch on
-    const first = relooper.addBlockWithSwitch(module.nop(), getArg(0));
-    const zero = relooper.addBlock(module.nop());
-
-    for (let index: i32 = 0; index < iFuncs.length; index++) {
-      const [funcID, classes] = iFuncs[index];
-      // Compile the interface methods with index
-      const IFuncs = interfaceMethods.get(funcID)!;
-      for (let i: i32 = 0; i < IFuncs.length; i++) {
-        const iFunc = IFuncs[i];
-        iFunc.finalize(module, this.compileInterfaceMethod(iFunc, index));
-      }
-      const innerBlock = relooper.addBlock(module.nop());
-      // Add brach for method
-      relooper.addBranchForSwitch(first, innerBlock, [index]);
-      for (const [classID, func] of classes.entries()) {
-        const methodCase = relooper.addBlock(module.return(module.i32(func.functionTableIndex)));
-        const condition = module.binary(BinaryOp.EqI32, getArg(1), module.i32(classID));
-        relooper.addBranch(innerBlock, methodCase, condition);
-      }
-      relooper.addBranch(innerBlock, zero);
-    }
-    relooper.addBranchForSwitch(first, zero, []);
-
-    var typeRef = this.ensureFunctionType([Type.u32, Type.u32], Type.u32, null);
-
-    const body = module.block(
-      null,
-      [relooper.renderAndDispose(first, 0), module.unreachable(), module.i32(0)],
-      Type.u32.toNativeType()
-    );
-    this.module.addFunction("~virtual", typeRef, null, body);
-
-  }
-
-  compileInterfaceMethod(func: Function, methodID: i32): ExpressionRef {
-    const signature = func.signature;
-    const module = this.module;
-    const typeRef = this.ensureSignature(signature);
-    const loadMethodID = module.i32(methodID);
-    // let target = this.compiler.program.instancesByName("virtual");
-
-    const callVirtual = module.call(
-      "~virtual",
-      [loadMethodID, loadClassID(module)],
-      NativeType.I32
-    );
-    // module.removeFunction(member.internalName);
-    const locals: usize[] = [];
-    for (let i: i32 = 0; i < func.localsByIndex.length; i++) {
-      const local = func.localsByIndex[i];
-      locals.push(module.local_get(local.index, local.type.toNativeType()));
-    }
-
-    const callIndirect = module.call_indirect(
-      callVirtual,
-      locals,
-      func.signature.toSignatureString()
-    );
-
-    const body = module.block(
-      null,
-      [callIndirect],
-      func.signature.returnType.toNativeType()
-    );
-    module.removeFunction(func.internalName);
-    return module.addFunction(func.internalName, typeRef, null, body);
-  }
-
   checkInterfaceImplementation(toType: Type, fromType: Type, reportNode: Node): bool {
     const _interface = (<Interface>toType.classReference!);
     const _class = fromType.classReference!;
@@ -9390,6 +9280,71 @@ export class Compiler extends DiagnosticEmitter {
             );
     }
     return !error;
+  }
+
+  compileInterfaces(): void {
+    const interfaces = this.program.interfaces;
+    for (let i: i32 = 0; i < interfaces.length; i++) {
+      const _interface = interfaces[i];
+      this.compileInterfaceProperties(_interface);
+      this.compileInterfaceMethods(_interface);
+    }
+  }
+
+  compileInterfaceMethods(_interface: Interface): void {
+    const module = this.module;
+    const ifuncs = _interface.methodInstances;
+    const classes = Array.from(_interface.implementers);
+
+    for (let i = 0; i < ifuncs.length; i++) {
+      const ifunc = ifuncs[i];
+      const classIDLocal = ifunc.addLocal(Type.i32);
+      const returnType = ifunc!.signature.returnType.toNativeType();
+      const typeRef = this.ensureSignature(ifunc!.signature);
+
+      const relooper = this.module.createRelooper();
+    
+      // Condition to switch on
+      const first = relooper.addBlock(module.local_set(classIDLocal.index, loadClassID(module)));
+      const last = relooper.addBlock(module.unreachable());
+      relooper.addBranch(first, last);
+
+      for (let c = 0; c < classes.length; c ++) {
+        const _class = classes[c];
+        let prop = _class.members!.get(ifunc.name)!;
+        let expr: ExpressionRef;
+        let thisExpr = loadClassArg(module, 0);
+        switch (prop.kind){
+          case ElementKind.FUNCTION_PROTOTYPE: {
+            let p = <FunctionPrototype> prop;
+            let newFunc = this.resolver.resolveFunction(p, null, ifunc.contextualTypeArguments);
+            if (newFunc == null) {
+              throw new Error(`Couldn't resolve ${p.name}`);
+            }
+            prop = newFunc;
+          }
+          case ElementKind.FUNCTION:{
+            this.compileFunction(<Function> prop);
+            break
+          }
+          default:
+            throw Error("Class " + classes[c].name + " must have property " + prop.name);
+        }
+        const locals: usize[] = [];
+        for (let i: i32 = 0; i < classIDLocal.index; i++) {
+          const local = ifunc.localsByIndex[i];
+          locals.push(module.local_get(local.index, local.type.toNativeType()));
+        }
+        const callExpr = module.call(prop.internalName, locals, returnType)
+        const returnBlock = relooper.addBlock(callExpr);
+        const loadLocal = loadClassArg(module, classIDLocal.index);
+        const classID = module.i32(_class.id);
+        relooper.addBranch(first, returnBlock, module.binary(BinaryOp.EqI32, loadLocal, classID));
+      }
+      // Remove the nop standin
+      module.removeFunction(ifunc.internalName);
+      module.addFunction(ifunc.internalName, typeRef, [NativeType.I32], relooper.renderAndDispose(first, 0));
+    }
   }
 
   compileInterfaceProperties(_interface: Interface): void {
