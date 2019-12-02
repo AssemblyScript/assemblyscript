@@ -251,15 +251,14 @@ function collectWhite(s: Block): void {
 // @ts-ignore: decorator
 @global @unsafe
 export function __retain(ptr: usize): usize {
-  // & AL_MASK != 0 is a non-closure function reference (table index)
-  if (i32(!(ptr & AL_MASK)) & i32(ptr > __heap_base)) increment(changetype<Block>(ptr - BLOCK_OVERHEAD));
+  if (ptr > __heap_base) increment(changetype<Block>(ptr - BLOCK_OVERHEAD));
   return ptr;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __release(ptr: usize): void {
-  if (i32(!(ptr & AL_MASK)) & i32(ptr > __heap_base)) decrement(changetype<Block>(ptr - BLOCK_OVERHEAD));
+  if (ptr > __heap_base) decrement(changetype<Block>(ptr - BLOCK_OVERHEAD));
 }
 
 // @ts-ignore: decorator

@@ -758,7 +758,6 @@
   call $~lib/rt/stub/__release
  )
  (func $retain-release/provideRefIndirect (; 42 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
   i32.const 1
   global.set $~lib/argc
   global.get $retain-release/REF
@@ -767,19 +766,17 @@
  )
  (func $retain-release/receiveRefIndirect (; 43 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
-  (local $2 i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
   call_indirect (type $FUNCSIG$i)
-  local.tee $2
+  local.tee $1
   i32.eqz
   drop
-  local.get $2
+  local.get $1
   call $~lib/rt/stub/__release
  )
  (func $retain-release/receiveRefIndirectDrop (; 44 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0

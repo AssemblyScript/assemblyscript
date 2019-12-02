@@ -2227,13 +2227,8 @@
  )
  (func $~lib/rt/pure/__retain (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
-  i32.and
   if
    local.get $0
    i32.const 16
@@ -3741,13 +3736,8 @@
  )
  (func $~lib/rt/pure/__release (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
-  i32.and
   if
    local.get $0
    i32.const 16
@@ -7285,7 +7275,6 @@
  (func $~lib/array/Array<i32>#reduceRight<i32> (; 137 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $2
   local.set $3
   block $break|0
@@ -7359,7 +7348,6 @@
  (func $~lib/array/Array<i32>#reduceRight<bool> (; 140 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   local.get $2
   local.set $3
   block $break|0
@@ -7675,8 +7663,7 @@
   (local $7 i32)
   (local $8 f32)
   (local $9 f32)
-  (local $10 i32)
-  (local $11 f32)
+  (local $10 f32)
   local.get $1
   i32.const 31
   i32.add
@@ -7951,13 +7938,13 @@
   call $~lib/rt/tlsf/__free
   local.get $0
   f32.load offset=4
-  local.set $11
+  local.set $10
   local.get $0
   local.get $0
   f32.load
   f32.store offset=4
   local.get $0
-  local.get $11
+  local.get $10
   f32.store
  )
  (func $~lib/array/Array<f32>#sort (; 150 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -8290,8 +8277,7 @@
   (local $7 i32)
   (local $8 f64)
   (local $9 f64)
-  (local $10 i32)
-  (local $11 f64)
+  (local $10 f64)
   local.get $1
   i32.const 31
   i32.add
@@ -8566,13 +8552,13 @@
   call $~lib/rt/tlsf/__free
   local.get $0
   f64.load offset=8
-  local.set $11
+  local.set $10
   local.get $0
   local.get $0
   f64.load
   f64.store offset=8
   local.get $0
-  local.get $11
+  local.get $10
   f64.store
  )
  (func $~lib/array/Array<f64>#sort (; 156 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -8939,7 +8925,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $1
   i32.const 31
   i32.add
@@ -9214,13 +9199,13 @@
   call $~lib/rt/tlsf/__free
   local.get $0
   i32.load offset=4
-  local.set $11
+  local.set $10
   local.get $0
   local.get $0
   i32.load
   i32.store offset=4
   local.get $0
-  local.get $11
+  local.get $10
   i32.store
  )
  (func $~lib/array/Array<i32>#sort (; 165 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -9274,23 +9259,23 @@
    return
   end
   local.get $3
-  local.set $5
-  local.get $2
-  local.set $4
-  local.get $1
   local.set $6
-  local.get $4
+  local.get $2
+  local.set $5
+  local.get $1
+  local.set $4
+  local.get $5
   i32.const 256
   i32.lt_s
   if
+   local.get $6
    local.get $5
    local.get $4
-   local.get $6
    call $~lib/util/sort/insertionSort<i32>
   else
+   local.get $6
    local.get $5
    local.get $4
-   local.get $6
    call $~lib/util/sort/weakHeapSort<i32>
   end
   local.get $0
@@ -9417,7 +9402,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
-  (local $11 i32)
   local.get $1
   i32.const 31
   i32.add
@@ -9692,13 +9676,13 @@
   call $~lib/rt/tlsf/__free
   local.get $0
   i32.load offset=4
-  local.set $11
+  local.set $10
   local.get $0
   local.get $0
   i32.load
   i32.store offset=4
   local.get $0
-  local.get $11
+  local.get $10
   i32.store
  )
  (func $~lib/array/Array<u32>#sort (; 170 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -9752,23 +9736,23 @@
    return
   end
   local.get $3
-  local.set $5
-  local.get $2
-  local.set $4
-  local.get $1
   local.set $6
-  local.get $4
+  local.get $2
+  local.set $5
+  local.get $1
+  local.set $4
+  local.get $5
   i32.const 256
   i32.lt_s
   if
+   local.get $6
    local.get $5
    local.get $4
-   local.get $6
    call $~lib/util/sort/insertionSort<u32>
   else
+   local.get $6
    local.get $5
    local.get $4
-   local.get $6
    call $~lib/util/sort/weakHeapSort<u32>
   end
   local.get $0

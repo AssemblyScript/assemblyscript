@@ -41,7 +41,6 @@
   i32.const 3
  )
  (func $function-types/doAddWithFn<i32> (; 7 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
   i32.const 2
   global.set $~lib/argc
   local.get $0
@@ -50,7 +49,6 @@
   call_indirect (type $FUNCSIG$iii)
  )
  (func $function-types/doAdd<i32> (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
   i32.const 2
   global.set $~lib/argc
   local.get $0
@@ -64,7 +62,6 @@
   i32.add
  )
  (func $function-types/makeAndAdd<i32> (; 10 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
   i32.const 2
   global.set $~lib/argc
   local.get $0
@@ -92,7 +89,6 @@
   call $function-types/makeAndAdd<i32>
  )
  (func $start:function-types (; 12 ;) (type $FUNCSIG$v)
-  (local $0 i32)
   call $function-types/makeAdder<i32>
   global.set $function-types/i32Adder
   i32.const 2

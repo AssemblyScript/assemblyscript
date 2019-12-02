@@ -1709,13 +1709,8 @@
  )
  (func $~lib/rt/pure/__release (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  local.get $0
   i32.const 300
   i32.gt_u
-  i32.and
   if
    local.get $0
    i32.const 16

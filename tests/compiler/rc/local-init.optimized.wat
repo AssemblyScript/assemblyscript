@@ -6,7 +6,6 @@
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
  (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
@@ -1750,13 +1749,8 @@
  )
  (func $~lib/rt/pure/__release (; 28 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  local.get $0
   i32.const 308
   i32.gt_u
-  i32.and
   if
    local.get $0
    i32.const 16
@@ -1764,19 +1758,16 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $rc/local-init/Ref#constructor (; 29 ;) (type $FUNCSIG$i) (result i32)
+ (func $start:rc/local-init (; 29 ;) (type $FUNCSIG$v)
   (local $0 i32)
+  i32.const 24
+  call $~lib/rt/pure/__release
   i32.const 0
   i32.const 3
   call $~lib/rt/tlsf/__alloc
   local.tee $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  local.get $0
   i32.const 308
   i32.gt_u
-  i32.and
   if
    local.get $0
    i32.const 16
@@ -1784,12 +1775,10 @@
    call $~lib/rt/pure/increment
   end
   local.get $0
+  call $~lib/rt/pure/__release
  )
  (func $start (; 30 ;) (type $FUNCSIG$v)
-  i32.const 24
-  call $~lib/rt/pure/__release
-  call $rc/local-init/Ref#constructor
-  call $~lib/rt/pure/__release
+  call $start:rc/local-init
  )
  (func $~lib/rt/pure/__visit (; 31 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0

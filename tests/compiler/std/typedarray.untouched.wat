@@ -2128,13 +2128,8 @@
  )
  (func $~lib/rt/pure/__retain (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
-  i32.and
   if
    local.get $0
    i32.const 16
@@ -3642,13 +3637,8 @@
  )
  (func $~lib/rt/pure/__release (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
-  i32.and
   if
    local.get $0
    i32.const 16
@@ -4882,8 +4872,7 @@
   (local $7 i32)
   (local $8 f64)
   (local $9 f64)
-  (local $10 i32)
-  (local $11 f64)
+  (local $10 f64)
   local.get $1
   i32.const 31
   i32.add
@@ -5158,13 +5147,13 @@
   call $~lib/rt/tlsf/__free
   local.get $0
   f64.load offset=8
-  local.set $11
+  local.set $10
   local.get $0
   local.get $0
   f64.load
   f64.store offset=8
   local.get $0
-  local.get $11
+  local.get $10
   f64.store
  )
  (func $~lib/typedarray/Float64Array#sort (; 64 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
@@ -6224,7 +6213,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -6363,7 +6351,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -6480,7 +6467,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -6621,7 +6607,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -6764,7 +6749,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -6881,7 +6865,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -7020,7 +7003,6 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -7159,8 +7141,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  (local $10 i64)
+  (local $9 i64)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -7206,10 +7187,10 @@
    unreachable
   end
   local.get $3
-  local.set $10
+  local.set $9
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $9
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Int64Array,i64> (; 114 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -7299,8 +7280,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  (local $10 i64)
+  (local $9 i64)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -7346,10 +7326,10 @@
    unreachable
   end
   local.get $3
-  local.set $10
+  local.set $9
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $9
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Uint64Array,u64> (; 118 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -7439,8 +7419,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  (local $10 f32)
+  (local $9 f32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -7486,10 +7465,10 @@
    unreachable
   end
   local.get $3
-  local.set $10
+  local.set $9
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $9
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Float32Array,f32> (; 122 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -7555,8 +7534,7 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  (local $10 f64)
+  (local $9 f64)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -7602,10 +7580,10 @@
    unreachable
   end
   local.get $3
-  local.set $10
+  local.set $9
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $10
+  local.get $9
  )
  (func $std/typedarray/testReduce<~lib/typedarray/Float64Array,f64> (; 125 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -7670,7 +7648,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -7788,7 +7765,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -7904,7 +7880,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -8020,7 +7995,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -8138,7 +8112,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -8254,7 +8227,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -8368,7 +8340,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -8482,8 +8453,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i64)
+  (local $8 i64)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -8529,10 +8499,10 @@
    unreachable
   end
   local.get $3
-  local.set $9
+  local.set $8
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $9
+  local.get $8
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Int64Array,i64> (; 149 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -8597,8 +8567,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i64)
+  (local $8 i64)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -8644,10 +8613,10 @@
    unreachable
   end
   local.get $3
-  local.set $9
+  local.set $8
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $9
+  local.get $8
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Uint64Array,u64> (; 152 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -8712,8 +8681,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 f32)
+  (local $8 f32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -8759,10 +8727,10 @@
    unreachable
   end
   local.get $3
-  local.set $9
+  local.set $8
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $9
+  local.get $8
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Float32Array,f32> (; 155 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -8827,8 +8795,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 f64)
+  (local $8 f64)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $5
@@ -8874,10 +8841,10 @@
    unreachable
   end
   local.get $3
-  local.set $9
+  local.set $8
   local.get $5
   call $~lib/rt/pure/__release
-  local.get $9
+  local.get $8
  )
  (func $std/typedarray/testReduceRight<~lib/typedarray/Float64Array,f64> (; 158 ;) (type $FUNCSIG$v)
   (local $0 i32)
@@ -8945,7 +8912,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -9118,7 +9084,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -9310,7 +9275,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -9483,7 +9447,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -9679,7 +9642,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -9875,7 +9837,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -10048,7 +10009,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -10244,7 +10204,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -10440,7 +10399,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -10636,7 +10594,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -10832,7 +10789,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -19267,7 +19223,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -19436,7 +19391,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -19599,7 +19553,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -19766,7 +19719,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -19935,7 +19887,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -20094,7 +20045,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -20247,7 +20197,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -20401,7 +20350,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -20558,7 +20506,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -20715,7 +20662,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3
@@ -20872,7 +20818,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $3

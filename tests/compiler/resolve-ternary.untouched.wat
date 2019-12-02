@@ -1773,13 +1773,8 @@
  )
  (func $~lib/rt/pure/__retain (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
-  i32.and
   if
    local.get $0
    i32.const 16
@@ -3277,13 +3272,8 @@
  )
  (func $~lib/rt/pure/__release (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
-  i32.and
   if
    local.get $0
    i32.const 16
@@ -5222,7 +5212,6 @@
  (func $start:resolve-ternary (; 47 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
   global.get $resolve-ternary/b
   if (result i32)
    i32.const 1

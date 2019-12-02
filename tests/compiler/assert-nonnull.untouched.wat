@@ -268,12 +268,12 @@
   global.set $~lib/argc
   local.get $0
   call_indirect (type $FUNCSIG$i)
-  local.tee $2
+  local.tee $1
   call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $2
-  call $~lib/rt/stub/__release
+  local.set $2
   local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
  )
  (func $assert-nonnull/testFn2 (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -291,12 +291,12 @@
   global.set $~lib/argc
   local.get $2
   call_indirect (type $FUNCSIG$i)
-  local.tee $3
+  local.tee $1
   call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $3
-  call $~lib/rt/stub/__release
+  local.set $3
   local.get $1
+  call $~lib/rt/stub/__release
+  local.get $3
  )
  (func $assert-nonnull/testRet (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -305,12 +305,12 @@
   global.set $~lib/argc
   local.get $0
   call_indirect (type $FUNCSIG$i)
-  local.tee $2
+  local.tee $1
   call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $2
-  call $~lib/rt/stub/__release
+  local.set $2
   local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
  )
  (func $assert-nonnull/testObjFn (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -323,14 +323,14 @@
   local.get $0
   i32.load offset=4
   call_indirect (type $FUNCSIG$i)
-  local.tee $2
+  local.tee $1
   call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $2
+  local.set $2
+  local.get $1
   call $~lib/rt/stub/__release
   local.get $0
   call $~lib/rt/stub/__release
-  local.get $1
+  local.get $2
  )
  (func $assert-nonnull/testObjRet (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -343,14 +343,14 @@
   local.get $0
   i32.load offset=4
   call_indirect (type $FUNCSIG$i)
-  local.tee $2
+  local.tee $1
   call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $2
+  local.set $2
+  local.get $1
   call $~lib/rt/stub/__release
   local.get $0
   call $~lib/rt/stub/__release
-  local.get $1
+  local.get $2
  )
  (func $null (; 19 ;) (type $FUNCSIG$v)
   unreachable

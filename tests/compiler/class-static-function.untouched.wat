@@ -15,7 +15,6 @@
   i32.const 42
  )
  (func $class-static-function/call (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0

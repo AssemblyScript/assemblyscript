@@ -6843,15 +6843,12 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var returnType = signature.returnType;
-    var flow = this.currentFlow;
-    var isWasm64 = this.options.isWasm64;
-    var temp = flow.getTempLocal(this.options.usizeType);
     var expr = module.block(null, [
       module.global_set(this.ensureArgcVar(), // might be calling a trampoline
         module.i32(numArguments)
       ),
       module.call_indirect(
-        isWasm64
+        this.options.isWasm64
           ? module.unary(UnaryOp.WrapI64, indexArg)
           : indexArg,
         operands,
@@ -6867,7 +6864,6 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeAutorelease(expr);
       }
     }
-    flow.freeTempLocal(temp);
     return expr;
   }
 
