@@ -869,7 +869,7 @@ export namespace errno {
 export type errno = u16;
 
 /** An event that occurred. */
-@unmanaged export abstract class event {
+@unmanaged export class event {
   /** User-provided value that got attached to `subscription#userdata`. */
   userdata: userdata;
   /** If non-zero, an error that occurred while processing the subscription request. */
@@ -1396,7 +1396,7 @@ export namespace signal {
 export type signal = u8;
 
 /** Flags determining how to interpret the timestamp provided in `subscription_t::u.clock.timeout. */
-export namespace subclock_flags {
+export namespace subclockflags {
   /** If set, treat the timestamp provided in `clocksubscription` as an absolute timestamp. */
   // @ts-ignore: decorator
   @inline
@@ -1405,7 +1405,7 @@ export namespace subclock_flags {
 export type subclockflags = u16;
 
 /** Subscription to an event. */
-@unmanaged export abstract class subscription {
+@unmanaged export class subscription {
   /** User-provided value that is attached to the subscription. */
   userdata: userdata;
   /** The type of the event to which to subscribe. */
@@ -1417,7 +1417,7 @@ export type subclockflags = u16;
 /* Subscription to an event of type `eventtype.CLOCK`.**/
 @unmanaged export class subscription_clock {
   /** The clock against which to compare the timestamp. */
-  id: clockid;
+  clock_id: clockid;
   /** The absolute or relative timestamp. */
   timeout: timestamp;
   /** The amount of time that the implementation may wait additionally to coalesce with other events. */
@@ -1431,7 +1431,7 @@ export type subclockflags = u16;
 /* Subscription to an event of type `eventtype.FD_READ` or `eventtype.FD_WRITE`.**/
 @unmanaged export class subscription_fd_readwrite {
   /** The file descriptor on which to wait for it to become ready for reading or writing. */
-  fd: fd;
+  file_descriptor: fd;
 }
 
 /** Timestamp in nanoseconds. */
