@@ -1,4 +1,4 @@
-import { dirent, rwevent, fdstat, filestat, iovec, clocksubscription, fdsubscription, signal, dirprestat } from "bindings/wasi";
+import { dirent, event_fd_readwrite, fdstat, filestat, iovec, subscription_clock, subscription_fd_readwrite, signal, prestat_dir } from "bindings/wasi";
 import { Target } from "shared/target";
 
 assert(offsetof<dirent>("next") == 0);
@@ -7,12 +7,12 @@ assert(offsetof<dirent>("namlen") == 16);
 assert(offsetof<dirent>("type") == 20);
 assert(offsetof<dirent>() == 24);
 
-assert(offsetof<rwevent>("userdata") == 0);
-assert(offsetof<rwevent>("error") == 8);
-assert(offsetof<rwevent>("type") == 10);
-assert(offsetof<rwevent>("nbytes") == 16);
-assert(offsetof<rwevent>("flags") == 24);
-assert(offsetof<rwevent>() == 32);
+assert(offsetof<event_fd_readwrite>("userdata") == 0);
+assert(offsetof<event_fd_readwrite>("error") == 8);
+assert(offsetof<event_fd_readwrite>("type") == 10);
+assert(offsetof<event_fd_readwrite>("nbytes") == 16);
+assert(offsetof<event_fd_readwrite>("flags") == 24);
+assert(offsetof<event_fd_readwrite>() == 32);
 
 assert(offsetof<fdstat>("filetype") == 0);
 assert(offsetof<fdstat>("flags") == 2);
@@ -23,12 +23,12 @@ assert(offsetof<fdstat>() == 24);
 assert(offsetof<filestat>("dev") == 0);
 assert(offsetof<filestat>("ino") == 8);
 assert(offsetof<filestat>("filetype") == 16);
-assert(offsetof<filestat>("nlink") == 20);
-assert(offsetof<filestat>("size") == 24);
-assert(offsetof<filestat>("atim") == 32);
-assert(offsetof<filestat>("mtim") == 40);
-assert(offsetof<filestat>("ctim") == 48);
-assert(offsetof<filestat>() == 56);
+assert(offsetof<filestat>("nlink") == 24);
+assert(offsetof<filestat>("size") == 32);
+assert(offsetof<filestat>("atim") == 40);
+assert(offsetof<filestat>("mtim") == 48);
+assert(offsetof<filestat>("ctim") == 56);
+assert(offsetof<filestat>() == 64);
 
 assert(offsetof<iovec>("buf") == 0);
 if (ASC_TARGET == Target.WASM32) {
@@ -41,27 +41,26 @@ if (ASC_TARGET == Target.WASM32) {
   assert(false);
 }
 
-assert(offsetof<clocksubscription>("userdata") == 0);
-assert(offsetof<clocksubscription>("type") == 8);
-assert(offsetof<clocksubscription>("identifier") == 16);
-assert(offsetof<clocksubscription>("clock_id") == 24);
-assert(offsetof<clocksubscription>("timeout") == 32);
-assert(offsetof<clocksubscription>("precision") == 40);
-assert(offsetof<clocksubscription>("flags") == 48);
-assert(offsetof<clocksubscription>() == 56);
+assert(offsetof<subscription_clock>("userdata") == 0);
+assert(offsetof<subscription_clock>("type") == 8);
+assert(offsetof<subscription_clock>("clock_id") == 16);
+assert(offsetof<subscription_clock>("timeout") == 24);
+assert(offsetof<subscription_clock>("precision") == 32);
+assert(offsetof<subscription_clock>("flags") == 40);
+assert(offsetof<subscription_clock>() == 48);
 
-assert(offsetof<fdsubscription>("userdata") == 0);
-assert(offsetof<fdsubscription>("type") == 8);
-assert(offsetof<fdsubscription>("fd") == 16);
-assert(offsetof<fdsubscription>() == 20);
+assert(offsetof<subscription_fd_readwrite>("userdata") == 0);
+assert(offsetof<subscription_fd_readwrite>("type") == 8);
+assert(offsetof<subscription_fd_readwrite>("file_descriptor") == 16);
+assert(offsetof<subscription_fd_readwrite>() == 20);
 
-assert(offsetof<dirprestat>("type") == 0);
+assert(offsetof<prestat_dir>("type") == 0);
 if (ASC_TARGET == Target.WASM32) {
-  assert(offsetof<dirprestat>("name_len") == 4);
-  assert(offsetof<dirprestat>() == 8);
+  assert(offsetof<prestat_dir>("name_len") == 4);
+  assert(offsetof<prestat_dir>() == 8);
 } else if (ASC_TARGET == Target.WASM64) {
-  assert(offsetof<dirprestat>("name_len") == 8);
-  assert(offsetof<dirprestat>() == 16);
+  assert(offsetof<prestat_dir>("name_len") == 8);
+  assert(offsetof<prestat_dir>() == 16);
 } else {
   assert(false);
 }
