@@ -1,4 +1,5 @@
-// see: https://wasi.dev
+// wasi_snapshot_preview1
+// see: https://github.com/WebAssembly/WASI/tree/master/phases/snapshot/witx
 
 /* tslint:disable:max-line-length */
 
