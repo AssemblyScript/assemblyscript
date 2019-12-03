@@ -539,7 +539,7 @@ export type clockid = u32;
 /** Identifier for a device containing a file system. Can be used in combination with `inode` to uniquely identify a file or directory in the filesystem. */
 export type device = u64;
 
-/** A reference to the offset of a directory entry. */
+/** A reference to the offset of a directory entry. The value 0 signifies the start of the directory. */
 export type dircookie = u64;
 
 /** A directory entry. */
@@ -874,17 +874,21 @@ export type errno = u16;
   userdata: userdata;
   /** If non-zero, an error that occurred while processing the subscription request. */
   error: errno;
-  /* The type of the event that occurred. */
+  /** The type of the event that occurred. */
   type: eventtype;
+  /** The contents of the event. */
+  u: event_fd_readwrite;
+
   private __padding0: u16;
 }
 
 /** An event that occurred when type is `eventtype.FD_READ` or `eventtype.FD_WRITE`. */
-@unmanaged export class rwevent extends event {
+@unmanaged export class event_fd_readwrite {
   /* The number of bytes available for reading or writing. */
   nbytes: filesize;
   /* The state of the file descriptor. */
   flags: eventrwflags;
+
   private __padding1: u32;
 }
 
@@ -1053,7 +1057,7 @@ export type inode = u64;
 }
 
 /** Number of hard links to an inode. */
-export type linkcount = u32;
+export type linkcount = u64;
 
 /** Flags determining the method of how paths are resolved. */
 export namespace lookupflags {
@@ -1085,21 +1089,26 @@ export namespace oflags {
 }
 export type oflags = u16;
 
-// TODO: undocumented
+/** Identifiers for preopened capabilities. */
 export namespace preopentype {
+  /** A pre-opened directory. */
   // @ts-ignore: decorator
   @inline
   export const DIR: preopentype = 0;
 }
 export type preopentype = u8;
 
-// TODO: undocumented
-export abstract class prestat {
+/* Information about a pre-opened capability. */
+export class prestat {
+  /* The type of the pre-opened capability. */
   type: preopentype;
+  /* The contents of the information. */
+  u: prestat_dir;
 }
 
-// TODO: undocumented
-export class dirprestat extends prestat {
+/** The contents of a $prestat when type is `preopentype.DIR`. */
+export class prestat_dir {
+  /** The length of the directory name for use with `fd_prestat_dir_name`. */
   name_len: usize;
 }
 
@@ -1387,7 +1396,7 @@ export namespace signal {
 export type signal = u8;
 
 /** Flags determining how to interpret the timestamp provided in `subscription_t::u.clock.timeout. */
-export namespace subclockflags {
+export namespace subclock_flags {
   /** If set, treat the timestamp provided in `clocksubscription` as an absolute timestamp. */
   // @ts-ignore: decorator
   @inline
@@ -1401,26 +1410,26 @@ export type subclockflags = u16;
   userdata: userdata;
   /** The type of the event to which to subscribe. */
   type: eventtype;
-  private __padding0: u32;
+  /** The contents of the subscription. */
+  u: usize; /* subscriptionclock | subscriptionreadwrite; */
 }
 
 /* Subscription to an event of type `eventtype.CLOCK`.**/
-@unmanaged export class clocksubscription extends subscription {
-  /** The user-defined unique identifier of the clock. */
-  identifier: userdata;
+@unmanaged export class subscription_clock {
   /** The clock against which to compare the timestamp. */
-  clock_id: clockid;
+  id: clockid;
   /** The absolute or relative timestamp. */
   timeout: timestamp;
   /** The amount of time that the implementation may wait additionally to coalesce with other events. */
   precision: timestamp;
   /** Flags specifying whether the timeout is absolute or relative. */
   flags: subclockflags;
+
   private __padding1: u32;
 }
 
 /* Subscription to an event of type `eventtype.FD_READ` or `eventtype.FD_WRITE`.**/
-@unmanaged export class fdsubscription extends subscription {
+@unmanaged export class subscription_fd_readwrite {
   /** The file descriptor on which to wait for it to become ready for reading or writing. */
   fd: fd;
 }
@@ -1433,17 +1442,18 @@ export type userdata = u64;
 
 /** The position relative to which to set the offset of the file descriptor. */
 export namespace whence {
-  /** Seek relative to current position. */
-  // @ts-ignore: decorator
-  @inline
-  export const CUR: whence = 0;
-  /** Seek relative to end-of-file. */
-  // @ts-ignore: decorator
-  @inline
-  export const END: whence = 1;
   /** Seek relative to start-of-file. */
   // @ts-ignore: decorator
   @inline
-  export const SET: whence = 2;
+  export const SET: whence = 0;
+  /** Seek relative to current position. */
+  // @ts-ignore: decorator
+  @inline
+  export const CUR: whence = 1;
+  /** Seek relative to end-of-file. */
+  // @ts-ignore: decorator
+  @inline
+  export const END: whence = 2;
 }
+
 export type whence = u8;
