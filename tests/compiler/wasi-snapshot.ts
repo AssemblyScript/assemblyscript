@@ -1,4 +1,15 @@
-import { dirent, event_fd_readwrite, fdstat, filestat, iovec, subscription_clock, subscription_fd_readwrite, signal, prestat_dir } from "bindings/wasi";
+import {
+  dirent,
+  event_fd_readwrite,
+  fdstat,
+  filestat,
+  iovec,
+  subscription_clock,
+  subscription_fd_readwrite,
+  signal,
+  prestat_dir
+} from "bindings/wasi_snapshot";
+
 import { Target } from "shared/target";
 
 assert(offsetof<dirent>("next") == 0);
