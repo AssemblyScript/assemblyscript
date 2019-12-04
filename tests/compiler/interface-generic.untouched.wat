@@ -8,16 +8,16 @@
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00.\00t\00s\00")
- (table $0 5 funcref)
- (elem (i32.const 0) $null $interface/AFoo#get:x $interface/AFoo#set:x $interface/AFoo#foo $interface/AFoo#faa)
+ (data (i32.const 8) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s\00")
+ (table $0 4 funcref)
+ (elem (i32.const 0) $null $interface-generic/AGFoo#get:x $interface-generic/AGFoo#foo $interface-generic/AGFoo#faa)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $interface/aFoo (mut i32) (i32.const 0))
- (global $interface/sFoo (mut i32) (i32.const 0))
- (global $interface/iFoo (mut i32) (i32.const 0))
- (global $interface/ibool (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 48))
+ (global $interface-generic/aGFoo (mut i32) (i32.const 0))
+ (global $interface-generic/sGFoo (mut i32) (i32.const 0))
+ (global $interface-generic/gFoo (mut i32) (i32.const 0))
+ (global $interface-generic/igbool (mut i32) (i32.const 0))
+ (global $~lib/heap/__heap_base i32 (i32.const 64))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -130,11 +130,11 @@
  (func $~lib/rt/stub/__retain (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
  )
- (func $interface/AFoo#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-generic/AGFoo#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
-   i32.const 5
+   i32.const 4
    i32.const 3
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
@@ -144,11 +144,8 @@
   i32.const 41
   i32.store
   local.get $0
-  i32.const 1
-  i32.store8 offset=4
-  local.get $0
  )
- (func $interface/StructurallyImplementsIFoo#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-generic/StructurallyImplementsGFoo#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -169,14 +166,29 @@
  (func $~lib/rt/stub/__release (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $interface/passAnInterface (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $interface-generic/passAnGInterface (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
   local.get $0
   i32.const 1
-  call $interface/IFoo#foo
+  call $interface-generic/GFoo<i32,bool>#foo
   i32.const 42
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 41
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 1
+  i32.const 3
+  call $interface-generic/GFoo<i32,bool>#faa
+  i32.const 4
   i32.eq
   i32.eqz
   if
@@ -188,16 +200,25 @@
    unreachable
   end
   local.get $0
-  i32.const 1
-  i32.const 3
-  call $interface/IFoo#faa
-  i32.const 4
+  call $~lib/rt/stub/__release
+ )
+ (func $interface-generic/expectGX (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  call $interface-generic/GFoo<i32,bool>#get:x
+  i32.const 0
+  i32.ne
+  local.get $1
+  i32.const 0
+  i32.ne
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 24
-   i32.const 43
+   i32.const 49
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -205,29 +226,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $interface/expectX (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $0
-  local.get $1
-  call $interface/IFoo#set:x
-  local.get $0
-  call $interface/IFoo#get:x
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 51
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  call $~lib/rt/stub/__release
- )
- (func $start:interface (; 9 ;) (type $FUNCSIG$v)
+ (func $start:interface-generic (; 9 ;) (type $FUNCSIG$v)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -239,49 +238,47 @@
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
   i32.const 0
-  call $interface/AFoo#constructor
-  global.set $interface/aFoo
+  call $interface-generic/AGFoo#constructor
+  global.set $interface-generic/aGFoo
   i32.const 0
-  call $interface/StructurallyImplementsIFoo#constructor
-  global.set $interface/sFoo
-  global.get $interface/aFoo
-  call $interface/passAnInterface
-  global.get $interface/sFoo
-  call $interface/passAnInterface
-  global.get $interface/aFoo
+  call $interface-generic/StructurallyImplementsGFoo#constructor
+  global.set $interface-generic/sGFoo
+  global.get $interface-generic/aGFoo
+  call $interface-generic/passAnGInterface
+  global.get $interface-generic/sGFoo
+  call $interface-generic/passAnGInterface
+  global.get $interface-generic/aGFoo
+  i32.const 1
+  call $interface-generic/expectGX
+  global.get $interface-generic/sGFoo
   i32.const 0
-  call $interface/expectX
-  global.get $interface/sFoo
-  i32.const 0
-  call $interface/expectX
-  global.get $interface/aFoo
+  call $interface-generic/expectGX
+  global.get $interface-generic/aGFoo
   call $~lib/rt/stub/__retain
-  global.set $interface/iFoo
-  global.get $interface/iFoo
-  call $interface/IFoo#get:x
+  global.set $interface-generic/gFoo
+  global.get $interface-generic/gFoo
+  call $interface-generic/GFoo<i32,bool>#get:x
   i32.const 0
   i32.ne
-  global.set $interface/ibool
-  global.get $interface/ibool
-  i32.eqz
+  global.set $interface-generic/igbool
+  global.get $interface-generic/igbool
   i32.eqz
   if
    i32.const 0
    i32.const 24
-   i32.const 59
+   i32.const 57
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
  (func $start (; 10 ;) (type $FUNCSIG$v)
-  call $start:interface
+  call $start:interface-generic
  )
- (func $interface/AFoo#get:x (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load8_u offset=4
+ (func $interface-generic/AGFoo#get:x (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 1
  )
- (func $interface/IFoo#get:x (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-generic/GFoo<i32,bool>#get:x (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 8
@@ -293,7 +290,7 @@
   i32.eq
   if (result i32)
    local.get $0
-   call $interface/AFoo#get:x
+   call $interface-generic/AGFoo#get:x
   else
    local.get $1
    i32.const 4
@@ -306,51 +303,19 @@
    end
   end
  )
- (func $interface/AFoo#set:x (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store8 offset=4
- )
- (func $interface/IFoo#set:x (; 14 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $2
-  local.get $2
-  i32.const 3
-  i32.eq
-  if
-   local.get $0
-   local.get $1
-   call $interface/AFoo#set:x
-  else
-   local.get $2
-   i32.const 4
-   i32.eq
-   if
-    local.get $0
-    local.get $1
-    i32.store8 offset=4
-   else
-    unreachable
-   end
-  end
- )
- (func $interface/AFoo#foo (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $interface-generic/AGFoo#foo (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
   i32.add
  )
- (func $interface/StructurallyImplementsIFoo#foo (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $interface-generic/StructurallyImplementsGFoo#foo (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
   i32.add
  )
- (func $interface/IFoo#foo (; 17 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $interface-generic/GFoo<i32,bool>#foo (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   i32.const 8
@@ -363,7 +328,7 @@
   if (result i32)
    local.get $0
    local.get $1
-   call $interface/AFoo#foo
+   call $interface-generic/AGFoo#foo
   else
    local.get $2
    i32.const 4
@@ -371,23 +336,23 @@
    if (result i32)
     local.get $0
     local.get $1
-    call $interface/StructurallyImplementsIFoo#foo
+    call $interface-generic/StructurallyImplementsGFoo#foo
    else
     unreachable
    end
   end
  )
- (func $interface/AFoo#faa (; 18 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $interface-generic/AGFoo#faa (; 16 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   local.get $2
   i32.add
  )
- (func $interface/StructurallyImplementsIFoo#faa (; 19 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $interface-generic/StructurallyImplementsGFoo#faa (; 17 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   local.get $2
   i32.add
  )
- (func $interface/IFoo#faa (; 20 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $interface-generic/GFoo<i32,bool>#faa (; 18 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.const 8
@@ -401,7 +366,7 @@
    local.get $0
    local.get $1
    local.get $2
-   call $interface/AFoo#faa
+   call $interface-generic/AGFoo#faa
   else
    local.get $3
    i32.const 4
@@ -410,12 +375,12 @@
     local.get $0
     local.get $1
     local.get $2
-    call $interface/StructurallyImplementsIFoo#faa
+    call $interface-generic/StructurallyImplementsGFoo#faa
    else
     unreachable
    end
   end
  )
- (func $null (; 21 ;) (type $FUNCSIG$v)
+ (func $null (; 19 ;) (type $FUNCSIG$v)
  )
 )

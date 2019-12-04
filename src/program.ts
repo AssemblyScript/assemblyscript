@@ -3722,8 +3722,12 @@ export class Interface extends Class { // FIXME
            (v: DeclaredElement): bool => v.kind == ElementKind.FUNCTION_PROTOTYPE);
   }
 
-  get props(): Property[] {
-    return <Property[]>filter(this.memberValues, v => v.kind == ElementKind.PROPERTY);
+  get getters(): Property[] {
+    return <Property[]>filter(this.memberValues, v => v.kind == ElementKind.PROPERTY && (<Property>v).getterInstance != null);
+  }
+
+  get setters(): Property[] {
+    return <Property[]>filter(this.memberValues, v => v.kind == ElementKind.PROPERTY && (<Property>v).setterInstance != null);
   }
 
   get methodInstances(): Function[] {

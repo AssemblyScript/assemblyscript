@@ -2,13 +2,14 @@
 interface IFoo {
   foo(i: i32): i32;
   faa(i: i32, i2: i32): i32;
-  readonly x: bool;
+  x: bool;
 }
 
 class AFoo implements IFoo {
   i: i32 = 41;
-  get x(): bool{ return true; }
-  set x(b: bool){}
+  _x: bool = true;
+  get x(): bool { return this._x; }
+  set x(b: bool){ this._x = b; }
 
   foo(i: i32): i32 {
     return this.i + i;
@@ -46,12 +47,13 @@ passAnInterface(aFoo);
 passAnInterface(sFoo);
 
 function expectX(foo: IFoo, x: bool): void {
-  assert(foo.x == x);
+  foo.x = x;
+  assert(!foo.x);
 }
 
-expectX(aFoo, true);
+expectX(aFoo, false);
 expectX(sFoo, false);
 
 const iFoo = <IFoo> aFoo;
 const ibool = iFoo.x;
-assert(ibool)
+assert(!ibool);

@@ -9287,6 +9287,7 @@ export class Compiler extends DiagnosticEmitter {
     for (let i: i32 = 0; i < interfaces.length; i++) {
       const _interface = interfaces[i];
       this.compileInterfaceProperties(_interface);
+      this.compileInterfacePropertiesSetters(_interface);
       this.compileInterfaceMethods(_interface);
     }
   }
@@ -9312,8 +9313,6 @@ export class Compiler extends DiagnosticEmitter {
       for (let c = 0; c < classes.length; c ++) {
         const _class = classes[c];
         let prop = _class.members!.get(ifunc.name)!;
-        let expr: ExpressionRef;
-        let thisExpr = loadClassArg(module, 0);
         switch (prop.kind){
           case ElementKind.FUNCTION_PROTOTYPE: {
             let p = <FunctionPrototype> prop;
@@ -9349,7 +9348,7 @@ export class Compiler extends DiagnosticEmitter {
 
   compileInterfaceProperties(_interface: Interface): void {
     const module = this.module;
-    const iprops = _interface.props;
+    const iprops = _interface.getters;
     const classes = Array.from(_interface.implementers);
 
     for (let i = 0; i < iprops.length; i++) {
@@ -9393,8 +9392,77 @@ export class Compiler extends DiagnosticEmitter {
       }
       // Remove the nop standin
       module.removeFunction(iprop.getterInstance!.internalName);
-      module.addFunction(iprop.getterInstance!.internalName, typeRef, [NativeType.I32], relooper.renderAndDispose(first, 0));
+      module.addFunction(iprop.getterInstance!.internalName, typeRef, [this.nativeUsizeType], relooper.renderAndDispose(first, 0));
     }
+  }
+
+  compileInterfacePropertiesSetters(_interface: Interface): void {
+    const module = this.module;
+    const iprops = _interface.setters;
+    const classes = Array.from(_interface.implementers);
+
+    for (let i = 0; i < iprops.length; i++) {
+      const iprop = iprops[i];
+      const relooper = this.module.createRelooper();
+      const setter = iprop.setterInstance!;
+      const classIDIndex = setter.localsByIndex.length;
+      const typeRef = this.ensureSignature(setter.signature);
+    
+      // Condition to switch on
+      const first = relooper.addBlock(module.local_set(classIDIndex, loadClassID(module)));
+      const last = relooper.addBlock(module.unreachable());
+      relooper.addBranch(first, last);
+
+      for (let c = 0; c < classes.length; c++) {
+        let _class = classes[c];
+        const prop = _class.members!.get(iprop.name)!;
+        let expr: ExpressionRef;
+        let thisExpr = this.loadClassArg(0);
+        if (prop.kind == ElementKind.PROPERTY) {
+          let p = <Property> prop;
+          let setter = p.setterInstance!;
+          this.compileFunction(setter);
+          expr = module.call(setter.internalName, 
+                            [thisExpr, this.module.local_get(1, p.type.toNativeType())], 
+                            setter.signature.returnType.toNativeType());
+        }else if(prop.kind == ElementKind.FIELD) {
+          let field = <Field> prop;
+          var type = field.type;
+          var nativeType = type.toNativeType();
+          var usizeType = this.options.usizeType;
+          var nativeSizeType = usizeType.toNativeType();
+          var valueExpr = module.local_get(1, nativeType);
+          expr =  module.store(
+            type.byteSize,
+            module.local_get(0, nativeSizeType),
+            valueExpr,
+            nativeType,
+            field.memoryOffset
+          )
+        } else {
+          throw Error("Class " + classes[c].name + " must have property " + prop.name);
+        }
+        const returnBlock = relooper.addBlock(expr);
+        const loadLocal = this.loadClassArg(classIDIndex);
+        const classID = module.i32(_class.id);
+        relooper.addBranch(first, returnBlock, module.binary(BinaryOp.EqI32, loadLocal, classID));
+      }
+       // Remove the nop standin
+       module.removeFunction(setter.internalName);
+       module.addFunction(setter.internalName, 
+                          typeRef, 
+                          [this.nativeUsizeType], 
+                          relooper.renderAndDispose(first, 0));
+    }
+
+  }
+
+  loadClassArg(index: i32): ExpressionRef {
+    return this.module.local_get(index, this.options.usizeType.toNativeType());
+  }
+
+  get nativeUsizeType(): NativeType {
+    return this.options.usizeType.toNativeType();
   }
 }
 
