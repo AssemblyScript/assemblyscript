@@ -1854,7 +1854,7 @@ export class Program extends DiagnosticEmitter {
         if (!fieldDecl.is(CommonFlags.READONLY)){
           const param = Node.createParameter(fieldDecl.name, fieldDecl.type!, null, ParameterKind.DEFAULT, fieldDecl.range)
           const signature = Node.createFunctionType([param], Node.createOmittedType(fieldDecl.range), null, false, fieldDecl.range);
-          instanceDeclarations.push(Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.GET, fieldDecl.range));
+          instanceDeclarations.push(Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.SET, fieldDecl.range));
         }
         const signature = Node.createFunctionType([], fieldDecl.type || Node.createOmittedType(fieldDecl.range), null, false, fieldDecl.range);
         memberDeclaration = Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.GET, fieldDecl.range);

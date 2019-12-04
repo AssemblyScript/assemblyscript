@@ -47,4 +47,9 @@ class BadProps implements Properties {
 
 const badProp = <Properties> new BadProps();
 
-const val = badProp.val;
+
+function badFunc(prop: Properties): void {
+  const val = prop.val;
+}
+
+badFunc(badProp);
