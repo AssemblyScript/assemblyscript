@@ -15,6 +15,8 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $interface/aFoo (mut i32) (i32.const 0))
  (global $interface/sFoo (mut i32) (i32.const 0))
+ (global $interface/iFoo (mut i32) (i32.const 0))
+ (global $interface/ibool (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 48))
  (export "memory" (memory $0))
  (start $start)
@@ -251,6 +253,24 @@
   global.get $interface/sFoo
   i32.const 0
   call $interface/expectX
+  global.get $interface/aFoo
+  call $~lib/rt/stub/__retain
+  global.set $interface/iFoo
+  global.get $interface/iFoo
+  call $interface/IFoo#get:x
+  i32.const 0
+  i32.ne
+  global.set $interface/ibool
+  global.get $interface/ibool
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 57
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $start (; 10 ;) (type $FUNCSIG$v)
   call $start:interface

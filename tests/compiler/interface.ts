@@ -51,3 +51,7 @@ function expectX(foo: IFoo, x: bool): void {
 
 expectX(aFoo, true);
 expectX(sFoo, false);
+
+const iFoo = <IFoo> aFoo;
+const ibool = iFoo.x;
+assert(ibool)
