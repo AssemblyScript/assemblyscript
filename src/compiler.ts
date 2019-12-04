@@ -337,7 +337,7 @@ export class Compiler extends DiagnosticEmitter {
       max(options.memoryBase, 8)
     );
     this.module = Module.create();
-    var featureFlags: BinaryenFeatureFlags = 0;
+    var featureFlags: FeatureFlags = 0;
     if (this.options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
     if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
     if (this.options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.NontrappingFPToInt;
@@ -7773,15 +7773,12 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
 
     // obtain the class being instantiated
-    var target = this.resolver.lookupExpression( // reports
-      expression.expression,
-      flow
-    );
+    var target = this.resolver.resolveTypeName(expression.typeName, flow.actualFunction);
     if (!target) return module.unreachable();
     if (target.kind != ElementKind.CLASS_PROTOTYPE) {
       this.error(
         DiagnosticCode.This_expression_is_not_constructable,
-        expression.expression.range
+        expression.typeName.range
       );
       return this.module.unreachable();
     }

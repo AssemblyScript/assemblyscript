@@ -184,11 +184,11 @@ export function isOctalDigit(c: i32): bool {
 
 /** Tests if the specified character code is a valid start of an identifier. */
 export function isIdentifierStart(c: i32): bool {
-  return c >= CharCode.a && c <= CharCode.z
-      || c >= CharCode.A && c <= CharCode.Z
+  const c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
+  return c0 >= CharCode.a && c0 <= CharCode.z
       || c == CharCode._
       || c == CharCode.DOLLAR
-      || c > 0x7f && isUnicodeIdentifierStart(c);
+      || c > 0x7F && isUnicodeIdentifierStart(c);
 }
 
 /** Tests if the specified character code is a valid keyword character. */
@@ -198,12 +198,12 @@ export function isKeywordCharacter(c: i32): bool {
 
 /** Tests if the specified character code is a valid part of an identifier. */
 export function isIdentifierPart(c: i32): bool {
-  return c >= CharCode.a && c <= CharCode.z
-      || c >= CharCode.A && c <= CharCode.Z
+  const c0 = c | 32; // unify uppercases and lowercases a|A - z|Z
+  return c0 >= CharCode.a && c0 <= CharCode.z
       || c >= CharCode._0 && c <= CharCode._9
       || c == CharCode._
       || c == CharCode.DOLLAR
-      || c > 0x7f && isUnicodeIdentifierPart(c);
+      || c > 0x7F && isUnicodeIdentifierPart(c);
 }
 
 // storing as u16 to save memory
@@ -368,11 +368,11 @@ function lookupInUnicodeMap(code: u16, map: u16[]): bool {
 }
 
 function isUnicodeIdentifierStart(code: i32): bool {
-  return code < 0 || code > 0xffff ? false
+  return code < 170 || code > 65500 ? false
        : lookupInUnicodeMap(code as u16, unicodeIdentifierStart);
 }
 
 function isUnicodeIdentifierPart(code: i32): bool {
-  return code < 0 || code > 0xffff ? false
+  return code < 170 || code > 65500 ? false
        : lookupInUnicodeMap(code as u16, unicodeIdentifierPart);
 }
