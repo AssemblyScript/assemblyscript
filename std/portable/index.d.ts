@@ -80,10 +80,6 @@ declare function select<T>(ifTrue: T, ifFalse: T, condition: bool): T;
 declare function sqrt<T = f32 | f64>(value: T): T;
 /** Rounds to the nearest integer towards zero of a 32-bit or 64-bit float. */
 declare function trunc<T = f32 | f64>(value: T): T;
-/** Loads a value of the specified type from memory. Type must be `u8`. */
-declare function load<T = u8>(ptr: usize, constantOffset?: usize): T;
-/** Stores a value of the specified type to memory. Type must be `u8`. */
-declare function store<T = u8>(ptr: usize, value: T, constantOffset?: usize): void;
 /** Emits an unreachable operation that results in a runtime error when executed. */
 declare function unreachable(): any; // sic
 
@@ -291,20 +287,6 @@ declare function bswap<T = i32 | u32 | isize | usize>(value: T): T;
 declare function bswap16<T = i16 | u16 | i32 | u32>(value: T): T;
 
 // Standard library
-
-/** Memory operations. */
-declare namespace memory {
-  /** Allocates a chunk of memory of the specified size and returns a pointer to it. */
-  function allocate(size: usize): usize;
-  /** Disposes a chunk of memory by its pointer. */
-  function free(ptr: usize): void;
-  /** Copies n bytes from the specified source to the specified destination in memory. These regions may overlap. */
-  function copy(dst: usize, src: usize, n: usize): void;
-  /** Fills size bytes from from the specified destination by same value in memory. */
-  function fill(dst: usize, value: u8, size: usize): void;
-  /** Resets the allocator to its initial state, if supported. */
-  function reset(): void;
-}
 
 declare const Mathf: typeof Math;
 declare const JSMath: typeof Math;

@@ -49,9 +49,7 @@ var assemblyscript, isDev = false;
       try { // `require("dist/asc.js")` in explicit browser tests
         assemblyscript = eval("require('./assemblyscript')");
       } catch (e) {
-        // combine both errors that lead us here
-        e.message = e_ts.stack + "\n---\n" + e.stack;
-        throw e;
+        throw Error(e_ts.stack + "\n---\n" + e.stack);
       }
     }
   }
@@ -302,10 +300,13 @@ exports.main = function main(argv, options, callback) {
     var sourceText = null; // text reported back to the compiler
     var sourcePath = null; // path reported back to the compiler
 
-    // Try file.ts, file/index.ts
+    // Try file.ts, file/index.ts, file.d.ts
     if (!internalPath.startsWith(exports.libraryPrefix)) {
       if ((sourceText = readFile(sourcePath = internalPath + ".ts", baseDir)) == null) {
-        sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir);
+        if ((sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir)) == null) {
+          // portable d.ts: uses the .js file next to it in JS or becomes an import in Wasm
+          sourceText = readFile(sourcePath = internalPath + ".d.ts", baseDir);
+        }
       }
 
     // Search library in this order: stdlib, custom lib dirs, paths
