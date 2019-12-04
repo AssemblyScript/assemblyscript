@@ -488,7 +488,7 @@ export class Flow {
   lookupLocal(name: string): Local | null {
     var current: Flow | null = this;
     var scope: Map<String,Local> | null;
-    do if ((scope = current.scopedLocals) && (scope.has(name))) return scope.get(name)!;
+    do if ((scope = current.scopedLocals) && scope.has(name)) return scope.get(name)!;
     while (current = current.parent);
     return this.parentFunction.localsByName.get(name)!;
   }
@@ -504,14 +504,14 @@ export class Flow {
   isLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
     if (index < 0) return defaultIfInlined;
     var localFlags = this.localFlags;
-    return index < localFlags.length && (unchecked(this.localFlags[index]) & flag) == flag;
+    return index < localFlags.length && (unchecked(localFlags[index]) & flag) == flag;
   }
 
   /** Tests if the local at the specified index has any of the specified flags. */
   isAnyLocalFlag(index: i32, flag: LocalFlags, defaultIfInlined: bool = true): bool {
     if (index < 0) return defaultIfInlined;
     var localFlags = this.localFlags;
-    return index < localFlags.length && (unchecked(this.localFlags[index]) & flag) != 0;
+    return index < localFlags.length && (unchecked(localFlags[index]) & flag) != 0;
   }
 
   /** Sets the specified flag or flags on the local at the specified index. */
@@ -519,7 +519,7 @@ export class Flow {
     if (index < 0) return;
     var localFlags = this.localFlags;
     var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
-    this.localFlags[index] = flags | flag;
+    localFlags[index] = flags | flag;
   }
 
   /** Unsets the specified flag or flags on the local at the specified index. */
@@ -527,7 +527,7 @@ export class Flow {
     if (index < 0) return;
     var localFlags = this.localFlags;
     var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
-    this.localFlags[index] = flags & ~flag;
+    localFlags[index] = flags & ~flag;
   }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
@@ -582,10 +582,10 @@ export class Flow {
     for (let i = 0, k = localFlags.length; i < k; ++i) {
       let flags = localFlags[i];
       this.setLocalFlag(i, flags & LocalFlags.ANY_CONDITIONAL);
-      if (flags & LocalFlags.RETAINED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETAINED);
-      if (flags & LocalFlags.READFROM) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
+      if (flags & LocalFlags.RETAINED)  this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETAINED);
+      if (flags & LocalFlags.READFROM)  this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
       if (flags & LocalFlags.WRITTENTO) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_WRITTENTO);
-      if (flags & LocalFlags.RETURNED) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETURNED);
+      if (flags & LocalFlags.RETURNED)  this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETURNED);
     }
   }
 
@@ -786,9 +786,10 @@ export class Flow {
           if (!ifFalse) break;
           // Logical OR: (if (condition 1 ifFalse))
           // the only way this had become false is if condition and ifFalse are false
+          let exprType = getExpressionType(ifTrue);
           if (
-            (getExpressionType(ifTrue) == NativeType.I32 && getConstValueI32(ifTrue) != 0) ||
-            (getExpressionType(ifTrue) == NativeType.I64 && (getConstValueI64Low(ifTrue) != 0 || getConstValueI64High(ifTrue) != 0))
+            (exprType == NativeType.I32 && getConstValueI32(ifTrue) != 0) ||
+            (exprType == NativeType.I64 && (getConstValueI64Low(ifTrue) != 0 || getConstValueI64High(ifTrue) != 0))
           ) {
             this.inheritNonnullIfFalse(getIfCondition(expr));
             this.inheritNonnullIfFalse(getIfFalse(expr));

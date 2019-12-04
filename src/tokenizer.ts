@@ -1146,6 +1146,9 @@ export class Tokenizer extends DiagnosticEmitter {
         }
         return this.readUnicodeEscape(); // \uDDDD
       }
+      case CharCode.x: {
+        return this.readHexadecimalEscape(); // \xDD
+      }
       case CharCode.CARRIAGERETURN: {
         if (
           this.pos < end &&
@@ -1237,21 +1240,18 @@ export class Tokenizer extends DiagnosticEmitter {
   testInteger(): bool {
     var end = this.end;
     var text = this.source.text;
-    if (this.pos + 1 < end && text.charCodeAt(this.pos) == CharCode._0) {
-      switch (text.charCodeAt(this.pos + 2)) {
+    var pos = this.pos;
+    if (pos + 1 < end && text.charCodeAt(pos) == CharCode._0) {
+      switch (text.charCodeAt(pos + 2) | 32) {
         case CharCode.x:
-        case CharCode.X:
         case CharCode.b:
-        case CharCode.B:
-        case CharCode.o:
-        case CharCode.O: return true;
+        case CharCode.o: return true;
       }
     }
-    var pos = this.pos;
     while (pos < end) {
       let c = text.charCodeAt(pos);
-      if (c == CharCode.DOT || c == CharCode.e || c == CharCode.E) return false;
-      if ((c < CharCode._0 || c > CharCode._9) && c != CharCode._) break;
+      if (c == CharCode.DOT || (c | 32) == CharCode.e) return false;
+      if (c != CharCode._ && (c < CharCode._0 || c > CharCode._9)) break;
       // does not validate separator placement (this is done in readXYInteger)
       pos++;
     }
@@ -1261,19 +1261,16 @@ export class Tokenizer extends DiagnosticEmitter {
   readInteger(): I64 {
     var text = this.source.text;
     if (this.pos + 2 < this.end && text.charCodeAt(this.pos) == CharCode._0) {
-      switch (text.charCodeAt(this.pos + 1)) {
-        case CharCode.x:
-        case CharCode.X: {
+      switch (text.charCodeAt(this.pos + 1) | 32) {
+        case CharCode.x: {
           this.pos += 2;
           return this.readHexInteger();
         }
-        case CharCode.b:
-        case CharCode.B: {
+        case CharCode.b: {
           this.pos += 2;
           return this.readBinaryInteger();
         }
-        case CharCode.o:
-        case CharCode.O: {
+        case CharCode.o: {
           this.pos += 2;
           return this.readOctalInteger();
         }
@@ -1517,7 +1514,7 @@ export class Tokenizer extends DiagnosticEmitter {
     }
     if (this.pos < end) {
       let c = text.charCodeAt(this.pos);
-      if (c == CharCode.e || c == CharCode.E) {
+      if ((c | 32) == CharCode.e) {
         if (
           ++this.pos < end &&
           (c = text.charCodeAt(this.pos)) == CharCode.MINUS || c == CharCode.PLUS &&
@@ -1537,8 +1534,7 @@ export class Tokenizer extends DiagnosticEmitter {
     throw new Error("not implemented"); // TBD
   }
 
-  readUnicodeEscape(): string {
-    var remain = 4;
+  readHexadecimalEscape(remain: i32 = 2): string {
     var value = 0;
     var end = this.end;
     var text = this.source.text;
@@ -1567,6 +1563,10 @@ export class Tokenizer extends DiagnosticEmitter {
       return "";
     }
     return String.fromCharCode(value);
+  }
+
+  readUnicodeEscape(): string {
+    return this.readHexadecimalEscape(4);
   }
 
   private readExtendedUnicodeEscape(): string {
@@ -1603,11 +1603,11 @@ export class Tokenizer extends DiagnosticEmitter {
     }
 
     if (invalid) return "";
-    return value32 < 65536
+    return value32 < 0x10000
       ? String.fromCharCode(value32)
       : String.fromCharCode(
-        ((value32 - 65536) >>> 10) + 0xD800,
-        ((value32 - 65536) & 1023) + 0xDC00
+        ((value32 - 0x10000) >>> 10) | 0xD800,
+        ((value32 - 0x10000) & 1023) | 0xDC00
       );
   }
 
