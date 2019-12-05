@@ -330,7 +330,7 @@ export class Compiler extends DiagnosticEmitter {
       max(options.memoryBase, 8)
     );
     this.module = Module.create();
-    var featureFlags: BinaryenFeatureFlags = 0;
+    var featureFlags: FeatureFlags = 0;
     if (this.options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
     if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
     if (this.options.hasFeature(Feature.NONTRAPPING_F2I)) featureFlags |= FeatureFlags.NontrappingFPToInt;
