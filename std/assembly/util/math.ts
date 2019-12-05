@@ -276,7 +276,7 @@ export function logf_lut(x: f32): f32 {
 
 // @ts-ignore: decorator
 @inline function zeroinfnan(ux: u32): bool {
-  return <u32>2 * ux - 1 >= <u32>2 * 0x7f800000 - 1;
+  return (ux << 1) - 1 >= (<u32>0x7f800000 << 1) - 1;
 }
 
 /* Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
@@ -393,10 +393,11 @@ export function powf_lut(x: f32, y: f32): f32 {
   var signBias: u32 = 0;
   var ix = reinterpret<u32>(x);
   var iy = reinterpret<u32>(y);
+  var ni = 0;
 
-  if (ix - 0x00800000 >= 0x7f800000 - 0x00800000 || zeroinfnan(iy)) {
+  if (i32(ix - 0x00800000 >= 0x7f800000 - 0x00800000) | i32(ni = zeroinfnan(iy))) {
     // Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).
-    if (zeroinfnan(iy)) {
+    if (ni) {
       if ((iy << 1) == 0) return 1.0;
       if (ix == 0x3F800000) return NaN; // // original: 1.0
       if ((ix << 1) > (<u32>0x7F800000 << 1) || (iy << 1) > (<u32>0x7F800000 << 1)) return x + y;

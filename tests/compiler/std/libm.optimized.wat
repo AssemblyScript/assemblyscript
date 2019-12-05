@@ -7785,7 +7785,16 @@
   (local $9 f64)
   local.get $1
   i32.reinterpret_f32
-  local.set $3
+  local.tee $3
+  i32.const 1
+  i32.shl
+  i32.const 1
+  i32.sub
+  i32.const -16777217
+  i32.ge_u
+  i32.const 0
+  i32.ne
+  local.tee $5
   local.get $0
   i32.reinterpret_f32
   local.tee $2
@@ -7793,25 +7802,9 @@
   i32.sub
   i32.const 2130706432
   i32.ge_u
-  if (result i32)
-   i32.const 1
-  else
-   local.get $3
-   i32.const 1
-   i32.shl
-   i32.const 1
-   i32.sub
-   i32.const -16777217
-   i32.ge_u
-  end
+  i32.or
   if
-   local.get $3
-   i32.const 1
-   i32.shl
-   i32.const 1
-   i32.sub
-   i32.const -16777217
-   i32.ge_u
+   local.get $5
    if
     local.get $3
     i32.const 1
@@ -7962,13 +7955,13 @@
      i32.shr_u
      i32.const 255
      i32.and
-     local.tee $6
+     local.tee $5
      i32.const 127
      i32.lt_u
      br_if $~lib/util/math/checkint|inlined.1
      drop
      i32.const 2
-     local.get $6
+     local.get $5
      i32.const 150
      i32.gt_u
      br_if $~lib/util/math/checkint|inlined.1
@@ -7976,10 +7969,10 @@
      i32.const 0
      i32.const 1
      i32.const 150
-     local.get $6
+     local.get $5
      i32.sub
      i32.shl
-     local.tee $6
+     local.tee $5
      i32.const 1
      i32.sub
      local.get $3
@@ -7988,7 +7981,7 @@
      drop
      i32.const 1
      local.get $3
-     local.get $6
+     local.get $5
      i32.and
      br_if $~lib/util/math/checkint|inlined.1
      drop
@@ -8011,7 +8004,7 @@
     i32.const 1
     i32.eq
     select
-    local.set $5
+    local.set $6
     local.get $2
     i32.const 2147483647
     i32.and
@@ -8112,7 +8105,7 @@
    if
     f32.const -1584563250285286751870879e5
     f32.const 1584563250285286751870879e5
-    local.get $5
+    local.get $6
     select
     f32.const 1584563250285286751870879e5
     f32.mul
@@ -8124,7 +8117,7 @@
    if
     f32.const -2.524354896707238e-29
     f32.const 2.524354896707238e-29
-    local.get $5
+    local.get $6
     select
     f32.const 2.524354896707238e-29
     f32.mul
@@ -8146,7 +8139,7 @@
   i32.shl
   i32.add
   i64.load
-  local.get $5
+  local.get $6
   i64.extend_i32_u
   local.get $8
   i64.add
