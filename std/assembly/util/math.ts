@@ -1,6 +1,8 @@
 /** Lookup data for exp2f **/
 
+// @ts-ignore: decorator
 @lazy const EXP2F_TABLE_BITS = 5;
+// @ts-ignore: decorator
 @lazy const exp2f_data_tab: u64[] = [
   /**
    * exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
@@ -48,6 +50,7 @@ export function exp2f_lut(x: f32): f32 {
   var r  = xd - (kd - shift);
   var t: u64, y: f64;
 
+  // @ts-ignore: cast
   const tab = exp2f_data_tab.dataStart as usize;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
@@ -97,6 +100,7 @@ export function expf_lut(x: f32): f32 {
   var r  = z - (kd - shift);
   var s: f64, y: f64, t: u64;
 
+  // @ts-ignore: cast
   const tab = exp2f_data_tab.dataStart as usize;
 
   /* exp(x) = 2^(k/N) * 2^(r/N) ~= s * (C0*r^3 + C1*r^2 + C2*r + 1) */
@@ -113,7 +117,9 @@ export function expf_lut(x: f32): f32 {
 
 /** Lookup data for log2f **/
 
+// @ts-ignore: decorator
 @lazy const LOG2F_TABLE_BITS = 4;
+// @ts-ignore: decorator
 @lazy const log2f_data_tab: f64[] = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019), // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4), // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
@@ -167,6 +173,7 @@ export function log2f_lut(x: f32): f32 {
   var iz   = ux - top;
   var k    = <i32>tmp >> 23;
 
+  // @ts-ignore: cast
   var tab = log2f_data_tab.dataStart as usize;
 
   var invc = load<f64>(tab + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
@@ -189,7 +196,9 @@ export function log2f_lut(x: f32): f32 {
 
 /* Lookup data for logf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/logf.c */
 
+// @ts-ignore: decorator
 @lazy const LOGF_TABLE_BITS = 4;
+// @ts-ignore: decorator
 @lazy const logf_data_tab: f64[] = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFD57BF7808CAADE), // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFD2BEF0A7C06DDB), // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
@@ -241,7 +250,7 @@ export function logf_lut(x: f32): f32 {
   var i   = (tmp >> (23 - LOGF_TABLE_BITS)) & N_MASK;
   var k   = <i32>tmp >> 23;
   var iz  = ux - (tmp & 0x1FF << 23);
-
+  // @ts-ignore: cast
   var tab = logf_data_tab.dataStart as usize;
 
   var invc = load<f64>(tab + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
@@ -264,11 +273,15 @@ export function logf_lut(x: f32): f32 {
 
 /* Lookup data for powf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/powf.c */
 
+// @ts-ignore: decorator
 @lazy const POWF_LOG2_TABLE_BITS = 4;
+// @ts-ignore: decorator
 @lazy const POWF_SCALE_BITS = 0;
+// @ts-ignore: decorator
 @lazy const POWF_SCALE: f64 = 1 << POWF_SCALE_BITS;
 
 // TODO: remove this and use log2_data_tab instead
+// @ts-ignore: decorator
 @lazy export const powf_log2_data_tab: f64[] = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019) * POWF_SCALE,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4) * POWF_SCALE,
@@ -288,12 +301,14 @@ export function logf_lut(x: f32): f32 {
   reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FDCE0A44EB17BCC) * POWF_SCALE
 ];
 
+// @ts-ignore: decorator
 @inline function zeroinfnan(ux: u32): bool {
   return 2 * ux - 1 >= 2 * 0x7f800000 - 1;
 }
 
 /* Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
    the bit representation of a non-zero finite floating-point value. */
+// @ts-ignore: decorator
 @inline function checkint(iy: u32): i32 {
   var e = iy >> 23 & 0xFF;
   if (e < 0x7F     ) return 0;
@@ -306,6 +321,7 @@ export function logf_lut(x: f32): f32 {
 
 /* Subnormal input is normalized so ix has negative biased exponent.
    Output is multiplied by N (POWF_SCALE) if TOINT_INTRINICS is set. */
+// @ts-ignore: decorator
 @inline function log2_inline(ux: u32): f64 {
   const A0 = reinterpret<f64>(0x3FD27616C9496E0B) * POWF_SCALE; //  0x1.27616c9496e0bp-2
   const A1 = reinterpret<f64>(0xBFD71969A075C67A) * POWF_SCALE; // -0x1.71969a075c67ap-2
@@ -313,7 +329,6 @@ export function logf_lut(x: f32): f32 {
   const A3 = reinterpret<f64>(0xBFE7154748BEF6C8) * POWF_SCALE; // -0x1.7154748bef6c8p-1
   const A4 = reinterpret<f64>(0x3FF71547652AB82B) * POWF_SCALE; //  0x1.71547652ab82bp+0
   const N_MASK = (1 << POWF_LOG2_TABLE_BITS) - 1;
-  const tab = powf_log2_data_tab.dataStart as usize;
 
   /* x = 2^k z; where z is in range [OFF,2*OFF] and exact.
     The range is split into N subintervals.
@@ -323,6 +338,10 @@ export function logf_lut(x: f32): f32 {
   var top  = tmp & 0xFF800000;
   var uz   = ux - top;
   var k    = <i32>(<i32>top >> (23 - POWF_SCALE_BITS));
+
+  // @ts-ignore: cast
+  const tab = powf_log2_data_tab.dataStart as usize;
+
   var invc = load<f64>(tab + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
   var logc = load<f64>(tab + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
   var z    = <f64>reinterpret<f32>(uz);
@@ -346,6 +365,7 @@ export function logf_lut(x: f32): f32 {
 /* The output of log2 and thus the input of exp2 is either scaled by N
    (in case of fast toint intrinsics) or not.  The unscaled xd must be
    in [-1021,1023], sign_bias sets the sign of the result.  */
+// @ts-ignore: decorator
 @inline function exp2_inline(xd: f64, signBias: u32): f32 {
   const N      = 1 << EXP2F_TABLE_BITS;
   const N_MASK = N - 1;
@@ -362,6 +382,7 @@ export function logf_lut(x: f32): f32 {
   var t: u64, z: f64, y: f64, s: f64;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
+  // @ts-ignore: cast
   const tab = exp2f_data_tab.dataStart as usize;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
