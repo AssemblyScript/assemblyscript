@@ -236,9 +236,9 @@ export function logf_lut(x: f32): f32 {
   // if (WANT_ROUNDING && ux == 0x3f800000) return 0;
   if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
     // x < 0x1p-126 or inf or nan.
-    if (ux * 2 == 0) return -Infinity;
+    if ((ux << 1) == 0) return -Infinity;
     if (ux == 0x7F800000) return x; // log(inf) == inf.
-    if ((ux >> 31) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
+    if ((ux >> 31) || (ux << 1) >= 0xFF000000) return (x - x) / (x - x);
     // x is subnormal, normalize it.
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
@@ -368,14 +368,17 @@ export function logf_lut(x: f32): f32 {
   return <f32>y;
 }
 
+// @ts-ignore: decorator
 @inline function xflowf(sign: u32, y: f32): f32 {
-  return <f32>((sign ? -y : y) * y);
+  return select<f32>(-y, y, sign) * y;
 }
 
+// @ts-ignore: decorator
 @inline function oflowf(sign: u32): f32 {
   return xflowf(sign, reinterpret<f32>(0x70000000)); // 0x1p97f
 }
 
+// @ts-ignore: decorator
 @inline function uflowf(sign: u32): f32 {
   return xflowf(sign, reinterpret<f32>(0x10000000)); // 0x1p-95f
 }

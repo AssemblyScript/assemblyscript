@@ -1814,8 +1814,8 @@
   i32.ge_u
   if
    local.get $1
-   i32.const 2
-   i32.mul
+   i32.const 1
+   i32.shl
    i32.const 0
    i32.eq
    if
@@ -1837,8 +1837,8 @@
     i32.const 1
    else
     local.get $1
-    i32.const 2
-    i32.mul
+    i32.const 1
+    i32.shl
     i32.const -16777216
     i32.ge_u
    end
@@ -10372,13 +10372,11 @@
     i32.const 1879048192
     f32.reinterpret_i32
     local.set $6
+    local.get $6
+    f32.neg
+    local.get $6
     local.get $7
-    if (result f32)
-     local.get $6
-     f32.neg
-    else
-     local.get $6
-    end
+    select
     local.get $6
     f32.mul
     return
@@ -10394,13 +10392,11 @@
     i32.const 268435456
     f32.reinterpret_i32
     local.set $6
+    local.get $6
+    f32.neg
+    local.get $6
     local.get $9
-    if (result f32)
-     local.get $6
-     f32.neg
-    else
-     local.get $6
-    end
+    select
     local.get $6
     f32.mul
     return
