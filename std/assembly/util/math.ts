@@ -38,8 +38,8 @@ export function exp2f_lut(x: f32): f32 {
     // |x| >= 128 or x is nan.
     if (ix == 0xFF800000) return 0; // x == -Inf    -> 0
     if (ux >= 0x7F8) return x + x;  // x == Inf/NaN -> Inf/NaN
-    if (x > 0) return Infinity;     // x >     0    -> Owerflow
-    if (x <= -150) return 0;        // x <= -150    -> Underflow
+    if (x > 0) return Infinity;     // x >     0    -> Inf (Owerflow)
+    if (x <= -150) return 0;        // x <= -150    -> 0 (Underflow)
   }
 
   // x = k/N + r with r in [-1/(2N), 1/(2N)] and int k.
@@ -56,6 +56,57 @@ export function exp2f_lut(x: f32): f32 {
   y  = C2 * r + 1;
   y += (C0 * r + C1) * (r  * r);
   y *= reinterpret<f64>(t);
+
+  return <f32>y;
+}
+
+/*
+ULP error: 0.502 (nearest rounding.)
+Relative error: 1.69 * 2^-34 in [-ln2/64, ln2/64] (before rounding.)
+Wrong count: 170635 (all nearest rounding wrong results with fma.)
+*/
+export function expf_lut(x: f32): f32 {
+  const N       = 1 << EXP2F_TABLE_BITS;
+  const N_MASK  = N - 1;
+  const shift   = reinterpret<f64>(0x4338000000000000);     // 0x1.8p+52
+  const InvLn2N = reinterpret<f64>(0x3FF71547652B82FE) * N; // 0x1.71547652b82fep+0
+
+  const C0 = reinterpret<f64>(0x3FAC6AF84B912394) / N / N / N; // 0x1.c6af84b912394p-5
+  const C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3) / N / N;     // 0x1.ebfce50fac4f3p-3
+  const C2 = reinterpret<f64>(0x3FE62E42FF0C52D6) / N;         // 0x1.62e42ff0c52d6p-1
+
+  var xd = <f64>x;
+  var ix = reinterpret<u32>(x);
+  var ux = ix >> 20 & 0x7FF;
+  if (ux >= 0x42B) {
+    /* |x| >= 88 or x is nan.  */
+    if (ix == 0xFF800000) return 0;                        // x == -Inf    -> 0
+    if (ux >= 0x7F8) return x + x;                         // x == Inf/NaN -> Inf/NaN
+    if (x > reinterpret<f32>(0x42B17217)) return Infinity; // x > log(0x1p128)  ~=  88.72 -> Inf (Owerflow)
+    if (x < reinterpret<f32>(0xC2CFF1B4)) return 0;        // x < log(0x1p-150) ~= -103.97 -> 0 (Underflow)
+  }
+
+  /* x*N/Ln2 = k + r with r in [-1/2, 1/2] and int k.  */
+  var z = InvLn2N * xd;
+
+  /* Round and convert z to int, the result is in [-150*N, 128*N] and
+     ideally ties-to-even rule is used, otherwise the magnitude of r
+     can be bigger which gives larger approximation error.  */
+  var kd = <f64>(z + shift);
+  var ki = reinterpret<u64>(kd);
+  var r  = z - (kd - shift);
+  var s: f64, y: f64, t: u64;
+
+  const tab = exp2f_data_tab.dataStart as usize;
+
+  /* exp(x) = 2^(k/N) * 2^(r/N) ~= s * (C0*r^3 + C1*r^2 + C2*r + 1) */
+  t  = load<u64>(tab + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t += ki << (52 - EXP2F_TABLE_BITS);
+  s  = reinterpret<f64>(t);
+  z  = C0 * r + C1;
+  y  = C2 * r + 1;
+  y += z * (r * r);
+  y *= s;
 
   return <f32>y;
 }
