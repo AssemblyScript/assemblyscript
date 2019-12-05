@@ -318,7 +318,7 @@ exports.main = function main(argv, options, callback) {
 
     // Search library in this order: stdlib, custom lib dirs, paths
     } else {
-      const plainName = internalPath.substring(exports.libraryPrefix.length);
+      const plainName = internalPath.substring(libraryPrefix.length);
       const indexName = plainName + "/index";
       if (libraryFiles.hasOwnProperty(plainName)) {
         sourceText = libraryFiles[plainName];
