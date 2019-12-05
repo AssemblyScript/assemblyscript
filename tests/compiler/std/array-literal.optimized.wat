@@ -6,7 +6,6 @@
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
@@ -530,7 +529,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 9 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -1601,7 +1600,7 @@
    end
   end
  )
- (func $~lib/rt/__allocArray (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/__allocArray (; 26 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 16
   local.get $1
@@ -1627,13 +1626,13 @@
   i32.store offset=12
   local.get $1
  )
- (func $std/array-literal/Ref#constructor (; 27 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/array-literal/Ref#constructor (; 27 ;) (result i32)
   i32.const 0
   i32.const 5
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
  )
- (func $std/array-literal/RefWithCtor#constructor (; 28 ;) (type $FUNCSIG$i) (result i32)
+ (func $std/array-literal/RefWithCtor#constructor (; 28 ;) (result i32)
   i32.const 0
   i32.const 7
   call $~lib/rt/tlsf/__alloc

@@ -486,7 +486,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -1329,7 +1329,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/memory/memory.fill (; 21 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 21 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -1988,7 +1988,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 31 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 31 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2212,7 +2212,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/array/ensureSize (; 34 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureSize (; 34 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2267,7 +2267,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i32>#push (; 35 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<i32>#push (; 35 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2290,7 +2290,7 @@
   local.get $2
   i32.store offset=12
  )
- (func $~lib/array/Array<i32>#pop (; 36 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<i32>#pop (; 36 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=12
@@ -2320,7 +2320,7 @@
   local.get $1
   i32.store offset=12
  )
- (func $~lib/array/Array<~lib/string/String>#push (; 37 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/array/Array<~lib/string/String>#push (; 37 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

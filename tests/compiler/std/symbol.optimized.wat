@@ -7,7 +7,6 @@
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\002\003")
@@ -152,7 +151,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/memory/memory.fill (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 4 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -361,7 +360,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 5 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741808
@@ -415,7 +414,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<~lib/string/String,usize>#constructor (; 7 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#constructor (; 7 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 3
@@ -442,7 +441,7 @@
   call $~lib/map/Map<~lib/string/String,usize>#clear
   local.get $0
  )
- (func $~lib/map/Map<usize,~lib/string/String>#constructor (; 8 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#constructor (; 8 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 4
@@ -519,7 +518,7 @@
   end
   local.get $1
  )
- (func $~lib/util/string/compareImpl (; 11 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1179,7 +1178,7 @@
    i32.store
   end
  )
- (func $~lib/symbol/_Symbol.for (; 21 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/symbol/_Symbol.for (; 21 ;) (result i32)
   (local $0 i32)
   global.get $~lib/symbol/stringToId
   if
@@ -1490,6 +1489,9 @@
   call $~lib/string/String#concat
  )
  (func $~lib/symbol/_Symbol#toString (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 296
+  local.set $1
   i32.const 720
   block $break|0 (result i32)
    block $case11|0

@@ -38,10 +38,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 872))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/__retain (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/util/number/decimalCount32 (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -107,7 +104,7 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -161,7 +158,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -214,7 +211,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/util/number/utoa32_lut (; 5 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -356,6 +353,9 @@
    i32.store16
   end
  )
+ (func $~lib/rt/stub/__retain (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+ )
  (func $~lib/util/number/itoa32 (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -367,7 +367,6 @@
   i32.eqz
   if
    i32.const 24
-   call $~lib/rt/stub/__retain
    return
   end
   local.get $0
@@ -625,19 +624,12 @@
   local.get $2
  )
  (func $~lib/number/Bool#toString (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
   local.get $0
   if (result i32)
    i32.const 616
-   call $~lib/rt/stub/__retain
-   local.tee $1
   else
    i32.const 640
-   call $~lib/rt/stub/__retain
-   local.tee $2
   end
-  call $~lib/rt/stub/__retain
  )
  (func $resolve-unary/Foo#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -653,7 +645,6 @@
  )
  (func $resolve-unary/Foo#plus (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 696
-  call $~lib/rt/stub/__retain
  )
  (func $~lib/string/String#toString (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -661,7 +652,6 @@
  )
  (func $resolve-unary/Foo#minus (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 720
-  call $~lib/rt/stub/__retain
  )
  (func $resolve-unary/Foo#prefix_inc (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -677,11 +667,9 @@
  )
  (func $resolve-unary/Foo#not (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 744
-  call $~lib/rt/stub/__retain
  )
  (func $resolve-unary/Foo#bitwise_not (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 768
-  call $~lib/rt/stub/__retain
  )
  (func $resolve-unary/Foo#postfix_inc (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -709,7 +697,6 @@
   call $~lib/rt/stub/__retain
   local.set $0
   i32.const 792
-  call $~lib/rt/stub/__retain
   local.set $1
   local.get $0
   call $~lib/rt/stub/__release
@@ -721,7 +708,6 @@
   call $~lib/rt/stub/__retain
   local.set $0
   i32.const 816
-  call $~lib/rt/stub/__retain
   local.set $1
   local.get $0
   call $~lib/rt/stub/__release
@@ -733,7 +719,6 @@
   call $~lib/rt/stub/__retain
   local.set $0
   i32.const 840
-  call $~lib/rt/stub/__retain
   local.set $1
   local.get $0
   call $~lib/rt/stub/__release
@@ -745,7 +730,6 @@
   call $~lib/rt/stub/__retain
   local.set $0
   i32.const 864
-  call $~lib/rt/stub/__retain
   local.set $1
   local.get $0
   call $~lib/rt/stub/__release

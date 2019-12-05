@@ -3500,7 +3500,6 @@
   i32.eqz
   if
    i32.const 272
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -5131,7 +5130,6 @@
   f64.eq
   if
    i32.const 824
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -5146,7 +5144,6 @@
    f64.ne
    if
     i32.const 848
-    call $~lib/rt/pure/__retain
     return
    end
    i32.const 872

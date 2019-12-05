@@ -1,4 +1,4 @@
-import { DEBUG, BLOCK_OVERHEAD, AL_MASK } from "rt/common";
+import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
 import { Block, freeBlock, ROOT } from "rt/tlsf";
 import { TypeinfoFlags } from "shared/typeinfo";
 import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";

@@ -3461,7 +3461,6 @@
   f64.eq
   if
    i32.const 240
-   call $~lib/rt/stub/__retain
    return
   end
   local.get $0
@@ -3476,7 +3475,6 @@
    f64.ne
    if
     i32.const 264
-    call $~lib/rt/stub/__retain
     return
    end
    i32.const 288

@@ -4,7 +4,6 @@
  (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00c\00a\00l\00l\00-\00s\00u\00p\00e\00r\00.\00t\00s")
@@ -125,7 +124,7 @@
   end
   local.get $0
  )
- (func $call-super/B#constructor (; 4 ;) (type $FUNCSIG$i) (result i32)
+ (func $call-super/B#constructor (; 4 ;) (result i32)
   (local $0 i32)
   i32.const 8
   i32.const 4
@@ -188,7 +187,7 @@
    unreachable
   end
  )
- (func $call-super/D#constructor (; 6 ;) (type $FUNCSIG$i) (result i32)
+ (func $call-super/D#constructor (; 6 ;) (result i32)
   (local $0 i32)
   i32.const 8
   i32.const 6
@@ -321,7 +320,7 @@
    unreachable
   end
  )
- (func $call-super/H#constructor (; 10 ;) (type $FUNCSIG$i) (result i32)
+ (func $call-super/H#constructor (; 10 ;) (result i32)
   (local $0 i32)
   i32.const 8
   i32.const 10
@@ -370,7 +369,7 @@
    unreachable
   end
  )
- (func $call-super/J#constructor (; 12 ;) (type $FUNCSIG$i) (result i32)
+ (func $call-super/J#constructor (; 12 ;) (result i32)
   (local $0 i32)
   i32.const 8
   i32.const 12

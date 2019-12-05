@@ -4,7 +4,6 @@
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
@@ -122,7 +121,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 6 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -242,7 +241,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 10 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -322,7 +321,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String.__eq (; 11 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 128

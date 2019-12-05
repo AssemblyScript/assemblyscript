@@ -3140,7 +3140,6 @@
   local.get $0
   local.set $1
   i32.const 296
-  call $~lib/rt/stub/__retain
   local.set $2
   block $break|0
    block $case11|0
@@ -3204,177 +3203,89 @@
                br $case11|0
               end
               i32.const 312
-              local.tee $3
+              local.set $3
               local.get $2
-              local.tee $4
-              i32.ne
-              if
-               local.get $3
-               call $~lib/rt/stub/__retain
-               local.set $3
-               local.get $4
-               call $~lib/rt/stub/__release
-              end
+              call $~lib/rt/stub/__release
               local.get $3
               local.set $2
               br $break|0
              end
              i32.const 352
-             local.tee $4
+             local.set $3
              local.get $2
-             local.tee $3
-             i32.ne
-             if
-              local.get $4
-              call $~lib/rt/stub/__retain
-              local.set $4
-              local.get $3
-              call $~lib/rt/stub/__release
-             end
-             local.get $4
+             call $~lib/rt/stub/__release
+             local.get $3
              local.set $2
              br $break|0
             end
             i32.const 408
-            local.tee $3
+            local.set $3
             local.get $2
-            local.tee $4
-            i32.ne
-            if
-             local.get $3
-             call $~lib/rt/stub/__retain
-             local.set $3
-             local.get $4
-             call $~lib/rt/stub/__release
-            end
+            call $~lib/rt/stub/__release
             local.get $3
             local.set $2
             br $break|0
            end
            i32.const 440
-           local.tee $4
+           local.set $3
            local.get $2
-           local.tee $3
-           i32.ne
-           if
-            local.get $4
-            call $~lib/rt/stub/__retain
-            local.set $4
-            local.get $3
-            call $~lib/rt/stub/__release
-           end
-           local.get $4
+           call $~lib/rt/stub/__release
+           local.get $3
            local.set $2
            br $break|0
           end
           i32.const 472
-          local.tee $3
+          local.set $3
           local.get $2
-          local.tee $4
-          i32.ne
-          if
-           local.get $3
-           call $~lib/rt/stub/__retain
-           local.set $3
-           local.get $4
-           call $~lib/rt/stub/__release
-          end
+          call $~lib/rt/stub/__release
           local.get $3
           local.set $2
           br $break|0
          end
          i32.const 504
-         local.tee $4
+         local.set $3
          local.get $2
-         local.tee $3
-         i32.ne
-         if
-          local.get $4
-          call $~lib/rt/stub/__retain
-          local.set $4
-          local.get $3
-          call $~lib/rt/stub/__release
-         end
-         local.get $4
+         call $~lib/rt/stub/__release
+         local.get $3
          local.set $2
          br $break|0
         end
         i32.const 536
-        local.tee $3
+        local.set $3
         local.get $2
-        local.tee $4
-        i32.ne
-        if
-         local.get $3
-         call $~lib/rt/stub/__retain
-         local.set $3
-         local.get $4
-         call $~lib/rt/stub/__release
-        end
+        call $~lib/rt/stub/__release
         local.get $3
         local.set $2
         br $break|0
        end
        i32.const 568
-       local.tee $4
+       local.set $3
        local.get $2
-       local.tee $3
-       i32.ne
-       if
-        local.get $4
-        call $~lib/rt/stub/__retain
-        local.set $4
-        local.get $3
-        call $~lib/rt/stub/__release
-       end
-       local.get $4
+       call $~lib/rt/stub/__release
+       local.get $3
        local.set $2
        br $break|0
       end
       i32.const 600
-      local.tee $3
+      local.set $3
       local.get $2
-      local.tee $4
-      i32.ne
-      if
-       local.get $3
-       call $~lib/rt/stub/__retain
-       local.set $3
-       local.get $4
-       call $~lib/rt/stub/__release
-      end
+      call $~lib/rt/stub/__release
       local.get $3
       local.set $2
       br $break|0
      end
      i32.const 640
-     local.tee $4
+     local.set $3
      local.get $2
-     local.tee $3
-     i32.ne
-     if
-      local.get $4
-      call $~lib/rt/stub/__retain
-      local.set $4
-      local.get $3
-      call $~lib/rt/stub/__release
-     end
-     local.get $4
+     call $~lib/rt/stub/__release
+     local.get $3
      local.set $2
      br $break|0
     end
     i32.const 680
-    local.tee $3
+    local.set $3
     local.get $2
-    local.tee $4
-    i32.ne
-    if
-     local.get $3
-     call $~lib/rt/stub/__retain
-     local.set $3
-     local.get $4
-     call $~lib/rt/stub/__release
-    end
+    call $~lib/rt/stub/__release
     local.get $3
     local.set $2
     br $break|0
@@ -3393,10 +3304,10 @@
     global.get $~lib/symbol/idToString
     local.get $1
     call $~lib/map/Map<usize,~lib/string/String>#get
-    local.set $4
+    local.set $3
     local.get $2
     call $~lib/rt/stub/__release
-    local.get $4
+    local.get $3
     local.set $2
    end
    br $break|0
@@ -3404,15 +3315,15 @@
   i32.const 720
   local.get $2
   call $~lib/string/String.__concat
-  local.tee $4
+  local.tee $3
   i32.const 776
   call $~lib/string/String.__concat
-  local.tee $3
+  local.tee $4
   call $~lib/rt/stub/__retain
   local.set $5
-  local.get $4
-  call $~lib/rt/stub/__release
   local.get $3
+  call $~lib/rt/stub/__release
+  local.get $4
   call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release

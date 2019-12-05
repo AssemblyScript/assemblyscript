@@ -32377,7 +32377,6 @@
   i32.eqz
   if
    i32.const 1720
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -32639,7 +32638,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -33059,7 +33057,6 @@
   i32.eqz
   if
    i32.const 1720
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -33155,7 +33152,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -33565,7 +33561,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -33853,7 +33848,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -34153,7 +34147,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -34433,7 +34426,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -34865,7 +34857,6 @@
   i32.eqz
   if
    i32.const 1720
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -35050,7 +35041,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -35281,7 +35271,6 @@
   i32.eqz
   if
    i32.const 1720
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -35423,7 +35412,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -36910,7 +36898,6 @@
   f64.eq
   if
    i32.const 2256
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -36925,7 +36912,6 @@
    f64.ne
    if
     i32.const 2280
-    call $~lib/rt/pure/__retain
     return
    end
    i32.const 2304
@@ -37059,7 +37045,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release
@@ -37300,7 +37285,6 @@
   i32.lt_s
   if
    i32.const 1704
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $2
    call $~lib/rt/pure/__release

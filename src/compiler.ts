@@ -1899,7 +1899,7 @@ export class Compiler extends DiagnosticEmitter {
     this.performAutoreleases(flow, stmts);
     var parent = flow.parent;
     while (parent !== null && parent.breakLabel == breakLabel) {
-      this.performAutoreleases(parent, stmts, /* clearFlags */ false);
+      this.performAutoreleases(parent, stmts, /* finalize */ false);
       parent = parent.parent;
     }
     flow.freeScopedLocals();
@@ -1935,7 +1935,7 @@ export class Compiler extends DiagnosticEmitter {
     this.performAutoreleases(flow, stmts);
     var current: Flow | null = flow.parent;
     while (current && current.continueLabel === continueLabel) {
-      this.performAutoreleases(current, stmts, /* clearFlags */ false);
+      this.performAutoreleases(current, stmts, /* finalize */ false);
       current = current.parent;
     }
     flow.freeScopedLocals();
@@ -5040,7 +5040,7 @@ export class Compiler extends DiagnosticEmitter {
               rightAutoreleaseSkipped = true;
             }
           } else if (!(constraints & Constraints.WILL_RETAIN)) { // otherwise keep right alive a little longer
-            rightExpr = this.moveAutorelease(rightExpr, rightFlow, flow);
+            rightExpr = this.delayAutorelease(rightExpr, rightType, rightFlow, flow);
           }
 
           let rightStmts = new Array<ExpressionRef>();
@@ -5139,7 +5139,7 @@ export class Compiler extends DiagnosticEmitter {
               rightAutoreleaseSkipped = true;
             }
           } else if (!(constraints & Constraints.WILL_RETAIN)) { // otherwise keep right alive a little longer
-            rightExpr = this.moveAutorelease(rightExpr, rightFlow, flow);
+            rightExpr = this.delayAutorelease(rightExpr, rightType, rightFlow, flow);
           }
 
           let rightStmts = new Array<ExpressionRef>();
@@ -5430,7 +5430,6 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
       case ElementKind.PROPERTY_PROTOTYPE: { // static property
-        if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, flow); // (*)
         let setterPrototype = (<PropertyPrototype>target).setterPrototype;
         if (!setterPrototype) {
           this.error(
@@ -5441,6 +5440,9 @@ export class Compiler extends DiagnosticEmitter {
         }
         let setterInstance = this.resolver.resolveFunction(setterPrototype, null, makeMap(), ReportMode.REPORT);
         if (!setterInstance) return module.unreachable();
+        assert(setterInstance.signature.parameterTypes.length == 1);
+        let valueType = setterInstance.signature.parameterTypes[0];
+        if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, valueType, flow); // (*)
         // call just the setter if the return value isn't of interest
         if (!tee) return this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression);
         // otherwise call the setter first, then the getter
@@ -5448,6 +5450,7 @@ export class Compiler extends DiagnosticEmitter {
         let getterInstance = this.resolver.resolveFunction(getterPrototype, null, makeMap(), ReportMode.REPORT);
         if (!getterInstance) return module.unreachable();
         let returnType = getterInstance.signature.returnType;
+        assert(valueType == returnType);
         let nativeReturnType = returnType.toNativeType();
         return module.block(null, [
           this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression),
@@ -5455,7 +5458,8 @@ export class Compiler extends DiagnosticEmitter {
         ], nativeReturnType);
       }
       case ElementKind.PROPERTY: { // instance property
-        if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, flow); // (*)
+        let instance = <Class>(<Property>target).parent;
+        assert(instance.kind == ElementKind.CLASS);
         let setterInstance = (<Property>target).setterInstance;
         if (!setterInstance) {
           this.error(
@@ -5464,9 +5468,12 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.unreachable();
         }
+        assert(setterInstance.signature.parameterTypes.length == 1);
+        let valueType = setterInstance.signature.parameterTypes[0];
+        if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, valueType, flow); // (*)
         // call just the setter if the return value isn't of interest
         if (!tee) {
-          let thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
+          let thisExpr = this.compileExpression(assert(thisExpression), instance.type);
           return this.makeCallDirect(setterInstance, [ thisExpr, valueExpr ], valueExpression);
         }
         // otherwise call the setter first, then the getter
@@ -5488,32 +5495,33 @@ export class Compiler extends DiagnosticEmitter {
         return ret;
       }
       case ElementKind.INDEXSIGNATURE: {
-        if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, flow); // (*)
+        let instance = <Class>(<IndexSignature>target).parent;
+        assert(instance.kind == ElementKind.CLASS);
         let isUnchecked = flow.is(FlowFlags.UNCHECKED_CONTEXT);
-        let parent = (<IndexSignature>target).parent;
-        assert(parent.kind == ElementKind.CLASS);
-        let indexedGet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
+        let indexedGet = instance.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
         if (!indexedGet) {
           this.error(
             DiagnosticCode.Index_signature_is_missing_in_type_0,
-            valueExpression.range, parent.internalName
+            valueExpression.range, instance.internalName
           );
           return module.unreachable();
         }
-        let indexedSet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
+        let indexedSet = instance.lookupOverload(OperatorKind.INDEXED_SET, isUnchecked);
         if (!indexedSet) {
           this.error(
             DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-            valueExpression.range, parent.internalName
+            valueExpression.range, instance.internalName
           );
           this.currentType = tee ? indexedGet.signature.returnType : Type.void;
           return module.unreachable();
         }
-        let targetType = (<Class>parent).type;
-        let thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
+        assert(indexedSet.signature.parameterTypes.length == 2);
+        let valueType = indexedSet.signature.parameterTypes[1];
+        if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, valueType, flow); // (*)
+        let thisExpr = this.compileExpression(assert(thisExpression), instance.type);
         let elementExpr = this.compileExpression(assert(indexExpression), Type.i32, Constraints.CONV_IMPLICIT);
         if (tee) {
-          let tempTarget = flow.getTempLocal(targetType);
+          let tempTarget = flow.getTempLocal(instance.type);
           let tempElement = flow.getTempLocal(this.currentType);
           let returnType = indexedGet.signature.returnType;
           flow.freeTempLocal(tempTarget);
@@ -6115,7 +6123,7 @@ export class Compiler extends DiagnosticEmitter {
         let expr = this.makeCallInline(instance, args, thisArg, (constraints & Constraints.WILL_DROP) != 0);
         if (this.currentType.isManaged) {
           if (!(constraints & Constraints.WILL_RETAIN)) {
-            expr = this.makeAutorelease(expr, this.currentFlow);
+            expr = this.makeAutorelease(expr, instance.signature.returnType, this.currentFlow);
           } else {
             this.skippedAutoreleases.add(expr);
           }
@@ -6433,7 +6441,7 @@ export class Compiler extends DiagnosticEmitter {
 
   // <reference-counting>
 
-  /** Makes retain call, retaining the expression's value. */
+  /** Makes a retain call, retaining the expression's value. */
   makeRetain(expr: ExpressionRef): ExpressionRef {
     var retainInstance = this.program.retainInstance;
     this.compileFunction(retainInstance);
@@ -6492,17 +6500,50 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Makes an automatic release call at the end of the current flow. */
-  makeAutorelease(expr: ExpressionRef, flow: Flow = this.currentFlow): ExpressionRef {
-    // FIXME: loses track of nonNull state?
-    return this.module.local_tee(flow.getAutoreleaseLocal(this.options.usizeType).index, expr);
+  /** Makes an autorelease call at the end of the specified `flow`. */
+  makeAutorelease(
+    /** Expression to autorelease. */
+    expr: ExpressionRef,
+    /** Type of the expression. */
+    type: Type,
+    /** Flow that should autorelease. Defaults to the current flow. */
+    flow: Flow = this.currentFlow
+  ): ExpressionRef {
+    // An 'autorelease' is the assignment of a managed reference to a temporary local,
+    // keeping the reference alive until the surrounding flow concludes. This is useful
+    // if a reference is not being immediately assigned to something that would keep it
+    // alive, like a local or a global, yet it'll remain alive in other code. Example:
+    //
+    //   callReceivingAReference(callReturningAReference())
+    //
+    // will be transformed into an autorelease like
+    //
+    //   callReceivingAReference(t = callReturningAReference())
+    //   ...
+    //   __release(t)
+    //
+    // since releasing immediately would free the value before the call:
+    //
+    //   callReceivingAReference((__release(t = callReturningAReference()), t))
+    //
+    var local = flow.getAutoreleaseLocal(type);
+    if (flow.isNonnull(expr, type)) flow.setLocalFlag(local.index, LocalFlags.NONNULL);
+    return this.module.local_tee(local.index, expr);
   }
 
-  /** Attempts to undo a final autorelease, returning the index of the previously retaining variable or -1 if not possible. */
-  undoAutorelease(expr: ExpressionRef, flow: Flow): i32 {
+  /**
+   * Attempts to undo an autorelease in the specified `flow`.
+   * Returns the index of the previously retaining variable or -1 if not possible.
+   */
+  tryUndoAutorelease(
+    /** Expression being autoreleased. */
+    expr: ExpressionRef,
+    /** Flow that would autorelease. */
+    flow: Flow
+  ): i32 {
     // NOTE: Can't remove the local.tee completely because it's already compiled
-    // and a child of something else. Preventing the final release however should
-    // make it optimize away.
+    // and a child of something else. Preventing the final release however makes
+    // it optimize away.
     switch (getExpressionId(expr)) {
       case ExpressionId.LocalSet: { // local.tee(__retain(expr))
         if (isLocalTee(expr)) {
@@ -6521,7 +6562,7 @@ export class Compiler extends DiagnosticEmitter {
         if (getBlockName(expr) === null) { // must not be a break target
           let count = getBlockChildCount(expr);
           if (count) {
-            return this.undoAutorelease(getBlockChild(expr, count - 1), flow);
+            return this.tryUndoAutorelease(getBlockChild(expr, count - 1), flow);
           }
         }
         break;
@@ -6530,23 +6571,41 @@ export class Compiler extends DiagnosticEmitter {
     return -1;
   }
 
-  /**
-   * Attemps to move a final autorelease from one flow to a parent.
-   * It is crucial that from flow hasn't processed autoreleases yet because otherwise the final
-   * retain would have been written already.
-   */
-  moveAutorelease(expr: ExpressionRef, fromInnerFlow: Flow, toOuterFlow: Flow): ExpressionRef {
-    // NOTE: While this avoids an unnecessary set of retain and release, it cannot
-    // eliminate the now unnecessary temporary local.tee because it is already part of
-    // another expression in the tree. But optimizing should collapse locals again.
-    var index = this.undoAutorelease(expr, fromInnerFlow);
+  /** Delays an autorelease in `innerFlow` until `outerFlow` concludes. */
+  delayAutorelease(
+    /** Expression being autoreleased in `innerFlow`. */
+    expr: ExpressionRef,
+    /** Type of the expression. */
+    type: Type,
+    /** Inner flow that would autorelease. Must not have processed autoreleases yet. */
+    innerFlow: Flow,
+    /** Outer flow that should autorelease instead. */
+    outerFlow: Flow
+  ): ExpressionRef {
+    // Attempt to undo the autorelease in `innerFlow`
+    var index = this.tryUndoAutorelease(expr, innerFlow);
     return ~index
-      ? this.makeAutorelease(expr, toOuterFlow) // undone, can skip the retain
-      : this.makeAutorelease(this.makeRetain(expr), toOuterFlow);
+      // If it worked, autorelease in `outerFlow` instead
+      ? this.makeAutorelease(expr, type, outerFlow)
+      // If it didn't work, extend the lifetime into `outerFlow`
+      : this.makeAutorelease(this.makeRetain(expr), type, outerFlow);
   }
 
   /** Performs any queued autoreleases in the specified flow. */
-  performAutoreleases(flow: Flow, stmts: ExpressionRef[], clearFlags: bool = true): void {
+  performAutoreleases(
+    /** Flow releasing its queued autoreleases. */
+    flow: Flow,
+    /** Array of statements to append the releases to. */
+    stmts: ExpressionRef[],
+    /**
+     * Whether to finalize affected locals. Defaults to `true`, which
+     * is almost always correct, except when bubbling up parent flows
+     * in break-like scenarios.
+     */
+    finalize: bool = true
+  ): void {
+    // Autoreleases must be performed whenever a flow concludes, decrementing
+    // the RC of all the references in that flow scheduled for an autorelease.
     var scopedLocals = flow.scopedLocals;
     if (scopedLocals) {
       let module = this.module;
@@ -6554,7 +6613,7 @@ export class Compiler extends DiagnosticEmitter {
         if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
           let localIndex = local.index;
           if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
-            if (clearFlags) flow.unsetLocalFlag(localIndex, LocalFlags.ANY_RETAINED);
+            if (finalize) flow.unsetLocalFlag(localIndex, LocalFlags.ANY_RETAINED);
             stmts.push(
               this.makeRelease(
                 module.local_get(localIndex, local.type.toNativeType())
@@ -6566,20 +6625,25 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Performs any queued autoreleases in the specified flow and returns the value. */
+  /** Performs any queued autoreleases in the specified flow and returns the given value. */
   performAutoreleasesWithValue(
+    /** Flow releasing its queued autoreleases. */
     flow: Flow,
+    /** Value to return. */
     valueExpr: ExpressionRef,
+    /** Type of the returned value. */
     valueType: Type,
+    /** Array of statements to append the releases to. */
     stmts: ExpressionRef[] | null = null,
-    clearFlags: bool = true
+    /** Whether to finalize affected locals. */
+    finalize: bool = true
   ): ExpressionRef {
     if (!stmts) stmts = new Array<ExpressionRef>();
     stmts.push(
       this.module.nop()
     );
     var lengthBefore = stmts.length;
-    this.performAutoreleases(flow, stmts, clearFlags);
+    this.performAutoreleases(flow, stmts, finalize);
     if (stmts.length > lengthBefore) {
       let nativeType = valueType.toNativeType();
       let temp = flow.getTempLocal(valueType);
@@ -6600,15 +6664,22 @@ export class Compiler extends DiagnosticEmitter {
     return valueExpr;
   }
 
-  /** Finishes any queued top-level autoreleases in the actual function of the specified flow. */
-  finishAutoreleases(flow: Flow, stmts: ExpressionRef[]): void {
+  /** Finishes any queued autoreleases in the actual function of the specified flow. */
+  finishAutoreleases(
+    /** Flow releasing its queued autoreleases. */
+    flow: Flow,
+    /** Array of statements to append the releases to. */
+    stmts: ExpressionRef[]
+  ): void {
+    // Differs from `performAutoreleases` in that concluding this flow also
+    // concludes all its parent flows, for example on a `return`.
     var module = this.module;
     if (flow.is(FlowFlags.INLINE_CONTEXT)) {
-      // traverse to the top-most flow containing the inlined function's
-      // locals as scoped locals and release these instead.
+      // Traverse to the top-most flow containing the inlined function's
+      // locals as scoped locals and release these instead of all the locals.
       let parent: Flow | null;
       while (parent = flow.parent) flow = parent;
-      this.performAutoreleases(flow, stmts, false);
+      this.performAutoreleases(flow, stmts, /* finalize */ false);
     } else {
       for (let local of flow.parentFunction.localsByIndex) {
         let localIndex = local.index;
@@ -6652,9 +6723,10 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           expr = this.makeCallInline(instance, operands, 0, immediatelyDropped);
         }
-        if (this.currentType.isManaged) {
+        let returnType = this.currentType;
+        if (returnType.isManaged) {
           if (!skipAutorelease) {
-            expr = this.makeAutorelease(expr, this.currentFlow);
+            expr = this.makeAutorelease(expr, returnType);
           } else {
             this.skippedAutoreleases.add(expr);
           }
@@ -6741,7 +6813,7 @@ export class Compiler extends DiagnosticEmitter {
               expr = this.makeRelease(expr);
               this.currentType = Type.void;
             } else if (!skipAutorelease) {
-              expr = this.makeAutorelease(expr);
+              expr = this.makeAutorelease(expr, returnType);
             } else {
               this.skippedAutoreleases.add(expr);
             }
@@ -6764,7 +6836,7 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeRelease(expr);
         this.currentType = Type.void;
       } else if (!skipAutorelease) {
-        expr = this.makeAutorelease(expr);
+        expr = this.makeAutorelease(expr, returnType);
       }
     }
     return expr;
@@ -6861,7 +6933,7 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeRelease(expr);
         this.currentType = Type.void;
       } else {
-        expr = this.makeAutorelease(expr);
+        expr = this.makeAutorelease(expr, returnType);
       }
     }
     return expr;
@@ -7468,7 +7540,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case LiteralKind.STRING: {
         assert(!implicitlyNegate);
-        return this.compileStringLiteral(<StringLiteralExpression>expression);
+        return this.compileStringLiteral(<StringLiteralExpression>expression, constraints);
       }
       case LiteralKind.OBJECT: {
         assert(!implicitlyNegate);
@@ -7484,8 +7556,18 @@ export class Compiler extends DiagnosticEmitter {
     return module.unreachable();
   }
 
-  compileStringLiteral(expression: StringLiteralExpression): ExpressionRef {
-    return this.ensureStaticString(expression.value);
+  compileStringLiteral(
+    expression: StringLiteralExpression,
+    constraints: Constraints
+  ): ExpressionRef {
+    var expr = this.ensureStaticString(expression.value);
+    if (constraints & Constraints.WILL_RETAIN) {
+      this.skippedAutoreleases.add(expr);
+    } else {
+      // not necessary since this is static data anyway
+      // expr = this.makeAutorelease(expr, this.currentType);
+    }
+    return expr;
   }
 
   compileArrayLiteral(
@@ -7561,7 +7643,7 @@ export class Compiler extends DiagnosticEmitter {
             : module.i32(i64_low(bufferAddress))
         ], reportNode);
         this.currentType = arrayType;
-        return this.makeAutorelease(this.makeRetain(expr));
+        return this.makeAutorelease(this.makeRetain(expr), arrayType);
       }
     }
 
@@ -7684,7 +7766,7 @@ export class Compiler extends DiagnosticEmitter {
     var hasErrors = false;
     var exprs = new Array<ExpressionRef>(numNames + 2);
     var flow = this.currentFlow;
-    var tempLocal = flow.getAutoreleaseLocal(this.options.usizeType);
+    var tempLocal = flow.getAutoreleaseLocal(classReference.type);
     assert(numNames == values.length);
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
@@ -8036,7 +8118,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = ifThenFlow;
     var ifThenExpr = this.compileExpression(ifThen, ctxType, inheritedConstraints);
     var ifThenType = this.currentType;
-    var IfThenAutoreleaseSkipped = this.skippedAutoreleases.has(ifThenExpr);
+    var ifThenAutoreleaseSkipped = this.skippedAutoreleases.has(ifThenExpr);
 
     var ifElseFlow = outerFlow.fork();
     this.currentFlow = ifElseFlow;
@@ -8067,19 +8149,26 @@ export class Compiler extends DiagnosticEmitter {
     );
     this.currentType = commonType;
 
-    if (IfThenAutoreleaseSkipped != ifElseAutoreleaseSkipped) { // unify to both skipped
-      if (!IfThenAutoreleaseSkipped) {
+    if (ifThenAutoreleaseSkipped != ifElseAutoreleaseSkipped) { // unify to both skipped
+      if (!ifThenAutoreleaseSkipped) {
         ifThenExpr = this.makeRetain(ifThenExpr);
-        IfThenAutoreleaseSkipped = true;
+        ifThenAutoreleaseSkipped = true;
       } else {
         ifElseExpr = this.makeRetain(ifElseExpr);
         ifElseAutoreleaseSkipped = true;
       }
-    } else if (!IfThenAutoreleaseSkipped && commonType.isManaged) { // keep alive a little longer
-      // if (!(constraints & Constraints.WILL_RETAIN)) {
-        ifThenExpr = this.moveAutorelease(ifThenExpr, ifThenFlow, outerFlow);
-        ifElseExpr = this.moveAutorelease(ifElseExpr, ifElseFlow, outerFlow);
-      // }
+    } else if (!ifThenAutoreleaseSkipped && commonType.isManaged) { // keep alive a little longer
+      if (constraints & Constraints.WILL_RETAIN) { // try to undo both
+        let ifThenIndex = this.tryUndoAutorelease(ifThenExpr, ifThenFlow);
+        if (ifThenIndex == -1) ifThenExpr = this.makeRetain(ifThenExpr);
+        let ifElseIndex = this.tryUndoAutorelease(ifElseExpr, ifElseFlow);
+        if (ifElseIndex == -1) ifElseExpr = this.makeRetain(ifElseExpr);
+        ifThenAutoreleaseSkipped = true;
+        ifElseAutoreleaseSkipped = true;
+      } else {
+        ifThenExpr = this.delayAutorelease(ifThenExpr, ifThenType, ifThenFlow, outerFlow);
+        ifElseExpr = this.delayAutorelease(ifElseExpr, ifElseType, ifElseFlow, outerFlow);
+      }
     }
 
     ifThenExpr = this.performAutoreleasesWithValue(ifThenFlow, ifThenExpr, commonType);
@@ -8092,8 +8181,8 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.inheritMutual(ifThenFlow, ifElseFlow);
 
     var expr = this.module.if(condExpr, ifThenExpr, ifElseExpr);
-    assert(IfThenAutoreleaseSkipped == ifElseAutoreleaseSkipped);
-    if (IfThenAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
+    assert(ifThenAutoreleaseSkipped == ifElseAutoreleaseSkipped);
+    if (ifThenAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
     return expr;
   }
 
@@ -8957,7 +9046,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.U64: {
         return module.binary(BinaryOp.NeI64, expr, module.i64(0));
       }
-      case TypeKind.USIZE: if (this.skippedAutoreleases.has(expr)) expr = this.makeAutorelease(expr);
+      case TypeKind.USIZE: if (type.isManaged && this.skippedAutoreleases.has(expr)) expr = this.makeAutorelease(expr, type);
       case TypeKind.ISIZE: {
         return type.size == 64
           ? module.binary(BinaryOp.NeI64, expr, module.i64(0))

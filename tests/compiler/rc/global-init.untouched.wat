@@ -36,7 +36,10 @@
  (global $~lib/heap/__heap_base i32 (i32.const 300))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/pure/increment (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $rc/global-init/getRef (; 5 ;) (type $FUNCSIG$i) (result i32)
+  i32.const 24
+ )
+ (func $~lib/rt/pure/increment (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -81,7 +84,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -92,10 +95,6 @@
    call $~lib/rt/pure/increment
   end
   local.get $0
- )
- (func $rc/global-init/getRef (; 7 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 24
-  call $~lib/rt/pure/__retain
  )
  (func $~lib/rt/tlsf/removeBlock (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)

@@ -215,6 +215,12 @@
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo | null>#__get
   local.tee $1
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else
+   unreachable
+  end
   i32.load
   local.tee $2
   if (result i32)
@@ -246,6 +252,12 @@
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo | null>#__get
   local.tee $1
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else
+   unreachable
+  end
   i32.load
   local.tee $2
   if (result i32)
@@ -306,6 +318,12 @@
   local.get $0
   call_indirect (type $FUNCSIG$i)
   local.tee $1
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else
+   unreachable
+  end
   call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
@@ -344,6 +362,12 @@
   i32.load offset=4
   call_indirect (type $FUNCSIG$i)
   local.tee $1
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else
+   unreachable
+  end
   call $~lib/rt/stub/__retain
   local.set $2
   local.get $1

@@ -5133,7 +5133,6 @@
    unreachable
   end
   i32.const 528
-  call $~lib/rt/pure/__retain
   local.set $2
   local.get $2
   i32.const 1
@@ -5167,7 +5166,6 @@
    unreachable
   end
   i32.const 560
-  call $~lib/rt/pure/__retain
   local.set $4
   local.get $4
   i32.const 1

@@ -72,23 +72,16 @@
  (global $~lib/heap/__heap_base i32 (i32.const 2288))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/__retain (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/number/Bool#toString (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
+ (func $~lib/number/Bool#toString (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    i32.const 24
-   call $~lib/rt/stub/__retain
-   local.tee $1
   else
    i32.const 48
-   call $~lib/rt/stub/__retain
-   local.tee $2
   end
-  call $~lib/rt/stub/__retain
+ )
+ (func $~lib/rt/stub/__retain (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
  )
  (func $~lib/rt/stub/__release (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
@@ -620,7 +613,6 @@
   i32.eqz
   if
    i32.const 160
-   call $~lib/rt/stub/__retain
    return
   end
   local.get $0
@@ -4523,7 +4515,6 @@
   f64.eq
   if
    i32.const 680
-   call $~lib/rt/stub/__retain
    return
   end
   local.get $0
@@ -4538,7 +4529,6 @@
    f64.ne
    if
     i32.const 704
-    call $~lib/rt/stub/__retain
     return
    end
    i32.const 728
@@ -4599,7 +4589,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2016
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4615,7 +4604,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2040
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4627,7 +4615,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2064
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4639,7 +4626,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2088
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4651,7 +4637,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2112
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4663,7 +4648,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2136
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4675,7 +4659,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2160
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4690,7 +4673,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2184
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $0
   call $~lib/rt/stub/__release
@@ -4704,7 +4686,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2208
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4716,7 +4697,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2232
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4728,7 +4708,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2256
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4740,7 +4719,6 @@
   call $~lib/rt/stub/__retain
   local.set $1
   i32.const 2280
-  call $~lib/rt/stub/__retain
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
