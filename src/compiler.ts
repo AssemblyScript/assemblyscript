@@ -94,7 +94,8 @@ import {
 } from "./flow";
 
 import {
-  Resolver, ReportMode
+  Resolver,
+  ReportMode
 } from "./resolver";
 
 import {
@@ -454,7 +455,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up function table
     var functionTable = this.functionTable;
-    module.setFunctionTable(functionTable.length, 0xffffffff, functionTable, module.i32(0));
+    module.setFunctionTable(functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(0));
     module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.unreachable());
 
     // import table if requested (default table is named '0' by Binaryen)
@@ -9278,17 +9279,17 @@ export function flatten(module: Module, stmts: ExpressionRef[], type: NativeType
   if (length == 0) return module.nop(); // usually filtered out again
   if (length == 1) {
     let single = stmts[0];
-    if (getExpressionType(single) == type) return single;
-    if (getExpressionId(single) == ExpressionId.Block) {
-      let count = getBlockChildCount(single);
-      let children = new Array<ExpressionRef>(count);
-      for (let i = 0; i < count; ++i) children[i] = getBlockChild(single, i);
-      return module.block(getBlockName(single), children, type);
+    switch (getExpressionId(single)) {
+      case ExpressionId.Return:
+      case ExpressionId.Throw:
+      case ExpressionId.Unreachable: {
+        // type does no matter, terminates anyway
+        return single;
+      }
     }
+    let singleType = getExpressionType(single);
+    assert(singleType == NativeType.Unreachable || singleType == type);
+    return single;
   }
-  return module.block(null, stmts,
-    type == NativeType.Auto
-      ? getExpressionType(stmts[length - 1])
-      : type
-  );
+  return module.block(null, stmts, type);
 }
