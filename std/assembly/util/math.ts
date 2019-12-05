@@ -68,8 +68,8 @@ Wrong count: 170635 (all nearest rounding wrong results with fma.)
 export function expf_lut(x: f32): f32 {
   const N       = 1 << EXP2F_TABLE_BITS;
   const N_MASK  = N - 1;
-  const shift   = reinterpret<f64>(0x4338000000000000);     // 0x1.8p+52
-  const InvLn2N = reinterpret<f64>(0x3FF71547652B82FE) * N; // 0x1.71547652b82fep+0
+  const shift   = reinterpret<f64>(0x4338000000000000);        // 0x1.8p+52
+  const InvLn2N = reinterpret<f64>(0x3FF71547652B82FE) * N;    // 0x1.71547652b82fep+0
 
   const C0 = reinterpret<f64>(0x3FAC6AF84B912394) / N / N / N; // 0x1.c6af84b912394p-5
   const C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3) / N / N;     // 0x1.ebfce50fac4f3p-3
@@ -86,7 +86,7 @@ export function expf_lut(x: f32): f32 {
     if (x < reinterpret<f32>(0xC2CFF1B4)) return 0;        // x < log(0x1p-150) ~= -103.97 -> 0 (Underflow)
   }
 
-  /* x*N/Ln2 = k + r with r in [-1/2, 1/2] and int k.  */
+  // x*N/Ln2 = k + r with r in [-1/2, 1/2] and int k.
   var z = InvLn2N * xd;
 
   /* Round and convert z to int, the result is in [-150*N, 128*N] and
@@ -147,14 +147,14 @@ export function log2f_lut(x: f32): f32 {
   const A3 = reinterpret<f64>(0x3FF715475F35C8B8); //  0x1.715475f35c8b8p0
 
   var ux = reinterpret<u32>(x);
-  /* Fix sign of zero with downward rounding when x==1.  */
+  // Fix sign of zero with downward rounding when x==1.
   // if (WANT_ROUNDING && predict_false(ix == 0x3f800000)) return 0;
   if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
-    /* x < 0x1p-126 or inf or nan.  */
+    // x < 0x1p-126 or inf or nan.
     if (ux * 2 == 0) return -Infinity;
-    if (ux == 0x7F800000) return x; /* log2(inf) == inf.  */
+    if (ux == 0x7F800000) return x; // log2(inf) == inf.
     if ((ux >> 31) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
-    /* x is subnormal, normalize it.  */
+    // x is subnormal, normalize it.
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
   }
@@ -165,7 +165,7 @@ export function log2f_lut(x: f32): f32 {
   var i    = (tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK;
   var top  = tmp & 0xFF800000;
   var iz   = ux - top;
-  var k    = <i32>tmp >> 23; /* arithmetic shift */
+  var k    = <i32>tmp >> 23;
 
   var tab = log2f_data_tab.dataStart as usize;
 
@@ -173,11 +173,11 @@ export function log2f_lut(x: f32): f32 {
   var logc = load<f64>(tab + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
   var z    = <f64>reinterpret<f32>(iz);
 
-  /* log2(x) = log1p(z/c-1)/ln2 + log2(c) + k */
+  // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
   var r  = z * invc - 1;
   var y0 = logc + <f64>k;
 
-  /* Pipelined polynomial evaluation to approximate log1p(r)/ln2.  */
+  // Pipelined polynomial evaluation to approximate log1p(r)/ln2.
   var y  = A1 * r + A2;
   var p  = A3 * r + y0;
   var r2 = r * r;
@@ -223,14 +223,14 @@ export function logf_lut(x: f32): f32 {
   const A2  = reinterpret<f64>(0xBFDFFFFEF20A4123); // -0x1.ffffef20a4123p-2
 
   var ux = reinterpret<u32>(x);
-  /* Fix sign of zero with downward rounding when x==1.  */
+  // Fix sign of zero with downward rounding when x==1.
   // if (WANT_ROUNDING && ux == 0x3f800000) return 0;
   if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
-    /* x < 0x1p-126 or inf or nan. */
+    // x < 0x1p-126 or inf or nan.
     if (ux * 2 == 0) return -Infinity;
-    if (ux == 0x7F800000) return x; // /* log(inf) == inf.  */
+    if (ux == 0x7F800000) return x; // log(inf) == inf.
     if ((ux >> 31) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
-    /* x is subnormal, normalize it.  */
+    // x is subnormal, normalize it.
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
   }
@@ -239,7 +239,7 @@ export function logf_lut(x: f32): f32 {
      The ith subinterval contains z and c is near its center.  */
   var tmp = ux - 0x3F330000;
   var i   = (tmp >> (23 - LOGF_TABLE_BITS)) & N_MASK;
-  var k   = <i32>tmp >> 23; /* arithmetic shift */
+  var k   = <i32>tmp >> 23;
   var iz  = ux - (tmp & 0x1FF << 23);
 
   var tab = logf_data_tab.dataStart as usize;
@@ -249,11 +249,11 @@ export function logf_lut(x: f32): f32 {
 
   var z = <f64>reinterpret<f32>(iz);
 
-  /* log(x) = log1p(z/c-1) + log(c) + k*Ln2 */
+  // log(x) = log1p(z/c-1) + log(c) + k*Ln2
   var r = z * invc - 1;
   var y0 = logc + <f64>k * Ln2;
 
-  /* Pipelined polynomial evaluation to approximate log1p(r).  */
+  // Pipelined polynomial evaluation to approximate log1p(r).
   var r2 = r * r;
   var y  = A1 * r + A2;
   y += A0 * r2;
@@ -292,8 +292,8 @@ export function logf_lut(x: f32): f32 {
   return 2 * ux - 1 >= 2 * 0x7f800000 - 1;
 }
 
-/* Returns 0 if not int, 1 if odd int, 2 if even int.  The argument is
-   the bit representation of a non-zero finite floating-point value.  */
+/* Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
+   the bit representation of a non-zero finite floating-point value. */
 @inline function checkint(iy: u32): i32 {
   var e = iy >> 23 & 0xFF;
   if (e < 0x7F     ) return 0;
@@ -307,7 +307,6 @@ export function logf_lut(x: f32): f32 {
 /* Subnormal input is normalized so ix has negative biased exponent.
    Output is multiplied by N (POWF_SCALE) if TOINT_INTRINICS is set. */
 @inline function log2_inline(ux: u32): f64 {
-  // #define A __powf_log2_data_poly
   const A0 = reinterpret<f64>(0x3FD27616C9496E0B) * POWF_SCALE; //  0x1.27616c9496e0bp-2
   const A1 = reinterpret<f64>(0xBFD71969A075C67A) * POWF_SCALE; // -0x1.71969a075c67ap-2
   const A2 = reinterpret<f64>(0x3FDEC70A6CA7BADD) * POWF_SCALE; //  0x1.ec70a6ca7baddp-2
@@ -323,16 +322,16 @@ export function logf_lut(x: f32): f32 {
   var i    = <usize>((tmp >> (23 - POWF_LOG2_TABLE_BITS)) & N_MASK);
   var top  = tmp & 0xFF800000;
   var uz   = ux - top;
-  var k    = <i32>(<i32>top >> (23 - POWF_SCALE_BITS)); /* arithmetic shift */
+  var k    = <i32>(<i32>top >> (23 - POWF_SCALE_BITS));
   var invc = load<f64>(tab + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
   var logc = load<f64>(tab + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
   var z    = <f64>reinterpret<f32>(uz);
 
-  /* log2(x) = log1p(z/c-1)/ln2 + log2(c) + k */
+  // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
   var r  = z * invc - 1;
   var y0 = logc + <f64>k;
 
-  /* Pipelined polynomial evaluation to approximate log1p(r)/ln2. */
+  // Pipelined polynomial evaluation to approximate log1p(r)/ln2.
   var y = A0 * r + A1;
   var p = A2 * r + A3;
   var q = A4 * r + y0;
@@ -356,13 +355,13 @@ export function logf_lut(x: f32): f32 {
   const C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3); // 0x1.ebfce50fac4f3p-3
   const C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
 
-  /* x = k/N + r with r in [-1/(2N), 1/(2N)] */
+  // x = k/N + r with r in [-1/(2N), 1/(2N)]
   var kd = <f64>(xd + shift);
   var ki = reinterpret<u64>(kd);
   var r  = xd - (kd - shift);
   var t: u64, z: f64, y: f64, s: f64;
 
-  /* exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1) */
+  // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
   const tab = exp2f_data_tab.dataStart as usize;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
@@ -388,41 +387,39 @@ export function powf_lut(x: f32, y: f32): f32 {
   var iy = reinterpret<u32>(y);
 
   if (ix - 0x00800000 >= 0x7f800000 - 0x00800000 || (by = zeroinfnan(iy))) {
-    /* Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).  */
+    // Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).
     if (by) {
       if (2 * iy == 0) return isNaN(x) ? x + y : 1.0;
       if (ix == 0x3F800000) return isNaN(y) ? x + y : 1.0;
       if (2 * ix > 2 * 0x7F800000 || 2 * iy > 2 * 0x7F800000) return x + y;
       if (2 * ix == 2 * 0x3F800000) return 1.0;
-      if ((2 * ix < 2 * 0x3F800000) == !(iy & 0x80000000)) return 0; /* |x|<1 && y==inf or |x|>1 && y==-inf.  */
+      if ((2 * ix < 2 * 0x3F800000) == !(iy & 0x80000000)) return 0; // |x|<1 && y==inf or |x|>1 && y==-inf.
       return y * y;
     }
     if (zeroinfnan(ix)) {
       let x2 = x * x;
       if ((ix >> 31) && checkint(iy) == 1) x2 = -x2;
-      /* Without the barrier some versions of clang hoist the 1/x2 and
-         thus division by zero exception can be signaled spuriously.  */
       return iy >> 31 ? 1 / x2 : x2;
     }
-    /* x and y are non-zero finite.  */
+    // x and y are non-zero finite.
     if (ix >> 31) {
-      /* Finite x < 0.  */
+      // Finite x < 0.
       let yint = checkint(iy);
       if (yint == 0) return (x - x) / (x - x);
       if (yint == 1) signBias = SIGN_BIAS;
       ix &= 0x7FFFFFFF;
     }
     if (ix < 0x00800000) {
-      /* Normalize subnormal x so exponent becomes negative.  */
+      // Normalize subnormal x so exponent becomes negative.
       ix = reinterpret<u32>(x * Ox1p23f);
       ix &= 0x7FFFFFFF;
       ix -= 23 << 23;
     }
   }
   var logx = log2_inline(ix);
-  var ylogx = y * logx; /* cannot overflow, y is single prec.  */
+  var ylogx = y * logx; // cannot overflow, y is single prec.
   if ((reinterpret<u64>(ylogx) >> 47 & 0xFFFF) >= reinterpret<u64>(126.0 * POWF_SCALE) >> 47) {
-    /* |y*log(x)| >= 126.  */
+    // |y * log(x)| >= 126
     if (ylogx  > UPPER_LIMIT) return __math_oflowf(signBias); // overflow
     if (ylogx <= LOWER_LIMIT) return __math_uflowf(signBias); // underflow
   }
