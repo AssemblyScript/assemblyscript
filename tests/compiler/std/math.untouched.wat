@@ -78,10 +78,8 @@
  (data (i32.const 944) "\10\00\00\00\01\00\00\00\04\00\00\00\10\00\00\00\b0\02\00\00\b0\02\00\00\00\01\00\00 \00\00\00")
  (data (i32.const 976) "\00\01\00\00\01\00\00\00\00\00\00\00\00\01\00\00\be\f3\f8y\eca\f6?\190\96[\c6\fe\de\bf=\88\afJ\edq\f5?\a4\fc\d42h\0b\db\bf\b0\10\f0\f09\95\f4?{\b7\1f\n\8bA\d7\bf\85\03\b8\b0\95\c9\f3?{\cfm\1a\e9\9d\d3\bf\a5d\88\0c\19\0d\f3?1\b6\f2\f3\9b\1d\d0\bf\a0\8e\0b{\"^\f2?\f0z;\1b\1d|\c9\bf?4\1aJJ\bb\f1?\9f<\af\93\e3\f9\c2\bf\ba\e5\8a\f0X#\f1?\\\8dx\bf\cb`\b9\bf\a7\00\99A?\95\f0?\ce_G\b6\9do\aa\bf\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00\00\acG\9a\fd\8c`\ee?=\f5$\9f\ca8\b3?\a0j\02\1f\b3\a4\ec?\ba\918T\a9v\c4?\e6\fcjW6 \eb?\d2\e4\c4J\0b\84\ce?-\aa\a1c\d1\c2\e9?\1ce\c6\f0E\06\d4?\edAx\03\e6\86\e8?\f8\9f\1b,\9c\8e\d8?bHS\f5\dcg\e7?\cc{\b1N\a4\e0\dc?")
  (data (i32.const 1248) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\e0\03\00\00\e0\03\00\00\00\01\00\00 \00\00\00")
- (data (i32.const 1280) "\00\01\00\00\01\00\00\00\00\00\00\00\00\01\00\00\be\f3\f8y\eca\f6?\190\96[\c6\fe\de\bf=\88\afJ\edq\f5?\a4\fc\d42h\0b\db\bf\b0\10\f0\f09\95\f4?{\b7\1f\n\8bA\d7\bf\85\03\b8\b0\95\c9\f3?{\cfm\1a\e9\9d\d3\bf\a5d\88\0c\19\0d\f3?1\b6\f2\f3\9b\1d\d0\bf\a0\8e\0b{\"^\f2?\f0z;\1b\1d|\c9\bf?4\1aJJ\bb\f1?\9f<\af\93\e3\f9\c2\bf\ba\e5\8a\f0X#\f1?\\\8dx\bf\cb`\b9\bf\a7\00\99A?\95\f0?\ce_G\b6\9do\aa\bf\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00\00\acG\9a\fd\8c`\ee?=\f5$\9f\ca8\b3?\a0j\02\1f\b3\a4\ec?\ba\918T\a9v\c4?\e6\fcjW6 \eb?\d2\e4\c4J\0b\84\ce?-\aa\a1c\d1\c2\e9?\1ce\c6\f0E\06\d4?\edAx\03\e6\86\e8?\f8\9f\1b,\9c\8e\d8?bHS\f5\dcg\e7?\cc{\b1N\a4\e0\dc?")
- (data (i32.const 1552) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\10\05\00\00\10\05\00\00\00\01\00\00 \00\00\00")
- (data (i32.const 1584) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
- (data (i32.const 1624) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.\00")
+ (data (i32.const 1280) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
+ (data (i32.const 1320) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $std/math/js i32 (i32.const 1))
@@ -121,10 +119,6 @@
  (global $~lib/builtins/f64.MIN_VALUE f64 (f64.const 5e-324))
  (global $~lib/util/math/LOG2F_TABLE_BITS i32 (i32.const 4))
  (global $~lib/util/math/log2f_data_tab i32 (i32.const 1264))
- (global $~lib/util/math/POWF_SCALE_BITS i32 (i32.const 0))
- (global $~lib/util/math/POWF_SCALE f64 (f64.const 1))
- (global $~lib/util/math/POWF_LOG2_TABLE_BITS i32 (i32.const 4))
- (global $~lib/util/math/powf_log2_data_tab i32 (i32.const 1568))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
@@ -10002,9 +9996,9 @@
    i32.const -16777217
    i32.ge_u
    if
-    i32.const 2
     local.get $4
-    i32.mul
+    i32.const 1
+    i32.shl
     i32.const 0
     i32.eq
     if
@@ -10018,17 +10012,17 @@
      f32.const nan:0x400000
      return
     end
-    i32.const 2
     local.get $3
-    i32.mul
+    i32.const 1
+    i32.shl
     i32.const -16777216
     i32.gt_u
     if (result i32)
      i32.const 1
     else
-     i32.const 2
      local.get $4
-     i32.mul
+     i32.const 1
+     i32.shl
      i32.const -16777216
      i32.gt_u
     end
@@ -10038,36 +10032,27 @@
      f32.add
      return
     end
-    i32.const 2
     local.get $3
-    i32.mul
+    i32.const 1
+    i32.shl
     i32.const 2130706432
     i32.eq
     if
      f32.const nan:0x400000
      return
     end
-    i32.const 2
     local.get $3
-    i32.mul
+    i32.const 1
+    i32.shl
     i32.const 2130706432
-    i32.lt_s
+    i32.lt_u
     local.get $4
-    i32.const -2147483648
-    i32.and
+    i32.const 31
+    i32.shr_u
     i32.eqz
     i32.eq
     if
-     local.get $0
-     local.get $0
-     f32.sub
      f32.const 0
-     f32.eq
-     if (result f32)
-      f32.const 0
-     else
-      f32.const inf
-     end
      return
     end
     local.get $1
@@ -10270,7 +10255,7 @@
   local.set $7
   local.get $7
   i32.const 23
-  global.get $~lib/util/math/POWF_LOG2_TABLE_BITS
+  global.get $~lib/util/math/LOG2F_TABLE_BITS
   i32.sub
   i32.shr_u
   i32.const 15
@@ -10286,11 +10271,9 @@
   local.set $10
   local.get $9
   i32.const 23
-  global.get $~lib/util/math/POWF_SCALE_BITS
-  i32.sub
   i32.shr_s
   local.set $11
-  i32.const 1568
+  i32.const 1264
   i32.load offset=4
   local.set $12
   local.get $12
@@ -10499,7 +10482,6 @@
   local.get $0
   local.get $1
   call $~lib/util/math/powf_lut
-  return
  )
  (func $std/math/test_powf (; 134 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
@@ -10619,7 +10601,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1600
+   i32.const 1296
    i32.const 1370
    i32.const 4
    call $~lib/builtins/abort
@@ -10633,8 +10615,8 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 1640
-   i32.const 1600
+   i32.const 1336
+   i32.const 1296
    i32.const 1377
    i32.const 24
    call $~lib/builtins/abort
@@ -10688,9 +10670,9 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 1640
-   i32.const 1600
-   i32.const 2742
+   i32.const 1336
+   i32.const 1296
+   i32.const 2553
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -41984,6 +41966,21 @@
    unreachable
   end
   f32.const inf
+  f32.const -inf
+  f32.const 0
+  f32.const 0
+  i32.const 0
+  call $std/math/test_powf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 2708
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const inf
   f32.const 3
   f32.const inf
   f32.const 0
@@ -42114,6 +42111,21 @@
    i32.const 0
    i32.const 24
    i32.const 2717
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f32.const -inf
+  f32.const -inf
+  f32.const 0
+  f32.const 0
+  i32.const 0
+  call $std/math/test_powf
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 2718
    i32.const 0
    call $~lib/builtins/abort
    unreachable
