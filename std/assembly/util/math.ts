@@ -18,24 +18,6 @@ const EXP2F_TABLE_BITS = 5;
   0x3FEF5818DCFBA487, 0x3FEF7C97337B9B5F, 0x3FEFA4AFA2A490DA, 0x3FEFD0765B6E4540
 ];
 
-// @lazy const exp2f_data_shift = reinterpret<f64>(0x4338000000000000); // 0x1.8p+52
-// @lazy const exp2f_data_shift_scaled = exp2f_data_shift / EXP2F_N;
-// @lazy export const exp2f_data_poly: f64[] = [
-//   reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
-//   reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
-//   reinterpret<f64>(0x3FE62E42FF0C52D6)  // 0x1.62e42ff0c52d6p-1
-// ];
-// @lazy const exp2f_data_invln2_scaled = reinterpret<f64>(0x3FF71547652B82FE) * EXP2F_N; // 0x1.71547652b82fep+0
-// @lazy const exp2f_data_poly_scaled: f64[] = [
-//   reinterpret<f64>(0x3FAC6AF84B912394) / EXP2F_N / EXP2F_N / EXP2F_N, // 0x1.c6af84b912394p-5
-//   reinterpret<f64>(0x3FCEBFCE50FAC4F3) / EXP2F_N / EXP2F_N,           // 0x1.ebfce50fac4f3p-3
-//   reinterpret<f64>(0x3FE62E42FF0C52D6) / EXP2F_N                      // 0x1.62e42ff0c52d6p-1
-// ];
-
-// @inline function top12(x: f32): u32 {
-//   return reinterpret<u32>(x) >> 20;
-// }
-
 /**
  * ULP error: 0.502 (nearest rounding.)
  * Relative error: 1.69 * 2^-34 in [-1/64, 1/64] (before rounding.)
@@ -110,6 +92,11 @@ export function exp2f_lut(x: f32): f32 {
   reinterpret<f64>(0x3FF715475F35C8B8)  //  0x1.715475f35c8b8p0
 ];
 
+@inline export function log2f_lut(x: f32): f32 {
+  // TODO
+  return 0;
+}
+
 /* Lookup data for logf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/logf.c */
 
 const LOGF_TABLE_BITS = 4;
@@ -132,13 +119,6 @@ const LOGF_TABLE_BITS = 4;
   reinterpret<f64>(0x3FE886E6037841ED), reinterpret<f64>(0x3FD1058BC8A07EE1), // 0x1.886e6037841edp-1,  0x1.1058bc8a07ee1p-2,
   reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FD4043057B6EE09), // 0x1.767dcf5534862p-1,  0x1.4043057b6ee09p-2
 ];
-
-// const logf_data_ln2 = reinterpret<f64>(0x3FE62E42FEFA39EF); // 0x1.62e42fefa39efp-1;
-// const logf_data_poly: f64[] = [
-//   reinterpret<f64>(0xBFD00EA348B88334), // -0x1.00ea348b88334p-2
-//   reinterpret<f64>(0x3FD5575B0BE00B6A), //  0x1.5575b0be00b6ap-2
-//   reinterpret<f64>(0xBFDFFFFEF20A4123)  // -0x1.ffffef20a4123p-2
-// ];
 
 /*
 ULP error: 0.818 (nearest rounding.)
@@ -196,7 +176,6 @@ export function logf_lut(x: f32): f32 {
 /* Lookup data for powf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/powf.c */
 
 @lazy const POWF_LOG2_TABLE_BITS = 4;
-@lazy const POWF_LOG2_POLY_ORDER = 5;
 @lazy const POWF_SCALE_BITS = 0;
 @lazy const POWF_SCALE: f64 = 1 << POWF_SCALE_BITS;
 
