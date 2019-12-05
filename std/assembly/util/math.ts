@@ -102,7 +102,7 @@ export function log2f_lut(x: f32): f32 {
     /* x < 0x1p-126 or inf or nan.  */
     if (ux * 2 == 0) return -Infinity;
     if (ux == 0x7F800000) return x; /* log2(inf) == inf.  */
-    if ((ux & 0x80000000) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
+    if ((ux >> 31) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
     /* x is subnormal, normalize it.  */
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
@@ -178,7 +178,7 @@ export function logf_lut(x: f32): f32 {
     /* x < 0x1p-126 or inf or nan. */
     if (ux * 2 == 0) return -Infinity;
     if (ux == 0x7F800000) return x; // /* log(inf) == inf.  */
-    if ((ux & 0x80000000) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
+    if ((ux >> 31) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
     /* x is subnormal, normalize it.  */
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
@@ -216,6 +216,8 @@ export function logf_lut(x: f32): f32 {
 @lazy const POWF_LOG2_TABLE_BITS = 4;
 @lazy const POWF_SCALE_BITS = 0;
 @lazy const POWF_SCALE: f64 = 1 << POWF_SCALE_BITS;
+
+// TODO: remove this and use log2_data_tab instead
 @lazy export const powf_log2_data_tab: f64[] = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019) * POWF_SCALE,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4) * POWF_SCALE,
@@ -346,13 +348,13 @@ export function powf_lut(x: f32, y: f32): f32 {
     }
     if (zeroinfnan(ix)) {
       let x2 = x * x;
-      if (ix & 0x80000000 && checkint(iy) == 1) x2 = -x2;
+      if ((ix >> 31) && checkint(iy) == 1) x2 = -x2;
       /* Without the barrier some versions of clang hoist the 1/x2 and
          thus division by zero exception can be signaled spuriously.  */
-      return iy & 0x80000000 ? 1 / x2 : x2;
+      return iy >> 31 ? 1 / x2 : x2;
     }
     /* x and y are non-zero finite.  */
-    if (ix & 0x80000000) {
+    if (ix >> 31) {
       /* Finite x < 0.  */
       let yint = checkint(iy);
       if (yint == 0) return (x - x) / (x - x);
