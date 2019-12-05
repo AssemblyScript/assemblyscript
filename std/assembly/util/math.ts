@@ -393,11 +393,11 @@ export function powf_lut(x: f32, y: f32): f32 {
   var signBias: u32 = 0;
   var ix = reinterpret<u32>(x);
   var iy = reinterpret<u32>(y);
-  var ni = 0;
+  var ny = 0;
 
-  if (i32(ix - 0x00800000 >= 0x7f800000 - 0x00800000) | i32(ni = zeroinfnan(iy))) {
+  if (i32(ix - 0x00800000 >= 0x7f800000 - 0x00800000) | (ny = i32(zeroinfnan(iy)))) {
     // Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).
-    if (ni) {
+    if (ny) {
       if ((iy << 1) == 0) return 1.0;
       if (ix == 0x3F800000) return NaN; // // original: 1.0
       if ((ix << 1) > (<u32>0x7F800000 << 1) || (iy << 1) > (<u32>0x7F800000 << 1)) return x + y;
