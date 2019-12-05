@@ -18,19 +18,19 @@ const EXP2F_TABLE_BITS = 5;
   0x3FEF5818DCFBA487, 0x3FEF7C97337B9B5F, 0x3FEFA4AFA2A490DA, 0x3FEFD0765B6E4540
 ];
 
-@lazy const exp2f_data_shift = reinterpret<f64>(0x4338000000000000); // 0x1.8p+52
-@lazy const exp2f_data_shift_scaled = exp2f_data_shift / EXP2F_N;
+// @lazy const exp2f_data_shift = reinterpret<f64>(0x4338000000000000); // 0x1.8p+52
+// @lazy const exp2f_data_shift_scaled = exp2f_data_shift / EXP2F_N;
 // @lazy export const exp2f_data_poly: f64[] = [
 //   reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
 //   reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
 //   reinterpret<f64>(0x3FE62E42FF0C52D6)  // 0x1.62e42ff0c52d6p-1
 // ];
-@lazy const exp2f_data_invln2_scaled = reinterpret<f64>(0x3FF71547652B82FE) * EXP2F_N; // 0x1.71547652b82fep+0
-@lazy const exp2f_data_poly_scaled: f64[] = [
-  reinterpret<f64>(0x3FAC6AF84B912394) / EXP2F_N / EXP2F_N / EXP2F_N, // 0x1.c6af84b912394p-5
-  reinterpret<f64>(0x3FCEBFCE50FAC4F3) / EXP2F_N / EXP2F_N,           // 0x1.ebfce50fac4f3p-3
-  reinterpret<f64>(0x3FE62E42FF0C52D6) / EXP2F_N                      // 0x1.62e42ff0c52d6p-1
-];
+// @lazy const exp2f_data_invln2_scaled = reinterpret<f64>(0x3FF71547652B82FE) * EXP2F_N; // 0x1.71547652b82fep+0
+// @lazy const exp2f_data_poly_scaled: f64[] = [
+//   reinterpret<f64>(0x3FAC6AF84B912394) / EXP2F_N / EXP2F_N / EXP2F_N, // 0x1.c6af84b912394p-5
+//   reinterpret<f64>(0x3FCEBFCE50FAC4F3) / EXP2F_N / EXP2F_N,           // 0x1.ebfce50fac4f3p-3
+//   reinterpret<f64>(0x3FE62E42FF0C52D6) / EXP2F_N                      // 0x1.62e42ff0c52d6p-1
+// ];
 
 // @inline function top12(x: f32): u32 {
 //   return reinterpret<u32>(x) >> 20;
@@ -42,10 +42,10 @@ const EXP2F_TABLE_BITS = 5;
  * Wrong count: 168353 (all nearest rounding wrong results with fma.)
  */
 export function exp2f_lut(x: f32): f32 {
-  const tab   = exp2f_data_tab.dataStart as usize;
-  const shift = exp2f_data_shift_scaled;
+  const N      = 1 << EXP2F_TABLE_BITS;
+  const N_MASK = N - 1;
+  const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
 
-  const N_MASK = (1 << EXP2F_TABLE_BITS) - 1;
   const C0 = reinterpret<f64>(0x3FAC6AF84B912394); // 0x1.c6af84b912394p-5
   const C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3); // 0x1.ebfce50fac4f3p-3
   const C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
@@ -66,6 +66,8 @@ export function exp2f_lut(x: f32): f32 {
   var ki = reinterpret<u64>(kd);
   var r  = xd - (kd - shift);
   var t: u64, y: f64;
+
+  const tab = exp2f_data_tab.dataStart as usize;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
   t  = load<u64>(tab + ((<usize>ki & N_MASK) << alignof<u64>()));
@@ -112,7 +114,7 @@ export function exp2f_lut(x: f32): f32 {
 
 @lazy const POWF_LOG2_TABLE_BITS = 4;
 @lazy const POWF_LOG2_POLY_ORDER = 5;
-@lazy const POWF_SCALE_BITS = EXP2F_TABLE_BITS;
+@lazy const POWF_SCALE_BITS = 0;
 @lazy const POWF_SCALE: f64 = 1 << POWF_SCALE_BITS;
 
 @lazy export const powf_log2_data_tab: f64[] = [
@@ -142,11 +144,11 @@ export function exp2f_lut(x: f32): f32 {
    the bit representation of a non-zero finite floating-point value.  */
 @inline function checkint(iy: u32): i32 {
   var e = iy >> 23 & 0xFF;
-  if (e < 0x7F +  0) return 0;
+  if (e < 0x7F     ) return 0;
   if (e > 0x7F + 23) return 2;
   e = 1 << (0x7F + 23 - e);
   if (iy & (e - 1)) return 0;
-  if (iy & (e - 0)) return 1;
+  if (iy &  e     ) return 1;
   return 2;
 }
 
@@ -194,38 +196,84 @@ export function exp2f_lut(x: f32): f32 {
 /* The output of log2 and thus the input of exp2 is either scaled by N
    (in case of fast toint intrinsics) or not.  The unscaled xd must be
    in [-1021,1023], sign_bias sets the sign of the result.  */
-@inline function exp2_inline(xd: f64, sign_bias: u32): f32 {
-  // const C0 =
-  // const C1 =
-  // const C2 =
+@inline function exp2_inline(xd: f64, signBias: u32): f32 {
+  const N      = 1 << EXP2F_TABLE_BITS;
+  const N_MASK = N - 1;
+  const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
 
-  var ki: u64, ski: u64, t: u64;
-  var kd: f64, z: f64, r: f64, r2: f64, y: f64, s: f64;
+  const C0 = reinterpret<f64>(0x3FAC6AF84B912394); // 0x1.c6af84b912394p-5
+  const C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3); // 0x1.ebfce50fac4f3p-3
+  const C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
 
-#if TOINT_INTRINSICS
-#define C __exp2f_data.poly_scaled
-  /* N*x = k + r with r in [-1/2, 1/2] */
-  kd = roundtoint(xd); /* k */
-  ki = converttoint(xd);
-#else
-#define C __exp2f_data.poly
-#define SHIFT __exp2f_data.shift_scaled
   /* x = k/N + r with r in [-1/(2N), 1/(2N)] */
-  kd = <f64>(xd + SHIFT);
-  ki = reinterpret<u64>(kd);
-  kd -= SHIFT; /* k/N */
-#endif
-  r = xd - kd;
+  var kd = <f64>(xd + shift);
+  var ki = reinterpret<u64>(kd);
+  var r  = xd - (kd - shift);
+  var t: u64, z: f64, y: f64, s: f64;
 
   /* exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1) */
-  t = T[ki % N];
-  ski = ki + sign_bias;
-  t += ski << (52 - EXP2F_TABLE_BITS);
-  s = reinterpret<f64>(t);
-  z = C0 * r + C1;
-  r2 = r * r;
-  y = C2 * r + 1;
-  y = z * r2 + y;
-  y = y * s;
+  const tab = exp2f_data_tab.dataStart as usize;
+
+  // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
+  t  = load<u64>(tab + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t += (ki + signBias) << (52 - EXP2F_TABLE_BITS);
+  s  = reinterpret<f64>(t);
+  z  = C0 * r + C1;
+  y  = C2 * r + 1;
+  y += z * (r * r);
+  y *= s;
   return <f32>y;
+}
+
+export function powf_lut(x: f32, y: f32): f32 {
+  const Ox1p23f     = reinterpret<f32>(0x4B000000); // 0x1p23f
+  const UPPER_LIMIT = reinterpret<f64>(0x405FFFFFFFD1D571) * POWF_SCALE; // 0x1.fffffffd1d571p+6
+  const LOWER_LIMIT = -150.0 * POWF_SCALE;
+  const SIGN_BIAS   = 1 << (EXP2F_TABLE_BITS + 11);
+
+  var signBias: u32 = 0;
+  var by: bool = false;
+  var ix = reinterpret<u32>(x);
+  var iy = reinterpret<u32>(y);
+
+  if (ix - 0x00800000 >= 0x7f800000 - 0x00800000 || (by = zeroinfnan(iy))) {
+    /* Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).  */
+    if (by) {
+      if (2 * iy == 0) return isNaN(x) ? x + y : 1.0;
+      if (ix == 0x3F800000) return isNaN(y) ? x + y : 1.0;
+      if (2 * ix > 2 * 0x7F800000 || 2 * iy > 2 * 0x7F800000) return x + y;
+      if (2 * ix == 2 * 0x3F800000) return 1.0;
+      if ((2 * ix < 2 * 0x3F800000) == !(iy & 0x80000000)) return 0; /* |x|<1 && y==inf or |x|>1 && y==-inf.  */
+      return y * y;
+    }
+    if (zeroinfnan(ix)) {
+      let x2 = x * x;
+      if (ix & 0x80000000 && checkint(iy) == 1) x2 = -x2;
+      /* Without the barrier some versions of clang hoist the 1/x2 and
+         thus division by zero exception can be signaled spuriously.  */
+      return iy & 0x80000000 ? 1 / x2 : x2;
+    }
+    /* x and y are non-zero finite.  */
+    if (ix & 0x80000000) {
+      /* Finite x < 0.  */
+      let yint = checkint(iy);
+      if (yint == 0) return (x - x) / (x - x);
+      if (yint == 1) signBias = SIGN_BIAS;
+      ix &= 0x7FFFFFFF;
+    }
+    if (ix < 0x00800000) {
+      /* Normalize subnormal x so exponent becomes negative.  */
+      ix = reinterpret<u32>(x * Ox1p23f);
+      ix &= 0x7FFFFFFF;
+      ix -= 23 << 23;
+    }
+  }
+  var logx = log2_inline(ix);
+  var ylogx = y * logx; /* cannot overflow, y is single prec.  */
+  if ((reinterpret<u64>(ylogx) >> 47 & 0xFFFF) >= reinterpret<u64>(126.0 * POWF_SCALE) >> 47) {
+    /* |y*log(x)| >= 126.  */
+    if (ylogx  > UPPER_LIMIT) return __math_oflowf(signBias); // overflow
+    if (ylogx <= LOWER_LIMIT) return __math_uflowf(signBias); // underflow
+  }
+  return exp2_inline(ylogx, signBias);
 }
