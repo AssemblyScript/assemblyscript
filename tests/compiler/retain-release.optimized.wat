@@ -144,7 +144,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $retain-release/Ref#constructor (; 3 ;) (type $FUNCSIG$i) (result i32)
+ (func $retain-release/Ref#constructor (; 3 ;) (result i32)
   i32.const 0
   i32.const 3
   call $~lib/rt/stub/__alloc

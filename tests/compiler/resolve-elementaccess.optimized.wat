@@ -132,7 +132,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/memory/memory.fill (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/memory/memory.fill (; 3 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 0
@@ -176,7 +176,7 @@
   i32.const 0
   i32.store8
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 4 ;) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 8
   i32.const 0
@@ -1453,7 +1453,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String#substring (; 14 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1624,7 +1624,7 @@
   f64.promote_f32
   call $~lib/util/number/dtoa
  )
- (func $~lib/util/string/compareImpl (; 18 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0

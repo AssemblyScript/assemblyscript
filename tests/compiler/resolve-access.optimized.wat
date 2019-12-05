@@ -8,7 +8,6 @@
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$viji (func (param i32 i64 i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$ji (func (param i32) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01")
@@ -109,7 +108,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/memory/memory.copy (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/memory/memory.copy (; 3 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -280,7 +279,7 @@
    end
   end
  )
- (func $~lib/rt/__allocArray (; 4 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/__allocArray (; 4 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -305,7 +304,7 @@
   call $~lib/memory/memory.copy
   local.get $0
  )
- (func $~lib/array/Array<u64>#__get (; 5 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
+ (func $~lib/array/Array<u64>#__get (; 5 ;) (param $0 i32) (result i64)
   i32.const 0
   local.get $0
   i32.load offset=12
@@ -313,7 +312,7 @@
   if
    i32.const 48
    i32.const 104
-   i32.const 93
+   i32.const 94
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -527,7 +526,7 @@
   call $~lib/array/Array<u64>#__get
   call $~lib/util/number/utoa64
  )
- (func $resolve-access/Container#constructor (; 12 ;) (type $FUNCSIG$i) (result i32)
+ (func $resolve-access/Container#constructor (; 12 ;) (result i32)
   (local $0 i32)
   i32.const 8
   i32.const 5

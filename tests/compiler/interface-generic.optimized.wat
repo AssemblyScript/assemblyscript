@@ -236,7 +236,7 @@
   local.get $1
   i32.add
  )
- (func $interface-generic/GFoo<i32,bool>#foo (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-generic/GFoo<i32,bool>#foo (; 10 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 8
@@ -267,7 +267,7 @@
   local.get $2
   i32.add
  )
- (func $interface-generic/GFoo<i32,bool>#faa (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-generic/GFoo<i32,bool>#faa (; 12 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 8

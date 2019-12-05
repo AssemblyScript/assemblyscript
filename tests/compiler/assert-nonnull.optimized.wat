@@ -51,12 +51,12 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get (; 4 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   i32.load
  )
- (func $~lib/array/Array<assert-nonnull/Foo>#__get (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo>#__get (; 5 ;) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load offset=12
@@ -64,7 +64,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 93
+   i32.const 94
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -76,7 +76,7 @@
   if
    i32.const 128
    i32.const 80
-   i32.const 97
+   i32.const 98
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -92,7 +92,7 @@
   local.get $0
   call $~lib/array/Array<assert-nonnull/Foo>#__get
  )
- (func $~lib/array/Array<assert-nonnull/Foo | null>#__get (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo | null>#__get (; 7 ;) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load offset=12
@@ -100,7 +100,7 @@
   if
    i32.const 24
    i32.const 80
-   i32.const 93
+   i32.const 94
    i32.const 41
    call $~lib/builtins/abort
    unreachable

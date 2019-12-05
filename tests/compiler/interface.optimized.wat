@@ -59,7 +59,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/stub/offset
@@ -112,7 +112,7 @@
    unreachable
   end
  )
- (func $interface/expectX (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $interface/expectX (; 4 ;) (param $0 i32)
   local.get $0
   call $interface/IFoo#set:x
   local.get $0
@@ -208,7 +208,7 @@
    end
   end
  )
- (func $interface/IFoo#set:x (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $interface/IFoo#set:x (; 9 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 8
@@ -240,7 +240,7 @@
   local.get $1
   i32.add
  )
- (func $interface/IFoo#foo (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface/IFoo#foo (; 11 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 8
@@ -271,7 +271,7 @@
   local.get $2
   i32.add
  )
- (func $interface/IFoo#faa (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface/IFoo#faa (; 13 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 8

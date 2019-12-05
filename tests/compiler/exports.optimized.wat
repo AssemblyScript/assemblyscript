@@ -102,7 +102,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 4 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/stub/offset
