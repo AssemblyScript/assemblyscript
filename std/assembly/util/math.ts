@@ -399,7 +399,7 @@ export function powf_lut(x: f32, y: f32): f32 {
     if (zeroinfnan(iy)) {
       if ((iy << 1) == 0) return 1.0;
       if (ix == 0x3F800000) return NaN; // // original: 1.0
-      if ((ix << 1) > (<u32>0x7F800000 << 1) || (iy << 1) > <u32>(0x7F800000 << 1)) return x + y;
+      if ((ix << 1) > (<u32>0x7F800000 << 1) || (iy << 1) > (<u32>0x7F800000 << 1)) return x + y;
       if ((ix << 1) == (0x3F800000 << 1)) return NaN; // original: 1.0
       if (((ix << 1) < (0x3F800000 << 1)) == !(iy >> 31)) return 0; // |x| < 1 && y==inf or |x| > 1 && y==-inf.
       return y * y;
@@ -426,7 +426,7 @@ export function powf_lut(x: f32, y: f32): f32 {
   }
   var logx = log2_inline(ix);
   var ylogx = y * logx; // cannot overflow, y is single prec.
-  if ((reinterpret<u64>(ylogx) >> 47 & 0xFFFF) >= reinterpret<u64>(126.0) >> 47) {
+  if ((reinterpret<u64>(ylogx) >> 47 & 0xFFFF) >= 0x80BF) { // reinterpret<u64>(126.0) >> 47
     // |y * log(x)| >= 126
     if (ylogx  > UPPER_LIMIT) return oflowf(signBias); // overflow
     if (ylogx <= LOWER_LIMIT) return uflowf(signBias); // underflow
