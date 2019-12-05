@@ -1,7 +1,6 @@
 /** Lookup data for exp2f **/
 
-const EXP2F_TABLE_BITS = 5;
-
+@lazy const EXP2F_TABLE_BITS = 5;
 @lazy const exp2f_data_tab: u64[] = [
   /**
    * exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
@@ -74,7 +73,7 @@ export function exp2f_lut(x: f32): f32 {
   reinterpret<f64>(0x3FF1BB4A4A1A343F), reinterpret<f64>(0xBFC2F9E393AF3C9F), // 0x1.1bb4a4a1a343fp+0, -0x1.2f9e393af3c9fp-3,
   reinterpret<f64>(0x3FF12358F08AE5BA), reinterpret<f64>(0xBFB960CBBF788D5C), // 0x1.12358f08ae5bap+0, -0x1.960cbbf788d5cp-4,
   reinterpret<f64>(0x3FF0953F419900A7), reinterpret<f64>(0xBFAA6F9DB6475FCE), // 0x1.0953f419900a7p+0, -0x1.a6f9db6475fcep-5,
-  reinterpret<f64>(0x3FF0000000000000), reinterpret<f64>(0x0),                // 0x1p+0,                0x0,
+  reinterpret<f64>(0x3FF0000000000000), 0,                                    // 0x1p+0,                0x0,
   reinterpret<f64>(0x3FEE608CFD9A47AC), reinterpret<f64>(0x3FB338CA9F24F53D), // 0x1.e608cfd9a47acp-1,  0x1.338ca9f24f53dp-4,
   reinterpret<f64>(0x3FECA4B31F026AA0), reinterpret<f64>(0x3FC476A9543891BA), // 0x1.ca4b31f026aap-1 ,  0x1.476a9543891bap-3,
   reinterpret<f64>(0x3FEB2036576AFCE6), reinterpret<f64>(0x3FCE840B4AC4E4D2), // 0x1.b2036576afce6p-1,  0x1.e840b4ac4e4d2p-3,
@@ -139,8 +138,7 @@ export function log2f_lut(x: f32): f32 {
 
 /* Lookup data for logf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/logf.c */
 
-const LOGF_TABLE_BITS = 4;
-
+@lazy const LOGF_TABLE_BITS = 4;
 @lazy const logf_data_tab: f64[] = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFD57BF7808CAADE), // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFD2BEF0A7C06DDB), // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
@@ -218,7 +216,6 @@ export function logf_lut(x: f32): f32 {
 @lazy const POWF_LOG2_TABLE_BITS = 4;
 @lazy const POWF_SCALE_BITS = 0;
 @lazy const POWF_SCALE: f64 = 1 << POWF_SCALE_BITS;
-
 @lazy export const powf_log2_data_tab: f64[] = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019) * POWF_SCALE,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4) * POWF_SCALE,
@@ -229,7 +226,7 @@ export function logf_lut(x: f32): f32 {
   reinterpret<f64>(0x3FF1BB4A4A1A343F), reinterpret<f64>(0xBFC2F9E393AF3C9F) * POWF_SCALE,
   reinterpret<f64>(0x3FF12358F08AE5BA), reinterpret<f64>(0xBFB960CBBF788D5C) * POWF_SCALE,
   reinterpret<f64>(0x3FF0953F419900A7), reinterpret<f64>(0xBFAA6F9DB6475FCE) * POWF_SCALE,
-  reinterpret<f64>(0x3FF0000000000000), reinterpret<f64>(0x0),
+  reinterpret<f64>(0x3FF0000000000000), 0,
   reinterpret<f64>(0x3FEE608CFD9A47AC), reinterpret<f64>(0x3FB338CA9F24F53D) * POWF_SCALE,
   reinterpret<f64>(0x3FECA4B31F026AA0), reinterpret<f64>(0x3FC476A9543891BA) * POWF_SCALE,
   reinterpret<f64>(0x3FEB2036576AFCE6), reinterpret<f64>(0x3FCE840B4AC4E4D2) * POWF_SCALE,
