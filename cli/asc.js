@@ -40,7 +40,8 @@ var assemblyscript, isDev = false;
     try { // `asc` on the command line without dist files
       require("ts-node").register({
         project: path.join(__dirname, "..", "src", "tsconfig.json"),
-        skipIgnore: true
+        skipIgnore: true,
+        compilerOptions: { target: "ES2016" }
       });
       require("../src/glue/js");
       assemblyscript = require("../src");
