@@ -2226,8 +2226,8 @@ declare module "assemblyscript/src/module" {
         getShrinkLevel(): number;
         setShrinkLevel(level?: number): void;
         setDebugInfo(on?: boolean): void;
-        getFeatures(): number;
-        setFeatures(featureFlags: number): void;
+        getFeatures(): FeatureFlags;
+        setFeatures(featureFlags: FeatureFlags): void;
         optimize(func?: FunctionRef): void;
         runPasses(passes: string[], func?: FunctionRef): void;
         private cachedPrecomputeNames;
@@ -5164,15 +5164,6 @@ declare module "assemblyscript/src/extra/ast" {
         serializeAccessModifiers(node: DeclarationStatement): void;
         finish(): string;
     }
-}
-/** @module glue/js */ /***/
-declare namespace binaryen {
-    class Module {
-        constructor();
-        emitStackIR(optimize?: boolean): string;
-        emitAsmjs(): string;
-    }
-    function wrapModule(ptr: number): Module;
 }
 /** @module glue/js */ /***/
 declare function f32_as_i32(value: number): number;
