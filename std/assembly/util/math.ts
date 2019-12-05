@@ -64,8 +64,6 @@ export function exp2f_lut(x: f32): f32 {
 /** Lookup data for log2f **/
 
 @lazy const LOG2F_TABLE_BITS = 4;
-@lazy const LOG2F_POLY_ORDER = 4;
-
 @lazy const log2f_data_tab: f64[] = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019), // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4), // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
@@ -85,16 +83,54 @@ export function exp2f_lut(x: f32): f32 {
   reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FDCE0A44EB17BCC), // 0x1.767dcf5534862p-1,  0x1.ce0a44eb17bccp-2
 ];
 
-@lazy const log2f_data_poly: f64[] = [
-  reinterpret<f64>(0xBFD712B6F70A7E4D), // -0x1.712b6f70a7e4dp-2,
-  reinterpret<f64>(0x3FDECABF496832E0), //  0x1.ecabf496832ep-2,
-  reinterpret<f64>(0xBFE715479FFAE3DE), // -0x1.715479ffae3dep-1,
-  reinterpret<f64>(0x3FF715475F35C8B8)  //  0x1.715475f35c8b8p0
-];
+export function log2f_lut(x: f32): f32 {
+  const Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f;
+  const N_MASK  = (1 << LOG2F_TABLE_BITS) - 1;
 
-@inline export function log2f_lut(x: f32): f32 {
-  // TODO
-  return 0;
+  const A0 = reinterpret<f64>(0xBFD712B6F70A7E4D); // -0x1.712b6f70a7e4dp-2
+  const A1 = reinterpret<f64>(0x3FDECABF496832E0); //  0x1.ecabf496832ep-2
+  const A2 = reinterpret<f64>(0xBFE715479FFAE3DE); // -0x1.715479ffae3dep-1
+  const A3 = reinterpret<f64>(0x3FF715475F35C8B8); //  0x1.715475f35c8b8p0
+
+  var ux = reinterpret<u32>(x);
+  /* Fix sign of zero with downward rounding when x==1.  */
+  // if (WANT_ROUNDING && predict_false(ix == 0x3f800000)) return 0;
+  if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
+    /* x < 0x1p-126 or inf or nan.  */
+    if (ux * 2 == 0) return -Infinity;
+    if (ux == 0x7F800000) return x; /* log2(inf) == inf.  */
+    if ((ux & 0x80000000) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
+    /* x is subnormal, normalize it.  */
+    ux = reinterpret<u32>(x * Ox1p23f);
+    ux -= 23 << 23;
+  }
+  /* x = 2^k z; where z is in range [OFF,2*OFF] and exact.
+     The range is split into N subintervals.
+     The ith subinterval contains z and c is near its center.  */
+  var tmp  = ux - 0x3F330000;
+  var i    = (tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK;
+  var top  = tmp & 0xFF800000;
+  var iz   = ux - top;
+  var k    = <i32>tmp >> 23; /* arithmetic shift */
+
+  var tab = log2f_data_tab.dataStart as usize;
+
+  var invc = load<f64>(tab + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(tab + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  var z    = <f64>reinterpret<f32>(iz);
+
+  /* log2(x) = log1p(z/c-1)/ln2 + log2(c) + k */
+  var r  = z * invc - 1;
+  var y0 = logc + <f64>k;
+
+  /* Pipelined polynomial evaluation to approximate log1p(r)/ln2.  */
+  var y = A1 * r + A2;
+  var p = A3 * r + y0;
+  var r2 = r * r;
+  y += A0 * r2;
+  y = y * r2 + p;
+
+  return <f32>y;
 }
 
 /* Lookup data for logf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/logf.c */
@@ -241,12 +277,11 @@ export function logf_lut(x: f32): f32 {
   /* log2(x) = log1p(z/c-1)/ln2 + log2(c) + k */
   var r  = z * invc - 1;
   var y0 = logc + <f64>k;
-  var p: f64, q: f64, y: f64;
 
   /* Pipelined polynomial evaluation to approximate log1p(r)/ln2. */
-  y = A0 * r + A1;
-  p = A2 * r + A3;
-  q = A4 * r + y0;
+  var y = A0 * r + A1;
+  var p = A2 * r + A3;
+  var q = A4 * r + y0;
 
   r *= r;
   q += p * r;
