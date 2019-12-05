@@ -48,7 +48,7 @@ export function exp2f_lut(x: f32): f32 {
   var kd = xd + shift;
   var ki = reinterpret<u64>(kd);
   var r  = xd - (kd - shift);
-  var t: u64, y: f64;
+  var t: u64, y: f64, s: f64;
 
   // @ts-ignore: cast
   const tab = exp2f_data_tab.dataStart as usize;
@@ -56,9 +56,10 @@ export function exp2f_lut(x: f32): f32 {
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
   t  = load<u64>(tab + ((<usize>ki & N_MASK) << alignof<u64>()));
   t += ki << (52 - EXP2F_TABLE_BITS);
+  s  = reinterpret<f64>(t);
   y  = C2 * r + 1;
   y += (C0 * r + C1) * (r  * r);
-  y *= reinterpret<f64>(t);
+  y *= s;
 
   return <f32>y;
 }
