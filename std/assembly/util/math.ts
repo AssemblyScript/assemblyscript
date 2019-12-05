@@ -83,6 +83,10 @@ export function exp2f_lut(x: f32): f32 {
   reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FDCE0A44EB17BCC), // 0x1.767dcf5534862p-1,  0x1.ce0a44eb17bccp-2
 ];
 
+/*
+ULP error: 0.752 (nearest rounding.)
+Relative error: 1.9 * 2^-26 (before rounding.)
+*/
 export function log2f_lut(x: f32): f32 {
   const Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f;
   const N_MASK  = (1 << LOG2F_TABLE_BITS) - 1;
@@ -124,11 +128,11 @@ export function log2f_lut(x: f32): f32 {
   var y0 = logc + <f64>k;
 
   /* Pipelined polynomial evaluation to approximate log1p(r)/ln2.  */
-  var y = A1 * r + A2;
-  var p = A3 * r + y0;
+  var y  = A1 * r + A2;
+  var p  = A3 * r + y0;
   var r2 = r * r;
   y += A0 * r2;
-  y = y * r2 + p;
+  y  = y * r2 + p;
 
   return <f32>y;
 }
