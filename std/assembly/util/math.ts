@@ -278,11 +278,11 @@ export function logf_lut(x: f32): f32 {
 // @ts-ignore: decorator
 @lazy const POWF_SCALE_BITS = 0;
 // @ts-ignore: decorator
-@lazy const POWF_SCALE: f64 = 1 << POWF_SCALE_BITS;
+@lazy const POWF_SCALE = <f64>(1 << POWF_SCALE_BITS);
 
 // TODO: remove this and use log2_data_tab instead
 // @ts-ignore: decorator
-@lazy export const powf_log2_data_tab: f64[] = [
+@lazy const powf_log2_data_tab: f64[] = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019) * POWF_SCALE,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4) * POWF_SCALE,
   reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD7418B0A1FB77B) * POWF_SCALE,
@@ -303,7 +303,7 @@ export function logf_lut(x: f32): f32 {
 
 // @ts-ignore: decorator
 @inline function zeroinfnan(ux: u32): bool {
-  return 2 * ux - 1 >= 2 * 0x7f800000 - 1;
+  return <u32>2 * ux - 1 >= <u32>2 * 0x7f800000 - 1;
 }
 
 /* Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
@@ -396,6 +396,18 @@ export function logf_lut(x: f32): f32 {
   return <f32>y;
 }
 
+@inline function xflowf(sign: u32, y: f32): f32 {
+  return <f32>((sign ? -y : y) * y);
+}
+
+@inline function oflowf(sign: u32): f32 {
+  return xflowf(sign, reinterpret<f32>(0x70000000)); // 0x1p97f
+}
+
+@inline function uflowf(sign: u32): f32 {
+  return xflowf(sign, reinterpret<f32>(0x10000000)); // 0x1p-95f
+}
+
 export function powf_lut(x: f32, y: f32): f32 {
   const Ox1p23f     = reinterpret<f32>(0x4B000000); // 0x1p23f
   const UPPER_LIMIT = reinterpret<f64>(0x405FFFFFFFD1D571) * POWF_SCALE; // 0x1.fffffffd1d571p+6
@@ -403,18 +415,19 @@ export function powf_lut(x: f32, y: f32): f32 {
   const SIGN_BIAS   = 1 << (EXP2F_TABLE_BITS + 11);
 
   var signBias: u32 = 0;
-  var by: bool = false;
   var ix = reinterpret<u32>(x);
   var iy = reinterpret<u32>(y);
 
-  if (ix - 0x00800000 >= 0x7f800000 - 0x00800000 || (by = zeroinfnan(iy))) {
+  if (ix - 0x00800000 >= 0x7f800000 - 0x00800000 || zeroinfnan(iy)) {
     // Either (x < 0x1p-126 or inf or nan) or (y is 0 or inf or nan).
-    if (by) {
-      if (2 * iy == 0) return isNaN(x) ? x + y : 1.0;
-      if (ix == 0x3F800000) return isNaN(y) ? x + y : 1.0;
-      if (2 * ix > 2 * 0x7F800000 || 2 * iy > 2 * 0x7F800000) return x + y;
-      if (2 * ix == 2 * 0x3F800000) return 1.0;
-      if ((2 * ix < 2 * 0x3F800000) == !(iy & 0x80000000)) return 0; // |x|<1 && y==inf or |x|>1 && y==-inf.
+    if (zeroinfnan(iy)) {
+      if (2 * iy == 0) return 1.0;
+      if (ix == 0x3F800000) return NaN; // // original: 1.0
+      if (<u32>2 * ix > <u32>2 * 0x7F800000 || <u32>2 * iy > <u32>2 * 0x7F800000) return x + y;
+      if (2 * ix == 2 * 0x3F800000) return NaN; // original: 1.0
+      if ((2 * ix < 2 * 0x3F800000) == !(iy & 0x80000000)) {
+        return isFinite(x) ? 0 : Infinity; // original: 0 // |x|<1 && y==inf or |x|>1 && y==-inf.
+      }
       return y * y;
     }
     if (zeroinfnan(ix)) {
@@ -441,8 +454,8 @@ export function powf_lut(x: f32, y: f32): f32 {
   var ylogx = y * logx; // cannot overflow, y is single prec.
   if ((reinterpret<u64>(ylogx) >> 47 & 0xFFFF) >= reinterpret<u64>(126.0 * POWF_SCALE) >> 47) {
     // |y * log(x)| >= 126
-    if (ylogx  > UPPER_LIMIT) return __math_oflowf(signBias); // overflow
-    if (ylogx <= LOWER_LIMIT) return __math_uflowf(signBias); // underflow
+    if (ylogx  > UPPER_LIMIT) return oflowf(signBias); // overflow
+    if (ylogx <= LOWER_LIMIT) return uflowf(signBias); // underflow
   }
   return exp2_inline(ylogx, signBias);
 }
