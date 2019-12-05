@@ -1356,6 +1356,8 @@ declare class Float64Array extends TypedArray<f64> {
 
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {
+  // TODO: Add iterable types
+  static from<T>(iterator: any): T[];
 
   /** Tests if a value is an array. */
   static isArray<U>(value: any): value is Array<any>;

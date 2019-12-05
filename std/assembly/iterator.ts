@@ -1,9 +1,13 @@
-export abstract class Iterable<T> {
-  // ?
+export interface Iterable<T> {
+  readonly iterator: Iterator<T>;
 }
 
-@sealed
-export abstract class Iterator<T> {
+export interface IteratorResut<T> {
+  readonly value: T;
+  readonly done: bool;
+}
+
+export interface Iterator<T> {
 
   // private constructor(iterable: Iterable<T>) {
   // }
@@ -29,7 +33,11 @@ export abstract class Iterator<T> {
   //   ?
   // }
 
-  done(this: u64): bool {
-    return <bool>(this & 1);
-  }
+  readonly done: bool;
+
+  readonly value: T;
+
+  next(): Iterator<T>;
+
+
 }

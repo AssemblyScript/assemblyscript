@@ -6,6 +6,7 @@ import { ArrayBufferView } from "./arraybuffer";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
+import { Iterator } from "iterator";
 
 /** Ensures that the given array has _at least_ the specified backing size. */
 function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
@@ -487,6 +488,19 @@ export class Array<T> extends ArrayBufferView {
 
   toString(): string {
     return this.join();
+  }
+
+  static from<T>(iter: Iterator<T>): Array<T> {
+    var arr = new Array<T>();
+    var res = iter.next();
+    var len = 0;
+    while (!res.done){
+      arr.push(res.value);
+      res = iter.next();
+      len++;
+    }
+    arr.length = len;
+    return arr;
   }
 
   // RT integration
