@@ -23,13 +23,13 @@
  (data (i32.const 408) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00w\00o\00r\00l\00d\00")
  (table $0 11 funcref)
  (elem (i32.const 0) $null $std/iterator/ArrayIterator<i32>#constructor $std/iterator/IterableArray<i32>#get:iterator $~lib/map/EntriesIter<~lib/string/String,i32>#constructor $~lib/map/EntriesIter<~lib/string/String,i32>#get:done $~lib/map/EntriesIter<~lib/string/String,i32>#get:entry $~lib/map/EntriesIter<~lib/string/String,i32>#next $std/iterator/ArrayIterator<i32>#next $std/iterator/ArrayIterator<i32>#get:done $std/iterator/ArrayIterator<i32>#get:value $~lib/map/EntriesIter<~lib/string/String,i32>#get:value)
- (global $std/iterator/arr (mut i32) (i32.const 56))
+ (global $std/iterator/arri32 (mut i32) (i32.const 56))
  (global $std/iterator/iterableArr (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/iterator/iter (mut i32) (i32.const 0))
- (global $std/iterator/res (mut i32) (i32.const 0))
- (global $std/iterator/i (mut i32) (i32.const 0))
+ (global $std/iterator/iterres (mut i32) (i32.const 0))
+ (global $std/iterator/arri (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/iterator/arr2 (mut i32) (i32.const 0))
  (global $std/iterator/map (mut i32) (i32.const 0))
@@ -2956,7 +2956,7 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  global.get $std/iterator/arr
+  global.get $std/iterator/arri32
   call $~lib/rt/stub/__retain
   global.set $std/iterator/iterableArr
   global.get $~lib/heap/__heap_base
@@ -2976,22 +2976,22 @@
   global.set $std/iterator/iter
   global.get $std/iterator/iter
   call $~lib/iterator/Iterator<i32>#next
-  global.set $std/iterator/res
+  global.set $std/iterator/iterres
   block $break|0
    loop $continue|0
-    global.get $std/iterator/res
+    global.get $std/iterator/iterres
     call $~lib/iterator/IteratorResult<i32>#get:done
     i32.eqz
     i32.eqz
     br_if $break|0
-    global.get $std/iterator/res
+    global.get $std/iterator/iterres
     call $~lib/iterator/IteratorResult<i32>#get:value
-    global.get $std/iterator/arr
-    global.get $std/iterator/i
+    global.get $std/iterator/arri32
+    global.get $std/iterator/arri
     local.tee $0
     i32.const 1
     i32.add
-    global.set $std/iterator/i
+    global.set $std/iterator/arri
     local.get $0
     call $~lib/array/Array<i32>#__get
     i32.eq
@@ -3007,10 +3007,10 @@
     global.get $std/iterator/iter
     call $~lib/iterator/Iterator<i32>#next
     local.set $0
-    global.get $std/iterator/res
+    global.get $std/iterator/iterres
     call $~lib/rt/stub/__release
     local.get $0
-    global.set $std/iterator/res
+    global.set $std/iterator/iterres
     br $continue|0
    end
    unreachable
@@ -3020,7 +3020,7 @@
   local.tee $0
   call $~lib/array/Array.from<i32>
   global.set $std/iterator/arr2
-  global.get $std/iterator/arr
+  global.get $std/iterator/arr2
   call $~lib/array/Array<i32>#get:length
   i32.const 3
   i32.eq

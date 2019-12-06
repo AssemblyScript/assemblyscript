@@ -24,8 +24,8 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/iterator/iter (mut i32) (i32.const 0))
- (global $std/iterator/res (mut i32) (i32.const 0))
- (global $std/iterator/i (mut i32) (i32.const 0))
+ (global $std/iterator/iterres (mut i32) (i32.const 0))
+ (global $std/iterator/arri (mut i32) (i32.const 0))
  (global $std/iterator/arr2 (mut i32) (i32.const 0))
  (global $std/iterator/map (mut i32) (i32.const 0))
  (global $std/iterator/entries (mut i32) (i32.const 0))
@@ -1391,20 +1391,20 @@
   global.set $std/iterator/iter
   global.get $std/iterator/iter
   call $~lib/iterator/Iterator<i32>#next
-  global.set $std/iterator/res
+  global.set $std/iterator/iterres
   loop $continue|0
-   global.get $std/iterator/res
+   global.get $std/iterator/iterres
    call $~lib/iterator/IteratorResult<i32>#get:done
    i32.eqz
    if
-    global.get $std/iterator/res
+    global.get $std/iterator/iterres
     call $~lib/iterator/IteratorResult<i32>#get:value
     local.set $0
-    global.get $std/iterator/i
+    global.get $std/iterator/arri
     local.tee $1
     i32.const 1
     i32.add
-    global.set $std/iterator/i
+    global.set $std/iterator/arri
     i32.const 56
     local.get $1
     call $~lib/array/Array<i32>#__get
@@ -1420,7 +1420,7 @@
     else
      global.get $std/iterator/iter
      call $~lib/iterator/Iterator<i32>#next
-     global.set $std/iterator/res
+     global.set $std/iterator/iterres
      br $continue|0
     end
     unreachable
@@ -1430,8 +1430,8 @@
   call $std/iterator/IterableArray<i32>#get:iterator
   call $~lib/array/Array.from<i32>
   global.set $std/iterator/arr2
-  i32.const 68
-  i32.load
+  global.get $std/iterator/arr2
+  i32.load offset=12
   i32.const 3
   i32.ne
   if

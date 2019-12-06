@@ -9167,15 +9167,15 @@ export class Compiler extends DiagnosticEmitter {
     const _class = fromType.classReference!;
     var imems: Map<string, Element>;
     var mems: Map<string, Element> | null;
-    if (_interface.prototype.instanceMembers == null) {
+    if (_interface.members == null) {
       return true;
     }
-    imems = _interface.prototype.instanceMembers;
-    mems = _class.prototype.instanceMembers;
+    imems = _interface.members;
+    mems = _class.members;
 
     var error = false;
     var incorrectMember = false;
-    for (const [name, imem] of imems.entries()) {
+    for (let [name, imem] of imems.entries()) {
       error = error || incorrectMember;
       incorrectMember = true;
       if (mems == null || mems.get(name) == null) {
@@ -9192,8 +9192,8 @@ export class Compiler extends DiagnosticEmitter {
       let mem  = mems.get(name)!;
       if (imem.kind != mem.kind) {
         // Interfaces can't have properties
-        if ((mem.kind != ElementKind.PROPERTY_PROTOTYPE  && mem.kind != ElementKind.FIELD_PROTOTYPE) && 
-            (imem.kind == ElementKind.PROPERTY)) {
+        if ((mem.kind != ElementKind.PROPERTY_PROTOTYPE  && mem.kind != ElementKind.FIELD_PROTOTYPE && mem.kind != ElementKind.FIELD && 
+            imem.kind == ElementKind.PROPERTY)) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             (<DeclaredElement>mem).declaration.range,
@@ -9205,10 +9205,18 @@ export class Compiler extends DiagnosticEmitter {
       }
       let from: Type = Type.void, to: Type = Type.void;
       switch (mem.kind) {
+        case ElementKind.FIELD: {
+          mem = (<Field>mem).prototype;
+          imem = (<Property>imem).prototype;
+        }
         case ElementKind.FIELD_PROTOTYPE: {
           from = this.resolver.resolveType((<FieldPrototype>mem).typeNode!, _class)!;
           to = this.resolver.resolveType((<PropertyPrototype>imem).getterPrototype!.functionTypeNode, imem, _interface.contextualTypeArguments, ReportMode.REPORT)!.signatureReference!.returnType;
           break;
+        }
+        case ElementKind.FUNCTION: {
+          mem = (<Function>mem).prototype;
+          imem = (<Function>mem).prototype;
         }
         case ElementKind.FUNCTION_PROTOTYPE: {
           let func = (<FunctionPrototype>mem);
@@ -9217,6 +9225,10 @@ export class Compiler extends DiagnosticEmitter {
           from = this.resolver.resolveType(func.functionTypeNode, func,  _class.contextualTypeArguments)!;//, ReportMode.REPORT, false)!.type;
           to = this.resolver.resolveType((<FunctionPrototype>imem).functionTypeNode, imem, _interface.contextualTypeArguments, ReportMode.REPORT)!;
           break;
+        }
+        case ElementKind.PROPERTY: {
+          mem = (<Property>mem).prototype;
+          imem = (<Property>imem).prototype;
         }
         case ElementKind.PROPERTY_PROTOTYPE: {
           const property = <PropertyPrototype> mem;
@@ -9283,6 +9295,9 @@ export class Compiler extends DiagnosticEmitter {
     const interfaces = this.program.interfaces;
     for (let i: i32 = 0; i < interfaces.length; i++) {
       const _interface = interfaces[i];
+      if (_interface.implementers.size == 0) {
+        continue;
+      }
       this.compileInterfaceProperties(_interface);
       this.compileInterfacePropertiesSetters(_interface);
       this.compileInterfaceMethods(_interface);

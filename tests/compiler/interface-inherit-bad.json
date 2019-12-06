@@ -1,0 +1,16 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+  "TS2741: Property 'a' is missing in type 'BadAC' but required in type 'BadIC'.",
+   "class BadAC implements IC {",
+
+  "TS2420: Class 'interface-inherit-bad/BadAC' incorrectly implements interface 'interface-inherit-bad/BadIC'.",
+   "class BadAC implements IC {",
+
+  "TS2322: Type 'interface-inherit-bad/BadAC' is not assignable to type 'interface-inherit-bad/BadIC'.",
+
+   "testbadIC(badac);"
+  ]
+}

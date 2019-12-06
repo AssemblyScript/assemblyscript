@@ -30,22 +30,22 @@ class IterableArray<T> extends Array<T> implements Iterable<T> {
 
 }
 
-let arr: Array<i32> = [1,3,5];
-let iterableArr = <IterableArray<i32>> arr;
+let arri32: Array<i32> = [1,3,5];
+let iterableArr = <IterableArray<i32>> arri32;
 
 let iter = iterableArr.iterator;
-let res = iter.next();
-let i: i32 = 0;
-while (!res.done){
-  assert(res.value == arr[i++]);
-  res = iter.next()
+let iterres = iter.next();
+let arri: i32 = 0;
+while (!iterres.done){
+  assert(iterres.value == arri32[arri++]);
+  iterres = iter.next()
 }
 
 
 
 let arr2: Array<i32> = Array.from<i32>(iterableArr.iterator);
 // assert (arr2 != null);
-assert(arr.length == 3);
+assert(arr2.length == 3);
 assert(arr2[0]== 1)
 assert(arr2[1]== 3)
 

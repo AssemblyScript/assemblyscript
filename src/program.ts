@@ -761,7 +761,7 @@ export class Program extends DiagnosticEmitter {
             break;
           }
           case NodeKind.INTERFACEDECLARATION: {
-            this.initializeInterface(<InterfaceDeclaration>statement, file);
+            this.initializeInterface(<InterfaceDeclaration>statement, file, queuedExtends);
             break;
           }
           case NodeKind.NAMESPACEDECLARATION: {
@@ -922,7 +922,7 @@ export class Program extends DiagnosticEmitter {
       let extendsNode = assert(thisPrototype.extendsNode); // must be present if in queuedExtends
       let baseElement = resolver.resolveTypeName(extendsNode.name, thisPrototype.parent); // reports
       if (!baseElement) continue;
-      if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
+      if (baseElement.kind == ElementKind.CLASS_PROTOTYPE || baseElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
         let basePrototype = <ClassPrototype>baseElement;
         if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
           this.error(
@@ -1699,7 +1699,7 @@ export class Program extends DiagnosticEmitter {
         break;
       }
       case NodeKind.INTERFACEDECLARATION: {
-        element = this.initializeInterface(<InterfaceDeclaration>declaration, parent);
+        element = this.initializeInterface(<InterfaceDeclaration>declaration, parent, queuedExtends);
         break;
       }
       case NodeKind.NAMESPACEDECLARATION: {
@@ -1830,7 +1830,9 @@ export class Program extends DiagnosticEmitter {
     /** The declaration to initialize. */
     declaration: InterfaceDeclaration,
     /** Parent element, usually a file or namespace. */
-    parent: Element
+    parent: Element,
+    /** So far queued `extends` clauses. */
+    queuedExtends: ClassPrototype[],
   ): InterfacePrototype | null {
     var name = declaration.name.text;
     var element = new InterfacePrototype(
@@ -1843,6 +1845,7 @@ export class Program extends DiagnosticEmitter {
     );
     if (!parent.add(name, element)) return null;
     var memberDeclarations = declaration.members;
+    if (declaration.extendsType) queuedExtends.push(element);
     var instanceDeclarations = new Array();
     /**
      * Must convert field declarations to property declarations
@@ -1922,7 +1925,7 @@ export class Program extends DiagnosticEmitter {
           break;
         }
         case NodeKind.INTERFACEDECLARATION: {
-          this.initializeInterface(<InterfaceDeclaration>member, original);
+          this.initializeInterface(<InterfaceDeclaration>member, original, queuedExtends);
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
@@ -3731,16 +3734,15 @@ export class Interface extends Class { // FIXME
   }
 
   get methodInstances(): Function[] {
-    var funcs: Function[] = [];
+    var funcs: Set<Function> = new Set();
     for (let func of this.methods) {
-      if (func.instances == null) continue;
-      map(func.instances.values(), (func: Function): void => {
-        if (funcs.findIndex((f: Function): bool => f.signature.id == func.signature.id) < 0) {
-          funcs.push(func);
+      if (func.instances) {
+        for (let i of func.instances.values()){
+          funcs.add(i);
         }
-      });
+      }
     }
-    return funcs;
+    return Array.from(funcs);
   }
 
   addImplementer(_class: Class): void {

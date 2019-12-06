@@ -1388,7 +1388,7 @@ export class Resolver extends DiagnosticEmitter {
             return members.get(propertyName)!; // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE...
           }
           // traverse inherited static members on the base prototype if target is a class prototype
-          if (target.kind == ElementKind.CLASS_PROTOTYPE) {
+          if (target.kind == ElementKind.CLASS_PROTOTYPE || target.kind == ElementKind.INTERFACE_PROTOTYPE) {
             if ((<ClassPrototype>target).basePrototype) {
               target = <ClassPrototype>(<ClassPrototype>target).basePrototype;
             } else {
