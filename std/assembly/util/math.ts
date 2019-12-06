@@ -1,4 +1,3 @@
-import { alignof } from "builtins";
 
 /** Lookup data for exp2f **/
 
