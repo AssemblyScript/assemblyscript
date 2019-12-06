@@ -703,6 +703,98 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   return scale + scale * tmp;
 }
 
+/* Lookup data for exp2. See: https://git.musl-libc.org/cgit/musl/tree/src/math/exp2.c */
+
+/* Handle cases that may overflow or underflow when computing the result that
+   is scale*(1+TMP) without intermediate rounding.  The bit representation of
+   scale is in SBITS, however it has a computed exponent that may have
+   overflown into the sign bit so that needs to be adjusted before using it as
+   a double.  (int32_t)KI is the k used in the argument reduction and exponent
+   adjustment of scale, positive k here means the result may overflow and
+   negative k means the result may underflow.*/
+// @ts-ignore: decorator
+@inline function specialcase2(tmp: f64, sbits: u64, ki: u64): f64 {
+  const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022;
+  var scale: f64;
+  if ((ki & 0x80000000) == 0) {
+    /* k > 0, the exponent of scale might have overflowed by 1.  */
+    sbits -= u64(1) << 52;
+    scale = reinterpret<f64>(sbits);
+    return 2 * (scale * tmp + scale);
+  }
+  /* k < 0, need special care in the subnormal range.  */
+  sbits += u64(1022) << 52;
+  scale = reinterpret<f64>(sbits);
+  var y = scale * tmp + scale;
+  if (y < 1.0) {
+    /* Round y to the right precision before scaling it into the subnormal
+      range to avoid double rounding that can cause 0.5+E/2 ulp error where
+      E is the worst-case ulp error outside the subnormal range.  So this
+      is only useful if the goal is better than 1 ulp worst-case error.  */
+    let hi: f64, lo: f64;
+    lo = scale - y + scale * tmp;
+    hi = 1.0 + y;
+    lo = 1.0 - hi + y + lo;
+    y = (hi + lo) - 1.0;
+  }
+  return y * Ox1p_1022;
+}
+
+// @ts-ignore: decorator
+@inline export function exp2_lut(x: f64): f64 {
+  const N      = 1 << EXP_TABLE_BITS;
+  const N_MASK = N - 1;
+  const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p52
+
+  const
+    C1 = reinterpret<f64>(0x3FE62E42FEFA39EF), // 0x1.62e42fefa39efp-1
+    C2 = reinterpret<f64>(0x3FCEBFBDFF82C424), // 0x1.ebfbdff82c424p-3
+    C3 = reinterpret<f64>(0x3FAC6B08D70CF4B5), // 0x1.c6b08d70cf4b5p-5
+    C4 = reinterpret<f64>(0x3F83B2ABD24650CC), // 0x1.3b2abd24650ccp-7
+    C5 = reinterpret<f64>(0x3F55D7E09B4E3A84); // 0x1.5d7e09b4e3a84p-10
+
+  var ux = reinterpret<u64>(x);
+  var abstop = <u32>(ux >> 52 & 0x7ff);
+  if (abstop - 0x3C9 >= 0x03F) {
+    if (abstop - 0x3C9 >= 0x80000000) return 1.0;
+    if (abstop >= 0x409) {
+      if (ux == 0xFFF0000000000000) return 0;
+      if (abstop >= 0x7FF) return 1.0 + x;
+      if (!(ux >> 63)) return Infinity;
+      else if (ux >= 0xC090CC0000000000) return 0;
+    }
+    if ((ux << 1) > 0x811A000000000000) abstop = 0; // Large x is special cased below.
+  }
+
+  // exp2(x) = 2^(k/N) * 2^r, with 2^r in [2^(-1/2N),2^(1/2N)].
+  // x = k/N + r, with int k and r in [-1/2N, 1/2N]
+  var kd = x + shift;
+  var ki = reinterpret<u64>(kd);
+  kd -= shift; // k/N for int k
+  var r = x - kd;
+  // 2^(k/N) ~= scale * (1 + tail)
+  var idx = <usize>((ki & N_MASK) << 1);
+  var top = ki << (52 - EXP_TABLE_BITS);
+
+  // @ts-ignore: cast
+  const tab = exp_data_tab.dataStart as usize;
+
+  var tail = reinterpret<f64>(load<u64>(tab + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
+  // This is only a valid scale when -1023*N < k < 1024*N
+  var sbits = reinterpret<f64>(load<u64>(tab + (idx << alignof<u64>()), 1 << alignof<u64>())) + top; // T[idx + 1]
+  // exp2(x) = 2^(k/N) * 2^r ~= scale + scale * (tail + 2^r - 1).
+  // Evaluation is optimized assuming superscalar pipelined execution
+  var r2 = r * r;
+  // Without fma the worst case error is 0.5/N ulp larger.
+  // Worst case error is less than 0.5+0.86/N+(abs poly error * 2^53) ulp.
+  var tmp = tail + r * C1 + r2 * (C2 + r * C3) + r2 * r2 * (C4 + r * C5);
+  if (abstop == 0) return specialcase2(tmp, sbits, ki);
+  var scale = reinterpret<f64>(sbits);
+  /* Note: tmp == 0 or |tmp| > 2^-65 and scale > 2^-928, so there
+     is no spurious underflow here even without fma.*/
+  return scale * tmp + scale;
+}
+
 /* Lookup data for log2. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log2.c */
 
 // @ts-ignore: decorator

@@ -2,8 +2,8 @@ import * as JSMath from "./bindings/Math";
 export { JSMath };
 
 import {
-  pow_lut, exp_lut, log_lut, log2_lut,
-  powf_lut, expf_lut, logf_lut, log2f_lut
+  pow_lut, exp_lut, exp2_lut, log_lut, log2_lut,
+  powf_lut, expf_lut, exp2f_lut, logf_lut, log2f_lut
 } from "./util/math";
 
 import {
@@ -825,6 +825,10 @@ export namespace NativeMath {
       let y = 1.0 + (x * c / (2 - c) - lo + hi);
       return k == 0 ? y : scalbn(y, k);
     }
+  }
+
+  export function exp2(x: f64): f64 {
+    return exp2_lut(x);
   }
 
   export function expm1(x: f64): f64 { // see: musl/src/math/expm1.c and SUN COPYRIGHT NOTICE above
@@ -2257,6 +2261,10 @@ export namespace NativeMathf {
       let y: f32 = 1 + (x * c / (2 - c) - lo + hi);
       return k == 0 ? y : scalbn(y, k);
     }
+  }
+
+  export function exp2(x: f32): f32 {
+    return exp2f_lut(x);
   }
 
   export function expm1(x: f32): f32 { // see: musl/src/math/expm1f.c and SUN COPYRIGHT NOTICE above
