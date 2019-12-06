@@ -35,9 +35,10 @@
   const N_MASK = N - 1;
   const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
 
-  const C0 = reinterpret<f64>(0x3FAC6AF84B912394); // 0x1.c6af84b912394p-5
-  const C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3); // 0x1.ebfce50fac4f3p-3
-  const C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
+  const
+    C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
+    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
+    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
 
   var xd = <f64>x;
   var ix = reinterpret<u32>(x);
@@ -77,14 +78,16 @@ Wrong count: 170635 (all nearest rounding wrong results with fma.)
 */
 // @ts-ignore: decorator
 @inline export function expf_lut(x: f32): f32 {
-  const N       = 1 << EXP2F_TABLE_BITS;
-  const N_MASK  = N - 1;
-  const shift   = reinterpret<f64>(0x4338000000000000);        // 0x1.8p+52
-  const InvLn2N = reinterpret<f64>(0x3FF71547652B82FE) * N;    // 0x1.71547652b82fep+0
+  const
+    N       = 1 << EXP2F_TABLE_BITS,
+    N_MASK  = N - 1,
+    shift   = reinterpret<f64>(0x4338000000000000),        // 0x1.8p+52
+    InvLn2N = reinterpret<f64>(0x3FF71547652B82FE) * N;    // 0x1.71547652b82fep+0
 
-  const C0 = reinterpret<f64>(0x3FAC6AF84B912394) / N / N / N; // 0x1.c6af84b912394p-5
-  const C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3) / N / N;     // 0x1.ebfce50fac4f3p-3
-  const C2 = reinterpret<f64>(0x3FE62E42FF0C52D6) / N;         // 0x1.62e42ff0c52d6p-1
+  const
+    C0 = reinterpret<f64>(0x3FAC6AF84B912394) / N / N / N, // 0x1.c6af84b912394p-5
+    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3) / N / N,     // 0x1.ebfce50fac4f3p-3
+    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6) / N;         // 0x1.62e42ff0c52d6p-1
 
   var xd = <f64>x;
   var ix = reinterpret<u32>(x);
@@ -156,10 +159,11 @@ Relative error: 1.9 * 2^-26 (before rounding.)
   const Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f;
   const N_MASK  = (1 << LOG2F_TABLE_BITS) - 1;
 
-  const A0 = reinterpret<f64>(0xBFD712B6F70A7E4D); // -0x1.712b6f70a7e4dp-2
-  const A1 = reinterpret<f64>(0x3FDECABF496832E0); //  0x1.ecabf496832ep-2
-  const A2 = reinterpret<f64>(0xBFE715479FFAE3DE); // -0x1.715479ffae3dep-1
-  const A3 = reinterpret<f64>(0x3FF715475F35C8B8); //  0x1.715475f35c8b8p0
+  const
+    A0 = reinterpret<f64>(0xBFD712B6F70A7E4D), // -0x1.712b6f70a7e4dp-2
+    A1 = reinterpret<f64>(0x3FDECABF496832E0), //  0x1.ecabf496832ep-2
+    A2 = reinterpret<f64>(0xBFE715479FFAE3DE), // -0x1.715479ffae3dep-1
+    A3 = reinterpret<f64>(0x3FF715475F35C8B8); //  0x1.715475f35c8b8p0
 
   var ux = reinterpret<u32>(x);
   // Fix sign of zero with downward rounding when x==1.
@@ -236,10 +240,11 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   const Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f;
   const N_MASK  = (1 << LOGF_TABLE_BITS) - 1;
 
-  const Ln2 = reinterpret<f64>(0x3FE62E42FEFA39EF); // 0x1.62e42fefa39efp-1;
-  const A0  = reinterpret<f64>(0xBFD00EA348B88334); // -0x1.00ea348b88334p-2
-  const A1  = reinterpret<f64>(0x3FD5575B0BE00B6A); //  0x1.5575b0be00b6ap-2
-  const A2  = reinterpret<f64>(0xBFDFFFFEF20A4123); // -0x1.ffffef20a4123p-2
+  const
+    Ln2 = reinterpret<f64>(0x3FE62E42FEFA39EF), // 0x1.62e42fefa39efp-1;
+    A0  = reinterpret<f64>(0xBFD00EA348B88334), // -0x1.00ea348b88334p-2
+    A1  = reinterpret<f64>(0x3FD5575B0BE00B6A), //  0x1.5575b0be00b6ap-2
+    A2  = reinterpret<f64>(0xBFDFFFFEF20A4123); // -0x1.ffffef20a4123p-2
 
   var ux = reinterpret<u32>(x);
   // Fix sign of zero with downward rounding when x==1.
@@ -305,12 +310,14 @@ Relative error: 1.957 * 2^-26 (before rounding.)
    Output is multiplied by N (POWF_SCALE) if TOINT_INTRINICS is set. */
 // @ts-ignore: decorator
 @inline function log2f_inline(ux: u32): f64 {
-  const A0 = reinterpret<f64>(0x3FD27616C9496E0B); //  0x1.27616c9496e0bp-2
-  const A1 = reinterpret<f64>(0xBFD71969A075C67A); // -0x1.71969a075c67ap-2
-  const A2 = reinterpret<f64>(0x3FDEC70A6CA7BADD); //  0x1.ec70a6ca7baddp-2
-  const A3 = reinterpret<f64>(0xBFE7154748BEF6C8); // -0x1.7154748bef6c8p-1
-  const A4 = reinterpret<f64>(0x3FF71547652AB82B); //  0x1.71547652ab82bp+0
   const N_MASK = (1 << LOG2F_TABLE_BITS) - 1;
+
+  const
+    A0 = reinterpret<f64>(0x3FD27616C9496E0B), //  0x1.27616c9496e0bp-2
+    A1 = reinterpret<f64>(0xBFD71969A075C67A), // -0x1.71969a075c67ap-2
+    A2 = reinterpret<f64>(0x3FDEC70A6CA7BADD), //  0x1.ec70a6ca7baddp-2
+    A3 = reinterpret<f64>(0xBFE7154748BEF6C8), // -0x1.7154748bef6c8p-1
+    A4 = reinterpret<f64>(0x3FF71547652AB82B); //  0x1.71547652ab82bp+0
 
   /* x = 2^k z; where z is in range [OFF,2*OFF] and exact.
     The range is split into N subintervals.
@@ -353,9 +360,10 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   const N_MASK = N - 1;
   const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
 
-  const C0 = reinterpret<f64>(0x3FAC6AF84B912394); // 0x1.c6af84b912394p-5
-  const C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3); // 0x1.ebfce50fac4f3p-3
-  const C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
+  const
+    C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
+    C1 = reinterpret<f64>(0x3FCEBFCE50FAC4F3), // 0x1.ebfce50fac4f3p-3
+    C2 = reinterpret<f64>(0x3FE62E42FF0C52D6); // 0x1.62e42ff0c52d6p-1
 
   // x = k/N + r with r in [-1/(2N), 1/(2N)]
   var kd = <f64>(xd + shift);
@@ -395,10 +403,11 @@ Relative error: 1.957 * 2^-26 (before rounding.)
 
 // @ts-ignore: decorator
 @inline export function powf_lut(x: f32, y: f32): f32 {
-  const Ox1p23f     = reinterpret<f32>(0x4B000000); // 0x1p23f
-  const UPPER_LIMIT = reinterpret<f64>(0x405FFFFFFFD1D571); // 0x1.fffffffd1d571p+6
-  const LOWER_LIMIT = -150.0;
-  const SIGN_BIAS   = 1 << (EXP2F_TABLE_BITS + 11);
+  const
+    Ox1p23f     = reinterpret<f32>(0x4B000000), // 0x1p23f
+    UPPER_LIMIT = reinterpret<f64>(0x405FFFFFFFD1D571), // 0x1.fffffffd1d571p+6
+    LOWER_LIMIT = -150.0,
+    SIGN_BIAS   = 1 << (EXP2F_TABLE_BITS + 11);
 
   var signBias: u32 = 0;
   var ix = reinterpret<u32>(x);
@@ -591,8 +600,9 @@ Relative error: 1.957 * 2^-26 (before rounding.)
    negative k means the result may underflow. */
 // @ts-ignore: decorator
 @inline function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
-  const Ox1p_1022 = reinterpret<f64>(0x0010000000000000); // 0x1p-1022
-  const Ox1p1009  = reinterpret<f64>(0x7F00000000000000); // 0x1p1009
+  const
+    Ox1p_1022 = reinterpret<f64>(0x0010000000000000), // 0x1p-1022
+    Ox1p1009  = reinterpret<f64>(0x7F00000000000000); // 0x1p1009
 
   var scale: f64;
   if (!(ki & 0x80000000)) {
@@ -627,15 +637,17 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   const N      = 1 << EXP_TABLE_BITS;
   const N_MASK = N - 1;
 
-  const InvLn2N   = reinterpret<f64>(0x3FF71547652B82FE) * N; // 0x1.71547652b82fep0
-  const NegLn2hiN = reinterpret<f64>(0xBF762E42FEFA0000);     // -0x1.62e42fefa0000p-8
-  const NegLn2loN = reinterpret<f64>(0xBD0CF79ABC9E3B3A);     // -0x1.cf79abc9e3b3ap-47
-  const shift     = reinterpret<f64>(0x4338000000000000);     // 0x1.8p52;
+  const
+    InvLn2N   = reinterpret<f64>(0x3FF71547652B82FE) * N, // 0x1.71547652b82fep0
+    NegLn2hiN = reinterpret<f64>(0xBF762E42FEFA0000),     // -0x1.62e42fefa0000p-8
+    NegLn2loN = reinterpret<f64>(0xBD0CF79ABC9E3B3A),     // -0x1.cf79abc9e3b3ap-47
+    shift     = reinterpret<f64>(0x4338000000000000);     // 0x1.8p52;
 
-  const C2 = reinterpret<f64>(0x3FDFFFFFFFFFFDBD); // __exp_data.poly[0] (0x1.ffffffffffdbdp-2)
-  const C3 = reinterpret<f64>(0x3FC555555555543C); // __exp_data.poly[1] (0x1.555555555543cp-3)
-  const C4 = reinterpret<f64>(0x3FA55555CF172B91); // __exp_data.poly[2] (0x1.55555cf172b91p-5)
-  const C5 = reinterpret<f64>(0x3F81111167A4D017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
+  const
+    C2 = reinterpret<f64>(0x3FDFFFFFFFFFFDBD), // __exp_data.poly[0] (0x1.ffffffffffdbdp-2)
+    C3 = reinterpret<f64>(0x3FC555555555543C), // __exp_data.poly[1] (0x1.555555555543cp-3)
+    C4 = reinterpret<f64>(0x3FA55555CF172B91), // __exp_data.poly[2] (0x1.55555cf172b91p-5)
+    C5 = reinterpret<f64>(0x3F81111167A4D017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
 
   var ux = reinterpret<u64>(x);
   var abstop = <u32>(ux >> 52 & 0x7FF);
@@ -866,29 +878,34 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   const N      = 1 << LOG2_TABLE_BITS;
   const N_MASK = N - 1;
 
-  const Ox1p52   = reinterpret<f64>(0x4330000000000000); // 0x1p52
-  const InvLn2hi = reinterpret<f64>(0x3FF7154765200000); // 0x1.7154765200000p+0
-  const InvLn2lo = reinterpret<f64>(0x3DE705FC2EEFA200); // 0x1.705fc2eefa200p-33
-  const LO: u64  = 0x3FEEA4AF00000000; // reinterpret<u64>(1.0 - 0x1.5b51p-5)
-  const HI: u64  = 0x3FF0B55900000000; // reinterpret<u64>(1.0 + 0x1.6ab2p-5)
+  const
+    LO: u64 = 0x3FEEA4AF00000000, // reinterpret<u64>(1.0 - 0x1.5b51p-5)
+    HI: u64 = 0x3FF0B55900000000; // reinterpret<u64>(1.0 + 0x1.6ab2p-5)
 
-  const B0 = reinterpret<f64>(0xBFE71547652B82FE); // -0x1.71547652b82fep-1
-  const B1 = reinterpret<f64>(0x3FDEC709DC3A03F7); //  0x1.ec709dc3a03f7p-2
-  const B2 = reinterpret<f64>(0xBFD71547652B7C3F); // -0x1.71547652b7c3fp-2
-  const B3 = reinterpret<f64>(0x3FD2776C50F05BE4); //  0x1.2776c50f05be4p-2
-  const B4 = reinterpret<f64>(0xBFCEC709DD768FE5); // -0x1.ec709dd768fe5p-3
-  const B5 = reinterpret<f64>(0x3FCA61761EC4E736); //  0x1.a61761ec4e736p-3
-  const B6 = reinterpret<f64>(0xBFC7153FBC64A79B); // -0x1.7153fbc64a79bp-3
-  const B7 = reinterpret<f64>(0x3FC484D154F01B4A); //  0x1.484d154f01b4ap-3
-  const B8 = reinterpret<f64>(0xBFC289E4A72C383C); // -0x1.289e4a72c383cp-3
-  const B9 = reinterpret<f64>(0x3FC0B32F285AEE66); //  0x1.0b32f285aee66p-3
+  const
+    InvLn2hi = reinterpret<f64>(0x3FF7154765200000), // 0x1.7154765200000p+0
+    InvLn2lo = reinterpret<f64>(0x3DE705FC2EEFA200), // 0x1.705fc2eefa200p-33
+    Ox1p52   = reinterpret<f64>(0x4330000000000000); // 0x1p52
 
-  const A0 = reinterpret<f64>(0xBFE71547652B8339); // -0x1.71547652b8339p-1
-  const A1 = reinterpret<f64>(0x3FDEC709DC3A04BE); //  0x1.ec709dc3a04bep-2
-  const A2 = reinterpret<f64>(0xBFD7154764702FFB); // -0x1.7154764702ffbp-2
-  const A3 = reinterpret<f64>(0x3FD2776C50034C48); //  0x1.2776c50034c48p-2
-  const A4 = reinterpret<f64>(0xBFCEC7B328EA92BC); // -0x1.ec7b328ea92bcp-3
-  const A5 = reinterpret<f64>(0x3FCA6225E117F92E); //  0x1.a6225e117f92ep-3
+  const
+    B0 = reinterpret<f64>(0xBFE71547652B82FE), // -0x1.71547652b82fep-1
+    B1 = reinterpret<f64>(0x3FDEC709DC3A03F7), //  0x1.ec709dc3a03f7p-2
+    B2 = reinterpret<f64>(0xBFD71547652B7C3F), // -0x1.71547652b7c3fp-2
+    B3 = reinterpret<f64>(0x3FD2776C50F05BE4), //  0x1.2776c50f05be4p-2
+    B4 = reinterpret<f64>(0xBFCEC709DD768FE5), // -0x1.ec709dd768fe5p-3
+    B5 = reinterpret<f64>(0x3FCA61761EC4E736), //  0x1.a61761ec4e736p-3
+    B6 = reinterpret<f64>(0xBFC7153FBC64A79B), // -0x1.7153fbc64a79bp-3
+    B7 = reinterpret<f64>(0x3FC484D154F01B4A), //  0x1.484d154f01b4ap-3
+    B8 = reinterpret<f64>(0xBFC289E4A72C383C), // -0x1.289e4a72c383cp-3
+    B9 = reinterpret<f64>(0x3FC0B32F285AEE66); //  0x1.0b32f285aee66p-3
+
+  const
+    A0 = reinterpret<f64>(0xBFE71547652B8339), // -0x1.71547652b8339p-1
+    A1 = reinterpret<f64>(0x3FDEC709DC3A04BE), //  0x1.ec709dc3a04bep-2
+    A2 = reinterpret<f64>(0xBFD7154764702FFB), // -0x1.7154764702ffbp-2
+    A3 = reinterpret<f64>(0x3FD2776C50034C48), //  0x1.2776c50034c48p-2
+    A4 = reinterpret<f64>(0xBFCEC7B328EA92BC), // -0x1.ec7b328ea92bcp-3
+    A5 = reinterpret<f64>(0x3FCA6225E117F92E); //  0x1.a6225e117f92ep-3
 
   var ix = reinterpret<u64>(x);
   if (ix - LO < HI - LO) {
@@ -1276,32 +1293,35 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   const N      = 1 << LOG_TABLE_BITS;
   const N_MASK = N - 1;
 
-  const B0  = reinterpret<f64>(0xBFE0000000000000); // -0x1p-1
-  const B1  = reinterpret<f64>(0x3FD5555555555577); //  0x1.5555555555577p-2
-  const B2  = reinterpret<f64>(0xBFCFFFFFFFFFFDCB); // -0x1.ffffffffffdcbp-3
-  const B3  = reinterpret<f64>(0x3FC999999995DD0C); //  0x1.999999995dd0cp-3
-  const B4  = reinterpret<f64>(0xBFC55555556745A7); // -0x1.55555556745a7p-3
-  const B5  = reinterpret<f64>(0x3FC24924A344DE30); //  0x1.24924a344de3p-3
-  const B6  = reinterpret<f64>(0xBFBFFFFFA4423D65); // -0x1.fffffa4423d65p-4
-  const B7  = reinterpret<f64>(0x3FBC7184282AD6CA); //  0x1.c7184282ad6cap-4
-  const B8  = reinterpret<f64>(0xBFB999EB43B068FF); // -0x1.999eb43b068ffp-4
-  const B9  = reinterpret<f64>(0x3FB78182F7AFD085); //  0x1.78182f7afd085p-4
-  const B10 = reinterpret<f64>(0xBFB5521375D145CD); // -0x1.5521375d145cdp-4
+  const
+    B0  = reinterpret<f64>(0xBFE0000000000000), // -0x1p-1
+    B1  = reinterpret<f64>(0x3FD5555555555577), //  0x1.5555555555577p-2
+    B2  = reinterpret<f64>(0xBFCFFFFFFFFFFDCB), // -0x1.ffffffffffdcbp-3
+    B3  = reinterpret<f64>(0x3FC999999995DD0C), //  0x1.999999995dd0cp-3
+    B4  = reinterpret<f64>(0xBFC55555556745A7), // -0x1.55555556745a7p-3
+    B5  = reinterpret<f64>(0x3FC24924A344DE30), //  0x1.24924a344de3p-3
+    B6  = reinterpret<f64>(0xBFBFFFFFA4423D65), // -0x1.fffffa4423d65p-4
+    B7  = reinterpret<f64>(0x3FBC7184282AD6CA), //  0x1.c7184282ad6cap-4
+    B8  = reinterpret<f64>(0xBFB999EB43B068FF), // -0x1.999eb43b068ffp-4
+    B9  = reinterpret<f64>(0x3FB78182F7AFD085), //  0x1.78182f7afd085p-4
+    B10 = reinterpret<f64>(0xBFB5521375D145CD); // -0x1.5521375d145cdp-4
 
-  const A0 = reinterpret<f64>(0xBFE0000000000001);  // -0x1.0000000000001p-1
-  const A1 = reinterpret<f64>(0x3FD555555551305B);  //  0x1.555555551305bp-2
-  const A2 = reinterpret<f64>(0xBFCFFFFFFFEB4590);  // -0x1.fffffffeb459p-3
-  const A3 = reinterpret<f64>(0x3FC999B324F10111);  //  0x1.999b324f10111p-3
-  const A4 = reinterpret<f64>(0xBFC55575E506C89F);  // -0x1.55575e506c89fp-3
+  const
+    A0 = reinterpret<f64>(0xBFE0000000000001),  // -0x1.0000000000001p-1
+    A1 = reinterpret<f64>(0x3FD555555551305B),  //  0x1.555555551305bp-2
+    A2 = reinterpret<f64>(0xBFCFFFFFFFEB4590),  // -0x1.fffffffeb459p-3
+    A3 = reinterpret<f64>(0x3FC999B324F10111),  //  0x1.999b324f10111p-3
+    A4 = reinterpret<f64>(0xBFC55575E506C89F);  // -0x1.55575e506c89fp-3
 
-  const LO: u64 = 0x3FEE000000000000;
-  const HI: u64 = 0x3FF1090000000000;
+  const
+    LO: u64 = 0x3FEE000000000000,
+    HI: u64 = 0x3FF1090000000000;
 
-  const Ln2hi = reinterpret<f64>(0x3FE62E42FEFA3800);  // 0x1.62e42fefa3800p-1
-  const Ln2lo = reinterpret<f64>(0x3D2EF35793C76730);  // 0x1.ef35793c76730p-45
-
-  const Ox1p27 = reinterpret<f64>(0x41A0000000000000); // 0x1p27
-  const Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
+  const
+    Ln2hi  = reinterpret<f64>(0x3FE62E42FEFA3800),  // 0x1.62e42fefa3800p-1
+    Ln2lo  = reinterpret<f64>(0x3D2EF35793C76730),  // 0x1.ef35793c76730p-45
+    Ox1p27 = reinterpret<f64>(0x41A0000000000000), // 0x1p27
+    Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
 
   var ix = reinterpret<u64>(x);
   if (ix - LO < HI - LO) {
@@ -1588,16 +1608,18 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   const N = 1 << POW_LOG_TABLE_BITS;
   const N_MASK = N - 1;
 
-  const Ln2hi = reinterpret<f64>(0x3FE62E42FEFA3800);
-  const Ln2lo = reinterpret<f64>(0x3D2EF35793C76730);
+  const
+    Ln2hi = reinterpret<f64>(0x3FE62E42FEFA3800),
+    Ln2lo = reinterpret<f64>(0x3D2EF35793C76730);
 
-  const A0 = reinterpret<f64>(0xBFE0000000000000);
-  const A1 = reinterpret<f64>(0xBFE5555555555560);
-  const A2 = reinterpret<f64>(0x3FE0000000000006);
-  const A3 = reinterpret<f64>(0x3FE999999959554E);
-  const A4 = reinterpret<f64>(0xBFE555555529A47A);
-  const A5 = reinterpret<f64>(0xBFF2495B9B4845E9);
-  const A6 = reinterpret<f64>(0x3FF0002B8B263FC3);
+  const
+    A0 = reinterpret<f64>(0xBFE0000000000000),
+    A1 = reinterpret<f64>(0xBFE5555555555560),
+    A2 = reinterpret<f64>(0x3FE0000000000006),
+    A3 = reinterpret<f64>(0x3FE999999959554E),
+    A4 = reinterpret<f64>(0xBFE555555529A47A),
+    A5 = reinterpret<f64>(0xBFF2495B9B4845E9),
+    A6 = reinterpret<f64>(0x3FF0002B8B263FC3);
 
   /* x = 2^k z; where z is in range [OFF,2*OFF) and exact.
     The range is split into N subintervals.
@@ -1662,15 +1684,17 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   const N      = 1 << EXP_TABLE_BITS;
   const N_MASK = N - 1;
 
-  const InvLn2N   = reinterpret<f64>(0x3FF71547652B82FE) * N; // 0x1.71547652b82fep0
-  const NegLn2hiN = reinterpret<f64>(0xBF762E42FEFA0000);     // -0x1.62e42fefa0000p-8
-  const NegLn2loN = reinterpret<f64>(0xBD0CF79ABC9E3B3A);     // -0x1.cf79abc9e3b3ap-47
-  const shift     = reinterpret<f64>(0x4338000000000000);     // 0x1.8p52
+  const
+    InvLn2N   = reinterpret<f64>(0x3FF71547652B82FE) * N, // 0x1.71547652b82fep0
+    NegLn2hiN = reinterpret<f64>(0xBF762E42FEFA0000),     // -0x1.62e42fefa0000p-8
+    NegLn2loN = reinterpret<f64>(0xBD0CF79ABC9E3B3A),     // -0x1.cf79abc9e3b3ap-47
+    shift     = reinterpret<f64>(0x4338000000000000);     // 0x1.8p52
 
-  const C2 = reinterpret<f64>(0x3FDFFFFFFFFFFDBD); // __exp_data.poly[0] (0x1.ffffffffffdbdp-2)
-  const C3 = reinterpret<f64>(0x3FC555555555543C); // __exp_data.poly[1] (0x1.555555555543cp-3)
-  const C4 = reinterpret<f64>(0x3FA55555CF172B91); // __exp_data.poly[2] (0x1.55555cf172b91p-5)
-  const C5 = reinterpret<f64>(0x3F81111167A4D017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
+  const
+    C2 = reinterpret<f64>(0x3FDFFFFFFFFFFDBD), // __exp_data.poly[0] (0x1.ffffffffffdbdp-2)
+    C3 = reinterpret<f64>(0x3FC555555555543C), // __exp_data.poly[1] (0x1.555555555543cp-3)
+    C4 = reinterpret<f64>(0x3FA55555CF172B91), // __exp_data.poly[2] (0x1.55555cf172b91p-5)
+    C5 = reinterpret<f64>(0x3F81111167A4D017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
 
   var abstop: u32;
   var ki: u64, top: u64, sbits: u64;
