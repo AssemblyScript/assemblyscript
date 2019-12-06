@@ -739,7 +739,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 /* Returns 0 if not int, 1 if odd int, 2 if even int.  The argument is
    the bit representation of a non-zero finite floating-point value. */
 // @ts-ignore: decorator
-@inline function checkint(iy: u64): i32 {
+/*@inline*/ function checkint(iy: u64): i32 {
   var e = iy >> 52 & 0x7FF;
   if (e < 0x3FF     ) return 0;
   if (e > 0x3FF + 52) return 2;
@@ -766,18 +766,18 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 
 /** Returns 1 if input is the bit representation of 0, infinity or nan. */
 // @ts-ignore: decorator
-@inline function zeroinfnan(u: u64): bool {
+/*@inline*/ function zeroinfnan(u: u64): bool {
   return (u << 1) - 1 >= 0xFFE0000000000000 - 1;
 }
 
 // @ts-ignore: decorator
-@lazy let log_tail: f64 = 0;
+@lazy var log_tail: f64 = 0;
 
 /* Compute y+TAIL = log(x) where the rounded result is y and TAIL has about
    additional 15 bits precision.  IX is the bit representation of x, but
    normalized in the subnormal range using the sign bit for the exponent. */
 // @ts-ignore: decorator
-@inline function log_inline(ix: u64): f64 {
+/*@inline*/ function log_inline(ix: u64): f64 {
   const N = 1 << POW_LOG_TABLE_BITS;
   const N_MASK = N - 1;
 
@@ -796,7 +796,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
     The range is split into N subintervals.
     The ith subinterval contains z and c is near its center. */
   var tmp = ix - 0x3fE6955500000000;
-  var i   = (tmp >> (52 - POW_LOG_TABLE_BITS)) & N_MASK;
+  var i   = <usize>((tmp >> (52 - POW_LOG_TABLE_BITS)) & N_MASK);
   var k   = <i64>tmp >> 52;
   var iz  = ix - (tmp & u64(0xFFF) << 52);
   var z   = reinterpret<f64>(iz);
@@ -813,7 +813,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   /* Note: 1/c is j/N or j/N/2 where j is an integer in [N,2N) and
     |z/c - 1| < 1/N, so r = z/c - 1 is exactly representible.  */
   // Split z such that rhi, rlo and rhi*rhi are exact and |rlo| <= |r|.
-  var zhi = reinterpret<f64>((iz + (u64(1) << 31)) & (u64(-1) << 32));
+  var zhi = reinterpret<f64>((iz + u64(0x80000000)) & 0xFFFFFFFF00000000);
   var zlo = z - zhi;
   var rhi = zhi * invc - 1.0;
   var rlo = zlo * invc;
@@ -853,11 +853,11 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
    adjustment of scale, positive k here means the result may overflow and
    negative k means the result may underflow. */
 // @ts-ignore: decorator
-@inline function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
+/*@inline*/ function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
   const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022
 
   var scale: f64, y: f64;
-  if ((ki & 0x80000000) == 0) {
+  if (!(ki & 0x80000000)) {
     /* k > 0, the exponent of scale might have overflowed by <= 460.  */
     sbits -= u64(1009) << 52;
     scale = reinterpret<f64>(sbits);
@@ -894,7 +894,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 /* Computes sign*exp(x+xtail) where |xtail| < 2^-8/N and |xtail| <= |x|.
    The sign_bias argument is SIGN_BIAS or 0 and sets the sign to -1 or 1.*/
 // @ts-ignore: decorator
-@inline function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
+/*@inline*/ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   const N = 1 << EXP_TABLE_BITS;
   const N_MASK = N - 1;
 
@@ -909,7 +909,8 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   const C5 = reinterpret<f64>(0x3F81111167A4D017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
 
   var abstop: u32;
-  var ki: u64, idx: u64, top: u64, sbits: u64;
+  var ki: u64, top: u64, sbits: u64;
+  var idx: usize;
   // double_t for better performance on targets with FLT_EVAL_METHOD==2.
   var kd: f64, z: f64, r: f64, r2: f64, scale: f64, tail: f64, tmp: f64;
 
@@ -951,8 +952,8 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   // The code assumes 2^-200 < |xtail| < 2^-8/N
   r += xtail;
   // 2^(k/N) ~= scale * (1 + tail)
-  idx  = (ki & N_MASK) << 1;
-  top  = (ki + sign_bias) << (52 - EXP_TABLE_BITS);
+  idx = <usize>((ki & N_MASK) << 1);
+  top = (ki + sign_bias) << (52 - EXP_TABLE_BITS);
 
   // @ts-ignore: cast
   const tab = exp_data_tab.dataStart as usize;
@@ -997,7 +998,7 @@ export function pow_lut(x: f64, y: f64): f64 {
     }
     if (zeroinfnan(ix)) {
       let x2 = x * x;
-      if (ix >> 63 && checkint(iy) == 1) x2 = -x2;
+      if (i32(ix >> 63) && checkint(iy) == 1) x2 = -x2;
       /* Without the barrier some versions of clang hoist the 1/x2 and
          thus division by zero exception can be signaled spuriously.  */
       return iy >> 63 ? 1 / x2 : x2;
@@ -1015,7 +1016,7 @@ export function pow_lut(x: f64, y: f64): f64 {
       /* Note: sign_bias == 0 here because y is not odd.  */
       if (ix == 0x3FF0000000000000) return 1.0;
       if ((topy & 0x7FF) < 0x3BE) return 1.0; // |y| < 2^-65, x^y ~= 1 + y*log(x).
-      return (ix > 0x3FF0000000000000) == (topy < 0x800) ? oflow(0) : uflow(0);
+      return (ix > 0x3FF0000000000000) == (topy < 0x800) ? Infinity : 0;
     }
     if (topx == 0) {
       /* Normalize subnormal x so exponent becomes negative.  */
