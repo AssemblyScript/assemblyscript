@@ -1353,8 +1353,8 @@
     local.get $3
     f64.mul
     local.set $4
-    local.get $3
     local.get $4
+    local.get $3
     f64.mul
     local.set $5
     local.get $5

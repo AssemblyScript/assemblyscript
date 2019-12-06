@@ -665,15 +665,15 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   // exp(x) = 2^(k/N) * exp(r), with exp(r) in [2^(-1/2N),2^(1/2N)]
   // x = ln2/N*k + r, with int k and r in [-ln2/2N, ln2/2N]
   var z = InvLn2N * x;
-// #if TOINT_INTRINSICS
-// 	kd = roundtoint(z);
-// 	ki = converttoint(z);
-// #elif EXP_USE_TOINT_NARROW
-// 	/* z - kd is in [-0.5-2^-16, 0.5] in all rounding modes.  */
-// var kd = z + shift;
-// var ki = reinterpret<u64>(kd) >> 16;
-// var kd = <f64><i32>ki;
-// #else
+  // #if TOINT_INTRINSICS
+  // 	kd = roundtoint(z);
+  // 	ki = converttoint(z);
+  // #elif EXP_USE_TOINT_NARROW
+  // 	/* z - kd is in [-0.5-2^-16, 0.5] in all rounding modes.  */
+  // var kd = z + shift;
+  // var ki = reinterpret<u64>(kd) >> 16;
+  // var kd = <f64><i32>ki;
+  // #else
   // z - kd is in [-1, 1] in non-nearest rounding modes.
   var kd = z + shift;
   var ki = reinterpret<u64>(kd);
@@ -970,11 +970,11 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   var chi = load<f64>(tab2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].chi;
   var clo = load<f64>(tab2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].clo;
 
-  var r = (z - chi - clo) * invc;
+  var r   = (z - chi - clo) * invc;
   var rhi = reinterpret<f64>(reinterpret<u64>(r) & 0xFFFFFFFF00000000);
   var rlo = r - rhi;
-  var t1 = rhi * InvLn2hi;
-  var t2 = rlo * InvLn2hi + r * InvLn2lo;
+  var t1  = rhi * InvLn2hi;
+  var t2  = rlo * InvLn2hi + r * InvLn2lo;
 // #endif
 
   // hi + lo = r/ln2 + log2(c) + k
@@ -1318,28 +1318,25 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
     HI: u64 = 0x3FF1090000000000;
 
   const
-    Ln2hi  = reinterpret<f64>(0x3FE62E42FEFA3800),  // 0x1.62e42fefa3800p-1
-    Ln2lo  = reinterpret<f64>(0x3D2EF35793C76730),  // 0x1.ef35793c76730p-45
+    Ln2hi  = reinterpret<f64>(0x3FE62E42FEFA3800), // 0x1.62e42fefa3800p-1
+    Ln2lo  = reinterpret<f64>(0x3D2EF35793C76730), // 0x1.ef35793c76730p-45
     Ox1p27 = reinterpret<f64>(0x41A0000000000000), // 0x1p27
     Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
 
   var ix = reinterpret<u64>(x);
   if (ix - LO < HI - LO) {
-    let r = x - 1.0;
+    let r  = x - 1.0;
     let r2 = r * r;
-    let r3 = r * r2;
+    let r3 = r2 * r;
     let y =
       r3 * (B1 + r * B2 + r2 * B3 +
-        r3 * (B4 + r * B5 + r2 * B6 +
-          r3 * (B7 + r * B8 + r2 * B9 + r3 * B10
-        )
-      )
-    );
-    /* Worst-case error is around 0.507 ULP.  */
+      r3 * (B4 + r * B5 + r2 * B6 +
+      r3 * (B7 + r * B8 + r2 * B9 + r3 * B10)));
+    // Worst-case error is around 0.507 ULP
     let w   = r * Ox1p27;
     let rhi = r + w - w;
     let rlo = r - rhi;
-    w = rhi * rhi * B0; /* B[0] == -0.5.  */
+    w = rhi * rhi * B0; // B[0] == -0.5
     let hi = r + w;
     let lo = r - hi + w;
     lo += B0 * rlo * (rhi + r);
@@ -1349,11 +1346,11 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   }
   var top = u32(ix >> 48);
   if (top - 0x0010 >= 0x7FF0 - 0x0010) {
-    // x < 0x1p-1022 or inf or nan.
+    // x < 0x1p-1022 or inf or nan
     if ((ix << 1) == 0) return -1.0 / (x * x);
     if (ix == reinterpret<u64>(Infinity)) return x; // log(inf) == inf
     if ((top & 0x8000) || (top & 0x7FF0) == 0x7FF0) return (x - x) / (x - x);
-    /* x is subnormal, normalize it.  */
+    // x is subnormal, normalize it
     ix = reinterpret<u64>(x * Ox1p52);
     ix -= u64(52) << 52;
   }
@@ -1375,10 +1372,10 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   var logc = load<f64>(tab1 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
   var z    = reinterpret<f64>(iz);
 
-  /* log(x) = log1p(z/c-1) + log(c) + k*Ln2.  */
-  /* r ~= z/c - 1, |r| < 1/(2*N).  */
+  // log(x) = log1p(z/c-1) + log(c) + k*Ln2.
+  // r ~= z/c - 1, |r| < 1/(2*N)
 // #if __FP_FAST_FMA
-// 	/* rounding error: 0x1p-55/N.  */
+// 	// rounding error: 0x1p-55/N
 // 	r = __builtin_fma(z, invc, -1.0);
 // #else
   // rounding error: 0x1p-55/N + 0x1p-66
