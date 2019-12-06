@@ -1,6 +1,3 @@
-import {Iterator, Iterable} from "iterator";
-
-
 class ArrayIterator<T> implements Iterator<T> {
   private _index: i32 = -1;
   constructor(private _array: Array<T>){}
@@ -16,7 +13,7 @@ class ArrayIterator<T> implements Iterator<T> {
     unreachable();
     return changetype<T>(this);
   }
-  next(): Iterator<T> {
+  next(): IteratorResult<T> {
     this._index++;
     return this;
   }
@@ -51,3 +48,20 @@ let arr2: Array<i32> = Array.from<i32>(iterableArr.iterator);
 assert(arr.length == 3);
 assert(arr2[0]== 1)
 assert(arr2[1]== 3)
+
+let map = new Map<string, i32>();
+map.set("hello", 40);
+map.set("world", 1);
+
+let entries = map.entries();
+let resEntry = entries.next();
+assert(resEntry.value.key == "hello");
+
+let keyIter = map.keys();
+let key = keyIter.next();
+assert(key.value == "hello");
+
+let valIter = map.values();
+let val = valIter.next();
+assert(val.value == 40);
+

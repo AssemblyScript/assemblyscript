@@ -2,6 +2,7 @@
 
 import { HASH } from "./util/hash";
 import { E_KEYNOTFOUND } from "util/error";
+import { Iterator, IteratorResult } from "iterator";
 
 // A deterministic hash map based on CloseTable from https://github.com/jorendorff/dht
 
@@ -61,6 +62,67 @@ function ENTRY_SIZE<K,V>(): usize {
   return size;
 }
 
+class EntriesIter<K,V> implements Iterator<MapEntry<K,V>> {
+  private index: usize = 0;
+  constructor(private _map: Map<K,V>, protected start: usize, protected size: usize){}
+
+  get done(): bool {
+    return this.index >= this.size;
+  }
+
+  protected get entry(): MapEntry<K,V> {
+    return changetype<MapEntry<K,V>>(this.start + this.index * ENTRY_SIZE<K,V>());
+  }
+
+  get value(): MapEntry<K,V> {
+    return this.entry;
+  }
+
+  next(): IteratorResult<MapEntry<K,V>> {
+    while (!this.done) {
+      if (!(this.entry.taggedNext & EMPTY)) {
+        break
+      }
+      this.index++
+    }
+    return this;
+  }
+}
+
+class KeyIterator<K,V> {
+  constructor(private entriesIter: EntriesIter<K,V>){}
+
+  get done(): bool {
+    return this.entriesIter.done;
+  }
+
+  get value(): K {
+    return this.entriesIter.value.key;
+  }
+
+  next(): IteratorResult<K> {
+    this.entriesIter.next();
+    return this;
+  }
+}
+
+class ValueIterator<K,V> {
+  constructor(private entriesIter: EntriesIter<K,V>){}
+
+  get done(): bool {
+    return this.entriesIter.done;
+  }
+
+  get value(): V {
+    return this.entriesIter.value.value;
+  }
+
+  next(): IteratorResult<V> {
+    this.entriesIter.next();
+    return this;
+  }
+}
+
 export class Map<K,V> {
 
   // buckets holding references to the respective first entry within
@@ -68,7 +130,7 @@ export class Map<K,V> {
   private bucketsMask: u32;
 
   // entries in insertion order
-  private entries: ArrayBuffer; // MapEntry<K,V>[entriesCapacity]
+  private _entries: ArrayBuffer; // MapEntry<K,V>[entriesCapacity]
   private entriesCapacity: i32;
   private entriesOffset: i32;
   private entriesCount: i32;
@@ -79,12 +141,18 @@ export class Map<K,V> {
     this.clear();
   }
 
+  public entries(): EntriesIter<K,V> {
+    var start = changetype<usize>(this._entries);
+    var size = this.entriesOffset;
+    return new EntriesIter<K,V>(this, start, size);
+  }
+
   clear(): void {
     const bucketsSize = INITIAL_CAPACITY * <i32>BUCKET_SIZE;
     this.buckets = new ArrayBuffer(bucketsSize);
     this.bucketsMask = INITIAL_CAPACITY - 1;
     const entriesSize = INITIAL_CAPACITY * <i32>ENTRY_SIZE<K,V>();
-    this.entries = new ArrayBuffer(entriesSize);
+    this._entries = new ArrayBuffer(entriesSize);
     this.entriesCapacity = INITIAL_CAPACITY;
     this.entriesOffset = 0;
     this.entriesCount = 0;
@@ -136,7 +204,7 @@ export class Map<K,V> {
         );
       }
       // append new entry
-      let entries = this.entries;
+      let entries = this._entries;
       entry = changetype<MapEntry<K,V>>(changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K,V>());
       // link with the map
       entry.key = isManaged<K>()
@@ -176,7 +244,7 @@ export class Map<K,V> {
     var newEntries = new ArrayBuffer(newEntriesCapacity * <i32>ENTRY_SIZE<K,V>());
 
     // copy old entries to new entries
-    var oldPtr = changetype<usize>(this.entries);
+    var oldPtr = changetype<usize>(this._entries);
     var oldEnd = oldPtr + <usize>this.entriesOffset * ENTRY_SIZE<K,V>();
     var newPtr = changetype<usize>(newEntries);
     while (oldPtr != oldEnd) {
@@ -196,43 +264,17 @@ export class Map<K,V> {
 
     this.buckets = newBuckets;
     this.bucketsMask = newBucketsMask;
-    this.entries = newEntries;
+    this._entries = newEntries;
     this.entriesCapacity = newEntriesCapacity;
     this.entriesOffset = this.entriesCount;
   }
 
-  keys(): K[] {
-    // FIXME: this is preliminary, needs iterators/closures
-    var start = changetype<usize>(this.entries);
-    var size = this.entriesOffset;
-    var keys = new Array<K>(size);
-    var length = 0;
-    for (let i = 0; i < size; ++i) {
-      let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
-      if (!(entry.taggedNext & EMPTY)) {
-        keys.push(entry.key);
-        ++length;
-      }
-    }
-    keys.length = length;
-    return keys;
+  keys(): Iterator<K> {
+    return new KeyIterator<K,V>(this.entries());
   }
 
-  values(): V[] {
-    // FIXME: this is preliminary, needs iterators/closures
-    var start = changetype<usize>(this.entries);
-    var size = this.entriesOffset;
-    var values = new Array<V>(size);
-    var length = 0;
-    for (let i = 0; i < size; ++i) {
-      let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
-      if (!(entry.taggedNext & EMPTY)) {
-        values.push(entry.value);
-        ++length;
-      }
-    }
-    values.length = length;
-    return values;
+  values(): Iterator<V> {
+    return new ValueIterator<K,V>(this.entries());
   }
 
   toString(): string {
@@ -243,7 +285,7 @@ export class Map<K,V> {
 
   @unsafe private __visit_impl(cookie: u32): void {
     __visit(changetype<usize>(this.buckets), cookie);
-    var entries = changetype<usize>(this.entries);
+    var entries = changetype<usize>(this._entries);
     if (isManaged<K>() || isManaged<V>()) {
       let cur = entries;
       let end = cur + <usize>this.entriesOffset * ENTRY_SIZE<K,V>();

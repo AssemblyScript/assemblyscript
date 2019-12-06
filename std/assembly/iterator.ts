@@ -2,7 +2,7 @@ export interface Iterable<T> {
   readonly iterator: Iterator<T>;
 }
 
-export interface IteratorResut<T> {
+export interface IteratorResult<T> {
   readonly value: T;
   readonly done: bool;
 }
@@ -33,11 +33,8 @@ export interface Iterator<T> {
   //   ?
   // }
 
-  readonly done: bool;
 
-  readonly value: T;
-
-  next(): Iterator<T>;
+  next(): IteratorResult<T>;
 
 
 }

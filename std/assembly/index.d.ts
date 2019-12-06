@@ -1525,15 +1525,38 @@ interface Function {}
 interface IArguments {}
 interface RegExp {}
 
+interface IteratorResult<TReturn> {
+  done: bool;
+  value: TReturn;
+}
+
+interface Iterator<T,> {
+  next(): IteratorResult<T>;
+}
+
+interface Iterable<T> {
+  iterator: Iterator<T>;
+}
+
+interface IterableIterator<T> extends Iterator<T> {
+  iterator: IterableIterator<T>;
+}
+
+declare class MapEntry<K, V> {
+  key: K;
+  value: V;
+}
+
 declare class Map<K,V> {
+  entries(): Iterator<MapEntry<K,V>>
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): void;
   get(key: K): V;
   delete(key: K): bool;
   clear(): void;
-  keys(): K[]; // preliminary
-  values(): V[]; // preliminary
+  keys(): Iterator<K>;
+  values(): Iterator<V>;
   toString(): string;
 }
 
