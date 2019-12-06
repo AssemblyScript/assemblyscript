@@ -29,7 +29,8 @@
  * Relative error: 1.69 * 2^-34 in [-1/64, 1/64] (before rounding.)
  * Wrong count: 168353 (all nearest rounding wrong results with fma.)
  */
-export function exp2f_lut(x: f32): f32 {
+// @ts-ignore: decorator
+@inline export function exp2f_lut(x: f32): f32 {
   const N      = 1 << EXP2F_TABLE_BITS;
   const N_MASK = N - 1;
   const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
@@ -74,7 +75,8 @@ ULP error: 0.502 (nearest rounding.)
 Relative error: 1.69 * 2^-34 in [-ln2/64, ln2/64] (before rounding.)
 Wrong count: 170635 (all nearest rounding wrong results with fma.)
 */
-export function expf_lut(x: f32): f32 {
+// @ts-ignore: decorator
+@inline export function expf_lut(x: f32): f32 {
   const N       = 1 << EXP2F_TABLE_BITS;
   const N_MASK  = N - 1;
   const shift   = reinterpret<f64>(0x4338000000000000);        // 0x1.8p+52
@@ -149,7 +151,8 @@ export function expf_lut(x: f32): f32 {
 ULP error: 0.752 (nearest rounding.)
 Relative error: 1.9 * 2^-26 (before rounding.)
 */
-export function log2f_lut(x: f32): f32 {
+// @ts-ignore: decorator
+@inline export function log2f_lut(x: f32): f32 {
   const Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f;
   const N_MASK  = (1 << LOG2F_TABLE_BITS) - 1;
 
@@ -228,7 +231,8 @@ export function log2f_lut(x: f32): f32 {
 ULP error: 0.818 (nearest rounding.)
 Relative error: 1.957 * 2^-26 (before rounding.)
 */
-export function logf_lut(x: f32): f32 {
+// @ts-ignore: decorator
+@inline export function logf_lut(x: f32): f32 {
   const Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f;
   const N_MASK  = (1 << LOGF_TABLE_BITS) - 1;
 
@@ -389,7 +393,8 @@ export function logf_lut(x: f32): f32 {
   return xflowf(sign, reinterpret<f32>(0x10000000)); // 0x1p-95f
 }
 
-export function powf_lut(x: f32, y: f32): f32 {
+// @ts-ignore: decorator
+@inline export function powf_lut(x: f32, y: f32): f32 {
   const Ox1p23f     = reinterpret<f32>(0x4B000000); // 0x1p23f
   const UPPER_LIMIT = reinterpret<f64>(0x405FFFFFFFD1D571); // 0x1.fffffffd1d571p+6
   const LOWER_LIMIT = -150.0;
@@ -617,7 +622,8 @@ export function powf_lut(x: f32, y: f32): f32 {
   return y * Ox1p_1022;
 }
 
-export function exp_lut(x: f64): f64 {
+// @ts-ignore: decorator
+@inline export function exp_lut(x: f64): f64 {
   const N      = 1 << EXP_TABLE_BITS;
   const N_MASK = N - 1;
 
@@ -855,7 +861,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   reinterpret<f64>(0x3FF5DFFFEBFC3481), reinterpret<f64>(0xBC9180902E30E93E)
 ];
 
-export function log2_lut(x: f64): f64 {
+// @ts-ignore: decorator
+@inline export function log2_lut(x: f64): f64 {
   const N      = 1 << LOG2_TABLE_BITS;
   const N_MASK = N - 1;
 
@@ -1264,7 +1271,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   reinterpret<f64>(0x3FF5EFFFE7B87A89), reinterpret<f64>(0xBC947EB780ED6904)
 ];
 
-export function log_lut(x: f64): f64 {
+// @ts-ignore: decorator
+@inline export function log_lut(x: f64): f64 {
   const N      = 1 << LOG_TABLE_BITS;
   const N_MASK = N - 1;
 
@@ -1730,7 +1738,8 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   return scale + scale * tmp;
 }
 
-export function pow_lut(x: f64, y: f64): f64 {
+// @ts-ignore: decorator
+@inline export function pow_lut(x: f64, y: f64): f64 {
   const Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
 
   var sign_bias: u32 = 0;

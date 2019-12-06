@@ -1312,9 +1312,9 @@
   f64.mul
   f64.add
  )
- (func $~lib/util/math/log_lut (; 51 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
-  (local $1 i64)
-  (local $2 f64)
+ (func $~lib/math/NativeMath.log (; 51 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+  (local $1 f64)
+  (local $2 i64)
   (local $3 f64)
   (local $4 f64)
   (local $5 f64)
@@ -1323,333 +1323,327 @@
   (local $8 f64)
   (local $9 f64)
   (local $10 f64)
-  (local $11 i32)
-  (local $12 i64)
-  (local $13 i32)
-  (local $14 i64)
+  (local $11 f64)
+  (local $12 i32)
+  (local $13 i64)
+  (local $14 i32)
   (local $15 i64)
-  (local $16 i32)
+  (local $16 i64)
   (local $17 i32)
-  (local $18 f64)
+  (local $18 i32)
   (local $19 f64)
   (local $20 f64)
-  (local $21 f64)
-  (local $22 f64)
-  (local $23 f64)
-  (local $24 f64)
-  (local $25 f64)
-  (local $26 f64)
-  local.get $0
-  i64.reinterpret_f64
-  local.set $1
-  local.get $1
-  i64.const 4606619468846596096
-  i64.sub
-  i64.const 854320534781952
-  i64.lt_u
-  if
+  block $~lib/util/math/log_lut|inlined.0 (result f64)
    local.get $0
-   f64.const 1
-   f64.sub
+   local.set $1
+   local.get $1
+   i64.reinterpret_f64
    local.set $2
    local.get $2
+   i64.const 4606619468846596096
+   i64.sub
+   i64.const 854320534781952
+   i64.lt_u
+   if
+    local.get $1
+    f64.const 1
+    f64.sub
+    local.set $3
+    local.get $3
+    local.get $3
+    f64.mul
+    local.set $4
+    local.get $3
+    local.get $4
+    f64.mul
+    local.set $5
+    local.get $5
+    f64.const 0.3333333333333352
+    local.get $3
+    f64.const -0.24999999999998432
+    f64.mul
+    f64.add
+    local.get $4
+    f64.const 0.19999999999320328
+    f64.mul
+    f64.add
+    local.get $5
+    f64.const -0.16666666669929706
+    local.get $3
+    f64.const 0.14285715076560868
+    f64.mul
+    f64.add
+    local.get $4
+    f64.const -0.12499997863982555
+    f64.mul
+    f64.add
+    local.get $5
+    f64.const 0.11110712032936046
+    local.get $3
+    f64.const -0.10000486757818193
+    f64.mul
+    f64.add
+    local.get $4
+    f64.const 0.09181994006195467
+    f64.mul
+    f64.add
+    local.get $5
+    f64.const -0.08328363062289341
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    f64.mul
+    local.set $6
+    local.get $3
+    f64.const 134217728
+    f64.mul
+    local.set $7
+    local.get $3
+    local.get $7
+    f64.add
+    local.get $7
+    f64.sub
+    local.set $8
+    local.get $3
+    local.get $8
+    f64.sub
+    local.set $9
+    local.get $8
+    local.get $8
+    f64.mul
+    f64.const -0.5
+    f64.mul
+    local.set $7
+    local.get $3
+    local.get $7
+    f64.add
+    local.set $10
+    local.get $3
+    local.get $10
+    f64.sub
+    local.get $7
+    f64.add
+    local.set $11
+    local.get $11
+    f64.const -0.5
+    local.get $9
+    f64.mul
+    local.get $8
+    local.get $3
+    f64.add
+    f64.mul
+    f64.add
+    local.set $11
+    local.get $6
+    local.get $11
+    f64.add
+    local.set $6
+    local.get $6
+    local.get $10
+    f64.add
+    local.set $6
+    local.get $6
+    br $~lib/util/math/log_lut|inlined.0
+   end
    local.get $2
-   f64.mul
-   local.set $3
+   i64.const 48
+   i64.shr_u
+   i32.wrap_i64
+   local.set $12
+   local.get $12
+   i32.const 16
+   i32.sub
+   i32.const 32736
+   i32.ge_u
+   if
+    local.get $2
+    i64.const 1
+    i64.shl
+    i64.const 0
+    i64.eq
+    if
+     f64.const -1
+     local.get $1
+     local.get $1
+     f64.mul
+     f64.div
+     br $~lib/util/math/log_lut|inlined.0
+    end
+    local.get $2
+    i64.const 9218868437227405312
+    i64.eq
+    if
+     local.get $1
+     br $~lib/util/math/log_lut|inlined.0
+    end
+    local.get $12
+    i32.const 32768
+    i32.and
+    if (result i32)
+     i32.const 1
+    else
+     local.get $12
+     i32.const 32752
+     i32.and
+     i32.const 32752
+     i32.eq
+    end
+    if
+     local.get $1
+     local.get $1
+     f64.sub
+     local.get $1
+     local.get $1
+     f64.sub
+     f64.div
+     br $~lib/util/math/log_lut|inlined.0
+    end
+    local.get $1
+    f64.const 4503599627370496
+    f64.mul
+    i64.reinterpret_f64
+    local.set $2
+    local.get $2
+    i64.const 52
+    i64.const 52
+    i64.shl
+    i64.sub
+    local.set $2
+   end
    local.get $2
-   local.get $3
+   i64.const 4604367669032910848
+   i64.sub
+   local.set $13
+   local.get $13
+   i64.const 52
+   global.get $~lib/util/math/LOG_TABLE_BITS
+   i64.extend_i32_s
+   i64.sub
+   i64.shr_u
+   i64.const 127
+   i64.and
+   i32.wrap_i64
+   local.set $14
+   local.get $13
+   i64.const 52
+   i64.shr_s
+   local.set $15
+   local.get $2
+   local.get $13
+   i64.const 4095
+   i64.const 52
+   i64.shl
+   i64.and
+   i64.sub
+   local.set $16
+   i32.const 2128
+   i32.load offset=4
+   local.set $17
+   i32.const 4224
+   i32.load offset=4
+   local.set $18
+   local.get $17
+   local.get $14
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load
+   local.set $11
+   local.get $17
+   local.get $14
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load offset=8
+   local.set $10
+   local.get $16
+   f64.reinterpret_i64
+   local.set $9
+   local.get $18
+   local.get $14
+   i32.const 4
+   i32.shl
+   i32.add
+   f64.load
+   local.set $8
+   local.get $18
+   local.get $14
+   i32.const 4
+   i32.shl
+   i32.add
+   f64.load offset=8
+   local.set $7
+   local.get $9
+   local.get $8
+   f64.sub
+   local.get $7
+   f64.sub
+   local.get $11
    f64.mul
+   local.set $6
+   local.get $15
+   f64.convert_i64_s
+   local.set $5
+   local.get $5
+   f64.const 0.6931471805598903
+   f64.mul
+   local.get $10
+   f64.add
    local.set $4
    local.get $4
-   f64.const 0.3333333333333352
-   local.get $2
-   f64.const -0.24999999999998432
-   f64.mul
-   f64.add
-   local.get $3
-   f64.const 0.19999999999320328
-   f64.mul
-   f64.add
-   local.get $4
-   f64.const -0.16666666669929706
-   local.get $2
-   f64.const 0.14285715076560868
-   f64.mul
-   f64.add
-   local.get $3
-   f64.const -0.12499997863982555
-   f64.mul
-   f64.add
-   local.get $4
-   f64.const 0.11110712032936046
-   local.get $2
-   f64.const -0.10000486757818193
-   f64.mul
-   f64.add
-   local.get $3
-   f64.const 0.09181994006195467
-   f64.mul
-   f64.add
-   local.get $4
-   f64.const -0.08328363062289341
-   f64.mul
-   f64.add
-   f64.mul
-   f64.add
-   f64.mul
-   f64.add
-   f64.mul
-   local.set $5
-   local.get $2
-   f64.const 134217728
-   f64.mul
-   local.set $6
-   local.get $2
    local.get $6
    f64.add
-   local.get $6
-   f64.sub
-   local.set $7
-   local.get $2
-   local.get $7
-   f64.sub
-   local.set $8
-   local.get $7
-   local.get $7
-   f64.mul
-   f64.const -0.5
-   f64.mul
-   local.set $6
-   local.get $2
-   local.get $6
-   f64.add
-   local.set $9
-   local.get $2
-   local.get $9
+   local.set $3
+   local.get $4
+   local.get $3
    f64.sub
    local.get $6
    f64.add
-   local.set $10
-   local.get $10
-   f64.const -0.5
-   local.get $8
-   f64.mul
-   local.get $7
-   local.get $2
-   f64.add
+   local.get $5
+   f64.const 5.497923018708371e-14
    f64.mul
    f64.add
-   local.set $10
-   local.get $5
-   local.get $10
+   local.set $19
+   local.get $6
+   local.get $6
+   f64.mul
+   local.set $20
+   local.get $19
+   local.get $20
+   f64.const -0.5000000000000001
+   f64.mul
    f64.add
-   local.set $5
-   local.get $5
-   local.get $9
+   local.get $6
+   local.get $20
+   f64.mul
+   f64.const 0.33333333331825593
+   local.get $6
+   f64.const -0.2499999999622955
+   f64.mul
    f64.add
-   local.set $5
-   local.get $5
-   return
+   local.get $20
+   f64.const 0.20000304511814496
+   local.get $6
+   f64.const -0.16667054827627667
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.get $3
+   f64.add
   end
-  local.get $1
-  i64.const 48
-  i64.shr_u
-  i32.wrap_i64
-  local.set $11
-  local.get $11
-  i32.const 16
-  i32.sub
-  i32.const 32736
-  i32.ge_u
-  if
-   local.get $1
-   i64.const 1
-   i64.shl
-   i64.const 0
-   i64.eq
-   if
-    f64.const -1
-    local.get $0
-    local.get $0
-    f64.mul
-    f64.div
-    return
-   end
-   local.get $1
-   i64.const 9218868437227405312
-   i64.eq
-   if
-    local.get $0
-    return
-   end
-   local.get $11
-   i32.const 32768
-   i32.and
-   if (result i32)
-    i32.const 1
-   else
-    local.get $11
-    i32.const 32752
-    i32.and
-    i32.const 32752
-    i32.eq
-   end
-   if
-    local.get $0
-    local.get $0
-    f64.sub
-    local.get $0
-    local.get $0
-    f64.sub
-    f64.div
-    return
-   end
-   local.get $0
-   f64.const 4503599627370496
-   f64.mul
-   i64.reinterpret_f64
-   local.set $1
-   local.get $1
-   i64.const 52
-   i64.const 52
-   i64.shl
-   i64.sub
-   local.set $1
-  end
-  local.get $1
-  i64.const 4604367669032910848
-  i64.sub
-  local.set $12
-  local.get $12
-  i64.const 52
-  global.get $~lib/util/math/LOG_TABLE_BITS
-  i64.extend_i32_s
-  i64.sub
-  i64.shr_u
-  i64.const 127
-  i64.and
-  i32.wrap_i64
-  local.set $13
-  local.get $12
-  i64.const 52
-  i64.shr_s
-  local.set $14
-  local.get $1
-  local.get $12
-  i64.const 4095
-  i64.const 52
-  i64.shl
-  i64.and
-  i64.sub
-  local.set $15
-  i32.const 2128
-  i32.load offset=4
-  local.set $16
-  i32.const 4224
-  i32.load offset=4
-  local.set $17
-  local.get $16
-  local.get $13
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load
-  local.set $18
-  local.get $16
-  local.get $13
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load offset=8
-  local.set $19
-  local.get $15
-  f64.reinterpret_i64
-  local.set $20
-  local.get $17
-  local.get $13
-  i32.const 4
-  i32.shl
-  i32.add
-  f64.load
-  local.set $10
-  local.get $17
-  local.get $13
-  i32.const 4
-  i32.shl
-  i32.add
-  f64.load offset=8
-  local.set $9
-  local.get $20
-  local.get $10
-  f64.sub
-  local.get $9
-  f64.sub
-  local.get $18
-  f64.mul
-  local.set $21
-  local.get $14
-  f64.convert_i64_s
-  local.set $22
-  local.get $22
-  f64.const 0.6931471805598903
-  f64.mul
-  local.get $19
-  f64.add
-  local.set $23
-  local.get $23
-  local.get $21
-  f64.add
-  local.set $24
-  local.get $23
-  local.get $24
-  f64.sub
-  local.get $21
-  f64.add
-  local.get $22
-  f64.const 5.497923018708371e-14
-  f64.mul
-  f64.add
-  local.set $25
-  local.get $21
-  local.get $21
-  f64.mul
-  local.set $26
-  local.get $25
-  local.get $26
-  f64.const -0.5000000000000001
-  f64.mul
-  f64.add
-  local.get $21
-  local.get $26
-  f64.mul
-  f64.const 0.33333333331825593
-  local.get $21
-  f64.const -0.2499999999622955
-  f64.mul
-  f64.add
-  local.get $26
-  f64.const 0.20000304511814496
-  local.get $21
-  f64.const -0.16667054827627667
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
-  local.get $24
-  f64.add
- )
- (func $~lib/math/NativeMath.log (; 52 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
-  local.get $0
-  call $~lib/util/math/log_lut
   return
  )
- (func $~lib/math/NativeMath.acosh (; 53 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.acosh (; 52 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   local.get $0
   i64.reinterpret_f64
@@ -1709,7 +1703,7 @@
   f64.const 0.6931471805599453
   f64.add
  )
- (func $std/math/test_acosh (; 54 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_acosh (; 53 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.acosh
   local.get $1
@@ -1733,7 +1727,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.log1p (; 55 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log1p (; 54 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -1942,175 +1936,176 @@
   f32.mul
   f32.add
  )
- (func $~lib/util/math/logf_lut (; 56 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
-  (local $1 i32)
+ (func $~lib/math/NativeMathf.log (; 55 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+  (local $1 f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f64)
+  (local $7 i32)
   (local $8 f64)
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
   (local $12 f64)
   (local $13 f64)
-  local.get $0
-  i32.reinterpret_f32
-  local.set $1
-  local.get $1
-  i32.const 8388608
-  i32.sub
-  i32.const 2130706432
-  i32.ge_u
-  if
+  (local $14 f64)
+  block $~lib/util/math/logf_lut|inlined.0 (result f32)
+   local.get $0
+   local.set $1
    local.get $1
-   i32.const 1
-   i32.shl
-   i32.const 0
-   i32.eq
+   i32.reinterpret_f32
+   local.set $2
+   local.get $2
+   i32.const 8388608
+   i32.sub
+   i32.const 2130706432
+   i32.ge_u
    if
-    f32.const inf
-    f32.neg
-    return
-   end
-   local.get $1
-   i32.const 2139095040
-   i32.eq
-   if
-    local.get $0
-    return
-   end
-   local.get $1
-   i32.const 31
-   i32.shr_u
-   if (result i32)
-    i32.const 1
-   else
-    local.get $1
+    local.get $2
     i32.const 1
     i32.shl
-    i32.const -16777216
-    i32.ge_u
+    i32.const 0
+    i32.eq
+    if
+     f32.const inf
+     f32.neg
+     br $~lib/util/math/logf_lut|inlined.0
+    end
+    local.get $2
+    i32.const 2139095040
+    i32.eq
+    if
+     local.get $1
+     br $~lib/util/math/logf_lut|inlined.0
+    end
+    local.get $2
+    i32.const 31
+    i32.shr_u
+    if (result i32)
+     i32.const 1
+    else
+     local.get $2
+     i32.const 1
+     i32.shl
+     i32.const -16777216
+     i32.ge_u
+    end
+    if
+     local.get $1
+     local.get $1
+     f32.sub
+     local.get $1
+     local.get $1
+     f32.sub
+     f32.div
+     br $~lib/util/math/logf_lut|inlined.0
+    end
+    local.get $1
+    f32.const 8388608
+    f32.mul
+    i32.reinterpret_f32
+    local.set $2
+    local.get $2
+    i32.const 23
+    i32.const 23
+    i32.shl
+    i32.sub
+    local.set $2
    end
-   if
-    local.get $0
-    local.get $0
-    f32.sub
-    local.get $0
-    local.get $0
-    f32.sub
-    f32.div
-    return
-   end
-   local.get $0
-   f32.const 8388608
-   f32.mul
-   i32.reinterpret_f32
-   local.set $1
-   local.get $1
+   local.get $2
+   i32.const 1060306944
+   i32.sub
+   local.set $3
+   local.get $3
    i32.const 23
+   global.get $~lib/util/math/LOGF_TABLE_BITS
+   i32.sub
+   i32.shr_u
+   i32.const 15
+   i32.and
+   local.set $4
+   local.get $3
+   i32.const 23
+   i32.shr_s
+   local.set $5
+   local.get $2
+   local.get $3
+   i32.const 511
    i32.const 23
    i32.shl
+   i32.and
    i32.sub
-   local.set $1
+   local.set $6
+   global.get $~lib/util/math/logf_data_tab
+   i32.load offset=4
+   local.set $7
+   local.get $7
+   local.get $4
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load
+   local.set $8
+   local.get $7
+   local.get $4
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load offset=8
+   local.set $9
+   local.get $6
+   f32.reinterpret_i32
+   f64.promote_f32
+   local.set $10
+   local.get $10
+   local.get $8
+   f64.mul
+   f64.const 1
+   f64.sub
+   local.set $11
+   local.get $9
+   local.get $5
+   f64.convert_i32_s
+   f64.const 0.6931471805599453
+   f64.mul
+   f64.add
+   local.set $12
+   local.get $11
+   local.get $11
+   f64.mul
+   local.set $13
+   f64.const 0.333456765744066
+   local.get $11
+   f64.mul
+   f64.const -0.4999997485802103
+   f64.add
+   local.set $14
+   local.get $14
+   f64.const -0.25089342214237154
+   local.get $13
+   f64.mul
+   f64.add
+   local.set $14
+   local.get $14
+   local.get $13
+   f64.mul
+   local.get $12
+   local.get $11
+   f64.add
+   f64.add
+   local.set $14
+   local.get $14
+   f32.demote_f64
   end
-  local.get $1
-  i32.const 1060306944
-  i32.sub
-  local.set $2
-  local.get $2
-  i32.const 23
-  global.get $~lib/util/math/LOGF_TABLE_BITS
-  i32.sub
-  i32.shr_u
-  i32.const 15
-  i32.and
-  local.set $3
-  local.get $2
-  i32.const 23
-  i32.shr_s
-  local.set $4
-  local.get $1
-  local.get $2
-  i32.const 511
-  i32.const 23
-  i32.shl
-  i32.and
-  i32.sub
-  local.set $5
-  global.get $~lib/util/math/logf_data_tab
-  i32.load offset=4
-  local.set $6
-  local.get $6
-  local.get $3
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load
-  local.set $7
-  local.get $6
-  local.get $3
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load offset=8
-  local.set $8
-  local.get $5
-  f32.reinterpret_i32
-  f64.promote_f32
-  local.set $9
-  local.get $9
-  local.get $7
-  f64.mul
-  f64.const 1
-  f64.sub
-  local.set $10
-  local.get $8
-  local.get $4
-  f64.convert_i32_s
-  f64.const 0.6931471805599453
-  f64.mul
-  f64.add
-  local.set $11
-  local.get $10
-  local.get $10
-  f64.mul
-  local.set $12
-  f64.const 0.333456765744066
-  local.get $10
-  f64.mul
-  f64.const -0.4999997485802103
-  f64.add
-  local.set $13
-  local.get $13
-  f64.const -0.25089342214237154
-  local.get $12
-  f64.mul
-  f64.add
-  local.set $13
-  local.get $13
-  local.get $12
-  f64.mul
-  local.get $11
-  local.get $10
-  f64.add
-  f64.add
-  local.set $13
-  local.get $13
-  f32.demote_f64
- )
- (func $~lib/math/NativeMathf.log (; 57 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
-  local.get $0
-  call $~lib/util/math/logf_lut
   return
  )
- (func $~lib/math/NativeMathf.acosh (; 58 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.acosh (; 56 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -2166,7 +2161,7 @@
   f32.const 0.6931471824645996
   f32.add
  )
- (func $std/math/test_acoshf (; 59 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_acoshf (; 57 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.acosh
   local.get $1
@@ -2174,7 +2169,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.asin (; 60 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.asin (; 58 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2333,7 +2328,7 @@
   end
   local.get $0
  )
- (func $std/math/test_asin (; 61 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_asin (; 59 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.asin
   local.get $1
@@ -2357,7 +2352,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.asin (; 62 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.asin (; 60 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 f32)
   (local $2 i32)
   (local $3 f32)
@@ -2449,7 +2444,7 @@
   local.get $1
   f32.copysign
  )
- (func $std/math/test_asinf (; 63 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_asinf (; 61 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.asin
   local.get $1
@@ -2457,7 +2452,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.asinh (; 64 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.asinh (; 62 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 f64)
@@ -2533,7 +2528,7 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_asinh (; 65 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_asinh (; 63 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.asinh
   local.get $1
@@ -2557,7 +2552,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.asinh (; 66 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.asinh (; 64 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   local.get $0
@@ -2626,7 +2621,7 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_asinhf (; 67 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_asinhf (; 65 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.asinh
   local.get $1
@@ -2634,7 +2629,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.atan (; 68 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.atan (; 66 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 f64)
   (local $3 f64)
@@ -2892,7 +2887,7 @@
   local.get $2
   f64.copysign
  )
- (func $std/math/test_atan (; 69 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_atan (; 67 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.atan
   local.get $1
@@ -2916,7 +2911,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.atan (; 70 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.atan (; 68 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -3146,7 +3141,7 @@
   local.get $2
   f32.copysign
  )
- (func $std/math/test_atanf (; 71 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_atanf (; 69 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.atan
   local.get $1
@@ -3154,7 +3149,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.atanh (; 72 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.atanh (; 70 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 f64)
@@ -3213,7 +3208,7 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_atanh (; 73 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_atanh (; 71 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.atanh
   local.get $1
@@ -3237,7 +3232,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.atanh (; 74 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.atanh (; 72 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   local.get $0
@@ -3287,7 +3282,7 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_atanhf (; 75 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_atanhf (; 73 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.atanh
   local.get $1
@@ -3295,7 +3290,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.atan2 (; 76 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.atan2 (; 74 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -3596,7 +3591,7 @@
   end
   unreachable
  )
- (func $std/math/test_atan2 (; 77 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_atan2 (; 75 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.atan2
@@ -3622,7 +3617,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.atan2 (; 78 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.atan2 (; 76 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3894,7 +3889,7 @@
   end
   unreachable
  )
- (func $std/math/test_atan2f (; 79 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_atan2f (; 77 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.atan2
@@ -3903,7 +3898,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.cbrt (; 80 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cbrt (; 78 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 f64)
@@ -4047,7 +4042,7 @@
   local.set $3
   local.get $3
  )
- (func $std/math/test_cbrt (; 81 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_cbrt (; 79 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.cbrt
   local.get $1
@@ -4071,7 +4066,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.cbrt (; 82 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cbrt (; 80 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -4187,7 +4182,7 @@
   local.get $3
   f32.demote_f64
  )
- (func $std/math/test_cbrtf (; 83 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_cbrtf (; 81 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.cbrt
   local.get $1
@@ -4195,7 +4190,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_ceil (; 84 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_ceil (; 82 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -4222,7 +4217,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_ceilf (; 85 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_ceilf (; 83 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -4233,7 +4228,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/pio2_large_quot (; 86 ;) (type $FUNCSIG$idj) (param $0 f64) (param $1 i64) (result i32)
+ (func $~lib/math/pio2_large_quot (; 84 ;) (type $FUNCSIG$idj) (param $0 f64) (param $1 i64) (result i32)
   (local $2 i32)
   (local $3 i64)
   (local $4 i64)
@@ -4635,7 +4630,7 @@
   local.get $31
   i32.wrap_i64
  )
- (func $~lib/math/NativeMath.cos (; 87 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cos (; 85 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -5153,7 +5148,7 @@
    local.get $0
   end
  )
- (func $std/math/test_cos (; 88 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_cos (; 86 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.cos
   local.get $1
@@ -5177,7 +5172,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.cos (; 89 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cos (; 87 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -5795,7 +5790,7 @@
    local.get $27
   end
  )
- (func $std/math/test_cosf (; 90 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_cosf (; 88 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.cos
   local.get $1
@@ -5803,7 +5798,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.expm1 (; 91 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.expm1 (; 89 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -6116,290 +6111,290 @@
   local.get $14
   f64.mul
  )
- (func $~lib/util/math/exp_lut (; 92 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
-  (local $1 i64)
-  (local $2 i32)
-  (local $3 f64)
+ (func $~lib/math/NativeMath.exp (; 90 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+  (local $1 f64)
+  (local $2 i64)
+  (local $3 i32)
   (local $4 f64)
-  (local $5 i64)
-  (local $6 f64)
-  (local $7 i32)
-  (local $8 i64)
-  (local $9 i32)
-  (local $10 f64)
-  (local $11 i64)
-  (local $12 f64)
+  (local $5 f64)
+  (local $6 i64)
+  (local $7 f64)
+  (local $8 i32)
+  (local $9 i64)
+  (local $10 i32)
+  (local $11 f64)
+  (local $12 i64)
   (local $13 f64)
-  (local $14 i64)
+  (local $14 f64)
   (local $15 i64)
-  (local $16 f64)
+  (local $16 i64)
   (local $17 f64)
   (local $18 f64)
   (local $19 f64)
   (local $20 f64)
   (local $21 f64)
   (local $22 f64)
-  local.get $0
-  i64.reinterpret_f64
-  local.set $1
-  local.get $1
-  i64.const 52
-  i64.shr_u
-  i64.const 2047
-  i64.and
-  i32.wrap_i64
-  local.set $2
-  local.get $2
-  i32.const 969
-  i32.sub
-  i32.const 63
-  i32.ge_u
-  if
+  block $~lib/util/math/exp_lut|inlined.0 (result f64)
+   local.get $0
+   local.set $1
+   local.get $1
+   i64.reinterpret_f64
+   local.set $2
    local.get $2
+   i64.const 52
+   i64.shr_u
+   i64.const 2047
+   i64.and
+   i32.wrap_i64
+   local.set $3
+   local.get $3
    i32.const 969
    i32.sub
-   i32.const -2147483648
+   i32.const 63
    i32.ge_u
    if
-    f64.const 1
-    return
-   end
-   local.get $2
-   i32.const 1033
-   i32.ge_u
-   if
-    local.get $1
-    i64.const -4503599627370496
-    i64.eq
-    if
-     f64.const 0
-     return
-    end
-    local.get $2
-    i32.const 2047
+    local.get $3
+    i32.const 969
+    i32.sub
+    i32.const -2147483648
     i32.ge_u
     if
      f64.const 1
-     local.get $0
-     f64.add
-     return
+     br $~lib/util/math/exp_lut|inlined.0
     end
-    f64.const 0
-    f64.const inf
-    local.get $1
-    i64.const 63
-    i64.shr_u
-    i64.const 0
-    i64.ne
-    select
-    return
-   end
-   i32.const 0
-   local.set $2
-  end
-  f64.const 184.6649652337873
-  local.get $0
-  f64.mul
-  local.set $3
-  local.get $3
-  f64.const 6755399441055744
-  f64.add
-  local.set $4
-  local.get $4
-  i64.reinterpret_f64
-  local.set $5
-  local.get $4
-  f64.const 6755399441055744
-  f64.sub
-  local.set $4
-  local.get $0
-  local.get $4
-  f64.const -0.005415212348111709
-  f64.mul
-  f64.add
-  local.get $4
-  f64.const -1.2864023111638346e-14
-  f64.mul
-  f64.add
-  local.set $6
-  local.get $5
-  i64.const 127
-  i64.and
-  i64.const 1
-  i64.shl
-  i32.wrap_i64
-  local.set $7
-  local.get $5
-  i64.const 52
-  global.get $~lib/util/math/EXP_TABLE_BITS
-  i64.extend_i32_s
-  i64.sub
-  i64.shl
-  local.set $8
-  i32.const 6944
-  i32.load offset=4
-  local.set $9
-  local.get $9
-  local.get $7
-  i32.const 3
-  i32.shl
-  i32.add
-  i64.load
-  f64.reinterpret_i64
-  local.set $10
-  local.get $9
-  local.get $7
-  i32.const 3
-  i32.shl
-  i32.add
-  i64.load offset=8
-  local.get $8
-  i64.add
-  local.set $11
-  local.get $6
-  local.get $6
-  f64.mul
-  local.set $12
-  local.get $10
-  local.get $6
-  f64.add
-  local.get $12
-  f64.const 0.49999999999996786
-  local.get $6
-  f64.const 0.16666666666665886
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
-  local.get $12
-  local.get $12
-  f64.mul
-  f64.const 0.0416666808410674
-  local.get $6
-  f64.const 0.008333335853059549
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
-  local.set $13
-  local.get $2
-  i32.const 0
-  i32.eq
-  if
-   block $~lib/util/math/specialcase|inlined.0 (result f64)
-    local.get $13
-    local.set $16
-    local.get $11
-    local.set $15
-    local.get $5
-    local.set $14
-    local.get $14
-    i64.const 2147483648
-    i64.and
-    i64.const 0
-    i64.ne
-    i32.eqz
+    local.get $3
+    i32.const 1033
+    i32.ge_u
     if
-     local.get $15
-     i64.const 1009
-     i64.const 52
-     i64.shl
-     i64.sub
+     local.get $2
+     i64.const -4503599627370496
+     i64.eq
+     if
+      f64.const 0
+      br $~lib/util/math/exp_lut|inlined.0
+     end
+     local.get $3
+     i32.const 2047
+     i32.ge_u
+     if
+      f64.const 1
+      local.get $1
+      f64.add
+      br $~lib/util/math/exp_lut|inlined.0
+     end
+     f64.const 0
+     f64.const inf
+     local.get $2
+     i64.const 63
+     i64.shr_u
+     i64.const 0
+     i64.ne
+     select
+     br $~lib/util/math/exp_lut|inlined.0
+    end
+    i32.const 0
+    local.set $3
+   end
+   f64.const 184.6649652337873
+   local.get $1
+   f64.mul
+   local.set $4
+   local.get $4
+   f64.const 6755399441055744
+   f64.add
+   local.set $5
+   local.get $5
+   i64.reinterpret_f64
+   local.set $6
+   local.get $5
+   f64.const 6755399441055744
+   f64.sub
+   local.set $5
+   local.get $1
+   local.get $5
+   f64.const -0.005415212348111709
+   f64.mul
+   f64.add
+   local.get $5
+   f64.const -1.2864023111638346e-14
+   f64.mul
+   f64.add
+   local.set $7
+   local.get $6
+   i64.const 127
+   i64.and
+   i64.const 1
+   i64.shl
+   i32.wrap_i64
+   local.set $8
+   local.get $6
+   i64.const 52
+   global.get $~lib/util/math/EXP_TABLE_BITS
+   i64.extend_i32_s
+   i64.sub
+   i64.shl
+   local.set $9
+   i32.const 6944
+   i32.load offset=4
+   local.set $10
+   local.get $10
+   local.get $8
+   i32.const 3
+   i32.shl
+   i32.add
+   i64.load
+   f64.reinterpret_i64
+   local.set $11
+   local.get $10
+   local.get $8
+   i32.const 3
+   i32.shl
+   i32.add
+   i64.load offset=8
+   local.get $9
+   i64.add
+   local.set $12
+   local.get $7
+   local.get $7
+   f64.mul
+   local.set $13
+   local.get $11
+   local.get $7
+   f64.add
+   local.get $13
+   f64.const 0.49999999999996786
+   local.get $7
+   f64.const 0.16666666666665886
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.get $13
+   local.get $13
+   f64.mul
+   f64.const 0.0416666808410674
+   local.get $7
+   f64.const 0.008333335853059549
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   local.set $14
+   local.get $3
+   i32.const 0
+   i32.eq
+   if
+    block $~lib/util/math/specialcase|inlined.0 (result f64)
+     local.get $14
+     local.set $17
+     local.get $12
+     local.set $16
+     local.get $6
      local.set $15
      local.get $15
-     f64.reinterpret_i64
-     local.set $17
-     f64.const 5486124068793688683255936e279
-     local.get $17
-     local.get $17
-     local.get $16
-     f64.mul
-     f64.add
-     f64.mul
-     br $~lib/util/math/specialcase|inlined.0
-    end
-    local.get $15
-    i64.const 1022
-    i64.const 52
-    i64.shl
-    i64.add
-    local.set $15
-    local.get $15
-    f64.reinterpret_i64
-    local.set $17
-    local.get $17
-    local.get $17
-    local.get $16
-    f64.mul
-    f64.add
-    local.set $18
-    local.get $18
-    f64.abs
-    f64.const 1
-    f64.lt
-    if
-     f64.const 1
-     local.get $18
-     f64.copysign
-     local.set $19
-     local.get $17
-     local.get $18
-     f64.sub
-     local.get $17
-     local.get $16
-     f64.mul
-     f64.add
-     local.set $20
-     local.get $19
-     local.get $18
-     f64.add
-     local.set $21
-     local.get $19
-     local.get $21
-     f64.sub
-     local.get $18
-     f64.add
-     local.get $20
-     f64.add
-     local.set $20
-     local.get $21
-     local.get $20
-     f64.add
-     local.get $19
-     f64.sub
-     local.set $18
-     local.get $18
-     f64.const 0
-     f64.eq
+     i64.const 2147483648
+     i64.and
+     i64.const 0
+     i64.ne
+     i32.eqz
      if
-      local.get $15
-      i64.const -9223372036854775808
-      i64.and
+      local.get $16
+      i64.const 1009
+      i64.const 52
+      i64.shl
+      i64.sub
+      local.set $16
+      local.get $16
       f64.reinterpret_i64
       local.set $18
+      f64.const 5486124068793688683255936e279
+      local.get $18
+      local.get $18
+      local.get $17
+      f64.mul
+      f64.add
+      f64.mul
+      br $~lib/util/math/specialcase|inlined.0
      end
+     local.get $16
+     i64.const 1022
+     i64.const 52
+     i64.shl
+     i64.add
+     local.set $16
+     local.get $16
+     f64.reinterpret_i64
+     local.set $18
+     local.get $18
+     local.get $18
+     local.get $17
+     f64.mul
+     f64.add
+     local.set $19
+     local.get $19
+     f64.abs
+     f64.const 1
+     f64.lt
+     if
+      f64.const 1
+      local.get $19
+      f64.copysign
+      local.set $20
+      local.get $18
+      local.get $19
+      f64.sub
+      local.get $18
+      local.get $17
+      f64.mul
+      f64.add
+      local.set $21
+      local.get $20
+      local.get $19
+      f64.add
+      local.set $22
+      local.get $20
+      local.get $22
+      f64.sub
+      local.get $19
+      f64.add
+      local.get $21
+      f64.add
+      local.set $21
+      local.get $22
+      local.get $21
+      f64.add
+      local.get $20
+      f64.sub
+      local.set $19
+      local.get $19
+      f64.const 0
+      f64.eq
+      if
+       local.get $16
+       i64.const -9223372036854775808
+       i64.and
+       f64.reinterpret_i64
+       local.set $19
+      end
+     end
+     local.get $19
+     f64.const 2.2250738585072014e-308
+     f64.mul
     end
-    local.get $18
-    f64.const 2.2250738585072014e-308
-    f64.mul
+    br $~lib/util/math/exp_lut|inlined.0
    end
-   return
+   local.get $12
+   f64.reinterpret_i64
+   local.set $19
+   local.get $19
+   local.get $19
+   local.get $14
+   f64.mul
+   f64.add
   end
-  local.get $11
-  f64.reinterpret_i64
-  local.set $22
-  local.get $22
-  local.get $22
-  local.get $13
-  f64.mul
-  f64.add
- )
- (func $~lib/math/NativeMath.exp (; 93 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
-  local.get $0
-  call $~lib/util/math/exp_lut
   return
  )
- (func $~lib/math/NativeMath.cosh (; 94 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.cosh (; 91 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 f64)
@@ -6488,7 +6483,7 @@
   local.set $3
   local.get $3
  )
- (func $std/math/test_cosh (; 95 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_cosh (; 92 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.cosh
   local.get $1
@@ -6512,7 +6507,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.expm1 (; 96 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.expm1 (; 93 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6805,140 +6800,141 @@
   local.get $13
   f32.mul
  )
- (func $~lib/util/math/expf_lut (; 97 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
-  (local $1 f64)
-  (local $2 i32)
+ (func $~lib/math/NativeMathf.exp (; 94 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+  (local $1 f32)
+  (local $2 f64)
   (local $3 i32)
-  (local $4 f64)
+  (local $4 i32)
   (local $5 f64)
-  (local $6 i64)
-  (local $7 f64)
+  (local $6 f64)
+  (local $7 i64)
   (local $8 f64)
   (local $9 f64)
-  (local $10 i64)
-  (local $11 i32)
-  local.get $0
-  f64.promote_f32
-  local.set $1
-  local.get $0
-  i32.reinterpret_f32
-  local.set $2
-  local.get $2
-  i32.const 20
-  i32.shr_u
-  i32.const 2047
-  i32.and
-  local.set $3
-  local.get $3
-  i32.const 1067
-  i32.ge_u
-  if
-   local.get $2
-   i32.const -8388608
-   i32.eq
-   if
-    f32.const 0
-    return
-   end
+  (local $10 f64)
+  (local $11 i64)
+  (local $12 i32)
+  block $~lib/util/math/expf_lut|inlined.0 (result f32)
+   local.get $0
+   local.set $1
+   local.get $1
+   f64.promote_f32
+   local.set $2
+   local.get $1
+   i32.reinterpret_f32
+   local.set $3
    local.get $3
-   i32.const 2040
+   i32.const 20
+   i32.shr_u
+   i32.const 2047
+   i32.and
+   local.set $4
+   local.get $4
+   i32.const 1067
    i32.ge_u
    if
-    local.get $0
-    local.get $0
-    f32.add
-    return
+    local.get $3
+    i32.const -8388608
+    i32.eq
+    if
+     f32.const 0
+     br $~lib/util/math/expf_lut|inlined.0
+    end
+    local.get $4
+    i32.const 2040
+    i32.ge_u
+    if
+     local.get $1
+     local.get $1
+     f32.add
+     br $~lib/util/math/expf_lut|inlined.0
+    end
+    local.get $1
+    f32.const 88.72283172607422
+    f32.gt
+    if
+     f32.const inf
+     br $~lib/util/math/expf_lut|inlined.0
+    end
+    local.get $1
+    f32.const -103.97207641601562
+    f32.lt
+    if
+     f32.const 0
+     br $~lib/util/math/expf_lut|inlined.0
+    end
    end
-   local.get $0
-   f32.const 88.72283172607422
-   f32.gt
-   if
-    f32.const inf
-    return
-   end
-   local.get $0
-   f32.const -103.97207641601562
-   f32.lt
-   if
-    f32.const 0
-    return
-   end
+   f64.const 46.16624130844683
+   local.get $2
+   f64.mul
+   local.set $5
+   local.get $5
+   f64.const 6755399441055744
+   f64.add
+   local.set $6
+   local.get $6
+   i64.reinterpret_f64
+   local.set $7
+   local.get $5
+   local.get $6
+   f64.const 6755399441055744
+   f64.sub
+   f64.sub
+   local.set $8
+   i32.const 7248
+   i32.load offset=4
+   local.set $12
+   local.get $12
+   local.get $7
+   i32.wrap_i64
+   i32.const 31
+   i32.and
+   i32.const 3
+   i32.shl
+   i32.add
+   i64.load
+   local.set $11
+   local.get $11
+   local.get $7
+   i64.const 52
+   global.get $~lib/util/math/EXP2F_TABLE_BITS
+   i64.extend_i32_s
+   i64.sub
+   i64.shl
+   i64.add
+   local.set $11
+   local.get $11
+   f64.reinterpret_i64
+   local.set $9
+   f64.const 1.6938359250920212e-06
+   local.get $8
+   f64.mul
+   f64.const 2.3459809789509004e-04
+   f64.add
+   local.set $5
+   f64.const 0.021660849396613134
+   local.get $8
+   f64.mul
+   f64.const 1
+   f64.add
+   local.set $10
+   local.get $10
+   local.get $5
+   local.get $8
+   local.get $8
+   f64.mul
+   f64.mul
+   f64.add
+   local.set $10
+   local.get $10
+   local.get $9
+   f64.mul
+   local.set $10
+   local.get $10
+   f32.demote_f64
   end
-  f64.const 46.16624130844683
-  local.get $1
-  f64.mul
-  local.set $4
-  local.get $4
-  f64.const 6755399441055744
-  f64.add
-  local.set $5
-  local.get $5
-  i64.reinterpret_f64
-  local.set $6
-  local.get $4
-  local.get $5
-  f64.const 6755399441055744
-  f64.sub
-  f64.sub
-  local.set $7
-  i32.const 7248
-  i32.load offset=4
-  local.set $11
-  local.get $11
-  local.get $6
-  i32.wrap_i64
-  i32.const 31
-  i32.and
-  i32.const 3
-  i32.shl
-  i32.add
-  i64.load
-  local.set $10
-  local.get $10
-  local.get $6
-  i64.const 52
-  global.get $~lib/util/math/EXP2F_TABLE_BITS
-  i64.extend_i32_s
-  i64.sub
-  i64.shl
-  i64.add
-  local.set $10
-  local.get $10
-  f64.reinterpret_i64
-  local.set $8
-  f64.const 1.6938359250920212e-06
-  local.get $7
-  f64.mul
-  f64.const 2.3459809789509004e-04
-  f64.add
-  local.set $4
-  f64.const 0.021660849396613134
-  local.get $7
-  f64.mul
-  f64.const 1
-  f64.add
-  local.set $9
-  local.get $9
-  local.get $4
-  local.get $7
-  local.get $7
-  f64.mul
-  f64.mul
-  f64.add
-  local.set $9
-  local.get $9
-  local.get $8
-  f64.mul
-  local.set $9
-  local.get $9
-  f32.demote_f64
- )
- (func $~lib/math/NativeMathf.exp (; 98 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
-  local.get $0
-  call $~lib/util/math/expf_lut
   return
  )
- (func $~lib/math/NativeMathf.cosh (; 99 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.cosh (; 95 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -7015,7 +7011,7 @@
   local.get $3
   f32.mul
  )
- (func $std/math/test_coshf (; 100 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_coshf (; 96 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.cosh
   local.get $1
@@ -7023,7 +7019,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_exp (; 101 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_exp (; 97 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.exp
   local.get $1
@@ -7047,7 +7043,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_expf (; 102 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expf (; 98 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.exp
   local.get $1
@@ -7055,7 +7051,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_expm1 (; 103 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_expm1 (; 99 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.expm1
   local.get $1
@@ -7079,7 +7075,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_expm1f (; 104 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_expm1f (; 100 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.expm1
   local.get $1
@@ -7087,7 +7083,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_floor (; 105 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_floor (; 101 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -7114,7 +7110,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_floorf (; 106 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_floorf (; 102 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -7125,7 +7121,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.hypot (; 107 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.hypot (; 103 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -7320,7 +7316,7 @@
   f64.sqrt
   f64.mul
  )
- (func $std/math/test_hypot (; 108 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_hypot (; 104 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.hypot
@@ -7329,7 +7325,7 @@
   local.get $4
   call $std/math/check<f64>
  )
- (func $~lib/math/NativeMathf.hypot (; 109 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.hypot (; 105 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7446,7 +7442,7 @@
   f32.sqrt
   f32.mul
  )
- (func $std/math/test_hypotf (; 110 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_hypotf (; 106 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.hypot
@@ -7455,7 +7451,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $std/math/test_log (; 111 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log (; 107 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.log
   local.get $1
@@ -7479,7 +7475,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_logf (; 112 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_logf (; 108 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log
   local.get $1
@@ -7487,7 +7483,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.log10 (; 113 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log10 (; 109 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -7747,7 +7743,7 @@
   local.get $8
   f64.add
  )
- (func $std/math/test_log10 (; 114 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log10 (; 110 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.log10
   local.get $1
@@ -7771,7 +7767,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.log10 (; 115 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.log10 (; 111 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -7971,7 +7967,7 @@
   f32.mul
   f32.add
  )
- (func $std/math/test_log10f (; 116 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log10f (; 112 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log10
   local.get $1
@@ -7979,7 +7975,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_log1p (; 117 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log1p (; 113 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.log1p
   local.get $1
@@ -8003,7 +7999,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_log1pf (; 118 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log1pf (; 114 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log1p
   local.get $1
@@ -8011,9 +8007,9 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/util/math/log2_lut (; 119 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
-  (local $1 i64)
-  (local $2 f64)
+ (func $~lib/math/NativeMath.log2 (; 115 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+  (local $1 f64)
+  (local $2 i64)
   (local $3 f64)
   (local $4 f64)
   (local $5 f64)
@@ -8022,14 +8018,14 @@
   (local $8 f64)
   (local $9 f64)
   (local $10 f64)
-  (local $11 i32)
-  (local $12 i64)
-  (local $13 i32)
-  (local $14 i64)
+  (local $11 f64)
+  (local $12 i32)
+  (local $13 i64)
+  (local $14 i32)
   (local $15 i64)
-  (local $16 i32)
+  (local $16 i64)
   (local $17 i32)
-  (local $18 f64)
+  (local $18 i32)
   (local $19 f64)
   (local $20 f64)
   (local $21 f64)
@@ -8037,341 +8033,333 @@
   (local $23 f64)
   (local $24 f64)
   (local $25 f64)
-  (local $26 f64)
-  (local $27 f64)
-  (local $28 f64)
-  (local $29 f64)
-  (local $30 f64)
-  (local $31 f64)
-  (local $32 f64)
-  (local $33 f64)
-  local.get $0
-  i64.reinterpret_f64
-  local.set $1
-  local.get $1
-  i64.const 4606800540372828160
-  i64.sub
-  i64.const 581272283906048
-  i64.lt_u
-  if
+  block $~lib/util/math/log2_lut|inlined.0 (result f64)
    local.get $0
-   f64.const 1
-   f64.sub
+   local.set $1
+   local.get $1
+   i64.reinterpret_f64
    local.set $2
    local.get $2
+   i64.const 4606800540372828160
+   i64.sub
+   i64.const 581272283906048
+   i64.lt_u
+   if
+    local.get $1
+    f64.const 1
+    f64.sub
+    local.set $3
+    local.get $3
+    i64.reinterpret_f64
+    i64.const -4294967296
+    i64.and
+    f64.reinterpret_i64
+    local.set $4
+    local.get $3
+    local.get $4
+    f64.sub
+    local.set $5
+    local.get $4
+    f64.const 1.4426950407214463
+    f64.mul
+    local.set $6
+    local.get $5
+    f64.const 1.4426950407214463
+    f64.mul
+    local.get $3
+    f64.const 1.6751713164886512e-10
+    f64.mul
+    f64.add
+    local.set $7
+    local.get $3
+    local.get $3
+    f64.mul
+    local.set $8
+    local.get $8
+    local.get $8
+    f64.mul
+    local.set $9
+    local.get $8
+    f64.const -0.7213475204444817
+    local.get $3
+    f64.const 0.48089834696298744
+    f64.mul
+    f64.add
+    f64.mul
+    local.set $10
+    local.get $6
+    local.get $10
+    f64.add
+    local.set $11
+    local.get $7
+    local.get $6
+    local.get $11
+    f64.sub
+    local.get $10
+    f64.add
+    f64.add
+    local.set $7
+    local.get $7
+    local.get $9
+    f64.const -0.360673760222145
+    local.get $3
+    f64.const 0.2885390081805197
+    f64.mul
+    f64.add
+    local.get $8
+    f64.const -0.24044917405728863
+    local.get $3
+    f64.const 0.2060992861022954
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    local.get $9
+    f64.const -0.18033596705327856
+    local.get $3
+    f64.const 0.1603032746063156
+    f64.mul
+    f64.add
+    local.get $8
+    f64.const -0.14483316576701266
+    local.get $3
+    f64.const 0.13046826811283835
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    local.set $7
+    local.get $11
+    local.get $7
+    f64.add
+    br $~lib/util/math/log2_lut|inlined.0
+   end
+   local.get $2
+   i64.const 48
+   i64.shr_u
+   i32.wrap_i64
+   local.set $12
+   local.get $12
+   i32.const 16
+   i32.sub
+   i32.const 32736
+   i32.ge_u
+   if
+    local.get $2
+    i64.const 1
+    i64.shl
+    i64.const 0
+    i64.eq
+    if
+     f64.const -1
+     local.get $1
+     local.get $1
+     f64.mul
+     f64.div
+     br $~lib/util/math/log2_lut|inlined.0
+    end
+    local.get $2
+    i64.const 9218868437227405312
+    i64.eq
+    if
+     local.get $1
+     br $~lib/util/math/log2_lut|inlined.0
+    end
+    local.get $12
+    i32.const 32768
+    i32.and
+    if (result i32)
+     i32.const 1
+    else
+     local.get $12
+     i32.const 32752
+     i32.and
+     i32.const 32752
+     i32.eq
+    end
+    if
+     local.get $1
+     local.get $1
+     f64.sub
+     local.get $1
+     local.get $1
+     f64.sub
+     f64.div
+     br $~lib/util/math/log2_lut|inlined.0
+    end
+    local.get $1
+    f64.const 4503599627370496
+    f64.mul
+    i64.reinterpret_f64
+    local.set $2
+    local.get $2
+    i64.const 52
+    i64.const 52
+    i64.shl
+    i64.sub
+    local.set $2
+   end
+   local.get $2
+   i64.const 4604367669032910848
+   i64.sub
+   local.set $13
+   local.get $13
+   i64.const 52
+   global.get $~lib/util/math/LOG2_TABLE_BITS
+   i64.extend_i32_s
+   i64.sub
+   i64.shr_u
+   i64.const 63
+   i64.and
+   i32.wrap_i64
+   local.set $14
+   local.get $13
+   i64.const 52
+   i64.shr_s
+   local.set $15
+   local.get $2
+   local.get $13
+   i64.const -4503599627370496
+   i64.and
+   i64.sub
+   local.set $16
+   i32.const 8320
+   i32.load offset=4
+   local.set $17
+   i32.const 9392
+   i32.load offset=4
+   local.set $18
+   local.get $17
+   local.get $14
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load
+   local.set $11
+   local.get $17
+   local.get $14
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load offset=8
+   local.set $10
+   local.get $16
+   f64.reinterpret_i64
+   local.set $9
+   local.get $15
+   f64.convert_i64_s
+   local.set $8
+   local.get $18
+   local.get $14
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load
+   local.set $7
+   local.get $18
+   local.get $14
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load offset=8
+   local.set $6
+   local.get $9
+   local.get $7
+   f64.sub
+   local.get $6
+   f64.sub
+   local.get $11
+   f64.mul
+   local.set $5
+   local.get $5
    i64.reinterpret_f64
    i64.const -4294967296
    i64.and
    f64.reinterpret_i64
-   local.set $3
-   local.get $2
-   local.get $3
-   f64.sub
    local.set $4
-   local.get $3
-   f64.const 1.4426950407214463
-   f64.mul
-   local.set $5
+   local.get $5
+   local.get $4
+   f64.sub
+   local.set $3
    local.get $4
    f64.const 1.4426950407214463
    f64.mul
-   local.get $2
+   local.set $19
+   local.get $3
+   f64.const 1.4426950407214463
+   f64.mul
+   local.get $5
    f64.const 1.6751713164886512e-10
    f64.mul
    f64.add
-   local.set $6
-   local.get $2
-   local.get $2
-   f64.mul
-   local.set $7
-   local.get $7
-   local.get $7
-   f64.mul
-   local.set $8
-   local.get $7
-   f64.const -0.7213475204444817
-   local.get $2
-   f64.const 0.48089834696298744
-   f64.mul
-   f64.add
-   f64.mul
-   local.set $9
-   local.get $5
-   local.get $9
-   f64.add
-   local.set $10
-   local.get $6
-   local.get $5
+   local.set $20
+   local.get $8
    local.get $10
+   f64.add
+   local.set $21
+   local.get $21
+   local.get $19
+   f64.add
+   local.set $22
+   local.get $21
+   local.get $22
    f64.sub
-   local.get $9
+   local.get $19
    f64.add
+   local.get $20
    f64.add
-   local.set $6
-   local.get $6
-   local.get $8
-   f64.const -0.360673760222145
-   local.get $2
-   f64.const 0.2885390081805197
+   local.set $23
+   local.get $5
+   local.get $5
+   f64.mul
+   local.set $24
+   f64.const -0.7213475204444882
+   local.get $5
+   f64.const 0.4808983469629985
    f64.mul
    f64.add
-   local.get $7
-   f64.const -0.24044917405728863
-   local.get $2
-   f64.const 0.2060992861022954
-   f64.mul
-   f64.add
-   f64.mul
-   f64.add
-   local.get $8
-   f64.const -0.18033596705327856
-   local.get $2
-   f64.const 0.1603032746063156
-   f64.mul
-   f64.add
-   local.get $7
-   f64.const -0.14483316576701266
-   local.get $2
-   f64.const 0.13046826811283835
+   local.get $24
+   f64.const -0.36067375954075914
+   local.get $5
+   f64.const 0.2885390073180969
    f64.mul
    f64.add
    f64.mul
    f64.add
+   local.get $24
+   local.get $24
+   f64.mul
+   f64.const -0.2404693555628422
+   local.get $5
+   f64.const 0.2061202382173603
    f64.mul
    f64.add
    f64.mul
    f64.add
-   local.set $6
-   local.get $10
-   local.get $6
+   local.set $25
+   local.get $23
+   local.get $24
+   local.get $25
+   f64.mul
    f64.add
-   return
+   local.get $22
+   f64.add
   end
-  local.get $1
-  i64.const 48
-  i64.shr_u
-  i32.wrap_i64
-  local.set $11
-  local.get $11
-  i32.const 16
-  i32.sub
-  i32.const 32736
-  i32.ge_u
-  if
-   local.get $1
-   i64.const 1
-   i64.shl
-   i64.const 0
-   i64.eq
-   if
-    f64.const -1
-    local.get $0
-    local.get $0
-    f64.mul
-    f64.div
-    return
-   end
-   local.get $1
-   i64.const 9218868437227405312
-   i64.eq
-   if
-    local.get $0
-    return
-   end
-   local.get $11
-   i32.const 32768
-   i32.and
-   if (result i32)
-    i32.const 1
-   else
-    local.get $11
-    i32.const 32752
-    i32.and
-    i32.const 32752
-    i32.eq
-   end
-   if
-    local.get $0
-    local.get $0
-    f64.sub
-    local.get $0
-    local.get $0
-    f64.sub
-    f64.div
-    return
-   end
-   local.get $0
-   f64.const 4503599627370496
-   f64.mul
-   i64.reinterpret_f64
-   local.set $1
-   local.get $1
-   i64.const 52
-   i64.const 52
-   i64.shl
-   i64.sub
-   local.set $1
-  end
-  local.get $1
-  i64.const 4604367669032910848
-  i64.sub
-  local.set $12
-  local.get $12
-  i64.const 52
-  global.get $~lib/util/math/LOG2_TABLE_BITS
-  i64.extend_i32_s
-  i64.sub
-  i64.shr_u
-  i64.const 63
-  i64.and
-  i32.wrap_i64
-  local.set $13
-  local.get $12
-  i64.const 52
-  i64.shr_s
-  local.set $14
-  local.get $1
-  local.get $12
-  i64.const -4503599627370496
-  i64.and
-  i64.sub
-  local.set $15
-  i32.const 8320
-  i32.load offset=4
-  local.set $16
-  i32.const 9392
-  i32.load offset=4
-  local.set $17
-  local.get $16
-  local.get $13
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load
-  local.set $18
-  local.get $16
-  local.get $13
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load offset=8
-  local.set $19
-  local.get $15
-  f64.reinterpret_i64
-  local.set $20
-  local.get $14
-  f64.convert_i64_s
-  local.set $21
-  local.get $17
-  local.get $13
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load
-  local.set $22
-  local.get $17
-  local.get $13
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load offset=8
-  local.set $23
-  local.get $20
-  local.get $22
-  f64.sub
-  local.get $23
-  f64.sub
-  local.get $18
-  f64.mul
-  local.set $24
-  local.get $24
-  i64.reinterpret_f64
-  i64.const -4294967296
-  i64.and
-  f64.reinterpret_i64
-  local.set $25
-  local.get $24
-  local.get $25
-  f64.sub
-  local.set $26
-  local.get $25
-  f64.const 1.4426950407214463
-  f64.mul
-  local.set $27
-  local.get $26
-  f64.const 1.4426950407214463
-  f64.mul
-  local.get $24
-  f64.const 1.6751713164886512e-10
-  f64.mul
-  f64.add
-  local.set $28
-  local.get $21
-  local.get $19
-  f64.add
-  local.set $29
-  local.get $29
-  local.get $27
-  f64.add
-  local.set $30
-  local.get $29
-  local.get $30
-  f64.sub
-  local.get $27
-  f64.add
-  local.get $28
-  f64.add
-  local.set $31
-  local.get $24
-  local.get $24
-  f64.mul
-  local.set $32
-  f64.const -0.7213475204444882
-  local.get $24
-  f64.const 0.4808983469629985
-  f64.mul
-  f64.add
-  local.get $32
-  f64.const -0.36067375954075914
-  local.get $24
-  f64.const 0.2885390073180969
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
-  local.get $32
-  local.get $32
-  f64.mul
-  f64.const -0.2404693555628422
-  local.get $24
-  f64.const 0.2061202382173603
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
-  local.set $33
-  local.get $31
-  local.get $32
-  local.get $33
-  f64.mul
-  f64.add
-  local.get $30
-  f64.add
- )
- (func $~lib/math/NativeMath.log2 (; 120 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
-  local.get $0
-  call $~lib/util/math/log2_lut
   return
  )
- (func $std/math/test_log2 (; 121 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_log2 (; 116 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.log2
   local.get $1
@@ -8395,15 +8383,15 @@
    i32.const 0
   end
  )
- (func $~lib/util/math/log2f_lut (; 122 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
-  (local $1 i32)
+ (func $~lib/math/NativeMathf.log2 (; 117 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+  (local $1 f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 f64)
+  (local $8 i32)
   (local $9 f64)
   (local $10 f64)
   (local $11 f64)
@@ -8411,163 +8399,164 @@
   (local $13 f64)
   (local $14 f64)
   (local $15 f64)
-  local.get $0
-  i32.reinterpret_f32
-  local.set $1
-  local.get $1
-  i32.const 8388608
-  i32.sub
-  i32.const 2130706432
-  i32.ge_u
-  if
+  (local $16 f64)
+  block $~lib/util/math/log2f_lut|inlined.0 (result f32)
+   local.get $0
+   local.set $1
    local.get $1
-   i32.const 2
-   i32.mul
-   i32.const 0
-   i32.eq
+   i32.reinterpret_f32
+   local.set $2
+   local.get $2
+   i32.const 8388608
+   i32.sub
+   i32.const 2130706432
+   i32.ge_u
    if
-    f32.const inf
-    f32.neg
-    return
-   end
-   local.get $1
-   i32.const 2139095040
-   i32.eq
-   if
-    local.get $0
-    return
-   end
-   local.get $1
-   i32.const 31
-   i32.shr_u
-   if (result i32)
-    i32.const 1
-   else
-    local.get $1
+    local.get $2
     i32.const 2
     i32.mul
-    i32.const -16777216
-    i32.ge_u
+    i32.const 0
+    i32.eq
+    if
+     f32.const inf
+     f32.neg
+     br $~lib/util/math/log2f_lut|inlined.0
+    end
+    local.get $2
+    i32.const 2139095040
+    i32.eq
+    if
+     local.get $1
+     br $~lib/util/math/log2f_lut|inlined.0
+    end
+    local.get $2
+    i32.const 31
+    i32.shr_u
+    if (result i32)
+     i32.const 1
+    else
+     local.get $2
+     i32.const 2
+     i32.mul
+     i32.const -16777216
+     i32.ge_u
+    end
+    if
+     local.get $1
+     local.get $1
+     f32.sub
+     local.get $1
+     local.get $1
+     f32.sub
+     f32.div
+     br $~lib/util/math/log2f_lut|inlined.0
+    end
+    local.get $1
+    f32.const 8388608
+    f32.mul
+    i32.reinterpret_f32
+    local.set $2
+    local.get $2
+    i32.const 23
+    i32.const 23
+    i32.shl
+    i32.sub
+    local.set $2
    end
-   if
-    local.get $0
-    local.get $0
-    f32.sub
-    local.get $0
-    local.get $0
-    f32.sub
-    f32.div
-    return
-   end
-   local.get $0
-   f32.const 8388608
-   f32.mul
-   i32.reinterpret_f32
-   local.set $1
-   local.get $1
-   i32.const 23
-   i32.const 23
-   i32.shl
+   local.get $2
+   i32.const 1060306944
    i32.sub
-   local.set $1
+   local.set $3
+   local.get $3
+   i32.const 23
+   global.get $~lib/util/math/LOG2F_TABLE_BITS
+   i32.sub
+   i32.shr_u
+   i32.const 15
+   i32.and
+   local.set $4
+   local.get $3
+   i32.const -8388608
+   i32.and
+   local.set $5
+   local.get $2
+   local.get $5
+   i32.sub
+   local.set $6
+   local.get $3
+   i32.const 23
+   i32.shr_s
+   local.set $7
+   global.get $~lib/util/math/log2f_data_tab
+   i32.load offset=4
+   local.set $8
+   local.get $8
+   local.get $4
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load
+   local.set $9
+   local.get $8
+   local.get $4
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load offset=8
+   local.set $10
+   local.get $6
+   f32.reinterpret_i32
+   f64.promote_f32
+   local.set $11
+   local.get $11
+   local.get $9
+   f64.mul
+   f64.const 1
+   f64.sub
+   local.set $12
+   local.get $10
+   local.get $7
+   f64.convert_i32_s
+   f64.add
+   local.set $13
+   f64.const 0.4811247078767291
+   local.get $12
+   f64.mul
+   f64.const -0.7213476299867769
+   f64.add
+   local.set $14
+   f64.const 1.4426950186867042
+   local.get $12
+   f64.mul
+   local.get $13
+   f64.add
+   local.set $15
+   local.get $12
+   local.get $12
+   f64.mul
+   local.set $16
+   local.get $14
+   f64.const -0.36051725506874704
+   local.get $16
+   f64.mul
+   f64.add
+   local.set $14
+   local.get $14
+   local.get $16
+   f64.mul
+   local.get $15
+   f64.add
+   local.set $14
+   local.get $14
+   f32.demote_f64
   end
-  local.get $1
-  i32.const 1060306944
-  i32.sub
-  local.set $2
-  local.get $2
-  i32.const 23
-  global.get $~lib/util/math/LOG2F_TABLE_BITS
-  i32.sub
-  i32.shr_u
-  i32.const 15
-  i32.and
-  local.set $3
-  local.get $2
-  i32.const -8388608
-  i32.and
-  local.set $4
-  local.get $1
-  local.get $4
-  i32.sub
-  local.set $5
-  local.get $2
-  i32.const 23
-  i32.shr_s
-  local.set $6
-  global.get $~lib/util/math/log2f_data_tab
-  i32.load offset=4
-  local.set $7
-  local.get $7
-  local.get $3
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load
-  local.set $8
-  local.get $7
-  local.get $3
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load offset=8
-  local.set $9
-  local.get $5
-  f32.reinterpret_i32
-  f64.promote_f32
-  local.set $10
-  local.get $10
-  local.get $8
-  f64.mul
-  f64.const 1
-  f64.sub
-  local.set $11
-  local.get $9
-  local.get $6
-  f64.convert_i32_s
-  f64.add
-  local.set $12
-  f64.const 0.4811247078767291
-  local.get $11
-  f64.mul
-  f64.const -0.7213476299867769
-  f64.add
-  local.set $13
-  f64.const 1.4426950186867042
-  local.get $11
-  f64.mul
-  local.get $12
-  f64.add
-  local.set $14
-  local.get $11
-  local.get $11
-  f64.mul
-  local.set $15
-  local.get $13
-  f64.const -0.36051725506874704
-  local.get $15
-  f64.mul
-  f64.add
-  local.set $13
-  local.get $13
-  local.get $15
-  f64.mul
-  local.get $14
-  f64.add
-  local.set $13
-  local.get $13
-  f32.demote_f64
- )
- (func $~lib/math/NativeMathf.log2 (; 123 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
-  local.get $0
-  call $~lib/util/math/log2f_lut
   return
  )
- (func $std/math/test_log2f (; 124 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_log2f (; 118 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.log2
   local.get $1
@@ -8575,7 +8564,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_max (; 125 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_max (; 119 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 f64)
   (local $6 f64)
   local.get $0
@@ -8607,7 +8596,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_maxf (; 126 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_maxf (; 120 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (local $5 f32)
   (local $6 f32)
   local.get $0
@@ -8622,7 +8611,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $std/math/test_min (; 127 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_min (; 121 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   (local $5 f64)
   (local $6 f64)
   local.get $0
@@ -8654,7 +8643,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_minf (; 128 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_minf (; 122 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   (local $5 f32)
   (local $6 f32)
   local.get $0
@@ -8669,7 +8658,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.mod (; 129 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 123 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -8923,7 +8912,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $std/math/test_mod (; 130 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_mod (; 124 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.mod
@@ -8949,7 +8938,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.mod (; 131 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 125 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9197,7 +9186,7 @@
   local.get $2
   f32.reinterpret_i32
  )
- (func $std/math/test_modf (; 132 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_modf (; 126 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.mod
@@ -9206,22 +9195,22 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/util/math/pow_lut (; 133 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
-  (local $2 i32)
-  (local $3 i64)
-  (local $4 i64)
+ (func $~lib/math/NativeMath.pow (; 127 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+  (local $2 f64)
+  (local $3 f64)
+  (local $4 i32)
   (local $5 i64)
   (local $6 i64)
   (local $7 i64)
-  (local $8 f64)
+  (local $8 i64)
   (local $9 i64)
-  (local $10 i32)
+  (local $10 f64)
   (local $11 i64)
-  (local $12 i64)
-  (local $13 f64)
-  (local $14 i32)
+  (local $12 i32)
+  (local $13 i64)
+  (local $14 i64)
   (local $15 f64)
-  (local $16 f64)
+  (local $16 i32)
   (local $17 f64)
   (local $18 f64)
   (local $19 f64)
@@ -9245,888 +9234,883 @@
   (local $37 f64)
   (local $38 f64)
   (local $39 f64)
-  (local $40 f64)
-  (local $41 f64)
-  (local $42 f64)
-  (local $43 f64)
-  (local $44 f64)
-  (local $45 f64)
-  (local $46 i32)
-  (local $47 i32)
-  (local $48 i32)
-  (local $49 i64)
-  (local $50 i64)
-  i32.const 0
-  local.set $2
-  local.get $0
-  i64.reinterpret_f64
-  local.set $3
-  local.get $1
-  i64.reinterpret_f64
-  local.set $4
-  local.get $3
-  i64.const 52
-  i64.shr_u
-  local.set $5
-  local.get $4
-  i64.const 52
-  i64.shr_u
-  local.set $6
-  local.get $5
-  i64.const 1
-  i64.sub
-  i64.const 2046
-  i64.ge_u
-  if (result i32)
-   i32.const 1
-  else
-   local.get $6
-   i64.const 2047
-   i64.and
-   i64.const 958
-   i64.sub
-   i64.const 128
-   i64.ge_u
-  end
-  if
-   local.get $4
+  (local $40 i32)
+  (local $41 i32)
+  (local $42 i32)
+  (local $43 i64)
+  (local $44 i64)
+  block $~lib/util/math/pow_lut|inlined.0 (result f64)
+   local.get $0
+   local.set $3
+   local.get $1
+   local.set $2
+   i32.const 0
+   local.set $4
+   local.get $3
+   i64.reinterpret_f64
+   local.set $5
+   local.get $2
+   i64.reinterpret_f64
+   local.set $6
+   local.get $5
+   i64.const 52
+   i64.shr_u
    local.set $7
+   local.get $6
+   i64.const 52
+   i64.shr_u
+   local.set $8
    local.get $7
    i64.const 1
-   i64.shl
-   i64.const 1
    i64.sub
-   i64.const -9007199254740993
+   i64.const 2046
    i64.ge_u
+   if (result i32)
+    i32.const 1
+   else
+    local.get $8
+    i64.const 2047
+    i64.and
+    i64.const 958
+    i64.sub
+    i64.const 128
+    i64.ge_u
+   end
    if
-    local.get $4
+    local.get $6
+    local.set $9
+    local.get $9
     i64.const 1
     i64.shl
-    i64.const 0
-    i64.eq
-    if
-     f64.const 1
-     return
-    end
-    local.get $3
-    i64.const 4607182418800017408
-    i64.eq
-    if
-     f64.const nan:0x8000000000000
-     return
-    end
-    local.get $3
     i64.const 1
-    i64.shl
-    i64.const -9007199254740992
-    i64.gt_u
-    if (result i32)
-     i32.const 1
-    else
-     local.get $4
+    i64.sub
+    i64.const -9007199254740993
+    i64.ge_u
+    if
+     local.get $6
+     i64.const 1
+     i64.shl
+     i64.const 0
+     i64.eq
+     if
+      f64.const 1
+      br $~lib/util/math/pow_lut|inlined.0
+     end
+     local.get $5
+     i64.const 4607182418800017408
+     i64.eq
+     if
+      f64.const nan:0x8000000000000
+      br $~lib/util/math/pow_lut|inlined.0
+     end
+     local.get $5
      i64.const 1
      i64.shl
      i64.const -9007199254740992
      i64.gt_u
-    end
-    if
-     local.get $0
-     local.get $1
-     f64.add
-     return
-    end
-    local.get $3
-    i64.const 1
-    i64.shl
-    i64.const 9214364837600034816
-    i64.eq
-    if
-     f64.const nan:0x8000000000000
-     return
-    end
-    local.get $3
-    i64.const 1
-    i64.shl
-    i64.const 9214364837600034816
-    i64.lt_u
-    local.get $4
-    i64.const 63
-    i64.shr_u
-    i64.const 0
-    i64.ne
-    i32.eqz
-    i32.eq
-    if
-     f64.const 0
-     return
-    end
-    local.get $1
-    local.get $1
-    f64.mul
-    return
-   end
-   local.get $3
-   local.set $7
-   local.get $7
-   i64.const 1
-   i64.shl
-   i64.const 1
-   i64.sub
-   i64.const -9007199254740993
-   i64.ge_u
-   if
-    local.get $0
-    local.get $0
-    f64.mul
-    local.set $8
-    local.get $3
-    i64.const 63
-    i64.shr_u
-    i32.wrap_i64
-    if (result i32)
-     block $~lib/util/math/checkint|inlined.0 (result i32)
-      local.get $4
-      local.set $7
-      local.get $7
-      i64.const 52
-      i64.shr_u
-      i64.const 2047
-      i64.and
-      local.set $9
-      local.get $9
-      i64.const 1023
-      i64.lt_u
-      if
-       i32.const 0
-       br $~lib/util/math/checkint|inlined.0
-      end
-      local.get $9
-      i64.const 1075
-      i64.gt_u
-      if
-       i32.const 2
-       br $~lib/util/math/checkint|inlined.0
-      end
-      i64.const 1
-      i64.const 1075
-      local.get $9
-      i64.sub
-      i64.shl
-      local.set $9
-      local.get $7
-      local.get $9
-      i64.const 1
-      i64.sub
-      i64.and
-      i64.const 0
-      i64.ne
-      if
-       i32.const 0
-       br $~lib/util/math/checkint|inlined.0
-      end
-      local.get $7
-      local.get $9
-      i64.and
-      i64.const 0
-      i64.ne
-      if
-       i32.const 1
-       br $~lib/util/math/checkint|inlined.0
-      end
-      i32.const 2
-     end
-     i32.const 1
-     i32.eq
-    else
-     i32.const 0
-    end
-    if
-     local.get $8
-     f64.neg
-     local.set $8
-    end
-    local.get $4
-    i64.const 63
-    i64.shr_u
-    i64.const 0
-    i64.ne
-    if (result f64)
-     f64.const 1
-     local.get $8
-     f64.div
-    else
-     local.get $8
-    end
-    return
-   end
-   local.get $3
-   i64.const 63
-   i64.shr_u
-   i64.const 0
-   i64.ne
-   if
-    block $~lib/util/math/checkint|inlined.1 (result i32)
-     local.get $4
-     local.set $7
-     local.get $7
-     i64.const 52
-     i64.shr_u
-     i64.const 2047
-     i64.and
-     local.set $9
-     local.get $9
-     i64.const 1023
-     i64.lt_u
-     if
-      i32.const 0
-      br $~lib/util/math/checkint|inlined.1
-     end
-     local.get $9
-     i64.const 1075
-     i64.gt_u
-     if
-      i32.const 2
-      br $~lib/util/math/checkint|inlined.1
-     end
-     i64.const 1
-     i64.const 1023
-     i64.const 52
-     i64.add
-     local.get $9
-     i64.sub
-     i64.shl
-     local.set $9
-     local.get $7
-     local.get $9
-     i64.const 1
-     i64.sub
-     i64.and
-     i64.const 0
-     i64.ne
-     if
-      i32.const 0
-      br $~lib/util/math/checkint|inlined.1
-     end
-     local.get $7
-     local.get $9
-     i64.and
-     i64.const 0
-     i64.ne
-     if
+     if (result i32)
       i32.const 1
-      br $~lib/util/math/checkint|inlined.1
+     else
+      local.get $6
+      i64.const 1
+      i64.shl
+      i64.const -9007199254740992
+      i64.gt_u
      end
-     i32.const 2
+     if
+      local.get $3
+      local.get $2
+      f64.add
+      br $~lib/util/math/pow_lut|inlined.0
+     end
+     local.get $5
+     i64.const 1
+     i64.shl
+     i64.const 9214364837600034816
+     i64.eq
+     if
+      f64.const nan:0x8000000000000
+      br $~lib/util/math/pow_lut|inlined.0
+     end
+     local.get $5
+     i64.const 1
+     i64.shl
+     i64.const 9214364837600034816
+     i64.lt_u
+     local.get $6
+     i64.const 63
+     i64.shr_u
+     i64.const 0
+     i64.ne
+     i32.eqz
+     i32.eq
+     if
+      f64.const 0
+      br $~lib/util/math/pow_lut|inlined.0
+     end
+     local.get $2
+     local.get $2
+     f64.mul
+     br $~lib/util/math/pow_lut|inlined.0
     end
-    local.set $10
-    local.get $10
-    i32.const 0
-    i32.eq
-    if
-     local.get $0
-     local.get $0
-     f64.sub
-     local.get $0
-     local.get $0
-     f64.sub
-     f64.div
-     return
-    end
-    local.get $10
-    i32.const 1
-    i32.eq
-    if
-     global.get $~lib/util/math/SIGN_BIAS
-     local.set $2
-    end
-    local.get $3
-    i64.const 9223372036854775807
-    i64.and
-    local.set $3
     local.get $5
-    i64.const 2047
-    i64.and
-    local.set $5
-   end
-   local.get $6
-   i64.const 2047
-   i64.and
-   i64.const 958
-   i64.sub
-   i64.const 128
-   i64.ge_u
-   if
-    local.get $3
-    i64.const 4607182418800017408
-    i64.eq
-    if
-     f64.const 1
-     return
-    end
-    local.get $6
-    i64.const 2047
-    i64.and
-    i64.const 958
-    i64.lt_u
-    if
-     f64.const 1
-     return
-    end
-    local.get $3
-    i64.const 4607182418800017408
-    i64.gt_u
-    local.get $6
-    i64.const 2048
-    i64.lt_u
-    i32.eq
-    if (result f64)
-     f64.const inf
-    else
-     f64.const 0
-    end
-    return
-   end
-   local.get $5
-   i64.const 0
-   i64.eq
-   if
-    local.get $0
-    f64.const 4503599627370496
-    f64.mul
-    i64.reinterpret_f64
-    local.set $3
-    local.get $3
-    i64.const 9223372036854775807
-    i64.and
-    local.set $3
-    local.get $3
-    i64.const 52
-    i64.const 52
+    local.set $9
+    local.get $9
+    i64.const 1
     i64.shl
+    i64.const 1
     i64.sub
-    local.set $3
-   end
-  end
-  local.get $3
-  local.set $7
-  local.get $7
-  i64.const 4604531861337669632
-  i64.sub
-  local.set $9
-  local.get $9
-  i64.const 52
-  global.get $~lib/util/math/POW_LOG_TABLE_BITS
-  i64.extend_i32_s
-  i64.sub
-  i64.shr_u
-  i64.const 127
-  i64.and
-  i32.wrap_i64
-  local.set $10
-  local.get $9
-  i64.const 52
-  i64.shr_s
-  local.set $11
-  local.get $7
-  local.get $9
-  i64.const 4095
-  i64.const 52
-  i64.shl
-  i64.and
-  i64.sub
-  local.set $12
-  local.get $12
-  f64.reinterpret_i64
-  local.set $8
-  local.get $11
-  f64.convert_i64_s
-  local.set $13
-  i32.const 13840
-  i32.load offset=4
-  local.set $14
-  local.get $14
-  local.get $10
-  i32.const 2
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load
-  local.set $15
-  local.get $14
-  local.get $10
-  i32.const 2
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load offset=16
-  local.set $16
-  local.get $14
-  local.get $10
-  i32.const 2
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load offset=24
-  local.set $17
-  local.get $12
-  i64.const 2147483648
-  i64.add
-  i64.const -4294967296
-  i64.and
-  f64.reinterpret_i64
-  local.set $18
-  local.get $8
-  local.get $18
-  f64.sub
-  local.set $19
-  local.get $18
-  local.get $15
-  f64.mul
-  f64.const 1
-  f64.sub
-  local.set $20
-  local.get $19
-  local.get $15
-  f64.mul
-  local.set $21
-  local.get $20
-  local.get $21
-  f64.add
-  local.set $22
-  local.get $13
-  f64.const 0.6931471805598903
-  f64.mul
-  local.get $16
-  f64.add
-  local.set $23
-  local.get $23
-  local.get $22
-  f64.add
-  local.set $24
-  local.get $13
-  f64.const 5.497923018708371e-14
-  f64.mul
-  local.get $17
-  f64.add
-  local.set $25
-  local.get $23
-  local.get $24
-  f64.sub
-  local.get $22
-  f64.add
-  local.set $26
-  f64.const -0.5
-  local.get $22
-  f64.mul
-  local.set $27
-  local.get $22
-  local.get $27
-  f64.mul
-  local.set $28
-  local.get $22
-  local.get $28
-  f64.mul
-  local.set $29
-  f64.const -0.5
-  local.get $20
-  f64.mul
-  local.set $30
-  local.get $20
-  local.get $30
-  f64.mul
-  local.set $31
-  local.get $24
-  local.get $31
-  f64.add
-  local.set $32
-  local.get $21
-  local.get $27
-  local.get $30
-  f64.add
-  f64.mul
-  local.set $33
-  local.get $24
-  local.get $32
-  f64.sub
-  local.get $31
-  f64.add
-  local.set $34
-  local.get $29
-  f64.const -0.6666666666666679
-  local.get $22
-  f64.const 0.5000000000000007
-  f64.mul
-  f64.add
-  local.get $28
-  f64.const 0.7999999995323976
-  local.get $22
-  f64.const -0.6666666663487739
-  f64.mul
-  f64.add
-  local.get $28
-  f64.const -1.142909628459501
-  local.get $22
-  f64.const 1.0000415263675542
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
-  f64.mul
-  f64.add
-  f64.mul
-  local.set $35
-  local.get $25
-  local.get $26
-  f64.add
-  local.get $33
-  f64.add
-  local.get $34
-  f64.add
-  local.get $35
-  f64.add
-  local.set $36
-  local.get $32
-  local.get $36
-  f64.add
-  local.set $37
-  local.get $32
-  local.get $37
-  f64.sub
-  local.get $36
-  f64.add
-  global.set $~lib/util/math/log_tail
-  local.get $37
-  local.set $38
-  global.get $~lib/util/math/log_tail
-  local.set $39
-  local.get $4
-  i64.const -134217728
-  i64.and
-  f64.reinterpret_i64
-  local.set $42
-  local.get $1
-  local.get $42
-  f64.sub
-  local.set $43
-  local.get $38
-  i64.reinterpret_f64
-  i64.const -134217728
-  i64.and
-  f64.reinterpret_i64
-  local.set $44
-  local.get $38
-  local.get $44
-  f64.sub
-  local.get $39
-  f64.add
-  local.set $45
-  local.get $42
-  local.get $44
-  f64.mul
-  local.set $40
-  local.get $43
-  local.get $44
-  f64.mul
-  local.get $1
-  local.get $45
-  f64.mul
-  f64.add
-  local.set $41
-  block $~lib/util/math/exp_inline|inlined.0 (result f64)
-   local.get $40
-   local.set $13
-   local.get $41
-   local.set $8
-   local.get $2
-   local.set $10
-   local.get $13
-   i64.reinterpret_f64
-   local.set $7
-   local.get $7
-   i64.const 52
-   i64.shr_u
-   i32.wrap_i64
-   i32.const 2047
-   i32.and
-   local.set $14
-   local.get $14
-   i32.const 969
-   i32.sub
-   i32.const 63
-   i32.ge_u
-   if
-    local.get $14
-    i32.const 969
-    i32.sub
-    i32.const -2147483648
-    i32.ge_u
+    i64.const -9007199254740993
+    i64.ge_u
     if
-     f64.const -1
-     f64.const 1
-     local.get $10
-     select
-     br $~lib/util/math/exp_inline|inlined.0
-    end
-    local.get $14
-    i32.const 1033
-    i32.ge_u
-    if
-     local.get $7
+     local.get $3
+     local.get $3
+     f64.mul
+     local.set $10
+     local.get $5
+     i64.const 63
+     i64.shr_u
+     i32.wrap_i64
+     if (result i32)
+      block $~lib/util/math/checkint|inlined.0 (result i32)
+       local.get $6
+       local.set $9
+       local.get $9
+       i64.const 52
+       i64.shr_u
+       i64.const 2047
+       i64.and
+       local.set $11
+       local.get $11
+       i64.const 1023
+       i64.lt_u
+       if
+        i32.const 0
+        br $~lib/util/math/checkint|inlined.0
+       end
+       local.get $11
+       i64.const 1075
+       i64.gt_u
+       if
+        i32.const 2
+        br $~lib/util/math/checkint|inlined.0
+       end
+       i64.const 1
+       i64.const 1075
+       local.get $11
+       i64.sub
+       i64.shl
+       local.set $11
+       local.get $9
+       local.get $11
+       i64.const 1
+       i64.sub
+       i64.and
+       i64.const 0
+       i64.ne
+       if
+        i32.const 0
+        br $~lib/util/math/checkint|inlined.0
+       end
+       local.get $9
+       local.get $11
+       i64.and
+       i64.const 0
+       i64.ne
+       if
+        i32.const 1
+        br $~lib/util/math/checkint|inlined.0
+       end
+       i32.const 2
+      end
+      i32.const 1
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $10
+      f64.neg
+      local.set $10
+     end
+     local.get $6
      i64.const 63
      i64.shr_u
      i64.const 0
      i64.ne
      if (result f64)
+      f64.const 1
       local.get $10
-      local.set $47
-      local.get $47
-      local.set $48
-      i64.const 1152921504606846976
-      f64.reinterpret_i64
-      local.set $15
-      local.get $15
-      f64.neg
-      local.get $15
-      local.get $48
-      select
-      local.get $15
-      f64.mul
+      f64.div
      else
       local.get $10
-      local.set $48
-      local.get $48
-      local.set $47
-      i64.const 8070450532247928832
-      f64.reinterpret_i64
-      local.set $16
-      local.get $16
-      f64.neg
-      local.get $16
-      local.get $47
+     end
+     br $~lib/util/math/pow_lut|inlined.0
+    end
+    local.get $5
+    i64.const 63
+    i64.shr_u
+    i64.const 0
+    i64.ne
+    if
+     block $~lib/util/math/checkint|inlined.1 (result i32)
+      local.get $6
+      local.set $9
+      local.get $9
+      i64.const 52
+      i64.shr_u
+      i64.const 2047
+      i64.and
+      local.set $11
+      local.get $11
+      i64.const 1023
+      i64.lt_u
+      if
+       i32.const 0
+       br $~lib/util/math/checkint|inlined.1
+      end
+      local.get $11
+      i64.const 1075
+      i64.gt_u
+      if
+       i32.const 2
+       br $~lib/util/math/checkint|inlined.1
+      end
+      i64.const 1
+      i64.const 1023
+      i64.const 52
+      i64.add
+      local.get $11
+      i64.sub
+      i64.shl
+      local.set $11
+      local.get $9
+      local.get $11
+      i64.const 1
+      i64.sub
+      i64.and
+      i64.const 0
+      i64.ne
+      if
+       i32.const 0
+       br $~lib/util/math/checkint|inlined.1
+      end
+      local.get $9
+      local.get $11
+      i64.and
+      i64.const 0
+      i64.ne
+      if
+       i32.const 1
+       br $~lib/util/math/checkint|inlined.1
+      end
+      i32.const 2
+     end
+     local.set $12
+     local.get $12
+     i32.const 0
+     i32.eq
+     if
+      local.get $3
+      local.get $3
+      f64.sub
+      local.get $3
+      local.get $3
+      f64.sub
+      f64.div
+      br $~lib/util/math/pow_lut|inlined.0
+     end
+     local.get $12
+     i32.const 1
+     i32.eq
+     if
+      global.get $~lib/util/math/SIGN_BIAS
+      local.set $4
+     end
+     local.get $5
+     i64.const 9223372036854775807
+     i64.and
+     local.set $5
+     local.get $7
+     i64.const 2047
+     i64.and
+     local.set $7
+    end
+    local.get $8
+    i64.const 2047
+    i64.and
+    i64.const 958
+    i64.sub
+    i64.const 128
+    i64.ge_u
+    if
+     local.get $5
+     i64.const 4607182418800017408
+     i64.eq
+     if
+      f64.const 1
+      br $~lib/util/math/pow_lut|inlined.0
+     end
+     local.get $8
+     i64.const 2047
+     i64.and
+     i64.const 958
+     i64.lt_u
+     if
+      f64.const 1
+      br $~lib/util/math/pow_lut|inlined.0
+     end
+     local.get $5
+     i64.const 4607182418800017408
+     i64.gt_u
+     local.get $8
+     i64.const 2048
+     i64.lt_u
+     i32.eq
+     if (result f64)
+      f64.const inf
+     else
+      f64.const 0
+     end
+     br $~lib/util/math/pow_lut|inlined.0
+    end
+    local.get $7
+    i64.const 0
+    i64.eq
+    if
+     local.get $3
+     f64.const 4503599627370496
+     f64.mul
+     i64.reinterpret_f64
+     local.set $5
+     local.get $5
+     i64.const 9223372036854775807
+     i64.and
+     local.set $5
+     local.get $5
+     i64.const 52
+     i64.const 52
+     i64.shl
+     i64.sub
+     local.set $5
+    end
+   end
+   local.get $5
+   local.set $9
+   local.get $9
+   i64.const 4604531861337669632
+   i64.sub
+   local.set $11
+   local.get $11
+   i64.const 52
+   global.get $~lib/util/math/POW_LOG_TABLE_BITS
+   i64.extend_i32_s
+   i64.sub
+   i64.shr_u
+   i64.const 127
+   i64.and
+   i32.wrap_i64
+   local.set $12
+   local.get $11
+   i64.const 52
+   i64.shr_s
+   local.set $13
+   local.get $9
+   local.get $11
+   i64.const 4095
+   i64.const 52
+   i64.shl
+   i64.and
+   i64.sub
+   local.set $14
+   local.get $14
+   f64.reinterpret_i64
+   local.set $10
+   local.get $13
+   f64.convert_i64_s
+   local.set $15
+   i32.const 13840
+   i32.load offset=4
+   local.set $16
+   local.get $16
+   local.get $12
+   i32.const 2
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load
+   local.set $17
+   local.get $16
+   local.get $12
+   i32.const 2
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load offset=16
+   local.set $18
+   local.get $16
+   local.get $12
+   i32.const 2
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load offset=24
+   local.set $19
+   local.get $14
+   i64.const 2147483648
+   i64.add
+   i64.const -4294967296
+   i64.and
+   f64.reinterpret_i64
+   local.set $20
+   local.get $10
+   local.get $20
+   f64.sub
+   local.set $21
+   local.get $20
+   local.get $17
+   f64.mul
+   f64.const 1
+   f64.sub
+   local.set $22
+   local.get $21
+   local.get $17
+   f64.mul
+   local.set $23
+   local.get $22
+   local.get $23
+   f64.add
+   local.set $24
+   local.get $15
+   f64.const 0.6931471805598903
+   f64.mul
+   local.get $18
+   f64.add
+   local.set $25
+   local.get $25
+   local.get $24
+   f64.add
+   local.set $26
+   local.get $15
+   f64.const 5.497923018708371e-14
+   f64.mul
+   local.get $19
+   f64.add
+   local.set $27
+   local.get $25
+   local.get $26
+   f64.sub
+   local.get $24
+   f64.add
+   local.set $28
+   f64.const -0.5
+   local.get $24
+   f64.mul
+   local.set $29
+   local.get $24
+   local.get $29
+   f64.mul
+   local.set $30
+   local.get $24
+   local.get $30
+   f64.mul
+   local.set $31
+   f64.const -0.5
+   local.get $22
+   f64.mul
+   local.set $32
+   local.get $22
+   local.get $32
+   f64.mul
+   local.set $33
+   local.get $26
+   local.get $33
+   f64.add
+   local.set $34
+   local.get $23
+   local.get $29
+   local.get $32
+   f64.add
+   f64.mul
+   local.set $35
+   local.get $26
+   local.get $34
+   f64.sub
+   local.get $33
+   f64.add
+   local.set $36
+   local.get $31
+   f64.const -0.6666666666666679
+   local.get $24
+   f64.const 0.5000000000000007
+   f64.mul
+   f64.add
+   local.get $30
+   f64.const 0.7999999995323976
+   local.get $24
+   f64.const -0.6666666663487739
+   f64.mul
+   f64.add
+   local.get $30
+   f64.const -1.142909628459501
+   local.get $24
+   f64.const 1.0000415263675542
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   f64.add
+   f64.mul
+   local.set $37
+   local.get $27
+   local.get $28
+   f64.add
+   local.get $35
+   f64.add
+   local.get $36
+   f64.add
+   local.get $37
+   f64.add
+   local.set $38
+   local.get $34
+   local.get $38
+   f64.add
+   local.set $39
+   local.get $34
+   local.get $39
+   f64.sub
+   local.get $38
+   f64.add
+   global.set $~lib/util/math/log_tail
+   local.get $39
+   local.set $39
+   global.get $~lib/util/math/log_tail
+   local.set $38
+   local.get $6
+   i64.const -134217728
+   i64.and
+   f64.reinterpret_i64
+   local.set $35
+   local.get $2
+   local.get $35
+   f64.sub
+   local.set $34
+   local.get $39
+   i64.reinterpret_f64
+   i64.const -134217728
+   i64.and
+   f64.reinterpret_i64
+   local.set $33
+   local.get $39
+   local.get $33
+   f64.sub
+   local.get $38
+   f64.add
+   local.set $32
+   local.get $35
+   local.get $33
+   f64.mul
+   local.set $37
+   local.get $34
+   local.get $33
+   f64.mul
+   local.get $2
+   local.get $32
+   f64.mul
+   f64.add
+   local.set $36
+   block $~lib/util/math/exp_inline|inlined.0 (result f64)
+    local.get $37
+    local.set $15
+    local.get $36
+    local.set $10
+    local.get $4
+    local.set $12
+    local.get $15
+    i64.reinterpret_f64
+    local.set $9
+    local.get $9
+    i64.const 52
+    i64.shr_u
+    i32.wrap_i64
+    i32.const 2047
+    i32.and
+    local.set $16
+    local.get $16
+    i32.const 969
+    i32.sub
+    i32.const 63
+    i32.ge_u
+    if
+     local.get $16
+     i32.const 969
+     i32.sub
+     i32.const -2147483648
+     i32.ge_u
+     if
+      f64.const -1
+      f64.const 1
+      local.get $12
       select
-      local.get $16
+      br $~lib/util/math/exp_inline|inlined.0
+     end
+     local.get $16
+     i32.const 1033
+     i32.ge_u
+     if
+      local.get $9
+      i64.const 63
+      i64.shr_u
+      i64.const 0
+      i64.ne
+      if (result f64)
+       local.get $12
+       local.set $41
+       local.get $41
+       local.set $42
+       i64.const 1152921504606846976
+       f64.reinterpret_i64
+       local.set $17
+       local.get $17
+       f64.neg
+       local.get $17
+       local.get $42
+       select
+       local.get $17
+       f64.mul
+      else
+       local.get $12
+       local.set $42
+       local.get $42
+       local.set $41
+       i64.const 8070450532247928832
+       f64.reinterpret_i64
+       local.set $18
+       local.get $18
+       f64.neg
+       local.get $18
+       local.get $41
+       select
+       local.get $18
+       f64.mul
+      end
+      br $~lib/util/math/exp_inline|inlined.0
+     end
+     i32.const 0
+     local.set $16
+    end
+    f64.const 184.6649652337873
+    local.get $15
+    f64.mul
+    local.set $30
+    local.get $30
+    f64.const 6755399441055744
+    f64.add
+    local.set $31
+    local.get $31
+    i64.reinterpret_f64
+    local.set $14
+    local.get $31
+    f64.const 6755399441055744
+    f64.sub
+    local.set $31
+    local.get $15
+    local.get $31
+    f64.const -0.005415212348111709
+    f64.mul
+    f64.add
+    local.get $31
+    f64.const -1.2864023111638346e-14
+    f64.mul
+    f64.add
+    local.set $29
+    local.get $29
+    local.get $10
+    f64.add
+    local.set $29
+    local.get $14
+    i64.const 127
+    i64.and
+    i64.const 1
+    i64.shl
+    i32.wrap_i64
+    local.set $40
+    local.get $14
+    local.get $12
+    i64.extend_i32_u
+    i64.add
+    i64.const 52
+    global.get $~lib/util/math/EXP_TABLE_BITS
+    i64.extend_i32_s
+    i64.sub
+    i64.shl
+    local.set $13
+    i32.const 6944
+    i32.load offset=4
+    local.set $42
+    local.get $42
+    local.get $40
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load
+    f64.reinterpret_i64
+    local.set $26
+    local.get $42
+    local.get $40
+    i32.const 3
+    i32.shl
+    i32.add
+    i64.load offset=8
+    local.get $13
+    i64.add
+    local.set $11
+    local.get $29
+    local.get $29
+    f64.mul
+    local.set $28
+    local.get $26
+    local.get $29
+    f64.add
+    local.get $28
+    f64.const 0.49999999999996786
+    local.get $29
+    f64.const 0.16666666666665886
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    local.get $28
+    local.get $28
+    f64.mul
+    f64.const 0.0416666808410674
+    local.get $29
+    f64.const 0.008333335853059549
+    f64.mul
+    f64.add
+    f64.mul
+    f64.add
+    local.set $25
+    local.get $16
+    i32.const 0
+    i32.eq
+    if
+     block $~lib/util/math/specialcase|inlined.1 (result f64)
+      local.get $25
+      local.set $19
+      local.get $11
+      local.set $44
+      local.get $14
+      local.set $43
+      local.get $43
+      i64.const 2147483648
+      i64.and
+      i64.const 0
+      i64.ne
+      i32.eqz
+      if
+       local.get $44
+       i64.const 1009
+       i64.const 52
+       i64.shl
+       i64.sub
+       local.set $44
+       local.get $44
+       f64.reinterpret_i64
+       local.set $18
+       f64.const 5486124068793688683255936e279
+       local.get $18
+       local.get $18
+       local.get $19
+       f64.mul
+       f64.add
+       f64.mul
+       br $~lib/util/math/specialcase|inlined.1
+      end
+      local.get $44
+      i64.const 1022
+      i64.const 52
+      i64.shl
+      i64.add
+      local.set $44
+      local.get $44
+      f64.reinterpret_i64
+      local.set $18
+      local.get $18
+      local.get $18
+      local.get $19
+      f64.mul
+      f64.add
+      local.set $17
+      local.get $17
+      f64.abs
+      f64.const 1
+      f64.lt
+      if
+       f64.const 1
+       local.get $17
+       f64.copysign
+       local.set $24
+       local.get $18
+       local.get $17
+       f64.sub
+       local.get $18
+       local.get $19
+       f64.mul
+       f64.add
+       local.set $23
+       local.get $24
+       local.get $17
+       f64.add
+       local.set $22
+       local.get $24
+       local.get $22
+       f64.sub
+       local.get $17
+       f64.add
+       local.get $23
+       f64.add
+       local.set $23
+       local.get $22
+       local.get $23
+       f64.add
+       local.get $24
+       f64.sub
+       local.set $17
+       local.get $17
+       f64.const 0
+       f64.eq
+       if
+        local.get $44
+        i64.const -9223372036854775808
+        i64.and
+        f64.reinterpret_i64
+        local.set $17
+       end
+      end
+      local.get $17
+      f64.const 2.2250738585072014e-308
       f64.mul
      end
      br $~lib/util/math/exp_inline|inlined.0
     end
-    i32.const 0
-    local.set $14
+    local.get $11
+    f64.reinterpret_i64
+    local.set $27
+    local.get $27
+    local.get $27
+    local.get $25
+    f64.mul
+    f64.add
    end
-   f64.const 184.6649652337873
-   local.get $13
-   f64.mul
-   local.set $36
-   local.get $36
-   f64.const 6755399441055744
-   f64.add
-   local.set $37
-   local.get $37
-   i64.reinterpret_f64
-   local.set $12
-   local.get $37
-   f64.const 6755399441055744
-   f64.sub
-   local.set $37
-   local.get $13
-   local.get $37
-   f64.const -0.005415212348111709
-   f64.mul
-   f64.add
-   local.get $37
-   f64.const -1.2864023111638346e-14
-   f64.mul
-   f64.add
-   local.set $35
-   local.get $35
-   local.get $8
-   f64.add
-   local.set $35
-   local.get $12
-   i64.const 127
-   i64.and
-   i64.const 1
-   i64.shl
-   i32.wrap_i64
-   local.set $46
-   local.get $12
-   local.get $10
-   i64.extend_i32_u
-   i64.add
-   i64.const 52
-   global.get $~lib/util/math/EXP_TABLE_BITS
-   i64.extend_i32_s
-   i64.sub
-   i64.shl
-   local.set $11
-   i32.const 6944
-   i32.load offset=4
-   local.set $48
-   local.get $48
-   local.get $46
-   i32.const 3
-   i32.shl
-   i32.add
-   i64.load
-   f64.reinterpret_i64
-   local.set $32
-   local.get $48
-   local.get $46
-   i32.const 3
-   i32.shl
-   i32.add
-   i64.load offset=8
-   local.get $11
-   i64.add
-   local.set $9
-   local.get $35
-   local.get $35
-   f64.mul
-   local.set $34
-   local.get $32
-   local.get $35
-   f64.add
-   local.get $34
-   f64.const 0.49999999999996786
-   local.get $35
-   f64.const 0.16666666666665886
-   f64.mul
-   f64.add
-   f64.mul
-   f64.add
-   local.get $34
-   local.get $34
-   f64.mul
-   f64.const 0.0416666808410674
-   local.get $35
-   f64.const 0.008333335853059549
-   f64.mul
-   f64.add
-   f64.mul
-   f64.add
-   local.set $31
-   local.get $14
-   i32.const 0
-   i32.eq
-   if
-    block $~lib/util/math/specialcase|inlined.1 (result f64)
-     local.get $31
-     local.set $17
-     local.get $9
-     local.set $50
-     local.get $12
-     local.set $49
-     local.get $49
-     i64.const 2147483648
-     i64.and
-     i64.const 0
-     i64.ne
-     i32.eqz
-     if
-      local.get $50
-      i64.const 1009
-      i64.const 52
-      i64.shl
-      i64.sub
-      local.set $50
-      local.get $50
-      f64.reinterpret_i64
-      local.set $16
-      f64.const 5486124068793688683255936e279
-      local.get $16
-      local.get $16
-      local.get $17
-      f64.mul
-      f64.add
-      f64.mul
-      br $~lib/util/math/specialcase|inlined.1
-     end
-     local.get $50
-     i64.const 1022
-     i64.const 52
-     i64.shl
-     i64.add
-     local.set $50
-     local.get $50
-     f64.reinterpret_i64
-     local.set $16
-     local.get $16
-     local.get $16
-     local.get $17
-     f64.mul
-     f64.add
-     local.set $15
-     local.get $15
-     f64.abs
-     f64.const 1
-     f64.lt
-     if
-      f64.const 1
-      local.get $15
-      f64.copysign
-      local.set $30
-      local.get $16
-      local.get $15
-      f64.sub
-      local.get $16
-      local.get $17
-      f64.mul
-      f64.add
-      local.set $29
-      local.get $30
-      local.get $15
-      f64.add
-      local.set $28
-      local.get $30
-      local.get $28
-      f64.sub
-      local.get $15
-      f64.add
-      local.get $29
-      f64.add
-      local.set $29
-      local.get $28
-      local.get $29
-      f64.add
-      local.get $30
-      f64.sub
-      local.set $15
-      local.get $15
-      f64.const 0
-      f64.eq
-      if
-       local.get $50
-       i64.const -9223372036854775808
-       i64.and
-       f64.reinterpret_i64
-       local.set $15
-      end
-     end
-     local.get $15
-     f64.const 2.2250738585072014e-308
-     f64.mul
-    end
-    br $~lib/util/math/exp_inline|inlined.0
-   end
-   local.get $9
-   f64.reinterpret_i64
-   local.set $33
-   local.get $33
-   local.get $33
-   local.get $31
-   f64.mul
-   f64.add
   end
- )
- (func $~lib/math/NativeMath.pow (; 134 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
-  local.get $0
-  local.get $1
-  call $~lib/util/math/pow_lut
   return
  )
- (func $std/math/test_pow (; 135 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_pow (; 128 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.pow
@@ -10152,21 +10136,21 @@
    i32.const 0
   end
  )
- (func $~lib/util/math/powf_lut (; 136 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
-  (local $2 i32)
-  (local $3 i32)
+ (func $~lib/math/NativeMathf.pow (; 129 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+  (local $2 f32)
+  (local $3 f32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f32)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
+  (local $9 f32)
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
-  (local $14 f64)
-  (local $15 f64)
+  (local $14 i32)
+  (local $15 i32)
   (local $16 f64)
   (local $17 f64)
   (local $18 f64)
@@ -10177,521 +10161,522 @@
   (local $23 f64)
   (local $24 i64)
   (local $25 i64)
-  i32.const 0
-  local.set $2
-  local.get $0
-  i32.reinterpret_f32
-  local.set $3
-  local.get $1
-  i32.reinterpret_f32
-  local.set $4
-  i32.const 0
-  local.set $5
-  local.get $3
-  i32.const 8388608
-  i32.sub
-  i32.const 2130706432
-  i32.ge_u
-  local.get $4
-  local.set $6
-  local.get $6
-  i32.const 1
-  i32.shl
-  i32.const 1
-  i32.sub
-  i32.const -16777217
-  i32.ge_u
-  i32.const 0
-  i32.ne
-  local.tee $5
-  i32.or
-  if
-   local.get $5
-   if
-    local.get $4
-    i32.const 1
-    i32.shl
-    i32.const 0
-    i32.eq
-    if
-     f32.const 1
-     return
-    end
-    local.get $3
-    i32.const 1065353216
-    i32.eq
-    if
-     f32.const nan:0x400000
-     return
-    end
-    local.get $3
-    i32.const 1
-    i32.shl
-    i32.const -16777216
-    i32.gt_u
-    if (result i32)
-     i32.const 1
-    else
-     local.get $4
-     i32.const 1
-     i32.shl
-     i32.const -16777216
-     i32.gt_u
-    end
-    if
-     local.get $0
-     local.get $1
-     f32.add
-     return
-    end
-    local.get $3
-    i32.const 1
-    i32.shl
-    i32.const 2130706432
-    i32.eq
-    if
-     f32.const nan:0x400000
-     return
-    end
-    local.get $3
-    i32.const 1
-    i32.shl
-    i32.const 2130706432
-    i32.lt_u
-    local.get $4
-    i32.const 31
-    i32.shr_u
-    i32.eqz
-    i32.eq
-    if
-     f32.const 0
-     return
-    end
-    local.get $1
-    local.get $1
-    f32.mul
-    return
-   end
+  block $~lib/util/math/powf_lut|inlined.0 (result f32)
+   local.get $0
+   local.set $3
+   local.get $1
+   local.set $2
+   i32.const 0
+   local.set $4
    local.get $3
+   i32.reinterpret_f32
+   local.set $5
+   local.get $2
+   i32.reinterpret_f32
    local.set $6
+   i32.const 0
+   local.set $7
+   local.get $5
+   i32.const 8388608
+   i32.sub
+   i32.const 2130706432
+   i32.ge_u
    local.get $6
+   local.set $8
+   local.get $8
    i32.const 1
    i32.shl
    i32.const 1
    i32.sub
    i32.const -16777217
    i32.ge_u
+   i32.const 0
+   i32.ne
+   local.tee $7
+   i32.or
    if
-    local.get $0
-    local.get $0
-    f32.mul
-    local.set $7
-    local.get $3
+    local.get $7
+    if
+     local.get $6
+     i32.const 1
+     i32.shl
+     i32.const 0
+     i32.eq
+     if
+      f32.const 1
+      br $~lib/util/math/powf_lut|inlined.0
+     end
+     local.get $5
+     i32.const 1065353216
+     i32.eq
+     if
+      f32.const nan:0x400000
+      br $~lib/util/math/powf_lut|inlined.0
+     end
+     local.get $5
+     i32.const 1
+     i32.shl
+     i32.const -16777216
+     i32.gt_u
+     if (result i32)
+      i32.const 1
+     else
+      local.get $6
+      i32.const 1
+      i32.shl
+      i32.const -16777216
+      i32.gt_u
+     end
+     if
+      local.get $3
+      local.get $2
+      f32.add
+      br $~lib/util/math/powf_lut|inlined.0
+     end
+     local.get $5
+     i32.const 1
+     i32.shl
+     i32.const 2130706432
+     i32.eq
+     if
+      f32.const nan:0x400000
+      br $~lib/util/math/powf_lut|inlined.0
+     end
+     local.get $5
+     i32.const 1
+     i32.shl
+     i32.const 2130706432
+     i32.lt_u
+     local.get $6
+     i32.const 31
+     i32.shr_u
+     i32.eqz
+     i32.eq
+     if
+      f32.const 0
+      br $~lib/util/math/powf_lut|inlined.0
+     end
+     local.get $2
+     local.get $2
+     f32.mul
+     br $~lib/util/math/powf_lut|inlined.0
+    end
+    local.get $5
+    local.set $8
+    local.get $8
+    i32.const 1
+    i32.shl
+    i32.const 1
+    i32.sub
+    i32.const -16777217
+    i32.ge_u
+    if
+     local.get $3
+     local.get $3
+     f32.mul
+     local.set $9
+     local.get $5
+     i32.const 31
+     i32.shr_u
+     if (result i32)
+      block $~lib/util/math/checkintf|inlined.0 (result i32)
+       local.get $6
+       local.set $8
+       local.get $8
+       i32.const 23
+       i32.shr_u
+       i32.const 255
+       i32.and
+       local.set $10
+       local.get $10
+       i32.const 127
+       i32.lt_u
+       if
+        i32.const 0
+        br $~lib/util/math/checkintf|inlined.0
+       end
+       local.get $10
+       i32.const 150
+       i32.gt_u
+       if
+        i32.const 2
+        br $~lib/util/math/checkintf|inlined.0
+       end
+       i32.const 1
+       i32.const 150
+       local.get $10
+       i32.sub
+       i32.shl
+       local.set $10
+       local.get $8
+       local.get $10
+       i32.const 1
+       i32.sub
+       i32.and
+       if
+        i32.const 0
+        br $~lib/util/math/checkintf|inlined.0
+       end
+       local.get $8
+       local.get $10
+       i32.and
+       if
+        i32.const 1
+        br $~lib/util/math/checkintf|inlined.0
+       end
+       i32.const 2
+      end
+      i32.const 1
+      i32.eq
+     else
+      i32.const 0
+     end
+     if
+      local.get $9
+      f32.neg
+      local.set $9
+     end
+     local.get $6
+     i32.const 31
+     i32.shr_u
+     if (result f32)
+      f32.const 1
+      local.get $9
+      f32.div
+     else
+      local.get $9
+     end
+     br $~lib/util/math/powf_lut|inlined.0
+    end
+    local.get $5
     i32.const 31
     i32.shr_u
-    if (result i32)
-     block $~lib/util/math/checkintf|inlined.0 (result i32)
-      local.get $4
-      local.set $6
+    if
+     block $~lib/util/math/checkintf|inlined.1 (result i32)
       local.get $6
+      local.set $8
+      local.get $8
       i32.const 23
       i32.shr_u
       i32.const 255
       i32.and
-      local.set $8
-      local.get $8
+      local.set $10
+      local.get $10
       i32.const 127
       i32.lt_u
       if
        i32.const 0
-       br $~lib/util/math/checkintf|inlined.0
+       br $~lib/util/math/checkintf|inlined.1
       end
-      local.get $8
+      local.get $10
       i32.const 150
       i32.gt_u
       if
        i32.const 2
-       br $~lib/util/math/checkintf|inlined.0
+       br $~lib/util/math/checkintf|inlined.1
       end
       i32.const 1
-      i32.const 150
-      local.get $8
+      i32.const 127
+      i32.const 23
+      i32.add
+      local.get $10
       i32.sub
       i32.shl
-      local.set $8
-      local.get $6
+      local.set $10
       local.get $8
+      local.get $10
       i32.const 1
       i32.sub
       i32.and
       if
        i32.const 0
-       br $~lib/util/math/checkintf|inlined.0
+       br $~lib/util/math/checkintf|inlined.1
       end
-      local.get $6
       local.get $8
+      local.get $10
       i32.and
       if
        i32.const 1
-       br $~lib/util/math/checkintf|inlined.0
+       br $~lib/util/math/checkintf|inlined.1
       end
       i32.const 2
      end
+     local.set $10
+     local.get $10
+     i32.const 0
+     i32.eq
+     if
+      local.get $3
+      local.get $3
+      f32.sub
+      local.get $3
+      local.get $3
+      f32.sub
+      f32.div
+      br $~lib/util/math/powf_lut|inlined.0
+     end
+     local.get $10
      i32.const 1
      i32.eq
-    else
-     i32.const 0
-    end
-    if
-     local.get $7
-     f32.neg
-     local.set $7
-    end
-    local.get $4
-    i32.const 31
-    i32.shr_u
-    if (result f32)
-     f32.const 1
-     local.get $7
-     f32.div
-    else
-     local.get $7
-    end
-    return
-   end
-   local.get $3
-   i32.const 31
-   i32.shr_u
-   if
-    block $~lib/util/math/checkintf|inlined.1 (result i32)
-     local.get $4
-     local.set $6
-     local.get $6
-     i32.const 23
-     i32.shr_u
-     i32.const 255
+     if
+      i32.const 65536
+      local.set $4
+     end
+     local.get $5
+     i32.const 2147483647
      i32.and
-     local.set $8
-     local.get $8
-     i32.const 127
-     i32.lt_u
-     if
-      i32.const 0
-      br $~lib/util/math/checkintf|inlined.1
-     end
-     local.get $8
-     i32.const 150
-     i32.gt_u
-     if
-      i32.const 2
-      br $~lib/util/math/checkintf|inlined.1
-     end
-     i32.const 1
-     i32.const 127
+     local.set $5
+    end
+    local.get $5
+    i32.const 8388608
+    i32.lt_u
+    if
+     local.get $3
+     f32.const 8388608
+     f32.mul
+     i32.reinterpret_f32
+     local.set $5
+     local.get $5
+     i32.const 2147483647
+     i32.and
+     local.set $5
+     local.get $5
      i32.const 23
-     i32.add
-     local.get $8
-     i32.sub
+     i32.const 23
      i32.shl
-     local.set $8
-     local.get $6
-     local.get $8
-     i32.const 1
      i32.sub
-     i32.and
-     if
-      i32.const 0
-      br $~lib/util/math/checkintf|inlined.1
-     end
-     local.get $6
+     local.set $5
+    end
+   end
+   local.get $5
+   local.set $8
+   local.get $8
+   i32.const 1060306944
+   i32.sub
+   local.set $10
+   local.get $10
+   i32.const 23
+   global.get $~lib/util/math/LOG2F_TABLE_BITS
+   i32.sub
+   i32.shr_u
+   i32.const 15
+   i32.and
+   local.set $11
+   local.get $10
+   i32.const -8388608
+   i32.and
+   local.set $12
+   local.get $8
+   local.get $12
+   i32.sub
+   local.set $13
+   local.get $12
+   i32.const 23
+   i32.shr_s
+   local.set $14
+   i32.const 9696
+   i32.load offset=4
+   local.set $15
+   local.get $15
+   local.get $11
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load
+   local.set $16
+   local.get $15
+   local.get $11
+   i32.const 1
+   i32.const 3
+   i32.add
+   i32.shl
+   i32.add
+   f64.load offset=8
+   local.set $17
+   local.get $13
+   f32.reinterpret_i32
+   f64.promote_f32
+   local.set $18
+   local.get $18
+   local.get $16
+   f64.mul
+   f64.const 1
+   f64.sub
+   local.set $19
+   local.get $17
+   local.get $14
+   f64.convert_i32_s
+   f64.add
+   local.set $20
+   f64.const 0.288457581109214
+   local.get $19
+   f64.mul
+   f64.const -0.36092606229713164
+   f64.add
+   local.set $21
+   f64.const 0.480898481472577
+   local.get $19
+   f64.mul
+   f64.const -0.7213474675006291
+   f64.add
+   local.set $22
+   f64.const 1.4426950408774342
+   local.get $19
+   f64.mul
+   local.get $20
+   f64.add
+   local.set $23
+   local.get $19
+   local.get $19
+   f64.mul
+   local.set $19
+   local.get $23
+   local.get $22
+   local.get $19
+   f64.mul
+   f64.add
+   local.set $23
+   local.get $21
+   local.get $19
+   local.get $19
+   f64.mul
+   f64.mul
+   local.get $23
+   f64.add
+   local.set $21
+   local.get $21
+   local.set $23
+   local.get $2
+   f64.promote_f32
+   local.get $23
+   f64.mul
+   local.set $22
+   local.get $22
+   i64.reinterpret_f64
+   i64.const 47
+   i64.shr_u
+   i64.const 65535
+   i64.and
+   i64.const 32959
+   i64.ge_u
+   if
+    local.get $22
+    f64.const 127.99999995700433
+    f64.gt
+    if
+     local.get $4
+     local.set $8
      local.get $8
-     i32.and
-     if
-      i32.const 1
-      br $~lib/util/math/checkintf|inlined.1
-     end
-     i32.const 2
+     local.set $10
+     i32.const 1879048192
+     f32.reinterpret_i32
+     local.set $9
+     local.get $9
+     f32.neg
+     local.get $9
+     local.get $10
+     select
+     local.get $9
+     f32.mul
+     br $~lib/util/math/powf_lut|inlined.0
     end
-    local.set $8
-    local.get $8
-    i32.const 0
-    i32.eq
+    local.get $22
+    f64.const -150
+    f64.le
     if
-     local.get $0
-     local.get $0
-     f32.sub
-     local.get $0
-     local.get $0
-     f32.sub
-     f32.div
-     return
+     local.get $4
+     local.set $11
+     local.get $11
+     local.set $12
+     i32.const 268435456
+     f32.reinterpret_i32
+     local.set $9
+     local.get $9
+     f32.neg
+     local.get $9
+     local.get $12
+     select
+     local.get $9
+     f32.mul
+     br $~lib/util/math/powf_lut|inlined.0
     end
-    local.get $8
-    i32.const 1
-    i32.eq
-    if
-     i32.const 65536
-     local.set $2
-    end
-    local.get $3
-    i32.const 2147483647
-    i32.and
-    local.set $3
    end
-   local.get $3
-   i32.const 8388608
-   i32.lt_u
-   if
-    local.get $0
-    f32.const 8388608
-    f32.mul
-    i32.reinterpret_f32
-    local.set $3
-    local.get $3
-    i32.const 2147483647
-    i32.and
-    local.set $3
-    local.get $3
-    i32.const 23
-    i32.const 23
-    i32.shl
-    i32.sub
-    local.set $3
-   end
+   local.get $22
+   local.set $16
+   local.get $4
+   local.set $13
+   local.get $16
+   f64.const 211106232532992
+   f64.add
+   local.set $21
+   local.get $21
+   i64.reinterpret_f64
+   local.set $24
+   local.get $16
+   local.get $21
+   f64.const 211106232532992
+   f64.sub
+   f64.sub
+   local.set $20
+   i32.const 7248
+   i32.load offset=4
+   local.set $11
+   local.get $11
+   local.get $24
+   i32.wrap_i64
+   i32.const 31
+   i32.and
+   i32.const 3
+   i32.shl
+   i32.add
+   i64.load
+   local.set $25
+   local.get $25
+   local.get $24
+   local.get $13
+   i64.extend_i32_u
+   i64.add
+   i64.const 52
+   global.get $~lib/util/math/EXP2F_TABLE_BITS
+   i64.extend_i32_s
+   i64.sub
+   i64.shl
+   i64.add
+   local.set $25
+   local.get $25
+   f64.reinterpret_i64
+   local.set $17
+   f64.const 0.05550361559341535
+   local.get $20
+   f64.mul
+   f64.const 0.2402284522445722
+   f64.add
+   local.set $19
+   f64.const 0.6931471806916203
+   local.get $20
+   f64.mul
+   f64.const 1
+   f64.add
+   local.set $18
+   local.get $18
+   local.get $19
+   local.get $20
+   local.get $20
+   f64.mul
+   f64.mul
+   f64.add
+   local.set $18
+   local.get $18
+   local.get $17
+   f64.mul
+   local.set $18
+   local.get $18
+   f32.demote_f64
   end
-  local.get $3
-  local.set $6
-  local.get $6
-  i32.const 1060306944
-  i32.sub
-  local.set $8
-  local.get $8
-  i32.const 23
-  global.get $~lib/util/math/LOG2F_TABLE_BITS
-  i32.sub
-  i32.shr_u
-  i32.const 15
-  i32.and
-  local.set $9
-  local.get $8
-  i32.const -8388608
-  i32.and
-  local.set $10
-  local.get $6
-  local.get $10
-  i32.sub
-  local.set $11
-  local.get $10
-  i32.const 23
-  i32.shr_s
-  local.set $12
-  i32.const 9696
-  i32.load offset=4
-  local.set $13
-  local.get $13
-  local.get $9
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load
-  local.set $14
-  local.get $13
-  local.get $9
-  i32.const 1
-  i32.const 3
-  i32.add
-  i32.shl
-  i32.add
-  f64.load offset=8
-  local.set $15
-  local.get $11
-  f32.reinterpret_i32
-  f64.promote_f32
-  local.set $16
-  local.get $16
-  local.get $14
-  f64.mul
-  f64.const 1
-  f64.sub
-  local.set $17
-  local.get $15
-  local.get $12
-  f64.convert_i32_s
-  f64.add
-  local.set $18
-  f64.const 0.288457581109214
-  local.get $17
-  f64.mul
-  f64.const -0.36092606229713164
-  f64.add
-  local.set $19
-  f64.const 0.480898481472577
-  local.get $17
-  f64.mul
-  f64.const -0.7213474675006291
-  f64.add
-  local.set $20
-  f64.const 1.4426950408774342
-  local.get $17
-  f64.mul
-  local.get $18
-  f64.add
-  local.set $21
-  local.get $17
-  local.get $17
-  f64.mul
-  local.set $17
-  local.get $21
-  local.get $20
-  local.get $17
-  f64.mul
-  f64.add
-  local.set $21
-  local.get $19
-  local.get $17
-  local.get $17
-  f64.mul
-  f64.mul
-  local.get $21
-  f64.add
-  local.set $19
-  local.get $19
-  local.set $22
-  local.get $1
-  f64.promote_f32
-  local.get $22
-  f64.mul
-  local.set $23
-  local.get $23
-  i64.reinterpret_f64
-  i64.const 47
-  i64.shr_u
-  i64.const 65535
-  i64.and
-  i64.const 32959
-  i64.ge_u
-  if
-   local.get $23
-   f64.const 127.99999995700433
-   f64.gt
-   if
-    local.get $2
-    local.set $6
-    local.get $6
-    local.set $8
-    i32.const 1879048192
-    f32.reinterpret_i32
-    local.set $7
-    local.get $7
-    f32.neg
-    local.get $7
-    local.get $8
-    select
-    local.get $7
-    f32.mul
-    return
-   end
-   local.get $23
-   f64.const -150
-   f64.le
-   if
-    local.get $2
-    local.set $9
-    local.get $9
-    local.set $10
-    i32.const 268435456
-    f32.reinterpret_i32
-    local.set $7
-    local.get $7
-    f32.neg
-    local.get $7
-    local.get $10
-    select
-    local.get $7
-    f32.mul
-    return
-   end
-  end
-  local.get $23
-  local.set $14
-  local.get $2
-  local.set $11
-  local.get $14
-  f64.const 211106232532992
-  f64.add
-  local.set $21
-  local.get $21
-  i64.reinterpret_f64
-  local.set $24
-  local.get $14
-  local.get $21
-  f64.const 211106232532992
-  f64.sub
-  f64.sub
-  local.set $20
-  i32.const 7248
-  i32.load offset=4
-  local.set $9
-  local.get $9
-  local.get $24
-  i32.wrap_i64
-  i32.const 31
-  i32.and
-  i32.const 3
-  i32.shl
-  i32.add
-  i64.load
-  local.set $25
-  local.get $25
-  local.get $24
-  local.get $11
-  i64.extend_i32_u
-  i64.add
-  i64.const 52
-  global.get $~lib/util/math/EXP2F_TABLE_BITS
-  i64.extend_i32_s
-  i64.sub
-  i64.shl
-  i64.add
-  local.set $25
-  local.get $25
-  f64.reinterpret_i64
-  local.set $17
-  f64.const 0.05550361559341535
-  local.get $20
-  f64.mul
-  f64.const 0.2402284522445722
-  f64.add
-  local.set $19
-  f64.const 0.6931471806916203
-  local.get $20
-  f64.mul
-  f64.const 1
-  f64.add
-  local.set $18
-  local.get $18
-  local.get $19
-  local.get $20
-  local.get $20
-  f64.mul
-  f64.mul
-  f64.add
-  local.set $18
-  local.get $18
-  local.get $17
-  f64.mul
-  local.set $18
-  local.get $18
-  f32.demote_f64
  )
- (func $~lib/math/NativeMathf.pow (; 137 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
-  local.get $0
-  local.get $1
-  call $~lib/util/math/powf_lut
- )
- (func $std/math/test_powf (; 138 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_powf (; 130 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.pow
@@ -10700,7 +10685,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/math/murmurHash3 (; 139 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 131 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
   local.get $0
   local.get $0
   i64.const 33
@@ -10729,7 +10714,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/math/splitMix32 (; 140 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/math/splitMix32 (; 132 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.const 1831565813
   i32.add
@@ -10764,7 +10749,7 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/math/NativeMath.seedRandom (; 141 ;) (type $FUNCSIG$vj) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 133 ;) (type $FUNCSIG$vj) (param $0 i64)
   i32.const 1
   global.set $~lib/math/random_seeded
   local.get $0
@@ -10816,7 +10801,7 @@
    unreachable
   end
  )
- (func $~lib/math/NativeMath.random (; 142 ;) (type $FUNCSIG$d) (result f64)
+ (func $~lib/math/NativeMath.random (; 134 ;) (type $FUNCSIG$d) (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i64)
@@ -10871,7 +10856,7 @@
   f64.const 1
   f64.sub
  )
- (func $~lib/math/NativeMathf.random (; 143 ;) (type $FUNCSIG$f) (result f32)
+ (func $~lib/math/NativeMathf.random (; 135 ;) (type $FUNCSIG$f) (result f32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -10926,7 +10911,7 @@
   f32.const 1
   f32.sub
  )
- (func $std/math/test_round (; 144 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_round (; 136 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -10941,7 +10926,7 @@
   local.get $3
   call $std/math/check<f64>
  )
- (func $std/math/test_roundf (; 145 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_roundf (; 137 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -10956,7 +10941,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_sign (; 146 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sign (; 138 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   block $~lib/math/NativeMath.sign|inlined.0 (result f64)
    local.get $0
@@ -10999,7 +10984,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_signf (; 147 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_signf (; 139 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   block $~lib/math/NativeMathf.sign|inlined.0 (result f32)
    local.get $0
@@ -11026,7 +11011,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.rem (; 148 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.rem (; 140 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -11341,7 +11326,7 @@
    local.get $0
   end
  )
- (func $std/math/test_rem (; 149 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
+ (func $std/math/test_rem (; 141 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.rem
@@ -11350,7 +11335,7 @@
   local.get $4
   call $std/math/check<f64>
  )
- (func $~lib/math/NativeMathf.rem (; 150 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.rem (; 142 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11659,7 +11644,7 @@
    local.get $0
   end
  )
- (func $std/math/test_remf (; 151 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
+ (func $std/math/test_remf (; 143 ;) (type $FUNCSIG$iffffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.rem
@@ -11668,7 +11653,7 @@
   local.get $4
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.sin (; 152 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sin (; 144 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -12197,7 +12182,7 @@
    local.get $0
   end
  )
- (func $std/math/test_sin (; 153 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sin (; 145 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.sin
   local.get $1
@@ -12221,7 +12206,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.sin (; 154 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sin (; 146 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -12831,7 +12816,7 @@
    local.get $27
   end
  )
- (func $std/math/test_sinf (; 155 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sinf (; 147 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.sin
   local.get $1
@@ -12839,7 +12824,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.sinh (; 156 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.sinh (; 148 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
   (local $3 i32)
@@ -12937,7 +12922,7 @@
   local.set $4
   local.get $4
  )
- (func $std/math/test_sinh (; 157 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sinh (; 149 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.sinh
   local.get $1
@@ -12961,7 +12946,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.sinh (; 158 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.sinh (; 150 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -13050,7 +13035,7 @@
   local.set $3
   local.get $3
  )
- (func $std/math/test_sinhf (; 159 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sinhf (; 151 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.sinh
   local.get $1
@@ -13058,7 +13043,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_sqrt (; 160 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_sqrt (; 152 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -13085,7 +13070,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_sqrtf (; 161 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_sqrtf (; 153 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -13096,7 +13081,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/tan_kern (; 162 ;) (type $FUNCSIG$dddi) (param $0 f64) (param $1 f64) (param $2 i32) (result f64)
+ (func $~lib/math/tan_kern (; 154 ;) (type $FUNCSIG$dddi) (param $0 f64) (param $1 f64) (param $2 i32) (result f64)
   (local $3 f64)
   (local $4 f64)
   (local $5 f64)
@@ -13309,7 +13294,7 @@
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.tan (; 163 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tan (; 155 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -13621,7 +13606,7 @@
   i32.sub
   call $~lib/math/tan_kern
  )
- (func $std/math/test_tan (; 164 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_tan (; 156 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.tan
   local.get $1
@@ -13645,7 +13630,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.tan (; 165 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tan (; 157 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -14296,7 +14281,7 @@
   end
   f32.demote_f64
  )
- (func $std/math/test_tanf (; 166 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_tanf (; 158 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.tan
   local.get $1
@@ -14304,7 +14289,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.tanh (; 167 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.tanh (; 159 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 f64)
   (local $3 i32)
@@ -14396,7 +14381,7 @@
   local.get $0
   f64.copysign
  )
- (func $std/math/test_tanh (; 168 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_tanh (; 160 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMath.tanh
   local.get $1
@@ -14420,7 +14405,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.tanh (; 169 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.tanh (; 161 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 f32)
   (local $3 f32)
@@ -14506,7 +14491,7 @@
   local.get $0
   f32.copysign
  )
- (func $std/math/test_tanhf (; 170 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_tanhf (; 162 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   local.get $0
   call $~lib/math/NativeMathf.tanh
   local.get $1
@@ -14514,7 +14499,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $std/math/test_trunc (; 171 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
+ (func $std/math/test_trunc (; 163 ;) (type $FUNCSIG$idddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 i32) (result i32)
   (local $4 f64)
   local.get $0
   local.set $4
@@ -14541,7 +14526,7 @@
    i32.const 0
   end
  )
- (func $std/math/test_truncf (; 172 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
+ (func $std/math/test_truncf (; 164 ;) (type $FUNCSIG$ifffi) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 i32) (result i32)
   (local $4 f32)
   local.get $0
   local.set $4
@@ -14552,7 +14537,7 @@
   local.get $3
   call $std/math/check<f32>
  )
- (func $~lib/math/NativeMath.sincos (; 173 ;) (type $FUNCSIG$vd) (param $0 f64)
+ (func $~lib/math/NativeMath.sincos (; 165 ;) (type $FUNCSIG$vd) (param $0 f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -15171,7 +15156,7 @@
   local.get $23
   global.set $~lib/math/NativeMath.sincos_cos
  )
- (func $std/math/test_sincos (; 174 ;) (type $FUNCSIG$ijjjjji) (param $0 i64) (param $1 i64) (param $2 i64) (param $3 i64) (param $4 i64) (param $5 i32) (result i32)
+ (func $std/math/test_sincos (; 166 ;) (type $FUNCSIG$ijjjjji) (param $0 i64) (param $1 i64) (param $2 i64) (param $3 i64) (param $4 i64) (param $5 i32) (result i32)
   (local $6 f64)
   (local $7 f64)
   (local $8 f64)
@@ -15209,7 +15194,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/dtoi32 (; 175 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/math/dtoi32 (; 167 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i64)
   (local $3 i64)
@@ -15280,7 +15265,7 @@
   local.get $1
   return
  )
- (func $~lib/math/NativeMath.imul (; 176 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.imul (; 168 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   local.get $0
   local.get $1
@@ -15302,7 +15287,7 @@
   i32.mul
   f64.convert_i32_s
  )
- (func $~lib/math/NativeMath.clz32 (; 177 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.clz32 (; 169 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
   local.get $0
   local.get $0
   f64.sub
@@ -15318,7 +15303,7 @@
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 178 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 170 ;) (type $FUNCSIG$jji) (param $0 i64) (param $1 i32) (result i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -15539,7 +15524,7 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 179 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/ipow32f (; 171 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
   (local $2 i32)
   (local $3 f32)
   local.get $1
@@ -15589,7 +15574,7 @@
    local.get $3
   end
  )
- (func $~lib/math/ipow64f (; 180 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/ipow64f (; 172 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
   (local $2 i32)
   (local $3 f64)
   local.get $1
@@ -15639,7 +15624,7 @@
    local.get $3
   end
  )
- (func $start:std/math (; 181 ;) (type $FUNCSIG$v)
+ (func $start:std/math (; 173 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f64)
   (local $2 i64)
@@ -54349,9 +54334,9 @@
    unreachable
   end
  )
- (func $start (; 182 ;) (type $FUNCSIG$v)
+ (func $start (; 174 ;) (type $FUNCSIG$v)
   call $start:std/math
  )
- (func $null (; 183 ;) (type $FUNCSIG$v)
+ (func $null (; 175 ;) (type $FUNCSIG$v)
  )
 )
