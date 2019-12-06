@@ -9875,6 +9875,7 @@
   local.get $0
   local.get $1
   call $~lib/util/math/pow_lut
+  return
  )
  (func $std/math/test_pow (; 133 ;) (type $FUNCSIG$iddddi) (param $0 f64) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 i32) (result i32)
   local.get $0
@@ -10560,7 +10561,7 @@
   if
    i32.const 0
    i32.const 7536
-   i32.const 1381
+   i32.const 1380
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -10575,7 +10576,7 @@
   if
    i32.const 7576
    i32.const 7536
-   i32.const 1388
+   i32.const 1387
    i32.const 24
    call $~lib/builtins/abort
    unreachable
@@ -10630,7 +10631,7 @@
   if
    i32.const 7576
    i32.const 7536
-   i32.const 2564
+   i32.const 2562
    i32.const 24
    call $~lib/builtins/abort
    unreachable

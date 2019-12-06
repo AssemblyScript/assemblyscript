@@ -34,6 +34,7 @@
  (global $std/operator-overloading/f (mut i32) (i32.const 0))
  (global $std/operator-overloading/p1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/p2 (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/util/math/EXP_TABLE_BITS i32 (i32.const 7))
  (global $~lib/util/math/SIGN_BIAS i32 (i32.const 262144))
  (global $~lib/util/math/POW_LOG_TABLE_BITS i32 (i32.const 7))
@@ -1277,6 +1278,7 @@
   local.get $0
   local.get $1
   call $~lib/util/math/pow_lut
+  return
  )
  (func $std/operator-overloading/Tester.pow (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

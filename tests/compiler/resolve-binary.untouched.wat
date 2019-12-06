@@ -1600,6 +1600,7 @@
   local.get $0
   local.get $1
   call $~lib/util/math/pow_lut
+  return
  )
  (func $~lib/array/Array<u64>#__unchecked_get (; 16 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
   local.get $0

@@ -823,8 +823,7 @@ export namespace NativeMath {
       let xq = xs * xs;
       let c = x - (xs * P1 + xq * ((P2 + xs * P3) + xq * (P4 + xs * P5)));
       let y = 1.0 + (x * c / (2 - c) - lo + hi);
-      if (k == 0) return y;
-      return scalbn(y, k);
+      return k == 0 ? y : scalbn(y, k);
     }
   }
 
@@ -1169,9 +1168,9 @@ export namespace NativeMath {
   }
 
   export function pow(x: f64, y: f64): f64 { // see: musl/src/math/pow.c and SUN COPYRIGHT NOTICE above
-    // if (/*ASC_SHRINK_LEVEL < */ true) {
+    if (ASC_SHRINK_LEVEL < 1) {
       return pow_lut(x, y);
-    /*} else {
+    } else {
       const
         dp_h1   = reinterpret<f64>(0x3FE2B80340000000), //  5.84962487220764160156e-01
         dp_l1   = reinterpret<f64>(0x3E4CFDEB43CFD006), //  1.35003920212974897128e-08
@@ -1369,7 +1368,7 @@ export namespace NativeMath {
       if ((j >> 20) <= 0) z = scalbn(z, n);
       else z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF | (<u64>j << 32));
       return s * z;
-    }*/
+    }
   }
 
   export function seedRandom(value: i64): void {
@@ -2248,8 +2247,7 @@ export namespace NativeMathf {
       let xx = x * x;
       let c = x - xx * (P1 + xx * P2);
       let y: f32 = 1 + (x * c / (2 - c) - lo + hi);
-      if (k == 0) return y;
-      return scalbn(y, k);
+      return k == 0 ? y : scalbn(y, k);
     }
   }
 

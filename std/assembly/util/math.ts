@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2018, Arm Limited.
+ * SPDX-License-Identifier: MIT
+ */
+
 /** Lookup data for exp2f **/
 
 // @ts-ignore: decorator

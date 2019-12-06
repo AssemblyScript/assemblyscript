@@ -15,6 +15,7 @@
  (elem (i32.const 0) $null)
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/util/math/EXP_TABLE_BITS i32 (i32.const 7))
  (global $~lib/util/math/SIGN_BIAS i32 (i32.const 262144))
  (global $~lib/util/math/POW_LOG_TABLE_BITS i32 (i32.const 7))
@@ -948,6 +949,7 @@
   local.get $0
   local.get $1
   call $~lib/util/math/pow_lut
+  return
  )
  (func $~lib/math/NativeMathf.mod (; 2 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)

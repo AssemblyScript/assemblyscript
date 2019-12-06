@@ -5339,6 +5339,7 @@
   local.get $0
   local.get $1
   call $~lib/util/math/pow_lut
+  return
  )
  (func $../../lib/libm/assembly/libm/pow (; 50 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
   local.get $0
