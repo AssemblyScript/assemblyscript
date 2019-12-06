@@ -1,3 +1,5 @@
+import { alignof } from "builtins";
+
 /** Lookup data for exp2f **/
 
 // @ts-ignore: decorator
@@ -575,6 +577,117 @@ export function powf_lut(x: f32, y: f32): f32 {
   0x3C5305C14160CC89, 0x3FEFF3C22B8F71F1
 ];
 
+/* Handle cases that may overflow or underflow when computing the result that
+   is scale*(1+TMP) without intermediate rounding. The bit representation of
+   scale is in SBITS, however it has a computed exponent that may have
+   overflown into the sign bit so that needs to be adjusted before using it as
+   a double.  (int32_t)KI is the k used in the argument reduction and exponent
+   adjustment of scale, positive k here means the result may overflow and
+   negative k means the result may underflow. */
+// @ts-ignore: decorator
+@inline function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
+  const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022
+
+  var scale: f64, y: f64;
+  if (!(ki & 0x80000000)) {
+    /* k > 0, the exponent of scale might have overflowed by <= 460.  */
+    sbits -= u64(1009) << 52;
+    scale = reinterpret<f64>(sbits);
+    y = reinterpret<f64>(0x7F00000000000000) * (scale + scale * tmp); // 0x1p1009
+    return y;
+  }
+  /* k < 0, need special care in the subnormal range.  */
+  sbits += u64(1022) << 52;
+  /* Note: sbits is signed scale.  */
+  scale = reinterpret<f64>(sbits);
+  y = scale + scale * tmp;
+  if (abs(y) < 1.0) {
+    /* Round y to the right precision before scaling it into the subnormal
+      range to avoid double rounding that can cause 0.5+E/2 ulp error where
+      E is the worst-case ulp error outside the subnormal range.  So this
+      is only useful if the goal is better than 1 ulp worst-case error.  */
+    let hi: f64, lo: f64, one = 1.0;
+    if (y < 0.0) one = -1.0;
+    lo = scale - y + scale * tmp;
+    hi = one + y;
+    lo = one - hi + y + lo;
+    y  = (hi + lo) - one;
+    /* Fix the sign of 0.  */
+    if (y == 0.0) y = reinterpret<f64>(sbits & 0x8000000000000000);
+    /* The underflow exception needs to be signaled explicitly.  */
+    // fp_force_eval(fp_barrier(0x1p-1022) * 0x1p-1022);
+  }
+  return y * Ox1p_1022;
+}
+
+export function exp_lut(x: f64): f64 {
+  const N      = 1 << EXP_TABLE_BITS;
+  const N_MASK = N - 1;
+
+  const InvLn2N   = reinterpret<f64>(0x3FF71547652B82FE) * N; // 0x1.71547652b82fep0
+  const NegLn2hiN = reinterpret<f64>(0xBF762E42FEFA0000);     // -0x1.62e42fefa0000p-8
+  const NegLn2loN = reinterpret<f64>(0xBD0CF79ABC9E3B3A);     // -0x1.cf79abc9e3b3ap-47
+  const shift     = reinterpret<f64>(0x4338000000000000);     // 0x1.8p52;
+
+  const C2 = reinterpret<f64>(0x3FDFFFFFFFFFFDBD); // __exp_data.poly[0] (0x1.ffffffffffdbdp-2)
+  const C3 = reinterpret<f64>(0x3FC555555555543C); // __exp_data.poly[1] (0x1.555555555543cp-3)
+  const C4 = reinterpret<f64>(0x3FA55555CF172B91); // __exp_data.poly[2] (0x1.55555cf172b91p-5)
+  const C5 = reinterpret<f64>(0x3F81111167A4D017); // __exp_data.poly[3] (0x1.1111167a4d017p-7)
+
+  var ux = reinterpret<u64>(x);
+  var abstop = <u32>(ux >> 52 & 0x7FF);
+  if (abstop - 0x3C9 >= 0x03F) {
+    if (abstop - 0x3C9 >= 0x80000000) return 1;
+    if (abstop >= 0x409) {
+      if (ux == 0xFFF0000000000000) return 0;
+      if (abstop >= 0x7FF) return 1.0 + x;
+      return select<f64>(0, Infinity, ux >> 63);
+    }
+    // Large x is special cased below.
+    abstop = 0;
+  }
+
+  // exp(x) = 2^(k/N) * exp(r), with exp(r) in [2^(-1/2N),2^(1/2N)]
+  // x = ln2/N*k + r, with int k and r in [-ln2/2N, ln2/2N]
+  var z = InvLn2N * x;
+// #if TOINT_INTRINSICS
+// 	kd = roundtoint(z);
+// 	ki = converttoint(z);
+// #elif EXP_USE_TOINT_NARROW
+// 	/* z - kd is in [-0.5-2^-16, 0.5] in all rounding modes.  */
+// var kd = z + shift;
+// var ki = reinterpret<u64>(kd) >> 16;
+// var kd = <f64><i32>ki;
+// #else
+  /* z - kd is in [-1, 1] in non-nearest rounding modes.  */
+  var kd = z + shift;
+  var ki = reinterpret<u64>(kd);
+  kd -= shift;
+// #endif
+  var r = x + kd * NegLn2hiN + kd * NegLn2loN;
+  // 2^(k/N) ~= scale * (1 + tail).
+  var idx = <usize>((ki & N_MASK) << 1);
+  var top = ki << (52 - EXP_TABLE_BITS);
+
+  // @ts-ignore: cast
+  const tab = exp_data_tab.dataStart as usize;
+
+  var tail = reinterpret<f64>(load<u64>(tab + (idx << alignof<u64>()))); // T[idx]
+  // This is only a valid scale when -1023*N < k < 1024*N
+  var sbits = load<u64>(tab + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
+  // exp(x) = 2^(k/N) * exp(r) ~= scale + scale * (tail + exp(r) - 1).
+  // Evaluation is optimized assuming superscalar pipelined execution.
+  var r2 = r * r;
+  // Without fma the worst case error is 0.25/N ulp larger.
+  // Worst case error is less than 0.5+1.11/N+(abs poly error * 2^53) ulp.
+  var tmp = tail + r + r2 * (C2 + r * C3) + r2 * r2 * (C4 + r * C5);
+  if (abstop == 0) return specialcase(tmp, sbits, ki);
+  var scale = reinterpret<f64>(sbits);
+  // Note: tmp == 0 or |tmp| > 2^-200 and scale > 2^-739, so there
+  // is no spurious underflow here even without fma.
+  return scale + scale * tmp;
+}
+
 /* Lookup data for pow. See: https://git.musl-libc.org/cgit/musl/tree/src/math/pow.c */
 
 // @ts-ignore: decorator
@@ -843,49 +956,6 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   log_tail = hi - y + lo;
 
   return y;
-}
-
-/* Handle cases that may overflow or underflow when computing the result that
-   is scale*(1+TMP) without intermediate rounding.  The bit representation of
-   scale is in SBITS, however it has a computed exponent that may have
-   overflown into the sign bit so that needs to be adjusted before using it as
-   a double.  (int32_t)KI is the k used in the argument reduction and exponent
-   adjustment of scale, positive k here means the result may overflow and
-   negative k means the result may underflow. */
-// @ts-ignore: decorator
-@inline function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
-  const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022
-
-  var scale: f64, y: f64;
-  if (!(ki & 0x80000000)) {
-    /* k > 0, the exponent of scale might have overflowed by <= 460.  */
-    sbits -= u64(1009) << 52;
-    scale = reinterpret<f64>(sbits);
-    y = reinterpret<f64>(0x7F00000000000000) * (scale + scale * tmp); // 0x1p1009
-    return <f64>y;
-  }
-  /* k < 0, need special care in the subnormal range.  */
-  sbits += u64(1022) << 52;
-  /* Note: sbits is signed scale.  */
-  scale = reinterpret<f64>(sbits);
-  y = scale + scale * tmp;
-  if (abs(y) < 1.0) {
-    /* Round y to the right precision before scaling it into the subnormal
-      range to avoid double rounding that can cause 0.5+E/2 ulp error where
-      E is the worst-case ulp error outside the subnormal range.  So this
-      is only useful if the goal is better than 1 ulp worst-case error.  */
-    let hi: f64, lo: f64, one = 1.0;
-    if (y < 0.0) one = -1.0;
-    lo = scale - y + scale * tmp;
-    hi = one + y;
-    lo = one - hi + y + lo;
-    y  = (hi + lo) - one;
-    /* Fix the sign of 0.  */
-    if (y == 0.0) y = reinterpret<f64>(sbits & 0x8000000000000000);
-    /* The underflow exception needs to be signaled explicitly.  */
-    // fp_force_eval(fp_barrier(0x1p-1022) * 0x1p-1022);
-  }
-  return y * Ox1p_1022;
 }
 
 // @ts-ignore: decorator
