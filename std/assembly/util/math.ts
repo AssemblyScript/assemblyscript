@@ -908,7 +908,7 @@ export function log2_lut(x: f64): f64 {
   var top = <u32>(ix >> 48);
   if (top - 0x0010 >= 0x7ff0 - 0x0010) {
     // x < 0x1p-1022 or inf or nan.
-    if ((ix << 1) == 0) return -1.0 / 0.0;
+    if ((ix << 1) == 0) return -1.0 / (x * x);
     if (ix == 0x7FF0000000000000) return x; // log(inf) == inf
     if ((top & 0x8000) || (top & 0x7FF0) == 0x7FF0) return (x - x) / (x - x);
     // x is subnormal, normalize it.
@@ -965,6 +965,413 @@ export function log2_lut(x: f64): f64 {
      ~ 0.5 + 2/N/ln2 + abs-poly-error*0x1p56 ULP (+ 0.003 ULP without fma).*/
   var p = A0 + r * A1 + r2 * (A2 + r * A3) + (r2 * r2) * (A4 + r * A5);
   return lo + r2 * p + hi;
+}
+
+/* Lookup data for log. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log.c */
+
+// @ts-ignore: decorator
+@lazy const LOG_TABLE_BITS = 7;
+
+/* Algorithm:
+
+  x = 2^k z
+  log(x) = k ln2 + log(c) + log(z/c)
+  log(z/c) = poly(z/c - 1)
+
+where z is in [1.6p-1; 1.6p0] which is split into N subintervals and z falls
+into the ith one, then table entries are computed as
+
+  tab[i].invc = 1/c
+  tab[i].logc = (double)log(c)
+  tab2[i].chi = (double)c
+  tab2[i].clo = (double)(c - (double)c)
+
+where c is near the center of the subinterval and is chosen by trying +-2^29
+floating point invc candidates around 1/center and selecting one for which
+
+  1) the rounding error in 0x1.8p9 + logc is 0,
+  2) the rounding error in z - chi - clo is < 0x1p-66 and
+  3) the rounding error in (double)log(c) is minimized (< 0x1p-66).
+
+Note: 1) ensures that k*ln2hi + logc can be computed without rounding error,
+2) ensures that z/c - 1 can be computed as (z - chi - clo)*invc with close to
+a single rounding error when there is no fast fma for z*invc - 1, 3) ensures
+that logc + poly(z/c - 1) has small error, however near x == 1 when
+|log(x)| < 0x1p-4, this is not enough so that is special cased.*/
+// @ts-ignore: decorator
+@lazy const log_data_tab1: f64[] = [
+  //              invc                ,                 logc
+  reinterpret<f64>(0x3FF734F0C3E0DE9F), reinterpret<f64>(0xBFD7CC7F79E69000),
+  reinterpret<f64>(0x3FF713786A2CE91F), reinterpret<f64>(0xBFD76FEEC20D0000),
+  reinterpret<f64>(0x3FF6F26008FAB5A0), reinterpret<f64>(0xBFD713E31351E000),
+  reinterpret<f64>(0x3FF6D1A61F138C7D), reinterpret<f64>(0xBFD6B85B38287800),
+  reinterpret<f64>(0x3FF6B1490BC5B4D1), reinterpret<f64>(0xBFD65D5590807800),
+  reinterpret<f64>(0x3FF69147332F0CBA), reinterpret<f64>(0xBFD602D076180000),
+  reinterpret<f64>(0x3FF6719F18224223), reinterpret<f64>(0xBFD5A8CA86909000),
+  reinterpret<f64>(0x3FF6524F99A51ED9), reinterpret<f64>(0xBFD54F4356035000),
+  reinterpret<f64>(0x3FF63356AA8F24C4), reinterpret<f64>(0xBFD4F637C36B4000),
+  reinterpret<f64>(0x3FF614B36B9DDC14), reinterpret<f64>(0xBFD49DA7FDA85000),
+  reinterpret<f64>(0x3FF5F66452C65C4C), reinterpret<f64>(0xBFD445923989A800),
+  reinterpret<f64>(0x3FF5D867B5912C4F), reinterpret<f64>(0xBFD3EDF439B0B800),
+  reinterpret<f64>(0x3FF5BABCCB5B90DE), reinterpret<f64>(0xBFD396CE448F7000),
+  reinterpret<f64>(0x3FF59D61F2D91A78), reinterpret<f64>(0xBFD3401E17BDA000),
+  reinterpret<f64>(0x3FF5805612465687), reinterpret<f64>(0xBFD2E9E2EF468000),
+  reinterpret<f64>(0x3FF56397CEE76BD3), reinterpret<f64>(0xBFD2941B3830E000),
+  reinterpret<f64>(0x3FF54725E2A77F93), reinterpret<f64>(0xBFD23EC58CDA8800),
+  reinterpret<f64>(0x3FF52AFF42064583), reinterpret<f64>(0xBFD1E9E129279000),
+  reinterpret<f64>(0x3FF50F22DBB2BDDF), reinterpret<f64>(0xBFD1956D2B48F800),
+  reinterpret<f64>(0x3FF4F38F4734DED7), reinterpret<f64>(0xBFD141679AB9F800),
+  reinterpret<f64>(0x3FF4D843CFDE2840), reinterpret<f64>(0xBFD0EDD094EF9800),
+  reinterpret<f64>(0x3FF4BD3EC078A3C8), reinterpret<f64>(0xBFD09AA518DB1000),
+  reinterpret<f64>(0x3FF4A27FC3E0258A), reinterpret<f64>(0xBFD047E65263B800),
+  reinterpret<f64>(0x3FF4880524D48434), reinterpret<f64>(0xBFCFEB224586F000),
+  reinterpret<f64>(0x3FF46DCE1B192D0B), reinterpret<f64>(0xBFCF474A7517B000),
+  reinterpret<f64>(0x3FF453D9D3391854), reinterpret<f64>(0xBFCEA4443D103000),
+  reinterpret<f64>(0x3FF43A2744B4845A), reinterpret<f64>(0xBFCE020D44E9B000),
+  reinterpret<f64>(0x3FF420B54115F8FB), reinterpret<f64>(0xBFCD60A22977F000),
+  reinterpret<f64>(0x3FF40782DA3EF4B1), reinterpret<f64>(0xBFCCC00104959000),
+  reinterpret<f64>(0x3FF3EE8F5D57FE8F), reinterpret<f64>(0xBFCC202956891000),
+  reinterpret<f64>(0x3FF3D5D9A00B4CE9), reinterpret<f64>(0xBFCB81178D811000),
+  reinterpret<f64>(0x3FF3BD60C010C12B), reinterpret<f64>(0xBFCAE2C9CCD3D000),
+  reinterpret<f64>(0x3FF3A5242B75DAB8), reinterpret<f64>(0xBFCA45402E129000),
+  reinterpret<f64>(0x3FF38D22CD9FD002), reinterpret<f64>(0xBFC9A877681DF000),
+  reinterpret<f64>(0x3FF3755BC5847A1C), reinterpret<f64>(0xBFC90C6D69483000),
+  reinterpret<f64>(0x3FF35DCE49AD36E2), reinterpret<f64>(0xBFC87120A645C000),
+  reinterpret<f64>(0x3FF34679984DD440), reinterpret<f64>(0xBFC7D68FB4143000),
+  reinterpret<f64>(0x3FF32F5CCEFFCB24), reinterpret<f64>(0xBFC73CB83C627000),
+  reinterpret<f64>(0x3FF3187775A10D49), reinterpret<f64>(0xBFC6A39A9B376000),
+  reinterpret<f64>(0x3FF301C8373E3990), reinterpret<f64>(0xBFC60B3154B7A000),
+  reinterpret<f64>(0x3FF2EB4EBB95F841), reinterpret<f64>(0xBFC5737D76243000),
+  reinterpret<f64>(0x3FF2D50A0219A9D1), reinterpret<f64>(0xBFC4DC7B8FC23000),
+  reinterpret<f64>(0x3FF2BEF9A8B7FD2A), reinterpret<f64>(0xBFC4462C51D20000),
+  reinterpret<f64>(0x3FF2A91C7A0C1BAB), reinterpret<f64>(0xBFC3B08ABC830000),
+  reinterpret<f64>(0x3FF293726014B530), reinterpret<f64>(0xBFC31B996B490000),
+  reinterpret<f64>(0x3FF27DFA5757A1F5), reinterpret<f64>(0xBFC2875490A44000),
+  reinterpret<f64>(0x3FF268B39B1D3BBF), reinterpret<f64>(0xBFC1F3B9F879A000),
+  reinterpret<f64>(0x3FF2539D838FF5BD), reinterpret<f64>(0xBFC160C8252CA000),
+  reinterpret<f64>(0x3FF23EB7AAC9083B), reinterpret<f64>(0xBFC0CE7F57F72000),
+  reinterpret<f64>(0x3FF22A012BA940B6), reinterpret<f64>(0xBFC03CDC49FEA000),
+  reinterpret<f64>(0x3FF2157996CC4132), reinterpret<f64>(0xBFBF57BDBC4B8000),
+  reinterpret<f64>(0x3FF201201DD2FC9B), reinterpret<f64>(0xBFBE370896404000),
+  reinterpret<f64>(0x3FF1ECF4494D480B), reinterpret<f64>(0xBFBD17983EF94000),
+  reinterpret<f64>(0x3FF1D8F5528F6569), reinterpret<f64>(0xBFBBF9674ED8A000),
+  reinterpret<f64>(0x3FF1C52311577E7C), reinterpret<f64>(0xBFBADC79202F6000),
+  reinterpret<f64>(0x3FF1B17C74CB26E9), reinterpret<f64>(0xBFB9C0C3E7288000),
+  reinterpret<f64>(0x3FF19E010C2C1AB6), reinterpret<f64>(0xBFB8A646B372C000),
+  reinterpret<f64>(0x3FF18AB07BB670BD), reinterpret<f64>(0xBFB78D01B3AC0000),
+  reinterpret<f64>(0x3FF1778A25EFBCB6), reinterpret<f64>(0xBFB674F145380000),
+  reinterpret<f64>(0x3FF1648D354C31DA), reinterpret<f64>(0xBFB55E0E6D878000),
+  reinterpret<f64>(0x3FF151B990275FDD), reinterpret<f64>(0xBFB4485CDEA1E000),
+  reinterpret<f64>(0x3FF13F0EA432D24C), reinterpret<f64>(0xBFB333D94D6AA000),
+  reinterpret<f64>(0x3FF12C8B7210F9DA), reinterpret<f64>(0xBFB22079F8C56000),
+  reinterpret<f64>(0x3FF11A3028ECB531), reinterpret<f64>(0xBFB10E4698622000),
+  reinterpret<f64>(0x3FF107FBDA8434AF), reinterpret<f64>(0xBFAFFA6C6AD20000),
+  reinterpret<f64>(0x3FF0F5EE0F4E6BB3), reinterpret<f64>(0xBFADDA8D4A774000),
+  reinterpret<f64>(0x3FF0E4065D2A9FCE), reinterpret<f64>(0xBFABBCECE4850000),
+  reinterpret<f64>(0x3FF0D244632CA521), reinterpret<f64>(0xBFA9A1894012C000),
+  reinterpret<f64>(0x3FF0C0A77CE2981A), reinterpret<f64>(0xBFA788583302C000),
+  reinterpret<f64>(0x3FF0AF2F83C636D1), reinterpret<f64>(0xBFA5715E67D68000),
+  reinterpret<f64>(0x3FF09DDB98A01339), reinterpret<f64>(0xBFA35C8A49658000),
+  reinterpret<f64>(0x3FF08CABAF52E7DF), reinterpret<f64>(0xBFA149E364154000),
+  reinterpret<f64>(0x3FF07B9F2F4E28FB), reinterpret<f64>(0xBF9E72C082EB8000),
+  reinterpret<f64>(0x3FF06AB58C358F19), reinterpret<f64>(0xBF9A55F152528000),
+  reinterpret<f64>(0x3FF059EEA5ECF92C), reinterpret<f64>(0xBF963D62CF818000),
+  reinterpret<f64>(0x3FF04949CDD12C90), reinterpret<f64>(0xBF9228FB8CAA0000),
+  reinterpret<f64>(0x3FF038C6C6F0ADA9), reinterpret<f64>(0xBF8C317B20F90000),
+  reinterpret<f64>(0x3FF02865137932A9), reinterpret<f64>(0xBF8419355DAA0000),
+  reinterpret<f64>(0x3FF0182427EA7348), reinterpret<f64>(0xBF781203C2EC0000),
+  reinterpret<f64>(0x3FF008040614B195), reinterpret<f64>(0xBF60040979240000),
+  reinterpret<f64>(0x3FEFE01FF726FA1A), reinterpret<f64>(0x3F6FEFF384900000),
+  reinterpret<f64>(0x3FEFA11CC261EA74), reinterpret<f64>(0x3F87DC41353D0000),
+  reinterpret<f64>(0x3FEF6310B081992E), reinterpret<f64>(0x3F93CEA3C4C28000),
+  reinterpret<f64>(0x3FEF25F63CEEADCD), reinterpret<f64>(0x3F9B9FC114890000),
+  reinterpret<f64>(0x3FEEE9C8039113E7), reinterpret<f64>(0x3FA1B0D8CE110000),
+  reinterpret<f64>(0x3FEEAE8078CBB1AB), reinterpret<f64>(0x3FA58A5BD001C000),
+  reinterpret<f64>(0x3FEE741AA29D0C9B), reinterpret<f64>(0x3FA95C8340D88000),
+  reinterpret<f64>(0x3FEE3A91830A99B5), reinterpret<f64>(0x3FAD276AEF578000),
+  reinterpret<f64>(0x3FEE01E009609A56), reinterpret<f64>(0x3FB07598E598C000),
+  reinterpret<f64>(0x3FEDCA01E577BB98), reinterpret<f64>(0x3FB253F5E30D2000),
+  reinterpret<f64>(0x3FED92F20B7C9103), reinterpret<f64>(0x3FB42EDD8B380000),
+  reinterpret<f64>(0x3FED5CAC66FB5CCE), reinterpret<f64>(0x3FB606598757C000),
+  reinterpret<f64>(0x3FED272CAA5EDE9D), reinterpret<f64>(0x3FB7DA76356A0000),
+  reinterpret<f64>(0x3FECF26E3E6B2CCD), reinterpret<f64>(0x3FB9AB434E1C6000),
+  reinterpret<f64>(0x3FECBE6DA2A77902), reinterpret<f64>(0x3FBB78C7BB0D6000),
+  reinterpret<f64>(0x3FEC8B266D37086D), reinterpret<f64>(0x3FBD431332E72000),
+  reinterpret<f64>(0x3FEC5894BD5D5804), reinterpret<f64>(0x3FBF0A3171DE6000),
+  reinterpret<f64>(0x3FEC26B533BB9F8C), reinterpret<f64>(0x3FC067152B914000),
+  reinterpret<f64>(0x3FEBF583EEECE73F), reinterpret<f64>(0x3FC147858292B000),
+  reinterpret<f64>(0x3FEBC4FD75DB96C1), reinterpret<f64>(0x3FC2266ECDCA3000),
+  reinterpret<f64>(0x3FEB951E0C864A28), reinterpret<f64>(0x3FC303D7A6C55000),
+  reinterpret<f64>(0x3FEB65E2C5EF3E2C), reinterpret<f64>(0x3FC3DFC33C331000),
+  reinterpret<f64>(0x3FEB374867C9888B), reinterpret<f64>(0x3FC4BA366B7A8000),
+  reinterpret<f64>(0x3FEB094B211D304A), reinterpret<f64>(0x3FC5933928D1F000),
+  reinterpret<f64>(0x3FEADBE885F2EF7E), reinterpret<f64>(0x3FC66ACD2418F000),
+  reinterpret<f64>(0x3FEAAF1D31603DA2), reinterpret<f64>(0x3FC740F8EC669000),
+  reinterpret<f64>(0x3FEA82E63FD358A7), reinterpret<f64>(0x3FC815C0F51AF000),
+  reinterpret<f64>(0x3FEA5740EF09738B), reinterpret<f64>(0x3FC8E92954F68000),
+  reinterpret<f64>(0x3FEA2C2A90AB4B27), reinterpret<f64>(0x3FC9BB3602F84000),
+  reinterpret<f64>(0x3FEA01A01393F2D1), reinterpret<f64>(0x3FCA8BED1C2C0000),
+  reinterpret<f64>(0x3FE9D79F24DB3C1B), reinterpret<f64>(0x3FCB5B515C01D000),
+  reinterpret<f64>(0x3FE9AE2505C7B190), reinterpret<f64>(0x3FCC2967CCBCC000),
+  reinterpret<f64>(0x3FE9852EF297CE2F), reinterpret<f64>(0x3FCCF635D5486000),
+  reinterpret<f64>(0x3FE95CBAEEA44B75), reinterpret<f64>(0x3FCDC1BD3446C000),
+  reinterpret<f64>(0x3FE934C69DE74838), reinterpret<f64>(0x3FCE8C01B8CFE000),
+  reinterpret<f64>(0x3FE90D4F2F6752E6), reinterpret<f64>(0x3FCF5509C0179000),
+  reinterpret<f64>(0x3FE8E6528EFFD79D), reinterpret<f64>(0x3FD00E6C121FB800),
+  reinterpret<f64>(0x3FE8BFCE9FCC007C), reinterpret<f64>(0x3FD071B80E93D000),
+  reinterpret<f64>(0x3FE899C0DABEC30E), reinterpret<f64>(0x3FD0D46B9E867000),
+  reinterpret<f64>(0x3FE87427AA2317FB), reinterpret<f64>(0x3FD13687334BD000),
+  reinterpret<f64>(0x3FE84F00ACB39A08), reinterpret<f64>(0x3FD1980D67234800),
+  reinterpret<f64>(0x3FE82A49E8653E55), reinterpret<f64>(0x3FD1F8FFE0CC8000),
+  reinterpret<f64>(0x3FE8060195F40260), reinterpret<f64>(0x3FD2595FD7636800),
+  reinterpret<f64>(0x3FE7E22563E0A329), reinterpret<f64>(0x3FD2B9300914A800),
+  reinterpret<f64>(0x3FE7BEB377DCB5AD), reinterpret<f64>(0x3FD3187210436000),
+  reinterpret<f64>(0x3FE79BAA679725C2), reinterpret<f64>(0x3FD377266DEC1800),
+  reinterpret<f64>(0x3FE77907F2170657), reinterpret<f64>(0x3FD3D54FFBAF3000),
+  reinterpret<f64>(0x3FE756CADBD6130C), reinterpret<f64>(0x3FD432EEE32FE000)
+];
+
+// @ts-ignore: decorator
+@lazy const log_data_tab2: f64[] = [
+  //               chi                ,                  clo
+  reinterpret<f64>(0x3FE61000014FB66B), reinterpret<f64>(0x3C7E026C91425B3C),
+  reinterpret<f64>(0x3FE63000034DB495), reinterpret<f64>(0x3C8DBFEA48005D41),
+  reinterpret<f64>(0x3FE650000D94D478), reinterpret<f64>(0x3C8E7FA786D6A5B7),
+  reinterpret<f64>(0x3FE67000074E6FAD), reinterpret<f64>(0x3C61FCEA6B54254C),
+  reinterpret<f64>(0x3FE68FFFFEDF0FAE), reinterpret<f64>(0xBC7C7E274C590EFD),
+  reinterpret<f64>(0x3FE6B0000763C5BC), reinterpret<f64>(0xBC8AC16848DCDA01),
+  reinterpret<f64>(0x3FE6D0001E5CC1F6), reinterpret<f64>(0x3C833F1C9D499311),
+  reinterpret<f64>(0x3FE6EFFFEB05F63E), reinterpret<f64>(0xBC7E80041AE22D53),
+  reinterpret<f64>(0x3FE710000E869780), reinterpret<f64>(0x3C7BFF6671097952),
+  reinterpret<f64>(0x3FE72FFFFC67E912), reinterpret<f64>(0x3C8C00E226BD8724),
+  reinterpret<f64>(0x3FE74FFFDF81116A), reinterpret<f64>(0xBC6E02916EF101D2),
+  reinterpret<f64>(0x3FE770000F679C90), reinterpret<f64>(0xBC67FC71CD549C74),
+  reinterpret<f64>(0x3FE78FFFFA7EC835), reinterpret<f64>(0x3C81BEC19EF50483),
+  reinterpret<f64>(0x3FE7AFFFFE20C2E6), reinterpret<f64>(0xBC707E1729CC6465),
+  reinterpret<f64>(0x3FE7CFFFED3FC900), reinterpret<f64>(0xBC808072087B8B1C),
+  reinterpret<f64>(0x3FE7EFFFE9261A76), reinterpret<f64>(0x3C8DC0286D9DF9AE),
+  reinterpret<f64>(0x3FE81000049CA3E8), reinterpret<f64>(0x3C897FD251E54C33),
+  reinterpret<f64>(0x3FE8300017932C8F), reinterpret<f64>(0xBC8AFEE9B630F381),
+  reinterpret<f64>(0x3FE850000633739C), reinterpret<f64>(0x3C89BFBF6B6535BC),
+  reinterpret<f64>(0x3FE87000204289C6), reinterpret<f64>(0xBC8BBF65F3117B75),
+  reinterpret<f64>(0x3FE88FFFEBF57904), reinterpret<f64>(0xBC89006EA23DCB57),
+  reinterpret<f64>(0x3FE8B00022BC04DF), reinterpret<f64>(0xBC7D00DF38E04B0A),
+  reinterpret<f64>(0x3FE8CFFFE50C1B8A), reinterpret<f64>(0xBC88007146FF9F05),
+  reinterpret<f64>(0x3FE8EFFFFC918E43), reinterpret<f64>(0x3C83817BD07A7038),
+  reinterpret<f64>(0x3FE910001EFA5FC7), reinterpret<f64>(0x3C893E9176DFB403),
+  reinterpret<f64>(0x3FE9300013467BB9), reinterpret<f64>(0x3C7F804E4B980276),
+  reinterpret<f64>(0x3FE94FFFE6EE076F), reinterpret<f64>(0xBC8F7EF0D9FF622E),
+  reinterpret<f64>(0x3FE96FFFDE3C12D1), reinterpret<f64>(0xBC7082AA962638BA),
+  reinterpret<f64>(0x3FE98FFFF4458A0D), reinterpret<f64>(0xBC87801B9164A8EF),
+  reinterpret<f64>(0x3FE9AFFFDD982E3E), reinterpret<f64>(0xBC8740E08A5A9337),
+  reinterpret<f64>(0x3FE9CFFFED49FB66), reinterpret<f64>(0x3C3FCE08C19BE000),
+  reinterpret<f64>(0x3FE9F00020F19C51), reinterpret<f64>(0xBC8A3FAA27885B0A),
+  reinterpret<f64>(0x3FEA10001145B006), reinterpret<f64>(0x3C74FF489958DA56),
+  reinterpret<f64>(0x3FEA300007BBF6FA), reinterpret<f64>(0x3C8CBEAB8A2B6D18),
+  reinterpret<f64>(0x3FEA500010971D79), reinterpret<f64>(0x3C88FECADD787930),
+  reinterpret<f64>(0x3FEA70001DF52E48), reinterpret<f64>(0xBC8F41763DD8ABDB),
+  reinterpret<f64>(0x3FEA90001C593352), reinterpret<f64>(0xBC8EBF0284C27612),
+  reinterpret<f64>(0x3FEAB0002A4F3E4B), reinterpret<f64>(0xBC69FD043CFF3F5F),
+  reinterpret<f64>(0x3FEACFFFD7AE1ED1), reinterpret<f64>(0xBC823EE7129070B4),
+  reinterpret<f64>(0x3FEAEFFFEE510478), reinterpret<f64>(0x3C6A063EE00EDEA3),
+  reinterpret<f64>(0x3FEB0FFFDB650D5B), reinterpret<f64>(0x3C5A06C8381F0AB9),
+  reinterpret<f64>(0x3FEB2FFFFEAACA57), reinterpret<f64>(0xBC79011E74233C1D),
+  reinterpret<f64>(0x3FEB4FFFD995BADC), reinterpret<f64>(0xBC79FF1068862A9F),
+  reinterpret<f64>(0x3FEB7000249E659C), reinterpret<f64>(0x3C8AFF45D0864F3E),
+  reinterpret<f64>(0x3FEB8FFFF9871640), reinterpret<f64>(0x3C7CFE7796C2C3F9),
+  reinterpret<f64>(0x3FEBAFFFD204CB4F), reinterpret<f64>(0xBC63FF27EEF22BC4),
+  reinterpret<f64>(0x3FEBCFFFD2415C45), reinterpret<f64>(0xBC6CFFB7EE3BEA21),
+  reinterpret<f64>(0x3FEBEFFFF86309DF), reinterpret<f64>(0xBC814103972E0B5C),
+  reinterpret<f64>(0x3FEC0FFFE1B57653), reinterpret<f64>(0x3C8BC16494B76A19),
+  reinterpret<f64>(0x3FEC2FFFF1FA57E3), reinterpret<f64>(0xBC64FEEF8D30C6ED),
+  reinterpret<f64>(0x3FEC4FFFDCBFE424), reinterpret<f64>(0xBC843F68BCEC4775),
+  reinterpret<f64>(0x3FEC6FFFED54B9F7), reinterpret<f64>(0x3C847EA3F053E0EC),
+  reinterpret<f64>(0x3FEC8FFFEB998FD5), reinterpret<f64>(0x3C7383068DF992F1),
+  reinterpret<f64>(0x3FECB0002125219A), reinterpret<f64>(0xBC68FD8E64180E04),
+  reinterpret<f64>(0x3FECCFFFDD94469C), reinterpret<f64>(0x3C8E7EBE1CC7EA72),
+  reinterpret<f64>(0x3FECEFFFEAFDC476), reinterpret<f64>(0x3C8EBE39AD9F88FE),
+  reinterpret<f64>(0x3FED1000169AF82B), reinterpret<f64>(0x3C757D91A8B95A71),
+  reinterpret<f64>(0x3FED30000D0FF71D), reinterpret<f64>(0x3C89C1906970C7DA),
+  reinterpret<f64>(0x3FED4FFFEA790FC4), reinterpret<f64>(0xBC580E37C558FE0C),
+  reinterpret<f64>(0x3FED70002EDC87E5), reinterpret<f64>(0xBC7F80D64DC10F44),
+  reinterpret<f64>(0x3FED900021DC82AA), reinterpret<f64>(0xBC747C8F94FD5C5C),
+  reinterpret<f64>(0x3FEDAFFFD86B0283), reinterpret<f64>(0x3C8C7F1DC521617E),
+  reinterpret<f64>(0x3FEDD000296C4739), reinterpret<f64>(0x3C88019EB2FFB153),
+  reinterpret<f64>(0x3FEDEFFFE54490F5), reinterpret<f64>(0x3C6E00D2C652CC89),
+  reinterpret<f64>(0x3FEE0FFFCDABF694), reinterpret<f64>(0xBC7F8340202D69D2),
+  reinterpret<f64>(0x3FEE2FFFDB52C8DD), reinterpret<f64>(0x3C7B00C1CA1B0864),
+  reinterpret<f64>(0x3FEE4FFFF24216EF), reinterpret<f64>(0x3C72FFA8B094AB51),
+  reinterpret<f64>(0x3FEE6FFFE88A5E11), reinterpret<f64>(0xBC57F673B1EFBE59),
+  reinterpret<f64>(0x3FEE9000119EFF0D), reinterpret<f64>(0xBC84808D5E0BC801),
+  reinterpret<f64>(0x3FEEAFFFDFA51744), reinterpret<f64>(0x3C780006D54320B5),
+  reinterpret<f64>(0x3FEED0001A127FA1), reinterpret<f64>(0xBC5002F860565C92),
+  reinterpret<f64>(0x3FEEF00007BABCC4), reinterpret<f64>(0xBC8540445D35E611),
+  reinterpret<f64>(0x3FEF0FFFF57A8D02), reinterpret<f64>(0xBC4FFB3139EF9105),
+  reinterpret<f64>(0x3FEF30001EE58AC7), reinterpret<f64>(0x3C8A81ACF2731155),
+  reinterpret<f64>(0x3FEF4FFFF5823494), reinterpret<f64>(0x3C8A3F41D4D7C743),
+  reinterpret<f64>(0x3FEF6FFFFCA94C6B), reinterpret<f64>(0xBC6202F41C987875),
+  reinterpret<f64>(0x3FEF8FFFE1F9C441), reinterpret<f64>(0x3C777DD1F477E74B),
+  reinterpret<f64>(0x3FEFAFFFD2E0E37E), reinterpret<f64>(0xBC6F01199A7CA331),
+  reinterpret<f64>(0x3FEFD0001C77E49E), reinterpret<f64>(0x3C7181EE4BCEACB1),
+  reinterpret<f64>(0x3FEFEFFFF7E0C331), reinterpret<f64>(0xBC6E05370170875A),
+  reinterpret<f64>(0x3FF00FFFF465606E), reinterpret<f64>(0xBC8A7EAD491C0ADA),
+  reinterpret<f64>(0x3FF02FFFF3867A58), reinterpret<f64>(0xBC977F69C3FCB2E0),
+  reinterpret<f64>(0x3FF04FFFFDFC0D17), reinterpret<f64>(0x3C97BFFE34CB945B),
+  reinterpret<f64>(0x3FF0700003CD4D82), reinterpret<f64>(0x3C820083C0E456CB),
+  reinterpret<f64>(0x3FF08FFFF9F2CBE8), reinterpret<f64>(0xBC6DFFDFBE37751A),
+  reinterpret<f64>(0x3FF0B000010CDA65), reinterpret<f64>(0xBC913F7FAEE626EB),
+  reinterpret<f64>(0x3FF0D00001A4D338), reinterpret<f64>(0x3C807DFA79489FF7),
+  reinterpret<f64>(0x3FF0EFFFFADAFDFD), reinterpret<f64>(0xBC77040570D66BC0),
+  reinterpret<f64>(0x3FF110000BBAFD96), reinterpret<f64>(0x3C8E80D4846D0B62),
+  reinterpret<f64>(0x3FF12FFFFAE5F45D), reinterpret<f64>(0x3C9DBFFA64FD36EF),
+  reinterpret<f64>(0x3FF150000DD59AD9), reinterpret<f64>(0x3C9A0077701250AE),
+  reinterpret<f64>(0x3FF170000F21559A), reinterpret<f64>(0x3C8DFDF9E2E3DEEE),
+  reinterpret<f64>(0x3FF18FFFFC275426), reinterpret<f64>(0x3C910030DC3B7273),
+  reinterpret<f64>(0x3FF1B000123D3C59), reinterpret<f64>(0x3C997F7980030188),
+  reinterpret<f64>(0x3FF1CFFFF8299EB7), reinterpret<f64>(0xBC65F932AB9F8C67),
+  reinterpret<f64>(0x3FF1EFFFF48AD400), reinterpret<f64>(0x3C937FBF9DA75BEB),
+  reinterpret<f64>(0x3FF210000C8B86A4), reinterpret<f64>(0x3C9F806B91FD5B22),
+  reinterpret<f64>(0x3FF2300003854303), reinterpret<f64>(0x3C93FFC2EB9FBF33),
+  reinterpret<f64>(0x3FF24FFFFFBCF684), reinterpret<f64>(0x3C7601E77E2E2E72),
+  reinterpret<f64>(0x3FF26FFFF52921D9), reinterpret<f64>(0x3C7FFCBB767F0C61),
+  reinterpret<f64>(0x3FF2900014933A3C), reinterpret<f64>(0xBC7202CA3C02412B),
+  reinterpret<f64>(0x3FF2B00014556313), reinterpret<f64>(0xBC92808233F21F02),
+  reinterpret<f64>(0x3FF2CFFFEBFE523B), reinterpret<f64>(0xBC88FF7E384FDCF2),
+  reinterpret<f64>(0x3FF2F0000BB8AD96), reinterpret<f64>(0xBC85FF51503041C5),
+  reinterpret<f64>(0x3FF30FFFFB7AE2AF), reinterpret<f64>(0xBC810071885E289D),
+  reinterpret<f64>(0x3FF32FFFFEAC5F7F), reinterpret<f64>(0xBC91FF5D3FB7B715),
+  reinterpret<f64>(0x3FF350000CA66756), reinterpret<f64>(0x3C957F82228B82BD),
+  reinterpret<f64>(0x3FF3700011FBF721), reinterpret<f64>(0x3C8000BAC40DD5CC),
+  reinterpret<f64>(0x3FF38FFFF9592FB9), reinterpret<f64>(0xBC943F9D2DB2A751),
+  reinterpret<f64>(0x3FF3B00004DDD242), reinterpret<f64>(0x3C857F6B707638E1),
+  reinterpret<f64>(0x3FF3CFFFF5B2C957), reinterpret<f64>(0x3C7A023A10BF1231),
+  reinterpret<f64>(0x3FF3EFFFEAB0B418), reinterpret<f64>(0x3C987F6D66B152B0),
+  reinterpret<f64>(0x3FF410001532AFF4), reinterpret<f64>(0x3C67F8375F198524),
+  reinterpret<f64>(0x3FF4300017478B29), reinterpret<f64>(0x3C8301E672DC5143),
+  reinterpret<f64>(0x3FF44FFFE795B463), reinterpret<f64>(0x3C89FF69B8B2895A),
+  reinterpret<f64>(0x3FF46FFFE80475E0), reinterpret<f64>(0xBC95C0B19BC2F254),
+  reinterpret<f64>(0x3FF48FFFEF6FC1E7), reinterpret<f64>(0x3C9B4009F23A2A72),
+  reinterpret<f64>(0x3FF4AFFFE5BEA704), reinterpret<f64>(0xBC94FFB7BF0D7D45),
+  reinterpret<f64>(0x3FF4D000171027DE), reinterpret<f64>(0xBC99C06471DC6A3D),
+  reinterpret<f64>(0x3FF4F0000FF03EE2), reinterpret<f64>(0x3C977F890B85531C),
+  reinterpret<f64>(0x3FF5100012DC4BD1), reinterpret<f64>(0x3C6004657166A436),
+  reinterpret<f64>(0x3FF530001605277A), reinterpret<f64>(0xBC96BFCECE233209),
+  reinterpret<f64>(0x3FF54FFFECDB704C), reinterpret<f64>(0xBC8902720505A1D7),
+  reinterpret<f64>(0x3FF56FFFEF5F54A9), reinterpret<f64>(0x3C9BBFE60EC96412),
+  reinterpret<f64>(0x3FF5900017E61012), reinterpret<f64>(0x3C887EC581AFEF90),
+  reinterpret<f64>(0x3FF5B00003C93E92), reinterpret<f64>(0xBC9F41080ABF0CC0),
+  reinterpret<f64>(0x3FF5D0001D4919BC), reinterpret<f64>(0xBC98812AFB254729),
+  reinterpret<f64>(0x3FF5EFFFE7B87A89), reinterpret<f64>(0xBC947EB780ED6904)
+];
+
+export function log_lut(x: f64): f64 {
+  const N      = 1 << LOG_TABLE_BITS;
+  const N_MASK = N - 1;
+
+  const B0  = reinterpret<f64>(0xBFE0000000000000); // -0x1p-1
+  const B1  = reinterpret<f64>(0x3FD5555555555577); //  0x1.5555555555577p-2
+  const B2  = reinterpret<f64>(0xBFCFFFFFFFFFFDCB); // -0x1.ffffffffffdcbp-3
+  const B3  = reinterpret<f64>(0x3FC999999995DD0C); //  0x1.999999995dd0cp-3
+  const B4  = reinterpret<f64>(0xBFC55555556745A7); // -0x1.55555556745a7p-3
+  const B5  = reinterpret<f64>(0x3FC24924A344DE30); //  0x1.24924a344de3p-3
+  const B6  = reinterpret<f64>(0xBFBFFFFFA4423D65); // -0x1.fffffa4423d65p-4
+  const B7  = reinterpret<f64>(0x3FBC7184282AD6CA); //  0x1.c7184282ad6cap-4
+  const B8  = reinterpret<f64>(0xBFB999EB43B068FF); // -0x1.999eb43b068ffp-4
+  const B9  = reinterpret<f64>(0x3FB78182F7AFD085); //  0x1.78182f7afd085p-4
+  const B10 = reinterpret<f64>(0xBFB5521375D145CD); // -0x1.5521375d145cdp-4
+
+  const A0 = reinterpret<f64>(0xBFE0000000000001);  // -0x1.0000000000001p-1
+  const A1 = reinterpret<f64>(0x3FD555555551305B);  //  0x1.555555551305bp-2
+  const A2 = reinterpret<f64>(0xBFCFFFFFFFEB4590);  // -0x1.fffffffeb459p-3
+  const A3 = reinterpret<f64>(0x3FC999B324F10111);  //  0x1.999b324f10111p-3
+  const A4 = reinterpret<f64>(0xBFC55575E506C89F);  // -0x1.55575e506c89fp-3
+
+  const LO: u64 = 0x3FEE000000000000;
+  const HI: u64 = 0x3FF1090000000000;
+
+  const Ln2hi = reinterpret<f64>(0x3FE62E42FEFA3800);  // 0x1.62e42fefa3800p-1
+  const Ln2lo = reinterpret<f64>(0x3D2EF35793C76730);  // 0x1.ef35793c76730p-45
+
+  const Ox1p27 = reinterpret<f64>(0x41A0000000000000); // 0x1p27
+  const Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
+
+  var ix = reinterpret<u64>(x);
+  if (ix - LO < HI - LO) {
+    let r = x - 1.0;
+    let r2 = r * r;
+    let r3 = r * r2;
+    let y =
+      r3 * (B1 + r * B2 + r2 * B3 +
+        r3 * (B4 + r * B5 + r2 * B6 +
+          r3 * (B7 + r * B8 + r2 * B9 + r3 * B10
+        )
+      )
+    );
+    /* Worst-case error is around 0.507 ULP.  */
+    let w   = r * Ox1p27;
+    let rhi = r + w - w;
+    let rlo = r - rhi;
+    w = rhi * rhi * B0; /* B[0] == -0.5.  */
+    let hi = r + w;
+    let lo = r - hi + w;
+    lo += B0 * rlo * (rhi + r);
+    y += lo;
+    y += hi;
+    return y;
+  }
+  var top = u32(ix >> 48);
+  if (top - 0x0010 >= 0x7FF0 - 0x0010) {
+    // x < 0x1p-1022 or inf or nan.
+    if ((ix << 1) == 0) return -1.0 / (x * x);
+    if (ix == reinterpret<u64>(Infinity)) return x; // log(inf) == inf
+    if ((top & 0x8000) || (top & 0x7FF0) == 0x7FF0) return (x - x) / (x - x);
+    /* x is subnormal, normalize it.  */
+    ix = reinterpret<u64>(x * Ox1p52);
+    ix -= u64(52) << 52;
+  }
+
+  /* x = 2^k z; where z is in range [OFF,2*OFF) and exact.
+     The range is split into N subintervals.
+     The ith subinterval contains z and c is near its center.  */
+  var tmp  = ix - 0x3FE6000000000000;
+  var i    = <usize>((tmp >> (52 - LOG_TABLE_BITS)) & N_MASK);
+  var k    = <i64>tmp >> 52;
+  var iz   = ix - (tmp & (u64(0xFFF) << 52));
+
+  // @ts-ignore: cast
+  const tab1 = log_data_tab1.dataStart as usize;
+  // @ts-ignore: cast
+  const tab2 = log_data_tab2.dataStart as usize;
+
+  var invc = load<f64>(tab1 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
+  var logc = load<f64>(tab1 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
+  var z    = reinterpret<f64>(iz);
+
+  /* log(x) = log1p(z/c-1) + log(c) + k*Ln2.  */
+  /* r ~= z/c - 1, |r| < 1/(2*N).  */
+// #if __FP_FAST_FMA
+// 	/* rounding error: 0x1p-55/N.  */
+// 	r = __builtin_fma(z, invc, -1.0);
+// #else
+  // rounding error: 0x1p-55/N + 0x1p-66
+  const chi = load<f64>(tab2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T2[i].chi
+  const clo = load<f64>(tab2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T2[i].clo
+  var r = (z - chi - clo) * invc;
+// #endif
+  var kd = <f64>k;
+
+  // hi + lo = r + log(c) + k*Ln2
+  var w  = kd * Ln2hi + logc;
+  var hi = w + r;
+  var lo = w - hi + r + kd * Ln2lo;
+
+  // log(x) = lo + (log1p(r) - r) + hi
+  var r2 = r * r; // rounding error: 0x1p-54/N^2
+  /* Worst case error if |y| > 0x1p-5:
+     0.5 + 4.13/N + abs-poly-error*2^57 ULP (+ 0.002 ULP without fma)
+     Worst case error if |y| > 0x1p-4:
+     0.5 + 2.06/N + abs-poly-error*2^56 ULP (+ 0.001 ULP without fma).*/
+  return lo + r2 * A0 + r * r2 * (A1 + r * A2 + r2 * (A3 + r * A4)) + hi;
 }
 
 /* Lookup data for pow. See: https://git.musl-libc.org/cgit/musl/tree/src/math/pow.c */

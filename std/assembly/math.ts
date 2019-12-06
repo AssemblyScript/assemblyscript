@@ -2,7 +2,7 @@ import * as JSMath from "./bindings/Math";
 export { JSMath };
 
 import {
-  pow_lut, exp_lut, log2_lut,
+  pow_lut, exp_lut, log_lut, log2_lut,
   powf_lut, expf_lut, logf_lut, log2f_lut
 } from "./util/math";
 
@@ -959,44 +959,48 @@ export namespace NativeMath {
   }
 
   export function log(x: f64): f64 { // see: musl/src/math/log.c and SUN COPYRIGHT NOTICE above
-    const
-      ln2_hi = reinterpret<f64>(0x3FE62E42FEE00000), // 6.93147180369123816490e-01
-      ln2_lo = reinterpret<f64>(0x3DEA39EF35793C76), // 1.90821492927058770002e-10
-      Lg1    = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
-      Lg2    = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
-      Lg3    = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
-      Lg4    = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
-      Lg5    = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
-      Lg6    = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
-      Lg7    = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
-      Ox1p54 = reinterpret<f64>(0x4350000000000000);
-    var u = reinterpret<u64>(x);
-    var hx = <u32>(u >> 32);
-    var k = 0;
-    if (hx < 0x00100000 || <bool>(hx >> 31)) {
-      if (u << 1 == 0) return -1 / (x * x);
-      if (hx >> 31)    return (x - x) / 0.0;
-      k -= 54;
-      x *= Ox1p54;
-      u = reinterpret<u64>(x);
-      hx = <u32>(u >> 32);
-    } else if (hx >= 0x7FF00000) return x;
-      else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
-    hx += 0x3FF00000 - 0x3FE6A09E;
-    k += (<i32>hx >> 20) - 0x3FF;
-    hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
-    u = <u64>hx << 32 | (u & 0xFFFFFFFF);
-    x = reinterpret<f64>(u);
-    var f = x - 1.0;
-    var hfsq = 0.5 * f * f;
-    var s = f / (2.0 + f);
-    var z = s * s;
-    var w = z * z;
-    var t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
-    var t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
-    var r = t2 + t1;
-    var dk = <f64>k;
-    return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
+    if (ASC_SHRINK_LEVEL < 1) {
+      return log_lut(x);
+    } else {
+      const
+        ln2_hi = reinterpret<f64>(0x3FE62E42FEE00000), // 6.93147180369123816490e-01
+        ln2_lo = reinterpret<f64>(0x3DEA39EF35793C76), // 1.90821492927058770002e-10
+        Lg1    = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
+        Lg2    = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
+        Lg3    = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
+        Lg4    = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
+        Lg5    = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
+        Lg6    = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
+        Lg7    = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
+        Ox1p54 = reinterpret<f64>(0x4350000000000000);
+      let u = reinterpret<u64>(x);
+      let hx = <u32>(u >> 32);
+      let k = 0;
+      if (hx < 0x00100000 || <bool>(hx >> 31)) {
+        if (u << 1 == 0) return -1 / (x * x);
+        if (hx >> 31)    return (x - x) / 0.0;
+        k -= 54;
+        x *= Ox1p54;
+        u = reinterpret<u64>(x);
+        hx = <u32>(u >> 32);
+      } else if (hx >= 0x7FF00000) return x;
+        else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
+      hx += 0x3FF00000 - 0x3FE6A09E;
+      k += (<i32>hx >> 20) - 0x3FF;
+      hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
+      u = <u64>hx << 32 | (u & 0xFFFFFFFF);
+      x = reinterpret<f64>(u);
+      let f = x - 1.0;
+      let hfsq = 0.5 * f * f;
+      let s = f / (2.0 + f);
+      let z = s * s;
+      let w = z * z;
+      let t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
+      let t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
+      let r = t2 + t1;
+      let dk = <f64>k;
+      return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
+    }
   }
 
   export function log10(x: f64): f64 { // see: musl/src/math/log10.c and SUN COPYRIGHT NOTICE above
