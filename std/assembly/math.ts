@@ -2,7 +2,7 @@ import * as JSMath from "./bindings/Math";
 export { JSMath };
 
 import {
-  pow_lut, exp_lut,
+  pow_lut, exp_lut, log2_lut,
   powf_lut, expf_lut, logf_lut, log2f_lut
 } from "./util/math";
 
@@ -1105,54 +1105,58 @@ export namespace NativeMath {
   }
 
   export function log2(x: f64): f64 { // see: musl/src/math/log2.c and SUN COPYRIGHT NOTICE above
-    const
-      ivln2hi = reinterpret<f64>(0x3FF7154765200000), // 1.44269504072144627571e+00
-      ivln2lo = reinterpret<f64>(0x3DE705FC2EEFA200), // 1.67517131648865118353e-10
-      Lg1     = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
-      Lg2     = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
-      Lg3     = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
-      Lg4     = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
-      Lg5     = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
-      Lg6     = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
-      Lg7     = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
-      Ox1p54  = reinterpret<f64>(0x4350000000000000);
-    var u = reinterpret<u64>(x);
-    var hx = <u32>(u >> 32);
-    var k = 0;
-    if (hx < 0x00100000 || <bool>(hx >> 31)) {
-      if (u << 1 == 0) return -1 / (x * x);
-      if (hx >> 31) return (x - x) / 0.0;
-      k -= 54;
-      x *= Ox1p54;
-      u = reinterpret<u64>(x);
-      hx = <u32>(u >> 32);
-    } else if (hx >= 0x7FF00000) return x;
-      else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
-    hx += 0x3FF00000 - 0x3FE6A09E;
-    k += <i32>(hx >> 20) - 0x3FF;
-    hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
-    u = <u64>hx << 32 | (u & 0xFFFFFFFF);
-    x = reinterpret<f64>(u);
-    var f = x - 1.0;
-    var hfsq = 0.5 * f * f;
-    var s = f / (2.0 + f);
-    var z = s * s;
-    var w = z * z;
-    var t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
-    var t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
-    var r = t2 + t1;
-    var hi = f - hfsq;
-    u = reinterpret<u64>(hi);
-    u &= 0xFFFFFFFF00000000;
-    hi = reinterpret<f64>(u);
-    var lo = f - hi - hfsq + s * (hfsq + r);
-    var val_hi = hi * ivln2hi;
-    var val_lo = (lo + hi) * ivln2lo + lo * ivln2hi;
-    var y = <f64>k;
-    w = y + val_hi;
-    val_lo += (y - w) + val_hi;
-    val_hi = w;
-    return val_lo + val_hi;
+    if (ASC_SHRINK_LEVEL < 1) {
+      return log2_lut(x);
+    } else {
+      const
+        ivln2hi = reinterpret<f64>(0x3FF7154765200000), // 1.44269504072144627571e+00
+        ivln2lo = reinterpret<f64>(0x3DE705FC2EEFA200), // 1.67517131648865118353e-10
+        Lg1     = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
+        Lg2     = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
+        Lg3     = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
+        Lg4     = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
+        Lg5     = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
+        Lg6     = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
+        Lg7     = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
+        Ox1p54  = reinterpret<f64>(0x4350000000000000);
+      let u = reinterpret<u64>(x);
+      let hx = <u32>(u >> 32);
+      let k = 0;
+      if (hx < 0x00100000 || <bool>(hx >> 31)) {
+        if (u << 1 == 0) return -1 / (x * x);
+        if (hx >> 31) return (x - x) / 0.0;
+        k -= 54;
+        x *= Ox1p54;
+        u = reinterpret<u64>(x);
+        hx = <u32>(u >> 32);
+      } else if (hx >= 0x7FF00000) return x;
+        else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
+      hx += 0x3FF00000 - 0x3FE6A09E;
+      k += <i32>(hx >> 20) - 0x3FF;
+      hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
+      u = <u64>hx << 32 | (u & 0xFFFFFFFF);
+      x = reinterpret<f64>(u);
+      let f = x - 1.0;
+      let hfsq = 0.5 * f * f;
+      let s = f / (2.0 + f);
+      let z = s * s;
+      let w = z * z;
+      let t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
+      let t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
+      let r = t2 + t1;
+      let hi = f - hfsq;
+      u = reinterpret<u64>(hi);
+      u &= 0xFFFFFFFF00000000;
+      hi = reinterpret<f64>(u);
+      let lo = f - hi - hfsq + s * (hfsq + r);
+      let val_hi = hi * ivln2hi;
+      let val_lo = (lo + hi) * ivln2lo + lo * ivln2hi;
+      let y = <f64>k;
+      w = y + val_hi;
+      val_lo += (y - w) + val_hi;
+      val_hi = w;
+      return val_lo + val_hi;
+    }
   }
 
   // @ts-ignore: decorator
