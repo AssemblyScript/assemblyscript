@@ -1,4 +1,3 @@
-
 /** Lookup data for exp2f **/
 
 // @ts-ignore: decorator
@@ -84,7 +83,7 @@ export function expf_lut(x: f32): f32 {
   var ix = reinterpret<u32>(x);
   var ux = ix >> 20 & 0x7FF;
   if (ux >= 0x42B) {
-    /* |x| >= 88 or x is nan.  */
+    // |x| >= 88 or x is nan.
     if (ix == 0xFF800000) return 0;                        // x == -Inf    -> 0
     if (ux >= 0x7F8) return x + x;                         // x == Inf/NaN -> Inf/NaN
     if (x > reinterpret<f32>(0x42B17217)) return Infinity; // x > log(0x1p128)  ~=  88.72 -> Inf (Owerflow)
@@ -105,7 +104,7 @@ export function expf_lut(x: f32): f32 {
   // @ts-ignore: cast
   const tab = exp2f_data_tab.dataStart as usize;
 
-  /* exp(x) = 2^(k/N) * 2^(r/N) ~= s * (C0*r^3 + C1*r^2 + C2*r + 1) */
+  // exp(x) = 2^(k/N) * 2^(r/N) ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
   t  = load<u64>(tab + ((<usize>ki & N_MASK) << alignof<u64>()));
   t += ki << (52 - EXP2F_TABLE_BITS);
   s  = reinterpret<f64>(t);
@@ -589,14 +588,14 @@ export function powf_lut(x: f32, y: f32): f32 {
 
   var scale: f64;
   if (!(ki & 0x80000000)) {
-    /* k > 0, the exponent of scale might have overflowed by <= 460.  */
+    // k > 0, the exponent of scale might have overflowed by <= 460.
     sbits -= u64(1009) << 52;
     scale = reinterpret<f64>(sbits);
     return reinterpret<f64>(0x7F00000000000000) * (scale + scale * tmp); // 0x1p1009
   }
-  /* k < 0, need special care in the subnormal range.  */
+  // k < 0, need special care in the subnormal range.
   sbits += u64(1022) << 52;
-  /* Note: sbits is signed scale.  */
+  // Note: sbits is signed scale.
   scale = reinterpret<f64>(sbits);
   var y = scale + scale * tmp;
   if (abs(y) < 1.0) {
@@ -610,10 +609,8 @@ export function powf_lut(x: f32, y: f32): f32 {
     hi = one + y;
     lo = one - hi + y + lo;
     y  = (hi + lo) - one;
-    /* Fix the sign of 0.  */
+    // Fix the sign of 0.
     if (y == 0.0) y = reinterpret<f64>(sbits & 0x8000000000000000);
-    /* The underflow exception needs to be signaled explicitly.  */
-    // fp_force_eval(fp_barrier(0x1p-1022) * 0x1p-1022);
   }
   return y * Ox1p_1022;
 }
@@ -657,7 +654,7 @@ export function exp_lut(x: f64): f64 {
 // var ki = reinterpret<u64>(kd) >> 16;
 // var kd = <f64><i32>ki;
 // #else
-  /* z - kd is in [-1, 1] in non-nearest rounding modes.  */
+  // z - kd is in [-1, 1] in non-nearest rounding modes.
   var kd = z + shift;
   var ki = reinterpret<u64>(kd);
   kd -= shift;
@@ -1053,8 +1050,8 @@ export function pow_lut(x: f64, y: f64): f64 {
 
   if (topx - 0x001 >= 0x7FF - 0x001 || (topy & 0x7FF) - 0x3BE >= 0x43e - 0x3BE) {
     /* Note: if |y| > 1075 * ln2 * 2^53 ~= 0x1.749p62 then pow(x,y) = inf/0
-       and if |y| < 2^-54 / 1075 ~= 0x1.e7b6p-65 then pow(x,y) = +-1.  */
-    /* Special cases: (x < 0x1p-126 or inf or nan) or
+       and if |y| < 2^-54 / 1075 ~= 0x1.e7b6p-65 then pow(x,y) = +-1.
+       Special cases: (x < 0x1p-126 or inf or nan) or
        (|y| < 0x1p-65 or |y| >= 0x1p63 or nan).  */
     if (zeroinfnan(iy)) {
       if ((iy << 1) == 0) return 1.0;
@@ -1067,13 +1064,11 @@ export function pow_lut(x: f64, y: f64): f64 {
     if (zeroinfnan(ix)) {
       let x2 = x * x;
       if (i32(ix >> 63) && checkint(iy) == 1) x2 = -x2;
-      /* Without the barrier some versions of clang hoist the 1/x2 and
-         thus division by zero exception can be signaled spuriously.  */
       return iy >> 63 ? 1 / x2 : x2;
     }
-    /* Here x and y are non-zero finite.  */
+    // Here x and y are non-zero finite
     if (ix >> 63) {
-      /* Finite x < 0.  */
+      // Finite x < 0
       let yint = checkint(iy);
       if (yint == 0) return (x - x) / (x - x);
       if (yint == 1) sign_bias = SIGN_BIAS;
@@ -1081,13 +1076,13 @@ export function pow_lut(x: f64, y: f64): f64 {
       topx &= 0x7FF;
     }
     if ((topy & 0x7FF) - 0x3BE >= 0x43E - 0x3BE) {
-      /* Note: sign_bias == 0 here because y is not odd.  */
+      // Note: sign_bias == 0 here because y is not odd.
       if (ix == 0x3FF0000000000000) return 1;
       if ((topy & 0x7FF) < 0x3BE)   return 1; // |y| < 2^-65, x^y ~= 1 + y*log(x).
       return (ix > 0x3FF0000000000000) == (topy < 0x800) ? Infinity : 0;
     }
     if (topx == 0) {
-      /* Normalize subnormal x so exponent becomes negative.  */
+      // Normalize subnormal x so exponent becomes negative.
       ix = reinterpret<u64>(x * Ox1p52);
       ix &= 0x7FFFFFFFFFFFFFFF;
       ix -= u64(52) << 52;
@@ -1106,7 +1101,7 @@ export function pow_lut(x: f64, y: f64): f64 {
   var lhi = reinterpret<f64>(reinterpret<u64>(hi) & 0xFFFFFFFFF8000000);
   var llo = hi - lhi + lo;
   ehi = yhi * lhi;
-  elo = ylo * lhi + y * llo; /* |elo| < |ehi| * 2^-25.  */
+  elo = ylo * lhi + y * llo; // |elo| < |ehi| * 2^-25.
 // #endif
   return exp_inline(ehi, elo, sign_bias);
 }
