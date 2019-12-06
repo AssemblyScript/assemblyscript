@@ -739,7 +739,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 /* Returns 0 if not int, 1 if odd int, 2 if even int.  The argument is
    the bit representation of a non-zero finite floating-point value. */
 // @ts-ignore: decorator
-/*@inline*/ function checkint(iy: u64): i32 {
+@inline function checkint(iy: u64): i32 {
   var e = iy >> 52 & 0x7FF;
   if (e < 0x3FF     ) return 0;
   if (e > 0x3FF + 52) return 2;
@@ -766,7 +766,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 
 /** Returns 1 if input is the bit representation of 0, infinity or nan. */
 // @ts-ignore: decorator
-/*@inline*/ function zeroinfnan(u: u64): bool {
+@inline function zeroinfnan(u: u64): bool {
   return (u << 1) - 1 >= 0xFFE0000000000000 - 1;
 }
 
@@ -777,7 +777,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
    additional 15 bits precision.  IX is the bit representation of x, but
    normalized in the subnormal range using the sign bit for the exponent. */
 // @ts-ignore: decorator
-/*@inline*/ function log_inline(ix: u64): f64 {
+@inline function log_inline(ix: u64): f64 {
   const N = 1 << POW_LOG_TABLE_BITS;
   const N_MASK = N - 1;
 
@@ -853,7 +853,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
    adjustment of scale, positive k here means the result may overflow and
    negative k means the result may underflow. */
 // @ts-ignore: decorator
-/*@inline*/ function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
+@inline function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
   const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022
 
   var scale: f64, y: f64;
