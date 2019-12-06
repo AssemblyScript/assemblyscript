@@ -584,14 +584,15 @@ export function powf_lut(x: f32, y: f32): f32 {
    negative k means the result may underflow. */
 // @ts-ignore: decorator
 @inline function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
-  const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022
+  const Ox1p_1022 = reinterpret<f64>(0x0010000000000000); // 0x1p-1022
+  const Ox1p1009  = reinterpret<f64>(0x7F00000000000000); // 0x1p1009
 
   var scale: f64;
   if (!(ki & 0x80000000)) {
     // k > 0, the exponent of scale might have overflowed by <= 460.
     sbits -= u64(1009) << 52;
     scale = reinterpret<f64>(sbits);
-    return reinterpret<f64>(0x7F00000000000000) * (scale + scale * tmp); // 0x1p1009
+    return Ox1p1009 * (scale + scale * tmp); // 0x1p1009
   }
   // k < 0, need special care in the subnormal range.
   sbits += u64(1022) << 52;
@@ -603,10 +604,9 @@ export function powf_lut(x: f32, y: f32): f32 {
       range to avoid double rounding that can cause 0.5+E/2 ulp error where
       E is the worst-case ulp error outside the subnormal range.  So this
       is only useful if the goal is better than 1 ulp worst-case error.  */
-    let hi: f64, lo: f64;
     let one = copysign(1.0, y);
-    lo = scale - y + scale * tmp;
-    hi = one + y;
+    let lo = scale - y + scale * tmp;
+    let hi = one + y;
     lo = one - hi + y + lo;
     y  = (hi + lo) - one;
     // Fix the sign of 0.

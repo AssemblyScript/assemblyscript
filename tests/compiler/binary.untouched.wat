@@ -858,8 +858,7 @@
       local.get $50
       f64.reinterpret_i64
       local.set $16
-      i64.const 9151314442816847872
-      f64.reinterpret_i64
+      f64.const 5486124068793688683255936e279
       local.get $16
       local.get $16
       local.get $17
@@ -891,7 +890,7 @@
       f64.const 1
       local.get $15
       f64.copysign
-      local.set $28
+      local.set $30
       local.get $16
       local.get $15
       f64.sub
@@ -900,22 +899,22 @@
       f64.mul
       f64.add
       local.set $29
-      local.get $28
+      local.get $30
       local.get $15
       f64.add
-      local.set $30
-      local.get $28
+      local.set $28
       local.get $30
+      local.get $28
       f64.sub
       local.get $15
       f64.add
       local.get $29
       f64.add
       local.set $29
-      local.get $30
+      local.get $28
       local.get $29
       f64.add
-      local.get $28
+      local.get $30
       f64.sub
       local.set $15
       local.get $15
