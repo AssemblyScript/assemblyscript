@@ -587,26 +587,25 @@ export function powf_lut(x: f32, y: f32): f32 {
 @inline function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
   const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022
 
-  var scale: f64, y: f64;
+  var scale: f64;
   if (!(ki & 0x80000000)) {
     /* k > 0, the exponent of scale might have overflowed by <= 460.  */
     sbits -= u64(1009) << 52;
     scale = reinterpret<f64>(sbits);
-    y = reinterpret<f64>(0x7F00000000000000) * (scale + scale * tmp); // 0x1p1009
-    return y;
+    return reinterpret<f64>(0x7F00000000000000) * (scale + scale * tmp); // 0x1p1009
   }
   /* k < 0, need special care in the subnormal range.  */
   sbits += u64(1022) << 52;
   /* Note: sbits is signed scale.  */
   scale = reinterpret<f64>(sbits);
-  y = scale + scale * tmp;
+  var y = scale + scale * tmp;
   if (abs(y) < 1.0) {
     /* Round y to the right precision before scaling it into the subnormal
       range to avoid double rounding that can cause 0.5+E/2 ulp error where
       E is the worst-case ulp error outside the subnormal range.  So this
       is only useful if the goal is better than 1 ulp worst-case error.  */
-    let hi: f64, lo: f64, one = 1.0;
-    if (y < 0.0) one = -1.0;
+    let hi: f64, lo: f64;
+    let one = copysign(1.0, y);
     lo = scale - y + scale * tmp;
     hi = one + y;
     lo = one - hi + y + lo;
@@ -963,8 +962,8 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 /* Computes sign*exp(x+xtail) where |xtail| < 2^-8/N and |xtail| <= |x|.
    The sign_bias argument is SIGN_BIAS or 0 and sets the sign to -1 or 1.*/
 // @ts-ignore: decorator
-/*@inline*/ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
-  const N = 1 << EXP_TABLE_BITS;
+@inline function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
+  const N      = 1 << EXP_TABLE_BITS;
   const N_MASK = N - 1;
 
   const InvLn2N   = reinterpret<f64>(0x3FF71547652B82FE) * N; // 0x1.71547652b82fep0
@@ -1083,8 +1082,8 @@ export function pow_lut(x: f64, y: f64): f64 {
     }
     if ((topy & 0x7FF) - 0x3BE >= 0x43E - 0x3BE) {
       /* Note: sign_bias == 0 here because y is not odd.  */
-      if (ix == 0x3FF0000000000000) return 1.0;
-      if ((topy & 0x7FF) < 0x3BE) return 1.0; // |y| < 2^-65, x^y ~= 1 + y*log(x).
+      if (ix == 0x3FF0000000000000) return 1;
+      if ((topy & 0x7FF) < 0x3BE)   return 1; // |y| < 2^-65, x^y ~= 1 + y*log(x).
       return (ix > 0x3FF0000000000000) == (topy < 0x800) ? Infinity : 0;
     }
     if (topx == 0) {
