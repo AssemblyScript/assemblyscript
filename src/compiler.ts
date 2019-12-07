@@ -5015,86 +5015,89 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
-          this.currentType = Type.bool;
           expr = module.if(
             this.makeIsTrueish(leftExpr, leftType),
             this.makeIsTrueish(rightExpr, rightType),
             module.i32(0)
           );
+          this.currentType = Type.bool;
 
-        // references must properly retain and release, with the same outcome independent of the branch taken
-        } else if (leftType.isManaged) {
-          let leftAutoreleaseSkipped = this.skippedAutoreleases.has(leftExpr);
-          let rightAutoreleaseSkipped = this.skippedAutoreleases.has(rightExpr);
-          let temp = flow.getTempLocal(leftType);
-          leftExpr = module.local_tee(temp.index, leftExpr);
+        } else {
 
-          // instead of retaining left and releasing it again in right when right
-          // is taken, we can also just retain left if right is not taken
-          let retainLeftInElse = false;
-          if (leftAutoreleaseSkipped != rightAutoreleaseSkipped) { // xor
-            if (!leftAutoreleaseSkipped) {
-              retainLeftInElse = true;
-            } else {
-              rightExpr = this.makeRetain(rightExpr);
-              rightAutoreleaseSkipped = true;
+          // references must properly retain and release, with the same outcome independent of the branch taken
+          if (leftType.isManaged) {
+            let leftAutoreleaseSkipped = this.skippedAutoreleases.has(leftExpr);
+            let rightAutoreleaseSkipped = this.skippedAutoreleases.has(rightExpr);
+            let temp = flow.getTempLocal(leftType);
+            leftExpr = module.local_tee(temp.index, leftExpr);
+
+            // instead of retaining left and releasing it again in right when right
+            // is taken, we can also just retain left if right is not taken
+            let retainLeftInElse = false;
+            if (leftAutoreleaseSkipped != rightAutoreleaseSkipped) { // xor
+              if (!leftAutoreleaseSkipped) {
+                retainLeftInElse = true;
+              } else {
+                rightExpr = this.makeRetain(rightExpr);
+                rightAutoreleaseSkipped = true;
+              }
+            } else if (!(constraints & Constraints.WILL_RETAIN)) { // otherwise keep right alive a little longer
+              rightExpr = this.moveAutorelease(rightExpr, rightFlow, flow);
             }
-          } else if (!(constraints & Constraints.WILL_RETAIN)) { // otherwise keep right alive a little longer
-            rightExpr = this.moveAutorelease(rightExpr, rightFlow, flow);
-          }
 
-          let rightStmts = new Array<ExpressionRef>();
-          if (leftAutoreleaseSkipped) { // left turned out to be true'ish and is dropped
-            rightStmts.unshift(
-              this.makeRelease(
-                module.local_get(temp.index, leftType.toNativeType())
-              )
-            );
-          }
-          rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType, rightStmts);
-          rightFlow.freeScopedLocals();
-          this.currentFlow = flow;
-
-          expr = module.if(
-            this.makeIsTrueish(leftExpr, leftType),
-            rightExpr,
-            retainLeftInElse
-              ? this.makeRetain(
+            let rightStmts = new Array<ExpressionRef>();
+            if (leftAutoreleaseSkipped) { // left turned out to be true'ish and is dropped
+              rightStmts.unshift(
+                this.makeRelease(
                   module.local_get(temp.index, leftType.toNativeType())
                 )
-              : module.local_get(temp.index, leftType.toNativeType())
-          );
-          if (leftAutoreleaseSkipped || rightAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
-          if (temp) flow.freeTempLocal(temp);
+              );
+            }
+            rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType, rightStmts);
+            rightFlow.freeScopedLocals();
+            this.currentFlow = flow;
 
-        // basic values can use more aggressive optimizations
-        } else {
-          rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
-          rightFlow.freeScopedLocals();
-          this.currentFlow = flow;
-
-          // simplify if cloning left without side effects is possible
-          if (expr = module.cloneExpression(leftExpr, true, 0)) {
             expr = module.if(
-              this.makeIsTrueish(leftExpr, this.currentType),
+              this.makeIsTrueish(leftExpr, leftType),
               rightExpr,
-              expr
+              retainLeftInElse
+                ? this.makeRetain(
+                    module.local_get(temp.index, leftType.toNativeType())
+                  )
+                : module.local_get(temp.index, leftType.toNativeType())
             );
+            if (leftAutoreleaseSkipped || rightAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
+            if (temp) flow.freeTempLocal(temp);
 
-          // if not possible, tee left to a temp
+          // basic values can use more aggressive optimizations
           } else {
-            let tempLocal = flow.getTempLocal(leftType);
-            if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.WRAPPED);
-            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.NONNULL);
-            expr = module.if(
-              this.makeIsTrueish(module.local_tee(tempLocal.index, leftExpr), leftType),
-              rightExpr,
-              module.local_get(tempLocal.index, leftType.toNativeType())
-            );
-            flow.freeTempLocal(tempLocal);
+            rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
+            rightFlow.freeScopedLocals();
+            this.currentFlow = flow;
+
+            // simplify if cloning left without side effects is possible
+            if (expr = module.cloneExpression(leftExpr, true, 0)) {
+              expr = module.if(
+                this.makeIsTrueish(leftExpr, this.currentType),
+                rightExpr,
+                expr
+              );
+
+            // if not possible, tee left to a temp
+            } else {
+              let tempLocal = flow.getTempLocal(leftType);
+              if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.WRAPPED);
+              if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(tempLocal.index, LocalFlags.NONNULL);
+              expr = module.if(
+                this.makeIsTrueish(module.local_tee(tempLocal.index, leftExpr), leftType),
+                rightExpr,
+                module.local_get(tempLocal.index, leftType.toNativeType())
+              );
+              flow.freeTempLocal(tempLocal);
+            }
           }
+          this.currentType = leftType;
         }
-        this.currentType = leftType;
         break;
       }
       case Token.BAR_BAR: { // left || right -> ((t = left) ? t : right)
@@ -5114,88 +5117,91 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, leftType);
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
-          this.currentType = Type.bool;
           expr = module.if(
             this.makeIsTrueish(leftExpr, leftType),
             module.i32(1),
             this.makeIsTrueish(rightExpr, rightType)
           );
+          this.currentType = Type.bool;
 
-        // references must properly retain and release, with the same outcome independent of the branch taken
-        } else if (leftType.isManaged) {
-          let leftAutoreleaseSkipped = this.skippedAutoreleases.has(leftExpr);
-          let rightAutoreleaseSkipped = this.skippedAutoreleases.has(rightExpr);
-          let temp = flow.getTempLocal(leftType);
-          leftExpr = module.local_tee(temp.index, leftExpr);
+        } else {
 
-          // instead of retaining left and releasing it again in right when right
-          // is taken, we can also just retain left if right is not taken
-          let retainLeftInThen = false;
-          if (leftAutoreleaseSkipped != rightAutoreleaseSkipped) { // xor
-            if (!leftAutoreleaseSkipped) {
-              retainLeftInThen = true;
-            } else {
-              rightExpr = this.makeRetain(rightExpr);
-              rightAutoreleaseSkipped = true;
+          // references must properly retain and release, with the same outcome independent of the branch taken
+          if (leftType.isManaged) {
+            let leftAutoreleaseSkipped = this.skippedAutoreleases.has(leftExpr);
+            let rightAutoreleaseSkipped = this.skippedAutoreleases.has(rightExpr);
+            let temp = flow.getTempLocal(leftType);
+            leftExpr = module.local_tee(temp.index, leftExpr);
+
+            // instead of retaining left and releasing it again in right when right
+            // is taken, we can also just retain left if right is not taken
+            let retainLeftInThen = false;
+            if (leftAutoreleaseSkipped != rightAutoreleaseSkipped) { // xor
+              if (!leftAutoreleaseSkipped) {
+                retainLeftInThen = true;
+              } else {
+                rightExpr = this.makeRetain(rightExpr);
+                rightAutoreleaseSkipped = true;
+              }
+            } else if (!(constraints & Constraints.WILL_RETAIN)) { // otherwise keep right alive a little longer
+              rightExpr = this.moveAutorelease(rightExpr, rightFlow, flow);
             }
-          } else if (!(constraints & Constraints.WILL_RETAIN)) { // otherwise keep right alive a little longer
-            rightExpr = this.moveAutorelease(rightExpr, rightFlow, flow);
-          }
 
-          let rightStmts = new Array<ExpressionRef>();
-          if (leftAutoreleaseSkipped) { // left turned out to be false'ish and is dropped
-            // TODO: usually, false'ish means left is null, but this might not hold
-            // once implicit conversion with strings is performed and left is "", so:
-            rightStmts.unshift(
-              this.makeRelease(
-                module.local_get(temp.index, leftType.toNativeType())
-              )
-            );
-          }
-          rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType, rightStmts);
-          rightFlow.freeScopedLocals();
-          this.currentFlow = flow;
-
-          expr = module.if(
-            this.makeIsTrueish(leftExpr, leftType),
-            retainLeftInThen
-              ? this.makeRetain(
+            let rightStmts = new Array<ExpressionRef>();
+            if (leftAutoreleaseSkipped) { // left turned out to be false'ish and is dropped
+              // TODO: usually, false'ish means left is null, but this might not hold
+              // once implicit conversion with strings is performed and left is "", so:
+              rightStmts.unshift(
+                this.makeRelease(
                   module.local_get(temp.index, leftType.toNativeType())
                 )
-              : module.local_get(temp.index, leftType.toNativeType()),
-            rightExpr
-          );
-          if (leftAutoreleaseSkipped || rightAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
-          if (temp) flow.freeTempLocal(temp);
+              );
+            }
+            rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType, rightStmts);
+            rightFlow.freeScopedLocals();
+            this.currentFlow = flow;
 
-        // basic values can use more aggressive optimizations
-        } else {
-          rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
-          rightFlow.freeScopedLocals();
-          this.currentFlow = flow;
-
-          // simplify if cloning left without side effects is possible
-          if (expr = module.cloneExpression(leftExpr, true, 0)) {
             expr = module.if(
               this.makeIsTrueish(leftExpr, leftType),
-              expr,
+              retainLeftInThen
+                ? this.makeRetain(
+                    module.local_get(temp.index, leftType.toNativeType())
+                  )
+                : module.local_get(temp.index, leftType.toNativeType()),
               rightExpr
             );
+            if (leftAutoreleaseSkipped || rightAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
+            if (temp) flow.freeTempLocal(temp);
 
-          // if not possible, tee left to a temp. local
+          // basic values can use more aggressive optimizations
           } else {
-            let temp = flow.getTempLocal(leftType);
-            if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-            if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-            expr = module.if(
-              this.makeIsTrueish(module.local_tee(temp.index, leftExpr), leftType),
-              module.local_get(temp.index, leftType.toNativeType()),
-              rightExpr
-            );
-            flow.freeTempLocal(temp);
+            rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
+            rightFlow.freeScopedLocals();
+            this.currentFlow = flow;
+
+            // simplify if cloning left without side effects is possible
+            if (expr = module.cloneExpression(leftExpr, true, 0)) {
+              expr = module.if(
+                this.makeIsTrueish(leftExpr, leftType),
+                expr,
+                rightExpr
+              );
+
+            // if not possible, tee left to a temp. local
+            } else {
+              let temp = flow.getTempLocal(leftType);
+              if (!flow.canOverflow(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+              if (flow.isNonnull(leftExpr, leftType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
+              expr = module.if(
+                this.makeIsTrueish(module.local_tee(temp.index, leftExpr), leftType),
+                module.local_get(temp.index, leftType.toNativeType()),
+                rightExpr
+              );
+              flow.freeTempLocal(temp);
+            }
           }
+          this.currentType = leftType;
         }
-        this.currentType = leftType;
         break;
       }
       default: {
