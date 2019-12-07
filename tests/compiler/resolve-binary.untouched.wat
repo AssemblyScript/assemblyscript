@@ -4268,7 +4268,7 @@
   f64.const 0
   f64.eq
   if
-   i32.const 680
+   i32.const 6920
    return
   end
   local.get $0
@@ -4282,7 +4282,7 @@
    local.get $0
    f64.ne
    if
-    i32.const 704
+    i32.const 6944
     return
    end
    i32.const 6968
@@ -4342,7 +4342,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2016
+  i32.const 8256
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4357,7 +4357,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2040
+  i32.const 8280
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4368,7 +4368,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2064
+  i32.const 8304
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4379,7 +4379,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2088
+  i32.const 8328
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4390,7 +4390,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2112
+  i32.const 8352
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4401,7 +4401,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2136
+  i32.const 8376
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4412,7 +4412,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2160
+  i32.const 8400
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4426,7 +4426,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2184
+  i32.const 8424
   local.set $2
   local.get $0
   call $~lib/rt/stub/__release
@@ -4439,7 +4439,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2208
+  i32.const 8448
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4450,7 +4450,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2232
+  i32.const 8472
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4461,7 +4461,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2256
+  i32.const 8496
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -4472,7 +4472,7 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 2280
+  i32.const 8520
   local.set $2
   local.get $1
   call $~lib/rt/stub/__release
@@ -5537,7 +5537,7 @@
  (func $start (; 44 ;) (type $FUNCSIG$v)
   call $start:resolve-binary
  )
- (func $null (; 46 ;) (type $FUNCSIG$v)
+ (func $null (; 45 ;) (type $FUNCSIG$v)
   unreachable
  )
 )

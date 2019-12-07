@@ -2599,7 +2599,7 @@
  (func $start (; 5 ;) (type $FUNCSIG$v)
   call $start:binary
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 6 ;) (type $FUNCSIG$v)
   unreachable
  )
 )

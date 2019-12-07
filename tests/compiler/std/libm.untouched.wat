@@ -12141,7 +12141,7 @@
   local.get $1
   f32.trunc
  )
- (func $null (; 122 ;) (type $FUNCSIG$v)
+ (func $null (; 120 ;) (type $FUNCSIG$v)
   unreachable
  )
 )
