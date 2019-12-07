@@ -1,5 +1,6 @@
 (module
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $FUNCSIG$iji (func (param i64 i32) (result i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -12,7 +13,33 @@
  (global $logical/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:logical (; 1 ;) (type $FUNCSIG$v)
+ (func $logical/testShortcutAnd (; 1 ;) (type $FUNCSIG$iji) (param $0 i64) (param $1 i32) (result i32)
+  local.get $0
+  i64.const 0
+  i64.ne
+  if (result i32)
+   local.get $1
+   i64.extend_i32_s
+   i64.const 0
+   i64.ne
+  else
+   i32.const 0
+  end
+ )
+ (func $logical/testShortcutOr (; 2 ;) (type $FUNCSIG$iji) (param $0 i64) (param $1 i32) (result i32)
+  local.get $0
+  i64.const 0
+  i64.ne
+  if (result i32)
+   i32.const 1
+  else
+   local.get $1
+   i64.extend_i32_s
+   i64.const 0
+   i64.ne
+  end
+ )
+ (func $start:logical (; 3 ;) (type $FUNCSIG$v)
   (local $0 f64)
   (local $1 f32)
   i32.const 0
@@ -491,11 +518,35 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i64.const 1
+  i32.const 1
+  call $logical/testShortcutAnd
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 76
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 0
+  i32.const 1
+  call $logical/testShortcutOr
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 77
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;) (type $FUNCSIG$v)
   call $start:logical
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 5 ;) (type $FUNCSIG$v)
   unreachable
  )
 )
