@@ -241,5 +241,6 @@
   call $start:function-expression
  )
  (func $null (; 19 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

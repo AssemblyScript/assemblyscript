@@ -20,6 +20,6 @@
   global.set $abi/y
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

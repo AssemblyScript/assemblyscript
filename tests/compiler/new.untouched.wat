@@ -300,5 +300,6 @@
   call $start:new
  )
  (func $null (; 12 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

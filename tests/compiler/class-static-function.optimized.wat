@@ -18,6 +18,6 @@
   global.set $~lib/argc
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

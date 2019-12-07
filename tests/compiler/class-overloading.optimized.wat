@@ -7,7 +7,7 @@
  (func $class-overloading/test (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
-  nop
+ (func $null (; 1 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

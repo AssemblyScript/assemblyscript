@@ -1882,7 +1882,6 @@
   i32.eqz
   if
    i32.const 152
-   call $~lib/rt/stub/__retain
    return
   end
   local.get $0
@@ -2018,7 +2017,6 @@
   i32.eqz
   if
    i32.const 152
-   call $~lib/rt/stub/__retain
    return
   end
   local.get $0
@@ -2082,5 +2080,6 @@
   global.set $~lib/rt/stub/offset
  )
  (func $null (; 26 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

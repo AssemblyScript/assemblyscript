@@ -163,8 +163,12 @@ export class Type {
 
   /** Tests if this is a managed type that needs GC hooks. */
   get isManaged(): bool {
-    var classReference = this.classReference;
-    return classReference !== null && !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
+    if (this.is(TypeFlags.INTEGER | TypeFlags.REFERENCE)) {
+      let classReference = this.classReference;
+      if (classReference) return !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
+      // return this.signatureReference !== null; // TODO: closures
+    }
+    return false;
   }
 
   /** Tests if this is a class type explicitly annotated as unmanaged. */
@@ -199,7 +203,7 @@ export class Type {
 
   /** Composes a function type from this type and a function. */
   asFunction(signature: Signature): Type {
-    assert(this.kind == TypeKind.U32 && !this.signatureReference);
+    assert(this.kind == TypeKind.USIZE && !this.signatureReference);
     var ret = new Type(this.kind, this.flags & ~TypeFlags.VALUE | TypeFlags.REFERENCE, this.size);
     ret.signatureReference = signature;
     return ret;
@@ -585,7 +589,7 @@ export class Signature {
     this.thisType = thisType;
     this.program = program;
     this.hasRest = false;
-    this.type = Type.u32.asFunction(this);
+    this.type = program.options.usizeType.asFunction(this);
 
     var signatureTypes = program.uniqueSignatures;
     var length = signatureTypes.length;

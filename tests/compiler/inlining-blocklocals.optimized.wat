@@ -50,6 +50,6 @@
   call $inlining-blocklocals/test
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

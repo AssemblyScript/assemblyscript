@@ -134,5 +134,6 @@
   call $start:instanceof
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

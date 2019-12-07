@@ -100,5 +100,6 @@
   call $start:infer-type
  )
  (func $null (; 7 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

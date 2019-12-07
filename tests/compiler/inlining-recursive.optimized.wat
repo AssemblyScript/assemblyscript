@@ -12,6 +12,6 @@
   call $inlining-recursive/baz
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

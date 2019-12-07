@@ -9,8 +9,6 @@
  (type $FUNCSIG$iijijiji (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$dd (func (param f64) (result f64)))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e")
@@ -77,7 +75,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 3 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -392,7 +390,7 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMath.pow (; 10 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 10 ;) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i64)
   (local $3 i32)
@@ -1543,7 +1541,7 @@
   local.get $10
   i32.add
  )
- (func $~lib/string/String#substring (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1709,7 +1707,7 @@
   local.get $1
   call $~lib/rt/stub/__free
  )
- (func $resolve-binary/Bar#constructor (; 18 ;) (type $FUNCSIG$i) (result i32)
+ (func $resolve-binary/Bar#constructor (; 18 ;) (result i32)
   i32.const 0
   i32.const 7
   call $~lib/rt/stub/__alloc
@@ -2433,6 +2431,6 @@
   call $start:resolve-binary
  )
  (func $null (; 21 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

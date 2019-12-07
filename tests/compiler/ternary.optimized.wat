@@ -13,6 +13,6 @@
   global.set $ternary/a
  )
  (func $null (; 1 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

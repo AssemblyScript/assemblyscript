@@ -398,6 +398,6 @@
   call $start:switch
  )
  (func $null (; 7 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )
