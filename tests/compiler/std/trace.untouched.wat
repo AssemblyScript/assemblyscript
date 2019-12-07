@@ -14,7 +14,7 @@
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/started (mut i32) (i32.const 0))
- (export "__start" (func $start))
+ (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $start:std/trace (; 1 ;) (type $FUNCSIG$v)
   i32.const 24
