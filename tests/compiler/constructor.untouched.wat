@@ -324,5 +324,6 @@
   call $start:constructor
  )
  (func $null (; 15 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

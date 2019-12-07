@@ -107,9 +107,9 @@ export class Parser extends DiagnosticEmitter {
   dependees: Map<string, Source> = new Map();
 
   /** Constructs a new parser. */
-  constructor() {
-    super();
-    this.program = new Program(this.diagnostics);
+  constructor(program: Program) {
+    super(program.diagnostics);
+    this.program = program;
   }
 
   /** Parses a file and adds its definitions to the program. */
@@ -388,14 +388,13 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  /** Finishes parsing and returns the program. */
-  finish(): Program {
+  /** Finishes parsing. */
+  finish(): void {
     if (this.backlog.length) throw new Error("backlog is not empty");
     this.backlog = [];
     this.seenlog.clear();
     this.donelog.clear();
     this.dependees.clear();
-    return this.program;
   }
 
   // types

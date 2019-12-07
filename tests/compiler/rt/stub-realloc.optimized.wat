@@ -598,4 +598,7 @@
   global.set $~lib/rt/stub/offset
   call $start:rt/stub-realloc
  )
+ (func $null (; 11 ;) (type $FUNCSIG$v)
+  unreachable
+ )
 )

@@ -111,6 +111,6 @@
   call $start:if
  )
  (func $null (; 6 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

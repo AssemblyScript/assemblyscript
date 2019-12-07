@@ -13,5 +13,6 @@
   call $named-export-default/get3
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

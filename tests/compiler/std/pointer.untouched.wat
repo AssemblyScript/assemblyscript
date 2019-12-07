@@ -2211,5 +2211,6 @@
   call $start:std/pointer
  )
  (func $null (; 8 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

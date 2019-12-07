@@ -2365,5 +2365,6 @@
   call $start:std/mod
  )
  (func $null (; 10 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

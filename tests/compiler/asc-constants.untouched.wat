@@ -53,5 +53,6 @@
   call $start:asc-constants
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

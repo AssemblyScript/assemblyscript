@@ -231,7 +231,6 @@
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.0 (result i32)
    i32.const 24
-   call $~lib/rt/stub/__retain
    local.set $1
    local.get $1
    call $~lib/util/hash/hashStr
@@ -245,7 +244,6 @@
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.1 (result i32)
    i32.const 40
-   call $~lib/rt/stub/__retain
    local.set $0
    local.get $0
    call $~lib/util/hash/hashStr
@@ -259,7 +257,6 @@
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.2 (result i32)
    i32.const 64
-   call $~lib/rt/stub/__retain
    local.set $1
    local.get $1
    call $~lib/util/hash/hashStr
@@ -273,7 +270,6 @@
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.3 (result i32)
    i32.const 88
-   call $~lib/rt/stub/__retain
    local.set $0
    local.get $0
    call $~lib/util/hash/hashStr
@@ -410,5 +406,6 @@
   call $start:std/hash
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

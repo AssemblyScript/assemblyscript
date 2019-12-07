@@ -136,5 +136,6 @@
   call $start:function
  )
  (func $null (; 20 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

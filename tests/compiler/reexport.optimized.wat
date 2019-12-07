@@ -46,4 +46,7 @@
   i32.add
   drop
  )
+ (func $null (; 5 ;) (type $FUNCSIG$v)
+  unreachable
+ )
 )

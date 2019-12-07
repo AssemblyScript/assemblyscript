@@ -7,4 +7,7 @@
  (func $export-default/theDefault (; 0 ;) (type $FUNCSIG$v)
   nop
  )
+ (func $null (; 1 ;) (type $FUNCSIG$v)
+  unreachable
+ )
 )
