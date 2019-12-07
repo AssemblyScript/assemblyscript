@@ -36,6 +36,6 @@
   call $start:scoped
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

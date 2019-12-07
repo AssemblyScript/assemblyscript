@@ -37,10 +37,7 @@
   i32.const 42
   i32.add
  )
- (func $~lib/rt/stub/__retain (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/util/number/decimalCount32 (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -106,7 +103,7 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -160,7 +157,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -213,7 +210,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/util/number/utoa32_lut (; 8 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -355,6 +352,9 @@
    i32.store16
   end
  )
+ (func $~lib/rt/stub/__retain (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+ )
  (func $~lib/util/number/itoa32 (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -366,7 +366,6 @@
   i32.eqz
   if
    i32.const 104
-   call $~lib/rt/stub/__retain
    return
   end
   local.get $0
@@ -692,5 +691,6 @@
   call $start:resolve-function-expression
  )
  (func $null (; 18 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

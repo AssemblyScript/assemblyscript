@@ -4,11 +4,6 @@
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$ji (func (param i32) (result i64)))
- (type $FUNCSIG$fi (func (param i32) (result f32)))
- (type $FUNCSIG$di (func (param i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02")
@@ -29,7 +24,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/array/Array<i32>#__get (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 60
   i32.load
@@ -423,7 +418,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $~lib/memory/memory.fill (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 6 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -632,7 +627,7 @@
    end
   end
  )
- (func $~lib/array/ensureSize (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureSize (; 7 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -688,7 +683,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i32>#__set (; 8 ;) (type $FUNCSIG$v)
+ (func $~lib/array/Array<i32>#__set (; 8 ;)
   i32.const 0
   i32.const 60
   i32.load
@@ -706,7 +701,7 @@
   i32.const 2
   i32.store
  )
- (func $~lib/array/Array<i64>#__get (; 9 ;) (type $FUNCSIG$ji) (param $0 i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (; 9 ;) (param $0 i32) (result i64)
   local.get $0
   i32.const 124
   i32.load
@@ -727,7 +722,7 @@
   i32.add
   i64.load
  )
- (func $~lib/array/Array<i64>#__set (; 10 ;) (type $FUNCSIG$v)
+ (func $~lib/array/Array<i64>#__set (; 10 ;)
   i32.const 0
   i32.const 124
   i32.load
@@ -745,7 +740,7 @@
   i64.const 4
   i64.store
  )
- (func $~lib/array/Array<f32>#__get (; 11 ;) (type $FUNCSIG$fi) (param $0 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 11 ;) (param $0 i32) (result f32)
   local.get $0
   i32.const 180
   i32.load
@@ -766,7 +761,7 @@
   i32.add
   f32.load
  )
- (func $~lib/array/Array<f32>#__set (; 12 ;) (type $FUNCSIG$v)
+ (func $~lib/array/Array<f32>#__set (; 12 ;)
   i32.const 0
   i32.const 180
   i32.load
@@ -784,7 +779,7 @@
   f32.const 2.5
   f32.store
  )
- (func $~lib/array/Array<f64>#__get (; 13 ;) (type $FUNCSIG$di) (param $0 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 13 ;) (param $0 i32) (result f64)
   local.get $0
   i32.const 244
   i32.load
@@ -805,7 +800,7 @@
   i32.add
   f64.load
  )
- (func $~lib/array/Array<f64>#__set (; 14 ;) (type $FUNCSIG$v)
+ (func $~lib/array/Array<f64>#__set (; 14 ;)
   i32.const 0
   i32.const 244
   i32.load
@@ -1029,6 +1024,6 @@
   call $start:std/static-array
  )
  (func $null (; 17 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

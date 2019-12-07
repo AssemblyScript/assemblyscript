@@ -553,5 +553,6 @@
   call $start:switch
  )
  (func $null (; 10 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

@@ -12,6 +12,6 @@
   global.set $namespace/Outer.Inner.evenAnotherVar
  )
  (func $null (; 1 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

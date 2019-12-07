@@ -225,5 +225,6 @@
   call $start:function-types
  )
  (func $null (; 14 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

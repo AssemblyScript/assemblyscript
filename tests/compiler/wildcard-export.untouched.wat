@@ -43,5 +43,6 @@
   call $start:wildcard-export
  )
  (func $null (; 6 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

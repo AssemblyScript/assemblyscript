@@ -3046,6 +3046,7 @@
  (func $start (; 36 ;) (type $FUNCSIG$v)
   call $start:std/operator-overloading
  )
- (func $null (; 37 ;) (type $FUNCSIG$v)
+ (func $null (; 38 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

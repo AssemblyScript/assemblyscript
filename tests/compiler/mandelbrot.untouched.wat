@@ -954,5 +954,6 @@
   end
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

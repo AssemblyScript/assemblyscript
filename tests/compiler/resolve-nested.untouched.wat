@@ -113,5 +113,6 @@
   call $~lib/rt/stub/__release
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

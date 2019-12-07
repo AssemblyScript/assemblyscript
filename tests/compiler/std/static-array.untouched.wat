@@ -2413,5 +2413,6 @@
   call $start:std/static-array
  )
  (func $null (; 31 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

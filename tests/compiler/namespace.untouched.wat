@@ -38,5 +38,6 @@
   call $start:namespace
  )
  (func $null (; 4 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

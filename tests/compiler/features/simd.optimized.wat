@@ -2,7 +2,6 @@
  (type $FUNCSIG$v (func))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
@@ -53,7 +52,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/rt/stub/offset
@@ -139,6 +138,6 @@
   call $~lib/rt/stub/__free
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

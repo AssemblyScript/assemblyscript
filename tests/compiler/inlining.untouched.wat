@@ -520,5 +520,6 @@
   call $start:inlining
  )
  (func $null (; 11 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

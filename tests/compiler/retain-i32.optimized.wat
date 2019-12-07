@@ -70,6 +70,6 @@
   call $start:retain-i32
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

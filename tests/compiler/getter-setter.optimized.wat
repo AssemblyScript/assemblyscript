@@ -23,6 +23,6 @@
   global.set $getter-setter/Foo._bar
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )
