@@ -1055,7 +1055,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/addMemory (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 14 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -2257,7 +2257,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 31 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 34 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   local.get $1
   i32.const 1
@@ -2409,7 +2409,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String.fromCharCode|trampoline (; 35 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String.fromCharCode|trampoline (; 38 ;) (param $0 i32) (result i32)
   (local $1 i32)
   block $1of1
    block $0of1
@@ -2479,7 +2479,7 @@
   local.get $1
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#startsWith (; 37 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#startsWith (; 40 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2530,7 +2530,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String#endsWith (; 38 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#endsWith (; 41 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 536870904
@@ -3138,7 +3138,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/string/strtol<f64> (; 48 ;) (param $0 i32) (result f64)
+ (func $~lib/util/string/strtol<f64> (; 51 ;) (param $0 i32) (result f64)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -3355,7 +3355,7 @@
   local.get $5
   f64.mul
  )
- (func $~lib/util/string/strtol<i32> (; 49 ;) (result i32)
+ (func $~lib/util/string/strtol<i32> (; 52 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3573,7 +3573,7 @@
   local.get $5
   i32.mul
  )
- (func $~lib/util/string/strtol<i64> (; 50 ;) (result i64)
+ (func $~lib/util/string/strtol<i64> (; 53 ;) (result i64)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3814,7 +3814,7 @@
   f64.load
   f64.mul
  )
- (func $~lib/math/ipow32 (; 52 ;) (param $0 i32) (result i32)
+ (func $~lib/math/ipow32 (; 55 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 5
@@ -4852,7 +4852,7 @@
   call $~lib/string/String.__lt
   i32.eqz
  )
- (func $~lib/string/String.__lte (; 61 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String.__lte (; 64 ;) (param $0 i32) (result i32)
   i32.const 440
   local.get $0
   call $~lib/string/String.__gt
@@ -5677,7 +5677,7 @@
   local.get $1
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/__allocArray (; 70 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/__allocArray (; 73 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5705,7 +5705,7 @@
   i32.store offset=12
   local.get $1
  )
- (func $~lib/memory/memory.fill (; 71 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 74 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -5914,7 +5914,7 @@
    end
   end
  )
- (func $~lib/array/ensureSize (; 72 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureSize (; 75 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5969,7 +5969,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<~lib/string/String>#push (; 73 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#push (; 76 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -16817,7 +16817,7 @@
    call $~lib/rt/pure/__visit
   end
  )
- (func $null (; 94 ;) (type $FUNCSIG$v)
+ (func $null (; 101 ;) (type $FUNCSIG$v)
   unreachable
  )
 )
