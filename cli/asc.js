@@ -40,7 +40,8 @@ var assemblyscript, isDev = false;
     try { // `asc` on the command line without dist files
       require("ts-node").register({
         project: path.join(__dirname, "..", "src", "tsconfig.json"),
-        skipIgnore: true
+        skipIgnore: true,
+        compilerOptions: { target: "ES2016" }
       });
       require("../src/glue/js");
       assemblyscript = require("../src");
@@ -286,7 +287,9 @@ exports.main = function main(argv, options, callback) {
     let transformArgs = args.transform;
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
-      if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
+      if (/\.ts$/.test(filename)) {
+        require("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
+      }
       try {
         const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
         if (typeof classOrModule === "function") {
