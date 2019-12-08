@@ -543,5 +543,6 @@
   call $start:features/threads
  )
  (func $null (; 4 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

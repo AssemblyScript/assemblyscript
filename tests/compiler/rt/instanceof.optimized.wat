@@ -4,7 +4,6 @@
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00r\00t\00/\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s")
@@ -62,7 +61,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/stub/offset
@@ -110,7 +109,7 @@
   local.get $0
   call $rt/instanceof/Animal#constructor
  )
- (func $rt/instanceof/BlackCat#constructor (; 5 ;) (type $FUNCSIG$i) (result i32)
+ (func $rt/instanceof/BlackCat#constructor (; 5 ;) (result i32)
   i32.const 5
   call $~lib/rt/stub/__alloc
   call $rt/instanceof/Cat#constructor
@@ -521,6 +520,6 @@
   call $start:rt/instanceof
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

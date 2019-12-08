@@ -52,8 +52,8 @@ if (argv.length) {
 require("ts-node").register({ project: path.join(__dirname, "..", "src", "tsconfig.json") });
 require("../src/glue/js");
 
-var Parser = require("../src/parser").Parser;
-var ASTBuilder = require("../src/extra/ast").ASTBuilder;
+const { Program, Options } = require("../src");
+const ASTBuilder = require("../src/extra/ast").ASTBuilder;
 
 var failures = 0;
 
@@ -63,10 +63,11 @@ tests.forEach(filename => {
   console.log(colorsUtil.white("Testing parser/" + filename));
 
   var failed = false;
-  var parser = new Parser();
+  var program = new Program(new Options());
+  var parser = program.parser;
   var sourceText = fs.readFileSync(basedir + "/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n");
   parser.parseFile(sourceText, filename, true);
-  var serializedSourceText = ASTBuilder.build(parser.program.sources[0]);
+  var serializedSourceText = ASTBuilder.build(program.sources[0]);
   var actual = serializedSourceText + parser.diagnostics.map(diagnostic => "// " + diagnostic +"\n").join("");
   var fixture = filename + ".fixture.ts";
 

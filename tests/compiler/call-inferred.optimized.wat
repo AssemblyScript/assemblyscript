@@ -10,6 +10,6 @@
   global.set $~lib/argc
  )
  (func $null (; 1 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

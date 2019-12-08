@@ -2,5 +2,5 @@
 // - dist/assemblyscript.js
 // - dist/assemblyscript.d.ts
 import * as as from "../../index.release";
-var parser: as.Parser = as.parseFile("", "empty");
-parser.finish();
+var program: as.Program = as.newProgram(as.newOptions());
+as.parse(program, "", "empty");

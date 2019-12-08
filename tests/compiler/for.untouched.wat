@@ -129,9 +129,6 @@
     i32.lt_s
     i32.eqz
     br_if $break|5
-    block $continue|5
-     br $continue|5
-    end
     local.get $1
     i32.const 1
     i32.add
@@ -199,5 +196,6 @@
   call $start:for
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

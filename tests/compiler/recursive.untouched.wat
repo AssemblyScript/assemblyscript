@@ -25,5 +25,6 @@
   i32.add
  )
  (func $null (; 1 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

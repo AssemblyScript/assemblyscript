@@ -99,5 +99,6 @@
   call $start:literals
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

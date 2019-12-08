@@ -64,5 +64,6 @@
   call $start:getter-setter
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

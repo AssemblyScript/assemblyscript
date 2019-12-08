@@ -119,5 +119,6 @@
   call $start:class
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

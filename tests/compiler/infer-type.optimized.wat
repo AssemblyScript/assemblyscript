@@ -34,6 +34,6 @@
   call $start:infer-type
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

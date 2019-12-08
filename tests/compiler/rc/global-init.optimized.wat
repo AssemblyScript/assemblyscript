@@ -524,7 +524,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/addMemory (; 8 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -1322,7 +1322,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $2
  )
- (func $~lib/rt/tlsf/__alloc (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (; 20 ;) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/tlsf/ROOT
   local.tee $1
@@ -1879,6 +1879,6 @@
   unreachable
  )
  (func $null (; 31 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

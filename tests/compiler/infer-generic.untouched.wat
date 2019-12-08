@@ -168,5 +168,6 @@
   call $start:infer-generic
  )
  (func $null (; 16 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

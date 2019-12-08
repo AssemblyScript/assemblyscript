@@ -70,8 +70,8 @@ export enum CommonFlags {
   TRAMPOLINE = 1 << 25,
   /** Is a virtual method. */
   VIRTUAL = 1 << 26,
-  /** Is the main function. */
-  MAIN = 1 << 27,
+  /** Is (part of) a closure. */
+  CLOSURE = 1 << 27,
 
   // Other
 

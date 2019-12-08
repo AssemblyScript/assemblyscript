@@ -27,8 +27,8 @@ export enum NativeType {
   V128 = binaryen._BinaryenTypeVec128(),
   Anyref = binaryen._BinaryenTypeAnyref(),
   Exnref = binaryen._BinaryenTypeExnref(),
-  Unreachable = binaryen._BinaryenTypeUnreachable(),
-  Auto = binaryen._BinaryenTypeAuto()
+  Unreachable = binaryen._BinaryenTypeUnreachable()
+  // Auto = binaryen._BinaryenTypeAuto()
 }
 
 export enum FeatureFlags {
@@ -1212,6 +1212,9 @@ export class Module {
   }
 
   // table
+
+  /** Unlimited table constant. */
+  static readonly UNLIMITED_TABLE: Index = <Index>-1;
 
   setFunctionTable(
     initial: Index,

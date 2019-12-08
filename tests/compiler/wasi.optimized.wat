@@ -9,6 +9,6 @@
   global.set $wasi/sig
  )
  (func $null (; 1 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )
