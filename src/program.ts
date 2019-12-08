@@ -3714,80 +3714,11 @@ export class Interface extends Class { // FIXME
     );
   }
 
-  get memberValues(): Iterable<DeclaredElement> {
-    if (this.members != null) return this.members.values();
-    return [];
-  }
-
-  get methods(): FunctionPrototype[] {
-    if (this.members == null) return [];
-    return <FunctionPrototype[]>filter(this.members.values(),
-           (v: DeclaredElement): bool => v.kind == ElementKind.FUNCTION_PROTOTYPE);
-  }
-
-  get getters(): Property[] {
-    return <Property[]>filter(this.memberValues, v => v.kind == ElementKind.PROPERTY && (<Property>v).getterInstance != null);
-  }
-
-  get setters(): Property[] {
-    return <Property[]>filter(this.memberValues, v => v.kind == ElementKind.PROPERTY && (<Property>v).setterInstance != null);
-  }
-
-  get methodInstances(): Function[] {
-    var funcs: Set<Function> = new Set();
-    for (let func of this.methods) {
-      if (func.instances) {
-        for (let i of func.instances.values()){
-          funcs.add(i);
-        }
-      }
-    }
-    return Array.from(funcs);
-  }
-
   addImplementer(_class: Class): void {
     this.implementers.add(_class);
-  if (this.base == null){ 
-      return;
+    if (this.base != null){ 
+      (<Interface>this.base).addImplementer(_class);
     }
-    (<Interface>this.base).addImplementer(_class);
-  }
-
-  checkClass(_class: Class): FunctionPrototype[] {
-    const res = [];
-    for (const ifunc of this.methods) {
-      let func = this.getFunc(_class, ifunc);
-      if (func == null || !(ifunc.equals(func))) res.push(ifunc);
-    }
-    return res;
-  }
-
-  private getFunc(_class: Class, ifunc: FunctionPrototype): FunctionPrototype | null {
-    if (_class.members == null) return null;
-    return <FunctionPrototype>_class.members.get(ifunc.name);
-  }
-
-  private getProp(_class: Class, iprop: PropertyPrototype): PropertyPrototype  | null {
-    if (_class.members == null) return null;
-    return <PropertyPrototype>_class.members.get(iprop.name);
-  }
-
-  getPropImplementations(iprop: Property): PropertyPrototype[] {
-    return <PropertyPrototype[]> map(this.implementers, _class => this.getProp(_class, iprop.prototype))
-          .filter(notNull);
-  }
-
-  getFuncImplementations(ifunc: Function): FunctionPrototype[] {
-    return <FunctionPrototype[]> map(this.implementers, _class => this.getFunc(_class, ifunc.prototype))
-          .filter(notNull);
-  }
-
-  get methodsToCompile(): FunctionPrototype[] {
-    var funcs: FunctionPrototype[] = [];
-    for (let func of this.methodInstances) {
-      funcs.concat(this.getFuncImplementations(func));
-    }
-    return funcs;
   }
 }
 
