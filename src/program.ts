@@ -3747,6 +3747,10 @@ export class Interface extends Class { // FIXME
 
   addImplementer(_class: Class): void {
     this.implementers.add(_class);
+  if (this.base == null){ 
+      return;
+    }
+    (<Interface>this.base).addImplementer(_class);
   }
 
   checkClass(_class: Class): FunctionPrototype[] {

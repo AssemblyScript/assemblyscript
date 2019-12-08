@@ -48,11 +48,11 @@ passAnInterface(sFoo);
 
 function expectX(foo: IFoo, x: bool): void {
   foo.x = x;
-  assert(!foo.x);
+  assert(foo.x == x);
 }
 
 expectX(aFoo, false);
-expectX(sFoo, false);
+expectX(sFoo, true);
 
 const iFoo = <IFoo> aFoo;
 const ibool = iFoo.x;

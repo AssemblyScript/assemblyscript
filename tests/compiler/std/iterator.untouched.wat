@@ -21,8 +21,8 @@
  (data (i32.const 328) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00")
  (data (i32.const 376) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00h\00e\00l\00l\00o\00")
  (data (i32.const 408) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00w\00o\00r\00l\00d\00")
- (table $0 11 funcref)
- (elem (i32.const 0) $null $std/iterator/ArrayIterator<i32>#constructor $std/iterator/IterableArray<i32>#get:iterator $~lib/map/EntriesIter<~lib/string/String,i32>#constructor $~lib/map/EntriesIter<~lib/string/String,i32>#get:done $~lib/map/EntriesIter<~lib/string/String,i32>#get:entry $~lib/map/EntriesIter<~lib/string/String,i32>#next $std/iterator/ArrayIterator<i32>#next $std/iterator/ArrayIterator<i32>#get:done $std/iterator/ArrayIterator<i32>#get:value $~lib/map/EntriesIter<~lib/string/String,i32>#get:value)
+ (table $0 1 funcref)
+ (elem (i32.const 0) $null)
  (global $std/iterator/arri32 (mut i32) (i32.const 56))
  (global $std/iterator/iterableArr (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -3192,61 +3192,12 @@
   call $~lib/array/Array<i32>#get:length
   i32.ge_s
  )
- (func $std/iterator/ArrayIterator<i32>#get:value (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $std/iterator/ArrayIterator<i32>#get:done
-  i32.eqz
-  if
-   local.get $0
-   i32.load offset=4
-   local.get $0
-   i32.load
-   call $~lib/array/Array<i32>#__get
-   return
-  end
-  unreachable
- )
- (func $~lib/map/EntriesIter<~lib/string/String,i32>#get:value (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/map/EntriesIter<~lib/string/String,i32>#get:entry
- )
- (func $~lib/map/ValueIterator<~lib/string/String,i32>#get:value (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load
-  call $~lib/map/EntriesIter<~lib/string/String,i32>#get:value
-  i32.load offset=4
- )
- (func $~lib/iterator/IteratorResult<i32>#get:value (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 6
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $std/iterator/ArrayIterator<i32>#get:value
-  else
-   local.get $1
-   i32.const 14
-   i32.eq
-   if (result i32)
-    local.get $0
-    call $~lib/map/ValueIterator<~lib/string/String,i32>#get:value
-   else
-    unreachable
-   end
-  end
- )
- (func $~lib/map/ValueIterator<~lib/string/String,i32>#get:done (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/ValueIterator<~lib/string/String,i32>#get:done (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   call $~lib/map/EntriesIter<~lib/string/String,i32>#get:done
  )
- (func $~lib/iterator/IteratorResult<i32>#get:done (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/iterator/IteratorResult<i32>#get:done (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 8
@@ -3271,6 +3222,55 @@
    end
   end
  )
+ (func $std/iterator/ArrayIterator<i32>#get:value (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $std/iterator/ArrayIterator<i32>#get:done
+  i32.eqz
+  if
+   local.get $0
+   i32.load offset=4
+   local.get $0
+   i32.load
+   call $~lib/array/Array<i32>#__get
+   return
+  end
+  unreachable
+ )
+ (func $~lib/map/EntriesIter<~lib/string/String,i32>#get:value (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  call $~lib/map/EntriesIter<~lib/string/String,i32>#get:entry
+ )
+ (func $~lib/map/ValueIterator<~lib/string/String,i32>#get:value (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  call $~lib/map/EntriesIter<~lib/string/String,i32>#get:value
+  i32.load offset=4
+ )
+ (func $~lib/iterator/IteratorResult<i32>#get:value (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load
+  local.set $1
+  local.get $1
+  i32.const 6
+  i32.eq
+  if (result i32)
+   local.get $0
+   call $std/iterator/ArrayIterator<i32>#get:value
+  else
+   local.get $1
+   i32.const 14
+   i32.eq
+   if (result i32)
+    local.get $0
+    call $~lib/map/ValueIterator<~lib/string/String,i32>#get:value
+   else
+    unreachable
+   end
+  end
+ )
  (func $~lib/iterator/IteratorResult<~lib/map/MapEntry<~lib/string/String,i32>>#get:value (; 51 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
@@ -3288,24 +3288,7 @@
    unreachable
   end
  )
- (func $~lib/iterator/IteratorResult<~lib/map/MapEntry<~lib/string/String,i32>>#get:done (; 52 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 9
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $~lib/map/EntriesIter<~lib/string/String,i32>#get:done
-  else
-   unreachable
-  end
- )
- (func $~lib/map/KeyIterator<~lib/string/String,i32>#next (; 53 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/KeyIterator<~lib/string/String,i32>#next (; 52 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   call $~lib/map/EntriesIter<~lib/string/String,i32>#next
@@ -3313,7 +3296,7 @@
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $~lib/iterator/Iterator<~lib/string/String>#next (; 54 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/iterator/Iterator<~lib/string/String>#next (; 53 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 8
@@ -3330,14 +3313,14 @@
    unreachable
   end
  )
- (func $~lib/map/KeyIterator<~lib/string/String,i32>#get:value (; 55 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/KeyIterator<~lib/string/String,i32>#get:value (; 54 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   call $~lib/map/EntriesIter<~lib/string/String,i32>#get:value
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/iterator/IteratorResult<~lib/string/String>#get:value (; 56 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/iterator/IteratorResult<~lib/string/String>#get:value (; 55 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 8
@@ -3354,28 +3337,6 @@
    unreachable
   end
  )
- (func $~lib/map/KeyIterator<~lib/string/String,i32>#get:done (; 57 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load
-  call $~lib/map/EntriesIter<~lib/string/String,i32>#get:done
- )
- (func $~lib/iterator/IteratorResult<~lib/string/String>#get:done (; 58 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 12
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $~lib/map/KeyIterator<~lib/string/String,i32>#get:done
-  else
-   unreachable
-  end
- )
- (func $null (; 59 ;) (type $FUNCSIG$v)
+ (func $null (; 56 ;) (type $FUNCSIG$v)
  )
 )

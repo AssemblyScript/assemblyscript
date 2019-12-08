@@ -186,7 +186,8 @@ import {
   writeI64,
   writeF32,
   writeF64,
-  makeMap
+  makeMap,
+  addAll
 } from "./util";
 
 /** Compiler options. */
@@ -319,6 +320,8 @@ export class Compiler extends DiagnosticEmitter {
   events: Map<string, EventRef> = new Map();
   /** Classes that implement an interface */
   implementers: Class[] = [];
+  /** Interface methods that need to be compiled */
+  interfaceMethods: Set<Function> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program, options: Options | null = null): Module {
@@ -1362,6 +1365,7 @@ export class Compiler extends DiagnosticEmitter {
         null,
         module.nop()
         );
+        this.interfaceMethods.add(instance);
     // imported function
     } else {
       if (!instance.is(CommonFlags.AMBIENT)) {
@@ -1382,9 +1386,6 @@ export class Compiler extends DiagnosticEmitter {
         );
     }
     funcRef = module.getFunction(instance.internalName);
-    if (instance.prototype.isBound  && (<Class>instance.parent).prototype.implementsNodes) {
-      this.ensureFunctionTableEntry(instance);
-    }
 
     instance.finalize(module, funcRef);
     this.currentType = previousType;
@@ -3052,7 +3053,7 @@ export class Compiler extends DiagnosticEmitter {
           toType.toString());
       } else {
         if (this.checkInterfaceImplementation(toType, fromType, reportNode)) {
-          (<Interface>toType.classReference).implementers.add(fromType.classReference);
+          (<Interface>toType.classReference).addImplementer(fromType.classReference);
         } else {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
@@ -9220,10 +9221,8 @@ export class Compiler extends DiagnosticEmitter {
         }
         case ElementKind.FUNCTION_PROTOTYPE: {
           let func = (<FunctionPrototype>mem);
-          mem.parent = _class;
-          imem.parent = _interface;
-          from = this.resolver.resolveType(func.functionTypeNode, func,  _class.contextualTypeArguments)!;//, ReportMode.REPORT, false)!.type;
-          to = this.resolver.resolveType((<FunctionPrototype>imem).functionTypeNode, imem, _interface.contextualTypeArguments, ReportMode.REPORT)!;
+          from = this.resolver.resolveType(func.functionTypeNode, func,  _class.contextualTypeArguments)!;
+          to = this.resolver.resolveType((<FunctionPrototype>imem).functionTypeNode, imem, _interface.contextualTypeArguments)!;
           break;
         }
         case ElementKind.PROPERTY: {
@@ -9292,180 +9291,110 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileInterfaces(): void {
-    const interfaces = this.program.interfaces;
-    for (let i: i32 = 0; i < interfaces.length; i++) {
-      const _interface = interfaces[i];
-      if (_interface.implementers.size == 0) {
-        continue;
-      }
-      this.compileInterfaceProperties(_interface);
-      this.compileInterfacePropertiesSetters(_interface);
-      this.compileInterfaceMethods(_interface);
-    }
-  }
-
-  compileInterfaceMethods(_interface: Interface): void {
     const module = this.module;
-    const ifuncs = _interface.methodInstances;
-    const classes = Array.from(_interface.implementers);
-
-    for (let i = 0; i < ifuncs.length; i++) {
-      const ifunc = ifuncs[i];
-      const classIDLocal = ifunc.addLocal(Type.i32);
-      const returnType = ifunc!.signature.returnType.toNativeType();
+    for (let ifunc of this.interfaceMethods) {
+      let classes = (<Interface>ifunc.parent).implementers;
+      const classIDLocal = ifunc.localsByIndex.length
       const typeRef = this.ensureSignature(ifunc!.signature);
-
       const relooper = this.module.createRelooper();
     
       // Condition to switch on
-      const first = relooper.addBlock(module.local_set(classIDLocal.index, loadClassID(module)));
+      const first = relooper.addBlock(module.local_set(classIDLocal, loadClassID(module)));
       const last = relooper.addBlock(module.unreachable());
       relooper.addBranch(first, last);
 
-      for (let c = 0; c < classes.length; c ++) {
-        const _class = classes[c];
-        let prop = _class.members!.get(ifunc.name)!;
-        switch (prop.kind){
-          case ElementKind.FUNCTION_PROTOTYPE: {
-            let p = <FunctionPrototype> prop;
-            let newFunc = this.resolver.resolveFunction(p, null, ifunc.contextualTypeArguments);
-            if (newFunc == null) {
-              throw new Error(`Couldn't resolve ${p.name}`);
-            }
-            prop = newFunc;
-          }
-          case ElementKind.FUNCTION:{
-            this.compileFunction(<Function> prop);
-            break
-          }
-          default:
-            throw Error("Class " + classes[c].name + " must have property " + prop.name);
-        }
-        const locals: usize[] = [];
-        for (let i: i32 = 0; i < classIDLocal.index; i++) {
-          const local = ifunc.localsByIndex[i];
-          locals.push(module.local_get(local.index, local.type.toNativeType()));
-        }
-        const callExpr = module.call(prop.internalName, locals, returnType)
-        const returnBlock = relooper.addBlock(callExpr);
-        const loadLocal = loadClassArg(module, classIDLocal.index);
+      for (let _class of classes) {        
+        const expr = this.compileInterfaceMethod(ifunc, _class, classIDLocal);
+        const returnBlock = relooper.addBlock(expr);
+        const loadLocal = loadClassArg(module, classIDLocal);
         const classID = module.i32(_class.id);
         relooper.addBranch(first, returnBlock, module.binary(BinaryOp.EqI32, loadLocal, classID));
       }
       // Remove the nop standin
       module.removeFunction(ifunc.internalName);
-      module.addFunction(ifunc.internalName, typeRef, [NativeType.I32], relooper.renderAndDispose(first, 0));
+      module.addFunction(ifunc.internalName, typeRef, [this.nativeUsizeType], relooper.renderAndDispose(first, 0));
     }
   }
 
-  compileInterfaceProperties(_interface: Interface): void {
+  compileInterfaceMethod(ifunc: Function, _class: Class, classIDLocal: i32): ExpressionRef {
     const module = this.module;
-    const iprops = _interface.getters;
-    const classes = Array.from(_interface.implementers);
-
-    for (let i = 0; i < iprops.length; i++) {
-      const iprop = iprops[i];
-      const returnType = iprop.getterInstance!.signature.returnType.toNativeType();
-      const typeRef = this.ensureSignature(iprop.getterInstance!.signature);
-
-      const relooper = this.module.createRelooper();
-    
-      // Condition to switch on
-      const first = relooper.addBlock(module.local_set(1, loadClassID(module)));
-      const last = relooper.addBlock(module.unreachable());
-      relooper.addBranch(first, last);
-      for (let c = 0; c < classes.length; c ++) {
-        const _class = classes[c];
-        const prop = _class.members!.get(iprop.name)!;
-        let expr: ExpressionRef;
-        let thisExpr = loadClassArg(module, 0);
-        if (prop.kind == ElementKind.PROPERTY) {
-          let p = <Property> prop;
-          let getter = p.getterInstance!;
-          this.compileFunction(getter);
-          expr = module.call(getter.internalName, [thisExpr], getter.signature.returnType.toNativeType());
-        }else if(prop.kind == ElementKind.FIELD) {
-          let target = <Field> prop;
-          assert((<Field>target).memoryOffset >= 0);
-          this.currentType = (<Field>target).type;
-          expr = module.load(
-            (<Field>target).type.byteSize,
-            (<Field>target).type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
-            thisExpr,
-            (<Field>target).type.toNativeType(),
-            (<Field>target).memoryOffset)
-        } else {
-          throw Error("Class " + classes[c].name + " must have property " + prop.name);
+    let name: string = ifunc.name;
+    if (ifunc.isAny(CommonFlags.GET | CommonFlags.SET)){
+      name = name.substr("get:".length);
+    }
+    let  prop = _class.members!.get(name)!;
+    let method: Function;
+      
+    const returnType = ifunc!.signature.returnType.toNativeType();
+    switch (prop.kind){
+      case ElementKind.FUNCTION_PROTOTYPE: {
+        let p = <FunctionPrototype> prop;
+        let newFunc = this.resolver.resolveFunction(p, null, (<Class>p.parent).contextualTypeArguments);
+        if (newFunc == null) {
+          throw new Error(`Couldn't resolve ${p.name}`);
         }
-        const returnBlock = relooper.addBlock(expr);
-        const loadLocal = loadClassArg(module, 1);
-        const classID = module.i32(_class.id);
-        relooper.addBranch(first, returnBlock, module.binary(BinaryOp.EqI32, loadLocal, classID));
+        prop = newFunc;
       }
-      // Remove the nop standin
-      module.removeFunction(iprop.getterInstance!.internalName);
-      module.addFunction(iprop.getterInstance!.internalName, typeRef, [this.nativeUsizeType], relooper.renderAndDispose(first, 0));
-    }
-  }
-
-  compileInterfacePropertiesSetters(_interface: Interface): void {
-    const module = this.module;
-    const iprops = _interface.setters;
-    const classes = Array.from(_interface.implementers);
-
-    for (let i = 0; i < iprops.length; i++) {
-      const iprop = iprops[i];
-      const relooper = this.module.createRelooper();
-      const setter = iprop.setterInstance!;
-      const classIDIndex = setter.localsByIndex.length;
-      const typeRef = this.ensureSignature(setter.signature);
-    
-      // Condition to switch on
-      const first = relooper.addBlock(module.local_set(classIDIndex, loadClassID(module)));
-      const last = relooper.addBlock(module.unreachable());
-      relooper.addBranch(first, last);
-
-      for (let c = 0; c < classes.length; c++) {
-        let _class = classes[c];
-        const prop = _class.members!.get(iprop.name)!;
-        let expr: ExpressionRef;
-        let thisExpr = this.loadClassArg(0);
-        if (prop.kind == ElementKind.PROPERTY) {
-          let p = <Property> prop;
-          let setter = p.setterInstance!;
-          this.compileFunction(setter);
-          expr = module.call(setter.internalName, 
-                            [thisExpr, this.module.local_get(1, p.type.toNativeType())], 
-                            setter.signature.returnType.toNativeType());
-        }else if(prop.kind == ElementKind.FIELD) {
-          let field = <Field> prop;
-          var type = field.type;
-          var nativeType = type.toNativeType();
-          var usizeType = this.options.usizeType;
-          var nativeSizeType = usizeType.toNativeType();
+      case ElementKind.FUNCTION:{
+        method = <Function> prop;
+        break;
+      }
+      case ElementKind.FIELD: {
+        let field = <Field> prop;
+        var type = field.type;
+        var nativeType = type.toNativeType();
+        const thisExpr = module.local_get(0, this.nativeUsizeType);
+        if (ifunc.is(CommonFlags.SET)){
+          assert(ifunc.signature.parameterTypes.length == 1);
+          if (ifunc.signature.parameterTypes[0] != type){
+            return module.nop();
+          }
           var valueExpr = module.local_get(1, nativeType);
-          expr =  module.store(
+          return module.store(
             type.byteSize,
-            module.local_get(0, nativeSizeType),
+            thisExpr,
             valueExpr,
             nativeType,
             field.memoryOffset
-          )
-        } else {
-          throw Error("Class " + classes[c].name + " must have property " + prop.name);
+           );
         }
-        const returnBlock = relooper.addBlock(expr);
-        const loadLocal = this.loadClassArg(classIDIndex);
-        const classID = module.i32(_class.id);
-        relooper.addBranch(first, returnBlock, module.binary(BinaryOp.EqI32, loadLocal, classID));
+        if (ifunc.is(CommonFlags.GET)){
+          if (ifunc.signature.returnType != type){
+            return module.nop();
+          }
+          assert(field.memoryOffset >= 0);
+          return this.module.load(
+            field.type.byteSize,
+            field.type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
+            thisExpr,
+            field.type.toNativeType(),
+            field.memoryOffset)
+        }
       }
-       // Remove the nop standin
-       module.removeFunction(setter.internalName);
-       module.addFunction(setter.internalName, 
-                          typeRef, 
-                          [this.nativeUsizeType], 
-                          relooper.renderAndDispose(first, 0));
+      case ElementKind.PROPERTY: {
+        let p = <Property> prop;
+        if (ifunc.is(CommonFlags.SET)){
+          method = p.setterInstance!;
+
+        }else if (ifunc.is(CommonFlags.GET)){
+          method = p.getterInstance!;
+        }else {
+          throw Error("Interface method " + ifunc.name + " should be a property");
+        }
+        break;
+
+      }
+      default:
+        throw Error("Class " + _class.name + " must have property " + prop.name);
     }
+
+    this.compileFunction(method);
+    const locals: usize[] = [];
+    for (let i: i32 = 0; i < classIDLocal; i++) {
+      const local = ifunc.localsByIndex[i];
+      locals.push(this.module.local_get(local.index, local.type.toNativeType()));
+    }
+    return this.module.call(method.internalName, locals, returnType)
 
   }
 

@@ -9,6 +9,7 @@
  (data (i32.const 64) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $interface-inherit/aa (mut i32) (i32.const 0))
  (global $interface-inherit/ac (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
@@ -54,32 +55,32 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (result i32)
-  (local $0 i32)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (result i32)
   (local $1 i32)
+  (local $2 i32)
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $1
+  local.tee $2
   i32.const 16
   i32.add
   call $~lib/rt/stub/maybeGrowMemory
-  local.get $1
+  local.get $2
   i32.const 16
   i32.sub
-  local.tee $0
+  local.tee $1
   i32.const 16
   i32.store
-  local.get $0
+  local.get $1
   i32.const -1
   i32.store offset=4
+  local.get $1
   local.get $0
-  i32.const 3
   i32.store offset=8
-  local.get $0
+  local.get $1
   i32.const 0
   i32.store offset=12
-  local.get $1
+  local.get $2
  )
  (func $~lib/string/String#get:length (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -202,19 +203,22 @@
  )
  (func $interface-inherit/testIC (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  i32.const 3
+  call $interface-inherit/IA#a
+  i32.const 42
   i32.ne
   if
+   i32.const 0
+   i32.const 24
+   i32.const 34
+   i32.const 2
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   i32.const 8
   i32.sub
   i32.load
-  i32.const 3
+  i32.const 4
   i32.ne
   if
    unreachable
@@ -225,7 +229,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 24
+   i32.const 35
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -234,7 +238,7 @@
   i32.const 8
   i32.sub
   i32.load
-  i32.const 3
+  i32.const 4
   i32.ne
   if
    unreachable
@@ -245,21 +249,60 @@
   global.set $~lib/rt/stub/startOffset
   i32.const 112
   global.set $~lib/rt/stub/offset
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  global.set $interface-inherit/aa
+  i32.const 4
   call $~lib/rt/stub/__alloc
   global.set $interface-inherit/ac
   global.get $interface-inherit/ac
-  call $interface-inherit/testIC
- )
- (func $interface-inherit/AC#a (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  call $interface-inherit/IA#a
   i32.const 42
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 30
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $interface-inherit/ac
+  call $interface-inherit/testIC
+  global.get $interface-inherit/aa
+  call $interface-inherit/IA#a
+  i32.const 84
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 42
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
- (func $interface-inherit/AC#b (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 80
+ (func $interface-inherit/IA#a (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 8
+  i32.sub
+  i32.load
+  local.tee $0
+  i32.const 4
+  i32.eq
+  if (result i32)
+   i32.const 42
+  else
+   local.get $0
+   i32.const 3
+   i32.ne
+   if
+    unreachable
+   end
+   i32.const 84
+  end
  )
- (func $interface-inherit/AC#c (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 1
- )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;) (type $FUNCSIG$v)
   nop
  )
 )
