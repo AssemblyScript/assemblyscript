@@ -1735,5 +1735,6 @@
   call $start:rt/stub-realloc
  )
  (func $null (; 12 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

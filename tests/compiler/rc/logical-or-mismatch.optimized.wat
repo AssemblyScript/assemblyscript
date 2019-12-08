@@ -6,7 +6,6 @@
  (type $FUNCSIG$ii (func (param i32) (result i32)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
@@ -478,7 +477,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -1374,7 +1373,7 @@
   end
   local.get $0
  )
- (func $rc/logical-or-mismatch/Ref#constructor (; 23 ;) (type $FUNCSIG$i) (result i32)
+ (func $rc/logical-or-mismatch/Ref#constructor (; 23 ;) (result i32)
   i32.const 0
   i32.const 3
   call $~lib/rt/tlsf/__alloc
@@ -1952,6 +1951,6 @@
   unreachable
  )
  (func $null (; 35 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

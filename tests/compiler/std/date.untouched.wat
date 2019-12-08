@@ -342,5 +342,6 @@
   call $start:std/date
  )
  (func $null (; 11 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

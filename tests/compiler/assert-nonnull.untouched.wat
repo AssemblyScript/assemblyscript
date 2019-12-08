@@ -215,6 +215,12 @@
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo | null>#__get
   local.tee $1
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else
+   unreachable
+  end
   i32.load
   local.tee $2
   if (result i32)
@@ -246,6 +252,12 @@
   i32.const 0
   call $~lib/array/Array<assert-nonnull/Foo | null>#__get
   local.tee $1
+  local.tee $2
+  if (result i32)
+   local.get $2
+  else
+   unreachable
+  end
   i32.load
   local.tee $2
   if (result i32)
@@ -365,5 +377,6 @@
   local.get $2
  )
  (func $null (; 19 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

@@ -63,3 +63,15 @@ assert(isNaN(F));
 
 F = NaN && 1.0;
 assert(isNaN(F));
+
+// Test shortcutting to bool on contextual bool
+// see: https://github.com/AssemblyScript/assemblyscript/pull/993
+
+function testShortcutAnd(a: i64, b: i32): bool {
+  return a && b;
+}
+function testShortcutOr(a: i64, b: i32): bool {
+  return a || b;
+}
+assert(testShortcutAnd(1, 1));
+assert(testShortcutOr(0, 1));

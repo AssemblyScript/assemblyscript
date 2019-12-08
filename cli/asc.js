@@ -49,9 +49,7 @@ var assemblyscript, isDev = false;
       try { // `require("dist/asc.js")` in explicit browser tests
         assemblyscript = eval("require('./assemblyscript')");
       } catch (e) {
-        // combine both errors that lead us here
-        e.message = e_ts.stack + "\n---\n" + e.stack;
-        throw e;
+        throw Error(e_ts.stack + "\n---\n" + e.stack);
       }
     }
   }
@@ -183,6 +181,7 @@ exports.main = function main(argv, options, callback) {
     stdout.write("Version " + exports.version + (isDev ? "-dev" : "") + EOL);
     return callback(null);
   }
+
   // Print the help message if requested or no source files are provided
   if (args.help || !argv.length) {
     var out = args.help ? stdout : stderr;
@@ -213,6 +212,77 @@ exports.main = function main(argv, options, callback) {
   // Set up base directory
   const baseDir = args.baseDir ? path.resolve(args.baseDir) : ".";
 
+  // Set up options
+  const compilerOptions = assemblyscript.newOptions();
+  assemblyscript.setTarget(compilerOptions, 0);
+  assemblyscript.setNoAssert(compilerOptions, args.noAssert);
+  assemblyscript.setImportMemory(compilerOptions, args.importMemory);
+  assemblyscript.setSharedMemory(compilerOptions, args.sharedMemory);
+  assemblyscript.setImportTable(compilerOptions, args.importTable);
+  assemblyscript.setExplicitStart(compilerOptions, args.explicitStart);
+  assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
+  assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
+  assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
+
+  // Initialize default aliases
+  assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
+  assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
+  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/builtins/abort");
+  assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/builtins/trace");
+
+  // Add or override aliases if specified
+  if (args.use) {
+    let aliases = args.use;
+    for (let i = 0, k = aliases.length; i < k; ++i) {
+      let part = aliases[i];
+      let p = part.indexOf("=");
+      if (p < 0) return callback(Error("Global alias '" + part + "' is invalid."));
+      let alias = part.substring(0, p).trim();
+      let name = part.substring(p + 1).trim();
+      if (!alias.length) return callback(Error("Global alias '" + part + "' is invalid."));
+      assemblyscript.setGlobalAlias(compilerOptions, alias, name);
+    }
+  }
+
+  // Disable default features if specified
+  var features;
+  if ((features = args.disable) != null) {
+    if (typeof features === "string") features = features.split(",");
+    for (let i = 0, k = features.length; i < k; ++i) {
+      let name = features[i].trim();
+      let flag = assemblyscript["FEATURE_" + name.replace(/\-/g, "_").toUpperCase()];
+      if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
+      assemblyscript.disableFeature(compilerOptions, flag);
+    }
+  }
+
+  // Enable experimental features if specified
+  if ((features = args.enable) != null) {
+    if (typeof features === "string") features = features.split(",");
+    for (let i = 0, k = features.length; i < k; ++i) {
+      let name = features[i].trim();
+      let flag = assemblyscript["FEATURE_" + name.replace(/\-/g, "_").toUpperCase()];
+      if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
+      assemblyscript.enableFeature(compilerOptions, flag);
+    }
+  }
+
+  // Set up optimization levels
+  var optimizeLevel = 0;
+  var shrinkLevel = 0;
+  if (args.optimize) {
+    optimizeLevel = exports.defaultOptimizeLevel;
+    shrinkLevel = exports.defaultShrinkLevel;
+  }
+  if (typeof args.optimizeLevel === "number") optimizeLevel = args.optimizeLevel;
+  if (typeof args.shrinkLevel === "number") shrinkLevel = args.shrinkLevel;
+  optimizeLevel = Math.min(Math.max(optimizeLevel, 0), 3);
+  shrinkLevel = Math.min(Math.max(shrinkLevel, 0), 2);
+  assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
+
+  // Initialize the program
+  const program = assemblyscript.newProgram(compilerOptions);
+
   // Set up transforms
   const transforms = [];
   if (args.transform) {
@@ -224,6 +294,7 @@ exports.main = function main(argv, options, callback) {
         const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
         if (typeof classOrModule === "function") {
           Object.assign(classOrModule.prototype, {
+            program,
             baseDir,
             stdout,
             stderr,
@@ -254,15 +325,12 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  // Begin parsing
-  var parser = null;
-
-  // Include library files
+  // Parse library files
   Object.keys(exports.libraryFiles).forEach(libPath => {
     if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(exports.libraryFiles[libPath], exports.libraryPrefix + libPath + ".ts", false, parser);
+      assemblyscript.parse(program, exports.libraryFiles[libPath], exports.libraryPrefix + libPath + ".ts", false);
     });
   });
   const customLibDirs = [];
@@ -286,7 +354,7 @@ exports.main = function main(argv, options, callback) {
         stats.parseCount++;
         exports.libraryFiles[libPath.replace(/\.ts$/, "")] = libText;
         stats.parseTime += measure(() => {
-          parser = assemblyscript.parseFile(libText, exports.libraryPrefix + libPath, false, parser);
+          assemblyscript.parse(program, libText, exports.libraryPrefix + libPath, false);
         });
       }
     }
@@ -302,10 +370,13 @@ exports.main = function main(argv, options, callback) {
     var sourceText = null; // text reported back to the compiler
     var sourcePath = null; // path reported back to the compiler
 
-    // Try file.ts, file/index.ts
+    // Try file.ts, file/index.ts, file.d.ts
     if (!internalPath.startsWith(exports.libraryPrefix)) {
       if ((sourceText = readFile(sourcePath = internalPath + ".ts", baseDir)) == null) {
-        sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir);
+        if ((sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir)) == null) {
+          // portable d.ts: uses the .js file next to it in JS or becomes an import in Wasm
+          sourceText = readFile(sourcePath = internalPath + ".d.ts", baseDir);
+        }
       }
 
     // Search library in this order: stdlib, custom lib dirs, paths
@@ -392,15 +463,15 @@ exports.main = function main(argv, options, callback) {
   // Parses the backlog of imported files after including entry files
   function parseBacklog() {
     var internalPath;
-    while ((internalPath = parser.nextFile()) != null) {
-      let file = getFile(internalPath, assemblyscript.getDependee(parser, internalPath));
+    while ((internalPath = assemblyscript.nextFile(program)) != null) {
+      let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
       if (!file) return callback(Error("Import file '" + internalPath + ".ts' not found."))
       stats.parseCount++;
       stats.parseTime += measure(() => {
-        assemblyscript.parseFile(file.sourceText, file.sourcePath, false, parser);
+        assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
       });
     }
-    if (checkDiagnostics(parser, stderr)) return callback(Error("Parse error"));
+    if (checkDiagnostics(program, stderr)) return callback(Error("Parse error"));
   }
 
   // Include runtime template before entry files so its setup runs first
@@ -417,7 +488,7 @@ exports.main = function main(argv, options, callback) {
     }
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(runtimeText, runtimePath, true, parser);
+      assemblyscript.parse(program, runtimeText, runtimePath, true);
     });
   }
 
@@ -441,7 +512,7 @@ exports.main = function main(argv, options, callback) {
 
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      parser = assemblyscript.parseFile(sourceText, sourcePath, true, parser);
+      assemblyscript.parse(program, sourceText, sourcePath, true);
     });
   }
 
@@ -453,7 +524,7 @@ exports.main = function main(argv, options, callback) {
 
   // Call afterParse transform hook
   {
-    let error = applyTransform("afterParse", parser);
+    let error = applyTransform("afterParse", program.parser);
     if (error) return callback(error);
   }
 
@@ -462,9 +533,6 @@ exports.main = function main(argv, options, callback) {
     let code = parseBacklog();
     if (code) return code;
   }
-
-  // Finish parsing
-  const program = assemblyscript.finishParsing(parser);
 
   // Print files and exit if listFiles
   if (args.listFiles) {
@@ -489,72 +557,16 @@ exports.main = function main(argv, options, callback) {
   optimizeLevel = Math.min(Math.max(optimizeLevel, 0), 3);
   shrinkLevel = Math.min(Math.max(shrinkLevel, 0), 2);
 
-  // Begin compilation
-  const compilerOptions = assemblyscript.createOptions();
-  assemblyscript.setTarget(compilerOptions, 0);
-  assemblyscript.setNoAssert(compilerOptions, args.noAssert);
-  assemblyscript.setImportMemory(compilerOptions, args.importMemory);
-  assemblyscript.setSharedMemory(compilerOptions, args.sharedMemory);
-  assemblyscript.setImportTable(compilerOptions, args.importTable);
-  assemblyscript.setExplicitStart(compilerOptions, args.explicitStart);
-  assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
-  assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
-  assemblyscript.setOptimizeLevelHints(compilerOptions, optimizeLevel, shrinkLevel);
-  assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
-
-  // Initialize default aliases
-  assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
-  assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
-  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/builtins/abort");
-  assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/builtins/trace");
-
-  // Add or override aliases if specified
-  if (args.use) {
-    let aliases = args.use;
-    for (let i = 0, k = aliases.length; i < k; ++i) {
-      let part = aliases[i];
-      let p = part.indexOf("=");
-      if (p < 0) return callback(Error("Global alias '" + part + "' is invalid."));
-      let alias = part.substring(0, p).trim();
-      let name = part.substring(p + 1).trim();
-      if (!alias.length) return callback(Error("Global alias '" + part + "' is invalid."));
-      assemblyscript.setGlobalAlias(compilerOptions, alias, name);
-    }
-  }
-
-  // Disable default features if specified
-  var features;
-  if ((features = args.disable) != null) {
-    if (typeof features === "string") features = features.split(",");
-    for (let i = 0, k = features.length; i < k; ++i) {
-      let name = features[i].trim();
-      let flag = assemblyscript["FEATURE_" + name.replace(/\-/g, "_").toUpperCase()];
-      if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
-      assemblyscript.disableFeature(compilerOptions, flag);
-    }
-  }
-
-  // Enable experimental features if specified
-  if ((features = args.enable) != null) {
-    if (typeof features === "string") features = features.split(",");
-    for (let i = 0, k = features.length; i < k; ++i) {
-      let name = features[i].trim();
-      let flag = assemblyscript["FEATURE_" + name.replace(/\-/g, "_").toUpperCase()];
-      if (!flag) return callback(Error("Feature '" + name + "' is unknown."));
-      assemblyscript.enableFeature(compilerOptions, flag);
-    }
-  }
-
   var module;
   stats.compileCount++;
   try {
     stats.compileTime += measure(() => {
-      module = assemblyscript.compileProgram(program, compilerOptions);
+      module = assemblyscript.compile(program);
     });
   } catch (e) {
     return callback(e);
   }
-  if (checkDiagnostics(parser, stderr)) {
+  if (checkDiagnostics(program, stderr)) {
     if (module) module.dispose();
     return callback(Error("Compile error"));
   }
@@ -943,10 +955,10 @@ exports.main = function main(argv, options, callback) {
 }
 
 /** Checks diagnostics emitted so far for errors. */
-function checkDiagnostics(emitter, stderr) {
+function checkDiagnostics(program, stderr) {
   var diagnostic;
   var hasErrors = false;
-  while ((diagnostic = assemblyscript.nextDiagnostic(emitter)) != null) {
+  while ((diagnostic = assemblyscript.nextDiagnostic(program)) != null) {
     if (stderr) {
       stderr.write(
         assemblyscript.formatDiagnostic(diagnostic, stderr.isTTY, true) +

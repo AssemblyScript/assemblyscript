@@ -166,6 +166,6 @@
   call $start:function-types
  )
  (func $null (; 7 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )
