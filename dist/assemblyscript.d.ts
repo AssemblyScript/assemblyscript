@@ -64,8 +64,8 @@ declare module "assemblyscript/src/common" {
         TRAMPOLINE = 33554432,
         /** Is a virtual method. */
         VIRTUAL = 67108864,
-        /** Is the main function. */
-        MAIN = 134217728,
+        /** Is (part of) a closure. */
+        CLOSURE = 134217728,
         /** Is quoted. */
         QUOTED = 268435456
     }
@@ -1727,8 +1727,7 @@ declare module "assemblyscript/src/module" {
         V128,
         Anyref,
         Exnref,
-        Unreachable,
-        Auto
+        Unreachable
     }
     export enum FeatureFlags {
         MVP,
@@ -2219,6 +2218,8 @@ declare module "assemblyscript/src/module" {
         /** Unlimited memory constant. */
         static readonly UNLIMITED_MEMORY: Index;
         setMemory(initial: Index, maximum: Index, segments: MemorySegment[], target: Target, exportName?: string | null, shared?: boolean): void;
+        /** Unlimited table constant. */
+        static readonly UNLIMITED_TABLE: Index;
         setFunctionTable(initial: Index, maximum: Index, funcs: string[], offset: ExpressionRef): void;
         addCustomSection(name: string, contents: Uint8Array): void;
         getOptimizeLevel(): number;
@@ -2987,6 +2988,134 @@ declare module "assemblyscript/src/resolver" {
         reportMode?: ReportMode): Class | null;
     }
 }
+declare module "assemblyscript/src/parser" {
+    /**
+     * A TypeScript parser for the AssemblyScript subset.
+     * @module parser
+     */ /***/
+    import { CommonFlags } from "assemblyscript/src/common";
+    import { Program } from "assemblyscript/src/program";
+    import { Tokenizer, CommentHandler } from "assemblyscript/src/tokenizer";
+    import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
+    import { Source, TypeNode, TypeName, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from "assemblyscript/src/ast";
+    /** Parser interface. */
+    export class Parser extends DiagnosticEmitter {
+        /** Program being created. */
+        program: Program;
+        /** Source file names to be requested next. */
+        backlog: string[];
+        /** Source file names already seen, that is processed or backlogged. */
+        seenlog: Set<string>;
+        /** Source file names already completely processed. */
+        donelog: Set<string>;
+        /** Optional handler to intercept comments while tokenizing. */
+        onComment: CommentHandler | null;
+        /** Current file being parsed. */
+        currentSource: Source;
+        /** Dependency map **/
+        dependees: Map<string, Source>;
+        /** Constructs a new parser. */
+        constructor(program: Program);
+        /** Parses a file and adds its definitions to the program. */
+        parseFile(
+        /** Source text of the file. */
+        text: string, 
+        /** Normalized path of the file. */
+        path: string, 
+        /** Whether this is an entry file. */
+        isEntry: boolean): void;
+        /** Parses a top-level statement. */
+        parseTopLevelStatement(tn: Tokenizer, namespace?: NamespaceDeclaration | null): Statement | null;
+        /** Obtains the next file to parse. */
+        nextFile(): string | null;
+        /** Obtains the dependee of the given imported file. */
+        getDependee(dependent: string): string | null;
+        /** Finishes parsing. */
+        finish(): void;
+        /** Parses a type name. */
+        parseTypeName(tn: Tokenizer): TypeName | null;
+        /** Parses a type. */
+        parseType(tn: Tokenizer, acceptParenthesized?: boolean, suppressErrors?: boolean): TypeNode | null;
+        private tryParseSignatureIsSignature;
+        /** Parses a function type, as used in type declarations. */
+        tryParseFunctionType(tn: Tokenizer): FunctionTypeNode | null;
+        parseDecorator(tn: Tokenizer): DecoratorNode | null;
+        parseVariable(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): VariableStatement | null;
+        parseVariableDeclaration(tn: Tokenizer, parentFlags: CommonFlags, parentDecorators: DecoratorNode[] | null): VariableDeclaration | null;
+        parseEnum(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): EnumDeclaration | null;
+        parseEnumValue(tn: Tokenizer, parentFlags: CommonFlags): EnumValueDeclaration | null;
+        parseReturn(tn: Tokenizer): ReturnStatement | null;
+        parseTypeParameters(tn: Tokenizer): TypeParameterNode[] | null;
+        parseTypeParameter(tn: Tokenizer): TypeParameterNode | null;
+        private parseParametersThis;
+        parseParameters(tn: Tokenizer, isConstructor?: boolean): ParameterNode[] | null;
+        parseParameter(tn: Tokenizer, isConstructor?: boolean): ParameterNode | null;
+        parseFunction(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): FunctionDeclaration | null;
+        parseFunctionExpression(tn: Tokenizer): FunctionExpression | null;
+        private parseFunctionExpressionCommon;
+        parseClassOrInterface(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): ClassDeclaration | null;
+        parseClassExpression(tn: Tokenizer): ClassExpression | null;
+        parseClassMember(tn: Tokenizer, parent: ClassDeclaration): DeclarationStatement | null;
+        parseIndexSignatureDeclaration(tn: Tokenizer, decorators: DecoratorNode[] | null): IndexSignatureDeclaration | null;
+        parseNamespace(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): NamespaceDeclaration | null;
+        parseExport(tn: Tokenizer, startPos: number, isDeclare: boolean): ExportStatement | null;
+        parseExportMember(tn: Tokenizer): ExportMember | null;
+        parseExportDefaultAlias(tn: Tokenizer, startPos: number, defaultStart: number, defaultEnd: number): ExportStatement;
+        parseImport(tn: Tokenizer): ImportStatement | null;
+        parseImportDeclaration(tn: Tokenizer): ImportDeclaration | null;
+        parseExportImport(tn: Tokenizer, startPos: number): ExportImportStatement | null;
+        parseStatement(tn: Tokenizer, topLevel?: boolean): Statement | null;
+        parseBlockStatement(tn: Tokenizer, topLevel: boolean): BlockStatement | null;
+        parseBreak(tn: Tokenizer): BreakStatement | null;
+        parseContinue(tn: Tokenizer): ContinueStatement | null;
+        parseDoStatement(tn: Tokenizer): DoStatement | null;
+        parseExpressionStatement(tn: Tokenizer): ExpressionStatement | null;
+        parseForStatement(tn: Tokenizer): ForStatement | null;
+        parseIfStatement(tn: Tokenizer): IfStatement | null;
+        parseSwitchStatement(tn: Tokenizer): SwitchStatement | null;
+        parseSwitchCase(tn: Tokenizer): SwitchCase | null;
+        parseThrowStatement(tn: Tokenizer): ThrowStatement | null;
+        parseTryStatement(tn: Tokenizer): TryStatement | null;
+        parseTypeDeclaration(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): TypeDeclaration | null;
+        parseVoidStatement(tn: Tokenizer): VoidStatement | null;
+        parseWhileStatement(tn: Tokenizer): WhileStatement | null;
+        parseExpressionStart(tn: Tokenizer): Expression | null;
+        tryParseTypeArgumentsBeforeArguments(tn: Tokenizer): TypeNode[] | null;
+        parseArguments(tn: Tokenizer): Expression[] | null;
+        parseExpression(tn: Tokenizer, precedence?: Precedence): Expression | null;
+        private joinPropertyCall;
+        private maybeParseCallExpression;
+        /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */
+        skipStatement(tn: Tokenizer): void;
+        /** Skips over a block on errors in an attempt to reduce unnecessary diagnostic noise. */
+        skipBlock(tn: Tokenizer): void;
+    }
+    /** Operator precedence from least to largest. */
+    export const enum Precedence {
+        NONE = 0,
+        COMMA = 1,
+        SPREAD = 2,
+        YIELD = 3,
+        ASSIGNMENT = 4,
+        CONDITIONAL = 5,
+        LOGICAL_OR = 6,
+        LOGICAL_AND = 7,
+        BITWISE_OR = 8,
+        BITWISE_XOR = 9,
+        BITWISE_AND = 10,
+        EQUALITY = 11,
+        RELATIONAL = 12,
+        SHIFT = 13,
+        ADDITIVE = 14,
+        MULTIPLICATIVE = 15,
+        EXPONENTIATED = 16,
+        UNARY_PREFIX = 17,
+        UNARY_POSTFIX = 18,
+        CALL = 19,
+        MEMBERACCESS = 20,
+        GROUPING = 21
+    }
+}
 declare module "assemblyscript/src/program" {
     /**
      * AssemblyScript's intermediate representation describing a program's elements.
@@ -3000,6 +3129,7 @@ declare module "assemblyscript/src/program" {
     import { Module, FunctionRef } from "assemblyscript/src/module";
     import { Resolver } from "assemblyscript/src/resolver";
     import { Flow } from "assemblyscript/src/flow";
+    import { Parser } from "assemblyscript/src/parser";
     /** Represents the kind of an operator overload. */
     export enum OperatorKind {
         INVALID = 0,
@@ -3046,6 +3176,8 @@ declare module "assemblyscript/src/program" {
     }
     /** Represents an AssemblyScript program. */
     export class Program extends DiagnosticEmitter {
+        /** Parser instance. */
+        parser: Parser;
         /** Resolver instance. */
         resolver: Resolver;
         /** Array of sources. */
@@ -3136,6 +3268,8 @@ declare module "assemblyscript/src/program" {
         nextSignatureId: number;
         /** Constructs a new program, optionally inheriting parser diagnostics. */
         constructor(
+        /** Compiler options. */
+        options: Options, 
         /** Shared array of diagnostic messages (emitted so far). */
         diagnostics?: DiagnosticMessage[] | null);
         /** Obtains the source matching the specified internal path. */
@@ -3988,7 +4122,7 @@ declare module "assemblyscript/src/compiler" {
         /** Resolver reference. */
         get resolver(): Resolver;
         /** Provided options. */
-        options: Options;
+        get options(): Options;
         /** Module instance being compiled. */
         module: Module;
         /** Current control flow. */
@@ -4020,9 +4154,9 @@ declare module "assemblyscript/src/compiler" {
         /** Registered event types. */
         events: Map<string, EventRef>;
         /** Compiles a {@link Program} to a {@link Module} using the specified options. */
-        static compile(program: Program, options?: Options | null): Module;
+        static compile(program: Program): Module;
         /** Constructs a new compiler for a {@link Program} using the specified options. */
-        constructor(program: Program, options?: Options | null);
+        constructor(program: Program);
         /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
         compile(): Module;
         /** Applies the respective module exports for the specified file. */
@@ -4165,28 +4299,69 @@ declare module "assemblyscript/src/compiler" {
         private ensureArgcVar;
         /** Makes sure that the argument count helper setter is present and returns its name. */
         private ensureArgcSet;
-        /** Makes retain call, retaining the expression's value. */
+        /** Makes a retain call, retaining the expression's value. */
         makeRetain(expr: ExpressionRef): ExpressionRef;
         /** Makes a release call, releasing the expression's value. Changes the current type to void.*/
         makeRelease(expr: ExpressionRef): ExpressionRef;
         /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
         makeReplace(oldExpr: ExpressionRef, newExpr: ExpressionRef, alreadyRetained?: boolean): ExpressionRef;
-        /** Makes an automatic release call at the end of the current flow. */
-        makeAutorelease(expr: ExpressionRef, flow?: Flow): ExpressionRef;
-        /** Attempts to undo a final autorelease, returning the index of the previously retaining variable or -1 if not possible. */
-        undoAutorelease(expr: ExpressionRef, flow: Flow): number;
+        /** Makes an autorelease call at the end of the specified `flow`. */
+        makeAutorelease(
+        /** Expression to autorelease. */
+        expr: ExpressionRef, 
+        /** Type of the expression. */
+        type: Type, 
+        /** Flow that should autorelease. Defaults to the current flow. */
+        flow?: Flow): ExpressionRef;
         /**
-         * Attemps to move a final autorelease from one flow to a parent.
-         * It is crucial that from flow hasn't processed autoreleases yet because otherwise the final
-         * retain would have been written already.
+         * Attempts to undo an autorelease in the specified `flow`.
+         * Returns the index of the previously retaining variable or -1 if not possible.
          */
-        moveAutorelease(expr: ExpressionRef, fromInnerFlow: Flow, toOuterFlow: Flow): ExpressionRef;
+        tryUndoAutorelease(
+        /** Expression being autoreleased. */
+        expr: ExpressionRef, 
+        /** Flow that would autorelease. */
+        flow: Flow): number;
+        /** Delays an autorelease in `innerFlow` until `outerFlow` concludes. */
+        delayAutorelease(
+        /** Expression being autoreleased in `innerFlow`. */
+        expr: ExpressionRef, 
+        /** Type of the expression. */
+        type: Type, 
+        /** Inner flow that would autorelease. Must not have processed autoreleases yet. */
+        innerFlow: Flow, 
+        /** Outer flow that should autorelease instead. */
+        outerFlow: Flow): ExpressionRef;
         /** Performs any queued autoreleases in the specified flow. */
-        performAutoreleases(flow: Flow, stmts: ExpressionRef[], clearFlags?: boolean): void;
-        /** Performs any queued autoreleases in the specified flow and returns the value. */
-        performAutoreleasesWithValue(flow: Flow, valueExpr: ExpressionRef, valueType: Type, stmts?: ExpressionRef[] | null, clearFlags?: boolean): ExpressionRef;
-        /** Finishes any queued top-level autoreleases in the actual function of the specified flow. */
-        finishAutoreleases(flow: Flow, stmts: ExpressionRef[]): void;
+        performAutoreleases(
+        /** Flow releasing its queued autoreleases. */
+        flow: Flow, 
+        /** Array of statements to append the releases to. */
+        stmts: ExpressionRef[], 
+        /**
+         * Whether to finalize affected locals. Defaults to `true`, which
+         * is almost always correct, except when bubbling up parent flows
+         * in break-like scenarios.
+         */
+        finalize?: boolean): void;
+        /** Performs any queued autoreleases in the specified flow and returns the given value. */
+        performAutoreleasesWithValue(
+        /** Flow releasing its queued autoreleases. */
+        flow: Flow, 
+        /** Value to return. */
+        valueExpr: ExpressionRef, 
+        /** Type of the returned value. */
+        valueType: Type, 
+        /** Array of statements to append the releases to. */
+        stmts?: ExpressionRef[] | null, 
+        /** Whether to finalize affected locals. */
+        finalize?: boolean): ExpressionRef;
+        /** Finishes any queued autoreleases in the actual function of the specified flow. */
+        finishAutoreleases(
+        /** Flow releasing its queued autoreleases. */
+        flow: Flow, 
+        /** Array of statements to append the releases to. */
+        stmts: ExpressionRef[]): void;
         /** Creates a direct call to the specified function. */
         makeCallDirect(instance: Function, operands: ExpressionRef[] | null, reportNode: Node, immediatelyDropped?: boolean, 
         /** Skip the usual autorelease and manage this at the callsite instead. */
@@ -4208,7 +4383,7 @@ declare module "assemblyscript/src/compiler" {
         compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
         compileInstanceOfExpression(expression: InstanceOfExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
         compileLiteralExpression(expression: LiteralExpression, contextualType: Type, constraints: Constraints, implicitlyNegate?: boolean): ExpressionRef;
-        compileStringLiteral(expression: StringLiteralExpression): ExpressionRef;
+        compileStringLiteral(expression: StringLiteralExpression, constraints: Constraints): ExpressionRef;
         compileArrayLiteral(elementType: Type, expressions: (Expression | null)[], constraints: Constraints, reportNode: Node): ExpressionRef;
         compileObjectLiteral(expression: ObjectLiteralExpression, contextualType: Type): ExpressionRef;
         compileNewExpression(expression: NewExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
@@ -4319,8 +4494,6 @@ declare module "assemblyscript/src/builtins" {
         const changetype = "~lib/builtins/changetype";
         const assert = "~lib/builtins/assert";
         const unchecked = "~lib/builtins/unchecked";
-        const call_direct = "~lib/builtins/call_direct";
-        const call_indirect = "~lib/builtins/call_indirect";
         const instantiate = "~lib/builtins/instantiate";
         const idof = "~lib/builtins/idof";
         const i8 = "~lib/builtins/i8";
@@ -4836,134 +5009,6 @@ declare module "assemblyscript/src/definitions" {
         build(): string;
     }
 }
-declare module "assemblyscript/src/parser" {
-    /**
-     * A TypeScript parser for the AssemblyScript subset.
-     * @module parser
-     */ /***/
-    import { CommonFlags } from "assemblyscript/src/common";
-    import { Program } from "assemblyscript/src/program";
-    import { Tokenizer, CommentHandler } from "assemblyscript/src/tokenizer";
-    import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
-    import { Source, TypeNode, TypeName, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from "assemblyscript/src/ast";
-    /** Parser interface. */
-    export class Parser extends DiagnosticEmitter {
-        /** Program being created. */
-        program: Program;
-        /** Source file names to be requested next. */
-        backlog: string[];
-        /** Source file names already seen, that is processed or backlogged. */
-        seenlog: Set<string>;
-        /** Source file names already completely processed. */
-        donelog: Set<string>;
-        /** Optional handler to intercept comments while tokenizing. */
-        onComment: CommentHandler | null;
-        /** Current file being parsed. */
-        currentSource: Source;
-        /** Dependency map **/
-        dependees: Map<string, Source>;
-        /** Constructs a new parser. */
-        constructor();
-        /** Parses a file and adds its definitions to the program. */
-        parseFile(
-        /** Source text of the file. */
-        text: string, 
-        /** Normalized path of the file. */
-        path: string, 
-        /** Whether this is an entry file. */
-        isEntry: boolean): void;
-        /** Parses a top-level statement. */
-        parseTopLevelStatement(tn: Tokenizer, namespace?: NamespaceDeclaration | null): Statement | null;
-        /** Obtains the next file to parse. */
-        nextFile(): string | null;
-        /** Obtains the dependee of the given imported file. */
-        getDependee(dependent: string): string | null;
-        /** Finishes parsing and returns the program. */
-        finish(): Program;
-        /** Parses a type name. */
-        parseTypeName(tn: Tokenizer): TypeName | null;
-        /** Parses a type. */
-        parseType(tn: Tokenizer, acceptParenthesized?: boolean, suppressErrors?: boolean): TypeNode | null;
-        private tryParseSignatureIsSignature;
-        /** Parses a function type, as used in type declarations. */
-        tryParseFunctionType(tn: Tokenizer): FunctionTypeNode | null;
-        parseDecorator(tn: Tokenizer): DecoratorNode | null;
-        parseVariable(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): VariableStatement | null;
-        parseVariableDeclaration(tn: Tokenizer, parentFlags: CommonFlags, parentDecorators: DecoratorNode[] | null): VariableDeclaration | null;
-        parseEnum(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): EnumDeclaration | null;
-        parseEnumValue(tn: Tokenizer, parentFlags: CommonFlags): EnumValueDeclaration | null;
-        parseReturn(tn: Tokenizer): ReturnStatement | null;
-        parseTypeParameters(tn: Tokenizer): TypeParameterNode[] | null;
-        parseTypeParameter(tn: Tokenizer): TypeParameterNode | null;
-        private parseParametersThis;
-        parseParameters(tn: Tokenizer, isConstructor?: boolean): ParameterNode[] | null;
-        parseParameter(tn: Tokenizer, isConstructor?: boolean): ParameterNode | null;
-        parseFunction(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): FunctionDeclaration | null;
-        parseFunctionExpression(tn: Tokenizer): FunctionExpression | null;
-        private parseFunctionExpressionCommon;
-        parseClassOrInterface(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): ClassDeclaration | null;
-        parseClassExpression(tn: Tokenizer): ClassExpression | null;
-        parseClassMember(tn: Tokenizer, parent: ClassDeclaration): DeclarationStatement | null;
-        parseIndexSignatureDeclaration(tn: Tokenizer, decorators: DecoratorNode[] | null): IndexSignatureDeclaration | null;
-        parseNamespace(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): NamespaceDeclaration | null;
-        parseExport(tn: Tokenizer, startPos: number, isDeclare: boolean): ExportStatement | null;
-        parseExportMember(tn: Tokenizer): ExportMember | null;
-        parseExportDefaultAlias(tn: Tokenizer, startPos: number, defaultStart: number, defaultEnd: number): ExportStatement;
-        parseImport(tn: Tokenizer): ImportStatement | null;
-        parseImportDeclaration(tn: Tokenizer): ImportDeclaration | null;
-        parseExportImport(tn: Tokenizer, startPos: number): ExportImportStatement | null;
-        parseStatement(tn: Tokenizer, topLevel?: boolean): Statement | null;
-        parseBlockStatement(tn: Tokenizer, topLevel: boolean): BlockStatement | null;
-        parseBreak(tn: Tokenizer): BreakStatement | null;
-        parseContinue(tn: Tokenizer): ContinueStatement | null;
-        parseDoStatement(tn: Tokenizer): DoStatement | null;
-        parseExpressionStatement(tn: Tokenizer): ExpressionStatement | null;
-        parseForStatement(tn: Tokenizer): ForStatement | null;
-        parseIfStatement(tn: Tokenizer): IfStatement | null;
-        parseSwitchStatement(tn: Tokenizer): SwitchStatement | null;
-        parseSwitchCase(tn: Tokenizer): SwitchCase | null;
-        parseThrowStatement(tn: Tokenizer): ThrowStatement | null;
-        parseTryStatement(tn: Tokenizer): TryStatement | null;
-        parseTypeDeclaration(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): TypeDeclaration | null;
-        parseVoidStatement(tn: Tokenizer): VoidStatement | null;
-        parseWhileStatement(tn: Tokenizer): WhileStatement | null;
-        parseExpressionStart(tn: Tokenizer): Expression | null;
-        tryParseTypeArgumentsBeforeArguments(tn: Tokenizer): TypeNode[] | null;
-        parseArguments(tn: Tokenizer): Expression[] | null;
-        parseExpression(tn: Tokenizer, precedence?: Precedence): Expression | null;
-        private joinPropertyCall;
-        private maybeParseCallExpression;
-        /** Skips over a statement on errors in an attempt to reduce unnecessary diagnostic noise. */
-        skipStatement(tn: Tokenizer): void;
-        /** Skips over a block on errors in an attempt to reduce unnecessary diagnostic noise. */
-        skipBlock(tn: Tokenizer): void;
-    }
-    /** Operator precedence from least to largest. */
-    export const enum Precedence {
-        NONE = 0,
-        COMMA = 1,
-        SPREAD = 2,
-        YIELD = 3,
-        ASSIGNMENT = 4,
-        CONDITIONAL = 5,
-        LOGICAL_OR = 6,
-        LOGICAL_AND = 7,
-        BITWISE_OR = 8,
-        BITWISE_XOR = 9,
-        BITWISE_AND = 10,
-        EQUALITY = 11,
-        RELATIONAL = 12,
-        SHIFT = 13,
-        ADDITIVE = 14,
-        MULTIPLICATIVE = 15,
-        EXPONENTIATED = 16,
-        UNARY_PREFIX = 17,
-        UNARY_POSTFIX = 18,
-        CALL = 19,
-        MEMBERACCESS = 20,
-        GROUPING = 21
-    }
-}
 declare module "assemblyscript/src/index" {
     /**
      * Low-level C-like compiler API.
@@ -4973,34 +5018,9 @@ declare module "assemblyscript/src/index" {
     import { Options } from "assemblyscript/src/compiler";
     import { DiagnosticMessage, formatDiagnosticMessage } from "assemblyscript/src/diagnostics";
     import { Module } from "assemblyscript/src/module";
-    import { Parser } from "assemblyscript/src/parser";
     import { Program } from "assemblyscript/src/program";
-    /** Parses a source file. If `parser` has been omitted a new one is created. */
-    export function parseFile(
-    /** Source text of the file. */
-    text: string, 
-    /** Normalized path of the file. */
-    path: string, 
-    /** Whether this is an entry file. */
-    isEntry?: boolean, 
-    /** Parser reference. */
-    parser?: Parser | null): Parser;
-    /** Obtains the next required file's path. Returns `null` once complete. */
-    export function nextFile(parser: Parser): string | null;
-    /** Obtains the path of the dependee of a given imported file. */
-    export function getDependee(parser: Parser, file: string): string | null;
-    /** Obtains the next diagnostic message. Returns `null` once complete. */
-    export function nextDiagnostic(parser: Parser): DiagnosticMessage | null;
-    /** Formats a diagnostic message to a string. */
-    export { formatDiagnosticMessage as formatDiagnostic };
-    /** Tests whether a diagnostic is informatory. */
-    export function isInfo(message: DiagnosticMessage): boolean;
-    /** Tests whether a diagnostic is a warning. */
-    export function isWarning(message: DiagnosticMessage): boolean;
-    /** Tests whether a diagnostic is an error. */
-    export function isError(message: DiagnosticMessage): boolean;
     /** Creates a new set of compiler options. */
-    export function createOptions(): Options;
+    export function newOptions(): Options;
     /** Sets the `target` option. */
     export function setTarget(options: Options, target: Target): void;
     /** Sets the `noAssert` option. */
@@ -5045,14 +5065,38 @@ declare module "assemblyscript/src/index" {
     export function disableFeature(options: Options, feature: Feature): void;
     /** Gives the compiler a hint at the optimize levels that will be used later on. */
     export function setOptimizeLevelHints(options: Options, optimizeLevel: number, shrinkLevel: number): void;
-    /** Finishes parsing. */
-    export function finishParsing(parser: Parser): Program;
+    /** Creates a new Program. */
+    export function newProgram(options: Options): Program;
+    /** Obtains the next diagnostic message. Returns `null` once complete. */
+    export function nextDiagnostic(program: Program): DiagnosticMessage | null;
     /** Obtains the source of the given file. */
     export function getSource(program: Program, internalPath: string): string | null;
-    /** Compiles the sources computed by the parser to a module. */
-    export function compileProgram(program: Program, options?: Options | null): Module;
+    /** Formats a diagnostic message to a string. */
+    export { formatDiagnosticMessage as formatDiagnostic };
+    /** Tests whether a diagnostic is informatory. */
+    export function isInfo(message: DiagnosticMessage): boolean;
+    /** Tests whether a diagnostic is a warning. */
+    export function isWarning(message: DiagnosticMessage): boolean;
+    /** Tests whether a diagnostic is an error. */
+    export function isError(message: DiagnosticMessage): boolean;
+    /** Parses a source file. If `parser` has been omitted a new one is created. */
+    export function parse(
+    /** Program reference. */
+    program: Program, 
+    /** Source text of the file. */
+    text: string, 
+    /** Normalized path of the file. */
+    path: string, 
+    /** Whether this is an entry file. */
+    isEntry?: boolean): void;
+    /** Obtains the next required file's path. Returns `null` once complete. */
+    export function nextFile(program: Program): string | null;
+    /** Obtains the path of the dependee of a given imported file. */
+    export function getDependee(program: Program, file: string): string | null;
+    /** Compiles the parsed sources to a module. */
+    export function compile(program: Program): Module;
     /** Decompiles a module to its (low level) source. */
-    export function decompileModule(module: Module): string;
+    export function decompile(module: Module): string;
     /** Builds WebIDL definitions for the specified program. */
     export function buildIDL(program: Program): string;
     /** Builds TypeScript definitions for the specified program. */
