@@ -8,7 +8,7 @@
  (export "renamed_a" (global $export/a))
  (export "renamed_b" (global $export/b))
  (export "renamed_renamed_b" (global $export/b))
- (func $start (; 0 ;) (type $FUNCSIG$v)
-  nop
+ (func $null (; 0 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

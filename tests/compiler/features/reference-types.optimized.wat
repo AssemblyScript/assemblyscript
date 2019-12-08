@@ -50,6 +50,6 @@
   call $start:features/reference-types
  )
  (func $null (; 8 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

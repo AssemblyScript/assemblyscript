@@ -99,5 +99,6 @@
   call $start:call-inferred
  )
  (func $null (; 8 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

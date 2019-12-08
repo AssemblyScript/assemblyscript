@@ -4,7 +4,6 @@
  (type $FUNCSIG$d (func (result f64)))
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$i (func (result i32)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
@@ -58,7 +57,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 4 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/stub/__alloc (; 4 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/rt/stub/offset
@@ -210,6 +209,6 @@
   call $start:std/date
  )
  (func $null (; 7 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

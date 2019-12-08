@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "../out",
     "allowJs": false,
-    "sourceMap": true
+    "sourceMap": true,
+    "target": "ES2016"
   },
   "include": [
     "./**/*.ts"

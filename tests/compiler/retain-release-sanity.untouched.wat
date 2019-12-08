@@ -4222,7 +4222,6 @@
   local.get $0
   call $~lib/rt/pure/__release
   i32.const 488
-  call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
   i32.const 512
@@ -4618,5 +4617,6 @@
   return
  )
  (func $null (; 54 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

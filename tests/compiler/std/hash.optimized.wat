@@ -209,6 +209,6 @@
   call $start:std/hash
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

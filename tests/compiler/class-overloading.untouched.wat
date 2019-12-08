@@ -34,5 +34,6 @@
   call $start:class-overloading
  )
  (func $null (; 6 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

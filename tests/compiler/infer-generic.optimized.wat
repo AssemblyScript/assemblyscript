@@ -24,7 +24,7 @@
   local.get $0
   select
  )
- (func $~lib/array/Array<f32>#reduce<bool> (; 1 ;) (type $FUNCSIG$v)
+ (func $~lib/array/Array<f32>#reduce<bool> (; 1 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -76,6 +76,6 @@
   call $~lib/array/Array<f32>#reduce<bool>
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

@@ -4097,5 +4097,6 @@
   return
  )
  (func $null (; 50 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

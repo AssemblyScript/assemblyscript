@@ -3,10 +3,13 @@
  * @module cli/transform
  *//***/
 
-import { Parser, Module } from "..";
+import { Program, Parser, Module } from "..";
 import { OutputStream } from "./asc";
 
 export abstract class Transform {
+
+  /** Program reference. */
+  readonly program: Program;
 
   /** Base directory. */
   readonly baseDir: string;

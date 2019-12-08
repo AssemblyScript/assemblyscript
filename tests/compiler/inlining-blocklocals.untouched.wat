@@ -100,5 +100,6 @@
   call $start:inlining-blocklocals
  )
  (func $null (; 4 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )
