@@ -67,9 +67,6 @@ exports.version = exports.isBundle ? BUNDLE_VERSION : require("../package.json")
 /** Available CLI options. */
 exports.options = require("./asc.json");
 
-/** Common root used in source maps. */
-exports.sourceMapRoot = "assemblyscript:///";
-
 /** Prefix used for library files. */
 exports.libraryPrefix = assemblyscript.LIBRARY_PREFIX;
 
@@ -767,16 +764,17 @@ exports.main = function main(argv, options, callback) {
 
     // Write binary
     if (args.binaryFile != null) {
+      let basename = path.basename(args.binaryFile);
       let sourceMapURL = args.sourceMap != null
         ? args.sourceMap.length
           ? args.sourceMap
-          : path.basename(args.binaryFile) + ".map"
+          : "./" + basename + ".map"
         : null;
 
       let wasm;
       stats.emitCount++;
       stats.emitTime += measure(() => {
-        wasm = module.toBinary(sourceMapURL)
+        wasm = module.toBinary(sourceMapURL);
       });
 
       if (args.binaryFile.length) {
@@ -790,18 +788,19 @@ exports.main = function main(argv, options, callback) {
       // Post-process source map
       if (wasm.sourceMap != null) {
         if (args.binaryFile.length) {
-          let sourceMap = JSON.parse(wasm.sourceMap);
-          sourceMap.sourceRoot = exports.sourceMapRoot;
-          sourceMap.sources.forEach((name, index) => {
+          let map = JSON.parse(wasm.sourceMap);
+          map.sourceRoot = "./" + basename;
+          let contents = [];
+          map.sources.forEach((name, index) => {
             let text = assemblyscript.getSource(program, name.replace(/\.ts$/, ""));
             if (text == null) return callback(Error("Source of file '" + name + "' not found."));
-            if (!sourceMap.sourceContents) sourceMap.sourceContents = [];
-            sourceMap.sourceContents[index] = text;
+            contents[index] = text;
           });
+          map.sourcesContent = contents;
           writeFile(path.join(
             path.dirname(args.binaryFile),
             path.basename(sourceMapURL)
-          ).replace(/^\.\//, ""), JSON.stringify(sourceMap), baseDir);
+          ).replace(/^\.\//, ""), JSON.stringify(map), baseDir);
         } else {
           stderr.write("Skipped source map (stdout already occupied)" + EOL);
         }
