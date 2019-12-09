@@ -1,5 +1,5 @@
 // Total tables size: ~5 kb (usually compressed to ~4 kb)
-// See musl/tree/src/ctype/casemap.h
+// See: https://git.musl-libc.org/cgit/musl/tree/src/ctype/casemap.h
 // @ts-ignore: decorator
 @lazy const tab: u8[] = [
   7, 8, 9, 10, 11, 12, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
@@ -438,7 +438,7 @@ export function bsearch(key: u32, ptr: usize, max: i32): i32 {
   return -1; // not found
 }
 
-// See: musl/tree/src/ctype/towctrans.c
+// See: https://git.musl-libc.org/cgit/musl/tree/src/ctype/towctrans.c
 export function casemap(c: u32, dir: i32): i32 {
   // if (c >= 0x20000) return c;
   var c0 = c as i32;

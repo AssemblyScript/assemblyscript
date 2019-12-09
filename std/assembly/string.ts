@@ -496,6 +496,7 @@ import { idof } from "./builtins";
       if (isAscii(c)) {
         store<u16>(codes + (j << 1), toLower8(c));
       } else {
+        // check and read surrogate pair
         if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
           let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
           if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
@@ -520,6 +521,7 @@ import { idof } from "./builtins";
           if (code < 0x10000) {
             store<u16>(codes + (j << 1), code);
           } else {
+            // store as surrogare pair
             code -= 0x10000;
             let lo = (code >>> 10) | 0xD800;
             let hi = (code & 0x03FF) | 0xDC00;
@@ -546,6 +548,7 @@ import { idof } from "./builtins";
       if (isAscii(c)) {
         store<u16>(codes + (j << 1), toUpper8(c));
       } else {
+        // check and read surrogate pair
         if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
           let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
           if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
@@ -580,6 +583,7 @@ import { idof } from "./builtins";
             if (code < 0x10000) {
               store<u16>(codes + (j << 1), code);
             } else {
+              // store as surrogare pair
               code -= 0x10000;
               let lo = (code >>> 10) | 0xD800;
               let hi = (code & 0x03FF) | 0xDC00;
