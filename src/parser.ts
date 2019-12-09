@@ -1843,6 +1843,7 @@ export class Parser extends DiagnosticEmitter {
           );
         }
         flags |= CommonFlags.ABSTRACT;
+        flags |= CommonFlags.VIRTUAL;
         abstractStart = tn.tokenPos;
         abstractEnd = tn.pos;
       }
@@ -2100,7 +2101,7 @@ export class Parser extends DiagnosticEmitter {
         }
         body = this.parseBlockStatement(tn, false);
         if (!body) return null;
-      } else if (!(flags & CommonFlags.AMBIENT) && !isInterface) {
+      } else if (!(flags & CommonFlags.AMBIENT) && !isInterface && !(flags & CommonFlags.ABSTRACT)) {
         this.error(
           DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
           tn.range()

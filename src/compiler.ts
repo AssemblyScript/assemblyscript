@@ -3044,16 +3044,17 @@ export class Compiler extends DiagnosticEmitter {
     if (this.currentFlow.isNonnull(expr, fromType)) fromType = fromType.nonNullableType;
 
     // Check if a converting to an Interface
-    if (toType.isInterface && !toType.isFunction) {
-      if (!fromType.isManaged || fromType.classReference == null) {
+    if ((toType.isInterface || toType.isAbstractClass) && !toType.isFunction) {
+      if ((!fromType.isManaged && toType.isManaged) || fromType.classReference == null) {
         this.error(
           DiagnosticCode.Type_0_is_not_assignable_to_type_1,
           reportNode.range,
           fromType.toString(),
           toType.toString());
       } else {
+        //Also checks abstract methods
         if (this.checkInterfaceImplementation(toType, fromType, reportNode)) {
-          (<Interface>toType.classReference).addImplementer(fromType.classReference);
+          toType.classReference!.addImplementer(fromType.classReference);
         } else {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
@@ -9279,6 +9280,9 @@ export class Compiler extends DiagnosticEmitter {
     var incorrectMember = false;
     for (let [name, imem] of imems.entries()) {
       error = error || incorrectMember;
+      if (!imem.is(CommonFlags.VIRTUAL)){
+        continue;
+      }
       incorrectMember = true;
       if (mems == null || mems.get(name) == null) {
         // Error!
@@ -9333,7 +9337,7 @@ export class Compiler extends DiagnosticEmitter {
         case ElementKind.PROPERTY_PROTOTYPE: {
           const property = <PropertyPrototype> mem;
           const iproperty = <PropertyPrototype> imem;
-          if (!iproperty.is(CommonFlags.READONLY)) {
+          if (!iproperty.isAny(CommonFlags.READONLY | CommonFlags.ABSTRACT)) {
             if (property.setterPrototype == null) {
               this.error(
                 DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,

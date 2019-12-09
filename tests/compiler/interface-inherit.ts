@@ -57,6 +57,7 @@ testGIC<IA>(aa);
 // testGIC(aFromClass);
 
 // function testFromClass(i: FromClass): void {
+//   assert(i.a() == 84);
 //   assert(Math.abs(i.d() - 3.14) < 0.00001 );
 // }
 

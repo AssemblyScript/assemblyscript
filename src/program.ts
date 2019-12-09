@@ -934,20 +934,25 @@ export class Program extends DiagnosticEmitter {
       if (!baseElement) continue;
       if (baseElement.kind == ElementKind.CLASS_PROTOTYPE || baseElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
         let basePrototype = <ClassPrototype>baseElement;
-        if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
-          this.error(
-            DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
-            extendsNode.range, (<ClassPrototype>baseElement).identifierNode.text
-          );
-        }
-        if (
-          basePrototype.hasDecorator(DecoratorFlags.UNMANAGED) !=
-          thisPrototype.hasDecorator(DecoratorFlags.UNMANAGED)
-        ) {
-          this.error(
-            DiagnosticCode.Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa,
-            Range.join(thisPrototype.identifierNode.range, extendsNode.range)
-          );
+        if (thisPrototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
+          // TODO: Interface extends class
+          // basePrototype = InterfacePrototype.fromClassPrototype(basePrototype);
+        } else {
+          if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
+            this.error(
+              DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
+              extendsNode.range, (<ClassPrototype>baseElement).identifierNode.text
+            );
+          }
+          if (
+            basePrototype.hasDecorator(DecoratorFlags.UNMANAGED) !=
+            thisPrototype.hasDecorator(DecoratorFlags.UNMANAGED)
+          ) {
+            this.error(
+              DiagnosticCode.Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa,
+              Range.join(thisPrototype.identifierNode.range, extendsNode.range)
+            );
+          }
         }
         thisPrototype.basePrototype = basePrototype;
       } else {
@@ -3368,6 +3373,8 @@ export class Class extends TypedElement {
   rttiFlags: u32 = 0;
   /** Wrapped type, if a wrapper for a basic type. */
   wrappedType: Type | null = null;
+  /** Each class that uses an abstract class or interface */
+  implementers: Set<Class> = new Set();
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {
@@ -3684,10 +3691,17 @@ export class Class extends TypedElement {
     }
     return false;
   }
+
+  addImplementer(_class: Class): void {
+    this.implementers.add(_class);
+    if (this.base != null) { 
+      (<Class>this.base).addImplementer(_class);
+    }
+  }
 }
 
 /** A yet unresolved interface. */
-export class InterfacePrototype extends ClassPrototype { // FIXME
+export class InterfacePrototype extends ClassPrototype {
 
   /** Constructs a new interface prototype. */
   constructor(
@@ -3704,11 +3718,20 @@ export class InterfacePrototype extends ClassPrototype { // FIXME
       true
     );
   }
+  /** Convert a class to an interface when an interface extends a class */
+  static fromClassPrototype(cP: ClassPrototype): InterfacePrototype {
+    const cDecl = <ClassDeclaration> cP.declaration;
+    const iDecl = new InterfaceDeclaration();
+    iDecl.typeParameters = cDecl.typeParameters;
+    iDecl.extendsType = cDecl.extendsType;
+    iDecl.implementsTypes = cDecl.implementsTypes;
+    iDecl.members = cDecl.members;
+    return new InterfacePrototype(cP.name, cP.parent, iDecl, cP.decoratorFlags);
+  }
 }
 
 /** A resolved interface. */
 export class Interface extends Class { // FIXME
-  implementers: Set<Class> = new Set();
   /** Constructs a new interface. */
   constructor(
     nameInclTypeParameters: string,
@@ -3723,13 +3746,6 @@ export class Interface extends Class { // FIXME
       base,
       true
     );
-  }
-
-  addImplementer(_class: Class): void {
-    this.implementers.add(_class);
-    if (this.base != null){ 
-      (<Interface>this.base).addImplementer(_class);
-    }
   }
 }
 

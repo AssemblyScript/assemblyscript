@@ -14,6 +14,7 @@ import {
 import {
   NativeType
 } from "./module";
+import { CommonFlags } from "./common";
 
 /** Indicates the kind of a type. */
 export const enum TypeKind {
@@ -185,6 +186,12 @@ export class Type {
 
   get isInterface(): bool {
     return this.classReference != null && this.classReference.kind == ElementKind.INTERFACE;
+  }
+
+  get isAbstractClass(): bool {
+    return this.classReference != null 
+        && this.classReference.kind == ElementKind.CLASS 
+        && this.classReference.is(CommonFlags.ABSTRACT);
   }
 
   /** Computes the sign-extending shift in the target type. */
