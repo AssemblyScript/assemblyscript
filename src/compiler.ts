@@ -9404,14 +9404,14 @@ export class Compiler extends DiagnosticEmitter {
       const relooper = this.module.createRelooper();
     
       // Condition to switch on
-      const first = relooper.addBlock(module.local_set(classIDLocal, loadClassID(module)));
+      const first = relooper.addBlock(module.local_set(classIDLocal, this.loadClassID()));
       const last = relooper.addBlock(module.unreachable());
       relooper.addBranch(first, last);
 
       for (let _class of classes) {        
         const expr = this.compileInterfaceMethod(ifunc, _class, classIDLocal);
         const returnBlock = relooper.addBlock(expr);
-        const loadLocal = loadClassArg(module, classIDLocal);
+        const loadLocal = this.loadClassArg(classIDLocal);
         const classID = module.i32(_class.id);
         relooper.addBranch(first, returnBlock, module.binary(BinaryOp.EqI32, loadLocal, classID));
       }
@@ -9510,6 +9510,20 @@ export class Compiler extends DiagnosticEmitter {
   get nativeUsizeType(): NativeType {
     return this.options.usizeType.toNativeType();
   }
+  
+  loadClassID(): ExpressionRef {
+    var module = this.module;
+    return module.load(
+      4,
+      false,
+      module.binary(
+        BinaryOp.SubI32,
+        this.loadClassArg(0),
+        module.i32(8)
+      ),
+      NativeType.I32
+    );
+  }
 }
 
 // helpers
@@ -9528,27 +9542,10 @@ export function defaulType(nativeType: NativeType, module: Module): ExpressionRe
     default:  {
       return module.i32(0);
     }
-
   }
-  
-}
+} 
 
-function loadClassArg(module: Module, index: number): ExpressionRef {
-  return module.local_get(index, Type.i32.toNativeType());
-}
 
-function loadClassID(module: Module): ExpressionRef {
-  return module.load(
-    4,
-    false,
-    module.binary(
-      BinaryOp.SubI32,
-      module.local_get(0, NativeType.I32),
-      module.i32(8)
-    ),
-    NativeType.I32
-  );
-}
 
 function mangleImportName(
   element: Element,
