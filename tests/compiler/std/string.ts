@@ -1,9 +1,9 @@
 import { utoa32, itoa32, utoa64, itoa64, dtoa } from "util/number";
 
-@external("env", "toUpperCaseFromIndex")
+@external("string", "toUpperCaseFromIndex")
 declare function toUpperCaseFromIndex(index: i32, codePointIndex: i32): i32;
 
-@external("env", "toLowerCaseFromIndex")
+@external("string", "toLowerCaseFromIndex")
 declare function toLowerCaseFromIndex(index: i32, codePointIndex: i32): i32;
 
 // preliminary

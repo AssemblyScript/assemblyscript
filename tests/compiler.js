@@ -309,14 +309,6 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
           },
           trace: function(msg, n) {
             console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
-          },
-          toUpperCaseFromIndex(index, codePointIndex) {
-            const code = String.fromCodePoint(index).toUpperCase().codePointAt(codePointIndex|0);
-            return code !== undefined ? code : -1;
-          },
-          toLowerCaseFromIndex(index, codePointIndex) {
-            const code = String.fromCodePoint(index).toLowerCase().codePointAt(codePointIndex|0);
-            return code !== undefined ? code : -1;
           }
         },
         Math,
