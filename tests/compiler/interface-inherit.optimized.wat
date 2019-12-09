@@ -219,7 +219,7 @@
   i32.sub
   i32.load
   i32.const 4
-  i32.ne
+  i32.sub
   if
    unreachable
   end
@@ -239,7 +239,7 @@
   i32.sub
   i32.load
   i32.const 4
-  i32.ne
+  i32.sub
   if
    unreachable
   end
@@ -283,24 +283,23 @@
   end
  )
  (func $interface-inherit/IA#a (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.tee $0
-  i32.const 4
-  i32.eq
-  if (result i32)
-   i32.const 42
-  else
-   local.get $0
-   i32.const 3
-   i32.ne
-   if
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     i32.const 3
+     i32.sub
+     br_table $switch$1$case$4 $switch$1$case$3 $switch$1$default
+    end
     unreachable
    end
-   i32.const 84
+   i32.const 42
+   return
   end
+  i32.const 84
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
   unreachable

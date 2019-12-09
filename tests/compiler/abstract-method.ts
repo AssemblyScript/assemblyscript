@@ -10,7 +10,7 @@ class AAbstract extends Abstract {
     return this.x;
   }
 
- get y(): i32 { return this.x * 2 }
+ get y(): i32 { return this.x * 2; }
 }
 
 const aastract = new AAbstract();

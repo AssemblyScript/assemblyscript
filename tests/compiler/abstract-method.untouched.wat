@@ -220,21 +220,19 @@
   i32.load
  )
  (func $abstract-method/Abstract#abstractMethod (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 4
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $abstract-method/AAbstract#abstractMethod
-  else
+  block $switch$1$case$3
+   block $switch$1$default
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default
+   end
    unreachable
   end
+  local.get $0
+  call $abstract-method/AAbstract#abstractMethod
+  return
  )
  (func $abstract-method/AAbstract#get:y (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -243,21 +241,19 @@
   i32.mul
  )
  (func $abstract-method/Abstract#get:y (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 4
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $abstract-method/AAbstract#get:y
-  else
+  block $switch$1$case$3
+   block $switch$1$default
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default
+   end
    unreachable
   end
+  local.get $0
+  call $abstract-method/AAbstract#get:y
+  return
  )
  (func $null (; 14 ;) (type $FUNCSIG$v)
   unreachable

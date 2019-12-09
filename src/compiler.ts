@@ -9280,7 +9280,7 @@ export class Compiler extends DiagnosticEmitter {
     var incorrectMember = false;
     for (let [name, imem] of imems.entries()) {
       error = error || incorrectMember;
-      if (!imem.is(CommonFlags.VIRTUAL)){
+      if (!imem.is(CommonFlags.VIRTUAL)) {
         continue;
       }
       incorrectMember = true;
@@ -9298,8 +9298,10 @@ export class Compiler extends DiagnosticEmitter {
       let mem  = mems.get(name)!;
       if (imem.kind != mem.kind) {
         // Interfaces can't have properties
-        if ((mem.kind != ElementKind.PROPERTY_PROTOTYPE  && mem.kind != ElementKind.FIELD_PROTOTYPE && mem.kind != ElementKind.FIELD && 
-            imem.kind == ElementKind.PROPERTY)) {
+        if (mem.kind != ElementKind.PROPERTY_PROTOTYPE
+            && mem.kind != ElementKind.FIELD_PROTOTYPE
+            && mem.kind != ElementKind.FIELD
+            && imem.kind == ElementKind.PROPERTY) {
           this.error(
             DiagnosticCode.Type_0_is_not_assignable_to_type_1,
             (<DeclaredElement>mem).declaration.range,
@@ -9398,39 +9400,49 @@ export class Compiler extends DiagnosticEmitter {
   compileInterfaces(): void {
     const module = this.module;
     for (let ifunc of this.interfaceMethods) {
-      let classes = (<Interface>ifunc.parent).implementers;
-      const classIDLocal = ifunc.localsByIndex.length
-      const typeRef = this.ensureSignature(ifunc!.signature);
+      let classes = (<Class>ifunc.parent).implementers;
+      const signature = ifunc.signature;
+      const returnType = signature.returnType;
+      const typeRef = this.ensureSignature(signature);
       const relooper = this.module.createRelooper();
-    
+      const isVoid = returnType.toNativeType() == NativeType.None;
+
       // Condition to switch on
-      const first = relooper.addBlock(module.local_set(classIDLocal, this.loadClassID()));
+      const first = relooper.addBlockWithSwitch(module.nop(), this.loadClassID());
+      const defaultVal = defaultTypeValue(returnType.toNativeType(), module);
       const last = relooper.addBlock(module.unreachable());
       relooper.addBranch(first, last);
 
-      for (let _class of classes) {        
-        const expr = this.compileInterfaceMethod(ifunc, _class, classIDLocal);
+      // Add branch cases
+      for (let _class of classes) {
+        let expr = this.compileInterfaceMethod(ifunc, _class);
+        if (!isVoid) {
+          expr = module.return(expr);
+        }
         const returnBlock = relooper.addBlock(expr);
-        const loadLocal = this.loadClassArg(classIDLocal);
-        const classID = module.i32(_class.id);
-        relooper.addBranch(first, returnBlock, module.binary(BinaryOp.EqI32, loadLocal, classID));
+        relooper.addBranchForSwitch(first, returnBlock, [_class.id]);
       }
+
+      // finish relooper and prepare body of function
+      let switchExpression = relooper.renderAndDispose(first, 0);
+      let block = isVoid ? [switchExpression] : [switchExpression, defaultVal];
+      let body = module.block(null, block, returnType.toNativeType());
+
       // Remove the nop standin
       module.removeFunction(ifunc.internalName);
-      module.addFunction(ifunc.internalName, typeRef, [this.nativeUsizeType], relooper.renderAndDispose(first, 0));
+      module.addFunction(ifunc.internalName, typeRef, null, body);
     }
   }
 
-  compileInterfaceMethod(ifunc: Function, _class: Class, classIDLocal: i32): ExpressionRef {
+  compileInterfaceMethod(ifunc: Function, _class: Class): ExpressionRef {
     const module = this.module;
-    let name: string = ifunc.name;
-    if (ifunc.isAny(CommonFlags.GET | CommonFlags.SET)){
+    var name: string = ifunc.name;
+    if (ifunc.isAny(CommonFlags.GET | CommonFlags.SET)) {
       name = name.substr("get:".length);
     }
-    let  prop = _class.members!.get(name)!;
-    let method: Function;
-      
+    var prop = _class.members!.get(name)!;
     const returnType = ifunc!.signature.returnType.toNativeType();
+    var method: Function;
     switch (prop.kind){
       case ElementKind.FUNCTION_PROTOTYPE: {
         let p = <FunctionPrototype> prop;
@@ -9440,21 +9452,21 @@ export class Compiler extends DiagnosticEmitter {
         }
         prop = newFunc;
       }
-      case ElementKind.FUNCTION:{
+      case ElementKind.FUNCTION: {
         method = <Function> prop;
         break;
       }
       case ElementKind.FIELD: {
         let field = <Field> prop;
-        var type = field.type;
-        var nativeType = type.toNativeType();
+        let type = field.type;
+        let nativeType = type.toNativeType();
         const thisExpr = module.local_get(0, this.nativeUsizeType);
-        if (ifunc.is(CommonFlags.SET)){
+        if (ifunc.is(CommonFlags.SET)) {
           assert(ifunc.signature.parameterTypes.length == 1);
-          if (ifunc.signature.parameterTypes[0] != type){
+          if (ifunc.signature.parameterTypes[0] != type) {
             return module.nop();
           }
-          var valueExpr = module.local_get(1, nativeType);
+          let valueExpr = module.local_get(1, nativeType);
           return module.store(
             type.byteSize,
             thisExpr,
@@ -9463,8 +9475,8 @@ export class Compiler extends DiagnosticEmitter {
             field.memoryOffset
            );
         }
-        if (ifunc.is(CommonFlags.GET)){
-          if (ifunc.signature.returnType != type){
+        if (ifunc.is(CommonFlags.GET)) {
+          if (ifunc.signature.returnType != type) {
             return module.nop();
           }
           assert(field.memoryOffset >= 0);
@@ -9473,15 +9485,14 @@ export class Compiler extends DiagnosticEmitter {
             field.type.is(TypeFlags.SIGNED | TypeFlags.INTEGER),
             thisExpr,
             field.type.toNativeType(),
-            field.memoryOffset)
+            field.memoryOffset);
         }
       }
       case ElementKind.PROPERTY: {
         let p = <Property> prop;
-        if (ifunc.is(CommonFlags.SET)){
+        if (ifunc.is(CommonFlags.SET)) {
           method = p.setterInstance!;
-
-        }else if (ifunc.is(CommonFlags.GET)){
+        }else if (ifunc.is(CommonFlags.GET)) {
           method = p.getterInstance!;
         }else {
           throw Error("Interface method " + ifunc.name + " should be a property");
@@ -9489,17 +9500,18 @@ export class Compiler extends DiagnosticEmitter {
         break;
 
       }
-      default:
+      default: {
         throw Error("Class " + _class.name + " must have property " + prop.name);
+      }
     }
 
     this.compileFunction(method);
     const locals: usize[] = [];
-    for (let i: i32 = 0; i < classIDLocal; i++) {
+    for (let i: i32 = 0; i < ifunc.localsByIndex.length; i++) {
       const local = ifunc.localsByIndex[i];
       locals.push(this.module.local_get(local.index, local.type.toNativeType()));
     }
-    return this.module.call(method.internalName, locals, returnType)
+    return this.module.call(method.internalName, locals, returnType);
 
   }
 
@@ -9510,7 +9522,7 @@ export class Compiler extends DiagnosticEmitter {
   get nativeUsizeType(): NativeType {
     return this.options.usizeType.toNativeType();
   }
-  
+
   loadClassID(): ExpressionRef {
     var module = this.module;
     return module.load(
@@ -9531,21 +9543,22 @@ export class Compiler extends DiagnosticEmitter {
 const v128_zero = new Uint8Array(16);
 
 /* Useful for adding to the end of a block that needs a type even if there is an unreachable(); */
-export function defaulType(nativeType: NativeType, module: Module): ExpressionRef {
-  switch(nativeType){
+export function defaultTypeValue(nativeType: NativeType, module: Module): ExpressionRef {
+  switch (nativeType) {
     case NativeType.I64: return module.i64(0);
     case NativeType.F32: return module.f32(0);
     case NativeType.F64: return module.f64(0);
     case NativeType.V128: return module.v128(v128_zero);
+    case NativeType.Unreachable: return module.unreachable();
+    case NativeType.None: return module.nop();
     case NativeType.I32:
     case NativeType.Anyref:
-    default:  {
+    case NativeType.Exnref:
+    default: {
       return module.i32(0);
     }
   }
-} 
-
-
+}
 
 function mangleImportName(
   element: Element,

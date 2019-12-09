@@ -1588,6 +1588,10 @@ interface SymbolConstructor {
   keyFor(sym: symbol): string | null;
 }
 
+interface Symbol {
+  toString(): string
+}
+
 declare const Symbol: SymbolConstructor;
 
 interface IMath<T> {

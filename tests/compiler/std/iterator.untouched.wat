@@ -3160,29 +3160,24 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/iterator/Iterator<i32>#next (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 6
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $std/iterator/ArrayIterator<i32>#next
-  else
-   local.get $1
-   i32.const 14
-   i32.eq
-   if (result i32)
-    local.get $0
-    call $~lib/map/ValueIterator<~lib/string/String,i32>#next
-   else
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$4 $switch$1$default
+    end
     unreachable
    end
+   local.get $0
+   call $std/iterator/ArrayIterator<i32>#next
+   return
   end
+  local.get $0
+  call $~lib/map/ValueIterator<~lib/string/String,i32>#next
+  return
  )
  (func $std/iterator/ArrayIterator<i32>#get:done (; 44 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -3198,29 +3193,24 @@
   call $~lib/map/EntriesIter<~lib/string/String,i32>#get:done
  )
  (func $~lib/iterator/IteratorResult<i32>#get:done (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 6
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $std/iterator/ArrayIterator<i32>#get:done
-  else
-   local.get $1
-   i32.const 14
-   i32.eq
-   if (result i32)
-    local.get $0
-    call $~lib/map/ValueIterator<~lib/string/String,i32>#get:done
-   else
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$4 $switch$1$default
+    end
     unreachable
    end
+   local.get $0
+   call $std/iterator/ArrayIterator<i32>#get:done
+   return
   end
+  local.get $0
+  call $~lib/map/ValueIterator<~lib/string/String,i32>#get:done
+  return
  )
  (func $std/iterator/ArrayIterator<i32>#get:value (; 47 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -3247,46 +3237,39 @@
   i32.load offset=4
  )
  (func $~lib/iterator/IteratorResult<i32>#get:value (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 6
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $std/iterator/ArrayIterator<i32>#get:value
-  else
-   local.get $1
-   i32.const 14
-   i32.eq
-   if (result i32)
-    local.get $0
-    call $~lib/map/ValueIterator<~lib/string/String,i32>#get:value
-   else
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$4 $switch$1$default
+    end
     unreachable
    end
+   local.get $0
+   call $std/iterator/ArrayIterator<i32>#get:value
+   return
   end
+  local.get $0
+  call $~lib/map/ValueIterator<~lib/string/String,i32>#get:value
+  return
  )
  (func $~lib/iterator/IteratorResult<~lib/map/MapEntry<~lib/string/String,i32>>#get:value (; 51 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 9
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $~lib/map/EntriesIter<~lib/string/String,i32>#get:value
-  else
+  block $switch$1$case$3
+   block $switch$1$default
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default
+   end
    unreachable
   end
+  local.get $0
+  call $~lib/map/EntriesIter<~lib/string/String,i32>#get:value
+  return
  )
  (func $~lib/map/KeyIterator<~lib/string/String,i32>#next (; 52 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -3297,21 +3280,19 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/iterator/Iterator<~lib/string/String>#next (; 53 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 12
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $~lib/map/KeyIterator<~lib/string/String,i32>#next
-  else
+  block $switch$1$case$3
+   block $switch$1$default
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default
+   end
    unreachable
   end
+  local.get $0
+  call $~lib/map/KeyIterator<~lib/string/String,i32>#next
+  return
  )
  (func $~lib/map/KeyIterator<~lib/string/String,i32>#get:value (; 54 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
@@ -3321,21 +3302,19 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/iterator/IteratorResult<~lib/string/String>#get:value (; 55 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 12
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $~lib/map/KeyIterator<~lib/string/String,i32>#get:value
-  else
+  block $switch$1$case$3
+   block $switch$1$default
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default
+   end
    unreachable
   end
+  local.get $0
+  call $~lib/map/KeyIterator<~lib/string/String,i32>#get:value
+  return
  )
  (func $null (; 56 ;) (type $FUNCSIG$v)
   unreachable

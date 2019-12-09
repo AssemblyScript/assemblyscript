@@ -15,7 +15,7 @@ class AA {
   a(): i32 { return 84; }
 }
 
-let aa = new AA();
+const aa = new AA();
 // assert(aa.a() == 84);
 
 class AC implements IC {
@@ -24,7 +24,7 @@ class AC implements IC {
   c(): bool { return true; }
 }
 
-let ac = new AC();
+const ac = new AC();
 
 function testIA(ia: IA): void {
   assert(ia.a() == 42);

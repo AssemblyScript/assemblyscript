@@ -189,8 +189,8 @@ export class Type {
   }
 
   get isAbstractClass(): bool {
-    return this.classReference != null 
-        && this.classReference.kind == ElementKind.CLASS 
+    return this.classReference != null
+        && this.classReference.kind == ElementKind.CLASS
         && this.classReference.is(CommonFlags.ABSTRACT);
   }
 

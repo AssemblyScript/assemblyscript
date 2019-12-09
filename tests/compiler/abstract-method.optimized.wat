@@ -85,13 +85,12 @@
   i32.sub
   i32.load
   i32.const 4
-  i32.eq
-  if (result i32)
-   local.get $0
-   i32.load
-  else
+  i32.sub
+  if
    unreachable
   end
+  local.get $0
+  i32.load
   i32.const 42
   i32.ne
   if
@@ -107,15 +106,14 @@
   i32.sub
   i32.load
   i32.const 4
-  i32.eq
-  if (result i32)
-   local.get $0
-   i32.load
-   i32.const 1
-   i32.shl
-  else
+  i32.sub
+  if
    unreachable
   end
+  local.get $0
+  i32.load
+  i32.const 1
+  i32.shl
   i32.const 84
   i32.ne
   if

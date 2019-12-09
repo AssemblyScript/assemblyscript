@@ -97,26 +97,35 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.tee $0
-  i32.const 3
-  i32.ne
-  if
-   local.get $0
-   i32.const 4
-   i32.ne
-   if
-    unreachable
+  block $__inlined_func$interface/IFoo#faa
+   block $switch$1$default
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    i32.const 3
+    i32.sub
+    br_table $__inlined_func$interface/IFoo#faa $__inlined_func$interface/IFoo#faa $switch$1$default
    end
+   unreachable
   end
  )
  (func $interface/expectX (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  block $switch$1$leave
+   block $switch$1$default
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    i32.const 3
+    i32.sub
+    br_table $switch$1$leave $switch$1$leave $switch$1$default
+   end
+   unreachable
+  end
   local.get $0
   local.get $1
-  call $interface/IFoo#set:x
+  i32.store8 offset=4
   local.get $0
   call $interface/IFoo#get:x
   i32.const 0
@@ -197,80 +206,48 @@
   i32.add
  )
  (func $interface/IFoo#foo (; 8 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.tee $1
-  i32.const 3
-  i32.eq
-  if (result i32)
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     i32.const 3
+     i32.sub
+     br_table $switch$1$case$3 $switch$1$case$4 $switch$1$default
+    end
+    unreachable
+   end
    local.get $0
    call $interface/AFoo#foo
-  else
-   local.get $1
-   i32.const 4
-   i32.eq
-   if (result i32)
-    local.get $0
-    call $interface/AFoo#foo
-   else
+   return
+  end
+  local.get $0
+  call $interface/AFoo#foo
+ )
+ (func $interface/IFoo#get:x (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     i32.const 3
+     i32.sub
+     br_table $switch$1$case$3 $switch$1$case$4 $switch$1$default
+    end
     unreachable
    end
-  end
- )
- (func $interface/IFoo#set:x (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.tee $2
-  i32.const 3
-  i32.eq
-  if
-   local.get $0
-   local.get $1
-   i32.store8 offset=4
-  else
-   local.get $2
-   i32.const 4
-   i32.eq
-   if
-    local.get $0
-    local.get $1
-    i32.store8 offset=4
-   else
-    unreachable
-   end
-  end
- )
- (func $interface/IFoo#get:x (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.tee $1
-  i32.const 3
-  i32.eq
-  if (result i32)
    local.get $0
    i32.load8_u offset=4
-  else
-   local.get $1
-   i32.const 4
-   i32.eq
-   if (result i32)
-    local.get $0
-    i32.load8_u offset=4
-   else
-    unreachable
-   end
+   return
   end
+  local.get $0
+  i32.load8_u offset=4
  )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 10 ;) (type $FUNCSIG$v)
   unreachable
  )
 )

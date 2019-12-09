@@ -1861,16 +1861,16 @@ export class Program extends DiagnosticEmitter {
     if (!parent.add(name, element)) return null;
     var memberDeclarations = declaration.members;
     if (declaration.extendsType) queuedExtends.push(element);
-    var instanceDeclarations = new Array();
+    var instanceDeclarations = new Array<DeclarationStatement>();
     /**
      * Must convert field declarations to property declarations
      */
     for (let i = 0, k = memberDeclarations.length; i < k; ++i) {
       let memberDeclaration = memberDeclarations[i];
-      if (memberDeclaration.kind == NodeKind.FIELDDECLARATION){
+      if (memberDeclaration.kind == NodeKind.FIELDDECLARATION) {
         let fieldDecl = <FieldDeclaration> memberDeclaration;
-        if (!fieldDecl.is(CommonFlags.READONLY)){
-          const param = Node.createParameter(fieldDecl.name, fieldDecl.type!, null, ParameterKind.DEFAULT, fieldDecl.range)
+        if (!fieldDecl.is(CommonFlags.READONLY)) {
+          const param = Node.createParameter(fieldDecl.name, fieldDecl.type!, null, ParameterKind.DEFAULT, fieldDecl.range);
           const signature = Node.createFunctionType([param], Node.createOmittedType(fieldDecl.range), null, false, fieldDecl.range);
           instanceDeclarations.push(Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.SET, fieldDecl.range));
         }
@@ -3229,12 +3229,6 @@ export class ClassPrototype extends DeclaredElement {
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
 
-  /** Instance Methods */
-  get instanceMethods(): FunctionPrototype[] {
-    if (!this.instanceMembers) return [];
-    return <FunctionPrototype[]> filter(this.instanceMembers.values(), (mem: Element): bool => mem.kind == ElementKind.FUNCTION_PROTOTYPE);
-  }
-
   constructor(
     /** Simple name. */
     name: string,
@@ -3694,7 +3688,7 @@ export class Class extends TypedElement {
 
   addImplementer(_class: Class): void {
     this.implementers.add(_class);
-    if (this.base != null) { 
+    if (this.base != null) {
       (<Class>this.base).addImplementer(_class);
     }
   }

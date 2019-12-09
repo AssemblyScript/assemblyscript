@@ -288,31 +288,26 @@
   i32.add
  )
  (func $interface-generic/GFoo<i32,bool>#foo (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $2
-  local.get $2
-  i32.const 3
-  i32.eq
-  if (result i32)
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$case$4 $switch$1$default
+    end
+    unreachable
+   end
    local.get $0
    local.get $1
    call $interface-generic/AGFoo#foo
-  else
-   local.get $2
-   i32.const 4
-   i32.eq
-   if (result i32)
-    local.get $0
-    local.get $1
-    call $interface-generic/StructurallyImplementsGFoo#foo
-   else
-    unreachable
-   end
+   return
   end
+  local.get $0
+  local.get $1
+  call $interface-generic/StructurallyImplementsGFoo#foo
+  return
  )
  (func $interface-generic/AGFoo#faa (; 14 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
@@ -325,61 +320,51 @@
   i32.add
  )
  (func $interface-generic/GFoo<i32,bool>#faa (; 16 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $3
-  local.get $3
-  i32.const 3
-  i32.eq
-  if (result i32)
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$case$4 $switch$1$default
+    end
+    unreachable
+   end
    local.get $0
    local.get $1
    local.get $2
    call $interface-generic/AGFoo#faa
-  else
-   local.get $3
-   i32.const 4
-   i32.eq
-   if (result i32)
-    local.get $0
-    local.get $1
-    local.get $2
-    call $interface-generic/StructurallyImplementsGFoo#faa
-   else
-    unreachable
-   end
+   return
   end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $interface-generic/StructurallyImplementsGFoo#faa
+  return
  )
  (func $interface-generic/AGFoo#get:x (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 1
  )
  (func $interface-generic/GFoo<i32,bool>#get:x (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  local.set $1
-  local.get $1
-  i32.const 3
-  i32.eq
-  if (result i32)
-   local.get $0
-   call $interface-generic/AGFoo#get:x
-  else
-   local.get $1
-   i32.const 4
-   i32.eq
-   if (result i32)
-    local.get $0
-    i32.load8_u offset=4
-   else
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$case$4 $switch$1$default
+    end
     unreachable
    end
+   local.get $0
+   call $interface-generic/AGFoo#get:x
+   return
   end
+  local.get $0
+  i32.load8_u offset=4
+  return
  )
  (func $null (; 19 ;) (type $FUNCSIG$v)
   unreachable
