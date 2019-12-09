@@ -9518,10 +9518,9 @@ export function defaulType(nativeType: NativeType, module: Module): ExpressionRe
     case NativeType.I64: return module.i64(0);
     case NativeType.F32: return module.f32(0);
     case NativeType.F64: return module.f64(0);
-    case NativeType.V128: return module.v128(new Uint8Array);
+    case NativeType.V128: return module.v128(new Uint8Array());
     case NativeType.I32:
     case NativeType.Anyref:
-    case NativeType.Exnref:
     default:  {
       return module.i32(0);
     }
