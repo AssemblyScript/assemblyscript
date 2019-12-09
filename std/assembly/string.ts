@@ -516,7 +516,7 @@ import { idof } from "./builtins";
           store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069);
           ++j;
         } else if (c - 0x24B6 <= 0x24CF - 0x24B6) {
-          // monkey patch
+          // Range 0x24B6 <= c <= 0x24CF not covered by casemap and require special early handling
           store<u16>(codes + (j << 1), c + 26);
         } else {
           let code = casemap(c, 0) & 0x1FFFFF;
@@ -564,6 +564,7 @@ import { idof } from "./builtins";
             }
           }
         }
+        // Range 0x24D0 <= c <= 0x24E9 not covered by casemap and require special early handling
         if (c - 0x24D0 <= 0x24E9 - 0x24D0) {
           // monkey patch
           store<u16>(codes + (j << 1), c - 26);
