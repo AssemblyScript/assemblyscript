@@ -2821,11 +2821,6 @@ export class FunctionPrototype extends DeclaredElement {
   lookup(name: string): Element | null {
     return this.parent.lookup(name);
   }
-
-  equals(func: FunctionPrototype): bool {
-    return this.functionTypeNode.equals(func.functionTypeNode) &&
-           TypeNode.arrayEquals(func.typeParameterNodes, this.typeParameterNodes);
-  }
 }
 
 /** A resolved function. */
