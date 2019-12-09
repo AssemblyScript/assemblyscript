@@ -510,7 +510,9 @@ import { idof } from "./builtins";
             }
           }
         }
+        // check special casing for lower table. It has one ently so instead lookup we just inline this.
         if (c == 0x0130) {
+          // 0x0130 -> [0x0069, 0x0307]
           store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069);
           ++j;
         } else if (c - 0x24B6 <= 0x24CF - 0x24B6) {
