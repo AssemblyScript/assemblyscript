@@ -91,10 +91,7 @@ import {
   writeI16,
   writeI32,
   writeF32,
-  writeF64,
-  filter,
-  map,
-  notNull
+  writeF64
 } from "./util";
 
 import {
@@ -507,20 +504,6 @@ export class Program extends DiagnosticEmitter {
       if (source.internalPath == internalPath) return source.text;
     }
     return null;
-  }
-
-  get interfaces(): Interface[] {
-    return <Interface[]> this.getInstanceByKind(ElementKind.INTERFACE);
-  }
-
-  getInstanceByKind(kind: ElementKind): Element[] {
-    const res = [];
-    for (const element of this.instancesByName.values()) {
-      if (element.kind == kind) {
-        res.push(element);
-      }
-    }
-    return res;
   }
 
   /** Writes a common runtime header to the specified buffer. */
