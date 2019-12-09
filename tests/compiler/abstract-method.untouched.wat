@@ -13,6 +13,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $abstract-method/aastract (mut i32) (i32.const 0))
+ (global $abstract-method/aAnotherAbstract (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 60))
  (export "memory" (memory $0))
  (start $start)
@@ -156,10 +157,42 @@
   local.set $0
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $abstract-method/SubAstract#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 4
+   i32.const 5
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+  end
+  call $abstract-method/Abstract#constructor
+  local.set $0
+  local.get $0
+  i32.const 21
+  i32.store
+  local.get $0
+ )
+ (func $abstract-method/AAnotherAbstract#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 4
+   i32.const 6
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+  call $abstract-method/SubAstract#constructor
+  local.set $0
+  local.get $0
+ )
+ (func $~lib/rt/stub/__release (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
   nop
  )
- (func $abstract-method/testAbstract (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $abstract-method/testAbstract (; 9 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -171,7 +204,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 19
+   i32.const 32
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -186,7 +219,7 @@
   if
    i32.const 0
    i32.const 24
-   i32.const 20
+   i32.const 33
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -194,7 +227,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $start:abstract-method (; 8 ;) (type $FUNCSIG$v)
+ (func $start:abstract-method (; 10 ;) (type $FUNCSIG$v)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -208,54 +241,76 @@
   i32.const 0
   call $abstract-method/AAbstract#constructor
   global.set $abstract-method/aastract
+  i32.const 0
+  call $abstract-method/AAnotherAbstract#constructor
+  global.set $abstract-method/aAnotherAbstract
   global.get $abstract-method/aastract
   i32.const 42
   call $abstract-method/testAbstract
+  global.get $abstract-method/aAnotherAbstract
+  i32.const 21
+  call $abstract-method/testAbstract
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 11 ;) (type $FUNCSIG$v)
   call $start:abstract-method
  )
- (func $abstract-method/AAbstract#abstractMethod (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $abstract-method/AAbstract#abstractMethod (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $abstract-method/Abstract#abstractMethod (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block $switch$1$case$3
-   block $switch$1$default
-    local.get $0
-    i32.const 8
-    i32.sub
-    i32.load
-    br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default
+ (func $abstract-method/AAnotherAbstract#abstractMethod (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 21
+ )
+ (func $abstract-method/Abstract#abstractMethod (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default $switch$1$case$4 $switch$1$default
+    end
+    unreachable
    end
-   unreachable
+   local.get $0
+   call $abstract-method/AAbstract#abstractMethod
+   return
   end
   local.get $0
-  call $abstract-method/AAbstract#abstractMethod
+  call $abstract-method/AAnotherAbstract#abstractMethod
   return
  )
- (func $abstract-method/AAbstract#get:y (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $abstract-method/AAbstract#get:y (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load
   i32.const 2
   i32.mul
  )
- (func $abstract-method/Abstract#get:y (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  block $switch$1$case$3
-   block $switch$1$default
-    local.get $0
-    i32.const 8
-    i32.sub
-    i32.load
-    br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default
+ (func $abstract-method/SubAstract#get:y (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 42
+ )
+ (func $abstract-method/Abstract#get:y (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default $switch$1$case$4 $switch$1$default
+    end
+    unreachable
    end
-   unreachable
+   local.get $0
+   call $abstract-method/AAbstract#get:y
+   return
   end
   local.get $0
-  call $abstract-method/AAbstract#get:y
+  call $abstract-method/SubAstract#get:y
   return
  )
- (func $null (; 14 ;) (type $FUNCSIG$v)
+ (func $null (; 18 ;) (type $FUNCSIG$v)
   unreachable
  )
 )

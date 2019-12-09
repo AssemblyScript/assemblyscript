@@ -1,5 +1,7 @@
 (module
  (type $FUNCSIG$vi (func (param i32)))
+ (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $FUNCSIG$vii (func (param i32 i32)))
  (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
  (type $FUNCSIG$v (func))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -8,6 +10,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $abstract-method/aastract (mut i32) (i32.const 0))
+ (global $abstract-method/aAnotherAbstract (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
@@ -79,61 +82,8 @@
   i32.store offset=12
   local.get $2
  )
- (func $abstract-method/testAbstract (; 3 ;) (param $0 i32)
+ (func $abstract-method/Abstract#constructor (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  i32.const 4
-  i32.sub
-  if
-   unreachable
-  end
-  local.get $0
-  i32.load
-  i32.const 42
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 19
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.const 8
-  i32.sub
-  i32.load
-  i32.const 4
-  i32.sub
-  if
-   unreachable
-  end
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.shl
-  i32.const 84
-  i32.ne
-  if
-   i32.const 0
-   i32.const 24
-   i32.const 20
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $start (; 4 ;) (type $FUNCSIG$v)
-  (local $0 i32)
-  i32.const 64
-  global.set $~lib/rt/stub/startOffset
-  i32.const 64
-  global.set $~lib/rt/stub/offset
-  i32.const 4
-  call $~lib/rt/stub/__alloc
-  local.tee $0
   i32.eqz
   if
    i32.const 3
@@ -144,11 +94,110 @@
   i32.const 42
   i32.store
   local.get $0
+ )
+ (func $abstract-method/testAbstract (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  local.get $0
+  call $abstract-method/Abstract#abstractMethod
+  local.get $1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 32
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $abstract-method/Abstract#get:y
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 33
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $start (; 5 ;) (type $FUNCSIG$v)
+  (local $0 i32)
+  i32.const 64
+  global.set $~lib/rt/stub/startOffset
+  i32.const 64
+  global.set $~lib/rt/stub/offset
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  call $abstract-method/Abstract#constructor
   global.set $abstract-method/aastract
+  i32.const 6
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 5
+   call $~lib/rt/stub/__alloc
+  end
+  call $abstract-method/Abstract#constructor
+  local.tee $0
+  i32.const 21
+  i32.store
+  local.get $0
+  global.set $abstract-method/aAnotherAbstract
   global.get $abstract-method/aastract
+  i32.const 42
+  call $abstract-method/testAbstract
+  global.get $abstract-method/aAnotherAbstract
+  i32.const 21
   call $abstract-method/testAbstract
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $abstract-method/Abstract#abstractMethod (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     i32.const 4
+     i32.sub
+     br_table $switch$1$case$3 $switch$1$default $switch$1$case$4 $switch$1$default
+    end
+    unreachable
+   end
+   local.get $0
+   i32.load
+   return
+  end
+  i32.const 21
+ )
+ (func $abstract-method/Abstract#get:y (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  block $switch$1$case$4
+   block $switch$1$case$3
+    block $switch$1$default
+     local.get $0
+     i32.const 8
+     i32.sub
+     i32.load
+     i32.const 4
+     i32.sub
+     br_table $switch$1$case$3 $switch$1$default $switch$1$case$4 $switch$1$default
+    end
+    unreachable
+   end
+   local.get $0
+   i32.load
+   i32.const 1
+   i32.shl
+   return
+  end
+  i32.const 42
+ )
+ (func $null (; 8 ;) (type $FUNCSIG$v)
   unreachable
  )
 )
