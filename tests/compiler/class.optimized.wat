@@ -25,7 +25,7 @@
   i32.store8 offset=6
   local.get $0
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
-  nop
+ (func $null (; 1 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

@@ -384,5 +384,6 @@
   call $start:unary
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

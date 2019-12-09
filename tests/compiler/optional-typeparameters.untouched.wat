@@ -203,5 +203,6 @@
   call $start:optional-typeparameters
  )
  (func $null (; 11 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

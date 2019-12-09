@@ -90,6 +90,6 @@
   global.set $optional-typeparameters/tDerived
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

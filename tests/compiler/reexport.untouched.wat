@@ -55,5 +55,6 @@
   call $start:reexport
  )
  (func $null (; 7 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

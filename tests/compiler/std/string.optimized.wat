@@ -4828,7 +4828,6 @@
     select
     call $~lib/rt/pure/__retain
    end
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $0
@@ -5090,7 +5089,6 @@
     select
     call $~lib/rt/pure/__retain
    end
-   call $~lib/rt/pure/__retain
    return
   end
   local.get $8
@@ -11561,13 +11559,7 @@
    unreachable
   end
   global.get $std/string/str
-  local.tee $2
-  i32.const 10680
-  i32.ne
-  if
-   local.get $2
-   call $~lib/rt/pure/__release
-  end
+  call $~lib/rt/pure/__release
   i32.const 10680
   global.set $std/string/str
   i32.const 10680
@@ -14913,6 +14905,6 @@
   end
  )
  (func $null (; 94 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

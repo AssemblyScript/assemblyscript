@@ -1984,4 +1984,7 @@
   end
   unreachable
  )
+ (func $null (; 42 ;) (type $FUNCSIG$v)
+  unreachable
+ )
 )

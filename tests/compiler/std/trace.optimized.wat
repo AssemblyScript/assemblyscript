@@ -91,6 +91,6 @@
   call $start:std/trace
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

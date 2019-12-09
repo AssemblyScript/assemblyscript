@@ -29338,6 +29338,6 @@
   end
  )
  (func $null (; 440 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

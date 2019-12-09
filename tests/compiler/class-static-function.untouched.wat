@@ -39,5 +39,6 @@
   call $start:class-static-function
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

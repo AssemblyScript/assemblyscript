@@ -3320,6 +3320,6 @@
   end
  )
  (func $null (; 45 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

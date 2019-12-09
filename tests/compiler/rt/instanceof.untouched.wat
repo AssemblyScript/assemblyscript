@@ -686,5 +686,6 @@
   call $start:rt/instanceof
  )
  (func $null (; 10 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

@@ -171,5 +171,6 @@
   call $start:std/new
  )
  (func $null (; 6 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

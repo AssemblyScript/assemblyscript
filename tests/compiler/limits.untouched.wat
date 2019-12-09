@@ -89,5 +89,6 @@
   call $start:limits
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

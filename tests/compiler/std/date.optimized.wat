@@ -209,6 +209,6 @@
   call $start:std/date
  )
  (func $null (; 7 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

@@ -1489,6 +1489,9 @@
   call $~lib/string/String#concat
  )
  (func $~lib/symbol/_Symbol#toString (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const 296
+  local.set $1
   i32.const 720
   block $break|0 (result i32)
    block $case11|0
@@ -1737,6 +1740,6 @@
   call $start:std/symbol
  )
  (func $null (; 31 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

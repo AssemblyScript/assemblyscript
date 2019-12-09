@@ -18,5 +18,6 @@
   call $start:wasi
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

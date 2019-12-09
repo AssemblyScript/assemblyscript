@@ -422,5 +422,6 @@
   end
  )
  (func $null (; 21 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

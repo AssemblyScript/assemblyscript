@@ -250,15 +250,15 @@ function collectWhite(s: Block): void {
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __retain(ref: usize): usize {
-  if (ref > __heap_base) increment(changetype<Block>(ref - BLOCK_OVERHEAD));
-  return ref;
+export function __retain(ptr: usize): usize {
+  if (ptr > __heap_base) increment(changetype<Block>(ptr - BLOCK_OVERHEAD));
+  return ptr;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
-export function __release(ref: usize): void {
-  if (ref > __heap_base) decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
+export function __release(ptr: usize): void {
+  if (ptr > __heap_base) decrement(changetype<Block>(ptr - BLOCK_OVERHEAD));
 }
 
 // @ts-ignore: decorator

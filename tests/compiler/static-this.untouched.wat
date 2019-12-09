@@ -31,5 +31,6 @@
   call $start:static-this
  )
  (func $null (; 4 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

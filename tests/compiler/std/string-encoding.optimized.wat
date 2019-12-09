@@ -3830,6 +3830,6 @@
   unreachable
  )
  (func $null (; 57 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

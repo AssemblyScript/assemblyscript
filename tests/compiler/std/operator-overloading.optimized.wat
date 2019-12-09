@@ -2384,6 +2384,6 @@
   call $start:std/operator-overloading
  )
  (func $null (; 13 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

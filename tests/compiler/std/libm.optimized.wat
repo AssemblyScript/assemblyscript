@@ -9274,6 +9274,6 @@
   f32.trunc
  )
  (func $null (; 120 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

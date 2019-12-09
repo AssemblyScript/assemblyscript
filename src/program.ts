@@ -105,6 +105,10 @@ import {
   Flow
 } from "./flow";
 
+import {
+  Parser
+} from "./parser";
+
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
   constructor(
@@ -375,6 +379,8 @@ export namespace OperatorKind {
 /** Represents an AssemblyScript program. */
 export class Program extends DiagnosticEmitter {
 
+  /** Parser instance. */
+  parser: Parser;
   /** Resolver instance. */
   resolver: Resolver;
   /** Array of sources. */
@@ -477,15 +483,19 @@ export class Program extends DiagnosticEmitter {
   nextSignatureId: i32 = 0;
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
+    /** Compiler options. */
+    options: Options,
     /** Shared array of diagnostic messages (emitted so far). */
     diagnostics: DiagnosticMessage[] | null = null
   ) {
     super(diagnostics);
+    this.options = options;
     var nativeSource = new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY_ENTRY);
     this.nativeSource = nativeSource;
     var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
+    this.parser = new Parser(this);
     this.resolver = new Resolver(this);
   }
 
@@ -2887,7 +2897,8 @@ export class Function extends TypedElement {
     this.flags = prototype.flags | CommonFlags.RESOLVED;
     this.decoratorFlags = prototype.decoratorFlags;
     this.contextualTypeArguments = contextualTypeArguments;
-    this.type = Type.u32.asFunction(signature);
+    var program = prototype.program;
+    this.type = program.options.usizeType.asFunction(signature);
     if (!prototype.is(CommonFlags.AMBIENT)) {
       let localIndex = 0;
       if (this.is(CommonFlags.INSTANCE)) {
@@ -2915,7 +2926,7 @@ export class Function extends TypedElement {
       }
     }
     this.flow = Flow.create(this);
-    registerConcreteElement(this.program, this);
+    registerConcreteElement(program, this);
   }
 
   /** Adds a local of the specified type, with an optional name. */
@@ -3011,7 +3022,7 @@ export class FunctionTarget extends Element {
     );
     this.signature = signature;
     this.flags = CommonFlags.RESOLVED;
-    this.type = Type.u32.asFunction(signature);
+    this.type = program.options.usizeType.asFunction(signature);
   }
 
   /* @override */

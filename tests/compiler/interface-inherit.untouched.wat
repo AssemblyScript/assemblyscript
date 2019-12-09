@@ -507,7 +507,6 @@
  )
  (func $interface-inherit/AC#b (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   i32.const 80
-  call $~lib/rt/stub/__retain
  )
  (func $interface-inherit/IB#b (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
@@ -547,5 +546,6 @@
   end
  )
  (func $null (; 22 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

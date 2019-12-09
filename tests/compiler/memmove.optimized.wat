@@ -374,6 +374,6 @@
   call $start:memmove
  )
  (func $null (; 4 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

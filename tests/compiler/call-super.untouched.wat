@@ -559,5 +559,6 @@
   call $start:call-super
  )
  (func $null (; 22 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

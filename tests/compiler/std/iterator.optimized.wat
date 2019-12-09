@@ -1696,6 +1696,6 @@
   local.get $0
  )
  (func $null (; 34 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

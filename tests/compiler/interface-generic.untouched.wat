@@ -382,5 +382,6 @@
   end
  )
  (func $null (; 19 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

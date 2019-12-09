@@ -19,6 +19,6 @@
   i32.store16 offset=4
  )
  (func $null (; 1 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )
