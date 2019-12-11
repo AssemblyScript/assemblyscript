@@ -123,7 +123,39 @@
    unreachable
   end
  )
- (func $start (; 5 ;) (type $FUNCSIG$v)
+ (func $abstract-method/AAbstract#get:y (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  i32.const 1
+  i32.shl
+ )
+ (func $abstract-method/testGeneric<abstract-method/AAbstract> (; 6 ;) (param $0 i32)
+  local.get $0
+  i32.load
+  i32.const 42
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 40
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $abstract-method/AAbstract#get:y
+  i32.const 84
+  i32.ne
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 41
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $start:abstract-method (; 7 ;) (type $FUNCSIG$v)
   (local $0 i32)
   i32.const 64
   global.set $~lib/rt/stub/startOffset
@@ -154,8 +186,13 @@
   global.get $abstract-method/aAnotherAbstract
   i32.const 21
   call $abstract-method/testAbstract
+  global.get $abstract-method/aastract
+  call $abstract-method/testGeneric<abstract-method/AAbstract>
  )
- (func $abstract-method/Abstract#abstractMethod (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $start (; 8 ;) (type $FUNCSIG$v)
+  call $start:abstract-method
+ )
+ (func $abstract-method/Abstract#abstractMethod (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block $switch$1$case$4
    block $switch$1$case$3
     block $switch$1$default
@@ -175,7 +212,7 @@
   end
   i32.const 21
  )
- (func $abstract-method/Abstract#get:y (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $abstract-method/Abstract#get:y (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block $switch$1$case$4
    block $switch$1$case$3
     block $switch$1$default
@@ -190,14 +227,12 @@
     unreachable
    end
    local.get $0
-   i32.load
-   i32.const 1
-   i32.shl
+   call $abstract-method/AAbstract#get:y
    return
   end
   i32.const 42
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 11 ;) (type $FUNCSIG$v)
   unreachable
  )
 )

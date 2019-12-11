@@ -35,3 +35,11 @@ function testAbstract(a: Abstract, expected: i32): void {
 
 testAbstract(aastract, 42);
 testAbstract(aAnotherAbstract, 21);
+
+function testGeneric<T extends Abstract>(a: T, expected: i32): void {
+  assert(a.abstractMethod() == expected);
+  assert(a.y == expected * 2);
+}
+
+testGeneric(aastract, 42);
+testGeneric(aAnotherAbstract, 21);

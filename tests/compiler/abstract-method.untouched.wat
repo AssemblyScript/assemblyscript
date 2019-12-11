@@ -227,7 +227,93 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $start:abstract-method (; 10 ;) (type $FUNCSIG$v)
+ (func $abstract-method/AAbstract#abstractMethod (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
+ (func $abstract-method/AAbstract#get:y (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+  i32.const 2
+  i32.mul
+ )
+ (func $abstract-method/testGeneric<abstract-method/AAbstract> (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  call $abstract-method/AAbstract#abstractMethod
+  local.get $1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 40
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $abstract-method/AAbstract#get:y
+  local.get $1
+  i32.const 2
+  i32.mul
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 41
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/stub/__release
+ )
+ (func $abstract-method/AAnotherAbstract#abstractMethod (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 21
+ )
+ (func $abstract-method/SubAstract#get:y (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  i32.const 42
+ )
+ (func $abstract-method/testGeneric<abstract-method/AAnotherAbstract> (; 15 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  call $abstract-method/AAnotherAbstract#abstractMethod
+  local.get $1
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 40
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $abstract-method/SubAstract#get:y
+  local.get $1
+  i32.const 2
+  i32.mul
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 41
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  call $~lib/rt/stub/__release
+ )
+ (func $start:abstract-method (; 16 ;) (type $FUNCSIG$v)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -250,18 +336,17 @@
   global.get $abstract-method/aAnotherAbstract
   i32.const 21
   call $abstract-method/testAbstract
+  global.get $abstract-method/aastract
+  i32.const 42
+  call $abstract-method/testGeneric<abstract-method/AAbstract>
+  global.get $abstract-method/aAnotherAbstract
+  i32.const 21
+  call $abstract-method/testGeneric<abstract-method/AAnotherAbstract>
  )
- (func $start (; 11 ;) (type $FUNCSIG$v)
+ (func $start (; 17 ;) (type $FUNCSIG$v)
   call $start:abstract-method
  )
- (func $abstract-method/AAbstract#abstractMethod (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $abstract-method/AAnotherAbstract#abstractMethod (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 21
- )
- (func $abstract-method/Abstract#abstractMethod (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $abstract-method/Abstract#abstractMethod (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block $switch$1$case$4
    block $switch$1$case$3
     block $switch$1$default
@@ -281,16 +366,7 @@
   call $abstract-method/AAnotherAbstract#abstractMethod
   return
  )
- (func $abstract-method/AAbstract#get:y (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.load
-  i32.const 2
-  i32.mul
- )
- (func $abstract-method/SubAstract#get:y (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 42
- )
- (func $abstract-method/Abstract#get:y (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $abstract-method/Abstract#get:y (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   block $switch$1$case$4
    block $switch$1$case$3
     block $switch$1$default
@@ -310,7 +386,7 @@
   call $abstract-method/SubAstract#get:y
   return
  )
- (func $null (; 18 ;) (type $FUNCSIG$v)
+ (func $null (; 20 ;) (type $FUNCSIG$v)
   unreachable
  )
 )

@@ -1174,7 +1174,8 @@ export enum DecoratorKind {
   EXTERNAL,
   BUILTIN,
   LAZY,
-  UNSAFE
+  UNSAFE,
+  VIRTUAL,
 }
 
 export namespace DecoratorKind {
@@ -1217,6 +1218,10 @@ export namespace DecoratorKind {
         case CharCode.u: {
           if (nameStr == "unmanaged") return DecoratorKind.UNMANAGED;
           if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
+          break;
+        }
+        case CharCode.v: {
+          if (nameStr == "virtual") return DecoratorKind.VIRTUAL;
           break;
         }
       }

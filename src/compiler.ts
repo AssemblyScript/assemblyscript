@@ -463,7 +463,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
     // set up virtual table
-    this.compileInterfaces();
+    this.compileVirtualMethods();
 
     // set up function table
     var functionTable = this.functionTable;
@@ -1297,8 +1297,19 @@ export class Compiler extends DiagnosticEmitter {
 
     // concrete function
     if (bodyNode) {
-
-      // must not be ambient
+      // Check if instance method is virtual so that overloading will use dynamic dispatch
+      if (instance.prototype.isBound && instance.hasDecorator(DecoratorFlags.VIRTUAL) && !this.interfaceMethods.has(instance)) {
+        this.interfaceMethods.add(instance);
+        assert(instance.parent.kind == ElementKind.CLASS);
+        (<Class>instance.parent).addImplementer(<Class>instance.parent);
+        funcRef = module.addFunction(
+          instance.internalName,
+          typeRef,
+          null,
+          module.nop()
+        );
+      }else {
+        // must not be ambient
       if (instance.is(CommonFlags.AMBIENT)) {
         this.error(
           DiagnosticCode.An_implementation_cannot_be_declared_in_ambient_contexts,
@@ -1358,8 +1369,9 @@ export class Compiler extends DiagnosticEmitter {
         typesToNativeTypes(instance.additionalLocals),
         flatten(module, stmts, instance.signature.returnType.toNativeType())
       );
-    // Virtual Methods
-    } else if (instance.is( CommonFlags.VIRTUAL)) {
+      }
+    // Interface or Abstract Methods
+    } else if (instance.is(CommonFlags.VIRTUAL)) {
       funcRef = module.addFunction(instance.internalName,
         typeRef,
         null,
@@ -3077,6 +3089,12 @@ export class Compiler extends DiagnosticEmitter {
             reportNode.range, fromType.toString(), toType.toString()
           ); // recoverable
         }
+      }
+    }
+
+    if (fromType.classReference && toType.classReference) {
+      if (fromType.classReference.extends(toType.classReference.prototype)){
+        toType.classReference.addImplementer(fromType.classReference);
       }
     }
 
@@ -9397,10 +9415,14 @@ export class Compiler extends DiagnosticEmitter {
     return !error;
   }
 
-  compileInterfaces(): void {
+  /**
+   * Compiles interfaces methods, abstract methods, and methods decorated with '@virtual'
+   */
+  compileVirtualMethods(): void {
     const module = this.module;
     for (let ifunc of this.interfaceMethods) {
       let classes = (<Class>ifunc.parent).implementers;
+      const name = ifunc.internalName;
       const signature = ifunc.signature;
       const returnType = signature.returnType;
       const typeRef = this.ensureSignature(signature);
@@ -9428,9 +9450,12 @@ export class Compiler extends DiagnosticEmitter {
       let block = isVoid ? [switchExpression] : [switchExpression, defaultVal];
       let body = module.block(null, block, returnType.toNativeType());
 
+      // if (ifunc.hasDecorator(DecoratorFlags.VIRTUAL)) {
+      //   ifunc.internalName = ifunc.internalName.substr(0, ifunc.internalName.length - "~virtual".length);
+      // }
       // Remove the nop standin
-      module.removeFunction(ifunc.internalName);
-      module.addFunction(ifunc.internalName, typeRef, null, body);
+      module.removeFunction(name);
+      module.addFunction(name, typeRef, null, body);
     }
   }
 
@@ -9504,7 +9529,15 @@ export class Compiler extends DiagnosticEmitter {
         throw Error("Class " + _class.name + " must have property " + prop.name);
       }
     }
+    var methodName = method.internalName;
 
+    /**
+     * If method is virtual it must be renamed to not overlap with actual implementation.
+     */
+    if (ifunc.hasDecorator(DecoratorFlags.VIRTUAL) && ifunc.parent == method.parent) {
+      method.internalName = method.internalName + "~virtual";
+      method.unset(CommonFlags.COMPILED);
+    }
     this.compileFunction(method);
     const locals: usize[] = [];
     for (let i: i32 = 0; i < ifunc.localsByIndex.length; i++) {

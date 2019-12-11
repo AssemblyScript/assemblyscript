@@ -23,7 +23,7 @@ class AGFoo implements GFoo<i32, bool> {
 class StructurallyImplementsGFoo {
   i: i32 = 41;
   x: bool = false;
-  
+
   foo(i: i32): i32 {
     return this.i + i;
   }
@@ -54,4 +54,5 @@ expectGX(sGFoo, false);
 
 const gFoo = <GFoo<i32, bool>> aGFoo;
 const igbool = gFoo.x;
-assert(igbool)
+assert(igbool);
+
