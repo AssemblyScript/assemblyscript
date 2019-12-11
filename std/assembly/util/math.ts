@@ -781,7 +781,7 @@ Relative error: 1.957 * 2^-26 (before rounding.)
 
   var tail = reinterpret<f64>(load<u64>(tab + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
   // This is only a valid scale when -1023*N < k < 1024*N
-  var sbits = reinterpret<f64>(load<u64>(tab + (idx << alignof<u64>()), 1 << alignof<u64>())) + top; // T[idx + 1]
+  var sbits = load<u64>(tab + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
   // exp2(x) = 2^(k/N) * 2^r ~= scale + scale * (tail + 2^r - 1).
   // Evaluation is optimized assuming superscalar pipelined execution
   var r2 = r * r;
