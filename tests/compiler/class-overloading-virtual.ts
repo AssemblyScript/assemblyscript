@@ -1,5 +1,4 @@
 class Foo {
-  //@ts-ignore: decorator
   @virtual
   baz(): i32 {
     return 42;
@@ -11,7 +10,6 @@ class Foo {
 }
 
 class Bar extends Foo {
-  //@ts-ignore
   @virtual
   baz(): i32 {
     return 84;
