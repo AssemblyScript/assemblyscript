@@ -3093,7 +3093,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     if (fromType.classReference && toType.classReference) {
-      if (fromType.classReference.extends(toType.classReference.prototype)){
+      if (fromType.classReference.extends(toType.classReference.prototype)) {
         toType.classReference.addImplementer(fromType.classReference);
       }
     }
