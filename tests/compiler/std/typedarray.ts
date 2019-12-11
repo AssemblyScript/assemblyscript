@@ -693,3 +693,47 @@ testArrayWrap<Int64Array, i64>();
 testArrayWrap<Uint64Array, u64>();
 testArrayWrap<Float32Array, f32>();
 testArrayWrap<Float64Array, f64>();
+
+function valuesEqual<T extends ArrayBufferView>(target: T, compare: valueof<T>[]): void {
+  let len = target.length;
+  assert(len == compare.length);
+  for (let i = 0; i < len; i++) {
+    let vala = target[i];
+    let valb = unchecked(compare[i]);
+    if (vala != valb) {
+      trace(nameof<T>(), 3, i, <f64>vala, <f64>valb);
+      assert(false);
+    }
+  }
+}
+
+let setSource1: i32[] = [1, 2, 3];
+let setSource2: f32[] = [4, 5, 6];
+let setSource3: f64[] = [Infinity, NaN, -Infinity];
+
+function testTypedArraySet<T extends ArrayBufferView>(): void {
+  let a = instantiate<T>(10);
+
+  a.set(setSource1);
+  valuesEqual<T>(a, [1, 2, 3, 0, 0, 0, 0, 0, 0, 0]);
+
+  a.set(setSource2, 3);
+  valuesEqual<T>(a, [1, 2, 3, 4, 5, 6, 0, 0, 0, 0]);
+
+  if (isInteger<valueof<T>>()) {
+    a.set(setSource3, 2);
+    valuesEqual<T>(a, [1, 2, 0, 0, 0, 6, 0, 0, 0, 0]);
+  }
+}
+
+testTypedArraySet<Int8Array>();
+testTypedArraySet<Uint8Array>();
+testTypedArraySet<Uint8ClampedArray>();
+testTypedArraySet<Int16Array>();
+testTypedArraySet<Uint16Array>();
+testTypedArraySet<Int32Array>();
+testTypedArraySet<Uint32Array>();
+testTypedArraySet<Int64Array>();
+testTypedArraySet<Uint64Array>();
+testTypedArraySet<Float32Array>();
+testTypedArraySet<Float64Array>();
