@@ -712,6 +712,11 @@ let setSource2: f32[] = [4, 5, 6];
 let setSource3: f64[] = [Infinity, NaN, -Infinity];
 
 function testTypedArraySet<T extends ArrayBufferView>(): void {
+  let setSource4: Int64Array = new Int64Array(3);
+  setSource4[0] = 7;
+  setSource4[1] = 8;
+  setSource4[2] = 9;
+
   let a = instantiate<T>(10);
 
   a.set(setSource1);
@@ -720,9 +725,12 @@ function testTypedArraySet<T extends ArrayBufferView>(): void {
   a.set(setSource2, 3);
   valuesEqual<T>(a, [1, 2, 3, 4, 5, 6, 0, 0, 0, 0]);
 
+  a.set(setSource4, 6);
+  valuesEqual<T>(a, [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
+
   if (isInteger<valueof<T>>()) {
     a.set(setSource3, 2);
-    valuesEqual<T>(a, [1, 2, 0, 0, 0, 6, 0, 0, 0, 0]);
+    valuesEqual<T>(a, [1, 2, 0, 0, 0, 6, 7, 8, 9, 0]);
   }
 }
 
@@ -737,3 +745,21 @@ testTypedArraySet<Int64Array>();
 testTypedArraySet<Uint64Array>();
 testTypedArraySet<Float32Array>();
 testTypedArraySet<Float64Array>();
+
+{
+  let targetClampedArray = new Uint8ClampedArray(10);
+  let a = new Float32Array(3);
+  a[0] = 400;
+  a[1] = NaN;
+  a[2] = Infinity;
+
+  let b = new Int64Array(4);
+  b[0] = -10;
+  b[1] = 100;
+  b[2] = 10;
+  b[3] = 300;
+
+  targetClampedArray.set(a, 1);
+  targetClampedArray.set(b, 4);
+  valuesEqual<Uint8ClampedArray>(targetClampedArray, [0, 255, 0, 0, 0, 100, 10, 255, 0, 0])
+}

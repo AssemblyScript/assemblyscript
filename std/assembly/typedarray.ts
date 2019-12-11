@@ -1775,27 +1775,45 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
   if (offset < 0) throw new RangeError(E_INDEXOUTOFRANGE);
   if (source.length + offset > target.length) throw new RangeError(E_INDEXOUTOFRANGE);
 
-  let targetOffset = <usize>offset << alignof<T>();
-  let targetDataStart = target.dataStart + targetOffset;
-  let sourceDataStart = source.dataStart;
-
   // if the types align and match, use memory.copy() instead of manual loop
   if (isInteger<T>() == isInteger<U>() && alignof<T>() == alignof<U>()) {
-    memory.copy(targetDataStart, sourceDataStart, source.byteLength);
+    memory.copy(
+      target.dataStart + (<usize>offset << alignof<T>()),
+      source.dataStart,
+      source.byteLength
+    );
   } else {
+    let targetDataStart = target.dataStart + (<usize>offset << alignof<T>());
+    let sourceDataStart = source.dataStart;
     let count = source.length;
     for (let i = 0; i < count; i++) {
-      let targetStoreOffset = <usize>i << alignof<T>();
-      let sourceLoadOffset = <usize>i << alignof<U>();
-
-      // if U is a float, then casting float to int must include a finite check
-      if (isFloat<U>() && !isFloat<T>()) {
-        let value = load<U>(sourceDataStart + sourceLoadOffset);
+      // if TArray is Uint8ClampedArray, then values must be clamped
+      if (target instanceof Uint8ClampedArray) {
+        if (isFloat<U>()) {
+          let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
+          store<T>(
+            targetDataStart + (<usize>i << alignof<T>()),
+            isFinite<U>(value)
+              // @ts-ignore: cast to T is valid for numeric types here
+              ? select<T>(0, select<T>(255, <T>value, value > 255), value < 0)
+              : 0
+          );
+        } else {
+          let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
+          store<T>(
+            targetDataStart + (<usize>i << alignof<T>()),
+            // @ts-ignore: cast to T is valid for numeric types here
+            select<T>(0, select<T>(255, <T>value, value > 255), value < 0)
+          );
+        }
+        // if U is a float, then casting float to int must include a finite check
+      } else if (isFloat<U>() && !isFloat<T>()) {
+        let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
         // @ts-ignore: cast to T is valid for numeric types here
-        store<T>(targetDataStart + targetStoreOffset, isFinite<U>(value) ? <T>value : 0);
+        store<T>(targetDataStart + (<usize>i << alignof<T>()), isFinite<U>(value) ? <T>value : 0);
       } else {
         // @ts-ignore: cast to T is valid for numeric types here
-        store<T>(targetDataStart + targetStoreOffset, <T>load<U>(sourceDataStart + sourceLoadOffset));
+        store<T>(targetDataStart + (<usize>i << alignof<T>()), <T>load<U>(sourceDataStart + (<usize>i << alignof<U>())));
       }
     }
   }
