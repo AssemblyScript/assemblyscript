@@ -1297,18 +1297,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // concrete function
     if (bodyNode) {
-      // Check if instance method is virtual so that overloading will use dynamic dispatch
-      if (instance.prototype.isBound && instance.hasDecorator(DecoratorFlags.VIRTUAL) && !this.interfaceMethods.has(instance)) {
-        this.interfaceMethods.add(instance);
-        assert(instance.parent.kind == ElementKind.CLASS);
-        (<Class>instance.parent).addImplementer(<Class>instance.parent);
-        funcRef = module.addFunction(
-          instance.internalName,
-          typeRef,
-          null,
-          module.nop()
-        );
-      }else {
         // must not be ambient
       if (instance.is(CommonFlags.AMBIENT)) {
         this.error(
@@ -1369,6 +1357,16 @@ export class Compiler extends DiagnosticEmitter {
         typesToNativeTypes(instance.additionalLocals),
         flatten(module, stmts, instance.signature.returnType.toNativeType())
       );
+
+      if (instance.prototype.isBound  // Is bound to a class
+          && !instance.hasDecorator(DecoratorFlags.SEALED) // Not sealed
+          && !( instance.is(CommonFlags.PRIVATE)  // Not private
+             || instance.hasDecorator(DecoratorFlags.FINAL)) // does not have a final decorator
+        ) {
+        this.interfaceMethods.add(instance);
+        assert(instance.parent.kind == ElementKind.CLASS);
+        // Add to the instance's class's implementing classes.
+        (<Class>instance.parent).addImplementer(<Class>instance.parent);
       }
     // Interface or Abstract Methods
     } else if (instance.is(CommonFlags.VIRTUAL)) {
@@ -3090,11 +3088,11 @@ export class Compiler extends DiagnosticEmitter {
           ); // recoverable
         }
       }
-    }
-
-    if (fromType.classReference && toType.classReference) {
-      if (fromType.classReference.extends(toType.classReference.prototype)) {
-        toType.classReference.addImplementer(fromType.classReference);
+    } else { // Otherwise "class From extends To"
+      if (fromType.classReference && toType.classReference) {
+        if (fromType.classReference.extends(toType.classReference.prototype)) {
+          toType.classReference.addImplementer(fromType.classReference);
+        }
       }
     }
 
@@ -9420,10 +9418,48 @@ export class Compiler extends DiagnosticEmitter {
    */
   compileVirtualMethods(): void {
     const module = this.module;
+    const nop = module.nop();
     for (let ifunc of this.interfaceMethods) {
-      let classes = (<Class>ifunc.parent).implementers;
+      let allClasses = (<Class>ifunc.parent).implementers;
+
+      // Skip constructors and if sigleton classes
+      if (!ifunc.isAny(CommonFlags.VIRTUAL | CommonFlags.ABSTRACT)
+          && (ifunc.is(CommonFlags.CONSTRUCTOR)
+          || allClasses.size == 1)) {
+        continue;
+      }
+
       const name = ifunc.internalName;
       const signature = ifunc.signature;
+
+      /**
+       * 
+       */
+      const funcs = new Map<Element, Set<Class>>();
+
+      const getClassSet = (func: Element): Set<Class> => {
+        if (!funcs.has(func)) {
+          funcs.set(func, new Set());
+        }
+        return funcs.get(func)!;
+      };
+
+      for (let _class of allClasses) {
+        let prop = this.getMethodOrField(ifunc, _class);
+        if (prop.is(CommonFlags.ABSTRACT)) {
+          continue;
+        }
+        getClassSet(prop).add(_class);
+      }
+
+      // Skip if method's class is the only implementer
+      if (funcs.size == 1 && !ifunc.is(CommonFlags.VIRTUAL)) {
+        continue;
+      }
+
+
+      // Remove Function
+      module.removeFunction(name);
       const returnType = signature.returnType;
       const typeRef = this.ensureSignature(signature);
       const relooper = this.module.createRelooper();
@@ -9436,13 +9472,14 @@ export class Compiler extends DiagnosticEmitter {
       relooper.addBranch(first, last);
 
       // Add branch cases
-      for (let _class of classes) {
-        let expr = this.compileInterfaceMethod(ifunc, _class);
+      for (let [prop, classes] of funcs) {
+        let expr = this.compileInterfaceMethod(ifunc, prop);
         if (!isVoid) {
           expr = module.return(expr);
         }
         const returnBlock = relooper.addBlock(expr);
-        relooper.addBranchForSwitch(first, returnBlock, [_class.id]);
+        let classIds = Array.from(classes).map(c => c.id);
+        relooper.addBranchForSwitch(first, returnBlock, classIds);
       }
 
       // finish relooper and prepare body of function
@@ -9450,28 +9487,67 @@ export class Compiler extends DiagnosticEmitter {
       let block = isVoid ? [switchExpression] : [switchExpression, defaultVal];
       let body = module.block(null, block, returnType.toNativeType());
 
-      // if (ifunc.hasDecorator(DecoratorFlags.VIRTUAL)) {
-      //   ifunc.internalName = ifunc.internalName.substr(0, ifunc.internalName.length - "~virtual".length);
-      // }
       // Remove the nop standin
-      module.removeFunction(name);
       module.addFunction(name, typeRef, null, body);
     }
-  }
+}
 
-  compileInterfaceMethod(ifunc: Function, _class: Class): ExpressionRef {
-    const module = this.module;
-    var name: string = ifunc.name;
-    if (ifunc.isAny(CommonFlags.GET | CommonFlags.SET)) {
+  getClassMember(func: Function, _class: Class): Element {
+    var name: string = func.name;
+    if (func.isAny(CommonFlags.GET | CommonFlags.SET)) {
       name = name.substr("get:".length);
     }
-    var prop = _class.members!.get(name)!;
+    return _class.members!.get(name)!;
+  }
+
+  getMethodOrField(func: Function, _class: Class): Element {
+    var prop = this.getClassMember(func, _class);
+    var method: Function;
+    switch (prop.kind){
+      case ElementKind.FUNCTION_PROTOTYPE: {
+        let p = <FunctionPrototype> prop;
+        let newFunc = this.resolver.resolveFunction(p, null, (<Class>func.parent).contextualTypeArguments);
+        if (newFunc == null) {
+          throw new Error(`Couldn't resolve ${p.name}`);
+        }
+        prop = newFunc;
+      }
+      case ElementKind.FUNCTION: {
+        method = <Function> prop;
+        break;
+      }
+      case ElementKind.FIELD: {
+        let field = <Field> prop;
+        return field;
+      }
+      case ElementKind.PROPERTY: {
+        let p = <Property> prop;
+        if (func.is(CommonFlags.SET)) {
+          method = p.setterInstance!;
+        }else if (func.is(CommonFlags.GET)) {
+          method = p.getterInstance!;
+        }else {
+          throw Error("Interface method " + func.name + " should be a property");
+        }
+        break;
+
+      }
+      default: {
+        throw Error("Class " + _class.name + " must have property " + prop.name);
+      }
+    }
+    return method;
+  }
+
+  compileInterfaceMethod(ifunc: Function, prop: Element): ExpressionRef {
+    const module = this.module;
+    // var prop = this.getClassMember(ifunc, _class);
     const returnType = ifunc!.signature.returnType.toNativeType();
     var method: Function;
     switch (prop.kind){
       case ElementKind.FUNCTION_PROTOTYPE: {
         let p = <FunctionPrototype> prop;
-        let newFunc = this.resolver.resolveFunction(p, null, (<Class>p.parent).contextualTypeArguments);
+        let newFunc = this.resolver.resolveFunction(p, null, (<Class>ifunc.parent).contextualTypeArguments);
         if (newFunc == null) {
           throw new Error(`Couldn't resolve ${p.name}`);
         }
@@ -9526,25 +9602,27 @@ export class Compiler extends DiagnosticEmitter {
 
       }
       default: {
-        throw Error("Class " + _class.name + " must have property " + prop.name);
+        throw Error("Class " + ifunc.parent.name + " must have property " + prop.name);
       }
     }
-    var methodName = method.internalName;
-
+    var origMethodName = method.internalName;
     /**
-     * If method is virtual it must be renamed to not overlap with actual implementation.
+     * If method is not virtual it must be renamed to not overlap with actual implementation.
      */
-    if (ifunc.hasDecorator(DecoratorFlags.VIRTUAL) && ifunc.parent == method.parent) {
+    if (!method.is(CommonFlags.VIRTUAL) && ifunc.parent == method.parent) {
       method.internalName = method.internalName + "~virtual";
       method.unset(CommonFlags.COMPILED);
     }
+
     this.compileFunction(method);
     const locals: usize[] = [];
     for (let i: i32 = 0; i < ifunc.localsByIndex.length; i++) {
       const local = ifunc.localsByIndex[i];
       locals.push(this.module.local_get(local.index, local.type.toNativeType()));
     }
-    return this.module.call(method.internalName, locals, returnType);
+    const callExpr = this.module.call(method.internalName, locals, returnType);
+    method.internalName = origMethodName;
+    return callExpr;
 
   }
 

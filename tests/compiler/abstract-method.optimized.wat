@@ -222,15 +222,15 @@
      i32.load
      i32.const 4
      i32.sub
-     br_table $switch$1$case$3 $switch$1$default $switch$1$case$4 $switch$1$default
+     br_table $switch$1$case$4 $switch$1$case$3 $switch$1$case$3 $switch$1$default
     end
     unreachable
    end
-   local.get $0
-   call $abstract-method/AAbstract#get:y
+   i32.const 42
    return
   end
-  i32.const 42
+  local.get $0
+  call $abstract-method/AAbstract#get:y
  )
  (func $null (; 11 ;) (type $FUNCSIG$v)
   unreachable

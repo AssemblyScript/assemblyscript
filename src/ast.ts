@@ -1175,7 +1175,7 @@ export enum DecoratorKind {
   BUILTIN,
   LAZY,
   UNSAFE,
-  VIRTUAL,
+  FINAL,
 }
 
 export namespace DecoratorKind {
@@ -1220,8 +1220,8 @@ export namespace DecoratorKind {
           if (nameStr == "unsafe") return DecoratorKind.UNSAFE;
           break;
         }
-        case CharCode.v: {
-          if (nameStr == "virtual") return DecoratorKind.VIRTUAL;
+        case CharCode.f: {
+          if (nameStr == "final") return DecoratorKind.FINAL;
           break;
         }
       }

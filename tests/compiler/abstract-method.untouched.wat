@@ -374,16 +374,16 @@
      i32.const 8
      i32.sub
      i32.load
-     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$3 $switch$1$default $switch$1$case$4 $switch$1$default
+     br_table $switch$1$default $switch$1$default $switch$1$default $switch$1$default $switch$1$case$4 $switch$1$case$3 $switch$1$case$3 $switch$1$default
     end
     unreachable
    end
    local.get $0
-   call $abstract-method/AAbstract#get:y
+   call $abstract-method/SubAstract#get:y
    return
   end
   local.get $0
-  call $abstract-method/SubAstract#get:y
+  call $abstract-method/AAbstract#get:y
   return
  )
  (func $null (; 20 ;) (type $FUNCSIG$v)

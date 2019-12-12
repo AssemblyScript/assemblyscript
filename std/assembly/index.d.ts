@@ -1785,5 +1785,5 @@ declare function lazy(...args: any[]): any;
 /** Annotates a function as the explicit start function. */
 declare function start(...args: any[]): any;
 
-/** Annotates a method to be virtually overloaded. */
-declare function virtual(...args: any[]): any;
+/** Annotates a method to not be virtually overloaded. */
+declare function final(...args: any[]): any;

@@ -1373,7 +1373,7 @@ export class Program extends DiagnosticEmitter {
   ): void {
     var name = declaration.name.text;
     var isStatic = declaration.is(CommonFlags.STATIC);
-    var acceptedFlags = DecoratorFlags.INLINE | DecoratorFlags.UNSAFE | DecoratorFlags.VIRTUAL;
+    var acceptedFlags = DecoratorFlags.INLINE | DecoratorFlags.UNSAFE | DecoratorFlags.FINAL;
     if (!declaration.is(CommonFlags.GENERIC)) {
       acceptedFlags |= DecoratorFlags.OPERATOR_BINARY
                     |  DecoratorFlags.OPERATOR_PREFIX
@@ -2086,8 +2086,8 @@ export enum DecoratorFlags {
   LAZY = 1 << 9,
   /** Is considered unsafe code. */
   UNSAFE = 1 << 10,
-  /** Is a virtual method when inherited. */
-  VIRTUAL = 1 << 11,
+  /** Is a final method that is not virtualized. */
+  FINAL = 1 << 11,
 }
 
 export namespace DecoratorFlags {
@@ -2107,7 +2107,7 @@ export namespace DecoratorFlags {
       case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;
       case DecoratorKind.LAZY: return DecoratorFlags.LAZY;
       case DecoratorKind.UNSAFE: return DecoratorFlags.UNSAFE;
-      case DecoratorKind.VIRTUAL: return DecoratorFlags.VIRTUAL;
+      case DecoratorKind.FINAL: return DecoratorFlags.FINAL;
       default: return DecoratorFlags.NONE;
     }
   }
