@@ -9433,7 +9433,7 @@ export class Compiler extends DiagnosticEmitter {
       const signature = ifunc.signature;
 
       /**
-       * 
+       * Maps functions and fields to classes that use it
        */
       const funcs = new Map<Element, Set<Class>>();
 
@@ -9457,7 +9457,6 @@ export class Compiler extends DiagnosticEmitter {
         continue;
       }
 
-
       // Remove Function
       module.removeFunction(name);
       const returnType = signature.returnType;
@@ -9478,7 +9477,7 @@ export class Compiler extends DiagnosticEmitter {
           expr = module.return(expr);
         }
         const returnBlock = relooper.addBlock(expr);
-        let classIds = Array.from(classes).map(c => c.id);
+        let classIds = Array.from(classes).map((c: Class) => c.id);
         relooper.addBranchForSwitch(first, returnBlock, classIds);
       }
 
