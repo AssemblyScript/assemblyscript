@@ -2273,7 +2273,7 @@ export namespace NativeMathf {
       1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1,
       1e+0, 1e+1, 1e+2, 1e+3, 1e+4, 1e+5, 1e+6, 1e+7
     ];
-    // inlined modff(x, &n);
+    // inlined y = modff(x, &n)
     var ux = reinterpret<u32>(x);
     var e  = <i32>(ux >> 23 & 0xFF) - 0x7F;
     var n: f32, y: f32;
