@@ -6852,7 +6852,9 @@
     f32.const 88.72283172607422
     f32.gt
     if
-     f32.const inf
+     local.get $1
+     f32.const 1701411834604692317316873e14
+     f32.mul
      br $~lib/util/math/expf_lut|inlined.0
     end
     local.get $1
@@ -7431,7 +7433,9 @@
     f32.const 0
     f32.gt
     if
-     f32.const inf
+     local.get $1
+     f32.const 1701411834604692317316873e14
+     f32.mul
      br $~lib/util/math/exp2f_lut|inlined.0
     end
     local.get $1

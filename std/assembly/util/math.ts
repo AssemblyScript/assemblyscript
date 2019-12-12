@@ -34,6 +34,7 @@
   const N      = 1 << EXP2F_TABLE_BITS;
   const N_MASK = N - 1;
   const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
+  const Ox127f = reinterpret<f32>(0x7F000000);
 
   const
     C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
@@ -47,7 +48,7 @@
     // |x| >= 128 or x is nan.
     if (ix == 0xFF800000) return 0; // x == -Inf    -> 0
     if (ux >= 0x7F8) return x + x;  // x == Inf/NaN -> Inf/NaN
-    if (x > 0) return Infinity;     // x >     0    -> Inf (Owerflow)
+    if (x > 0) return x * Ox127f;   // x >     0    -> HugeVal (Owerflow)
     if (x <= -150) return 0;        // x <= -150    -> 0 (Underflow)
   }
 
@@ -79,10 +80,11 @@ Wrong count: 170635 (all nearest rounding wrong results with fma.)
 // @ts-ignore: decorator
 @inline export function expf_lut(x: f32): f32 {
   const
-    N       = 1 << EXP2F_TABLE_BITS,
-    N_MASK  = N - 1,
-    shift   = reinterpret<f64>(0x4338000000000000),        // 0x1.8p+52
-    InvLn2N = reinterpret<f64>(0x3FF71547652B82FE) * N;    // 0x1.71547652b82fep+0
+    N        = 1 << EXP2F_TABLE_BITS,
+    N_MASK   = N - 1,
+    shift    = reinterpret<f64>(0x4338000000000000),        // 0x1.8p+52
+    InvLn2N  = reinterpret<f64>(0x3FF71547652B82FE) * N,    // 0x1.71547652b82fep+0
+    Ox1p127f = reinterpret<f32>(0x7F000000);
 
   const
     C0 = reinterpret<f64>(0x3FAC6AF84B912394) / N / N / N, // 0x1.c6af84b912394p-5
@@ -94,10 +96,10 @@ Wrong count: 170635 (all nearest rounding wrong results with fma.)
   var ux = ix >> 20 & 0x7FF;
   if (ux >= 0x42B) {
     // |x| >= 88 or x is nan.
-    if (ix == 0xFF800000) return 0;                        // x == -Inf    -> 0
-    if (ux >= 0x7F8) return x + x;                         // x == Inf/NaN -> Inf/NaN
-    if (x > reinterpret<f32>(0x42B17217)) return Infinity; // x > log(0x1p128)  ~=  88.72 -> Inf (Owerflow)
-    if (x < reinterpret<f32>(0xC2CFF1B4)) return 0;        // x < log(0x1p-150) ~= -103.97 -> 0 (Underflow)
+    if (ix == 0xFF800000) return 0;                            // x == -Inf    -> 0
+    if (ux >= 0x7F8) return x + x;                             // x == Inf/NaN -> Inf/NaN
+    if (x > reinterpret<f32>(0x42B17217)) return x * Ox1p127f; // x > log(0x1p128)  ~=  88.72 -> HugeVal (Owerflow)
+    if (x < reinterpret<f32>(0xC2CFF1B4)) return 0;            // x < log(0x1p-150) ~= -103.97 -> 0 (Underflow)
   }
 
   // x*N/Ln2 = k + r with r in [-1/2, 1/2] and int k.

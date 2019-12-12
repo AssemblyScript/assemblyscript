@@ -5510,7 +5510,9 @@
     i32.ge_u
     br_if $~lib/util/math/exp2f_lut|inlined.0
     drop
-    f32.const inf
+    local.get $0
+    f32.const 1701411834604692317316873e14
+    f32.mul
     local.get $0
     f32.const 0
     f32.gt
