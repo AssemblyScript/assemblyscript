@@ -1396,7 +1396,6 @@ export class Compiler extends DiagnosticEmitter {
         );
     }
     funcRef = module.getFunction(instance.internalName);
-
     instance.finalize(module, funcRef);
     this.currentType = previousType;
     return true;
@@ -9418,11 +9417,10 @@ export class Compiler extends DiagnosticEmitter {
    */
   compileVirtualMethods(): void {
     const module = this.module;
-    const nop = module.nop();
     for (let ifunc of this.interfaceMethods) {
       let allClasses = (<Class>ifunc.parent).implementers;
 
-      // Skip constructors and if sigleton classes
+      // Skip constructors and sigleton classes
       if (!ifunc.isAny(CommonFlags.VIRTUAL | CommonFlags.ABSTRACT)
           && (ifunc.is(CommonFlags.CONSTRUCTOR)
           || allClasses.size == 1)) {
@@ -9464,10 +9462,10 @@ export class Compiler extends DiagnosticEmitter {
       const relooper = this.module.createRelooper();
       const isVoid = returnType.toNativeType() == NativeType.None;
 
-      // Condition to switch on
       const first = relooper.addBlockWithSwitch(module.nop(), this.loadClassID());
       const defaultVal = defaultTypeValue(returnType.toNativeType(), module);
       const last = relooper.addBlock(module.unreachable());
+      // default branch
       relooper.addBranch(first, last);
 
       // Add branch cases
