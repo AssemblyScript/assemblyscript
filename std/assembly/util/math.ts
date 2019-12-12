@@ -31,10 +31,11 @@
  */
 // @ts-ignore: decorator
 @inline export function exp2f_lut(x: f32): f32 {
-  const N      = 1 << EXP2F_TABLE_BITS;
-  const N_MASK = N - 1;
-  const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
-  const Ox127f = reinterpret<f32>(0x7F000000);
+  const
+    N      = 1 << EXP2F_TABLE_BITS,
+    N_MASK = N - 1,
+    shift  = reinterpret<f64>(0x4338000000000000) / N, // 0x1.8p+52
+    Ox127f = reinterpret<f32>(0x7F000000);
 
   const
     C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
@@ -158,8 +159,9 @@ Relative error: 1.9 * 2^-26 (before rounding.)
 */
 // @ts-ignore: decorator
 @inline export function log2f_lut(x: f32): f32 {
-  const Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f;
-  const N_MASK  = (1 << LOG2F_TABLE_BITS) - 1;
+  const
+    N_MASK  = (1 << LOG2F_TABLE_BITS) - 1,
+    Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
 
   const
     A0 = reinterpret<f64>(0xBFD712B6F70A7E4D), // -0x1.712b6f70a7e4dp-2
@@ -239,8 +241,9 @@ Relative error: 1.957 * 2^-26 (before rounding.)
 */
 // @ts-ignore: decorator
 @inline export function logf_lut(x: f32): f32 {
-  const Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f;
-  const N_MASK  = (1 << LOGF_TABLE_BITS) - 1;
+  const
+    N_MASK  = (1 << LOGF_TABLE_BITS) - 1,
+    Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
 
   const
     Ln2 = reinterpret<f64>(0x3FE62E42FEFA39EF), // 0x1.62e42fefa39efp-1;
@@ -358,9 +361,10 @@ Relative error: 1.957 * 2^-26 (before rounding.)
    in [-1021,1023], sign_bias sets the sign of the result.  */
 // @ts-ignore: decorator
 @inline function exp2f_inline(xd: f64, signBias: u32): f32 {
-  const N      = 1 << EXP2F_TABLE_BITS;
-  const N_MASK = N - 1;
-  const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
+  const
+    N      = 1 << EXP2F_TABLE_BITS,
+    N_MASK = N - 1,
+    shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p+52
 
   const
     C0 = reinterpret<f64>(0x3FAC6AF84B912394), // 0x1.c6af84b912394p-5
@@ -636,8 +640,9 @@ Relative error: 1.957 * 2^-26 (before rounding.)
 
 // @ts-ignore: decorator
 @inline export function exp_lut(x: f64): f64 {
-  const N      = 1 << EXP_TABLE_BITS;
-  const N_MASK = N - 1;
+  const
+    N      = 1 << EXP_TABLE_BITS,
+    N_MASK = N - 1;
 
   const
     InvLn2N   = reinterpret<f64>(0x3FF71547652B82FE) * N, // 0x1.71547652b82fep0
@@ -744,9 +749,10 @@ Relative error: 1.957 * 2^-26 (before rounding.)
 
 // @ts-ignore: decorator
 @inline export function exp2_lut(x: f64): f64 {
-  const N      = 1 << EXP_TABLE_BITS;
-  const N_MASK = N - 1;
-  const shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p52
+  const
+    N      = 1 << EXP_TABLE_BITS,
+    N_MASK = N - 1,
+    shift  = reinterpret<f64>(0x4338000000000000) / N; // 0x1.8p52
 
   const
     C1 = reinterpret<f64>(0x3FE62E42FEFA39EF), // 0x1.62e42fefa39efp-1
@@ -969,8 +975,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 
 // @ts-ignore: decorator
 @inline export function log2_lut(x: f64): f64 {
-  const N      = 1 << LOG2_TABLE_BITS;
-  const N_MASK = N - 1;
+  const N_MASK = (1 << LOG2_TABLE_BITS) - 1;
 
   const
     LO: u64 = 0x3FEEA4AF00000000, // reinterpret<u64>(1.0 - 0x1.5b51p-5)
@@ -1384,8 +1389,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 
 // @ts-ignore: decorator
 @inline export function log_lut(x: f64): f64 {
-  const N      = 1 << LOG_TABLE_BITS;
-  const N_MASK = N - 1;
+  const N_MASK = (1 << LOG_TABLE_BITS) - 1;
 
   const
     B0  = reinterpret<f64>(0xBFE0000000000000), // -0x1p-1
@@ -1434,9 +1438,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
     let hi = r + w;
     let lo = r - hi + w;
     lo += B0 * rlo * (rhi + r);
-    y += lo;
-    y += hi;
-    return y;
+    return y + lo + hi;
   }
   var top = u32(ix >> 48);
   if (top - 0x0010 >= 0x7FF0 - 0x0010) {
