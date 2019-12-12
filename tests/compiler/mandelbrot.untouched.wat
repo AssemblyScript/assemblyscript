@@ -151,12 +151,8 @@
     local.get $6
     local.get $11
     f64.add
-    local.set $6
-    local.get $6
     local.get $10
     f64.add
-    local.set $6
-    local.get $6
     br $~lib/util/math/log_lut|inlined.0
    end
    local.get $2
