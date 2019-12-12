@@ -2267,41 +2267,6 @@ export namespace NativeMathf {
     return exp2f_lut(x);
   }
 
-  export function exp10(x: f32): f32 {
-    const LOG2_10 = reinterpret<f32>(0x40549A78); // 3.32192809488736234787031942948939
-    const p10: f32[] = [
-      1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1,
-      1e+0, 1e+1, 1e+2, 1e+3, 1e+4, 1e+5, 1e+6, 1e+7
-    ];
-    // inlined y = modff(x, &n)
-    var ux = reinterpret<u32>(x);
-    var e  = <i32>(ux >> 23 & 0xFF) - 0x7F;
-    var n: f32, y: f32;
-    if (e >= 23) { // no fractional part
-      n = x;
-      y = e == 0x80 && ux << 9 != 0 /*NaN*/ ? x : reinterpret<f32>(ux & 0x80000000);
-    } else if (e < 0) { // no integral part
-      n = reinterpret<f32>(ux & 0x80000000);
-      y = x;
-    } else {
-      let mask = <u32>0x007FFFFF >> e;
-      if ((ux & mask) == 0) {
-        n = x;
-        y = reinterpret<f32>(ux & 0x80000000);
-      } else {
-        n = reinterpret<f32>(ux & ~mask);
-        y = x - n;
-      }
-    }
-    // fabsf(n) < 8 without raising invalid on NaN
-    if ((reinterpret<u32>(n) >> 23 & 0xFF) < 0x7F + 3) {
-      let p = p10[<i32>n + 7];
-      if (y == 0) return p;
-      return exp2(y * LOG2_10) * p;
-    }
-    return exp2(x * LOG2_10);
-  }
-
   export function expm1(x: f32): f32 { // see: musl/src/math/expm1f.c and SUN COPYRIGHT NOTICE above
     const
       o_threshold = reinterpret<f32>(0x42B17180), //  8.8721679688e+01f
