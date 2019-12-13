@@ -210,8 +210,7 @@ export class Map<K,V> {
     for (let i = 0; i < size; ++i) {
       let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
       if (!(entry.taggedNext & EMPTY)) {
-        keys[length] = entry.key;
-        ++length;
+        keys[length++] = entry.key;
       }
     }
     keys.length = length;
@@ -227,8 +226,7 @@ export class Map<K,V> {
     for (let i = 0; i < size; ++i) {
       let entry = changetype<MapEntry<K,V>>(start + <usize>i * ENTRY_SIZE<K,V>());
       if (!(entry.taggedNext & EMPTY)) {
-        values[length] = entry.value;
-        ++length;
+        values[length++] = entry.value;
       }
     }
     values.length = length;

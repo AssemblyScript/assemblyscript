@@ -4424,6 +4424,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -4459,13 +4460,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load8_s
-     call $~lib/array/Array<i8>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load8_s
+     call $~lib/array/Array<i8>#__set
     end
     local.get $5
     i32.const 1
@@ -4566,6 +4568,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -4601,13 +4604,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=4
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -6588,6 +6592,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -6623,13 +6628,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load8_u
-     call $~lib/array/Array<u8>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load8_u
+     call $~lib/array/Array<u8>#__set
     end
     local.get $5
     i32.const 1
@@ -6651,6 +6657,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -6686,13 +6693,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=4
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -8228,6 +8236,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -8263,13 +8272,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load16_s
-     call $~lib/array/Array<i16>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load16_s
+     call $~lib/array/Array<i16>#__set
     end
     local.get $5
     i32.const 1
@@ -8291,6 +8301,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -8326,13 +8337,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=4
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -9858,6 +9870,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -9893,13 +9906,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load16_u
-     call $~lib/array/Array<u16>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load16_u
+     call $~lib/array/Array<u16>#__set
     end
     local.get $5
     i32.const 1
@@ -9921,6 +9935,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -9956,13 +9971,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=4
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -10997,6 +11013,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -11032,13 +11049,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -11060,6 +11078,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -11095,13 +11114,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=4
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -12166,6 +12186,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -12201,13 +12222,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load
-     call $~lib/array/Array<u32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load
+     call $~lib/array/Array<u32>#__set
     end
     local.get $5
     i32.const 1
@@ -12229,6 +12251,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -12264,13 +12287,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=4
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -13838,6 +13862,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -13873,13 +13898,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i64.load
-     call $~lib/array/Array<i64>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i64.load
+     call $~lib/array/Array<i64>#__set
     end
     local.get $5
     i32.const 1
@@ -13901,6 +13927,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -13936,13 +13963,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=8
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=8
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -15433,6 +15461,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -15468,13 +15497,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i64.load
-     call $~lib/array/Array<u64>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i64.load
+     call $~lib/array/Array<u64>#__set
     end
     local.get $5
     i32.const 1
@@ -15496,6 +15526,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -15531,13 +15562,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=8
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=8
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -17032,6 +17064,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -17067,13 +17100,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     f32.load
-     call $~lib/array/Array<f32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     f32.load
+     call $~lib/array/Array<f32>#__set
     end
     local.get $5
     i32.const 1
@@ -17095,6 +17129,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -17130,13 +17165,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=4
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
@@ -18634,6 +18670,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -18669,13 +18706,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     f64.load
-     call $~lib/array/Array<f64>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     f64.load
+     call $~lib/array/Array<f64>#__set
     end
     local.get $5
     i32.const 1
@@ -18697,6 +18735,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   local.set $1
@@ -18732,13 +18771,14 @@
     if
      local.get $3
      local.get $4
-     local.get $6
-     i32.load offset=8
-     call $~lib/array/Array<i32>#__set
-     local.get $4
+     local.tee $7
      i32.const 1
      i32.add
      local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=8
+     call $~lib/array/Array<i32>#__set
     end
     local.get $5
     i32.const 1
