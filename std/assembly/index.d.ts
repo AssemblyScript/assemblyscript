@@ -1431,6 +1431,8 @@ declare class String {
   replaceAll(search: string, replacement: string): string;
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
+  toLowerCase(): string;
+  toUpperCase(): string;
   toString(): string;
 }
 
