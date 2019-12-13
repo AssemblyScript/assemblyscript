@@ -444,7 +444,7 @@
  (func $~lib/map/Map<usize,~lib/string/String>#constructor (; 8 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 4
+  i32.const 6
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.const 0

@@ -33,7 +33,7 @@
  (data (i32.const 360) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00a\00p\00.\00t\00s")
  (data (i32.const 400) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00K\00e\00y\00 \00d\00o\00e\00s\00 \00n\00o\00t\00 \00e\00x\00i\00s\00t")
  (data (i32.const 456) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00~\00l\00i\00b\00/\00m\00a\00p\00.\00t\00s")
- (data (i32.const 496) "\0d\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\98D\08\00\00\00\00\00\98D\00\00\00\00\00\00\98\84\08\00\00\00\00\00\98\84\00\00\00\00\00\00\98\04\t\00\00\00\00\00\98\04\01\00\00\00\00\00\98\04\n\00\00\00\00\00\98\04\02\00\00\00\00\00\98\04\19\00\00\00\00\00\98\04\1a")
+ (data (i32.const 496) "!\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\98D\08\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\04\00\00\00\98D\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\07\00\00\00\98\84\08\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\n\00\00\00\98\84\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\0d\00\00\00\98\04\t\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\10\00\00\00\98\04\01\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\13\00\00\00\98\04\n\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\16\00\00\00\98\04\02\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\19\00\00\00\98\04\19\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\1c\00\00\00\98\04\1a\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\1f")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
@@ -626,10 +626,10 @@
   if
    unreachable
   end
-  i32.const 608
+  i32.const 768
   i32.const 0
   i32.store
-  i32.const 2176
+  i32.const 2336
   i32.const 0
   i32.store
   i32.const 0
@@ -643,7 +643,7 @@
     local.get $0
     i32.const 2
     i32.shl
-    i32.const 608
+    i32.const 768
     i32.add
     i32.const 0
     i32.store offset=4
@@ -662,7 +662,7 @@
       i32.add
       i32.const 2
       i32.shl
-      i32.const 608
+      i32.const 768
       i32.add
       i32.const 0
       i32.store offset=96
@@ -680,13 +680,13 @@
     br $loop|0
    end
   end
-  i32.const 608
-  i32.const 2192
+  i32.const 768
+  i32.const 2352
   memory.size
   i32.const 16
   i32.shl
   call $~lib/rt/tlsf/addMemory
-  i32.const 608
+  i32.const 768
   global.set $~lib/rt/tlsf/ROOT
  )
  (func $~lib/rt/tlsf/prepareSize (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
@@ -1378,7 +1378,7 @@
  )
  (func $~lib/rt/pure/__retain (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 604
+  i32.const 764
   i32.gt_u
   if
    local.get $0
@@ -2007,7 +2007,7 @@
  )
  (func $~lib/rt/pure/__release (; 31 ;) (type $FUNCSIG$vi) (param $0 i32)
   local.get $0
-  i32.const 604
+  i32.const 764
   i32.gt_u
   if
    local.get $0
@@ -2803,7 +2803,7 @@
  (func $~lib/map/Map<u8,i32>#constructor (; 42 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 4
+  i32.const 6
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -3480,7 +3480,7 @@
  (func $~lib/map/Map<i16,i32>#constructor (; 49 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 5
+  i32.const 9
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -4239,7 +4239,7 @@
  (func $~lib/map/Map<u16,i32>#constructor (; 58 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 6
+  i32.const 12
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -4916,7 +4916,7 @@
  (func $~lib/map/Map<i32,i32>#constructor (; 65 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 7
+  i32.const 15
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -5645,7 +5645,7 @@
  (func $~lib/map/Map<u32,i32>#constructor (; 74 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 8
+  i32.const 18
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -6024,7 +6024,7 @@
  (func $~lib/map/Map<i64,i32>#constructor (; 77 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 9
+  i32.const 21
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -6796,7 +6796,7 @@
  (func $~lib/map/Map<u64,i32>#constructor (; 86 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 10
+  i32.const 24
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -7149,7 +7149,7 @@
  (func $~lib/map/Map<f32,i32>#constructor (; 88 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 11
+  i32.const 27
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -7860,7 +7860,7 @@
  (func $~lib/map/Map<f64,i32>#constructor (; 96 ;) (result i32)
   (local $0 i32)
   i32.const 24
-  i32.const 12
+  i32.const 30
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
@@ -8582,7 +8582,7 @@
  )
  (func $~lib/rt/pure/__visit (; 105 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 604
+  i32.const 764
   i32.lt_u
   if
    return
@@ -8699,7 +8699,7 @@
       i32.const 8
       i32.sub
       i32.load
-      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $switch$1$default
+      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $folding-inner0 $switch$1$case$2 $switch$1$case$2 $switch$1$default
      end
      return
     end

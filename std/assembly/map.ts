@@ -27,7 +27,7 @@ const FREE_FACTOR_N = 3;
 const FREE_FACTOR_D = 4;
 
 /** Structure of a map entry. */
-@unmanaged class MapEntry<K,V> {
+@unmanaged export class MapEntry<K,V> {
   key: K;
   value: V;
   taggedNext: usize; // LSB=1 indicates EMPTY
@@ -319,5 +319,9 @@ export class Map<K,V> {
       }
     }
     __visit(entries, cookie);
+  }
+
+  get iterator(): IterableIterator<MapEntry<K,V>> {
+    return this.entries();
   }
 }

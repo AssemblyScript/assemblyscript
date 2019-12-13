@@ -1558,6 +1558,7 @@ declare class Map<K,V> {
   keys(): IterableIterator<K>;
   values(): IterableIterator<V>;
   toString(): string;
+  readonly iterator: IterableIterator<MapEntry<K,V>>
 }
 
 declare class Set<K> {
@@ -1568,6 +1569,7 @@ declare class Set<K> {
   clear(): void;
   values(): IterableIterator<K>; // preliminary
   toString(): string;
+  readonly iterator: IterableIterator<K>
 }
 
 interface SymbolConstructor {

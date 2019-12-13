@@ -33,7 +33,7 @@
  (data (i32.const 360) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00a\00p\00.\00t\00s\00")
  (data (i32.const 400) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00K\00e\00y\00 \00d\00o\00e\00s\00 \00n\00o\00t\00 \00e\00x\00i\00s\00t\00")
  (data (i32.const 456) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00~\00l\00i\00b\00/\00m\00a\00p\00.\00t\00s\00")
- (data (i32.const 496) "\0d\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\98D\08\00\00\00\00\00\98D\00\00\00\00\00\00\98\84\08\00\00\00\00\00\98\84\00\00\00\00\00\00\98\04\t\00\00\00\00\00\98\04\01\00\00\00\00\00\98\04\n\00\00\00\00\00\98\04\02\00\00\00\00\00\98\04\19\00\00\00\00\00\98\04\1a\00\00\00\00\00")
+ (data (i32.const 496) "!\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\98D\08\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\04\00\00\00\98D\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\07\00\00\00\98\84\08\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\n\00\00\00\98\84\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\0d\00\00\00\98\04\t\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\10\00\00\00\98\04\01\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\13\00\00\00\98\04\n\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\16\00\00\00\98\04\02\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\19\00\00\00\98\04\19\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\1c\00\00\00\98\04\1a\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\1f\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -44,7 +44,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 496))
- (global $~lib/heap/__heap_base i32 (i32.const 604))
+ (global $~lib/heap/__heap_base i32 (i32.const 764))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -4510,7 +4510,7 @@
   i32.eqz
   if
    i32.const 24
-   i32.const 4
+   i32.const 6
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -5378,7 +5378,7 @@
   i32.eqz
   if
    i32.const 24
-   i32.const 5
+   i32.const 9
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -6292,7 +6292,7 @@
   i32.eqz
   if
    i32.const 24
-   i32.const 6
+   i32.const 12
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -7160,7 +7160,7 @@
   i32.eqz
   if
    i32.const 24
-   i32.const 7
+   i32.const 15
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -8046,7 +8046,7 @@
   i32.eqz
   if
    i32.const 24
-   i32.const 8
+   i32.const 18
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -8890,7 +8890,7 @@
   i32.eqz
   if
    i32.const 24
-   i32.const 9
+   i32.const 21
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -9832,7 +9832,7 @@
   i32.eqz
   if
    i32.const 24
-   i32.const 10
+   i32.const 24
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -10686,7 +10686,7 @@
   i32.eqz
   if
    i32.const 24
-   i32.const 11
+   i32.const 27
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -11545,7 +11545,7 @@
   i32.eqz
   if
    i32.const 24
-   i32.const 12
+   i32.const 30
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -12637,15 +12637,15 @@
  (func $~lib/rt/__visit_members (; 150 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
-   block $switch$1$case$14
-    block $switch$1$case$13
-     block $switch$1$case$12
-      block $switch$1$case$11
-       block $switch$1$case$10
-        block $switch$1$case$9
-         block $switch$1$case$8
-          block $switch$1$case$7
-           block $switch$1$case$6
+   block $switch$1$case$32
+    block $switch$1$case$29
+     block $switch$1$case$26
+      block $switch$1$case$23
+       block $switch$1$case$20
+        block $switch$1$case$17
+         block $switch$1$case$14
+          block $switch$1$case$11
+           block $switch$1$case$8
             block $switch$1$case$5
              block $switch$1$case$4
               block $switch$1$case$2
@@ -12653,7 +12653,7 @@
                i32.const 8
                i32.sub
                i32.load
-               br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$8 $switch$1$case$9 $switch$1$case$10 $switch$1$case$11 $switch$1$case$12 $switch$1$case$13 $switch$1$case$14 $switch$1$default
+               br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$2 $switch$1$case$2 $switch$1$case$8 $switch$1$case$2 $switch$1$case$2 $switch$1$case$11 $switch$1$case$2 $switch$1$case$2 $switch$1$case$14 $switch$1$case$2 $switch$1$case$2 $switch$1$case$17 $switch$1$case$2 $switch$1$case$2 $switch$1$case$20 $switch$1$case$2 $switch$1$case$2 $switch$1$case$23 $switch$1$case$2 $switch$1$case$2 $switch$1$case$26 $switch$1$case$2 $switch$1$case$2 $switch$1$case$29 $switch$1$case$2 $switch$1$case$2 $switch$1$case$32 $switch$1$case$2 $switch$1$case$2 $switch$1$default
               end
               return
              end

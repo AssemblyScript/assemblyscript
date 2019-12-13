@@ -53,6 +53,10 @@ const entries = map.entries();
 const resEntry = entries.next();
 assert(resEntry.value.key == "hello");
 
+const entriesArr = Array.from<MapEntry<string, i32>>(map);
+assert(entriesArr.length == map.size);
+assert(entriesArr[0].key == "hello");
+
 const keyIter = map.keys();
 const key = keyIter.next();
 assert(key.value == "hello");
@@ -69,3 +73,7 @@ assert(strSet.has("hello"));
 const mapArray = Array.from<string>(strSet.values());
 assert(mapArray[0] == "hello");
 assert(mapArray[1] == "world");
+
+const setArray = Array.from<string>(strSet);
+assert(setArray[0] == "hello");
+assert(setArray[1] == "world");

@@ -236,4 +236,8 @@ export class Set<T> {
     }
     __visit(entries, cookie);
   }
+
+  get iterator(): IterableIterator<T> {
+    return this.values();
+  }
 }
