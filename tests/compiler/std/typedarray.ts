@@ -759,7 +759,12 @@ testTypedArraySet<Float64Array>();
   b[2] = 10;
   b[3] = 300;
 
+  let c = new Int32Array(2);
+  c[0] = 300;
+  c[1] = -1;
+
   targetClampedArray.set(a, 1);
   targetClampedArray.set(b, 4);
-  valuesEqual<Uint8ClampedArray>(targetClampedArray, [0, 255, 0, 0, 0, 100, 10, 255, 0, 0])
+  targetClampedArray.set(c, 8);
+  valuesEqual<Uint8ClampedArray>(targetClampedArray, [0, 255, 0, 0, 0, 100, 10, 255, 255, 0]);
 }

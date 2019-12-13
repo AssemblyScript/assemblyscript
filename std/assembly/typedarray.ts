@@ -1793,18 +1793,23 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
           let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
           store<T>(
             targetDataStart + (<usize>i << alignof<T>()),
-            isFinite<U>(value)
-              // @ts-ignore: cast to T is valid for numeric types here
-              ? select<T>(0, select<T>(255, <T>value, value > 255), value < 0)
-              : 0
+            isFinite<U>(value) ? <T>max<U>(0, min<U>(255, value)) : 0
           );
         } else {
           let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
-          store<T>(
-            targetDataStart + (<usize>i << alignof<T>()),
-            // @ts-ignore: cast to T is valid for numeric types here
-            select<T>(0, select<T>(255, <T>value, value > 255), value < 0)
-          );
+          if (sizeof<T>() <= 4) {
+            store<T>(
+              targetDataStart + (<usize>i << alignof<T>()),
+              // @ts-ignore: cast to T is valid for numeric types here
+              <T>~(<i32>value >> 31) & (((255 - <i32>value) >> 31) | value)
+            );
+          } else {
+            store<T>(
+              targetDataStart + (<usize>i << alignof<T>()),
+              // @ts-ignore: cast to T is valid for numeric types here
+              <T>~(<i64>value >> 63) & (((255 - <i64>value) >> 63) | value)
+            );
+          }
         }
         // if U is a float, then casting float to int must include a finite check
       } else if (isFloat<U>() && !isFloat<T>()) {
