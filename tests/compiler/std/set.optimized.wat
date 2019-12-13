@@ -17,7 +17,6 @@
  (type $FUNCSIG$iid (func (param i32 f64) (result i32)))
  (type $FUNCSIG$iidi (func (param i32 f64 i32) (result i32)))
  (type $FUNCSIG$vid (func (param i32 f64)))
- (type $FUNCSIG$i (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
@@ -491,7 +490,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 7 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -1387,7 +1386,7 @@
   end
   local.get $0
  )
- (func $~lib/memory/memory.fill (; 23 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 23 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -1596,7 +1595,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 24 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741808
@@ -2048,7 +2047,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i8>#constructor (; 33 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<i8>#constructor (; 33 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 3
@@ -2356,7 +2355,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<i8>#delete (; 39 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#delete (; 39 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -2666,7 +2665,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u8>#constructor (; 41 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<u8>#constructor (; 41 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 4
@@ -2918,7 +2917,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<u8>#delete (; 45 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#delete (; 45 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -3226,7 +3225,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<i16>#constructor (; 47 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<i16>#constructor (; 47 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 5
@@ -3542,7 +3541,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<i16>#delete (; 53 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#delete (; 53 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -3852,7 +3851,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u16>#constructor (; 55 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<u16>#constructor (; 55 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 6
@@ -4104,7 +4103,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<u16>#delete (; 59 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#delete (; 59 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -4412,7 +4411,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<i32>#constructor (; 61 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<i32>#constructor (; 61 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 7
@@ -4734,7 +4733,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<i32>#delete (; 67 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#delete (; 67 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -5040,7 +5039,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u32>#constructor (; 69 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<u32>#constructor (; 69 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 8
@@ -5348,7 +5347,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i64>#constructor (; 72 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<i64>#constructor (; 72 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 9
@@ -5705,7 +5704,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<i64>#delete (; 78 ;) (type $FUNCSIG$vij) (param $0 i32) (param $1 i64)
+ (func $~lib/set/Set<i64>#delete (; 78 ;) (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -6012,7 +6011,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u64>#constructor (; 80 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<u64>#constructor (; 80 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 10
@@ -6287,7 +6286,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<f32>#constructor (; 82 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<f32>#constructor (; 82 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 11
@@ -6581,7 +6580,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<f32>#delete (; 87 ;) (type $FUNCSIG$vif) (param $0 i32) (param $1 f32)
+ (func $~lib/set/Set<f32>#delete (; 87 ;) (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -6889,7 +6888,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<f64>#constructor (; 89 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/set/Set<f64>#constructor (; 89 ;) (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 12
@@ -7183,7 +7182,7 @@
    i32.store
   end
  )
- (func $~lib/set/Set<f64>#delete (; 94 ;) (type $FUNCSIG$vid) (param $0 i32) (param $1 f64)
+ (func $~lib/set/Set<f64>#delete (; 94 ;) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -7648,6 +7647,6 @@
   call $~lib/rt/pure/__visit
  )
  (func $null (; 99 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

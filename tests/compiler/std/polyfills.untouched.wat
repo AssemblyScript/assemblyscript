@@ -494,5 +494,6 @@
   call $start:std/polyfills
  )
  (func $null (; 19 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

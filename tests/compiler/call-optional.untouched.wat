@@ -150,5 +150,6 @@
   call $start:call-optional
  )
  (func $null (; 5 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

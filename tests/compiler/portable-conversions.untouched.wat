@@ -638,5 +638,6 @@
   call $start:portable-conversions
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

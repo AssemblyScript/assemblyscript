@@ -6417,5 +6417,6 @@
   unreachable
  )
  (func $null (; 70 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

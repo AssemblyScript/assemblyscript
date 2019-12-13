@@ -24,5 +24,6 @@
   call $start:ternary
  )
  (func $null (; 2 ;) (type $FUNCSIG$v)
+  unreachable
  )
 )

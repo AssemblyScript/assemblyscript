@@ -9,6 +9,6 @@
   global.set $wasi-snapshot/sig
  )
  (func $null (; 1 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

@@ -5,7 +5,6 @@
  (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
  (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
@@ -121,7 +120,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/stub/offset
@@ -148,7 +147,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $std/operator-overloading/Tester#constructor (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester#constructor (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 3
   call $~lib/rt/stub/__alloc
@@ -1196,7 +1195,7 @@
    i32.const 0
   end
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 9 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 4
   call $~lib/rt/stub/__alloc
@@ -1208,7 +1207,7 @@
   i32.store offset=4
   local.get $2
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 5
   call $~lib/rt/stub/__alloc
@@ -2385,6 +2384,6 @@
   call $start:std/operator-overloading
  )
  (func $null (; 13 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )

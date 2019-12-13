@@ -102,7 +102,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 4 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/stub/offset
@@ -148,7 +148,7 @@
   global.set $~lib/rt/stub/offset
  )
  (func $null (; 9 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
  (func $exports/subOpt|trampoline (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   block $1of1

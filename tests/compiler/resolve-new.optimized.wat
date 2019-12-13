@@ -1,7 +1,6 @@
 (module
  (type $FUNCSIG$vi (func (param i32)))
  (type $FUNCSIG$v (func))
- (type $FUNCSIG$i (func (result i32)))
  (memory $0 0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -50,7 +49,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$i) (result i32)
+ (func $~lib/rt/stub/__alloc (; 1 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/rt/stub/offset
@@ -88,6 +87,6 @@
   drop
  )
  (func $null (; 3 ;) (type $FUNCSIG$v)
-  nop
+  unreachable
  )
 )
