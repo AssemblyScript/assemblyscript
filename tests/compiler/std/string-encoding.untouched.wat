@@ -4382,7 +4382,7 @@
         local.get $7
         i32.const 1023
         i32.and
-        i32.add
+        i32.or
         local.set $6
         local.get $5
         local.get $6
@@ -4473,7 +4473,7 @@
    if
     i32.const 0
     i32.const 480
-    i32.const 567
+    i32.const 684
     i32.const 8
     call $~lib/builtins/abort
     unreachable
@@ -4497,7 +4497,7 @@
    if
     i32.const 0
     i32.const 480
-    i32.const 571
+    i32.const 688
     i32.const 8
     call $~lib/builtins/abort
     unreachable
@@ -4853,7 +4853,7 @@
   if
    i32.const 0
    i32.const 480
-   i32.const 585
+   i32.const 702
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4999,14 +4999,14 @@
        local.get $7
        i32.const 10
        i32.shr_u
-       i32.add
+       i32.or
        i32.store16
        local.get $6
        i32.const 56320
        local.get $7
        i32.const 1023
        i32.and
-       i32.add
+       i32.or
        i32.store16 offset=2
        local.get $6
        i32.const 4
