@@ -1357,7 +1357,7 @@ declare class Float64Array extends TypedArray<f64> {
 /** Class representing a sequence of values of type `T`. */
 declare class Array<T> {
   // TODO: Add iterable types
-  static from<T>(iterator: any): T[];
+  static from<T>(iteratable: Iterable<T>): Array<T>;
 
   /** Tests if a value is an array. */
   static isArray<U>(value: any): value is Array<any>;
@@ -1535,7 +1535,7 @@ interface Iterator<T,> {
 }
 
 interface Iterable<T> {
-  iterator: Iterator<T>;
+  readonly iterator: Iterator<T>;
 }
 
 interface IterableIterator<T> extends Iterator<T> {
@@ -1548,15 +1548,15 @@ declare class MapEntry<K, V> {
 }
 
 declare class Map<K,V> {
-  entries(): Iterator<MapEntry<K,V>>
+  entries(): IterableIterator<MapEntry<K,V>>
   readonly size: i32;
   has(key: K): bool;
   set(key: K, value: V): void;
   get(key: K): V;
   delete(key: K): bool;
   clear(): void;
-  keys(): Iterator<K>;
-  values(): Iterator<V>;
+  keys(): IterableIterator<K>;
+  values(): IterableIterator<V>;
   toString(): string;
 }
 
@@ -1566,7 +1566,7 @@ declare class Set<K> {
   add(value: K): void;
   delete(value: K): bool;
   clear(): void;
-  values(): K[]; // preliminary
+  values(): IterableIterator<K>; // preliminary
   toString(): string;
 }
 

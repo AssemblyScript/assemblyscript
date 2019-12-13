@@ -58,6 +58,35 @@ function ENTRY_SIZE<T>(): usize {
   return size;
 }
 
+export class SetIterator<T> implements IterableIterator<T> {
+  private index: usize = -1;
+  constructor(protected start: usize, protected size: usize) {}
+
+  get done(): bool {
+    return this.index >= this.size;
+  }
+
+  protected get entry(): SetEntry<T> {
+    return changetype<SetEntry<T>>(this.start + <usize> this.index * ENTRY_SIZE<T>());
+  }
+
+  get value(): T {
+    return this.entry.key;
+  }
+
+  get iterator(): IterableIterator<T> {
+    return this;
+  }
+
+  next(): IteratorResult<T> {
+    this.index++;
+    while (!this.done && !!(this.entry.taggedNext & EMPTY)) {
+      this.index++;
+    }
+    return this;
+  }
+}
+
 export class Set<T> {
 
   // buckets holding references to the respective first entry within
@@ -178,21 +207,8 @@ export class Set<T> {
     this.entriesOffset = this.entriesCount;
   }
 
-  values(): T[] {
-    // FIXME: this is preliminary, needs iterators/closures
-    var start = changetype<usize>(this.entries);
-    var size = this.entriesOffset;
-    var values = new Array<T>(size);
-    var length = 0;
-    for (let i = 0; i < size; ++i) {
-      let entry = changetype<SetEntry<T>>(start + <usize>i * ENTRY_SIZE<T>());
-      if (!(entry.taggedNext & EMPTY)) {
-        values.push(entry.key);
-        ++length;
-      }
-    }
-    values.length = length;
-    return values;
+  values(): IterableIterator<T> {
+    return new SetIterator<T>(changetype<usize>(this.entries), this.entriesOffset);
   }
 
   toString(): string {

@@ -489,16 +489,21 @@ export class Array<T> extends ArrayBufferView {
     return this.join();
   }
 
-  static from<T>(iter: Iterator<T>): Array<T> {
-    var arr = new Array<T>();
+  static from<T, U = T>(iterable: Iterable<T>, mapFn: ((t: T) => U) | null = null): Array<U> {
+    const arr = new Array<U>();
+    const iter = iterable.iterator;
     var res = iter.next();
-    var len = 0;
-    while (!res.done){
-      arr.push(res.value);
+    var length = 0;
+    while (!res.done) {
+      if (mapFn) {
+        arr[length++] = mapFn(res.value);
+      } else {
+        //@ts-ignore U = T
+        arr[length++] =  res.value;
+      }
       res = iter.next();
-      len++;
     }
-    arr.length = len;
+    arr.length = length;
     return arr;
   }
 

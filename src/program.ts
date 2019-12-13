@@ -1288,13 +1288,6 @@ export class Program extends DiagnosticEmitter {
           );
         }
       } else if (numImplementsTypes) {
-        // remember classes that implement interfaces
-        // for (let i = 0; i < numImplementsTypes; ++i) {
-        //   this.warning( // TODO: not yet supported
-        //     DiagnosticCode.Operation_not_supported,
-        //     implementsTypes[i].range
-        //   );
-        // }
         queuedImplements.push(element);
       }
     }
@@ -3721,6 +3714,19 @@ export class Interface extends Class { // FIXME
       base,
       true
     );
+  }
+  // Overrides class.addImplementer for casses when implementer is also interfaces
+  addImplementer(_class: Class): void {
+    if (_class.kind == ElementKind.INTERFACE) {
+      _class.implementers.forEach((_class: Class) => {
+        this.addImplementer(_class);
+      });
+      if (this.base != null) {
+        this.base.addImplementer(_class);
+      }
+    } else {
+      super.addImplementer(_class);
+    }
   }
 }
 

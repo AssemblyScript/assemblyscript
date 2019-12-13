@@ -62,9 +62,9 @@ function ENTRY_SIZE<K,V>(): usize {
   return size;
 }
 
-class EntriesIter<K,V> implements Iterator<MapEntry<K,V>> {
-  private index: usize = 0;
-  constructor(private _map: Map<K,V>, protected start: usize, protected size: usize){}
+class EntriesIter<K,V> implements IterableIterator<MapEntry<K,V>> {
+  private index: usize = -1;
+  constructor(protected start: usize, protected size: usize) {}
 
   get done(): bool {
     return this.index >= this.size;
@@ -79,18 +79,20 @@ class EntriesIter<K,V> implements Iterator<MapEntry<K,V>> {
   }
 
   next(): IteratorResult<MapEntry<K,V>> {
-    while (!this.done) {
-      if (!(this.entry.taggedNext & EMPTY)) {
-        break
-      }
-      this.index++
+    this.index++;
+    while (!this.done && !!(this.entry.taggedNext & EMPTY)) {
+      this.index++;
     }
+    return this;
+  }
+
+  get iterator(): IterableIterator<MapEntry<K,V>> {
     return this;
   }
 }
 
-class KeyIterator<K,V> {
-  constructor(private entriesIter: EntriesIter<K,V>){}
+class KeyIterator<K,V> implements IterableIterator<K> {
+  constructor(private entriesIter: EntriesIter<K,V>) {}
 
   get done(): bool {
     return this.entriesIter.done;
@@ -104,9 +106,13 @@ class KeyIterator<K,V> {
     this.entriesIter.next();
     return this;
   }
+
+  get iterator(): IterableIterator<K> {
+    return this;
+  }
 }
 
-class ValueIterator<K,V> {
+class ValueIterator<K,V> implements IterableIterator<V> {
   constructor(private entriesIter: EntriesIter<K,V>){}
 
   get done(): bool {
@@ -119,6 +125,10 @@ class ValueIterator<K,V> {
 
   next(): IteratorResult<V> {
     this.entriesIter.next();
+    return this;
+  }
+
+  get iterator(): IterableIterator<V> {
     return this;
   }
 }
@@ -141,10 +151,10 @@ export class Map<K,V> {
     this.clear();
   }
 
-  public entries(): EntriesIter<K,V> {
+  entries(): EntriesIter<K,V> {
     var start = changetype<usize>(this._entries);
     var size = this.entriesOffset;
-    return new EntriesIter<K,V>(this, start, size);
+    return new EntriesIter<K,V>(start, size);
   }
 
   clear(): void {
@@ -269,11 +279,11 @@ export class Map<K,V> {
     this.entriesOffset = this.entriesCount;
   }
 
-  keys(): Iterator<K> {
+  keys(): IterableIterator<K> {
     return new KeyIterator<K,V>(this.entries());
   }
 
-  values(): Iterator<V> {
+  values(): IterableIterator<V> {
     return new ValueIterator<K,V>(this.entries());
   }
 

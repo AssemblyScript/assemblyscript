@@ -997,7 +997,7 @@
    call $~lib/rt/stub/__release
    i32.const 200
    i32.const 256
-   i32.const 179
+   i32.const 189
    i32.const 16
    call $~lib/builtins/abort
    unreachable
@@ -1750,7 +1750,7 @@
   if
    i32.const 200
    i32.const 256
-   i32.const 179
+   i32.const 189
    i32.const 16
    call $~lib/builtins/abort
    unreachable
