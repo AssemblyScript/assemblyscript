@@ -712,7 +712,7 @@ let setSource2: f32[] = [4, 5, 6];
 let setSource3: f64[] = [Infinity, NaN, -Infinity];
 
 function testTypedArraySet<T extends ArrayBufferView>(): void {
-  let setSource4: Int64Array = new Int64Array(3);
+  let setSource4 = new Int64Array(3);
   setSource4[0] = 7;
   setSource4[1] = 8;
   setSource4[2] = 9;
@@ -767,4 +767,22 @@ testTypedArraySet<Float64Array>();
   targetClampedArray.set(b, 4);
   targetClampedArray.set(c, 8);
   valuesEqual<Uint8ClampedArray>(targetClampedArray, [0, 255, 0, 0, 0, 100, 10, 255, 255, 0]);
+
+  let d = new Uint32Array(4);
+  d[0] = 1;
+  d[1] = 300;
+  d[2] = 100;
+  d[3] = 0xFFFFFFFF;
+
+  let e = new Int16Array(4);
+  e[0] = -10;
+  e[1] = 100;
+  e[2] = 10;
+  e[3] = 300;
+
+  targetClampedArray.set(d, 0);
+  targetClampedArray.set(e, 5);
+  valuesEqual<Uint8ClampedArray>(targetClampedArray, [1, 255, 100, 255, 0, 0, 100, 10, 255, 0]);
+
+
 }

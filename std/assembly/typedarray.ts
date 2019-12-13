@@ -1797,7 +1797,13 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
           );
         } else {
           let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
-          if (sizeof<T>() <= 4) {
+          if (!isSigned<U>()) {
+            store<T>(
+              targetDataStart + (<usize>i << alignof<T>()),
+              // @ts-ignore: cast to T is valid for numeric types here
+              <T>min<U>(255, value)
+            );
+          } else if (sizeof<T>() <= 4) {
             store<T>(
               targetDataStart + (<usize>i << alignof<T>()),
               // @ts-ignore: cast to T is valid for numeric types here
