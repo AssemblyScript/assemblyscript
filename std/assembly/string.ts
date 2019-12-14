@@ -442,19 +442,21 @@ import { idof } from "./builtins";
       if (!length) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>()));  // retains
       // split by chars
       length = min<isize>(length, <isize>limit);
-      let result = __allocArray(length, alignof<String>(), idof<Array<String>>());
-      let resultStart = changetype<ArrayBufferView>(result).dataStart;
+      let result = changetype<Array<String>>(__allocArray(length, alignof<String>(), idof<Array<String>>())); // retains
+      // @ts-ignore: cast
+      let resultStart = result.dataStart as usize;
       for (let i: isize = 0; i < length; ++i) {
         let charStr = __alloc(2, idof<String>());
         store<u16>(charStr, load<u16>(changetype<usize>(this) + (<usize>i << 1)));
         store<usize>(resultStart + (<usize>i << alignof<usize>()), charStr); // result[i] = charStr
         if (isManaged<String>()) __retain(charStr);
       }
-      return changetype<Array<String>>(result); // retains
+      return result;
     } else if (!length) {
-      let result = __allocArray(1, alignof<String>(), idof<Array<String>>());
-      store<usize>(changetype<ArrayBufferView>(result).dataStart, changetype<usize>("")); // static ""
-      return changetype<Array<String>>(result); // retains
+      let result = changetype<Array<String>>(__allocArray(1, alignof<String>(), idof<Array<String>>())); // retains
+      // @ts-ignore: cast
+      store<usize>(result.dataStart as usize, changetype<usize>("")); // static ""
+      return result;
     }
     var result = changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
     var end = 0, start = 0, i = 0;
@@ -467,12 +469,12 @@ import { idof } from "./builtins";
       } else {
         result.push(changetype<String>(""));
       }
-      if (++i == limit) return changetype<Array<String>>(result); // retains
+      if (++i == limit) return result;
       start = end + sepLen;
     }
     if (!start) { // also means: loop above didn't do anything
       result.push(this);
-      return changetype<Array<String>>(result); // retains
+      return result;
     }
     var len = length - start;
     if (len > 0) {
@@ -482,8 +484,7 @@ import { idof } from "./builtins";
     } else {
       result.push(changetype<String>("")); // static ""
     }
-    return changetype<Array<String>>(result); // retains
-    // releases result
+    return result;
   }
 
   toLowerCase(): String {
