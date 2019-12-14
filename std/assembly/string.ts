@@ -163,7 +163,7 @@ import { idof } from "./builtins";
     return -1;
   }
 
-  // TODO: implement full locale compareision with locales and Collator options
+  // TODO: implement full locale comparison with locales and Collator options
   localeCompare(other: String): i32 {
     if (other === null) other = changetype<String>("null");
     var otherLen: isize = other.length;
