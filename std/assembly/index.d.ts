@@ -1413,6 +1413,7 @@ declare class String {
   endsWith(other: string): bool;
   indexOf(other: string, fromIndex?: i32): i32;
   lastIndexOf(other: string, fromIndex?: i32): i32;
+  localeCompare(other: string): i32;
   includes(other: string): bool;
   startsWith(other: string): bool;
   substr(start: i32, length?: i32): string;
