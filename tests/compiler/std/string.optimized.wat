@@ -2929,8 +2929,8 @@
  )
  (func $~lib/util/string/isSpace (; 48 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
-  i32.const 255
-  i32.le_s
+  i32.const 5760
+  i32.lt_s
   if
    local.get $0
    i32.const 128
