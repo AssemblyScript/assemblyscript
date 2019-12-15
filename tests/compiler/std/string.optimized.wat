@@ -2932,21 +2932,17 @@
   i32.const 255
   i32.le_s
   if
-   i32.const 1
    local.get $0
+   i32.const 128
+   i32.or
    i32.const 160
    i32.eq
-   i32.const 1
    local.get $0
    i32.const 9
    i32.sub
    i32.const 4
    i32.le_u
-   local.get $0
-   i32.const 32
-   i32.eq
-   select
-   select
+   i32.or
    return
   end
   local.get $0

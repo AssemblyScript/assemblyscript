@@ -4740,26 +4740,18 @@
   i32.le_s
   if
    local.get $0
-   i32.const 32
+   i32.const 128
+   i32.or
+   i32.const 160
    i32.eq
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    i32.const 9
-    i32.sub
-    i32.const 13
-    i32.const 9
-    i32.sub
-    i32.le_u
-   end
-   if (result i32)
-    i32.const 1
-   else
-    local.get $0
-    i32.const 160
-    i32.eq
-   end
+   local.get $0
+   i32.const 9
+   i32.sub
+   i32.const 13
+   i32.const 9
+   i32.sub
+   i32.le_u
+   i32.or
    return
   end
   local.get $0

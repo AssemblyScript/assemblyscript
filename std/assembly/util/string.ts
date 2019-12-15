@@ -109,9 +109,10 @@ export function compareImpl(str1: string, index1: usize, str2: string, index2: u
 export function isSpace(c: i32): bool {
   if (c <= 0xFF) {
     // <SP>, <TAB>, <LF>, <VT>, <FF>, <CR> and <NBSP>
-    return c == 0x20 || <u32>(c - 0x09) <= 0x0D - 0x09 || c == 0xA0;
+    // @ts-ignore: cast
+    return ((c | 0x80) == 0xA0) | (u32(c - 0x09) <= 0x0D - 0x09);
   }
-  if (<u32>(c - 0x2000) <= 0x200A - 0x2000) return true;
+  if (u32(c - 0x2000) <= 0x200A - 0x2000) return true;
   switch (c) {
     case 0x1680: // <LS> (1)
     case 0x2028: // <LS> (2)
