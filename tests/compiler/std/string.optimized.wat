@@ -2877,6 +2877,15 @@
   local.get $1
   call $~lib/rt/pure/__retain
   local.tee $1
+  local.get $0
+  i32.eq
+  if
+   local.get $1
+   call $~lib/rt/pure/__release
+   i32.const 0
+   return
+  end
+  local.get $1
   i32.eqz
   if
    i32.const 648
@@ -2893,12 +2902,12 @@
    local.get $2
    local.set $1
   end
-  local.get $1
-  call $~lib/string/String#get:length
-  local.tee $2
   local.get $0
   call $~lib/string/String#get:length
   local.tee $3
+  local.get $1
+  call $~lib/string/String#get:length
+  local.tee $2
   i32.ne
   if
    local.get $1
@@ -4928,7 +4937,7 @@
   if
    i32.const 9888
    i32.const 552
-   i32.const 312
+   i32.const 313
    i32.const 6
    call $~lib/builtins/abort
    unreachable

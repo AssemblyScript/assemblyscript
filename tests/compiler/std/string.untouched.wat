@@ -4672,6 +4672,17 @@
   call $~lib/rt/pure/__retain
   local.set $1
   local.get $1
+  local.get $0
+  i32.eq
+  if
+   i32.const 0
+   local.set $2
+   local.get $1
+   call $~lib/rt/pure/__release
+   local.get $2
+   return
+  end
+  local.get $1
   i32.const 0
   i32.eq
   if
@@ -4690,10 +4701,10 @@
    local.get $2
    local.set $1
   end
-  local.get $1
+  local.get $0
   call $~lib/string/String#get:length
   local.set $4
-  local.get $0
+  local.get $1
   call $~lib/string/String#get:length
   local.set $5
   local.get $5
@@ -4702,8 +4713,8 @@
   if
    i32.const 1
    i32.const -1
-   local.get $5
    local.get $4
+   local.get $5
    i32.gt_s
    select
    local.set $2
@@ -4712,7 +4723,7 @@
    local.get $2
    return
   end
-  local.get $4
+  local.get $5
   i32.eqz
   if
    i32.const 0
@@ -4726,7 +4737,7 @@
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $4
+  local.get $5
   call $~lib/util/string/compareImpl
   local.set $2
   local.get $1
@@ -7591,7 +7602,7 @@
   if
    i32.const 9888
    i32.const 552
-   i32.const 312
+   i32.const 313
    i32.const 6
    call $~lib/builtins/abort
    unreachable
