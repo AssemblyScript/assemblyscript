@@ -1,7 +1,8 @@
 (module
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
@@ -10,7 +11,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -79,7 +80,7 @@
   i32.store offset=12
   local.get $1
  )
- (func $~lib/rt/stub/__free (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__free (; 3 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 15
@@ -123,7 +124,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;)
   (local $0 i32)
   i32.const 112
   global.set $~lib/rt/stub/startOffset
@@ -137,7 +138,7 @@
   local.get $0
   call $~lib/rt/stub/__free
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 5 ;)
   unreachable
  )
 )

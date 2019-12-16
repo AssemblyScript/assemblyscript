@@ -1,13 +1,13 @@
 (module
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
@@ -60,19 +60,19 @@
  (export "FinalizeARC.eliminates.unnecessaryStaticRelease" (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRelease))
  (export "FinalizeARC.keeps.dynamicRetain" (func $rc/optimize/FinalizeARC.keeps.dynamicRetain))
  (export "FinalizeARC.keeps.dynamicRelease" (func $rc/optimize/FinalizeARC.keeps.dynamicRelease))
- (func $rc/optimize/eliminated_v (; 5 ;) (type $FUNCSIG$v)
+ (func $rc/optimize/eliminated_v (; 5 ;)
   nop
  )
- (func $rc/optimize/eliminated_vi (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $rc/optimize/eliminated_vi (; 6 ;) (param $0 i32)
   nop
  )
- (func $rc/optimize/eliminated_vii (; 7 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/eliminated_vii (; 7 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $rc/optimize/eliminated_viii (; 8 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $rc/optimize/eliminated_viii (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   nop
  )
- (func $~lib/rt/pure/increment (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/increment (; 9 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -117,7 +117,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (; 10 ;) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -129,7 +129,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/removeBlock (; 11 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (; 11 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -339,7 +339,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (; 12 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -689,7 +689,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 13 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -837,7 +837,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/initializeRoot (; 14 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/tlsf/initializeRoot (; 14 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -982,7 +982,7 @@
   local.get $3
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/tlsf/prepareSize (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (; 15 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1011,7 +1011,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1194,7 +1194,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/pure/markGray (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 17 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1221,7 +1221,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/tlsf/freeBlock (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 18 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -1250,7 +1250,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/pure/scanBlack (; 19 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 19 ;) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -1267,7 +1267,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 20 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1304,7 +1304,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 21 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 21 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1342,7 +1342,7 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__collect (; 22 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/pure/__collect (; 22 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1485,7 +1485,7 @@
   local.get $0
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/tlsf/growMemory (; 23 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (; 23 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1569,7 +1569,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 24 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1664,7 +1664,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 25 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 25 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1772,7 +1772,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 26 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (; 26 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/rt/tlsf/ROOT
@@ -1795,7 +1795,7 @@
   i32.const 16
   i32.add
  )
- (func $rc/optimize/Ref#constructor (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $rc/optimize/Ref#constructor (; 27 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1807,11 +1807,11 @@
   end
   local.get $0
  )
- (func $rc/optimize/getRef (; 28 ;) (type $FUNCSIG$i) (result i32)
+ (func $rc/optimize/getRef (; 28 ;) (result i32)
   i32.const 0
   call $rc/optimize/Ref#constructor
  )
- (func $~lib/rt/__typeinfo (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/__typeinfo (; 29 ;) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/__rtti_base
   local.set $1
@@ -1836,7 +1836,7 @@
   i32.add
   i32.load
  )
- (func $~lib/util/memory/memcpy (; 30 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 30 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2864,7 +2864,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 31 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 31 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3089,7 +3089,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/__free (; 32 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/tlsf/__free (; 32 ;) (param $0 i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -3126,7 +3126,7 @@
   i32.sub
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/pure/growRoots (; 33 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/pure/growRoots (; 33 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3184,7 +3184,7 @@
   i32.add
   global.set $~lib/rt/pure/END
  )
- (func $~lib/rt/pure/appendRoot (; 34 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/appendRoot (; 34 ;) (param $0 i32)
   (local $1 i32)
   global.get $~lib/rt/pure/CUR
   local.set $1
@@ -3204,7 +3204,7 @@
   i32.add
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/pure/decrement (; 35 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 35 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3308,7 +3308,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__release (; 36 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 36 ;) (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -3319,7 +3319,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $rc/optimize/eliminated_rr (; 37 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $rc/optimize/eliminated_rr (; 37 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3330,14 +3330,14 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $rc/optimize/OptimizeARC.eliminates.linearArgument (; 38 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.linearArgument (; 38 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.linearLocal (; 39 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.linearLocal (; 39 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3345,7 +3345,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.linearChain (; 40 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.linearChain (; 40 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3365,7 +3365,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedReleases (; 41 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedReleases (; 41 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3379,7 +3379,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $rc/optimize/OptimizeARC.eliminates.partialReleases (; 42 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.partialReleases (; 42 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3390,7 +3390,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedRetains (; 43 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedRetains (; 43 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   if
@@ -3412,7 +3412,7 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedInsideLoop (; 44 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideLoop (; 44 ;) (param $0 i32) (param $1 i32)
   block $break|0
    loop $continue|0
     local.get $1
@@ -3428,7 +3428,7 @@
    unreachable
   end
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedOutsideLoop (; 45 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedOutsideLoop (; 45 ;) (param $0 i32) (param $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -3444,7 +3444,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoop (; 46 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoop (; 46 ;) (param $0 i32) (param $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -3465,7 +3465,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch (; 47 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch (; 47 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -3492,7 +3492,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.replace (; 48 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.replace (; 48 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3520,7 +3520,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.replaceAlreadyRetained (; 49 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $rc/optimize/OptimizeARC.eliminates.replaceAlreadyRetained (; 49 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3533,7 +3533,7 @@
   local.set $0
   local.get $0
  )
- (func $rc/optimize/OptimizeARC.keeps.partialRetains (; 50 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.keeps.partialRetains (; 50 ;) (param $0 i32) (param $1 i32)
   local.get $1
   if
    local.get $0
@@ -3543,7 +3543,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.keeps.reachesReturn (; 51 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $rc/optimize/OptimizeARC.keeps.reachesReturn (; 51 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -3556,42 +3556,42 @@
   call $~lib/rt/pure/__release
   i32.const 0
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryAllocation (; 52 ;) (type $FUNCSIG$v)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryAllocation (; 52 ;)
   i32.const 1
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryPair (; 53 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryPair (; 53 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticPair (; 54 ;) (type $FUNCSIG$v)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticPair (; 54 ;)
   i32.const 272
   call $~lib/rt/pure/__retain
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRetain (; 55 ;) (type $FUNCSIG$v)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRetain (; 55 ;)
   i32.const 272
   call $~lib/rt/pure/__retain
   drop
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRelease (; 56 ;) (type $FUNCSIG$v)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRelease (; 56 ;)
   i32.const 272
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (; 57 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (; 57 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
  )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (; 58 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (; 58 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/__visit (; 59 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 59 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3721,7 +3721,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 60 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 60 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4
@@ -3746,7 +3746,7 @@
   end
   unreachable
  )
- (func $null (; 61 ;) (type $FUNCSIG$v)
+ (func $null (; 61 ;)
   unreachable
  )
 )

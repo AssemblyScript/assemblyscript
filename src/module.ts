@@ -7,7 +7,6 @@ import { Target } from "./common";
 import * as binaryen from "./glue/binaryen";
 
 export type ModuleRef = usize;
-export type FunctionTypeRef = usize;
 export type FunctionRef = usize;
 export type ExpressionRef = usize;
 export type GlobalRef = usize;
@@ -27,8 +26,8 @@ export enum NativeType {
   V128 = binaryen._BinaryenTypeVec128(),
   Anyref = binaryen._BinaryenTypeAnyref(),
   Exnref = binaryen._BinaryenTypeExnref(),
-  Unreachable = binaryen._BinaryenTypeUnreachable()
-  // Auto = binaryen._BinaryenTypeAuto()
+  Unreachable = binaryen._BinaryenTypeUnreachable(),
+  Auto = binaryen._BinaryenTypeAuto()
 }
 
 export enum FeatureFlags {
@@ -557,9 +556,11 @@ export class Module {
 
   local_tee(
     index: i32,
-    value: ExpressionRef
+    value: ExpressionRef,
+    type: NativeType = NativeType.Auto
   ): ExpressionRef {
-    return binaryen._BinaryenLocalTee(this.ref, index, value);
+    if (type == NativeType.Auto) type = binaryen._BinaryenExpressionGetType(value);
+    return binaryen._BinaryenLocalTee(this.ref, index, value, type);
   }
 
   global_get(
@@ -776,14 +777,14 @@ export class Module {
   call_indirect(
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
-    typeName: string,
+    params: NativeType,
+    results: NativeType,
     isReturn: bool = false
   ): ExpressionRef {
-    var cStr = this.allocStringCached(typeName);
     var cArr = allocPtrArray(operands);
     var ret = isReturn
-      ? binaryen._BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr)
-      : binaryen._BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
+      ? binaryen._BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, params, results)
+      : binaryen._BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, params, results);
     binaryen._free(cArr);
     return ret;
   }
@@ -791,9 +792,10 @@ export class Module {
   return_call_indirect(
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
-    typeName: string,
+    params: NativeType,
+    results: NativeType
   ): ExpressionRef {
-    return this.call_indirect(index, operands, typeName, true);
+    return this.call_indirect(index, operands, params, results, true);
   }
 
   unreachable(): ExpressionRef {
@@ -925,35 +927,6 @@ export class Module {
     return binaryen._BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
   }
 
-  // function types
-
-  addFunctionType(
-    name: string,
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionTypeRef {
-    var cStr = this.allocStringCached(name);
-    var cArr = allocI32Array(paramTypes);
-    var ret = binaryen._BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
-    binaryen._free(cArr);
-    return ret;
-  }
-
-  getFunctionTypeBySignature(
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionTypeRef {
-    var cArr = allocI32Array(paramTypes);
-    var ret = binaryen._BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
-    binaryen._free(cArr);
-    return ret;
-  }
-
-  removeFunctionType(name: string): void {
-    var cStr = this.allocStringCached(name);
-    binaryen._BinaryenRemoveFunctionType(this.ref, cStr);
-  }
-
   // globals
 
   addGlobal(
@@ -985,10 +958,11 @@ export class Module {
   addEvent(
     name: string,
     attribute: u32,
-    type: FunctionTypeRef
+    params: NativeType,
+    results: NativeType
   ): EventRef {
     var cStr = this.allocStringCached(name);
-    return binaryen._BinaryenAddEvent(this.ref, cStr, attribute, type);
+    return binaryen._BinaryenAddEvent(this.ref, cStr, attribute, params, results);
   }
 
   getEvent(
@@ -1009,13 +983,14 @@ export class Module {
 
   addFunction(
     name: string,
-    type: FunctionTypeRef,
+    params: NativeType,
+    results: NativeType,
     varTypes: NativeType[] | null,
     body: ExpressionRef
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocI32Array(varTypes);
-    var ret = binaryen._BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes ? varTypes.length : 0, body);
+    var ret = binaryen._BinaryenAddFunction(this.ref, cStr, params, results, cArr, varTypes ? varTypes.length : 0, body);
     binaryen._free(cArr);
     return ret;
   }
@@ -1038,8 +1013,13 @@ export class Module {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
     var tempName = this.allocStringCached("");
     var cArr = allocI32Array(paramTypes);
-    var typeRef = binaryen._BinaryenAddFunctionType(this.ref, tempName, result, cArr, paramTypes ? paramTypes.length : 0);
-    var ret = binaryen._BinaryenAddFunction(this.ref, tempName, typeRef, 0, 0, body);
+    var ret = binaryen._BinaryenAddFunction(this.ref,
+      tempName,
+      createType(paramTypes),
+      result,
+      0, 0,
+      body
+    );
     binaryen._free(cArr);
     return ret;
   }
@@ -1048,7 +1028,6 @@ export class Module {
     this.hasTemporaryFunction = !assert(this.hasTemporaryFunction);
     var tempName = this.allocStringCached("");
     binaryen._BinaryenRemoveFunction(this.ref, tempName);
-    binaryen._BinaryenRemoveFunctionType(this.ref, tempName);
   }
 
   setStart(func: FunctionRef): void {
@@ -1113,12 +1092,13 @@ export class Module {
     internalName: string,
     externalModuleName: string,
     externalBaseName: string,
-    functionType: FunctionTypeRef
+    params: NativeType,
+    results: NativeType
   ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    binaryen._BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
+    binaryen._BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, params, results);
   }
 
   addTableImport(
@@ -1162,12 +1142,13 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string,
     attribute: u32,
-    eventType: FunctionTypeRef
+    params: NativeType,
+    results: NativeType
   ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    binaryen._BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, eventType);
+    binaryen._BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, params, results);
   }
 
   // memory
@@ -1512,6 +1493,32 @@ export class Module {
   }
 }
 
+// types
+
+export function createType(types: NativeType[] | null): NativeType {
+  if (!types) return NativeType.None;
+  switch (types.length) {
+    case 0: return NativeType.None;
+    case 1: return types[0];
+  }
+  var cArr = allocI32Array(types);
+  var ret = binaryen._BinaryenTypeCreate(cArr, types.length);
+  binaryen._free(cArr);
+  return ret;
+}
+
+export function expandType(type: NativeType): NativeType[] {
+  var arity = binaryen._BinaryenTypeArity(type);
+  var cArr = binaryen._malloc(<usize>arity << 2);
+  binaryen._BinaryenTypeExpand(type, cArr);
+  var types = new Array(arity);
+  for (let i = 0; i < arity; ++i) {
+    types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+  }
+  binaryen._free(cArr);
+  return types;
+}
+
 // expressions
 
 export function getExpressionId(expr: ExpressionRef): ExpressionId {
@@ -1700,24 +1707,6 @@ export function getHostOperand(expr: ExpressionRef, index: Index): ExpressionRef
 
 export function getHostName(expr: ExpressionRef): string | null {
   return readString(binaryen._BinaryenHostGetNameOperand(expr));
-}
-
-// function types
-
-export function getFunctionTypeName(ftype: FunctionTypeRef): string | null {
-  return readString(binaryen._BinaryenFunctionTypeGetName(ftype));
-}
-
-export function getFunctionTypeParamCount(ftype: FunctionTypeRef): Index {
-  return binaryen._BinaryenFunctionTypeGetNumParams(ftype);
-}
-
-export function getFunctionTypeParam(ftype: FunctionTypeRef, index: Index): NativeType {
-  return binaryen._BinaryenFunctionTypeGetParam(ftype, index);
-}
-
-export function getFunctionTypeResult(ftype: FunctionTypeRef): NativeType {
-  return binaryen._BinaryenFunctionTypeGetResult(ftype);
 }
 
 // functions

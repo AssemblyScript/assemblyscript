@@ -1,5 +1,5 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -19,7 +19,7 @@
  (global $~lib/ASC_FEATURE_REFERENCE_TYPES i32 (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:asc-constants (; 0 ;) (type $FUNCSIG$v)
+ (func $start:asc-constants (; 0 ;)
   i32.const 0
   drop
   i32.const 0
@@ -49,10 +49,10 @@
   i32.const 0
   drop
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
+ (func $start (; 1 ;)
   call $start:asc-constants
  )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 2 ;)
   unreachable
  )
 )

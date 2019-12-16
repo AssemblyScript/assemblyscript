@@ -1,18 +1,18 @@
 (module
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $FUNCSIG$idi (func (param f64 i32) (result i32)))
- (type $FUNCSIG$id (func (param f64) (result i32)))
- (type $FUNCSIG$iid (func (param i32 f64) (result i32)))
- (type $FUNCSIG$jii (func (param i32 i32) (result i64)))
- (type $FUNCSIG$iijijiji (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
+ (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
+ (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
+ (type $f64_=>_i32 (func (param f64) (result i32)))
+ (type $f64_i32_=>_i32 (func (param f64 i32) (result i32)))
+ (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
@@ -66,7 +66,7 @@
  (export "__collect" (func $~lib/rt/pure/__collect))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (start $start)
- (func $~lib/rt/tlsf/removeBlock (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -276,7 +276,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (; 2 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -626,7 +626,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 3 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -774,7 +774,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/initializeRoot (; 4 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/tlsf/initializeRoot (; 4 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -919,7 +919,7 @@
   local.get $3
   global.set $~lib/rt/tlsf/ROOT
  )
- (func $~lib/rt/tlsf/prepareSize (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (; 5 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -948,7 +948,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 6 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1131,7 +1131,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/pure/markGray (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 7 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1158,7 +1158,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/tlsf/freeBlock (; 8 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 8 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -1185,7 +1185,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/pure/scanBlack (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 9 ;) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -1202,7 +1202,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 10 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1239,7 +1239,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 11 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1277,7 +1277,7 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__collect (; 12 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/pure/__collect (; 12 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1420,7 +1420,7 @@
   local.get $0
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/tlsf/growMemory (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (; 13 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1504,7 +1504,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 14 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 14 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1599,7 +1599,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 15 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1705,7 +1705,7 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 16 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/rt/tlsf/ROOT
@@ -1728,7 +1728,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/increment (; 17 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/increment (; 17 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1771,7 +1771,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (; 18 ;) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -1783,7 +1783,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/__typeinfo (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/__typeinfo (; 19 ;) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/__rtti_base
   local.set $1
@@ -1808,7 +1808,7 @@
   i32.add
   i32.load
  )
- (func $~lib/util/memory/memcpy (; 20 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2836,7 +2836,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 21 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3061,7 +3061,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/__free (; 22 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/tlsf/__free (; 22 ;) (param $0 i32)
   global.get $~lib/rt/tlsf/ROOT
   i32.eqz
   if
@@ -3098,7 +3098,7 @@
   i32.sub
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/pure/growRoots (; 23 ;) (type $FUNCSIG$v)
+ (func $~lib/rt/pure/growRoots (; 23 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3148,7 +3148,7 @@
   i32.add
   global.set $~lib/rt/pure/END
  )
- (func $~lib/rt/pure/appendRoot (; 24 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/appendRoot (; 24 ;) (param $0 i32)
   (local $1 i32)
   global.get $~lib/rt/pure/CUR
   local.set $1
@@ -3168,7 +3168,7 @@
   i32.add
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/pure/decrement (; 25 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 25 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3270,7 +3270,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__release (; 26 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 26 ;) (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -3281,7 +3281,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/util/number/decimalCount32 (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 27 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -3347,7 +3347,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/utoa32_lut (; 28 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (; 28 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3489,7 +3489,7 @@
    i32.store16
   end
  )
- (func $~lib/util/number/itoa32 (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 29 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3543,16 +3543,16 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/itoa<i32> (; 30 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<i32> (; 30 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa32
   return
  )
- (func $~lib/number/I32#toString (; 31 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (; 31 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa<i32>
  )
- (func $~lib/string/String#get:length (; 32 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 32 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -3560,7 +3560,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 33 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 33 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -3680,7 +3680,7 @@
   call $~lib/rt/pure/__release
   local.get $8
  )
- (func $~lib/string/String.__eq (; 34 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 34 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3753,7 +3753,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $~lib/array/Array<u64>#__unchecked_get (; 35 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<u64>#__unchecked_get (; 35 ;) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3762,7 +3762,7 @@
   i32.add
   i64.load
  )
- (func $~lib/array/Array<i16>#__unchecked_get (; 36 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i16>#__unchecked_get (; 36 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3771,7 +3771,7 @@
   i32.add
   i32.load16_s
  )
- (func $~lib/util/number/genDigits (; 37 ;) (type $FUNCSIG$iijijiji) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (; 37 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -4273,7 +4273,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/prettify (; 38 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 38 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4592,7 +4592,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/dtoa_core (; 39 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (; 39 ;) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5014,7 +5014,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/string/String#substring (; 40 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (; 40 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5121,7 +5121,7 @@
   local.get $11
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/dtoa (; 41 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (; 41 ;) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5182,31 +5182,31 @@
   call $~lib/rt/tlsf/__free
   local.get $3
  )
- (func $~lib/number/F64#toString (; 42 ;) (type $FUNCSIG$idi) (param $0 f64) (param $1 i32) (result i32)
+ (func $~lib/number/F64#toString (; 42 ;) (param $0 f64) (param $1 i32) (result i32)
   local.get $0
   call $~lib/util/number/dtoa
  )
- (func $start:resolve-ternary~anonymous|0 (; 43 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $start:resolve-ternary~anonymous|0 (; 43 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.add
  )
- (func $start:resolve-ternary~anonymous|1 (; 44 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $start:resolve-ternary~anonymous|1 (; 44 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 2
   i32.add
  )
- (func $resolve-ternary/g1 (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-ternary/g1 (; 45 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 3
   i32.add
  )
- (func $resolve-ternary/g2 (; 46 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-ternary/g2 (; 46 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 4
   i32.add
  )
- (func $start:resolve-ternary (; 47 ;) (type $FUNCSIG$v)
+ (func $start:resolve-ternary (; 47 ;)
   (local $0 i32)
   (local $1 i32)
   global.get $resolve-ternary/b
@@ -5257,7 +5257,7 @@
   else
    i32.const 2
   end
-  call_indirect (type $FUNCSIG$ii)
+  call_indirect (type $i32_=>_i32)
   i32.const 2
   i32.eq
   i32.eqz
@@ -5278,7 +5278,7 @@
   else
    i32.const 4
   end
-  call_indirect (type $FUNCSIG$ii)
+  call_indirect (type $i32_=>_i32)
   i32.const 4
   i32.eq
   i32.eqz
@@ -5299,7 +5299,7 @@
   else
    i32.const 4
   end
-  call_indirect (type $FUNCSIG$ii)
+  call_indirect (type $i32_=>_i32)
   i32.const 3
   i32.eq
   i32.eqz
@@ -5316,19 +5316,19 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $start (; 48 ;) (type $FUNCSIG$v)
+ (func $start (; 48 ;)
   call $start:resolve-ternary
  )
- (func $~lib/array/Array<u32>#__visit_impl (; 49 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>#__visit_impl (; 49 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u64>#__visit_impl (; 50 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u64>#__visit_impl (; 50 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<i16>#__visit_impl (; 51 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i16>#__visit_impl (; 51 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/pure/__visit (; 52 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 52 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -5458,7 +5458,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 53 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 53 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
@@ -5504,7 +5504,7 @@
   end
   return
  )
- (func $null (; 54 ;) (type $FUNCSIG$v)
+ (func $null (; 54 ;)
   unreachable
  )
 )
