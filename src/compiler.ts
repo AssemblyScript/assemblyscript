@@ -1114,51 +1114,6 @@ export class Compiler extends DiagnosticEmitter {
     return instance;
   }
 
-  /** Either reuses or creates the function type matching the specified signature. */
-  /* ensureFunctionType(
-    parameterTypes: Type[] | null,
-    returnType: Type,
-    thisType: Type | null = null
-  ): FunctionTypeRef {
-    var numParameters = parameterTypes ? parameterTypes.length : 0;
-    var paramTypes: NativeType[];
-    var index = 0;
-    if (thisType) {
-      paramTypes = new Array(1 + numParameters);
-      paramTypes[0] = thisType.toNativeType();
-      index = 1;
-    } else {
-      paramTypes = new Array(numParameters);
-    }
-    if (parameterTypes) {
-      for (let i = 0; i < numParameters; ++i, ++index) {
-        paramTypes[index] = parameterTypes[i].toNativeType();
-      }
-    }
-    var resultType = returnType.toNativeType();
-    var module = this.module;
-    var typeRef = module.getFunctionTypeBySignature(resultType, paramTypes);
-    if (!typeRef) {
-      let name = Signature.makeSignatureString(parameterTypes, returnType, thisType);
-      typeRef = module.addFunctionType(name, resultType, paramTypes);
-    }
-    return typeRef;
-  } */
-
-  /** Either reuses or creates the event type matching the specified name. */
-  /* ensureEventType(
-    name: string,
-    parameterTypes: Type[] | null
-  ): EventRef {
-    var events = this.events;
-    if (events.has(name)) return events.get(name)!;
-    var module = this.module;
-    var funcType = this.ensureFunctionType(parameterTypes, Type.void);
-    var eventType = module.addEvent(name, 0, funcType);
-    events.set(name, eventType);
-    return eventType;
-  } */
-
   /** Compiles the body of a function within the specified flow. */
   compileFunctionBody(
     /** Function to compile. */

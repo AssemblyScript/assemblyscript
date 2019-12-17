@@ -1719,16 +1719,22 @@ export function getFunctionName(func: FunctionRef): string | null {
   return readString(binaryen._BinaryenFunctionGetName(func));
 }
 
-export function getFunctionParamCount(func: FunctionRef): Index {
-  return binaryen._BinaryenFunctionGetNumParams(func);
+export function getFunctionParams(func: FunctionRef): Index {
+  return binaryen._BinaryenFunctionGetParams(func);
 }
 
-export function getFunctionParamType(func: FunctionRef, index: Index): NativeType {
-  return binaryen._BinaryenFunctionGetParam(func, index);
+export function getFunctionResults(func: FunctionRef): NativeType {
+  return binaryen._BinaryenFunctionGetResults(func);
 }
 
-export function getFunctionResultType(func: FunctionRef): NativeType {
-  return binaryen._BinaryenFunctionGetResult(func);
+export function getFunctionVars(func: FunctionRef): NativeType {
+  // TODO: unify this on Binaryen's side?
+  var count = binaryen._BinaryenFunctionGetNumVars(func);
+  var types = new Array<NativeType>(count);
+  for (let i = 0; i < count; ++i) {
+    types[i] = binaryen._BinaryenFunctionGetVar(func, i);
+  }
+  return createType(types);
 }
 
 // globals

@@ -675,9 +675,6 @@ export declare function _BinaryenGetFunctionByIndex(module: BinaryenModuleRef, i
 export declare function _BinaryenFunctionGetName(func: BinaryenFunctionRef): usize;
 export declare function _BinaryenFunctionGetParams(func: BinaryenFunctionRef): BinaryenType;
 export declare function _BinaryenFunctionGetResults(func: BinaryenFunctionRef): BinaryenType;
-export declare function _BinaryenFunctionGetNumParams(func: BinaryenFunctionRef): BinaryenIndex;
-export declare function _BinaryenFunctionGetParam(func: BinaryenFunctionRef, index: BinaryenIndex): BinaryenType;
-export declare function _BinaryenFunctionGetResult(func: BinaryenFunctionRef): BinaryenType;
 export declare function _BinaryenFunctionGetNumVars(func: BinaryenFunctionRef): BinaryenIndex;
 export declare function _BinaryenFunctionGetVar(func: BinaryenFunctionRef, index: BinaryenIndex): BinaryenType;
 export declare function _BinaryenFunctionGetBody(func: BinaryenFunctionRef): BinaryenExpressionRef;
