@@ -156,11 +156,13 @@ export enum Token {
   BAR_EQUALS,
   CARET_EQUALS,
   AT,
+  DOLLAR,
 
   // literals
 
   IDENTIFIER,
   STRINGLITERAL,
+  TEMPLATELITERAL,
   INTEGERLITERAL,
   FLOATLITERAL,
 
@@ -458,6 +460,7 @@ export class Tokenizer extends DiagnosticEmitter {
   nextTokenOnNewLine: bool = false;
 
   onComment: CommentHandler | null = null;
+  public inStringTemplate: bool = false;
 
   /** Constructs a new tokenizer. */
   constructor(source: Source, diagnostics: DiagnosticMessage[] | null = null) {
@@ -553,7 +556,9 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.EXCLAMATION;
         }
         case CharCode.DOUBLEQUOTE:
-        case CharCode.SINGLEQUOTE:
+        case CharCode.SINGLEQUOTE: {
+          return Token.STRINGLITERAL;
+        }
         case CharCode.BACKTICK: { // TODO
           this.pos = pos;
           return Token.STRINGLITERAL; // expects a call to readString
@@ -904,6 +909,13 @@ export class Tokenizer extends DiagnosticEmitter {
           this.pos = pos + 1;
           return Token.AT;
         }
+        case CharCode.DOLLAR: {
+          if (this.inStringTemplate) {
+            ++this.pos;
+            return Token.DOLLAR;
+          }
+          // fall through to identifier
+        }
         default: {
           if (isIdentifierStart(c)) {
             if (isKeywordCharacter(c)) {
@@ -1014,6 +1026,11 @@ export class Tokenizer extends DiagnosticEmitter {
     }
   }
 
+  advance() {
+    this.nextToken = -1;
+    ++this.pos;
+  }
+
   mark(): State {
     var state = reusableState;
     if (state) {
@@ -1063,7 +1080,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return text.substring(start, pos);
   }
 
-  readString(): string {
+  readString(quote: i32 = -1): string {
     var text = this.source.text;
     var end = this.end;
     var pos = this.pos;
@@ -1128,6 +1145,7 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.r: return "\r";
       case CharCode.SINGLEQUOTE: return "'";
       case CharCode.DOUBLEQUOTE: return "\"";
+      case CharCode.BACKTICK: return "`";
       case CharCode.u: {
         if (
           this.pos < end &&

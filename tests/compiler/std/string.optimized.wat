@@ -454,6 +454,7 @@
  (global $std/string/str (mut i32) (i32.const 1040))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
+ (global $std/string/templateStr (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/util/string/__fixmulShift (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
@@ -16468,13 +16469,13 @@
   call $~lib/rt/pure/__release
   local.get $51
   call $~lib/rt/pure/__release
-  local.get $52
+  local.get $55
   call $~lib/rt/pure/__release
   local.get $53
   call $~lib/rt/pure/__release
   local.get $54
   call $~lib/rt/pure/__release
-  local.get $55
+  local.get $51
   call $~lib/rt/pure/__release
   local.get $56
   call $~lib/rt/pure/__release
@@ -16609,6 +16610,8 @@
   local.get $122
   call $~lib/rt/pure/__release
   local.get $123
+  call $~lib/rt/pure/__release
+  local.get $122
   call $~lib/rt/pure/__release
   local.get $124
   call $~lib/rt/pure/__release

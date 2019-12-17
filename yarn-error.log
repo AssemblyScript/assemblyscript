@@ -1,0 +1,128 @@
+Arguments: 
+  /Users/fredericksilva/.nvm/versions/node/v14.4.0/bin/node /usr/local/bin/yarn test
+
+PATH: 
+  /Users/fredericksilva/.rvm/gems/ruby-2.2.0/bin:/Users/fredericksilva/.rvm/gems/ruby-2.2.0@global/bin:/Users/fredericksilva/.rvm/rubies/ruby-2.2.0/bin:/usr/local/opt/llvm/bin:/Users/fredericksilva/.nvm/versions/node/v14.4.0/bin:/Users/fredericksilva/opensource/flutter/bin:/Users/fredericksilva/.cargo/bin:/Users/fredericksilva/.nvm/versions/node/v14.4.0/bin:/Users/fredericksilva/.nimble/bin:/Users/fredericksilva/bin:/usr/local/bin:/Users/fredericksilva/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/fredericksilva/.rvm/gems/ruby-2.2.0/bin:/Users/fredericksilva/.rvm/gems/ruby-2.2.0@global/bin:/Users/fredericksilva/.rvm/rubies/ruby-2.2.0/bin:/usr/local/opt/llvm/bin:/Users/fredericksilva/opensource/flutter/bin:/Users/fredericksilva/.cargo/bin:/Users/fredericksilva/.nvm/versions/node/v14.4.0/bin:/Users/fredericksilva/.nimble/bin:/Users/fredericksilva/bin:/Users/fredericksilva/.yarn/bin:/Users/fredericksilva/go/bin:/usr/local/opt/go/libexec/bin:./node_modules/.bin:/Users/fredericksilva/.fzf/bin:/Users/fredericksilva/.rvm/bin:/Users/fredericksilva/.yarn/bin:/Users/fredericksilva/go/bin:/usr/local/opt/go/libexec/bin:./node_modules/.bin
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  14.4.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: ENOSPC: no space left on device, write
+
+npm manifest: 
+  {
+    "name": "assemblyscript",
+    "description": "Definitely not a TypeScript to WebAssembly compiler.",
+    "keywords": [
+      "typescript",
+      "webassembly",
+      "compiler",
+      "assemblyscript",
+      "wasm"
+    ],
+    "version": "0.0.0",
+    "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
+    "contributors": [],
+    "license": "Apache-2.0",
+    "homepage": "https://assemblyscript.org",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/AssemblyScript/assemblyscript.git"
+    },
+    "bugs": {
+      "url": "https://github.com/AssemblyScript/assemblyscript/issues"
+    },
+    "dependencies": {
+      "binaryen": "95.0.0-nightly.20200723",
+      "long": "^4.0.0",
+      "source-map-support": "^0.5.19",
+      "ts-node": "^6.2.0"
+    },
+    "devDependencies": {
+      "@types/node": "^14.0.23",
+      "@typescript-eslint/eslint-plugin": "^3.6.1",
+      "@typescript-eslint/parser": "^3.6.1",
+      "diff": "^4.0.2",
+      "eslint": "^7.4.0",
+      "glob": "^7.1.6",
+      "physical-cpu-count": "^2.0.0",
+      "semantic-release": "github:dcodeIO/semantic-release",
+      "source-map-support": "^0.5.19",
+      "ts-loader": "^8.0.1",
+      "ts-node": "^6.2.0",
+      "typescript": "^3.9.6",
+      "webpack": "^4.43.0",
+      "webpack-cli": "^3.3.12"
+    },
+    "main": "index.js",
+    "types": "index.d.ts",
+    "bin": {
+      "asc": "bin/asc",
+      "asinit": "bin/asinit"
+    },
+    "scripts": {
+      "build": "npm run build:bundle && npm run build:dts && npm run build:sdk",
+      "build:bundle": "webpack --mode production --display-modules",
+      "build:dts": "node scripts/build-dts && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index-release",
+      "build:sdk": "node scripts/build-sdk",
+      "clean": "node scripts/clean",
+      "check": "npm run check:config && npm run check:require && npm run check:lint",
+      "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
+      "check:require": "tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index",
+      "check:lint": "eslint --max-warnings 0 --ext js . && eslint --max-warnings 0 --ext ts .",
+      "test": "npm run test:parser && npm run test:compiler && npm run test:packages && npm run test:extension && npm run test:asconfig",
+      "test:parser": "node tests/parser",
+      "test:compiler": "node tests/compiler",
+      "test:packages": "cd tests/packages && npm run test",
+      "test:extension": "cd tests/extension && npm run test",
+      "test:asconfig": "cd tests/asconfig && npm run test",
+      "make": "npm run clean && npm test && npm run build && npm test",
+      "all": "npm run check && npm run make",
+      "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
+      "postversion": "node scripts/postversion && npm run build",
+      "prepublishOnly": "node scripts/prepublish",
+      "postpublish": "node scripts/postpublish",
+      "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+      "asbuild:untouched": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.untouched.wat -b out/assemblyscript.untouched.wasm -d out/assemblyscript.d.ts --debug --measure --runtime stub",
+      "asbuild:optimized": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.optimized.wat -b out/assemblyscript.optimized.wasm -O3 --measure --runtime stub",
+      "astest": "ts-node tests/bootstrap"
+    },
+    "releaseFiles": [
+      "lib/rtrace/index.d.ts",
+      "lib/rtrace/index.js",
+      "lib/rtrace/README.md",
+      "lib/rtrace/package.json",
+      "lib/loader/index.d.ts",
+      "lib/loader/index.js",
+      "lib/loader/README.md",
+      "bin/",
+      "cli/",
+      "dist/",
+      "index.d.ts",
+      "index.js",
+      "LICENSE",
+      "NOTICE",
+      "package.json",
+      "package-lock.json",
+      "README.md",
+      "std/",
+      "tsconfig-base.json"
+    ],
+    "funding": {
+      "type": "opencollective",
+      "url": "https://opencollective.com/assemblyscript"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

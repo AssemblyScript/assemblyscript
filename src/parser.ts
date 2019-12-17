@@ -29,7 +29,7 @@ import {
 } from "./diagnostics";
 
 import {
-  normalizePath
+  normalizePath, CharCode
 } from "./util";
 
 import {
@@ -367,7 +367,7 @@ export class Parser extends DiagnosticEmitter {
             statement = this.parseExport(tn, startPos, (flags & CommonFlags.DECLARE) != 0);
           }
 
-        // handle non-declaration statements
+          // handle non-declaration statements
         } else {
           if (exportEnd) {
             this.error(
@@ -551,25 +551,25 @@ export class Parser extends DiagnosticEmitter {
         return null;
       }
 
-    // 'void'
+      // 'void'
     } else if (token == Token.VOID) {
       type = Node.createNamedType(
         Node.createSimpleTypeName("void", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
-    // 'this'
+      // 'this'
     } else if (token == Token.THIS) {
       type = Node.createNamedType(
         Node.createSimpleTypeName("this", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
-    // 'true'
+      // 'true'
     } else if (token == Token.TRUE || token == Token.FALSE) {
       type = Node.createNamedType(
         Node.createSimpleTypeName("bool", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
-    // 'null'
+      // 'null'
     } else if (token == Token.NULL) {
       type = Node.createNamedType(
         Node.createSimpleTypeName("null", tn.range()), [], false, tn.range(startPos, tn.pos)
@@ -582,7 +582,7 @@ export class Parser extends DiagnosticEmitter {
         Node.createSimpleTypeName("string", tn.range()), [], false, tn.range(startPos, tn.pos)
       );
 
-    // Identifier
+      // Identifier
     } else if (token == Token.IDENTIFIER) {
       let name = this.parseTypeName(tn);
       if (!name) return null;
@@ -664,7 +664,7 @@ export class Parser extends DiagnosticEmitter {
       }
       type = Node.createNamedType(
         Node.createSimpleTypeName("Array", bracketRange),
-        [ type ],
+        [type],
         nullable,
         tn.range(startPos, tn.pos)
       );
@@ -2244,7 +2244,7 @@ export class Parser extends DiagnosticEmitter {
         name.range
       );
 
-    // field: (':' Type)? ('=' Expression)? ';'?
+      // field: (':' Type)? ('=' Expression)? ';'?
     } else {
       if (flags & CommonFlags.ABSTRACT) {
         this.error(
@@ -2501,7 +2501,7 @@ export class Parser extends DiagnosticEmitter {
           let internalPath = assert(ret.internalPath);
           let source = tn.source;
           let exportPaths = source.exportPaths;
-          if (!exportPaths) source.exportPaths = [ internalPath ];
+          if (!exportPaths) source.exportPaths = [internalPath];
           else if (!exportPaths.includes(internalPath)) exportPaths.push(internalPath);
           if (!this.seenlog.has(internalPath)) {
             this.dependees.set(internalPath, new Dependee(currentSource, path));
@@ -3239,7 +3239,7 @@ export class Parser extends DiagnosticEmitter {
 
     var startPos = tn.tokenPos;
     var statements: Statement[],
-        statement: Statement | null;
+      statement: Statement | null;
 
     // 'case' Expression ':' Statement*
 
@@ -3797,7 +3797,11 @@ export class Parser extends DiagnosticEmitter {
         return this.maybeParseCallExpression(tn, expr);
       }
       case Token.STRINGLITERAL: {
-        return Node.createStringLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
+        return this.parseStringLiteral(tn, startPos);
+      }
+      case Token.TEMPLATELITERAL: {
+        return this.parseTemplateLiteralExpression(tn);
+        // return Node.createTemplateLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
       }
       case Token.INTEGERLITERAL: {
         return Node.createIntegerLiteralExpression(tn.readInteger(), tn.range(startPos, tn.pos));
@@ -3846,6 +3850,48 @@ export class Parser extends DiagnosticEmitter {
       }
     }
   }
+  parseStringLiteral(tn: Tokenizer, startPos: i32, quote: i32 = -1): Expression {
+    return Node.createStringLiteralExpression(tn.readString(quote), tn.range(startPos, tn.pos));
+  }
+
+  parseTemplateLiteralExpression(tn: Tokenizer): Expression | null {
+    var startPos = tn.pos;
+    tn.inStringTemplate = true;
+
+    // at `(String*${ Expression }*String*)*`
+    const parts: Expression[] = [this.parseStringLiteral(tn, startPos)];
+
+    var token = tn.peek();
+    while (token == Token.DOLLAR) {
+      tn.skip(token);
+      tn.skip(Token.OPENBRACE);
+      let expr = this.parseExpressionStart(tn);
+      if (expr == null) return null;
+      parts.push(expr);
+      tn.skip(Token.CLOSEBRACE);
+      token = tn.next();
+      if (token == Token.TEMPLATELITERAL) {
+        break;
+      }
+      if (token == Token.DOLLAR) {
+        continue;
+      }
+      startPos = tn.pos;
+      parts.push(this.parseStringLiteral(tn, startPos, CharCode.BACKTICK));
+      token = tn.next();
+    }
+    if (token == Token.TEMPLATELITERAL) {
+      tn.advance();
+      tn.inStringTemplate = false;
+    }
+    if (parts.length == 1) {
+      return parts[0];
+    }
+    return parts.reduce((acc: Expression | null, expr: Expression) => {
+      if (acc == null) return expr;
+      return Node.createBinaryExpression(Token.PLUS, acc, expr, tn.range(startPos, tn.pos));
+    }, null);
+  }
 
   tryParseTypeArgumentsBeforeArguments(
     tn: Tokenizer
@@ -3866,7 +3912,7 @@ export class Parser extends DiagnosticEmitter {
         tn.reset(state);
         return null;
       }
-      if (!typeArguments) typeArguments = [ type ];
+      if (!typeArguments) typeArguments = [type];
       else typeArguments.push(type);
     } while (tn.skip(Token.COMMA));
     if (tn.skip(Token.GREATERTHAN)) {
@@ -4036,7 +4082,7 @@ export class Parser extends DiagnosticEmitter {
         }
         // CommaExpression
         case Token.COMMA: {
-          let commaExprs: Expression[] = [ expr ];
+          let commaExprs: Expression[] = [expr];
           do {
             expr = this.parseExpression(tn, Precedence.COMMA + 1);
             if (!expr) return null;
