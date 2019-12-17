@@ -152,11 +152,13 @@ export enum Token {
   BAR_EQUALS,
   CARET_EQUALS,
   AT,
+  DOLLAR,
 
   // literals
 
   IDENTIFIER,
   STRINGLITERAL,
+  TEMPLATELITERAL,
   INTEGERLITERAL,
   FLOATLITERAL,
 
@@ -600,7 +602,7 @@ export class Tokenizer extends DiagnosticEmitter {
         case CharCode.DOUBLEQUOTE:
         case CharCode.SINGLEQUOTE:
         case CharCode.BACKTICK: { // TODO
-          return Token.STRINGLITERAL; // expects a call to readString
+          return Token.TEMPLATELITERAL; // expects a call to readString
         }
         case CharCode.PERCENT: {
           ++this.pos;
@@ -930,6 +932,10 @@ export class Tokenizer extends DiagnosticEmitter {
           ++this.pos;
           return Token.AT;
         }
+        case CharCode.DOLLAR: {
+          ++this.pos;
+          return Token.DOLLAR;
+        }
         default: {
           if (isIdentifierStart(c)) {
             if (isKeywordCharacter(c)) {
@@ -1091,6 +1097,10 @@ export class Tokenizer extends DiagnosticEmitter {
         break;
       }
       let c = text.charCodeAt(this.pos);
+      if (quote == CharCode.BACKTICK && c == CharCode.DOLLAR) {
+        result += text.substring(start, this.pos++);
+        break;
+      }
       if (c == quote) {
         result += text.substring(start, this.pos++);
         break;

@@ -496,6 +496,16 @@ export abstract class Node {
     return expr;
   }
 
+  static createTemplateLiteralExpression(
+    value: string,
+    range: Range
+  ): StringLiteralExpression {
+    var expr = new StringLiteralExpression();
+    expr.range = range;
+    expr.value = value;
+    return expr;
+  }
+
   static createSuperExpression(
     range: Range
   ): SuperExpression {
@@ -1305,7 +1315,8 @@ export enum LiteralKind {
   STRING,
   REGEXP,
   ARRAY,
-  OBJECT
+  OBJECT,
+  TEMPLATE,
 }
 
 /** Checks if the given node represents a numeric (float or integer) literal. */
@@ -1557,6 +1568,14 @@ export class TernaryExpression extends Expression {
 /** Represents a string literal expression. */
 export class StringLiteralExpression extends LiteralExpression {
   literalKind = LiteralKind.STRING;
+
+  /** String value without quotes. */
+  value: string;
+}
+
+/** Represents a string template literal expression. */
+export class TemplateLiteralExpression extends LiteralExpression {
+  literalKind = LiteralKind.TEMPLATE;
 
   /** String value without quotes. */
   value: string;

@@ -3562,6 +3562,10 @@ export class Parser extends DiagnosticEmitter {
       case Token.STRINGLITERAL: {
         return Node.createStringLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
       }
+      case Token.TEMPLATELITERAL: {
+        return this.parseTemplateLiteralExpression(tn);
+        return Node.createTemplateLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
+      }
       case Token.INTEGERLITERAL: {
         return Node.createIntegerLiteralExpression(tn.readInteger(), tn.range(startPos, tn.pos));
       }
@@ -3608,6 +3612,26 @@ export class Parser extends DiagnosticEmitter {
         return null;
       }
     }
+  }
+
+  parseTemplateLiteralExpression(tn: Tokenizer): Expression | null {
+    var startPos = tn.pos;
+    // at `(Sring* | ${ Epression }*)`
+    var str = tn.readString();
+    const parts: Expression[] = [Node.createStringLiteralExpression(str, tn.range(startPos, tn.pos))];
+
+    var token = tn.next();
+    while (token == Token.DOLLAR) {
+      tn.skip(token);
+      tn.skip(Token.OPENBRACE);
+      let expr = this.parseExpression(tn);
+      if (expr == null) return null;
+      parts.push(expr);
+      tn.skip(Token.OPENBRACE);
+      
+    }
+
+    return null;
   }
 
   tryParseTypeArgumentsBeforeArguments(

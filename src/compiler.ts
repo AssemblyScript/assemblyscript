@@ -164,7 +164,8 @@ import {
   findDecorator,
   isTypeOmitted,
   ExportDefaultStatement,
-  SourceKind
+  SourceKind,
+  TemplateLiteralExpression
 } from "./ast";
 
 import {
@@ -7549,6 +7550,10 @@ export class Compiler extends DiagnosticEmitter {
         assert(!implicitlyNegate);
         return this.compileStringLiteral(<StringLiteralExpression>expression, constraints);
       }
+      case LiteralKind.TEMPLATE: {
+        assert(!implicitlyNegate);
+        return this.compileTemplateLiteral(<TemplateLiteralExpression>expression, constraints);
+      }
       case LiteralKind.OBJECT: {
         assert(!implicitlyNegate);
         return this.compileObjectLiteral(<ObjectLiteralExpression>expression, contextualType);
@@ -7561,6 +7566,12 @@ export class Compiler extends DiagnosticEmitter {
     );
     this.currentType = contextualType;
     return module.unreachable();
+  }
+
+  compileTemplateLiteral(arg0: TemplateLiteralExpression, constraints: Constraints): ExpressionRef {
+    const innerExpressions: ExpressionRef[] = [];
+
+    return 0;
   }
 
   compileStringLiteral(
