@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (memory $0 0)
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
@@ -45,8 +45,5 @@
   call $export/mul
   i32.add
   drop
- )
- (func $null (; 5 ;)
-  unreachable
  )
 )

@@ -3,7 +3,6 @@
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $none_=>_none (func))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
@@ -8903,8 +8902,5 @@
  (func $../../lib/libm/assembly/libmf/trunc (; 119 ;) (param $0 f32) (result f32)
   local.get $0
   f32.trunc
- )
- (func $null (; 120 ;)
-  unreachable
  )
 )

@@ -3,7 +3,6 @@
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $none_=>_none (func))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $f64_i64_=>_i32 (func (param f64 i64) (result i32)))
  (type $f64_f64_i32_=>_f64 (func (param f64 f64 i32) (result f64)))
@@ -31,7 +30,6 @@
  (data (i32.const 13512) "\00\01\00\00\01\00\00\00\00\00\00\00\00\01\00\00\be\f3\f8y\eca\f6?\190\96[\c6\fe\de\bf=\88\afJ\edq\f5?\a4\fc\d42h\0b\db\bf\b0\10\f0\f09\95\f4?{\b7\1f\n\8bA\d7\bf\85\03\b8\b0\95\c9\f3?{\cfm\1a\e9\9d\d3\bf\a5d\88\0c\19\0d\f3?1\b6\f2\f3\9b\1d\d0\bf\a0\8e\0b{\"^\f2?\f0z;\1b\1d|\c9\bf?4\1aJJ\bb\f1?\9f<\af\93\e3\f9\c2\bf\ba\e5\8a\f0X#\f1?\\\8dx\bf\cb`\b9\bf\a7\00\99A?\95\f0?\ce_G\b6\9do\aa\bf\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00\00\acG\9a\fd\8c`\ee?=\f5$\9f\ca8\b3?\a0j\02\1f\b3\a4\ec?\ba\918T\a9v\c4?\e6\fcjW6 \eb?\d2\e4\c4J\0b\84\ce?-\aa\a1c\d1\c2\e9?\1ce\c6\f0E\06\d4?\edAx\03\e6\86\e8?\f8\9f\1b,\9c\8e\d8?bHS\f5\dcg\e7?\cc{\b1N\a4\e0\dc?")
  (data (i32.const 13784) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\d84\00\00\d84\00\00\00\01\00\00 \00\00\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $../../lib/libm/assembly/libm/E f64 (f64.const 2.718281828459045))
  (global $~lib/math/NativeMath.LN10 f64 (f64.const 2.302585092994046))
@@ -12138,8 +12136,5 @@
   local.set $1
   local.get $1
   f32.trunc
- )
- (func $null (; 120 ;)
-  unreachable
  )
 )

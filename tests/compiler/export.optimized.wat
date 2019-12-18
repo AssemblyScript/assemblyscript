@@ -32,7 +32,4 @@
  (func $export/ns.one (; 3 ;)
   nop
  )
- (func $null (; 4 ;)
-  unreachable
- )
 )

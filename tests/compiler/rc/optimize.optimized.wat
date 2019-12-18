@@ -1984,7 +1984,4 @@
   end
   unreachable
  )
- (func $null (; 42 ;)
-  unreachable
- )
 )

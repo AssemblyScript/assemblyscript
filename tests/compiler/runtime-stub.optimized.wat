@@ -117,7 +117,4 @@
   i32.const 48
   global.set $~lib/rt/stub/offset
  )
- (func $null (; 6 ;)
-  unreachable
- )
 )

@@ -1,8 +1,8 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -1830,8 +1830,5 @@
  )
  (func $start (; 21 ;)
   call $start:resolve-elementaccess
- )
- (func $null (; 22 ;)
-  unreachable
  )
 )

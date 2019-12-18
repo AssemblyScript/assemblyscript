@@ -22,7 +22,4 @@
   i32.const 2
   global.set $getter-setter/Foo._bar
  )
- (func $null (; 2 ;)
-  unreachable
- )
 )

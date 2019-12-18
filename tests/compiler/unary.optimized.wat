@@ -240,7 +240,4 @@
  (func $start (; 1 ;)
   call $start:unary
  )
- (func $null (; 2 ;)
-  unreachable
- )
 )

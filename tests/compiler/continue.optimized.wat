@@ -1,5 +1,4 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (export "memory" (memory $0))
@@ -29,8 +28,5 @@
    end
    unreachable
   end
- )
- (func $null (; 1 ;)
-  unreachable
  )
 )

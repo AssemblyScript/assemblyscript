@@ -29,7 +29,6 @@
  (data (i32.const 544) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00d\00")
  (data (i32.const 568) "\08\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
@@ -4615,8 +4614,5 @@
    call $~lib/rt/pure/__visit
   end
   return
- )
- (func $null (; 54 ;)
-  unreachable
  )
 )

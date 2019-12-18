@@ -5,7 +5,6 @@
  (memory $0 1)
  (data (i32.const 8) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00f\00o\00r\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $for/i (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
@@ -194,8 +193,5 @@
  )
  (func $start (; 2 ;)
   call $start:for
- )
- (func $null (; 3 ;)
-  unreachable
  )
 )

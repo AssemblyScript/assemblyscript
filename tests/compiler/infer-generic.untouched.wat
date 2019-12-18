@@ -13,7 +13,7 @@
  (data (i32.const 56) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
  (data (i32.const 88) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00H\00\00\00H\00\00\00\0c\00\00\00\03\00\00\00")
  (table $0 2 funcref)
- (elem (i32.const 0) $null $start:infer-generic~anonymous|0)
+ (elem (i32.const 1) $start:infer-generic~anonymous|0)
  (global $infer-generic/arr i32 (i32.const 104))
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -166,8 +166,5 @@
  )
  (func $start (; 15 ;)
   call $start:infer-generic
- )
- (func $null (; 16 ;)
-  unreachable
  )
 )

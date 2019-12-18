@@ -1,11 +1,10 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $resolve-new/foo (mut i32) (i32.const 0))
@@ -164,8 +163,5 @@
  )
  (func $start (; 7 ;)
   call $start:resolve-new
- )
- (func $null (; 8 ;)
-  unreachable
  )
 )

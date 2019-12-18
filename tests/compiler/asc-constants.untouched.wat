@@ -2,7 +2,6 @@
  (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/ASC_TARGET i32 (i32.const 0))
  (global $~lib/ASC_NO_ASSERT i32 (i32.const 0))
  (global $~lib/ASC_MEMORY_BASE i32 (i32.const 0))
@@ -51,8 +50,5 @@
  )
  (func $start (; 1 ;)
   call $start:asc-constants
- )
- (func $null (; 2 ;)
-  unreachable
  )
 )

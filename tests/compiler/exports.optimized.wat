@@ -1,8 +1,8 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
- (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
@@ -147,10 +147,7 @@
   i32.const 16
   global.set $~lib/rt/stub/offset
  )
- (func $null (; 9 ;)
-  unreachable
- )
- (func $exports/subOpt|trampoline (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -168,11 +165,11 @@
   local.get $1
   call $exports/subOpt
  )
- (func $~lib/setargc (; 11 ;) (param $0 i32)
+ (func $~lib/setargc (; 10 ;) (param $0 i32)
   local.get $0
   global.set $~lib/argc
  )
- (func $exports/Car#constructor|trampoline (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -199,7 +196,7 @@
   i32.store
   local.get $0
  )
- (func $exports/vehicles.Car#constructor|trampoline (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor|trampoline (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange

@@ -75,7 +75,4 @@
   end
   call $start:features/mutable-globals
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )

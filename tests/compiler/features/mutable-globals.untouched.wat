@@ -6,7 +6,6 @@
  (memory $0 1)
  (data (i32.const 8) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00m\00u\00t\00a\00b\00l\00e\00-\00g\00l\00o\00b\00a\00l\00s\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $features/mutable-globals/internal (mut i32) (i32.const 124))
  (global $~lib/started (mut i32) (i32.const 0))
  (export "__start" (func $start))
@@ -80,8 +79,5 @@
    global.set $~lib/started
   end
   call $start:features/mutable-globals
- )
- (func $null (; 3 ;)
-  unreachable
  )
 )

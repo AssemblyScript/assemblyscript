@@ -16,7 +16,6 @@
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (start $start)
  (func $function/_ (; 0 ;)
@@ -134,8 +133,5 @@
  )
  (func $start (; 19 ;)
   call $start:function
- )
- (func $null (; 20 ;)
-  unreachable
  )
 )

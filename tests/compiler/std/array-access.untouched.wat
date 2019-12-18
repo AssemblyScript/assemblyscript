@@ -1,7 +1,6 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
@@ -14,7 +13,6 @@
  (data (i32.const 224) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
  (data (i32.const 240) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00n\00u\00l\00l\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (export "memory" (memory $0))
  (export "i32ArrayArrayElementAccess" (func $std/array-access/i32ArrayArrayElementAccess))
@@ -492,8 +490,5 @@
   local.get $0
   call $~lib/rt/stub/__release
   local.get $3
- )
- (func $null (; 19 ;)
-  unreachable
  )
 )

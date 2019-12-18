@@ -901,7 +901,4 @@
  (func $start (; 5 ;)
   call $start:binary
  )
- (func $null (; 6 ;)
-  unreachable
- )
 )

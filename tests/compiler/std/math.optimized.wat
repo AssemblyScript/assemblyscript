@@ -7,9 +7,9 @@
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $none_=>_none (func))
  (type $f32_f32_f32_f32_=>_i32 (func (param f32 f32 f32 f32) (result i32)))
  (type $f64_f64_f64_f64_=>_i32 (func (param f64 f64 f64 f64) (result i32)))
+ (type $none_=>_none (func))
  (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
  (type $none_=>_f64 (func (result f64)))
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
@@ -46732,8 +46732,5 @@
  )
  (func $start (; 176 ;)
   call $start:std/math
- )
- (func $null (; 177 ;)
-  unreachable
  )
 )

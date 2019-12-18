@@ -2246,7 +2246,4 @@
  (func $start (; 9 ;)
   call $start:std/mod
  )
- (func $null (; 10 ;)
-  unreachable
- )
 )

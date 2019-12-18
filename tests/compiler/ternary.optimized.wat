@@ -12,7 +12,4 @@
   i32.const 1
   global.set $ternary/a
  )
- (func $null (; 1 ;)
-  unreachable
- )
 )

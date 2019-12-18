@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
@@ -519,8 +519,5 @@
    global.set $~lib/started
   end
   call $start:rt/instanceof
- )
- (func $null (; 9 ;)
-  unreachable
  )
 )

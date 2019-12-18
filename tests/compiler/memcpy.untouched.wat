@@ -6,7 +6,6 @@
  (memory $0 1)
  (data (i32.const 8) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00c\00p\00y\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $memcpy/base i32 (i32.const 8))
  (global $memcpy/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -1253,8 +1252,5 @@
  )
  (func $start (; 3 ;)
   call $start:memcpy
- )
- (func $null (; 4 ;)
-  unreachable
  )
 )

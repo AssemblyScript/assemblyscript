@@ -9,7 +9,4 @@
   i32.const 0
   global.set $~lib/argc
  )
- (func $null (; 1 ;)
-  unreachable
- )
 )

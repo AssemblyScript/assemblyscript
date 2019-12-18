@@ -1,7 +1,6 @@
 (module
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
- (type $none_=>_none (func))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "testTrue" (func $possibly-null/testTrue))
@@ -60,8 +59,5 @@
  )
  (func $possibly-null/testLogicalAndMulti (; 4 ;) (param $0 i32) (param $1 i32)
   nop
- )
- (func $null (; 5 ;)
-  unreachable
  )
 )

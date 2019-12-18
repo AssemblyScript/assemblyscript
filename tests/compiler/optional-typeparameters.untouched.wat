@@ -7,7 +7,6 @@
  (type $i32_f64_f64_=>_f64 (func (param i32 f64 f64) (result f64)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $optional-typeparameters/tConcrete (mut i32) (i32.const 0))
@@ -201,8 +200,5 @@
  )
  (func $start (; 10 ;)
   call $start:optional-typeparameters
- )
- (func $null (; 11 ;)
-  unreachable
  )
 )

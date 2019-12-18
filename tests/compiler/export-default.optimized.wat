@@ -7,7 +7,4 @@
  (func $export-default/theDefault (; 0 ;)
   nop
  )
- (func $null (; 1 ;)
-  unreachable
- )
 )

@@ -2155,7 +2155,4 @@
  (func $start (; 22 ;)
   call $start:number
  )
- (func $null (; 23 ;)
-  unreachable
- )
 )

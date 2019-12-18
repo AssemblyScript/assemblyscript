@@ -158,7 +158,4 @@
  (func $start (; 2 ;)
   call $start:comma
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )

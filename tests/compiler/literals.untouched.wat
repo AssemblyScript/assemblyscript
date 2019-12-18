@@ -2,7 +2,6 @@
  (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (start $start)
  (func $start:literals (; 0 ;)
@@ -97,8 +96,5 @@
  )
  (func $start (; 1 ;)
   call $start:literals
- )
- (func $null (; 2 ;)
-  unreachable
  )
 )

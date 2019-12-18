@@ -208,7 +208,4 @@
  (func $start (; 4 ;)
   call $start:std/hash
  )
- (func $null (; 5 ;)
-  unreachable
- )
 )
