@@ -49,7 +49,4 @@
  (func $start (; 7 ;)
   call $start:features/reference-types
  )
- (func $null (; 8 ;)
-  unreachable
- )
 )

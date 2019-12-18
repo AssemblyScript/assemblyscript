@@ -430,7 +430,4 @@
   call $call-super/test4
   call $call-super/test5
  )
- (func $null (; 15 ;)
-  unreachable
- )
 )

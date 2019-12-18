@@ -5,7 +5,6 @@
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00o\00v\00e\00r\00f\00l\00o\00w\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (start $start)
  (func $start:overflow (; 1 ;)
@@ -731,8 +730,5 @@
  )
  (func $start (; 2 ;)
   call $start:overflow
- )
- (func $null (; 3 ;)
-  unreachable
  )
 )

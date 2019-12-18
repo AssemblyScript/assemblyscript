@@ -1888,7 +1888,4 @@
   end
   unreachable
  )
- (func $null (; 28 ;)
-  unreachable
- )
 )

@@ -1,14 +1,13 @@
 (module
  (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00l\00o\00o\00p\00-\00f\00l\00o\00w\00.\00t\00s\00")
  (data (i32.const 48) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00e\00r\00m\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "whileReturn" (func $loop-flow/whileReturn))
  (export "whileThrow" (func $loop-flow/whileThrow))
@@ -236,8 +235,5 @@
  )
  (func $start (; 13 ;)
   call $start:loop-flow
- )
- (func $null (; 14 ;)
-  unreachable
  )
 )

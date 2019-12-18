@@ -870,7 +870,4 @@
  (func $start (; 9 ;)
   call $start:builtins
  )
- (func $null (; 10 ;)
-  unreachable
- )
 )

@@ -671,7 +671,4 @@
  (func $start (; 10 ;)
   call $start:std/object
  )
- (func $null (; 11 ;)
-  unreachable
- )
 )

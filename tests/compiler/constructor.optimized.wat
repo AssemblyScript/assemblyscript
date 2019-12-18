@@ -174,7 +174,4 @@
  (func $start (; 3 ;)
   call $start:constructor
  )
- (func $null (; 4 ;)
-  unreachable
- )
 )

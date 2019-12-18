@@ -13399,7 +13399,4 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $null (; 171 ;)
-  unreachable
- )
 )

@@ -1,10 +1,8 @@
 (module
  (type $f64_=>_f64 (func (param f64) (result f64)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $../../examples/mandelbrot/assembly/index/NUM_COLORS i32 (i32.const 2048))
  (export "memory" (memory $0))
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
@@ -716,8 +714,5 @@
    end
    unreachable
   end
- )
- (func $null (; 3 ;)
-  unreachable
  )
 )

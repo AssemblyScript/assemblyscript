@@ -209,7 +209,4 @@
  (func $start (; 6 ;)
   call $start:std/date
  )
- (func $null (; 7 ;)
-  unreachable
- )
 )

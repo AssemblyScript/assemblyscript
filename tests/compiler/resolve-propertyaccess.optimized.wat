@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -490,8 +490,5 @@
  )
  (func $start (; 10 ;)
   call $start:resolve-propertyaccess
- )
- (func $null (; 11 ;)
-  unreachable
  )
 )

@@ -29,7 +29,6 @@
  (data (i32.const 488) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00")
  (data (i32.const 528) "\t\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\003\04\00\00\02\00\00\00\93\04\00\00\02\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00\10\00\00\00\00\00\00\00\93 \00\00\02\00\00\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $std/array-literal/staticArrayI8 i32 (i32.const 48))
  (global $std/array-literal/staticArrayI32 i32 (i32.const 272))
  (global $std/array-literal/emptyArrayI32 (mut i32) (i32.const 320))
@@ -4095,8 +4094,5 @@
    call $~lib/rt/pure/__visit
   end
   return
- )
- (func $null (; 50 ;)
-  unreachable
  )
 )

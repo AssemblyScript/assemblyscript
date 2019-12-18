@@ -90,7 +90,4 @@
   call $~lib/rt/stub/__alloc
   global.set $optional-typeparameters/tDerived
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )

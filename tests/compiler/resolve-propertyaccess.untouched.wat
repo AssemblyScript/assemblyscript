@@ -23,7 +23,6 @@
  (data (i32.const 744) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\005\005\00")
  (data (i32.const 768) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $resolve-propertyaccess/Namespace.member i32 (i32.const 1))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -830,8 +829,5 @@
  )
  (func $start (; 15 ;)
   call $start:resolve-propertyaccess
- )
- (func $null (; 16 ;)
-  unreachable
  )
 )

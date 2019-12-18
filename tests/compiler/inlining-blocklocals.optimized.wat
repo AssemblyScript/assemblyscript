@@ -49,7 +49,4 @@
  (func $start (; 2 ;)
   call $inlining-blocklocals/test
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )

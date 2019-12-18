@@ -4,7 +4,7 @@
  (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (table $0 2 funcref)
- (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|0)
+ (elem (i32.const 1) $getter-call/C#get:x~anonymous|0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
@@ -95,8 +95,5 @@
   global.set $~lib/rt/stub/startOffset
   i32.const 16
   global.set $~lib/rt/stub/offset
- )
- (func $null (; 5 ;)
-  unreachable
  )
 )

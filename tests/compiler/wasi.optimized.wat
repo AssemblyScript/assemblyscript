@@ -8,7 +8,4 @@
   i32.const 9
   global.set $wasi/sig
  )
- (func $null (; 1 ;)
-  unreachable
- )
 )

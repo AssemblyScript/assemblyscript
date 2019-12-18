@@ -67,7 +67,4 @@
   i32.const 1
   global.set $enum/NonConstant.ONE
  )
- (func $null (; 1 ;)
-  unreachable
- )
 )

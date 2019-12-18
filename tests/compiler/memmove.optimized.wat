@@ -373,7 +373,4 @@
  (func $start (; 3 ;)
   call $start:memmove
  )
- (func $null (; 4 ;)
-  unreachable
- )
 )

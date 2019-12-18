@@ -35,7 +35,4 @@
  (func $start (; 1 ;)
   call $start:scoped
  )
- (func $null (; 2 ;)
-  unreachable
- )
 )

@@ -2384,7 +2384,4 @@
  (func $start (; 12 ;)
   call $start:std/operator-overloading
  )
- (func $null (; 13 ;)
-  unreachable
- )
 )

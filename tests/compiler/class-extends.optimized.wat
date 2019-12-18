@@ -1,5 +1,4 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (export "memory" (memory $0))
@@ -17,8 +16,5 @@
   local.get $0
   i32.const 3
   i32.store16 offset=4
- )
- (func $null (; 1 ;)
-  unreachable
  )
 )

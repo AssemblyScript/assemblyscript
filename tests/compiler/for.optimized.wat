@@ -158,7 +158,4 @@
  (func $start (; 2 ;)
   call $start:for
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )
