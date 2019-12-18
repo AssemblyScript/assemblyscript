@@ -24,7 +24,7 @@ class AFoo implements IFoo {
 class StructurallyImplementsIFoo {
   i: i32 = 41;
   x: bool = false;
-  
+
   foo(i: i32): i32 {
     return this.i + i;
   }
@@ -37,12 +37,11 @@ class StructurallyImplementsIFoo {
 const aFoo = new AFoo();
 const sFoo = new StructurallyImplementsIFoo();
 
-
 function passAnInterface(foo: IFoo): void {
   assert(foo.foo(1) == 42);
   assert(foo.faa(1,3) == 4);
 }
-
+// const num = aFoo.foo(1);
 passAnInterface(aFoo);
 passAnInterface(sFoo);
 
@@ -54,6 +53,6 @@ function expectX(foo: IFoo, x: bool): void {
 expectX(aFoo, false);
 expectX(sFoo, true);
 
-const iFoo = <IFoo> aFoo;
+const iFoo = <IFoo>aFoo;
 const ibool = iFoo.x;
 assert(!ibool);

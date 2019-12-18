@@ -37,7 +37,7 @@
    "class BadProps implements Properties {",
 
   "TS2322: Type 'interface-fail/BadProps' is not assignable to type 'interface-fail/Properties'.",
-   "const badProp = <Properties> new BadProps();"
+   "const badProp = <Properties>new BadProps();"
     
 
 ]

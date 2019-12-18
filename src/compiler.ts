@@ -1516,11 +1516,7 @@ export class Compiler extends DiagnosticEmitter {
     contextualTypeArguments: Map<string,Type> | null = null,
     alternativeReportNode: Node | null = null
   ): void {
-    // TODO Compile functions to use
-    // this.error(
-    //   DiagnosticCode.Operation_not_supported,
-    //   declaration.range
-    // );
+    // TODO: Allow multiple interfaces with the same name to merge
   }
 
   // === Memory ===================================================================================
@@ -3061,7 +3057,7 @@ export class Compiler extends DiagnosticEmitter {
           fromType.toString(),
           toType.toString());
       } else {
-        //Also checks abstract methods
+        // Also checks abstract methods
         if (this.checkInterfaceImplementation(toType, fromType, reportNode)) {
           toType.classReference!.addImplementer(fromType.classReference);
         } else {
@@ -9283,13 +9279,14 @@ export class Compiler extends DiagnosticEmitter {
   checkInterfaceImplementation(toType: Type, fromType: Type, reportNode: Node): bool {
     const _interface = (<Interface>toType.classReference!);
     const _class = fromType.classReference!;
-    var imems: Map<string, Element>;
-    var mems: Map<string, Element> | null;
+    assert(_interface != null);
+    assert(_class != null);
     if (_interface.members == null) {
       return true;
     }
-    imems = _interface.members;
-    mems = _class.members;
+
+    var imems: Map<string, Element>  = _interface.members;
+    var mems: Map<string, Element> | null = _class.members;
 
     var error = false;
     var incorrectMember = false;
@@ -9329,17 +9326,9 @@ export class Compiler extends DiagnosticEmitter {
       let from: Type = Type.void, to: Type = Type.void;
       switch (mem.kind) {
         case ElementKind.FIELD: {
-          mem = (<Field>mem).prototype;
-          imem = (<Property>imem).prototype;
-        }
-        case ElementKind.FIELD_PROTOTYPE: {
-          from = this.resolver.resolveType((<FieldPrototype>mem).typeNode!, _class)!;
-          to = this.resolver.resolveType((<PropertyPrototype>imem).getterPrototype!.functionTypeNode, imem, _interface.contextualTypeArguments, ReportMode.REPORT)!.signatureReference!.returnType;
+          from = (<Field>mem).type!;
+          to = (<Property>imem).getterInstance!.signature!.returnType;
           break;
-        }
-        case ElementKind.FUNCTION: {
-          mem = (<Function>mem).prototype;
-          imem = (<Function>mem).prototype;
         }
         case ElementKind.FUNCTION_PROTOTYPE: {
           let func = (<FunctionPrototype>mem);
@@ -9347,13 +9336,18 @@ export class Compiler extends DiagnosticEmitter {
           to = this.resolver.resolveType((<FunctionPrototype>imem).functionTypeNode, imem, _interface.contextualTypeArguments)!;
           break;
         }
+        case ElementKind.FUNCTION: {
+          from = (<Function>mem).signature.type;
+          to = (<Function>imem).signature.type;
+          break;
+        }
         case ElementKind.PROPERTY: {
           mem = (<Property>mem).prototype;
           imem = (<Property>imem).prototype;
         }
         case ElementKind.PROPERTY_PROTOTYPE: {
-          const property = <PropertyPrototype> mem;
-          const iproperty = <PropertyPrototype> imem;
+          const property = <PropertyPrototype>mem;
+          const iproperty = <PropertyPrototype>imem;
           if (!iproperty.isAny(CommonFlags.READONLY | CommonFlags.ABSTRACT)) {
             if (property.setterPrototype == null) {
               this.error(
@@ -9400,14 +9394,14 @@ export class Compiler extends DiagnosticEmitter {
         }
         incorrectMember = false;
     }
-      error = error || incorrectMember;// case where contiune skips the last check.
+    error = error || incorrectMember; // case where continue skips the last check.
     if (error) {
       this.error(
         DiagnosticCode.Class_0_incorrectly_implements_interface_1,
           _class.identifierNode.range,
-            fromType.toString(),
-            toType.toString()
-            );
+          fromType.toString(),
+          toType.toString()
+          );
     }
     return !error;
   }
@@ -9463,7 +9457,6 @@ export class Compiler extends DiagnosticEmitter {
       const isVoid = returnType.toNativeType() == NativeType.None;
 
       const first = relooper.addBlockWithSwitch(module.nop(), this.loadClassID());
-      const defaultVal = defaultTypeValue(returnType.toNativeType(), module);
       const last = relooper.addBlock(module.unreachable());
       // default branch
       relooper.addBranch(first, last);
@@ -9481,7 +9474,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // finish relooper and prepare body of function
       let switchExpression = relooper.renderAndDispose(first, 0);
-      let block = isVoid ? [switchExpression] : [switchExpression, defaultVal];
+      let block = isVoid ? [switchExpression] : [switchExpression, this.makeZero(returnType)];
       let body = module.block(null, block, returnType.toNativeType());
 
       // Remove the nop standin
@@ -9502,7 +9495,7 @@ export class Compiler extends DiagnosticEmitter {
     var method: Function;
     switch (prop.kind){
       case ElementKind.FUNCTION_PROTOTYPE: {
-        let p = <FunctionPrototype> prop;
+        let p = <FunctionPrototype>prop;
         let newFunc = this.resolver.resolveFunction(p, null, (<Class>func.parent).contextualTypeArguments);
         if (newFunc == null) {
           throw new Error(`Couldn't resolve ${p.name}`);
@@ -9510,20 +9503,20 @@ export class Compiler extends DiagnosticEmitter {
         prop = newFunc;
       }
       case ElementKind.FUNCTION: {
-        method = <Function> prop;
+        method = <Function>prop;
         break;
       }
       case ElementKind.FIELD: {
-        let field = <Field> prop;
+        let field = <Field>prop;
         return field;
       }
       case ElementKind.PROPERTY: {
-        let p = <Property> prop;
+        let p = <Property>prop;
         if (func.is(CommonFlags.SET)) {
           method = p.setterInstance!;
-        }else if (func.is(CommonFlags.GET)) {
+        } else if (func.is(CommonFlags.GET)) {
           method = p.getterInstance!;
-        }else {
+        } else {
           throw Error("Interface method " + func.name + " should be a property");
         }
         break;
@@ -9543,7 +9536,7 @@ export class Compiler extends DiagnosticEmitter {
     var method: Function;
     switch (prop.kind){
       case ElementKind.FUNCTION_PROTOTYPE: {
-        let p = <FunctionPrototype> prop;
+        let p = <FunctionPrototype>prop;
         let newFunc = this.resolver.resolveFunction(p, null, (<Class>ifunc.parent).contextualTypeArguments);
         if (newFunc == null) {
           throw new Error(`Couldn't resolve ${p.name}`);
@@ -9551,11 +9544,11 @@ export class Compiler extends DiagnosticEmitter {
         prop = newFunc;
       }
       case ElementKind.FUNCTION: {
-        method = <Function> prop;
+        method = <Function>prop;
         break;
       }
       case ElementKind.FIELD: {
-        let field = <Field> prop;
+        let field = <Field>prop;
         let type = field.type;
         let nativeType = type.toNativeType();
         const thisExpr = module.local_get(0, this.nativeUsizeType);
@@ -9587,12 +9580,12 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
       case ElementKind.PROPERTY: {
-        let p = <Property> prop;
+        let p = <Property>prop;
         if (ifunc.is(CommonFlags.SET)) {
           method = p.setterInstance!;
-        }else if (ifunc.is(CommonFlags.GET)) {
+        } else if (ifunc.is(CommonFlags.GET)) {
           method = p.getterInstance!;
-        }else {
+        } else {
           throw Error("Interface method " + ifunc.name + " should be a property");
         }
         break;
@@ -9649,24 +9642,6 @@ export class Compiler extends DiagnosticEmitter {
 // helpers
 
 const v128_zero = new Uint8Array(16);
-
-/* Useful for adding to the end of a block that needs a type even if there is an unreachable(); */
-export function defaultTypeValue(nativeType: NativeType, module: Module): ExpressionRef {
-  switch (nativeType) {
-    case NativeType.I64: return module.i64(0);
-    case NativeType.F32: return module.f32(0);
-    case NativeType.F64: return module.f64(0);
-    case NativeType.V128: return module.v128(v128_zero);
-    case NativeType.Unreachable: return module.unreachable();
-    case NativeType.None: return module.nop();
-    case NativeType.I32:
-    case NativeType.Anyref:
-    case NativeType.Exnref:
-    default: {
-      return module.i32(0);
-    }
-  }
-}
 
 function mangleImportName(
   element: Element,

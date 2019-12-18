@@ -917,9 +917,13 @@ export class Program extends DiagnosticEmitter {
       if (!baseElement) continue;
       if (baseElement.kind == ElementKind.CLASS_PROTOTYPE || baseElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
         let basePrototype = <ClassPrototype>baseElement;
-        if (thisPrototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
+        if (thisPrototype.kind == ElementKind.INTERFACE_PROTOTYPE && baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
           // TODO: Interface extends class
           // basePrototype = InterfacePrototype.fromClassPrototype(basePrototype);
+          this.error(
+            DiagnosticCode.Not_implemented,
+            Range.join(thisPrototype.identifierNode.range, extendsNode.range)
+          );
         } else {
           if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
             this.error(
@@ -1837,37 +1841,26 @@ export class Program extends DiagnosticEmitter {
     if (!parent.add(name, element)) return null;
     var memberDeclarations = declaration.members;
     if (declaration.extendsType) queuedExtends.push(element);
-    var instanceDeclarations = new Array<DeclarationStatement>();
-    /**
-     * Must convert field declarations to property declarations
-     */
     for (let i = 0, k = memberDeclarations.length; i < k; ++i) {
       let memberDeclaration = memberDeclarations[i];
-      if (memberDeclaration.kind == NodeKind.FIELDDECLARATION) {
-        let fieldDecl = <FieldDeclaration> memberDeclaration;
-        if (!fieldDecl.is(CommonFlags.READONLY)) {
-          const param = Node.createParameter(fieldDecl.name, fieldDecl.type!, null, ParameterKind.DEFAULT, fieldDecl.range);
-          const signature = Node.createFunctionType([param], Node.createOmittedType(fieldDecl.range), null, false, fieldDecl.range);
-          instanceDeclarations.push(Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.SET, fieldDecl.range));
-        }
-        const signature = Node.createFunctionType([], fieldDecl.type || Node.createOmittedType(fieldDecl.range), null, false, fieldDecl.range);
-        memberDeclaration = Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.GET, fieldDecl.range);
-      }else if (memberDeclaration.kind == NodeKind.METHODDECLARATION &&
-                (memberDeclaration.is(CommonFlags.GET) || memberDeclaration.is(CommonFlags.SET))) {
-        //TODO check that you can't have a property in an interface
-      }
-      instanceDeclarations.push(memberDeclaration);
-    }
-    for (let i = 0, k = instanceDeclarations.length; i < k; ++i) {
-      let memberDeclaration = instanceDeclarations[i];
       switch (memberDeclaration.kind) {
         case NodeKind.FIELDDECLARATION: {
-          this.initializeField(<FieldDeclaration>memberDeclaration, element);
+          let fieldDecl = <FieldDeclaration>memberDeclaration;
+          if (!fieldDecl.is(CommonFlags.READONLY)) {
+            const param = Node.createParameter(fieldDecl.name, fieldDecl.type!, null, ParameterKind.DEFAULT, fieldDecl.range);
+            const signature = Node.createFunctionType([param], Node.createOmittedType(fieldDecl.range), null, false, fieldDecl.range);
+            const setter = Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.SET, fieldDecl.range);
+            this.initializeProperty(<MethodDeclaration>setter, element);
+          }
+          const signature = Node.createFunctionType([], fieldDecl.type || Node.createOmittedType(fieldDecl.range), null, false, fieldDecl.range);
+          memberDeclaration = Node.createMethodDeclaration(memberDeclaration.name, null, signature, null, fieldDecl.decorators, fieldDecl.flags | CommonFlags.GET, fieldDecl.range);
+          this.initializeProperty(<MethodDeclaration>memberDeclaration, element);
           break;
         }
         case NodeKind.METHODDECLARATION: {
           if (memberDeclaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
-            this.initializeProperty(<MethodDeclaration>memberDeclaration, element);
+            // Throw error
+            //this.initializeProperty(<MethodDeclaration>memberDeclaration, element);
           } else {
             this.initializeMethod(<MethodDeclaration>memberDeclaration, element);
           }
@@ -3438,9 +3431,6 @@ export class Class extends TypedElement {
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
-    if (target.kind == ElementKind.INTERFACE) {
-       return true;
-    }
     do if (current == target) return true;
     while (current = current.base);
     return false;
@@ -3688,12 +3678,13 @@ export class InterfacePrototype extends ClassPrototype {
   }
   /** Convert a class to an interface when an interface extends a class */
   static fromClassPrototype(cP: ClassPrototype): InterfacePrototype {
-    const cDecl = <ClassDeclaration> cP.declaration;
+    const cDecl = <ClassDeclaration>cP.declaration;
     const iDecl = new InterfaceDeclaration();
     iDecl.typeParameters = cDecl.typeParameters;
     iDecl.extendsType = cDecl.extendsType;
     iDecl.implementsTypes = cDecl.implementsTypes;
     iDecl.members = cDecl.members;
+    iDecl.range = cDecl.range;
     return new InterfacePrototype(cP.name, cP.parent, iDecl, cP.decoratorFlags);
   }
 }
@@ -3705,7 +3696,7 @@ export class Interface extends Class { // FIXME
     nameInclTypeParameters: string,
     prototype: InterfacePrototype,
     typeArguments: Type[] | null = [],
-    base: Interface | Class | null = null // interface can extend classes in typescript
+    base: Class | null = null // interface can extend classes in typescript
   ) {
     super(
       nameInclTypeParameters,
@@ -3715,7 +3706,7 @@ export class Interface extends Class { // FIXME
       true
     );
   }
-  // Overrides class.addImplementer for casses when implementer is also interfaces
+  // Overrides class.addImplementer for cases when implementer is also interfaces
   addImplementer(_class: Class): void {
     if (_class.kind == ElementKind.INTERFACE) {
       _class.implementers.forEach((_class: Class) => {
