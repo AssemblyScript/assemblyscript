@@ -618,10 +618,10 @@
   scale = reinterpret<f64>(sbits);
   var y = scale + scale * tmp;
   if (abs(y) < 1.0) {
-    /* Round y to the right precision before scaling it into the subnormal
-      range to avoid double rounding that can cause 0.5+E/2 ulp error where
-      E is the worst-case ulp error outside the subnormal range.  So this
-      is only useful if the goal is better than 1 ulp worst-case error.  */
+    // Round y to the right precision before scaling it into the subnormal
+    // range to avoid double rounding that can cause 0.5+E/2 ulp error where
+    // E is the worst-case ulp error outside the subnormal range.  So this
+    // is only useful if the goal is better than 1 ulp worst-case error.
     let one = copysign(1.0, y);
     let lo = scale - y + scale * tmp;
     let hi = one + y;
@@ -671,7 +671,7 @@
   // 	kd = roundtoint(z);
   // 	ki = converttoint(z);
   // #elif EXP_USE_TOINT_NARROW
-  // 	/* z - kd is in [-0.5-2^-16, 0.5] in all rounding modes.  */
+  // 	// z - kd is in [-0.5-2^-16, 0.5] in all rounding modes.
   // var kd = z + shift;
   // var ki = reinterpret<u64>(kd) >> 16;
   // var kd = <f64><i32>ki;
@@ -1059,7 +1059,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   // log2(x) = log2(z/c) + log2(c) + k.
   // r ~= z/c - 1, |r| < 1/(2*N).
 // #if __FP_FAST_FMA
-// 	/* rounding error: 0x1p-55/N.  */
+// 	// rounding error: 0x1p-55/N.
 // 	r = __builtin_fma(z, invc, -1.0);
 // 	t1 = r * InvLn2hi;
 // 	t2 = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -t1);
@@ -1688,7 +1688,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   return xflow(sign, reinterpret<f64>(0x7000000000000000)); // 0x1p769
 }
 
-/** Returns 1 if input is the bit representation of 0, infinity or nan. */
+// Returns 1 if input is the bit representation of 0, infinity or nan.
 // @ts-ignore: decorator
 @inline function zeroinfnan(u: u64): bool {
   return (u << 1) - 1 >= 0xFFE0000000000000 - 1;
@@ -1823,7 +1823,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 //   kd = roundtoint(z);
 //   ki = converttoint(z);
 // #elif EXP_USE_TOINT_NARROW
-//   /* z - kd is in [-0.5-2^-16, 0.5] in all rounding modes.  */
+//   // z - kd is in [-0.5-2^-16, 0.5] in all rounding modes.
 //   kd = eval_as_double(z + shift);
 //   ki = asuint64(kd) >> 16;
 //   kd = (double_t)(int32_t)ki;
