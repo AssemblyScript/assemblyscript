@@ -198,6 +198,8 @@ export class Options {
   sharedMemory: i32 = 0;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
+  /** If true, exports the function table. */
+  exportTable: bool = false;
   /** If true, generates information necessary for source maps. */
   sourceMap: bool = false;
   /** If true, generates an explicit start function. */
@@ -454,8 +456,9 @@ export class Compiler extends DiagnosticEmitter {
     var functionTable = this.functionTable;
     module.setFunctionTable(1 + functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(1));
 
-    // import table if requested (default table is named '0' by Binaryen)
+    // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) module.addTableImport("0", "env", "table");
+    if (options.exportTable) module.addTableExport("0", "table");
 
     // set up module exports
     for (let file of this.program.filesByName.values()) {

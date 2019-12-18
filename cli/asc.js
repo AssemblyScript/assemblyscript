@@ -217,6 +217,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setImportMemory(compilerOptions, args.importMemory);
   assemblyscript.setSharedMemory(compilerOptions, args.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, args.importTable);
+  assemblyscript.setExportTable(compilerOptions, args.exportTable);
   assemblyscript.setExplicitStart(compilerOptions, args.explicitStart);
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
