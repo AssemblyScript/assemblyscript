@@ -1,16 +1,15 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00c\00o\00m\00m\00a\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:comma (; 1 ;) (type $FUNCSIG$v)
+ (func $start:comma (; 1 ;)
   (local $0 i32)
   (local $1 i32)
   global.get $comma/a
@@ -183,10 +182,7 @@
   i32.const 3
   drop
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;)
   call $start:comma
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

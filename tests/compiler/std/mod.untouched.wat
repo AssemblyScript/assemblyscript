@@ -1,23 +1,22 @@
 (module
- (type $FUNCSIG$iddd (func (param f64 f64 f64) (result i32)))
- (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
- (type $FUNCSIG$idd (func (param f64 f64) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$ifff (func (param f32 f32 f32) (result i32)))
- (type $FUNCSIG$fff (func (param f32 f32) (result f32)))
- (type $FUNCSIG$iff (func (param f32 f32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
+ (type $f32_f32_f32_=>_i32 (func (param f32 f32 f32) (result i32)))
+ (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
+ (type $f64_f64_f64_=>_i32 (func (param f64 f64 f64) (result i32)))
+ (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
  (import "mod" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $std/mod/js i32 (i32.const 1))
  (export "memory" (memory $0))
  (export "mod" (func $std/mod/mod))
  (start $start)
- (func $~lib/math/NativeMath.mod (; 2 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 2 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -271,7 +270,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $std/mod/check<f64> (; 3 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+ (func $std/mod/check<f64> (; 3 ;) (param $0 f64) (param $1 f64) (result i32)
   local.get $1
   local.get $1
   f64.ne
@@ -299,7 +298,7 @@
   local.get $1
   f64.eq
  )
- (func $std/mod/test_fmod (; 4 ;) (type $FUNCSIG$iddd) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $std/mod/test_fmod (; 4 ;) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.mod
@@ -321,7 +320,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.mod (; 5 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 5 ;) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -569,7 +568,7 @@
   local.get $2
   f32.reinterpret_i32
  )
- (func $std/mod/check<f32> (; 6 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
+ (func $std/mod/check<f32> (; 6 ;) (param $0 f32) (param $1 f32) (result i32)
   local.get $1
   local.get $1
   f32.ne
@@ -597,14 +596,14 @@
   local.get $1
   f32.eq
  )
- (func $std/mod/test_fmodf (; 7 ;) (type $FUNCSIG$ifff) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/mod/test_fmodf (; 7 ;) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.mod
   local.get $2
   call $std/mod/check<f32>
  )
- (func $start:std/mod (; 8 ;) (type $FUNCSIG$v)
+ (func $start:std/mod (; 8 ;)
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2361,10 +2360,7 @@
    unreachable
   end
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 9 ;)
   call $start:std/mod
- )
- (func $null (; 10 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

@@ -1,9 +1,10 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
@@ -41,7 +42,7 @@
  (export "memory" (memory $0))
  (export "test" (func $start:builtins~anonymous|0))
  (start $start)
- (func $~lib/atomics/Atomics.isLockFree (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/atomics/Atomics.isLockFree (; 2 ;) (param $0 i32) (result i32)
   i32.const 1
   local.get $0
   i32.const 4
@@ -56,7 +57,7 @@
   select
   select
  )
- (func $~lib/string/String#get:length (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -144,7 +145,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -176,13 +177,13 @@
   end
   i32.const 0
  )
- (func $start:builtins~anonymous|0 (; 6 ;) (type $FUNCSIG$v)
+ (func $start:builtins~anonymous|0 (; 6 ;)
   nop
  )
- (func $start:builtins~anonymous|1 (; 7 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $start:builtins~anonymous|1 (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   nop
  )
- (func $start:builtins (; 8 ;) (type $FUNCSIG$v)
+ (func $start:builtins (; 8 ;)
   i32.const 31
   global.set $builtins/i
   i32.const 0
@@ -866,10 +867,7 @@
    unreachable
   end
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 9 ;)
   call $start:builtins
- )
- (func $null (; 10 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

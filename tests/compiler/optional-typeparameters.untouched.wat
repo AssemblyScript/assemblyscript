@@ -1,13 +1,12 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
- (type $FUNCSIG$didd (func (param i32 f64 f64) (result f64)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_f64_f64_=>_f64 (func (param i32 f64 f64) (result f64)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $optional-typeparameters/tConcrete (mut i32) (i32.const 0))
@@ -15,13 +14,13 @@
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
  (start $start)
- (func $optional-typeparameters/testConcrete<i32,i32> (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/testConcrete<i32,i32> (; 0 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $optional-typeparameters/testDerived<i32,i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/testDerived<i32,i32> (; 1 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -75,7 +74,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -128,10 +127,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 4 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/TestConcrete<i32,i32>#constructor (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -143,12 +142,12 @@
   end
   local.get $0
  )
- (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 6 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $optional-typeparameters/TestConcrete<i32,i32>#test<i32> (; 6 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   local.get $2
   i32.add
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $optional-typeparameters/TestDerived<f64,f64>#constructor (; 7 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -160,12 +159,12 @@
   end
   local.get $0
  )
- (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 8 ;) (type $FUNCSIG$didd) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
+ (func $optional-typeparameters/TestDerived<f64,f64>#test<f64> (; 8 ;) (param $0 i32) (param $1 f64) (param $2 f64) (result f64)
   local.get $1
   local.get $2
   f64.add
  )
- (func $start:optional-typeparameters (; 9 ;) (type $FUNCSIG$v)
+ (func $start:optional-typeparameters (; 9 ;)
   i32.const 1
   call $optional-typeparameters/testConcrete<i32,i32>
   drop
@@ -199,10 +198,7 @@
   call $optional-typeparameters/TestDerived<f64,f64>#test<f64>
   drop
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 10 ;)
   call $start:optional-typeparameters
- )
- (func $null (; 11 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

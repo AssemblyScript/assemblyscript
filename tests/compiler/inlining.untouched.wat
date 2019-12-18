@@ -1,15 +1,15 @@
 (module
- (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
  (table $0 2 funcref)
- (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
+ (elem (i32.const 1) $inlining/func_fe~anonymous|0)
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -18,21 +18,21 @@
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
  (start $start)
- (func $inlining/test (; 1 ;) (type $FUNCSIG$i) (result i32)
+ (func $inlining/test (; 1 ;) (result i32)
   global.get $inlining/constantGlobal
   i32.const 2
   i32.add
  )
- (func $inlining/func_fe~anonymous|0 (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $inlining/func_fe~anonymous|0 (; 2 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__retain (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 4 ;) (param $0 i32)
   nop
  )
- (func $inlining/test_funcs (; 5 ;) (type $FUNCSIG$v)
+ (func $inlining/test_funcs (; 5 ;)
   (local $0 f32)
   (local $1 f64)
   (local $2 i32)
@@ -217,7 +217,7 @@
   global.set $~lib/argc
   i32.const 2
   i32.const 1
-  call_indirect (type $FUNCSIG$ii)
+  call_indirect (type $i32_=>_i32)
   i32.const 2
   i32.eq
   i32.eqz
@@ -275,7 +275,7 @@
   local.get $7
   call $~lib/rt/stub/__release
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 6 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -329,7 +329,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -382,7 +382,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $inlining/test_ctor (; 8 ;) (type $FUNCSIG$v)
+ (func $inlining/test_ctor (; 8 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -490,7 +490,7 @@
   local.get $4
   call $~lib/rt/stub/__release
  )
- (func $start:inlining (; 9 ;) (type $FUNCSIG$v)
+ (func $start:inlining (; 9 ;)
   call $inlining/test
   i32.const 3
   i32.eq
@@ -516,10 +516,7 @@
   global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 10 ;)
   call $start:inlining
- )
- (func $null (; 11 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

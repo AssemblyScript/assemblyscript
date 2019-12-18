@@ -11,7 +11,8 @@ import {
 } from "./program";
 
 import {
-  NativeType
+  NativeType,
+  createType
 } from "./module";
 
 /** Indicates the kind of a type. */
@@ -366,31 +367,6 @@ export class Type {
     }
   }
 
-  /** Converts this type to its signature string. */
-  toSignatureString(): string {
-    switch (this.kind) {
-      default: assert(false);
-      // same naming scheme as Binaryen
-      case TypeKind.I8:
-      case TypeKind.U8:
-      case TypeKind.I16:
-      case TypeKind.U16:
-      case TypeKind.I32:
-      case TypeKind.U32:
-      case TypeKind.BOOL: return "i";
-      case TypeKind.ISIZE:
-      case TypeKind.USIZE: if (this.size != 64) return "i";
-      case TypeKind.I64:
-      case TypeKind.U64: return "j";
-      case TypeKind.F32: return "f";
-      case TypeKind.F64: return "d";
-      case TypeKind.V128: return "V";
-      case TypeKind.ANYREF: return "a";
-      case TypeKind.EXNREF: return "e";
-      case TypeKind.VOID: return "v";
-    }
-  }
-
   // Types
 
   /** An 8-bit signed integer. */
@@ -604,6 +580,29 @@ export class Signature {
     this.id = program.nextSignatureId++;
   }
 
+  get nativeParams(): NativeType {
+    var thisType = this.thisType;
+    var parameterTypes = this.parameterTypes;
+    var numParameterTypes = parameterTypes.length;
+    if (!numParameterTypes) {
+      if (!thisType) return NativeType.None;
+      return thisType.toNativeType();
+    }
+    if (thisType) {
+      let nativeTypes = new Array<NativeType>(1 + numParameterTypes);
+      nativeTypes[0] = thisType.toNativeType();
+      for (let i = 0; i < numParameterTypes; ++i) {
+        nativeTypes[i + 1] = parameterTypes[i].toNativeType();
+      }
+      return createType(nativeTypes);
+    }
+    return createType(typesToNativeTypes(parameterTypes));
+  }
+
+  get nativeResults(): NativeType {
+    return this.returnType.toNativeType();
+  }
+
   asFunctionTarget(program: Program): FunctionTarget {
     var target = this.cachedFunctionTarget;
     if (!target) this.cachedFunctionTarget = target = new FunctionTarget(this, program);
@@ -655,22 +654,6 @@ export class Signature {
     var thisReturnType = this.returnType;
     var targetReturnType = value.returnType;
     return thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
-  }
-
-  /** Converts a signature to a function type string. */
-  static makeSignatureString(parameterTypes: Type[] | null, returnType: Type, thisType: Type | null = null): string {
-    var sb = [];
-    sb.push(returnType.toSignatureString());
-    if (thisType) sb.push(thisType.toSignatureString());
-    if (parameterTypes) {
-      for (let i = 0, k = parameterTypes.length; i < k; ++i) sb.push(parameterTypes[i].toSignatureString());
-    }
-    return "FUNCSIG$" + sb.join("");
-  }
-
-  /** Converts this signature to a function type string. */
-  toSignatureString(): string {
-    return Signature.makeSignatureString(this.parameterTypes, this.returnType, this.thisType);
   }
 
   /** Converts this signature to a string. */

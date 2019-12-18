@@ -1,9 +1,9 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 (shared 1 1))
  (export "memory" (memory $0))
  (start $start)
- (func $features/threads/testAtomic (; 0 ;) (type $FUNCSIG$v)
+ (func $features/threads/testAtomic (; 0 ;)
   i32.const 0
   i32.atomic.load8_u
   drop
@@ -285,7 +285,7 @@
   i64.atomic.rmw.cmpxchg offset=8
   drop
  )
- (func $features/threads/testAtomicAsm (; 1 ;) (type $FUNCSIG$v)
+ (func $features/threads/testAtomicAsm (; 1 ;)
   i32.const 0
   i32.atomic.load8_u
   drop
@@ -532,11 +532,8 @@
   i64.atomic.rmw.cmpxchg
   drop
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;)
   call $features/threads/testAtomic
   call $features/threads/testAtomicAsm
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

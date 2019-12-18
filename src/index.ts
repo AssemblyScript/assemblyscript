@@ -43,6 +43,11 @@ export function setImportTable(options: Options, importTable: bool): void {
   options.importTable = importTable;
 }
 
+/** Sets the `exportTable` option. */
+export function setExportTable(options: Options, exportTable: bool): void {
+  options.exportTable = exportTable;
+}
+
 /** Sets the `sourceMap` option. */
 export function setSourceMap(options: Options, sourceMap: bool): void {
   options.sourceMap = sourceMap;

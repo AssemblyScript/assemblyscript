@@ -105,7 +105,10 @@ function runTest(basename) {
   var missing_features = [];
   if (config.features) {
     config.features.forEach(feature => {
-      if (!features.includes(feature)) missing_features.push(feature);
+      if (!features.includes(feature) && !features.includes("*")) {
+        missing_features.push(feature);
+        return;
+      }
       var featureConfig = featuresConfig[feature];
       if (featureConfig.asc_flags) {
         featureConfig.asc_flags.forEach(flag => {
