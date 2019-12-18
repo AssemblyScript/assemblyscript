@@ -1,5 +1,5 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -9,7 +9,7 @@
  (global $unary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:unary (; 0 ;) (type $FUNCSIG$v)
+ (func $start:unary (; 0 ;)
   (local $0 f64)
   (local $1 i32)
   (local $2 i64)
@@ -380,10 +380,10 @@
   local.get $0
   global.set $unary/F
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
+ (func $start (; 1 ;)
   call $start:unary
  )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 2 ;)
   unreachable
  )
 )

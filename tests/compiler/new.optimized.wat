@@ -1,6 +1,7 @@
 (module
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
  (global $new/ref (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -9,7 +10,7 @@
  (global $new/ref2 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -78,7 +79,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $start:new (; 2 ;) (type $FUNCSIG$v)
+ (func $start:new (; 2 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16
@@ -108,10 +109,10 @@
   call $~lib/rt/stub/__alloc
   global.set $new/ref2
  )
- (func $start (; 3 ;) (type $FUNCSIG$v)
+ (func $start (; 3 ;)
   call $start:new
  )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $null (; 4 ;)
   unreachable
  )
 )

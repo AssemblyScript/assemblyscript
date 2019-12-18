@@ -1,6 +1,6 @@
 (module
- (type $FUNCSIG$viiddddd (func (param i32 i32 f64 f64 f64 f64 f64)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
  (data (i32.const 8) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00z\00e\00r\00o\00_\00i\00m\00p\00l\00i\00c\00i\00t")
@@ -14,7 +14,7 @@
  (global $~lib/started (mut i32) (i32.const 0))
  (export "__start" (func $start))
  (export "memory" (memory $0))
- (func $start:std/trace (; 1 ;) (type $FUNCSIG$v)
+ (func $start:std/trace (; 1 ;)
   i32.const 24
   i32.const 0
   f64.const 0
@@ -80,7 +80,7 @@
   f64.const 5.5
   call $~lib/builtins/trace
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;)
   global.get $~lib/started
   if
    return
@@ -90,7 +90,7 @@
   end
   call $start:std/trace
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;)
   unreachable
  )
 )

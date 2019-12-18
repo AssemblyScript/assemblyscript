@@ -1,8 +1,8 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -22,7 +22,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -76,7 +76,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -129,10 +129,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $constructor/EmptyCtor#constructor (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtor#constructor (; 3 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -144,7 +144,7 @@
   end
   local.get $0
  )
- (func $constructor/EmptyCtorWithFieldInit#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtorWithFieldInit#constructor (; 4 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -159,7 +159,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/EmptyCtorWithFieldNoInit#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/EmptyCtorWithFieldNoInit#constructor (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -174,7 +174,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/None#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/None#constructor (; 6 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -186,7 +186,7 @@
   end
   local.get $0
  )
- (func $constructor/JustFieldInit#constructor (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/JustFieldInit#constructor (; 7 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -201,7 +201,7 @@
   i32.store
   local.get $0
  )
- (func $constructor/JustFieldNoInit#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/JustFieldNoInit#constructor (; 8 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -216,11 +216,11 @@
   i32.store
   local.get $0
  )
- (func $constructor/CtorReturns#constructor (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorReturns#constructor (; 9 ;) (param $0 i32) (result i32)
   i32.const 0
   call $~lib/rt/stub/__retain
  )
- (func $constructor/CtorConditionallyReturns#constructor (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorConditionallyReturns#constructor (; 10 ;) (param $0 i32) (result i32)
   global.get $constructor/b
   if
    i32.const 0
@@ -238,7 +238,7 @@
   end
   local.get $0
  )
- (func $constructor/CtorAllocates#constructor (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorAllocates#constructor (; 11 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -252,7 +252,7 @@
   drop
   local.get $0
  )
- (func $constructor/CtorConditionallyAllocates#constructor (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $constructor/CtorConditionallyAllocates#constructor (; 12 ;) (param $0 i32) (result i32)
   global.get $constructor/b
   if
    local.get $0
@@ -278,7 +278,7 @@
   end
   local.get $0
  )
- (func $start:constructor (; 13 ;) (type $FUNCSIG$v)
+ (func $start:constructor (; 13 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -320,10 +320,10 @@
   call $constructor/CtorConditionallyAllocates#constructor
   global.set $constructor/ctorConditionallyAllocates
  )
- (func $start (; 14 ;) (type $FUNCSIG$v)
+ (func $start (; 14 ;)
   call $start:constructor
  )
- (func $null (; 15 ;) (type $FUNCSIG$v)
+ (func $null (; 15 ;)
   unreachable
  )
 )

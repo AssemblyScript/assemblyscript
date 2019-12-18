@@ -1,6 +1,8 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00s\00t\00d\00/\00p\00o\00i\00n\00t\00e\00r\00.\00t\00s")
@@ -230,7 +232,7 @@
    end
   end
  )
- (func $start:std/pointer (; 3 ;) (type $FUNCSIG$v)
+ (func $start:std/pointer (; 3 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 8
@@ -605,10 +607,10 @@
    unreachable
   end
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;)
   call $start:std/pointer
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 5 ;)
   unreachable
  )
 )
