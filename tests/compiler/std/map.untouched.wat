@@ -11,12 +11,21 @@
  (type $FUNCSIG$ij (func (param i64) (result i32)))
  (type $FUNCSIG$iiji (func (param i32 i64 i32) (result i32)))
  (type $FUNCSIG$viji (func (param i32 i64 i32)))
+ (type $FUNCSIG$viij (func (param i32 i32 i64)))
+ (type $FUNCSIG$jii (func (param i32 i32) (result i64)))
+ (type $FUNCSIG$vijj (func (param i32 i64 i64)))
  (type $FUNCSIG$iif (func (param i32 f32) (result i32)))
  (type $FUNCSIG$iifi (func (param i32 f32 i32) (result i32)))
  (type $FUNCSIG$vifi (func (param i32 f32 i32)))
+ (type $FUNCSIG$viif (func (param i32 i32 f32)))
+ (type $FUNCSIG$fii (func (param i32 i32) (result f32)))
+ (type $FUNCSIG$viff (func (param i32 f32 f32)))
  (type $FUNCSIG$iid (func (param i32 f64) (result i32)))
  (type $FUNCSIG$iidi (func (param i32 f64 i32) (result i32)))
  (type $FUNCSIG$vidi (func (param i32 f64 i32)))
+ (type $FUNCSIG$viid (func (param i32 i32 f64)))
+ (type $FUNCSIG$dii (func (param i32 i32) (result f64)))
+ (type $FUNCSIG$vidd (func (param i32 f64 f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
@@ -33,7 +42,8 @@
  (data (i32.const 360) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00a\00p\00.\00t\00s\00")
  (data (i32.const 400) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00K\00e\00y\00 \00d\00o\00e\00s\00 \00n\00o\00t\00 \00e\00x\00i\00s\00t\00")
  (data (i32.const 456) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00~\00l\00i\00b\00/\00m\00a\00p\00.\00t\00s\00")
- (data (i32.const 496) "\0d\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\98D\08\00\00\00\00\00\98D\00\00\00\00\00\00\98\84\08\00\00\00\00\00\98\84\00\00\00\00\00\00\98\04\t\00\00\00\00\00\98\04\01\00\00\00\00\00\98\04\n\00\00\00\00\00\98\04\02\00\00\00\00\00\98\04\19\00\00\00\00\00\98\04\1a\00\00\00\00\00")
+ (data (i32.const 496) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 544) " \00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\98D\08\00\00\00\00\003\04\00\00\02\00\00\00\93\04\00\00\02\00\00\008D\08\00\00\00\00\00\98\04\t\00\00\00\00\00\98D\00\00\00\00\00\003\00\00\00\02\00\00\008@\00\00\00\00\00\00\98\84\08\00\00\00\00\00S\04\00\00\02\00\00\00X\84\08\00\00\00\00\00\98\84\00\00\00\00\00\00S\00\00\00\02\00\00\00X\80\00\00\00\00\00\00\98\04\01\00\00\00\00\00\93\00\00\00\02\00\00\00\98\00\01\00\00\00\00\00\98\04\n\00\00\00\00\00\13\05\00\00\02\00\00\00\18\05\n\00\00\00\00\00\98\04\02\00\00\00\00\00\13\01\00\00\02\00\00\00\18\01\02\00\00\00\00\00\98\04\19\00\00\00\00\00\93\0c\00\00\02\00\00\00\98\0c\19\00\00\00\00\00\98\04\1a\00\00\00\00\00\13\0d\00\00\02\00\00\00\18\0d\1a\00\00\00\00\00")
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -43,8 +53,8 @@
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 496))
- (global $~lib/heap/__heap_base i32 (i32.const 604))
+ (global $~lib/rt/__rtti_base i32 (i32.const 544))
+ (global $~lib/heap/__heap_base i32 (i32.const 804))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
@@ -4015,14 +4025,1495 @@
   local.get $0
   i32.load offset=20
  )
- (func $~lib/map/Map<i8,i32>#delete (; 42 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 42 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $1
+  i32.const 1073741808
+  local.get $2
+  i32.shr_u
+  i32.gt_u
+  if
+   i32.const 176
+   i32.const 224
+   i32.const 23
+   i32.const 56
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  local.get $2
+  i32.shl
+  local.tee $1
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $3
+  local.get $3
+  i32.const 0
+  local.get $1
+  call $~lib/memory/memory.fill
+  local.get $0
+  i32.eqz
+  if
+   i32.const 12
+   i32.const 2
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  local.tee $4
+  local.get $3
+  local.tee $5
+  local.get $4
+  i32.load
+  local.tee $6
+  i32.ne
+  if
+   local.get $5
+   call $~lib/rt/pure/__retain
+   local.set $5
+   local.get $6
+   call $~lib/rt/pure/__release
+  end
+  local.get $5
+  i32.store
+  local.get $0
+  local.get $3
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  i32.store offset=8
+  local.get $0
+ )
+ (func $~lib/array/Array<i8>#constructor (; 43 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 4
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/rt/tlsf/reallocateBlock (; 44 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  local.get $2
+  call $~lib/rt/tlsf/prepareSize
+  local.set $3
+  local.get $1
+  i32.load
+  local.set $4
+  local.get $4
+  i32.const 1
+  i32.and
+  i32.eqz
+  if (result i32)
+   local.get $1
+   i32.load offset=4
+   i32.const -268435456
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 521
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  i32.const -4
+  i32.and
+  i32.le_u
+  if
+   local.get $0
+   local.get $1
+   local.get $3
+   call $~lib/rt/tlsf/prepareBlock
+   local.get $1
+   local.get $2
+   i32.store offset=12
+   local.get $1
+   return
+  end
+  local.get $1
+  local.set $5
+  local.get $5
+  i32.const 16
+  i32.add
+  local.get $5
+  i32.load
+  i32.const 3
+  i32.const -1
+  i32.xor
+  i32.and
+  i32.add
+  local.set $6
+  local.get $6
+  i32.load
+  local.set $7
+  local.get $7
+  i32.const 1
+  i32.and
+  if
+   local.get $4
+   i32.const 3
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.const 16
+   i32.add
+   local.get $7
+   i32.const 3
+   i32.const -1
+   i32.xor
+   i32.and
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $3
+   i32.ge_u
+   if
+    local.get $0
+    local.get $6
+    call $~lib/rt/tlsf/removeBlock
+    local.get $1
+    local.get $4
+    i32.const 3
+    i32.and
+    local.get $5
+    i32.or
+    i32.store
+    local.get $1
+    local.get $2
+    i32.store offset=12
+    local.get $0
+    local.get $1
+    local.get $3
+    call $~lib/rt/tlsf/prepareBlock
+    local.get $1
+    return
+   end
+  end
+  local.get $0
+  local.get $2
+  call $~lib/rt/tlsf/allocateBlock
+  local.set $8
+  local.get $8
+  local.get $1
+  i32.load offset=8
+  i32.store offset=8
+  local.get $8
+  i32.const 16
+  i32.add
+  local.get $1
+  i32.const 16
+  i32.add
+  local.get $2
+  call $~lib/memory/memory.copy
+  local.get $1
+  local.get $4
+  i32.const 1
+  i32.or
+  i32.store
+  local.get $0
+  local.get $1
+  call $~lib/rt/tlsf/insertBlock
+  local.get $1
+  call $~lib/rt/rtrace/onfree
+  local.get $8
+ )
+ (func $~lib/rt/tlsf/__realloc (; 45 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  global.get $~lib/rt/tlsf/ROOT
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 585
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 0
+  i32.ne
+  if (result i32)
+   local.get $0
+   i32.const 15
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 24
+   i32.const 586
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/rt/tlsf/ROOT
+  local.get $0
+  i32.const 16
+  i32.sub
+  local.get $1
+  call $~lib/rt/tlsf/reallocateBlock
+  i32.const 16
+  i32.add
+ )
+ (func $~lib/array/ensureSize (; 46 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $3
+  local.get $1
+  local.get $3
+  local.get $2
+  i32.shr_u
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 1073741808
+   local.get $2
+   i32.shr_u
+   i32.gt_u
+   if
+    i32.const 176
+    i32.const 512
+    i32.const 14
+    i32.const 47
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   i32.load
+   local.set $4
+   local.get $1
+   local.get $2
+   i32.shl
+   local.set $5
+   local.get $4
+   local.get $5
+   call $~lib/rt/tlsf/__realloc
+   local.set $6
+   local.get $6
+   local.get $3
+   i32.add
+   i32.const 0
+   local.get $5
+   local.get $3
+   i32.sub
+   call $~lib/memory/memory.fill
+   local.get $6
+   local.get $4
+   i32.ne
+   if
+    local.get $0
+    local.get $6
+    call $~lib/rt/pure/__retain
+    i32.store
+    local.get $0
+    local.get $6
+    i32.store offset=4
+   end
+   local.get $0
+   local.get $5
+   i32.store offset=8
+  end
+ )
+ (func $~lib/array/Array<i8>#__unchecked_set (; 47 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 0
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store8
+ )
+ (func $~lib/array/Array<i8>#__set (; 48 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 0
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<i8>#__unchecked_set
+ )
+ (func $~lib/array/Array<i8>#set:length (; 49 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<i8,i32>#keys (; 50 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i8>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load8_s
+     call $~lib/array/Array<i8>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i8>#set:length
+  local.get $3
+ )
+ (func $~lib/array/Array<i32>#constructor (; 51 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 5
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/array/Array<i32>#__unchecked_set (; 52 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store
+ )
+ (func $~lib/array/Array<i32>#__set (; 53 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 2
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<i32>#__unchecked_set
+ )
+ (func $~lib/array/Array<i32>#set:length (; 54 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<i8,i32>#values (; 55 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<i8,i8>#clear (; 56 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 32
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<i8,i8>#constructor (; 57 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 6
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<i8,i8>#clear
+  local.get $0
+ )
+ (func $~lib/map/Map<i32,i32>#clear (; 58 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 48
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<i32,i32>#constructor (; 59 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 7
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<i32,i32>#clear
+  local.get $0
+ )
+ (func $~lib/array/Array<i8>#get:length (; 60 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<i8>#__unchecked_get (; 61 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 0
+  i32.shl
+  i32.add
+  i32.load8_s
+ )
+ (func $~lib/array/Array<i8>#__get (; 62 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i8>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/array/Array<i32>#__unchecked_get (; 63 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
+ (func $~lib/array/Array<i32>#__get (; 64 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i32>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/map/Map<i8,i8>#find (; 65 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=4
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     i32.load8_s
+     local.get $1
+     i32.const 24
+     i32.shl
+     i32.const 24
+     i32.shr_s
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=4
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<i8,i8>#rehash (; 66 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 8
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 8
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=4
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     i32.load8_s
+     i32.store8
+     local.get $10
+     local.get $9
+     i32.load8_s offset=1
+     i32.store8 offset=1
+     block $~lib/util/hash/HASH<i8>|inlined.5 (result i32)
+      local.get $9
+      i32.load8_s
+      local.set $11
+      local.get $11
+      call $~lib/util/hash/hash8
+      br $~lib/util/hash/HASH<i8>|inlined.5
+     end
+     local.get $1
+     i32.and
+     local.set $11
+     local.get $3
+     local.get $11
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $12
+     local.get $10
+     local.get $12
+     i32.load
+     i32.store offset=4
+     local.get $12
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 8
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 8
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $12
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $11
+   call $~lib/rt/pure/__retain
+   local.set $11
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $11
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<i8,i8>#set (; 67 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  block $~lib/util/hash/HASH<i8>|inlined.4 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
+   call $~lib/util/hash/hash8
+   br $~lib/util/hash/HASH<i8>|inlined.4
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<i8,i8>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   i32.store8 offset=1
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<i8,i8>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $3
+   local.get $3
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $6
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $6
+   i32.const 8
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   i32.store8
+   local.get $5
+   local.get $2
+   i32.store8 offset=1
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $6
+   local.get $5
+   local.get $6
+   i32.load
+   i32.store offset=4
+   local.get $6
+   local.get $5
+   i32.store
+   local.get $3
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/util/hash/hash32 (; 68 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  i32.const -2128831035
+  local.set $1
+  local.get $1
+  local.get $0
+  i32.const 255
+  i32.and
+  i32.xor
+  i32.const 16777619
+  i32.mul
+  local.set $1
+  local.get $1
+  local.get $0
+  i32.const 8
+  i32.shr_u
+  i32.const 255
+  i32.and
+  i32.xor
+  i32.const 16777619
+  i32.mul
+  local.set $1
+  local.get $1
+  local.get $0
+  i32.const 16
+  i32.shr_u
+  i32.const 255
+  i32.and
+  i32.xor
+  i32.const 16777619
+  i32.mul
+  local.set $1
+  local.get $1
+  local.get $0
+  i32.const 24
+  i32.shr_u
+  i32.xor
+  i32.const 16777619
+  i32.mul
+  local.set $1
+  local.get $1
+ )
+ (func $~lib/map/Map<i32,i32>#find (; 69 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     i32.load
+     local.get $1
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=8
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<i32,i32>#rehash (; 70 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 12
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 12
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     i32.load
+     i32.store
+     local.get $10
+     local.get $9
+     i32.load offset=4
+     i32.store offset=4
+     block $~lib/util/hash/HASH<i32>|inlined.1 (result i32)
+      local.get $9
+      i32.load
+      local.set $11
+      local.get $11
+      call $~lib/util/hash/hash32
+      br $~lib/util/hash/HASH<i32>|inlined.1
+     end
+     local.get $1
+     i32.and
+     local.set $11
+     local.get $3
+     local.get $11
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $12
+     local.get $10
+     local.get $12
+     i32.load
+     i32.store offset=8
+     local.get $12
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 12
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 12
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $12
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $11
+   call $~lib/rt/pure/__retain
+   local.set $11
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $11
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<i32,i32>#set (; 71 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  block $~lib/util/hash/HASH<i32>|inlined.0 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   call $~lib/util/hash/hash32
+   br $~lib/util/hash/HASH<i32>|inlined.0
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<i32,i32>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   i32.store offset=4
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<i32,i32>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $3
+   local.get $3
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $6
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $6
+   i32.const 12
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   i32.store
+   local.get $5
+   local.get $2
+   i32.store offset=4
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $6
+   local.get $5
+   local.get $6
+   i32.load
+   i32.store offset=8
+   local.get $6
+   local.get $5
+   i32.store
+   local.get $3
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/map/Map<i8,i8>#get:size (; 72 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<i32,i32>#get:size (; 73 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<i8,i32>#delete (; 74 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i8>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<i8>|inlined.6 (result i32)
    local.get $1
    local.set $2
    local.get $2
@@ -4031,7 +5522,7 @@
    i32.const 24
    i32.shr_s
    call $~lib/util/hash/hash8
-   br $~lib/util/hash/HASH<i8>|inlined.4
+   br $~lib/util/hash/HASH<i8>|inlined.6
   end
   call $~lib/map/Map<i8,i32>#find
   local.set $3
@@ -4091,9 +5582,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<i8,i32> (; 43 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<i8,i32> (; 75 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<i8,i32>#constructor
   local.set $0
@@ -4286,32 +5783,134 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<i8,i32>#keys
+  local.set $1
+  local.get $0
+  call $~lib/map/Map<i8,i32>#values
+  local.set $2
+  i32.const 0
+  call $~lib/map/Map<i8,i8>#constructor
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $4
   block $break|2
    i32.const 0
-   local.set $1
+   local.set $5
    loop $loop|2
+    local.get $5
     local.get $1
-    i32.const 50
+    call $~lib/array/Array<i8>#get:length
     i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
     local.get $1
+    local.get $5
+    call $~lib/array/Array<i8>#__get
+    local.set $6
+    local.get $2
+    local.get $5
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $6
     call $~lib/map/Map<i8,i32>#has
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 25
+     i32.const 31
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i8,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 32
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $3
+    local.get $6
+    local.get $6
+    call $~lib/map/Map<i8,i8>#set
+    local.get $4
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|2
+   end
+   unreachable
+  end
+  local.get $3
+  call $~lib/map/Map<i8,i8>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|3
+   i32.const 0
+   local.set $5
+   loop $loop|3
+    local.get $5
+    i32.const 50
+    i32.lt_s
+    i32.eqz
+    br_if $break|3
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i8,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 41
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
     call $~lib/map/Map<i8,i32>#get
     i32.const 20
-    local.get $1
+    local.get $5
     i32.const 24
     i32.shl
     i32.const 24
@@ -4322,114 +5921,32 @@
     if
      i32.const 0
      i32.const 376
-     i32.const 26
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<i8,i32>#delete
     drop
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<i8,i32>#has
     i32.eqz
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 28
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $5
     i32.const 1
     i32.add
-    local.set $1
-    br $loop|2
-   end
-   unreachable
-  end
-  local.get $0
-  call $~lib/map/Map<i8,i32>#get:size
-  i32.const 50
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 376
-   i32.const 30
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  block $break|3
-   i32.const 0
-   local.set $1
-   loop $loop|3
-    local.get $1
-    i32.const 50
-    i32.lt_s
-    i32.eqz
-    br_if $break|3
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i8,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 34
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    i32.const 10
-    local.get $1
-    i32.const 24
-    i32.shl
-    i32.const 24
-    i32.shr_s
-    i32.add
-    call $~lib/map/Map<i8,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i8,i32>#has
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 36
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i8,i32>#delete
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i8,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 38
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    i32.const 1
-    i32.add
-    local.set $1
+    local.set $5
     br $loop|3
    end
    unreachable
@@ -4442,7 +5959,89 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   i32.const 0
+   local.set $5
+   loop $loop|4
+    local.get $5
+    i32.const 50
+    i32.lt_s
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i8,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    i32.const 10
+    local.get $5
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.add
+    call $~lib/map/Map<i8,i32>#set
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i8,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i8,i32>#delete
+    drop
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i8,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<i8,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -4457,15 +6056,23 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u8,i32>#clear (; 44 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<u8,i32>#clear (; 76 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -4505,12 +6112,12 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<u8,i32>#constructor (; 45 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#constructor (; 77 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 24
-   i32.const 4
+   i32.const 8
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -4537,7 +6144,7 @@
   call $~lib/map/Map<u8,i32>#clear
   local.get $0
  )
- (func $~lib/map/Map<u8,i32>#find (; 46 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#find (; 78 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.load
@@ -4587,7 +6194,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<u8,i32>#has (; 47 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#has (; 79 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -4604,7 +6211,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u8,i32>#rehash (; 48 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#rehash (; 80 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4761,7 +6368,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u8,i32>#set (; 49 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u8,i32>#set (; 81 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4866,7 +6473,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $~lib/map/Map<u8,i32>#get (; 50 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#get (; 82 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -4895,25 +6502,655 @@
   local.get $3
   i32.load offset=4
  )
- (func $~lib/map/Map<u8,i32>#get:size (; 51 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#get:size (; 83 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/map/Map<u8,i32>#delete (; 52 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#constructor (; 84 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 9
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/array/Array<u8>#__unchecked_set (; 85 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 0
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store8
+ )
+ (func $~lib/array/Array<u8>#__set (; 86 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 0
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u8>#__unchecked_set
+ )
+ (func $~lib/array/Array<u8>#set:length (; 87 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<u8,i32>#keys (; 88 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<u8>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load8_u
+     call $~lib/array/Array<u8>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<u8>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<u8,i32>#values (; 89 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<u8,u8>#clear (; 90 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 32
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<u8,u8>#constructor (; 91 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 10
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<u8,u8>#clear
+  local.get $0
+ )
+ (func $~lib/array/Array<u8>#get:length (; 92 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<u8>#__unchecked_get (; 93 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 0
+  i32.shl
+  i32.add
+  i32.load8_u
+ )
+ (func $~lib/array/Array<u8>#__get (; 94 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u8>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/map/Map<u8,u8>#find (; 95 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=4
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     i32.load8_u
+     local.get $1
+     i32.const 255
+     i32.and
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=4
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<u8,u8>#rehash (; 96 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 8
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 8
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=4
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     i32.load8_u
+     i32.store8
+     local.get $10
+     local.get $9
+     i32.load8_u offset=1
+     i32.store8 offset=1
+     block $~lib/util/hash/HASH<u8>|inlined.5 (result i32)
+      local.get $9
+      i32.load8_u
+      local.set $11
+      local.get $11
+      call $~lib/util/hash/hash8
+      br $~lib/util/hash/HASH<u8>|inlined.5
+     end
+     local.get $1
+     i32.and
+     local.set $11
+     local.get $3
+     local.get $11
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $12
+     local.get $10
+     local.get $12
+     i32.load
+     i32.store offset=4
+     local.get $12
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 8
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 8
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $12
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $11
+   call $~lib/rt/pure/__retain
+   local.set $11
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $11
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<u8,u8>#set (; 97 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  block $~lib/util/hash/HASH<u8>|inlined.4 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   i32.const 255
+   i32.and
+   call $~lib/util/hash/hash8
+   br $~lib/util/hash/HASH<u8>|inlined.4
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<u8,u8>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   i32.store8 offset=1
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<u8,u8>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $3
+   local.get $3
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $6
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $6
+   i32.const 8
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   i32.store8
+   local.get $5
+   local.get $2
+   i32.store8 offset=1
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $6
+   local.get $5
+   local.get $6
+   i32.load
+   i32.store offset=4
+   local.get $6
+   local.get $5
+   i32.store
+   local.get $3
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/map/Map<u8,u8>#get:size (; 98 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<u8,i32>#delete (; 99 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u8>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<u8>|inlined.6 (result i32)
    local.get $1
    local.set $2
    local.get $2
    i32.const 255
    i32.and
    call $~lib/util/hash/hash8
-   br $~lib/util/hash/HASH<u8>|inlined.4
+   br $~lib/util/hash/HASH<u8>|inlined.6
   end
   call $~lib/map/Map<u8,i32>#find
   local.set $3
@@ -4973,9 +7210,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<u8,i32> (; 53 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<u8,i32> (; 100 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<u8,i32>#constructor
   local.set $0
@@ -5158,32 +7401,134 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<u8,i32>#keys
+  local.set $1
+  local.get $0
+  call $~lib/map/Map<u8,i32>#values
+  local.set $2
+  i32.const 0
+  call $~lib/map/Map<u8,u8>#constructor
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $4
   block $break|2
    i32.const 0
-   local.set $1
+   local.set $5
    loop $loop|2
+    local.get $5
     local.get $1
-    i32.const 50
-    i32.lt_u
+    call $~lib/array/Array<u8>#get:length
+    i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
     local.get $1
+    local.get $5
+    call $~lib/array/Array<u8>#__get
+    local.set $6
+    local.get $2
+    local.get $5
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $6
     call $~lib/map/Map<u8,i32>#has
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 25
+     i32.const 31
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<u8,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 32
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $3
+    local.get $6
+    local.get $6
+    call $~lib/map/Map<u8,u8>#set
+    local.get $4
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|2
+   end
+   unreachable
+  end
+  local.get $3
+  call $~lib/map/Map<u8,u8>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|3
+   i32.const 0
+   local.set $5
+   loop $loop|3
+    local.get $5
+    i32.const 50
+    i32.lt_u
+    i32.eqz
+    br_if $break|3
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u8,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 41
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
     call $~lib/map/Map<u8,i32>#get
     i32.const 20
-    local.get $1
+    local.get $5
     i32.const 255
     i32.and
     i32.add
@@ -5192,112 +7537,32 @@
     if
      i32.const 0
      i32.const 376
-     i32.const 26
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<u8,i32>#delete
     drop
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<u8,i32>#has
     i32.eqz
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 28
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $5
     i32.const 1
     i32.add
-    local.set $1
-    br $loop|2
-   end
-   unreachable
-  end
-  local.get $0
-  call $~lib/map/Map<u8,i32>#get:size
-  i32.const 50
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 376
-   i32.const 30
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  block $break|3
-   i32.const 0
-   local.set $1
-   loop $loop|3
-    local.get $1
-    i32.const 50
-    i32.lt_u
-    i32.eqz
-    br_if $break|3
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u8,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 34
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    i32.const 10
-    local.get $1
-    i32.const 255
-    i32.and
-    i32.add
-    call $~lib/map/Map<u8,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u8,i32>#has
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 36
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u8,i32>#delete
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u8,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 38
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    i32.const 1
-    i32.add
-    local.set $1
+    local.set $5
     br $loop|3
    end
    unreachable
@@ -5310,7 +7575,87 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   i32.const 0
+   local.set $5
+   loop $loop|4
+    local.get $5
+    i32.const 50
+    i32.lt_u
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u8,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    i32.const 10
+    local.get $5
+    i32.const 255
+    i32.and
+    i32.add
+    call $~lib/map/Map<u8,i32>#set
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u8,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u8,i32>#delete
+    drop
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u8,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<u8,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -5325,15 +7670,23 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i16,i32>#clear (; 54 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<i16,i32>#clear (; 101 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -5373,12 +7726,12 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<i16,i32>#constructor (; 55 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#constructor (; 102 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 24
-   i32.const 5
+   i32.const 11
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -5405,7 +7758,7 @@
   call $~lib/map/Map<i16,i32>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash16 (; 56 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash16 (; 103 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -5427,7 +7780,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/map/Map<i16,i32>#find (; 57 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#find (; 104 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.load
@@ -5479,7 +7832,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i16,i32>#has (; 58 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#has (; 105 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -5498,7 +7851,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i16,i32>#rehash (; 59 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#rehash (; 106 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5655,7 +8008,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i16,i32>#set (; 60 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<i16,i32>#set (; 107 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5762,7 +8115,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $~lib/map/Map<i16,i32>#get (; 61 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#get (; 108 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -5793,18 +8146,652 @@
   local.get $3
   i32.load offset=4
  )
- (func $~lib/map/Map<i16,i32>#get:size (; 62 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#get:size (; 109 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/map/Map<i16,i32>#delete (; 63 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i16>#constructor (; 110 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 12
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 1
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/array/Array<i16>#__unchecked_set (; 111 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store16
+ )
+ (func $~lib/array/Array<i16>#__set (; 112 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 1
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<i16>#__unchecked_set
+ )
+ (func $~lib/array/Array<i16>#set:length (; 113 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 1
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<i16,i32>#keys (; 114 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i16>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load16_s
+     call $~lib/array/Array<i16>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i16>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<i16,i32>#values (; 115 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<i16,i16>#clear (; 116 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 32
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<i16,i16>#constructor (; 117 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 13
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<i16,i16>#clear
+  local.get $0
+ )
+ (func $~lib/array/Array<i16>#get:length (; 118 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<i16>#__unchecked_get (; 119 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_s
+ )
+ (func $~lib/array/Array<i16>#__get (; 120 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i16>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/map/Map<i16,i16>#find (; 121 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=4
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     i32.load16_s
+     local.get $1
+     i32.const 16
+     i32.shl
+     i32.const 16
+     i32.shr_s
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=4
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<i16,i16>#rehash (; 122 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 8
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 8
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=4
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     i32.load16_s
+     i32.store16
+     local.get $10
+     local.get $9
+     i32.load16_s offset=2
+     i32.store16 offset=2
+     block $~lib/util/hash/HASH<i16>|inlined.5 (result i32)
+      local.get $9
+      i32.load16_s
+      local.set $11
+      local.get $11
+      call $~lib/util/hash/hash16
+      br $~lib/util/hash/HASH<i16>|inlined.5
+     end
+     local.get $1
+     i32.and
+     local.set $11
+     local.get $3
+     local.get $11
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $12
+     local.get $10
+     local.get $12
+     i32.load
+     i32.store offset=4
+     local.get $12
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 8
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 8
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $12
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $11
+   call $~lib/rt/pure/__retain
+   local.set $11
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $11
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<i16,i16>#set (; 123 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  block $~lib/util/hash/HASH<i16>|inlined.4 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   i32.const 16
+   i32.shl
+   i32.const 16
+   i32.shr_s
+   call $~lib/util/hash/hash16
+   br $~lib/util/hash/HASH<i16>|inlined.4
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<i16,i16>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   i32.store16 offset=2
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<i16,i16>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $3
+   local.get $3
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $6
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $6
+   i32.const 8
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   i32.store16
+   local.get $5
+   local.get $2
+   i32.store16 offset=2
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $6
+   local.get $5
+   local.get $6
+   i32.load
+   i32.store offset=4
+   local.get $6
+   local.get $5
+   i32.store
+   local.get $3
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/map/Map<i16,i16>#get:size (; 124 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<i16,i32>#delete (; 125 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i16>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<i16>|inlined.6 (result i32)
    local.get $1
    local.set $2
    local.get $2
@@ -5813,7 +8800,7 @@
    i32.const 16
    i32.shr_s
    call $~lib/util/hash/hash16
-   br $~lib/util/hash/HASH<i16>|inlined.4
+   br $~lib/util/hash/HASH<i16>|inlined.6
   end
   call $~lib/map/Map<i16,i32>#find
   local.set $3
@@ -5873,9 +8860,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<i16,i32> (; 64 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<i16,i32> (; 126 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<i16,i32>#constructor
   local.set $0
@@ -6068,32 +9061,134 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<i16,i32>#keys
+  local.set $1
+  local.get $0
+  call $~lib/map/Map<i16,i32>#values
+  local.set $2
+  i32.const 0
+  call $~lib/map/Map<i16,i16>#constructor
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $4
   block $break|2
    i32.const 0
-   local.set $1
+   local.set $5
    loop $loop|2
+    local.get $5
     local.get $1
-    i32.const 50
+    call $~lib/array/Array<i16>#get:length
     i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
     local.get $1
+    local.get $5
+    call $~lib/array/Array<i16>#__get
+    local.set $6
+    local.get $2
+    local.get $5
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $6
     call $~lib/map/Map<i16,i32>#has
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 25
+     i32.const 31
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i16,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 32
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $3
+    local.get $6
+    local.get $6
+    call $~lib/map/Map<i16,i16>#set
+    local.get $4
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|2
+   end
+   unreachable
+  end
+  local.get $3
+  call $~lib/map/Map<i16,i16>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|3
+   i32.const 0
+   local.set $5
+   loop $loop|3
+    local.get $5
+    i32.const 50
+    i32.lt_s
+    i32.eqz
+    br_if $break|3
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i16,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 41
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
     call $~lib/map/Map<i16,i32>#get
     i32.const 20
-    local.get $1
+    local.get $5
     i32.const 16
     i32.shl
     i32.const 16
@@ -6104,114 +9199,32 @@
     if
      i32.const 0
      i32.const 376
-     i32.const 26
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<i16,i32>#delete
     drop
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<i16,i32>#has
     i32.eqz
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 28
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $5
     i32.const 1
     i32.add
-    local.set $1
-    br $loop|2
-   end
-   unreachable
-  end
-  local.get $0
-  call $~lib/map/Map<i16,i32>#get:size
-  i32.const 50
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 376
-   i32.const 30
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  block $break|3
-   i32.const 0
-   local.set $1
-   loop $loop|3
-    local.get $1
-    i32.const 50
-    i32.lt_s
-    i32.eqz
-    br_if $break|3
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i16,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 34
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    i32.const 10
-    local.get $1
-    i32.const 16
-    i32.shl
-    i32.const 16
-    i32.shr_s
-    i32.add
-    call $~lib/map/Map<i16,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i16,i32>#has
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 36
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i16,i32>#delete
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i16,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 38
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    i32.const 1
-    i32.add
-    local.set $1
+    local.set $5
     br $loop|3
    end
    unreachable
@@ -6224,7 +9237,89 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   i32.const 0
+   local.set $5
+   loop $loop|4
+    local.get $5
+    i32.const 50
+    i32.lt_s
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i16,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    i32.const 10
+    local.get $5
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    i32.add
+    call $~lib/map/Map<i16,i32>#set
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i16,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i16,i32>#delete
+    drop
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i16,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<i16,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -6239,15 +9334,23 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u16,i32>#clear (; 65 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<u16,i32>#clear (; 127 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -6287,12 +9390,12 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<u16,i32>#constructor (; 66 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#constructor (; 128 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 24
-   i32.const 6
+   i32.const 14
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -6319,7 +9422,7 @@
   call $~lib/map/Map<u16,i32>#clear
   local.get $0
  )
- (func $~lib/map/Map<u16,i32>#find (; 67 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#find (; 129 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.load
@@ -6369,7 +9472,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<u16,i32>#has (; 68 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#has (; 130 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -6386,7 +9489,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u16,i32>#rehash (; 69 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#rehash (; 131 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6543,7 +9646,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u16,i32>#set (; 70 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u16,i32>#set (; 132 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6648,7 +9751,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $~lib/map/Map<u16,i32>#get (; 71 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#get (; 133 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -6677,25 +9780,655 @@
   local.get $3
   i32.load offset=4
  )
- (func $~lib/map/Map<u16,i32>#get:size (; 72 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#get:size (; 134 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/map/Map<u16,i32>#delete (; 73 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u16>#constructor (; 135 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 15
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 1
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/array/Array<u16>#__unchecked_set (; 136 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store16
+ )
+ (func $~lib/array/Array<u16>#__set (; 137 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 1
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u16>#__unchecked_set
+ )
+ (func $~lib/array/Array<u16>#set:length (; 138 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 1
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<u16,i32>#keys (; 139 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<u16>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load16_u
+     call $~lib/array/Array<u16>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<u16>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<u16,i32>#values (; 140 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<u16,u16>#clear (; 141 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 32
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<u16,u16>#constructor (; 142 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 16
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<u16,u16>#clear
+  local.get $0
+ )
+ (func $~lib/array/Array<u16>#get:length (; 143 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<u16>#__unchecked_get (; 144 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u
+ )
+ (func $~lib/array/Array<u16>#__get (; 145 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u16>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/map/Map<u16,u16>#find (; 146 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=4
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     i32.load16_u
+     local.get $1
+     i32.const 65535
+     i32.and
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=4
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<u16,u16>#rehash (; 147 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 8
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 8
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=4
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     i32.load16_u
+     i32.store16
+     local.get $10
+     local.get $9
+     i32.load16_u offset=2
+     i32.store16 offset=2
+     block $~lib/util/hash/HASH<u16>|inlined.5 (result i32)
+      local.get $9
+      i32.load16_u
+      local.set $11
+      local.get $11
+      call $~lib/util/hash/hash16
+      br $~lib/util/hash/HASH<u16>|inlined.5
+     end
+     local.get $1
+     i32.and
+     local.set $11
+     local.get $3
+     local.get $11
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $12
+     local.get $10
+     local.get $12
+     i32.load
+     i32.store offset=4
+     local.get $12
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 8
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 8
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $12
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $11
+   call $~lib/rt/pure/__retain
+   local.set $11
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $11
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<u16,u16>#set (; 148 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  block $~lib/util/hash/HASH<u16>|inlined.4 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   i32.const 65535
+   i32.and
+   call $~lib/util/hash/hash16
+   br $~lib/util/hash/HASH<u16>|inlined.4
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<u16,u16>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   i32.store16 offset=2
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<u16,u16>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $3
+   local.get $3
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $6
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $6
+   i32.const 8
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   i32.store16
+   local.get $5
+   local.get $2
+   i32.store16 offset=2
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $6
+   local.get $5
+   local.get $6
+   i32.load
+   i32.store offset=4
+   local.get $6
+   local.get $5
+   i32.store
+   local.get $3
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/map/Map<u16,u16>#get:size (; 149 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<u16,i32>#delete (; 150 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u16>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<u16>|inlined.6 (result i32)
    local.get $1
    local.set $2
    local.get $2
    i32.const 65535
    i32.and
    call $~lib/util/hash/hash16
-   br $~lib/util/hash/HASH<u16>|inlined.4
+   br $~lib/util/hash/HASH<u16>|inlined.6
   end
   call $~lib/map/Map<u16,i32>#find
   local.set $3
@@ -6755,9 +10488,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<u16,i32> (; 74 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<u16,i32> (; 151 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<u16,i32>#constructor
   local.set $0
@@ -6940,32 +10679,134 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<u16,i32>#keys
+  local.set $1
+  local.get $0
+  call $~lib/map/Map<u16,i32>#values
+  local.set $2
+  i32.const 0
+  call $~lib/map/Map<u16,u16>#constructor
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $4
   block $break|2
    i32.const 0
-   local.set $1
+   local.set $5
    loop $loop|2
+    local.get $5
     local.get $1
-    i32.const 50
-    i32.lt_u
+    call $~lib/array/Array<u16>#get:length
+    i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
     local.get $1
+    local.get $5
+    call $~lib/array/Array<u16>#__get
+    local.set $6
+    local.get $2
+    local.get $5
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $6
     call $~lib/map/Map<u16,i32>#has
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 25
+     i32.const 31
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<u16,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 32
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $3
+    local.get $6
+    local.get $6
+    call $~lib/map/Map<u16,u16>#set
+    local.get $4
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|2
+   end
+   unreachable
+  end
+  local.get $3
+  call $~lib/map/Map<u16,u16>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|3
+   i32.const 0
+   local.set $5
+   loop $loop|3
+    local.get $5
+    i32.const 50
+    i32.lt_u
+    i32.eqz
+    br_if $break|3
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u16,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 41
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
     call $~lib/map/Map<u16,i32>#get
     i32.const 20
-    local.get $1
+    local.get $5
     i32.const 65535
     i32.and
     i32.add
@@ -6974,112 +10815,32 @@
     if
      i32.const 0
      i32.const 376
-     i32.const 26
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<u16,i32>#delete
     drop
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<u16,i32>#has
     i32.eqz
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 28
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $5
     i32.const 1
     i32.add
-    local.set $1
-    br $loop|2
-   end
-   unreachable
-  end
-  local.get $0
-  call $~lib/map/Map<u16,i32>#get:size
-  i32.const 50
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 376
-   i32.const 30
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  block $break|3
-   i32.const 0
-   local.set $1
-   loop $loop|3
-    local.get $1
-    i32.const 50
-    i32.lt_u
-    i32.eqz
-    br_if $break|3
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u16,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 34
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    i32.const 10
-    local.get $1
-    i32.const 65535
-    i32.and
-    i32.add
-    call $~lib/map/Map<u16,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u16,i32>#has
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 36
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u16,i32>#delete
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u16,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 38
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    i32.const 1
-    i32.add
-    local.set $1
+    local.set $5
     br $loop|3
    end
    unreachable
@@ -7092,7 +10853,87 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   i32.const 0
+   local.set $5
+   loop $loop|4
+    local.get $5
+    i32.const 50
+    i32.lt_u
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u16,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    i32.const 10
+    local.get $5
+    i32.const 65535
+    i32.and
+    i32.add
+    call $~lib/map/Map<u16,i32>#set
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u16,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u16,i32>#delete
+    drop
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u16,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<u16,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -7107,452 +10948,38 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i32,i32>#clear (; 75 ;) (type $FUNCSIG$vi) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  local.tee $1
-  i32.const 0
-  i32.const 16
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
-  i32.load
-  call $~lib/rt/pure/__release
-  local.get $2
-  i32.store
-  local.get $0
-  i32.const 4
-  i32.const 1
-  i32.sub
-  i32.store offset=4
-  local.get $0
-  local.tee $1
-  i32.const 0
-  i32.const 48
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
-  i32.load offset=8
-  call $~lib/rt/pure/__release
-  local.get $2
-  i32.store offset=8
-  local.get $0
-  i32.const 4
-  i32.store offset=12
-  local.get $0
-  i32.const 0
-  i32.store offset=16
-  local.get $0
-  i32.const 0
-  i32.store offset=20
- )
- (func $~lib/map/Map<i32,i32>#constructor (; 76 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 24
-   i32.const 7
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   local.set $0
-  end
-  local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
-  local.get $0
-  i32.const 0
-  i32.store offset=12
-  local.get $0
-  i32.const 0
-  i32.store offset=16
-  local.get $0
-  i32.const 0
-  i32.store offset=20
-  local.get $0
-  call $~lib/map/Map<i32,i32>#clear
-  local.get $0
- )
- (func $~lib/util/hash/hash32 (; 77 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  (local $1 i32)
-  i32.const -2128831035
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 8
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 16
-  i32.shr_u
-  i32.const 255
-  i32.and
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
-  local.get $0
-  i32.const 24
-  i32.shr_u
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  local.set $1
-  local.get $1
- )
- (func $~lib/map/Map<i32,i32>#find (; 78 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  local.get $0
-  i32.load
-  local.get $2
-  local.get $0
-  i32.load offset=4
-  i32.and
-  i32.const 4
-  i32.mul
-  i32.add
-  i32.load
-  local.set $3
-  block $break|0
-   loop $continue|0
-    local.get $3
-    i32.eqz
-    br_if $break|0
-    local.get $3
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if (result i32)
-     local.get $3
-     i32.load
-     local.get $1
-     i32.eq
-    else
-     i32.const 0
-    end
-    if
-     local.get $3
-     return
-    end
-    local.get $3
-    i32.load offset=8
-    i32.const 1
-    i32.const -1
-    i32.xor
-    i32.and
-    local.set $3
-    br $continue|0
-   end
-   unreachable
-  end
-  i32.const 0
- )
- (func $~lib/map/Map<i32,i32>#has (; 79 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#has (; 152 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i32>|inlined.0 (result i32)
+  block $~lib/util/hash/HASH<i32>|inlined.2 (result i32)
    local.get $1
    local.set $2
    local.get $2
    call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i32>|inlined.0
+   br $~lib/util/hash/HASH<i32>|inlined.2
   end
   call $~lib/map/Map<i32,i32>#find
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i32,i32>#rehash (; 80 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
-  local.get $1
-  i32.const 1
-  i32.add
-  local.set $2
-  i32.const 0
-  local.get $2
-  i32.const 4
-  i32.mul
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $3
-  local.get $2
-  i32.const 8
-  i32.mul
-  i32.const 3
-  i32.div_s
-  local.set $4
-  i32.const 0
-  local.get $4
-  i32.const 12
-  i32.mul
-  call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $5
-  local.get $0
-  i32.load offset=8
-  local.set $6
-  local.get $6
-  local.get $0
-  i32.load offset=16
-  i32.const 12
-  i32.mul
-  i32.add
-  local.set $7
-  local.get $5
-  local.set $8
-  block $break|0
-   loop $continue|0
-    local.get $6
-    local.get $7
-    i32.ne
-    i32.eqz
-    br_if $break|0
-    local.get $6
-    local.set $9
-    local.get $9
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $8
-     local.set $10
-     local.get $10
-     local.get $9
-     i32.load
-     i32.store
-     local.get $10
-     local.get $9
-     i32.load offset=4
-     i32.store offset=4
-     block $~lib/util/hash/HASH<i32>|inlined.2 (result i32)
-      local.get $9
-      i32.load
-      local.set $11
-      local.get $11
-      call $~lib/util/hash/hash32
-      br $~lib/util/hash/HASH<i32>|inlined.2
-     end
-     local.get $1
-     i32.and
-     local.set $11
-     local.get $3
-     local.get $11
-     i32.const 4
-     i32.mul
-     i32.add
-     local.set $12
-     local.get $10
-     local.get $12
-     i32.load
-     i32.store offset=8
-     local.get $12
-     local.get $8
-     i32.store
-     local.get $8
-     i32.const 12
-     i32.add
-     local.set $8
-    end
-    local.get $6
-    i32.const 12
-    i32.add
-    local.set $6
-    br $continue|0
-   end
-   unreachable
-  end
-  local.get $0
-  local.tee $9
-  local.get $3
-  local.tee $10
-  local.get $9
-  i32.load
-  local.tee $12
-  i32.ne
-  if
-   local.get $10
-   call $~lib/rt/pure/__retain
-   local.set $10
-   local.get $12
-   call $~lib/rt/pure/__release
-  end
-  local.get $10
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
-  local.tee $11
-  local.get $9
-  i32.load offset=8
-  local.tee $10
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $10
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store offset=8
-  local.get $0
-  local.get $4
-  i32.store offset=12
-  local.get $0
-  local.get $0
-  i32.load offset=20
-  i32.store offset=16
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
- )
- (func $~lib/map/Map<i32,i32>#set (; 81 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  block $~lib/util/hash/HASH<i32>|inlined.1 (result i32)
-   local.get $1
-   local.set $3
-   local.get $3
-   call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<i32>|inlined.1
-  end
-  local.set $4
-  local.get $0
-  local.get $1
-  local.get $4
-  call $~lib/map/Map<i32,i32>#find
-  local.set $5
-  local.get $5
-  if
-   local.get $5
-   local.get $2
-   i32.store offset=4
-  else
-   local.get $0
-   i32.load offset=16
-   local.get $0
-   i32.load offset=12
-   i32.eq
-   if
-    local.get $0
-    local.get $0
-    i32.load offset=20
-    local.get $0
-    i32.load offset=12
-    i32.const 3
-    i32.mul
-    i32.const 4
-    i32.div_s
-    i32.lt_s
-    if (result i32)
-     local.get $0
-     i32.load offset=4
-    else
-     local.get $0
-     i32.load offset=4
-     i32.const 1
-     i32.shl
-     i32.const 1
-     i32.or
-    end
-    call $~lib/map/Map<i32,i32>#rehash
-   end
-   local.get $0
-   i32.load offset=8
-   call $~lib/rt/pure/__retain
-   local.set $3
-   local.get $3
-   local.get $0
-   local.get $0
-   i32.load offset=16
-   local.tee $6
-   i32.const 1
-   i32.add
-   i32.store offset=16
-   local.get $6
-   i32.const 12
-   i32.mul
-   i32.add
-   local.set $5
-   local.get $5
-   local.get $1
-   i32.store
-   local.get $5
-   local.get $2
-   i32.store offset=4
-   local.get $0
-   local.get $0
-   i32.load offset=20
-   i32.const 1
-   i32.add
-   i32.store offset=20
-   local.get $0
-   i32.load
-   local.get $4
-   local.get $0
-   i32.load offset=4
-   i32.and
-   i32.const 4
-   i32.mul
-   i32.add
-   local.set $6
-   local.get $5
-   local.get $6
-   i32.load
-   i32.store offset=8
-   local.get $6
-   local.get $5
-   i32.store
-   local.get $3
-   call $~lib/rt/pure/__release
-  end
- )
- (func $~lib/map/Map<i32,i32>#get (; 82 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#get (; 153 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -7579,11 +11006,141 @@
   local.get $3
   i32.load offset=4
  )
- (func $~lib/map/Map<i32,i32>#get:size (; 83 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#keys (; 154 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   local.get $0
-  i32.load offset=20
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
  )
- (func $~lib/map/Map<i32,i32>#delete (; 84 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#values (; 155 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/array/Array<i32>#get:length (; 156 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/map/Map<i32,i32>#delete (; 157 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7655,9 +11212,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<i32,i32> (; 85 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<i32,i32> (; 158 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<i32,i32>#constructor
   local.set $0
@@ -7830,142 +11393,166 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<i32,i32>#keys
+  local.set $1
+  local.get $0
+  call $~lib/map/Map<i32,i32>#values
+  local.set $2
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $4
   block $break|2
    i32.const 0
-   local.set $1
+   local.set $5
    loop $loop|2
+    local.get $5
     local.get $1
-    i32.const 50
+    call $~lib/array/Array<i32>#get:length
     i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
     local.get $1
+    local.get $5
+    call $~lib/array/Array<i32>#__get
+    local.set $6
+    local.get $2
+    local.get $5
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $6
     call $~lib/map/Map<i32,i32>#has
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 25
+     i32.const 31
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
-    call $~lib/map/Map<i32,i32>#get
+    local.get $7
     i32.const 20
-    local.get $1
-    i32.add
-    i32.eq
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 26
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i32,i32>#delete
-    drop
-    local.get $0
-    local.get $1
+    i32.sub
     call $~lib/map/Map<i32,i32>#has
     i32.eqz
-    i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 28
+     i32.const 32
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $3
+    local.get $6
+    local.get $6
+    call $~lib/map/Map<i32,i32>#set
+    local.get $4
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $5
     i32.const 1
     i32.add
-    local.set $1
+    local.set $5
     br $loop|2
    end
    unreachable
   end
-  local.get $0
+  local.get $3
   call $~lib/map/Map<i32,i32>#get:size
-  i32.const 50
+  i32.const 100
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 376
-   i32.const 30
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
   block $break|3
    i32.const 0
-   local.set $1
+   local.set $5
    loop $loop|3
-    local.get $1
+    local.get $5
     i32.const 50
     i32.lt_s
     i32.eqz
     br_if $break|3
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<i32,i32>#has
-    i32.eqz
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 34
+     i32.const 41
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
-    i32.const 10
-    local.get $1
+    local.get $5
+    call $~lib/map/Map<i32,i32>#get
+    i32.const 20
+    local.get $5
     i32.add
-    call $~lib/map/Map<i32,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i32,i32>#has
+    i32.eq
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 36
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<i32,i32>#delete
     drop
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<i32,i32>#has
     i32.eqz
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 38
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $5
     i32.const 1
     i32.add
-    local.set $1
+    local.set $5
     br $loop|3
    end
    unreachable
@@ -7978,7 +11565,85 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   i32.const 0
+   local.set $5
+   loop $loop|4
+    local.get $5
+    i32.const 50
+    i32.lt_s
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i32,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    i32.const 10
+    local.get $5
+    i32.add
+    call $~lib/map/Map<i32,i32>#set
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i32,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i32,i32>#delete
+    drop
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<i32,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -7993,15 +11658,23 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u32,i32>#clear (; 86 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<u32,i32>#clear (; 159 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -8041,12 +11714,12 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<u32,i32>#constructor (; 87 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#constructor (; 160 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 24
-   i32.const 8
+   i32.const 17
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -8073,7 +11746,7 @@
   call $~lib/map/Map<u32,i32>#clear
   local.get $0
  )
- (func $~lib/map/Map<u32,i32>#find (; 88 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#find (; 161 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.load
@@ -8121,7 +11794,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<u32,i32>#has (; 89 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#has (; 162 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -8136,7 +11809,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u32,i32>#rehash (; 90 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u32,i32>#rehash (; 163 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8293,7 +11966,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u32,i32>#set (; 91 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<u32,i32>#set (; 164 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8396,7 +12069,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $~lib/map/Map<u32,i32>#get (; 92 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#get (; 165 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -8423,23 +12096,649 @@
   local.get $3
   i32.load offset=4
  )
- (func $~lib/map/Map<u32,i32>#get:size (; 93 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#get:size (; 166 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/map/Map<u32,i32>#delete (; 94 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#constructor (; 167 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 18
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/array/Array<u32>#__unchecked_set (; 168 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store
+ )
+ (func $~lib/array/Array<u32>#__set (; 169 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 2
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u32>#__unchecked_set
+ )
+ (func $~lib/array/Array<u32>#set:length (; 170 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<u32,i32>#keys (; 171 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<u32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load
+     call $~lib/array/Array<u32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<u32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<u32,i32>#values (; 172 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<u32,u32>#clear (; 173 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 48
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<u32,u32>#constructor (; 174 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 19
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<u32,u32>#clear
+  local.get $0
+ )
+ (func $~lib/array/Array<u32>#get:length (; 175 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<u32>#__unchecked_get (; 176 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
+ )
+ (func $~lib/array/Array<u32>#__get (; 177 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u32>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/map/Map<u32,u32>#find (; 178 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     i32.load
+     local.get $1
+     i32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=8
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<u32,u32>#rehash (; 179 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 12
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 12
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     i32.load
+     i32.store
+     local.get $10
+     local.get $9
+     i32.load offset=4
+     i32.store offset=4
+     block $~lib/util/hash/HASH<u32>|inlined.5 (result i32)
+      local.get $9
+      i32.load
+      local.set $11
+      local.get $11
+      call $~lib/util/hash/hash32
+      br $~lib/util/hash/HASH<u32>|inlined.5
+     end
+     local.get $1
+     i32.and
+     local.set $11
+     local.get $3
+     local.get $11
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $12
+     local.get $10
+     local.get $12
+     i32.load
+     i32.store offset=8
+     local.get $12
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 12
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 12
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $12
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $12
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $11
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $11
+   call $~lib/rt/pure/__retain
+   local.set $11
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $11
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<u32,u32>#set (; 180 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  block $~lib/util/hash/HASH<u32>|inlined.4 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   call $~lib/util/hash/hash32
+   br $~lib/util/hash/HASH<u32>|inlined.4
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<u32,u32>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   i32.store offset=4
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<u32,u32>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $3
+   local.get $3
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $6
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $6
+   i32.const 12
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   i32.store
+   local.get $5
+   local.get $2
+   i32.store offset=4
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $6
+   local.get $5
+   local.get $6
+   i32.load
+   i32.store offset=8
+   local.get $6
+   local.get $5
+   i32.store
+   local.get $3
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/map/Map<u32,u32>#get:size (; 181 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<u32,i32>#delete (; 182 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u32>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<u32>|inlined.6 (result i32)
    local.get $1
    local.set $2
    local.get $2
    call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<u32>|inlined.4
+   br $~lib/util/hash/HASH<u32>|inlined.6
   end
   call $~lib/map/Map<u32,i32>#find
   local.set $3
@@ -8499,9 +12798,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<u32,i32> (; 95 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<u32,i32> (; 183 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<u32,i32>#constructor
   local.set $0
@@ -8674,142 +12979,166 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<u32,i32>#keys
+  local.set $1
+  local.get $0
+  call $~lib/map/Map<u32,i32>#values
+  local.set $2
+  i32.const 0
+  call $~lib/map/Map<u32,u32>#constructor
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $4
   block $break|2
    i32.const 0
-   local.set $1
+   local.set $5
    loop $loop|2
+    local.get $5
     local.get $1
-    i32.const 50
-    i32.lt_u
+    call $~lib/array/Array<u32>#get:length
+    i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
     local.get $1
+    local.get $5
+    call $~lib/array/Array<u32>#__get
+    local.set $6
+    local.get $2
+    local.get $5
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $6
     call $~lib/map/Map<u32,i32>#has
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 25
+     i32.const 31
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
-    call $~lib/map/Map<u32,i32>#get
+    local.get $7
     i32.const 20
-    local.get $1
-    i32.add
-    i32.eq
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 26
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u32,i32>#delete
-    drop
-    local.get $0
-    local.get $1
+    i32.sub
     call $~lib/map/Map<u32,i32>#has
     i32.eqz
-    i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 28
+     i32.const 32
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $3
+    local.get $6
+    local.get $6
+    call $~lib/map/Map<u32,u32>#set
+    local.get $4
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $5
     i32.const 1
     i32.add
-    local.set $1
+    local.set $5
     br $loop|2
    end
    unreachable
   end
-  local.get $0
-  call $~lib/map/Map<u32,i32>#get:size
-  i32.const 50
+  local.get $3
+  call $~lib/map/Map<u32,u32>#get:size
+  i32.const 100
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 376
-   i32.const 30
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $4
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
   block $break|3
    i32.const 0
-   local.set $1
+   local.set $5
    loop $loop|3
-    local.get $1
+    local.get $5
     i32.const 50
     i32.lt_u
     i32.eqz
     br_if $break|3
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<u32,i32>#has
-    i32.eqz
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 34
+     i32.const 41
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
-    i32.const 10
-    local.get $1
+    local.get $5
+    call $~lib/map/Map<u32,i32>#get
+    i32.const 20
+    local.get $5
     i32.add
-    call $~lib/map/Map<u32,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u32,i32>#has
+    i32.eq
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 36
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<u32,i32>#delete
     drop
     local.get $0
-    local.get $1
+    local.get $5
     call $~lib/map/Map<u32,i32>#has
     i32.eqz
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 38
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $5
     i32.const 1
     i32.add
-    local.set $1
+    local.set $5
     br $loop|3
    end
    unreachable
@@ -8822,7 +13151,85 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   i32.const 0
+   local.set $5
+   loop $loop|4
+    local.get $5
+    i32.const 50
+    i32.lt_u
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u32,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    i32.const 10
+    local.get $5
+    i32.add
+    call $~lib/map/Map<u32,i32>#set
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u32,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u32,i32>#delete
+    drop
+    local.get $0
+    local.get $5
+    call $~lib/map/Map<u32,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<u32,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -8837,15 +13244,23 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i64,i32>#clear (; 96 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<i64,i32>#clear (; 184 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -8885,12 +13300,12 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<i64,i32>#constructor (; 97 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#constructor (; 185 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 24
-   i32.const 9
+   i32.const 20
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -8917,7 +13332,7 @@
   call $~lib/map/Map<i64,i32>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash64 (; 98 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/hash/hash64 (; 186 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9005,7 +13420,7 @@
   local.set $3
   local.get $3
  )
- (func $~lib/map/Map<i64,i32>#find (; 99 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#find (; 187 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.load
@@ -9053,7 +13468,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i64,i32>#has (; 100 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#has (; 188 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   local.get $0
   local.get $1
@@ -9068,7 +13483,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i64,i32>#rehash (; 101 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i32>#rehash (; 189 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9226,7 +13641,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i64,i32>#set (; 102 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/map/Map<i64,i32>#set (; 190 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i64)
   (local $4 i32)
   (local $5 i32)
@@ -9330,7 +13745,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $~lib/map/Map<i64,i32>#get (; 103 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#get (; 191 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   local.get $0
@@ -9357,11 +13772,639 @@
   local.get $3
   i32.load offset=8
  )
- (func $~lib/map/Map<i64,i32>#get:size (; 104 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#get:size (; 192 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/map/Map<i64,i32>#delete (; 105 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/array/Array<i64>#constructor (; 193 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 21
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 3
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/array/Array<i64>#__unchecked_set (; 194 ;) (type $FUNCSIG$viij) (param $0 i32) (param $1 i32) (param $2 i64)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 3
+  i32.shl
+  i32.add
+  local.get $2
+  i64.store
+ )
+ (func $~lib/array/Array<i64>#__set (; 195 ;) (type $FUNCSIG$viij) (param $0 i32) (param $1 i32) (param $2 i64)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 3
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<i64>#__unchecked_set
+ )
+ (func $~lib/array/Array<i64>#set:length (; 196 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 3
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<i64,i32>#keys (; 197 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i64>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 16
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=12
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i64.load
+     call $~lib/array/Array<i64>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i64>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<i64,i32>#values (; 198 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 16
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=12
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=8
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<i64,i64>#clear (; 199 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 96
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<i64,i64>#constructor (; 200 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 22
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<i64,i64>#clear
+  local.get $0
+ )
+ (func $~lib/array/Array<i64>#get:length (; 201 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<i64>#__unchecked_get (; 202 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 3
+  i32.shl
+  i32.add
+  i64.load
+ )
+ (func $~lib/array/Array<i64>#__get (; 203 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i64)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<i64>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/map/Map<i64,i64>#find (; 204 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=16
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     i64.load
+     local.get $1
+     i64.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=16
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<i64,i64>#rehash (; 205 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i64)
+  (local $12 i32)
+  (local $13 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 24
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 24
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=16
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     i64.load
+     i64.store
+     local.get $10
+     local.get $9
+     i64.load offset=8
+     i64.store offset=8
+     block $~lib/util/hash/HASH<i64>|inlined.5 (result i32)
+      local.get $9
+      i64.load
+      local.set $11
+      local.get $11
+      call $~lib/util/hash/hash64
+      br $~lib/util/hash/HASH<i64>|inlined.5
+     end
+     local.get $1
+     i32.and
+     local.set $12
+     local.get $3
+     local.get $12
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $13
+     local.get $10
+     local.get $13
+     i32.load
+     i32.store offset=16
+     local.get $13
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 24
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 24
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $13
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $13
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $12
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $12
+   call $~lib/rt/pure/__retain
+   local.set $12
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $12
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<i64,i64>#set (; 206 ;) (type $FUNCSIG$vijj) (param $0 i32) (param $1 i64) (param $2 i64)
+  (local $3 i64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  block $~lib/util/hash/HASH<i64>|inlined.4 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   call $~lib/util/hash/hash64
+   br $~lib/util/hash/HASH<i64>|inlined.4
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<i64,i64>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   i64.store offset=8
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<i64,i64>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $6
+   local.get $6
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $7
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $7
+   i32.const 24
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   i64.store
+   local.get $5
+   local.get $2
+   i64.store offset=8
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $7
+   local.get $5
+   local.get $7
+   i32.load
+   i32.store offset=16
+   local.get $7
+   local.get $5
+   i32.store
+   local.get $6
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/map/Map<i64,i64>#get:size (; 207 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<i64,i32>#delete (; 208 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -9369,12 +14412,12 @@
   (local $6 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<i64>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<i64>|inlined.6 (result i32)
    local.get $1
    local.set $2
    local.get $2
    call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<i64>|inlined.4
+   br $~lib/util/hash/HASH<i64>|inlined.6
   end
   call $~lib/map/Map<i64,i32>#find
   local.set $3
@@ -9434,9 +14477,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<i64,i32> (; 106 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<i64,i32> (; 209 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<i64,i32>#constructor
   local.set $0
@@ -9614,78 +14663,105 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<i64,i32>#keys
+  local.set $2
+  local.get $0
+  call $~lib/map/Map<i64,i32>#values
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<i64,i64>#constructor
+  local.set $4
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $5
   block $break|2
-   i64.const 0
-   local.set $1
+   i32.const 0
+   local.set $6
    loop $loop|2
-    local.get $1
-    i64.const 50
-    i64.lt_s
+    local.get $6
+    local.get $2
+    call $~lib/array/Array<i64>#get:length
+    i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i64,i32>#has
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 25
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i64,i32>#get
-    i32.const 20
-    local.get $1
-    i32.wrap_i64
-    i32.add
-    i32.eq
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 26
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i64,i32>#delete
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i64,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 28
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    i64.const 1
-    i64.add
+    local.get $2
+    local.get $6
+    call $~lib/array/Array<i64>#__get
     local.set $1
+    local.get $3
+    local.get $6
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<i64,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 31
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $7
+    i32.const 20
+    i32.sub
+    i64.extend_i32_s
+    call $~lib/map/Map<i64,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 32
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $4
+    local.get $1
+    local.get $1
+    call $~lib/map/Map<i64,i64>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $6
+    i32.const 1
+    i32.add
+    local.set $6
     br $loop|2
    end
    unreachable
   end
-  local.get $0
-  call $~lib/map/Map<i64,i32>#get:size
-  i32.const 50
+  local.get $4
+  call $~lib/map/Map<i64,i64>#get:size
+  i32.const 100
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 376
-   i32.const 30
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $5
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -9703,30 +14779,27 @@
     local.get $1
     call $~lib/map/Map<i64,i32>#has
     i32.eqz
-    i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 34
+     i32.const 41
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
     local.get $1
-    i32.const 10
+    call $~lib/map/Map<i64,i32>#get
+    i32.const 20
     local.get $1
     i32.wrap_i64
     i32.add
-    call $~lib/map/Map<i64,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<i64,i32>#has
+    i32.eq
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 36
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
@@ -9743,7 +14816,7 @@
     if
      i32.const 0
      i32.const 376
-     i32.const 38
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
@@ -9764,7 +14837,86 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   i64.const 0
+   local.set $1
+   loop $loop|4
+    local.get $1
+    i64.const 50
+    i64.lt_s
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<i64,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $1
+    i32.const 10
+    local.get $1
+    i32.wrap_i64
+    i32.add
+    call $~lib/map/Map<i64,i32>#set
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<i64,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<i64,i32>#delete
+    drop
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<i64,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $1
+    i64.const 1
+    i64.add
+    local.set $1
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<i64,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -9779,15 +14931,23 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u64,i32>#clear (; 107 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<u64,i32>#clear (; 210 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -9827,12 +14987,12 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<u64,i32>#constructor (; 108 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u64,i32>#constructor (; 211 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 24
-   i32.const 10
+   i32.const 23
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -9859,7 +15019,7 @@
   call $~lib/map/Map<u64,i32>#clear
   local.get $0
  )
- (func $~lib/map/Map<u64,i32>#find (; 109 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u64,i32>#find (; 212 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.load
@@ -9907,7 +15067,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<u64,i32>#has (; 110 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<u64,i32>#has (; 213 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   local.get $0
   local.get $1
@@ -9922,7 +15082,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u64,i32>#rehash (; 111 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u64,i32>#rehash (; 214 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10080,7 +15240,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u64,i32>#set (; 112 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/map/Map<u64,i32>#set (; 215 ;) (type $FUNCSIG$viji) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i64)
   (local $4 i32)
   (local $5 i32)
@@ -10184,7 +15344,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $~lib/map/Map<u64,i32>#get (; 113 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<u64,i32>#get (; 216 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   local.get $0
@@ -10211,11 +15371,639 @@
   local.get $3
   i32.load offset=8
  )
- (func $~lib/map/Map<u64,i32>#get:size (; 114 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u64,i32>#get:size (; 217 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/map/Map<u64,i32>#delete (; 115 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/array/Array<u64>#constructor (; 218 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 24
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 3
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/array/Array<u64>#__unchecked_set (; 219 ;) (type $FUNCSIG$viij) (param $0 i32) (param $1 i32) (param $2 i64)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 3
+  i32.shl
+  i32.add
+  local.get $2
+  i64.store
+ )
+ (func $~lib/array/Array<u64>#__set (; 220 ;) (type $FUNCSIG$viij) (param $0 i32) (param $1 i32) (param $2 i64)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 3
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<u64>#__unchecked_set
+ )
+ (func $~lib/array/Array<u64>#set:length (; 221 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 3
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<u64,i32>#keys (; 222 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<u64>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 16
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=12
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i64.load
+     call $~lib/array/Array<u64>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<u64>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<u64,i32>#values (; 223 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 16
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=12
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=8
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<u64,u64>#clear (; 224 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 96
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<u64,u64>#constructor (; 225 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 25
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<u64,u64>#clear
+  local.get $0
+ )
+ (func $~lib/array/Array<u64>#get:length (; 226 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<u64>#__unchecked_get (; 227 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 3
+  i32.shl
+  i32.add
+  i64.load
+ )
+ (func $~lib/array/Array<u64>#__get (; 228 ;) (type $FUNCSIG$jii) (param $0 i32) (param $1 i32) (result i64)
+  (local $2 i64)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<u64>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/map/Map<u64,u64>#find (; 229 ;) (type $FUNCSIG$iiji) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=16
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     i64.load
+     local.get $1
+     i64.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=16
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<u64,u64>#rehash (; 230 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i64)
+  (local $12 i32)
+  (local $13 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 24
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 24
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=16
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     i64.load
+     i64.store
+     local.get $10
+     local.get $9
+     i64.load offset=8
+     i64.store offset=8
+     block $~lib/util/hash/HASH<u64>|inlined.5 (result i32)
+      local.get $9
+      i64.load
+      local.set $11
+      local.get $11
+      call $~lib/util/hash/hash64
+      br $~lib/util/hash/HASH<u64>|inlined.5
+     end
+     local.get $1
+     i32.and
+     local.set $12
+     local.get $3
+     local.get $12
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $13
+     local.get $10
+     local.get $13
+     i32.load
+     i32.store offset=16
+     local.get $13
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 24
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 24
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $13
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $13
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $12
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $12
+   call $~lib/rt/pure/__retain
+   local.set $12
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $12
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<u64,u64>#set (; 231 ;) (type $FUNCSIG$vijj) (param $0 i32) (param $1 i64) (param $2 i64)
+  (local $3 i64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  block $~lib/util/hash/HASH<u64>|inlined.4 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   call $~lib/util/hash/hash64
+   br $~lib/util/hash/HASH<u64>|inlined.4
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<u64,u64>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   i64.store offset=8
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<u64,u64>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $6
+   local.get $6
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $7
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $7
+   i32.const 24
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   i64.store
+   local.get $5
+   local.get $2
+   i64.store offset=8
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $7
+   local.get $5
+   local.get $7
+   i32.load
+   i32.store offset=16
+   local.get $7
+   local.get $5
+   i32.store
+   local.get $6
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/map/Map<u64,u64>#get:size (; 232 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<u64,i32>#delete (; 233 ;) (type $FUNCSIG$iij) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -10223,12 +16011,12 @@
   (local $6 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<u64>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<u64>|inlined.6 (result i32)
    local.get $1
    local.set $2
    local.get $2
    call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<u64>|inlined.4
+   br $~lib/util/hash/HASH<u64>|inlined.6
   end
   call $~lib/map/Map<u64,i32>#find
   local.set $3
@@ -10288,9 +16076,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<u64,i32> (; 116 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<u64,i32> (; 234 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 i64)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<u64,i32>#constructor
   local.set $0
@@ -10468,78 +16262,105 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<u64,i32>#keys
+  local.set $2
+  local.get $0
+  call $~lib/map/Map<u64,i32>#values
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<u64,u64>#constructor
+  local.set $4
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $5
   block $break|2
-   i64.const 0
-   local.set $1
+   i32.const 0
+   local.set $6
    loop $loop|2
-    local.get $1
-    i64.const 50
-    i64.lt_u
+    local.get $6
+    local.get $2
+    call $~lib/array/Array<u64>#get:length
+    i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u64,i32>#has
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 25
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u64,i32>#get
-    i32.const 20
-    local.get $1
-    i32.wrap_i64
-    i32.add
-    i32.eq
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 26
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u64,i32>#delete
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u64,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 28
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    i64.const 1
-    i64.add
+    local.get $2
+    local.get $6
+    call $~lib/array/Array<u64>#__get
     local.set $1
+    local.get $3
+    local.get $6
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<u64,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 31
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $7
+    i32.const 20
+    i32.sub
+    i64.extend_i32_s
+    call $~lib/map/Map<u64,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 32
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $4
+    local.get $1
+    local.get $1
+    call $~lib/map/Map<u64,u64>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $6
+    i32.const 1
+    i32.add
+    local.set $6
     br $loop|2
    end
    unreachable
   end
-  local.get $0
-  call $~lib/map/Map<u64,i32>#get:size
-  i32.const 50
+  local.get $4
+  call $~lib/map/Map<u64,u64>#get:size
+  i32.const 100
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 376
-   i32.const 30
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $5
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -10557,30 +16378,27 @@
     local.get $1
     call $~lib/map/Map<u64,i32>#has
     i32.eqz
-    i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 34
+     i32.const 41
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
     local.get $1
-    i32.const 10
+    call $~lib/map/Map<u64,i32>#get
+    i32.const 20
     local.get $1
     i32.wrap_i64
     i32.add
-    call $~lib/map/Map<u64,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<u64,i32>#has
+    i32.eq
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 36
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
@@ -10597,7 +16415,7 @@
     if
      i32.const 0
      i32.const 376
-     i32.const 38
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
@@ -10618,7 +16436,86 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   i64.const 0
+   local.set $1
+   loop $loop|4
+    local.get $1
+    i64.const 50
+    i64.lt_u
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<u64,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $1
+    i32.const 10
+    local.get $1
+    i32.wrap_i64
+    i32.add
+    call $~lib/map/Map<u64,i32>#set
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<u64,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<u64,i32>#delete
+    drop
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<u64,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $1
+    i64.const 1
+    i64.add
+    local.set $1
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<u64,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -10633,15 +16530,23 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f32,i32>#clear (; 117 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<f32,i32>#clear (; 235 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -10681,12 +16586,12 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<f32,i32>#constructor (; 118 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#constructor (; 236 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 24
-   i32.const 11
+   i32.const 26
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -10713,7 +16618,7 @@
   call $~lib/map/Map<f32,i32>#clear
   local.get $0
  )
- (func $~lib/map/Map<f32,i32>#find (; 119 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#find (; 237 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.load
@@ -10761,7 +16666,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<f32,i32>#has (; 120 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#has (; 238 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   (local $2 f32)
   local.get $0
   local.get $1
@@ -10777,7 +16682,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<f32,i32>#rehash (; 121 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,i32>#rehash (; 239 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10936,7 +16841,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f32,i32>#set (; 122 ;) (type $FUNCSIG$vifi) (param $0 i32) (param $1 f32) (param $2 i32)
+ (func $~lib/map/Map<f32,i32>#set (; 240 ;) (type $FUNCSIG$vifi) (param $0 i32) (param $1 f32) (param $2 i32)
   (local $3 f32)
   (local $4 i32)
   (local $5 i32)
@@ -11041,7 +16946,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $~lib/map/Map<f32,i32>#get (; 123 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#get (; 241 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   (local $2 f32)
   (local $3 i32)
   local.get $0
@@ -11069,11 +16974,641 @@
   local.get $3
   i32.load offset=4
  )
- (func $~lib/map/Map<f32,i32>#get:size (; 124 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#get:size (; 242 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/map/Map<f32,i32>#delete (; 125 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/array/Array<f32>#constructor (; 243 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 27
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/array/Array<f32>#__unchecked_set (; 244 ;) (type $FUNCSIG$viif) (param $0 i32) (param $1 i32) (param $2 f32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $2
+  f32.store
+ )
+ (func $~lib/array/Array<f32>#__set (; 245 ;) (type $FUNCSIG$viif) (param $0 i32) (param $1 i32) (param $2 f32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 2
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<f32>#__unchecked_set
+ )
+ (func $~lib/array/Array<f32>#set:length (; 246 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<f32,i32>#keys (; 247 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<f32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     f32.load
+     call $~lib/array/Array<f32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<f32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<f32,i32>#values (; 248 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 12
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=4
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<f32,f32>#clear (; 249 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 48
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<f32,f32>#constructor (; 250 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 28
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<f32,f32>#clear
+  local.get $0
+ )
+ (func $~lib/array/Array<f32>#get:length (; 251 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<f32>#__unchecked_get (; 252 ;) (type $FUNCSIG$fii) (param $0 i32) (param $1 i32) (result f32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  f32.load
+ )
+ (func $~lib/array/Array<f32>#__get (; 253 ;) (type $FUNCSIG$fii) (param $0 i32) (param $1 i32) (result f32)
+  (local $2 f32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<f32>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/map/Map<f32,f32>#find (; 254 ;) (type $FUNCSIG$iifi) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     f32.load
+     local.get $1
+     f32.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=8
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<f32,f32>#rehash (; 255 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 f32)
+  (local $12 i32)
+  (local $13 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 12
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 12
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     f32.load
+     f32.store
+     local.get $10
+     local.get $9
+     f32.load offset=4
+     f32.store offset=4
+     block $~lib/util/hash/HASH<f32>|inlined.5 (result i32)
+      local.get $9
+      f32.load
+      local.set $11
+      local.get $11
+      i32.reinterpret_f32
+      call $~lib/util/hash/hash32
+      br $~lib/util/hash/HASH<f32>|inlined.5
+     end
+     local.get $1
+     i32.and
+     local.set $12
+     local.get $3
+     local.get $12
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $13
+     local.get $10
+     local.get $13
+     i32.load
+     i32.store offset=8
+     local.get $13
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 12
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 12
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $13
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $13
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $12
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $12
+   call $~lib/rt/pure/__retain
+   local.set $12
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $12
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<f32,f32>#set (; 256 ;) (type $FUNCSIG$viff) (param $0 i32) (param $1 f32) (param $2 f32)
+  (local $3 f32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  block $~lib/util/hash/HASH<f32>|inlined.4 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   i32.reinterpret_f32
+   call $~lib/util/hash/hash32
+   br $~lib/util/hash/HASH<f32>|inlined.4
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<f32,f32>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   f32.store offset=4
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<f32,f32>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $6
+   local.get $6
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $7
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $7
+   i32.const 12
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   f32.store
+   local.get $5
+   local.get $2
+   f32.store offset=4
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $7
+   local.get $5
+   local.get $7
+   i32.load
+   i32.store offset=8
+   local.get $7
+   local.get $5
+   i32.store
+   local.get $6
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/map/Map<f32,f32>#get:size (; 257 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<f32,i32>#delete (; 258 ;) (type $FUNCSIG$iif) (param $0 i32) (param $1 f32) (result i32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -11081,13 +17616,13 @@
   (local $6 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<f32>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<f32>|inlined.6 (result i32)
    local.get $1
    local.set $2
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
-   br $~lib/util/hash/HASH<f32>|inlined.4
+   br $~lib/util/hash/HASH<f32>|inlined.6
   end
   call $~lib/map/Map<f32,i32>#find
   local.set $3
@@ -11147,9 +17682,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<f32,i32> (; 126 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<f32,i32> (; 259 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<f32,i32>#constructor
   local.set $0
@@ -11327,78 +17868,105 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<f32,i32>#keys
+  local.set $2
+  local.get $0
+  call $~lib/map/Map<f32,i32>#values
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<f32,f32>#constructor
+  local.set $4
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $5
   block $break|2
-   f32.const 0
-   local.set $1
+   i32.const 0
+   local.set $6
    loop $loop|2
-    local.get $1
-    f32.const 50
-    f32.lt
+    local.get $6
+    local.get $2
+    call $~lib/array/Array<f32>#get:length
+    i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f32,i32>#has
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 25
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f32,i32>#get
-    i32.const 20
-    local.get $1
-    i32.trunc_f32_s
-    i32.add
-    i32.eq
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 26
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f32,i32>#delete
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f32,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 28
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    f32.const 1
-    f32.add
+    local.get $2
+    local.get $6
+    call $~lib/array/Array<f32>#__get
     local.set $1
+    local.get $3
+    local.get $6
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f32,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 31
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $7
+    i32.const 20
+    i32.sub
+    f32.convert_i32_s
+    call $~lib/map/Map<f32,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 32
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $4
+    local.get $1
+    local.get $1
+    call $~lib/map/Map<f32,f32>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $6
+    i32.const 1
+    i32.add
+    local.set $6
     br $loop|2
    end
    unreachable
   end
-  local.get $0
-  call $~lib/map/Map<f32,i32>#get:size
-  i32.const 50
+  local.get $4
+  call $~lib/map/Map<f32,f32>#get:size
+  i32.const 100
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 376
-   i32.const 30
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $5
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -11416,30 +17984,27 @@
     local.get $1
     call $~lib/map/Map<f32,i32>#has
     i32.eqz
-    i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 34
+     i32.const 41
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
     local.get $1
-    i32.const 10
+    call $~lib/map/Map<f32,i32>#get
+    i32.const 20
     local.get $1
     i32.trunc_f32_s
     i32.add
-    call $~lib/map/Map<f32,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f32,i32>#has
+    i32.eq
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 36
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
@@ -11456,7 +18021,7 @@
     if
      i32.const 0
      i32.const 376
-     i32.const 38
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
@@ -11477,7 +18042,86 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   f32.const 0
+   local.set $1
+   loop $loop|4
+    local.get $1
+    f32.const 50
+    f32.lt
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f32,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $1
+    i32.const 10
+    local.get $1
+    i32.trunc_f32_s
+    i32.add
+    call $~lib/map/Map<f32,i32>#set
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f32,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f32,i32>#delete
+    drop
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f32,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $1
+    f32.const 1
+    f32.add
+    local.set $1
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<f32,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -11492,15 +18136,23 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f64,i32>#clear (; 127 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/map/Map<f64,i32>#clear (; 260 ;) (type $FUNCSIG$vi) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -11540,12 +18192,12 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<f64,i32>#constructor (; 128 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#constructor (; 261 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 24
-   i32.const 12
+   i32.const 29
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
    local.set $0
@@ -11572,7 +18224,7 @@
   call $~lib/map/Map<f64,i32>#clear
   local.get $0
  )
- (func $~lib/map/Map<f64,i32>#find (; 129 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#find (; 262 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.load
@@ -11620,7 +18272,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<f64,i32>#has (; 130 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#has (; 263 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 f64)
   local.get $0
   local.get $1
@@ -11636,7 +18288,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<f64,i32>#rehash (; 131 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f64,i32>#rehash (; 264 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11795,7 +18447,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f64,i32>#set (; 132 ;) (type $FUNCSIG$vidi) (param $0 i32) (param $1 f64) (param $2 i32)
+ (func $~lib/map/Map<f64,i32>#set (; 265 ;) (type $FUNCSIG$vidi) (param $0 i32) (param $1 f64) (param $2 i32)
   (local $3 f64)
   (local $4 i32)
   (local $5 i32)
@@ -11900,7 +18552,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $~lib/map/Map<f64,i32>#get (; 133 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#get (; 266 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 f64)
   (local $3 i32)
   local.get $0
@@ -11928,11 +18580,641 @@
   local.get $3
   i32.load offset=8
  )
- (func $~lib/map/Map<f64,i32>#get:size (; 134 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#get:size (; 267 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/map/Map<f64,i32>#delete (; 135 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/array/Array<f64>#constructor (; 268 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  if (result i32)
+   local.get $0
+  else
+   i32.const 16
+   i32.const 30
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+  end
+  local.get $1
+  i32.const 3
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $0
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $1
+  i32.store offset=12
+  local.get $0
+ )
+ (func $~lib/array/Array<f64>#__unchecked_set (; 269 ;) (type $FUNCSIG$viid) (param $0 i32) (param $1 i32) (param $2 f64)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 3
+  i32.shl
+  i32.add
+  local.get $2
+  f64.store
+ )
+ (func $~lib/array/Array<f64>#__set (; 270 ;) (type $FUNCSIG$viid) (param $0 i32) (param $1 i32) (param $2 f64)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   local.get $1
+   i32.const 0
+   i32.lt_s
+   if
+    i32.const 280
+    i32.const 512
+    i32.const 109
+    i32.const 21
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.const 3
+   call $~lib/array/ensureSize
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.add
+   i32.store offset=12
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/array/Array<f64>#__unchecked_set
+ )
+ (func $~lib/array/Array<f64>#set:length (; 271 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 3
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
+ (func $~lib/map/Map<f64,i32>#keys (; 272 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<f64>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 16
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=12
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     f64.load
+     call $~lib/array/Array<f64>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<f64>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<f64,i32>#values (; 273 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $1
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  i32.const 0
+  local.get $2
+  call $~lib/array/Array<i32>#constructor
+  local.set $3
+  i32.const 0
+  local.set $4
+  block $break|0
+   i32.const 0
+   local.set $5
+   loop $loop|0
+    local.get $5
+    local.get $2
+    i32.lt_s
+    i32.eqz
+    br_if $break|0
+    local.get $1
+    local.get $5
+    i32.const 16
+    i32.mul
+    i32.add
+    local.set $6
+    local.get $6
+    i32.load offset=12
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $3
+     local.get $4
+     local.tee $7
+     i32.const 1
+     i32.add
+     local.set $4
+     local.get $7
+     local.get $6
+     i32.load offset=8
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $5
+    i32.const 1
+    i32.add
+    local.set $5
+    br $loop|0
+   end
+   unreachable
+  end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
+  local.get $3
+ )
+ (func $~lib/map/Map<f64,f64>#clear (; 274 ;) (type $FUNCSIG$vi) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 16
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store
+  local.get $0
+  i32.const 4
+  i32.const 1
+  i32.sub
+  i32.store offset=4
+  local.get $0
+  local.tee $1
+  i32.const 0
+  i32.const 96
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $2
+  local.get $1
+  i32.load offset=8
+  call $~lib/rt/pure/__release
+  local.get $2
+  i32.store offset=8
+  local.get $0
+  i32.const 4
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+ )
+ (func $~lib/map/Map<f64,f64>#constructor (; 275 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 24
+   i32.const 31
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  call $~lib/map/Map<f64,f64>#clear
+  local.get $0
+ )
+ (func $~lib/array/Array<f64>#get:length (; 276 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=12
+ )
+ (func $~lib/array/Array<f64>#__unchecked_get (; 277 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 3
+  i32.shl
+  i32.add
+  f64.load
+ )
+ (func $~lib/array/Array<f64>#__get (; 278 ;) (type $FUNCSIG$dii) (param $0 i32) (param $1 i32) (result f64)
+  (local $2 f64)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 280
+   i32.const 512
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<f64>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $~lib/map/Map<f64,f64>#find (; 279 ;) (type $FUNCSIG$iidi) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  i32.load
+  local.get $2
+  local.get $0
+  i32.load offset=4
+  i32.and
+  i32.const 4
+  i32.mul
+  i32.add
+  i32.load
+  local.set $3
+  block $break|0
+   loop $continue|0
+    local.get $3
+    i32.eqz
+    br_if $break|0
+    local.get $3
+    i32.load offset=16
+    i32.const 1
+    i32.and
+    i32.eqz
+    if (result i32)
+     local.get $3
+     f64.load
+     local.get $1
+     f64.eq
+    else
+     i32.const 0
+    end
+    if
+     local.get $3
+     return
+    end
+    local.get $3
+    i32.load offset=16
+    i32.const 1
+    i32.const -1
+    i32.xor
+    i32.and
+    local.set $3
+    br $continue|0
+   end
+   unreachable
+  end
+  i32.const 0
+ )
+ (func $~lib/map/Map<f64,f64>#rehash (; 280 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 f64)
+  (local $12 i32)
+  (local $13 i32)
+  local.get $1
+  i32.const 1
+  i32.add
+  local.set $2
+  i32.const 0
+  local.get $2
+  i32.const 4
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $3
+  local.get $2
+  i32.const 8
+  i32.mul
+  i32.const 3
+  i32.div_s
+  local.set $4
+  i32.const 0
+  local.get $4
+  i32.const 24
+  i32.mul
+  call $~lib/arraybuffer/ArrayBuffer#constructor
+  local.set $5
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $6
+  local.get $0
+  i32.load offset=16
+  i32.const 24
+  i32.mul
+  i32.add
+  local.set $7
+  local.get $5
+  local.set $8
+  block $break|0
+   loop $continue|0
+    local.get $6
+    local.get $7
+    i32.ne
+    i32.eqz
+    br_if $break|0
+    local.get $6
+    local.set $9
+    local.get $9
+    i32.load offset=16
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $8
+     local.set $10
+     local.get $10
+     local.get $9
+     f64.load
+     f64.store
+     local.get $10
+     local.get $9
+     f64.load offset=8
+     f64.store offset=8
+     block $~lib/util/hash/HASH<f64>|inlined.5 (result i32)
+      local.get $9
+      f64.load
+      local.set $11
+      local.get $11
+      i64.reinterpret_f64
+      call $~lib/util/hash/hash64
+      br $~lib/util/hash/HASH<f64>|inlined.5
+     end
+     local.get $1
+     i32.and
+     local.set $12
+     local.get $3
+     local.get $12
+     i32.const 4
+     i32.mul
+     i32.add
+     local.set $13
+     local.get $10
+     local.get $13
+     i32.load
+     i32.store offset=16
+     local.get $13
+     local.get $8
+     i32.store
+     local.get $8
+     i32.const 24
+     i32.add
+     local.set $8
+    end
+    local.get $6
+    i32.const 24
+    i32.add
+    local.set $6
+    br $continue|0
+   end
+   unreachable
+  end
+  local.get $0
+  local.tee $9
+  local.get $3
+  local.tee $10
+  local.get $9
+  i32.load
+  local.tee $13
+  i32.ne
+  if
+   local.get $10
+   call $~lib/rt/pure/__retain
+   local.set $10
+   local.get $13
+   call $~lib/rt/pure/__release
+  end
+  local.get $10
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $9
+  local.get $5
+  local.tee $12
+  local.get $9
+  i32.load offset=8
+  local.tee $10
+  i32.ne
+  if
+   local.get $12
+   call $~lib/rt/pure/__retain
+   local.set $12
+   local.get $10
+   call $~lib/rt/pure/__release
+  end
+  local.get $12
+  i32.store offset=8
+  local.get $0
+  local.get $4
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.load offset=20
+  i32.store offset=16
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/map/Map<f64,f64>#set (; 281 ;) (type $FUNCSIG$vidd) (param $0 i32) (param $1 f64) (param $2 f64)
+  (local $3 f64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  block $~lib/util/hash/HASH<f64>|inlined.4 (result i32)
+   local.get $1
+   local.set $3
+   local.get $3
+   i64.reinterpret_f64
+   call $~lib/util/hash/hash64
+   br $~lib/util/hash/HASH<f64>|inlined.4
+  end
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $4
+  call $~lib/map/Map<f64,f64>#find
+  local.set $5
+  local.get $5
+  if
+   local.get $5
+   local.get $2
+   f64.store offset=8
+  else
+   local.get $0
+   i32.load offset=16
+   local.get $0
+   i32.load offset=12
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.load offset=20
+    local.get $0
+    i32.load offset=12
+    i32.const 3
+    i32.mul
+    i32.const 4
+    i32.div_s
+    i32.lt_s
+    if (result i32)
+     local.get $0
+     i32.load offset=4
+    else
+     local.get $0
+     i32.load offset=4
+     i32.const 1
+     i32.shl
+     i32.const 1
+     i32.or
+    end
+    call $~lib/map/Map<f64,f64>#rehash
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/pure/__retain
+   local.set $6
+   local.get $6
+   local.get $0
+   local.get $0
+   i32.load offset=16
+   local.tee $7
+   i32.const 1
+   i32.add
+   i32.store offset=16
+   local.get $7
+   i32.const 24
+   i32.mul
+   i32.add
+   local.set $5
+   local.get $5
+   local.get $1
+   f64.store
+   local.get $5
+   local.get $2
+   f64.store offset=8
+   local.get $0
+   local.get $0
+   i32.load offset=20
+   i32.const 1
+   i32.add
+   i32.store offset=20
+   local.get $0
+   i32.load
+   local.get $4
+   local.get $0
+   i32.load offset=4
+   i32.and
+   i32.const 4
+   i32.mul
+   i32.add
+   local.set $7
+   local.get $5
+   local.get $7
+   i32.load
+   i32.store offset=16
+   local.get $7
+   local.get $5
+   i32.store
+   local.get $6
+   call $~lib/rt/pure/__release
+  end
+ )
+ (func $~lib/map/Map<f64,f64>#get:size (; 282 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+  local.get $0
+  i32.load offset=20
+ )
+ (func $~lib/map/Map<f64,i32>#delete (; 283 ;) (type $FUNCSIG$iid) (param $0 i32) (param $1 f64) (result i32)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -11940,13 +19222,13 @@
   (local $6 i32)
   local.get $0
   local.get $1
-  block $~lib/util/hash/HASH<f64>|inlined.4 (result i32)
+  block $~lib/util/hash/HASH<f64>|inlined.6 (result i32)
    local.get $1
    local.set $2
    local.get $2
    i64.reinterpret_f64
    call $~lib/util/hash/hash64
-   br $~lib/util/hash/HASH<f64>|inlined.4
+   br $~lib/util/hash/HASH<f64>|inlined.6
   end
   call $~lib/map/Map<f64,i32>#find
   local.set $3
@@ -12006,9 +19288,15 @@
   end
   i32.const 1
  )
- (func $std/map/testNumeric<f64,i32> (; 136 ;) (type $FUNCSIG$v)
+ (func $std/map/testNumeric<f64,i32> (; 284 ;) (type $FUNCSIG$v)
   (local $0 i32)
   (local $1 f64)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $~lib/map/Map<f64,i32>#constructor
   local.set $0
@@ -12186,78 +19474,105 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  call $~lib/map/Map<f64,i32>#keys
+  local.set $2
+  local.get $0
+  call $~lib/map/Map<f64,i32>#values
+  local.set $3
+  i32.const 0
+  call $~lib/map/Map<f64,f64>#constructor
+  local.set $4
+  i32.const 0
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $5
   block $break|2
-   f64.const 0
-   local.set $1
+   i32.const 0
+   local.set $6
    loop $loop|2
-    local.get $1
-    f64.const 50
-    f64.lt
+    local.get $6
+    local.get $2
+    call $~lib/array/Array<f64>#get:length
+    i32.lt_s
     i32.eqz
     br_if $break|2
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f64,i32>#has
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 25
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f64,i32>#get
-    i32.const 20
-    local.get $1
-    i32.trunc_f64_s
-    i32.add
-    i32.eq
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 26
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f64,i32>#delete
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f64,i32>#has
-    i32.eqz
-    i32.eqz
-    if
-     i32.const 0
-     i32.const 376
-     i32.const 28
-     i32.const 4
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    f64.const 1
-    f64.add
+    local.get $2
+    local.get $6
+    call $~lib/array/Array<f64>#__get
     local.set $1
+    local.get $3
+    local.get $6
+    call $~lib/array/Array<i32>#__get
+    local.set $7
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f64,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 31
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $7
+    i32.const 20
+    i32.sub
+    f64.convert_i32_s
+    call $~lib/map/Map<f64,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 32
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $4
+    local.get $1
+    local.get $1
+    call $~lib/map/Map<f64,f64>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.get $7
+    i32.const 20
+    i32.sub
+    call $~lib/map/Map<i32,i32>#set
+    local.get $6
+    i32.const 1
+    i32.add
+    local.set $6
     br $loop|2
    end
    unreachable
   end
-  local.get $0
-  call $~lib/map/Map<f64,i32>#get:size
-  i32.const 50
+  local.get $4
+  call $~lib/map/Map<f64,f64>#get:size
+  i32.const 100
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 376
-   i32.const 30
+   i32.const 36
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $5
+  call $~lib/map/Map<i32,i32>#get:size
+  i32.const 100
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 37
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -12275,30 +19590,27 @@
     local.get $1
     call $~lib/map/Map<f64,i32>#has
     i32.eqz
-    i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 34
+     i32.const 41
      i32.const 4
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
     local.get $1
-    i32.const 10
+    call $~lib/map/Map<f64,i32>#get
+    i32.const 20
     local.get $1
     i32.trunc_f64_s
     i32.add
-    call $~lib/map/Map<f64,i32>#set
-    local.get $0
-    local.get $1
-    call $~lib/map/Map<f64,i32>#has
+    i32.eq
     i32.eqz
     if
      i32.const 0
      i32.const 376
-     i32.const 36
+     i32.const 42
      i32.const 4
      call $~lib/builtins/abort
      unreachable
@@ -12315,7 +19627,7 @@
     if
      i32.const 0
      i32.const 376
-     i32.const 38
+     i32.const 44
      i32.const 4
      call $~lib/builtins/abort
      unreachable
@@ -12336,7 +19648,86 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 40
+   i32.const 46
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  block $break|4
+   f64.const 0
+   local.set $1
+   loop $loop|4
+    local.get $1
+    f64.const 50
+    f64.lt
+    i32.eqz
+    br_if $break|4
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f64,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 50
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $1
+    i32.const 10
+    local.get $1
+    i32.trunc_f64_s
+    i32.add
+    call $~lib/map/Map<f64,i32>#set
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f64,i32>#has
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 52
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f64,i32>#delete
+    drop
+    local.get $0
+    local.get $1
+    call $~lib/map/Map<f64,i32>#has
+    i32.eqz
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 376
+     i32.const 54
+     i32.const 4
+     call $~lib/builtins/abort
+     unreachable
+    end
+    local.get $1
+    f64.const 1
+    f64.add
+    local.set $1
+    br $loop|4
+   end
+   unreachable
+  end
+  local.get $0
+  call $~lib/map/Map<f64,i32>#get:size
+  i32.const 50
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 376
+   i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -12351,15 +19742,23 @@
   if
    i32.const 0
    i32.const 376
-   i32.const 44
+   i32.const 60
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $start:std/map (; 137 ;) (type $FUNCSIG$v)
+ (func $start:std/map (; 285 ;) (type $FUNCSIG$v)
   call $std/map/testNumeric<i8,i32>
   call $std/map/testNumeric<u8,i32>
   call $std/map/testNumeric<i16,i32>
@@ -12371,10 +19770,10 @@
   call $std/map/testNumeric<f32,i32>
   call $std/map/testNumeric<f64,i32>
  )
- (func $start (; 138 ;) (type $FUNCSIG$v)
+ (func $start (; 286 ;) (type $FUNCSIG$v)
   call $start:std/map
  )
- (func $~lib/rt/pure/__visit (; 139 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 287 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -12504,7 +19903,7 @@
    end
   end
  )
- (func $~lib/map/Map<i8,i32>#__visit_impl (; 140 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#__visit_impl (; 288 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12517,7 +19916,13 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u8,i32>#__visit_impl (; 141 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i8>#__visit_impl (; 289 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/array/Array<i32>#__visit_impl (; 290 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/map/Map<i8,i8>#__visit_impl (; 291 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12530,7 +19935,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<i16,i32>#__visit_impl (; 142 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>#__visit_impl (; 292 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12543,7 +19948,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u16,i32>#__visit_impl (; 143 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#__visit_impl (; 293 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12556,7 +19961,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<i32,i32>#__visit_impl (; 144 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>#__visit_impl (; 294 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/map/Map<u8,u8>#__visit_impl (; 295 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12569,7 +19977,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u32,i32>#__visit_impl (; 145 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#__visit_impl (; 296 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12582,7 +19990,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<i64,i32>#__visit_impl (; 146 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i16>#__visit_impl (; 297 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/map/Map<i16,i16>#__visit_impl (; 298 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12595,7 +20006,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<u64,i32>#__visit_impl (; 147 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#__visit_impl (; 299 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12608,7 +20019,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<f32,i32>#__visit_impl (; 148 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>#__visit_impl (; 300 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/map/Map<u16,u16>#__visit_impl (; 301 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12621,7 +20035,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/map/Map<f64,i32>#__visit_impl (; 149 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u32,i32>#__visit_impl (; 302 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -12634,92 +20048,341 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/rt/__visit_members (; 150 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>#__visit_impl (; 303 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/map/Map<u32,u32>#__visit_impl (; 304 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  block $switch$1$default
-   block $switch$1$case$14
-    block $switch$1$case$13
-     block $switch$1$case$12
-      block $switch$1$case$11
-       block $switch$1$case$10
-        block $switch$1$case$9
-         block $switch$1$case$8
-          block $switch$1$case$7
-           block $switch$1$case$6
-            block $switch$1$case$5
-             block $switch$1$case$4
-              block $switch$1$case$2
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/map/Map<i64,i32>#__visit_impl (; 305 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/array/Array<i64>#__visit_impl (; 306 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/map/Map<i64,i64>#__visit_impl (; 307 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/map/Map<u64,i32>#__visit_impl (; 308 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/array/Array<u64>#__visit_impl (; 309 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/map/Map<u64,u64>#__visit_impl (; 310 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/map/Map<f32,i32>#__visit_impl (; 311 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/array/Array<f32>#__visit_impl (; 312 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/map/Map<f32,f32>#__visit_impl (; 313 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/map/Map<f64,i32>#__visit_impl (; 314 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/array/Array<f64>#__visit_impl (; 315 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/map/Map<f64,f64>#__visit_impl (; 316 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
+  local.get $0
+  i32.load offset=8
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/rt/__visit_members (; 317 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  block $block$4$break
+   block $switch$1$default
+    block $switch$1$case$33
+     block $switch$1$case$32
+      block $switch$1$case$31
+       block $switch$1$case$30
+        block $switch$1$case$29
+         block $switch$1$case$28
+          block $switch$1$case$27
+           block $switch$1$case$26
+            block $switch$1$case$25
+             block $switch$1$case$24
+              block $switch$1$case$23
+               block $switch$1$case$22
+                block $switch$1$case$21
+                 block $switch$1$case$20
+                  block $switch$1$case$19
+                   block $switch$1$case$18
+                    block $switch$1$case$17
+                     block $switch$1$case$16
+                      block $switch$1$case$15
+                       block $switch$1$case$14
+                        block $switch$1$case$13
+                         block $switch$1$case$12
+                          block $switch$1$case$11
+                           block $switch$1$case$10
+                            block $switch$1$case$9
+                             block $switch$1$case$8
+                              block $switch$1$case$7
+                               block $switch$1$case$6
+                                block $switch$1$case$5
+                                 block $switch$1$case$4
+                                  block $switch$1$case$2
+                                   local.get $0
+                                   i32.const 8
+                                   i32.sub
+                                   i32.load
+                                   br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$8 $switch$1$case$9 $switch$1$case$10 $switch$1$case$11 $switch$1$case$12 $switch$1$case$13 $switch$1$case$14 $switch$1$case$15 $switch$1$case$16 $switch$1$case$17 $switch$1$case$18 $switch$1$case$19 $switch$1$case$20 $switch$1$case$21 $switch$1$case$22 $switch$1$case$23 $switch$1$case$24 $switch$1$case$25 $switch$1$case$26 $switch$1$case$27 $switch$1$case$28 $switch$1$case$29 $switch$1$case$30 $switch$1$case$31 $switch$1$case$32 $switch$1$case$33 $switch$1$default
+                                  end
+                                  return
+                                 end
+                                 br $block$4$break
+                                end
+                                local.get $0
+                                local.get $1
+                                call $~lib/map/Map<i8,i32>#__visit_impl
+                                return
+                               end
+                               local.get $0
+                               local.get $1
+                               call $~lib/array/Array<i8>#__visit_impl
+                               br $block$4$break
+                              end
+                              local.get $0
+                              local.get $1
+                              call $~lib/array/Array<i32>#__visit_impl
+                              br $block$4$break
+                             end
+                             local.get $0
+                             local.get $1
+                             call $~lib/map/Map<i8,i8>#__visit_impl
+                             return
+                            end
+                            local.get $0
+                            local.get $1
+                            call $~lib/map/Map<i32,i32>#__visit_impl
+                            return
+                           end
+                           local.get $0
+                           local.get $1
+                           call $~lib/map/Map<u8,i32>#__visit_impl
+                           return
+                          end
+                          local.get $0
+                          local.get $1
+                          call $~lib/array/Array<u8>#__visit_impl
+                          br $block$4$break
+                         end
+                         local.get $0
+                         local.get $1
+                         call $~lib/map/Map<u8,u8>#__visit_impl
+                         return
+                        end
+                        local.get $0
+                        local.get $1
+                        call $~lib/map/Map<i16,i32>#__visit_impl
+                        return
+                       end
+                       local.get $0
+                       local.get $1
+                       call $~lib/array/Array<i16>#__visit_impl
+                       br $block$4$break
+                      end
+                      local.get $0
+                      local.get $1
+                      call $~lib/map/Map<i16,i16>#__visit_impl
+                      return
+                     end
+                     local.get $0
+                     local.get $1
+                     call $~lib/map/Map<u16,i32>#__visit_impl
+                     return
+                    end
+                    local.get $0
+                    local.get $1
+                    call $~lib/array/Array<u16>#__visit_impl
+                    br $block$4$break
+                   end
+                   local.get $0
+                   local.get $1
+                   call $~lib/map/Map<u16,u16>#__visit_impl
+                   return
+                  end
+                  local.get $0
+                  local.get $1
+                  call $~lib/map/Map<u32,i32>#__visit_impl
+                  return
+                 end
+                 local.get $0
+                 local.get $1
+                 call $~lib/array/Array<u32>#__visit_impl
+                 br $block$4$break
+                end
+                local.get $0
+                local.get $1
+                call $~lib/map/Map<u32,u32>#__visit_impl
+                return
+               end
                local.get $0
-               i32.const 8
-               i32.sub
-               i32.load
-               br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$8 $switch$1$case$9 $switch$1$case$10 $switch$1$case$11 $switch$1$case$12 $switch$1$case$13 $switch$1$case$14 $switch$1$default
+               local.get $1
+               call $~lib/map/Map<i64,i32>#__visit_impl
+               return
               end
-              return
+              local.get $0
+              local.get $1
+              call $~lib/array/Array<i64>#__visit_impl
+              br $block$4$break
              end
              local.get $0
-             i32.load
-             local.tee $2
-             if
-              local.get $2
-              local.get $1
-              call $~lib/rt/pure/__visit
-             end
+             local.get $1
+             call $~lib/map/Map<i64,i64>#__visit_impl
              return
             end
             local.get $0
             local.get $1
-            call $~lib/map/Map<i8,i32>#__visit_impl
+            call $~lib/map/Map<u64,i32>#__visit_impl
             return
            end
            local.get $0
            local.get $1
-           call $~lib/map/Map<u8,i32>#__visit_impl
-           return
+           call $~lib/array/Array<u64>#__visit_impl
+           br $block$4$break
           end
           local.get $0
           local.get $1
-          call $~lib/map/Map<i16,i32>#__visit_impl
+          call $~lib/map/Map<u64,u64>#__visit_impl
           return
          end
          local.get $0
          local.get $1
-         call $~lib/map/Map<u16,i32>#__visit_impl
+         call $~lib/map/Map<f32,i32>#__visit_impl
          return
         end
         local.get $0
         local.get $1
-        call $~lib/map/Map<i32,i32>#__visit_impl
-        return
+        call $~lib/array/Array<f32>#__visit_impl
+        br $block$4$break
        end
        local.get $0
        local.get $1
-       call $~lib/map/Map<u32,i32>#__visit_impl
+       call $~lib/map/Map<f32,f32>#__visit_impl
        return
       end
       local.get $0
       local.get $1
-      call $~lib/map/Map<i64,i32>#__visit_impl
+      call $~lib/map/Map<f64,i32>#__visit_impl
       return
      end
      local.get $0
      local.get $1
-     call $~lib/map/Map<u64,i32>#__visit_impl
-     return
+     call $~lib/array/Array<f64>#__visit_impl
+     br $block$4$break
     end
     local.get $0
     local.get $1
-    call $~lib/map/Map<f32,i32>#__visit_impl
+    call $~lib/map/Map<f64,f64>#__visit_impl
     return
    end
-   local.get $0
-   local.get $1
-   call $~lib/map/Map<f64,i32>#__visit_impl
-   return
+   unreachable
   end
-  unreachable
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+  return
  )
- (func $null (; 151 ;) (type $FUNCSIG$v)
+ (func $null (; 318 ;) (type $FUNCSIG$v)
   unreachable
  )
 )
