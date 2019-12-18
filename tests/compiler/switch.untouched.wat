@@ -1,15 +1,14 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (start $start)
- (func $switch/doSwitch (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $switch/doSwitch (; 1 ;) (param $0 i32) (result i32)
   (local $1 i32)
   block $case4|0
    block $case3|0
@@ -47,7 +46,7 @@
   i32.const 23
   return
  )
- (func $switch/doSwitchDefaultOmitted (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchDefaultOmitted (; 2 ;) (param $0 i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case2|0
@@ -78,7 +77,7 @@
   end
   i32.const 0
  )
- (func $switch/doSwitchBreakCase (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchBreakCase (; 3 ;) (param $0 i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case1|0
@@ -98,7 +97,7 @@
   end
   i32.const 1
  )
- (func $switch/doSwitchBreakDefault (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchBreakDefault (; 4 ;) (param $0 i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case1|0
@@ -118,7 +117,7 @@
   end
   i32.const 2
  )
- (func $switch/doSwitchFallThroughCase (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchFallThroughCase (; 5 ;) (param $0 i32) (result i32)
   (local $1 i32)
   block $case1|0
    block $case0|0
@@ -135,7 +134,7 @@
   end
   i32.const 1
  )
- (func $switch/doSwitchFallThroughDefault (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchFallThroughDefault (; 6 ;) (param $0 i32) (result i32)
   (local $1 i32)
   block $case1|0
    block $case0|0
@@ -152,12 +151,12 @@
   end
   i32.const 2
  )
- (func $switch/doSwitchEmpty (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $switch/doSwitchEmpty (; 7 ;) (param $0 i32) (result i32)
   local.get $0
   drop
   i32.const 2
  )
- (func $start:switch (; 8 ;) (type $FUNCSIG$v)
+ (func $start:switch (; 8 ;)
   i32.const 0
   call $switch/doSwitch
   i32.const 0
@@ -549,10 +548,7 @@
    unreachable
   end
  )
- (func $start (; 9 ;) (type $FUNCSIG$v)
+ (func $start (; 9 ;)
   call $start:switch
- )
- (func $null (; 10 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

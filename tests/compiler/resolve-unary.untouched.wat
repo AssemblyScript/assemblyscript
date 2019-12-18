@@ -1,11 +1,11 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000\00")
@@ -27,7 +27,6 @@
  (data (i32.const 824) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\00+\00+\00")
  (data (i32.const 848) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\00-\00-\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -38,7 +37,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 872))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/util/number/decimalCount32 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 1 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 100000
@@ -104,7 +103,7 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -158,7 +157,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -211,7 +210,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/util/number/utoa32_lut (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -353,10 +352,10 @@
    i32.store16
   end
  )
- (func $~lib/rt/stub/__retain (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 5 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/util/number/itoa32 (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 6 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -410,19 +409,19 @@
   local.get $3
   call $~lib/rt/stub/__retain
  )
- (func $~lib/util/number/itoa<i32> (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<i32> (; 7 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa32
   return
  )
- (func $~lib/number/I32#toString (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (; 8 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa<i32>
  )
- (func $~lib/rt/stub/__release (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 9 ;) (param $0 i32)
   nop
  )
- (func $~lib/string/String#get:length (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 10 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -430,7 +429,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 11 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -550,7 +549,7 @@
   call $~lib/rt/stub/__release
   local.get $8
  )
- (func $~lib/string/String.__eq (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -623,7 +622,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/number/Bool#toString (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/number/Bool#toString (; 13 ;) (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    i32.const 616
@@ -631,7 +630,7 @@
    i32.const 640
   end
  )
- (func $resolve-unary/Foo#constructor (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#constructor (; 14 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -643,43 +642,43 @@
   end
   local.get $0
  )
- (func $resolve-unary/Foo#plus (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#plus (; 15 ;) (param $0 i32) (result i32)
   i32.const 696
  )
- (func $~lib/string/String#toString (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#toString (; 16 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#minus (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#minus (; 17 ;) (param $0 i32) (result i32)
   i32.const 720
  )
- (func $resolve-unary/Foo#prefix_inc (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#prefix_inc (; 18 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#self (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#self (; 19 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#prefix_dec (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#prefix_dec (; 20 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#not (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#not (; 21 ;) (param $0 i32) (result i32)
   i32.const 744
  )
- (func $resolve-unary/Foo#bitwise_not (; 22 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#bitwise_not (; 22 ;) (param $0 i32) (result i32)
   i32.const 768
  )
- (func $resolve-unary/Foo#postfix_inc (; 23 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#postfix_inc (; 23 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Foo#postfix_dec (; 24 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Foo#postfix_dec (; 24 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-unary/Bar#constructor (; 25 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar#constructor (; 25 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -691,7 +690,7 @@
   end
   local.get $0
  )
- (func $resolve-unary/Bar.prefix_inc (; 26 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar.prefix_inc (; 26 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -702,7 +701,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $resolve-unary/Bar.prefix_dec (; 27 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar.prefix_dec (; 27 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -713,7 +712,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $resolve-unary/Bar.postfix_inc (; 28 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar.postfix_inc (; 28 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -724,7 +723,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $resolve-unary/Bar.postfix_dec (; 29 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $resolve-unary/Bar.postfix_dec (; 29 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -735,7 +734,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $start:resolve-unary (; 30 ;) (type $FUNCSIG$v)
+ (func $start:resolve-unary (; 30 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1251,10 +1250,7 @@
   local.get $32
   call $~lib/rt/stub/__release
  )
- (func $start (; 31 ;) (type $FUNCSIG$v)
+ (func $start (; 31 ;)
   call $start:resolve-unary
- )
- (func $null (; 32 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

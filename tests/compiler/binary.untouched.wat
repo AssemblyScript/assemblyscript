@@ -1,12 +1,11 @@
 (module
- (type $FUNCSIG$ddd (func (param f64 f64) (result f64)))
- (type $FUNCSIG$ddi (func (param f64 i32) (result f64)))
- (type $FUNCSIG$fff (func (param f32 f32) (result f32)))
- (type $FUNCSIG$ffi (func (param f32 i32) (result f32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
+ (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
+ (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
+ (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
  (global $binary/I (mut i64) (i64.const 0))
@@ -14,7 +13,7 @@
  (global $binary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/math/NativeMath.scalbn (; 0 ;) (type $FUNCSIG$ddi) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 0 ;) (param $0 f64) (param $1 i32) (result f64)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -105,7 +104,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/math/NativeMath.pow (; 1 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 1 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -1184,7 +1183,7 @@
   local.get $15
   f64.mul
  )
- (func $~lib/math/NativeMathf.mod (; 2 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 2 ;) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1432,7 +1431,7 @@
   local.get $2
   f32.reinterpret_i32
  )
- (func $~lib/math/NativeMathf.scalbn (; 3 ;) (type $FUNCSIG$ffi) (param $0 f32) (param $1 i32) (result f32)
+ (func $~lib/math/NativeMathf.scalbn (; 3 ;) (param $0 f32) (param $1 i32) (result f32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -1522,7 +1521,7 @@
   f32.reinterpret_i32
   f32.mul
  )
- (func $~lib/math/NativeMathf.pow (; 4 ;) (type $FUNCSIG$fff) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.pow (; 4 ;) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2456,7 +2455,7 @@
   local.get $11
   f32.mul
  )
- (func $~lib/math/NativeMath.mod (; 5 ;) (type $FUNCSIG$ddd) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 5 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -2710,7 +2709,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $start:binary (; 6 ;) (type $FUNCSIG$v)
+ (func $start:binary (; 6 ;)
   global.get $binary/i
   i32.const 1
   i32.lt_s
@@ -3318,10 +3317,7 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 7 ;)
   call $start:binary
- )
- (func $null (; 8 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

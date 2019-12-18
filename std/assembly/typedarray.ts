@@ -1801,19 +1801,19 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
             store<T>(
               targetDataStart + (<usize>i << alignof<T>()),
               // @ts-ignore: cast to T is valid for numeric types here
-              <T>min<U>(255, value)
+              min<U>(255, value)
             );
           } else if (sizeof<T>() <= 4) {
             store<T>(
               targetDataStart + (<usize>i << alignof<T>()),
               // @ts-ignore: cast to T is valid for numeric types here
-              <T>~(<i32>value >> 31) & (((255 - <i32>value) >> 31) | value)
+              ~(<i32>value >> 31) & (((255 - <i32>value) >> 31) | value)
             );
           } else {
             store<T>(
               targetDataStart + (<usize>i << alignof<T>()),
               // @ts-ignore: cast to T is valid for numeric types here
-              <T>~(<i64>value >> 63) & (((255 - <i64>value) >> 63) | value)
+              ~(<i64>value >> 63) & (((255 - <i64>value) >> 63) | value)
             );
           }
         }

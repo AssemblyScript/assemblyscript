@@ -1,6 +1,6 @@
 (module
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "declare" "externalConstant" (global $declare/externalConstant i32))
  (import "declare" "my.externalConstant" (global $declare/my.externalConstant i32))
  (import "declare" "externalFunction" (func $declare/externalFunction))
@@ -10,7 +10,7 @@
  (data (i32.const 8) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
  (export "memory" (memory $0))
  (start $start)
- (func $start:declare (; 3 ;) (type $FUNCSIG$v)
+ (func $start:declare (; 3 ;)
   call $declare/externalFunction
   global.get $declare/externalConstant
   i32.const 1
@@ -36,10 +36,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;)
   call $start:declare
- )
- (func $null (; 5 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

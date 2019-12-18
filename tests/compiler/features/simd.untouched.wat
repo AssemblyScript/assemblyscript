@@ -1,14 +1,13 @@
 (module
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00")
  (data (i32.const 56) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/ASC_FEATURE_SIMD i32 (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -20,7 +19,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 104))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -74,7 +73,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -127,7 +126,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__free (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__free (; 3 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 0
@@ -177,7 +176,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $features/simd/test_v128 (; 4 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_v128 (; 4 ;)
   (local $0 i32)
   i32.const 64
   i32.const 0
@@ -190,7 +189,7 @@
   local.get $0
   call $~lib/rt/stub/__free
  )
- (func $features/simd/test_i8x16 (; 5 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_i8x16 (; 5 ;)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -571,7 +570,7 @@
    unreachable
   end
  )
- (func $features/simd/test_i16x8 (; 6 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_i16x8 (; 6 ;)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -952,7 +951,7 @@
    unreachable
   end
  )
- (func $features/simd/test_i32x4 (; 7 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_i32x4 (; 7 ;)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1310,7 +1309,7 @@
    unreachable
   end
  )
- (func $features/simd/test_i64x2 (; 8 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_i64x2 (; 8 ;)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1462,7 +1461,7 @@
    unreachable
   end
  )
- (func $features/simd/test_f32x4 (; 9 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_f32x4 (; 9 ;)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1840,7 +1839,7 @@
    unreachable
   end
  )
- (func $features/simd/test_f64x2 (; 10 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_f64x2 (; 10 ;)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -2218,7 +2217,7 @@
    unreachable
   end
  )
- (func $features/simd/test_v8x16 (; 11 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_v8x16 (; 11 ;)
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -2263,16 +2262,16 @@
    unreachable
   end
  )
- (func $features/simd/test_v16x8 (; 12 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_v16x8 (; 12 ;)
   nop
  )
- (func $features/simd/test_v32x4 (; 13 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_v32x4 (; 13 ;)
   nop
  )
- (func $features/simd/test_v64x2 (; 14 ;) (type $FUNCSIG$v)
+ (func $features/simd/test_v64x2 (; 14 ;)
   nop
  )
- (func $start:features/simd (; 15 ;) (type $FUNCSIG$v)
+ (func $start:features/simd (; 15 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -2295,10 +2294,7 @@
   call $features/simd/test_v32x4
   call $features/simd/test_v64x2
  )
- (func $start (; 16 ;) (type $FUNCSIG$v)
+ (func $start (; 16 ;)
   call $start:features/simd
- )
- (func $null (; 17 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )
