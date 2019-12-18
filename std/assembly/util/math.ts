@@ -1,14 +1,14 @@
-/** Lookup data for exp2f **/
+//
+// Lookup data for exp2f
+//
 
 // @ts-ignore: decorator
 @lazy const EXP2F_TABLE_BITS = 5;
 // @ts-ignore: decorator
 @lazy const exp2f_data_tab: u64[] = [
-  /**
-   * exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
-   * used for computing 2^(k/N) for an int |k| < 150 N as
-   * double(tab[k%N] + (k << 52-BITS))
-   */
+  // exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
+  // used for computing 2^(k/N) for an int |k| < 150 N as
+  // double(tab[k%N] + (k << 52-BITS))
   0x3FF0000000000000, 0x3FEFD9B0D3158574, 0x3FEFB5586CF9890F, 0x3FEF9301D0125B51,
   0x3FEF72B83C7D517B, 0x3FEF54873168B9AA, 0x3FEF387A6E756238, 0x3FEF1E9DF51FDEE1,
   0x3FEF06FE0A31B715, 0x3FEEF1A7373AA9CB, 0x3FEEDEA64C123422, 0x3FEECE086061892D,
@@ -19,11 +19,9 @@
   0x3FEF5818DCFBA487, 0x3FEF7C97337B9B5F, 0x3FEFA4AFA2A490DA, 0x3FEFD0765B6E4540
 ];
 
-/**
- * ULP error: 0.502 (nearest rounding.)
- * Relative error: 1.69 * 2^-34 in [-1/64, 1/64] (before rounding.)
- * Wrong count: 168353 (all nearest rounding wrong results with fma.)
- */
+// ULP error: 0.502 (nearest rounding.)
+// Relative error: 1.69 * 2^-34 in [-1/64, 1/64] (before rounding.)
+// Wrong count: 168353 (all nearest rounding wrong results with fma.)
 // @ts-ignore: decorator
 @inline export function exp2f_lut(x: f32): f32 {
   const
@@ -68,11 +66,9 @@
   return <f32>y;
 }
 
-/*
-ULP error: 0.502 (nearest rounding.)
-Relative error: 1.69 * 2^-34 in [-ln2/64, ln2/64] (before rounding.)
-Wrong count: 170635 (all nearest rounding wrong results with fma.)
-*/
+// ULP error: 0.502 (nearest rounding.)
+// Relative error: 1.69 * 2^-34 in [-ln2/64, ln2/64] (before rounding.)
+// Wrong count: 170635 (all nearest rounding wrong results with fma.)
 // @ts-ignore: decorator
 @inline export function expf_lut(x: f32): f32 {
   const
@@ -101,9 +97,9 @@ Wrong count: 170635 (all nearest rounding wrong results with fma.)
   // x*N/Ln2 = k + r with r in [-1/2, 1/2] and int k.
   var z = InvLn2N * xd;
 
-  /* Round and convert z to int, the result is in [-150*N, 128*N] and
-     ideally ties-to-even rule is used, otherwise the magnitude of r
-     can be bigger which gives larger approximation error.  */
+  // Round and convert z to int, the result is in [-150*N, 128*N] and
+  // ideally ties-to-even rule is used, otherwise the magnitude of r
+  // can be bigger which gives larger approximation error.
   var kd = <f64>(z + shift);
   var ki = reinterpret<u64>(kd);
   var r  = z - (kd - shift);
@@ -124,7 +120,9 @@ Wrong count: 170635 (all nearest rounding wrong results with fma.)
   return <f32>y;
 }
 
-/** Lookup data for log2f **/
+//
+// Lookup data for log2f
+//
 
 // @ts-ignore: decorator
 @lazy const LOG2F_TABLE_BITS = 4;
@@ -148,10 +146,8 @@ Wrong count: 170635 (all nearest rounding wrong results with fma.)
   reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FDCE0A44EB17BCC)  // 0x1.767dcf5534862p-1,  0x1.ce0a44eb17bccp-2
 ];
 
-/*
-ULP error: 0.752 (nearest rounding.)
-Relative error: 1.9 * 2^-26 (before rounding.)
-*/
+// ULP error: 0.752 (nearest rounding.)
+// Relative error: 1.9 * 2^-26 (before rounding.)
 // @ts-ignore: decorator
 @inline export function log2f_lut(x: f32): f32 {
   const
@@ -176,9 +172,9 @@ Relative error: 1.9 * 2^-26 (before rounding.)
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
   }
-  /* x = 2^k z; where z is in range [OFF,2*OFF] and exact.
-     The range is split into N subintervals.
-     The ith subinterval contains z and c is near its center.  */
+  // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
+  // The range is split into N subintervals.
+  // The ith subinterval contains z and c is near its center.
   var tmp  = ux - 0x3F330000;
   var i    = (tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK;
   var top  = tmp & 0xFF800000;
@@ -206,7 +202,9 @@ Relative error: 1.9 * 2^-26 (before rounding.)
   return <f32>y;
 }
 
-/* Lookup data for logf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/logf.c */
+//
+// Lookup data for logf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/logf.c
+//
 
 // @ts-ignore: decorator
 @lazy const LOGF_TABLE_BITS = 4;
@@ -230,10 +228,8 @@ Relative error: 1.9 * 2^-26 (before rounding.)
   reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FD4043057B6EE09)  // 0x1.767dcf5534862p-1,  0x1.4043057b6ee09p-2
 ];
 
-/*
-ULP error: 0.818 (nearest rounding.)
-Relative error: 1.957 * 2^-26 (before rounding.)
-*/
+// ULP error: 0.818 (nearest rounding.)
+// Relative error: 1.957 * 2^-26 (before rounding.)
 // @ts-ignore: decorator
 @inline export function logf_lut(x: f32): f32 {
   const
@@ -258,9 +254,9 @@ Relative error: 1.957 * 2^-26 (before rounding.)
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
   }
-  /* x = 2^k z; where z is in range [OFF,2*OFF] and exact.
-     The range is split into N subintervals.
-     The ith subinterval contains z and c is near its center.  */
+  // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
+  // The range is split into N subintervals.
+  // The ith subinterval contains z and c is near its center.
   var tmp = ux - 0x3F330000;
   var i   = (tmp >> (23 - LOGF_TABLE_BITS)) & N_MASK;
   var k   = <i32>tmp >> 23;
@@ -286,15 +282,17 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   return <f32>y;
 }
 
-/* Lookup data for powf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/powf.c */
+//
+// Lookup data for powf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/powf.c
+//
 
 // @ts-ignore: decorator
 @inline function zeroinfnanf(ux: u32): bool {
   return (ux << 1) - 1 >= (<u32>0x7f800000 << 1) - 1;
 }
 
-/* Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
-   the bit representation of a non-zero finite floating-point value. */
+// Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
+// the bit representation of a non-zero finite floating-point value.
 // @ts-ignore: decorator
 @inline function checkintf(iy: u32): i32 {
   var e = iy >> 23 & 0xFF;
@@ -306,8 +304,8 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   return 2;
 }
 
-/* Subnormal input is normalized so ix has negative biased exponent.
-   Output is multiplied by N (POWF_SCALE) if TOINT_INTRINICS is set. */
+// Subnormal input is normalized so ix has negative biased exponent.
+// Output is multiplied by N (POWF_SCALE) if TOINT_INTRINICS is set.
 // @ts-ignore: decorator
 @inline function log2f_inline(ux: u32): f64 {
   const N_MASK = (1 << LOG2F_TABLE_BITS) - 1;
@@ -319,9 +317,9 @@ Relative error: 1.957 * 2^-26 (before rounding.)
     A3 = reinterpret<f64>(0xBFE7154748BEF6C8), // -0x1.7154748bef6c8p-1
     A4 = reinterpret<f64>(0x3FF71547652AB82B); //  0x1.71547652ab82bp+0
 
-  /* x = 2^k z; where z is in range [OFF,2*OFF] and exact.
-    The range is split into N subintervals.
-    The ith subinterval contains z and c is near its center.  */
+  // x = 2^k z; where z is in range [OFF,2*OFF] and exact.
+  // The range is split into N subintervals.
+  // The ith subinterval contains z and c is near its center.
   var tmp  = ux - 0x3F330000;
   var i    = <usize>((tmp >> (23 - LOG2F_TABLE_BITS)) & N_MASK);
   var top  = tmp & 0xFF800000;
@@ -351,9 +349,9 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   return y;
 }
 
-/* The output of log2 and thus the input of exp2 is either scaled by N
-   (in case of fast toint intrinsics) or not.  The unscaled xd must be
-   in [-1021,1023], sign_bias sets the sign of the result.  */
+// The output of log2 and thus the input of exp2 is either scaled by N
+// (in case of fast toint intrinsics) or not.  The unscaled xd must be
+// in [-1021,1023], sign_bias sets the sign of the result.
 // @ts-ignore: decorator
 @inline function exp2f_inline(xd: f64, signBias: u32): f32 {
   const
@@ -455,7 +453,9 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   return exp2f_inline(ylogx, signBias);
 }
 
-/* Lookup data for exp. See: https://git.musl-libc.org/cgit/musl/tree/src/math/exp.c */
+//
+// Lookup data for exp. See: https://git.musl-libc.org/cgit/musl/tree/src/math/exp.c
+//
 
 // @ts-ignore: decorator
 @lazy const EXP_TABLE_BITS = 7;
@@ -592,13 +592,13 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   0x3C5305C14160CC89, 0x3FEFF3C22B8F71F1
 ];
 
-/* Handle cases that may overflow or underflow when computing the result that
-   is scale*(1+TMP) without intermediate rounding. The bit representation of
-   scale is in SBITS, however it has a computed exponent that may have
-   overflown into the sign bit so that needs to be adjusted before using it as
-   a double.  (int32_t)KI is the k used in the argument reduction and exponent
-   adjustment of scale, positive k here means the result may overflow and
-   negative k means the result may underflow. */
+// Handle cases that may overflow or underflow when computing the result that
+// is scale*(1+TMP) without intermediate rounding. The bit representation of
+// scale is in SBITS, however it has a computed exponent that may have
+// overflown into the sign bit so that needs to be adjusted before using it as
+// a double.  (int32_t)KI is the k used in the argument reduction and exponent
+// adjustment of scale, positive k here means the result may overflow and
+// negative k means the result may underflow.
 // @ts-ignore: decorator
 @inline function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
   const
@@ -705,34 +705,36 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   return scale + scale * tmp;
 }
 
-/* Lookup data for exp2. See: https://git.musl-libc.org/cgit/musl/tree/src/math/exp2.c */
+//
+// Lookup data for exp2. See: https://git.musl-libc.org/cgit/musl/tree/src/math/exp2.c
+//
 
-/* Handle cases that may overflow or underflow when computing the result that
-   is scale*(1+TMP) without intermediate rounding.  The bit representation of
-   scale is in SBITS, however it has a computed exponent that may have
-   overflown into the sign bit so that needs to be adjusted before using it as
-   a double.  (int32_t)KI is the k used in the argument reduction and exponent
-   adjustment of scale, positive k here means the result may overflow and
-   negative k means the result may underflow.*/
+// Handle cases that may overflow or underflow when computing the result that
+// is scale*(1+TMP) without intermediate rounding.  The bit representation of
+// scale is in SBITS, however it has a computed exponent that may have
+// overflown into the sign bit so that needs to be adjusted before using it as
+// a double.  (int32_t)KI is the k used in the argument reduction and exponent
+// adjustment of scale, positive k here means the result may overflow and
+// negative k means the result may underflow.
 // @ts-ignore: decorator
 @inline function specialcase2(tmp: f64, sbits: u64, ki: u64): f64 {
-  const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022;
+  const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022
   var scale: f64;
   if ((ki & 0x80000000) == 0) {
-    /* k > 0, the exponent of scale might have overflowed by 1.  */
+    // k > 0, the exponent of scale might have overflowed by 1
     sbits -= u64(1) << 52;
     scale = reinterpret<f64>(sbits);
     return 2 * (scale * tmp + scale);
   }
-  /* k < 0, need special care in the subnormal range.  */
+  // k < 0, need special care in the subnormal range
   sbits += u64(1022) << 52;
   scale = reinterpret<f64>(sbits);
   var y = scale * tmp + scale;
   if (y < 1.0) {
-    /* Round y to the right precision before scaling it into the subnormal
-      range to avoid double rounding that can cause 0.5+E/2 ulp error where
-      E is the worst-case ulp error outside the subnormal range.  So this
-      is only useful if the goal is better than 1 ulp worst-case error.  */
+    // Round y to the right precision before scaling it into the subnormal
+    // range to avoid double rounding that can cause 0.5+E/2 ulp error where
+    // E is the worst-case ulp error outside the subnormal range. So this
+    // is only useful if the goal is better than 1 ulp worst-case error.
     let hi: f64, lo: f64;
     lo = scale - y + scale * tmp;
     hi = 1.0 + y;
@@ -793,12 +795,14 @@ Relative error: 1.957 * 2^-26 (before rounding.)
   var tmp = tail + r * C1 + r2 * (C2 + r * C3) + r2 * r2 * (C4 + r * C5);
   if (abstop == 0) return specialcase2(tmp, sbits, ki);
   var scale = reinterpret<f64>(sbits);
-  /* Note: tmp == 0 or |tmp| > 2^-65 and scale > 2^-928, so there
-     is no spurious underflow here even without fma.*/
+  // Note: tmp == 0 or |tmp| > 2^-65 and scale > 2^-928, so there
+  // is no spurious underflow here even without fma.
   return scale * tmp + scale;
 }
 
-/* Lookup data for log2. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log2.c */
+//
+// Lookup data for log2. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log2.c
+//
 
 // @ts-ignore: decorator
 @lazy const LOG2_TABLE_BITS = 6;
@@ -828,7 +832,7 @@ Note: 1) ensures that k + logc can be computed without rounding error, 2)
 ensures that z/c - 1 can be computed as (z - chi - clo)*invc with close to a
 single rounding error when there is no fast fma for z*invc - 1, 3) ensures
 that logc + poly(z/c - 1) has small error, however near x == 1 when
-|log2(x)| < 0x1p-4, this is not enough so that is special cased.*/
+|log2(x)| < 0x1p-4, this is not enough so that is special cased. */
 
 // @ts-ignore: decorator
 @lazy const log2_data_tab1: f64[] = [
@@ -1034,9 +1038,9 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
     ix -= u64(52) << 52;
   }
 
-  /* x = 2^k z; where z is in range [OFF,2*OFF) and exact.
-     The range is split into N subintervals.
-     The ith subinterval contains z and c is near its center.  */
+  // x = 2^k z; where z is in range [OFF,2*OFF) and exact.
+  // The range is split into N subintervals.
+  // The ith subinterval contains z and c is near its center.
   var tmp  = ix - 0x3FE6000000000000;
   var i    = <usize>((tmp >> (52 - LOG2_TABLE_BITS)) & N_MASK);
   var k    = <i64>tmp >> 52;
@@ -1079,13 +1083,15 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   // log2(r+1) = r/ln2 + r^2*poly(r)
   // Evaluation is optimized assuming superscalar pipelined execution
   var r2 = r * r; // rounding error: 0x1p-54/N^2
-  /* Worst-case error if |y| > 0x1p-4: 0.547 ULP (0.550 ULP without fma).
-     ~ 0.5 + 2/N/ln2 + abs-poly-error*0x1p56 ULP (+ 0.003 ULP without fma).*/
+  // Worst-case error if |y| > 0x1p-4: 0.547 ULP (0.550 ULP without fma).
+  // ~ 0.5 + 2/N/ln2 + abs-poly-error*0x1p56 ULP (+ 0.003 ULP without fma).
   var p = A0 + r * A1 + r2 * (A2 + r * A3) + (r2 * r2) * (A4 + r * A5);
   return lo + r2 * p + hi;
 }
 
-/* Lookup data for log. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log.c */
+//
+// Lookup data for log. See: https://git.musl-libc.org/cgit/musl/tree/src/math/log.c
+//
 
 // @ts-ignore: decorator
 @lazy const LOG_TABLE_BITS = 7;
@@ -1116,6 +1122,7 @@ Note: 1) ensures that k*ln2hi + logc can be computed without rounding error,
 a single rounding error when there is no fast fma for z*invc - 1, 3) ensures
 that logc + poly(z/c - 1) has small error, however near x == 1 when
 |log(x)| < 0x1p-4, this is not enough so that is special cased.*/
+
 // @ts-ignore: decorator
 @lazy const log_data_tab1: f64[] = [
   //              invc                ,                 logc
@@ -1446,9 +1453,9 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
     ix -= u64(52) << 52;
   }
 
-  /* x = 2^k z; where z is in range [OFF,2*OFF) and exact.
-     The range is split into N subintervals.
-     The ith subinterval contains z and c is near its center.  */
+  // x = 2^k z; where z is in range [OFF,2*OFF) and exact.
+  // The range is split into N subintervals.
+  // The ith subinterval contains z and c is near its center.
   var tmp  = ix - 0x3FE6000000000000;
   var i    = <usize>((tmp >> (52 - LOG_TABLE_BITS)) & N_MASK);
   var k    = <i64>tmp >> 52;
@@ -1483,14 +1490,16 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 
   // log(x) = lo + (log1p(r) - r) + hi
   var r2 = r * r; // rounding error: 0x1p-54/N^2
-  /* Worst case error if |y| > 0x1p-5:
-     0.5 + 4.13/N + abs-poly-error*2^57 ULP (+ 0.002 ULP without fma)
-     Worst case error if |y| > 0x1p-4:
-     0.5 + 2.06/N + abs-poly-error*2^56 ULP (+ 0.001 ULP without fma).*/
+  // Worst case error if |y| > 0x1p-5:
+  // 0.5 + 4.13/N + abs-poly-error*2^57 ULP (+ 0.002 ULP without fma)
+  // Worst case error if |y| > 0x1p-4:
+  // 0.5 + 2.06/N + abs-poly-error*2^56 ULP (+ 0.001 ULP without fma).
   return lo + r2 * A0 + r * r2 * (A1 + r * A2 + r2 * (A3 + r * A4)) + hi;
 }
 
-/* Lookup data for pow. See: https://git.musl-libc.org/cgit/musl/tree/src/math/pow.c */
+//
+// Lookup data for pow. See: https://git.musl-libc.org/cgit/musl/tree/src/math/pow.c
+//
 
 // @ts-ignore: decorator
 @lazy const POW_LOG_TABLE_BITS = 7;
@@ -1651,8 +1660,8 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   reinterpret<f64>(0x3FE6C00000000000), 0, reinterpret<f64>(0x3FD5D5BDDF596000), reinterpret<f64>(0xBD0A0B2A08A465DC)
 ];
 
-/* Returns 0 if not int, 1 if odd int, 2 if even int.  The argument is
-   the bit representation of a non-zero finite floating-point value. */
+// Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
+// the bit representation of a non-zero finite floating-point value.
 // @ts-ignore: decorator
 @inline function checkint(iy: u64): i32 {
   var e = iy >> 52 & 0x7FF;
@@ -1688,9 +1697,9 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 // @ts-ignore: decorator
 @lazy var log_tail: f64 = 0;
 
-/* Compute y+TAIL = log(x) where the rounded result is y and TAIL has about
-   additional 15 bits precision.  IX is the bit representation of x, but
-   normalized in the subnormal range using the sign bit for the exponent. */
+// Compute y+TAIL = log(x) where the rounded result is y and TAIL has about
+// additional 15 bits precision. IX is the bit representation of x, but
+// normalized in the subnormal range using the sign bit for the exponent.
 // @ts-ignore: decorator
 @inline function log_inline(ix: u64): f64 {
   const N = 1 << POW_LOG_TABLE_BITS;
@@ -1709,9 +1718,9 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
     A5 = reinterpret<f64>(0xBFF2495B9B4845E9),
     A6 = reinterpret<f64>(0x3FF0002B8B263FC3);
 
-  /* x = 2^k z; where z is in range [OFF,2*OFF) and exact.
-    The range is split into N subintervals.
-    The ith subinterval contains z and c is near its center. */
+  // x = 2^k z; where z is in range [OFF,2*OFF) and exact.
+  // The range is split into N subintervals.
+  // The ith subinterval contains z and c is near its center.
   var tmp = ix - 0x3fE6955500000000;
   var i   = <usize>((tmp >> (52 - POW_LOG_TABLE_BITS)) & N_MASK);
   var k   = <i64>tmp >> 52;
@@ -1727,8 +1736,8 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   var logc     = load<f64>(tab + (i << (2 + alignof<f64>())), 2 << alignof<f64>()); // tab[i].logc
   var logctail = load<f64>(tab + (i << (2 + alignof<f64>())), 3 << alignof<f64>()); // tab[i].logctail
 
-  /* Note: 1/c is j/N or j/N/2 where j is an integer in [N,2N) and
-    |z/c - 1| < 1/N, so r = z/c - 1 is exactly representible.  */
+  // Note: 1/c is j/N or j/N/2 where j is an integer in [N,2N) and
+  // |z/c - 1| < 1/N, so r = z/c - 1 is exactly representible.
   // Split z such that rhi, rlo and rhi*rhi are exact and |rlo| <= |r|.
   var zhi = reinterpret<f64>((iz + u64(0x80000000)) & 0xFFFFFFFF00000000);
   var zlo = z - zhi;
@@ -1736,7 +1745,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   var rlo = zlo * invc;
   var r   = rhi + rlo;
 
-  // k*Ln2 + log(c) + r.
+  // k * Ln2 + log(c) + r.
   var t1  = kd * Ln2hi + logc;
   var t2  = t1 + r;
   var lo1 = kd * Ln2lo + logctail;
@@ -1746,14 +1755,14 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   var ar  = A0 * r; // A[0] = -0.5
   var ar2 = r * ar;
   var ar3 = r * ar2;
-  // k*Ln2 + log(c) + r + A[0]*r*r.
+  // k * Ln2 + log(c) + r + A[0] * r * r.
   var arhi  = A0  * rhi;
   var arhi2 = rhi * arhi;
   var hi    = t2  + arhi2;
   var lo3   = rlo * (ar + arhi);
   var lo4   = t2 - hi + arhi2;
 
-  // p = log1p(r) - r - A[0]*r*r.
+  // p = log1p(r) - r - A[0] * r * r.
   var p  = ar3 * (A1 + r * A2 + ar2 * (A3 + r * A4 + ar2 * (A5 + r * A6)));
   var lo = lo1 + lo2 + lo3 + lo4 + p;
   var y  = hi + lo;
@@ -1765,8 +1774,8 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 // @ts-ignore: decorator
 @lazy const SIGN_BIAS = 0x800 << EXP_TABLE_BITS;
 
-/* Computes sign*exp(x+xtail) where |xtail| < 2^-8/N and |xtail| <= |x|.
-   The sign_bias argument is SIGN_BIAS or 0 and sets the sign to -1 or 1.*/
+// Computes sign*exp(x+xtail) where |xtail| < 2^-8/N and |xtail| <= |x|.
+// The sign_bias argument is SIGN_BIAS or 0 and sets the sign to -1 or 1.
 // @ts-ignore: decorator
 @inline function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   const N      = 1 << EXP_TABLE_BITS;
@@ -1861,10 +1870,10 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   var topy = iy >> 52;
 
   if (topx - 0x001 >= 0x7FF - 0x001 || (topy & 0x7FF) - 0x3BE >= 0x43e - 0x3BE) {
-    /* Note: if |y| > 1075 * ln2 * 2^53 ~= 0x1.749p62 then pow(x,y) = inf/0
-       and if |y| < 2^-54 / 1075 ~= 0x1.e7b6p-65 then pow(x,y) = +-1.
-       Special cases: (x < 0x1p-126 or inf or nan) or
-       (|y| < 0x1p-65 or |y| >= 0x1p63 or nan).  */
+    // Note: if |y| > 1075 * ln2 * 2^53 ~= 0x1.749p62 then pow(x,y) = inf/0
+    // and if |y| < 2^-54 / 1075 ~= 0x1.e7b6p-65 then pow(x,y) = +-1.
+    // Special cases: (x < 0x1p-126 or inf or nan) or
+    // (|y| < 0x1p-65 or |y| >= 0x1p63 or nan).
     if (zeroinfnan(iy)) {
       if ((iy << 1) == 0) return 1.0;
       if (ix == 0x3FF0000000000000) return NaN; // original: 1.0
