@@ -2948,6 +2948,8 @@ export class Function extends TypedElement {
   }
 }
 
+var nextFunctionTarget = 0;
+
 /** A resolved function target, that is a function called indirectly by an index and signature. */
 export class FunctionTarget extends Element {
 
@@ -2961,16 +2963,16 @@ export class FunctionTarget extends Element {
     /** Concrete signature. */
     signature: Signature,
     /** Program reference. */
-    program: Program,
-    __s: string = "" // FIXME: current TS limitation workaround, but a fix seems underway
+    program: Program
   ) {
     super(
       ElementKind.FUNCTION_TARGET,
-      __s = "sig:" + signature.toSignatureString(),
-      __s,
+      "~sig" + nextFunctionTarget.toString(),
+      "~sig" + nextFunctionTarget.toString(),
       program,
       program.nativeFile
     );
+    ++nextFunctionTarget;
     this.signature = signature;
     this.flags = CommonFlags.RESOLVED;
     this.type = program.options.usizeType.asFunction(signature);

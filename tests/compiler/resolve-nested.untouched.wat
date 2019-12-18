@@ -1,10 +1,10 @@
 (module
- (type $FUNCSIG$viiiiii (func (param i32 i32 i32 i32 i32 i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$viiiii (func (param i32 i32 i32 i32 i32)))
- (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
+ (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -30,13 +30,13 @@
  (export "Outer.Inner.evenInner" (func $resolve-nested/Outer.Inner.evenInner))
  (export "Outer.inner" (func $resolve-nested/Outer.inner))
  (export "outer" (func $resolve-nested/outer))
- (func $~lib/rt/stub/__retain (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 1 ;) (param $0 i32)
   nop
  )
- (func $resolve-nested/Outer.Inner.evenInner (; 2 ;) (type $FUNCSIG$viiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
+ (func $resolve-nested/Outer.Inner.evenInner (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -68,7 +68,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $resolve-nested/Outer.inner (; 3 ;) (type $FUNCSIG$viiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $resolve-nested/Outer.inner (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -95,7 +95,7 @@
   local.get $4
   call $~lib/rt/stub/__release
  )
- (func $resolve-nested/outer (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $resolve-nested/outer (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -112,7 +112,7 @@
   local.get $2
   call $~lib/rt/stub/__release
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 5 ;)
   unreachable
  )
 )

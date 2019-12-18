@@ -1,9 +1,14 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$viii (func (param i32 i32 i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_i64 (func (param i32) (result i64)))
+ (type $i32_=>_f32 (func (param i32) (result f32)))
+ (type $i32_=>_f64 (func (param i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02")
@@ -45,7 +50,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -87,7 +92,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -132,7 +137,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/memory/memory.copy (; 4 ;) (type $FUNCSIG$viii) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -307,7 +312,7 @@
    end
   end
  )
- (func $~lib/rt/stub/__realloc (; 5 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__realloc (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -818,7 +823,7 @@
   f64.const 2.25
   f64.store
  )
- (func $start:std/static-array (; 15 ;) (type $FUNCSIG$v)
+ (func $start:std/static-array (; 15 ;)
   i32.const 60
   i32.load
   i32.const 2
@@ -1020,10 +1025,10 @@
    unreachable
   end
  )
- (func $start (; 16 ;) (type $FUNCSIG$v)
+ (func $start (; 16 ;)
   call $start:std/static-array
  )
- (func $null (; 17 ;) (type $FUNCSIG$v)
+ (func $null (; 17 ;)
   unreachable
  )
 )

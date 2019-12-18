@@ -1,8 +1,8 @@
 (module
- (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00l\00o\00o\00p\00-\00f\00l\00o\00w\00.\00t\00s")
@@ -20,10 +20,10 @@
  (export "doThrow" (func $loop-flow/doThrow))
  (export "doAny" (func $loop-flow/doAny))
  (start $start)
- (func $loop-flow/whileReturn (; 1 ;) (type $FUNCSIG$i) (result i32)
+ (func $loop-flow/whileReturn (; 1 ;) (result i32)
   i32.const 1
  )
- (func $loop-flow/whileAny (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $loop-flow/whileAny (; 2 ;) (param $0 i32) (result i32)
   loop $continue|0 (result i32)
    local.get $0
    i32.const 1
@@ -44,7 +44,7 @@
    end
   end
  )
- (func $loop-flow/forAny (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $loop-flow/forAny (; 3 ;) (param $0 i32) (result i32)
   loop $loop|0 (result i32)
    local.get $0
    i32.const 1
@@ -67,7 +67,7 @@
    end
   end
  )
- (func $loop-flow/doAny (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $loop-flow/doAny (; 4 ;) (param $0 i32) (result i32)
   loop $continue|0 (result i32)
    local.get $0
    i32.const 1
@@ -88,7 +88,7 @@
    end
   end
  )
- (func $start:loop-flow (; 5 ;) (type $FUNCSIG$v)
+ (func $start:loop-flow (; 5 ;)
   i32.const 1
   call $loop-flow/whileAny
   i32.const 1
@@ -126,7 +126,7 @@
    unreachable
   end
  )
- (func $loop-flow/whileThrow (; 6 ;) (type $FUNCSIG$i) (result i32)
+ (func $loop-flow/whileThrow (; 6 ;) (result i32)
   i32.const 64
   i32.const 24
   i32.const 11
@@ -134,13 +134,13 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $loop-flow/whileContinue (; 7 ;) (type $FUNCSIG$i) (result i32)
+ (func $loop-flow/whileContinue (; 7 ;) (result i32)
   loop $continue|0
    br $continue|0
   end
   unreachable
  )
- (func $loop-flow/forThrow (; 8 ;) (type $FUNCSIG$i) (result i32)
+ (func $loop-flow/forThrow (; 8 ;) (result i32)
   i32.const 64
   i32.const 24
   i32.const 41
@@ -148,7 +148,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $loop-flow/doThrow (; 9 ;) (type $FUNCSIG$i) (result i32)
+ (func $loop-flow/doThrow (; 9 ;) (result i32)
   i32.const 64
   i32.const 24
   i32.const 71
@@ -156,10 +156,10 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 10 ;)
   call $start:loop-flow
  )
- (func $null (; 11 ;) (type $FUNCSIG$v)
+ (func $null (; 11 ;)
   unreachable
  )
 )

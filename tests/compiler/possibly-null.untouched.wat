@@ -1,8 +1,8 @@
 (module
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -25,13 +25,13 @@
  (export "testLogicalOrMulti" (func $possibly-null/testLogicalOrMulti))
  (export "testAssign" (func $possibly-null/testAssign))
  (export "testNeverNull" (func $possibly-null/testNeverNull))
- (func $~lib/rt/stub/__retain (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 1 ;) (param $0 i32)
   nop
  )
- (func $possibly-null/testTrue (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testTrue (; 2 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -42,7 +42,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testFalseElse (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testFalseElse (; 3 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -58,7 +58,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testFalseContinuation (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testFalseContinuation (; 4 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -72,7 +72,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testNeNull (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testNeNull (; 5 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -85,7 +85,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testEqNullElse (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testEqNullElse (; 6 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -102,7 +102,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testEqNullContinuation (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testEqNullContinuation (; 7 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -117,7 +117,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testNotEqNull (; 8 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testNotEqNull (; 8 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -131,7 +131,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testNotNeNullElse (; 9 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testNotNeNullElse (; 9 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -149,7 +149,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testNotNeNullContinuation (; 10 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testNotNeNullContinuation (; 10 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -165,7 +165,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testWhile (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testWhile (; 11 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -197,7 +197,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testWhile2 (; 12 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testWhile2 (; 12 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -234,7 +234,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testWhile3 (; 13 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testWhile3 (; 13 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -274,13 +274,13 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/requireNonNull (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $possibly-null/requireNonNull (; 14 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
   local.get $0
  )
- (func $possibly-null/testLogicalAnd (; 15 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testLogicalAnd (; 15 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -302,7 +302,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testLogicalOr (; 16 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testLogicalOr (; 16 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -327,7 +327,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testLogicalAndMulti (; 17 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testLogicalAndMulti (; 17 ;) (param $0 i32) (param $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -350,7 +350,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testLogicalOrMulti (; 18 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testLogicalOrMulti (; 18 ;) (param $0 i32) (param $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -375,7 +375,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testAssign (; 19 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testAssign (; 19 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -403,7 +403,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $possibly-null/testNeverNull (; 20 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testNeverNull (; 20 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -415,7 +415,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $null (; 21 ;) (type $FUNCSIG$v)
+ (func $null (; 21 ;)
   unreachable
  )
 )

@@ -1,6 +1,6 @@
 (module
- (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -65,10 +65,10 @@
  (export "SelfReferenceConst.ZERO" (global $enum/SelfReferenceConst.ZERO))
  (export "SelfReferenceConst.ONE" (global $enum/SelfReferenceConst.ONE))
  (start $start)
- (func $enum/getZero (; 0 ;) (type $FUNCSIG$i) (result i32)
+ (func $enum/getZero (; 0 ;) (result i32)
   i32.const 0
  )
- (func $start:enum (; 1 ;) (type $FUNCSIG$v)
+ (func $start:enum (; 1 ;)
   call $enum/getZero
   global.set $enum/NonConstant.ZERO
   call $enum/getZero
@@ -80,10 +80,10 @@
   global.get $enum/NonConstant.ONE
   drop
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;)
   call $start:enum
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;)
   unreachable
  )
 )

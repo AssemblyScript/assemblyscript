@@ -1,7 +1,7 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
@@ -14,7 +14,7 @@
  (data (i32.const 668) "\88 \t\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/__typeinfo (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/__typeinfo (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 144
   i32.load
@@ -34,7 +34,7 @@
   i32.add
   i32.load
  )
- (func $start:rt/flags (; 2 ;) (type $FUNCSIG$v)
+ (func $start:rt/flags (; 2 ;)
   block $folding-inner0
    i32.const 3
    call $~lib/rt/__typeinfo
@@ -446,10 +446,10 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $start (; 3 ;) (type $FUNCSIG$v)
+ (func $start (; 3 ;)
   call $start:rt/flags
  )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $null (; 4 ;)
   unreachable
  )
 )

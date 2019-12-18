@@ -1,7 +1,7 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$j (func (result i64)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $none_=>_i64 (func (result i64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "js-bigint-integration" "externalValue" (global $features/js-bigint-integration/externalValue i64))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "js-bigint-integration" "getExternalValue" (func $features/js-bigint-integration/getExternalValue (result i64)))
@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "internalValue" (global $features/js-bigint-integration/internalValue))
  (export "getInternalValue" (func $features/js-bigint-integration/getInternalValue))
- (func $start:features/js-bigint-integration (; 2 ;) (type $FUNCSIG$v)
+ (func $start:features/js-bigint-integration (; 2 ;)
   global.get $features/js-bigint-integration/externalValue
   i64.const 9007199254740991
   i64.ne
@@ -37,10 +37,10 @@
    unreachable
   end
  )
- (func $features/js-bigint-integration/getInternalValue (; 3 ;) (type $FUNCSIG$j) (result i64)
+ (func $features/js-bigint-integration/getInternalValue (; 3 ;) (result i64)
   i64.const 9007199254740991
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;)
   global.get $~lib/started
   if
    return
@@ -50,7 +50,7 @@
   end
   call $start:features/js-bigint-integration
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 5 ;)
   unreachable
  )
 )

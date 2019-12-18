@@ -1,9 +1,9 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$id (func (param f64) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $f64_=>_i32 (func (param f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s\00")
@@ -18,29 +18,29 @@
  (global $instanceof/an (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $instanceof/isI32<i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $instanceof/isI32<i32> (; 1 ;) (param $0 i32) (result i32)
   i32.const 1
   return
  )
- (func $instanceof/isI32<f64> (; 2 ;) (type $FUNCSIG$id) (param $0 f64) (result i32)
+ (func $instanceof/isI32<f64> (; 2 ;) (param $0 f64) (result i32)
   i32.const 0
   return
  )
- (func $instanceof/isI32<u32> (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $instanceof/isI32<u32> (; 3 ;) (param $0 i32) (result i32)
   i32.const 0
   return
  )
- (func $instanceof/isI32<u16> (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $instanceof/isI32<u16> (; 4 ;) (param $0 i32) (result i32)
   i32.const 0
   return
  )
- (func $~lib/rt/stub/__retain (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 5 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 6 ;) (param $0 i32)
   nop
  )
- (func $start:instanceof (; 7 ;) (type $FUNCSIG$v)
+ (func $start:instanceof (; 7 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -130,10 +130,10 @@
    unreachable
   end
  )
- (func $start (; 8 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;)
   call $start:instanceof
  )
- (func $null (; 9 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;)
   unreachable
  )
 )

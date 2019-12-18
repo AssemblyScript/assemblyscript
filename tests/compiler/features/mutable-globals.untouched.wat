@@ -1,6 +1,6 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "mutable-globals" "external" (global $features/mutable-globals/external (mut i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -13,7 +13,7 @@
  (export "memory" (memory $0))
  (export "external" (global $features/mutable-globals/external))
  (export "internal" (global $features/mutable-globals/internal))
- (func $start:features/mutable-globals (; 1 ;) (type $FUNCSIG$v)
+ (func $start:features/mutable-globals (; 1 ;)
   global.get $features/mutable-globals/external
   i32.const 123
   i32.eq
@@ -71,7 +71,7 @@
    unreachable
   end
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;)
   global.get $~lib/started
   if
    return
@@ -81,7 +81,7 @@
   end
   call $start:features/mutable-globals
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;)
   unreachable
  )
 )

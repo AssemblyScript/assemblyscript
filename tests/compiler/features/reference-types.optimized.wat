@@ -1,10 +1,10 @@
 (module
- (type $FUNCSIG$iaa (func (param anyref anyref) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$va (func (param anyref)))
- (type $FUNCSIG$aaa (func (param anyref anyref) (result anyref)))
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$aa (func (param anyref) (result anyref)))
+ (type $none_=>_none (func))
+ (type $anyref_=>_anyref (func (param anyref) (result anyref)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $anyref_=>_none (func (param anyref)))
+ (type $anyref_anyref_=>_i32 (func (param anyref anyref) (result i32)))
+ (type $anyref_anyref_=>_anyref (func (param anyref anyref) (result anyref)))
  (import "reference-types" "someObject" (global $features/reference-types/someObject anyref))
  (import "reference-types" "someKey" (global $features/reference-types/someKey anyref))
  (import "Reflect" "has" (func $~lib/bindings/Reflect/has (param anyref anyref) (result i32)))
@@ -18,7 +18,7 @@
  (export "external" (func $features/reference-types/external))
  (export "internal" (func $features/reference-types/internal))
  (start $start)
- (func $start:features/reference-types (; 5 ;) (type $FUNCSIG$v)
+ (func $start:features/reference-types (; 5 ;)
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -40,16 +40,16 @@
   call $~lib/bindings/Reflect/get
   call $~lib/bindings/console/log
  )
- (func $features/reference-types/internal (; 6 ;) (type $FUNCSIG$aa) (param $0 anyref) (result anyref)
+ (func $features/reference-types/internal (; 6 ;) (param $0 anyref) (result anyref)
   local.get $0
   call $features/reference-types/external
   call $features/reference-types/external
   call $features/reference-types/external
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 7 ;)
   call $start:features/reference-types
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 8 ;)
   unreachable
  )
 )

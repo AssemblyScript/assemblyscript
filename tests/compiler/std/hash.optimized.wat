@@ -1,7 +1,7 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$ij (func (param i64) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (memory $0 1)
  (data (i32.const 12) "\01\00\00\00\01")
  (data (i32.const 24) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
@@ -9,7 +9,7 @@
  (data (i32.const 72) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/util/hash/hashStr (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hashStr (; 0 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -55,7 +55,7 @@
   end
   local.get $1
  )
- (func $~lib/util/hash/hash32 (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
@@ -86,7 +86,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/util/hash/hash64 (; 2 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/hash/hash64 (; 2 ;) (param $0 i64) (result i32)
   (local $1 i32)
   local.get $0
   i32.wrap_i64
@@ -152,7 +152,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $start:std/hash (; 3 ;) (type $FUNCSIG$v)
+ (func $start:std/hash (; 3 ;)
   i32.const 0
   call $~lib/util/hash/hashStr
   drop
@@ -205,10 +205,10 @@
   call $~lib/util/hash/hash64
   drop
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;)
   call $start:std/hash
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 5 ;)
   unreachable
  )
 )

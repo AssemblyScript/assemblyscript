@@ -1,10 +1,10 @@
 (module
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "test" (func $class/test))
- (func $class/test (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $class/test (; 0 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load
   drop
@@ -25,7 +25,7 @@
   i32.store8 offset=6
   local.get $0
  )
- (func $null (; 1 ;) (type $FUNCSIG$v)
+ (func $null (; 1 ;)
   unreachable
  )
 )

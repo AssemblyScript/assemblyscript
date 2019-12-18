@@ -26,7 +26,6 @@ import {
   NativeType,
   FunctionRef,
   ExpressionId,
-  FunctionTypeRef,
   GlobalRef,
   EventRef,
   FeatureFlags,
@@ -46,7 +45,8 @@ import {
   needsExplicitUnreachable,
   getLocalSetValue,
   getGlobalGetName,
-  isGlobalMutable
+  isGlobalMutable,
+  createType
 } from "./module";
 
 import {
@@ -397,11 +397,8 @@ export class Compiler extends DiagnosticEmitter {
       }
       let funcRef = module.addFunction(
         startFunctionInstance.internalName,
-        this.ensureFunctionType(
-          signature.parameterTypes,
-          signature.returnType,
-          signature.thisType
-        ),
+        signature.nativeParams,
+        signature.nativeResults,
         typesToNativeTypes(startFunctionInstance.additionalLocals),
         module.block(null, startFunctionBody)
       );
@@ -458,7 +455,7 @@ export class Compiler extends DiagnosticEmitter {
     // set up function table
     var functionTable = this.functionTable;
     module.setFunctionTable(functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(0));
-    module.addFunction("null", this.ensureFunctionType(null, Type.void), null, module.unreachable());
+    module.addFunction("null", NativeType.None, NativeType.None, null, module.unreachable());
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) module.addTableImport("0", "env", "table");
@@ -631,7 +628,8 @@ export class Compiler extends DiagnosticEmitter {
     if (type.isManaged) loadExpr = this.makeRetain(loadExpr);
     module.addFunction(
       name,
-      this.ensureFunctionType(null, type, usizeType),
+      usizeType.toNativeType(),
+      type.toNativeType(),
       null,
       loadExpr
     );
@@ -657,7 +655,8 @@ export class Compiler extends DiagnosticEmitter {
     }
     module.addFunction(
       name,
-      this.ensureFunctionType([ type ], Type.void, usizeType),
+      createType([ usizeType.toNativeType(), type.toNativeType() ]),
+      NativeType.None,
       null,
       module.store(
         type.byteSize,
@@ -762,6 +761,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile top-level statements within the file's start function
     var startFunction = file.startFunction;
+    var startSignature = startFunction.signature;
     var previousBody = this.currentBody;
     var startFunctionBody = new Array<ExpressionRef>();
     this.currentBody = startFunctionBody;
@@ -784,9 +784,11 @@ export class Compiler extends DiagnosticEmitter {
       let numLocals = locals.length;
       let varTypes = new Array<NativeType>(numLocals);
       for (let i = 0; i < numLocals; ++i) varTypes[i] = locals[i].type.toNativeType();
+
       module.addFunction(
         startFunction.internalName,
-        this.ensureFunctionType(startFunction.signature.parameterTypes, startFunction.signature.returnType),
+        startSignature.nativeParams,
+        startSignature.nativeResults,
         varTypes,
         startFunctionBody.length > 1
           ? module.block(null, startFunctionBody)
@@ -1115,51 +1117,6 @@ export class Compiler extends DiagnosticEmitter {
     return instance;
   }
 
-  /** Either reuses or creates the function type matching the specified signature. */
-  ensureFunctionType(
-    parameterTypes: Type[] | null,
-    returnType: Type,
-    thisType: Type | null = null
-  ): FunctionTypeRef {
-    var numParameters = parameterTypes ? parameterTypes.length : 0;
-    var paramTypes: NativeType[];
-    var index = 0;
-    if (thisType) {
-      paramTypes = new Array(1 + numParameters);
-      paramTypes[0] = thisType.toNativeType();
-      index = 1;
-    } else {
-      paramTypes = new Array(numParameters);
-    }
-    if (parameterTypes) {
-      for (let i = 0; i < numParameters; ++i, ++index) {
-        paramTypes[index] = parameterTypes[i].toNativeType();
-      }
-    }
-    var resultType = returnType.toNativeType();
-    var module = this.module;
-    var typeRef = module.getFunctionTypeBySignature(resultType, paramTypes);
-    if (!typeRef) {
-      let name = Signature.makeSignatureString(parameterTypes, returnType, thisType);
-      typeRef = module.addFunctionType(name, resultType, paramTypes);
-    }
-    return typeRef;
-  }
-
-  /** Either reuses or creates the event type matching the specified name. */
-  ensureEventType(
-    name: string,
-    parameterTypes: Type[] | null
-  ): EventRef {
-    var events = this.events;
-    if (events.has(name)) return events.get(name)!;
-    var module = this.module;
-    var funcType = this.ensureFunctionType(parameterTypes, Type.void);
-    var eventType = module.addEvent(name, 0, funcType);
-    events.set(name, eventType);
-    return eventType;
-  }
-
   /** Compiles the body of a function within the specified flow. */
   compileFunctionBody(
     /** Function to compile. */
@@ -1277,7 +1234,6 @@ export class Compiler extends DiagnosticEmitter {
     var signature = instance.signature;
     var bodyNode = instance.prototype.bodyNode;
 
-    var typeRef = this.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
     var funcRef: FunctionRef;
 
     // concrete function
@@ -1339,7 +1295,8 @@ export class Compiler extends DiagnosticEmitter {
       // create the function
       funcRef = module.addFunction(
         instance.internalName,
-        typeRef,
+        signature.nativeParams,
+        signature.nativeResults,
         typesToNativeTypes(instance.additionalLocals),
         flatten(module, stmts, instance.signature.returnType.toNativeType())
       );
@@ -1361,7 +1318,8 @@ export class Compiler extends DiagnosticEmitter {
         instance.internalName,
         mangleImportName_moduleName,
         mangleImportName_elementName,
-        typeRef
+        signature.nativeParams,
+        signature.nativeResults
       );
       funcRef = module.getFunction(instance.internalName);
     }
@@ -6407,11 +6365,8 @@ export class Compiler extends DiagnosticEmitter {
 
     var funcRef = module.addFunction(
       trampoline.internalName,
-      this.ensureFunctionType(
-        trampolineSignature.parameterTypes,
-        returnType,
-        thisType
-      ),
+      trampolineSignature.nativeParams,
+      trampolineSignature.nativeResults,
       typesToNativeTypes(trampoline.additionalLocals),
       module.block(null, stmts, returnType.toNativeType())
     );
@@ -6438,7 +6393,8 @@ export class Compiler extends DiagnosticEmitter {
     if (!this.argcSet) {
       let module = this.module;
       this.argcSet = module.addFunction(BuiltinSymbols.setargc,
-        this.ensureFunctionType([ Type.u32 ], Type.void),
+        NativeType.I32,
+        NativeType.None,
         null,
         module.global_set(this.ensureArgcVar(),
           module.local_get(0, NativeType.I32)
@@ -6909,7 +6865,6 @@ export class Compiler extends DiagnosticEmitter {
     }
     assert(numOperands >= minOperands);
 
-    this.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
     var module = this.module;
 
     // fill up omitted arguments with zeroes
@@ -6934,7 +6889,8 @@ export class Compiler extends DiagnosticEmitter {
           ? module.unary(UnaryOp.WrapI64, indexArg)
           : indexArg,
         operands,
-        signature.toSignatureString()
+        signature.nativeParams,
+        signature.nativeResults
       )
     ], returnType.toNativeType());
     this.currentType = returnType;
@@ -7954,7 +7910,6 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = previousFlow;
 
     // make the function
-    var typeRef = this.ensureFunctionType(signature.parameterTypes, signature.returnType, signature.thisType);
     var locals = instance.localsByIndex;
     var varTypes = new Array<NativeType>(); // of temp. vars added while compiling initializers
     var numOperands = 1 + signature.parameterTypes.length;
@@ -7962,7 +7917,7 @@ export class Compiler extends DiagnosticEmitter {
     if (numLocals > numOperands) {
       for (let i = numOperands; i < numLocals; ++i) varTypes.push(locals[i].type.toNativeType());
     }
-    var funcRef = module.addFunction(instance.internalName, typeRef, varTypes, body);
+    var funcRef = module.addFunction(instance.internalName, signature.nativeParams, signature.nativeResults, varTypes, body);
     instance.finalize(module, funcRef);
     return instance;
   }

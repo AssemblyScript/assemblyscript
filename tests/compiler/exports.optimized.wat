@@ -1,10 +1,10 @@
 (module
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
  (global $exports/Animal.CAT i32 (i32.const 0))
  (global $exports/Animal.DOG i32 (i32.const 1))
@@ -47,20 +47,20 @@
  (export "vehicles.Car.getNumTires" (func $exports/Car.getNumTires))
  (export "outer.inner.a" (global $exports/outer.inner.a))
  (start $start)
- (func $exports/add (; 0 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $exports/subOpt (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $exports/Car.getNumTires (; 2 ;) (type $FUNCSIG$i) (result i32)
+ (func $exports/Car.getNumTires (; 2 ;) (result i32)
   i32.const 4
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -129,28 +129,28 @@
   i32.store offset=12
   local.get $2
  )
- (func $exports/Car#get:numDoors (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $exports/Car#get:numDoors (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 6 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (; 6 ;) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#openDoors (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $exports/Car#openDoors (; 7 ;) (param $0 i32)
   nop
  )
- (func $start (; 8 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16
   global.set $~lib/rt/stub/offset
  )
- (func $null (; 9 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;)
   unreachable
  )
- (func $exports/subOpt|trampoline (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -168,11 +168,11 @@
   local.get $1
   call $exports/subOpt
  )
- (func $~lib/setargc (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/setargc (; 11 ;) (param $0 i32)
   local.get $0
   global.set $~lib/argc
  )
- (func $exports/Car#constructor|trampoline (; 12 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -199,7 +199,7 @@
   i32.store
   local.get $0
  )
- (func $exports/vehicles.Car#constructor|trampoline (; 13 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor|trampoline (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
