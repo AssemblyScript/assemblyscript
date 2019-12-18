@@ -5,7 +5,6 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -361,108 +360,17 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/math/NativeMath.scalbn (; 11 ;) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.pow (; 11 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
-  local.get $0
-  local.set $2
-  local.get $1
-  i32.const 1023
-  i32.gt_s
-  if
-   local.get $2
-   f64.const 8988465674311579538646525e283
-   f64.mul
-   local.set $2
-   local.get $1
-   i32.const 1023
-   i32.sub
-   local.set $1
-   local.get $1
-   i32.const 1023
-   i32.gt_s
-   if
-    local.get $2
-    f64.const 8988465674311579538646525e283
-    f64.mul
-    local.set $2
-    local.get $1
-    i32.const 1023
-    i32.sub
-    local.tee $3
-    i32.const 1023
-    local.tee $4
-    local.get $3
-    local.get $4
-    i32.lt_s
-    select
-    local.set $1
-   end
-  else
-   local.get $1
-   i32.const -1022
-   i32.lt_s
-   if
-    local.get $2
-    f64.const 2.2250738585072014e-308
-    f64.const 9007199254740992
-    f64.mul
-    f64.mul
-    local.set $2
-    local.get $1
-    i32.const 1022
-    i32.const 53
-    i32.sub
-    i32.add
-    local.set $1
-    local.get $1
-    i32.const -1022
-    i32.lt_s
-    if
-     local.get $2
-     f64.const 2.2250738585072014e-308
-     f64.const 9007199254740992
-     f64.mul
-     f64.mul
-     local.set $2
-     local.get $1
-     i32.const 1022
-     i32.add
-     i32.const 53
-     i32.sub
-     local.tee $3
-     i32.const -1022
-     local.tee $4
-     local.get $3
-     local.get $4
-     i32.gt_s
-     select
-     local.set $1
-    end
-   end
-  end
-  local.get $2
-  i64.const 1023
-  local.get $1
-  i64.extend_i32_s
-  i64.add
-  i64.const 52
-  i64.shl
-  f64.reinterpret_i64
-  f64.mul
- )
- (func $~lib/math/NativeMath.pow (; 12 ;) (param $0 f64) (param $1 f64) (result f64)
-  (local $2 i64)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
+  (local $5 i64)
+  (local $6 i64)
+  (local $7 i64)
+  (local $8 i64)
+  (local $9 i64)
+  (local $10 f64)
+  (local $11 i64)
   (local $12 i32)
   (local $13 i64)
   (local $14 i64)
@@ -1367,7 +1275,7 @@
   end
   return
  )
- (func $std/operator-overloading/Tester.pow (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.pow (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1400,7 +1308,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.and (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.and (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1427,7 +1335,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.or (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.or (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1454,7 +1362,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.xor (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.xor (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1481,7 +1389,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.equals (; 17 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.equals (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1510,7 +1418,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.notEquals (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.notEquals (; 17 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1539,7 +1447,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.greater (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.greater (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1568,7 +1476,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.greaterEquals (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.greaterEquals (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1597,7 +1505,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.less (; 21 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.less (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1626,7 +1534,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.lessEquals (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.lessEquals (; 21 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1655,7 +1563,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.shr (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shr (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1675,7 +1583,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.shu (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shu (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1695,7 +1603,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.shl (; 25 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.shl (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1715,7 +1623,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $std/operator-overloading/Tester.pos (; 26 ;) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.pos (; 25 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1731,7 +1639,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $std/operator-overloading/Tester.neg (; 27 ;) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.neg (; 26 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1751,7 +1659,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $std/operator-overloading/Tester.not (; 28 ;) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.not (; 27 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1771,7 +1679,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $std/operator-overloading/Tester.excl (; 29 ;) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester.excl (; 28 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -1791,7 +1699,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $std/operator-overloading/Tester#inc (; 30 ;) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#inc (; 29 ;) (param $0 i32) (result i32)
   local.get $0
   local.get $0
   i32.load
@@ -1807,7 +1715,7 @@
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $std/operator-overloading/Tester#dec (; 31 ;) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#dec (; 30 ;) (param $0 i32) (result i32)
   local.get $0
   local.get $0
   i32.load
@@ -1823,7 +1731,7 @@
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $std/operator-overloading/Tester#postInc (; 32 ;) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postInc (; 31 ;) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1835,7 +1743,7 @@
   i32.add
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/Tester#postDec (; 33 ;) (param $0 i32) (result i32)
+ (func $std/operator-overloading/Tester#postDec (; 32 ;) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load
@@ -1847,7 +1755,7 @@
   i32.sub
   call $std/operator-overloading/Tester#constructor
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 34 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (; 33 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1865,7 +1773,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 35 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (; 34 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1883,7 +1791,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $start:std/operator-overloading (; 36 ;)
+ (func $start:std/operator-overloading (; 35 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3135,10 +3043,10 @@
   local.get $22
   call $~lib/rt/stub/__release
  )
- (func $start (; 37 ;)
+ (func $start (; 36 ;)
   call $start:std/operator-overloading
  )
- (func $null (; 38 ;)
+ (func $null (; 37 ;)
   unreachable
  )
 )

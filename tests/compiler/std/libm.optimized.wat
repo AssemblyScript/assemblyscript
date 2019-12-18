@@ -7773,9 +7773,9 @@
   f32.min
  )
  (func $~lib/math/NativeMathf.pow (; 106 ;) (param $0 f32) (param $1 f32) (result f32)
-  (local $2 f32)
-  (local $3 f32)
-  (local $4 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 f64)
   (local $5 i32)
   (local $6 i32)
   (local $7 f64)
