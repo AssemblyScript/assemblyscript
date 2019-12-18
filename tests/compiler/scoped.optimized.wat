@@ -1,9 +1,9 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 0)
  (export "memory" (memory $0))
  (start $start)
- (func $start:scoped (; 0 ;) (type $FUNCSIG$v)
+ (func $start:scoped (; 0 ;)
   (local $0 i32)
   loop $loop|0
    local.get $0
@@ -32,10 +32,10 @@
    end
   end
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
+ (func $start (; 1 ;)
   call $start:scoped
  )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 2 ;)
   unreachable
  )
 )

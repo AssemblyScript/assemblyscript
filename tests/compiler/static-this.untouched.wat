@@ -1,7 +1,7 @@
 (module
- (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00s\00t\00a\00t\00i\00c\00-\00t\00h\00i\00s\00.\00t\00s\00")
@@ -10,10 +10,10 @@
  (global $static-this/Foo.bar (mut i32) (i32.const 42))
  (export "memory" (memory $0))
  (start $start)
- (func $static-this/Foo.getBar (; 1 ;) (type $FUNCSIG$i) (result i32)
+ (func $static-this/Foo.getBar (; 1 ;) (result i32)
   global.get $static-this/Foo.bar
  )
- (func $start:static-this (; 2 ;) (type $FUNCSIG$v)
+ (func $start:static-this (; 2 ;)
   call $static-this/Foo.getBar
   i32.const 42
   i32.eq
@@ -27,10 +27,10 @@
    unreachable
   end
  )
- (func $start (; 3 ;) (type $FUNCSIG$v)
+ (func $start (; 3 ;)
   call $start:static-this
  )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $null (; 4 ;)
   unreachable
  )
 )

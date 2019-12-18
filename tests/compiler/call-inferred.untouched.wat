@@ -1,9 +1,9 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$dd (func (param f64) (result f64)))
- (type $FUNCSIG$ff (func (param f32) (result f32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $f32_=>_f32 (func (param f32) (result f32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $f64_=>_f64 (func (param f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00i\00n\00f\00e\00r\00r\00e\00d\00.\00t\00s\00")
@@ -12,19 +12,19 @@
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $call-inferred/foo<i32> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $call-inferred/foo<i32> (; 1 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $call-inferred/foo<f64> (; 2 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $call-inferred/foo<f64> (; 2 ;) (param $0 f64) (result f64)
   local.get $0
  )
- (func $call-inferred/foo<f32> (; 3 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $call-inferred/foo<f32> (; 3 ;) (param $0 f32) (result f32)
   local.get $0
  )
- (func $call-inferred/bar<f32> (; 4 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $call-inferred/bar<f32> (; 4 ;) (param $0 f32) (result f32)
   local.get $0
  )
- (func $call-inferred/bar<f32>|trampoline (; 5 ;) (type $FUNCSIG$ff) (param $0 f32) (result f32)
+ (func $call-inferred/bar<f32>|trampoline (; 5 ;) (param $0 f32) (result f32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -39,7 +39,7 @@
   local.get $0
   call $call-inferred/bar<f32>
  )
- (func $start:call-inferred (; 6 ;) (type $FUNCSIG$v)
+ (func $start:call-inferred (; 6 ;)
   i32.const 42
   call $call-inferred/foo<i32>
   i32.const 42
@@ -95,10 +95,10 @@
    unreachable
   end
  )
- (func $start (; 7 ;) (type $FUNCSIG$v)
+ (func $start (; 7 ;)
   call $start:call-inferred
  )
- (func $null (; 8 ;) (type $FUNCSIG$v)
+ (func $null (; 8 ;)
   unreachable
  )
 )

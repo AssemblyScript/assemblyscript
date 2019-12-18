@@ -107,8 +107,8 @@ declare function trunc<T = f32 | f64>(value: T): T;
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
 declare function store<T>(ptr: usize, value: any, immOffset?: usize, immAlign?: usize): void;
-/** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
-declare function unreachable(): any; // sic
+/** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression. */
+declare function unreachable(): never;
 
 /** NaN (not a number) as a 32-bit or 64-bit float depending on context. */
 declare const NaN: f32 | f64;
@@ -1429,6 +1429,8 @@ declare class String {
   replaceAll(search: string, replacement: string): string;
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
+  toLowerCase(): string;
+  toUpperCase(): string;
   toString(): string;
 }
 

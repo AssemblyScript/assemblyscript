@@ -1,12 +1,12 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $ternary/a (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:ternary (; 0 ;) (type $FUNCSIG$v)
+ (func $start:ternary (; 0 ;)
   i32.const 1
   drop
   i32.const 1
@@ -20,10 +20,10 @@
   i32.const 1
   global.set $ternary/a
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
+ (func $start (; 1 ;)
   call $start:ternary
  )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 2 ;)
   unreachable
  )
 )

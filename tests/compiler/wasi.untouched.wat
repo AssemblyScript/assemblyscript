@@ -1,5 +1,5 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -10,14 +10,14 @@
  (global $wasi/sig (mut i32) (i32.const 1))
  (export "memory" (memory $0))
  (start $start)
- (func $start:wasi (; 0 ;) (type $FUNCSIG$v)
+ (func $start:wasi (; 0 ;)
   i32.const 9
   global.set $wasi/sig
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
+ (func $start (; 1 ;)
   call $start:wasi
  )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 2 ;)
   unreachable
  )
 )

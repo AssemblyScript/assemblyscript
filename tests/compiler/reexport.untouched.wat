@@ -1,6 +1,6 @@
 (module
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -20,17 +20,17 @@
  (export "rerenamed_sub" (func $export/mul))
  (export "renamed_ns.two" (func $export/ns.two))
  (start $start)
- (func $export/add (; 0 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $export/mul (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/mul (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.mul
  )
- (func $start:reexport (; 2 ;) (type $FUNCSIG$v)
+ (func $start:reexport (; 2 ;)
   i32.const 1
   i32.const 2
   call $export/add
@@ -40,21 +40,21 @@
   i32.add
   drop
  )
- (func $export/sub (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/sub (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $export/ns.one (; 4 ;) (type $FUNCSIG$v)
+ (func $export/ns.one (; 4 ;)
   nop
  )
- (func $export/ns.two (; 5 ;) (type $FUNCSIG$v)
+ (func $export/ns.two (; 5 ;)
   nop
  )
- (func $start (; 6 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;)
   call $start:reexport
  )
- (func $null (; 7 ;) (type $FUNCSIG$v)
+ (func $null (; 7 ;)
   unreachable
  )
 )

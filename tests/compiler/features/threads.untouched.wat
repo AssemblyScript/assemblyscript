@@ -1,12 +1,12 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 (shared 1 1))
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
  (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $features/threads/testAtomic (; 0 ;) (type $FUNCSIG$v)
+ (func $features/threads/testAtomic (; 0 ;)
   i32.const 0
   i32.atomic.load8_u
   drop
@@ -288,7 +288,7 @@
   i64.atomic.rmw.cmpxchg offset=8
   drop
  )
- (func $features/threads/testAtomicAsm (; 1 ;) (type $FUNCSIG$v)
+ (func $features/threads/testAtomicAsm (; 1 ;)
   i32.const 0
   i32.atomic.load8_u
   drop
@@ -535,14 +535,14 @@
   i64.atomic.rmw.cmpxchg
   drop
  )
- (func $start:features/threads (; 2 ;) (type $FUNCSIG$v)
+ (func $start:features/threads (; 2 ;)
   call $features/threads/testAtomic
   call $features/threads/testAtomicAsm
  )
- (func $start (; 3 ;) (type $FUNCSIG$v)
+ (func $start (; 3 ;)
   call $start:features/threads
  )
- (func $null (; 4 ;) (type $FUNCSIG$v)
+ (func $null (; 4 ;)
   unreachable
  )
 )

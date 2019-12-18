@@ -1,7 +1,8 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
-import { compareImpl, strtol, strtod, isSpace } from "./util/string";
+import { compareImpl, strtol, strtod, isSpace, isAscii, toLower8, toUpper8 } from "./util/string";
+import { specialsUpper, casemap, bsearch } from "./util/casemap";
 import { E_INVALIDLENGTH } from "./util/error";
 import { ArrayBufferView } from "./arraybuffer";
 import { idof } from "./builtins";
@@ -10,27 +11,27 @@ import { idof } from "./builtins";
 
   @lazy static readonly MAX_LENGTH: i32 = BLOCK_MAXSIZE >>> alignof<u16>();
 
-  static fromCharCode(unit: i32, surr: i32 = -1): string {
+  static fromCharCode(unit: i32, surr: i32 = -1): String {
     var hasSur = surr > 0;
-    var out = __alloc(2 << i32(hasSur), idof<string>());
+    var out = __alloc(2 << i32(hasSur), idof<String>());
     store<u16>(out, <u16>unit);
     if (hasSur) store<u16>(out, <u16>surr, 2);
-    return changetype<string>(out); // retains
+    return changetype<String>(out); // retains
   }
 
-  static fromCodePoint(code: i32): string {
+  static fromCodePoint(code: i32): String {
     assert(<u32>code <= 0x10FFFF);
     var hasSur = code > 0xFFFF;
-    var out = __alloc(2 << i32(hasSur), idof<string>());
+    var out = __alloc(2 << i32(hasSur), idof<String>());
     if (!hasSur) {
       store<u16>(out, <u16>code);
     } else {
       code -= 0x10000;
-      let lo: u32 = (code & 0x3FF) + 0xDC00;
-      let hi: u32 = (code >>> 10) + 0xD800;
-      store<u32>(out, hi | (lo << 16));
+      let hi = (code & 0x03FF) | 0xDC00;
+      let lo = (code >>> 10) | 0xD800;
+      store<u32>(out, lo | (hi << 16));
     }
-    return changetype<string>(out); // retains
+    return changetype<String>(out); // retains
   }
 
   get length(): i32 {
@@ -50,12 +51,13 @@ import { idof } from "./builtins";
   }
 
   codePointAt(pos: i32): i32 {
-    if (<u32>pos >= <u32>this.length) return -1; // (undefined)
+    var len = this.length;
+    if (<u32>pos >= <u32>len) return -1; // (undefined)
     var first = <i32>load<u16>(changetype<usize>(this) + (<usize>pos << 1));
-    if (first < 0xD800 || first > 0xDBFF || pos + 1 == this.length) return first;
+    if ((first & 0xFC00) != 0xD800 || pos + 1 == len) return first;
     var second = <i32>load<u16>(changetype<usize>(this) + ((<usize>pos + 1) << 1));
-    if (second < 0xDC00 || second > 0xDFFF) return first;
-    return ((first - 0xD800) << 10) + (second - 0xDC00) + 0x10000;
+    if ((second & 0xFC00) != 0xDC00) return first;
+    return (first - 0xD800 << 10) + (second - 0xDC00) + 0x10000;
   }
 
   @operator("+") private static __concat(left: String, right: String): String {
@@ -432,7 +434,7 @@ import { idof } from "./builtins";
 
   split(separator: String | null = null, limit: i32 = i32.MAX_VALUE): String[] {
     if (!limit) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
-    if (separator === null) return <String[]>[this];
+    if (separator === null) return [this];
     var length: isize = this.length;
     var sepLen: isize = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;
@@ -482,6 +484,121 @@ import { idof } from "./builtins";
     }
     return changetype<Array<String>>(result); // retains
     // releases result
+  }
+
+  toLowerCase(): String {
+    var len = <usize>this.length;
+    if (!len) return this;
+    var codes = __alloc(len * 2 * 2, idof<String>());
+    var j: usize = 0;
+    for (let i: usize = 0; i < len; ++i, ++j) {
+      let c = <u32>load<u16>(changetype<usize>(this) + (i << 1));
+      if (isAscii(c)) {
+        store<u16>(codes + (j << 1), toLower8(c));
+      } else {
+        // check and read surrogate pair
+        if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
+          let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
+          if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
+            let c0 = c;
+            c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
+            ++i;
+            if (c >= 0x20000) {
+              store<u32>(codes + (j << 1), c0 | (c1 << 16));
+              ++j;
+              continue;
+            }
+          }
+        }
+        // check special casing for lower table. It has one ently so instead lookup we just inline this.
+        if (c == 0x0130) {
+          // 0x0130 -> [0x0069, 0x0307]
+          store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069);
+          ++j;
+        } else if (c - 0x24B6 <= 0x24CF - 0x24B6) {
+          // Range 0x24B6 <= c <= 0x24CF not covered by casemap and require special early handling
+          store<u16>(codes + (j << 1), c + 26);
+        } else {
+          let code = casemap(c, 0) & 0x1FFFFF;
+          if (code < 0x10000) {
+            store<u16>(codes + (j << 1), code);
+          } else {
+            // store as surrogare pair
+            code -= 0x10000;
+            let lo = (code >>> 10) | 0xD800;
+            let hi = (code & 0x03FF) | 0xDC00;
+            store<u32>(codes + (j << 1), lo | (hi << 16));
+            ++j;
+          }
+        }
+      }
+    }
+    codes = __realloc(codes, j << 1);
+    return changetype<String>(codes); // retains
+  }
+
+  toUpperCase(): String {
+    var len = <usize>this.length;
+    if (!len) return this;
+    var codes = __alloc(len * 3 * 2, idof<String>());
+    // @ts-ignore: cast
+    var specialsUpperPtr = specialsUpper.dataStart as usize;
+    var specialsUpperLen = specialsUpper.length;
+    var j: usize = 0;
+    for (let i: usize = 0; i < len; ++i, ++j) {
+      let c = <u32>load<u16>(changetype<usize>(this) + (i << 1));
+      if (isAscii(c)) {
+        store<u16>(codes + (j << 1), toUpper8(c));
+      } else {
+        // check and read surrogate pair
+        if ((c - 0xD7FF < 0xDC00 - 0xD7FF) && i < len - 1) {
+          let c1 = <u32>load<u16>(changetype<usize>(this) + (i << 1), 2);
+          if (c1 - 0xDBFF < 0xE000 - 0xDBFF) {
+            let c0 = c;
+            c = (((c & 0x03FF) << 10) | (c1 & 0x03FF)) + 0x10000;
+            ++i;
+            if (c >= 0x20000) {
+              store<u32>(codes + (j << 1), c0 | (c1 << 16));
+              ++j;
+              continue;
+            }
+          }
+        }
+        // Range 0x24D0 <= c <= 0x24E9 not covered by casemap and require special early handling
+        if (c - 0x24D0 <= 0x24E9 - 0x24D0) {
+          // monkey patch
+          store<u16>(codes + (j << 1), c - 26);
+        } else {
+          let index = -1;
+          // Fast range check. See first and last rows in specialsUpper table
+          if (c - 0x00DF <= 0xFB17 - 0x00DF) {
+            index = <usize>bsearch(c, specialsUpperPtr, specialsUpperLen);
+          }
+          if (~index) {
+            // load next 3 code points from row with `index` offset for specialsUpper table
+            let ab = load<u32>(specialsUpperPtr + (index << 1), 2);
+            let cc = load<u16>(specialsUpperPtr + (index << 1), 6);
+            store<u32>(codes + (j << 1), ab, 0);
+            store<u16>(codes + (j << 1), cc, 4);
+            j += 1 + usize(cc != 0);
+          } else {
+            let code = casemap(c, 1) & 0x1FFFFF;
+            if (code < 0x10000) {
+              store<u16>(codes + (j << 1), code);
+            } else {
+              // store as surrogare pair
+              code -= 0x10000;
+              let lo = (code >>> 10) | 0xD800;
+              let hi = (code & 0x03FF) | 0xDC00;
+              store<u32>(codes + (j << 1), lo | (hi << 16));
+              ++j;
+            }
+          }
+        }
+      }
+    }
+    codes = __realloc(codes, j << 1);
+    return changetype<String>(codes); // retains
   }
 
   toString(): String {
@@ -548,7 +665,7 @@ export namespace String {
           if ((c1 & 0xFC00) == 0xD800 && strOff + 2 < strEnd) {
             let c2 = <u32>load<u16>(strOff, 2);
             if ((c2 & 0xFC00) == 0xDC00) {
-              c1 = 0x10000 + ((c1 & 0x03FF) << 10) + (c2 & 0x03FF);
+              c1 = 0x10000 + ((c1 & 0x03FF) << 10) | (c2 & 0x03FF);
               store<u8>(bufOff, c1 >> 18      | 240);
               store<u8>(bufOff, c1 >> 12 & 63 | 128, 1);
               store<u8>(bufOff, c1 >> 6  & 63 | 128, 2);
@@ -573,17 +690,17 @@ export namespace String {
       return changetype<ArrayBuffer>(buf); // retains
     }
 
-    export function decode(buf: ArrayBuffer, nullTerminated: bool = false): string {
+    export function decode(buf: ArrayBuffer, nullTerminated: bool = false): String {
       return decodeUnsafe(changetype<usize>(buf), buf.byteLength, nullTerminated);
     }
 
     // @ts-ignore: decorator
     @unsafe
-    export function decodeUnsafe(buf: usize, len: usize, nullTerminated: bool = false): string {
+    export function decodeUnsafe(buf: usize, len: usize, nullTerminated: bool = false): String {
       var bufOff = buf;
       var bufEnd = buf + len;
       assert(bufEnd >= bufOff); // guard wraparound
-      var str = __alloc(len << 1, idof<string>()); // max is one u16 char per u8 byte
+      var str = __alloc(len << 1, idof<String>()); // max is one u16 char per u8 byte
       var strOff = str;
       while (bufOff < bufEnd) {
         let cp = <u32>load<u8>(bufOff++);
@@ -604,8 +721,8 @@ export namespace String {
              load<u8>(bufOff, 2) & 63
           ) - 0x10000;
           bufOff += 3;
-          store<u16>(strOff, 0xD800 + (cp >> 10));
-          store<u16>(strOff, 0xDC00 + (cp & 1023), 2);
+          store<u16>(strOff, 0xD800 | (cp >> 10));
+          store<u16>(strOff, 0xDC00 | (cp & 1023), 2);
           strOff += 4;
         } else {
           if (bufEnd - bufOff < 2) break;
@@ -617,7 +734,7 @@ export namespace String {
           bufOff += 2; strOff += 2;
         }
       }
-      return changetype<string>(__realloc(str, strOff - str)); // retains
+      return changetype<String>(__realloc(str, strOff - str)); // retains
     }
   }
 
@@ -634,16 +751,16 @@ export namespace String {
       return changetype<ArrayBuffer>(buf); // retains
     }
 
-    export function decode(buf: ArrayBuffer): string {
+    export function decode(buf: ArrayBuffer): String {
       return decodeUnsafe(changetype<usize>(buf), buf.byteLength);
     }
 
     // @ts-ignore: decorator
     @unsafe
-    export function decodeUnsafe(buf: usize, len: usize): string {
-      var str = __alloc(len &= ~1, idof<string>());
+    export function decodeUnsafe(buf: usize, len: usize): String {
+      var str = __alloc(len &= ~1, idof<String>());
       memory.copy(str, buf, len);
-      return changetype<string>(str); // retains
+      return changetype<String>(str); // retains
     }
   }
 }

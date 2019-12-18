@@ -1,5 +1,5 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 0)
  (global $infer-type/ri (mut i32) (i32.const 0))
  (global $infer-type/rI (mut i64) (i64.const 0))
@@ -7,7 +7,7 @@
  (global $infer-type/rF (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:infer-type (; 0 ;) (type $FUNCSIG$v)
+ (func $start:infer-type (; 0 ;)
   (local $0 i32)
   i32.const 0
   global.set $infer-type/ri
@@ -30,10 +30,10 @@
    end
   end
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
+ (func $start (; 1 ;)
   call $start:infer-type
  )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 2 ;)
   unreachable
  )
 )

@@ -1,9 +1,11 @@
 (module
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00n\00u\00m\00b\00e\00r")
@@ -20,7 +22,7 @@
  (global $~lib/started (mut i32) (i32.const 0))
  (export "__start" (func $start))
  (export "memory" (memory $0))
- (func $~lib/string/String#get:length (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -108,7 +110,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -140,10 +142,10 @@
   end
   i32.const 0
  )
- (func $start:typeof~anonymous|0 (; 4 ;) (type $FUNCSIG$v)
+ (func $start:typeof~anonymous|0 (; 4 ;)
   nop
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 5 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 5 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -212,7 +214,7 @@
   i32.store offset=12
   local.get $1
  )
- (func $start:typeof (; 7 ;) (type $FUNCSIG$v)
+ (func $start:typeof (; 7 ;)
   i32.const 56
   i32.const 56
   call $~lib/string/String.__eq
@@ -496,7 +498,7 @@
    unreachable
   end
  )
- (func $start (; 8 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;)
   global.get $~lib/started
   if
    return
@@ -506,7 +508,7 @@
   end
   call $start:typeof
  )
- (func $null (; 9 ;) (type $FUNCSIG$v)
+ (func $null (; 9 ;)
   unreachable
  )
 )

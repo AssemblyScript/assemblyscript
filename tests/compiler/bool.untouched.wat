@@ -1,6 +1,6 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\0e\00\00\00\01\00\00\00\01\00\00\00\0e\00\00\00b\00o\00o\00l\00.\00t\00s\00")
@@ -15,7 +15,7 @@
  (global $bool/uu (mut i32) (i32.const 2))
  (export "memory" (memory $0))
  (start $start)
- (func $start:bool (; 1 ;) (type $FUNCSIG$v)
+ (func $start:bool (; 1 ;)
   global.get $bool/i
   i32.const 0
   i32.ne
@@ -115,10 +115,10 @@
    unreachable
   end
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;)
   call $start:bool
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;)
   unreachable
  )
 )
