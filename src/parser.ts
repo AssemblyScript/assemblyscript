@@ -28,7 +28,7 @@ import {
 } from "./diagnostics";
 
 import {
-  normalizePath
+  normalizePath, CharCode
 } from "./util";
 
 import {
@@ -3560,11 +3560,11 @@ export class Parser extends DiagnosticEmitter {
         return this.maybeParseCallExpression(tn, expr);
       }
       case Token.STRINGLITERAL: {
-        return Node.createStringLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
+        return this.parseStringLiteral(tn, startPos);
       }
       case Token.TEMPLATELITERAL: {
         return this.parseTemplateLiteralExpression(tn);
-        return Node.createTemplateLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
+        // return Node.createTemplateLiteralExpression(tn.readString(), tn.range(startPos, tn.pos));
       }
       case Token.INTEGERLITERAL: {
         return Node.createIntegerLiteralExpression(tn.readInteger(), tn.range(startPos, tn.pos));
@@ -3613,25 +3613,42 @@ export class Parser extends DiagnosticEmitter {
       }
     }
   }
+  parseStringLiteral(tn: Tokenizer, startPos: i32, quote: i32 = -1): Expression {
+    return Node.createStringLiteralExpression(tn.readString(quote), tn.range(startPos, tn.pos));
+  }
 
   parseTemplateLiteralExpression(tn: Tokenizer): Expression | null {
     var startPos = tn.pos;
     // at `(Sring* | ${ Epression }*)`
-    var str = tn.readString();
-    const parts: Expression[] = [Node.createStringLiteralExpression(str, tn.range(startPos, tn.pos))];
-
+    const parts: Expression[] = [this.parseStringLiteral(tn, startPos)];
+    
     var token = tn.next();
     while (token == Token.DOLLAR) {
       tn.skip(token);
       tn.skip(Token.OPENBRACE);
-      let expr = this.parseExpression(tn);
+      let expr = this.parseExpressionStart(tn);
       if (expr == null) return null;
       parts.push(expr);
       tn.skip(Token.OPENBRACE);
-      
+      token = tn.next();
+      if (token == Token.TEMPLATELITERAL) {
+        tn.skip(token);
+        break;
+      }
+      if (token == Token.DOLLAR) {
+        continue;
+      }
+      startPos = tn.pos;
+      parts.push(this.parseStringLiteral(tn, startPos, CharCode.BACKTICK));
+      token = tn.next();
     }
-
-    return null;
+    if (parts.length == 1) {
+      return parts[0];
+    }
+    return parts.reduce((acc: Expression | null, expr: Expression) => {
+      if (acc == null) return expr;
+      return  Node.createBinaryExpression(Token.PLUS, acc, expr, tn.range(startPos, tn.pos));
+    }, null);
   }
 
   tryParseTypeArgumentsBeforeArguments(

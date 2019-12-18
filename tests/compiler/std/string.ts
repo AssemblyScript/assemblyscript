@@ -8,10 +8,12 @@ declare function toLowerCaseFromIndex(index: i32, codePointIndex: i32): i32;
 
 // preliminary
 var str: string = "hi, I'm a string";
+var templateStr: string = `${str}`;
 var nullStr: string;
 
 // exactly once in static memory
 assert(changetype<usize>(str) == changetype<usize>("hi, I'm a string"));
+assert(str == templateStr);
 
 assert("\xDF" == "ß");
 assert("\xDF\xDF" == "ßß");
@@ -688,6 +690,8 @@ for (let i = 0; i <= 0x10FFFF; i++) {
   assert(origUpperCode == expectUpperCode);
 }
 
+
+
 export function getString(): string {
   return str;
 }
@@ -695,3 +699,4 @@ export function getString(): string {
 // Unleak globals
 
 __release(changetype<usize>(str));
+__release(changetype<usize>(templateStr));

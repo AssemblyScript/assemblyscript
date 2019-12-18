@@ -600,7 +600,9 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.EXCLAMATION;
         }
         case CharCode.DOUBLEQUOTE:
-        case CharCode.SINGLEQUOTE:
+        case CharCode.SINGLEQUOTE: {
+          return Token.STRINGLITERAL;
+        }
         case CharCode.BACKTICK: { // TODO
           return Token.TEMPLATELITERAL; // expects a call to readString
         }
@@ -1081,9 +1083,9 @@ export class Tokenizer extends DiagnosticEmitter {
     return text.substring(start, this.pos);
   }
 
-  readString(): string {
+  readString(quote: i32 = -1): string {
     var text = this.source.text;
-    var quote = text.charCodeAt(this.pos++);
+    quote = quote == -1 ? text.charCodeAt(this.pos++) : quote;
     var start = this.pos;
     var end = this.end;
     var result = "";
@@ -1098,7 +1100,7 @@ export class Tokenizer extends DiagnosticEmitter {
       }
       let c = text.charCodeAt(this.pos);
       if (quote == CharCode.BACKTICK && c == CharCode.DOLLAR) {
-        result += text.substring(start, this.pos++);
+        result += text.substring(start, this.pos);
         break;
       }
       if (c == quote) {
