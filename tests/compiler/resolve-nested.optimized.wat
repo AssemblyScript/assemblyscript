@@ -1,5 +1,4 @@
 (module
- (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
@@ -20,8 +19,5 @@
  )
  (func $resolve-nested/outer (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   nop
- )
- (func $null (; 3 ;)
-  unreachable
  )
 )

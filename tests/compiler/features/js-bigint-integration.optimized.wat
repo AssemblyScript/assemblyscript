@@ -50,7 +50,4 @@
   end
   call $start:features/js-bigint-integration
  )
- (func $null (; 5 ;)
-  unreachable
- )
 )

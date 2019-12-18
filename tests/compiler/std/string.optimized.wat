@@ -16813,7 +16813,4 @@
    call $~lib/rt/pure/__visit
   end
  )
- (func $null (; 101 ;)
-  unreachable
- )
 )

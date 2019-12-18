@@ -9,7 +9,7 @@
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
  (table $0 2 funcref)
- (elem (i32.const 0) $null $inlining/func_fe~anonymous|0)
+ (elem (i32.const 1) $inlining/func_fe~anonymous|0)
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -518,8 +518,5 @@
  )
  (func $start (; 10 ;)
   call $start:inlining
- )
- (func $null (; 11 ;)
-  unreachable
  )
 )

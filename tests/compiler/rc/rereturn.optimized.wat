@@ -1896,7 +1896,4 @@
   end
   unreachable
  )
- (func $null (; 29 ;)
-  unreachable
- )
 )

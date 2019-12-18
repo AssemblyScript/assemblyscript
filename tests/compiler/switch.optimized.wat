@@ -397,7 +397,4 @@
  (func $start (; 6 ;)
   call $start:switch
  )
- (func $null (; 7 ;)
-  unreachable
- )
 )

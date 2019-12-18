@@ -69,7 +69,4 @@
  (func $start (; 1 ;)
   call $start:retain-i32
  )
- (func $null (; 2 ;)
-  unreachable
- )
 )

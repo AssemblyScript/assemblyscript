@@ -97,7 +97,4 @@
  (func $start (; 2 ;)
   call $start:logical
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )

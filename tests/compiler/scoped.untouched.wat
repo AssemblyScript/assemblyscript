@@ -3,7 +3,6 @@
  (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $scoped/aGlobal (mut i32) (i32.const 1))
  (global $scoped/aConstant i32 (i32.const 3))
  (global $scoped/aStartFunctionLocal (mut i32) (i32.const 2))
@@ -67,8 +66,5 @@
  )
  (func $start (; 2 ;)
   call $start:scoped
- )
- (func $null (; 3 ;)
-  unreachable
  )
 )

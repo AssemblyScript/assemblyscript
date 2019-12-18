@@ -302,7 +302,4 @@
  (func $start (; 8 ;)
   call $start:std/object-literal
  )
- (func $null (; 9 ;)
-  unreachable
- )
 )

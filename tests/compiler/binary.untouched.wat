@@ -6,7 +6,6 @@
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
  (global $binary/I (mut i64) (i64.const 0))
@@ -3320,8 +3319,5 @@
  )
  (func $start (; 7 ;)
   call $start:binary
- )
- (func $null (; 8 ;)
-  unreachable
  )
 )

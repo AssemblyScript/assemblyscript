@@ -536,7 +536,4 @@
   call $features/threads/testAtomic
   call $features/threads/testAtomicAsm
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )

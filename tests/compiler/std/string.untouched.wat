@@ -4,8 +4,8 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $none_=>_none (func))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $i32_=>_f64 (func (param i32) (result f64)))
@@ -469,7 +469,6 @@
  (data (i32.const 26208) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00")
  (data (i32.const 26288) "\0b\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\13\0d\00\00\02\00\00\00\93 \00\00\02\00\00\00\93\04\00\00\02\00\00\00\93\00\00\00\02\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00S\00\00\00\02\00\00\003\00\00\00\02\00\00\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $std/string/str (mut i32) (i32.const 24))
  (global $std/string/nullStr (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -21069,8 +21068,5 @@
    call $~lib/rt/pure/__visit
   end
   return
- )
- (func $null (; 120 ;)
-  unreachable
  )
 )

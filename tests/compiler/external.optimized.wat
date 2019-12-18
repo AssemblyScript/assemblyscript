@@ -12,7 +12,4 @@
  (export "two" (func $external/two))
  (export "three" (func $external/three))
  (export "var_" (global $external/var_))
- (func $null (; 4 ;)
-  unreachable
- )
 )

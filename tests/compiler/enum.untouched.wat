@@ -3,7 +3,6 @@
  (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
  (global $enum/Implicit.TWO i32 (i32.const 2))
@@ -82,8 +81,5 @@
  )
  (func $start (; 2 ;)
   call $start:enum
- )
- (func $null (; 3 ;)
-  unreachable
  )
 )

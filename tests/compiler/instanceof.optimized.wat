@@ -20,7 +20,4 @@
   i32.const 1
   global.set $instanceof/an
  )
- (func $null (; 2 ;)
-  unreachable
- )
 )

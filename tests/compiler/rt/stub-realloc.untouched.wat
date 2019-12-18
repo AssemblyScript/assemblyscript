@@ -11,7 +11,6 @@
  (data (i32.const 56) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00r\00t\00/\00s\00t\00u\00b\00-\00r\00e\00a\00l\00l\00o\00c\00.\00t\00s\00")
  (data (i32.const 112) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $rt/stub-realloc/ptr (mut i32) (i32.const 0))
@@ -1733,8 +1732,5 @@
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
   call $start:rt/stub-realloc
- )
- (func $null (; 12 ;)
-  unreachable
  )
 )

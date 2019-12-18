@@ -1,10 +1,9 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "test" (func $class-overloading/test))
  (start $start)
@@ -32,8 +31,5 @@
  )
  (func $start (; 5 ;)
   call $start:class-overloading
- )
- (func $null (; 6 ;)
-  unreachable
  )
 )

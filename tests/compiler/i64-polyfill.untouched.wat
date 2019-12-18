@@ -2,10 +2,8 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $../../lib/i64/assembly/i64/lo (mut i32) (i32.const 0))
  (global $../../lib/i64/assembly/i64/hi (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -749,8 +747,5 @@
   global.set $../../lib/i64/assembly/i64/lo
   i32.const 0
   global.set $../../lib/i64/assembly/i64/hi
- )
- (func $null (; 31 ;)
-  unreachable
  )
 )

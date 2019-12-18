@@ -10,7 +10,6 @@
  (data (i32.const 8) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00e\00r\00r\00o\00r")
  (data (i32.const 40) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00r\00e\00t\00a\00i\00n\00-\00r\00e\00l\00e\00a\00s\00e\00.\00t\00s")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $retain-release/REF (mut i32) (i32.const 0))
@@ -268,8 +267,5 @@
   i32.store
   local.get $0
   global.set $retain-release/TARGET
- )
- (func $null (; 18 ;)
-  unreachable
  )
 )

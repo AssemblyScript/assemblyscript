@@ -1,9 +1,9 @@
 (module
  (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
@@ -579,8 +579,5 @@
   global.set $~lib/rt/stub/startOffset
   i32.const 160
   global.set $~lib/rt/stub/offset
- )
- (func $null (; 17 ;)
-  unreachable
  )
 )

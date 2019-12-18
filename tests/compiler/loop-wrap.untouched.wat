@@ -3,7 +3,6 @@
  (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "testAlwaysWrapped" (func $loop-wrap/testAlwaysWrapped))
  (export "testFirstWrapped" (func $loop-wrap/testFirstWrapped))
@@ -77,8 +76,5 @@
     br_if $continue|0
    end
   end
- )
- (func $null (; 3 ;)
-  unreachable
  )
 )

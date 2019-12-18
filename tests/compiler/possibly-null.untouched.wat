@@ -2,10 +2,8 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (export "testTrue" (func $possibly-null/testTrue))
  (export "testFalseElse" (func $possibly-null/testFalseElse))
@@ -414,8 +412,5 @@
   end
   local.get $0
   call $~lib/rt/stub/__release
- )
- (func $null (; 21 ;)
-  unreachable
  )
 )

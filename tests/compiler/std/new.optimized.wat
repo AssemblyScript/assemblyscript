@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -104,8 +104,5 @@
   global.set $~lib/rt/stub/offset
   call $std/new/AClass#constructor
   global.set $std/new/aClass
- )
- (func $null (; 4 ;)
-  unreachable
  )
 )

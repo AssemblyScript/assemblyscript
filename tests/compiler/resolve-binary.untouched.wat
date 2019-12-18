@@ -1,9 +1,9 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
@@ -54,7 +54,6 @@
  (data (i32.const 2240) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00r\00e\00m\00")
  (data (i32.const 2264) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00p\00o\00w\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $resolve-binary/a (mut i32) (i32.const 0))
  (global $resolve-binary/f (mut f64) (f64.const 0))
@@ -5782,8 +5781,5 @@
  )
  (func $start (; 45 ;)
   call $start:resolve-binary
- )
- (func $null (; 46 ;)
-  unreachable
  )
 )

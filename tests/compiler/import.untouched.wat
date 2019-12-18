@@ -3,7 +3,6 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $export/a i32 (i32.const 1))
  (global $export/b i32 (i32.const 2))
  (global $export/c i32 (i32.const 3))
@@ -62,8 +61,5 @@
  )
  (func $start (; 6 ;)
   call $start:import
- )
- (func $null (; 7 ;)
-  unreachable
  )
 )

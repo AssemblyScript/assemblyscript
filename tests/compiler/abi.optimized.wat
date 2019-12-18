@@ -19,7 +19,4 @@
   i32.const 0
   global.set $abi/y
  )
- (func $null (; 2 ;)
-  unreachable
- )
 )

@@ -15,7 +15,6 @@
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $std/date/creationTime (mut i64) (i64.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -340,8 +339,5 @@
  )
  (func $start (; 10 ;)
   call $start:std/date
- )
- (func $null (; 11 ;)
-  unreachable
  )
 )

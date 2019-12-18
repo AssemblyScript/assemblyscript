@@ -2,7 +2,6 @@
  (type $none_=>_none (func))
  (memory $0 (shared 1 1))
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
@@ -541,8 +540,5 @@
  )
  (func $start (; 3 ;)
   call $start:features/threads
- )
- (func $null (; 4 ;)
-  unreachable
  )
 )

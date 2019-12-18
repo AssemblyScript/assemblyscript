@@ -33,7 +33,4 @@
  (func $start (; 1 ;)
   call $start:infer-type
  )
- (func $null (; 2 ;)
-  unreachable
- )
 )

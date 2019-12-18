@@ -301,8 +301,8 @@ export class Compiler extends DiagnosticEmitter {
   memorySegments: MemorySegment[] = [];
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
-  /** Function table being compiled. */
-  functionTable: string[] = [ "null" ];
+  /** Function table being compiled. First elem is blank. */
+  functionTable: string[] = [];
   /** Argument count helper global. */
   argcVar: GlobalRef = 0;
   /** Argument count helper setter. */
@@ -450,10 +450,9 @@ export class Compiler extends DiagnosticEmitter {
     // import memory if requested (default memory is named '0' by Binaryen)
     if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
-    // set up function table
+    // set up function table (first elem is blank)
     var functionTable = this.functionTable;
-    module.setFunctionTable(functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(0));
-    module.addFunction("null", NativeType.None, NativeType.None, null, module.unreachable());
+    module.setFunctionTable(1 + functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(1));
 
     // import table if requested (default table is named '0' by Binaryen)
     if (options.importTable) module.addTableImport("0", "env", "table");
@@ -1602,7 +1601,7 @@ export class Compiler extends DiagnosticEmitter {
       return func.functionTableIndex;
     }
     var functionTable = this.functionTable;
-    var index = functionTable.length;
+    var index = 1 + functionTable.length; // first elem is blank
     if (!func.is(CommonFlags.TRAMPOLINE) && func.signature.requiredParameters < func.signature.parameterTypes.length) {
       // insert the trampoline if the function has optional parameters
       func = this.ensureTrampoline(func);

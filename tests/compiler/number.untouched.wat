@@ -1,10 +1,10 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $f32_=>_i32 (func (param f32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -40,7 +40,6 @@
  (data (i32.const 1904) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e\00")
  (data (i32.const 1928) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $number/a (mut i32) (i32.const 1))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -4217,8 +4216,5 @@
  )
  (func $start (; 30 ;)
   call $start:number
- )
- (func $null (; 31 ;)
-  unreachable
  )
 )

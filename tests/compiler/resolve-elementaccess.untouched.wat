@@ -1,10 +1,10 @@
 (module
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f32_=>_none (func (param i32 i32 f32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
@@ -39,7 +39,6 @@
  (data (i32.const 2000) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\002\00.\000\00")
  (data (i32.const 2024) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\001\001\00.\000\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -3827,8 +3826,5 @@
  )
  (func $start (; 27 ;)
   call $start:resolve-elementaccess
- )
- (func $null (; 28 ;)
-  unreachable
  )
 )

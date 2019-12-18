@@ -610,7 +610,4 @@
  (func $start (; 4 ;)
   call $start:std/pointer
  )
- (func $null (; 5 ;)
-  unreachable
- )
 )
