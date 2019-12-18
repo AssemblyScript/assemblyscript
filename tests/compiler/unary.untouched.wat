@@ -2,7 +2,6 @@
  (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $unary/i (mut i32) (i32.const 0))
  (global $unary/I (mut i64) (i64.const 0))
  (global $unary/f (mut f32) (f32.const 0))
@@ -382,8 +381,5 @@
  )
  (func $start (; 1 ;)
   call $start:unary
- )
- (func $null (; 2 ;)
-  unreachable
  )
 )

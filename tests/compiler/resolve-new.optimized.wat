@@ -87,7 +87,4 @@
   call $~lib/rt/stub/__alloc
   drop
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )

@@ -112,7 +112,4 @@
  (func $start (; 3 ;)
   call $start:new
  )
- (func $null (; 4 ;)
-  unreachable
- )
 )

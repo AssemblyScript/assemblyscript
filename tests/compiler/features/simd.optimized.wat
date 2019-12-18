@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -137,8 +137,5 @@
   v128.store offset=32
   local.get $0
   call $~lib/rt/stub/__free
- )
- (func $null (; 5 ;)
-  unreachable
  )
 )

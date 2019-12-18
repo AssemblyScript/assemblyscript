@@ -5,7 +5,6 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $new/ref (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -298,8 +297,5 @@
  )
  (func $start (; 11 ;)
   call $start:new
- )
- (func $null (; 12 ;)
-  unreachable
  )
 )

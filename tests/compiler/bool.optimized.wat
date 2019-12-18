@@ -7,7 +7,4 @@
  (func $start (; 0 ;)
   nop
  )
- (func $null (; 1 ;)
-  unreachable
- )
 )

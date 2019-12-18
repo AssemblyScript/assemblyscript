@@ -3,7 +3,6 @@
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
- (type $none_=>_none (func))
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $f64_i64_=>_i32 (func (param f64 i64) (result i32)))
  (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
@@ -15,7 +14,6 @@
  (data (i32.const 248) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
  (data (i32.const 296) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\08\01\00\00\08\01\00\00 \00\00\00\04\00\00\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $../../lib/libm/assembly/libm/E f64 (f64.const 2.718281828459045))
  (global $~lib/math/NativeMath.LN10 f64 (f64.const 2.302585092994046))
@@ -12545,8 +12543,5 @@
   local.set $1
   local.get $1
   f32.trunc
- )
- (func $null (; 122 ;)
-  unreachable
  )
 )

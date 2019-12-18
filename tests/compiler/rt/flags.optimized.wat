@@ -449,7 +449,4 @@
  (func $start (; 3 ;)
   call $start:rt/flags
  )
- (func $null (; 4 ;)
-  unreachable
- )
 )

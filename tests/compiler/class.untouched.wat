@@ -8,7 +8,6 @@
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $class/Animal.ONE (mut i32) (i32.const 1))
  (export "memory" (memory $0))
  (export "test" (func $class/test))
@@ -117,8 +116,5 @@
  )
  (func $start (; 8 ;)
   call $start:class
- )
- (func $null (; 9 ;)
-  unreachable
  )
 )

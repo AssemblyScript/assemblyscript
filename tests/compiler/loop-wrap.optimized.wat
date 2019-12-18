@@ -60,7 +60,4 @@
    end
   end
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )

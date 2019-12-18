@@ -1028,7 +1028,4 @@
  (func $start (; 16 ;)
   call $start:std/static-array
  )
- (func $null (; 17 ;)
-  unreachable
- )
 )

@@ -1,6 +1,5 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
@@ -223,8 +222,5 @@
   i32.const 1
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
   call $~lib/string/String#startsWith
- )
- (func $null (; 11 ;)
-  unreachable
  )
 )

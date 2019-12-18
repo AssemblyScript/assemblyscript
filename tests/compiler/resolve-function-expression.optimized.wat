@@ -11,7 +11,7 @@
  (data (i32.const 88) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
  (data (i32.const 112) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
  (table $0 4 funcref)
- (elem (i32.const 0) $null $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
+ (elem (i32.const 1) $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -401,8 +401,5 @@
  )
  (func $start (; 13 ;)
   call $start:resolve-function-expression
- )
- (func $null (; 14 ;)
-  unreachable
  )
 )

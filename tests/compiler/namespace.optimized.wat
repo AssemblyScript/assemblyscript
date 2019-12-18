@@ -11,7 +11,4 @@
   i32.const 1
   global.set $namespace/Outer.Inner.evenAnotherVar
  )
- (func $null (; 1 ;)
-  unreachable
- )
 )

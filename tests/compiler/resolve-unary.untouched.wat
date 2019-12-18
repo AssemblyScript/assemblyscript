@@ -27,7 +27,6 @@
  (data (i32.const 824) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\00+\00+\00")
  (data (i32.const 848) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\00-\00-\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -1253,8 +1252,5 @@
  )
  (func $start (; 31 ;)
   call $start:resolve-unary
- )
- (func $null (; 32 ;)
-  unreachable
  )
 )

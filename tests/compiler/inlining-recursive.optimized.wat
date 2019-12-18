@@ -11,7 +11,4 @@
  (func $inlining-recursive/baz (; 1 ;)
   call $inlining-recursive/baz
  )
- (func $null (; 2 ;)
-  unreachable
- )
 )

@@ -328,7 +328,4 @@
  (func $start (; 3 ;)
   call $start:memset
  )
- (func $null (; 4 ;)
-  unreachable
- )
 )

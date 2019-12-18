@@ -39,7 +39,4 @@
  (func $start (; 4 ;)
   call $start:declare
  )
- (func $null (; 5 ;)
-  unreachable
- )
 )

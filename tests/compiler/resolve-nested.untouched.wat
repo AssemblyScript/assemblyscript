@@ -1,5 +1,4 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
@@ -7,7 +6,6 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $resolve-nested/Outer.Inner.a (mut i32) (i32.const 0))
  (global $resolve-nested/Outer.Inner.b (mut i32) (i32.const 0))
  (global $resolve-nested/Outer.Inner.c (mut i32) (i32.const 0))
@@ -111,8 +109,5 @@
   call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release
- )
- (func $null (; 5 ;)
-  unreachable
  )
 )

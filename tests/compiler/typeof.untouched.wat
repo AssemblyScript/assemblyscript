@@ -16,7 +16,7 @@
  (data (i32.const 200) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 232) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d\00")
  (table $0 2 funcref)
- (elem (i32.const 0) $null $start:typeof~anonymous|0)
+ (elem (i32.const 1) $start:typeof~anonymous|0)
  (global $typeof/SomeNamespace.a i32 (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $typeof/b (mut i32) (i32.const 1))
@@ -662,8 +662,5 @@
    global.set $~lib/started
   end
   call $start:typeof
- )
- (func $null (; 12 ;)
-  unreachable
  )
 )

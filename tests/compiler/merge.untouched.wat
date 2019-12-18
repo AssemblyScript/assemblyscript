@@ -2,7 +2,6 @@
  (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $merge/globalType i32 (i32.const 2))
  (global $merge/globalType_test (mut i32) (i32.const 0))
  (global $merge/typeGlobal i32 (i32.const 3))
@@ -91,8 +90,5 @@
  )
  (func $start (; 17 ;)
   call $start:merge
- )
- (func $null (; 18 ;)
-  unreachable
  )
 )

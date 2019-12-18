@@ -1,5 +1,4 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
  (export "memory" (memory $0))
@@ -21,8 +20,5 @@
   i32.sub
   call $recursive/fib
   i32.add
- )
- (func $null (; 1 ;)
-  unreachable
  )
 )

@@ -174,7 +174,4 @@
  (func $start (; 2 ;)
   call $start:while
  )
- (func $null (; 3 ;)
-  unreachable
- )
 )

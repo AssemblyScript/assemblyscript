@@ -1,6 +1,5 @@
 (module
  (type $f64_=>_f64 (func (param f64) (result f64)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (memory $0 0)
  (export "memory" (memory $0))
@@ -569,8 +568,5 @@
     br $loop|0
    end
   end
- )
- (func $null (; 3 ;)
-  unreachable
  )
 )

@@ -1044,7 +1044,4 @@
  (func $start (; 3 ;)
   call $start:memcpy
  )
- (func $null (; 4 ;)
-  unreachable
- )
 )

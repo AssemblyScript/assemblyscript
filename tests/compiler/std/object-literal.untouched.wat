@@ -10,7 +10,6 @@
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00")
  (data (i32.const 48) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -455,8 +454,5 @@
  )
  (func $start (; 12 ;)
   call $start:std/object-literal
- )
- (func $null (; 13 ;)
-  unreachable
  )
 )
