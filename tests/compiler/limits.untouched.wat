@@ -1,5 +1,5 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -31,7 +31,7 @@
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (export "memory" (memory $0))
  (start $start)
- (func $start:limits (; 0 ;) (type $FUNCSIG$v)
+ (func $start:limits (; 0 ;)
   global.get $~lib/builtins/i8.MIN_VALUE
   drop
   global.get $~lib/builtins/i8.MAX_VALUE
@@ -85,10 +85,10 @@
   global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   drop
  )
- (func $start (; 1 ;) (type $FUNCSIG$v)
+ (func $start (; 1 ;)
   call $start:limits
  )
- (func $null (; 2 ;) (type $FUNCSIG$v)
+ (func $null (; 2 ;)
   unreachable
  )
 )

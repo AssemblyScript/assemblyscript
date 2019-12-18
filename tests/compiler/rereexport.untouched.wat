@@ -1,6 +1,6 @@
 (module
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
  (elem (i32.const 0) $null)
@@ -13,17 +13,17 @@
  (export "renamed_b" (global $export/b))
  (export "renamed_renamed_b" (global $export/b))
  (start $start)
- (func $export/add (; 0 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $export/mul (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/mul (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.mul
  )
- (func $start:reexport (; 2 ;) (type $FUNCSIG$v)
+ (func $start:reexport (; 2 ;)
   i32.const 1
   i32.const 2
   call $export/add
@@ -33,13 +33,13 @@
   i32.add
   drop
  )
- (func $start:rereexport (; 3 ;) (type $FUNCSIG$v)
+ (func $start:rereexport (; 3 ;)
   call $start:reexport
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;)
   call $start:rereexport
  )
- (func $null (; 5 ;) (type $FUNCSIG$v)
+ (func $null (; 5 ;)
   unreachable
  )
 )

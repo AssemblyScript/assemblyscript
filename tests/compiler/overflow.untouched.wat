@@ -1,6 +1,6 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00o\00v\00e\00r\00f\00l\00o\00w\00.\00t\00s\00")
@@ -8,7 +8,7 @@
  (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (start $start)
- (func $start:overflow (; 1 ;) (type $FUNCSIG$v)
+ (func $start:overflow (; 1 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -729,10 +729,10 @@
    unreachable
   end
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;)
   call $start:overflow
  )
- (func $null (; 3 ;) (type $FUNCSIG$v)
+ (func $null (; 3 ;)
   unreachable
  )
 )
