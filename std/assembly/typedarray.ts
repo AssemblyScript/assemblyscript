@@ -1822,9 +1822,11 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
         let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
         // @ts-ignore: cast to T is valid for numeric types here
         store<T>(targetDataStart + (<usize>i << alignof<T>()), isFinite<U>(value) ? <T>value : 0);
-      } else {
-        // @ts-ignore: cast to T is valid for numeric types here
+      } else if (isFloat<T>() && !isFloat<U>()) {
+        // @ts-ignore: In this case the <T> conversion is required
         store<T>(targetDataStart + (<usize>i << alignof<T>()), <T>load<U>(sourceDataStart + (<usize>i << alignof<U>())));
+      } else {
+        store<T>(targetDataStart + (<usize>i << alignof<T>()), load<U>(sourceDataStart + (<usize>i << alignof<U>())));
       }
     }
   }

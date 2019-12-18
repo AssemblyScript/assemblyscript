@@ -40935,8 +40935,7 @@
     i32.shl
     i32.add
     i64.load
-    i32.wrap_i64
-    i32.store8
+    i64.store8
     local.get $9
     i32.const 1
     i32.add
@@ -41568,8 +41567,7 @@
     i32.shl
     i32.add
     i64.load
-    i32.wrap_i64
-    i32.store8
+    i64.store8
     local.get $9
     i32.const 1
     i32.add
@@ -42845,8 +42843,7 @@
     i32.shl
     i32.add
     i64.load
-    i32.wrap_i64
-    i32.store16
+    i64.store16
     local.get $9
     i32.const 1
     i32.add
@@ -43474,8 +43471,7 @@
     i32.shl
     i32.add
     i64.load
-    i32.wrap_i64
-    i32.store16
+    i64.store16
     local.get $9
     i32.const 1
     i32.add
@@ -44055,8 +44051,7 @@
     i32.shl
     i32.add
     i64.load
-    i32.wrap_i64
-    i32.store
+    i64.store32
     local.get $9
     i32.const 1
     i32.add
@@ -44649,8 +44644,7 @@
     i32.shl
     i32.add
     i64.load
-    i32.wrap_i64
-    i32.store
+    i64.store32
     local.get $9
     i32.const 1
     i32.add
