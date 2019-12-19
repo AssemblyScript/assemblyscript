@@ -1708,7 +1708,6 @@ declare module "assemblyscript/src/module" {
      */ /***/
     import { Target } from "assemblyscript/src/common";
     export type ModuleRef = number;
-    export type FunctionTypeRef = number;
     export type FunctionRef = number;
     export type ExpressionRef = number;
     export type GlobalRef = number;
@@ -1727,7 +1726,8 @@ declare module "assemblyscript/src/module" {
         V128,
         Anyref,
         Exnref,
-        Unreachable
+        Unreachable,
+        Auto
     }
     export enum FeatureFlags {
         MVP,
@@ -2147,7 +2147,7 @@ declare module "assemblyscript/src/module" {
         binary(op: BinaryOp, left: ExpressionRef, right: ExpressionRef): ExpressionRef;
         host(op: HostOp, name?: string | null, operands?: ExpressionRef[] | null): ExpressionRef;
         local_get(index: number, type: NativeType): ExpressionRef;
-        local_tee(index: number, value: ExpressionRef): ExpressionRef;
+        local_tee(index: number, value: ExpressionRef, type?: NativeType): ExpressionRef;
         global_get(name: string, type: NativeType): ExpressionRef;
         load(bytes: Index, signed: boolean, ptr: ExpressionRef, type: NativeType, offset?: Index, align?: Index): ExpressionRef;
         store(bytes: Index, ptr: ExpressionRef, value: ExpressionRef, type: NativeType, offset?: Index, align?: Index): ExpressionRef;
@@ -2171,8 +2171,8 @@ declare module "assemblyscript/src/module" {
         switch(names: string[], defaultName: string | null, condition: ExpressionRef, value?: ExpressionRef): ExpressionRef;
         call(target: string, operands: ExpressionRef[] | null, returnType: NativeType, isReturn?: boolean): ExpressionRef;
         return_call(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef;
-        call_indirect(index: ExpressionRef, operands: ExpressionRef[] | null, typeName: string, isReturn?: boolean): ExpressionRef;
-        return_call_indirect(index: ExpressionRef, operands: ExpressionRef[] | null, typeName: string): ExpressionRef;
+        call_indirect(index: ExpressionRef, operands: ExpressionRef[] | null, params: NativeType, results: NativeType, isReturn?: boolean): ExpressionRef;
+        return_call_indirect(index: ExpressionRef, operands: ExpressionRef[] | null, params: NativeType, results: NativeType): ExpressionRef;
         unreachable(): ExpressionRef;
         memory_copy(dest: ExpressionRef, source: ExpressionRef, size: ExpressionRef): ExpressionRef;
         memory_fill(dest: ExpressionRef, value: ExpressionRef, size: ExpressionRef): ExpressionRef;
@@ -2188,16 +2188,13 @@ declare module "assemblyscript/src/module" {
         simd_ternary(op: SIMDTernaryOp, a: ExpressionRef, b: ExpressionRef, c: ExpressionRef): ExpressionRef;
         simd_shift(op: SIMDShiftOp, vec: ExpressionRef, shift: ExpressionRef): ExpressionRef;
         simd_load(op: SIMDLoadOp, ptr: ExpressionRef, offset: number, align: number): ExpressionRef;
-        addFunctionType(name: string, result: NativeType, paramTypes: NativeType[] | null): FunctionTypeRef;
-        getFunctionTypeBySignature(result: NativeType, paramTypes: NativeType[] | null): FunctionTypeRef;
-        removeFunctionType(name: string): void;
         addGlobal(name: string, type: NativeType, mutable: boolean, initializer: ExpressionRef): GlobalRef;
         getGlobal(name: string): GlobalRef;
         removeGlobal(name: string): void;
-        addEvent(name: string, attribute: number, type: FunctionTypeRef): EventRef;
+        addEvent(name: string, attribute: number, params: NativeType, results: NativeType): EventRef;
         getEvent(name: string): EventRef;
         removeEvent(name: string): void;
-        addFunction(name: string, type: FunctionTypeRef, varTypes: NativeType[] | null, body: ExpressionRef): FunctionRef;
+        addFunction(name: string, params: NativeType, results: NativeType, varTypes: NativeType[] | null, body: ExpressionRef): FunctionRef;
         getFunction(name: string): FunctionRef;
         removeFunction(name: string): void;
         private hasTemporaryFunction;
@@ -2210,11 +2207,11 @@ declare module "assemblyscript/src/module" {
         addGlobalExport(internalName: string, externalName: string): ExportRef;
         addEventExport(internalName: string, externalName: string): ExportRef;
         removeExport(externalName: string): void;
-        addFunctionImport(internalName: string, externalModuleName: string, externalBaseName: string, functionType: FunctionTypeRef): void;
+        addFunctionImport(internalName: string, externalModuleName: string, externalBaseName: string, params: NativeType, results: NativeType): void;
         addTableImport(internalName: string, externalModuleName: string, externalBaseName: string): void;
         addMemoryImport(internalName: string, externalModuleName: string, externalBaseName: string, shared?: boolean): void;
         addGlobalImport(internalName: string, externalModuleName: string, externalBaseName: string, globalType: NativeType, mutable?: boolean): void;
-        addEventImport(internalName: string, externalModuleName: string, externalBaseName: string, attribute: number, eventType: FunctionTypeRef): void;
+        addEventImport(internalName: string, externalModuleName: string, externalBaseName: string, attribute: number, params: NativeType, results: NativeType): void;
         /** Unlimited memory constant. */
         static readonly UNLIMITED_MEMORY: Index;
         setMemory(initial: Index, maximum: Index, segments: MemorySegment[], target: Target, exportName?: string | null, shared?: boolean): void;
@@ -2247,6 +2244,8 @@ declare module "assemblyscript/src/module" {
         getDebugInfoFile(index: Index): string | null;
         setDebugLocation(func: FunctionRef, expr: ExpressionRef, fileIndex: Index, lineNumber: Index, columnNumber: Index): void;
     }
+    export function createType(types: NativeType[] | null): NativeType;
+    export function expandType(type: NativeType): NativeType[];
     export function getExpressionId(expr: ExpressionRef): ExpressionId;
     export function getExpressionType(expr: ExpressionRef): NativeType;
     export function getConstValueI32(expr: ExpressionRef): number;
@@ -2294,15 +2293,11 @@ declare module "assemblyscript/src/module" {
     export function getHostOperandCount(expr: ExpressionRef): Index;
     export function getHostOperand(expr: ExpressionRef, index: Index): ExpressionRef;
     export function getHostName(expr: ExpressionRef): string | null;
-    export function getFunctionTypeName(ftype: FunctionTypeRef): string | null;
-    export function getFunctionTypeParamCount(ftype: FunctionTypeRef): Index;
-    export function getFunctionTypeParam(ftype: FunctionTypeRef, index: Index): NativeType;
-    export function getFunctionTypeResult(ftype: FunctionTypeRef): NativeType;
     export function getFunctionBody(func: FunctionRef): ExpressionRef;
     export function getFunctionName(func: FunctionRef): string | null;
-    export function getFunctionParamCount(func: FunctionRef): Index;
-    export function getFunctionParamType(func: FunctionRef, index: Index): NativeType;
-    export function getFunctionResultType(func: FunctionRef): NativeType;
+    export function getFunctionParams(func: FunctionRef): Index;
+    export function getFunctionResults(func: FunctionRef): NativeType;
+    export function getFunctionVars(func: FunctionRef): NativeType;
     export function getGlobalName(global: GlobalRef): string | null;
     export function getGlobalType(global: GlobalRef): NativeType;
     export function isGlobalMutable(global: GlobalRef): boolean;
@@ -2463,8 +2458,6 @@ declare module "assemblyscript/src/types" {
         toString(): string;
         /** Converts this type to its respective native type. */
         toNativeType(): NativeType;
-        /** Converts this type to its signature string. */
-        toSignatureString(): string;
         /** An 8-bit signed integer. */
         static readonly i8: Type;
         /** A 16-bit signed integer. */
@@ -2534,6 +2527,8 @@ declare module "assemblyscript/src/types" {
         program: Program;
         /** Constructs a new signature. */
         constructor(program: Program, parameterTypes?: Type[] | null, returnType?: Type | null, thisType?: Type | null);
+        get nativeParams(): NativeType;
+        get nativeResults(): NativeType;
         asFunctionTarget(program: Program): FunctionTarget;
         /** Gets the known or, alternatively, generic parameter name at the specified index. */
         getParameterName(index: number): string;
@@ -2541,10 +2536,6 @@ declare module "assemblyscript/src/types" {
         isAssignableTo(target: Signature): boolean;
         /** Tests to see if a signature equals another signature. */
         equals(value: Signature): boolean;
-        /** Converts a signature to a function type string. */
-        static makeSignatureString(parameterTypes: Type[] | null, returnType: Type, thisType?: Type | null): string;
-        /** Converts this signature to a function type string. */
-        toSignatureString(): string;
         /** Converts this signature to a string. */
         toString(): string;
     }
@@ -3839,7 +3830,7 @@ declare module "assemblyscript/src/program" {
         /** Concrete signature. */
         signature: Signature, 
         /** Program reference. */
-        program: Program, __s?: string);
+        program: Program);
         lookup(name: string): Element | null;
     }
     /** A yet unresolved instance field prototype. */
@@ -4041,7 +4032,7 @@ declare module "assemblyscript/src/compiler" {
      * @module compiler
      */ /***/
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
-    import { Module, MemorySegment, ExpressionRef, NativeType, FunctionRef, FunctionTypeRef, GlobalRef, EventRef } from "assemblyscript/src/module";
+    import { Module, MemorySegment, ExpressionRef, NativeType, FunctionRef, GlobalRef, EventRef } from "assemblyscript/src/module";
     import { Feature, Target } from "assemblyscript/src/common";
     import { Program, ClassPrototype, Class, Element, Enum, Field, FunctionPrototype, Function, Global, VariableLikeElement, File } from "assemblyscript/src/program";
     import { Flow } from "assemblyscript/src/flow";
@@ -4060,6 +4051,8 @@ declare module "assemblyscript/src/compiler" {
         sharedMemory: number;
         /** If true, imports the function table provided by the embedder. */
         importTable: boolean;
+        /** If true, exports the function table. */
+        exportTable: boolean;
         /** If true, generates information necessary for source maps. */
         sourceMap: boolean;
         /** If true, generates an explicit start function. */
@@ -4141,7 +4134,7 @@ declare module "assemblyscript/src/compiler" {
         memorySegments: MemorySegment[];
         /** Map of already compiled static string segments. */
         stringSegments: Map<string, MemorySegment>;
-        /** Function table being compiled. */
+        /** Function table being compiled. First elem is blank. */
         functionTable: string[];
         /** Argument count helper global. */
         argcVar: GlobalRef;
@@ -4181,10 +4174,6 @@ declare module "assemblyscript/src/compiler" {
         compileEnum(element: Enum): boolean;
         /** Resolves the specified type arguments prior to compiling the resulting function instance. */
         compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: NamedTypeNode[], contextualTypeArguments?: Map<string, Type>, alternativeReportNode?: Node | null): Function | null;
-        /** Either reuses or creates the function type matching the specified signature. */
-        ensureFunctionType(parameterTypes: Type[] | null, returnType: Type, thisType?: Type | null): FunctionTypeRef;
-        /** Either reuses or creates the event type matching the specified name. */
-        ensureEventType(name: string, parameterTypes: Type[] | null): EventRef;
         /** Compiles the body of a function within the specified flow. */
         compileFunctionBody(
         /** Function to compile. */
@@ -5031,6 +5020,8 @@ declare module "assemblyscript/src/index" {
     export function setSharedMemory(options: Options, sharedMemory: number): void;
     /** Sets the `importTable` option. */
     export function setImportTable(options: Options, importTable: boolean): void;
+    /** Sets the `exportTable` option. */
+    export function setExportTable(options: Options, exportTable: boolean): void;
     /** Sets the `sourceMap` option. */
     export function setSourceMap(options: Options, sourceMap: boolean): void;
     /** Sets the `memoryBase` option. */
