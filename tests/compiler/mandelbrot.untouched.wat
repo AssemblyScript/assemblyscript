@@ -1,14 +1,12 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$dd (func (param f64) (result f64)))
- (type $FUNCSIG$v (func))
+ (type $f64_=>_f64 (func (param f64) (result f64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $../../examples/mandelbrot/assembly/index/NUM_COLORS i32 (i32.const 2048))
  (export "memory" (memory $0))
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
- (func $~lib/math/NativeMath.log (; 0 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log (; 0 ;) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -217,7 +215,7 @@
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.log2 (; 1 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (; 1 ;) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
   (local $3 i32)
@@ -470,7 +468,7 @@
   local.get $14
   f64.add
  )
- (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 i32)
@@ -716,8 +714,5 @@
    end
    unreachable
   end
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

@@ -1,5 +1,7 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $f32_=>_f32 (func (param f32) (result f32)))
+ (type $f64_=>_f64 (func (param f64) (result f64)))
  (memory $0 0)
  (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
@@ -365,7 +367,7 @@
   local.get $0
   f64.mul
  )
- (func $start:binary (; 4 ;) (type $FUNCSIG$v)
+ (func $start:binary (; 4 ;)
   global.get $binary/i
   i32.const 1
   i32.rem_s
@@ -701,10 +703,7 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $start (; 5 ;) (type $FUNCSIG$v)
+ (func $start (; 5 ;)
   call $start:binary
- )
- (func $null (; 6 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

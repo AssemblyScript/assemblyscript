@@ -1,12 +1,11 @@
 (module
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00r\00e\00t\00a\00i\00n\00-\00i\003\002\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/builtins/i8.MAX_VALUE i32 (i32.const 127))
  (global $~lib/builtins/i8.MIN_VALUE i32 (i32.const -128))
  (global $~lib/builtins/u8.MAX_VALUE i32 (i32.const 255))
@@ -21,7 +20,7 @@
  (global $retain-i32/ri (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $retain-i32/test (; 1 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $retain-i32/test (; 1 ;) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.add
@@ -331,13 +330,13 @@
    unreachable
   end
  )
- (func $retain-i32/testLocalRetain (; 2 ;) (type $FUNCSIG$v)
+ (func $retain-i32/testLocalRetain (; 2 ;)
   (local $0 i32)
   i32.const 0
   i32.load8_s
   local.set $0
  )
- (func $start:retain-i32 (; 3 ;) (type $FUNCSIG$v)
+ (func $start:retain-i32 (; 3 ;)
   (local $0 i32)
   i32.const 0
   global.get $~lib/builtins/i8.MAX_VALUE
@@ -798,10 +797,7 @@
   global.set $retain-i32/ri
   call $retain-i32/testLocalRetain
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;)
   call $start:retain-i32
- )
- (func $null (; 5 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

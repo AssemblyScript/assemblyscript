@@ -1,10 +1,11 @@
 (module
- (type $FUNCSIG$idd (func (param f64 f64) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$iff (func (param f32 f32) (result i32)))
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
+ (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 8) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00.\00t\00s")
@@ -14,7 +15,7 @@
  (data (i32.const 132) "\01\00\00\00\01")
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/object/Object.is<f64> (; 1 ;) (type $FUNCSIG$idd) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/object/Object.is<f64> (; 1 ;) (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   f64.eq
@@ -34,7 +35,7 @@
   f64.ne
   i32.and
  )
- (func $~lib/object/Object.is<f32> (; 2 ;) (type $FUNCSIG$iff) (param $0 f32) (param $1 f32) (result i32)
+ (func $~lib/object/Object.is<f32> (; 2 ;) (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   f32.eq
@@ -54,12 +55,12 @@
   f32.ne
   i32.and
  )
- (func $~lib/object/Object.is<i32> (; 3 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<i32> (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.eq
  )
- (func $~lib/object/Object.is<bool> (; 4 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<bool> (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -68,7 +69,7 @@
   i32.ne
   i32.eq
  )
- (func $~lib/string/String#get:length (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -156,7 +157,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 7 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -188,12 +189,12 @@
   end
   i32.const 0
  )
- (func $~lib/object/Object.is<~lib/string/String> (; 8 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String> (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
  )
- (func $start:std/object (; 9 ;) (type $FUNCSIG$v)
+ (func $start:std/object (; 9 ;)
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -667,10 +668,7 @@
    unreachable
   end
  )
- (func $start (; 10 ;) (type $FUNCSIG$v)
+ (func $start (; 10 ;)
   call $start:std/object
- )
- (func $null (; 11 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )
