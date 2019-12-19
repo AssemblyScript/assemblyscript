@@ -5771,7 +5771,7 @@ export class Compiler extends DiagnosticEmitter {
         ),
         Constraints.WILL_RETAIN
       );
-      assert(this.skippedAutoreleases.has(theCall)); // guaranteed
+      assert(baseClassInstance.type.isUnmanaged || this.skippedAutoreleases.has(theCall)); // guaranteed
       let stmts: ExpressionRef[] = [
         module.local_set(thisLocal.index, theCall)
       ];
