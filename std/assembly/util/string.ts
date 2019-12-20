@@ -1,5 +1,6 @@
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
+import { DEBUG } from "rt/common";
 
 // @ts-ignore
 @lazy const lowerTable127: u8[] = [
@@ -599,6 +600,7 @@ function fixmul(a: u64, b: u32): u64 {
 // @ts-ignore: decorator
 @inline
 function pow10(n: i32): f64 {
+  if (DEBUG) assert(n >= 0 && n <= 22);
   return load<f64>(powers10 + (n << alignof<f64>()));
 }
 
