@@ -123,6 +123,7 @@ assert(parseFloat("1e-1") == 0.1);
 assert(parseFloat("0.1e-0") == 0.1);
 assert(parseFloat("0.1") == 0.1);
 assert(parseFloat(".25") == 0.25);
+assert(parseFloat("1.e+3a") == 1e+3);
 assert(parseFloat("1.0e-10") == 1e-10);
 assert(parseFloat("1.0e-30") == 1e-30);
 assert(parseFloat("1.0e-323") == 1e-323);
