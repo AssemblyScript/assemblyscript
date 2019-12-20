@@ -1776,7 +1776,8 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
   if (source.length + offset > target.length) throw new RangeError(E_INDEXOUTOFRANGE);
 
   // if the types align and match, use memory.copy() instead of manual loop
-  if (isInteger<T>() == isInteger<U>() && alignof<T>() == alignof<U>()) {
+  if (isInteger<T>() == isInteger<U>() && alignof<T>() == alignof<U>() &&
+    !(target instanceof Uint8ClampedArray && isSigned<U>())) {
     memory.copy(
       target.dataStart + (<usize>offset << alignof<T>()),
       source.dataStart,
