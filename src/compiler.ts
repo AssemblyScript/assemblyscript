@@ -7576,7 +7576,7 @@ export class Compiler extends DiagnosticEmitter {
           let currentType = this.resolver.resolveExpression(expression, this.currentFlow, elementType);
           if (!currentType) return module.unreachable();
           if (elementType == Type.auto) elementType = currentType;
-          else {
+          else if (currentType != elementType) {
             let commonType = Type.commonDenominator(elementType, currentType, false);
             if (commonType) elementType = commonType;
             // otherwise triggers error further down
