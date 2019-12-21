@@ -7459,22 +7459,16 @@ export class Compiler extends DiagnosticEmitter {
 
         // Infer from first element in auto contexts
         if (contextualType == Type.auto) {
-          if (elementExpressions.length) {
-            let first = elementExpressions[0];
-            if (first) {
-              let firstType = this.resolver.resolveExpression(first, this.currentFlow);
-              if (!firstType) return module.unreachable();
-              return this.compileArrayLiteral(
-                firstType,
-                elementExpressions,
-                constraints,
-                expression
-              );
-            }
-          }
+          return this.compileArrayLiteral(
+            Type.auto,
+            elementExpressions,
+            constraints,
+            expression
+          );
+        }
 
         // Use contextual type if an array
-        } else if (contextualType.is(TypeFlags.REFERENCE)) {
+        if (contextualType.is(TypeFlags.REFERENCE)) {
           let classType = contextualType.classReference;
           if (classType) {
             if (classType.prototype == this.program.arrayPrototype) {
@@ -7566,17 +7560,42 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var program = this.program;
     var arrayPrototype = assert(program.arrayPrototype);
-    var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
     var arrayBufferInstance = assert(program.arrayBufferInstance);
-    var arrayType = arrayInstance.type;
     var flow = this.currentFlow;
 
     // block those here so compiling expressions doesn't conflict
-    var tempThis = flow.getTempLocal(arrayType);
+    var tempThis = flow.getTempLocal(this.options.usizeType);
     var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
 
-    // compile value expressions and find out whether all are constant
+    // infer common element type in auto contexts
     var length = expressions.length;
+    if (elementType == Type.auto) {
+      for (let i = 0; i < length; ++i) {
+        let expression = expressions[i];
+        if (expression) {
+          let currentType = this.resolver.resolveExpression(expression, this.currentFlow, elementType);
+          if (!currentType) return module.unreachable();
+          if (elementType == Type.auto) elementType = currentType;
+          else {
+            let commonType = Type.commonDenominator(elementType, currentType, false);
+            if (commonType) elementType = commonType;
+            // otherwise triggers error further down
+          }
+        }
+      }
+      if (elementType /* still */ == Type.auto) {
+        this.error(
+          DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
+          reportNode.range, "T"
+        );
+        return module.unreachable();
+      }
+    }
+
+    var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
+    var arrayType = arrayInstance.type;
+
+    // compile value expressions and find out whether all are constant
     var values = new Array<ExpressionRef>(length);
     var isStatic = true;
     var nativeElementType = elementType.toNativeType();
