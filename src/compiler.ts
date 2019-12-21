@@ -7455,17 +7455,39 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.literalKind) {
       case LiteralKind.ARRAY: {
         assert(!implicitlyNegate);
-        let classType = contextualType.classReference;
-        if (classType) {
-          if (classType.prototype == this.program.arrayPrototype) {
-            return this.compileArrayLiteral(
-              assert(classType.typeArguments)[0],
-              (<ArrayLiteralExpression>expression).elementExpressions,
-              constraints,
-              expression
-            );
+        let elementExpressions = (<ArrayLiteralExpression>expression).elementExpressions;
+
+        // Infer from first element in auto contexts
+        if (contextualType == Type.auto) {
+          if (elementExpressions.length) {
+            let first = elementExpressions[0];
+            if (first) {
+              let firstType = this.resolver.resolveExpression(first, this.currentFlow);
+              if (!firstType) return module.unreachable();
+              return this.compileArrayLiteral(
+                firstType,
+                elementExpressions,
+                constraints,
+                expression
+              );
+            }
+          }
+
+        // Use contextual type if an array
+        } else if (contextualType.is(TypeFlags.REFERENCE)) {
+          let classType = contextualType.classReference;
+          if (classType) {
+            if (classType.prototype == this.program.arrayPrototype) {
+              return this.compileArrayLiteral(
+                assert(classType.typeArguments)[0],
+                elementExpressions,
+                constraints,
+                expression
+              );
+            }
           }
         }
+
         this.error(
           DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
           expression.range, "T"
