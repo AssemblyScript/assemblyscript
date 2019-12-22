@@ -4841,6 +4841,7 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
   local.get $0
   local.set $3
   local.get $0
@@ -5017,20 +5018,25 @@
        i32.const 65536
        i32.sub
        local.set $7
-       local.get $6
-       i32.const 55296
        local.get $7
        i32.const 10
        i32.shr_u
+       i32.const 55296
        i32.or
-       i32.store16
-       local.get $6
-       i32.const 56320
+       local.set $10
        local.get $7
        i32.const 1023
        i32.and
+       i32.const 56320
        i32.or
-       i32.store16 offset=2
+       local.set $11
+       local.get $6
+       local.get $10
+       local.get $11
+       i32.const 16
+       i32.shl
+       i32.or
+       i32.store
        local.get $6
        i32.const 2
        i32.add

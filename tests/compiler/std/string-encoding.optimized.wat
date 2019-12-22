@@ -3231,14 +3231,15 @@
        i32.shr_u
        i32.const 55296
        i32.or
-       i32.store16
-       local.get $3
        local.get $1
        i32.const 1023
        i32.and
        i32.const 56320
        i32.or
-       i32.store16 offset=2
+       i32.const 16
+       i32.shl
+       i32.or
+       i32.store
        local.get $3
        i32.const 2
        i32.add

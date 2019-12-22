@@ -725,8 +725,9 @@ export namespace String {
               store<u16>(strOff, u0);
             } else {
               u0 -= 0x10000;
-              store<u16>(strOff, 0xD800 | u0 >> 10,    0);
-              store<u16>(strOff, 0xDC00 | (u0 & 1023), 2);
+              let lo = u0 >> 10 | 0xD800;
+              let hi = (u0 & 0x03FF) | 0xDC00;
+              store<u32>(strOff, lo | (hi << 16));
               strOff += 2;
             }
           }
