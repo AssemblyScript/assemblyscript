@@ -4876,13 +4876,12 @@
     i32.eqz
     br_if $break|0
     local.get $3
-    local.tee $7
+    i32.load8_u
+    local.set $7
+    local.get $3
     i32.const 1
     i32.add
     local.set $3
-    local.get $7
-    i32.load8_u
-    local.set $7
     local.get $7
     i32.const 128
     i32.and
@@ -4909,15 +4908,14 @@
       br $break|0
      end
      local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
-     local.get $8
      i32.load8_u
      i32.const 63
      i32.and
      local.set $8
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
      local.get $7
      i32.const 224
      i32.and
@@ -4941,15 +4939,14 @@
        br $break|0
       end
       local.get $3
-      local.tee $9
-      i32.const 1
-      i32.add
-      local.set $3
-      local.get $9
       i32.load8_u
       i32.const 63
       i32.and
       local.set $9
+      local.get $3
+      i32.const 1
+      i32.add
+      local.set $3
       local.get $7
       i32.const 240
       i32.and
@@ -4989,16 +4986,15 @@
        i32.shl
        i32.or
        local.get $3
-       local.tee $10
-       i32.const 1
-       i32.add
-       local.set $3
-       local.get $10
        i32.load8_u
        i32.const 63
        i32.and
        i32.or
        local.set $7
+       local.get $3
+       i32.const 1
+       i32.add
+       local.set $3
       end
       local.get $7
       i32.const 65536

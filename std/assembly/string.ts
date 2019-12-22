@@ -703,23 +703,24 @@ export namespace String {
       var str = __alloc(len << 1, idof<String>()); // max is one u16 char per u8 byte
       var strOff = str;
       while (bufOff < bufEnd) {
-        let u0 = <u32>load<u8>(bufOff++);
+        let u0 = <u32>load<u8>(bufOff); ++bufOff;
         if (!(u0 & 128)) {
           if (nullTerminated && !u0) break;
           store<u16>(strOff, u0);
         } else {
           if (bufEnd == bufOff) break;
-          let u1 = <u32>load<u8>(bufOff++) & 63;
+          let u1 = <u32>load<u8>(bufOff) & 63; ++bufOff;
           if ((u0 & 224) == 192) {
             store<u16>(strOff, (u0 & 31) << 6 | u1);
           } else {
             if (bufEnd == bufOff) break;
-            let u2 = <u32>load<u8>(bufOff++) & 63;
+            let u2 = <u32>load<u8>(bufOff) & 63; ++bufOff;
             if ((u0 & 240) == 224) {
               u0 = (u0 & 15) << 12 | u1 << 6 | u2;
             } else {
               if (bufEnd == bufOff) break;
-              u0 = (u0 & 7) << 18 | u1 << 12 | u2 << 6 | <u32>load<u8>(bufOff++) & 63;
+              u0 = (u0 & 7) << 18 | u1 << 12 | u2 << 6 | <u32>load<u8>(bufOff) & 63;
+              ++bufOff;
             }
             if (u0 < 0x10000) {
               store<u16>(strOff, u0);
