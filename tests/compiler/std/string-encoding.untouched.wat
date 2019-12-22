@@ -4904,9 +4904,7 @@
     else
      local.get $4
      local.get $3
-     i32.sub
-     i32.const 1
-     i32.lt_u
+     i32.eq
      if
       br $break|0
      end
@@ -4938,9 +4936,7 @@
      else
       local.get $4
       local.get $3
-      i32.sub
-      i32.const 1
-      i32.lt_u
+      i32.eq
       if
        br $break|0
       end
@@ -4975,9 +4971,7 @@
       else
        local.get $4
        local.get $3
-       i32.sub
-       i32.const 1
-       i32.lt_u
+       i32.eq
        if
         br $break|0
        end

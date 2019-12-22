@@ -3118,11 +3118,9 @@
     i32.const 128
     i32.and
     if
-     local.get $5
      local.get $0
-     i32.sub
-     i32.const 1
-     i32.lt_u
+     local.get $5
+     i32.eq
      br_if $break|0
      local.get $0
      local.tee $1
@@ -3150,11 +3148,9 @@
       i32.or
       i32.store16
      else
-      local.get $5
       local.get $0
-      i32.sub
-      i32.const 1
-      i32.lt_u
+      local.get $5
+      i32.eq
       br_if $break|0
       local.get $0
       local.tee $1
@@ -3184,11 +3180,9 @@
        local.get $8
        i32.or
       else
-       local.get $5
        local.get $0
-       i32.sub
-       i32.const 1
-       i32.lt_u
+       local.get $5
+       i32.eq
        br_if $break|0
        local.get $0
        local.tee $1
