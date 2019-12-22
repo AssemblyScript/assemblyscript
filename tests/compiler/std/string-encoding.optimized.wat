@@ -3118,6 +3118,12 @@
     i32.const 128
     i32.and
     if
+     local.get $5
+     local.get $0
+     i32.sub
+     i32.const 1
+     i32.lt_u
+     br_if $break|0
      local.get $0
      local.tee $1
      i32.const 1

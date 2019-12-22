@@ -708,6 +708,7 @@ export namespace String {
           if (nullTerminated && !u0) break;
           store<u16>(strOff, u0);
         } else {
+          if (bufEnd - bufOff < 1) break;
           let u1 = <u32>load<u8>(bufOff++) & 63;
           if ((u0 & 224) == 192) {
             if (bufEnd - bufOff < 1) break;
