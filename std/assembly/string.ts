@@ -703,36 +703,34 @@ export namespace String {
       var str = __alloc(len << 1, idof<String>()); // max is one u16 char per u8 byte
       var strOff = str;
       while (bufOff < bufEnd) {
-        let cp = <u32>load<u8>(bufOff++);
-        if (cp < 128) {
-          if (nullTerminated && !cp) break;
-          store<u16>(strOff, cp);
-          strOff += 2;
-        } else if (cp > 191 && cp < 224) {
-          if (bufEnd - bufOff < 1) break;
-          store<u16>(strOff, (cp & 31) << 6 | load<u8>(bufOff++) & 63);
-          strOff += 2;
-        } else if (cp > 239 && cp < 365) {
-          if (bufEnd - bufOff < 3) break;
-          cp = (
-            (cp                  &  7) << 18 |
-            (load<u8>(bufOff)    & 63) << 12 |
-            (load<u8>(bufOff, 1) & 63) << 6  |
-             load<u8>(bufOff, 2) & 63
-          ) - 0x10000;
-          bufOff += 3;
-          store<u16>(strOff, 0xD800 | (cp >> 10));
-          store<u16>(strOff, 0xDC00 | (cp & 1023), 2);
-          strOff += 4;
+        let u0 = <u32>load<u8>(bufOff++);
+        if (!(u0 & 128)) {
+          if (nullTerminated && !u0) break;
+          store<u16>(strOff, u0);
         } else {
-          if (bufEnd - bufOff < 2) break;
-          store<u16>(strOff,
-            (cp                  & 15) << 12 |
-            (load<u8>(bufOff)    & 63) << 6  |
-             load<u8>(bufOff, 1) & 63
-          );
-          bufOff += 2; strOff += 2;
+          let u1 = <u32>load<u8>(bufOff++) & 63;
+          if ((u0 & 224) == 192) {
+            if (bufEnd - bufOff < 1) break;
+            store<u16>(strOff, (u0 & 31) << 6 | u1);
+          } else {
+            let u2 = <u32>load<u8>(bufOff++) & 63;
+            if ((u0 & 240) == 224) {
+              u0 = (u0 & 15) << 12 | u1 << 6 | u2;
+            } else {
+              if (bufEnd - bufOff < 1) break;
+              u0 = (u0 & 7) << 18 | u1 << 12 | u2 << 6 | <u32>load<u8>(bufOff++) & 63;
+            }
+            if (u0 < 0x10000) {
+              store<u16>(strOff, u0);
+            } else {
+              u0 -= 0x10000;
+              store<u16>(strOff, 0xD800 | u0 >> 10,    0);
+              store<u16>(strOff, 0xDC00 | (u0 & 1023), 2);
+              strOff += 2;
+            }
+          }
         }
+        strOff += 2;
       }
       return changetype<String>(__realloc(str, strOff - str)); // retains
     }
