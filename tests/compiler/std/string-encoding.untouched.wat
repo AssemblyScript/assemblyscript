@@ -4925,14 +4925,6 @@
      i32.const 192
      i32.eq
      if
-      local.get $4
-      local.get $3
-      i32.sub
-      i32.const 1
-      i32.lt_u
-      if
-       br $break|0
-      end
       local.get $6
       local.get $7
       i32.const 31
@@ -4943,6 +4935,14 @@
       i32.or
       i32.store16
      else
+      local.get $4
+      local.get $3
+      i32.sub
+      i32.const 1
+      i32.lt_u
+      if
+       br $break|0
+      end
       local.get $3
       local.tee $9
       i32.const 1

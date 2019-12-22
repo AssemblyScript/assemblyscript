@@ -711,9 +711,9 @@ export namespace String {
           if (bufEnd - bufOff < 1) break;
           let u1 = <u32>load<u8>(bufOff++) & 63;
           if ((u0 & 224) == 192) {
-            if (bufEnd - bufOff < 1) break;
             store<u16>(strOff, (u0 & 31) << 6 | u1);
           } else {
+            if (bufEnd - bufOff < 1) break;
             let u2 = <u32>load<u8>(bufOff++) & 63;
             if ((u0 & 240) == 224) {
               u0 = (u0 & 15) << 12 | u1 << 6 | u2;
