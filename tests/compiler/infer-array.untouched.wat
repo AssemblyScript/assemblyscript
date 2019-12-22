@@ -4,6 +4,7 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
@@ -13,13 +14,15 @@
  (data (i32.const 40) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00")
  (data (i32.const 96) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 144) "\18\00\00\00\01\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@")
- (data (i32.const 184) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00i\00n\00f\00e\00r\00-\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 232) "\18\00\00\00\01\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@")
+ (data (i32.const 184) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\ff\ff\ff\ff")
+ (data (i32.const 208) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00i\00n\00f\00e\00r\00-\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 256) "\18\00\00\00\01\00\00\00\00\00\00\00\18\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@")
+ (data (i32.const 296) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
  (table $0 1 funcref)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 272))
+ (global $~lib/heap/__heap_base i32 (i32.const 324))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
@@ -1513,19 +1516,48 @@
   local.set $2
   local.get $2
  )
- (func $infer-array/Ref#constructor (; 14 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f32>#__unchecked_get (; 14 ;) (param $0 i32) (param $1 i32) (result f32)
+  local.get $0
+  i32.load offset=4
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  f32.load
+ )
+ (func $~lib/array/Array<f32>#__get (; 15 ;) (param $0 i32) (param $1 i32) (result f32)
+  (local $2 f32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 56
+   i32.const 112
+   i32.const 93
+   i32.const 41
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  call $~lib/array/Array<f32>#__unchecked_get
+  local.set $2
+  local.get $2
+ )
+ (func $infer-array/Ref#constructor (; 16 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
    i32.const 0
-   i32.const 6
+   i32.const 7
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
   end
   local.get $0
  )
- (func $~lib/array/Array<infer-array/Ref | null>#__unchecked_get (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<infer-array/Ref | null>#__unchecked_get (; 17 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1535,7 +1567,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<infer-array/Ref | null>#__get (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<infer-array/Ref | null>#__get (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1555,11 +1587,12 @@
   local.set $2
   local.get $2
  )
- (func $start:infer-array (; 17 ;)
+ (func $start:infer-array (; 19 ;)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
+  (local $2 f32)
   (local $3 i32)
+  (local $4 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -1596,27 +1629,16 @@
   call $~lib/rt/stub/__release
   local.get $0
   call $~lib/rt/stub/__release
-  i32.const 0
-  local.set $0
   i32.const 2
   i32.const 2
   i32.const 5
-  i32.const 0
+  i32.const 200
   call $~lib/rt/__allocArray
-  local.set $1
-  local.get $1
-  i32.load offset=4
-  local.set $2
-  local.get $2
-  local.get $0
-  i32.store
-  local.get $2
-  i32.const -1
-  i32.store offset=4
-  local.get $1
   call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $2
+  local.tee $1
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
   i32.const 1
   call $~lib/array/Array<u32>#__get
   i32.const -1
@@ -1624,126 +1646,145 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 200
-   i32.const 15
+   i32.const 224
+   i32.const 14
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $0
   call $~lib/rt/stub/__release
   i32.const 3
   i32.const 3
   i32.const 4
-  i32.const 248
+  i32.const 272
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
-  local.tee $0
+  local.tee $1
   call $~lib/rt/stub/__retain
-  local.set $2
+  local.set $0
+  local.get $1
+  call $~lib/rt/stub/__release
   local.get $0
   call $~lib/rt/stub/__release
-  local.get $2
-  call $~lib/rt/stub/__release
-  i32.const 0
-  call $infer-array/Ref#constructor
+  i32.const 3
+  i32.const 2
+  i32.const 6
+  i32.const 312
+  call $~lib/rt/__allocArray
+  call $~lib/rt/stub/__retain
+  local.tee $1
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $0
+  i32.const 1
+  call $~lib/array/Array<f32>#__get
   local.set $2
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
   i32.const 0
   call $infer-array/Ref#constructor
   local.set $0
+  i32.const 0
+  call $infer-array/Ref#constructor
+  local.set $1
   i32.const 2
   i32.const 2
-  i32.const 7
+  i32.const 8
+  i32.const 0
+  call $~lib/rt/__allocArray
+  local.set $3
+  local.get $3
+  i32.load offset=4
+  local.set $4
+  local.get $4
+  local.get $0
+  call $~lib/rt/stub/__retain
+  i32.store
+  local.get $4
+  local.get $1
+  call $~lib/rt/stub/__retain
+  i32.store offset=4
+  local.get $3
+  call $~lib/rt/stub/__retain
+  local.set $4
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $4
+  call $~lib/rt/stub/__release
+  local.get $3
+  call $~lib/rt/stub/__release
+  i32.const 0
+  call $infer-array/Ref#constructor
+  local.set $3
+  i32.const 0
+  call $infer-array/Ref#constructor
+  local.set $4
+  i32.const 2
+  i32.const 2
+  i32.const 8
   i32.const 0
   call $~lib/rt/__allocArray
   local.set $1
   local.get $1
   i32.load offset=4
-  local.set $3
+  local.set $0
+  local.get $0
   local.get $3
-  local.get $2
   call $~lib/rt/stub/__retain
   i32.store
-  local.get $3
   local.get $0
+  local.get $4
   call $~lib/rt/stub/__retain
   i32.store offset=4
   local.get $1
   call $~lib/rt/stub/__retain
-  local.set $3
-  local.get $2
+  local.set $0
+  local.get $3
+  call $~lib/rt/stub/__release
+  local.get $4
   call $~lib/rt/stub/__release
   local.get $0
-  call $~lib/rt/stub/__release
-  local.get $3
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
   i32.const 0
   call $infer-array/Ref#constructor
   local.set $1
-  i32.const 0
-  call $infer-array/Ref#constructor
-  local.set $3
   i32.const 2
   i32.const 2
-  i32.const 7
+  i32.const 8
   i32.const 0
   call $~lib/rt/__allocArray
   local.set $0
   local.get $0
   i32.load offset=4
-  local.set $2
-  local.get $2
+  local.set $4
+  local.get $4
   local.get $1
   call $~lib/rt/stub/__retain
   i32.store
-  local.get $2
-  local.get $3
+  local.get $4
+  i32.const 0
   call $~lib/rt/stub/__retain
   i32.store offset=4
   local.get $0
   call $~lib/rt/stub/__retain
-  local.set $2
+  local.set $4
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $2
+  local.get $4
   call $~lib/rt/stub/__release
   local.get $0
-  call $~lib/rt/stub/__release
-  i32.const 0
-  call $infer-array/Ref#constructor
-  local.set $0
-  i32.const 2
-  i32.const 2
-  i32.const 7
-  i32.const 0
-  call $~lib/rt/__allocArray
-  local.set $2
-  local.get $2
-  i32.load offset=4
-  local.set $3
-  local.get $3
-  local.get $0
-  call $~lib/rt/stub/__retain
-  i32.store
-  local.get $3
-  i32.const 0
-  call $~lib/rt/stub/__retain
-  i32.store offset=4
-  local.get $2
-  call $~lib/rt/stub/__retain
-  local.set $3
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $2
   call $~lib/rt/stub/__release
  )
- (func $start (; 18 ;)
+ (func $start (; 20 ;)
   call $start:infer-array
  )
 )
