@@ -6,7 +6,7 @@
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00i\00n\00f\00e\00r\00r\00e\00d\00.\00t\00s\00")
+ (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00i\00n\00f\00e\00r\00r\00e\00d\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -46,7 +46,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 5
    i32.const 0
    call $~lib/builtins/abort
@@ -59,7 +59,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 6
    i32.const 0
    call $~lib/builtins/abort
@@ -72,7 +72,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 7
    i32.const 0
    call $~lib/builtins/abort
@@ -87,7 +87,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 13
    i32.const 0
    call $~lib/builtins/abort

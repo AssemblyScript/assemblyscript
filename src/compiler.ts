@@ -1450,7 +1450,7 @@ export class Compiler extends DiagnosticEmitter {
   // === Memory ===================================================================================
 
   /** Adds a static memory segment with the specified data. */
-  addMemorySegment(buffer: Uint8Array, alignment: i32 = 8): MemorySegment {
+  addMemorySegment(buffer: Uint8Array, alignment: i32 = 16): MemorySegment {
     var memoryOffset = i64_align(this.memoryOffset, alignment);
     var segment = MemorySegment.create(buffer, memoryOffset);
     this.memorySegments.push(segment);

@@ -7,9 +7,9 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
- (data (i32.const 88) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
- (data (i32.const 112) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
+ (data (i32.const 16) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
+ (data (i32.const 96) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
+ (data (i32.const 128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
  (table $0 4 funcref)
  (elem (i32.const 1) $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
  (global $~lib/argc (mut i32) (i32.const 0))
@@ -157,7 +157,7 @@
   local.get $3
   i32.store
   local.get $1
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $1
   i32.const 1
@@ -198,7 +198,7 @@
   local.get $0
   i32.eqz
   if
-   i32.const 104
+   i32.const 112
    return
   end
   local.get $0
@@ -322,7 +322,7 @@
  (func $~lib/string/String.__eq (; 11 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  i32.const 128
+  i32.const 144
   i32.eq
   if
    i32.const 1
@@ -337,12 +337,12 @@
    local.get $0
    call $~lib/string/String#get:length
    local.tee $1
-   i32.const 128
+   i32.const 144
    call $~lib/string/String#get:length
    i32.ne
    br_if $folding-inner0
    local.get $0
-   i32.const 128
+   i32.const 144
    local.get $1
    call $~lib/util/string/compareImpl
    i32.eqz
@@ -359,7 +359,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 1
    i32.const 0
    call $~lib/builtins/abort
@@ -373,15 +373,15 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 6
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 144
+  i32.const 160
   global.set $~lib/rt/stub/startOffset
-  i32.const 144
+  i32.const 160
   global.set $~lib/rt/stub/offset
   i32.const 1
   global.set $~lib/argc
@@ -392,7 +392,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 11
    i32.const 0
    call $~lib/builtins/abort

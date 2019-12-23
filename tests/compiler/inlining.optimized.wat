@@ -7,7 +7,7 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
  (table $0 2 funcref)
  (elem (i32.const 1) $inlining/func_fe~anonymous|0)
  (global $~lib/argc (mut i32) (i32.const 0))
@@ -99,7 +99,7 @@
   local.get $4
   i32.store
   local.get $2
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $2
   local.get $1
@@ -146,7 +146,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 95
    i32.const 2
    call $~lib/builtins/abort
@@ -158,7 +158,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 96
    i32.const 2
    call $~lib/builtins/abort
@@ -170,7 +170,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 97
    i32.const 2
    call $~lib/builtins/abort
@@ -182,7 +182,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 98
    i32.const 2
    call $~lib/builtins/abort
@@ -192,9 +192,9 @@
  (func $start (; 6 ;)
   i32.const 1
   global.set $~lib/argc
-  i32.const 48
+  i32.const 64
   global.set $~lib/rt/stub/startOffset
-  i32.const 48
+  i32.const 64
   global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )
