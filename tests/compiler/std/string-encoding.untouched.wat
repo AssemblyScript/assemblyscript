@@ -4299,12 +4299,9 @@
     i32.lt_u
     if
      local.get $1
-     if (result i32)
-      local.get $6
-      i32.eqz
-     else
-      i32.const 0
-     end
+     local.get $6
+     i32.eqz
+     i32.and
      if
       br $break|0
      end
@@ -4472,7 +4469,7 @@
    if
     i32.const 0
     i32.const 480
-    i32.const 684
+    i32.const 685
     i32.const 8
     call $~lib/builtins/abort
     unreachable
@@ -4496,7 +4493,7 @@
    if
     i32.const 0
     i32.const 480
-    i32.const 688
+    i32.const 689
     i32.const 8
     call $~lib/builtins/abort
     unreachable
@@ -4855,7 +4852,7 @@
   if
    i32.const 0
    i32.const 480
-   i32.const 702
+   i32.const 703
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4888,12 +4885,9 @@
     i32.eqz
     if
      local.get $2
-     if (result i32)
-      local.get $7
-      i32.eqz
-     else
-      i32.const 0
-     end
+     local.get $7
+     i32.eqz
+     i32.and
      if
       br $break|0
      end

@@ -654,7 +654,8 @@ export namespace String {
       while (strOff < strEnd) {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
-          if (nullTerminated && !c1) break;
+          // @ts-ignore: cast
+          if (nullTerminated & !c1) break;
           store<u8>(bufOff, c1);
           bufOff += 1; strOff += 2;
         } else if (c1 < 2048) {
@@ -705,7 +706,8 @@ export namespace String {
       while (bufOff < bufEnd) {
         let u0 = <u32>load<u8>(bufOff); ++bufOff;
         if (!(u0 & 128)) {
-          if (nullTerminated && !u0) break;
+          // @ts-ignore: cast
+          if (nullTerminated & !u0) break;
           store<u16>(strOff, u0);
         } else {
           if (bufEnd == bufOff) break;

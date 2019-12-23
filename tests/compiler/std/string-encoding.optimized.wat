@@ -2593,9 +2593,8 @@
     if
      local.get $3
      i32.eqz
-     i32.const 0
      local.get $1
-     select
+     i32.and
      br_if $break|0
      local.get $2
      local.get $3
@@ -2747,7 +2746,7 @@
    if
     i32.const 0
     i32.const 480
-    i32.const 684
+    i32.const 685
     i32.const 8
     call $~lib/builtins/abort
     unreachable
@@ -2770,7 +2769,7 @@
    if
     i32.const 0
     i32.const 480
-    i32.const 688
+    i32.const 689
     i32.const 8
     call $~lib/builtins/abort
     unreachable
@@ -3088,7 +3087,7 @@
   if
    i32.const 0
    i32.const 480
-   i32.const 702
+   i32.const 703
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -3241,9 +3240,8 @@
     else
      local.get $3
      i32.eqz
-     i32.const 0
      local.get $2
-     select
+     i32.and
      br_if $break|0
      local.get $1
      local.get $3
