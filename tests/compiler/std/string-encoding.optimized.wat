@@ -1793,9 +1793,7 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/string/String.UTF16.byteLength
   local.tee $1
   i32.const 0
   call $~lib/rt/tlsf/__alloc
@@ -2290,10 +2288,9 @@
   local.get $0
   i32.add
   local.set $4
-  i32.const 1
-  i32.const 0
   local.get $1
-  select
+  i32.const 0
+  i32.ne
   local.set $2
   loop $continue|0
    block $break|0
@@ -2306,26 +2303,23 @@
     local.tee $3
     i32.const 128
     i32.lt_u
-    if
+    if (result i32)
      local.get $3
      i32.eqz
-     i32.const 0
      local.get $1
-     select
+     i32.and
      br_if $break|0
      local.get $2
      i32.const 1
      i32.add
-     local.set $2
     else
      local.get $3
      i32.const 2048
      i32.lt_u
-     if
+     if (result i32)
       local.get $2
       i32.const 2
       i32.add
-      local.set $2
      else
       local.get $0
       i32.const 2
@@ -2347,23 +2341,23 @@
        i32.const 56320
        i32.eq
        if
-        local.get $0
-        i32.const 4
-        i32.add
-        local.set $0
         local.get $2
         i32.const 4
         i32.add
         local.set $2
+        local.get $0
+        i32.const 4
+        i32.add
+        local.set $0
         br $continue|0
        end
       end
       local.get $2
       i32.const 3
       i32.add
-      local.set $2
      end
     end
+    local.set $2
     local.get $0
     i32.const 2
     i32.add
@@ -2746,7 +2740,7 @@
    if
     i32.const 0
     i32.const 480
-    i32.const 685
+    i32.const 687
     i32.const 8
     call $~lib/builtins/abort
     unreachable
@@ -2769,7 +2763,7 @@
    if
     i32.const 0
     i32.const 480
-    i32.const 689
+    i32.const 691
     i32.const 8
     call $~lib/builtins/abort
     unreachable
@@ -3087,7 +3081,7 @@
   if
    i32.const 0
    i32.const 480
-   i32.const 703
+   i32.const 705
    i32.const 6
    call $~lib/builtins/abort
    unreachable

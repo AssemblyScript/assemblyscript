@@ -625,23 +625,25 @@ export namespace String {
     export function byteLength(str: string, nullTerminated: bool = false): i32 {
       var strOff = changetype<usize>(str);
       var strEnd = strOff + <usize>changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
-      var bufLen = nullTerminated ? 1 : 0;
+      var bufLen = <i32>nullTerminated;
       while (strOff < strEnd) {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
-          if (nullTerminated && !c1) break;
-          bufLen += 1; strOff += 2;
+          // @ts-ignore: cast
+          if (nullTerminated & !c1) break;
+          bufLen += 1;
         } else if (c1 < 2048) {
-          bufLen += 2; strOff += 2;
+          bufLen += 2;
         } else {
           if ((c1 & 0xFC00) == 0xD800 && strOff + 2 < strEnd) {
             if ((<u32>load<u16>(strOff, 2) & 0xFC00) == 0xDC00) {
-              strOff += 4; bufLen += 4;
+              bufLen += 4; strOff += 4;
               continue;
             }
           }
-          strOff += 2; bufLen += 3;
+          bufLen += 3;
         }
+        strOff += 2;
       }
       return bufLen;
     }
@@ -748,7 +750,7 @@ export namespace String {
     }
 
     export function encode(str: string): ArrayBuffer {
-      var size = changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
+      var size = UTF16.byteLength(str);
       var buf = __alloc(size, idof<ArrayBuffer>());
       memory.copy(buf, changetype<usize>(str), <usize>size);
       return changetype<ArrayBuffer>(buf); // retains
