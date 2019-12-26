@@ -459,22 +459,26 @@ function prepareSize(size: usize): usize {
 }
 
 /** Initilizes the root structure. */
-export function initializeRoot(): void {
-  var rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
-  var pagesBefore = memory.size();
-  var pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
-  if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
-  var root = changetype<Root>(rootOffset);
-  root.flMap = 0;
-  SETTAIL(root, changetype<Block>(0));
-  for (let fl: usize = 0; fl < FL_BITS; ++fl) {
-    SETSL(root, fl, 0);
-    for (let sl: u32 = 0; sl < SL_SIZE; ++sl) {
-      SETHEAD(root, fl, sl, null);
+export function maybeInitialize(): Root {
+  var root = ROOT;
+  if (!root) {
+    let rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
+    let pagesBefore = memory.size();
+    let pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
+    if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
+    root = changetype<Root>(rootOffset);
+    root.flMap = 0;
+    SETTAIL(root, changetype<Block>(0));
+    for (let fl: usize = 0; fl < FL_BITS; ++fl) {
+      SETSL(root, fl, 0);
+      for (let sl: u32 = 0; sl < SL_SIZE; ++sl) {
+        SETHEAD(root, fl, sl, null);
+      }
     }
+    addMemory(root, (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
+    ROOT = root;
   }
-  addMemory(root, (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
-  ROOT = root;
+  return root;
 }
 
 // @ts-ignore: decorator
@@ -551,9 +555,11 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   var newBlock = allocateBlock(root, size);
   newBlock.rtId = block.rtId;
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
-  block.mmInfo = blockInfo | FREE;
-  insertBlock(root, block);
-  if (isDefined(ASC_RTRACE)) onfree(block);
+  if (changetype<usize>(block) >= __heap_base) {
+    block.mmInfo = blockInfo | FREE;
+    insertBlock(root, block);
+    if (isDefined(ASC_RTRACE)) onfree(block);
+  }
   return newBlock;
 }
 
@@ -569,12 +575,7 @@ export function freeBlock(root: Root, block: Block): void {
 // @ts-ignore: decorator
 @global @unsafe
 export function __alloc(size: usize, id: u32): usize {
-  var root = ROOT;
-  if (!root) {
-    initializeRoot();
-    root = ROOT;
-  }
-  var block = allocateBlock(root, size);
+  var block = allocateBlock(maybeInitialize(), size);
   block.rtId = id;
   return changetype<usize>(block) + BLOCK_OVERHEAD;
 }
@@ -582,15 +583,13 @@ export function __alloc(size: usize, id: u32): usize {
 // @ts-ignore: decorator
 @global @unsafe
 export function __realloc(ref: usize, size: usize): usize {
-  if (DEBUG) assert(ROOT); // must be initialized
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
-  return changetype<usize>(reallocateBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD), size)) + BLOCK_OVERHEAD;
+  return changetype<usize>(reallocateBlock(maybeInitialize(), changetype<Block>(ref - BLOCK_OVERHEAD), size)) + BLOCK_OVERHEAD;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __free(ref: usize): void {
-  if (DEBUG) assert(ROOT); // must be initialized
   assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
-  freeBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD));
+  freeBlock(maybeInitialize(), changetype<Block>(ref - BLOCK_OVERHEAD));
 }
