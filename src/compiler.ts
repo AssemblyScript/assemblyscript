@@ -1141,18 +1141,8 @@ export class Compiler extends DiagnosticEmitter {
       // none of the following can be an arrow function
       assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET));
 
-      // pretend to retain the expression immediately so the autorelease, if any, is skipped
-      let expr = this.compileExpression((<ExpressionStatement>bodyNode).expression, returnType,
-        Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-      );
-      if (returnType.isManaged) {
-        // check if that worked, and if it didn't, keep the reference alive
-        if (!this.skippedAutoreleases.has(expr)) {
-          let index = this.tryUndoAutorelease(expr, flow);
-          if (index != -1) this.skippedAutoreleases.add(expr);
-          // otherwise not an autorelease (using a local), hence irrelevant
-        }
-      }
+      // take special care of properly retaining the returned value
+      let expr = this.compileReturnedExpression((<ExpressionStatement>bodyNode).expression, returnType, Constraints.CONV_IMPLICIT);
 
       if (!stmts) stmts = [ expr ];
       else stmts.push(expr);
@@ -2226,6 +2216,32 @@ export class Compiler extends DiagnosticEmitter {
     // foo // is possibly null
   }
 
+  /** Compiles an expression that is about to be returned, taking special care of retaining and setting flow states. */
+  compileReturnedExpression(
+    /** Expression to compile. */
+    expression: Expression,
+    /** Return type of the function. */
+    returnType: Type,
+    /** Constraints indicating contextual conditions. */
+    constraints: Constraints = Constraints.NONE
+  ): ExpressionRef {
+    // pretend to retain the expression immediately so the autorelease, if any, is skipped
+    var expr = this.compileExpression(expression, returnType, constraints | Constraints.WILL_RETAIN);
+    var flow = this.currentFlow;
+    if (returnType.isManaged) {
+      // check if that worked, and if it didn't, keep the reference alive
+      if (!this.skippedAutoreleases.has(expr)) {
+        let index = this.tryUndoAutorelease(expr, flow);
+        if (index != -1) this.skippedAutoreleases.add(expr);
+        // otherwise not an autorelease (using a local), hence irrelevant
+      }
+    }
+    // remember return states
+    if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
+    if (flow.isNonnull(expr, returnType)) flow.set(FlowFlags.RETURNS_NONNULL);
+    return expr;
+  }
+
   compileReturnStatement(
     statement: ReturnStatement,
     isLastInBody: bool
@@ -2250,21 +2266,9 @@ export class Compiler extends DiagnosticEmitter {
       }
       let constraints = Constraints.CONV_IMPLICIT;
       if (flow.actualFunction.is(CommonFlags.MODULE_EXPORT)) constraints |= Constraints.MUST_WRAP;
-      // pretend to retain the expression immediately so the autorelease, if any, is skipped
-      expr = this.compileExpression(valueExpression, returnType, constraints | Constraints.WILL_RETAIN);
-      if (returnType.isManaged) {
-        // check if that worked, and if it didn't, keep the reference alive
-        if (!this.skippedAutoreleases.has(expr)) {
-          let index = this.tryUndoAutorelease(expr, flow);
-          if (index != -1) this.skippedAutoreleases.add(expr);
-          // otherwise not an autorelease (using a local), hence irrelevant
-        }
-      }
 
-      // remember return states
-      if (!flow.canOverflow(expr, returnType)) flow.set(FlowFlags.RETURNS_WRAPPED);
-      if (flow.isNonnull(expr, returnType)) flow.set(FlowFlags.RETURNS_NONNULL);
-
+      // take special care of properly retaining the returned value
+      expr = this.compileReturnedExpression(valueExpression, returnType, constraints);
     } else if (returnType != Type.void) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
