@@ -2761,10 +2761,24 @@ export class Resolver extends DiagnosticEmitter {
       assert(!(typeParameterNodes && typeParameterNodes.length));
     }
 
+    // There shouldn't be an instance before resolving the base class
+    assert(!prototype.getResolvedInstance(instanceKey));
+
     // Resolve base class if applicable
     var basePrototype = prototype.basePrototype;
     var baseClass: Class | null = null;
     if (basePrototype) {
+      let current: ClassPrototype | null = basePrototype;
+      do {
+        if (current == prototype) {
+          this.error(
+            DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
+            prototype.identifierNode.range,
+            prototype.internalName
+          );
+          return null;
+        }
+      } while (current = current.basePrototype);
       let extendsNode = assert(prototype.extendsNode); // must be present if it has a base prototype
       baseClass = this.resolveClassInclTypeArguments(
         basePrototype,
@@ -2778,11 +2792,17 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Construct the instance and remember that it has been resolved already
-    var nameInclTypeParamters = prototype.name;
-    if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
-    instance = new Class(nameInclTypeParamters, prototype, typeArguments, baseClass);
-    instance.contextualTypeArguments = ctxTypes;
-    prototype.setResolvedInstance(instanceKey, instance);
+    var recursiveInstanceFromResolvingBase = prototype.getResolvedInstance(instanceKey);
+    if (recursiveInstanceFromResolvingBase) {
+      // Happens if the base class already triggers resolving this class
+      instance = recursiveInstanceFromResolvingBase;
+    } else {
+      let nameInclTypeParamters = prototype.name;
+      if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
+      instance = new Class(nameInclTypeParamters, prototype, typeArguments, baseClass);
+      prototype.setResolvedInstance(instanceKey, instance);
+    }
+    instance.contextualTypeArguments = ctxTypes; // unique (as specified by the caller)
 
     // Inherit base class members and set up the initial memory offset for own fields
     var memoryOffset: u32 = 0;
