@@ -3318,11 +3318,8 @@
   i32.const 864
   call $~lib/string/String.__concat
   local.tee $4
-  call $~lib/rt/stub/__retain
   local.set $5
   local.get $3
-  call $~lib/rt/stub/__release
-  local.get $4
   call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release

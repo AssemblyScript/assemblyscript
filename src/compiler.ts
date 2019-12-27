@@ -1141,12 +1141,23 @@ export class Compiler extends DiagnosticEmitter {
       // none of the following can be an arrow function
       assert(!instance.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.GET | CommonFlags.SET));
 
+      // pretend to retain the expression immediately so the autorelease, if any, is skipped
       let expr = this.compileExpression((<ExpressionStatement>bodyNode).expression, returnType,
-        Constraints.CONV_IMPLICIT
+        Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
       );
+      if (returnType.isManaged) {
+        // check if that worked, and if it didn't, keep the reference alive
+        if (!this.skippedAutoreleases.has(expr)) {
+          let index = this.tryUndoAutorelease(expr, flow);
+          if (index != -1) this.skippedAutoreleases.add(expr);
+          // otherwise not an autorelease (using a local), hence irrelevant
+        }
+      }
+
       if (!stmts) stmts = [ expr ];
       else stmts.push(expr);
-      if (!flow.is(FlowFlags.TERMINATES)) { // TODO: detect if returning an autorelease local?
+
+      if (!flow.is(FlowFlags.TERMINATES)) {
         let indexBefore = stmts.length;
         this.performAutoreleases(flow, stmts);
         this.finishAutoreleases(flow, stmts);
@@ -2239,20 +2250,14 @@ export class Compiler extends DiagnosticEmitter {
       }
       let constraints = Constraints.CONV_IMPLICIT;
       if (flow.actualFunction.is(CommonFlags.MODULE_EXPORT)) constraints |= Constraints.MUST_WRAP;
+      // pretend to retain the expression immediately so the autorelease, if any, is skipped
       expr = this.compileExpression(valueExpression, returnType, constraints | Constraints.WILL_RETAIN);
-
-      // when returning a local, and it is already retained, skip the final set
-      // of retaining it as the return value and releasing it as a variable
-      if (!this.skippedAutoreleases.has(expr)) {
-        if (returnType.isManaged) {
-          if (getExpressionId(expr) == ExpressionId.LocalGet) {
-            let index = getLocalGetIndex(expr);
-            if (flow.isAnyLocalFlag(index, LocalFlags.ANY_RETAINED)) {
-              flow.unsetLocalFlag(index, LocalFlags.ANY_RETAINED);
-              flow.setLocalFlag(index, LocalFlags.RETURNED);
-              this.skippedAutoreleases.add(expr);
-            }
-          }
+      if (returnType.isManaged) {
+        // check if that worked, and if it didn't, keep the reference alive
+        if (!this.skippedAutoreleases.has(expr)) {
+          let index = this.tryUndoAutorelease(expr, flow);
+          if (index != -1) this.skippedAutoreleases.add(expr);
+          // otherwise not an autorelease (using a local), hence irrelevant
         }
       }
 
@@ -6506,24 +6511,32 @@ export class Compiler extends DiagnosticEmitter {
     /** Flow that would autorelease. */
     flow: Flow
   ): i32 {
-    // NOTE: Can't remove the local.tee completely because it's already compiled
-    // and a child of something else. Preventing the final release however makes
-    // it optimize away.
+    // The following assumes that the expression actually belongs to the flow and that
+    // top-level autoreleases are never undone. While that's true, it's not necessary
+    // to check presence in scopedLocals.
     switch (getExpressionId(expr)) {
-      case ExpressionId.LocalSet: { // local.tee(__retain(expr))
+      case ExpressionId.LocalGet: { // local.get(idx)
+        let index = getLocalGetIndex(expr);
+        if (flow.isAnyLocalFlag(index, LocalFlags.ANY_RETAINED)) {
+          flow.unsetLocalFlag(index, LocalFlags.ANY_RETAINED);
+          return index;
+        }
+        break;
+      }
+      case ExpressionId.LocalSet: { // local.tee(idx, expr)
         if (isLocalTee(expr)) {
+          // NOTE: Can't remove the local.tee completely because it's already compiled
+          // and a child of something else. Preventing the final release however makes
+          // it optimize away.
           let index = getLocalSetIndex(expr);
           if (flow.isAnyLocalFlag(index, LocalFlags.ANY_RETAINED)) {
-            // Assumes that the expression actually belongs to the flow and that
-            // top-level autoreleases are never undone. While that's true, it's
-            // not necessary to check presence in scopedLocals.
             flow.unsetLocalFlag(index, LocalFlags.ANY_RETAINED);
             return index;
           }
         }
         break;
       }
-      case ExpressionId.Block: { // { ..., local.tee(__retain(expr)) }
+      case ExpressionId.Block: { // { ..., local.get|tee(...) }
         if (getBlockName(expr) === null) { // must not be a break target
           let count = getBlockChildCount(expr);
           if (count) {
