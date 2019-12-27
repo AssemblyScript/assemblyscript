@@ -462,7 +462,7 @@ function prepareSize(size: usize): usize {
 export function maybeInitialize(): Root {
   var root = ROOT;
   if (!root) {
-    let rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
+    const rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
     let pagesBefore = memory.size();
     let pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
     if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();

@@ -779,9 +779,7 @@
    global.get $~lib/heap/__heap_base
    i32.const 15
    i32.add
-   i32.const 15
-   i32.const -1
-   i32.xor
+   i32.const -16
    i32.and
    local.set $1
    memory.size
