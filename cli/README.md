@@ -45,6 +45,9 @@ const options = require("assemblyscript/cli/asc.json");
 You can also compile a source string directly, for example in a browser environment:
 
 ```js
-const { binary, text, stdout, stderr } = asc.compileString(`...`, { optimize: 2 });
+const asc = require("assemblyscript/cli/asc");
+asc.ready.then(() => {
+  const { binary, text, stdout, stderr } = asc.compileString(`...`, { optimize: 2 });
+});
 ...
 ```
