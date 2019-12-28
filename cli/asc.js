@@ -24,8 +24,12 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
+const binaryen = global.Binaryen || (global.Binaryen = require("binaryen/wasm"));
 
-// global.Binaryen = require("../lib/binaryen");
+// Proxy Binaryen's ready event
+Object.defineProperty(exports, "ready", {
+  get: function() { return binaryen.ready; }
+});
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
 // useless code fragment on top of an actual error. suppress this:
@@ -33,7 +37,7 @@ if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
 
 // Use distribution files if present, otherwise run the sources directly
 var assemblyscript, isDev = false;
-(() => {
+exports.ready.then(() => {
   try { // `asc` on the command line
     assemblyscript = require("../dist/assemblyscript.js");
   } catch (e) {
@@ -54,7 +58,7 @@ var assemblyscript, isDev = false;
       }
     }
   }
-})();
+});
 
 /** Whether this is a webpack bundle or not. */
 exports.isBundle = typeof BUNDLE_VERSION === "string";
@@ -69,7 +73,7 @@ exports.version = exports.isBundle ? BUNDLE_VERSION : require("../package.json")
 exports.options = require("./asc.json");
 
 /** Prefix used for library files. */
-exports.libraryPrefix = assemblyscript.LIBRARY_PREFIX;
+exports.libraryPrefix = "~lib/"; // assemblyscript.LIBRARY_PREFIX;
 
 /** Default Binaryen optimization level. */
 exports.defaultOptimizeLevel = 3;
