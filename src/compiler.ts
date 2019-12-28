@@ -2232,8 +2232,8 @@ export class Compiler extends DiagnosticEmitter {
       // check if that worked, and if it didn't, keep the reference alive
       if (!this.skippedAutoreleases.has(expr)) {
         let index = this.tryUndoAutorelease(expr, flow);
-        if (index != -1) this.skippedAutoreleases.add(expr);
-        // otherwise not an autorelease (using a local), hence irrelevant
+        if (index == -1) expr = this.makeRetain(expr);
+        this.skippedAutoreleases.add(expr);
       }
     }
     // remember return states
@@ -2280,9 +2280,6 @@ export class Compiler extends DiagnosticEmitter {
     var stmts = new Array<ExpressionRef>();
     this.performAutoreleases(flow, stmts);
     this.finishAutoreleases(flow, stmts);
-
-    // Make sure that the return value is retained for the caller
-    if (returnType.isManaged && !this.skippedAutoreleases.has(expr)) expr = this.makeRetain(expr);
 
     if (returnType != Type.void && stmts.length) {
       let temp = flow.getTempLocal(returnType);
