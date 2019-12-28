@@ -37,28 +37,26 @@ if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
 
 // Use distribution files if present, otherwise run the sources directly
 var assemblyscript, isDev = false;
-exports.ready.then(() => {
-  try { // `asc` on the command line
-    assemblyscript = require("../dist/assemblyscript.js");
-  } catch (e) {
-    try { // `asc` on the command line without dist files
-      require("ts-node").register({
-        project: path.join(__dirname, "..", "src", "tsconfig.json"),
-        skipIgnore: true,
-        compilerOptions: { target: "ES2016" }
-      });
-      require("../src/glue/js");
-      assemblyscript = require("../src");
-      isDev = true;
-    } catch (e_ts) {
-      try { // `require("dist/asc.js")` in explicit browser tests
-        assemblyscript = eval("require('./assemblyscript')");
-      } catch (e) {
-        throw Error(e_ts.stack + "\n---\n" + e.stack);
-      }
+try { // `asc` on the command line
+  assemblyscript = require("../dist/assemblyscript.js");
+} catch (e) {
+  try { // `asc` on the command line without dist files
+    require("ts-node").register({
+      project: path.join(__dirname, "..", "src", "tsconfig.json"),
+      skipIgnore: true,
+      compilerOptions: { target: "ES2016" }
+    });
+    require("../src/glue/js");
+    assemblyscript = require("../src");
+    isDev = true;
+  } catch (e_ts) {
+    try { // `require("dist/asc.js")` in explicit browser tests
+      assemblyscript = eval("require('./assemblyscript')");
+    } catch (e) {
+      throw Error(e_ts.stack + "\n---\n" + e.stack);
     }
   }
-});
+}
 
 /** Whether this is a webpack bundle or not. */
 exports.isBundle = typeof BUNDLE_VERSION === "string";
@@ -73,7 +71,7 @@ exports.version = exports.isBundle ? BUNDLE_VERSION : require("../package.json")
 exports.options = require("./asc.json");
 
 /** Prefix used for library files. */
-exports.libraryPrefix = "~lib/"; // assemblyscript.LIBRARY_PREFIX;
+exports.libraryPrefix = assemblyscript.LIBRARY_PREFIX;
 
 /** Default Binaryen optimization level. */
 exports.defaultOptimizeLevel = 3;
