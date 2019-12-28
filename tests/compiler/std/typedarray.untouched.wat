@@ -32713,10 +32713,7 @@
    i32.load8_s
    call $~lib/util/number/itoa<i8>
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
@@ -33227,10 +33224,7 @@
    i32.load8_u
    call $~lib/util/number/itoa<u8>
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
@@ -33636,10 +33630,7 @@
    i32.load16_s
    call $~lib/util/number/itoa<i16>
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
@@ -33923,10 +33914,7 @@
    i32.load16_u
    call $~lib/util/number/itoa<u16>
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
@@ -34222,10 +34210,7 @@
    i32.load
    call $~lib/util/number/itoa<i32>
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
@@ -34501,10 +34486,7 @@
    i32.load
    call $~lib/util/number/itoa<u32>
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
@@ -35116,10 +35098,7 @@
    i64.load
    call $~lib/util/number/itoa<i64>
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
@@ -35487,10 +35466,7 @@
    i64.load
    call $~lib/util/number/itoa<u64>
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
@@ -37121,10 +37097,7 @@
    f64.promote_f32
    call $~lib/util/number/dtoa
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
@@ -37360,10 +37333,7 @@
    f64.load
    call $~lib/util/number/dtoa
    local.tee $4
-   call $~lib/rt/pure/__retain
    local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
    local.get $2
    call $~lib/rt/pure/__release
    local.get $5
