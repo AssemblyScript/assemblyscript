@@ -9,10 +9,10 @@
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (type $f64_f64_i32_=>_f64 (func (param f64 f64 i32) (result f64)))
  (memory $0 1)
- (data (i32.const 8) "\c0\00\00\00\01\00\00\00\00\00\00\00\c0\00\00\00n\83\f9\a2\00\00\00\00\d1W\'\fc)\15DN\99\95b\db\c0\dd4\f5\abcQ\feA\90C<:n$\b7a\c5\bb\de\ea.I\06\e0\d2MB\1c\eb\1d\fe\1c\92\d1\t\f55\82\e8>\a7)\b1&p\9c\e9\84D\bb.9\d6\919A~_\b4\8b_\84\9c\f49S\83\ff\97\f8\1f;(\f9\bd\8b\11/\ef\0f\98\05\de\cf~6m\1fm\nZf?FO\b7\t\cb\'\c7\ba\'u-\ea_\9e\f79\07={\f1\e5\eb\b1_\fbk\ea\92R\8aF0\03V\08]\8d\1f \bc\cf\f0\abk{\fca\91\e3\a9\1d6\f4\9a_\85\99e\08\1b\e6^\80\d8\ff\8d@h\a0\14W\15\06\061\'sM")
- (data (i32.const 216) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\18\00\00\00\18\00\00\00\c0\00\00\00\18\00\00\00")
- (data (i32.const 248) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
- (data (i32.const 296) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\08\01\00\00\08\01\00\00 \00\00\00\04\00\00\00")
+ (data (i32.const 16) "\c0\00\00\00\01\00\00\00\00\00\00\00\c0\00\00\00n\83\f9\a2\00\00\00\00\d1W\'\fc)\15DN\99\95b\db\c0\dd4\f5\abcQ\feA\90C<:n$\b7a\c5\bb\de\ea.I\06\e0\d2MB\1c\eb\1d\fe\1c\92\d1\t\f55\82\e8>\a7)\b1&p\9c\e9\84D\bb.9\d6\919A~_\b4\8b_\84\9c\f49S\83\ff\97\f8\1f;(\f9\bd\8b\11/\ef\0f\98\05\de\cf~6m\1fm\nZf?FO\b7\t\cb\'\c7\ba\'u-\ea_\9e\f79\07={\f1\e5\eb\b1_\fbk\ea\92R\8aF0\03V\08]\8d\1f \bc\cf\f0\abk{\fca\91\e3\a9\1d6\f4\9a_\85\99e\08\1b\e6^\80\d8\ff\8d@h\a0\14W\15\06\061\'sM")
+ (data (i32.const 224) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00 \00\00\00 \00\00\00\c0\00\00\00\18\00\00\00")
+ (data (i32.const 256) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
+ (data (i32.const 304) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\10\01\00\00\10\01\00\00 \00\00\00\04\00\00\00")
  (table $0 1 funcref)
  (global $~lib/math/NativeMath.E f64 (f64.const 2.718281828459045))
  (global $../../lib/libm/assembly/libm/E f64 (f64.const 2.718281828459045))
@@ -49,10 +49,10 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/math/rempio2_y0 (mut f64) (f64.const 0))
  (global $~lib/math/rempio2_y1 (mut f64) (f64.const 0))
- (global $~lib/math/PIO2_TABLE i32 (i32.const 232))
+ (global $~lib/math/PIO2_TABLE i32 (i32.const 240))
  (global $~lib/math/res128_hi (mut i64) (i64.const 0))
  (global $~lib/math/rempio2f_y (mut f64) (f64.const 0))
- (global $~lib/math/PIO2F_TABLE i32 (i32.const 312))
+ (global $~lib/math/PIO2F_TABLE i32 (i32.const 320))
  (export "memory" (memory $0))
  (export "libm.E" (global $../../lib/libm/assembly/libm/E))
  (export "libm.LN10" (global $../../lib/libm/assembly/libm/LN10))
@@ -2022,7 +2022,7 @@
   (local $35 i64)
   (local $36 i64)
   (local $37 f64)
-  i32.const 232
+  i32.const 240
   i32.load offset=4
   local.set $2
   local.get $1
@@ -8673,7 +8673,7 @@
    local.set $12
    local.get $9
    local.set $11
-   i32.const 312
+   i32.const 320
    i32.load offset=4
    local.set $13
    local.get $11
@@ -11485,7 +11485,7 @@
    local.set $12
    local.get $9
    local.set $11
-   i32.const 312
+   i32.const 320
    i32.load offset=4
    local.set $13
    local.get $11
@@ -12263,7 +12263,7 @@
    local.set $14
    local.get $11
    local.set $13
-   i32.const 312
+   i32.const 320
    i32.load offset=4
    local.set $15
    local.get $13

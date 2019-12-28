@@ -67,7 +67,7 @@
   i32.const 16
   i32.store
   local.get $0
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $0
   i32.const 3

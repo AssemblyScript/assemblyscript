@@ -4,7 +4,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
+ (data (i32.const 16) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
  (global $memset/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
@@ -232,9 +232,9 @@
   end
  )
  (func $start:memset (; 2 ;)
-  i32.const 44
+  i32.const 52
   global.set $memset/dest
-  i32.const 44
+  i32.const 52
   i32.const 1
   i32.const 16
   call $memset/memset
@@ -244,7 +244,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 72
    i32.const 0
    call $~lib/builtins/abort
@@ -258,7 +258,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 73
    i32.const 0
    call $~lib/builtins/abort
@@ -276,7 +276,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 77
    i32.const 0
    call $~lib/builtins/abort
@@ -290,7 +290,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 78
    i32.const 0
    call $~lib/builtins/abort
@@ -304,7 +304,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 79
    i32.const 0
    call $~lib/builtins/abort
@@ -318,7 +318,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 80
    i32.const 0
    call $~lib/builtins/abort

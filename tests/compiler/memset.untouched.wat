@@ -4,10 +4,10 @@
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
+ (data (i32.const 16) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $memset/dest (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 44))
+ (global $~lib/heap/__heap_base i32 (i32.const 52))
  (export "memory" (memory $0))
  (start $start)
  (func $memset/memset (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -288,7 +288,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 72
    i32.const 0
    call $~lib/builtins/abort
@@ -303,7 +303,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 73
    i32.const 0
    call $~lib/builtins/abort
@@ -323,7 +323,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 77
    i32.const 0
    call $~lib/builtins/abort
@@ -338,7 +338,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 78
    i32.const 0
    call $~lib/builtins/abort
@@ -353,7 +353,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 79
    i32.const 0
    call $~lib/builtins/abort
@@ -368,7 +368,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 80
    i32.const 0
    call $~lib/builtins/abort

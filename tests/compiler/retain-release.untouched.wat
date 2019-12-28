@@ -7,8 +7,8 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00e\00r\00r\00o\00r\00")
- (data (i32.const 40) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00r\00e\00t\00a\00i\00n\00-\00r\00e\00l\00e\00a\00s\00e\00.\00t\00s\00")
+ (data (i32.const 16) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00e\00r\00r\00o\00r\00")
+ (data (i32.const 48) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00r\00e\00t\00a\00i\00n\00-\00r\00e\00l\00e\00a\00s\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -17,7 +17,7 @@
  (global $retain-release/TARGET (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 92))
+ (global $~lib/heap/__heap_base i32 (i32.const 100))
  (export "__start" (func $start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
@@ -154,7 +154,7 @@
   local.get $5
   i32.store
   local.get $6
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $6
   local.get $1
@@ -702,8 +702,8 @@
    local.set $1
    local.get $1
    call $~lib/rt/stub/__release
-   i32.const 24
-   i32.const 56
+   i32.const 32
+   i32.const 64
    i32.const 367
    i32.const 4
    call $~lib/builtins/abort
