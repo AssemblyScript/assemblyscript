@@ -21918,10 +21918,6 @@
    local.get $0
    i32.load8_s
    call $~lib/util/number/itoa32
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
@@ -22261,10 +22257,6 @@
    local.get $0
    i32.load8_u
    call $~lib/util/number/utoa32
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
@@ -22554,10 +22546,6 @@
    local.get $0
    i32.load16_s
    call $~lib/util/number/itoa32
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
@@ -22764,10 +22752,6 @@
    local.get $0
    i32.load16_u
    call $~lib/util/number/utoa32
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
@@ -22986,10 +22970,6 @@
    local.get $0
    i32.load
    call $~lib/util/number/itoa32
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
@@ -23190,10 +23170,6 @@
    local.get $0
    i32.load
    call $~lib/util/number/utoa32
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
@@ -23575,10 +23551,6 @@
    local.get $0
    i64.load
    call $~lib/util/number/itoa64
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
@@ -23838,10 +23810,6 @@
    local.get $0
    i64.load
    call $~lib/util/number/utoa64
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
@@ -25110,10 +25078,6 @@
    f32.load
    f64.promote_f32
    call $~lib/util/number/dtoa
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
@@ -25292,10 +25256,6 @@
    local.get $0
    f64.load
    call $~lib/util/number/dtoa
-   local.tee $0
-   call $~lib/rt/pure/__retain
-   local.get $0
-   call $~lib/rt/pure/__release
    return
   end
   i32.const 2016
