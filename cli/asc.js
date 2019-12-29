@@ -721,6 +721,10 @@ exports.main = function main(argv, options, callback) {
       add("inlining-optimizing"); // differs
       if (hasARC) { // differs
         add("post-assemblyscript-finalize");
+        if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+          add("rse");
+          add("optimize-instructions");
+        }
         add("vacuum");
       }
       add("remove-unused-module-elements");
