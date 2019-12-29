@@ -325,6 +325,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         The_0_operator_cannot_be_applied_to_type_1 = 2469,
         In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
         Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
+        _0_is_referenced_directly_or_indirectly_in_its_own_base_expression = 2506,
         Object_is_possibly_null = 2531,
         Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
         The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
@@ -2612,26 +2613,22 @@ declare module "assemblyscript/src/flow" {
         WRITTENTO = 32,
         /** Local is retained. */
         RETAINED = 64,
-        /** Local is returned. */
-        RETURNED = 128,
         /** Local is conditionally read from. */
-        CONDITIONALLY_READFROM = 256,
+        CONDITIONALLY_READFROM = 128,
         /** Local is conditionally written to. */
-        CONDITIONALLY_WRITTENTO = 512,
+        CONDITIONALLY_WRITTENTO = 256,
         /** Local must be conditionally retained. */
-        CONDITIONALLY_RETAINED = 1024,
+        CONDITIONALLY_RETAINED = 512,
         /** Local is conditionally returned. */
-        CONDITIONALLY_RETURNED = 2048,
+        CONDITIONALLY_RETURNED = 1024,
         /** Any categorical flag. */
-        ANY_CATEGORICAL = 255,
+        ANY_CATEGORICAL = 127,
         /** Any conditional flag. */
-        ANY_CONDITIONAL = 3904,
+        ANY_CONDITIONAL = 1984,
         /** Any written to flag. */
-        ANY_WRITTENTO = 544,
+        ANY_WRITTENTO = 288,
         /** Any retained flag. */
-        ANY_RETAINED = 1088,
-        /** Any returned flag. */
-        ANY_RETURNED = 2176
+        ANY_RETAINED = 576
     }
     export namespace LocalFlags {
         function join(left: LocalFlags, right: LocalFlags): LocalFlags;
@@ -4204,6 +4201,14 @@ declare module "assemblyscript/src/compiler" {
         compileExpressionStatement(statement: ExpressionStatement): ExpressionRef;
         compileForStatement(statement: ForStatement): ExpressionRef;
         compileIfStatement(statement: IfStatement): ExpressionRef;
+        /** Compiles an expression that is about to be returned, taking special care of retaining and setting flow states. */
+        compileReturnedExpression(
+        /** Expression to compile. */
+        expression: Expression, 
+        /** Return type of the function. */
+        returnType: Type, 
+        /** Constraints indicating contextual conditions. */
+        constraints?: Constraints): ExpressionRef;
         compileReturnStatement(statement: ReturnStatement, isLastInBody: boolean): ExpressionRef;
         compileSwitchStatement(statement: SwitchStatement): ExpressionRef;
         compileThrowStatement(statement: ThrowStatement): ExpressionRef;
