@@ -34,8 +34,6 @@
  (data (i32.const 1636) "\01\00\00\00\01")
  (data (i32.const 1648) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\00.\000")
  (data (i32.const 1680) "\06\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\93\00\00\00\02")
- (table $0 5 funcref)
- (elem (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))

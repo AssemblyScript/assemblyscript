@@ -2325,7 +2325,6 @@
   i32.shl
   i32.add
   i32.const 512
-  call $~lib/rt/pure/__retain
   i32.store
   local.get $0
   local.get $2

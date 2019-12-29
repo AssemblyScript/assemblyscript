@@ -2188,8 +2188,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 352
-  call $~lib/rt/pure/__release
   global.get $std/array-literal/dynamicArrayI8
   call $~lib/rt/pure/__release
   global.get $std/array-literal/dynamicArrayI32

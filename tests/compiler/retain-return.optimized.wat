@@ -15,8 +15,6 @@
  (data (i32.const 176) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 240) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
  (data (i32.const 288) "\04\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
- (table $0 7 funcref)
- (elem (i32.const 1) $retain-return/returnNew $start:retain-return~anonymous|1 $retain-return/returnGlobal $retain-return/returnNew $retain-return/returnNew $retain-return/returnGlobal)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
@@ -1765,6 +1763,7 @@
  )
  (func $start:retain-return (; 30 ;)
   (local $0 i32)
+  (local $1 i32)
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
   call $retain-return/Ref#constructor
@@ -1775,12 +1774,6 @@
   call $~lib/rt/pure/__release
   call $retain-return/Ref#constructor
   global.set $retain-return/ref
-  global.get $retain-return/ref
-  call $~lib/rt/pure/__retain
-  call $~lib/rt/pure/__release
-  global.get $retain-return/ref
-  call $~lib/rt/pure/__retain
-  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~lib/argc
   call $retain-return/Ref#constructor
@@ -1791,24 +1784,12 @@
   call $~lib/rt/pure/__release
   i32.const 1
   global.set $~lib/argc
-  global.get $retain-return/ref
-  call $~lib/rt/pure/__retain
-  call $~lib/rt/pure/__release
   i32.const 1
   global.set $~lib/argc
-  global.get $retain-return/ref
-  call $~lib/rt/pure/__retain
-  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~lib/argc
-  global.get $retain-return/ref
-  call $~lib/rt/pure/__retain
-  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~lib/argc
-  global.get $retain-return/ref
-  call $~lib/rt/pure/__retain
-  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~lib/argc
   call $retain-return/Ref#constructor
@@ -1827,21 +1808,17 @@
   call $~lib/rt/pure/__release
   i32.const 0
   global.set $~lib/argc
-  global.get $retain-return/ref
-  call $~lib/rt/pure/__retain
-  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~lib/argc
-  global.get $retain-return/ref
-  call $~lib/rt/pure/__retain
-  call $~lib/rt/pure/__release
   global.get $retain-return/ref
   local.tee $0
   if
+   i32.const 0
+   local.set $1
    local.get $0
    call $~lib/rt/pure/__release
   end
-  i32.const 0
+  local.get $1
   global.set $retain-return/ref
  )
  (func $start (; 31 ;)

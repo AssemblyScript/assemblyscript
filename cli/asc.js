@@ -701,9 +701,6 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
       }
-      if (hasARC) { // differs
-        add("post-assemblyscript-finalize");
-      }
       add("vacuum");
 
       // PassRunner::addDefaultGlobalOptimizationPostPasses
@@ -720,10 +717,14 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("simplify-globals");
       }
+      add("directize"); // differs
+      add("inlining-optimizing"); // differs
+      if (hasARC) { // differs
+        add("post-assemblyscript-finalize");
+        add("vacuum");
+      }
       add("remove-unused-module-elements");
       add("memory-packing");
-      add("directize");
-      add("inlining-optimizing"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("generate-stack-ir");
         add("optimize-stack-ir");

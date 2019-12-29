@@ -2478,35 +2478,38 @@
   (local $3 i32)
   (local $4 i32)
   i32.const 720
-  call $~lib/rt/pure/__retain
   local.tee $1
   i32.eqz
   if
+   i32.const 752
+   local.set $2
    local.get $1
    i32.const 752
    i32.ne
    if
+    i32.const 752
+    local.set $2
     local.get $1
     call $~lib/rt/pure/__release
    end
-   i32.const 752
+   local.get $2
    local.set $1
   end
   i32.const 0
   local.get $0
   call $~lib/string/String#get:length
-  local.tee $2
+  local.tee $3
   i32.const 0
-  local.get $2
+  local.get $3
   i32.lt_s
   select
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   local.get $1
   call $~lib/string/String#get:length
-  local.tee $4
+  local.tee $2
   i32.add
-  local.get $2
+  local.get $3
   i32.gt_s
   if
    local.get $1
@@ -2515,9 +2518,9 @@
    return
   end
   local.get $0
-  local.get $3
-  local.get $1
   local.get $4
+  local.get $1
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
   local.get $1
@@ -12913,7 +12916,8 @@
   i32.const 0
   i32.const 2147483647
   call $~lib/string/String#split
-  local.tee $1
+  local.set $1
+  local.get $1
   i32.load offset=12
   i32.const 1
   i32.eq

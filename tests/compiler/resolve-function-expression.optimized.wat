@@ -10,8 +10,6 @@
  (data (i32.const 16) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
  (data (i32.const 96) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
  (data (i32.const 128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
- (table $0 4 funcref)
- (elem (i32.const 1) $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))

@@ -1752,8 +1752,6 @@
  )
  (func $start:rc/local-init (; 29 ;)
   (local $0 i32)
-  i32.const 32
-  call $~lib/rt/pure/__release
   i32.const 0
   i32.const 3
   call $~lib/rt/tlsf/__alloc

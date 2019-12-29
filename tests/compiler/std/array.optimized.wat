@@ -9134,13 +9134,11 @@
     local.set $4
    end
    local.get $4
-   if (result i32)
-    i32.const 7248
-   else
-    i32.const 5168
-   end
-   local.get $4
    call $~lib/rt/pure/__release
+   i32.const 7248
+   i32.const 5168
+   local.get $4
+   select
    return
   end
   i32.const 5168
@@ -9187,8 +9185,6 @@
       local.get $1
       call $~lib/rt/pure/__release
      end
-     i32.const 7248
-     call $~lib/rt/pure/__release
      local.get $6
      call $~lib/rt/pure/__release
      local.get $2
@@ -9253,8 +9249,6 @@
     local.get $1
     call $~lib/rt/pure/__release
    end
-   i32.const 7248
-   call $~lib/rt/pure/__release
    local.get $0
    call $~lib/rt/pure/__release
    local.get $3
