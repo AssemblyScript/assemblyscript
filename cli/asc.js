@@ -725,12 +725,11 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
-        add("dae");
-        add("inlining-optimizing");
         add("remove-unused-brs");
         add("remove-unused-names");
         add("merge-blocks");
         add("vacuum");
+        add("inlining-optimizing");
         add("optimize-instructions");
         add("simplify-globals-optimizing");
       }
