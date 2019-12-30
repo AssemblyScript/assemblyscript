@@ -725,9 +725,6 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
-      }
-      add("vacuum"); // differs
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("dae");
         add("inlining-optimizing");
         add("remove-unused-brs");
@@ -738,7 +735,7 @@ exports.main = function main(argv, options, callback) {
         add("simplify-globals-optimizing");
       }
       add("duplicate-function-elimination"); // differs
-      add("remove-unused-module-elements");
+      add("remove-unused-nonfunction-module-elements"); // differs
       add("memory-packing");
       add("remove-unused-module-elements"); // differs
       if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
