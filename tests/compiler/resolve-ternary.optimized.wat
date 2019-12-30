@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
@@ -2889,12 +2889,7 @@
   i32.const 3
   i32.add
  )
- (func $resolve-ternary/g2 (; 39 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 4
-  i32.add
- )
- (func $start:resolve-ternary (; 40 ;)
+ (func $start:resolve-ternary (; 39 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 1
@@ -2982,10 +2977,10 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $start (; 41 ;)
+ (func $start (; 40 ;)
   call $start:resolve-ternary
  )
- (func $~lib/rt/pure/__visit (; 42 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 41 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 1732
   i32.lt_u
@@ -3095,7 +3090,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 43 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 42 ;) (param $0 i32) (param $1 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$2

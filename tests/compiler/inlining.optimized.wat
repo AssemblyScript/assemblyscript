@@ -3,7 +3,6 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -17,10 +16,7 @@
  (func $inlining/test (; 1 ;) (result i32)
   i32.const 3
  )
- (func $inlining/func_fe~anonymous|0 (; 2 ;) (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -62,7 +58,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -107,7 +103,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $inlining/test_ctor (; 5 ;)
+ (func $inlining/test_ctor (; 4 ;)
   (local $0 i32)
   i32.const 16
   i32.const 5
@@ -187,7 +183,7 @@
    unreachable
   end
  )
- (func $start (; 6 ;)
+ (func $start (; 5 ;)
   i32.const 1
   global.set $~lib/argc
   i32.const 64

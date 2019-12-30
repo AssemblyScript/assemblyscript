@@ -1,7 +1,7 @@
 (module
  (type $none_=>_none (func))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
@@ -180,10 +180,7 @@
  (func $start:builtins~anonymous|0 (; 6 ;)
   nop
  )
- (func $start:builtins~anonymous|1 (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
-  nop
- )
- (func $start:builtins (; 8 ;)
+ (func $start:builtins (; 7 ;)
   i32.const 31
   global.set $builtins/i
   i32.const 0
@@ -856,7 +853,7 @@
    unreachable
   end
  )
- (func $start (; 9 ;)
+ (func $start (; 8 ;)
   call $start:builtins
  )
 )

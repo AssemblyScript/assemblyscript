@@ -2,10 +2,10 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -1373,10 +1373,7 @@
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
  )
- (func $retain-return/returnNew (; 20 ;) (result i32)
-  call $retain-return/Ref#constructor
- )
- (func $~lib/rt/__typeinfo (; 21 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/__typeinfo (; 20 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 288
   i32.load
@@ -1396,7 +1393,7 @@
   i32.add
   i32.load
  )
- (func $~lib/memory/memory.copy (; 22 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -1569,7 +1566,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/__free (; 23 ;) (param $0 i32)
+ (func $~lib/rt/tlsf/__free (; 22 ;) (param $0 i32)
   local.get $0
   i32.const 15
   i32.and
@@ -1592,7 +1589,7 @@
   i32.sub
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/pure/growRoots (; 24 ;)
+ (func $~lib/rt/pure/growRoots (; 23 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1633,7 +1630,7 @@
   i32.add
   global.set $~lib/rt/pure/END
  )
- (func $~lib/rt/pure/appendRoot (; 25 ;) (param $0 i32)
+ (func $~lib/rt/pure/appendRoot (; 24 ;) (param $0 i32)
   (local $1 i32)
   global.get $~lib/rt/pure/CUR
   local.tee $1
@@ -1652,7 +1649,7 @@
   i32.add
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/pure/decrement (; 26 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 25 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1740,7 +1737,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__release (; 27 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 26 ;) (param $0 i32)
   local.get $0
   i32.const 324
   i32.gt_u
@@ -1751,15 +1748,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $retain-return/returnGlobal (; 28 ;) (result i32)
-  global.get $retain-return/ref
-  call $~lib/rt/pure/__retain
- )
- (func $start:retain-return~anonymous|1 (; 29 ;) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
- )
- (func $start:retain-return (; 30 ;)
+ (func $start:retain-return (; 27 ;)
   (local $0 i32)
   (local $1 i32)
   call $retain-return/Ref#constructor
@@ -1817,7 +1806,7 @@
   local.get $1
   global.set $retain-return/ref
  )
- (func $start (; 31 ;)
+ (func $start (; 28 ;)
   global.get $~lib/started
   if
    return
@@ -1827,7 +1816,7 @@
   end
   call $start:retain-return
  )
- (func $~lib/rt/pure/__visit (; 32 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 29 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 324
   i32.lt_u
@@ -1937,7 +1926,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 33 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 30 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2

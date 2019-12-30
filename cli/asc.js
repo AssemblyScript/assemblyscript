@@ -736,6 +736,7 @@ exports.main = function main(argv, options, callback) {
       add("duplicate-function-elimination"); // differs
       add("remove-unused-module-elements");
       add("memory-packing");
+      add("remove-unused-module-elements"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("generate-stack-ir");
         add("optimize-stack-ir");

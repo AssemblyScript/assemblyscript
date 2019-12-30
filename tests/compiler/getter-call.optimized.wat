@@ -1,7 +1,7 @@
 (module
  (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -76,16 +76,13 @@
   i32.const 0
   i32.store offset=12
  )
- (func $getter-call/C#get:x~anonymous|0 (; 2 ;) (result i32)
-  i32.const 42
- )
- (func $getter-call/test (; 3 ;) (result i32)
+ (func $getter-call/test (; 2 ;) (result i32)
   call $~lib/rt/stub/__alloc
   i32.const 0
   global.set $~lib/argc
   i32.const 42
  )
- (func $start (; 4 ;)
+ (func $start (; 3 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16
