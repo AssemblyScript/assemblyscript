@@ -668,9 +668,9 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
-      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
-        add("code-pushing");
-      }
+      // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+      //   add("code-pushing");
+      // }
       add("simplify-locals-nostructure");
       add("vacuum");
       add("reorder-locals");

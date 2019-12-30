@@ -447,16 +447,9 @@
                i32.ne
                if
                 local.get $4
-                i32.const 9
-                i32.eq
-                br_if $case1|1
-                block $tablify|0
-                 local.get $4
-                 i32.const 1
-                 i32.sub
-                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $tablify|0
-                end
-                br $case10|1
+                i32.const 1
+                i32.sub
+                br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case10|1
                end
                local.get $7
                i32.const 1000000000

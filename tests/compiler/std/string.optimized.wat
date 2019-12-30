@@ -2885,30 +2885,30 @@
   end
   block $break|0
    local.get $0
+   i32.const 5760
+   i32.eq
+   local.get $0
    i32.const 8232
    i32.eq
+   i32.or
    local.get $0
    i32.const 8233
    i32.eq
-   i32.or
-   local.get $0
-   i32.const 5760
-   i32.eq
-   i32.or
    local.get $0
    i32.const 8239
    i32.eq
+   i32.or
+   i32.or
    local.get $0
    i32.const 8287
    i32.eq
-   i32.or
    local.get $0
    i32.const 12288
    i32.eq
+   i32.or
    local.get $0
    i32.const 65279
    i32.eq
-   i32.or
    i32.or
    i32.or
    i32.eqz
@@ -6591,16 +6591,9 @@
                i32.ne
                if
                 local.get $4
-                i32.const 9
-                i32.eq
-                br_if $case1|1
-                block $tablify|0
-                 local.get $4
-                 i32.const 1
-                 i32.sub
-                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $tablify|0
-                end
-                br $case10|1
+                i32.const 1
+                i32.sub
+                br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case10|1
                end
                local.get $7
                i32.const 1000000000
@@ -16624,15 +16617,8 @@
         if
          local.get $1
          i32.const 2
-         i32.eq
-         br_if $case1|0
-         block $tablify|0
-          local.get $1
-          i32.const 3
-          i32.sub
-          br_table $case2|0 $case3|0 $case4|0 $tablify|0
-         end
-         br $case5|0
+         i32.sub
+         br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0
         end
         local.get $0
         call $~lib/rt/pure/decrement

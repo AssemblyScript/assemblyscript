@@ -3696,15 +3696,8 @@
         if
          local.get $1
          i32.const 2
-         i32.eq
-         br_if $case1|0
-         block $tablify|0
-          local.get $1
-          i32.const 3
-          i32.sub
-          br_table $case2|0 $case3|0 $case4|0 $tablify|0
-         end
-         br $case5|0
+         i32.sub
+         br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0
         end
         local.get $0
         call $~lib/rt/pure/decrement
