@@ -2800,9 +2800,10 @@ export class Resolver extends DiagnosticEmitter {
       if (!base) return null;
       instance.setBase(base);
 
-      // If the base class is still pending, yield here and try again later.
-      // This is guaranteed to never happen when calling `resolveClass` from
-      // other (non-recursive) code.
+      // If the base class is still pending, yield here and instead resolve any
+      // derived classes once the base class's `finishResolveClass` is done.
+      // This is guaranteed to never happen at the entry of the recursion, i.e.
+      // where `resolveClass` is called from other code.
       if (pendingClasses.includes(base)) return instance;
     }
 
@@ -3011,11 +3012,13 @@ export class Resolver extends DiagnosticEmitter {
 
     // Remove this class from pending
     var pendingIndex = pendingClasses.indexOf(instance);
-    if (~pendingIndex) pendingClasses.splice(pendingIndex, 1);
+    assert(~pendingIndex); // must be pending
+    pendingClasses.splice(pendingIndex, 1);
 
-    // Finish any classes extending this class. This essentially reverses the
-    // recursion from where we previously yielded when we found that we can't
-    // yet resolve a derived class since its base was still pending.
+    // Finish derived classes that we postponed in `resolveClass` due to the
+    // base class still being pending, again triggering `finishResolveClass`
+    // of any classes derived from those classes, ultimately leading to all
+    // pending classes being resolved.
     var derivedPendingClasses = new Array<Class>();
     for (let i = 0, k = pendingClasses.length; i < k; ++i) {
       let pending = pendingClasses[i];
