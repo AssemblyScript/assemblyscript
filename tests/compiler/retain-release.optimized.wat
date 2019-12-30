@@ -33,7 +33,7 @@
  (export "scopeBlock" (func $retain-release/receiveRef))
  (export "scopeBlockToUninitialized" (func $retain-release/receiveRef))
  (export "scopeBlockToInitialized" (func $retain-release/receiveRef))
- (export "scopeBlockToConditional" (func $retain-release/scopeBlockToConditional))
+ (export "scopeBlockToConditional" (func $retain-release/takeRef))
  (export "scopeTopLevelUninitialized" (func $retain-release/receiveRef))
  (export "scopeTopLevelInitialized" (func $retain-release/receiveRef))
  (export "scopeTopLevelConditional" (func $retain-release/takeRef))
@@ -183,11 +183,7 @@
   local.get $0
   i32.store
  )
- (func $retain-release/scopeBlockToConditional (; 11 ;) (param $0 i32)
-  (local $1 i32)
-  nop
- )
- (func $retain-release/scopeForComplex (; 12 ;) (param $0 i32)
+ (func $retain-release/scopeForComplex (; 11 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   loop $loop|0
@@ -213,7 +209,7 @@
    end
   end
  )
- (func $retain-release/scopeThrow (; 13 ;) (param $0 i32)
+ (func $retain-release/scopeThrow (; 12 ;) (param $0 i32)
   local.get $0
   if
    i32.const 32
@@ -224,27 +220,27 @@
    unreachable
   end
  )
- (func $retain-release/scopeUnreachable (; 14 ;) (param $0 i32)
+ (func $retain-release/scopeUnreachable (; 13 ;) (param $0 i32)
   local.get $0
   if
    unreachable
   end
  )
- (func $retain-release/provideRefIndirect (; 15 ;) (param $0 i32)
+ (func $retain-release/provideRefIndirect (; 14 ;) (param $0 i32)
   i32.const 1
   global.set $~lib/argc
   global.get $retain-release/REF
   local.get $0
   call_indirect (type $i32_=>_none)
  )
- (func $retain-release/receiveRefIndirect (; 16 ;) (param $0 i32)
+ (func $retain-release/receiveRefIndirect (; 15 ;) (param $0 i32)
   i32.const 0
   global.set $~lib/argc
   local.get $0
   call_indirect (type $none_=>_i32)
   drop
  )
- (func $start (; 17 ;)
+ (func $start (; 16 ;)
   (local $0 i32)
   global.get $~lib/started
   if

@@ -730,6 +730,8 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("dae");
         add("inlining-optimizing");
+        add("coalesce-locals");
+        add("simplify-locals");
         add("remove-unused-brs");
         add("remove-unused-names");
         add("merge-blocks");
@@ -741,7 +743,7 @@ exports.main = function main(argv, options, callback) {
       add("remove-unused-module-elements");
       add("memory-packing");
       add("remove-unused-module-elements"); // differs
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
         add("generate-stack-ir");
         add("optimize-stack-ir");
       }
