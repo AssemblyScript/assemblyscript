@@ -11902,10 +11902,6 @@
   i32.const 255
   i32.and
   local.set $2
-  local.get $1
-  i32.const -2147483648
-  i32.and
-  local.set $4
   i32.const 1
   i32.const 0
   local.get $2
@@ -11921,6 +11917,10 @@
    f32.div
    return
   end
+  local.get $1
+  i32.const -2147483648
+  i32.and
+  local.set $4
   block $folding-inner0
    local.get $1
    i32.const 1
@@ -12142,10 +12142,6 @@
   i64.const 2047
   i64.and
   local.set $2
-  local.get $1
-  i64.const 63
-  i64.shr_u
-  local.set $4
   i32.const 1
   i32.const 0
   local.get $2
@@ -12161,6 +12157,10 @@
    f64.div
    return
   end
+  local.get $1
+  i64.const 63
+  i64.shr_u
+  local.set $4
   block $folding-inner0
    local.get $1
    i64.const 1

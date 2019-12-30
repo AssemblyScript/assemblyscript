@@ -5282,11 +5282,6 @@
    local.set $4
    local.set $2
   end
-  local.get $4
-  i64.const 52
-  i64.shr_u
-  i32.wrap_i64
-  local.set $5
   local.get $2
   f64.reinterpret_i64
   local.set $1
@@ -5301,6 +5296,11 @@
    local.get $1
    return
   end
+  local.get $4
+  i64.const 52
+  i64.shr_u
+  i32.wrap_i64
+  local.set $5
   local.get $4
   f64.reinterpret_i64
   local.set $0
@@ -6418,10 +6418,6 @@
   i64.const 2047
   i64.and
   local.set $5
-  local.get $2
-  i64.const 63
-  i64.shr_u
-  local.set $7
   local.get $3
   i64.const 1
   i64.shl
@@ -6450,6 +6446,10 @@
    f64.div
    return
   end
+  local.get $2
+  i64.const 63
+  i64.shr_u
+  local.set $7
   block $folding-inner0
    local.get $2
    i64.const 1
@@ -6639,10 +6639,6 @@
   i32.const 255
   i32.and
   local.set $5
-  local.get $2
-  i32.const -2147483648
-  i32.and
-  local.set $7
   local.get $3
   i32.const 1
   i32.shl
@@ -6670,6 +6666,10 @@
    f32.div
    return
   end
+  local.get $2
+  i32.const -2147483648
+  i32.and
+  local.set $7
   block $folding-inner0
    local.get $2
    i32.const 1
@@ -8808,10 +8808,6 @@
   i64.const 2047
   i64.and
   local.set $6
-  local.get $2
-  i64.const 63
-  i64.shr_u
-  i32.wrap_i64
   i32.const 1
   local.get $1
   local.get $1
@@ -8843,6 +8839,10 @@
    local.get $0
    return
   end
+  local.get $2
+  i64.const 63
+  i64.shr_u
+  i32.wrap_i64
   local.get $3
   i64.eqz
   if (result i64)
@@ -9067,9 +9067,6 @@
   i32.const 255
   i32.and
   local.set $5
-  local.get $2
-  i32.const 31
-  i32.shr_u
   i32.const 1
   local.get $1
   local.get $1
@@ -9100,6 +9097,9 @@
    local.get $0
    return
   end
+  local.get $2
+  i32.const 31
+  i32.shr_u
   local.get $3
   if (result i32)
    local.get $2

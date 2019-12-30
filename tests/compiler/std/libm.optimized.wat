@@ -2842,11 +2842,6 @@
    local.set $4
    local.set $2
   end
-  local.get $4
-  i64.const 52
-  i64.shr_u
-  i32.wrap_i64
-  local.set $5
   local.get $2
   f64.reinterpret_i64
   local.set $1
@@ -2861,6 +2856,11 @@
    local.get $1
    return
   end
+  local.get $4
+  i64.const 52
+  i64.shr_u
+  i32.wrap_i64
+  local.set $5
   local.get $4
   f64.reinterpret_i64
   local.set $0

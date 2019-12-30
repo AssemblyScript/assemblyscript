@@ -731,6 +731,7 @@ exports.main = function main(argv, options, callback) {
         add("vacuum");
         add("directize");
         add("inlining-optimizing");
+        add("code-pushing");
         add("optimize-instructions");
         add("simplify-globals-optimizing");
       }
