@@ -2729,6 +2729,9 @@ export class Resolver extends DiagnosticEmitter {
     );
   }
 
+  /** Currently resolving classes. */
+  private resolveClassPending: Class[] = [];
+
   /** Resolves a class prototype using the specified concrete type arguments. */
   resolveClass(
     /** The prototype of the class. */
@@ -2742,9 +2745,18 @@ export class Resolver extends DiagnosticEmitter {
   ): Class | null {
     var instanceKey = typeArguments ? typesToString(typeArguments) : "";
 
-    // Check if this exact instance has already been resolved
+    // Do not attempt to resolve the same class twice. This can return a class
+    // that isn't fully resolved yet, but only on deeper levels of recursion.
     var instance = prototype.getResolvedInstance(instanceKey);
     if (instance) return instance;
+
+    // Otherwise create
+    var nameInclTypeParamters = prototype.name;
+    if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
+    instance = new Class(nameInclTypeParamters, prototype, typeArguments);
+    prototype.setResolvedInstance(instanceKey, instance);
+    var pendingClasses = this.resolveClassPending;
+    pendingClasses.push(instance);
 
     // Insert contextual type arguments for this operation. Internally, this method is always
     // called with matching type parameter / argument counts.
@@ -2760,13 +2772,10 @@ export class Resolver extends DiagnosticEmitter {
       let typeParameterNodes = prototype.typeParameterNodes;
       assert(!(typeParameterNodes && typeParameterNodes.length));
     }
-
-    // There shouldn't be an instance before resolving the base class
-    assert(!prototype.getResolvedInstance(instanceKey));
+    instance.contextualTypeArguments = ctxTypes;
 
     // Resolve base class if applicable
     var basePrototype = prototype.basePrototype;
-    var baseClass: Class | null = null;
     if (basePrototype) {
       let current: ClassPrototype | null = basePrototype;
       do {
@@ -2780,7 +2789,7 @@ export class Resolver extends DiagnosticEmitter {
         }
       } while (current = current.basePrototype);
       let extendsNode = assert(prototype.extendsNode); // must be present if it has a base prototype
-      baseClass = this.resolveClassInclTypeArguments(
+      let base = this.resolveClassInclTypeArguments(
         basePrototype,
         extendsNode.typeArguments,
         prototype.parent, // relative to derived class
@@ -2788,62 +2797,59 @@ export class Resolver extends DiagnosticEmitter {
         extendsNode,
         reportMode
       );
-      if (!baseClass) return null;
+      if (!base) return null;
+      instance.setBase(base);
+
+      // If the base class is still pending, yield here and try again later.
+      // This is guaranteed to never happen when calling `resolveClass` from
+      // other (non-recursive) code.
+      if (pendingClasses.includes(base)) return instance;
     }
 
-    // Construct the instance and remember that it has been resolved already
-    var recursiveInstanceFromResolvingBase = prototype.getResolvedInstance(instanceKey);
-    if (recursiveInstanceFromResolvingBase) {
-      // Happens if the base class already triggers resolving this class
-      instance = recursiveInstanceFromResolvingBase;
-    } else {
-      let nameInclTypeParamters = prototype.name;
-      if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
-      instance = new Class(nameInclTypeParamters, prototype, typeArguments, baseClass);
-      prototype.setResolvedInstance(instanceKey, instance);
-    }
-    instance.contextualTypeArguments = ctxTypes; // unique (as specified by the caller)
+    // We only get here if the base class has been fully resolved already.
+    this.finishResolveClass(instance, reportMode);
+    return instance;
+  }
 
-    // Inherit base class members and set up the initial memory offset for own fields
+  /** Finishes resolving the specified class. */
+  private finishResolveClass(
+    /** Class to finish resolving. */
+    instance: Class,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode
+  ): void {
+    var instanceMembers = instance.members;
+    if (!instanceMembers) instance.members = instanceMembers = new Map();
+
+    // Alias base members
+    var pendingClasses = this.resolveClassPending;
     var memoryOffset: u32 = 0;
-    if (baseClass) {
-      let baseMembers = baseClass.members;
+    var base = instance.base;
+    if (base) {
+      assert(!pendingClasses.includes(base));
+      let baseMembers = base.members;
       if (baseMembers) {
-        let instanceMembers = instance.members;
-        if (!instanceMembers) instance.members = instanceMembers = new Map();
         for (let [baseMemberName, baseMember] of baseMembers) {
           instanceMembers.set(baseMemberName, baseMember);
         }
       }
-      memoryOffset = baseClass.currentMemoryOffset;
+      memoryOffset = base.nextMemoryOffset;
     }
 
     // Resolve instance members
+    var prototype = instance.prototype;
     var instanceMemberPrototypes = prototype.instanceMembers;
     if (instanceMemberPrototypes) {
       for (let member of instanceMemberPrototypes.values()) {
         switch (member.kind) {
 
-          // Lay out fields in advance
           case ElementKind.FIELD_PROTOTYPE: {
-            let instanceMembers = instance.members;
-            if (!instanceMembers) instance.members = instanceMembers = new Map();
-            else if (instanceMembers.has(member.name)) {
-              let existing = instanceMembers.get(member.name)!;
-              this.errorRelated(
-                DiagnosticCode.Duplicate_identifier_0,
-                (<FieldPrototype>member).identifierNode.range,
-                existing.declaration.name.range,
-                member.name
-              );
-              break;
-            }
             let fieldTypeNode = (<FieldPrototype>member).typeNode;
             let fieldType: Type | null = null;
             // TODO: handle duplicate non-private fields specifically?
             if (!fieldTypeNode) {
-              if (baseClass) {
-                let baseMembers = baseClass.members;
+              if (base) {
+                let baseMembers = base.members;
                 if (baseMembers && baseMembers.has((<FieldPrototype>member).name)) {
                   let baseField = baseMembers.get((<FieldPrototype>member).name)!;
                   if (!baseField.is(CommonFlags.PRIVATE)) {
@@ -2869,13 +2875,13 @@ export class Resolver extends DiagnosticEmitter {
               );
             }
             if (!fieldType) break; // did report above
-            let fieldInstance = new Field(<FieldPrototype>member, instance, fieldType);
+            let field = new Field(<FieldPrototype>member, instance, fieldType);
             assert(isPowerOf2(fieldType.byteSize));
             let mask = fieldType.byteSize - 1;
             if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
-            fieldInstance.memoryOffset = memoryOffset;
+            field.memoryOffset = memoryOffset;
             memoryOffset += fieldType.byteSize;
-            instance.add(member.name, fieldInstance); // reports
+            instance.add(member.name, field); // reports
             break;
           }
           case ElementKind.FUNCTION_PROTOTYPE: {
@@ -2923,7 +2929,7 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Finalize memory offset
-    instance.currentMemoryOffset = memoryOffset;
+    instance.nextMemoryOffset = memoryOffset;
 
     // Link _own_ constructor if present
     {
@@ -2933,7 +2939,7 @@ export class Resolver extends DiagnosticEmitter {
         let ctorInstance = this.resolveFunction(
           <FunctionPrototype>ctorPrototype,
           null,
-          instance.contextualTypeArguments,
+          assert(instance.contextualTypeArguments),
           reportMode
         );
         if (ctorInstance) instance.constructorInstance = <Function>ctorInstance;
@@ -3002,7 +3008,22 @@ export class Resolver extends DiagnosticEmitter {
         }
       }
     }
-    return instance;
+
+    // Remove this class from pending
+    var pendingIndex = pendingClasses.indexOf(instance);
+    if (~pendingIndex) pendingClasses.splice(pendingIndex, 1);
+
+    // Finish any classes extending this class. This essentially reverses the
+    // recursion from where we previously yielded when we found that we can't
+    // yet resolve a derived class since its base was still pending.
+    var derivedPendingClasses = new Array<Class>();
+    for (let i = 0, k = pendingClasses.length; i < k; ++i) {
+      let pending = pendingClasses[i];
+      if (instance == pending.base) derivedPendingClasses.push(pending);
+    }
+    for (let i = 0, k = derivedPendingClasses.length; i < k; ++i) {
+      this.finishResolveClass(derivedPendingClasses[i], reportMode);
+    }
   }
 
   /** Resolves a class prototype by first resolving the specified type arguments. */
