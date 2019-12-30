@@ -723,11 +723,13 @@ exports.main = function main(argv, options, callback) {
       if (hasARC) { // differs
         add("post-assemblyscript-finalize");
       }
-      add("rse"); // differs
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("rse");
+      }
       add("vacuum"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("dae");
-        add("inlining");
+        add("inlining-optimizing");
         add("optimize-instructions");
         add("simplify-globals-optimizing");
       }

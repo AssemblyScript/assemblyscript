@@ -1739,7 +1739,6 @@
  )
  (func $start:rc/local-init (; 28 ;)
   (local $0 i32)
-  (local $1 i32)
   i32.const 0
   i32.const 3
   call $~lib/rt/tlsf/__alloc
@@ -1753,12 +1752,10 @@
    call $~lib/rt/pure/increment
   end
   local.get $0
-  local.set $1
-  local.get $1
   i32.const 340
   i32.gt_u
   if
-   local.get $1
+   local.get $0
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
