@@ -1,10 +1,10 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -46,11 +46,11 @@
  (export "OptimizeARC.eliminates.replaceAlreadyRetained" (func $rc/optimize/eliminated_rr))
  (export "OptimizeARC.keeps.partialRetains" (func $rc/optimize/OptimizeARC.keeps.partialRetains))
  (export "OptimizeARC.keeps.reachesReturn" (func $rc/optimize/OptimizeARC.keeps.reachesReturn))
- (export "FinalizeARC.eliminates.unnecessaryAllocation" (func $rc/optimize/FinalizeARC.eliminates.unnecessaryAllocation))
+ (export "FinalizeARC.eliminates.unnecessaryAllocation" (func $rc/optimize/eliminated_v))
  (export "FinalizeARC.eliminates.unnecessaryPair" (func $rc/optimize/eliminated_vi))
  (export "FinalizeARC.eliminates.unnecessaryStaticPair" (func $rc/optimize/eliminated_v))
- (export "FinalizeARC.eliminates.unnecessaryStaticRetain" (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRetain))
- (export "FinalizeARC.eliminates.unnecessaryStaticRelease" (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRelease))
+ (export "FinalizeARC.eliminates.unnecessaryStaticRetain" (func $rc/optimize/eliminated_v))
+ (export "FinalizeARC.eliminates.unnecessaryStaticRelease" (func $rc/optimize/eliminated_v))
  (export "FinalizeARC.keeps.dynamicRetain" (func $rc/optimize/FinalizeARC.keeps.dynamicRetain))
  (export "FinalizeARC.keeps.dynamicRelease" (func $rc/optimize/FinalizeARC.keeps.dynamicRelease))
  (func $rc/optimize/eliminated_v (; 5 ;)
@@ -1830,25 +1830,16 @@
   call $~lib/rt/pure/__release
   i32.const 0
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryAllocation (; 38 ;)
-  nop
- )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRetain (; 39 ;)
-  nop
- )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRelease (; 40 ;)
-  nop
- )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (; 41 ;) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (; 38 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
  )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (; 42 ;) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (; 39 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/__visit (; 43 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 40 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 356
   i32.lt_u
@@ -1958,7 +1949,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 44 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 41 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2

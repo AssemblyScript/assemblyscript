@@ -52,8 +52,7 @@
   loop $loop|2
    global.get $for/i
    i32.const 0
-   i32.le_s
-   i32.eqz
+   i32.gt_s
    if
     global.get $for/i
     i32.const 1
@@ -74,8 +73,7 @@
   loop $loop|3
    global.get $for/i
    i32.const 10
-   i32.eq
-   i32.eqz
+   i32.ne
    if
     global.get $for/i
     i32.const 1

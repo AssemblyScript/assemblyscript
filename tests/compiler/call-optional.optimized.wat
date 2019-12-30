@@ -9,10 +9,10 @@
  (export "memory" (memory $0))
  (start $start)
  (func $call-optional/opt (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $2
   local.get $0
   local.get $1
   i32.add
-  local.get $2
   i32.add
  )
  (func $call-optional/opt|trampoline (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)

@@ -721,12 +721,14 @@ exports.main = function main(argv, options, callback) {
       add("inlining-optimizing"); // differs
       if (hasARC) { // differs
         add("post-assemblyscript-finalize");
-        if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-          add("rse");
-          add("optimize-instructions");
-        }
-        add("vacuum");
       }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("rse");
+        add("vacuum");
+        add("dae-optimizing");
+        add("optimize-instructions");
+      }
+      add("duplicate-function-elimination"); // differs
       add("remove-unused-module-elements");
       add("memory-packing");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {

@@ -80,6 +80,7 @@
    i32.and
    local.tee $2
    i32.sub
+   local.set $3
    local.get $0
    local.get $2
    i32.add
@@ -91,10 +92,11 @@
    i32.mul
    local.tee $1
    i32.store
+   local.get $0
+   local.get $3
    i32.const -4
    i32.and
    local.tee $2
-   local.get $0
    i32.add
    i32.const 4
    i32.sub
@@ -175,12 +177,12 @@
    local.get $1
    i32.store
    local.get $0
+   local.get $0
    i32.const 4
    i32.and
    i32.const 24
    i32.add
    local.tee $3
-   local.get $0
    i32.add
    local.set $0
    local.get $2

@@ -151,12 +151,12 @@
   f64.add
   f64.add
   f64.mul
+  local.get $5
   local.get $1
   i32.const 20
   i32.shr_s
   i32.const 1023
   i32.sub
-  local.get $5
   i32.add
   f64.convert_i32_s
   local.tee $0
@@ -334,12 +334,12 @@
   f64.mul
   f64.add
   local.set $0
+  local.get $6
   local.get $2
   i32.const 20
   i32.shr_u
   i32.const 1023
   i32.sub
-  local.get $6
   i32.add
   f64.convert_i32_s
   local.tee $4
@@ -492,8 +492,7 @@
     loop $continue|2
      local.get $6
      local.get $0
-     i32.ge_u
-     i32.eqz
+     i32.lt_u
      if
       local.get $4
       local.get $4
@@ -522,10 +521,10 @@
     end
     i32.const 2047
     local.set $9
+    local.get $2
     local.get $7
     i32.const 1
     i32.shl
-    local.get $2
     i32.add
     local.get $4
     local.get $4
