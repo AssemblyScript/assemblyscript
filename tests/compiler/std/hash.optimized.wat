@@ -53,10 +53,7 @@
    end
   end
  )
- (func $~lib/util/hash/hash32 (; 1 ;)
-  nop
- )
- (func $start:std/hash (; 2 ;)
+ (func $start (; 1 ;)
   i32.const 0
   call $~lib/util/hash/hashStr
   i32.const 32
@@ -67,20 +64,5 @@
   call $~lib/util/hash/hashStr
   i32.const 112
   call $~lib/util/hash/hashStr
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
-  call $~lib/util/hash/hash32
- )
- (func $start (; 3 ;)
-  call $start:std/hash
  )
 )

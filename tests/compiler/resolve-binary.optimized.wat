@@ -10,7 +10,6 @@
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
- (type $none_=>_f64 (func (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e")
@@ -389,10 +388,7 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMath.pow (; 10 ;) (result f64)
-  f64.const 4
- )
- (func $~lib/util/number/genDigits (; 11 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (; 10 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
@@ -791,7 +787,7 @@
    local.get $6
   end
  )
- (func $~lib/memory/memory.copy (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -964,7 +960,7 @@
    end
   end
  )
- (func $~lib/util/number/prettify (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -1211,7 +1207,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 14 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (; 13 ;) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i64)
@@ -1499,7 +1495,7 @@
   local.get $10
   i32.add
  )
- (func $~lib/string/String#substring (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1571,7 +1567,7 @@
   call $~lib/memory/memory.copy
   local.get $2
  )
- (func $~lib/rt/stub/__free (; 16 ;) (param $0 i32)
+ (func $~lib/rt/stub/__free (; 15 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 15
@@ -1615,7 +1611,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~lib/util/number/dtoa (; 17 ;) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (; 16 ;) (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1665,12 +1661,12 @@
   local.get $1
   call $~lib/rt/stub/__free
  )
- (func $resolve-binary/Bar#constructor (; 18 ;) (result i32)
+ (func $resolve-binary/Bar#constructor (; 17 ;) (result i32)
   i32.const 0
   i32.const 7
   call $~lib/rt/stub/__alloc
  )
- (func $start:resolve-binary (; 19 ;)
+ (func $start:resolve-binary (; 18 ;)
   i32.const 1
   call $~lib/number/Bool#toString
   i32.const 32
@@ -1847,7 +1843,7 @@
   end
   f64.const 2
   global.set $resolve-binary/f
-  call $~lib/math/NativeMath.pow
+  f64.const 4
   global.set $resolve-binary/f
   global.get $resolve-binary/f
   call $~lib/util/number/dtoa
@@ -2063,7 +2059,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/math/NativeMath.pow
+  f64.const 4
   call $~lib/util/number/dtoa
   i32.const 1568
   call $~lib/string/String.__eq
@@ -2383,7 +2379,7 @@
    unreachable
   end
  )
- (func $start (; 20 ;)
+ (func $start (; 19 ;)
   call $start:resolve-binary
  )
 )

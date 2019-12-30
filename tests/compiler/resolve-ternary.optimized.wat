@@ -1841,24 +1841,7 @@
    br_if $continue|0
   end
  )
- (func $~lib/util/number/itoa32 (; 28 ;) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  i32.const 1
-  call $~lib/util/number/decimalCount32
-  local.tee $0
-  i32.const 1
-  i32.shl
-  i32.const 1
-  call $~lib/rt/tlsf/__alloc
-  local.tee $1
-  i32.const 1
-  local.get $0
-  call $~lib/util/number/utoa_simple<u32>
-  local.get $1
-  call $~lib/rt/pure/__retain
- )
- (func $~lib/string/String#get:length (; 29 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 28 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -1866,7 +1849,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 30 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 29 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1946,7 +1929,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 31 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 30 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -1980,7 +1963,7 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/util/number/genDigits (; 32 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
+ (func $~lib/util/number/genDigits (; 31 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i64)
@@ -2380,7 +2363,7 @@
   i32.store16
   local.get $2
  )
- (func $~lib/util/number/prettify (; 33 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 32 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -2627,7 +2610,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 34 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/dtoa_core (; 33 ;) (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -2804,7 +2787,7 @@
   global.get $~lib/util/number/_K
   call $~lib/util/number/prettify
  )
- (func $~lib/string/String#substring (; 35 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 34 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2878,7 +2861,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/dtoa (; 36 ;) (result i32)
+ (func $~lib/util/number/dtoa (; 35 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 56
@@ -2900,31 +2883,42 @@
   local.get $0
   call $~lib/rt/tlsf/__free
  )
- (func $start:resolve-ternary~anonymous|0 (; 37 ;) (param $0 i32) (result i32)
+ (func $start:resolve-ternary~anonymous|0 (; 36 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.add
  )
- (func $start:resolve-ternary~anonymous|1 (; 38 ;) (param $0 i32) (result i32)
+ (func $start:resolve-ternary~anonymous|1 (; 37 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 2
   i32.add
  )
- (func $resolve-ternary/g1 (; 39 ;) (param $0 i32) (result i32)
+ (func $resolve-ternary/g1 (; 38 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 3
   i32.add
  )
- (func $resolve-ternary/g2 (; 40 ;) (param $0 i32) (result i32)
+ (func $resolve-ternary/g2 (; 39 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 4
   i32.add
  )
- (func $start:resolve-ternary (; 41 ;)
+ (func $start:resolve-ternary (; 40 ;)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  call $~lib/util/number/itoa32
+  i32.const 1
+  call $~lib/util/number/decimalCount32
+  local.tee $0
+  i32.const 1
+  i32.shl
+  i32.const 1
+  call $~lib/rt/tlsf/__alloc
+  local.tee $1
+  i32.const 1
+  local.get $0
+  call $~lib/util/number/utoa_simple<u32>
+  local.get $1
+  call $~lib/rt/pure/__retain
   local.tee $0
   local.get $0
   i32.const 336
@@ -2940,8 +2934,6 @@
   end
   call $~lib/util/number/dtoa
   local.tee $0
-  local.set $2
-  local.get $0
   i32.const 1664
   call $~lib/string/String.__eq
   i32.eqz
@@ -2996,13 +2988,13 @@
    unreachable
   end
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $0
   call $~lib/rt/pure/__release
  )
- (func $start (; 42 ;)
+ (func $start (; 41 ;)
   call $start:resolve-ternary
  )
- (func $~lib/rt/pure/__visit (; 43 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 42 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 1732
   i32.lt_u
@@ -3112,7 +3104,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 44 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 43 ;) (param $0 i32) (param $1 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$2

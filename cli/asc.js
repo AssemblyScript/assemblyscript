@@ -718,14 +718,15 @@ exports.main = function main(argv, options, callback) {
         add("simplify-globals");
       }
       add("directize"); // differs
+      add("dae-optimizing"); // differs
       add("inlining-optimizing"); // differs
       if (hasARC) { // differs
         add("post-assemblyscript-finalize");
       }
+      add("rse");
+      add("vacuum");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("rse");
-        add("vacuum");
-        add("dae-optimizing");
+        add("dae-optimizing"); // differs
         add("optimize-instructions");
       }
       add("duplicate-function-elimination"); // differs
