@@ -724,10 +724,13 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
+        add("vacuum");
+
         add("remove-unused-brs");
         add("remove-unused-names");
         add("merge-blocks");
         add("vacuum");
+
         add("directize");
         add("inlining-optimizing");
         add("code-pushing");
