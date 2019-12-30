@@ -2364,9 +2364,10 @@
   local.tee $3
   i32.eqz
   if
-   i32.const 512
    local.get $1
    call $~lib/rt/pure/__release
+   i32.const 512
+   local.tee $0
    return
   end
   local.get $3

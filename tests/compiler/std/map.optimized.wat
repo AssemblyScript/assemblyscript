@@ -2859,16 +2859,16 @@
   i32.load offset=16
   local.tee $4
   call $~lib/array/Array<i32>#constructor
-  local.set $2
+  local.set $1
   i32.const 0
   local.set $0
   loop $loop|0
-   local.get $1
+   local.get $2
    local.get $4
    i32.lt_s
    if
     local.get $3
-    local.get $1
+    local.get $2
     i32.const 12
     i32.mul
     i32.add
@@ -2883,23 +2883,23 @@
      i32.const 1
      i32.add
      local.set $0
-     local.get $2
+     local.get $1
      local.get $6
      local.get $5
      i32.load offset=4
      call $~lib/array/Array<i32>#__set
     end
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $loop|0
    end
   end
-  local.get $2
+  local.get $1
   local.get $0
   call $~lib/array/Array<i32>#set:length
-  local.get $2
+  local.get $1
  )
  (func $~lib/map/Map<i8,i8>#clear (; 51 ;) (param $0 i32)
   (local $1 i32)
@@ -7688,16 +7688,16 @@
   i32.load offset=16
   local.tee $4
   call $~lib/array/Array<i32>#constructor
-  local.set $2
+  local.set $1
   i32.const 0
   local.set $0
   loop $loop|0
-   local.get $1
+   local.get $2
    local.get $4
    i32.lt_s
    if
     local.get $3
-    local.get $1
+    local.get $2
     i32.const 12
     i32.mul
     i32.add
@@ -7712,23 +7712,23 @@
      i32.const 1
      i32.add
      local.set $0
-     local.get $2
+     local.get $1
      local.get $6
      local.get $5
      i32.load
      call $~lib/array/Array<i32>#__set
     end
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $loop|0
    end
   end
-  local.get $2
+  local.get $1
   local.get $0
   call $~lib/array/Array<i32>#set:length
-  local.get $2
+  local.get $1
  )
  (func $~lib/map/Map<i32,i32>#delete (; 109 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -9314,16 +9314,16 @@
   i32.load offset=16
   local.tee $4
   call $~lib/array/Array<i32>#constructor
-  local.set $2
+  local.set $1
   i32.const 0
   local.set $0
   loop $loop|0
-   local.get $1
+   local.get $2
    local.get $4
    i32.lt_s
    if
     local.get $3
-    local.get $1
+    local.get $2
     i32.const 4
     i32.shl
     i32.add
@@ -9338,23 +9338,23 @@
      i32.const 1
      i32.add
      local.set $0
-     local.get $2
+     local.get $1
      local.get $6
      local.get $5
      i32.load offset=8
      call $~lib/array/Array<i32>#__set
     end
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $loop|0
    end
   end
-  local.get $2
+  local.get $1
   local.get $0
   call $~lib/array/Array<i32>#set:length
-  local.get $2
+  local.get $1
  )
  (func $~lib/map/Map<i64,i64>#clear (; 127 ;) (param $0 i32)
   (local $1 i32)
