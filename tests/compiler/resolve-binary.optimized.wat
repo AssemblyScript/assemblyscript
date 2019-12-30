@@ -1845,7 +1845,7 @@
   global.set $resolve-binary/f
   f64.const 4
   global.set $resolve-binary/f
-  global.get $resolve-binary/f
+  f64.const 4
   call $~lib/util/number/dtoa
   i32.const 1568
   call $~lib/string/String.__eq
@@ -1862,7 +1862,7 @@
   global.set $resolve-binary/a
   i32.const 2
   global.set $resolve-binary/a
-  global.get $resolve-binary/a
+  i32.const 2
   call $~lib/util/number/itoa32
   i32.const 256
   call $~lib/string/String.__eq

@@ -216,17 +216,6 @@
   global.set $builtins/I
   i64.const 1
   global.set $builtins/I
-  global.get $builtins/i
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 87
-   i32.const 20
-   call $~lib/builtins/abort
-   unreachable
-  end
   f32.const nan:0x400000
   global.set $builtins/f
   f32.const inf

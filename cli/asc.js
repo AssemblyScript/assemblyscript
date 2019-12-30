@@ -729,6 +729,7 @@ exports.main = function main(argv, options, callback) {
         add("dae");
         add("inlining");
         add("optimize-instructions");
+        add("simplify-globals-optimizing");
       }
       add("duplicate-function-elimination"); // differs
       add("remove-unused-module-elements");
