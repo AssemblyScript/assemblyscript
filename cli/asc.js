@@ -726,7 +726,8 @@ exports.main = function main(argv, options, callback) {
       add("rse"); // differs
       add("vacuum"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("dae-optimizing");
+        add("dae");
+        add("inlining");
         add("optimize-instructions");
       }
       add("duplicate-function-elimination"); // differs

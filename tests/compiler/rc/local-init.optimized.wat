@@ -1696,18 +1696,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__release (; 27 ;) (param $0 i32)
-  local.get $0
-  i32.const 340
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
- (func $~lib/rt/pure/increment (; 28 ;) (param $0 i32)
+ (func $~lib/rt/pure/increment (; 27 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1748,8 +1737,9 @@
    unreachable
   end
  )
- (func $start:rc/local-init (; 29 ;)
+ (func $start:rc/local-init (; 28 ;)
   (local $0 i32)
+  (local $1 i32)
   i32.const 0
   i32.const 3
   call $~lib/rt/tlsf/__alloc
@@ -1763,12 +1753,21 @@
    call $~lib/rt/pure/increment
   end
   local.get $0
-  call $~lib/rt/pure/__release
+  local.set $1
+  local.get $1
+  i32.const 340
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
- (func $start (; 30 ;)
+ (func $start (; 29 ;)
   call $start:rc/local-init
  )
- (func $~lib/rt/pure/__visit (; 31 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 30 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 340
   i32.lt_u
@@ -1878,7 +1877,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 32 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 31 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2
