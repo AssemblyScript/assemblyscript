@@ -52,9 +52,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $1
   local.get $0
   i32.load offset=4
-  local.get $1
   i32.add
   i32.load8_s
  )

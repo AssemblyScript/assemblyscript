@@ -697,9 +697,6 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
-      if (optimizeLevel >= 2 || shrinkLevel >= 2) { // diffs
-        add("inlining-optimizing");
-      }
       add("optimize-instructions");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");

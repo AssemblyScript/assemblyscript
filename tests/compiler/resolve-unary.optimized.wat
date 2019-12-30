@@ -292,16 +292,16 @@
     local.get $3
     i32.eqz
     br_if $break|1
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $3
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $3
      local.get $4
+     local.get $3
      i32.sub
      return
     else
@@ -559,8 +559,8 @@
   global.get $resolve-unary/foo
   local.tee $0
   global.set $resolve-unary/foo
-  global.get $resolve-unary/foo
   local.get $0
+  global.get $resolve-unary/foo
   i32.ne
   if
    i32.const 0
@@ -573,8 +573,8 @@
   global.get $resolve-unary/foo
   local.tee $0
   global.set $resolve-unary/foo
-  global.get $resolve-unary/foo
   local.get $0
+  global.get $resolve-unary/foo
   i32.ne
   if
    i32.const 0
