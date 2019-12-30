@@ -10,7 +10,6 @@
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $f32_i32_i32_=>_i32 (func (param f32 i32 i32) (result i32)))
  (type $f64_i32_i32_=>_i32 (func (param f64 i32 i32) (result i32)))
- (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i64_i64_i32_i32_=>_i64 (func (param i64 i64 i32 i32) (result i64)))
@@ -36,6 +35,7 @@
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
  (type $f64_=>_i32 (func (param f64) (result i32)))
+ (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $i64_i32_i32_=>_i64 (func (param i64 i32 i32) (result i64)))
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $f32_=>_f32 (func (param f32) (result f32)))
@@ -3081,8 +3081,7 @@
       global.set $~lib/argc
       local.get $4
       local.get $5
-      i32.const 1
-      call_indirect (type $f64_f64_=>_i32)
+      call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
       i32.const 0
       i32.ge_s
       br_if $break|1
@@ -3202,8 +3201,7 @@
     global.set $~lib/argc
     local.get $4
     local.get $6
-    i32.const 1
-    call_indirect (type $f64_f64_=>_i32)
+    call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
     i32.const 0
     i32.lt_s
     if
@@ -3319,8 +3317,7 @@
       global.set $~lib/argc
       local.get $4
       local.get $6
-      i32.const 1
-      call_indirect (type $f64_f64_=>_i32)
+      call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
       i32.const 0
       i32.lt_s
       if
@@ -3414,8 +3411,7 @@
     global.set $~lib/argc
     local.get $3
     local.get $4
-    i32.const 1
-    call_indirect (type $f64_f64_=>_i32)
+    call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
     i32.const 0
     i32.lt_s
     if
