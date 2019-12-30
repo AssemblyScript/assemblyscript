@@ -502,11 +502,11 @@
      local.get $3
      i32.ge_u
      br_if $break|0
-     local.get $1
      local.get $0
      local.get $2
      i32.add
      i32.load8_u
+     local.get $1
      i32.xor
      i32.const 16777619
      i32.mul
@@ -574,16 +574,16 @@
     local.get $3
     i32.eqz
     br_if $break|1
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $3
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $4
      local.get $3
+     local.get $4
      i32.sub
      return
     else
@@ -752,7 +752,6 @@
      i32.load offset=4
      i32.store offset=4
      local.get $3
-     local.get $5
      local.get $2
      i32.load
      call $~lib/util/hash/hashStr
@@ -760,6 +759,7 @@
      i32.and
      i32.const 2
      i32.shl
+     local.get $5
      i32.add
      local.tee $8
      i32.load
@@ -1026,7 +1026,6 @@
      i32.load offset=4
      i32.store offset=4
      local.get $3
-     local.get $5
      local.get $2
      i32.load
      call $~lib/util/hash/hash32
@@ -1034,6 +1033,7 @@
      i32.and
      i32.const 2
      i32.shl
+     local.get $5
      i32.add
      local.tee $8
      i32.load
@@ -1440,6 +1440,7 @@
   i32.const 1
   i32.shl
   local.set $3
+  local.get $3
   local.get $1
   i32.const 832
   local.get $1
@@ -1449,7 +1450,6 @@
   i32.const 1
   i32.shl
   local.tee $4
-  local.get $3
   i32.add
   local.tee $2
   i32.eqz

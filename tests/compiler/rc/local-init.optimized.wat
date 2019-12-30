@@ -1730,7 +1730,7 @@
    unreachable
   end
  )
- (func $start:rc/local-init (; 28 ;)
+ (func $start (; 28 ;)
   (local $0 i32)
   i32.const 0
   i32.const 3
@@ -1754,10 +1754,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $start (; 29 ;)
-  call $start:rc/local-init
- )
- (func $~lib/rt/pure/__visit (; 30 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 29 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 340
   i32.lt_u
@@ -1860,7 +1857,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 31 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 30 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2

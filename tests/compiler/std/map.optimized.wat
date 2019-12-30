@@ -2692,9 +2692,9 @@
    local.get $3
    i32.store offset=12
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   local.get $2
   i32.store8
@@ -3003,9 +3003,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_s
  )
@@ -4498,9 +4498,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_u
  )

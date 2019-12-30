@@ -2650,9 +2650,9 @@
    local.get $3
    i32.store offset=12
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   local.get $2
   i32.store8
@@ -2734,9 +2734,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_s
  )
@@ -3435,9 +3435,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_u
  )
@@ -7204,30 +7204,30 @@
   end
   local.get $1
   call $~lib/set/Set<i64>#values
-  local.set $2
+  local.set $3
   call $~lib/set/Set<i64>#constructor
   local.set $4
   loop $loop|2
-   local.get $3
    local.get $2
+   local.get $3
    i32.load offset=12
    i32.lt_s
    if
     local.get $1
-    local.get $2
     local.get $3
+    local.get $2
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#has
     if
      local.get $4
-     local.get $2
      local.get $3
+     local.get $2
      call $~lib/array/Array<i64>#__get
      call $~lib/set/Set<i64>#add
-     local.get $3
+     local.get $2
      i32.const 1
      i32.add
-     local.set $3
+     local.set $2
      br $loop|2
     else
      i32.const 0
@@ -7387,7 +7387,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $4
   call $~lib/rt/pure/__release
@@ -7601,30 +7601,30 @@
   end
   local.get $1
   call $~lib/set/Set<u64>#values
-  local.set $2
+  local.set $3
   call $~lib/set/Set<u64>#constructor
   local.set $4
   loop $loop|2
-   local.get $3
    local.get $2
+   local.get $3
    i32.load offset=12
    i32.lt_s
    if
     local.get $1
-    local.get $2
     local.get $3
+    local.get $2
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#has
     if
      local.get $4
-     local.get $2
      local.get $3
+     local.get $2
      call $~lib/array/Array<i64>#__get
      call $~lib/set/Set<i64>#add
-     local.get $3
+     local.get $2
      i32.const 1
      i32.add
-     local.set $3
+     local.set $2
      br $loop|2
     else
      i32.const 0
@@ -7784,7 +7784,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $4
   call $~lib/rt/pure/__release
@@ -8381,30 +8381,30 @@
   end
   local.get $1
   call $~lib/set/Set<f32>#values
-  local.set $2
+  local.set $3
   call $~lib/set/Set<f32>#constructor
   local.set $4
   loop $loop|2
-   local.get $3
    local.get $2
+   local.get $3
    i32.load offset=12
    i32.lt_s
    if
     local.get $1
-    local.get $2
     local.get $3
+    local.get $2
     call $~lib/array/Array<f32>#__get
     call $~lib/set/Set<f32>#has
     if
      local.get $4
-     local.get $2
      local.get $3
+     local.get $2
      call $~lib/array/Array<f32>#__get
      call $~lib/set/Set<f32>#add
-     local.get $3
+     local.get $2
      i32.const 1
      i32.add
-     local.set $3
+     local.set $2
      br $loop|2
     else
      i32.const 0
@@ -8564,7 +8564,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $4
   call $~lib/rt/pure/__release
@@ -9161,30 +9161,30 @@
   end
   local.get $1
   call $~lib/set/Set<f64>#values
-  local.set $2
+  local.set $3
   call $~lib/set/Set<f64>#constructor
   local.set $4
   loop $loop|2
-   local.get $3
    local.get $2
+   local.get $3
    i32.load offset=12
    i32.lt_s
    if
     local.get $1
-    local.get $2
     local.get $3
+    local.get $2
     call $~lib/array/Array<f64>#__get
     call $~lib/set/Set<f64>#has
     if
      local.get $4
-     local.get $2
      local.get $3
+     local.get $2
      call $~lib/array/Array<f64>#__get
      call $~lib/set/Set<f64>#add
-     local.get $3
+     local.get $2
      i32.const 1
      i32.add
-     local.set $3
+     local.set $2
      br $loop|2
     else
      i32.const 0
@@ -9344,7 +9344,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $4
   call $~lib/rt/pure/__release

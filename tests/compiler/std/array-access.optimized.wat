@@ -142,16 +142,16 @@
     local.get $0
     i32.eqz
     br_if $break|1
-    local.get $1
+    local.get $3
     i32.load16_u
     local.tee $0
-    local.get $3
+    local.get $1
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $0
      local.get $4
+     local.get $0
      i32.sub
      return
     else
@@ -174,17 +174,18 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 0
   local.get $0
   call $~lib/string/String#get:length
-  local.tee $1
+  local.set $1
+  i32.const 256
+  call $~lib/string/String#get:length
+  local.tee $2
+  i32.const 0
+  local.get $1
   i32.const 0
   local.get $1
   i32.lt_s
   select
-  local.tee $2
-  i32.const 256
-  call $~lib/string/String#get:length
   local.tee $3
   i32.add
   local.get $1
@@ -194,8 +195,8 @@
    return
   end
   local.get $0
-  local.get $2
   local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
  )
