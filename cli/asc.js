@@ -710,7 +710,7 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("inlining-optimizing");
       }
-      add("duplicate-function-elimination");
+      // add("duplicate-function-elimination");
       add("duplicate-import-elimination");
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("simplify-globals-optimizing");
