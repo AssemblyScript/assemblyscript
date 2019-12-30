@@ -1095,6 +1095,10 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function avgr<T>(a: v128, b: v128): v128; // u8, u16 only
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function abs<T>(a: v128): v128; // f32, f64 only
 
   // @ts-ignore: decorator
@@ -1206,6 +1210,10 @@ export namespace i8x16 {
   // @ts-ignore: decorator
   @builtin
   export declare function max_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function avgr_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
@@ -1345,6 +1353,10 @@ export namespace i16x8 {
   // @ts-ignore: decorator
   @builtin
   export declare function max_u(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function avgr_u(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin
