@@ -431,11 +431,10 @@
   select
   local.set $0
   loop $loop|0
-   block $break|0
-    local.get $7
-    local.get $1
-    i32.ge_u
-    br_if $break|0
+   local.get $7
+   local.get $1
+   i32.lt_u
+   if
     local.get $7
     f64.convert_i32_u
     local.get $10

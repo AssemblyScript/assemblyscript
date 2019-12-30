@@ -730,6 +730,10 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("dae");
         add("inlining-optimizing");
+        add("remove-unused-brs");
+        add("remove-unused-names");
+        add("merge-blocks");
+        add("vacuum");
         add("optimize-instructions");
         add("simplify-globals-optimizing");
       }

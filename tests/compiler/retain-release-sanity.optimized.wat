@@ -318,7 +318,7 @@
    local.tee $7
    i32.const 1073741808
    i32.lt_u
-   if (result i32)
+   if
     local.get $0
     local.get $2
     call $~lib/rt/tlsf/removeBlock
@@ -331,10 +331,8 @@
     local.tee $3
     i32.store
     local.get $2
-   else
-    local.get $1
+    local.set $1
    end
-   local.set $1
   end
   local.get $4
   local.get $5
@@ -637,11 +635,10 @@
    i32.const 0
    local.set $0
    loop $loop|0
-    block $break|0
-     local.get $0
-     i32.const 23
-     i32.ge_u
-     br_if $break|0
+    local.get $0
+    i32.const 23
+    i32.lt_u
+    if
      local.get $0
      i32.const 2
      i32.shl
@@ -652,11 +649,10 @@
      i32.const 0
      local.set $1
      loop $loop|1
-      block $break|1
-       local.get $1
-       i32.const 16
-       i32.ge_u
-       br_if $break|1
+      local.get $1
+      i32.const 16
+      i32.lt_u
+      if
        local.get $1
        local.get $0
        i32.const 4
@@ -992,11 +988,10 @@
   global.get $~lib/rt/pure/CUR
   local.set $0
   loop $loop|0
-   block $break|0
-    local.get $3
-    local.get $0
-    i32.ge_u
-    br_if $break|0
+   local.get $3
+   local.get $0
+   i32.lt_u
+   if
     local.get $3
     i32.load
     local.tee $4
@@ -1059,11 +1054,10 @@
   local.get $5
   local.set $0
   loop $loop|1
-   block $break|1
-    local.get $0
-    local.get $2
-    i32.ge_u
-    br_if $break|1
+   local.get $0
+   local.get $2
+   i32.lt_u
+   if
     local.get $0
     i32.load
     call $~lib/rt/pure/scan
@@ -1077,11 +1071,10 @@
   local.get $5
   local.set $0
   loop $loop|2
-   block $break|2
-    local.get $0
-    local.get $2
-    i32.ge_u
-    br_if $break|2
+   local.get $0
+   local.get $2
+   i32.lt_u
+   if
     local.get $0
     i32.load
     local.tee $1

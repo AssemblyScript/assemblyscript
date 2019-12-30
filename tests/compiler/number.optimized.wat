@@ -969,11 +969,10 @@
   end
   if (result i32)
    loop $loop|0
-    block $break|0
-     local.get $1
-     local.get $3
-     i32.ge_s
-     br_if $break|0
+    local.get $1
+    local.get $3
+    i32.lt_s
+    if
      local.get $0
      local.get $1
      i32.const 1
@@ -1058,11 +1057,10 @@
      i32.const 2
      local.set $2
      loop $loop|1
-      block $break|1
-       local.get $2
-       local.get $3
-       i32.ge_s
-       br_if $break|1
+      local.get $2
+      local.get $3
+      i32.lt_s
+      if
        local.get $0
        local.get $2
        i32.const 1

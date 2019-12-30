@@ -946,20 +946,20 @@
      i32.and
      i32.const 1083231232
      i32.ge_s
-     if
-      local.get $5
-      local.get $12
-      i32.const -1064252416
-      i32.sub
-      i32.or
-      local.get $1
-      local.get $0
-      local.get $2
-      f64.sub
-      f64.le
-      i32.or
-      br_if $folding-inner1
-     end
+     i32.const 0
+     local.get $5
+     local.get $12
+     i32.const -1064252416
+     i32.sub
+     i32.or
+     local.get $1
+     local.get $0
+     local.get $2
+     f64.sub
+     f64.le
+     i32.or
+     select
+     br_if $folding-inner1
     end
     local.get $12
     i32.const 2147483647

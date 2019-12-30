@@ -1106,13 +1106,10 @@
       block $case1|0
        local.get $2
        if
-        block $tablify|0
-         local.get $2
-         i32.const 1
-         i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $tablify|0
-        end
-        br $case4|0
+        local.get $2
+        i32.const 1
+        i32.sub
+        br_table $case1|0 $case2|0 $case3|0 $case4|0
        end
        f64.const 0.4636476090008061
        local.get $1
@@ -1402,13 +1399,10 @@
       block $case1|1
        local.get $2
        if
-        block $tablify|0
-         local.get $2
-         i32.const 1
-         i32.sub
-         br_table $case1|1 $case2|1 $case3|1 $tablify|0
-        end
-        br $break|1
+        local.get $2
+        i32.const 1
+        i32.sub
+        br_table $case1|1 $case2|1 $case3|1 $break|1
        end
        local.get $0
        return
@@ -2061,7 +2055,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $2
       f64.const 8.4784276603689e-32
       f64.mul
@@ -2081,10 +2075,8 @@
       local.get $0
       local.get $1
       f64.sub
-     else
-      local.get $3
+      local.set $3
      end
-     local.set $3
     end
     local.get $3
     global.set $~lib/math/rempio2_y0
@@ -4155,20 +4147,20 @@
      i32.and
      i32.const 1083231232
      i32.ge_s
-     if
-      local.get $5
-      local.get $12
-      i32.const -1064252416
-      i32.sub
-      i32.or
-      local.get $1
-      local.get $0
-      local.get $2
-      f64.sub
-      f64.le
-      i32.or
-      br_if $folding-inner1
-     end
+     i32.const 0
+     local.get $5
+     local.get $12
+     i32.const -1064252416
+     i32.sub
+     i32.or
+     local.get $1
+     local.get $0
+     local.get $2
+     f64.sub
+     f64.le
+     i32.or
+     select
+     br_if $folding-inner1
     end
     local.get $12
     i32.const 2147483647
@@ -4535,7 +4527,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $2
       f64.const 8.4784276603689e-32
       f64.mul
@@ -4555,10 +4547,8 @@
       local.get $0
       local.get $1
       f64.sub
-     else
-      local.get $3
+      local.set $3
      end
-     local.set $3
     end
     local.get $3
     global.set $~lib/math/rempio2_y0
@@ -5094,7 +5084,7 @@
      i32.sub
      i32.const 49
      i32.gt_u
-     if (result f64)
+     if
       local.get $3
       f64.const 8.4784276603689e-32
       f64.mul
@@ -5114,10 +5104,8 @@
       local.get $0
       local.get $1
       f64.sub
-     else
-      local.get $5
+      local.set $5
      end
-     local.set $5
     end
     local.get $5
     global.set $~lib/math/rempio2_y0
@@ -6042,13 +6030,10 @@
       block $case1|0
        local.get $1
        if
-        block $tablify|0
-         local.get $1
-         i32.const 1
-         i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $tablify|0
-        end
-        br $case4|0
+        local.get $1
+        i32.const 1
+        i32.sub
+        br_table $case1|0 $case2|0 $case3|0 $case4|0
        end
        f32.const 0.46364760398864746
        local.get $2
@@ -6310,13 +6295,10 @@
       block $case1|1
        local.get $2
        if
-        block $tablify|0
-         local.get $2
-         i32.const 1
-         i32.sub
-         br_table $case1|1 $case2|1 $case3|1 $tablify|0
-        end
-        br $break|1
+        local.get $2
+        i32.const 1
+        i32.sub
+        br_table $case1|1 $case2|1 $case3|1 $break|1
        end
        local.get $0
        return
