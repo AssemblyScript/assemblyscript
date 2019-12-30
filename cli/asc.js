@@ -730,8 +730,6 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("dae");
         add("inlining-optimizing");
-        add("coalesce-locals");
-        add("simplify-locals");
         add("remove-unused-brs");
         add("remove-unused-names");
         add("merge-blocks");

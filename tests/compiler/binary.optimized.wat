@@ -13,6 +13,7 @@
  (func $~lib/math/NativeMath.pow (; 0 ;) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i64)
+  (local $3 i32)
   local.get $0
   i64.reinterpret_f64
   local.tee $2
@@ -31,11 +32,11 @@
   local.get $1
   i32.const 2147483647
   i32.and
-  local.tee $1
+  local.tee $3
   i32.const 2146435072
   i32.eq
   select
-  local.get $1
+  local.get $3
   i32.const 2146435072
   i32.gt_s
   select
@@ -200,6 +201,7 @@
   i32.const 0
   local.get $0
   i32.reinterpret_f32
+  local.tee $1
   i32.const 2147483647
   i32.and
   i32.const 2139095040
