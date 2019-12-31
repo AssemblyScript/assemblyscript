@@ -723,6 +723,7 @@ exports.main = function main(argv, options, callback) {
       add("directize"); // differs
       add("dae-optimizing"); // differs
       add("inlining-optimizing"); // differs
+      // ARC finalization should be done exactly after inlining for better release/retain reduction
       if (hasARC) { // differs
         add("post-assemblyscript-finalize");
       }
