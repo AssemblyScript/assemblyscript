@@ -17,19 +17,21 @@ The API accepts the same options as the CLI but also lets you override stdout an
 
 ```js
 const asc = require("assemblyscript/cli/asc");
-asc.main([
-  "myModule.ts",
-  "--binaryFile", "myModule.wasm",
-  "--optimize",
-  "--sourceMap",
-  "--measure"
-], {
-  stdout: process.stdout,
-  stderr: process.stderr
-}, function(err) {
-  if (err)
-    throw err;
-  ...
+asc.ready.then(() => {
+  asc.main([
+    "myModule.ts",
+    "--binaryFile", "myModule.wasm",
+    "--optimize",
+    "--sourceMap",
+    "--measure"
+  ], {
+    stdout: process.stdout,
+    stderr: process.stderr
+  }, function(err) {
+    if (err)
+      throw err;
+    ...
+  });
 });
 ```
 
@@ -43,6 +45,9 @@ const options = require("assemblyscript/cli/asc.json");
 You can also compile a source string directly, for example in a browser environment:
 
 ```js
-const { binary, text, stdout, stderr } = asc.compileString(`...`, { optimize: 2 });
+const asc = require("assemblyscript/cli/asc");
+asc.ready.then(() => {
+  const { binary, text, stdout, stderr } = asc.compileString(`...`, { optimize: 2 });
+});
 ...
 ```
