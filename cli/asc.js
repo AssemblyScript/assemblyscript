@@ -710,7 +710,7 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("inlining-optimizing");
       }
-      // "duplicate-function-elimination" will better be done later
+      // "duplicate-function-elimination" will better done later
       // add("duplicate-function-elimination");
       add("duplicate-import-elimination");
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
@@ -718,7 +718,7 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("simplify-globals");
       }
-      // replace inderect calls with direct, reduce arity and
+      // replace indirect calls with direct, reduce arity and
       // inline this calls if possible
       add("directize"); // differs
       add("dae-optimizing"); // differs
@@ -736,11 +736,11 @@ exports.main = function main(argv, options, callback) {
         add("merge-blocks");
         add("vacuum");
 
-        // replace inderect calls with direct and inline if possible again.
+        // replace indirect calls with direct and inline if possible again.
         add("directize");
         add("inlining-optimizing");
-        // move some code after early return which potensially could reduce computations
-        // do this after CFG cleanup (origianlly it was done before)
+        // move some code after early return which potentially could reduce computations
+        // do this after CFG cleanup (originally it was done before)
         add("code-pushing");
 
         // this quite expensive so do this only for highest opt level
