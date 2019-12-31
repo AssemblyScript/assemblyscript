@@ -753,7 +753,7 @@ exports.main = function main(argv, options, callback) {
         add("simplify-globals-optimizing");
         add("optimize-instructions");
       }
-      // remove and unused elements of table and pack / reduce memory
+      // remove unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs
       add("remove-unused-nonfunction-module-elements"); // differs
       add("memory-packing");
