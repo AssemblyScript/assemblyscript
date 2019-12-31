@@ -648,12 +648,12 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         add("ssa-nomerge");
       }
-      if (optimizeLevel >= 4) {
+      if (optimizeLevel >= 3) {
         add("flatten");
         add("local-cse");
       }
       if (hasARC) { // differs
-        if (optimizeLevel < 4) {
+        if (optimizeLevel < 3) {
           add("flatten");
         }
         add("post-assemblyscript");
@@ -670,9 +670,10 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
-      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
-        add("code-pushing");
-      }
+      // this will be done later
+      // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+      //   add("code-pushing");
+      // }
       add("simplify-locals-nostructure");
       add("vacuum");
       add("reorder-locals");
@@ -703,11 +704,7 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
       }
-      if (hasARC) { // differs
-        add("post-assemblyscript-finalize");
-      }
       add("vacuum");
-
       // PassRunner::addDefaultGlobalOptimizationPostPasses
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("dae-optimizing");
@@ -715,18 +712,56 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("inlining-optimizing");
       }
-      add("duplicate-function-elimination");
+      // "duplicate-function-elimination" will better done later
+      // add("duplicate-function-elimination");
       add("duplicate-import-elimination");
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("simplify-globals-optimizing");
       } else {
         add("simplify-globals");
       }
-      add("remove-unused-module-elements");
-      add("memory-packing");
-      add("directize");
+      // replace indirect calls with direct, reduce arity and
+      // inline this calls if possible
+      add("directize"); // differs
+      add("dae-optimizing"); // differs
       add("inlining-optimizing"); // differs
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+      // ARC finalization should be done exactly after inlining for better release/retain reduction
+      if (hasARC) { // differs
+        add("post-assemblyscript-finalize");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("rse");
+        add("vacuum");
+
+        // rearrange / reduce switch cases again
+        add("remove-unused-brs");
+        add("remove-unused-names");
+        add("merge-blocks");
+        add("vacuum");
+
+        // replace indirect calls with direct and inline if possible again.
+        add("directize");
+        add("inlining-optimizing");
+        // move some code after early return which potentially could reduce computations
+        // do this after CFG cleanup (originally it was done before)
+        add("code-pushing");
+
+        // this quite expensive so do this only for highest opt level
+        if (optimizeLevel >= 3) {
+          add("simplify-locals-nostructure");
+          add("reorder-locals");
+          add("vacuum");
+        }
+        // finally optimize all remaining peepholes
+        add("simplify-globals-optimizing");
+        add("optimize-instructions");
+      }
+      // remove unused elements of table and pack / reduce memory
+      add("duplicate-function-elimination"); // differs
+      add("remove-unused-nonfunction-module-elements"); // differs
+      add("memory-packing");
+      add("remove-unused-module-elements"); // differs
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
         add("generate-stack-ir");
         add("optimize-stack-ir");
       }

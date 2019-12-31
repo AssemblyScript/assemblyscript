@@ -165,13 +165,13 @@
    local.get $1
    i32.const 10
    i32.div_u
+   local.get $0
    local.get $2
    i32.const 1
    i32.sub
    local.tee $2
    i32.const 1
    i32.shl
-   local.get $0
    i32.add
    local.get $1
    i32.const 10

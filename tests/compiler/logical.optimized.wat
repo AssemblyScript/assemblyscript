@@ -54,7 +54,6 @@
   f32.const nan:0x400000
   global.set $logical/f
   f32.const nan:0x400000
-  local.tee $0
   local.get $0
   f32.eq
   if
@@ -82,7 +81,6 @@
   f64.const nan:0x8000000000000
   global.set $logical/F
   f64.const nan:0x8000000000000
-  local.tee $1
   local.get $1
   f64.eq
   if
