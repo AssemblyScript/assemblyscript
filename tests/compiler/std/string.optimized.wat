@@ -2490,11 +2490,10 @@
   local.get $3
   i32.lt_s
   select
-  local.set $4
+  local.tee $4
   local.get $1
   call $~lib/string/String#get:length
   local.tee $2
-  local.get $4
   i32.add
   local.get $3
   i32.gt_s

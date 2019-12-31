@@ -8915,7 +8915,7 @@
    i32.lt_s
    if
     local.get $2
-    local.set $3
+    local.tee $3
     local.get $0
     local.get $4
     i32.const 2
@@ -8923,7 +8923,6 @@
     i32.add
     i32.load
     local.tee $2
-    local.get $3
     i32.ne
     if
      local.get $2
@@ -9084,7 +9083,7 @@
    i32.lt_s
    if
     local.get $3
-    local.set $2
+    local.tee $2
     local.get $0
     local.get $4
     i32.const 2
@@ -9092,7 +9091,6 @@
     i32.add
     i32.load
     local.tee $3
-    local.get $2
     i32.ne
     if
      local.get $3
@@ -10055,7 +10053,7 @@
    i32.lt_s
    if
     local.get $4
-    local.set $2
+    local.tee $2
     local.get $0
     local.get $3
     i32.const 2
@@ -10063,7 +10061,6 @@
     i32.add
     i32.load
     local.tee $4
-    local.get $2
     i32.ne
     if
      local.get $4
@@ -10360,7 +10357,7 @@
    i32.lt_s
    if
     local.get $4
-    local.set $2
+    local.tee $2
     local.get $0
     local.get $3
     i32.const 2
@@ -10368,7 +10365,6 @@
     i32.add
     i32.load
     local.tee $4
-    local.get $2
     i32.ne
     if
      local.get $4
@@ -10530,7 +10526,7 @@
    i32.lt_s
    if
     local.get $4
-    local.set $2
+    local.tee $2
     local.get $0
     local.get $3
     i32.const 2
@@ -10538,7 +10534,6 @@
     i32.add
     i32.load
     local.tee $4
-    local.get $2
     i32.ne
     if
      local.get $4
@@ -10702,7 +10697,7 @@
    i32.lt_s
    if
     local.get $4
-    local.set $2
+    local.tee $2
     local.get $0
     local.get $3
     i32.const 2
@@ -10710,7 +10705,6 @@
     i32.add
     i32.load
     local.tee $4
-    local.get $2
     i32.ne
     if
      local.get $4

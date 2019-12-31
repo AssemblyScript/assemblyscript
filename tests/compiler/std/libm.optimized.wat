@@ -1753,11 +1753,10 @@
   local.tee $6
   i64.const 63
   i64.shr_s
-  local.set $5
-  local.get $6
-  local.get $5
+  local.tee $5
   i64.const 1
   i64.shr_s
+  local.get $6
   i64.xor
   local.tee $3
   i64.clz
@@ -3476,11 +3475,10 @@
   local.tee $8
   i32.const 2147483647
   i32.and
-  local.set $7
+  local.tee $7
   local.get $15
   i32.wrap_i64
   local.tee $6
-  local.get $7
   i32.or
   i32.eqz
   if
@@ -4172,6 +4170,7 @@
     i32.const 1071644672
     i32.gt_s
     if
+     i32.const 1048575
      local.get $11
      i32.const 1048576
      local.get $5
@@ -4186,7 +4185,17 @@
      i32.shr_s
      i32.const 1023
      i32.sub
-     local.set $5
+     local.tee $5
+     i32.shr_s
+     i32.const -1
+     i32.xor
+     local.get $10
+     i32.and
+     i64.extend_i32_s
+     i64.const 32
+     i64.shl
+     f64.reinterpret_i64
+     local.set $0
      i32.const 0
      local.get $10
      i32.const 1048575
@@ -4206,18 +4215,7 @@
      select
      local.set $6
      local.get $2
-     local.get $10
-     i32.const 1048575
-     local.get $5
-     i32.shr_s
-     i32.const -1
-     i32.xor
-     i32.and
-     i64.extend_i32_s
-     i64.const 32
-     i64.shl
-     f64.reinterpret_i64
-     local.tee $0
+     local.get $0
      f64.sub
      local.set $2
     end
@@ -8363,6 +8361,7 @@
     i32.const 1056964608
     i32.gt_s
     if
+     i32.const 8388607
      local.get $7
      i32.const 8388608
      local.get $5
@@ -8377,7 +8376,14 @@
      i32.shr_s
      i32.const 127
      i32.sub
-     local.set $5
+     local.tee $5
+     i32.shr_s
+     i32.const -1
+     i32.xor
+     local.get $12
+     i32.and
+     f32.reinterpret_i32
+     local.set $0
      i32.const 0
      local.get $12
      i32.const 8388607
@@ -8397,15 +8403,7 @@
      select
      local.set $6
      local.get $2
-     local.get $12
-     i32.const 8388607
-     local.get $5
-     i32.shr_s
-     i32.const -1
-     i32.xor
-     i32.and
-     f32.reinterpret_i32
-     local.tee $0
+     local.get $0
      f32.sub
      local.set $2
     end

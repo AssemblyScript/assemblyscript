@@ -734,15 +734,14 @@ exports.main = function main(argv, options, callback) {
         add("directize");
         add("inlining-optimizing");
         add("code-pushing");
-        add("optimize-instructions");
 
         if (optimizeLevel >= 3) {
           add("reorder-locals");
           add("simplify-locals-nostructure");
           add("vacuum");
         }
-
         add("simplify-globals-optimizing");
+        add("optimize-instructions");
       }
       add("duplicate-function-elimination"); // differs
       add("remove-unused-nonfunction-module-elements"); // differs

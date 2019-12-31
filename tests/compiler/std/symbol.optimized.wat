@@ -1439,7 +1439,7 @@
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
-  local.set $3
+  local.tee $3
   local.get $1
   i32.const 832
   local.get $1
@@ -1449,7 +1449,6 @@
   i32.const 1
   i32.shl
   local.tee $4
-  local.get $3
   i32.add
   local.tee $2
   i32.eqz
