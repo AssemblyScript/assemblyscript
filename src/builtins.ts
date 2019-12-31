@@ -853,7 +853,7 @@ export function compileCall(
         }
         offset = (<Field>field).memoryOffset;
       } else {
-        offset = classType.currentMemoryOffset;
+        offset = classType.nextMemoryOffset;
       }
       if (compiler.options.isWasm64) {
         // implicitly wrap if contextual type is a 32-bit integer

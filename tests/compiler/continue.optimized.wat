@@ -5,8 +5,8 @@
  (export "testInherit" (func $continue/testInherit))
  (func $continue/testInherit (; 0 ;) (param $0 i32)
   (local $1 i32)
-  block $break|0
-   loop $loop|0
+  loop $loop|0
+   block $break|0
     local.get $1
     i32.const 10
     i32.ge_s
@@ -26,7 +26,6 @@
     local.set $1
     br $loop|0
    end
-   unreachable
   end
  )
 )

@@ -38,8 +38,7 @@
   global.set $unary/i
   i32.const 2
   global.set $unary/i
-  global.get $unary/i
-  i32.eqz
+  i32.const 0
   global.set $unary/i
   global.get $unary/i
   i32.const -1
@@ -93,9 +92,7 @@
   global.set $unary/I
   i64.const 2
   global.set $unary/I
-  global.get $unary/I
-  i64.eqz
-  i64.extend_i32_u
+  i64.const 0
   global.set $unary/I
   global.get $unary/I
   i64.const -1
@@ -147,7 +144,7 @@
   global.set $unary/i
   f32.const 1.25
   global.set $unary/f
-  global.get $unary/f
+  f32.const 1.25
   local.tee $0
   f32.const 0
   f32.ne
@@ -157,9 +154,7 @@
   i32.and
   i32.eqz
   global.set $unary/i
-  global.get $unary/f
-  f32.const 1
-  f32.add
+  f32.const 2.25
   global.set $unary/f
   global.get $unary/f
   f32.const 1
@@ -203,7 +198,7 @@
   global.set $unary/I
   f64.const 1.25
   global.set $unary/F
-  global.get $unary/F
+  f64.const 1.25
   local.tee $1
   f64.const 0
   f64.ne
@@ -214,9 +209,7 @@
   i32.eqz
   i64.extend_i32_u
   global.set $unary/I
-  global.get $unary/F
-  f64.const 1
-  f64.add
+  f64.const 2.25
   global.set $unary/F
   global.get $unary/F
   f64.const 1

@@ -178,11 +178,11 @@
        local.get $2
        i32.eqz
        br_if $~lib/util/memory/memmove|inlined.0
+       local.get $0
        local.get $2
        i32.const 1
        i32.sub
        local.tee $2
-       local.get $0
        i32.add
        local.get $1
        local.get $2
@@ -197,11 +197,11 @@
       i32.const 8
       i32.ge_u
       if
+       local.get $0
        local.get $2
        i32.const 8
        i32.sub
        local.tee $2
-       local.get $0
        i32.add
        local.get $1
        local.get $2
@@ -215,11 +215,11 @@
     loop $continue|5
      local.get $2
      if
+      local.get $0
       local.get $2
       i32.const 1
       i32.sub
       local.tee $2
-      local.get $0
       i32.add
       local.get $1
       local.get $2
@@ -239,17 +239,6 @@
   global.set $std/pointer/one
   i32.const 24
   global.set $std/pointer/two
-  global.get $std/pointer/two
-  i32.const 24
-  i32.ne
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 79
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   global.get $std/pointer/one
   i32.const 1
   i32.store
