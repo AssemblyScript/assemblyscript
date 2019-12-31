@@ -1579,7 +1579,7 @@ export class Compiler extends DiagnosticEmitter {
     var runtimeHeaderSize = program.runtimeHeaderSize;
     var arrayPrototype = assert(program.arrayPrototype);
     var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
-    var arrayInstanceSize = arrayInstance.currentMemoryOffset;
+    var arrayInstanceSize = arrayInstance.nextMemoryOffset;
     var bufferLength = bufferSegment.buffer.length - runtimeHeaderSize;
     var arrayLength = i32(bufferLength / elementType.byteSize);
 
@@ -9123,8 +9123,8 @@ export class Compiler extends DiagnosticEmitter {
     this.compileFunction(allocInstance);
     return module.call(allocInstance.internalName, [
       options.isWasm64
-        ? module.i64(classInstance.currentMemoryOffset)
-        : module.i32(classInstance.currentMemoryOffset),
+        ? module.i64(classInstance.nextMemoryOffset)
+        : module.i32(classInstance.nextMemoryOffset),
       module.i32(
         classInstance.hasDecorator(DecoratorFlags.UNMANAGED)
           ? 0

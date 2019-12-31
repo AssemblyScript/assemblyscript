@@ -2,7 +2,7 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
- (global $extends-recursive/Child i32 (i32.const 4))
+ (global $extends-recursive/Child i32 (i32.const 3))
  (export "memory" (memory $0))
  (export "Child" (global $extends-recursive/Child))
  (export "Child#get:child" (func $Child#get:child))
