@@ -106,13 +106,13 @@
  (func $inlining/test_ctor (; 4 ;)
   (local $0 i32)
   i32.const 16
-  i32.const 5
+  i32.const 4
   call $~lib/rt/stub/__alloc
   local.tee $0
   i32.eqz
   if
    i32.const 8
-   i32.const 4
+   i32.const 5
    call $~lib/rt/stub/__alloc
    local.set $0
   end
