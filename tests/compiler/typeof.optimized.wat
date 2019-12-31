@@ -142,10 +142,7 @@
   end
   i32.const 0
  )
- (func $start:typeof~anonymous|0 (; 4 ;)
-  nop
- )
- (func $~lib/rt/stub/maybeGrowMemory (; 5 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 4 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -187,7 +184,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 6 ;) (result i32)
+ (func $~lib/rt/stub/__alloc (; 5 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   global.get $~lib/rt/stub/offset
@@ -214,7 +211,7 @@
   i32.store offset=12
   local.get $1
  )
- (func $start:typeof (; 7 ;)
+ (func $start:typeof (; 6 ;)
   i32.const 64
   i32.const 64
   call $~lib/string/String.__eq
@@ -498,7 +495,7 @@
    unreachable
   end
  )
- (func $start (; 8 ;)
+ (func $start (; 7 ;)
   global.get $~lib/started
   if
    return

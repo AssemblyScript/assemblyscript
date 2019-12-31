@@ -7,8 +7,6 @@
  (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00i\00n\00f\00e\00r\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s")
  (data (i32.const 64) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
  (data (i32.const 96) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00P\00\00\00P\00\00\00\0c\00\00\00\03")
- (table $0 2 funcref)
- (elem (i32.const 1) $start:infer-generic~anonymous|0)
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
