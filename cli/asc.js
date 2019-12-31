@@ -646,12 +646,12 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         add("ssa-nomerge");
       }
-      if (optimizeLevel >= 4) {
+      if (optimizeLevel >= 3) {
         add("flatten");
         add("local-cse");
       }
       if (hasARC) { // differs
-        if (optimizeLevel < 4) {
+        if (optimizeLevel < 3) {
           add("flatten");
         }
         add("post-assemblyscript");
