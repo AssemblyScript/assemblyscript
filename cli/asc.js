@@ -735,11 +735,10 @@ exports.main = function main(argv, options, callback) {
         add("inlining-optimizing");
         add("code-pushing");
         add("optimize-instructions");
+        add("simplify-globals-optimizing");
         add("reorder-locals");
         add("simplify-locals-nostructure");
         add("vacuum");
-
-        add("simplify-globals-optimizing");
       }
       add("duplicate-function-elimination"); // differs
       add("remove-unused-nonfunction-module-elements"); // differs
