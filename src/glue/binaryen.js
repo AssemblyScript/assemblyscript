@@ -1,4 +1,4 @@
-const binaryen = global.Binaryen || (global.Binaryen = require("binaryen/wasm"));
+const binaryen = global.Binaryen || (global.Binaryen = require("binaryen"));
 
 module.exports = binaryen;
 

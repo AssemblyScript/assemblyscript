@@ -24,7 +24,7 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
-const binaryen = global.Binaryen || (global.Binaryen = require("binaryen/wasm"));
+const binaryen = global.Binaryen || (global.Binaryen = require("binaryen"));
 
 // Proxy Binaryen's ready event
 Object.defineProperty(exports, "ready", {

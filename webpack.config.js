@@ -15,8 +15,7 @@ const lib = {
     ]
   },
   externals: [
-    "binaryen",
-    { "binaryen/wasm": "binaryen" }
+    "binaryen"
   ],
   resolve: {
     extensions: [ ".ts", ".js" ]
@@ -39,8 +38,7 @@ const bin = {
   context: path.join(__dirname, "cli"),
   entry: [ "./asc.js" ],
   externals: [
-    { "../dist/assemblyscript.js": "assemblyscript" },
-    { "binaryen/wasm": "binaryen" }
+    { "../dist/assemblyscript.js": "assemblyscript" }
   ],
   node: {
     "buffer": false,
