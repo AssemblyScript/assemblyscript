@@ -4,12 +4,12 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 1)
- (data (i32.const 8) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
+ (data (i32.const 16) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 8))
- (global $~lib/heap/__heap_base i32 (i32.const 36))
+ (global $~lib/rt/__rtti_base i32 (i32.const 16))
+ (global $~lib/heap/__heap_base i32 (i32.const 44))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/stub/__alloc))
  (export "__retain" (func $~lib/rt/stub/__retain))
@@ -114,7 +114,7 @@
   local.get $5
   i32.store
   local.get $6
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $6
   local.get $1

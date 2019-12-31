@@ -19,25 +19,25 @@
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/math/NativeMath.pow (; 0 ;) (param $0 f64) (result f64)
-  (local $1 i32)
-  (local $2 i64)
+  (local $1 i64)
+  (local $2 i32)
   (local $3 i32)
   local.get $0
   i64.reinterpret_f64
-  local.tee $2
+  local.tee $1
   i64.const 32
   i64.shr_u
   i32.wrap_i64
-  local.set $1
+  local.set $2
   i32.const 1
   i32.const 0
   i32.const 1
   i32.const 0
   i32.const 1
-  local.get $2
+  local.get $1
   i32.wrap_i64
   i32.const 0
-  local.get $1
+  local.get $2
   i32.const 2147483647
   i32.and
   local.tee $3
@@ -63,6 +63,8 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  i32.const 1
+  i32.const 0
   local.get $0
   i32.reinterpret_f32
   local.tee $1
@@ -70,14 +72,7 @@
   i32.shr_u
   i32.const 255
   i32.and
-  local.set $2
-  local.get $1
-  i32.const -2147483648
-  i32.and
-  local.set $4
-  i32.const 1
-  i32.const 0
-  local.get $2
+  local.tee $2
   i32.const 255
   i32.eq
   select
@@ -87,6 +82,10 @@
    f32.div
    return
   end
+  local.get $1
+  i32.const -2147483648
+  i32.and
+  local.set $4
   block $folding-inner0
    local.get $1
    i32.const 1
@@ -204,13 +203,16 @@
   f32.mul
  )
  (func $~lib/math/NativeMathf.pow (; 2 ;) (param $0 f32) (result f32)
-  (local $1 i32)
-  (local $2 f64)
-  (local $3 f64)
-  (local $4 i32)
-  (local $5 i64)
-  (local $6 i32)
-  block $~lib/util/math/powf_lut|inlined.0 (result f32)
+  i32.const 1
+  i32.const 0
+  local.get $0
+  i32.reinterpret_f32
+  i32.const 2147483647
+  i32.and
+  i32.const 2139095040
+  i32.gt_s
+  select
+  if
    local.get $0
    i32.reinterpret_f32
    local.tee $1
@@ -415,6 +417,8 @@
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
+  i32.const 1
+  i32.const 0
   local.get $0
   i64.reinterpret_f64
   local.tee $1
@@ -422,14 +426,7 @@
   i64.shr_u
   i64.const 2047
   i64.and
-  local.set $2
-  local.get $1
-  i64.const 63
-  i64.shr_u
-  local.set $4
-  i32.const 1
-  i32.const 0
-  local.get $2
+  local.tee $2
   i64.const 2047
   i64.eq
   select
@@ -439,6 +436,10 @@
    f64.div
    return
   end
+  local.get $1
+  i64.const 63
+  i64.shr_u
+  local.set $4
   block $folding-inner0
    local.get $1
    i64.const 1

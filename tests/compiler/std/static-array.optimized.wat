@@ -11,38 +11,38 @@
  (type $i32_=>_f64 (func (param i32) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02")
- (data (i32.const 32) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\18\00\00\00\18\00\00\00\08\00\00\00\02")
- (data (i32.const 64) "\10\00\00\00\01\00\00\00\00\00\00\00\10\00\00\00\03\00\00\00\00\00\00\00\04")
- (data (i32.const 96) "\10\00\00\00\01\00\00\00\04\00\00\00\10\00\00\00P\00\00\00P\00\00\00\10\00\00\00\02")
- (data (i32.const 128) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\00\00\c0?\00\00 @")
- (data (i32.const 152) "\10\00\00\00\01\00\00\00\05\00\00\00\10\00\00\00\90\00\00\00\90\00\00\00\08\00\00\00\02")
- (data (i32.const 184) "\10\00\00\00\01\00\00\00\00\00\00\00\10")
- (data (i32.const 206) "\f4?\00\00\00\00\00\00\02@")
- (data (i32.const 216) "\10\00\00\00\01\00\00\00\06\00\00\00\10\00\00\00\c8\00\00\00\c8\00\00\00\10\00\00\00\02")
- (data (i32.const 248) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00s\00t\00d\00/\00s\00t\00a\00t\00i\00c\00-\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 304) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 360) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 408) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
- (data (i32.const 456) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
+ (data (i32.const 16) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02")
+ (data (i32.const 48) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00 \00\00\00 \00\00\00\08\00\00\00\02")
+ (data (i32.const 80) "\10\00\00\00\01\00\00\00\00\00\00\00\10\00\00\00\03\00\00\00\00\00\00\00\04")
+ (data (i32.const 112) "\10\00\00\00\01\00\00\00\04\00\00\00\10\00\00\00`\00\00\00`\00\00\00\10\00\00\00\02")
+ (data (i32.const 144) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\00\00\c0?\00\00 @")
+ (data (i32.const 176) "\10\00\00\00\01\00\00\00\05\00\00\00\10\00\00\00\a0\00\00\00\a0\00\00\00\08\00\00\00\02")
+ (data (i32.const 208) "\10\00\00\00\01\00\00\00\00\00\00\00\10")
+ (data (i32.const 230) "\f4?\00\00\00\00\00\00\02@")
+ (data (i32.const 240) "\10\00\00\00\01\00\00\00\06\00\00\00\10\00\00\00\e0\00\00\00\e0\00\00\00\10\00\00\00\02")
+ (data (i32.const 272) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00s\00t\00d\00/\00s\00t\00a\00t\00i\00c\00-\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 336) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 400) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 448) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
+ (data (i32.const 496) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/array/Array<i32>#__get (; 1 ;) (param $0 i32) (result i32)
   local.get $0
-  i32.const 60
+  i32.const 76
   i32.load
   i32.ge_u
   if
-   i32.const 320
-   i32.const 376
+   i32.const 352
+   i32.const 416
    i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 52
+  i32.const 68
   i32.load
   local.get $0
   i32.const 2
@@ -127,7 +127,7 @@
   local.get $4
   i32.store
   local.get $2
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $2
   local.get $1
@@ -191,8 +191,7 @@
      loop $continue|1
       local.get $3
       i32.const 8
-      i32.lt_u
-      i32.eqz
+      i32.ge_u
       if
        local.get $0
        local.get $1
@@ -257,11 +256,11 @@
        local.get $3
        i32.eqz
        br_if $~lib/util/memory/memmove|inlined.0
-       local.get $0
        local.get $3
        i32.const 1
        i32.sub
        local.tee $3
+       local.get $0
        i32.add
        local.get $1
        local.get $3
@@ -274,14 +273,13 @@
      loop $continue|4
       local.get $3
       i32.const 8
-      i32.lt_u
-      i32.eqz
+      i32.ge_u
       if
-       local.get $0
        local.get $3
        i32.const 8
        i32.sub
        local.tee $3
+       local.get $0
        i32.add
        local.get $1
        local.get $3
@@ -295,11 +293,11 @@
     loop $continue|5
      local.get $3
      if
-      local.get $0
       local.get $3
       i32.const 1
       i32.sub
       local.tee $3
+      local.get $0
       i32.add
       local.get $1
       local.get $3
@@ -327,7 +325,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 472
+   i32.const 512
    i32.const 43
    i32.const 2
    call $~lib/builtins/abort
@@ -341,11 +339,11 @@
   local.set $4
   local.get $3
   i32.load offset=4
-  i32.const -1
+  i32.const 1
   i32.ne
   if
    i32.const 0
-   i32.const 472
+   i32.const 512
    i32.const 46
    i32.const 13
    call $~lib/builtins/abort
@@ -494,16 +492,18 @@
    i32.and
    local.tee $1
    i32.sub
+   local.set $2
    local.get $0
    local.get $1
    i32.add
    local.tee $0
    i32.const 0
    i32.store
+   local.get $0
+   local.get $2
    i32.const -4
    i32.and
    local.tee $1
-   local.get $0
    i32.add
    i32.const 4
    i32.sub
@@ -584,12 +584,12 @@
    i32.const 0
    i32.store
    local.get $0
+   local.get $0
    i32.const 4
    i32.and
    i32.const 24
    i32.add
    local.tee $2
-   local.get $0
    i32.add
    local.set $0
    local.get $1
@@ -650,13 +650,14 @@
    i32.shr_u
    i32.gt_u
    if
-    i32.const 424
-    i32.const 376
+    i32.const 464
+    i32.const 416
     i32.const 14
     i32.const 47
     call $~lib/builtins/abort
     unreachable
    end
+   local.get $2
    local.get $0
    i32.load
    local.tee $4
@@ -666,7 +667,6 @@
    local.tee $3
    call $~lib/rt/stub/__realloc
    local.tee $1
-   local.get $2
    i32.add
    local.get $3
    local.get $2
@@ -690,36 +690,36 @@
  )
  (func $~lib/array/Array<i32>#__set (; 8 ;)
   i32.const 0
-  i32.const 60
+  i32.const 76
   i32.load
   i32.ge_u
   if
-   i32.const 48
+   i32.const 64
    i32.const 2
    call $~lib/array/ensureSize
-   i32.const 60
+   i32.const 76
    i32.const 1
    i32.store
   end
-  i32.const 52
+  i32.const 68
   i32.load
   i32.const 2
   i32.store
  )
  (func $~lib/array/Array<i64>#__get (; 9 ;) (param $0 i32) (result i64)
   local.get $0
-  i32.const 124
+  i32.const 140
   i32.load
   i32.ge_u
   if
-   i32.const 320
-   i32.const 376
+   i32.const 352
+   i32.const 416
    i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 116
+  i32.const 132
   i32.load
   local.get $0
   i32.const 3
@@ -729,36 +729,36 @@
  )
  (func $~lib/array/Array<i64>#__set (; 10 ;)
   i32.const 0
-  i32.const 124
+  i32.const 140
   i32.load
   i32.ge_u
   if
-   i32.const 112
+   i32.const 128
    i32.const 3
    call $~lib/array/ensureSize
-   i32.const 124
+   i32.const 140
    i32.const 1
    i32.store
   end
-  i32.const 116
+  i32.const 132
   i32.load
   i64.const 4
   i64.store
  )
  (func $~lib/array/Array<f32>#__get (; 11 ;) (param $0 i32) (result f32)
   local.get $0
-  i32.const 180
+  i32.const 204
   i32.load
   i32.ge_u
   if
-   i32.const 320
-   i32.const 376
+   i32.const 352
+   i32.const 416
    i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 172
+  i32.const 196
   i32.load
   local.get $0
   i32.const 2
@@ -768,36 +768,36 @@
  )
  (func $~lib/array/Array<f32>#__set (; 12 ;)
   i32.const 0
-  i32.const 180
+  i32.const 204
   i32.load
   i32.ge_u
   if
-   i32.const 168
+   i32.const 192
    i32.const 2
    call $~lib/array/ensureSize
-   i32.const 180
+   i32.const 204
    i32.const 1
    i32.store
   end
-  i32.const 172
+  i32.const 196
   i32.load
   f32.const 2.5
   f32.store
  )
  (func $~lib/array/Array<f64>#__get (; 13 ;) (param $0 i32) (result f64)
   local.get $0
-  i32.const 244
+  i32.const 268
   i32.load
   i32.ge_u
   if
-   i32.const 320
-   i32.const 376
+   i32.const 352
+   i32.const 416
    i32.const 93
    i32.const 41
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 236
+  i32.const 260
   i32.load
   local.get $0
   i32.const 3
@@ -807,30 +807,30 @@
  )
  (func $~lib/array/Array<f64>#__set (; 14 ;)
   i32.const 0
-  i32.const 244
+  i32.const 268
   i32.load
   i32.ge_u
   if
-   i32.const 232
+   i32.const 256
    i32.const 3
    call $~lib/array/ensureSize
-   i32.const 244
+   i32.const 268
    i32.const 1
    i32.store
   end
-  i32.const 236
+  i32.const 260
   i32.load
   f64.const 2.25
   f64.store
  )
  (func $start:std/static-array (; 15 ;)
-  i32.const 60
+  i32.const 76
   i32.load
   i32.const 2
   i32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 6
    i32.const 0
    call $~lib/builtins/abort
@@ -842,7 +842,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 7
    i32.const 0
    call $~lib/builtins/abort
@@ -854,15 +854,15 @@
   i32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 8
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 512
+  i32.const 544
   global.set $~lib/rt/stub/startOffset
-  i32.const 512
+  i32.const 544
   global.set $~lib/rt/stub/offset
   call $~lib/array/Array<i32>#__set
   i32.const 0
@@ -871,19 +871,19 @@
   i32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 10
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 124
+  i32.const 140
   i32.load
   i32.const 2
   i32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 12
    i32.const 0
    call $~lib/builtins/abort
@@ -895,7 +895,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 13
    i32.const 0
    call $~lib/builtins/abort
@@ -907,7 +907,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 14
    i32.const 0
    call $~lib/builtins/abort
@@ -920,19 +920,19 @@
   i64.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 16
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 180
+  i32.const 204
   i32.load
   i32.const 2
   i32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 18
    i32.const 0
    call $~lib/builtins/abort
@@ -944,7 +944,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 19
    i32.const 0
    call $~lib/builtins/abort
@@ -956,7 +956,7 @@
   f32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 20
    i32.const 0
    call $~lib/builtins/abort
@@ -969,19 +969,19 @@
   f32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 22
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 244
+  i32.const 268
   i32.load
   i32.const 2
   i32.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 24
    i32.const 0
    call $~lib/builtins/abort
@@ -993,7 +993,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 25
    i32.const 0
    call $~lib/builtins/abort
@@ -1005,7 +1005,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 26
    i32.const 0
    call $~lib/builtins/abort
@@ -1018,7 +1018,7 @@
   f64.ne
   if
    i32.const 0
-   i32.const 264
+   i32.const 288
    i32.const 28
    i32.const 0
    call $~lib/builtins/abort

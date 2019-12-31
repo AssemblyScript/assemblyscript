@@ -1,1 +1,1 @@
-export * from "./wasi_unstable";
+export * from "./wasi_snapshot";

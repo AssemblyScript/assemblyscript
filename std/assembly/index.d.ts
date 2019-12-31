@@ -134,10 +134,6 @@ declare function idof<T>(): u32;
 declare function changetype<T>(value: any): T;
 /** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
 declare function unchecked<T>(value: T): T;
-/** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
-declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
-/** Emits a `call` instruction, calling the specified function in the function table directly with the specified arguments. Function index must be a compile-time constant. */
-declare function call_direct<T>(target: Function | u32, ...args: any[]): T;
 /** Instantiates a new instance of `T` using the specified constructor arguments. */
 declare function instantiate<T>(...args: any[]): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
@@ -1294,6 +1290,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   reverse(): this;
   /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
   join(separator?: string): string;
+  /** The set() method stores multiple values in the typed array, reading input values from a specified array. */
+  set<U extends ArrayBufferView>(source: U, offset?: i32): void
   /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
   toString(): string;
 }

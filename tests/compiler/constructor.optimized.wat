@@ -94,7 +94,7 @@
   local.get $4
   i32.store
   local.get $2
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $2
   local.get $1

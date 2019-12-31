@@ -8,7 +8,7 @@
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 16) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/operator-overloading/a1 (mut i32) (i32.const 0))
@@ -138,7 +138,7 @@
   i32.const 16
   i32.store
   local.get $1
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $1
   local.get $0
@@ -243,45 +243,44 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f64)
+  (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
-  (local $10 f64)
+  (local $9 f64)
+  (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
+  (local $12 f64)
+  (local $13 f64)
   (local $14 f64)
-  (local $15 f64)
-  (local $16 i64)
+  (local $15 i64)
+  (local $16 i32)
   (local $17 i32)
   (local $18 f64)
   (local $19 i32)
   (local $20 f64)
   local.get $0
   i64.reinterpret_f64
-  local.tee $16
+  local.tee $15
   i32.wrap_i64
   local.set $19
-  local.get $16
+  local.get $15
   i64.const 32
   i64.shr_u
   i32.wrap_i64
-  local.tee $17
+  local.tee $16
   i32.const 2147483647
   i32.and
   local.set $4
   local.get $1
   i64.reinterpret_f64
-  local.tee $16
+  local.tee $15
   i64.const 32
   i64.shr_u
   i32.wrap_i64
-  local.tee $9
+  local.tee $7
   i32.const 2147483647
   i32.and
-  local.set $8
-  local.get $8
-  local.get $16
+  local.tee $8
+  local.get $15
   i32.wrap_i64
   local.tee $6
   i32.or
@@ -320,7 +319,7 @@
    f64.add
    return
   end
-  local.get $17
+  local.get $16
   i32.const 0
   i32.lt_s
   if
@@ -348,32 +347,31 @@
      select
      local.get $11
      i32.sub
-     local.set $12
+     local.set $10
+     i32.const 2
      local.get $6
      local.get $8
      local.get $5
      select
      local.tee $5
-     local.get $12
+     local.get $10
      i32.shr_u
-     local.set $11
-     i32.const 2
-     local.get $11
+     local.tee $11
      i32.const 1
      i32.and
      i32.sub
      i32.const 0
-     local.get $11
-     local.get $12
-     i32.shl
      local.get $5
+     local.get $11
+     local.get $10
+     i32.shl
      i32.eq
      select
     else
      i32.const 0
     end
    end
-   local.set $13
+   local.set $17
   end
   local.get $6
   i32.eqz
@@ -382,17 +380,17 @@
    i32.const 2146435072
    i32.eq
    if
+    local.get $19
     local.get $4
     i32.const 1072693248
     i32.sub
-    local.get $19
     i32.or
     if
      local.get $4
      i32.const 1072693248
      i32.ge_s
      if
-      local.get $9
+      local.get $7
       i32.const 0
       i32.lt_s
       if
@@ -405,7 +403,7 @@
       f64.const 0
       local.get $1
       f64.neg
-      local.get $9
+      local.get $7
       i32.const 0
       i32.ge_s
       select
@@ -422,7 +420,7 @@
    i32.const 1072693248
    i32.eq
    if
-    local.get $9
+    local.get $7
     i32.const 0
     i32.ge_s
     if
@@ -434,7 +432,7 @@
     f64.div
     return
    end
-   local.get $9
+   local.get $7
    i32.const 1073741824
    i32.eq
    if
@@ -443,11 +441,11 @@
     f64.mul
     return
    end
-   local.get $9
+   local.get $7
    i32.const 1071644672
    i32.eq
    if
-    local.get $17
+    local.get $16
     i32.const 0
     i32.ge_s
     if
@@ -479,25 +477,25 @@
     local.get $3
     f64.div
     local.get $3
-    local.get $9
+    local.get $7
     i32.const 0
     i32.lt_s
     select
     local.set $3
-    local.get $17
+    local.get $16
     i32.const 0
     i32.lt_s
     if (result f64)
+     local.get $17
      local.get $4
      i32.const 1072693248
      i32.sub
-     local.get $13
      i32.or
      if (result f64)
       local.get $3
       f64.neg
       local.get $3
-      local.get $13
+      local.get $17
       i32.const 1
       i32.eq
       select
@@ -516,12 +514,12 @@
    end
   end
   f64.const 1
-  local.set $7
-  local.get $17
+  local.set $12
+  local.get $16
   i32.const 0
   i32.lt_s
   if
-   local.get $13
+   local.get $17
    i32.eqz
    if
     local.get $0
@@ -534,11 +532,11 @@
    end
    f64.const -1
    f64.const 1
-   local.get $13
+   local.get $17
    i32.const 1
    i32.eq
    select
-   local.set $7
+   local.set $12
   end
   local.get $8
   i32.const 1105199104
@@ -554,7 +552,7 @@
     if
      f64.const inf
      f64.const 0
-     local.get $9
+     local.get $7
      i32.const 0
      i32.lt_s
      select
@@ -566,7 +564,7 @@
     if
      f64.const inf
      f64.const 0
-     local.get $9
+     local.get $7
      i32.const 0
      i32.gt_s
      select
@@ -577,17 +575,17 @@
    i32.const 1072693247
    i32.lt_s
    if
-    local.get $7
+    local.get $12
     f64.const 1.e+300
     f64.mul
     f64.const 1.e+300
     f64.mul
+    local.get $12
+    f64.const 1e-300
+    f64.mul
+    f64.const 1e-300
+    f64.mul
     local.get $7
-    f64.const 1e-300
-    f64.mul
-    f64.const 1e-300
-    f64.mul
-    local.get $9
     i32.const 0
     i32.lt_s
     select
@@ -597,17 +595,17 @@
    i32.const 1072693248
    i32.gt_s
    if
-    local.get $7
+    local.get $12
     f64.const 1.e+300
     f64.mul
     f64.const 1.e+300
     f64.mul
+    local.get $12
+    f64.const 1e-300
+    f64.mul
+    f64.const 1e-300
+    f64.mul
     local.get $7
-    f64.const 1e-300
-    f64.mul
-    f64.const 1e-300
-    f64.mul
-    local.get $9
     i32.const 0
     i32.gt_s
     select
@@ -647,9 +645,9 @@
    i64.const -4294967296
    i64.and
    f64.reinterpret_i64
-   local.set $10
+   local.set $9
    local.get $0
-   local.get $10
+   local.get $9
    local.get $3
    f64.sub
    f64.sub
@@ -728,7 +726,7 @@
    select
    local.tee $0
    f64.sub
-   local.tee $10
+   local.tee $9
    f64.const 1
    local.get $3
    local.get $0
@@ -741,7 +739,7 @@
    i64.const -4294967296
    i64.and
    f64.reinterpret_i64
-   local.set $14
+   local.set $13
    local.get $3
    local.get $4
    i32.const 1
@@ -764,29 +762,29 @@
    f64.sub
    local.set $0
    f64.const 0.9617967009544373
-   local.get $14
+   local.get $13
    f64.const 3
-   local.get $14
-   local.get $14
+   local.get $13
+   local.get $13
    f64.mul
    local.tee $20
    f64.add
    local.get $18
    local.get $18
    f64.mul
-   local.tee $15
-   local.get $15
+   local.tee $14
+   local.get $14
    f64.mul
    f64.const 0.5999999999999946
-   local.get $15
+   local.get $14
    f64.const 0.4285714285785502
-   local.get $15
+   local.get $14
    f64.const 0.33333332981837743
-   local.get $15
+   local.get $14
    f64.const 0.272728123808534
-   local.get $15
+   local.get $14
    f64.const 0.23066074577556175
-   local.get $15
+   local.get $14
    f64.const 0.20697501780033842
    f64.mul
    f64.add
@@ -800,18 +798,18 @@
    f64.add
    f64.mul
    local.get $2
-   local.get $10
-   local.get $14
+   local.get $9
+   local.get $13
    local.get $3
    f64.mul
    f64.sub
-   local.get $14
+   local.get $13
    local.get $0
    f64.mul
    f64.sub
    f64.mul
    local.tee $2
-   local.get $14
+   local.get $13
    local.get $18
    f64.add
    f64.mul
@@ -822,14 +820,14 @@
    i64.const -4294967296
    i64.and
    f64.reinterpret_i64
-   local.tee $10
+   local.tee $9
    f64.mul
    local.tee $3
    local.get $2
-   local.get $10
+   local.get $9
    f64.mul
    local.get $0
-   local.get $10
+   local.get $9
    f64.const 3
    f64.sub
    local.get $20
@@ -879,9 +877,9 @@
    i64.const -4294967296
    i64.and
    f64.reinterpret_i64
-   local.set $10
+   local.set $9
    local.get $2
-   local.get $10
+   local.get $9
    local.get $0
    f64.sub
    local.get $3
@@ -899,7 +897,7 @@
   f64.reinterpret_i64
   local.tee $0
   f64.sub
-  local.get $10
+  local.get $9
   f64.mul
   local.get $1
   local.get $3
@@ -907,29 +905,29 @@
   f64.add
   local.tee $1
   local.get $0
-  local.get $10
+  local.get $9
   f64.mul
   local.tee $2
   f64.add
   local.tee $0
   i64.reinterpret_f64
-  local.tee $16
+  local.tee $15
   i32.wrap_i64
   local.set $5
   block $folding-inner1
    block $folding-inner0
-    local.get $16
+    local.get $15
     i64.const 32
     i64.shr_u
     i32.wrap_i64
-    local.tee $12
+    local.tee $10
     i32.const 1083179008
     i32.ge_s
     if
-     local.get $12
+     local.get $5
+     local.get $10
      i32.const 1083179008
      i32.sub
-     local.get $5
      i32.or
      local.get $1
      f64.const 8.008566259537294e-17
@@ -941,27 +939,27 @@
      i32.or
      br_if $folding-inner0
     else
-     local.get $12
+     local.get $10
      i32.const 2147483647
      i32.and
      i32.const 1083231232
      i32.ge_s
-     if
-      local.get $12
-      i32.const -1064252416
-      i32.sub
-      local.get $5
-      i32.or
-      local.get $1
-      local.get $0
-      local.get $2
-      f64.sub
-      f64.le
-      i32.or
-      br_if $folding-inner1
-     end
+     i32.const 0
+     local.get $5
+     local.get $10
+     i32.const -1064252416
+     i32.sub
+     i32.or
+     local.get $1
+     local.get $0
+     local.get $2
+     f64.sub
+     f64.le
+     i32.or
+     select
+     br_if $folding-inner1
     end
-    local.get $12
+    local.get $10
     i32.const 2147483647
     i32.and
     local.tee $11
@@ -976,12 +974,13 @@
     i32.const 1071644672
     i32.gt_s
     if
+     i32.const 1048575
+     local.get $10
      i32.const 1048576
      local.get $5
      i32.const 1
      i32.add
      i32.shr_s
-     local.get $12
      i32.add
      local.tee $11
      i32.const 2147483647
@@ -990,9 +989,7 @@
      i32.shr_s
      i32.const 1023
      i32.sub
-     local.set $5
-     i32.const 1048575
-     local.get $5
+     local.tee $5
      i32.shr_s
      i32.const -1
      i32.xor
@@ -1003,6 +1000,7 @@
      i64.shl
      f64.reinterpret_i64
      local.set $0
+     i32.const 0
      local.get $11
      i32.const 1048575
      i32.and
@@ -1012,12 +1010,10 @@
      local.get $5
      i32.sub
      i32.shr_s
-     local.set $6
-     i32.const 0
-     local.get $6
+     local.tee $6
      i32.sub
      local.get $6
-     local.get $12
+     local.get $10
      i32.const 0
      i32.lt_s
      select
@@ -1055,7 +1051,7 @@
     local.get $2
     f64.mul
     local.set $0
-    local.get $7
+    local.get $12
     f64.const 1
     local.get $2
     local.get $2
@@ -1132,14 +1128,14 @@
     f64.mul
     return
    end
-   local.get $7
+   local.get $12
    f64.const 1.e+300
    f64.mul
    f64.const 1.e+300
    f64.mul
    return
   end
-  local.get $7
+  local.get $12
   f64.const 1e-300
   f64.mul
   f64.const 1e-300
@@ -1223,9 +1219,9 @@
  (func $start:std/operator-overloading (; 11 ;)
   (local $0 i32)
   (local $1 i32)
-  i32.const 80
+  i32.const 96
   global.set $~lib/rt/stub/startOffset
-  i32.const 80
+  i32.const 96
   global.set $~lib/rt/stub/offset
   i32.const 1
   i32.const 2
@@ -1264,7 +1260,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 145
    i32.const 0
    call $~lib/builtins/abort
@@ -1305,7 +1301,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 151
    i32.const 0
    call $~lib/builtins/abort
@@ -1348,7 +1344,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 157
    i32.const 0
    call $~lib/builtins/abort
@@ -1391,7 +1387,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 163
    i32.const 0
    call $~lib/builtins/abort
@@ -1433,7 +1429,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 169
    i32.const 0
    call $~lib/builtins/abort
@@ -1466,7 +1462,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 175
    i32.const 0
    call $~lib/builtins/abort
@@ -1509,7 +1505,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 181
    i32.const 0
    call $~lib/builtins/abort
@@ -1552,7 +1548,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 187
    i32.const 0
    call $~lib/builtins/abort
@@ -1595,7 +1591,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 193
    i32.const 0
    call $~lib/builtins/abort
@@ -1618,7 +1614,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 199
    i32.const 0
    call $~lib/builtins/abort
@@ -1639,7 +1635,7 @@
   global.get $std/operator-overloading/eqf
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 205
    i32.const 0
    call $~lib/builtins/abort
@@ -1652,7 +1648,7 @@
   global.get $std/operator-overloading/eq
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 209
    i32.const 0
    call $~lib/builtins/abort
@@ -1667,7 +1663,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 213
    i32.const 0
    call $~lib/builtins/abort
@@ -1703,7 +1699,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 219
    i32.const 0
    call $~lib/builtins/abort
@@ -1739,7 +1735,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 225
    i32.const 0
    call $~lib/builtins/abort
@@ -1775,7 +1771,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 231
    i32.const 0
    call $~lib/builtins/abort
@@ -1811,7 +1807,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 237
    i32.const 0
    call $~lib/builtins/abort
@@ -1847,7 +1843,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 242
    i32.const 0
    call $~lib/builtins/abort
@@ -1883,7 +1879,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 247
    i32.const 0
    call $~lib/builtins/abort
@@ -1919,7 +1915,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 252
    i32.const 0
    call $~lib/builtins/abort
@@ -1953,7 +1949,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 257
    i32.const 0
    call $~lib/builtins/abort
@@ -1995,7 +1991,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 262
    i32.const 0
    call $~lib/builtins/abort
@@ -2037,7 +2033,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 267
    i32.const 0
    call $~lib/builtins/abort
@@ -2071,7 +2067,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 272
    i32.const 0
    call $~lib/builtins/abort
@@ -2082,7 +2078,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 273
    i32.const 0
    call $~lib/builtins/abort
@@ -2122,7 +2118,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 279
    i32.const 0
    call $~lib/builtins/abort
@@ -2156,7 +2152,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 282
    i32.const 0
    call $~lib/builtins/abort
@@ -2192,7 +2188,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 287
    i32.const 0
    call $~lib/builtins/abort
@@ -2213,7 +2209,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 288
    i32.const 0
    call $~lib/builtins/abort
@@ -2247,7 +2243,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 291
    i32.const 0
    call $~lib/builtins/abort
@@ -2266,7 +2262,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 292
    i32.const 0
    call $~lib/builtins/abort
@@ -2320,7 +2316,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 312
    i32.const 0
    call $~lib/builtins/abort
@@ -2374,7 +2370,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 332
    i32.const 0
    call $~lib/builtins/abort
