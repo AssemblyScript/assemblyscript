@@ -668,6 +668,7 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
+      // this will be done later
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
       // }
@@ -709,6 +710,7 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("inlining-optimizing");
       }
+      // "duplicate-function-elimination" will better be done later
       // add("duplicate-function-elimination");
       add("duplicate-import-elimination");
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
@@ -716,6 +718,8 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("simplify-globals");
       }
+      // replace inderect calls with direct, reduce arity and
+      // inline this calls if possible
       add("directize"); // differs
       add("dae-optimizing"); // differs
       add("inlining-optimizing"); // differs
@@ -726,23 +730,30 @@ exports.main = function main(argv, options, callback) {
         add("rse");
         add("vacuum");
 
+        // rearrange / reduce switch cases again
         add("remove-unused-brs");
         add("remove-unused-names");
         add("merge-blocks");
         add("vacuum");
 
+        // replace inderect calls with direct and inline if possible again.
         add("directize");
         add("inlining-optimizing");
+        // move some code after early return which potensially could reduce computations
+        // do this after CFG cleanup (origianlly it was done before)
         add("code-pushing");
 
+        // this quite expensive so do this only for highest opt level
         if (optimizeLevel >= 3) {
           add("simplify-locals-nostructure");
           add("reorder-locals");
           add("vacuum");
         }
+        // finally optimize all remaining peepholes
         add("simplify-globals-optimizing");
         add("optimize-instructions");
       }
+      // remove and unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs
       add("remove-unused-nonfunction-module-elements"); // differs
       add("memory-packing");
