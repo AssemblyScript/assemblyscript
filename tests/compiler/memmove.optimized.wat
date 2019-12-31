@@ -1,14 +1,14 @@
 (module
- (type $FUNCSIG$iiii (func (param i32 i32 i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s")
+ (data (i32.const 16) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00m\00e\00m\00m\00o\00v\00e\00.\00t\00s")
  (global $memmove/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $memmove/memmove (; 1 ;) (type $FUNCSIG$iiii) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memmove/memmove (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -194,7 +194,7 @@
   end
   local.get $3
  )
- (func $start:memmove (; 2 ;) (type $FUNCSIG$v)
+ (func $start:memmove (; 2 ;)
   i32.const 8
   i64.const 1229782938247303441
   i64.store
@@ -217,7 +217,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 55
    i32.const 0
    call $~lib/builtins/abort
@@ -229,7 +229,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 56
    i32.const 0
    call $~lib/builtins/abort
@@ -245,7 +245,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 59
    i32.const 0
    call $~lib/builtins/abort
@@ -257,7 +257,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 60
    i32.const 0
    call $~lib/builtins/abort
@@ -269,7 +269,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 61
    i32.const 0
    call $~lib/builtins/abort
@@ -281,7 +281,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 62
    i32.const 0
    call $~lib/builtins/abort
@@ -293,7 +293,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 63
    i32.const 0
    call $~lib/builtins/abort
@@ -310,7 +310,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 66
    i32.const 0
    call $~lib/builtins/abort
@@ -327,7 +327,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 69
    i32.const 0
    call $~lib/builtins/abort
@@ -339,7 +339,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 70
    i32.const 0
    call $~lib/builtins/abort
@@ -351,7 +351,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 71
    i32.const 0
    call $~lib/builtins/abort
@@ -363,17 +363,14 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 72
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 3 ;) (type $FUNCSIG$v)
+ (func $start (; 3 ;)
   call $start:memmove
- )
- (func $null (; 4 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

@@ -123,7 +123,7 @@
     "default": false
   },
   "importMemory": {
-    "description": "Imports the memory instance provided by the embedder.",
+    "description": "Imports the memory provided as 'env.memory'.",
     "type": "b",
     "default": false
   },
@@ -138,7 +138,12 @@
     "default": 0
   },
   "importTable": {
-    "description": "Imports the function table instance provided by the embedder.",
+    "description": "Imports the function table provided as 'env.table'.",
+    "type": "b",
+    "default": false
+  },
+  "exportTable": {
+    "description": "Exports the function table as 'table'.",
     "type": "b",
     "default": false
   },

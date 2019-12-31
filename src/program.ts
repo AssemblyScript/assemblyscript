@@ -2948,6 +2948,8 @@ export class Function extends TypedElement {
   }
 }
 
+var nextFunctionTarget = 0;
+
 /** A resolved function target, that is a function called indirectly by an index and signature. */
 export class FunctionTarget extends Element {
 
@@ -2961,16 +2963,16 @@ export class FunctionTarget extends Element {
     /** Concrete signature. */
     signature: Signature,
     /** Program reference. */
-    program: Program,
-    __s: string = "" // FIXME: current TS limitation workaround, but a fix seems underway
+    program: Program
   ) {
     super(
       ElementKind.FUNCTION_TARGET,
-      __s = "sig:" + signature.toSignatureString(),
-      __s,
+      "~sig" + nextFunctionTarget.toString(),
+      "~sig" + nextFunctionTarget.toString(),
       program,
       program.nativeFile
     );
+    ++nextFunctionTarget;
     this.signature = signature;
     this.flags = CommonFlags.RESOLVED;
     this.type = program.options.usizeType.asFunction(signature);
@@ -3298,7 +3300,7 @@ export class Class extends TypedElement {
   /** Contextual type arguments for fields and methods. */
   contextualTypeArguments: Map<string,Type> | null = null;
   /** Current member memory offset. */
-  currentMemoryOffset: u32 = 0;
+  nextMemoryOffset: u32 = 0;
   /** Constructor instance. */
   constructorInstance: Function | null = null;
   /** Operator overloads. */
@@ -3348,8 +3350,6 @@ export class Class extends TypedElement {
     prototype: ClassPrototype,
     /** Concrete type arguments, if any. */
     typeArguments: Type[] | null = null,
-    /** Base class, if derived. */
-    base: Class | null = null,
     _isInterface: bool = false // FIXME
   ) {
     super(
@@ -3366,24 +3366,11 @@ export class Class extends TypedElement {
     this.decoratorFlags = prototype.decoratorFlags;
     this.typeArguments = typeArguments;
     this.setType(program.options.usizeType.asClass(this));
-    this.base = base;
 
     if (!this.hasDecorator(DecoratorFlags.UNMANAGED)) {
       let id = program.nextClassId++;
       this._id = id;
       program.managedClasses.set(id, this);
-    }
-
-    // inherit static members and contextual type arguments from base class
-    if (base) {
-      let inheritedTypeArguments = base.contextualTypeArguments;
-      if (inheritedTypeArguments) {
-        let contextualTypeArguments = this.contextualTypeArguments;
-        for (let [baseName, baseType] of inheritedTypeArguments) {
-          if (!contextualTypeArguments) this.contextualTypeArguments = contextualTypeArguments = new Map();
-          contextualTypeArguments.set(baseName, baseType);
-        }
-      }
     }
 
     // apply pre-checked instance-specific contextual type arguments
@@ -3403,6 +3390,26 @@ export class Class extends TypedElement {
       throw new Error("type argument count mismatch");
     }
     registerConcreteElement(program, this);
+  }
+
+  /** Sets the base class. */
+  setBase(base: Class): void {
+    assert(!this.base);
+    this.base = base;
+
+    // Inherit contextual type arguments from base class
+    var inheritedTypeArguments = base.contextualTypeArguments;
+    if (inheritedTypeArguments) {
+      let contextualTypeArguments = this.contextualTypeArguments;
+      for (let [baseName, baseType] of inheritedTypeArguments) {
+        if (!contextualTypeArguments) {
+          this.contextualTypeArguments = contextualTypeArguments = new Map();
+          contextualTypeArguments.set(baseName, baseType);
+        } else if (!contextualTypeArguments.has(baseName)) {
+          contextualTypeArguments.set(baseName, baseType);
+        }
+      }
+    }
   }
 
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
@@ -3458,7 +3465,7 @@ export class Class extends TypedElement {
   /** Writes a field value to a buffer and returns the number of bytes written. */
   writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32): i32 {
     var field = this.lookupInSelf(name);
-    if (field && field.kind == ElementKind.FIELD) {
+    if (field !== null && field.kind == ElementKind.FIELD) {
       let offset = baseOffset + (<Field>field).memoryOffset;
       switch ((<Field>field).type.kind) {
         case TypeKind.I8:
@@ -3655,14 +3662,12 @@ export class Interface extends Class { // FIXME
   constructor(
     nameInclTypeParameters: string,
     prototype: InterfacePrototype,
-    typeArguments: Type[] = [],
-    base: Interface | null = null
+    typeArguments: Type[] = []
   ) {
     super(
       nameInclTypeParameters,
       prototype,
       typeArguments,
-      base,
       true
     );
   }

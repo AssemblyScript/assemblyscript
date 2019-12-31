@@ -1,12 +1,12 @@
 (module
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$vi (func (param i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "testAlwaysWrapped" (func $loop-wrap/testAlwaysWrapped))
  (export "testFirstWrapped" (func $loop-wrap/testFirstWrapped))
  (export "testSubsequentWrapped" (func $loop-wrap/testSubsequentWrapped))
- (func $loop-wrap/testAlwaysWrapped (; 0 ;) (type $FUNCSIG$v)
+ (func $loop-wrap/testAlwaysWrapped (; 0 ;)
   (local $0 i32)
   loop $continue|0
    local.get $0
@@ -23,7 +23,7 @@
    end
   end
  )
- (func $loop-wrap/testFirstWrapped (; 1 ;) (type $FUNCSIG$v)
+ (func $loop-wrap/testFirstWrapped (; 1 ;)
   (local $0 i32)
   loop $continue|0
    local.get $0
@@ -42,7 +42,7 @@
    end
   end
  )
- (func $loop-wrap/testSubsequentWrapped (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $loop-wrap/testSubsequentWrapped (; 2 ;) (param $0 i32)
   loop $continue|0
    local.get $0
    i32.const 255
@@ -59,8 +59,5 @@
     br_if $continue|0
    end
   end
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

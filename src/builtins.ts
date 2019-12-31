@@ -55,7 +55,8 @@ import {
   RelooperBlockRef,
   SIMDLoadOp,
   getLocalGetIndex,
-  hasSideEffects
+  hasSideEffects,
+  createType
 } from "./module";
 
 import {
@@ -849,7 +850,7 @@ export function compileCall(
         }
         offset = (<Field>field).memoryOffset;
       } else {
-        offset = classType.currentMemoryOffset;
+        offset = classType.nextMemoryOffset;
       }
       if (compiler.options.isWasm64) {
         // implicitly wrap if contextual type is a 32-bit integer
@@ -4757,7 +4758,6 @@ export function compileAbort(
 export function compileVisitGlobals(compiler: Compiler): void {
   var module = compiler.module;
   var exprs = new Array<ExpressionRef>();
-  var typeRef = compiler.ensureFunctionType([ Type.u32 ], Type.void); // cookie
   var nativeSizeType = compiler.options.nativeSizeType;
   var visitInstance = assert(compiler.program.visitInstance);
 
@@ -4800,7 +4800,10 @@ export function compileVisitGlobals(compiler: Compiler): void {
       }
     }
   }
-  module.addFunction(BuiltinSymbols.visit_globals, typeRef, [ nativeSizeType ],
+  module.addFunction(BuiltinSymbols.visit_globals,
+    NativeType.I32,  // cookie
+    NativeType.None, // => void
+    [ nativeSizeType ],
     exprs.length
       ? module.block(null, exprs)
       : module.nop()
@@ -4814,7 +4817,6 @@ export function compileVisitMembers(compiler: Compiler): void {
   var usizeType = program.options.usizeType;
   var nativeSizeType = usizeType.toNativeType();
   var nativeSizeSize = usizeType.byteSize;
-  var ftype = compiler.ensureFunctionType([ usizeType, Type.i32 ], Type.void); // ref, cookie
   var managedClasses = program.managedClasses;
   var visitInstance = assert(program.visitInstance);
   var blocks = new Array<RelooperBlockRef>();
@@ -4921,7 +4923,12 @@ export function compileVisitMembers(compiler: Compiler): void {
   );
   relooper.addBranchForSwitch(outer, blocks[blocks.length - 1], []); // default
   compiler.compileFunction(visitInstance);
-  module.addFunction(BuiltinSymbols.visit_members, ftype, [ nativeSizeType ], relooper.renderAndDispose(outer, 2));
+  module.addFunction(BuiltinSymbols.visit_members,
+    createType([ usizeType.toNativeType(), NativeType.I32 ]), // ref, cookie
+    NativeType.None, // => void
+    [ nativeSizeType ],
+    relooper.renderAndDispose(outer, 2)
+  );
 }
 
 function typeToRuntimeFlags(type: Type): TypeinfoFlags {

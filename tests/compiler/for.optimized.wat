@@ -1,13 +1,13 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00f\00o\00r\00.\00t\00s")
+ (data (i32.const 16) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00f\00o\00r\00.\00t\00s")
  (global $for/i (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $start:for (; 1 ;) (type $FUNCSIG$v)
+ (func $start:for (; 1 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -30,7 +30,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 5
    i32.const 0
    call $~lib/builtins/abort
@@ -65,7 +65,7 @@
   global.get $for/i
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 12
    i32.const 0
    call $~lib/builtins/abort
@@ -112,7 +112,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 19
    i32.const 0
    call $~lib/builtins/abort
@@ -155,10 +155,7 @@
    end
   end
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;)
   call $start:for
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )
