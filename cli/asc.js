@@ -736,8 +736,8 @@ exports.main = function main(argv, options, callback) {
         add("code-pushing");
 
         if (optimizeLevel >= 3) {
-          add("reorder-locals");
           add("simplify-locals-nostructure");
+          add("reorder-locals");
           add("vacuum");
         }
         add("simplify-globals-optimizing");

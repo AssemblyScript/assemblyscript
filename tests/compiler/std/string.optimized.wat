@@ -5993,7 +5993,7 @@
    local.set $2
    local.get $1
    call $~lib/string/String#get:length
-   local.tee $7
+   local.tee $8
    if
     local.get $5
     i32.eqz
@@ -6071,11 +6071,11 @@
     local.get $1
     local.get $4
     call $~lib/string/String#indexOf
-    local.tee $8
+    local.tee $7
     i32.const -1
     i32.xor
     if
-     local.get $8
+     local.get $7
      local.get $4
      i32.sub
      local.tee $6

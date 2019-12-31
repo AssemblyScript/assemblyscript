@@ -1480,7 +1480,6 @@
   call $~lib/string/String#concat
  )
  (func $~lib/symbol/_Symbol#toString (; 28 ;) (param $0 i32) (result i32)
-  (local $1 i32)
   i32.const 800
   block $break|0 (result i32)
    block $case11|0

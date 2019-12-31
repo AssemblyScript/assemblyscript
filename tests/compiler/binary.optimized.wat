@@ -195,7 +195,6 @@
   f32.mul
  )
  (func $~lib/math/NativeMathf.pow (; 2 ;) (param $0 f32) (result f32)
-  (local $1 i32)
   i32.const 1
   i32.const 0
   local.get $0
