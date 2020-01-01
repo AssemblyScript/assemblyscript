@@ -32,7 +32,9 @@ export declare function _BinaryenTypeInt64(): BinaryenType;
 export declare function _BinaryenTypeFloat32(): BinaryenType;
 export declare function _BinaryenTypeFloat64(): BinaryenType;
 export declare function _BinaryenTypeVec128(): BinaryenType;
+export declare function _BinaryenTypeFuncref(): BinaryenType;
 export declare function _BinaryenTypeAnyref(): BinaryenType;
+export declare function _BinaryenTypeNullref(): BinaryenType;
 export declare function _BinaryenTypeExnref(): BinaryenType;
 export declare function _BinaryenTypeUnreachable(): BinaryenType;
 export declare function _BinaryenTypeAuto(): BinaryenType;
@@ -95,6 +97,9 @@ export declare function _BinaryenMemoryInitId(): BinaryenExpressionId;
 export declare function _BinaryenDataDropId(): BinaryenExpressionId;
 export declare function _BinaryenMemoryCopyId(): BinaryenExpressionId;
 export declare function _BinaryenMemoryFillId(): BinaryenExpressionId;
+export declare function _BinaryenRefNullId(): BinaryenExpressionId;
+export declare function _BinaryenRefIsNullId(): BinaryenExpressionId;
+export declare function _BinaryenRefFuncId(): BinaryenExpressionId;
 export declare function _BinaryenTryId(): BinaryenExpressionId;
 export declare function _BinaryenThrowId(): BinaryenExpressionId;
 export declare function _BinaryenRethrowId(): BinaryenExpressionId;
@@ -468,7 +473,7 @@ export declare function _BinaryenStore(module: BinaryenModuleRef, bytes: u32, of
 export declare function _BinaryenConst(module: BinaryenModuleRef, value: usize): BinaryenExpressionRef;
 export declare function _BinaryenUnary(module: BinaryenModuleRef, op: BinaryenOp, value: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenBinary(module: BinaryenModuleRef, op: BinaryenOp, left: BinaryenExpressionRef, right: BinaryenExpressionRef): BinaryenExpressionRef;
-export declare function _BinaryenSelect(module: BinaryenModuleRef, condition: BinaryenExpressionRef, ifTrue: BinaryenExpressionRef, ifFalse: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenSelect(module: BinaryenModuleRef, condition: BinaryenExpressionRef, ifTrue: BinaryenExpressionRef, ifFalse: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 export declare function _BinaryenDrop(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenReturn(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenHost(module: BinaryenModuleRef, op: BinaryenOp, name: usize | 0, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
@@ -494,6 +499,10 @@ export declare function _BinaryenMemoryInit(module: BinaryenModuleRef, segment: 
 export declare function _BinaryenDataDrop(module: BinaryenModuleRef, segment: u32): BinaryenExpressionRef;
 export declare function _BinaryenMemoryCopy(module: BinaryenModuleRef, dest: BinaryenExpressionRef, source: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenMemoryFill(module: BinaryenModuleRef, dest: BinaryenExpressionRef, value: BinaryenExpressionRef, size: BinaryenExpressionRef): BinaryenExpressionRef;
+
+export declare function _BinaryenRefNull(module: BinaryenModuleRef): BinaryenExpressionRef;
+export declare function _BinaryenRefIsNull(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenRefFunc(module: BinaryenModuleRef, funcName: usize): BinaryenExpressionRef;
 
 export declare function _BinaryenTry(module: BinaryenModuleRef, body: BinaryenExpressionRef, catchBody: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenThrow(module: BinaryenModuleRef, event: usize, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
@@ -650,6 +659,10 @@ export declare function _BinaryenMemoryCopyGetSize(expr: BinaryenExpressionRef):
 export declare function _BinaryenMemoryFillGetDest(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenMemoryFillGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenMemoryFillGetSize(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+export declare function _BinaryenRefIsNullGetValue(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
+export declare function _BinaryenRefFuncGetFunc(expr: BinaryenExpressionRef): usize;
 
 export declare function _BinaryenTryGetBody(expr: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenTryGetCatchBody(expr: BinaryenExpressionRef): BinaryenExpressionRef;
