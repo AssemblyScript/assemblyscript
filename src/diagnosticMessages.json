@@ -120,6 +120,7 @@
   "The '{0}' operator cannot be applied to type '{1}'.": 2469,
   "In 'const' enum declarations member initializer must be constant expression.": 2474,
   "Export declaration conflicts with exported declaration of '{0}'.": 2484,
+  "'{0}' is referenced directly or indirectly in its own base expression.": 2506,
   "Object is possibly 'null'.": 2531,
   "Cannot assign to '{0}' because it is a constant or a read-only property.": 2540,
   "The target of an assignment must be a variable or a property access.": 2541,
