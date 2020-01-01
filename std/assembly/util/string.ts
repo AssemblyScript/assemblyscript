@@ -69,18 +69,12 @@ export const enum CharCode {
   z = 0x7A
 }
 
-// 9 * 8 = 72 bytes
+// 23 * 8 = 184 bytes
 // @ts-ignore: decorator
-@lazy
-const Powers10Hi: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288];
-// 32 * 8 = 256 bytes
-// @ts-ignore: decorator
-@lazy
-const Powers10Lo: f64[] = [
+@lazy const Powers10: f64[] = [
   1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
   1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
-  1e20, 1e21, 1e22, 1e23, 1e24, 1e25, 1e26, 1e27, 1e28, 1e29,
-  1e30, 1e31
+  1e20, 1e21, 1e22
 ];
 
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
@@ -600,15 +594,11 @@ function fixmul(a: u64, b: u32): u64 {
 }
 
 // @ts-ignore: decorator
+@inline
 function pow10(n: i32): f64 {
-  // @ts-ignore: type
-  const hi = Powers10Hi.dataStart as usize;
-  // @ts-ignore: type
-  const lo = Powers10Lo.dataStart as usize;
-  return (
-    load<f64>(hi + ((n >> 5) << alignof<f64>())) *
-    load<f64>(lo + ((n & 31) << alignof<f64>()))
-  );
+  // argument `n` should bounds in [0, 22] range
+  // @ts-ignore: cast
+  return load<f64>(Powers10.dataStart as usize + (n << alignof<f64>()));
 }
 
 // @ts-ignore: decorator
