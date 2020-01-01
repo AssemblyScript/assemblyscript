@@ -1,13 +1,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
 <script>
-require(
-  ["../index"],
-  function(sdk) {
-    console.log(sdk);
-    const { asc } = sdk;
-    asc.ready.then(() => {
-      console.log("ready");
-    });
-  }
-);
+require(["../index"], function(sdk) {
+  console.log(sdk);
+  sdk.asc.ready.then(() => console.log("ready"));
+});
 </script>
