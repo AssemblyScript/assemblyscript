@@ -1677,6 +1677,8 @@ interface INativeMath<T> extends IMath<T> {
   rem(x: T, y: T): T;
   /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32/64` and `sincos_c32/64` globals */
   sincos(x: T): void;
+  /** Returns 2 raised to the given power x. Equivalent to 2 ** x. */
+  exp2(x: T): T;
 }
 
 /** Double precision math imported from JavaScript. */
