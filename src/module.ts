@@ -531,6 +531,10 @@ export class Module {
     return binaryen._BinaryenConst(this.ref, out);
   }
 
+  ref_null(): ExpressionRef {
+    return binaryen._BinaryenRefNull(this.ref);
+  }
+
   // expressions
 
   unary(
@@ -943,6 +947,21 @@ export class Module {
     align: u32
   ): ExpressionRef {
     return binaryen._BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
+  }
+
+  // reference types
+
+  ref_is_null(
+    expr: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenRefIsNull(this.ref, expr);
+  }
+
+  ref_func(
+    name: string
+  ): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenRefFunc(this.ref, cStr);
   }
 
   // globals

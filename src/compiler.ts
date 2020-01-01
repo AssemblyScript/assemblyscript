@@ -7144,7 +7144,7 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = signatureReference.type.asNullable();
             return module.i32(0);
           }
-          // TODO: anyref context yields <usize>0
+          return module.ref_null();
         }
         this.currentType = options.usizeType;
         return options.isWasm64
@@ -9001,6 +9001,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(0);
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
+      case TypeKind.ANYREF: return module.ref_null();
     }
   }
 
@@ -9099,9 +9100,11 @@ export class Compiler extends DiagnosticEmitter {
         flow.freeTempLocal(temp);
         return ret;
       }
-      // case TypeKind.ANYREF: {
-      //   TODO: !ref.is_null
-      // }
+      case TypeKind.ANYREF: {
+        // TODO: non-null object might still be considered falseish
+        // i.e. a ref to Boolean(false), Number(0), String("") etc.
+        return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
+      }
       default: {
         assert(false);
         return module.i32(0);
