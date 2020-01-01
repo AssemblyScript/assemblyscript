@@ -591,6 +591,8 @@ declare namespace v128 {
   export function max<T>(a: v128, b: v128): v128;
   /** Computes the dot product of two lanes each, yielding lanes one size wider than the input. */
   export function dot<T = i16>(a: v128, b: v128): v128;
+  /** Computes the average of each lane. */
+  export function avgr<T = u8 | u16>(a: v128, b: v128): v128;
   /** Computes the absolute value of each lane. */
   export function abs<T = f32 | f64>(a: v128): v128;
   /** Computes the square root of each lane. */
@@ -647,6 +649,8 @@ declare namespace i8x16 {
   export function max_s(a: v128, b: v128): v128;
   /** Computes the unsigned maximum of each 8-bit integer lane. */
   export function max_u(a: v128, b: v128): v128;
+  /** Computes the unsigned average of each 8-bit integer lane. */
+  export function avgr_u(a: v128, b: v128): v128;
   /** Negates each 8-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 8-bit integer lane using signed saturation. */
@@ -717,6 +721,8 @@ declare namespace i16x8 {
   export function max_s(a: v128, b: v128): v128;
   /** Computes the unsigned maximum of each 16-bit integer lane. */
   export function max_u(a: v128, b: v128): v128;
+  /** Computes the unsigned average of each 16-bit integer lane. */
+  export function avgr_u(a: v128, b: v128): v128;
   /** Negates each 16-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 16-bit integer lane using signed saturation. */
@@ -1290,6 +1296,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   reverse(): this;
   /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
   join(separator?: string): string;
+  /** The set() method stores multiple values in the typed array, reading input values from a specified array. */
+  set<U extends ArrayBufferView>(source: U, offset?: i32): void
   /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
   toString(): string;
 }

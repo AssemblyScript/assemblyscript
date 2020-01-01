@@ -3,7 +3,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00d\00o\00.\00t\00s")
+ (data (i32.const 16) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00d\00o\00.\00t\00s")
  (global $do/n (mut i32) (i32.const 10))
  (global $do/m (mut i32) (i32.const 0))
  (global $do/o (mut i32) (i32.const 0))
@@ -26,7 +26,7 @@
   global.get $do/n
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 7
    i32.const 0
    call $~lib/builtins/abort
@@ -37,7 +37,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 8
    i32.const 0
    call $~lib/builtins/abort
@@ -59,7 +59,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 12
    i32.const 0
    call $~lib/builtins/abort
@@ -93,7 +93,7 @@
    global.get $do/n
    if
     i32.const 0
-    i32.const 24
+    i32.const 32
     i32.const 24
     i32.const 2
     call $~lib/builtins/abort
@@ -104,7 +104,7 @@
    i32.ne
    if
     i32.const 0
-    i32.const 24
+    i32.const 32
     i32.const 25
     i32.const 2
     call $~lib/builtins/abort
@@ -116,7 +116,7 @@
   global.get $do/n
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 27
    i32.const 0
    call $~lib/builtins/abort
@@ -127,7 +127,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 28
    i32.const 0
    call $~lib/builtins/abort
@@ -138,7 +138,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 29
    i32.const 0
    call $~lib/builtins/abort

@@ -4,9 +4,9 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 64) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 112) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
+ (data (i32.const 16) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 80) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 128) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
  (table $0 1 funcref)
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -60,8 +60,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 24
-   i32.const 80
+   i32.const 32
+   i32.const 96
    i32.const 93
    i32.const 41
    call $~lib/builtins/abort
@@ -72,8 +72,8 @@
   local.tee $0
   i32.eqz
   if
-   i32.const 128
-   i32.const 80
+   i32.const 144
+   i32.const 96
    i32.const 97
    i32.const 39
    call $~lib/builtins/abort
@@ -96,8 +96,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 24
-   i32.const 80
+   i32.const 32
+   i32.const 96
    i32.const 93
    i32.const 41
    call $~lib/builtins/abort

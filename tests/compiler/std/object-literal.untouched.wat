@@ -7,13 +7,13 @@
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00")
- (data (i32.const 48) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
+ (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00")
+ (data (i32.const 64) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 108))
+ (global $~lib/heap/__heap_base i32 (i32.const 124))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
@@ -113,7 +113,7 @@
   local.get $5
   i32.store
   local.get $6
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $6
   local.get $1
@@ -341,7 +341,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 7
    i32.const 2
    call $~lib/builtins/abort
@@ -349,12 +349,12 @@
   end
   local.get $0
   i32.load offset=4
-  i32.const 24
+  i32.const 32
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 8
    i32.const 2
    call $~lib/builtins/abort
@@ -374,7 +374,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 24
    i32.const 2
    call $~lib/builtins/abort
@@ -391,7 +391,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 64
+   i32.const 80
    i32.const 19
    i32.const 4
    call $~lib/builtins/abort
@@ -421,7 +421,7 @@
   i32.const 1
   i32.store
   local.get $0
-  i32.const 24
+  i32.const 32
   i32.store offset=4
   local.get $0
   call $std/object-literal/bar
