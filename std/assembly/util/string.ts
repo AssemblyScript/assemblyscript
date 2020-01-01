@@ -597,10 +597,10 @@ function fixmul(a: u64, b: u32): u64 {
   return (high << space | (low & 0xFFFFFFFF) >> revspace) + (low << space >> 31 & 1);
 }
 
+// argument `n` should bounds in [0, 22] range
 // @ts-ignore: decorator
 @inline
 function pow10(n: i32): f64 {
-  if (DEBUG) assert(n >= 0 && n <= 22);
   return load<f64>(powers10 + (n << alignof<f64>()));
 }
 
