@@ -2142,6 +2142,44 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(binaryen._BinaryenStoreGetValue(expr), data);
       break;
     }
+    case ExpressionId.Const: {
+      break;
+    }
+    case ExpressionId.Unary: {
+      visit(binaryen._BinaryenUnaryGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Binary: {
+      visit(binaryen._BinaryenBinaryGetLeft(expr), data);
+      visit(binaryen._BinaryenBinaryGetRight(expr), data);
+      break;
+    }
+    case ExpressionId.Select: {
+      visit(binaryen._BinaryenSelectGetIfTrue(expr), data);
+      visit(binaryen._BinaryenSelectGetIfFalse(expr), data);
+      visit(binaryen._BinaryenSelectGetCondition(expr), data);
+      break;
+    }
+    case ExpressionId.Drop: {
+      visit(binaryen._BinaryenDropGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Return: {
+      visit(binaryen._BinaryenReturnGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Host: {
+      for (let i = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
+        visit(binaryen._BinaryenHostGetOperand(expr, i), data);
+      }
+      break;
+    }
+    case ExpressionId.Nop: {
+      break;
+    }
+    case ExpressionId.Unreachable: {
+      break;
+    }
     case ExpressionId.AtomicRMW: {
       visit(binaryen._BinaryenAtomicRMWGetPtr(expr), data);
       visit(binaryen._BinaryenAtomicRMWGetValue(expr), data);
@@ -2216,6 +2254,23 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(binaryen._BinaryenMemoryFillGetSize(expr), data);
       break;
     }
+    case ExpressionId.Push: {
+      visit(binaryen._BinaryenPushGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Pop: {
+      break;
+    }
+    case ExpressionId.RefNull: {
+      break;
+    }
+    case ExpressionId.RefIsNull: {
+      visit(binaryen._BinaryenRefIsNullGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.RefFunc: {
+      break;
+    }
     case ExpressionId.Try: {
       visit(binaryen._BinaryenTryGetBody(expr), data);
       visit(binaryen._BinaryenTryGetCatchBody(expr), data);
@@ -2233,51 +2288,6 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
     }
     case ExpressionId.BrOnExn: {
       visit(binaryen._BinaryenBrOnExnGetExnref(expr), data);
-      break;
-    }
-    case ExpressionId.Push: {
-      visit(binaryen._BinaryenPushGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Pop: {
-      break;
-    }
-    case ExpressionId.Const: {
-      break;
-    }
-    case ExpressionId.Unary: {
-      visit(binaryen._BinaryenUnaryGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Binary: {
-      visit(binaryen._BinaryenBinaryGetLeft(expr), data);
-      visit(binaryen._BinaryenBinaryGetRight(expr), data);
-      break;
-    }
-    case ExpressionId.Select: {
-      visit(binaryen._BinaryenSelectGetIfTrue(expr), data);
-      visit(binaryen._BinaryenSelectGetIfFalse(expr), data);
-      visit(binaryen._BinaryenSelectGetCondition(expr), data);
-      break;
-    }
-    case ExpressionId.Drop: {
-      visit(binaryen._BinaryenDropGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Return: {
-      visit(binaryen._BinaryenReturnGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Host: {
-      for (let i = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
-        visit(binaryen._BinaryenHostGetOperand(expr, i), data);
-      }
-      break;
-    }
-    case ExpressionId.Nop: {
-      break;
-    }
-    case ExpressionId.Unreachable: {
       break;
     }
     default: assert(false);
