@@ -18,7 +18,7 @@
  (global $rt/instanceof/nullableCat (mut i32) (i32.const 0))
  (global $rt/instanceof/nullableBlackcat (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (export "__start" (func $start))
+ (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)

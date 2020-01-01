@@ -17,7 +17,7 @@
  (global $retain-release/TARGET (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (export "__start" (func $start))
+ (export "_start" (func $start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
  (export "receiveRef" (func $retain-release/receiveRef))

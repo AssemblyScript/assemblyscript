@@ -20,7 +20,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (export "__start" (func $start))
+ (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/string/String#get:length (; 1 ;) (param $0 i32) (result i32)
   local.get $0

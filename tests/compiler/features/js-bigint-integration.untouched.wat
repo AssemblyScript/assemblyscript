@@ -10,7 +10,7 @@
  (table $0 1 funcref)
  (global $features/js-bigint-integration/internalValue i64 (i64.const 9007199254740991))
  (global $~lib/started (mut i32) (i32.const 0))
- (export "__start" (func $start))
+ (export "_start" (func $start))
  (export "memory" (memory $0))
  (export "internalValue" (global $features/js-bigint-integration/internalValue))
  (export "getInternalValue" (func $features/js-bigint-integration/getInternalValue))

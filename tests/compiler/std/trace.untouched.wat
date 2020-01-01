@@ -13,7 +13,7 @@
  (data (i32.const 288) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l\00")
  (table $0 1 funcref)
  (global $~lib/started (mut i32) (i32.const 0))
- (export "__start" (func $start))
+ (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $start:std/trace (; 1 ;)
   i32.const 32

@@ -404,7 +404,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       startFunctionInstance.finalize(module, funcRef);
       if (!explicitStart) module.setStart(funcRef);
-      else module.addFunctionExport(startFunctionInstance.internalName, "__start");
+      else module.addFunctionExport(startFunctionInstance.internalName, "_start");
     }
 
     // compile runtime features
