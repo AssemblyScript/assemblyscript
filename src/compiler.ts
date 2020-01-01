@@ -7282,7 +7282,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field
-          return this.module.unreachable();
+          return module.unreachable();
         }
         let type = (<Global>target).type;
         assert(type != Type.void);
@@ -7290,7 +7290,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(<Global>target, contextualType, constraints);
         }
         this.currentType = type;
-        return this.module.global_get((<Global>target).internalName, type.toNativeType());
+        return module.global_get((<Global>target).internalName, type.toNativeType());
       }
       case ElementKind.ENUMVALUE: { // here: if referenced from within the same enum
         if (!target.is(CommonFlags.COMPILED)) {
@@ -7299,14 +7299,14 @@ export class Compiler extends DiagnosticEmitter {
             expression.range
           );
           this.currentType = Type.i32;
-          return this.module.unreachable();
+          return module.unreachable();
         }
         this.currentType = Type.i32;
         if ((<EnumValue>target).is(CommonFlags.INLINED)) {
           assert((<EnumValue>target).constantValueKind == ConstantValueKind.INTEGER);
-          return this.module.i32(i64_low((<EnumValue>target).constantIntegerValue));
+          return module.i32(i64_low((<EnumValue>target).constantIntegerValue));
         }
-        return this.module.global_get((<EnumValue>target).internalName, NativeType.I32);
+        return module.global_get((<EnumValue>target).internalName, NativeType.I32);
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
         let instance = this.resolver.resolveFunction(
@@ -7315,9 +7315,13 @@ export class Compiler extends DiagnosticEmitter {
           makeMap<string,Type>(flow.contextualTypeArguments)
         );
         if (!(instance && this.compileFunction(instance))) return module.unreachable();
+        if (contextualType.is(TypeFlags.HOST | TypeFlags.REFERENCE)) {
+          this.currentType = Type.anyref;
+          return module.ref_func(instance.internalName);
+        }
         let index = this.ensureFunctionTableEntry(instance);
         this.currentType = instance.signature.type;
-        return this.module.i32(index);
+        return module.i32(index);
       }
     }
     this.error(

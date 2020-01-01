@@ -42,3 +42,11 @@ assert(!nullGlobalInit);
   let nullLocalInit: anyref = null;
   assert(!nullLocalInit);
 }
+
+// can represent function references
+
+function someFunc(): void {}
+var funcGlobal: anyref = someFunc;
+{
+  let funcLocal: anyref = someFunc;
+}

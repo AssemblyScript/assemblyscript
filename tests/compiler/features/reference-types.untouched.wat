@@ -17,11 +17,15 @@
  (table $0 1 funcref)
  (global $features/reference-types/nullGlobal (mut anyref) (ref.null))
  (global $features/reference-types/nullGlobalInit (mut anyref) (ref.null))
+ (global $features/reference-types/funcGlobal (mut anyref) (ref.null))
  (export "memory" (memory $0))
  (export "external" (func $features/reference-types/external))
  (export "internal" (func $features/reference-types/internal))
  (start $start)
- (func $start:features/reference-types (; 5 ;)
+ (func $features/reference-types/someFunc (; 5 ;)
+  nop
+ )
+ (func $start:features/reference-types (; 6 ;)
   (local $0 anyref)
   (local $1 anyref)
   global.get $features/reference-types/someObject
@@ -132,8 +136,12 @@
    call $~lib/builtins/abort
    unreachable
   end
+  ref.func $features/reference-types/someFunc
+  global.set $features/reference-types/funcGlobal
+  ref.func $features/reference-types/someFunc
+  local.set $1
  )
- (func $features/reference-types/internal (; 6 ;) (param $0 anyref) (result anyref)
+ (func $features/reference-types/internal (; 7 ;) (param $0 anyref) (result anyref)
   (local $1 anyref)
   (local $2 anyref)
   (local $3 anyref)
@@ -148,7 +156,7 @@
   local.set $3
   local.get $3
  )
- (func $start (; 7 ;)
+ (func $start (; 8 ;)
   call $start:features/reference-types
  )
 )
