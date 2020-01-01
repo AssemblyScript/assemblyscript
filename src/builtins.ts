@@ -323,6 +323,7 @@ export namespace BuiltinSymbols {
   export const v128_min = "~lib/builtins/v128.min";
   export const v128_max = "~lib/builtins/v128.max";
   export const v128_dot = "~lib/builtins/v128.dot";
+  export const v128_avgr = "~lib/builtins/v128.avgr";
   export const v128_abs = "~lib/builtins/v128.abs";
   export const v128_sqrt = "~lib/builtins/v128.sqrt";
   export const v128_eq = "~lib/builtins/v128.eq";
@@ -357,6 +358,7 @@ export namespace BuiltinSymbols {
   export const i8x16_min_u = "~lib/builtins/i8x16.min_u";
   export const i8x16_max_s = "~lib/builtins/i8x16.max_s";
   export const i8x16_max_u = "~lib/builtins/i8x16.max_u";
+  export const i8x16_avgr_u = "~lib/builtins/i8x16.avgr_u";
   export const i8x16_neg = "~lib/builtins/i8x16.neg";
   export const i8x16_add_saturate_s = "~lib/builtins/i8x16.add_saturate_s";
   export const i8x16_add_saturate_u = "~lib/builtins/i8x16.add_saturate_u";
@@ -391,6 +393,7 @@ export namespace BuiltinSymbols {
   export const i16x8_min_u = "~lib/builtins/i16x8.min_u";
   export const i16x8_max_s = "~lib/builtins/i16x8.max_s";
   export const i16x8_max_u = "~lib/builtins/i16x8.max_u";
+  export const i16x8_avgr_u = "~lib/builtins/i16x8.avgr_u";
   export const i16x8_neg = "~lib/builtins/i16x8.neg";
   export const i16x8_add_saturate_s = "~lib/builtins/i16x8.add_saturate_s";
   export const i16x8_add_saturate_u = "~lib/builtins/i16x8.add_saturate_u";
@@ -850,7 +853,7 @@ export function compileCall(
         }
         offset = (<Field>field).memoryOffset;
       } else {
-        offset = classType.currentMemoryOffset;
+        offset = classType.nextMemoryOffset;
       }
       if (compiler.options.isWasm64) {
         // implicitly wrap if contextual type is a 32-bit integer
@@ -3377,6 +3380,30 @@ export function compileCall(
       );
       return module.unreachable();
     }
+    case BuiltinSymbols.v128_avgr: { // avgr<T!>(a: v128, b: v128) -> v128
+      if (
+        checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
+        checkTypeRequired(typeArguments, reportNode, compiler) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.v128;
+        return module.unreachable();
+      }
+      let type = typeArguments![0];
+      let arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+      if (!type.is(TypeFlags.REFERENCE)) {
+        switch (type.kind) {
+          case TypeKind.U8:  return module.binary(BinaryOp.AvgrU8x16, arg0, arg1);
+          case TypeKind.U16: return module.binary(BinaryOp.AvgrU16x8, arg0, arg1);
+        }
+      }
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        reportNode.typeArgumentsRange, "v128.avgr", type.toString()
+      );
+      return module.unreachable();
+    }
     case BuiltinSymbols.v128_eq: { // eq<T!>(a: v128, b: v128) -> v128
       if (
         checkFeatureEnabled(Feature.SIMD, reportNode, compiler) |
@@ -4516,6 +4543,7 @@ function tryDeferASM(
     case BuiltinSymbols.i8x16_min_u: return deferASM(BuiltinSymbols.v128_min, compiler, Type.u8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_max_s: return deferASM(BuiltinSymbols.v128_max, compiler, Type.i8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_max_u: return deferASM(BuiltinSymbols.v128_max, compiler, Type.u8, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i8x16_avgr_u: return deferASM(BuiltinSymbols.v128_avgr, compiler, Type.u8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_neg: return deferASM(BuiltinSymbols.v128_neg, compiler, Type.i8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_add_saturate_s: return deferASM(BuiltinSymbols.v128_add_saturate, compiler, Type.i8, operands, Type.v128, reportNode);
     case BuiltinSymbols.i8x16_add_saturate_u: return deferASM(BuiltinSymbols.v128_add_saturate, compiler, Type.u8, operands, Type.v128, reportNode);
@@ -4550,6 +4578,7 @@ function tryDeferASM(
     case BuiltinSymbols.i16x8_min_u: return deferASM(BuiltinSymbols.v128_min, compiler, Type.u16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_max_s: return deferASM(BuiltinSymbols.v128_max, compiler, Type.i16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_max_u: return deferASM(BuiltinSymbols.v128_max, compiler, Type.u16, operands, Type.v128, reportNode);
+    case BuiltinSymbols.i16x8_avgr_u: return deferASM(BuiltinSymbols.v128_avgr, compiler, Type.u16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_neg: return deferASM(BuiltinSymbols.v128_neg, compiler, Type.i16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_add_saturate_s: return deferASM(BuiltinSymbols.v128_add_saturate, compiler, Type.i16, operands, Type.v128, reportNode);
     case BuiltinSymbols.i16x8_add_saturate_u: return deferASM(BuiltinSymbols.v128_add_saturate, compiler, Type.u16, operands, Type.v128, reportNode);

@@ -397,7 +397,7 @@
    local.get $1
   else
    i32.const 16
-   i32.const 5
+   i32.const 4
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
   end
@@ -408,7 +408,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 4
+   i32.const 5
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $3
