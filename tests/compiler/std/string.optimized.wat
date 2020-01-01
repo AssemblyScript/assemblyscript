@@ -501,7 +501,6 @@
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
- (global $~lib/util/string/powers10 (mut i32) (i32.const 0))
  (global $~lib/util/string/__fixmulShift (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
@@ -4355,7 +4354,8 @@
     select
     if
      local.get $9
-     global.get $~lib/util/string/powers10
+     i32.const 2276
+     i32.load
      local.get $0
      i32.const 22
      i32.sub
@@ -4391,7 +4391,8 @@
      i32.gt_s
      if
       local.get $9
-      global.get $~lib/util/string/powers10
+      i32.const 2276
+      i32.load
       local.get $0
       i32.const 3
       i32.shl
@@ -4402,7 +4403,8 @@
       br $~lib/util/string/scientific|inlined.0
      end
      local.get $9
-     global.get $~lib/util/string/powers10
+     i32.const 2276
+     i32.load
      i32.const 0
      local.get $0
      i32.sub
@@ -9651,9 +9653,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2276
-  i32.load
-  global.set $~lib/util/string/powers10
   i32.const 1472
   call $~lib/util/string/strtod
   f64.const 0

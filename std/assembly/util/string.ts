@@ -1,6 +1,5 @@
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
-import { DEBUG } from "rt/common";
 
 // @ts-ignore
 @lazy const lowerTable127: u8[] = [
@@ -75,11 +74,8 @@ export const enum CharCode {
 @lazy const Powers10: f64[] = [
   1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
   1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
-  1e20, 1e21, 1e22,
+  1e20, 1e21, 1e22
 ];
-
-// @ts-ignore
-@lazy const powers10 = Powers10.dataStart as usize;
 
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
   var ptr1 = changetype<usize>(str1) + (index1 << 1);
@@ -597,11 +593,12 @@ function fixmul(a: u64, b: u32): u64 {
   return (high << space | (low & 0xFFFFFFFF) >> revspace) + (low << space >> 31 & 1);
 }
 
-// argument `n` should bounds in [0, 22] range
 // @ts-ignore: decorator
 @inline
 function pow10(n: i32): f64 {
-  return load<f64>(powers10 + (n << alignof<f64>()));
+  // argument `n` should bounds in [0, 22] range
+  // @ts-ignore: cast
+  return load<f64>(Powers10.dataStart as usize + (n << alignof<f64>()));
 }
 
 // @ts-ignore: decorator

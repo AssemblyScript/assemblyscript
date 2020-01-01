@@ -492,7 +492,6 @@
  (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~lib/number/I64.MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~lib/util/string/Powers10 i32 (i32.const 2272))
- (global $~lib/util/string/powers10 (mut i32) (i32.const 0))
  (global $~lib/util/string/__fixmulShift (mut i64) (i64.const 0))
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f64.MAX_VALUE f64 (f64.const 1797693134862315708145274e284))
@@ -6796,7 +6795,8 @@
     i32.const 22
     i32.sub
     local.set $12
-    global.get $~lib/util/string/powers10
+    global.get $~lib/util/string/Powers10
+    i32.load offset=4
     local.get $12
     i32.const 3
     i32.shl
@@ -6833,7 +6833,8 @@
      local.get $2
      local.get $16
      local.set $11
-     global.get $~lib/util/string/powers10
+     global.get $~lib/util/string/Powers10
+     i32.load offset=4
      local.get $11
      i32.const 3
      i32.shl
@@ -6847,7 +6848,8 @@
     local.get $16
     i32.sub
     local.set $13
-    global.get $~lib/util/string/powers10
+    global.get $~lib/util/string/Powers10
+    i32.load offset=4
     local.get $13
     i32.const 3
     i32.shl
@@ -13585,9 +13587,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2272
-  i32.load offset=4
-  global.set $~lib/util/string/powers10
   i32.const 1472
   call $~lib/string/parseFloat
   f64.const 0
