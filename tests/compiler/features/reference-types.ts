@@ -25,3 +25,28 @@ import * as console from "bindings/console";
 console.log(someObject);
 console.log(someKey);
 console.log(Reflect.get(someObject, someKey));
+
+// can represent and recognize 'null'
+
+var nullGlobal: anyref;
+assert(!nullGlobal);
+nullGlobal = null;
+assert(!nullGlobal);
+var nullGlobalInit: anyref = null;
+assert(!nullGlobalInit);
+{
+  let nullLocal: anyref;
+  assert(!nullLocal);
+  nullLocal = null;
+  assert(!nullLocal);
+  let nullLocalInit: anyref = null;
+  assert(!nullLocalInit);
+}
+
+// can represent function references
+
+function someFunc(): void {}
+var funcGlobal: anyref = someFunc;
+{
+  let funcLocal: anyref = someFunc;
+}

@@ -750,7 +750,6 @@ function testTypedArraySet<T extends ArrayBufferView>(): void {
   a.set(setSource7, 7);
 
   if (a instanceof Uint8ClampedArray) {
-    trace("index 7", 1, a[7]);
     valuesEqual<T>(a, [100, 101, 102, 103, 255, 255, 255, 0, 0, 0]);
   } else {
     // explicitly case the input values to valueof<T>
