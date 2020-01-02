@@ -156,17 +156,15 @@ export enum LocalFlags {
   WRITTENTO = 1 << 5,
   /** Local is retained. */
   RETAINED = 1 << 6,
-  /** Local is returned. */
-  RETURNED = 1 << 7,
 
   /** Local is conditionally read from. */
-  CONDITIONALLY_READFROM = 1 << 8,
+  CONDITIONALLY_READFROM = 1 << 7,
   /** Local is conditionally written to. */
-  CONDITIONALLY_WRITTENTO = 1 << 9,
+  CONDITIONALLY_WRITTENTO = 1 << 8,
   /** Local must be conditionally retained. */
-  CONDITIONALLY_RETAINED = 1 << 10,
+  CONDITIONALLY_RETAINED = 1 << 9,
   /** Local is conditionally returned. */
-  CONDITIONALLY_RETURNED = 1 << 11,
+  CONDITIONALLY_RETURNED = 1 << 10,
 
   /** Any categorical flag. */
   ANY_CATEGORICAL = CONSTANT
@@ -175,8 +173,7 @@ export enum LocalFlags {
                   | NONNULL
                   | READFROM
                   | WRITTENTO
-                  | RETAINED
-                  | RETURNED,
+                  | RETAINED,
 
   /** Any conditional flag. */
   ANY_CONDITIONAL = RETAINED
@@ -191,11 +188,7 @@ export enum LocalFlags {
 
   /** Any retained flag. */
   ANY_RETAINED = RETAINED
-               | CONDITIONALLY_RETAINED,
-
-  /** Any returned flag. */
-  ANY_RETURNED = RETURNED
-               | CONDITIONALLY_RETURNED
+               | CONDITIONALLY_RETAINED
 }
 export namespace LocalFlags {
   export function join(left: LocalFlags, right: LocalFlags): LocalFlags {
@@ -585,7 +578,6 @@ export class Flow {
       if (flags & LocalFlags.RETAINED)  this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETAINED);
       if (flags & LocalFlags.READFROM)  this.setLocalFlag(i, LocalFlags.CONDITIONALLY_READFROM);
       if (flags & LocalFlags.WRITTENTO) this.setLocalFlag(i, LocalFlags.CONDITIONALLY_WRITTENTO);
-      if (flags & LocalFlags.RETURNED)  this.setLocalFlag(i, LocalFlags.CONDITIONALLY_RETURNED);
     }
   }
 

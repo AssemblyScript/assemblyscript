@@ -13,13 +13,21 @@
  (import "Reflect" "get" (func $~lib/bindings/Reflect/get (param anyref anyref) (result anyref)))
  (import "reference-types" "external" (func $features/reference-types/external (param anyref) (result anyref)))
  (memory $0 1)
- (data (i32.const 8) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s\00")
+ (data (i32.const 16) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s\00")
  (table $0 1 funcref)
+ (global $features/reference-types/nullGlobal (mut anyref) (ref.null))
+ (global $features/reference-types/nullGlobalInit (mut anyref) (ref.null))
+ (global $features/reference-types/funcGlobal (mut anyref) (ref.null))
  (export "memory" (memory $0))
  (export "external" (func $features/reference-types/external))
  (export "internal" (func $features/reference-types/internal))
  (start $start)
- (func $start:features/reference-types (; 5 ;)
+ (func $features/reference-types/someFunc (; 5 ;)
+  nop
+ )
+ (func $start:features/reference-types (; 6 ;)
+  (local $0 anyref)
+  (local $1 anyref)
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -28,7 +36,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 19
    i32.const 0
    call $~lib/builtins/abort
@@ -42,8 +50,98 @@
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/get
   call $~lib/bindings/console/log
+  global.get $features/reference-types/nullGlobal
+  ref.is_null
+  i32.eqz
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 32
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  ref.null
+  global.set $features/reference-types/nullGlobal
+  global.get $features/reference-types/nullGlobal
+  ref.is_null
+  i32.eqz
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 34
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  ref.null
+  global.set $features/reference-types/nullGlobalInit
+  global.get $features/reference-types/nullGlobalInit
+  ref.is_null
+  i32.eqz
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 36
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  ref.is_null
+  i32.eqz
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 39
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  ref.null
+  local.set $0
+  local.get $0
+  ref.is_null
+  i32.eqz
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 41
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  ref.null
+  local.set $1
+  local.get $1
+  ref.is_null
+  i32.eqz
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 43
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  ref.func $features/reference-types/someFunc
+  global.set $features/reference-types/funcGlobal
+  ref.func $features/reference-types/someFunc
+  local.set $1
  )
- (func $features/reference-types/internal (; 6 ;) (param $0 anyref) (result anyref)
+ (func $features/reference-types/internal (; 7 ;) (param $0 anyref) (result anyref)
   (local $1 anyref)
   (local $2 anyref)
   (local $3 anyref)
@@ -58,7 +156,7 @@
   local.set $3
   local.get $3
  )
- (func $start (; 7 ;)
+ (func $start (; 8 ;)
   call $start:features/reference-types
  )
 )

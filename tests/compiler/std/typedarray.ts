@@ -693,3 +693,118 @@ testArrayWrap<Int64Array, i64>();
 testArrayWrap<Uint64Array, u64>();
 testArrayWrap<Float32Array, f32>();
 testArrayWrap<Float64Array, f64>();
+
+function valuesEqual<T extends ArrayBufferView>(target: T, compare: valueof<T>[]): void {
+  let len = target.length;
+  assert(len == compare.length);
+  for (let i = 0; i < len; i++) {
+    let vala = target[i];
+    let valb = unchecked(compare[i]);
+    if (vala != valb) {
+      trace(nameof<T>(), 3, i, <f64>vala, <f64>valb);
+      assert(false);
+    }
+  }
+}
+
+let setSource1: i32[] = [1, 2, 3];
+let setSource2: f32[] = [4, 5, 6];
+let setSource3: f64[] = [Infinity, NaN, -Infinity];
+let setSource7: i8[] = [-110, -111, -112];
+
+function testTypedArraySet<T extends ArrayBufferView>(): void {
+  let setSource4 = new Int64Array(3);
+  setSource4[0] = 7;
+  setSource4[1] = 8;
+  setSource4[2] = 9;
+
+  let setSource5 = new Uint8Array(4);
+  setSource5[0] = 100;
+  setSource5[1] = 101;
+  setSource5[2] = 102;
+  setSource5[3] = 103;
+
+  let setSource6 = new Int16Array(3);
+  setSource6[0] = 1000;
+  setSource6[1] = 1001;
+  setSource6[2] = 1002;
+
+  let a = instantiate<T>(10);
+
+  a.set(setSource1);
+  valuesEqual<T>(a, [1, 2, 3, 0, 0, 0, 0, 0, 0, 0]);
+
+  a.set(setSource2, 3);
+  valuesEqual<T>(a, [1, 2, 3, 4, 5, 6, 0, 0, 0, 0]);
+
+  a.set(setSource4, 6);
+  valuesEqual<T>(a, [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]);
+
+  if (isInteger<valueof<T>>()) {
+    a.set(setSource3, 2);
+    valuesEqual<T>(a, [1, 2, 0, 0, 0, 6, 7, 8, 9, 0]);
+  }
+
+  a.set(setSource5, 0);
+  a.set(setSource6, 4);
+  a.set(setSource7, 7);
+
+  if (a instanceof Uint8ClampedArray) {
+    valuesEqual<T>(a, [100, 101, 102, 103, 255, 255, 255, 0, 0, 0]);
+  } else {
+    // explicitly case the input values to valueof<T>
+    valuesEqual<T>(a, [100, 101, 102, 103, <valueof<T>>1000, <valueof<T>>1001, <valueof<T>>1002, <valueof<T>>-110, <valueof<T>>-111, <valueof<T>>-112]);
+  }
+
+}
+
+testTypedArraySet<Int8Array>();
+testTypedArraySet<Uint8Array>();
+testTypedArraySet<Uint8ClampedArray>();
+testTypedArraySet<Int16Array>();
+testTypedArraySet<Uint16Array>();
+testTypedArraySet<Int32Array>();
+testTypedArraySet<Uint32Array>();
+testTypedArraySet<Int64Array>();
+testTypedArraySet<Uint64Array>();
+testTypedArraySet<Float32Array>();
+testTypedArraySet<Float64Array>();
+
+{
+  let targetClampedArray = new Uint8ClampedArray(10);
+  let a = new Float32Array(3);
+  a[0] = 400;
+  a[1] = NaN;
+  a[2] = Infinity;
+
+  let b = new Int64Array(4);
+  b[0] = -10;
+  b[1] = 100;
+  b[2] = 10;
+  b[3] = 300;
+
+  let c = new Int32Array(2);
+  c[0] = 300;
+  c[1] = -1;
+
+  targetClampedArray.set(a, 1);
+  targetClampedArray.set(b, 4);
+  targetClampedArray.set(c, 8);
+  valuesEqual<Uint8ClampedArray>(targetClampedArray, [0, 255, 0, 0, 0, 100, 10, 255, 255, 0]);
+
+  let d = new Uint32Array(4);
+  d[0] = 1;
+  d[1] = 300;
+  d[2] = 100;
+  d[3] = 0xFFFFFFFF;
+
+  let e = new Int16Array(4);
+  e[0] = -10;
+  e[1] = 100;
+  e[2] = 10;
+  e[3] = 300;
+
+  targetClampedArray.set(d, 0);
+  targetClampedArray.set(e, 5);
+  valuesEqual<Uint8ClampedArray>(targetClampedArray, [1, 255, 100, 255, 0, 0, 100, 10, 255, 0]);
+}
