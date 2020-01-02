@@ -166,7 +166,6 @@ import { idof } from "./builtins";
   // TODO: implement full locale comparison with locales and Collator options
   localeCompare(other: String): i32 {
     if (other === this) return 0; // compare pointers
-    if (other === null) other = changetype<String>("null");
     var len: isize = this.length;
     var otherLen: isize = other.length;
     if (otherLen != len) return select(1, -1, len > otherLen);

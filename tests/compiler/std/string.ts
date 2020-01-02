@@ -81,7 +81,6 @@ assert(str.lastIndexOf("hi", 0) == 0);
 assert("".localeCompare("") == 0);
 assert("a".localeCompare("") == 1);
 assert("".localeCompare("a") == -1);
-assert("null".localeCompare(changetype<string>(null)) == 0);
 assert("null".localeCompare("null") == 0);
 assert("abc".localeCompare("abd") == -1);
 assert("abd".localeCompare("abc") == 1);
