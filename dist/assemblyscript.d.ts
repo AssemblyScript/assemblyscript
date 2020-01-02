@@ -1720,14 +1720,16 @@ declare module "assemblyscript/src/module" {
     export type Index = number;
     export enum NativeType {
         None = 0,
+        Unreachable = 1,
         I32 = 2,
         I64 = 3,
         F32 = 4,
         F64 = 5,
         V128 = 6,
-        Anyref = 7,
-        Exnref = 8,
-        Unreachable = 1,
+        Funcref = 7,
+        Anyref = 8,
+        Nullref = 9,
+        Exnref = 10,
         Auto = -1
     }
     export enum FeatureFlags {
@@ -1782,35 +1784,38 @@ declare module "assemblyscript/src/module" {
         DataDrop = 35,
         MemoryCopy = 36,
         MemoryFill = 37,
-        Try = 40,
-        Throw = 41,
-        Rethrow = 42,
-        BrOnExn = 43,
         Push = 38,
-        Pop = 39
+        Pop = 39,
+        RefNull = 40,
+        RefIsNull = 41,
+        RefFunc = 42,
+        Try = 43,
+        Throw = 44,
+        Rethrow = 45,
+        BrOnExn = 46
     }
     export enum UnaryOp {
         ClzI32 = 0,
-        CtzI32 = 2,
-        PopcntI32 = 4,
-        NegF32 = 6,
-        AbsF32 = 8,
-        CeilF32 = 10,
-        FloorF32 = 12,
-        TruncF32 = 14,
-        NearestF32 = 16,
-        SqrtF32 = 18,
-        EqzI32 = 20,
         ClzI64 = 1,
+        CtzI32 = 2,
         CtzI64 = 3,
+        PopcntI32 = 4,
         PopcntI64 = 5,
+        NegF32 = 6,
         NegF64 = 7,
+        AbsF32 = 8,
         AbsF64 = 9,
+        CeilF32 = 10,
         CeilF64 = 11,
+        FloorF32 = 12,
         FloorF64 = 13,
+        TruncF32 = 14,
         TruncF64 = 15,
+        NearestF32 = 16,
         NearestF64 = 17,
+        SqrtF32 = 18,
         SqrtF64 = 19,
+        EqzI32 = 20,
         EqzI64 = 21,
         ExtendI32 = 22,
         ExtendU32 = 23,
@@ -1884,12 +1889,12 @@ declare module "assemblyscript/src/module" {
         ConvertI64x2ToF64x2 = 91,
         ConvertU64x2ToF64x2 = 92,
         WidenLowI8x16ToI16x8 = 93,
-        WidenLowU8x16ToU16x8 = 95,
         WidenHighI8x16ToI16x8 = 94,
+        WidenLowU8x16ToU16x8 = 95,
         WidenHighU8x16ToU16x8 = 96,
         WidenLowI16x8ToI32x4 = 97,
-        WidenLowU16x8ToU32x4 = 99,
         WidenHighI16x8ToI32x4 = 98,
+        WidenLowU16x8ToU32x4 = 99,
         WidenHighU16x8ToU32x4 = 100
     }
     export enum BinaryOp {
@@ -1973,43 +1978,43 @@ declare module "assemblyscript/src/module" {
         NeI8x16 = 77,
         LtI8x16 = 78,
         LtU8x16 = 79,
-        LeI8x16 = 82,
-        LeU8x16 = 83,
         GtI8x16 = 80,
         GtU8x16 = 81,
+        LeI8x16 = 82,
+        LeU8x16 = 83,
         GeI8x16 = 84,
         GeU8x16 = 85,
         EqI16x8 = 86,
         NeI16x8 = 87,
         LtI16x8 = 88,
         LtU16x8 = 89,
-        LeI16x8 = 92,
-        LeU16x8 = 93,
         GtI16x8 = 90,
         GtU16x8 = 91,
+        LeI16x8 = 92,
+        LeU16x8 = 93,
         GeI16x8 = 94,
         GeU16x8 = 95,
         EqI32x4 = 96,
         NeI32x4 = 97,
         LtI32x4 = 98,
         LtU32x4 = 99,
-        LeI32x4 = 102,
-        LeU32x4 = 103,
         GtI32x4 = 100,
         GtU32x4 = 101,
+        LeI32x4 = 102,
+        LeU32x4 = 103,
         GeI32x4 = 104,
         GeU32x4 = 105,
         EqF32x4 = 106,
         NeF32x4 = 107,
         LtF32x4 = 108,
-        LeF32x4 = 110,
         GtF32x4 = 109,
+        LeF32x4 = 110,
         GeF32x4 = 111,
         EqF64x2 = 112,
         NeF64x2 = 113,
         LtF64x2 = 114,
-        LeF64x2 = 116,
         GtF64x2 = 115,
+        LeF64x2 = 116,
         GeF64x2 = 117,
         AndV128 = 118,
         OrV128 = 119,
@@ -2146,6 +2151,7 @@ declare module "assemblyscript/src/module" {
         f32(value: number): ExpressionRef;
         f64(value: number): ExpressionRef;
         v128(bytes: Uint8Array): ExpressionRef;
+        ref_null(): ExpressionRef;
         unary(op: UnaryOp, expr: ExpressionRef): ExpressionRef;
         binary(op: BinaryOp, left: ExpressionRef, right: ExpressionRef): ExpressionRef;
         host(op: HostOp, name?: string | null, operands?: ExpressionRef[] | null): ExpressionRef;
@@ -2170,7 +2176,7 @@ declare module "assemblyscript/src/module" {
         if(condition: ExpressionRef, ifTrue: ExpressionRef, ifFalse?: ExpressionRef): ExpressionRef;
         nop(): ExpressionRef;
         return(expression?: ExpressionRef): ExpressionRef;
-        select(ifTrue: ExpressionRef, ifFalse: ExpressionRef, condition: ExpressionRef): ExpressionRef;
+        select(ifTrue: ExpressionRef, ifFalse: ExpressionRef, condition: ExpressionRef, type?: NativeType): ExpressionRef;
         switch(names: string[], defaultName: string | null, condition: ExpressionRef, value?: ExpressionRef): ExpressionRef;
         call(target: string, operands: ExpressionRef[] | null, returnType: NativeType, isReturn?: boolean): ExpressionRef;
         return_call(target: string, operands: ExpressionRef[] | null, returnType: NativeType): ExpressionRef;
@@ -2191,6 +2197,8 @@ declare module "assemblyscript/src/module" {
         simd_ternary(op: SIMDTernaryOp, a: ExpressionRef, b: ExpressionRef, c: ExpressionRef): ExpressionRef;
         simd_shift(op: SIMDShiftOp, vec: ExpressionRef, shift: ExpressionRef): ExpressionRef;
         simd_load(op: SIMDLoadOp, ptr: ExpressionRef, offset: number, align: number): ExpressionRef;
+        ref_is_null(expr: ExpressionRef): ExpressionRef;
+        ref_func(name: string): ExpressionRef;
         addGlobal(name: string, type: NativeType, mutable: boolean, initializer: ExpressionRef): GlobalRef;
         getGlobal(name: string): GlobalRef;
         removeGlobal(name: string): void;
@@ -2372,12 +2380,10 @@ declare module "assemblyscript/src/types" {
         F64 = 12,
         /** A 128-bit vector. */
         V128 = 13,
-        /** A host reference. */
+        /** Any host reference. */
         ANYREF = 14,
-        /** An internal exception reference. */
-        EXNREF = 15,
         /** No return type. */
-        VOID = 16
+        VOID = 15
     }
     /** Indicates capabilities of a type. */
     export const enum TypeFlags {
@@ -2403,7 +2409,9 @@ declare module "assemblyscript/src/types" {
         /** Is a nullable type. */
         NULLABLE = 512,
         /** Is a vector type. */
-        VECTOR = 1024
+        VECTOR = 1024,
+        /** Is a host type. */
+        HOST = 2048
     }
     /** Represents a resolved type. */
     export class Type {
@@ -2493,10 +2501,8 @@ declare module "assemblyscript/src/types" {
         static readonly f64: Type;
         /** A 128-bit vector. */
         static readonly v128: Type;
-        /** A host reference. */
+        /** Any host reference. */
         static readonly anyref: Type;
-        /** An internal exception reference. */
-        static readonly exnref: Type;
         /** No return type. */
         static readonly void: Type;
         /** Alias of i32 indicating type inference of locals and globals with just an initializer. */
