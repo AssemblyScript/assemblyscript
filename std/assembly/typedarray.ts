@@ -1461,9 +1461,9 @@ function SORT<TArray extends ArrayBufferView, T>(
       store<T>(base, b, sizeof<T>()); // arr[1] = b
       store<T>(base, a); // arr[0] = a
     }
-    return;
+  } else {
+    SORT_IMPL<T>(base, len, comparator);
   }
-  SORT_IMPL<T>(base, len, comparator);
 }
 
 // @ts-ignore: decorator
