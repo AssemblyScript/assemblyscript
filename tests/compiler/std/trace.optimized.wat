@@ -12,7 +12,7 @@
  (data (i32.const 256) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00i\00n\00t")
  (data (i32.const 288) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
  (global $~lib/started (mut i32) (i32.const 0))
- (export "__start" (func $start))
+ (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $start:std/trace (; 1 ;)
   i32.const 32

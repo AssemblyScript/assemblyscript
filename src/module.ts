@@ -19,18 +19,22 @@ export type Index = u32;
 
 // The following constants must be updated by running scripts/update-constants.
 // This is necessary because the functions are not yet callable with Binaryen
-// compiled to WebAssembly, requiring awaiting the ready promise first.
+// compiled to WebAssembly, requiring awaiting the ready promise first. Note
+// that this essentially fixes the compiler to specific versions of Binaryen
+// sometimes, because these constants can differ between Binaryen versions.
 
 export enum NativeType {
   None = 0 /* _BinaryenTypeNone */,
+  Unreachable = 1 /* _BinaryenTypeUnreachable */,
   I32 = 2 /* _BinaryenTypeInt32 */,
   I64 = 3 /* _BinaryenTypeInt64 */,
   F32 = 4 /* _BinaryenTypeFloat32 */,
   F64 = 5 /* _BinaryenTypeFloat64 */,
   V128 = 6 /* _BinaryenTypeVec128 */,
-  Anyref = 7 /* _BinaryenTypeAnyref */,
-  Exnref = 8 /* _BinaryenTypeExnref */,
-  Unreachable = 1 /* _BinaryenTypeUnreachable */,
+  Funcref = 7 /* _BinaryenTypeFuncref */,
+  Anyref = 8 /* _BinaryenTypeAnyref */,
+  Nullref = 9 /* _BinaryenTypeNullref */,
+  Exnref = 10 /* _BinaryenTypeExnref */,
   Auto = -1 /* _BinaryenTypeAuto */
 }
 
@@ -87,36 +91,39 @@ export enum ExpressionId {
   DataDrop = 35 /* _BinaryenDataDropId */,
   MemoryCopy = 36 /* _BinaryenMemoryCopyId */,
   MemoryFill = 37 /* _BinaryenMemoryFillId */,
-  Try = 40 /* _BinaryenTryId */,
-  Throw = 41 /* _BinaryenThrowId */,
-  Rethrow = 42 /* _BinaryenRethrowId */,
-  BrOnExn = 43 /* _BinaryenBrOnExnId */,
   Push = 38 /* _BinaryenPushId */,
-  Pop = 39 /* _BinaryenPopId */
+  Pop = 39 /* _BinaryenPopId */,
+  RefNull = 40 /* _BinaryenRefNullId */,
+  RefIsNull = 41 /* _BinaryenRefIsNullId */,
+  RefFunc = 42 /* _BinaryenRefFuncId */,
+  Try = 43 /* _BinaryenTryId */,
+  Throw = 44 /* _BinaryenThrowId */,
+  Rethrow = 45 /* _BinaryenRethrowId */,
+  BrOnExn = 46 /* _BinaryenBrOnExnId */
 }
 
 export enum UnaryOp {
   ClzI32 = 0 /* _BinaryenClzInt32 */,
-  CtzI32 = 2 /* _BinaryenCtzInt32 */,
-  PopcntI32 = 4 /* _BinaryenPopcntInt32 */,
-  NegF32 = 6 /* _BinaryenNegFloat32 */,
-  AbsF32 = 8 /* _BinaryenAbsFloat32 */,
-  CeilF32 = 10 /* _BinaryenCeilFloat32 */,
-  FloorF32 = 12 /* _BinaryenFloorFloat32 */,
-  TruncF32 = 14 /* _BinaryenTruncFloat32 */,
-  NearestF32 = 16 /* _BinaryenNearestFloat32 */,
-  SqrtF32 = 18 /* _BinaryenSqrtFloat32 */,
-  EqzI32 = 20 /* _BinaryenEqZInt32 */,
   ClzI64 = 1 /* _BinaryenClzInt64 */,
+  CtzI32 = 2 /* _BinaryenCtzInt32 */,
   CtzI64 = 3 /* _BinaryenCtzInt64 */,
+  PopcntI32 = 4 /* _BinaryenPopcntInt32 */,
   PopcntI64 = 5 /* _BinaryenPopcntInt64 */,
+  NegF32 = 6 /* _BinaryenNegFloat32 */,
   NegF64 = 7 /* _BinaryenNegFloat64 */,
+  AbsF32 = 8 /* _BinaryenAbsFloat32 */,
   AbsF64 = 9 /* _BinaryenAbsFloat64 */,
+  CeilF32 = 10 /* _BinaryenCeilFloat32 */,
   CeilF64 = 11 /* _BinaryenCeilFloat64 */,
+  FloorF32 = 12 /* _BinaryenFloorFloat32 */,
   FloorF64 = 13 /* _BinaryenFloorFloat64 */,
+  TruncF32 = 14 /* _BinaryenTruncFloat32 */,
   TruncF64 = 15 /* _BinaryenTruncFloat64 */,
+  NearestF32 = 16 /* _BinaryenNearestFloat32 */,
   NearestF64 = 17 /* _BinaryenNearestFloat64 */,
+  SqrtF32 = 18 /* _BinaryenSqrtFloat32 */,
   SqrtF64 = 19 /* _BinaryenSqrtFloat64 */,
+  EqzI32 = 20 /* _BinaryenEqZInt32 */,
   EqzI64 = 21 /* _BinaryenEqZInt64 */,
   ExtendI32 = 22 /* _BinaryenExtendSInt32 */,
   ExtendU32 = 23 /* _BinaryenExtendUInt32 */,
@@ -196,12 +203,12 @@ export enum UnaryOp {
   ConvertI64x2ToF64x2 = 91 /* _BinaryenConvertSVecI64x2ToVecF64x2 */,
   ConvertU64x2ToF64x2 = 92 /* _BinaryenConvertUVecI64x2ToVecF64x2 */,
   WidenLowI8x16ToI16x8 = 93 /* _BinaryenWidenLowSVecI8x16ToVecI16x8 */,
-  WidenLowU8x16ToU16x8 = 95 /* _BinaryenWidenLowUVecI8x16ToVecI16x8 */,
   WidenHighI8x16ToI16x8 = 94 /* _BinaryenWidenHighSVecI8x16ToVecI16x8 */,
+  WidenLowU8x16ToU16x8 = 95 /* _BinaryenWidenLowUVecI8x16ToVecI16x8 */,
   WidenHighU8x16ToU16x8 = 96 /* _BinaryenWidenHighUVecI8x16ToVecI16x8 */,
   WidenLowI16x8ToI32x4 = 97 /* _BinaryenWidenLowSVecI16x8ToVecI32x4 */,
-  WidenLowU16x8ToU32x4 = 99 /* _BinaryenWidenLowUVecI16x8ToVecI32x4 */,
   WidenHighI16x8ToI32x4 = 98 /* _BinaryenWidenHighSVecI16x8ToVecI32x4 */,
+  WidenLowU16x8ToU32x4 = 99 /* _BinaryenWidenLowUVecI16x8ToVecI32x4 */,
   WidenHighU16x8ToU32x4 = 100 /* _BinaryenWidenHighUVecI16x8ToVecI32x4 */
 }
 
@@ -288,43 +295,43 @@ export enum BinaryOp {
   NeI8x16 = 77 /* _BinaryenNeVecI8x16 */,
   LtI8x16 = 78 /* _BinaryenLtSVecI8x16 */,
   LtU8x16 = 79 /* _BinaryenLtUVecI8x16 */,
-  LeI8x16 = 82 /* _BinaryenLeSVecI8x16 */,
-  LeU8x16 = 83 /* _BinaryenLeUVecI8x16 */,
   GtI8x16 = 80 /* _BinaryenGtSVecI8x16 */,
   GtU8x16 = 81 /* _BinaryenGtUVecI8x16 */,
+  LeI8x16 = 82 /* _BinaryenLeSVecI8x16 */,
+  LeU8x16 = 83 /* _BinaryenLeUVecI8x16 */,
   GeI8x16 = 84 /* _BinaryenGeSVecI8x16 */,
   GeU8x16 = 85 /* _BinaryenGeUVecI8x16 */,
   EqI16x8 = 86 /* _BinaryenEqVecI16x8 */,
   NeI16x8 = 87 /* _BinaryenNeVecI16x8 */,
   LtI16x8 = 88 /* _BinaryenLtSVecI16x8 */,
   LtU16x8 = 89 /* _BinaryenLtUVecI16x8 */,
-  LeI16x8 = 92 /* _BinaryenLeSVecI16x8 */,
-  LeU16x8 = 93 /* _BinaryenLeUVecI16x8 */,
   GtI16x8 = 90 /* _BinaryenGtSVecI16x8 */,
   GtU16x8 = 91 /* _BinaryenGtUVecI16x8 */,
+  LeI16x8 = 92 /* _BinaryenLeSVecI16x8 */,
+  LeU16x8 = 93 /* _BinaryenLeUVecI16x8 */,
   GeI16x8 = 94 /* _BinaryenGeSVecI16x8 */,
   GeU16x8 = 95 /* _BinaryenGeUVecI16x8 */,
   EqI32x4 = 96 /* _BinaryenEqVecI32x4 */,
   NeI32x4 = 97 /* _BinaryenNeVecI32x4 */,
   LtI32x4 = 98 /* _BinaryenLtSVecI32x4 */,
   LtU32x4 = 99 /* _BinaryenLtUVecI32x4 */,
-  LeI32x4 = 102 /* _BinaryenLeSVecI32x4 */,
-  LeU32x4 = 103 /* _BinaryenLeUVecI32x4 */,
   GtI32x4 = 100 /* _BinaryenGtSVecI32x4 */,
   GtU32x4 = 101 /* _BinaryenGtUVecI32x4 */,
+  LeI32x4 = 102 /* _BinaryenLeSVecI32x4 */,
+  LeU32x4 = 103 /* _BinaryenLeUVecI32x4 */,
   GeI32x4 = 104 /* _BinaryenGeSVecI32x4 */,
   GeU32x4 = 105 /* _BinaryenGeUVecI32x4 */,
   EqF32x4 = 106 /* _BinaryenEqVecF32x4 */,
   NeF32x4 = 107 /* _BinaryenNeVecF32x4 */,
   LtF32x4 = 108 /* _BinaryenLtVecF32x4 */,
-  LeF32x4 = 110 /* _BinaryenLeVecF32x4 */,
   GtF32x4 = 109 /* _BinaryenGtVecF32x4 */,
+  LeF32x4 = 110 /* _BinaryenLeVecF32x4 */,
   GeF32x4 = 111 /* _BinaryenGeVecF32x4 */,
   EqF64x2 = 112 /* _BinaryenEqVecF64x2 */,
   NeF64x2 = 113 /* _BinaryenNeVecF64x2 */,
   LtF64x2 = 114 /* _BinaryenLtVecF64x2 */,
-  LeF64x2 = 116 /* _BinaryenLeVecF64x2 */,
   GtF64x2 = 115 /* _BinaryenGtVecF64x2 */,
+  LeF64x2 = 116 /* _BinaryenLeVecF64x2 */,
   GeF64x2 = 117 /* _BinaryenGeVecF64x2 */,
   AndV128 = 118 /* _BinaryenAndVec128 */,
   OrV128 = 119 /* _BinaryenOrVec128 */,
@@ -522,6 +529,10 @@ export class Module {
     for (let i = 0; i < 16; ++i) binaryen.__i32_store8(out + i, bytes[i]);
     binaryen._BinaryenLiteralVec128(out, out);
     return binaryen._BinaryenConst(this.ref, out);
+  }
+
+  ref_null(): ExpressionRef {
+    return binaryen._BinaryenRefNull(this.ref);
   }
 
   // expressions
@@ -734,9 +745,14 @@ export class Module {
   select(
     ifTrue: ExpressionRef,
     ifFalse: ExpressionRef,
-    condition: ExpressionRef
+    condition: ExpressionRef,
+    type: NativeType = NativeType.Auto
   ): ExpressionRef {
-    return binaryen._BinaryenSelect(this.ref, condition, ifTrue, ifFalse);
+    if (type == NativeType.Auto) {
+      type = binaryen._BinaryenExpressionGetType(ifTrue);
+      assert(type == binaryen._BinaryenExpressionGetType(ifFalse));
+    }
+    return binaryen._BinaryenSelect(this.ref, condition, ifTrue, ifFalse, type);
   }
 
   switch(
@@ -931,6 +947,21 @@ export class Module {
     align: u32
   ): ExpressionRef {
     return binaryen._BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
+  }
+
+  // reference types
+
+  ref_is_null(
+    expr: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenRefIsNull(this.ref, expr);
+  }
+
+  ref_func(
+    name: string
+  ): ExpressionRef {
+    var cStr = this.allocStringCached(name);
+    return binaryen._BinaryenRefFunc(this.ref, cStr);
   }
 
   // globals
@@ -2111,6 +2142,44 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(binaryen._BinaryenStoreGetValue(expr), data);
       break;
     }
+    case ExpressionId.Const: {
+      break;
+    }
+    case ExpressionId.Unary: {
+      visit(binaryen._BinaryenUnaryGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Binary: {
+      visit(binaryen._BinaryenBinaryGetLeft(expr), data);
+      visit(binaryen._BinaryenBinaryGetRight(expr), data);
+      break;
+    }
+    case ExpressionId.Select: {
+      visit(binaryen._BinaryenSelectGetIfTrue(expr), data);
+      visit(binaryen._BinaryenSelectGetIfFalse(expr), data);
+      visit(binaryen._BinaryenSelectGetCondition(expr), data);
+      break;
+    }
+    case ExpressionId.Drop: {
+      visit(binaryen._BinaryenDropGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Return: {
+      visit(binaryen._BinaryenReturnGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Host: {
+      for (let i = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
+        visit(binaryen._BinaryenHostGetOperand(expr, i), data);
+      }
+      break;
+    }
+    case ExpressionId.Nop: {
+      break;
+    }
+    case ExpressionId.Unreachable: {
+      break;
+    }
     case ExpressionId.AtomicRMW: {
       visit(binaryen._BinaryenAtomicRMWGetPtr(expr), data);
       visit(binaryen._BinaryenAtomicRMWGetValue(expr), data);
@@ -2185,6 +2254,23 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(binaryen._BinaryenMemoryFillGetSize(expr), data);
       break;
     }
+    case ExpressionId.Push: {
+      visit(binaryen._BinaryenPushGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Pop: {
+      break;
+    }
+    case ExpressionId.RefNull: {
+      break;
+    }
+    case ExpressionId.RefIsNull: {
+      visit(binaryen._BinaryenRefIsNullGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.RefFunc: {
+      break;
+    }
     case ExpressionId.Try: {
       visit(binaryen._BinaryenTryGetBody(expr), data);
       visit(binaryen._BinaryenTryGetCatchBody(expr), data);
@@ -2202,51 +2288,6 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
     }
     case ExpressionId.BrOnExn: {
       visit(binaryen._BinaryenBrOnExnGetExnref(expr), data);
-      break;
-    }
-    case ExpressionId.Push: {
-      visit(binaryen._BinaryenPushGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Pop: {
-      break;
-    }
-    case ExpressionId.Const: {
-      break;
-    }
-    case ExpressionId.Unary: {
-      visit(binaryen._BinaryenUnaryGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Binary: {
-      visit(binaryen._BinaryenBinaryGetLeft(expr), data);
-      visit(binaryen._BinaryenBinaryGetRight(expr), data);
-      break;
-    }
-    case ExpressionId.Select: {
-      visit(binaryen._BinaryenSelectGetIfTrue(expr), data);
-      visit(binaryen._BinaryenSelectGetIfFalse(expr), data);
-      visit(binaryen._BinaryenSelectGetCondition(expr), data);
-      break;
-    }
-    case ExpressionId.Drop: {
-      visit(binaryen._BinaryenDropGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Return: {
-      visit(binaryen._BinaryenReturnGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Host: {
-      for (let i = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
-        visit(binaryen._BinaryenHostGetOperand(expr, i), data);
-      }
-      break;
-    }
-    case ExpressionId.Nop: {
-      break;
-    }
-    case ExpressionId.Unreachable: {
       break;
     }
     default: assert(false);

@@ -242,7 +242,7 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~lib/started (mut i32) (i32.const 0))
- (export "__start" (func $start))
+ (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 6 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -4690,7 +4690,7 @@
   if
    i32.const 0
    i32.const 4080
-   i32.const 1368
+   i32.const 1392
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -6149,7 +6149,7 @@
   if
    i32.const 4912
    i32.const 4080
-   i32.const 1375
+   i32.const 1399
    i32.const 24
    call $~lib/builtins/abort
    unreachable

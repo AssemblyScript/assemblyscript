@@ -21,7 +21,7 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "90.0.0-nightly.20191231",
+    "binaryen": "90.0.0-nightly.20200101",
     "long": "^4.0.0",
     "source-map-support": "^0.5.16",
     "ts-node": "^6.2.0"
@@ -48,9 +48,10 @@
     "asinit": "bin/asinit"
   },
   "scripts": {
-    "build": "npm run build:bundle && npm run build:dts",
+    "build": "npm run build:bundle && npm run build:dts && npm run build:sdk",
     "build:bundle": "webpack --mode production --display-modules",
     "build:dts": "node scripts/build-dts && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index-release",
+    "build:sdk": "node scripts/build-sdk",
     "clean": "node scripts/clean",
     "check": "npm run check:config && npm run check:compiler && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",

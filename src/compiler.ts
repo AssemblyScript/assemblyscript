@@ -404,7 +404,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       startFunctionInstance.finalize(module, funcRef);
       if (!explicitStart) module.setStart(funcRef);
-      else module.addFunctionExport(startFunctionInstance.internalName, "__start");
+      else module.addFunctionExport(startFunctionInstance.internalName, "_start");
     }
 
     // compile runtime features
@@ -7144,7 +7144,7 @@ export class Compiler extends DiagnosticEmitter {
             this.currentType = signatureReference.type.asNullable();
             return module.i32(0);
           }
-          // TODO: anyref context yields <usize>0
+          return module.ref_null();
         }
         this.currentType = options.usizeType;
         return options.isWasm64
@@ -7282,7 +7282,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) { // reports; not yet compiled if a static field
-          return this.module.unreachable();
+          return module.unreachable();
         }
         let type = (<Global>target).type;
         assert(type != Type.void);
@@ -7290,7 +7290,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileInlineConstant(<Global>target, contextualType, constraints);
         }
         this.currentType = type;
-        return this.module.global_get((<Global>target).internalName, type.toNativeType());
+        return module.global_get((<Global>target).internalName, type.toNativeType());
       }
       case ElementKind.ENUMVALUE: { // here: if referenced from within the same enum
         if (!target.is(CommonFlags.COMPILED)) {
@@ -7299,14 +7299,14 @@ export class Compiler extends DiagnosticEmitter {
             expression.range
           );
           this.currentType = Type.i32;
-          return this.module.unreachable();
+          return module.unreachable();
         }
         this.currentType = Type.i32;
         if ((<EnumValue>target).is(CommonFlags.INLINED)) {
           assert((<EnumValue>target).constantValueKind == ConstantValueKind.INTEGER);
-          return this.module.i32(i64_low((<EnumValue>target).constantIntegerValue));
+          return module.i32(i64_low((<EnumValue>target).constantIntegerValue));
         }
-        return this.module.global_get((<EnumValue>target).internalName, NativeType.I32);
+        return module.global_get((<EnumValue>target).internalName, NativeType.I32);
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
         let instance = this.resolver.resolveFunction(
@@ -7315,9 +7315,13 @@ export class Compiler extends DiagnosticEmitter {
           makeMap<string,Type>(flow.contextualTypeArguments)
         );
         if (!(instance && this.compileFunction(instance))) return module.unreachable();
+        if (contextualType.is(TypeFlags.HOST | TypeFlags.REFERENCE)) {
+          this.currentType = Type.anyref;
+          return module.ref_func(instance.internalName);
+        }
         let index = this.ensureFunctionTableEntry(instance);
         this.currentType = instance.signature.type;
-        return this.module.i32(index);
+        return module.i32(index);
       }
     }
     this.error(
@@ -9001,6 +9005,7 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F32: return module.f32(0);
       case TypeKind.F64: return module.f64(0);
       case TypeKind.V128: return module.v128(v128_zero);
+      case TypeKind.ANYREF: return module.ref_null();
     }
   }
 
@@ -9099,9 +9104,11 @@ export class Compiler extends DiagnosticEmitter {
         flow.freeTempLocal(temp);
         return ret;
       }
-      // case TypeKind.ANYREF: {
-      //   TODO: !ref.is_null
-      // }
+      case TypeKind.ANYREF: {
+        // TODO: non-null object might still be considered falseish
+        // i.e. a ref to Boolean(false), Number(0), String("") etc.
+        return module.unary(UnaryOp.EqzI32, module.ref_is_null(expr));
+      }
       default: {
         assert(false);
         return module.i32(0);

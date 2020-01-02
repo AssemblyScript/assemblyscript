@@ -60,10 +60,8 @@ export const enum TypeKind {
 
   // references
 
-  /** A host reference. */
+  /** Any host reference. */
   ANYREF,
-  /** An internal exception reference. */
-  EXNREF,
 
   // other
 
@@ -95,7 +93,9 @@ export const enum TypeFlags {
   /** Is a nullable type. */
   NULLABLE = 1 << 9,
   /** Is a vector type. */
-  VECTOR = 1 << 10
+  VECTOR = 1 << 10,
+  /** Is a host type. */
+  HOST = 1 << 11
 }
 
 const v128_zero = new Uint8Array(16);
@@ -362,7 +362,6 @@ export class Type {
       case TypeKind.F64: return NativeType.F64;
       case TypeKind.V128: return NativeType.V128;
       case TypeKind.ANYREF: return NativeType.Anyref;
-      case TypeKind.EXNREF: return NativeType.Exnref;
       case TypeKind.VOID: return NativeType.None;
     }
   }
@@ -494,13 +493,9 @@ export class Type {
     TypeFlags.VALUE, 128
   );
 
-  /** A host reference. */
+  /** Any host reference. */
   static readonly anyref: Type = new Type(TypeKind.ANYREF,
-    TypeFlags.REFERENCE, 0
-  );
-
-  /** An internal exception reference. */
-  static readonly exnref: Type = new Type(TypeKind.EXNREF,
+    TypeFlags.HOST       |
     TypeFlags.REFERENCE, 0
   );
 
