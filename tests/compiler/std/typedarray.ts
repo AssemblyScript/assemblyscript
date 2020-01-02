@@ -808,3 +808,18 @@ testTypedArraySet<Float64Array>();
   targetClampedArray.set(e, 5);
   valuesEqual<Uint8ClampedArray>(targetClampedArray, [1, 255, 100, 255, 0, 0, 100, 10, 255, 0]);
 }
+
+{
+  let arr2 = new Int32Array(2);
+  arr2[0] = 2;
+  arr2[1] = 1;
+  arr2.sort();
+  assert(arr2[0] == 1 && arr2[1] == 2);
+
+  let arr3 = new Int32Array(3);
+  arr3[0] = 3;
+  arr3[1] = 2;
+  arr3[2] = 1;
+  arr3.sort();
+  assert(arr3[0] == 1 && arr3[1] == 2 && arr3[2] == 3);
+}
