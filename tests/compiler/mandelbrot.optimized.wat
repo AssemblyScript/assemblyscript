@@ -1,17 +1,16 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$dd (func (param f64) (result f64)))
- (type $FUNCSIG$v (func))
+ (type $f64_=>_f64 (func (param f64) (result f64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
- (func $~lib/math/NativeMath.log (; 0 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log (; 0 ;) (param $0 f64) (result f64)
   (local $1 i32)
   (local $2 i64)
   (local $3 f64)
   (local $4 f64)
-  (local $5 i32)
-  (local $6 f64)
+  (local $5 f64)
+  (local $6 i32)
   local.get $0
   i64.reinterpret_f64
   local.tee $2
@@ -53,7 +52,7 @@
     return
    end
    i32.const -54
-   local.set $5
+   local.set $6
    local.get $0
    f64.const 18014398509481984
    f64.mul
@@ -112,8 +111,8 @@
   local.tee $4
   local.get $4
   f64.mul
-  local.tee $6
-  local.get $6
+  local.tee $5
+  local.get $5
   f64.mul
   local.set $0
   local.get $4
@@ -123,7 +122,7 @@
   local.get $3
   f64.mul
   local.tee $4
-  local.get $6
+  local.get $5
   f64.const 0.6666666666666735
   local.get $0
   f64.const 0.2857142874366239
@@ -152,12 +151,12 @@
   f64.add
   f64.add
   f64.mul
+  local.get $6
   local.get $1
   i32.const 20
   i32.shr_s
   i32.const 1023
   i32.sub
-  local.get $5
   i32.add
   f64.convert_i32_s
   local.tee $0
@@ -173,14 +172,14 @@
   f64.mul
   f64.add
  )
- (func $~lib/math/NativeMath.log2 (; 1 ;) (type $FUNCSIG$dd) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (; 1 ;) (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i64)
   (local $4 f64)
   (local $5 f64)
-  (local $6 i32)
-  (local $7 f64)
+  (local $6 f64)
+  (local $7 i32)
   local.get $0
   i64.reinterpret_f64
   local.tee $3
@@ -222,7 +221,7 @@
     return
    end
    i32.const -54
-   local.set $6
+   local.set $7
    local.get $0
    f64.const 18014398509481984
    f64.mul
@@ -298,7 +297,7 @@
   i64.const -4294967296
   i64.and
   f64.reinterpret_i64
-  local.tee $7
+  local.tee $6
   f64.sub
   local.get $1
   f64.sub
@@ -335,23 +334,23 @@
   f64.mul
   f64.add
   local.set $0
+  local.get $7
   local.get $2
   i32.const 20
   i32.shr_u
   i32.const 1023
   i32.sub
-  local.get $6
   i32.add
   f64.convert_i32_s
   local.tee $4
-  local.get $7
+  local.get $6
   f64.const 1.4426950407214463
   f64.mul
   local.tee $5
   f64.add
   local.set $1
   local.get $0
-  local.get $7
+  local.get $6
   f64.add
   f64.const 1.6751713164886512e-10
   f64.mul
@@ -368,12 +367,12 @@
   local.get $1
   f64.add
  )
- (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (type $FUNCSIG$viiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 i32)
-  (local $7 i32)
-  (local $8 f64)
+  (local $7 f64)
+  (local $8 i32)
   (local $9 i32)
   (local $10 f64)
   (local $11 f64)
@@ -432,12 +431,11 @@
   select
   local.set $0
   loop $loop|0
-   block $break|0
-    local.get $7
-    local.get $1
-    i32.ge_u
-    br_if $break|0
-    local.get $7
+   local.get $8
+   local.get $1
+   i32.lt_u
+   if
+    local.get $8
     f64.convert_i32_u
     local.get $10
     f64.mul
@@ -459,7 +457,7 @@
       local.get $5
       local.get $5
       f64.mul
-      local.tee $8
+      local.tee $7
       f64.add
       f64.const 4
       f64.le
@@ -474,7 +472,7 @@
       f64.add
       local.set $5
       local.get $15
-      local.get $8
+      local.get $7
       f64.sub
       local.get $12
       f64.add
@@ -493,8 +491,7 @@
     loop $continue|2
      local.get $6
      local.get $0
-     i32.ge_u
-     i32.eqz
+     i32.lt_u
      if
       local.get $4
       local.get $4
@@ -523,10 +520,10 @@
     end
     i32.const 2047
     local.set $9
-    local.get $7
+    local.get $2
+    local.get $8
     i32.const 1
     i32.shl
-    local.get $2
     i32.add
     local.get $4
     local.get $4
@@ -535,7 +532,7 @@
     local.get $5
     f64.mul
     f64.add
-    local.tee $8
+    local.tee $7
     f64.const 1
     f64.gt
     if (result i32)
@@ -545,7 +542,7 @@
      i32.add
      f64.convert_i32_u
      f64.const 0.5
-     local.get $8
+     local.get $7
      call $~lib/math/NativeMath.log
      f64.mul
      call $~lib/math/NativeMath.log2
@@ -562,15 +559,12 @@
      i32.const 2047
     end
     i32.store16
-    local.get $7
+    local.get $8
     i32.const 1
     i32.add
-    local.set $7
+    local.set $8
     br $loop|0
    end
   end
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

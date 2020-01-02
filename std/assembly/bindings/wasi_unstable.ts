@@ -1,4 +1,5 @@
-// see: https://wasi.dev
+// Phase: wasi_unstable / wasi_snapshot_preview0
+// See: https://github.com/WebAssembly/WASI/tree/master/phases/old/snapshot_0/witx
 
 /* tslint:disable:max-line-length */
 

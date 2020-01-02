@@ -15,9 +15,8 @@ import {
   Index,
   getFunctionName,
   getFunctionBody,
-  getFunctionParamCount,
-  getFunctionParamType,
-  getFunctionResultType,
+  getFunctionParams,
+  getFunctionResults,
   getExpressionId,
   getExpressionType,
   getBlockName,
@@ -54,7 +53,8 @@ import {
   getDropValue,
   getReturnValue,
   getHostOp,
-  getHostOperand
+  getHostOperand,
+  expandType
 } from "./module";
 
 // TODO :-)
@@ -83,15 +83,27 @@ export class Decompiler {
     this.push("function ");
     this.push(name);
     this.push("(");
-     for (let i: Index = 0, k: Index = getFunctionParamCount(func); i < k; ++i) {
+    var params = expandType(getFunctionParams(func));
+    for (let i = 0, k = params.length; i < k; ++i) {
       if (i > 0) this.push(", ");
       this.push("$");
       this.push(i.toString(10));
       this.push(": ");
-      this.push(nativeTypeToType(getFunctionParamType(func, i)));
+      this.push(nativeTypeToType(params[i]));
     }
     this.push("): ");
-    this.push(nativeTypeToType(getFunctionResultType(func)));
+    var results = expandType(getFunctionResults(func));
+    switch (results.length) {
+      case 0: {
+        this.push("void");
+        break;
+      }
+      default: assert(false); // TODO: multi-value
+      case 1: {
+        this.push(nativeTypeToType(results[0]));
+        break;
+      }
+    }
     this.push(" ");
     if (getExpressionId(body) != ExpressionId.Block) {
       this.push("{\n");

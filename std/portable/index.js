@@ -290,6 +290,11 @@ Object.defineProperties(globalScope["JSMath"], {
       this.sincos_sin = Math.sin(x);
       this.sincos_cos = Math.cos(x);
     }
+  },
+  exp2: {
+    value: function exp2(x) {
+      return Math.pow(2, x);
+    }
   }
 });
 

@@ -16,7 +16,7 @@ interface ASUtil {
   table?: WebAssembly.Table;
 
   /** Explicit start function, if requested. */
-  __start(): void;
+  _start(): void;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
   __allocString(str: string): number;
   /** Reads (copies) the value of a string from the module's memory. */

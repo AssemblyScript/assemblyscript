@@ -1,18 +1,17 @@
 (module
- (type $FUNCSIG$v (func))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00-\00b\00l\00o\00c\00k\00l\00o\00c\00a\00l\00s\00.\00t\00s\00")
+ (data (i32.const 16) ".\00\00\00\01\00\00\00\01\00\00\00.\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00-\00b\00l\00o\00c\00k\00l\00o\00c\00a\00l\00s\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $inlining-blocklocals/b (mut i32) (i32.const 2))
  (global $inlining-blocklocals/theCall_a (mut i32) (i32.const 0))
  (global $inlining-blocklocals/theCall_b (mut i32) (i32.const 0))
  (global $inlining-blocklocals/theCall_c (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $inlining-blocklocals/test (; 1 ;) (type $FUNCSIG$v)
+ (func $inlining-blocklocals/test (; 1 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -50,7 +49,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 18
    i32.const 2
    call $~lib/builtins/abort
@@ -62,7 +61,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 19
    i32.const 2
    call $~lib/builtins/abort
@@ -74,7 +73,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 20
    i32.const 2
    call $~lib/builtins/abort
@@ -86,20 +85,17 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 21
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start:inlining-blocklocals (; 2 ;) (type $FUNCSIG$v)
+ (func $start:inlining-blocklocals (; 2 ;)
   call $inlining-blocklocals/test
  )
- (func $start (; 3 ;) (type $FUNCSIG$v)
+ (func $start (; 3 ;)
   call $start:inlining-blocklocals
- )
- (func $null (; 4 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

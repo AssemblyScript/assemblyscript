@@ -187,11 +187,9 @@ export class Set<T> {
     for (let i = 0; i < size; ++i) {
       let entry = changetype<SetEntry<T>>(start + <usize>i * ENTRY_SIZE<T>());
       if (!(entry.taggedNext & EMPTY)) {
-        values.push(entry.key);
-        ++length;
+        values[length++] = entry.key;
       }
     }
-    values.length = length;
     return values;
   }
 

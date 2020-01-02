@@ -1,13 +1,12 @@
 (module
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "testInherit" (func $continue/testInherit))
- (func $continue/testInherit (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $continue/testInherit (; 0 ;) (param $0 i32)
   (local $1 i32)
-  block $break|0
-   loop $loop|0
+  loop $loop|0
+   block $break|0
     local.get $1
     i32.const 10
     i32.ge_s
@@ -27,10 +26,6 @@
     local.set $1
     br $loop|0
    end
-   unreachable
   end
- )
- (func $null (; 1 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )
