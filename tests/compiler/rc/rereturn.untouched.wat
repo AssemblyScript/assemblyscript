@@ -31,6 +31,7 @@
  (export "__retain" (func $~lib/rt/pure/__retain))
  (export "__release" (func $~lib/rt/pure/__release))
  (export "__collect" (func $~lib/rt/pure/__collect))
+ (export "__reset" (func $~lib/rt/pure/__reset))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
@@ -3233,7 +3234,10 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $rc/rereturn/Ref#constructor (; 27 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__reset (; 27 ;)
+  nop
+ )
+ (func $rc/rereturn/Ref#constructor (; 28 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -3245,21 +3249,21 @@
   end
   local.get $0
  )
- (func $rc/rereturn/getRef (; 28 ;) (result i32)
+ (func $rc/rereturn/getRef (; 29 ;) (result i32)
   i32.const 0
   call $rc/rereturn/Ref#constructor
  )
- (func $rc/rereturn/rereturnRef (; 29 ;) (result i32)
+ (func $rc/rereturn/rereturnRef (; 30 ;) (result i32)
   call $rc/rereturn/getRef
  )
- (func $start:rc/rereturn (; 30 ;)
+ (func $start:rc/rereturn (; 31 ;)
   call $rc/rereturn/rereturnRef
   call $~lib/rt/pure/__release
  )
- (func $start (; 31 ;)
+ (func $start (; 32 ;)
   call $start:rc/rereturn
  )
- (func $~lib/rt/pure/__visit (; 32 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 33 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3389,7 +3393,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 33 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 34 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4
