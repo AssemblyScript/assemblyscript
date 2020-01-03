@@ -33,12 +33,12 @@ function test(file) {
   const alloc = exports["__alloc"];
   var overflow = false;
   try {
-    alloc(COMMON_MAX + 1); // unreachable
+    alloc(COMMON_MAX + 1, 0); // unreachable
     overflow = true;
   } catch (e) {}
   if (overflow) throw Error("allocation can overflow COMMON_MAX + 1");
   try {
-    alloc(0xffffffff); // unreachable
+    alloc(0xffffffff, 0); // unreachable
     overflow = true;
   } catch (e) {}
   if (overflow) throw Error("allocation can overflow 0xffffffff");

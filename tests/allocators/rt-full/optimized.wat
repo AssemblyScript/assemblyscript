@@ -3,26 +3,23 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 80) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 128) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 192) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s")
- (data (i32.const 240) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00N\00o\00t\00 \00i\00m\00p\00l\00e\00m\00e\00n\00t\00e\00d")
- (data (i32.const 288) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00~\00l\00i\00b\00/\00m\00e\00m\00o\00r\00y\00.\00t\00s")
- (data (i32.const 336) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
+ (data (i32.const 240) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 336))
+ (global $~lib/rt/__rtti_base i32 (i32.const 240))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
@@ -30,11 +27,6 @@
  (export "__collect" (func $~lib/rt/pure/__collect))
  (export "__reset" (func $~lib/rt/pure/__reset))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
- (export "memory.copy" (func $~lib/memory/memory.copy))
- (export "memory.init" (func $~lib/memory/memory.init))
- (export "memory.drop" (func $~lib/memory/memory.drop))
- (export "memory.repeat" (func $~lib/memory/memory.repeat))
- (export "memory.compare" (func $~lib/memory/memory.compare))
  (export "__free" (func $~lib/rt/tlsf/__free))
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -436,12 +428,12 @@
    if
     unreachable
    end
-   i32.const 368
+   i32.const 272
    local.set $2
-   i32.const 368
+   i32.const 272
    i32.const 0
    i32.store
-   i32.const 1936
+   i32.const 1840
    i32.const 0
    i32.store
    i32.const 0
@@ -454,7 +446,7 @@
      local.get $0
      i32.const 2
      i32.shl
-     i32.const 368
+     i32.const 272
      i32.add
      i32.const 0
      i32.store offset=4
@@ -472,7 +464,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 368
+       i32.const 272
        i32.add
        i32.const 0
        i32.store offset=96
@@ -490,13 +482,13 @@
      br $loop|0
     end
    end
-   i32.const 368
-   i32.const 1952
+   i32.const 272
+   i32.const 1856
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 368
+   i32.const 272
    global.set $~lib/rt/tlsf/ROOT
   end
   local.get $2
@@ -1048,7 +1040,7 @@
  (func $~lib/rt/pure/__retain (; 17 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
-  i32.const 364
+  i32.const 268
   i32.gt_u
   if
    local.get $0
@@ -1065,7 +1057,7 @@
  )
  (func $~lib/rt/__typeinfo (; 18 ;) (param $0 i32) (result i32)
   local.get $0
-  i32.const 336
+  i32.const 240
   i32.load
   i32.gt_u
   if
@@ -1079,7 +1071,7 @@
   local.get $0
   i32.const 3
   i32.shl
-  i32.const 340
+  i32.const 244
   i32.add
   i32.load
  )
@@ -1389,7 +1381,7 @@
  )
  (func $~lib/rt/pure/__release (; 24 ;) (param $0 i32)
   local.get $0
-  i32.const 364
+  i32.const 268
   i32.gt_u
   if
    local.get $0
@@ -1401,175 +1393,9 @@
  (func $~lib/rt/pure/__reset (; 25 ;)
   nop
  )
- (func $~lib/memory/memory.init (; 26 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
-  i32.const 256
-  i32.const 304
-  i32.const 35
-  i32.const 4
-  call $~lib/builtins/abort
-  unreachable
- )
- (func $~lib/memory/memory.drop (; 27 ;) (param $0 i32)
-  i32.const 256
-  i32.const 304
-  i32.const 42
-  i32.const 4
-  call $~lib/builtins/abort
-  unreachable
- )
- (func $~lib/memory/memory.repeat (; 28 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
-  (local $4 i32)
-  local.get $2
-  local.get $3
-  i32.mul
-  local.set $3
-  loop $continue|0
-   local.get $4
-   local.get $3
-   i32.lt_u
-   if
-    local.get $0
-    local.get $4
-    i32.add
-    local.get $1
-    local.get $2
-    call $~lib/memory/memory.copy
-    local.get $2
-    local.get $4
-    i32.add
-    local.set $4
-    br $continue|0
-   end
-  end
- )
- (func $~lib/memory/memory.compare (; 29 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  block $~lib/util/memory/memcmp|inlined.0 (result i32)
-   i32.const 0
-   local.get $0
-   local.get $1
-   i32.eq
-   br_if $~lib/util/memory/memcmp|inlined.0
-   drop
-   local.get $0
-   i32.const 7
-   i32.and
-   local.get $1
-   i32.const 7
-   i32.and
-   i32.eq
-   if
-    loop $continue|0
-     local.get $0
-     i32.const 7
-     i32.and
-     if
-      i32.const 0
-      local.get $2
-      i32.eqz
-      br_if $~lib/util/memory/memcmp|inlined.0
-      drop
-      local.get $0
-      i32.load8_u
-      local.tee $3
-      local.get $1
-      i32.load8_u
-      local.tee $4
-      i32.ne
-      if
-       local.get $3
-       local.get $4
-       i32.sub
-       br $~lib/util/memory/memcmp|inlined.0
-      else
-       local.get $2
-       i32.const 1
-       i32.sub
-       local.set $2
-       local.get $0
-       i32.const 1
-       i32.add
-       local.set $0
-       local.get $1
-       i32.const 1
-       i32.add
-       local.set $1
-       br $continue|0
-      end
-      unreachable
-     end
-    end
-    loop $continue|1
-     block $break|1
-      local.get $2
-      i32.const 8
-      i32.lt_u
-      br_if $break|1
-      local.get $0
-      i64.load
-      local.get $1
-      i64.load
-      i64.ne
-      br_if $break|1
-      local.get $0
-      i32.const 8
-      i32.add
-      local.set $0
-      local.get $1
-      i32.const 8
-      i32.add
-      local.set $1
-      local.get $2
-      i32.const 8
-      i32.sub
-      local.set $2
-      br $continue|1
-     end
-    end
-   end
-   loop $continue|2
-    block $break|2
-     local.get $2
-     local.tee $3
-     i32.const 1
-     i32.sub
-     local.set $2
-     local.get $3
-     i32.eqz
-     br_if $break|2
-     local.get $0
-     i32.load8_u
-     local.tee $3
-     local.get $1
-     i32.load8_u
-     local.tee $4
-     i32.ne
-     if
-      local.get $3
-      local.get $4
-      i32.sub
-      br $~lib/util/memory/memcmp|inlined.0
-     else
-      local.get $0
-      i32.const 1
-      i32.add
-      local.set $0
-      local.get $1
-      i32.const 1
-      i32.add
-      local.set $1
-      br $continue|2
-     end
-     unreachable
-    end
-   end
-   i32.const 0
-  end
- )
- (func $~lib/rt/pure/__visit (; 30 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 26 ;) (param $0 i32) (param $1 i32)
   local.get $0
-  i32.const 364
+  i32.const 268
   i32.lt_u
   if
    return
@@ -1630,7 +1456,7 @@
    call $~lib/rt/pure/collectWhite
   end
  )
- (func $~lib/rt/__visit_members (; 31 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 27 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2
