@@ -3387,17 +3387,9 @@
   i32.gt_s
   if
    local.get $0
-   call $~lib/rt/pure/__retain
-   local.tee $2
-   call $~lib/typedarray/Int64Array#get:length
-   local.tee $1
-   i32.const 1
-   i32.le_s
-   br_if $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
-   local.get $2
    i32.load offset=4
-   local.set $0
-   local.get $1
+   local.set $1
+   local.get $2
    i32.const 2
    i32.eq
    if
@@ -3422,22 +3414,23 @@
      local.get $3
      f64.store
     end
-    br $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
-   end
-   local.get $1
-   i32.const 256
-   i32.lt_s
-   if
-    local.get $0
-    local.get $1
-    call $~lib/util/sort/insertionSort<f64>
    else
-    local.get $0
-    local.get $1
-    call $~lib/util/sort/weakHeapSort<f64>
+    local.get $2
+    i32.const 256
+    i32.lt_s
+    if
+     local.get $1
+     local.get $2
+     call $~lib/util/sort/insertionSort<f64>
+    else
+     local.get $1
+     local.get $2
+     call $~lib/util/sort/weakHeapSort<f64>
+    end
    end
   end
-  local.get $2
+  local.get $0
+  call $~lib/rt/pure/__retain
  )
  (func $~lib/util/sort/COMPARATOR<f64>~anonymous|0 (; 57 ;) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
