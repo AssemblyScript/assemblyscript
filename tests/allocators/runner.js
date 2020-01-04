@@ -12,16 +12,16 @@ function runner(exports, runs, allocs) {
     size = (size + 3) & ~3;
     var ptr = alloc(size, 0);
     if (!ptr) throw Error();
-    if ((ptr & 7) != 0) throw Error("invalid alignment: " + (ptr & 7) + " on " + ptr);
+    if ((ptr & 15) != 0) throw Error("invalid alignment: " + (ptr & 15) + " on " + ptr);
     if (ptrs.indexOf(ptr) >= 0) throw Error("duplicate pointer");
-    if (fill) fill(ptr, ptr % 8, size);
+    if (fill) fill(ptr, ptr % 16, size);
     ptrs.push(ptr);
     return ptr;
   }
 
   function preciseFree(ptr) {
     var idx = ptrs.indexOf(ptr);
-    if (idx < 0) throw Error();
+    if (idx < 0) throw Error("unknown pointer");
     var ptr = ptrs[idx];
     ptrs.splice(idx, 1);
     if (typeof ptr !== "number") throw Error();

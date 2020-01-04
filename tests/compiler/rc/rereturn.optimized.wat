@@ -1,10 +1,10 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -26,7 +26,6 @@
  (export "__retain" (func $~lib/rt/pure/__retain))
  (export "__release" (func $~lib/rt/pure/__release))
  (export "__collect" (func $~lib/rt/pure/__collect))
- (export "__reset" (func $~lib/rt/pure/__reset))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1738,10 +1737,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/rt/pure/__reset (; 26 ;)
-  nop
- )
- (func $~lib/rt/pure/__visit (; 27 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 26 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 324
   i32.lt_u
@@ -1844,7 +1840,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 28 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 27 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2
