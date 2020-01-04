@@ -3,7 +3,7 @@
  * @module compiler
  *//***/
 
- import {
+import {
   BuiltinSymbols,
   compileCall as compileBuiltinCall,
   compileAbort,
