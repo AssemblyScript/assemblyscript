@@ -430,7 +430,7 @@
   i32.lt_u
   select
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $8
    local.get $1
    i32.lt_u
@@ -563,7 +563,7 @@
     i32.const 1
     i32.add
     local.set $8
-    br $loop|0
+    br $for-loop|0
    end
   end
  )

@@ -11,7 +11,7 @@
   (local $0 i32)
   i32.const -128
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 255
    i32.le_s
@@ -20,7 +20,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $loop|0
+    br $for-loop|0
    end
   end
   i32.const -1

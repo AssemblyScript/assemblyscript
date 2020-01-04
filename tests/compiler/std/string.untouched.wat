@@ -1406,15 +1406,13 @@
    local.get $5
    local.get $4
    i32.store offset=1568
-   block $break|0
-    i32.const 0
-    local.set $5
-    loop $loop|0
-     local.get $5
-     i32.const 23
-     i32.lt_u
-     i32.eqz
-     br_if $break|0
+   i32.const 0
+   local.set $5
+   loop $for-loop|0
+    local.get $5
+    i32.const 23
+    i32.lt_u
+    if
      local.get $0
      local.set $7
      local.get $5
@@ -1428,15 +1426,13 @@
      i32.add
      local.get $4
      i32.store offset=4
-     block $break|1
-      i32.const 0
-      local.set $7
-      loop $loop|1
-       local.get $7
-       i32.const 16
-       i32.lt_u
-       i32.eqz
-       br_if $break|1
+     i32.const 0
+     local.set $7
+     loop $for-loop|1
+      local.get $7
+      i32.const 16
+      i32.lt_u
+      if
        local.get $0
        local.set $9
        local.get $5
@@ -1460,17 +1456,15 @@
        i32.const 1
        i32.add
        local.set $7
-       br $loop|1
+       br $for-loop|1
       end
-      unreachable
      end
      local.get $5
      i32.const 1
      i32.add
      local.set $5
-     br $loop|0
+     br $for-loop|0
     end
-    unreachable
    end
    local.get $0
    local.get $1
@@ -1834,17 +1828,15 @@
   local.set $0
   local.get $0
   local.set $1
-  block $break|0
-   local.get $1
-   local.set $2
-   global.get $~lib/rt/pure/CUR
-   local.set $3
-   loop $loop|0
-    local.get $2
-    local.get $3
-    i32.lt_u
-    i32.eqz
-    br_if $break|0
+  local.get $1
+  local.set $2
+  global.get $~lib/rt/pure/CUR
+  local.set $3
+  loop $for-loop|0
+   local.get $2
+   local.get $3
+   i32.lt_u
+   if
     local.get $2
     i32.load
     local.set $4
@@ -1907,21 +1899,18 @@
     i32.const 4
     i32.add
     local.set $2
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   local.get $1
   global.set $~lib/rt/pure/CUR
-  block $break|1
-   local.get $0
-   local.set $3
-   loop $loop|1
-    local.get $3
-    local.get $1
-    i32.lt_u
-    i32.eqz
-    br_if $break|1
+  local.get $0
+  local.set $3
+  loop $for-loop|1
+   local.get $3
+   local.get $1
+   i32.lt_u
+   if
     local.get $3
     i32.load
     call $~lib/rt/pure/scan
@@ -1929,19 +1918,16 @@
     i32.const 4
     i32.add
     local.set $3
-    br $loop|1
+    br $for-loop|1
    end
-   unreachable
   end
-  block $break|2
-   local.get $0
-   local.set $3
-   loop $loop|2
-    local.get $3
-    local.get $1
-    i32.lt_u
-    i32.eqz
-    br_if $break|2
+  local.get $0
+  local.set $3
+  loop $for-loop|2
+   local.get $3
+   local.get $1
+   i32.lt_u
+   if
     local.get $3
     i32.load
     local.set $2
@@ -1959,9 +1945,8 @@
     i32.const 4
     i32.add
     local.set $3
-    br $loop|2
+    br $for-loop|2
    end
-   unreachable
   end
   local.get $0
   global.set $~lib/rt/pure/CUR
@@ -4272,17 +4257,15 @@
   i32.lt_s
   select
   local.set $7
-  block $break|0
+  local.get $5
+  local.get $3
+  i32.sub
+  local.set $5
+  loop $for-loop|0
+   local.get $7
    local.get $5
-   local.get $3
-   i32.sub
-   local.set $5
-   loop $loop|0
-    local.get $7
-    local.get $5
-    i32.le_s
-    i32.eqz
-    br_if $break|0
+   i32.le_s
+   if
     local.get $0
     local.get $7
     local.get $1
@@ -4302,9 +4285,8 @@
     i32.const 1
     i32.add
     local.set $7
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   i32.const -1
   local.set $4
@@ -4617,13 +4599,11 @@
   i32.lt_s
   select
   local.set $7
-  block $break|0
-   loop $loop|0
-    local.get $7
-    i32.const 0
-    i32.ge_s
-    i32.eqz
-    br_if $break|0
+  loop $for-loop|0
+   local.get $7
+   i32.const 0
+   i32.ge_s
+   if
     local.get $0
     local.get $7
     local.get $1
@@ -4643,9 +4623,8 @@
     i32.const 1
     i32.sub
     local.set $7
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   i32.const -1
   local.set $4
@@ -6436,17 +6415,15 @@
     local.get $2
     return
    end
-   block $break|2
-    i32.const 1
-    local.set $7
-    loop $loop|2
-     local.get $3
-     i32.load16_u
-     local.tee $4
-     i32.const 48
-     i32.eq
-     i32.eqz
-     br_if $break|2
+   i32.const 1
+   local.set $7
+   loop $for-loop|2
+    local.get $3
+    i32.load16_u
+    local.tee $4
+    i32.const 48
+    i32.eq
+    if
      local.get $1
      i32.const 1
      i32.sub
@@ -6459,9 +6436,8 @@
      i32.const 2
      i32.add
      local.set $3
-     br $loop|2
+     br $for-loop|2
     end
-    unreachable
    end
    local.get $1
    i32.const 0
@@ -6499,12 +6475,12 @@
     return
    end
   end
-  block $break|3
-   local.get $4
-   i32.const 48
-   i32.sub
-   local.set $11
-   loop $loop|3
+  local.get $4
+  i32.const 48
+  i32.sub
+  local.set $11
+  block $for-break3
+   loop $for-loop|3
     local.get $11
     i32.const 10
     i32.lt_u
@@ -6521,62 +6497,61 @@
       i32.const 0
      end
     end
-    i32.eqz
-    br_if $break|3
-    local.get $11
-    i32.const 10
-    i32.lt_u
     if
-     local.get $8
-     i32.const 19
-     i32.lt_s
-     if (result i64)
-      i64.const 10
-      local.get $10
-      i64.mul
-      local.get $11
-      i64.extend_i32_u
-      i64.add
+     local.get $11
+     i32.const 10
+     i32.lt_u
+     if
+      local.get $8
+      i32.const 19
+      i32.lt_s
+      if (result i64)
+       i64.const 10
+       local.get $10
+       i64.mul
+       local.get $11
+       i64.extend_i32_u
+       i64.add
+      else
+       local.get $10
+       local.get $11
+       i32.eqz
+       i32.eqz
+       i64.extend_i32_u
+       i64.or
+      end
+      local.set $10
+      local.get $8
+      i32.const 1
+      i32.add
+      local.set $8
      else
-      local.get $10
-      local.get $11
-      i32.eqz
-      i32.eqz
-      i64.extend_i32_u
-      i64.or
+      local.get $8
+      local.set $9
+      i32.const 1
+      local.set $7
      end
-     local.set $10
-     local.get $8
+     local.get $1
      i32.const 1
+     i32.sub
+     local.tee $1
+     i32.eqz
+     if
+      br $for-break3
+     end
+     local.get $3
+     i32.const 2
      i32.add
-     local.set $8
-    else
-     local.get $8
-     local.set $9
-     i32.const 1
-     local.set $7
+     local.tee $3
+     i32.load16_u
+     local.set $4
+     local.get $4
+     i32.const 48
+     i32.sub
+     local.set $11
+     br $for-loop|3
     end
-    local.get $1
-    i32.const 1
-    i32.sub
-    local.tee $1
-    i32.eqz
-    if
-     br $break|3
-    end
-    local.get $3
-    i32.const 2
-    i32.add
-    local.tee $3
-    i32.load16_u
-    local.set $4
-    local.get $4
-    i32.const 48
-    i32.sub
-    local.set $11
-    br $loop|3
    end
-   unreachable
   end
   local.get $7
   i32.eqz
@@ -6693,22 +6668,20 @@
      end
      unreachable
     end
-    block $break|5
-     local.get $15
-     i32.const 48
-     i32.sub
-     local.set $16
-     loop $loop|5
-      local.get $12
-      if (result i32)
-       local.get $16
-       i32.const 10
-       i32.lt_u
-      else
-       i32.const 0
-      end
-      i32.eqz
-      br_if $break|5
+    local.get $15
+    i32.const 48
+    i32.sub
+    local.set $16
+    loop $for-loop|5
+     local.get $12
+     if (result i32)
+      local.get $16
+      i32.const 10
+      i32.lt_u
+     else
+      i32.const 0
+     end
+     if
       local.get $14
       i32.const 3200
       i32.ge_s
@@ -6738,9 +6711,8 @@
       i32.const 48
       i32.sub
       local.set $16
-      br $loop|5
+      br $for-loop|5
      end
-     unreachable
     end
     local.get $13
     local.get $14
@@ -6878,13 +6850,11 @@
      local.get $19
      i64.sub
      local.set $19
-     block $break|6
-      loop $loop|6
-       local.get $14
-       i32.const -14
-       i32.le_s
-       i32.eqz
-       br_if $break|6
+     loop $for-loop|6
+      local.get $14
+      i32.const -14
+      i32.le_s
+      if
        local.get $18
        i64.const 6103515625
        i64.div_u
@@ -6919,9 +6889,8 @@
        i32.const 14
        i32.add
        local.set $14
-       br $loop|6
+       br $for-loop|6
       end
-      unreachable
      end
      i32.const 5
      i32.const 0
@@ -6987,13 +6956,11 @@
      local.set $23
      local.get $23
      global.set $~lib/util/string/__fixmulShift
-     block $break|7
-      loop $loop|7
-       local.get $15
-       i32.const 13
-       i32.ge_s
-       i32.eqz
-       br_if $break|7
+     loop $for-loop|7
+      local.get $15
+      i32.const 13
+      i32.ge_s
+      if
        local.get $18
        local.set $19
        i32.const 1220703125
@@ -7057,9 +7024,8 @@
        i32.const 13
        i32.sub
        local.set $15
-       br $loop|7
+       br $for-loop|7
       end
-      unreachable
      end
      local.get $18
      local.set $19
@@ -7953,15 +7919,13 @@
    call $~lib/memory/memory.copy
    local.get $6
    local.set $7
-   block $break|0
-    i32.const 0
-    local.set $8
-    loop $loop|0
-     local.get $8
-     local.get $3
-     i32.lt_u
-     i32.eqz
-     br_if $break|0
+   i32.const 0
+   local.set $8
+   loop $for-loop|0
+    local.get $8
+    local.get $3
+    i32.lt_u
+    if
      local.get $5
      local.get $7
      local.tee $9
@@ -7997,9 +7961,8 @@
      i32.const 1
      i32.add
      local.set $8
-     br $loop|0
+     br $for-loop|0
     end
-    unreachable
    end
    local.get $5
    call $~lib/rt/pure/__retain
@@ -9007,15 +8970,13 @@
    local.get $4
    i32.load offset=4
    local.set $3
-   block $break|0
-    i32.const 0
-    local.set $7
-    loop $loop|0
-     local.get $7
-     local.get $5
-     i32.lt_s
-     i32.eqz
-     br_if $break|0
+   i32.const 0
+   local.set $7
+   loop $for-loop|0
+    local.get $7
+    local.get $5
+    i32.lt_s
+    if
      i32.const 2
      i32.const 1
      call $~lib/rt/tlsf/__alloc
@@ -9042,9 +9003,8 @@
      i32.const 1
      i32.add
      local.set $7
-     br $loop|0
+     br $for-loop|0
     end
-    unreachable
    end
    local.get $4
    call $~lib/rt/pure/__retain
@@ -10470,15 +10430,13 @@
    i32.const 0
   end
   if
-   block $break|0
-    local.get $1
-    local.set $4
-    loop $loop|0
-     local.get $4
-     local.get $3
-     i32.lt_s
-     i32.eqz
-     br_if $break|0
+   local.get $1
+   local.set $4
+   loop $for-loop|0
+    local.get $4
+    local.get $3
+    i32.lt_s
+    if
      local.get $0
      local.get $4
      i32.const 1
@@ -10490,9 +10448,8 @@
      i32.const 1
      i32.add
      local.set $4
-     br $loop|0
+     br $for-loop|0
     end
-    unreachable
    end
    local.get $0
    local.get $3
@@ -10581,15 +10538,13 @@
      i32.shl
      i32.or
      i32.store
-     block $break|1
-      i32.const 2
-      local.set $5
-      loop $loop|1
-       local.get $5
-       local.get $4
-       i32.lt_s
-       i32.eqz
-       br_if $break|1
+     i32.const 2
+     local.set $5
+     loop $for-loop|1
+      local.get $5
+      local.get $4
+      i32.lt_s
+      if
        local.get $0
        local.get $5
        i32.const 1
@@ -10601,9 +10556,8 @@
        i32.const 1
        i32.add
        local.set $5
-       br $loop|1
+       br $for-loop|1
       end
-      unreachable
      end
      local.get $1
      local.get $4
@@ -11483,16 +11437,14 @@
   local.set $4
   i32.const 0
   local.set $5
-  block $break|0
-   i32.const 0
-   local.set $6
-   loop $loop|0
-    local.get $6
-    local.get $1
-    i32.lt_u
-    i32.eqz
-    br_if $break|0
-    block $continue|0
+  i32.const 0
+  local.set $6
+  loop $for-loop|0
+   local.get $6
+   local.get $1
+   i32.lt_u
+   if
+    block $for-continue|0
      local.get $0
      local.get $6
      i32.const 1
@@ -11588,7 +11540,7 @@
          i32.const 1
          i32.add
          local.set $5
-         br $continue|0
+         br $for-continue|0
         end
        end
       end
@@ -11782,9 +11734,8 @@
     i32.const 1
     i32.add
     local.set $5
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   local.get $2
   local.get $5
@@ -11824,16 +11775,14 @@
   local.set $2
   i32.const 0
   local.set $3
-  block $break|0
-   i32.const 0
-   local.set $4
-   loop $loop|0
-    local.get $4
-    local.get $1
-    i32.lt_u
-    i32.eqz
-    br_if $break|0
-    block $continue|0
+  i32.const 0
+  local.set $4
+  loop $for-loop|0
+   local.get $4
+   local.get $1
+   i32.lt_u
+   if
+    block $for-continue|0
      local.get $0
      local.get $4
      i32.const 1
@@ -11929,7 +11878,7 @@
          i32.const 1
          i32.add
          local.set $3
-         br $continue|0
+         br $for-continue|0
         end
        end
       end
@@ -12031,9 +11980,8 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   local.get $2
   local.get $3
@@ -20131,15 +20079,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $break|0
-   i32.const 0
-   local.set $263
-   loop $loop|0
-    local.get $263
-    i32.const 1114111
-    i32.le_s
-    i32.eqz
-    br_if $break|0
+  i32.const 0
+  local.set $263
+  loop $for-loop|0
+   local.get $263
+   i32.const 1114111
+   i32.le_s
+   if
     local.get $263
     call $~lib/string/String.fromCodePoint
     local.set $264
@@ -20355,9 +20301,8 @@
     i32.const 1
     i32.add
     local.set $263
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   global.get $std/string/str
   call $~lib/rt/pure/__release

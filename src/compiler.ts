@@ -3,7 +3,7 @@
  * @module compiler
  *//***/
 
-import {
+ import {
   BuiltinSymbols,
   compileCall as compileBuiltinCall,
   compileAbort,
@@ -2001,145 +2001,148 @@ export class Compiler extends DiagnosticEmitter {
     statement: ForStatement
   ): ExpressionRef {
     var module = this.module;
-
-    // Set up and use the inner flow
     var outerFlow = this.currentFlow;
+
+    // (initializer)       ┐ flow
+    // (block $break       │
+    //  (loop $loop        │ ┐ loopFlow
+    //   (if (condition)   │ │
+    //    (block $continue │ │ ┐ contFlow
+    //     (body)          │ │ ┘
+    //    )                │ │
+    //    (incrementor)    │ │ ┐ incrFlow
+    //                     │ │ ┘
+    //    (br $loop)       │ │
+    //   )                 │ ┘
+    //  )                  │
+    // )                   ┘
+
     var label = outerFlow.pushBreakLabel();
-    var innerFlow = outerFlow.fork();
-    this.currentFlow = innerFlow;
-
-    // Compile the initializer
-    var initializer = statement.initializer;
-    var initExpr: ExpressionRef = 0;
-    if (initializer) initExpr = this.compileStatement(initializer);
-
-    // Compile the condition
-    var condExpr: ExpressionRef = 0;
-    var alwaysTrue = false;
-    if (statement.condition) {
-      condExpr = module.precomputeExpression(
-        this.makeIsTrueish(
-          this.compileExpression(<Expression>statement.condition, Type.bool),
-          this.currentType
-        )
-      );
-      // Simplify if the condition is constant
-      if (getExpressionId(condExpr) == ExpressionId.Const) {
-        assert(getExpressionType(condExpr) == NativeType.I32);
-        if (getConstValueI32(condExpr) == /* false */ 0) {
-          let stmts = new Array<ExpressionRef>();
-          if (initExpr) stmts.push(initExpr);
-          this.performAutoreleases(innerFlow, stmts);
-          innerFlow.freeScopedLocals();
-          outerFlow.popBreakLabel();
-          this.currentFlow = outerFlow;
-          return flatten(module, stmts, NativeType.None);
-        }
-        alwaysTrue = true;
-      }
-    } else { // Omitted condition is always true
-      condExpr = module.i32(1);
-      alwaysTrue = true;
-    }
-    innerFlow.inheritNonnullIfTrue(condExpr);
-
-    // Compile the incrementor before the body in order to...
-    var incrementor = statement.incrementor;
-    var incrExpr: ExpressionRef = 0;
-    if (incrementor) {
-      let incrFlow = innerFlow.fork();
-      this.currentFlow = incrFlow;
-      incrExpr = this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP);
-      assert(!incrFlow.hasScopedLocals);
-      this.currentFlow = innerFlow;
-      // ...unify local states before and after the incrementor has been executed the first time
-      innerFlow.unifyLocalFlags(incrFlow);
-    }
-
-    // Compile body (break: drop out, continue: fall through to incrementor, + loop)
-    var bodyFlow = innerFlow.fork();
-    this.currentFlow = bodyFlow;
-    var breakLabel = innerFlow.breakLabel = "break|" + label; bodyFlow.breakLabel = breakLabel;
-    bodyFlow.breakLabel = breakLabel;
-    var continueLabel = "continue|" + label;
-    bodyFlow.continueLabel = continueLabel;
-    var loopLabel = "loop|" + label;
-    var bodyStatement = statement.statement;
     var stmts = new Array<ExpressionRef>();
-    if (bodyStatement.kind == NodeKind.BLOCK) {
-      this.compileStatements((<BlockStatement>bodyStatement).statements, false, stmts);
-    } else {
-      stmts.push(this.compileStatement(bodyStatement));
+    var flow = outerFlow.fork();
+    this.currentFlow = flow;
+
+    {
+      let initializer = statement.initializer;
+      if (initializer) stmts.push(this.compileStatement(initializer));
     }
-    var terminates = bodyFlow.is(FlowFlags.TERMINATES);
-    var continues = bodyFlow.isAny(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
-    var breaks = bodyFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS);
-    var fallsThrough = !terminates && !innerFlow.is(FlowFlags.BREAKS);
 
-    // Finalize body flow
-    if (fallsThrough) this.performAutoreleases(bodyFlow, stmts);
-    bodyFlow.freeScopedLocals();
-    innerFlow.inherit(bodyFlow);
-    this.currentFlow = innerFlow;
-
-    // (block $break          ;; (1) skip label (needed anyway) if skipping (4) + no breaks
-    //  (initializer)         ;; (2) [may be empty]
-    //  (loop $loop           ;; (3) skip if (6) does not fall through + no continues
-    //   (br_if !cond $break) ;; (4) skip if always true
-    //   (block $continue     ;; (5) skip if no continues or nothing else than continue
-    //    (...)               ;; (6)
-    //   )
-    //   (incrementor)        ;; (7) skip if skipping (3) [may be empty]
-    //   (br $loop)           ;; (8) skip if skipping (3)
-    //  )
-    // )
-    var needsLabel = !alwaysTrue || breaks;
-
-    var loop = new Array<ExpressionRef>();
-    if (!alwaysTrue) { // (4)
-      loop.push(module.br(breakLabel, module.unary(UnaryOp.EqzI32, condExpr)));
-    }
-    if (continues) { // (5)
-      if (stmts.length > 1 || getExpressionId(stmts[0]) != ExpressionId.Break) { // otherwise lonely continue
-        loop.push(module.block(continueLabel, stmts));
+    var loopFlow = flow.fork();
+    var condExpr: ExpressionRef;
+    var condTrue = false;
+    {
+      let condition = statement.condition;
+      if (condition) {
+        condExpr = module.precomputeExpression(
+          this.makeIsTrueish(
+            this.compileExpression(<Expression>condition, Type.bool),
+            this.currentType
+          )
+        );
+        if (getExpressionId(condExpr) == ExpressionId.Const) {
+          if (!getConstValueI32(condExpr)) { // condition is always false
+            // only initializer will run -> simplify
+            this.performAutoreleases(loopFlow, stmts);
+            loopFlow.freeScopedLocals();
+            flow.inherit(loopFlow);
+            this.performAutoreleases(flow, stmts);
+            flow.freeScopedLocals();
+            outerFlow.inherit(flow);
+            outerFlow.popBreakLabel();
+            this.currentFlow = outerFlow;
+            return flatten(module, stmts, NativeType.None);
+          }
+          condTrue = true; // condition is always true
+        }
+      } else { // omitted condition is always true
+        condExpr = module.i32(1);
+        condTrue = true;
       }
-    } else {
-      for (let i = 0, k = stmts.length; i < k; ++i) loop.push(stmts[i]);
     }
-    var expr: ExpressionRef;
-    if (fallsThrough || continues) { // (3)
-      if (incrExpr) loop.push(incrExpr); // (7)
-      this.performAutoreleases(innerFlow, loop);
-      loop.push(module.br(loopLabel)); // (8)
-      if (initExpr) { // (2)
-        expr = module.block(needsLabel ? breakLabel : null, [
-          initExpr,
-          module.loop(loopLabel, module.block(null, loop))
-        ]);
+
+    var incrStmts = new Array<ExpressionRef>();
+    {
+      let incrementor = statement.incrementor;
+      if (incrementor) {
+        let incrFlow = loopFlow.fork();
+        this.currentFlow = incrFlow;
+        incrStmts.push(
+          this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP)
+        );
+        this.performAutoreleases(incrFlow, incrStmts);
+        incrFlow.freeScopedLocals();
+        // The incrementor has no CFG side-effects, but can modify local state.
+        // Hence: unify flags before and after the incrementor runs
+        // TODO: Can also throw, but that's not implemented yet.
+        loopFlow.unifyLocalFlags(incrFlow);
+        this.currentFlow = loopFlow;
+      }
+    }
+
+    var contFlow = loopFlow.fork();
+    this.currentFlow = contFlow;
+    var breakLabel = "for-break" + label;
+    contFlow.breakLabel = breakLabel;
+    var continueLabel = "for-continue|" + label;
+    contFlow.continueLabel = continueLabel;
+    var loopLabel = "for-loop|" + label;
+
+    var contStmts = new Array<ExpressionRef>();
+    {
+      let body = statement.statement;
+      if (body.kind == NodeKind.BLOCK) {
+        this.compileStatements((<BlockStatement>body).statements, false, contStmts);
       } else {
-        expr = module.block(needsLabel ? breakLabel : null, [
-          module.loop(loopLabel, flatten(module, loop, NativeType.None))
-        ]);
+        contStmts.push(this.compileStatement(body));
       }
-    } else {
-      if (initExpr) loop.unshift(initExpr); // (2)
-      this.performAutoreleases(innerFlow, loop);
-      expr = module.block(needsLabel ? breakLabel : null, loop);
+      if (contFlow.is(FlowFlags.TERMINATES) || flow.is(FlowFlags.BREAKS)) {
+        // contStmts.push(module.unreachable());
+      } else {
+        this.performAutoreleases(contFlow, contStmts);
+      }
+      // TODO: For a proper CFG we'd have to take into account that the loop
+      // body affects itself when executing at least twice. One way to do this
+      // would be to unroll the first iteration if we detect that local states
+      // differ before and after the loop executed for the first time, or we
+      // can move this logic to a checker. The latter is preferrable because
+      // since it can determine such a condition prior we can compile once with
+      // the least common denominator of flags (i.e. null and wrap states).
     }
+    contFlow.freeScopedLocals();
+    if (condTrue) loopFlow.inherit(contFlow);
+    else loopFlow.inheritConditional(contFlow);
+    flow.inherit(loopFlow);
+    this.currentFlow = flow;
 
-    // Switch back to the parent flow
-    innerFlow.freeScopedLocals();
-    outerFlow.popBreakLabel();
-    innerFlow.unset(
+    stmts.push(
+      module.block(breakLabel, [
+        module.loop(loopLabel,
+          module.if(condExpr,
+            module.block(null, [
+              module.block(continueLabel, contStmts),
+              module.block(null, incrStmts),
+              module.br(loopLabel)
+            ])
+          )
+        )
+      ])
+    );
+    if (!flow.is(FlowFlags.TERMINATES)) {
+      this.performAutoreleases(flow, stmts);
+    } else {
+      stmts.push(module.unreachable());
+    }
+    flow.freeScopedLocals();
+    flow.unset(
       FlowFlags.BREAKS |
       FlowFlags.CONDITIONALLY_BREAKS |
       FlowFlags.CONTINUES |
       FlowFlags.CONDITIONALLY_CONTINUES
     );
-    if (alwaysTrue) outerFlow.inherit(innerFlow);
-    else outerFlow.inheritConditional(innerFlow);
+    outerFlow.inherit(flow);
+    outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
-    return expr;
+    return flatten(module, stmts, NativeType.None);
   }
 
   compileIfStatement(

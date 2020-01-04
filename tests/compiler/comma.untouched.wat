@@ -141,15 +141,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  block $break|0
-   i32.const 0
-   local.set $1
-   loop $loop|0
-    local.get $1
-    global.get $comma/a
-    i32.lt_s
-    i32.eqz
-    br_if $break|0
+  i32.const 0
+  local.set $1
+  loop $for-loop|0
+   local.get $1
+   global.get $comma/a
+   i32.lt_s
+   if
     nop
     global.get $comma/a
     i32.const 1
@@ -159,9 +157,8 @@
     i32.const 1
     i32.add
     local.set $1
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   local.get $1
   i32.const 1

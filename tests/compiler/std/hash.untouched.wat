@@ -38,20 +38,18 @@
   i32.const 0
   i32.ne
   if
-   block $break|0
-    i32.const 0
-    local.set $2
-    local.get $0
-    call $~lib/string/String#get:length
-    i32.const 1
-    i32.shl
-    local.set $3
-    loop $loop|0
-     local.get $2
-     local.get $3
-     i32.lt_u
-     i32.eqz
-     br_if $break|0
+   i32.const 0
+   local.set $2
+   local.get $0
+   call $~lib/string/String#get:length
+   i32.const 1
+   i32.shl
+   local.set $3
+   loop $for-loop|0
+    local.get $2
+    local.get $3
+    i32.lt_u
+    if
      local.get $1
      local.get $0
      local.get $2
@@ -65,9 +63,8 @@
      i32.const 1
      i32.add
      local.set $2
-     br $loop|0
+     br $for-loop|0
     end
-    unreachable
    end
   end
   local.get $1

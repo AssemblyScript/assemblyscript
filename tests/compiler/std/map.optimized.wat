@@ -653,7 +653,7 @@
    i32.store
    i32.const 0
    local.set $0
-   loop $loop|0
+   loop $for-loop|0
     local.get $0
     i32.const 23
     i32.lt_u
@@ -667,7 +667,7 @@
      i32.store offset=4
      i32.const 0
      local.set $1
-     loop $loop|1
+     loop $for-loop|1
       local.get $1
       i32.const 16
       i32.lt_u
@@ -687,14 +687,14 @@
        i32.const 1
        i32.add
        local.set $1
-       br $loop|1
+       br $for-loop|1
       end
      end
      local.get $0
      i32.const 1
      i32.add
      local.set $0
-     br $loop|0
+     br $for-loop|0
     end
    end
    i32.const 880
@@ -1006,7 +1006,7 @@
   local.set $3
   global.get $~lib/rt/pure/CUR
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $0
    i32.lt_u
@@ -1065,14 +1065,14 @@
     i32.const 4
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
   global.set $~lib/rt/pure/CUR
   local.get $5
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    local.get $2
    i32.lt_u
@@ -1084,12 +1084,12 @@
     i32.const 4
     i32.add
     local.set $0
-    br $loop|1
+    br $for-loop|1
    end
   end
   local.get $5
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.lt_u
@@ -1108,7 +1108,7 @@
     i32.const 4
     i32.add
     local.set $0
-    br $loop|2
+    br $for-loop|2
    end
   end
   local.get $5
@@ -2739,7 +2739,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $2
    i32.lt_s
@@ -2770,7 +2770,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -2862,7 +2862,7 @@
   local.set $1
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $2
    local.get $4
    i32.lt_s
@@ -2893,7 +2893,7 @@
     i32.const 1
     i32.add
     local.set $2
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -3665,7 +3665,7 @@
   (local $7 i32)
   call $~lib/map/Map<i8,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_s
@@ -3721,14 +3721,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -3745,7 +3743,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -3821,14 +3819,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -3855,7 +3851,7 @@
   local.set $5
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $3
    i32.load offset=12
@@ -3886,24 +3882,8 @@
     i32.const 20
     i32.sub
     call $~lib/map/Map<i8,i32>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $2
-     call $~lib/map/Map<i8,i8>#set
-     local.get $5
-     local.get $7
-     i32.const 20
-     i32.sub
-     local.tee $2
-     local.get $2
-     call $~lib/map/Map<i32,i32>#set
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -3911,7 +3891,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $2
+    call $~lib/map/Map<i8,i8>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.tee $2
+    local.get $2
+    call $~lib/map/Map<i32,i32>#set
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $4
@@ -3940,7 +3935,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_s
@@ -3989,14 +3984,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -4013,7 +4006,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_s
@@ -4064,14 +4057,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -4418,7 +4409,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $2
    i32.lt_s
@@ -4449,7 +4440,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -4797,7 +4788,7 @@
   (local $7 i32)
   call $~lib/map/Map<u8,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_u
@@ -4849,14 +4840,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -4873,7 +4862,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -4943,14 +4932,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -4977,7 +4964,7 @@
   local.set $5
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $3
    i32.load offset=12
@@ -5008,24 +4995,8 @@
     i32.const 20
     i32.sub
     call $~lib/map/Map<u8,i32>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $2
-     call $~lib/map/Map<u8,u8>#set
-     local.get $5
-     local.get $7
-     i32.const 20
-     i32.sub
-     local.tee $2
-     local.get $2
-     call $~lib/map/Map<i32,i32>#set
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -5033,7 +5004,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $2
+    call $~lib/map/Map<u8,u8>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.tee $2
+    local.get $2
+    call $~lib/map/Map<i32,i32>#set
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $4
@@ -5062,7 +5048,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_u
@@ -5109,14 +5095,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -5133,7 +5117,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_u
@@ -5182,14 +5166,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -5652,7 +5634,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $2
    i32.lt_s
@@ -5683,7 +5665,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -6082,7 +6064,7 @@
   (local $7 i32)
   call $~lib/map/Map<i16,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_s
@@ -6138,14 +6120,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -6162,7 +6142,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -6238,14 +6218,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -6272,7 +6250,7 @@
   local.set $5
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $3
    i32.load offset=12
@@ -6303,24 +6281,8 @@
     i32.const 20
     i32.sub
     call $~lib/map/Map<i16,i32>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $2
-     call $~lib/map/Map<i16,i16>#set
-     local.get $5
-     local.get $7
-     i32.const 20
-     i32.sub
-     local.tee $2
-     local.get $2
-     call $~lib/map/Map<i32,i32>#set
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -6328,7 +6290,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $2
+    call $~lib/map/Map<i16,i16>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.tee $2
+    local.get $2
+    call $~lib/map/Map<i32,i32>#set
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $4
@@ -6357,7 +6334,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_s
@@ -6406,14 +6383,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -6430,7 +6405,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_s
@@ -6481,14 +6456,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -6835,7 +6808,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $2
    i32.lt_s
@@ -6866,7 +6839,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -7216,7 +7189,7 @@
   (local $7 i32)
   call $~lib/map/Map<u16,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_u
@@ -7268,14 +7241,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -7292,7 +7263,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -7362,14 +7333,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -7396,7 +7365,7 @@
   local.set $5
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $3
    i32.load offset=12
@@ -7427,24 +7396,8 @@
     i32.const 20
     i32.sub
     call $~lib/map/Map<u16,i32>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $2
-     call $~lib/map/Map<u16,u16>#set
-     local.get $5
-     local.get $7
-     i32.const 20
-     i32.sub
-     local.tee $2
-     local.get $2
-     call $~lib/map/Map<i32,i32>#set
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -7452,7 +7405,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $2
+    call $~lib/map/Map<u16,u16>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.tee $2
+    local.get $2
+    call $~lib/map/Map<i32,i32>#set
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $4
@@ -7481,7 +7449,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_u
@@ -7528,14 +7496,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -7552,7 +7518,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_u
@@ -7601,14 +7567,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -7691,7 +7655,7 @@
   local.set $1
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $2
    local.get $4
    i32.lt_s
@@ -7722,7 +7686,7 @@
     i32.const 1
     i32.add
     local.set $2
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -7800,7 +7764,7 @@
   (local $7 i32)
   call $~lib/map/Map<i32,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_s
@@ -7848,14 +7812,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -7872,7 +7834,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -7936,14 +7898,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -7970,7 +7930,7 @@
   local.set $5
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $3
    i32.load offset=12
@@ -8001,24 +7961,8 @@
     i32.const 20
     i32.sub
     call $~lib/map/Map<i32,i32>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $2
-     call $~lib/map/Map<i32,i32>#set
-     local.get $5
-     local.get $7
-     i32.const 20
-     i32.sub
-     local.tee $2
-     local.get $2
-     call $~lib/map/Map<i32,i32>#set
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -8026,7 +7970,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $2
+    call $~lib/map/Map<i32,i32>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.tee $2
+    local.get $2
+    call $~lib/map/Map<i32,i32>#set
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $4
@@ -8055,7 +8014,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_s
@@ -8100,14 +8059,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -8124,7 +8081,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_s
@@ -8171,14 +8128,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -8272,7 +8227,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $2
    i32.lt_s
@@ -8303,7 +8258,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -8350,7 +8305,7 @@
   (local $7 i32)
   call $~lib/map/Map<u32,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_u
@@ -8398,14 +8353,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -8422,7 +8375,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -8486,14 +8439,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -8520,7 +8471,7 @@
   local.set $5
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $3
    i32.load offset=12
@@ -8551,24 +8502,8 @@
     i32.const 20
     i32.sub
     call $~lib/map/Map<i32,i32>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $2
-     call $~lib/map/Map<i32,i32>#set
-     local.get $5
-     local.get $7
-     i32.const 20
-     i32.sub
-     local.tee $2
-     local.get $2
-     call $~lib/map/Map<i32,i32>#set
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -8576,7 +8511,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $2
+    call $~lib/map/Map<i32,i32>#set
+    local.get $5
+    local.get $7
+    i32.const 20
+    i32.sub
+    local.tee $2
+    local.get $2
+    call $~lib/map/Map<i32,i32>#set
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $4
@@ -8605,7 +8555,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_u
@@ -8650,14 +8600,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -8674,7 +8622,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_u
@@ -8721,14 +8669,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -9261,7 +9207,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $2
    i32.lt_s
@@ -9292,7 +9238,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -9317,7 +9263,7 @@
   local.set $1
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $2
    local.get $4
    i32.lt_s
@@ -9348,7 +9294,7 @@
     i32.const 1
     i32.add
     local.set $2
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -9771,7 +9717,7 @@
   (local $7 i32)
   call $~lib/map/Map<i64,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i64.const 100
    i64.lt_s
@@ -9821,14 +9767,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -9845,7 +9789,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i64.const 100
    i64.lt_s
@@ -9912,14 +9856,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -9944,7 +9886,7 @@
   local.set $5
   call $~lib/map/Map<i32,i32>#constructor
   local.set $6
-  loop $loop|2
+  loop $for-loop|2
    local.get $2
    local.get $4
    i32.load offset=12
@@ -9976,24 +9918,8 @@
     i32.sub
     i64.extend_i32_s
     call $~lib/map/Map<i64,i32>#has
+    i32.eqz
     if
-     local.get $5
-     local.get $0
-     local.get $0
-     call $~lib/map/Map<i64,i64>#set
-     local.get $6
-     local.get $3
-     i32.const 20
-     i32.sub
-     local.tee $3
-     local.get $3
-     call $~lib/map/Map<i32,i32>#set
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -10001,7 +9927,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $5
+    local.get $0
+    local.get $0
+    call $~lib/map/Map<i64,i64>#set
+    local.get $6
+    local.get $3
+    i32.const 20
+    i32.sub
+    local.tee $3
+    local.get $3
+    call $~lib/map/Map<i32,i32>#set
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $for-loop|2
    end
   end
   local.get $5
@@ -10030,7 +9971,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i64.const 50
    i64.lt_s
@@ -10076,14 +10017,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -10100,7 +10039,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i64.const 50
    i64.lt_s
@@ -10148,14 +10087,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -10249,7 +10186,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $2
    i32.lt_s
@@ -10280,7 +10217,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -10327,7 +10264,7 @@
   (local $7 i32)
   call $~lib/map/Map<u64,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i64.const 100
    i64.lt_u
@@ -10377,14 +10314,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -10401,7 +10336,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i64.const 100
    i64.lt_u
@@ -10468,14 +10403,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -10500,7 +10433,7 @@
   local.set $5
   call $~lib/map/Map<i32,i32>#constructor
   local.set $6
-  loop $loop|2
+  loop $for-loop|2
    local.get $2
    local.get $4
    i32.load offset=12
@@ -10532,24 +10465,8 @@
     i32.sub
     i64.extend_i32_s
     call $~lib/map/Map<i64,i32>#has
+    i32.eqz
     if
-     local.get $5
-     local.get $0
-     local.get $0
-     call $~lib/map/Map<i64,i64>#set
-     local.get $6
-     local.get $3
-     i32.const 20
-     i32.sub
-     local.tee $3
-     local.get $3
-     call $~lib/map/Map<i32,i32>#set
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -10557,7 +10474,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $5
+    local.get $0
+    local.get $0
+    call $~lib/map/Map<i64,i64>#set
+    local.get $6
+    local.get $3
+    i32.const 20
+    i32.sub
+    local.tee $3
+    local.get $3
+    call $~lib/map/Map<i32,i32>#set
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $for-loop|2
    end
   end
   local.get $5
@@ -10586,7 +10518,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i64.const 50
    i64.lt_u
@@ -10632,14 +10564,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -10656,7 +10586,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i64.const 50
    i64.lt_u
@@ -10704,14 +10634,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -11137,7 +11065,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $2
    i32.lt_s
@@ -11168,7 +11096,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -11518,7 +11446,7 @@
   (local $7 i32)
   call $~lib/map/Map<f32,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    f32.const 100
    f32.lt
@@ -11568,14 +11496,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f32.const 1
-     f32.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    f32.const 1
+    f32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -11592,7 +11518,7 @@
   end
   f32.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    f32.const 100
    f32.lt
@@ -11659,14 +11585,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f32.const 1
-     f32.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    f32.const 1
+    f32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -11691,7 +11615,7 @@
   local.set $5
   call $~lib/map/Map<i32,i32>#constructor
   local.set $6
-  loop $loop|2
+  loop $for-loop|2
    local.get $2
    local.get $4
    i32.load offset=12
@@ -11723,24 +11647,8 @@
     i32.sub
     f32.convert_i32_s
     call $~lib/map/Map<f32,i32>#has
+    i32.eqz
     if
-     local.get $5
-     local.get $0
-     local.get $0
-     call $~lib/map/Map<f32,f32>#set
-     local.get $6
-     local.get $3
-     i32.const 20
-     i32.sub
-     local.tee $3
-     local.get $3
-     call $~lib/map/Map<i32,i32>#set
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -11748,7 +11656,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $5
+    local.get $0
+    local.get $0
+    call $~lib/map/Map<f32,f32>#set
+    local.get $6
+    local.get $3
+    i32.const 20
+    i32.sub
+    local.tee $3
+    local.get $3
+    call $~lib/map/Map<i32,i32>#set
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $for-loop|2
    end
   end
   local.get $5
@@ -11777,7 +11700,7 @@
   end
   f32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    f32.const 50
    f32.lt
@@ -11823,14 +11746,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f32.const 1
-     f32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    f32.const 1
+    f32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -11847,7 +11768,7 @@
   end
   f32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    f32.const 50
    f32.lt
@@ -11895,14 +11816,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f32.const 1
-     f32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    f32.const 1
+    f32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -12328,7 +12247,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $2
    i32.lt_s
@@ -12359,7 +12278,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -12752,7 +12671,7 @@
   (local $7 i32)
   call $~lib/map/Map<f64,i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    f64.const 100
    f64.lt
@@ -12802,14 +12721,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f64.const 1
-     f64.add
-     local.set $0
-     br $loop|0
     end
-    unreachable
+    local.get $0
+    f64.const 1
+    f64.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -12826,7 +12743,7 @@
   end
   f64.const 0
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    f64.const 100
    f64.lt
@@ -12893,14 +12810,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f64.const 1
-     f64.add
-     local.set $0
-     br $loop|1
     end
-    unreachable
+    local.get $0
+    f64.const 1
+    f64.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -12925,7 +12840,7 @@
   local.set $5
   call $~lib/map/Map<i32,i32>#constructor
   local.set $6
-  loop $loop|2
+  loop $for-loop|2
    local.get $2
    local.get $4
    i32.load offset=12
@@ -12957,24 +12872,8 @@
     i32.sub
     f64.convert_i32_s
     call $~lib/map/Map<f64,i32>#has
+    i32.eqz
     if
-     local.get $5
-     local.get $0
-     local.get $0
-     call $~lib/map/Map<f64,f64>#set
-     local.get $6
-     local.get $3
-     i32.const 20
-     i32.sub
-     local.tee $3
-     local.get $3
-     call $~lib/map/Map<i32,i32>#set
-     local.get $2
-     i32.const 1
-     i32.add
-     local.set $2
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 32
@@ -12982,7 +12881,22 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $5
+    local.get $0
+    local.get $0
+    call $~lib/map/Map<f64,f64>#set
+    local.get $6
+    local.get $3
+    i32.const 20
+    i32.sub
+    local.tee $3
+    local.get $3
+    call $~lib/map/Map<i32,i32>#set
+    local.get $2
+    i32.const 1
+    i32.add
+    local.set $2
+    br $for-loop|2
    end
   end
   local.get $5
@@ -13011,7 +12925,7 @@
   end
   f64.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    f64.const 50
    f64.lt
@@ -13057,14 +12971,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f64.const 1
-     f64.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    f64.const 1
+    f64.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -13081,7 +12993,7 @@
   end
   f64.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    f64.const 50
    f64.lt
@@ -13129,14 +13041,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f64.const 1
-     f64.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    f64.const 1
+    f64.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1

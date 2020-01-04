@@ -407,15 +407,13 @@
   global.get $~lib/builtins/u8.MAX_VALUE
   global.get $~lib/builtins/u8.MAX_VALUE
   call $retain-i32/test
-  block $break|0
-   global.get $~lib/builtins/i8.MIN_VALUE
-   local.set $0
-   loop $loop|0
-    local.get $0
-    i32.const 255
-    i32.le_s
-    i32.eqz
-    br_if $break|0
+  global.get $~lib/builtins/i8.MIN_VALUE
+  local.set $0
+  loop $for-loop|0
+   local.get $0
+   i32.const 255
+   i32.le_s
+   if
     i32.const 0
     local.get $0
     call $retain-i32/test
@@ -456,9 +454,8 @@
     i32.const 1
     i32.add
     local.set $0
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   i32.const 127
   i32.const 127

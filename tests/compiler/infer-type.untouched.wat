@@ -75,24 +75,21 @@
   global.set $infer-type/rF
   global.get $infer-type/rF
   drop
-  block $break|0
-   i32.const 0
-   local.set $0
-   i32.const 10
-   local.set $1
-   loop $loop|0
-    local.get $0
-    local.get $1
-    i32.lt_s
-    i32.eqz
-    br_if $break|0
+  i32.const 0
+  local.set $0
+  i32.const 10
+  local.set $1
+  loop $for-loop|0
+   local.get $0
+   local.get $1
+   i32.lt_s
+   if
     local.get $0
     i32.const 1
     i32.add
     local.set $0
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
  )
  (func $start (; 6 ;)

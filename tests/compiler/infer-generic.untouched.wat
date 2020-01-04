@@ -59,26 +59,24 @@
   (local $7 i32)
   local.get $2
   local.set $3
-  block $break|0
-   i32.const 0
-   local.set $4
+  i32.const 0
+  local.set $4
+  local.get $0
+  i32.load offset=12
+  local.set $5
+  loop $for-loop|0
+   local.get $4
+   local.get $5
+   local.tee $6
    local.get $0
    i32.load offset=12
-   local.set $5
-   loop $loop|0
-    local.get $4
-    local.get $5
-    local.tee $6
-    local.get $0
-    i32.load offset=12
-    local.tee $7
-    local.get $6
-    local.get $7
-    i32.lt_s
-    select
-    i32.lt_s
-    i32.eqz
-    br_if $break|0
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.lt_s
+   select
+   i32.lt_s
+   if
     i32.const 4
     global.set $~lib/argc
     local.get $3
@@ -98,9 +96,8 @@
     i32.const 1
     i32.add
     local.set $4
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   local.get $3
  )

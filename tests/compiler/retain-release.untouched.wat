@@ -524,19 +524,16 @@
  )
  (func $retain-release/scopeFor (; 30 ;) (param $0 i32)
   (local $1 i32)
-  block $break|0
-   loop $loop|0
-    local.get $0
-    i32.eqz
-    br_if $break|0
+  loop $for-loop|0
+   local.get $0
+   if
     global.get $retain-release/REF
     call $~lib/rt/stub/__retain
     local.set $1
     local.get $1
     call $~lib/rt/stub/__release
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
  )
  (func $retain-release/scopeForComplex (; 31 ;) (param $0 i32)
@@ -545,24 +542,20 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  block $break|0
-   i32.const 0
-   local.set $1
-   loop $loop|0
-    local.get $0
-    i32.eqz
-    br_if $break|0
+  i32.const 0
+  local.set $1
+  loop $for-loop|0
+   local.get $0
+   if
     global.get $retain-release/REF
     call $~lib/rt/stub/__retain
     local.set $2
-    block $break|1
-     i32.const 0
-     local.set $3
-     loop $loop|1
-      local.get $0
-      i32.eqz
-      br_if $break|1
-      block $continue|1
+    i32.const 0
+    local.set $3
+    loop $for-loop|1
+     local.get $0
+     if
+      block $for-continue|1
        global.get $retain-release/REF
        call $~lib/rt/stub/__retain
        local.set $4
@@ -575,7 +568,7 @@
         call $~lib/rt/stub/__release
         local.get $4
         call $~lib/rt/stub/__release
-        br $continue|1
+        br $for-continue|1
        end
        local.get $4
        call $~lib/rt/stub/__release
@@ -584,9 +577,8 @@
       i32.const 1
       i32.add
       local.set $3
-      br $loop|1
+      br $for-loop|1
      end
-     unreachable
     end
     local.get $2
     call $~lib/rt/stub/__release
@@ -594,9 +586,8 @@
     i32.const 1
     i32.add
     local.set $1
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
  )
  (func $retain-release/scopeBreak (; 32 ;) (param $0 i32)

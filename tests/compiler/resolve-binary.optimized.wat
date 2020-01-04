@@ -984,7 +984,7 @@
    i32.const 0
   end
   if (result i32)
-   loop $loop|0
+   loop $for-loop|0
     local.get $1
     local.get $3
     i32.lt_s
@@ -1000,7 +1000,7 @@
      i32.const 1
      i32.add
      local.set $1
-     br $loop|0
+     br $for-loop|0
     end
    end
    local.get $0
@@ -1072,7 +1072,7 @@
      i32.store
      i32.const 2
      local.set $2
-     loop $loop|1
+     loop $for-loop|1
       local.get $2
       local.get $3
       i32.lt_s
@@ -1088,7 +1088,7 @@
        i32.const 1
        i32.add
        local.set $2
-       br $loop|1
+       br $for-loop|1
       end
      end
      local.get $1

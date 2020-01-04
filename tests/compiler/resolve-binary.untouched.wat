@@ -3405,15 +3405,13 @@
    i32.const 0
   end
   if
-   block $break|0
-    local.get $1
-    local.set $4
-    loop $loop|0
-     local.get $4
-     local.get $3
-     i32.lt_s
-     i32.eqz
-     br_if $break|0
+   local.get $1
+   local.set $4
+   loop $for-loop|0
+    local.get $4
+    local.get $3
+    i32.lt_s
+    if
      local.get $0
      local.get $4
      i32.const 1
@@ -3425,9 +3423,8 @@
      i32.const 1
      i32.add
      local.set $4
-     br $loop|0
+     br $for-loop|0
     end
-    unreachable
    end
    local.get $0
    local.get $3
@@ -3516,15 +3513,13 @@
      i32.shl
      i32.or
      i32.store
-     block $break|1
-      i32.const 2
-      local.set $5
-      loop $loop|1
-       local.get $5
-       local.get $4
-       i32.lt_s
-       i32.eqz
-       br_if $break|1
+     i32.const 2
+     local.set $5
+     loop $for-loop|1
+      local.get $5
+      local.get $4
+      i32.lt_s
+      if
        local.get $0
        local.get $5
        i32.const 1
@@ -3536,9 +3531,8 @@
        i32.const 1
        i32.add
        local.set $5
-       br $loop|1
+       br $for-loop|1
       end
-      unreachable
      end
      local.get $1
      local.get $4

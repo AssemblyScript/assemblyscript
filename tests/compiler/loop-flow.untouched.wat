@@ -54,37 +54,46 @@
   unreachable
  )
  (func $loop-flow/forReturn (; 3 ;) (result i32)
-  i32.const 1
-  return
+  loop $for-loop|0
+   i32.const 1
+   if
+    i32.const 1
+    return
+   end
+  end
+  unreachable
  )
  (func $loop-flow/forAny (; 4 ;) (param $0 i32) (result i32)
-  loop $loop|0
-   block $continue|0
-    local.get $0
-    i32.const 1
-    i32.eq
-    if
-     i32.const 1
-     return
-    else
+  loop $for-loop|0
+   i32.const 1
+   if
+    block $for-continue|0
      local.get $0
-     i32.const 2
+     i32.const 1
      i32.eq
      if
-      i32.const 80
-      i32.const 32
-      i32.const 54
-      i32.const 21
-      call $~lib/builtins/abort
-      unreachable
+      i32.const 1
+      return
      else
-      br $continue|0
+      local.get $0
+      i32.const 2
+      i32.eq
+      if
+       i32.const 80
+       i32.const 32
+       i32.const 54
+       i32.const 21
+       call $~lib/builtins/abort
+       unreachable
+      else
+       br $for-continue|0
+      end
+      unreachable
      end
      unreachable
     end
-    unreachable
+    br $for-loop|0
    end
-   br $loop|0
   end
   unreachable
  )
@@ -212,16 +221,28 @@
   unreachable
  )
  (func $loop-flow/forThrow (; 10 ;) (result i32)
-  i32.const 80
-  i32.const 32
-  i32.const 41
-  i32.const 4
-  call $~lib/builtins/abort
+  loop $for-loop|0
+   i32.const 1
+   if
+    i32.const 80
+    i32.const 32
+    i32.const 41
+    i32.const 4
+    call $~lib/builtins/abort
+    unreachable
+   end
+  end
   unreachable
  )
  (func $loop-flow/forContinue (; 11 ;) (result i32)
-  loop $loop|0
-   br $loop|0
+  loop $for-loop|0
+   i32.const 1
+   if
+    block $for-continue|0
+     br $for-continue|0
+    end
+    br $for-loop|0
+   end
   end
   unreachable
  )

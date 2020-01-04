@@ -30,7 +30,7 @@
   i32.const 124
   i32.load
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    local.get $1
    i32.const 124
@@ -60,7 +60,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $loop|0
+    br $for-loop|0
    end
   end
  )

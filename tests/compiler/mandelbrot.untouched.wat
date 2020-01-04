@@ -783,15 +783,13 @@
   i32.lt_u
   select
   local.set $13
-  block $break|0
-   i32.const 0
-   local.set $6
-   loop $loop|0
-    local.get $6
-    local.get $1
-    i32.lt_u
-    i32.eqz
-    br_if $break|0
+  i32.const 0
+  local.set $6
+  loop $for-loop|0
+   local.get $6
+   local.get $1
+   i32.lt_u
+   if
     local.get $6
     f64.convert_i32_u
     local.get $8
@@ -942,9 +940,8 @@
     i32.const 1
     i32.add
     local.set $6
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
  )
 )

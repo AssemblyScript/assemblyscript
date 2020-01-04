@@ -645,7 +645,7 @@
    i32.store
    i32.const 0
    local.set $0
-   loop $loop|0
+   loop $for-loop|0
     local.get $0
     i32.const 23
     i32.lt_u
@@ -659,7 +659,7 @@
      i32.store offset=4
      i32.const 0
      local.set $1
-     loop $loop|1
+     loop $for-loop|1
       local.get $1
       i32.const 16
       i32.lt_u
@@ -679,14 +679,14 @@
        i32.const 1
        i32.add
        local.set $1
-       br $loop|1
+       br $for-loop|1
       end
      end
      local.get $0
      i32.const 1
      i32.add
      local.set $0
-     br $loop|0
+     br $for-loop|0
     end
    end
    i32.const 688
@@ -998,7 +998,7 @@
   local.set $3
   global.get $~lib/rt/pure/CUR
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $0
    i32.lt_u
@@ -1057,14 +1057,14 @@
     i32.const 4
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
   global.set $~lib/rt/pure/CUR
   local.get $5
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    local.get $2
    i32.lt_u
@@ -1076,12 +1076,12 @@
     i32.const 4
     i32.add
     local.set $0
-    br $loop|1
+    br $for-loop|1
    end
   end
   local.get $5
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.lt_u
@@ -1100,7 +1100,7 @@
     i32.const 4
     i32.add
     local.set $0
-    br $loop|2
+    br $for-loop|2
    end
   end
   local.get $5
@@ -2685,7 +2685,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -2716,7 +2716,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -2810,7 +2810,7 @@
   (local $3 i32)
   call $~lib/set/Set<i8>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_s
@@ -2832,13 +2832,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i8>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -2846,7 +2841,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -2863,7 +2862,7 @@
   end
   i32.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -2886,13 +2885,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i8>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -2900,7 +2894,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -2922,7 +2920,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.load offset=12
@@ -2933,18 +2931,8 @@
     local.get $0
     call $~lib/array/Array<i8>#__get
     call $~lib/set/Set<i8>#has
+    i32.eqz
     if
-     local.get $3
-     local.get $2
-     local.get $0
-     call $~lib/array/Array<i8>#__get
-     call $~lib/set/Set<i8>#add
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -2952,7 +2940,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $3
+    local.get $2
+    local.get $0
+    call $~lib/array/Array<i8>#__get
+    call $~lib/set/Set<i8>#add
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $3
@@ -2970,7 +2967,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_s
@@ -3000,14 +2997,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -3024,7 +3019,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_s
@@ -3068,14 +3063,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -3386,7 +3379,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -3417,7 +3410,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -3509,7 +3502,7 @@
   (local $3 i32)
   call $~lib/set/Set<u8>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_u
@@ -3531,13 +3524,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<u8>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -3545,7 +3533,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -3562,7 +3554,7 @@
   end
   i32.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -3585,13 +3577,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<u8>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -3599,7 +3586,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -3621,7 +3612,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.load offset=12
@@ -3632,18 +3623,8 @@
     local.get $0
     call $~lib/array/Array<u8>#__get
     call $~lib/set/Set<u8>#has
+    i32.eqz
     if
-     local.get $3
-     local.get $2
-     local.get $0
-     call $~lib/array/Array<u8>#__get
-     call $~lib/set/Set<u8>#add
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -3651,7 +3632,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $3
+    local.get $2
+    local.get $0
+    call $~lib/array/Array<u8>#__get
+    call $~lib/set/Set<u8>#add
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $3
@@ -3669,7 +3659,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_u
@@ -3699,14 +3689,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -3723,7 +3711,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_u
@@ -3767,14 +3755,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -4187,7 +4173,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -4218,7 +4204,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -4314,7 +4300,7 @@
   (local $3 i32)
   call $~lib/set/Set<i16>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_s
@@ -4336,13 +4322,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i16>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -4350,7 +4331,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -4367,7 +4352,7 @@
   end
   i32.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -4390,13 +4375,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i16>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -4404,7 +4384,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -4426,7 +4410,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.load offset=12
@@ -4437,18 +4421,8 @@
     local.get $0
     call $~lib/array/Array<i16>#__get
     call $~lib/set/Set<i16>#has
+    i32.eqz
     if
-     local.get $3
-     local.get $2
-     local.get $0
-     call $~lib/array/Array<i16>#__get
-     call $~lib/set/Set<i16>#add
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -4456,7 +4430,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $3
+    local.get $2
+    local.get $0
+    call $~lib/array/Array<i16>#__get
+    call $~lib/set/Set<i16>#add
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $3
@@ -4474,7 +4457,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_s
@@ -4504,14 +4487,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -4528,7 +4509,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_s
@@ -4572,14 +4553,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -4890,7 +4869,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -4921,7 +4900,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -5015,7 +4994,7 @@
   (local $3 i32)
   call $~lib/set/Set<u16>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_u
@@ -5037,13 +5016,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<u16>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -5051,7 +5025,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -5068,7 +5046,7 @@
   end
   i32.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -5091,13 +5069,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<u16>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -5105,7 +5078,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -5127,7 +5104,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.load offset=12
@@ -5138,18 +5115,8 @@
     local.get $0
     call $~lib/array/Array<u16>#__get
     call $~lib/set/Set<u16>#has
+    i32.eqz
     if
-     local.get $3
-     local.get $2
-     local.get $0
-     call $~lib/array/Array<u16>#__get
-     call $~lib/set/Set<u16>#add
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -5157,7 +5124,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $3
+    local.get $2
+    local.get $0
+    call $~lib/array/Array<u16>#__get
+    call $~lib/set/Set<u16>#add
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $3
@@ -5175,7 +5151,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_u
@@ -5205,14 +5181,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -5229,7 +5203,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_u
@@ -5273,14 +5247,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -5699,7 +5671,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -5730,7 +5702,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -5822,7 +5794,7 @@
   (local $3 i32)
   call $~lib/set/Set<i32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_s
@@ -5844,13 +5816,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -5858,7 +5825,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -5875,7 +5846,7 @@
   end
   i32.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -5898,13 +5869,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -5912,7 +5878,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -5934,7 +5904,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.load offset=12
@@ -5945,18 +5915,8 @@
     local.get $0
     call $~lib/array/Array<i32>#__get
     call $~lib/set/Set<i32>#has
+    i32.eqz
     if
-     local.get $3
-     local.get $2
-     local.get $0
-     call $~lib/array/Array<i32>#__get
-     call $~lib/set/Set<i32>#add
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -5964,7 +5924,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $3
+    local.get $2
+    local.get $0
+    call $~lib/array/Array<i32>#__get
+    call $~lib/set/Set<i32>#add
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $3
@@ -5982,7 +5951,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_s
@@ -6012,14 +5981,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -6036,7 +6003,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_s
@@ -6080,14 +6047,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -6177,7 +6142,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -6208,7 +6173,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -6220,7 +6185,7 @@
   (local $3 i32)
   call $~lib/set/Set<u32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 100
    i32.lt_u
@@ -6242,13 +6207,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -6256,7 +6216,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -6273,7 +6237,7 @@
   end
   i32.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -6296,13 +6260,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i32>#has
+    i32.eqz
     if
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -6310,7 +6269,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -6332,7 +6295,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.load offset=12
@@ -6343,18 +6306,8 @@
     local.get $0
     call $~lib/array/Array<i32>#__get
     call $~lib/set/Set<i32>#has
+    i32.eqz
     if
-     local.get $3
-     local.get $2
-     local.get $0
-     call $~lib/array/Array<i32>#__get
-     call $~lib/set/Set<i32>#add
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -6362,7 +6315,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $3
+    local.get $2
+    local.get $0
+    call $~lib/array/Array<i32>#__get
+    call $~lib/set/Set<i32>#add
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|2
    end
   end
   local.get $3
@@ -6380,7 +6342,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i32.const 50
    i32.lt_u
@@ -6410,14 +6372,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -6434,7 +6394,7 @@
   end
   i32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i32.const 50
    i32.lt_u
@@ -6478,14 +6438,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i32.const 1
-     i32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i32.const 1
+    i32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -6972,7 +6930,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -7003,7 +6961,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -7097,7 +7055,7 @@
   (local $4 i32)
   call $~lib/set/Set<i64>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i64.const 100
    i64.lt_s
@@ -7119,13 +7077,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#has
+    i32.eqz
     if
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -7133,7 +7086,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -7150,7 +7107,7 @@
   end
   i64.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i64.const 100
    i64.lt_s
@@ -7173,13 +7130,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#has
+    i32.eqz
     if
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -7187,7 +7139,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -7207,7 +7163,7 @@
   local.set $2
   call $~lib/set/Set<i64>#constructor
   local.set $4
-  loop $loop|2
+  loop $for-loop|2
    local.get $3
    local.get $2
    i32.load offset=12
@@ -7218,18 +7174,8 @@
     local.get $3
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $3
-     call $~lib/array/Array<i64>#__get
-     call $~lib/set/Set<i64>#add
-     local.get $3
-     i32.const 1
-     i32.add
-     local.set $3
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -7237,7 +7183,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $3
+    call $~lib/array/Array<i64>#__get
+    call $~lib/set/Set<i64>#add
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|2
    end
   end
   local.get $4
@@ -7255,7 +7210,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i64.const 50
    i64.lt_s
@@ -7285,14 +7240,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -7309,7 +7262,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i64.const 50
    i64.lt_s
@@ -7353,14 +7306,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -7450,7 +7401,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -7481,7 +7432,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -7494,7 +7445,7 @@
   (local $4 i32)
   call $~lib/set/Set<u64>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i64.const 100
    i64.lt_u
@@ -7516,13 +7467,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#has
+    i32.eqz
     if
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -7530,7 +7476,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -7547,7 +7497,7 @@
   end
   i64.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    i64.const 100
    i64.lt_u
@@ -7570,13 +7520,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#has
+    i32.eqz
     if
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -7584,7 +7529,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -7604,7 +7553,7 @@
   local.set $2
   call $~lib/set/Set<u64>#constructor
   local.set $4
-  loop $loop|2
+  loop $for-loop|2
    local.get $3
    local.get $2
    i32.load offset=12
@@ -7615,18 +7564,8 @@
     local.get $3
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $3
-     call $~lib/array/Array<i64>#__get
-     call $~lib/set/Set<i64>#add
-     local.get $3
-     i32.const 1
-     i32.add
-     local.set $3
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -7634,7 +7573,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $3
+    call $~lib/array/Array<i64>#__get
+    call $~lib/set/Set<i64>#add
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|2
    end
   end
   local.get $4
@@ -7652,7 +7600,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    i64.const 50
    i64.lt_u
@@ -7682,14 +7630,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -7706,7 +7652,7 @@
   end
   i64.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    i64.const 50
    i64.lt_u
@@ -7750,14 +7696,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     i64.const 1
-     i64.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    i64.const 1
+    i64.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -8148,7 +8092,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -8179,7 +8123,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -8274,7 +8218,7 @@
   (local $4 i32)
   call $~lib/set/Set<f32>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    f32.const 100
    f32.lt
@@ -8296,13 +8240,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f32>#has
+    i32.eqz
     if
-     local.get $0
-     f32.const 1
-     f32.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -8310,7 +8249,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    f32.const 1
+    f32.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -8327,7 +8270,7 @@
   end
   f32.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    f32.const 100
    f32.lt
@@ -8350,13 +8293,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f32>#has
+    i32.eqz
     if
-     local.get $0
-     f32.const 1
-     f32.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -8364,7 +8302,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    f32.const 1
+    f32.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -8384,7 +8326,7 @@
   local.set $2
   call $~lib/set/Set<f32>#constructor
   local.set $4
-  loop $loop|2
+  loop $for-loop|2
    local.get $3
    local.get $2
    i32.load offset=12
@@ -8395,18 +8337,8 @@
     local.get $3
     call $~lib/array/Array<f32>#__get
     call $~lib/set/Set<f32>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $3
-     call $~lib/array/Array<f32>#__get
-     call $~lib/set/Set<f32>#add
-     local.get $3
-     i32.const 1
-     i32.add
-     local.set $3
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -8414,7 +8346,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $3
+    call $~lib/array/Array<f32>#__get
+    call $~lib/set/Set<f32>#add
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|2
    end
   end
   local.get $4
@@ -8432,7 +8373,7 @@
   end
   f32.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    f32.const 50
    f32.lt
@@ -8462,14 +8403,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f32.const 1
-     f32.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    f32.const 1
+    f32.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -8486,7 +8425,7 @@
   end
   f32.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    f32.const 50
    f32.lt
@@ -8530,14 +8469,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f32.const 1
-     f32.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    f32.const 1
+    f32.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1
@@ -8928,7 +8865,7 @@
   i32.store offset=12
   i32.const 0
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $1
    i32.lt_s
@@ -8959,7 +8896,7 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
@@ -9054,7 +8991,7 @@
   (local $4 i32)
   call $~lib/set/Set<f64>#constructor
   local.set $1
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    f64.const 100
    f64.lt
@@ -9076,13 +9013,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f64>#has
+    i32.eqz
     if
-     local.get $0
-     f64.const 1
-     f64.add
-     local.set $0
-     br $loop|0
-    else
      i32.const 0
      i32.const 416
      i32.const 8
@@ -9090,7 +9022,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    f64.const 1
+    f64.add
+    local.set $0
+    br $for-loop|0
    end
   end
   local.get $1
@@ -9107,7 +9043,7 @@
   end
   f64.const 50
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    f64.const 100
    f64.lt
@@ -9130,13 +9066,8 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f64>#has
+    i32.eqz
     if
-     local.get $0
-     f64.const 1
-     f64.add
-     local.set $0
-     br $loop|1
-    else
      i32.const 0
      i32.const 416
      i32.const 16
@@ -9144,7 +9075,11 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $0
+    f64.const 1
+    f64.add
+    local.set $0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -9164,7 +9099,7 @@
   local.set $2
   call $~lib/set/Set<f64>#constructor
   local.set $4
-  loop $loop|2
+  loop $for-loop|2
    local.get $3
    local.get $2
    i32.load offset=12
@@ -9175,18 +9110,8 @@
     local.get $3
     call $~lib/array/Array<f64>#__get
     call $~lib/set/Set<f64>#has
+    i32.eqz
     if
-     local.get $4
-     local.get $2
-     local.get $3
-     call $~lib/array/Array<f64>#__get
-     call $~lib/set/Set<f64>#add
-     local.get $3
-     i32.const 1
-     i32.add
-     local.set $3
-     br $loop|2
-    else
      i32.const 0
      i32.const 416
      i32.const 24
@@ -9194,7 +9119,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    unreachable
+    local.get $4
+    local.get $2
+    local.get $3
+    call $~lib/array/Array<f64>#__get
+    call $~lib/set/Set<f64>#add
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|2
    end
   end
   local.get $4
@@ -9212,7 +9146,7 @@
   end
   f64.const 0
   local.set $0
-  loop $loop|3
+  loop $for-loop|3
    local.get $0
    f64.const 50
    f64.lt
@@ -9242,14 +9176,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f64.const 1
-     f64.add
-     local.set $0
-     br $loop|3
     end
-    unreachable
+    local.get $0
+    f64.const 1
+    f64.add
+    local.set $0
+    br $for-loop|3
    end
   end
   local.get $1
@@ -9266,7 +9198,7 @@
   end
   f64.const 0
   local.set $0
-  loop $loop|4
+  loop $for-loop|4
    local.get $0
    f64.const 50
    f64.lt
@@ -9310,14 +9242,12 @@
      i32.const 4
      call $~lib/builtins/abort
      unreachable
-    else
-     local.get $0
-     f64.const 1
-     f64.add
-     local.set $0
-     br $loop|4
     end
-    unreachable
+    local.get $0
+    f64.const 1
+    f64.add
+    local.set $0
+    br $for-loop|4
    end
   end
   local.get $1

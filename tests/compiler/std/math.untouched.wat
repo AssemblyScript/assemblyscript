@@ -43551,16 +43551,14 @@
   call $~lib/bindings/Math/random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
-  block $break|0
-   i32.const 0
-   local.set $0
-   loop $loop|0
-    local.get $0
-    f64.convert_i32_s
-    f64.const 1e6
-    f64.lt
-    i32.eqz
-    br_if $break|0
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $0
+   f64.convert_i32_s
+   f64.const 1e6
+   f64.lt
+   if
     call $~lib/math/NativeMath.random
     local.set $1
     local.get $1
@@ -43586,25 +43584,22 @@
     i32.const 1
     i32.add
     local.set $0
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   call $~lib/bindings/Math/random
   i64.reinterpret_f64
   local.set $2
   local.get $2
   call $~lib/math/NativeMath.seedRandom
-  block $break|1
-   i32.const 0
-   local.set $0
-   loop $loop|1
-    local.get $0
-    f64.convert_i32_s
-    f64.const 1e6
-    f64.lt
-    i32.eqz
-    br_if $break|1
+  i32.const 0
+  local.set $0
+  loop $for-loop|1
+   local.get $0
+   f64.convert_i32_s
+   f64.const 1e6
+   f64.lt
+   if
     call $~lib/math/NativeMathf.random
     local.set $3
     local.get $3
@@ -43630,9 +43625,8 @@
     i32.const 1
     i32.add
     local.set $0
-    br $loop|1
+    br $for-loop|1
    end
-   unreachable
   end
   f64.const -8.06684839057968
   f64.const -8

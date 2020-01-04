@@ -185,26 +185,26 @@
  (func $retain-release/scopeForComplex (; 11 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    if
     i32.const 0
     local.set $1
-    loop $loop|1
+    loop $for-loop|1
      local.get $0
      if
       local.get $1
       i32.const 1
       i32.add
       local.set $1
-      br $loop|1
+      br $for-loop|1
      end
     end
     local.get $2
     i32.const 1
     i32.add
     local.set $2
-    br $loop|0
+    br $for-loop|0
    end
   end
  )
