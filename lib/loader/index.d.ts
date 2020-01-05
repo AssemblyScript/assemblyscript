@@ -19,14 +19,16 @@ interface ASUtil {
   _start(): void;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
   __allocString(str: string): number;
-  /** Reads (copies) the value of a string from the module's memory. */
-  __getString(ptr: number): string;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
   __allocArray(id: number, values: ArrayLike<number>): number;
+
+  /** Reads (copies) the value of a string from the module's memory. */
+  __getString(ptr: number): string;
   /** Reads (copies) the values of an array from the module's memory. */
   __getArray(ptr: number): number[];
   /** Gets a view on the values of an array in the module's memory. */
   __getArrayView(ptr: number): ArrayBufferView;
+
   /** Reads the values of Int8Array from the module's memory. */
   __getInt8Array(ptr: number): Int8Array;
   /** Reads the values of Uint8Array from the module's memory. */
@@ -49,6 +51,30 @@ interface ASUtil {
   __getFloat32Array(ptr: number): Float32Array;
     /** Reads the values of Float64Array from the module's memory. */
   __getFloat64Array(ptr: number): Float64Array;
+
+  /** Reads the values of Int8Array from the module's memory. */
+  __getInt8ArrayUnsafe(ptr: number): Int8Array;
+  /** Reads the values of Uint8Array from the module's memory. */
+  __getUint8ArrayUnsafe(ptr: number): Uint8Array;
+  /** Reads the values of Uint8Array from the module's memory. */
+  __getUint8ClampedArrayUnsafe(ptr: number): Uint8ClampedArray;
+  /** Reads the values of Int16Array from the module's memory. */
+  __getInt16ArrayUnsafe(ptr: number): Int16Array;
+  /** Reads the values of Uint16Array from the module's memory. */
+  __getUint16ArrayUnsafe(ptr: number): Uint16Array;
+  /** Reads the values of Int32Array from the module's memory. */
+  __getInt32ArrayUnsafe(ptr: number): Int32Array;
+  /** Reads the values of Uint32Array from the module's memory. */
+  __getUint32ArrayUnsafe(ptr: number): Uint32Array;
+  /** Reads the values of Int32Array from the module's memory. */
+  __getInt64ArrayUnsafe?(ptr: number): BigInt64Array;
+  /** Reads the values of Uint32Array from the module's memory. */
+  __getUint64ArrayUnsafe?(ptr: number): BigUint64Array;
+  /** Reads the values of Float32Array from the module's memory. */
+  __getFloat32ArrayUnsafe(ptr: number): Float32Array;
+    /** Reads the values of Float64Array from the module's memory. */
+  __getFloat64ArrayUnsafe(ptr: number): Float64Array;
+
   /** Reads (copies) the data of an ArrayBuffer from the module's memory. */
   __getArrayBuffer(ptr: number): ArrayBuffer;
   /** Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer. */
