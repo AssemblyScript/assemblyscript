@@ -53,27 +53,27 @@ interface ASUtil {
   __getFloat64Array(ptr: number): Float64Array;
 
   /** Reads the values of Int8Array from the module's memory. */
-  __getInt8ArrayUnsafe(ptr: number): Int8Array;
+  __getInt8ArrayView(ptr: number): Int8Array;
   /** Reads the values of Uint8Array from the module's memory. */
-  __getUint8ArrayUnsafe(ptr: number): Uint8Array;
+  __getUint8ArrayView(ptr: number): Uint8Array;
   /** Reads the values of Uint8Array from the module's memory. */
-  __getUint8ClampedArrayUnsafe(ptr: number): Uint8ClampedArray;
+  __getUint8ClampedArrayView(ptr: number): Uint8ClampedArray;
   /** Reads the values of Int16Array from the module's memory. */
-  __getInt16ArrayUnsafe(ptr: number): Int16Array;
+  __getInt16ArrayView(ptr: number): Int16Array;
   /** Reads the values of Uint16Array from the module's memory. */
-  __getUint16ArrayUnsafe(ptr: number): Uint16Array;
+  __getUint16ArrayView(ptr: number): Uint16Array;
   /** Reads the values of Int32Array from the module's memory. */
-  __getInt32ArrayUnsafe(ptr: number): Int32Array;
+  __getInt32ArrayView(ptr: number): Int32Array;
   /** Reads the values of Uint32Array from the module's memory. */
-  __getUint32ArrayUnsafe(ptr: number): Uint32Array;
+  __getUint32ArrayView(ptr: number): Uint32Array;
   /** Reads the values of Int32Array from the module's memory. */
-  __getInt64ArrayUnsafe?(ptr: number): BigInt64Array;
+  __getInt64ArrayView?(ptr: number): BigInt64Array;
   /** Reads the values of Uint32Array from the module's memory. */
-  __getUint64ArrayUnsafe?(ptr: number): BigUint64Array;
+  __getUint64ArrayView?(ptr: number): BigUint64Array;
   /** Reads the values of Float32Array from the module's memory. */
-  __getFloat32ArrayUnsafe(ptr: number): Float32Array;
+  __getFloat32ArrayView(ptr: number): Float32Array;
   /** Reads the values of Float64Array from the module's memory. */
-  __getFloat64ArrayUnsafe(ptr: number): Float64Array;
+  __getFloat64ArrayView(ptr: number): Float64Array;
 
   /** Reads (copies) the data of an ArrayBuffer from the module's memory. */
   __getArrayBuffer(ptr: number): ArrayBuffer;
