@@ -617,6 +617,31 @@ export class Flow {
     this.localFlags = combinedFlags;
   }
 
+  /** Tests if the specified flows have differing local states. */
+  static hasIncompatibleLocalStates(before: Flow, after: Flow): bool {
+    var numThisLocalFlags = before.localFlags.length;
+    var numOtherLocalFlags = after.localFlags.length;
+    var parentFunction = before.parentFunction;
+    assert(parentFunction === after.parentFunction);
+    var localsByIndex = parentFunction.localsByIndex;
+    assert(localsByIndex === after.parentFunction.localsByIndex);
+    for (let i = 0, k = min<i32>(numThisLocalFlags, numOtherLocalFlags); i < k; ++i) {
+      let local = localsByIndex[i];
+      let type = local.type;
+      if (type.is(TypeFlags.SHORT | TypeFlags.INTEGER)) {
+        if (before.isLocalFlag(i, LocalFlags.WRAPPED) && !after.isLocalFlag(i, LocalFlags.WRAPPED)) {
+          return true;
+        }
+      }
+      if (type.is(TypeFlags.REFERENCE)) {
+        if (before.isLocalFlag(i, LocalFlags.NONNULL) && !after.isLocalFlag(i, LocalFlags.NONNULL)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   /** Unifies local flags between this and the other flow. */
   unifyLocalFlags(other: Flow): void {
     var numThisLocalFlags = this.localFlags.length;

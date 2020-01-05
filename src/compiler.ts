@@ -1998,7 +1998,17 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   compileForStatement(
+    /** Statement to compile. */
     statement: ForStatement
+  ): ExpressionRef {
+    return this.doCompileForStatement(statement, null);
+  }
+
+  private doCompileForStatement(
+    /** Statement to compile. */
+    statement: ForStatement,
+    /** If recompiling, the loop flow with differing local flags that triggered it. */
+    overrideLoopFlow: Flow | null
   ): ExpressionRef {
     var module = this.module;
     var outerFlow = this.currentFlow;
@@ -2028,6 +2038,8 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var loopFlow = flow.fork();
+    if (overrideLoopFlow) loopFlow.unifyLocalFlags(overrideLoopFlow);
+    var loopFlowBefore = loopFlow.fork();
     var condExpr: ExpressionRef;
     var condTrue = false;
     {
@@ -2060,25 +2072,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    var incrStmts = new Array<ExpressionRef>();
-    {
-      let incrementor = statement.incrementor;
-      if (incrementor) {
-        let incrFlow = loopFlow.fork();
-        this.currentFlow = incrFlow;
-        incrStmts.push(
-          this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP)
-        );
-        this.performAutoreleases(incrFlow, incrStmts);
-        incrFlow.freeScopedLocals();
-        // The incrementor has no CFG side-effects, but can modify local state.
-        // Hence: unify flags before and after the incrementor runs
-        // TODO: Can also throw, but that's not implemented yet.
-        loopFlow.unifyLocalFlags(incrFlow);
-        this.currentFlow = loopFlow;
-      }
-    }
-
     var contFlow = loopFlow.fork();
     this.currentFlow = contFlow;
     var breakLabel = "for-break" + label;
@@ -2100,17 +2093,39 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         this.performAutoreleases(contFlow, contStmts);
       }
-      // TODO: For a proper CFG we'd have to take into account that the loop
-      // body affects itself when executing at least twice. One way to do this
-      // would be to unroll the first iteration if we detect that local states
-      // differ before and after the loop executed for the first time, or we
-      // can move this logic to a checker. The latter is preferrable because
-      // since it can determine such a condition prior we can compile once with
-      // the least common denominator of flags (i.e. null and wrap states).
+      contFlow.freeScopedLocals();
+      if (condTrue) loopFlow.inherit(contFlow);
+      else loopFlow.inheritConditional(contFlow);
+      this.currentFlow = loopFlow;
     }
-    contFlow.freeScopedLocals();
-    if (condTrue) loopFlow.inherit(contFlow);
-    else loopFlow.inheritConditional(contFlow);
+
+    var incrStmts = new Array<ExpressionRef>();
+    {
+      let incrementor = statement.incrementor;
+      if (incrementor) {
+        let incrFlow = loopFlow.fork();
+        this.currentFlow = incrFlow;
+        incrStmts.push(
+          this.compileExpression(incrementor, Type.void, Constraints.CONV_IMPLICIT | Constraints.WILL_DROP)
+        );
+        this.performAutoreleases(incrFlow, incrStmts);
+        incrFlow.freeScopedLocals();
+        loopFlow.inherit(incrFlow);
+        this.currentFlow = loopFlow;
+      }
+    }
+
+    // Detect if local flags are incompatible before and after looping, and if
+    // so recompile by unifying local flags before and after the loop.
+    if (Flow.hasIncompatibleLocalStates(loopFlowBefore, loopFlow)) {
+      assert(!overrideLoopFlow); // should not have to recompile twice
+      loopFlow.freeScopedLocals();
+      flow.freeScopedLocals();
+      outerFlow.popBreakLabel();
+      this.currentFlow = outerFlow;
+      return this.doCompileForStatement(statement, loopFlow);
+    }
+
     flow.inherit(loopFlow);
     this.currentFlow = flow;
 
@@ -2927,7 +2942,7 @@ export class Compiler extends DiagnosticEmitter {
     // ensure conversion and wrapping in case the respective function doesn't on its own
     var currentType = this.currentType;
     var wrap = (constraints & Constraints.MUST_WRAP) != 0;
-    if (currentType != contextualType) {
+    if (currentType != contextualType.nonNullableType) { // allow assigning non-nullable to nullable
       if (constraints & Constraints.CONV_EXPLICIT) {
         expr = this.convertExpression(expr, currentType, contextualType, true, wrap, expression);
         wrap = false;
@@ -5194,6 +5209,7 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeAssignment(
       target,
       expr, // TODO: delay release above if possible?
+      this.currentType,
       left,
       resolver.currentThisExpression,
       resolver.currentElementExpression,
@@ -5327,9 +5343,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile the value and do the assignment
     assert(targetType != Type.void);
+    var valueExpr = this.compileExpression(valueExpression, targetType, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
     return this.makeAssignment(
       target,
-      this.compileExpression(valueExpression, targetType, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN),
+      valueExpr,
+      this.currentType,
       expression,
       thisExpression,
       elementExpression,
@@ -5343,6 +5361,8 @@ export class Compiler extends DiagnosticEmitter {
     target: Element,
     /** Value expression that has been compiled in a previous step already. */
     valueExpr: ExpressionRef,
+    /** Value expression type. */
+    valueType: Type,
     /** Expression reference. Has already been compiled to `valueExpr`. */
     valueExpression: Expression,
     /** `this` expression reference if a field or property set. */
@@ -5368,7 +5388,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = tee ? (<Local>target).type : Type.void;
           return module.unreachable();
         }
-        return this.makeLocalAssignment(<Local>target, valueExpr, tee);
+        return this.makeLocalAssignment(<Local>target, valueExpr, valueType, tee);
       }
       case ElementKind.GLOBAL: {
         if (!this.compileGlobal(<Global>target)) return module.unreachable();
@@ -5533,10 +5553,12 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes an assignment to a local, possibly retaining and releasing affected references and keeping track of wrap and null states. */
   private makeLocalAssignment(
-    /** The local to assign to. */
+    /** Local to assign to. */
     local: Local,
-    /** The value to assign. */
+    /** Value to assign. */
     valueExpr: ExpressionRef,
+    /** Value type. */
+    valueType: Type,
     /** Whether to tee the value. */
     tee: bool
   ): ExpressionRef {
@@ -5547,7 +5569,7 @@ export class Compiler extends DiagnosticEmitter {
     var localIndex = local.index;
 
     if (type.is(TypeFlags.NULLABLE)) {
-      if (flow.isNonnull(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.NONNULL);
+      if (!valueType.is(TypeFlags.NULLABLE) || flow.isNonnull(valueExpr, type)) flow.setLocalFlag(localIndex, LocalFlags.NONNULL);
       else flow.unsetLocalFlag(localIndex, LocalFlags.NONNULL);
     }
     flow.setLocalFlag(localIndex, LocalFlags.WRITTENTO);
@@ -8055,7 +8077,18 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FIELD: { // instance field
         assert((<Field>target).memoryOffset >= 0);
-        let thisExpr = this.compileExpression(assert(this.resolver.currentThisExpression), this.options.usizeType);
+        let thisExpression = assert(this.resolver.currentThisExpression);
+        let thisExpr = this.compileExpression(thisExpression, this.options.usizeType);
+        // FIXME
+        // let thisType = this.currentType;
+        // if (thisType.is(TypeFlags.NULLABLE)) {
+        //   if (!flow.isNonnull(thisExpr, thisType)) {
+        //     this.error(
+        //       DiagnosticCode.Object_is_possibly_null,
+        //       thisExpression.range
+        //     );
+        //   }
+        // }
         this.currentType = (<Field>target).type;
         return module.load(
           (<Field>target).type.byteSize,
@@ -8440,6 +8473,7 @@ export class Compiler extends DiagnosticEmitter {
       return this.makeAssignment(
         target,
         expr,
+        this.currentType,
         expression.operand,
         resolver.currentThisExpression,
         resolver.currentElementExpression,
@@ -8451,6 +8485,7 @@ export class Compiler extends DiagnosticEmitter {
     var setValue = this.makeAssignment(
       target,
       expr, // includes a tee of getValue to tempLocal
+      this.currentType,
       expression.operand,
       resolver.currentThisExpression,
       resolver.currentElementExpression,
@@ -8824,6 +8859,7 @@ export class Compiler extends DiagnosticEmitter {
     return this.makeAssignment(
       target,
       expr,
+      this.currentType,
       expression.operand,
       resolver.currentThisExpression,
       resolver.currentElementExpression,

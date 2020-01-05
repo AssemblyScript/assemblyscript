@@ -653,7 +653,7 @@ function testArrayWrap<TArray extends TypedArray<T>, T extends number>(): void {
     array[i] = <T>values[i];
   }
   var buffer = array.buffer.slice(array.byteOffset, array.byteOffset + array.byteLength);
-  var result: TArray | null = null;
+  var result: TArray;
   if (array instanceof Int8Array) {
     result = <TArray>Int8Array.wrap(buffer);
   } else if (array instanceof Uint8Array) {
@@ -676,9 +676,12 @@ function testArrayWrap<TArray extends TypedArray<T>, T extends number>(): void {
     result = <TArray>Float32Array.wrap(buffer);
   } else if (array instanceof Float64Array) {
     result = <TArray>Float64Array.wrap(buffer);
+  } else {
+    assert(false);
+    return;
   }
   for (let i = 0; i < length; i++) {
-    assert(array[i] == result![i]);
+    assert(array[i] == result[i]);
   }
 }
 

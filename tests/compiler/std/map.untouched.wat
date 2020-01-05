@@ -5555,7 +5555,7 @@
   local.set $0
   i32.const 0
   local.set $1
-  loop $for-loop|0
+  loop $for-loop|1
    local.get $1
    i32.const 100
    i32.lt_s
@@ -5619,7 +5619,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|0
+    br $for-loop|1
    end
   end
   local.get $0
@@ -5637,7 +5637,7 @@
   end
   i32.const 0
   local.set $1
-  loop $for-loop|1
+  loop $for-loop|3
    local.get $1
    i32.const 100
    i32.lt_s
@@ -5720,7 +5720,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|1
+    br $for-loop|3
    end
   end
   local.get $0
@@ -5750,7 +5750,7 @@
   local.set $4
   i32.const 0
   local.set $5
-  loop $for-loop|2
+  loop $for-loop|4
    local.get $5
    local.get $1
    call $~lib/array/Array<i8>#get:length
@@ -5806,7 +5806,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|2
+    br $for-loop|4
    end
   end
   local.get $3
@@ -5837,7 +5837,7 @@
   end
   i32.const 0
   local.set $5
-  loop $for-loop|3
+  loop $for-loop|6
    local.get $5
    i32.const 50
    i32.lt_s
@@ -5895,7 +5895,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|3
+    br $for-loop|6
    end
   end
   local.get $0
@@ -5913,7 +5913,7 @@
   end
   i32.const 0
   local.set $5
-  loop $for-loop|4
+  loop $for-loop|8
    local.get $5
    i32.const 50
    i32.lt_s
@@ -5974,7 +5974,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|4
+    br $for-loop|8
    end
   end
   local.get $0
@@ -7162,7 +7162,7 @@
   local.set $0
   i32.const 0
   local.set $1
-  loop $for-loop|0
+  loop $for-loop|1
    local.get $1
    i32.const 100
    i32.lt_u
@@ -7222,7 +7222,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|0
+    br $for-loop|1
    end
   end
   local.get $0
@@ -7240,7 +7240,7 @@
   end
   i32.const 0
   local.set $1
-  loop $for-loop|1
+  loop $for-loop|3
    local.get $1
    i32.const 100
    i32.lt_u
@@ -7317,7 +7317,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|1
+    br $for-loop|3
    end
   end
   local.get $0
@@ -7347,7 +7347,7 @@
   local.set $4
   i32.const 0
   local.set $5
-  loop $for-loop|2
+  loop $for-loop|4
    local.get $5
    local.get $1
    call $~lib/array/Array<u8>#get:length
@@ -7403,7 +7403,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|2
+    br $for-loop|4
    end
   end
   local.get $3
@@ -7434,7 +7434,7 @@
   end
   i32.const 0
   local.set $5
-  loop $for-loop|3
+  loop $for-loop|6
    local.get $5
    i32.const 50
    i32.lt_u
@@ -7490,7 +7490,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|3
+    br $for-loop|6
    end
   end
   local.get $0
@@ -7508,7 +7508,7 @@
   end
   i32.const 0
   local.set $5
-  loop $for-loop|4
+  loop $for-loop|8
    local.get $5
    i32.const 50
    i32.lt_u
@@ -7567,7 +7567,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|4
+    br $for-loop|8
    end
   end
   local.get $0
@@ -8791,7 +8791,7 @@
   local.set $0
   i32.const 0
   local.set $1
-  loop $for-loop|0
+  loop $for-loop|1
    local.get $1
    i32.const 100
    i32.lt_s
@@ -8855,7 +8855,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|0
+    br $for-loop|1
    end
   end
   local.get $0
@@ -8873,7 +8873,7 @@
   end
   i32.const 0
   local.set $1
-  loop $for-loop|1
+  loop $for-loop|3
    local.get $1
    i32.const 100
    i32.lt_s
@@ -8956,7 +8956,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|1
+    br $for-loop|3
    end
   end
   local.get $0
@@ -8986,7 +8986,7 @@
   local.set $4
   i32.const 0
   local.set $5
-  loop $for-loop|2
+  loop $for-loop|4
    local.get $5
    local.get $1
    call $~lib/array/Array<i16>#get:length
@@ -9042,7 +9042,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|2
+    br $for-loop|4
    end
   end
   local.get $3
@@ -9073,7 +9073,7 @@
   end
   i32.const 0
   local.set $5
-  loop $for-loop|3
+  loop $for-loop|6
    local.get $5
    i32.const 50
    i32.lt_s
@@ -9131,7 +9131,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|3
+    br $for-loop|6
    end
   end
   local.get $0
@@ -9149,7 +9149,7 @@
   end
   i32.const 0
   local.set $5
-  loop $for-loop|4
+  loop $for-loop|8
    local.get $5
    i32.const 50
    i32.lt_s
@@ -9210,7 +9210,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|4
+    br $for-loop|8
    end
   end
   local.get $0
@@ -10398,7 +10398,7 @@
   local.set $0
   i32.const 0
   local.set $1
-  loop $for-loop|0
+  loop $for-loop|1
    local.get $1
    i32.const 100
    i32.lt_u
@@ -10458,7 +10458,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|0
+    br $for-loop|1
    end
   end
   local.get $0
@@ -10476,7 +10476,7 @@
   end
   i32.const 0
   local.set $1
-  loop $for-loop|1
+  loop $for-loop|3
    local.get $1
    i32.const 100
    i32.lt_u
@@ -10553,7 +10553,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|1
+    br $for-loop|3
    end
   end
   local.get $0
@@ -10583,7 +10583,7 @@
   local.set $4
   i32.const 0
   local.set $5
-  loop $for-loop|2
+  loop $for-loop|4
    local.get $5
    local.get $1
    call $~lib/array/Array<u16>#get:length
@@ -10639,7 +10639,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|2
+    br $for-loop|4
    end
   end
   local.get $3
@@ -10670,7 +10670,7 @@
   end
   i32.const 0
   local.set $5
-  loop $for-loop|3
+  loop $for-loop|6
    local.get $5
    i32.const 50
    i32.lt_u
@@ -10726,7 +10726,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|3
+    br $for-loop|6
    end
   end
   local.get $0
@@ -10744,7 +10744,7 @@
   end
   i32.const 0
   local.set $5
-  loop $for-loop|4
+  loop $for-loop|8
    local.get $5
    i32.const 50
    i32.lt_u
@@ -10803,7 +10803,7 @@
     i32.const 1
     i32.add
     local.set $5
-    br $for-loop|4
+    br $for-loop|8
    end
   end
   local.get $0

@@ -2810,7 +2810,7 @@
   (local $3 i32)
   call $~lib/set/Set<i8>#constructor
   local.set $1
-  loop $for-loop|0
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -2845,7 +2845,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -2862,7 +2862,7 @@
   end
   i32.const 50
   local.set $0
-  loop $for-loop|1
+  loop $for-loop|3
    local.get $0
    i32.const 100
    i32.lt_s
@@ -2898,7 +2898,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|1
+    br $for-loop|3
    end
   end
   local.get $1
@@ -2920,7 +2920,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $for-loop|2
+  loop $for-loop|4
    local.get $0
    local.get $2
    i32.load offset=12
@@ -2949,7 +2949,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|2
+    br $for-loop|4
    end
   end
   local.get $3
@@ -2967,7 +2967,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|3
+  loop $for-loop|6
    local.get $0
    i32.const 50
    i32.lt_s
@@ -3002,7 +3002,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|3
+    br $for-loop|6
    end
   end
   local.get $1
@@ -3019,7 +3019,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|4
+  loop $for-loop|8
    local.get $0
    i32.const 50
    i32.lt_s
@@ -3068,7 +3068,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|4
+    br $for-loop|8
    end
   end
   local.get $1
@@ -3502,7 +3502,7 @@
   (local $3 i32)
   call $~lib/set/Set<u8>#constructor
   local.set $1
-  loop $for-loop|0
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -3537,7 +3537,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -3554,7 +3554,7 @@
   end
   i32.const 50
   local.set $0
-  loop $for-loop|1
+  loop $for-loop|3
    local.get $0
    i32.const 100
    i32.lt_u
@@ -3590,7 +3590,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|1
+    br $for-loop|3
    end
   end
   local.get $1
@@ -3612,7 +3612,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $for-loop|2
+  loop $for-loop|4
    local.get $0
    local.get $2
    i32.load offset=12
@@ -3641,7 +3641,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|2
+    br $for-loop|4
    end
   end
   local.get $3
@@ -3659,7 +3659,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|3
+  loop $for-loop|6
    local.get $0
    i32.const 50
    i32.lt_u
@@ -3694,7 +3694,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|3
+    br $for-loop|6
    end
   end
   local.get $1
@@ -3711,7 +3711,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|4
+  loop $for-loop|8
    local.get $0
    i32.const 50
    i32.lt_u
@@ -3760,7 +3760,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|4
+    br $for-loop|8
    end
   end
   local.get $1
@@ -4300,7 +4300,7 @@
   (local $3 i32)
   call $~lib/set/Set<i16>#constructor
   local.set $1
-  loop $for-loop|0
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_s
@@ -4335,7 +4335,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -4352,7 +4352,7 @@
   end
   i32.const 50
   local.set $0
-  loop $for-loop|1
+  loop $for-loop|3
    local.get $0
    i32.const 100
    i32.lt_s
@@ -4388,7 +4388,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|1
+    br $for-loop|3
    end
   end
   local.get $1
@@ -4410,7 +4410,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $for-loop|2
+  loop $for-loop|4
    local.get $0
    local.get $2
    i32.load offset=12
@@ -4439,7 +4439,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|2
+    br $for-loop|4
    end
   end
   local.get $3
@@ -4457,7 +4457,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|3
+  loop $for-loop|6
    local.get $0
    i32.const 50
    i32.lt_s
@@ -4492,7 +4492,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|3
+    br $for-loop|6
    end
   end
   local.get $1
@@ -4509,7 +4509,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|4
+  loop $for-loop|8
    local.get $0
    i32.const 50
    i32.lt_s
@@ -4558,7 +4558,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|4
+    br $for-loop|8
    end
   end
   local.get $1
@@ -4994,7 +4994,7 @@
   (local $3 i32)
   call $~lib/set/Set<u16>#constructor
   local.set $1
-  loop $for-loop|0
+  loop $for-loop|1
    local.get $0
    i32.const 100
    i32.lt_u
@@ -5029,7 +5029,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|0
+    br $for-loop|1
    end
   end
   local.get $1
@@ -5046,7 +5046,7 @@
   end
   i32.const 50
   local.set $0
-  loop $for-loop|1
+  loop $for-loop|3
    local.get $0
    i32.const 100
    i32.lt_u
@@ -5082,7 +5082,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|1
+    br $for-loop|3
    end
   end
   local.get $1
@@ -5104,7 +5104,7 @@
   local.set $3
   i32.const 0
   local.set $0
-  loop $for-loop|2
+  loop $for-loop|4
    local.get $0
    local.get $2
    i32.load offset=12
@@ -5133,7 +5133,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|2
+    br $for-loop|4
    end
   end
   local.get $3
@@ -5151,7 +5151,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|3
+  loop $for-loop|6
    local.get $0
    i32.const 50
    i32.lt_u
@@ -5186,7 +5186,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|3
+    br $for-loop|6
    end
   end
   local.get $1
@@ -5203,7 +5203,7 @@
   end
   i32.const 0
   local.set $0
-  loop $for-loop|4
+  loop $for-loop|8
    local.get $0
    i32.const 50
    i32.lt_u
@@ -5252,7 +5252,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $for-loop|4
+    br $for-loop|8
    end
   end
   local.get $1
