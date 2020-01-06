@@ -3643,7 +3643,7 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $start:std/string-encoding (; 53 ;)
+ (func $start (; 53 ;)
   i32.const 28
   i32.load
   i32.const 12
@@ -3670,10 +3670,7 @@
   i32.const 13808
   call $std/string-encoding/testLarge
  )
- (func $start (; 54 ;)
-  call $start:std/string-encoding
- )
- (func $~lib/rt/pure/__visit (; 55 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 54 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 21196
   i32.lt_u
@@ -3776,7 +3773,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 56 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 55 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2

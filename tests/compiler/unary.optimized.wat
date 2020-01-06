@@ -36,13 +36,13 @@
   global.set $unary/i
   i32.const -2
   global.set $unary/i
+  i32.const -2
+  global.set $unary/i
   i32.const 2
   global.set $unary/i
   i32.const 0
   global.set $unary/i
-  global.get $unary/i
   i32.const -1
-  i32.xor
   global.set $unary/i
   global.get $unary/i
   i32.const 1
@@ -90,13 +90,13 @@
   global.set $unary/I
   i64.const -2
   global.set $unary/I
+  i64.const -2
+  global.set $unary/I
   i64.const 2
   global.set $unary/I
   i64.const 0
   global.set $unary/I
-  global.get $unary/I
   i64.const -1
-  i64.xor
   global.set $unary/I
   global.get $unary/I
   i64.const 1
@@ -142,6 +142,8 @@
   global.set $unary/f
   i32.const 0
   global.set $unary/i
+  f32.const -1.25
+  global.set $unary/f
   f32.const 1.25
   global.set $unary/f
   f32.const 1.25
@@ -156,9 +158,7 @@
   global.set $unary/i
   f32.const 2.25
   global.set $unary/f
-  global.get $unary/f
-  f32.const 1
-  f32.sub
+  f32.const 1.25
   global.set $unary/f
   global.get $unary/f
   local.tee $0
@@ -196,6 +196,8 @@
   global.set $unary/F
   i64.const 0
   global.set $unary/I
+  f64.const -1.25
+  global.set $unary/F
   f64.const 1.25
   global.set $unary/F
   f64.const 1.25
@@ -211,9 +213,7 @@
   global.set $unary/I
   f64.const 2.25
   global.set $unary/F
-  global.get $unary/F
-  f64.const 1
-  f64.sub
+  f64.const 1.25
   global.set $unary/F
   global.get $unary/F
   local.tee $1

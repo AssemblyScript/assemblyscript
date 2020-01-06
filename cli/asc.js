@@ -700,6 +700,9 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("simplify-globals-optimizing");
+      }
       add("optimize-instructions");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
