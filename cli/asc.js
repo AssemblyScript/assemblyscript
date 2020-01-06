@@ -665,6 +665,9 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("pick-load-signs");
       }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("simplify-globals-optimizing");
+      }
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
       } else {
