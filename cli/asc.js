@@ -695,13 +695,13 @@ exports.main = function main(argv, options, callback) {
       add("remove-unused-brs");
       add("remove-unused-names");
       add("merge-blocks");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("simplify-globals-optimizing");
+      }
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
       } else {
         add("precompute");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("simplify-globals-optimizing");
       }
       add("optimize-instructions");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {

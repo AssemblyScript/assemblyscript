@@ -410,7 +410,7 @@
   i32.const 0
   local.tee $0
   if (result i32)
-   local.get $0
+   i32.const 0
    i32.const 4
    call $~lib/rt/__instanceof
   else
