@@ -6948,8 +6948,8 @@
   local.get $0
   local.get $3
   call $~lib/memory/memory.copy
-  local.get $3
   local.get $2
+  local.get $3
   i32.add
   local.get $1
   local.get $4

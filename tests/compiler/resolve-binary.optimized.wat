@@ -1208,22 +1208,18 @@
   global.set $~lib/util/number/_frc_minus
   i32.const -61
   global.set $~lib/util/number/_exp
-  i32.const 348
+  i32.const 340
   f64.const 347
   i32.trunc_f64_s
-  i32.const 0
-  i32.add
   i32.const 3
   i32.shr_s
-  i32.const 1
-  i32.add
   i32.const 3
   i32.shl
   i32.sub
   global.set $~lib/util/number/_K
-  i32.const 352
   i32.const 1156
   i32.load
+  i32.const 352
   i32.add
   i64.load
   global.set $~lib/util/number/_frc_pow
@@ -1265,8 +1261,8 @@
   i64.add
   i64.const 32
   i64.shr_u
-  i64.const 2147483648
   local.get $4
+  i64.const 2147483648
   i64.mul
   local.get $3
   i64.const 32
@@ -1334,8 +1330,8 @@
   i64.add
   i64.const 32
   i64.shr_u
-  i64.const 2147483647
   local.get $4
+  i64.const 2147483647
   i64.mul
   local.get $1
   i64.const 32

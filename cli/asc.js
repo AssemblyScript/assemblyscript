@@ -753,21 +753,20 @@ exports.main = function main(argv, options, callback) {
         add("code-pushing");
 
         // this quite expensive so do this only for highest opt level
+        add("simplify-globals-optimizing");
         if (optimizeLevel >= 3) {
           add("simplify-locals-nostructure");
           add("vacuum");
 
-          add("optimize-instructions");
-          add("simplify-globals-optimizing");
           add("precompute-propagate");
-
           add("simplify-locals-nostructure");
-          add("reorder-locals");
           add("vacuum");
+
+          add("reorder-locals");
         } else {
-          add("optimize-instructions");
           add("simplify-globals-optimizing");
         }
+        add("optimize-instructions");
       }
       // remove unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs
