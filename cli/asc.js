@@ -699,11 +699,12 @@ exports.main = function main(argv, options, callback) {
       add("remove-unused-brs");
       add("remove-unused-names");
       add("merge-blocks");
-      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
-        add("precompute-propagate");
-      } else {
-        add("precompute");
-      }
+      // make this later
+      // if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+      //   add("precompute-propagate");
+      // } else {
+      //   add("precompute");
+      // }
       add("optimize-instructions");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
@@ -724,7 +725,11 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("simplify-globals");
       }
-      add("precompute-propagate"); // differs
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("precompute-propagate");
+      } else { // differs
+        add("precompute");
+      }
       // replace indirect calls with direct, reduce arity and
       // inline this calls if possible
       add("directize"); // differs
@@ -757,9 +762,7 @@ exports.main = function main(argv, options, callback) {
           add("reorder-locals");
           add("vacuum");
         }
-        // finally optimize all remaining peepholes
         add("simplify-globals-optimizing");
-        add("optimize-instructions");
       }
       // remove unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs
@@ -767,6 +770,9 @@ exports.main = function main(argv, options, callback) {
       add("memory-packing");
       add("remove-unused-module-elements"); // differs
       if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
+        // finally optimize all remaining peepholes
+        add("optimize-instructions"); // differs
+
         add("generate-stack-ir");
         add("optimize-stack-ir");
       }
