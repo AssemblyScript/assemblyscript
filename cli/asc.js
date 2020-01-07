@@ -662,13 +662,9 @@ exports.main = function main(argv, options, callback) {
       add("remove-unused-brs");
       add("remove-unused-names");
       add("optimize-instructions");
-      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("simplify-globals-optimizing");
-      } else {  // differs
-        add("simplify-globals");
+        add("simplify-globals-optimizing"); // differs
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
@@ -698,8 +694,6 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("simplify-globals-optimizing");
-      } else {  // differs
-        add("simplify-globals");
       }
       add("merge-blocks");
       add("remove-unused-brs");
