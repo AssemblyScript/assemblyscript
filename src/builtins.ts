@@ -6,8 +6,7 @@
  import {
   Compiler,
   Constraints,
-  RuntimeFeatures,
-  flatten
+  RuntimeFeatures
 } from "./compiler";
 
 import {
@@ -4933,7 +4932,7 @@ export function compileVisitMembers(compiler: Compiler): void {
     }
     if (!instance.base) code.push(module.return());
     let block = relooper.addBlock(
-      flatten(module, code, NativeType.None)
+      module.flatten(code)
     );
     relooper.addBranchForSwitch(outer, block, [ id ]);
     blocks.push(block);

@@ -401,7 +401,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.nativeParams,
         signature.nativeResults,
         typesToNativeTypes(startFunctionInstance.additionalLocals),
-        module.block(null, startFunctionBody)
+        module.flatten(startFunctionBody)
       );
       startFunctionInstance.finalize(module, funcRef);
       if (!explicitStart) module.setStart(funcRef);
@@ -791,7 +791,7 @@ export class Compiler extends DiagnosticEmitter {
         startSignature.nativeResults,
         varTypes,
         startFunctionBody.length > 1
-          ? module.block(null, startFunctionBody)
+          ? module.flatten(startFunctionBody)
           : startFunctionBody[0]
       );
       previousBody.push(
@@ -1299,7 +1299,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.nativeParams,
         signature.nativeResults,
         typesToNativeTypes(instance.additionalLocals),
-        flatten(module, stmts, instance.signature.returnType.toNativeType())
+        module.flatten(stmts, instance.signature.returnType.toNativeType())
       );
 
     // imported function
@@ -1835,7 +1835,7 @@ export class Compiler extends DiagnosticEmitter {
     innerFlow.freeScopedLocals();
     outerFlow.inherit(innerFlow); // TODO: only if not terminated?
     this.currentFlow = outerFlow;
-    return flatten(this.module, stmts, NativeType.None);
+    return this.module.flatten(stmts);
   }
 
   compileBreakStatement(
@@ -1868,7 +1868,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.freeScopedLocals();
     stmts.push(module.br(breakLabel));
     flow.set(FlowFlags.BREAKS);
-    return flatten(module, stmts, NativeType.None);
+    return module.flatten(stmts);
   }
 
   compileContinueStatement(
@@ -1903,7 +1903,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     flow.freeScopedLocals();
     stmts.push(module.br(continueLabel));
-    return flatten(module, stmts, NativeType.None);
+    return module.flatten(stmts);
   }
 
   compileDoStatement(
@@ -1957,7 +1957,9 @@ export class Compiler extends DiagnosticEmitter {
 
     // Shortcut if body never falls through
     if (bodyFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
-      bodyStmts.push(module.unreachable());
+      bodyStmts.push(
+        module.unreachable()
+      );
       flow.inherit(bodyFlow);
 
     // Otherwise evaluate the condition
@@ -1976,12 +1978,22 @@ export class Compiler extends DiagnosticEmitter {
 
       // Shortcut if condition is always false
       if (condKind == ConditionKind.FALSE) {
+        bodyStmts.push(
+          module.drop(condExpr)
+        );
+        this.performAutoreleases(condFlow, bodyStmts);
         flow.inherit(bodyFlow);
       } else {
         let tcond = condFlow.getTempLocal(Type.bool);
-        bodyStmts.push(module.local_set(tcond.index, condExpr));
+        bodyStmts.push(
+          module.local_set(tcond.index, condExpr)
+        );
         this.performAutoreleases(condFlow, bodyStmts);
-        bodyStmts.push(module.br(continueLabel, module.local_get(tcond.index, NativeType.I32)));
+        bodyStmts.push(
+          module.br(continueLabel,
+            module.local_get(tcond.index, NativeType.I32)
+          )
+        );
         condFlow.freeTempLocal(tcond);
         flow.inherit(condFlow);
 
@@ -2012,7 +2024,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = outerFlow;
     var expr = module.block(breakLabel, [
       module.loop(continueLabel,
-        module.block(null, bodyStmts)
+        module.flatten(bodyStmts)
       )
     ]);
     if (flow.is(FlowFlags.TERMINATES)) {
@@ -2117,7 +2129,7 @@ export class Compiler extends DiagnosticEmitter {
         outerFlow.inherit(flow);
         outerFlow.popBreakLabel();
         this.currentFlow = outerFlow;
-        return flatten(module, stmts, NativeType.None);
+        return module.flatten(stmts);
       }
     } else {
       condExpr = module.i32(1);
@@ -2196,14 +2208,14 @@ export class Compiler extends DiagnosticEmitter {
     }
     loopStmts.push(
       module.if(module.local_get(tcond.index, NativeType.I32),
-        module.block(null, ifStmts)
+        module.flatten(ifStmts)
       )
     );
 
     stmts.push(
       module.block(breakLabel, [
         module.loop(loopLabel,
-          module.block(null, loopStmts)
+          module.flatten(loopStmts)
         )
       ])
     );
@@ -2229,7 +2241,7 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.inherit(flow);
     outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
-    return flatten(module, stmts, NativeType.None);
+    return module.flatten(stmts);
   }
 
   compileIfStatement(
@@ -2322,8 +2334,8 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFlow = flow;
       flow.inheritMutual(thenFlow, elseFlow);
       return module.if(condExpr,
-        flatten(module, thenStmts, NativeType.None),
-        flatten(module, elseStmts, NativeType.None)
+        module.flatten(thenStmts),
+        module.flatten(elseStmts)
       );
     } else {
       flow.inheritBranch(thenFlow);
@@ -2333,7 +2345,7 @@ export class Compiler extends DiagnosticEmitter {
           : thenFlow // must become nonnull in thenFlow otherwise
       );
       return module.if(condExpr,
-        flatten(module, thenStmts, NativeType.None)
+        module.flatten(thenStmts)
       );
     }
   }
@@ -2418,7 +2430,7 @@ export class Compiler extends DiagnosticEmitter {
     if (isLastInBody && expr && returnType != Type.void) {
       if (!stmts.length) return expr;
       stmts.push(expr);
-      return module.block(null, stmts, returnType.toNativeType());
+      return module.flatten(stmts, returnType.toNativeType());
     }
 
     // When inlining, break to the end of the inlined function's block (no need to wrap)
@@ -2426,13 +2438,13 @@ export class Compiler extends DiagnosticEmitter {
       if (!stmts.length) return module.br(assert(flow.inlineReturnLabel), 0, expr);
       stmts.push(module.br(assert(flow.inlineReturnLabel), 0, expr));
       // stmts.push(module.createUnreachable());
-      return module.block(null, stmts);
+      return module.flatten(stmts);
     }
 
     // Otherwise emit a normal return
     if (!stmts.length) return module.return(expr);
     stmts.push(module.return(expr));
-    return module.block(null, stmts);
+    return module.flatten(stmts);
   }
 
   compileSwitchStatement(
@@ -2569,7 +2581,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     stmts.push(compileAbort(this, message, statement));
 
-    return flatten(this.module, stmts, NativeType.None);
+    return this.module.flatten(stmts);
   }
 
   compileTryStatement(
@@ -2790,7 +2802,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     return initializers.length == 0
       ? 0
-      : flatten(module, initializers, NativeType.None);
+      : module.flatten(initializers);
   }
 
   compileVoidStatement(
@@ -2855,19 +2867,23 @@ export class Compiler extends DiagnosticEmitter {
 
     // Shortcut if condition is always false (body never runs)
     if (condKind == ConditionKind.FALSE) {
-      assert(!condFlow.hasScopedLocals);
+      stmts.push(
+        module.drop(condExpr)
+      );
+      this.performAutoreleases(condFlow, stmts);
       assert(!flow.hasScopedLocals);
-      outerFlow.inheritNonnullIfFalse(condExpr);
       outerFlow.popBreakLabel();
       this.currentFlow = outerFlow;
-      return module.nop();
+      return module.flatten(stmts);
     }
 
     // From here on condition is either always true or unknown
 
     // Store condition result in a temp while we autorelease
     var tcond = flow.getTempLocal(Type.bool);
-    stmts.push(module.local_set(tcond.index, condExpr));
+    stmts.push(
+      module.local_set(tcond.index, condExpr)
+    );
     this.performAutoreleases(condFlow, stmts);
     condFlow.freeScopedLocals();
 
@@ -2888,16 +2904,22 @@ export class Compiler extends DiagnosticEmitter {
 
     // Check if body terminates
     if (bodyFlow.is(FlowFlags.TERMINATES)) {
-      bodyStmts.push(module.unreachable());
+      bodyStmts.push(
+        module.unreachable()
+      );
       if (condKind == ConditionKind.TRUE) flow.inherit(bodyFlow);
       else flow.inheritBranch(bodyFlow);
     } else {
       let breaks = bodyFlow.is(FlowFlags.BREAKS);
       if (breaks) {
-        bodyStmts.push(module.unreachable());
+        bodyStmts.push(
+          module.unreachable()
+        );
       } else {
         this.performAutoreleases(bodyFlow, bodyStmts);
-        bodyStmts.push(module.br(continueLabel));
+        bodyStmts.push(
+          module.br(continueLabel)
+        );
       }
       if (condKind == ConditionKind.TRUE) flow.inherit(bodyFlow);
       else flow.inheritBranch(bodyFlow);
@@ -2915,7 +2937,7 @@ export class Compiler extends DiagnosticEmitter {
     }
     stmts.push(
       module.if(module.local_get(tcond.index, NativeType.I32),
-        module.block(null, bodyStmts)
+        module.flatten(bodyStmts)
       )
     );
     flow.freeTempLocal(tcond);
@@ -2937,7 +2959,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = outerFlow;
     var expr = module.block(breakLabel, [
       module.loop(continueLabel,
-        module.block(null, stmts)
+        module.flatten(stmts)
       )
     ]);
     if (condKind == ConditionKind.TRUE && flow.is(FlowFlags.TERMINATES)) {
@@ -5992,7 +6014,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       flow.set(FlowFlags.ALLOCATES | FlowFlags.CALLS_SUPER);
       this.currentType = Type.void;
-      return module.block(null, stmts);
+      return module.flatten(stmts);
     }
 
     // otherwise resolve normally
@@ -6569,7 +6591,7 @@ export class Compiler extends DiagnosticEmitter {
       trampolineSignature.nativeParams,
       trampolineSignature.nativeResults,
       typesToNativeTypes(trampoline.additionalLocals),
-      module.block(null, stmts, returnType.toNativeType())
+      module.flatten(stmts, returnType.toNativeType())
     );
     trampoline.finalize(module, funcRef);
     return trampoline;
@@ -6819,22 +6841,22 @@ export class Compiler extends DiagnosticEmitter {
     );
     var lengthBefore = stmts.length;
     this.performAutoreleases(flow, stmts, finalize);
+    var module = this.module;
     if (stmts.length > lengthBefore) {
       let nativeType = valueType.toNativeType();
       let temp = flow.getTempLocal(valueType);
       if (!flow.canOverflow(valueExpr, valueType)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
       if (flow.isNonnull(valueExpr, valueType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-      let module = this.module;
       stmts[lengthBefore - 1] = module.local_set(temp.index, valueExpr); // nop -> set
       stmts.push(
         module.local_get(temp.index, nativeType) // append get
       );
-      let ret = module.block(null, stmts, nativeType);
+      let ret = module.flatten(stmts, nativeType);
       flow.freeTempLocal(temp);
       return ret;
     } else if (stmts.length > 1) {
       stmts[lengthBefore - 1] = valueExpr; // nop -> value
-      return this.module.block(null, stmts, valueType.toNativeType());
+      return module.flatten(stmts, valueType.toNativeType());
     }
     return valueExpr;
   }
@@ -7128,7 +7150,7 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     exprs[numExpressions] = this.compileExpression(expressions[numExpressions], contextualType, constraints);
-    return this.module.block(null, exprs, this.currentType.toNativeType());
+    return this.module.flatten(exprs, this.currentType.toNativeType());
   }
 
   compileElementAccessExpression(
@@ -7386,7 +7408,7 @@ export class Compiler extends DiagnosticEmitter {
                 module.local_get(thisLocal.index, nativeSizeType)
               );
               this.currentType = thisLocal.type;
-              return module.block(null, stmts, nativeSizeType);
+              return module.flatten(stmts, nativeSizeType);
             }
           }
           // if not a constructor, `this` type can differ
@@ -7933,7 +7955,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.freeTempLocal(tempThis);
     flow.freeTempLocal(tempDataStart);
     this.currentType = arrayType;
-    return module.block(null, stmts, nativeArrayType);
+    return module.flatten(stmts, nativeArrayType);
   }
 
   compileObjectLiteral(expression: ObjectLiteralExpression, contextualType: Type): ExpressionRef {
@@ -8022,7 +8044,7 @@ export class Compiler extends DiagnosticEmitter {
     exprs[exprs.length - 1] = module.local_get(tempLocal.index, this.options.nativeSizeType);
 
     this.currentType = classReference.type;
-    return module.block(null, exprs, this.options.nativeSizeType);
+    return module.flatten(exprs, this.options.nativeSizeType);
   }
 
   compileNewExpression(
@@ -9508,29 +9530,9 @@ function mangleImportName(
 var mangleImportName_moduleName: string;
 var mangleImportName_elementName: string;
 
-/** Flattens a series of expressions to a nop, a single statement or a block depending on statement count. */
-export function flatten(module: Module, stmts: ExpressionRef[], type: NativeType): ExpressionRef {
-  var length = stmts.length;
-  if (length == 0) return module.nop(); // usually filtered out again
-  if (length == 1) {
-    let single = stmts[0];
-    switch (getExpressionId(single)) {
-      case ExpressionId.Return:
-      case ExpressionId.Throw:
-      case ExpressionId.Unreachable: {
-        // type does no matter, terminates anyway
-        return single;
-      }
-    }
-    let singleType = getExpressionType(single);
-    assert(singleType == NativeType.Unreachable || singleType == type);
-    return single;
-  }
-  return module.block(null, stmts, type);
-}
-
 /** Evaluates the kind of a condition from its expression. */
 function evaluateConditionKind(expr: ExpressionRef): ConditionKind {
+  // TODO: String(""), Number(0) ?
   if (getExpressionId(expr) == ExpressionId.Const) {
     assert(getExpressionType(expr) == NativeType.I32);
     return getConstValueI32(expr)
