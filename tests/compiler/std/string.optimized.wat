@@ -2487,17 +2487,17 @@
   i32.const 0
   local.get $0
   call $~lib/string/String#get:length
-  local.tee $2
+  local.tee $3
   i32.const 0
-  local.get $2
+  local.get $3
   i32.lt_s
   select
-  local.tee $3
+  local.tee $4
   local.get $1
   call $~lib/string/String#get:length
-  local.tee $4
+  local.tee $2
   i32.add
-  local.get $2
+  local.get $3
   i32.gt_s
   if
    local.get $1
@@ -2506,9 +2506,9 @@
    return
   end
   local.get $0
-  local.get $3
-  local.get $1
   local.get $4
+  local.get $1
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
   local.get $1
@@ -4647,11 +4647,10 @@
   if
    i32.const 752
    local.get $1
-   local.tee $2
    i32.const 752
    i32.ne
    if
-    local.get $2
+    local.get $1
     call $~lib/rt/pure/__release
    end
    local.set $1
@@ -4660,14 +4659,14 @@
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
-  local.tee $3
+  local.tee $2
   local.get $1
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
   local.tee $4
   i32.add
-  local.tee $2
+  local.tee $3
   i32.eqz
   if
    local.get $1
@@ -4676,13 +4675,13 @@
    local.tee $0
    return
   end
-  local.get $2
+  local.get $3
   i32.const 1
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $2
+  local.tee $3
   local.get $0
-  local.get $3
+  local.get $2
   call $~lib/memory/memory.copy
   local.get $2
   local.get $3
@@ -4692,7 +4691,7 @@
   call $~lib/memory/memory.copy
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $3
  )
  (func $~lib/string/String.__concat (; 58 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -6575,11 +6574,10 @@
              block $case2|1
               block $case1|1
                local.get $4
-               local.tee $2
                i32.const 10
                i32.ne
                if
-                local.get $2
+                local.get $4
                 i32.const 1
                 i32.sub
                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case10|1
@@ -6687,9 +6685,13 @@
     local.get $8
     i32.or
     if
-     local.get $0
      local.get $6
      local.tee $2
+     i32.const 1
+     i32.add
+     local.set $6
+     local.get $0
+     local.get $2
      i32.const 1
      i32.shl
      i32.add
@@ -6699,10 +6701,6 @@
      i32.const 48
      i32.add
      i32.store16
-     local.get $6
-     i32.const 1
-     i32.add
-     local.set $6
     end
     local.get $4
     i32.const 1
@@ -6810,9 +6808,13 @@
    i64.const 0
    i64.ne
    if
-    local.get $0
     local.get $6
     local.tee $2
+    i32.const 1
+    i32.add
+    local.set $6
+    local.get $0
+    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -6823,10 +6825,6 @@
     i32.const 48
     i32.add
     i32.store16
-    local.get $6
-    i32.const 1
-    i32.add
-    local.set $6
    end
    local.get $4
    i32.const 1

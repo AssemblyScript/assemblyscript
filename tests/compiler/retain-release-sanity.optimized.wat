@@ -1988,11 +1988,11 @@
   local.get $1
   i32.const 2
   i32.shl
-  local.tee $3
+  local.tee $2
   i32.const 0
   call $~lib/rt/tlsf/__alloc
-  local.tee $1
-  local.get $3
+  local.tee $3
+  local.get $2
   call $~lib/memory/memory.fill
   local.get $0
   i32.eqz
@@ -2012,28 +2012,27 @@
   local.get $0
   i32.const 0
   i32.store offset=8
-  local.get $1
-  local.set $2
+  local.get $3
+  local.tee $1
   local.get $0
   i32.load
   local.tee $4
-  local.get $1
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $4
    call $~lib/rt/pure/__release
   end
   local.get $0
-  local.get $2
+  local.get $1
   i32.store
   local.get $0
-  local.get $1
+  local.get $3
   i32.store offset=4
   local.get $0
-  local.get $3
+  local.get $2
   i32.store offset=8
   local.get $0
  )
@@ -2340,11 +2339,10 @@
   if
    i32.const 592
    local.get $1
-   local.tee $2
    i32.const 592
    i32.ne
    if
-    local.get $2
+    local.get $1
     call $~lib/rt/pure/__release
    end
    local.set $1
@@ -2353,14 +2351,14 @@
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
-  local.tee $3
+  local.tee $2
   local.get $1
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
   local.tee $4
   i32.add
-  local.tee $2
+  local.tee $3
   i32.eqz
   if
    local.get $1
@@ -2369,13 +2367,13 @@
    local.tee $0
    return
   end
-  local.get $2
+  local.get $3
   i32.const 1
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $2
+  local.tee $3
   local.get $0
-  local.get $3
+  local.get $2
   call $~lib/memory/memory.copy
   local.get $2
   local.get $3
@@ -2385,7 +2383,7 @@
   call $~lib/memory/memory.copy
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $3
  )
  (func $~lib/string/String.__concat (; 40 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -2444,29 +2442,29 @@
     call $~lib/rt/pure/__retain
     i32.const 0
     call $~lib/arraybuffer/ArrayBufferView#constructor
-    local.tee $2
+    local.tee $3
     i32.const 0
     i32.store offset=12
-    local.get $2
+    local.get $3
     i32.const 0
     i32.store offset=12
     i32.const 0
-    local.set $3
+    local.set $2
     loop $loop|1
-     local.get $3
+     local.get $2
      i32.const 10
      i32.lt_s
      if
-      local.get $2
-      call $~lib/array/Array<~lib/string/String>#push
       local.get $3
+      call $~lib/array/Array<~lib/string/String>#push
+      local.get $2
       i32.const 1
       i32.add
-      local.set $3
+      local.set $2
       br $loop|1
      end
     end
-    local.get $2
+    local.get $3
     call $~lib/rt/pure/__release
     local.get $1
     i32.const 1
@@ -2480,128 +2478,128 @@
   i32.const 528
   i32.const 560
   call $~lib/string/String.__concat
-  local.tee $2
+  local.tee $3
   i32.const 624
   call $~lib/string/String.__concat
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
   i32.const 4
   i32.const 6
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $3
+  local.tee $0
   i32.const 0
   i32.store
-  local.get $3
+  local.get $0
   i32.const 4
   i32.const 7
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $2
+  local.tee $3
   i32.const 0
   i32.store
-  local.get $2
-  local.tee $0
+  local.get $3
+  local.tee $4
+  local.get $0
+  i32.load
+  local.tee $1
+  i32.ne
+  if
+   local.get $4
+   call $~lib/rt/pure/__retain
+   local.set $4
+   local.get $1
+   call $~lib/rt/pure/__release
+  end
+  local.get $4
+  i32.store
+  local.get $3
+  local.tee $1
+  local.get $0
+  local.tee $4
+  i32.load
+  local.tee $2
+  i32.ne
+  if
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $1
+   local.get $2
+   call $~lib/rt/pure/__release
+  end
+  local.get $4
+  local.get $1
+  i32.store
+  local.get $3
+  local.set $2
+  local.get $0
   local.get $3
   i32.load
   local.tee $1
   i32.ne
   if
-   local.get $0
+   local.get $4
    call $~lib/rt/pure/__retain
-   local.set $0
+   local.set $4
    local.get $1
    call $~lib/rt/pure/__release
   end
-  local.get $0
-  i32.store
   local.get $2
-  local.tee $0
-  local.get $3
+  local.get $4
+  i32.store
+  local.get $0
   local.tee $1
+  local.get $2
   i32.load
   local.tee $4
   i32.ne
   if
-   local.get $0
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $0
+   local.set $1
    local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $1
-  local.get $0
-  i32.store
-  local.get $1
-  local.tee $0
   local.get $2
-  local.tee $4
-  i32.load
-  local.tee $1
-  i32.ne
-  if
-   local.get $0
-   call $~lib/rt/pure/__retain
-   local.set $0
-   local.get $1
-   call $~lib/rt/pure/__release
-  end
-  local.get $4
-  local.get $0
+  local.get $1
   i32.store
+  local.get $2
+  local.set $4
   local.get $3
-  local.tee $0
-  local.get $4
-  i32.load
-  local.tee $1
-  i32.ne
-  if
-   local.get $0
-   call $~lib/rt/pure/__retain
-   local.set $0
-   local.get $1
-   call $~lib/rt/pure/__release
-  end
-  local.get $4
   local.get $0
-  i32.store
-  local.get $4
-  local.tee $0
-  local.get $3
   local.tee $1
   i32.load
-  local.tee $4
+  local.tee $2
   i32.ne
   if
-   local.get $0
-   call $~lib/rt/pure/__retain
-   local.set $0
    local.get $4
+   call $~lib/rt/pure/__retain
+   local.set $4
+   local.get $2
    call $~lib/rt/pure/__release
   end
   local.get $1
-  local.get $0
+  local.get $4
   i32.store
-  local.get $1
-  local.tee $0
-  local.get $2
+  local.get $0
+  local.get $3
   i32.load
-  local.tee $1
+  local.tee $2
   i32.ne
   if
-   local.get $0
-   call $~lib/rt/pure/__retain
-   local.set $0
    local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $1
+   local.get $2
    call $~lib/rt/pure/__release
   end
-  local.get $2
-  local.get $0
-  i32.store
   local.get $3
+  local.get $1
+  i32.store
+  local.get $0
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__collect
  )

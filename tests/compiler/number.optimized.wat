@@ -366,13 +366,16 @@
  )
  (func $~lib/util/number/genDigits (; 9 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
   (local $6 i32)
-  (local $7 i64)
-  (local $8 i32)
+  (local $7 i32)
+  (local $8 i64)
   (local $9 i64)
   (local $10 i32)
   (local $11 i64)
   (local $12 i32)
   (local $13 i64)
+  (local $14 i32)
+  i32.const 0
+  local.set $2
   local.get $3
   local.get $1
   i64.sub
@@ -390,7 +393,7 @@
   i64.sub
   local.tee $13
   i64.and
-  local.set $7
+  local.set $8
   local.get $3
   local.get $10
   i64.extend_i32_s
@@ -430,7 +433,7 @@
                local.get $6
                i32.const 1000000000
                i32.div_u
-               local.set $2
+               local.set $7
                local.get $6
                i32.const 1000000000
                i32.rem_u
@@ -440,7 +443,7 @@
               local.get $6
               i32.const 100000000
               i32.div_u
-              local.set $2
+              local.set $7
               local.get $6
               i32.const 100000000
               i32.rem_u
@@ -450,7 +453,7 @@
              local.get $6
              i32.const 10000000
              i32.div_u
-             local.set $2
+             local.set $7
              local.get $6
              i32.const 10000000
              i32.rem_u
@@ -460,7 +463,7 @@
             local.get $6
             i32.const 1000000
             i32.div_u
-            local.set $2
+            local.set $7
             local.get $6
             i32.const 1000000
             i32.rem_u
@@ -470,7 +473,7 @@
            local.get $6
            i32.const 100000
            i32.div_u
-           local.set $2
+           local.set $7
            local.get $6
            i32.const 100000
            i32.rem_u
@@ -480,7 +483,7 @@
           local.get $6
           i32.const 10000
           i32.div_u
-          local.set $2
+          local.set $7
           local.get $6
           i32.const 10000
           i32.rem_u
@@ -490,7 +493,7 @@
          local.get $6
          i32.const 1000
          i32.div_u
-         local.set $2
+         local.set $7
          local.get $6
          i32.const 1000
          i32.rem_u
@@ -500,7 +503,7 @@
         local.get $6
         i32.const 100
         i32.div_u
-        local.set $2
+        local.set $7
         local.get $6
         i32.const 100
         i32.rem_u
@@ -510,7 +513,7 @@
        local.get $6
        i32.const 10
        i32.div_u
-       local.set $2
+       local.set $7
        local.get $6
        i32.const 10
        i32.rem_u
@@ -518,39 +521,40 @@
        br $break|1
       end
       local.get $6
-      local.set $2
+      local.set $7
       i32.const 0
       local.set $6
       br $break|1
      end
      i32.const 0
-     local.set $2
+     local.set $7
     end
     local.get $2
-    local.get $8
+    local.get $7
     i32.or
     if
+     local.get $2
+     local.tee $14
+     i32.const 1
+     i32.add
+     local.set $2
      local.get $0
-     local.get $8
+     local.get $14
      i32.const 1
      i32.shl
      i32.add
-     local.get $2
+     local.get $7
      i32.const 65535
      i32.and
      i32.const 48
      i32.add
      i32.store16
-     local.get $8
-     i32.const 1
-     i32.add
-     local.set $8
     end
     local.get $4
     i32.const 1
     i32.sub
     local.set $4
-    local.get $7
+    local.get $8
     local.get $6
     i64.extend_i32_u
     local.get $10
@@ -574,9 +578,9 @@
     local.get $10
     i64.extend_i32_s
     i64.shl
-    local.set $7
+    local.set $3
     local.get $0
-    local.get $8
+    local.get $2
     i32.const 1
     i32.sub
     i32.const 1
@@ -591,13 +595,13 @@
      local.get $1
      i64.sub
      local.get $1
-     local.get $7
+     local.get $3
      i64.add
-     local.tee $3
+     local.tee $8
      local.get $9
      i64.sub
      i64.gt_u
-     local.get $3
+     local.get $8
      local.get $9
      i64.lt_u
      select
@@ -605,7 +609,7 @@
      local.get $5
      local.get $1
      i64.sub
-     local.get $7
+     local.get $3
      i64.ge_u
      i32.const 0
      local.get $1
@@ -619,7 +623,7 @@
       i32.sub
       local.set $4
       local.get $1
-      local.get $7
+      local.get $3
       i64.add
       local.set $1
       br $continue|2
@@ -628,7 +632,7 @@
     local.get $0
     local.get $4
     i32.store16
-    local.get $8
+    local.get $2
     return
    end
   end
@@ -637,45 +641,46 @@
    i64.const 10
    i64.mul
    local.set $5
-   local.get $7
+   local.get $8
    i64.const 10
    i64.mul
-   local.tee $3
+   local.tee $1
    local.get $10
    i64.extend_i32_s
    i64.shr_u
-   local.tee $1
-   local.get $8
+   local.tee $3
+   local.get $2
    i64.extend_i32_s
    i64.or
    i64.const 0
    i64.ne
    if
+    local.get $2
+    local.tee $6
+    i32.const 1
+    i32.add
+    local.set $2
     local.get $0
-    local.get $8
+    local.get $6
     i32.const 1
     i32.shl
     i32.add
-    local.get $1
+    local.get $3
     i32.wrap_i64
     i32.const 65535
     i32.and
     i32.const 48
     i32.add
     i32.store16
-    local.get $8
-    i32.const 1
-    i32.add
-    local.set $8
    end
    local.get $4
    i32.const 1
    i32.sub
    local.set $4
-   local.get $3
+   local.get $1
    local.get $13
    i64.and
-   local.tee $7
+   local.tee $8
    local.get $5
    i64.ge_u
    br_if $continue|3
@@ -684,7 +689,7 @@
   global.get $~lib/util/number/_K
   i32.add
   global.set $~lib/util/number/_K
-  local.get $7
+  local.get $8
   local.set $1
   local.get $9
   local.get $12
@@ -696,9 +701,9 @@
   i32.add
   i64.load32_u
   i64.mul
-  local.set $7
+  local.set $3
   local.get $0
-  local.get $8
+  local.get $2
   i32.const 1
   i32.sub
   i32.const 1
@@ -709,18 +714,18 @@
   local.set $4
   loop $continue|4
    i32.const 1
-   local.get $7
+   local.get $3
    local.get $1
    i64.sub
    local.get $1
    local.get $11
    i64.add
-   local.tee $3
-   local.get $7
+   local.tee $8
+   local.get $3
    i64.sub
    i64.gt_u
+   local.get $8
    local.get $3
-   local.get $7
    i64.lt_u
    select
    i32.const 0
@@ -731,7 +736,7 @@
    i64.ge_u
    i32.const 0
    local.get $1
-   local.get $7
+   local.get $3
    i64.lt_u
    select
    select
@@ -750,7 +755,7 @@
   local.get $0
   local.get $4
   i32.store16
-  local.get $8
+  local.get $2
  )
  (func $~lib/memory/memory.copy (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
