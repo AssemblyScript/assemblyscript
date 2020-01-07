@@ -667,6 +667,8 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("simplify-globals-optimizing");
+      } else {  // differs
+        add("simplify-globals");
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
@@ -696,6 +698,8 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("simplify-globals-optimizing");
+      } else {  // differs
+        add("simplify-globals");
       }
       add("merge-blocks");
       add("remove-unused-brs");
@@ -726,6 +730,7 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("simplify-globals");
       }
+      add("precompute-propagate"); // differs
       // replace indirect calls with direct, reduce arity and
       // inline this calls if possible
       add("directize"); // differs

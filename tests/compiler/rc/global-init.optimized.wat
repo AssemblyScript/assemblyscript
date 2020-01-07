@@ -1683,44 +1683,34 @@
    end
   end
  )
- (func $~lib/rt/pure/__release (; 25 ;) (param $0 i32)
-  local.get $0
-  i32.const 332
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
- (func $start:rc/global-init (; 26 ;)
+ (func $start:rc/global-init (; 25 ;)
   (local $0 i32)
   i32.const 32
   global.set $rc/global-init/a
   i32.const 32
   global.set $rc/global-init/b
+  i32.const 0
+  global.set $rc/global-init/a
   i32.const 32
   local.tee $0
   if
    local.get $0
-   call $~lib/rt/pure/__release
-  end
-  i32.const 0
-  global.set $rc/global-init/a
-  global.get $rc/global-init/b
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/pure/__release
+   i32.const 332
+   i32.gt_u
+   if
+    local.get $0
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   i32.const 0
   global.set $rc/global-init/b
  )
- (func $start (; 27 ;)
+ (func $start (; 26 ;)
   call $start:rc/global-init
  )
- (func $~lib/rt/pure/__visit (; 28 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 27 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 332
   i32.lt_u
@@ -1823,7 +1813,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 29 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 28 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2
