@@ -771,10 +771,11 @@ exports.main = function main(argv, options, callback) {
       add("remove-unused-nonfunction-module-elements"); // differs
       add("memory-packing");
       add("remove-unused-module-elements"); // differs
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
-        add("generate-stack-ir");
-        add("optimize-stack-ir");
-      }
+      // It seems stack-ir unuseful for our needs.
+      // if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
+      //   add("generate-stack-ir");
+      //   add("optimize-stack-ir");
+      // }
     }
 
     // Append additional passes if requested and execute
