@@ -2185,7 +2185,7 @@
   local.tee $3
   i32.const 0
   call $~lib/rt/tlsf/__alloc
-  local.tee $2
+  local.tee $1
   i32.const 0
   local.get $3
   call $~lib/memory/memory.fill
@@ -2207,25 +2207,25 @@
   local.get $0
   i32.const 0
   i32.store offset=8
-  local.get $2
-  local.set $1
-  local.get $2
+  local.get $1
+  local.set $2
+  local.get $1
   local.get $0
   i32.load
   local.tee $4
   i32.ne
   if
-   local.get $1
+   local.get $2
    call $~lib/rt/pure/__retain
-   local.set $1
+   local.set $2
    local.get $4
    call $~lib/rt/pure/__release
   end
   local.get $0
-  local.get $1
+  local.get $2
   i32.store
   local.get $0
-  local.get $2
+  local.get $1
   i32.store offset=4
   local.get $0
   local.get $3
@@ -7488,7 +7488,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   i32.load offset=8
   local.set $4
@@ -7521,15 +7520,14 @@
     call $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>~anonymous|0
     if
      local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
      i32.add
      local.get $6
      i32.store8
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
     end
     local.get $2
     i32.const 1
@@ -7662,7 +7660,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   i32.load offset=8
   local.set $4
@@ -7695,15 +7692,14 @@
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0
     if
      local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
      i32.add
      local.get $6
      i32.store8
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
     end
     local.get $2
     i32.const 1
@@ -7829,7 +7825,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
   i32.load offset=8
   local.set $4
@@ -7862,15 +7857,14 @@
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>~anonymous|0
     if
      local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
      i32.add
      local.get $6
      i32.store8
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
     end
     local.get $2
     i32.const 1
@@ -8005,8 +7999,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
+  local.tee $3
   call $~lib/typedarray/Int16Array#get:length
   local.set $4
   i32.const 12
@@ -8022,6 +8016,8 @@
   local.get $0
   i32.load offset=4
   local.set $7
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $2
    local.get $4
@@ -8038,21 +8034,20 @@
     global.set $~lib/argc
     local.get $6
     local.get $2
-    local.get $0
+    local.get $3
     call $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>~anonymous|0
     if
-     local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
+     local.get $0
      i32.const 1
      i32.shl
      i32.add
      local.get $6
      i32.store16
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -8063,7 +8058,7 @@
   end
   local.get $1
   local.get $5
-  local.get $3
+  local.get $0
   i32.const 1
   i32.shl
   local.tee $0
@@ -8189,8 +8184,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
+  local.tee $3
   call $~lib/typedarray/Int16Array#get:length
   local.set $4
   i32.const 12
@@ -8206,6 +8201,8 @@
   local.get $0
   i32.load offset=4
   local.set $7
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $2
    local.get $4
@@ -8222,21 +8219,20 @@
     global.set $~lib/argc
     local.get $6
     local.get $2
-    local.get $0
+    local.get $3
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>~anonymous|0
     if
-     local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
+     local.get $0
      i32.const 1
      i32.shl
      i32.add
      local.get $6
      i32.store16
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -8247,7 +8243,7 @@
   end
   local.get $1
   local.get $5
-  local.get $3
+  local.get $0
   i32.const 1
   i32.shl
   local.tee $0
@@ -8371,8 +8367,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
+  local.tee $3
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
   i32.const 12
@@ -8388,6 +8384,8 @@
   local.get $0
   i32.load offset=4
   local.set $7
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $2
    local.get $4
@@ -8404,21 +8402,20 @@
     global.set $~lib/argc
     local.get $6
     local.get $2
-    local.get $0
+    local.get $3
     call $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>~anonymous|0
     if
-     local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
+     local.get $0
      i32.const 2
      i32.shl
      i32.add
      local.get $6
      i32.store
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -8429,7 +8426,7 @@
   end
   local.get $1
   local.get $5
-  local.get $3
+  local.get $0
   i32.const 2
   i32.shl
   local.tee $0
@@ -8553,8 +8550,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
+  local.tee $3
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
   i32.const 12
@@ -8570,6 +8567,8 @@
   local.get $0
   i32.load offset=4
   local.set $7
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $2
    local.get $4
@@ -8586,21 +8585,20 @@
     global.set $~lib/argc
     local.get $6
     local.get $2
-    local.get $0
+    local.get $3
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>~anonymous|0
     if
-     local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
+     local.get $0
      i32.const 2
      i32.shl
      i32.add
      local.get $6
      i32.store
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -8611,7 +8609,7 @@
   end
   local.get $1
   local.get $5
-  local.get $3
+  local.get $0
   i32.const 2
   i32.shl
   local.tee $0
@@ -8735,8 +8733,8 @@
   (local $5 i32)
   (local $6 i64)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
+  local.tee $3
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
   i32.const 12
@@ -8752,6 +8750,8 @@
   local.get $0
   i32.load offset=4
   local.set $7
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $2
    local.get $4
@@ -8768,21 +8768,20 @@
     global.set $~lib/argc
     local.get $6
     local.get $2
-    local.get $0
+    local.get $3
     call $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>~anonymous|0
     if
-     local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
+     local.get $0
      i32.const 3
      i32.shl
      i32.add
      local.get $6
      i64.store
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -8793,7 +8792,7 @@
   end
   local.get $1
   local.get $5
-  local.get $3
+  local.get $0
   i32.const 3
   i32.shl
   local.tee $0
@@ -8917,8 +8916,8 @@
   (local $5 i32)
   (local $6 i64)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
+  local.tee $3
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
   i32.const 12
@@ -8934,6 +8933,8 @@
   local.get $0
   i32.load offset=4
   local.set $7
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $2
    local.get $4
@@ -8950,21 +8951,20 @@
     global.set $~lib/argc
     local.get $6
     local.get $2
-    local.get $0
+    local.get $3
     call $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>~anonymous|0
     if
-     local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
+     local.get $0
      i32.const 3
      i32.shl
      i32.add
      local.get $6
      i64.store
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -8975,7 +8975,7 @@
   end
   local.get $1
   local.get $5
-  local.get $3
+  local.get $0
   i32.const 3
   i32.shl
   local.tee $0
@@ -9099,8 +9099,8 @@
   (local $5 i32)
   (local $6 f32)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
+  local.tee $3
   call $~lib/typedarray/Int32Array#get:length
   local.set $4
   i32.const 12
@@ -9116,6 +9116,8 @@
   local.get $0
   i32.load offset=4
   local.set $7
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $2
    local.get $4
@@ -9132,21 +9134,20 @@
     global.set $~lib/argc
     local.get $6
     local.get $2
-    local.get $0
+    local.get $3
     call $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>~anonymous|0
     if
-     local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
+     local.get $0
      i32.const 2
      i32.shl
      i32.add
      local.get $6
      f32.store
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -9157,7 +9158,7 @@
   end
   local.get $1
   local.get $5
-  local.get $3
+  local.get $0
   i32.const 2
   i32.shl
   local.tee $0
@@ -9281,8 +9282,8 @@
   (local $5 i32)
   (local $6 f64)
   (local $7 i32)
-  (local $8 i32)
   local.get $0
+  local.tee $3
   call $~lib/typedarray/Int64Array#get:length
   local.set $4
   i32.const 12
@@ -9298,6 +9299,8 @@
   local.get $0
   i32.load offset=4
   local.set $7
+  i32.const 0
+  local.set $0
   loop $loop|0
    local.get $2
    local.get $4
@@ -9314,21 +9317,20 @@
     global.set $~lib/argc
     local.get $6
     local.get $2
-    local.get $0
+    local.get $3
     call $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>~anonymous|0
     if
-     local.get $3
-     local.tee $8
-     i32.const 1
-     i32.add
-     local.set $3
      local.get $5
-     local.get $8
+     local.get $0
      i32.const 3
      i32.shl
      i32.add
      local.get $6
      f64.store
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
     end
     local.get $2
     i32.const 1
@@ -9339,7 +9341,7 @@
   end
   local.get $1
   local.get $5
-  local.get $3
+  local.get $0
   i32.const 3
   i32.shl
   local.tee $0
@@ -23978,10 +23980,11 @@
              block $case2|1
               block $case1|1
                local.get $4
+               local.tee $2
                i32.const 10
                i32.ne
                if
-                local.get $4
+                local.get $2
                 i32.const 1
                 i32.sub
                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case10|1
@@ -24089,13 +24092,9 @@
     local.get $8
     i32.or
     if
+     local.get $0
      local.get $6
      local.tee $2
-     i32.const 1
-     i32.add
-     local.set $6
-     local.get $0
-     local.get $2
      i32.const 1
      i32.shl
      i32.add
@@ -24105,6 +24104,10 @@
      i32.const 48
      i32.add
      i32.store16
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
     end
     local.get $4
     i32.const 1
@@ -24212,13 +24215,9 @@
    i64.const 0
    i64.ne
    if
+    local.get $0
     local.get $6
     local.tee $2
-    i32.const 1
-    i32.add
-    local.set $6
-    local.get $0
-    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -24229,6 +24228,10 @@
     i32.const 48
     i32.add
     i32.store16
+    local.get $6
+    i32.const 1
+    i32.add
+    local.set $6
    end
    local.get $4
    i32.const 1

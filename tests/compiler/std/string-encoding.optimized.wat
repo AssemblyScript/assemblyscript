@@ -3052,11 +3052,10 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   local.get $0
   local.get $1
   i32.add
-  local.tee $5
+  local.tee $4
   local.get $0
   i32.lt_u
   if
@@ -3072,12 +3071,12 @@
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
-  local.tee $6
+  local.tee $5
   local.set $3
   loop $continue|0
    block $break|0
     local.get $0
-    local.get $5
+    local.get $4
     i32.ge_u
     br_if $break|0
     local.get $0
@@ -3087,71 +3086,70 @@
     local.set $0
     local.get $1
     i32.load8_u
-    local.tee $4
+    local.tee $1
     i32.const 128
     i32.lt_u
     if
-     local.get $4
+     local.get $1
      i32.eqz
      i32.const 0
      local.get $2
      select
      br_if $break|0
      local.get $3
-     local.get $4
+     local.get $1
      i32.store16
      local.get $3
      i32.const 2
      i32.add
      local.set $3
     else
-     local.get $4
+     local.get $1
      i32.const 224
      i32.lt_u
      i32.const 0
-     local.get $4
+     local.get $1
      i32.const 191
      i32.gt_u
      select
-     if
-      local.get $5
+     if (result i32)
+      local.get $4
       local.get $0
       i32.sub
       i32.const 1
       i32.lt_u
       br_if $break|0
-      local.get $0
-      local.tee $1
-      i32.const 1
-      i32.add
-      local.set $0
       local.get $3
       local.get $1
-      i32.load8_u
-      i32.const 63
-      i32.and
-      local.get $4
       i32.const 31
       i32.and
       i32.const 6
       i32.shl
+      local.get $0
+      local.tee $1
+      i32.load8_u
+      i32.const 63
+      i32.and
       i32.or
       i32.store16
       local.get $3
       i32.const 2
       i32.add
       local.set $3
+      local.get $0
+      i32.const 1
+      i32.add
      else
-      local.get $4
+      local.get $1
       i32.const 365
       i32.lt_u
       i32.const 0
-      local.get $4
+      local.get $1
       i32.const 239
       i32.gt_u
       select
       if (result i32)
-       local.get $5
+       local.get $4
        local.get $0
        i32.sub
        i32.const 3
@@ -3162,7 +3160,7 @@
        i32.load8_u offset=2
        i32.const 63
        i32.and
-       local.get $4
+       local.get $1
        i32.const 7
        i32.and
        i32.const 18
@@ -3205,7 +3203,7 @@
        i32.const 3
        i32.add
       else
-       local.get $5
+       local.get $4
        local.get $0
        i32.sub
        i32.const 2
@@ -3216,7 +3214,7 @@
        i32.load8_u offset=1
        i32.const 63
        i32.and
-       local.get $4
+       local.get $1
        i32.const 15
        i32.and
        i32.const 12
@@ -3238,15 +3236,15 @@
        i32.const 2
        i32.add
       end
-      local.set $0
      end
+     local.set $0
     end
     br $continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.get $3
-  local.get $6
+  local.get $5
   i32.sub
   call $~lib/rt/tlsf/__realloc
   call $~lib/rt/pure/__retain

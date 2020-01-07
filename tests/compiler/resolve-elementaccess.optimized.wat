@@ -364,10 +364,11 @@
              block $case2|1
               block $case1|1
                local.get $4
+               local.tee $2
                i32.const 10
                i32.ne
                if
-                local.get $4
+                local.get $2
                 i32.const 1
                 i32.sub
                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case10|1
@@ -475,13 +476,9 @@
     local.get $8
     i32.or
     if
+     local.get $0
      local.get $6
      local.tee $2
-     i32.const 1
-     i32.add
-     local.set $6
-     local.get $0
-     local.get $2
      i32.const 1
      i32.shl
      i32.add
@@ -491,6 +488,10 @@
      i32.const 48
      i32.add
      i32.store16
+     local.get $6
+     i32.const 1
+     i32.add
+     local.set $6
     end
     local.get $4
     i32.const 1
@@ -598,13 +599,9 @@
    i64.const 0
    i64.ne
    if
+    local.get $0
     local.get $6
     local.tee $2
-    i32.const 1
-    i32.add
-    local.set $6
-    local.get $0
-    local.get $2
     i32.const 1
     i32.shl
     i32.add
@@ -615,6 +612,10 @@
     i32.const 48
     i32.add
     i32.store16
+    local.get $6
+    i32.const 1
+    i32.add
+    local.set $6
    end
    local.get $4
    i32.const 1

@@ -679,12 +679,16 @@ exports.main = function main(argv, options, callback) {
       add("vacuum");
       add("reorder-locals");
       add("remove-unused-brs");
-      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
-        add("merge-locals");
-      }
+      // merge-locals after simplify-locals
+      // if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+      //   add("merge-locals");
+      // }
       add("coalesce-locals");
       add("simplify-locals");
       add("vacuum");
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) { // differs
+        add("merge-locals");
+      }
       add("reorder-locals");
       add("coalesce-locals");
       add("reorder-locals");
