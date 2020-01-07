@@ -1740,7 +1740,6 @@
  )
  (func $start:retain-return (; 27 ;)
   (local $0 i32)
-  (local $1 i32)
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
   call $retain-return/Ref#constructor
@@ -1793,7 +1792,7 @@
    local.get $0
    call $~lib/rt/pure/__release
   end
-  local.get $1
+  i32.const 0
   global.set $retain-return/ref
  )
  (func $start (; 28 ;)

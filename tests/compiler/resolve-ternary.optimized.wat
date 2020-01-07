@@ -2602,16 +2602,7 @@
   global.set $~lib/util/number/_frc_minus
   i32.const -63
   global.set $~lib/util/number/_exp
-  i32.const 340
-  f64.const 347.60205999132796
-  i32.trunc_f64_s
-  i32.const 1
-  i32.add
-  i32.const 3
-  i32.shr_s
-  i32.const 3
-  i32.shl
-  i32.sub
+  i32.const -4
   global.set $~lib/util/number/_K
   i32.const 1300
   i32.load

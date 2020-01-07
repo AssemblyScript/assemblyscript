@@ -2475,13 +2475,10 @@
   i32.eqz
   if
    i32.const 752
-   local.get $1
+   local.set $2
+   i32.const 720
+   call $~lib/rt/pure/__release
    i32.const 752
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__release
-   end
    local.set $1
   end
   i32.const 0
@@ -2884,38 +2881,37 @@
    i32.const 1
    return
   end
-  block $break|0
-   local.get $0
-   i32.const 5760
-   i32.eq
-   local.get $0
-   i32.const 8232
-   i32.eq
-   i32.or
-   local.get $0
-   i32.const 8233
-   i32.eq
-   local.get $0
-   i32.const 8239
-   i32.eq
-   i32.or
-   i32.or
-   local.get $0
-   i32.const 8287
-   i32.eq
-   local.get $0
-   i32.const 12288
-   i32.eq
-   i32.or
-   local.get $0
-   i32.const 65279
-   i32.eq
-   i32.or
-   i32.or
-   i32.eqz
-   if
-    br $break|0
-   end
+  local.get $0
+  i32.const 5760
+  i32.eq
+  local.get $0
+  i32.const 8232
+  i32.eq
+  i32.or
+  local.get $0
+  i32.const 8233
+  i32.eq
+  local.get $0
+  i32.const 8239
+  i32.eq
+  i32.or
+  i32.or
+  local.get $0
+  i32.const 8287
+  i32.eq
+  local.get $0
+  i32.const 12288
+  i32.eq
+  i32.or
+  local.get $0
+  i32.const 65279
+  i32.eq
+  i32.or
+  i32.or
+  i32.eqz
+  i32.eqz
+  if
+   nop
    i32.const 1
    return
   end
@@ -4646,6 +4642,7 @@
   i32.eqz
   if
    i32.const 752
+   local.set $3
    local.get $1
    i32.const 752
    i32.ne
@@ -4653,20 +4650,21 @@
     local.get $1
     call $~lib/rt/pure/__release
    end
+   i32.const 752
    local.set $1
   end
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
-  local.tee $2
+  local.tee $3
   local.get $1
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
   local.tee $4
   i32.add
-  local.tee $3
+  local.tee $2
   i32.eqz
   if
    local.get $1
@@ -4675,23 +4673,23 @@
    local.tee $0
    return
   end
-  local.get $3
+  local.get $2
   i32.const 1
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $3
+  local.tee $2
   local.get $0
-  local.get $2
-  call $~lib/memory/memory.copy
-  local.get $2
   local.get $3
+  call $~lib/memory/memory.copy
+  local.get $3
+  local.get $2
   i32.add
   local.get $1
   local.get $4
   call $~lib/memory/memory.copy
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $3
+  local.get $2
  )
  (func $~lib/string/String.__concat (; 58 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0

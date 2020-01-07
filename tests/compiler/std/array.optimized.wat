@@ -6909,6 +6909,7 @@
   i32.eqz
   if
    i32.const 5280
+   local.set $3
    local.get $1
    i32.const 5280
    i32.ne
@@ -6916,20 +6917,21 @@
     local.get $1
     call $~lib/rt/pure/__release
    end
+   i32.const 5280
    local.set $1
   end
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
-  local.tee $2
+  local.tee $3
   local.get $1
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
   local.tee $4
   i32.add
-  local.tee $3
+  local.tee $2
   i32.eqz
   if
    local.get $1
@@ -6938,23 +6940,23 @@
    local.tee $0
    return
   end
-  local.get $3
+  local.get $2
   i32.const 1
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  local.tee $3
+  local.tee $2
   local.get $0
-  local.get $2
-  call $~lib/memory/memory.copy
-  local.get $2
   local.get $3
+  call $~lib/memory/memory.copy
+  local.get $3
+  local.get $2
   i32.add
   local.get $1
   local.get $4
   call $~lib/memory/memory.copy
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $3
+  local.get $2
  )
  (func $~lib/string/String.__concat (; 154 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
