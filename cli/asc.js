@@ -759,9 +759,11 @@ exports.main = function main(argv, options, callback) {
         // this quite expensive so do this only for highest opt level
         if (optimizeLevel >= 3) {
           add("simplify-locals-nostructure");
-          add("reorder-locals");
           add("vacuum");
+          add("reorder-locals");
         }
+        // finally optimize all remaining peepholes
+        add("optimize-instructions");
         add("simplify-globals-optimizing");
       }
       // remove unused elements of table and pack / reduce memory
@@ -770,9 +772,6 @@ exports.main = function main(argv, options, callback) {
       add("memory-packing");
       add("remove-unused-module-elements"); // differs
       if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
-        // finally optimize all remaining peepholes
-        add("optimize-instructions"); // differs
-
         add("generate-stack-ir");
         add("optimize-stack-ir");
       }
