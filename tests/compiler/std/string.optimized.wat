@@ -2881,37 +2881,38 @@
    i32.const 1
    return
   end
-  local.get $0
-  i32.const 5760
-  i32.eq
-  local.get $0
-  i32.const 8232
-  i32.eq
-  i32.or
-  local.get $0
-  i32.const 8233
-  i32.eq
-  local.get $0
-  i32.const 8239
-  i32.eq
-  i32.or
-  i32.or
-  local.get $0
-  i32.const 8287
-  i32.eq
-  local.get $0
-  i32.const 12288
-  i32.eq
-  i32.or
-  local.get $0
-  i32.const 65279
-  i32.eq
-  i32.or
-  i32.or
-  i32.eqz
-  i32.eqz
-  if
-   nop
+  block $break|0
+   local.get $0
+   i32.const 5760
+   i32.eq
+   local.get $0
+   i32.const 8232
+   i32.eq
+   i32.or
+   local.get $0
+   i32.const 8233
+   i32.eq
+   local.get $0
+   i32.const 8239
+   i32.eq
+   i32.or
+   i32.or
+   local.get $0
+   i32.const 8287
+   i32.eq
+   local.get $0
+   i32.const 12288
+   i32.eq
+   i32.or
+   local.get $0
+   i32.const 65279
+   i32.eq
+   i32.or
+   i32.or
+   i32.eqz
+   if
+    br $break|0
+   end
    i32.const 1
    return
   end

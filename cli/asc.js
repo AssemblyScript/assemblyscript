@@ -756,17 +756,18 @@ exports.main = function main(argv, options, callback) {
         if (optimizeLevel >= 3) {
           add("simplify-locals-nostructure");
           add("vacuum");
-          add("reorder-locals");
-        }
-        // finally optimize all remaining peepholes
-        add("optimize-instructions");
-        add("simplify-globals-optimizing");
-        add("precompute-propagate");
 
-        add("simplify-locals-nostructure");
-        add("vacuum");
-        add("reorder-locals");
-        add("remove-unused-brs");
+          add("optimize-instructions");
+          add("simplify-globals-optimizing");
+          add("precompute-propagate");
+
+          add("simplify-locals-nostructure");
+          add("reorder-locals");
+          add("vacuum");
+        } else {
+          add("optimize-instructions");
+          add("simplify-globals-optimizing");
+        }
       }
       // remove unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs
