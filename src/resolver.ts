@@ -2043,7 +2043,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    if (ctxFlow.is(FlowFlags.INLINE_CONTEXT)) {
+    if (ctxFlow.isInline) {
       let thisLocal = ctxFlow.lookupLocal(CommonSymbols.this_);
       if (thisLocal) {
         this.currentThisExpression = null;
@@ -2102,7 +2102,7 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    if (ctxFlow.is(FlowFlags.INLINE_CONTEXT)) {
+    if (ctxFlow.isInline) {
       let superLocal = ctxFlow.lookupLocal(CommonSymbols.super_);
       if (superLocal) {
         this.currentThisExpression = null;
