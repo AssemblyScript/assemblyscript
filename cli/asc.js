@@ -741,12 +741,8 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
-        add("vacuum");
-
         // rearrange / reduce switch cases again
         add("remove-unused-brs");
-        add("remove-unused-names");
-        add("merge-blocks");
         add("vacuum");
 
         // replace indirect calls with direct and inline if possible again.
