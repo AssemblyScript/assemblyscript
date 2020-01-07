@@ -11,7 +11,7 @@
  (start $start)
  (func $start:do (; 1 ;)
   (local $0 i32)
-  loop $continue|0
+  loop $do-continue|0
    global.get $do/n
    i32.const 1
    i32.sub
@@ -21,7 +21,7 @@
    i32.add
    global.set $do/m
    global.get $do/n
-   br_if $continue|0
+   br_if $do-continue|0
   end
   global.get $do/n
   if
@@ -45,14 +45,14 @@
   end
   i32.const 10
   global.set $do/n
-  loop $continue|1
+  loop $do-continue|1
    global.get $do/n
    local.tee $0
    i32.const 1
    i32.sub
    global.set $do/n
    local.get $0
-   br_if $continue|1
+   br_if $do-continue|1
   end
   global.get $do/n
   i32.const -1
@@ -69,7 +69,7 @@
   global.set $do/n
   i32.const 0
   global.set $do/m
-  loop $continue|2
+  loop $do-continue|2
    global.get $do/n
    i32.const 1
    i32.sub
@@ -78,7 +78,7 @@
    i32.const 1
    i32.add
    global.set $do/m
-   loop $continue|3
+   loop $do-continue|3
     global.get $do/n
     i32.const 1
     i32.sub
@@ -88,7 +88,7 @@
     i32.add
     global.set $do/o
     global.get $do/n
-    br_if $continue|3
+    br_if $do-continue|3
    end
    global.get $do/n
    if
@@ -111,7 +111,7 @@
     unreachable
    end
    global.get $do/n
-   br_if $continue|2
+   br_if $do-continue|2
   end
   global.get $do/n
   if

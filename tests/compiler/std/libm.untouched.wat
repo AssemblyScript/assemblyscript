@@ -647,6 +647,8 @@
   (local $18 i32)
   (local $19 f64)
   (local $20 f64)
+  i32.const 1
+  drop
   block $~lib/util/math/log_lut|inlined.0 (result f64)
    local.get $0
    local.set $1
@@ -2052,6 +2054,8 @@
   (local $3 i64)
   (local $4 i64)
   i32.const 0
+  drop
+  i32.const 0
   local.set $1
   local.get $0
   i64.reinterpret_f64
@@ -2672,6 +2676,8 @@
    i32.const 2147483647
    i32.and
    local.set $12
+   i32.const 1
+   drop
    local.get $12
    i32.const 1073928572
    i32.lt_u
@@ -3397,6 +3403,8 @@
   (local $20 f64)
   (local $21 f64)
   (local $22 f64)
+  i32.const 1
+  drop
   block $~lib/util/math/exp_lut|inlined.0 (result f64)
    local.get $0
    local.set $1
@@ -4298,6 +4306,8 @@
   (local $23 f64)
   (local $24 f64)
   (local $25 f64)
+  i32.const 1
+  drop
   block $~lib/util/math/log2_lut|inlined.0 (result f64)
    local.get $0
    local.set $1
@@ -4694,6 +4704,8 @@
   (local $42 i32)
   (local $43 i64)
   (local $44 i64)
+  i32.const 1
+  drop
   block $~lib/util/math/pow_lut|inlined.0 (result f64)
    local.get $0
    local.set $3
@@ -5586,6 +5598,8 @@
   block $~lib/math/NativeMath.sign|inlined.0 (result f64)
    local.get $0
    local.set $1
+   i32.const 0
+   drop
    local.get $1
    f64.const 0
    f64.gt
@@ -5750,6 +5764,8 @@
    i32.const 2147483647
    i32.and
    local.set $12
+   i32.const 1
+   drop
    local.get $12
    i32.const 1073928572
    i32.lt_u
@@ -6533,6 +6549,8 @@
    i32.const 2147483647
    i32.and
    local.set $7
+   i32.const 1
+   drop
    local.get $7
    i32.const 1073928572
    i32.lt_u
@@ -7278,6 +7296,8 @@
   (local $12 f64)
   (local $13 f64)
   (local $14 f64)
+  i32.const 1
+  drop
   block $~lib/util/math/logf_lut|inlined.0 (result f32)
    local.get $0
    local.set $1
@@ -8460,6 +8480,8 @@
    f32.demote_f64
    return
   end
+  i32.const 1
+  drop
   local.get $1
   i32.const 1081824209
   i32.le_u
@@ -9302,6 +9324,8 @@
   (local $10 f64)
   (local $11 i64)
   (local $12 i32)
+  i32.const 1
+  drop
   block $~lib/util/math/expf_lut|inlined.0 (result f32)
    local.get $0
    local.set $1
@@ -9910,6 +9934,8 @@
   (local $14 f64)
   (local $15 f64)
   (local $16 f64)
+  i32.const 1
+  drop
   block $~lib/util/math/log2f_lut|inlined.0 (result f32)
    local.get $0
    local.set $1
@@ -10653,6 +10679,8 @@
   block $~lib/math/NativeMathf.sign|inlined.0 (result f32)
    local.get $0
    local.set $1
+   i32.const 0
+   drop
    local.get $1
    f32.const 0
    f32.gt
@@ -10760,6 +10788,8 @@
    f32.demote_f64
    return
   end
+  i32.const 1
+  drop
   local.get $1
   i32.const 1081824209
   i32.le_u
@@ -11499,6 +11529,8 @@
    f32.demote_f64
    return
   end
+  i32.const 1
+  drop
   local.get $1
   i32.const 1081824209
   i32.le_u

@@ -52,6 +52,7 @@
  (func $start:infer-type (; 5 ;)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
   global.get $infer-type/i
   drop
   global.get $infer-type/I
@@ -83,6 +84,8 @@
    local.get $0
    local.get $1
    i32.lt_s
+   local.set $2
+   local.get $2
    if
     local.get $0
     i32.const 1

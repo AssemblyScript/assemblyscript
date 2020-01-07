@@ -24,7 +24,7 @@
   i32.const 1
  )
  (func $loop-flow/whileAny (; 2 ;) (param $0 i32) (result i32)
-  loop $continue|0 (result i32)
+  loop $while-continue|0 (result i32)
    local.get $0
    i32.const 1
    i32.eq
@@ -34,7 +34,7 @@
     local.get $0
     i32.const 2
     i32.ne
-    br_if $continue|0
+    br_if $while-continue|0
     i32.const 80
     i32.const 32
     i32.const 24
@@ -68,7 +68,7 @@
   end
  )
  (func $loop-flow/doAny (; 4 ;) (param $0 i32) (result i32)
-  loop $continue|0 (result i32)
+  loop $do-continue|0 (result i32)
    local.get $0
    i32.const 1
    i32.eq
@@ -78,7 +78,7 @@
     local.get $0
     i32.const 2
     i32.ne
-    br_if $continue|0
+    br_if $do-continue|0
     i32.const 80
     i32.const 32
     i32.const 78
@@ -135,8 +135,8 @@
   unreachable
  )
  (func $loop-flow/whileContinue (; 7 ;) (result i32)
-  loop $continue|0
-   br $continue|0
+  loop $while-continue|0
+   br $while-continue|0
   end
   unreachable
  )

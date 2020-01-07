@@ -76,6 +76,8 @@
    i32.lt_s
    select
    i32.lt_s
+   local.set $6
+   local.get $6
    if
     i32.const 4
     global.set $~lib/argc

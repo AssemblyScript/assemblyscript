@@ -199,6 +199,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -216,42 +218,38 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i64)
+  (local $8 i32)
   (local $9 i64)
+  (local $10 i64)
+  (local $11 i32)
+  (local $12 i32)
   i32.const 480
   i32.load offset=4
   local.set $3
-  block $break|0
-   loop $continue|0
-    local.get $1
-    i32.const 10000
-    i32.ge_u
-    i32.eqz
-    br_if $break|0
+  loop $while-continue|0
+   local.get $1
+   i32.const 10000
+   i32.ge_u
+   local.set $4
+   local.get $4
+   if
     local.get $1
     i32.const 10000
     i32.div_u
-    local.set $4
+    local.set $5
     local.get $1
     i32.const 10000
     i32.rem_u
-    local.set $5
-    local.get $4
-    local.set $1
-    local.get $5
-    i32.const 100
-    i32.div_u
     local.set $6
     local.get $5
+    local.set $1
+    local.get $6
+    i32.const 100
+    i32.div_u
+    local.set $7
+    local.get $6
     i32.const 100
     i32.rem_u
-    local.set $7
-    local.get $3
-    local.get $6
-    i32.const 2
-    i32.shl
-    i32.add
-    i64.load32_u
     local.set $8
     local.get $3
     local.get $7
@@ -260,6 +258,13 @@
     i32.add
     i64.load32_u
     local.set $9
+    local.get $3
+    local.get $8
+    i32.const 2
+    i32.shl
+    i32.add
+    i64.load32_u
+    local.set $10
     local.get $2
     i32.const 4
     i32.sub
@@ -269,15 +274,14 @@
     i32.const 1
     i32.shl
     i32.add
-    local.get $8
     local.get $9
+    local.get $10
     i64.const 32
     i64.shl
     i64.or
     i64.store
-    br $continue|0
+    br $while-continue|0
    end
-   unreachable
   end
   local.get $1
   i32.const 100
@@ -286,30 +290,30 @@
    local.get $1
    i32.const 100
    i32.div_u
-   local.set $7
+   local.set $4
    local.get $1
    i32.const 100
    i32.rem_u
-   local.set $6
-   local.get $7
+   local.set $11
+   local.get $4
    local.set $1
    local.get $2
    i32.const 2
    i32.sub
    local.set $2
    local.get $3
-   local.get $6
+   local.get $11
    i32.const 2
    i32.shl
    i32.add
    i32.load
-   local.set $5
+   local.set $12
    local.get $0
    local.get $2
    i32.const 1
    i32.shl
    i32.add
-   local.get $5
+   local.get $12
    i32.store
   end
   local.get $1
@@ -326,13 +330,13 @@
    i32.shl
    i32.add
    i32.load
-   local.set $5
+   local.set $12
    local.get $0
    local.get $2
    i32.const 1
    i32.shl
    i32.add
-   local.get $5
+   local.get $12
    i32.store
   else
    local.get $2
@@ -342,13 +346,13 @@
    i32.const 48
    local.get $1
    i32.add
-   local.set $5
+   local.set $12
    local.get $0
    local.get $2
    i32.const 1
    i32.shl
    i32.add
-   local.get $5
+   local.get $12
    i32.store16
   end
  )
@@ -396,6 +400,8 @@
   local.set $5
   local.get $2
   local.set $4
+  i32.const 0
+  drop
   local.get $6
   local.get $5
   local.get $4
@@ -410,6 +416,12 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<i32> (; 7 ;) (param $0 i32) (result i32)
+  i32.const 0
+  drop
+  i32.const 1
+  drop
+  i32.const 1
+  drop
   local.get $0
   call $~lib/util/number/itoa32
   return
@@ -435,6 +447,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -453,6 +466,8 @@
   i32.shl
   i32.add
   local.set $6
+  i32.const 1
+  drop
   local.get $4
   i32.const 4
   i32.ge_u
@@ -469,15 +484,15 @@
    i32.const 0
   end
   if
-   block $break|0
-    loop $continue|0
+   block $do-break|0
+    loop $do-continue|0
      local.get $5
      i64.load
      local.get $6
      i64.load
      i64.ne
      if
-      br $break|0
+      br $do-break|0
      end
      local.get $5
      i32.const 8
@@ -494,39 +509,41 @@
      local.get $4
      i32.const 4
      i32.ge_u
-     br_if $continue|0
+     local.set $7
+     local.get $7
+     br_if $do-continue|0
     end
    end
   end
-  block $break|1
-   loop $continue|1
-    local.get $4
-    local.tee $7
-    i32.const 1
-    i32.sub
-    local.set $4
-    local.get $7
-    i32.eqz
-    br_if $break|1
+  loop $while-continue|1
+   local.get $4
+   local.tee $7
+   i32.const 1
+   i32.sub
+   local.set $4
+   local.get $7
+   local.set $7
+   local.get $7
+   if
     local.get $5
     i32.load16_u
-    local.set $7
+    local.set $8
     local.get $6
     i32.load16_u
-    local.set $8
-    local.get $7
+    local.set $9
     local.get $8
+    local.get $9
     i32.ne
     if
-     local.get $7
      local.get $8
+     local.get $9
      i32.sub
-     local.set $9
+     local.set $10
      local.get $0
      call $~lib/rt/stub/__release
      local.get $2
      call $~lib/rt/stub/__release
-     local.get $9
+     local.get $10
      return
     end
     local.get $5
@@ -537,17 +554,16 @@
     i32.const 2
     i32.add
     local.set $6
-    br $continue|1
+    br $while-continue|1
    end
-   unreachable
   end
   i32.const 0
-  local.set $8
+  local.set $7
   local.get $0
   call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release
-  local.get $8
+  local.get $7
  )
  (func $~lib/string/String.__eq (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

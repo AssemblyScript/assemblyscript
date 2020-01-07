@@ -35,7 +35,8 @@
   local.set $0
   local.get $0
   if
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -51,7 +52,8 @@
    call $~lib/rt/stub/__release
    return
   else
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -67,6 +69,8 @@
    call $~lib/rt/stub/__release
    return
   end
+  i32.const 0
+  drop
   local.get $0
   call $~lib/rt/stub/__release
  )
@@ -78,7 +82,8 @@
   i32.const 0
   i32.ne
   if
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -95,7 +100,8 @@
    call $~lib/rt/stub/__release
    return
   else
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -112,6 +118,8 @@
    call $~lib/rt/stub/__release
    return
   end
+  i32.const 0
+  drop
   local.get $0
   call $~lib/rt/stub/__release
  )
@@ -124,7 +132,8 @@
   i32.eq
   i32.eqz
   if
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -142,7 +151,8 @@
    call $~lib/rt/stub/__release
    return
   else
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -160,56 +170,26 @@
    call $~lib/rt/stub/__release
    return
   end
+  i32.const 0
+  drop
   local.get $0
   call $~lib/rt/stub/__release
  )
  (func $possibly-null/testWhile (; 11 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  block $break|0
-   loop $continue|0
-    local.get $0
-    i32.eqz
-    br_if $break|0
-    i32.const 0
-    local.tee $1
-    local.get $0
-    local.tee $2
-    i32.ne
-    if
-     local.get $1
-     call $~lib/rt/stub/__retain
-     local.set $1
-     local.get $2
-     call $~lib/rt/stub/__release
-    end
-    local.get $1
-    local.set $0
-    br $continue|0
-   end
-   unreachable
-  end
-  local.get $0
-  call $~lib/rt/stub/__release
- )
- (func $possibly-null/testWhile2 (; 12 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
   (local $3 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
-  block $break|0
-   loop $continue|0
-    local.get $0
-    i32.eqz
-    br_if $break|0
-    local.get $1
+  loop $while-continue|0
+   local.get $0
+   local.set $1
+   local.get $1
+   if
+    i32.const 0
+    drop
+    i32.const 0
     local.tee $2
     local.get $0
     local.tee $3
@@ -223,9 +203,49 @@
     end
     local.get $2
     local.set $0
-    br $continue|0
+    i32.const 0
+    drop
+    br $while-continue|0
    end
-   unreachable
+  end
+  local.get $0
+  call $~lib/rt/stub/__release
+ )
+ (func $possibly-null/testWhile2 (; 12 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $1
+  call $~lib/rt/stub/__retain
+  local.set $1
+  loop $while-continue|0
+   local.get $0
+   local.set $2
+   local.get $2
+   if
+    i32.const 0
+    drop
+    local.get $1
+    local.tee $3
+    local.get $0
+    local.tee $4
+    i32.ne
+    if
+     local.get $3
+     call $~lib/rt/stub/__retain
+     local.set $3
+     local.get $4
+     call $~lib/rt/stub/__release
+    end
+    local.get $3
+    local.set $0
+    i32.const 0
+    drop
+    br $while-continue|0
+   end
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -235,37 +255,41 @@
  (func $possibly-null/testWhile3 (; 13 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  block $break|0
-   loop $continue|0
-    local.get $0
-    i32.eqz
-    br_if $break|0
+  loop $while-continue|0
+   local.get $0
+   local.set $2
+   local.get $2
+   if
+    i32.const 0
+    drop
     local.get $1
     if
      local.get $1
-     local.tee $2
-     local.get $0
      local.tee $3
+     local.get $0
+     local.tee $4
      i32.ne
      if
-      local.get $2
-      call $~lib/rt/stub/__retain
-      local.set $2
       local.get $3
+      call $~lib/rt/stub/__retain
+      local.set $3
+      local.get $4
       call $~lib/rt/stub/__release
      end
-     local.get $2
+     local.get $3
      local.set $0
+     i32.const 0
+     drop
     end
-    br $continue|0
+    br $while-continue|0
    end
-   unreachable
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -339,9 +363,15 @@
    i32.const 0
   end
   if
-   nop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
   else
-   nop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -364,9 +394,15 @@
    i32.eqz
   end
   if
-   nop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
   else
-   nop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -396,6 +432,8 @@
   end
   local.get $2
   local.set $0
+  i32.const 0
+  drop
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1

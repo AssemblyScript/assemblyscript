@@ -29,6 +29,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -49,6 +50,8 @@
     local.get $2
     local.get $3
     i32.lt_u
+    local.set $4
+    local.get $4
     if
      local.get $1
      local.get $0
@@ -215,6 +218,8 @@
    i32.const 0
    call $~lib/rt/stub/__retain
    local.set $0
+   i32.const 1
+   drop
    local.get $0
    call $~lib/util/hash/hashStr
    local.set $1
@@ -228,6 +233,8 @@
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.0 (result i32)
    i32.const 32
    local.set $1
+   i32.const 1
+   drop
    local.get $1
    call $~lib/util/hash/hashStr
    local.set $0
@@ -241,6 +248,8 @@
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.1 (result i32)
    i32.const 48
    local.set $0
+   i32.const 1
+   drop
    local.get $0
    call $~lib/util/hash/hashStr
    local.set $1
@@ -254,6 +263,8 @@
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.2 (result i32)
    i32.const 80
    local.set $1
+   i32.const 1
+   drop
    local.get $1
    call $~lib/util/hash/hashStr
    local.set $0
@@ -267,6 +278,8 @@
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.3 (result i32)
    i32.const 112
    local.set $0
+   i32.const 1
+   drop
    local.get $0
    call $~lib/util/hash/hashStr
    local.set $1
@@ -280,6 +293,14 @@
   block $~lib/util/hash/HASH<f32>|inlined.0 (result i32)
    f32.const 0
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 1
+   drop
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
@@ -290,6 +311,14 @@
   block $~lib/util/hash/HASH<f32>|inlined.1 (result i32)
    f32.const 1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 1
+   drop
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
@@ -300,6 +329,14 @@
   block $~lib/util/hash/HASH<f32>|inlined.2 (result i32)
    f32.const 1.100000023841858
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 1
+   drop
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
@@ -310,6 +347,14 @@
   block $~lib/util/hash/HASH<f32>|inlined.3 (result i32)
    f32.const 0
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 1
+   drop
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
@@ -320,6 +365,14 @@
   block $~lib/util/hash/HASH<f32>|inlined.4 (result i32)
    f32.const inf
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 1
+   drop
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
@@ -330,6 +383,14 @@
   block $~lib/util/hash/HASH<f32>|inlined.5 (result i32)
    f32.const nan:0x400000
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 1
+   drop
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
@@ -340,6 +401,16 @@
   block $~lib/util/hash/HASH<f64>|inlined.0 (result i32)
    f64.const 0
    local.set $3
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
    local.get $3
    i64.reinterpret_f64
    call $~lib/util/hash/hash64
@@ -350,6 +421,16 @@
   block $~lib/util/hash/HASH<f64>|inlined.1 (result i32)
    f64.const 1
    local.set $3
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
    local.get $3
    i64.reinterpret_f64
    call $~lib/util/hash/hash64
@@ -360,6 +441,16 @@
   block $~lib/util/hash/HASH<f64>|inlined.2 (result i32)
    f64.const 1.1
    local.set $3
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
    local.get $3
    i64.reinterpret_f64
    call $~lib/util/hash/hash64
@@ -370,6 +461,16 @@
   block $~lib/util/hash/HASH<f64>|inlined.3 (result i32)
    f64.const 0
    local.set $3
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
    local.get $3
    i64.reinterpret_f64
    call $~lib/util/hash/hash64
@@ -380,6 +481,16 @@
   block $~lib/util/hash/HASH<f64>|inlined.4 (result i32)
    f64.const inf
    local.set $3
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
    local.get $3
    i64.reinterpret_f64
    call $~lib/util/hash/hash64
@@ -390,6 +501,16 @@
   block $~lib/util/hash/HASH<f64>|inlined.5 (result i32)
    f64.const nan:0x8000000000000
    local.set $3
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
    local.get $3
    i64.reinterpret_f64
    call $~lib/util/hash/hash64

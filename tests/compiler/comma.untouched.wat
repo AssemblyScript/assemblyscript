@@ -147,6 +147,8 @@
    local.get $1
    global.get $comma/a
    i32.lt_s
+   local.set $0
+   local.get $0
    if
     nop
     global.get $comma/a

@@ -10,6 +10,12 @@
  (export "memory" (memory $0))
  (start $start)
  (func $start:wasi-snapshot (; 0 ;)
+  i32.const 1
+  drop
+  nop
+  i32.const 1
+  drop
+  nop
   i32.const 9
   global.set $wasi-snapshot/sig
  )

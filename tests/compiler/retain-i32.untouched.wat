@@ -338,6 +338,7 @@
  )
  (func $start:retain-i32 (; 3 ;)
   (local $0 i32)
+  (local $1 i32)
   i32.const 0
   global.get $~lib/builtins/i8.MAX_VALUE
   call $retain-i32/test
@@ -413,6 +414,8 @@
    local.get $0
    i32.const 255
    i32.le_s
+   local.set $1
+   local.get $1
    if
     i32.const 0
     local.get $0

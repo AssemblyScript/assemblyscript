@@ -11,7 +11,7 @@
  (start $start)
  (func $start:while (; 1 ;)
   (local $0 i32)
-  loop $continue|0
+  loop $while-continue|0
    global.get $while/n
    if
     global.get $while/n
@@ -22,7 +22,7 @@
     i32.const 1
     i32.add
     global.set $while/m
-    br $continue|0
+    br $while-continue|0
    end
   end
   global.get $while/n
@@ -49,7 +49,7 @@
   global.set $while/n
   i32.const 0
   global.set $while/m
-  loop $continue|1
+  loop $while-continue|1
    global.get $while/n
    if
     global.get $while/n
@@ -60,7 +60,7 @@
     i32.const 1
     i32.add
     global.set $while/m
-    loop $continue|2
+    loop $while-continue|2
      global.get $while/n
      if
       global.get $while/n
@@ -71,7 +71,7 @@
       i32.const 1
       i32.add
       global.set $while/o
-      br $continue|2
+      br $while-continue|2
      end
     end
     global.get $while/n
@@ -85,14 +85,16 @@
     end
     global.get $while/o
     i32.const 9
-    i32.eq
-    br_if $continue|1
-    i32.const 0
-    i32.const 32
-    i32.const 22
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
+    i32.ne
+    if
+     i32.const 0
+     i32.const 32
+     i32.const 22
+     i32.const 2
+     call $~lib/builtins/abort
+     unreachable
+    end
+    br $while-continue|1
    end
   end
   global.get $while/n
@@ -130,7 +132,7 @@
   global.set $while/n
   i32.const 0
   global.set $while/m
-  loop $continue|3
+  loop $while-continue|3
    global.get $while/n
    local.tee $0
    i32.const 1
@@ -146,7 +148,7 @@
    else
     i32.const 0
    end
-   br_if $continue|3
+   br_if $while-continue|3
   end
   global.get $while/n
   i32.const -1

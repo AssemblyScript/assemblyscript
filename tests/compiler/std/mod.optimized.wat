@@ -133,7 +133,7 @@
     i64.or
    end
    local.set $3
-   loop $continue|0
+   loop $while-continue|0
     local.get $4
     local.get $5
     i64.gt_s
@@ -159,7 +159,7 @@
      i64.const 1
      i64.sub
      local.set $4
-     br $continue|0
+     br $while-continue|0
     end
    end
    local.get $2
@@ -372,7 +372,7 @@
     i32.shl
    end
    local.set $3
-   loop $continue|0
+   loop $while-continue|0
     local.get $4
     local.get $5
     i32.gt_s
@@ -398,7 +398,7 @@
      i32.const 1
      i32.sub
      local.set $4
-     br $continue|0
+     br $while-continue|0
     end
    end
    local.get $2

@@ -42,6 +42,8 @@
   (local $18 i32)
   (local $19 f64)
   (local $20 f64)
+  i32.const 1
+  drop
   block $~lib/util/math/log_lut|inlined.0 (result f64)
    local.get $0
    local.set $1
@@ -374,6 +376,8 @@
   (local $23 f64)
   (local $24 f64)
   (local $25 f64)
+  i32.const 1
+  drop
   block $~lib/util/math/log2_lut|inlined.0 (result f64)
    local.get $0
    local.set $1
@@ -716,12 +720,14 @@
   (local $16 f64)
   (local $17 f64)
   (local $18 f64)
-  (local $19 f64)
+  (local $19 i32)
   (local $20 i32)
   (local $21 f64)
   (local $22 f64)
   (local $23 f64)
   (local $24 f64)
+  (local $25 f64)
+  (local $26 f64)
   local.get $1
   f64.convert_i32_u
   f64.const 1
@@ -789,6 +795,8 @@
    local.get $6
    local.get $1
    i32.lt_u
+   local.set $7
+   local.get $7
    if
     local.get $6
     f64.convert_i32_u
@@ -802,9 +810,9 @@
     f64.const 0
     local.set $16
     i32.const 0
-    local.set $7
-    block $break|1
-     loop $continue|1
+    local.set $19
+    block $while-break|1
+     loop $while-continue|1
       local.get $15
       local.get $15
       f64.mul
@@ -816,43 +824,44 @@
       f64.add
       f64.const 4
       f64.le
-      i32.eqz
-      br_if $break|1
-      f64.const 2
-      local.get $15
-      f64.mul
-      local.get $16
-      f64.mul
-      local.get $9
-      f64.add
-      local.set $16
-      local.get $17
-      local.get $18
-      f64.sub
-      local.get $14
-      f64.add
-      local.set $15
-      local.get $7
-      local.get $3
-      i32.ge_u
+      local.set $20
+      local.get $20
       if
-       br $break|1
+       f64.const 2
+       local.get $15
+       f64.mul
+       local.get $16
+       f64.mul
+       local.get $9
+       f64.add
+       local.set $16
+       local.get $17
+       local.get $18
+       f64.sub
+       local.get $14
+       f64.add
+       local.set $15
+       local.get $19
+       local.get $3
+       i32.ge_u
+       if
+        br $while-break|1
+       end
+       local.get $19
+       i32.const 1
+       i32.add
+       local.set $19
+       br $while-continue|1
       end
-      local.get $7
-      i32.const 1
-      i32.add
-      local.set $7
-      br $continue|1
      end
-     unreachable
     end
-    block $break|2
-     loop $continue|2
-      local.get $7
-      local.get $13
-      i32.lt_u
-      i32.eqz
-      br_if $break|2
+    loop $while-continue|2
+     local.get $19
+     local.get $13
+     i32.lt_u
+     local.set $20
+     local.get $20
+     if
       local.get $15
       local.get $15
       f64.mul
@@ -862,7 +871,7 @@
       f64.sub
       local.get $14
       f64.add
-      local.set $19
+      local.set $21
       f64.const 2
       local.get $15
       f64.mul
@@ -871,15 +880,14 @@
       local.get $9
       f64.add
       local.set $16
-      local.get $19
+      local.get $21
       local.set $15
-      local.get $7
+      local.get $19
       i32.const 1
       i32.add
-      local.set $7
-      br $continue|2
+      local.set $19
+      br $while-continue|2
      end
-     unreachable
     end
     global.get $../../examples/mandelbrot/assembly/index/NUM_COLORS
     i32.const 1
@@ -892,38 +900,38 @@
     local.get $16
     f64.mul
     f64.add
-    local.set $19
-    local.get $19
+    local.set $22
+    local.get $22
     f64.const 1
     f64.gt
     if
      f64.const 0.5
-     local.get $19
+     local.get $22
      call $~lib/math/NativeMath.log
      f64.mul
      call $~lib/math/NativeMath.log2
-     local.set $21
+     local.set $23
      global.get $../../examples/mandelbrot/assembly/index/NUM_COLORS
      i32.const 1
      i32.sub
      f64.convert_i32_s
-     local.get $7
+     local.get $19
      i32.const 1
      i32.add
      f64.convert_i32_u
-     local.get $21
+     local.get $23
      f64.sub
      local.get $12
      f64.mul
-     local.set $24
+     local.set $26
      f64.const 0
-     local.set $23
+     local.set $25
      f64.const 1
-     local.set $22
-     local.get $24
-     local.get $23
+     local.set $24
+     local.get $26
+     local.get $25
      f64.max
-     local.get $22
+     local.get $24
      f64.min
      f64.mul
      i32.trunc_f64_u

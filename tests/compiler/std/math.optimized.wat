@@ -6843,7 +6843,7 @@
     i64.or
    end
    local.set $3
-   loop $continue|0
+   loop $while-continue|0
     local.get $4
     local.get $5
     i64.gt_s
@@ -6869,7 +6869,7 @@
      i64.const 1
      i64.sub
      local.set $4
-     br $continue|0
+     br $while-continue|0
     end
    end
    local.get $2
@@ -7057,7 +7057,7 @@
     i32.shl
    end
    local.set $3
-   loop $continue|0
+   loop $while-continue|0
     local.get $4
     local.get $5
     i32.gt_s
@@ -7083,7 +7083,7 @@
      i32.const 1
      i32.sub
      local.set $4
-     br $continue|0
+     br $while-continue|0
     end
    end
    local.get $2
@@ -8835,7 +8835,7 @@
    i64.or
   end
   local.set $4
-  block $break|0
+  block $do-break|0
    local.get $3
    local.get $5
    i64.lt_s
@@ -8845,11 +8845,11 @@
     i64.const 1
     i64.add
     i64.eq
-    br_if $break|0
+    br_if $do-break|0
     local.get $0
     return
    end
-   loop $continue|1
+   loop $while-continue|1
     local.get $3
     local.get $5
     i64.gt_s
@@ -8879,7 +8879,7 @@
      i64.const 1
      i64.sub
      local.set $3
-     br $continue|1
+     br $while-continue|1
     end
    end
    local.get $2
@@ -9086,7 +9086,7 @@
   local.set $6
   i32.const 0
   local.set $4
-  block $break|0
+  block $do-break|0
    local.get $3
    local.get $5
    i32.lt_s
@@ -9096,11 +9096,11 @@
     i32.const 1
     i32.add
     i32.eq
-    br_if $break|0
+    br_if $do-break|0
     local.get $0
     return
    end
-   loop $continue|1
+   loop $while-continue|1
     local.get $3
     local.get $5
     i32.gt_s
@@ -9130,7 +9130,7 @@
      i32.const 1
      i32.sub
      local.set $3
-     br $continue|1
+     br $while-continue|1
     end
    end
    local.get $2
@@ -11353,7 +11353,7 @@
   (local $2 i64)
   i64.const 1
   local.set $2
-  loop $continue|0
+  loop $while-continue|0
    local.get $1
    i32.const 0
    i32.gt_s
@@ -11375,7 +11375,7 @@
     local.get $0
     i64.mul
     local.set $0
-    br $continue|0
+    br $while-continue|0
    end
   end
   local.get $2
@@ -11394,7 +11394,7 @@
   local.set $1
   f32.const 1
   local.set $2
-  loop $continue|0
+  loop $while-continue|0
    local.get $1
    if
     local.get $2
@@ -11414,7 +11414,7 @@
     local.get $0
     f32.mul
     local.set $0
-    br $continue|0
+    br $while-continue|0
    end
   end
   local.get $3
@@ -11440,7 +11440,7 @@
   local.set $1
   f64.const 1
   local.set $2
-  loop $continue|0
+  loop $while-continue|0
    local.get $1
    if
     local.get $2
@@ -11460,7 +11460,7 @@
     local.get $0
     f64.mul
     local.set $0
-    br $continue|0
+    br $while-continue|0
    end
   end
   local.get $3

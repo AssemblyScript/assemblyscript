@@ -121,6 +121,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -180,6 +182,7 @@
  (func $~lib/rt/__instanceof (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -192,7 +195,7 @@
   i32.load
   i32.le_u
   if
-   loop $continue|0
+   loop $do-continue|0
     local.get $2
     local.get $1
     i32.eq
@@ -209,7 +212,9 @@
     i32.add
     i32.load offset=4
     local.tee $2
-    br_if $continue|0
+    local.set $4
+    local.get $4
+    br_if $do-continue|0
    end
   end
   i32.const 0

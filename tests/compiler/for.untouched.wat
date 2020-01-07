@@ -13,12 +13,16 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   i32.const 0
   global.set $for/i
   loop $for-loop|0
    global.get $for/i
    i32.const 10
    i32.lt_s
+   local.set $0
+   local.get $0
    if
     global.get $for/i
     i32.const 1
@@ -40,16 +44,18 @@
    unreachable
   end
   i32.const 0
-  local.set $0
+  local.set $1
   loop $for-loop|1
-   local.get $0
+   local.get $1
    i32.const 10
    i32.lt_s
+   local.set $0
+   local.get $0
    if
-    local.get $0
+    local.get $1
     i32.const 1
     i32.add
-    local.set $0
+    local.set $1
     br $for-loop|1
    end
   end
@@ -57,6 +63,8 @@
    global.get $for/i
    i32.const 0
    i32.gt_s
+   local.set $0
+   local.get $0
    if
     nop
     global.get $for/i
@@ -81,6 +89,8 @@
   block $for-break3
    loop $for-loop|3
     i32.const 1
+    local.set $0
+    local.get $0
     if
      global.get $for/i
      i32.const 10
@@ -99,6 +109,8 @@
   block $for-break4
    loop $for-loop|4
     i32.const 1
+    local.set $0
+    local.get $0
     if
      global.get $for/i
      i32.const 1
@@ -115,23 +127,25 @@
    end
   end
   i32.const 0
-  local.set $1
+  local.set $2
   loop $for-loop|5
-   local.get $1
+   local.get $2
    i32.const 10
    i32.lt_s
+   local.set $0
+   local.get $0
    if
     block $for-continue|5
      br $for-continue|5
     end
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $for-loop|5
    end
   end
-  local.get $1
+  local.get $2
   i32.const 10
   i32.eq
   i32.eqz
@@ -144,38 +158,42 @@
    unreachable
   end
   i32.const 0
-  local.set $2
+  local.set $0
   loop $for-loop|6
-   local.get $2
+   local.get $0
    i32.const 10
    i32.lt_s
+   local.set $3
+   local.get $3
    if
     i32.const 0
-    local.set $3
+    local.set $4
     loop $for-loop|7
-     local.get $3
+     local.get $4
      i32.const 10
      i32.lt_s
+     local.set $5
+     local.get $5
      if
       block $for-continue|7
-       local.get $2
-       local.get $3
+       local.get $0
+       local.get $4
        i32.eq
        if
         br $for-continue|7
        end
       end
-      local.get $3
+      local.get $4
       i32.const 1
       i32.add
-      local.set $3
+      local.set $4
       br $for-loop|7
      end
     end
-    local.get $2
+    local.get $0
     i32.const 1
     i32.add
-    local.set $2
+    local.set $0
     br $for-loop|6
    end
   end

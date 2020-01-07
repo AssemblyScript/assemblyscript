@@ -448,47 +448,47 @@
     local.set $5
     i32.const 0
     local.set $6
-    loop $continue|1
-     block $break|1
-      local.get $4
-      local.get $4
-      f64.mul
-      local.tee $15
-      local.get $5
-      local.get $5
-      f64.mul
-      local.tee $7
-      f64.add
-      f64.const 4
-      f64.le
-      i32.eqz
-      br_if $break|1
-      f64.const 2
-      local.get $4
-      f64.mul
-      local.get $5
-      f64.mul
-      local.get $11
-      f64.add
-      local.set $5
-      local.get $15
-      local.get $7
-      f64.sub
-      local.get $12
-      f64.add
-      local.set $4
-      local.get $6
-      local.get $3
-      i32.ge_u
-      br_if $break|1
-      local.get $6
-      i32.const 1
-      i32.add
-      local.set $6
-      br $continue|1
+    loop $while-continue|1
+     local.get $4
+     local.get $4
+     f64.mul
+     local.tee $15
+     local.get $5
+     local.get $5
+     f64.mul
+     local.tee $7
+     f64.add
+     f64.const 4
+     f64.le
+     if
+      block $while-break|1
+       f64.const 2
+       local.get $4
+       f64.mul
+       local.get $5
+       f64.mul
+       local.get $11
+       f64.add
+       local.set $5
+       local.get $15
+       local.get $7
+       f64.sub
+       local.get $12
+       f64.add
+       local.set $4
+       local.get $6
+       local.get $3
+       i32.ge_u
+       br_if $while-break|1
+       local.get $6
+       i32.const 1
+       i32.add
+       local.set $6
+       br $while-continue|1
+      end
      end
     end
-    loop $continue|2
+    loop $while-continue|2
      local.get $6
      local.get $0
      i32.lt_u
@@ -515,7 +515,7 @@
       i32.const 1
       i32.add
       local.set $6
-      br $continue|2
+      br $while-continue|2
      end
     end
     i32.const 2047

@@ -197,7 +197,7 @@
    i64.shl
    i64.or
    local.set $4
-   loop $continue|0
+   loop $while-continue|0
     local.get $2
     i32.const 32
     i32.ge_u
@@ -228,7 +228,7 @@
      i32.const 32
      i32.add
      local.set $0
-     br $continue|0
+     br $while-continue|0
     end
    end
   end
