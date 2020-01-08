@@ -1959,26 +1959,21 @@
  (func $resolve-access/arrayAccess (; 17 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
   i32.const 1
   i32.const 3
   i32.const 3
   i32.const 32
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
-  local.tee $1
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $0
+  local.set $1
+  local.get $1
   i32.const 0
   call $~lib/array/Array<u64>#__get
   call $~lib/number/U64#toString
-  local.set $2
+  local.set $0
   local.get $1
   call $~lib/rt/stub/__release
   local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
  )
  (func $resolve-access/Container#constructor (; 18 ;) (param $0 i32) (result i32)
   local.get $0

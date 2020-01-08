@@ -5964,13 +5964,13 @@
    if
     i32.const 1
     call $~lib/rt/__allocArray
+    call $~lib/rt/pure/__retain
     local.tee $1
     i32.load offset=4
     local.get $0
     call $~lib/rt/pure/__retain
     i32.store
     local.get $1
-    call $~lib/rt/pure/__retain
     return
    end
    local.get $0

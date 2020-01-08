@@ -9023,6 +9023,7 @@
    i32.const 4
    i32.const 0
    call $~lib/rt/__allocArray
+   call $~lib/rt/pure/__retain
    local.set $3
    local.get $3
    i32.load offset=4
@@ -9032,7 +9033,6 @@
    call $~lib/rt/pure/__retain
    i32.store
    local.get $3
-   call $~lib/rt/pure/__retain
    local.set $4
    local.get $1
    call $~lib/rt/pure/__release

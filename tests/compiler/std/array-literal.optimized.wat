@@ -7,6 +7,7 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
@@ -1593,31 +1594,31 @@
    end
   end
  )
- (func $~lib/rt/__allocArray (; 26 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/rt/__allocArray (; 26 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
   i32.const 16
-  local.get $1
-  call $~lib/rt/tlsf/__alloc
-  local.tee $1
-  i32.const 3
-  local.get $0
-  i32.shl
-  local.tee $0
-  i32.const 0
+  local.get $2
   call $~lib/rt/tlsf/__alloc
   local.tee $2
+  local.get $0
+  local.get $1
+  i32.shl
+  local.tee $1
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.tee $3
   call $~lib/rt/pure/__retain
   i32.store
-  local.get $1
   local.get $2
+  local.get $3
   i32.store offset=4
+  local.get $2
   local.get $1
-  local.get $0
   i32.store offset=8
-  local.get $1
-  i32.const 3
+  local.get $2
+  local.get $0
   i32.store offset=12
-  local.get $1
+  local.get $2
  )
  (func $std/array-literal/Ref#constructor (; 27 ;) (result i32)
   i32.const 0
@@ -1851,6 +1852,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   i32.const 76
   i32.load
   i32.const 3
@@ -1959,9 +1961,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
   i32.const 0
   i32.const 3
   call $~lib/rt/__allocArray
+  call $~lib/rt/pure/__retain
   local.tee $1
   i32.load offset=4
   local.tee $0
@@ -1982,7 +1986,6 @@
   global.get $std/array-literal/i
   i32.store8 offset=2
   local.get $1
-  call $~lib/rt/pure/__retain
   global.set $std/array-literal/dynamicArrayI8
   global.get $std/array-literal/dynamicArrayI8
   i32.load offset=12
@@ -2035,9 +2038,11 @@
   end
   i32.const 0
   global.set $std/array-literal/i
+  i32.const 3
   i32.const 2
   i32.const 4
   call $~lib/rt/__allocArray
+  call $~lib/rt/pure/__retain
   local.tee $1
   i32.load offset=4
   local.tee $0
@@ -2058,7 +2063,6 @@
   global.get $std/array-literal/i
   i32.store offset=8
   local.get $1
-  call $~lib/rt/pure/__retain
   global.set $std/array-literal/dynamicArrayI32
   global.get $std/array-literal/dynamicArrayI32
   i32.load offset=12
@@ -2109,9 +2113,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
   i32.const 2
   i32.const 6
   call $~lib/rt/__allocArray
+  call $~lib/rt/pure/__retain
   local.tee $1
   i32.load offset=4
   local.tee $0
@@ -2130,7 +2136,6 @@
   call $~lib/rt/pure/__retain
   i32.store offset=8
   local.get $1
-  call $~lib/rt/pure/__retain
   global.set $std/array-literal/dynamicArrayRef
   global.get $std/array-literal/dynamicArrayRef
   i32.load offset=12
@@ -2144,9 +2149,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
   i32.const 2
   i32.const 8
   call $~lib/rt/__allocArray
+  call $~lib/rt/pure/__retain
   local.tee $1
   i32.load offset=4
   local.tee $0
@@ -2165,7 +2172,6 @@
   call $~lib/rt/pure/__retain
   i32.store offset=8
   local.get $1
-  call $~lib/rt/pure/__retain
   global.set $std/array-literal/dynamicArrayRefWithCtor
   global.get $std/array-literal/dynamicArrayRefWithCtor
   i32.load offset=12
@@ -2186,6 +2192,21 @@
   global.get $std/array-literal/dynamicArrayRef
   call $~lib/rt/pure/__release
   global.get $std/array-literal/dynamicArrayRefWithCtor
+  call $~lib/rt/pure/__release
+  i32.const 1
+  i32.const 2
+  i32.const 6
+  call $~lib/rt/__allocArray
+  call $~lib/rt/pure/__retain
+  local.tee $1
+  i32.load offset=4
+  call $std/array-literal/Ref#constructor
+  local.tee $7
+  call $~lib/rt/pure/__retain
+  i32.store
+  local.get $7
+  call $~lib/rt/pure/__release
+  local.get $1
   call $~lib/rt/pure/__release
   local.get $2
   call $~lib/rt/pure/__release
