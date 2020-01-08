@@ -671,7 +671,7 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
-      // this will be done later
+      // this will be done later (1)
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
       // }
@@ -699,7 +699,7 @@ exports.main = function main(argv, options, callback) {
       add("remove-unused-brs");
       add("remove-unused-names");
       add("merge-blocks");
-      // make this later
+      // make this later & move to (2)
       // if (optimizeLevel >= 3 || shrinkLevel >= 2) {
       //   add("precompute-propagate");
       // } else {
@@ -725,9 +725,11 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("simplify-globals");
       }
+      // moved from (2)
+      // it works better after globals optimizations like simplify-globals, inlining-optimizing and etc
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("precompute-propagate");
-      } else { // differs
+      } else {
         add("precompute");
       }
       // replace indirect calls with direct, reduce arity and
@@ -750,6 +752,7 @@ exports.main = function main(argv, options, callback) {
         add("inlining-optimizing");
         // move some code after early return which potentially could reduce computations
         // do this after CFG cleanup (originally it was done before)
+        // moved from (1)
         add("code-pushing");
 
         // this quite expensive so do this only for highest opt level
