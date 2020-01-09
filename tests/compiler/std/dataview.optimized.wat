@@ -37,7 +37,8 @@
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
@@ -2549,7 +2550,7 @@
   block $2of2
    block $1of2
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $1of2 $1of2 $2of2 $outOfRange
@@ -4088,7 +4089,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $1
   i32.load
   call $~lib/dataview/DataView#constructor|trampoline

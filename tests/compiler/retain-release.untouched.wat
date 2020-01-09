@@ -15,9 +15,10 @@
  (global $retain-release/REF (mut i32) (i32.const 0))
  (global $retain-release/glo (mut i32) (i32.const 0))
  (global $retain-release/TARGET (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 100))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
@@ -776,7 +777,7 @@
  )
  (func $retain-release/provideRefIndirect (; 42 ;) (param $0 i32)
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-release/REF
   local.get $0
   call_indirect (type $i32_=>_none)
@@ -784,7 +785,7 @@
  (func $retain-release/receiveRefIndirect (; 43 ;) (param $0 i32)
   (local $1 i32)
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call_indirect (type $none_=>_i32)
   local.tee $1
@@ -795,18 +796,18 @@
  )
  (func $retain-release/receiveRefIndirectDrop (; 44 ;) (param $0 i32)
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call_indirect (type $none_=>_i32)
   call $~lib/rt/stub/__release
  )
  (func $start (; 45 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:retain-release
  )

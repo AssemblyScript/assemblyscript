@@ -10,9 +10,10 @@
  (data (i32.const 16) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
  (data (i32.const 96) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
  (data (i32.const 128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (start $start)
  (func $start:resolve-function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
@@ -344,7 +345,7 @@
  )
  (func $start:resolve-function-expression (; 12 ;)
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 2
   call $start:resolve-function-expression~anonymous|0
   i32.const 42
@@ -358,7 +359,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   call $start:resolve-function-expression~anonymous|1
   i32.const 42
@@ -376,7 +377,7 @@
   i32.const 160
   global.set $~lib/rt/stub/offset
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
   call $start:resolve-function-expression~anonymous|2
   call $~lib/util/number/itoa32

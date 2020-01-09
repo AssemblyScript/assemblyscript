@@ -27,15 +27,16 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $retain-return/ref (mut i32) (i32.const 0))
  (global $retain-return/returnNewFnExpr (mut i32) (i32.const 1))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $retain-return/returnLocalFnExpr (mut i32) (i32.const 2))
  (global $retain-return/returnGlobalFnExpr (mut i32) (i32.const 3))
  (global $retain-return/returnNewFnBlock (mut i32) (i32.const 4))
  (global $retain-return/returnLocalFnBlock (mut i32) (i32.const 5))
  (global $retain-return/returnGlobalFnBlock (mut i32) (i32.const 6))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 288))
  (global $~lib/heap/__heap_base i32 (i32.const 324))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
@@ -3366,64 +3367,64 @@
   call $retain-return/returnGlobal
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnNewFnExpr
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnNewFnExpr
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/ref
   global.get $retain-return/returnLocalFnExpr
   call_indirect (type $i32_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/ref
   global.get $retain-return/returnLocalFnExpr
   call_indirect (type $i32_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnExpr
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnExpr
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnNewFnBlock
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnNewFnBlock
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnLocalFnBlock
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnLocalFnBlock
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnBlock
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/returnGlobalFnBlock
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
@@ -3443,12 +3444,12 @@
   global.set $retain-return/ref
  )
  (func $start (; 38 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:retain-return
  )

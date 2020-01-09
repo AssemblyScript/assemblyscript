@@ -277,7 +277,7 @@ export class Resolver extends DiagnosticEmitter {
 
       // Handle special built-in types
       if (isSimpleType) {
-        switch (nameNode.identifier.symbol) {
+        switch (nameNode.identifier.text) {
           case CommonSymbols.native: return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.indexof: return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
           case CommonSymbols.valueof: return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
@@ -712,7 +712,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       return this.resolveFunctionInclTypeArguments(
         prototype,
-        node.typeArguments,
+        typeArguments,
         ctxFlow.actualFunction,
         makeMap(ctxFlow.contextualTypeArguments), // don't inherit
         node,

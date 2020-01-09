@@ -15,11 +15,12 @@
  (data (i32.const 576) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002\00")
  (table $0 4 funcref)
  (elem (i32.const 1) $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 596))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (start $start)
  (func $start:resolve-function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
@@ -641,7 +642,7 @@
  (func $start:resolve-function-expression (; 16 ;)
   (local $0 i32)
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 2
   i32.const 1
   call_indirect (type $i32_=>_i32)
@@ -657,7 +658,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   i32.const 2
   call_indirect (type $i32_=>_i32)
@@ -683,7 +684,7 @@
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
   i32.const 3
   call_indirect (type $i32_=>_i32)

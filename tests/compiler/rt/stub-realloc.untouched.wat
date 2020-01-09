@@ -17,7 +17,7 @@
  (global $rt/stub-realloc/originalPtr (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $rt/stub-realloc/newLastPtr (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 128))
  (global $~lib/heap/__heap_base i32 (i32.const 156))
  (export "_start" (func $start))
@@ -1715,12 +1715,12 @@
   end
  )
  (func $start (; 11 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   global.get $~lib/heap/__heap_base
   i32.const 15

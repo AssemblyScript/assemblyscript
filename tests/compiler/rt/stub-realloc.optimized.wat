@@ -15,7 +15,7 @@
  (global $rt/stub-realloc/ptr (mut i32) (i32.const 0))
  (global $rt/stub-realloc/originalPtr (mut i32) (i32.const 0))
  (global $rt/stub-realloc/newLastPtr (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 128))
  (export "_start" (func $start))
  (export "memory" (memory $0))
@@ -583,12 +583,12 @@
   end
  )
  (func $start (; 10 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   i32.const 160
   global.set $~lib/rt/stub/startOffset

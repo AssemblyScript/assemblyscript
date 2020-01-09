@@ -500,7 +500,7 @@
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/util/string/__fixmulShift (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
@@ -508,7 +508,8 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
@@ -2399,7 +2400,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -8641,7 +8642,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
   call $~lib/string/String.fromCharCode|trampoline
   local.tee $10
@@ -8657,7 +8658,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 54
   call $~lib/string/String.fromCharCode|trampoline
   local.tee $11
@@ -8673,7 +8674,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 65590
   call $~lib/string/String.fromCharCode|trampoline
   local.tee $12
@@ -16676,12 +16677,12 @@
   call $~lib/rt/pure/__retain
  )
  (func $start (; 96 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:std/string
  )

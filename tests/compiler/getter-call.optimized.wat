@@ -5,7 +5,8 @@
  (memory $0 0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $start)
@@ -79,7 +80,7 @@
  (func $getter-call/test (; 2 ;) (result i32)
   call $~lib/rt/stub/__alloc
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 42
  )
  (func $start (; 3 ;)

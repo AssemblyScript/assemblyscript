@@ -17,7 +17,7 @@
  (global $rt/instanceof/nullableAnimal (mut i32) (i32.const 0))
  (global $rt/instanceof/nullableCat (mut i32) (i32.const 0))
  (global $rt/instanceof/nullableBlackcat (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
@@ -426,12 +426,12 @@
   end
  )
  (func $start (; 8 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:rt/instanceof
  )

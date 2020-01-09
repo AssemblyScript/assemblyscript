@@ -15,12 +15,12 @@
  (global $exports/outer.inner.a i32 (i32.const 42))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $exports/Car i32 (i32.const 3))
  (global $exports/vehicles.Car i32 (i32.const 4))
  (export "memory" (memory $0))
  (export "add" (func $exports/add))
- (export "__setargc" (func $~lib/setargc))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "subOpt" (func $exports/subOpt|trampoline))
  (export "math.sub" (func $exports/subOpt))
  (export "Animal.CAT" (global $exports/Animal.CAT))
@@ -151,7 +151,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -165,15 +165,11 @@
   local.get $1
   call $exports/subOpt
  )
- (func $~lib/setargc (; 10 ;) (param $0 i32)
-  local.get $0
-  global.set $~lib/argc
- )
- (func $exports/Car#constructor|trampoline (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable
@@ -196,11 +192,11 @@
   i32.store
   local.get $0
  )
- (func $exports/vehicles.Car#constructor|trampoline (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor|trampoline (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable

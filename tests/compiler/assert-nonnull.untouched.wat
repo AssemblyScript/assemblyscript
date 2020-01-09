@@ -10,7 +10,8 @@
  (data (i32.const 80) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 128) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00")
  (table $0 1 funcref)
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "testVar" (func $assert-nonnull/testVar))
  (export "testObj" (func $assert-nonnull/testObj))
@@ -282,7 +283,7 @@
  (func $assert-nonnull/testFn (; 14 ;) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call_indirect (type $none_=>_i32)
   local.tee $1
@@ -299,7 +300,7 @@
   end
   local.set $2
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $2
   call_indirect (type $none_=>_i32)
   local.tee $1
@@ -308,7 +309,7 @@
   (local $1 i32)
   (local $2 i32)
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call_indirect (type $none_=>_i32)
   local.tee $1
@@ -331,7 +332,7 @@
   call $~lib/rt/stub/__retain
   local.set $0
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.load offset=4
   call_indirect (type $none_=>_i32)
@@ -348,7 +349,7 @@
   call $~lib/rt/stub/__retain
   local.set $0
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.load offset=4
   call_indirect (type $none_=>_i32)

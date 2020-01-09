@@ -21,8 +21,9 @@
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $retain-return/ref (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
@@ -1755,41 +1756,41 @@
   call $retain-return/Ref#constructor
   global.set $retain-return/ref
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-return/ref
   local.tee $0
   if
@@ -1800,12 +1801,12 @@
   global.set $retain-return/ref
  )
  (func $start (; 28 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:retain-return
  )

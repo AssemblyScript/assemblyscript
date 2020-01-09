@@ -11,7 +11,7 @@
  (data (i32.const 224) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00o\00u\00r\00_\00i\00n\00t")
  (data (i32.const 256) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00i\00n\00t")
  (data (i32.const 288) "\10\00\00\00\01\00\00\00\01\00\00\00\10\00\00\00f\00i\00v\00e\00_\00d\00b\00l")
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $start:std/trace (; 1 ;)
@@ -81,12 +81,12 @@
   call $~lib/builtins/trace
  )
  (func $start (; 2 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:std/trace
  )

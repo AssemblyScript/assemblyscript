@@ -30,7 +30,8 @@
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
@@ -2408,7 +2409,7 @@
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $5
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.load
   local.tee $3

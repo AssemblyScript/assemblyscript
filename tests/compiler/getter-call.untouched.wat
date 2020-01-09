@@ -9,8 +9,9 @@
  (elem (i32.const 1) $getter-call/C#get:x~anonymous|0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $start)
@@ -154,7 +155,7 @@
   call $getter-call/C#constructor
   local.set $0
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $getter-call/C#get:x
   call_indirect (type $none_=>_i32)

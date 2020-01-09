@@ -15,8 +15,9 @@
  (global $retain-release/REF (mut i32) (i32.const 0))
  (global $retain-release/glo (mut i32) (i32.const 0))
  (global $retain-release/TARGET (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
@@ -227,26 +228,26 @@
  )
  (func $retain-release/provideRefIndirect (; 14 ;) (param $0 i32)
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $retain-release/REF
   local.get $0
   call_indirect (type $i32_=>_none)
  )
  (func $retain-release/receiveRefIndirect (; 15 ;) (param $0 i32)
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call_indirect (type $none_=>_i32)
   drop
  )
  (func $start (; 16 ;)
   (local $0 i32)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   i32.const 112
   global.set $~lib/rt/stub/startOffset

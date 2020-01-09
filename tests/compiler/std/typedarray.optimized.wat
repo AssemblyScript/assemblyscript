@@ -203,7 +203,7 @@
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $std/typedarray/forEachCallCount (mut i32) (i32.const 0))
  (global $std/typedarray/forEachSelf (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
@@ -212,7 +212,8 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 6 ;) (param $0 i32) (param $1 i32)
@@ -3077,7 +3078,7 @@
        f64.load
        local.set $5
        i32.const 2
-       global.set $~lib/argc
+       global.set $~argumentsLength
        local.get $4
        local.get $5
        call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
@@ -3198,7 +3199,7 @@
     f64.load
     local.set $6
     i32.const 2
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $4
     local.get $6
     call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
@@ -3314,7 +3315,7 @@
       f64.load
       local.set $6
       i32.const 2
-      global.set $~lib/argc
+      global.set $~argumentsLength
       local.get $4
       local.get $6
       call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
@@ -3404,7 +3405,7 @@
     f64.load
     local.set $4
     i32.const 2
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $4
     call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
@@ -4171,7 +4172,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $1
     local.get $3
@@ -4262,7 +4263,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $2
     local.get $4
@@ -4395,7 +4396,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $3
     local.get $1
@@ -4492,7 +4493,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $3
     local.get $1
@@ -4565,7 +4566,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $4
     local.get $2
@@ -4725,7 +4726,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $4
     local.get $2
@@ -4885,7 +4886,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $3
     local.get $1
@@ -4961,7 +4962,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $3
     local.get $1
@@ -5033,7 +5034,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $1
     local.get $3
@@ -5105,7 +5106,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $2
     local.get $4
@@ -5215,7 +5216,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $3
     local.get $1
@@ -5289,7 +5290,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $3
     local.get $1
@@ -5363,7 +5364,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $4
     local.get $2
@@ -5471,7 +5472,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $4
     local.get $2
@@ -5579,7 +5580,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $3
     local.get $1
@@ -5651,7 +5652,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $3
     local.get $1
@@ -5736,7 +5737,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $1
     local.get $4
     i32.add
@@ -5858,7 +5859,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $1
     local.get $4
     i32.add
@@ -5999,7 +6000,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $1
     local.get $4
     i32.add
@@ -6127,7 +6128,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $5
     local.get $2
     i32.const 1
@@ -6283,7 +6284,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $5
     local.get $2
     i32.const 1
@@ -6439,7 +6440,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $5
     local.get $2
     i32.const 2
@@ -6572,7 +6573,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $5
     local.get $2
     i32.const 2
@@ -6733,7 +6734,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $5
     local.get $2
     i32.const 3
@@ -6889,7 +6890,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $5
     local.get $2
     i32.const 3
@@ -7050,7 +7051,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $5
     local.get $2
     i32.const 2
@@ -7211,7 +7212,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $5
     local.get $2
     i32.const 3
@@ -7508,7 +7509,7 @@
     i32.load8_s
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -7682,7 +7683,7 @@
     i32.load8_u
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -7849,7 +7850,7 @@
     i32.load8_u
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -8029,7 +8030,7 @@
     i32.load16_s
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -8213,7 +8214,7 @@
     i32.load16_u
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -8395,7 +8396,7 @@
     i32.load
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -8577,7 +8578,7 @@
     i32.load
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -8759,7 +8760,7 @@
     i64.load
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -8941,7 +8942,7 @@
     i64.load
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -9123,7 +9124,7 @@
     f32.load
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -9305,7 +9306,7 @@
     f64.load
     local.set $6
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $6
     local.get $2
     local.get $0
@@ -9468,7 +9469,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 1
      local.get $2
      local.get $3
@@ -9557,7 +9558,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 1
      local.get $2
      local.get $3
@@ -9691,7 +9692,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 1
      local.get $3
      local.get $2
@@ -9782,7 +9783,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 1
      local.get $3
      local.get $2
@@ -9872,7 +9873,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 1
      local.get $3
      local.get $2
@@ -10010,7 +10011,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 1
      local.get $3
      local.get $2
@@ -10148,7 +10149,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 1
      local.get $3
      local.get $2
@@ -10243,7 +10244,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 1
      local.get $3
      local.get $2
@@ -10333,7 +10334,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      local.get $2
      local.get $3
      i32.add
@@ -10426,7 +10427,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      local.get $2
      local.get $3
      i32.add
@@ -10559,7 +10560,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      local.get $2
      local.get $3
      local.get $2
@@ -10654,7 +10655,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      local.get $2
      local.get $3
      local.get $2
@@ -10742,7 +10743,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      local.get $2
      local.get $3
      local.get $2
@@ -10882,7 +10883,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      local.get $2
      local.get $3
      local.get $2
@@ -11022,7 +11023,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      local.get $2
      local.get $3
      local.get $2
@@ -11115,7 +11116,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      local.get $2
      local.get $3
      local.get $2
@@ -11218,7 +11219,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 0
      local.get $2
      local.get $3
@@ -11308,7 +11309,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 0
      local.get $2
      local.get $3
@@ -11446,7 +11447,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 0
      local.get $3
      local.get $2
@@ -11532,7 +11533,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 0
      local.get $3
      local.get $2
@@ -11624,7 +11625,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 0
      local.get $3
      local.get $2
@@ -11760,7 +11761,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 0
      local.get $3
      local.get $2
@@ -12049,7 +12050,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 0
      local.get $3
      local.get $2
@@ -12295,7 +12296,7 @@
     i32.lt_s
     if
      i32.const 3
-     global.set $~lib/argc
+     global.set $~argumentsLength
      i32.const 0
      local.get $3
      local.get $2
@@ -12425,7 +12426,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $1
     local.get $2
     i32.add
@@ -12513,7 +12514,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $3
     i32.add
@@ -12693,7 +12694,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $1
     i32.const 1
@@ -12783,7 +12784,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $1
     i32.const 1
@@ -12908,7 +12909,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $2
     i32.const 2
@@ -13075,7 +13076,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $2
     i32.const 3
@@ -13248,7 +13249,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $1
     i32.const 2
@@ -13371,7 +13372,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $1
     i32.const 3
@@ -16142,7 +16143,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -16318,7 +16319,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 0
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -16331,7 +16332,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 11
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -16346,7 +16347,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -16361,7 +16362,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 3
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -16736,7 +16737,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 0
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -16749,7 +16750,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 11
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -16764,7 +16765,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -16779,7 +16780,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 3
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -17153,7 +17154,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 0
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -17166,7 +17167,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 11
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -17181,7 +17182,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -17196,7 +17197,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 3
   call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
@@ -17540,7 +17541,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -17716,7 +17717,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 0
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
@@ -17729,7 +17730,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 11
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
@@ -17744,7 +17745,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
@@ -17759,7 +17760,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 3
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
@@ -18133,7 +18134,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 0
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
@@ -18146,7 +18147,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 11
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
@@ -18161,7 +18162,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
@@ -18176,7 +18177,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 3
   call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
@@ -18516,7 +18517,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -18688,7 +18689,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 0
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
@@ -18701,7 +18702,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 11
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
@@ -18716,7 +18717,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
@@ -18731,7 +18732,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 3
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
@@ -19104,7 +19105,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 0
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
@@ -19117,7 +19118,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 11
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
@@ -19132,7 +19133,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const -1
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
@@ -19147,7 +19148,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 3
   call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
@@ -19487,7 +19488,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -19660,7 +19661,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i64.const 0
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
@@ -19673,7 +19674,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i64.const 11
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
@@ -19688,7 +19689,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i64.const -1
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
@@ -19703,7 +19704,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i64.const 3
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
@@ -20076,7 +20077,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i64.const 0
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
@@ -20089,7 +20090,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i64.const 11
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
@@ -20104,7 +20105,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i64.const -1
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
@@ -20119,7 +20120,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i64.const 3
   call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
@@ -20459,7 +20460,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -20632,7 +20633,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   f32.const 0
   call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
@@ -20645,7 +20646,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   f32.const 11
   call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
@@ -20660,7 +20661,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   f32.const -1
   call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
@@ -20675,7 +20676,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   f32.const 3
   call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
@@ -21015,7 +21016,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -21188,7 +21189,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   f64.const 0
   call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
@@ -21201,7 +21202,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   f64.const 11
   call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
@@ -21216,7 +21217,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   f64.const -1
   call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
@@ -21231,7 +21232,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   f64.const 3
   call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
@@ -25491,7 +25492,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Int8Array.wrap
   local.set $4
@@ -25632,7 +25633,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Uint8Array.wrap
   local.set $4
@@ -25773,7 +25774,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Uint8ClampedArray.wrap
   local.set $4
@@ -25916,7 +25917,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Int16Array.wrap
   local.set $4
@@ -26057,7 +26058,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Uint16Array.wrap
   local.set $4
@@ -26196,7 +26197,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Int32Array.wrap
   local.set $4
@@ -26335,7 +26336,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Uint32Array.wrap
   local.set $4
@@ -26475,7 +26476,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Int64Array.wrap
   local.set $4
@@ -26615,7 +26616,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Uint64Array.wrap
   local.set $4
@@ -26755,7 +26756,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Float32Array.wrap
   local.set $4
@@ -26895,7 +26896,7 @@
   call $~lib/arraybuffer/ArrayBuffer#slice
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Float64Array.wrap
   local.set $4
@@ -32652,7 +32653,7 @@
    unreachable
   end
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   call $~lib/typedarray/Float64Array#sort
   call $~lib/rt/pure/__release
@@ -34442,12 +34443,12 @@
   call $~lib/rt/pure/__release
  )
  (func $start (; 521 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:std/typedarray
  )

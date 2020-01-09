@@ -57,9 +57,10 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $resolve-ternary/f1 i32 (i32.const 1))
  (global $resolve-ternary/f2 i32 (i32.const 2))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 2128))
  (global $~lib/heap/__heap_base i32 (i32.const 2180))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
@@ -5309,7 +5310,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   global.get $resolve-ternary/b
   if (result i32)
@@ -5330,7 +5331,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   global.get $resolve-ternary/b
   if (result i32)
@@ -5351,7 +5352,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   global.get $resolve-ternary/b
   if (result i32)

@@ -34,9 +34,10 @@
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 544))
  (global $~lib/heap/__heap_base i32 (i32.const 676))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
@@ -4184,7 +4185,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~lib/argc
+      global.get $~argumentsLength
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -4582,7 +4583,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
   local.get $2
   i32.load

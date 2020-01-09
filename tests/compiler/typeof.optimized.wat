@@ -19,7 +19,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/string/String#get:length (; 1 ;) (param $0 i32) (result i32)
@@ -492,12 +492,12 @@
   end
  )
  (func $start (; 7 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:typeof
  )

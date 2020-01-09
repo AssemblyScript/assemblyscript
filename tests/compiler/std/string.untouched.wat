@@ -485,7 +485,7 @@
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/string/String.MAX_LENGTH i32 (i32.const 536870904))
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $~lib/number/I32.MAX_VALUE i32 (i32.const 2147483647))
@@ -517,9 +517,10 @@
  (global $~lib/util/casemap/exceptions i32 (i32.const 23456))
  (global $~lib/util/string/lowerTable127 i32 (i32.const 23632))
  (global $~lib/util/string/lowerTable127Ptr (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 28416))
  (global $~lib/heap/__heap_base i32 (i32.const 28508))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
@@ -4062,7 +4063,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 1
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -12616,7 +12617,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
   i32.const 0
   call $~lib/string/String.fromCharCode|trampoline
@@ -12633,7 +12634,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 54
   i32.const 0
   call $~lib/string/String.fromCharCode|trampoline
@@ -12650,7 +12651,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 65590
   i32.const 0
   call $~lib/string/String.fromCharCode|trampoline
@@ -21001,12 +21002,12 @@
   call $~lib/rt/pure/__retain
  )
  (func $start (; 108 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:std/string
  )

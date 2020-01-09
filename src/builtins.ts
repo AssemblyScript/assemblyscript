@@ -167,7 +167,6 @@ export namespace BuiltinSymbols {
   export const f32 = "~lib/builtins/f32";
   export const f64 = "~lib/builtins/f64";
   export const v128 = "~lib/builtins/v128";
-  export const void_ = "~lib/builtins/void";
 
   export const i32_clz = "~lib/builtins/i32.clz";
   export const i64_clz = "~lib/builtins/i64.clz";
@@ -547,37 +546,19 @@ export namespace BuiltinSymbols {
   export const memory_grow = "~lib/memory/memory.grow";
   export const memory_copy = "~lib/memory/memory.copy";
   export const memory_fill = "~lib/memory/memory.fill";
-  export const memory_allocate = "~lib/memory/memory.allocate";
-  export const memory_free = "~lib/memory/memory.free";
-  export const memory_reset = "~lib/memory/memory.reset";
-
-  // std/runtime.ts
-  export const runtime_instanceof = "~lib/runtime/runtime.instanceof";
-  export const runtime_flags = "~lib/runtime/runtime.flags";
-  export const runtime_allocate = "~lib/util/runtime/allocate";
-  export const runtime_reallocate = "~lib/util/runtime/reallocate";
-  export const runtime_register = "~lib/util/runtime/register";
-  export const runtime_discard = "~lib/util/runtime/discard";
-  export const runtime_makeArray = "~lib/util/runtime/makeArray";
 
   // std/typedarray.ts
   export const Int8Array = "~lib/typedarray/Int8Array";
   export const Uint8Array = "~lib/typedarray/Uint8Array";
+  export const Uint8ClampedArray = "~lib/typedarray/Uint8ClampedArray";
   export const Int16Array = "~lib/typedarray/Int16Array";
   export const Uint16Array = "~lib/typedarray/Uint16Array";
   export const Int32Array = "~lib/typedarray/Int32Array";
   export const Uint32Array = "~lib/typedarray/Uint32Array";
   export const Int64Array = "~lib/typedarray/Int64Array";
   export const Uint64Array = "~lib/typedarray/Uint64Array";
-  export const Uint8ClampedArray = "~lib/typedarray/Uint8ClampedArray";
   export const Float32Array = "~lib/typedarray/Float32Array";
   export const Float64Array = "~lib/typedarray/Float64Array";
-
-  // compiler generated
-  export const started = "~lib/started";
-  export const argc = "~lib/argc";
-  export const setargc = "~lib/setargc";
-  export const capabilities = "~lib/capabilities";
 }
 
 /** Compiles a call to a built-in function. */

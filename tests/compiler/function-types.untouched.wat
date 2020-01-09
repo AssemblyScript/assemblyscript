@@ -12,8 +12,9 @@
  (table $0 5 funcref)
  (elem (i32.const 1) $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/addI32)
  (global $function-types/i32Adder (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (start $start)
  (func $function-types/makeAdder<i32>~anonymous|0 (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
@@ -42,7 +43,7 @@
  )
  (func $function-types/doAddWithFn<i32> (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   local.get $1
   local.get $2
@@ -50,7 +51,7 @@
  )
  (func $function-types/doAdd<i32> (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   local.get $1
   call $function-types/makeAdder<i32>
@@ -63,7 +64,7 @@
  )
  (func $function-types/makeAndAdd<i32> (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   local.get $1
   local.get $2
@@ -73,7 +74,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      i32.const 2
      i32.sub
      br_table $0of1 $1of1 $outOfRange
@@ -92,7 +93,7 @@
   call $function-types/makeAdder<i32>
   global.set $function-types/i32Adder
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   i32.const 2
   global.get $function-types/i32Adder
@@ -111,7 +112,7 @@
   call $function-types/makeAdder<i64>
   global.set $function-types/i64Adder
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i64.const 10
   i64.const 20
   global.get $function-types/i64Adder
@@ -128,7 +129,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   f64.const 1.5
   f64.const 2.5
   call $function-types/makeAdder<f64>
@@ -189,7 +190,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   i32.const 2
   i32.const 0

@@ -8,7 +8,8 @@
  (memory $0 1)
  (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00i\00n\00f\00e\00r\00r\00e\00d\00.\00t\00s\00")
  (table $0 1 funcref)
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (start $start)
  (func $call-inferred/foo<i32> (; 1 ;) (param $0 i32) (result i32)
@@ -27,7 +28,7 @@
   block $1of1
    block $0of1
     block $outOfRange
-     global.get $~lib/argc
+     global.get $~argumentsLength
      br_table $0of1 $1of1 $outOfRange
     end
     unreachable
@@ -79,7 +80,7 @@
    unreachable
   end
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   f32.const 0
   call $call-inferred/bar<f32>|trampoline
   f32.const 42

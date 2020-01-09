@@ -20,7 +20,7 @@
  (global $rt/instanceof/nullAnimal (mut i32) (i32.const 0))
  (global $rt/instanceof/nullCat (mut i32) (i32.const 0))
  (global $rt/instanceof/nullBlackcat (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 64))
  (global $~lib/heap/__heap_base i32 (i32.const 116))
  (export "_start" (func $start))
@@ -680,12 +680,12 @@
   end
  )
  (func $start (; 9 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:rt/instanceof
  )

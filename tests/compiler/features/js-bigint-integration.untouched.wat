@@ -9,7 +9,7 @@
  (data (i32.const 16) "B\00\00\00\01\00\00\00\01\00\00\00B\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00j\00s\00-\00b\00i\00g\00i\00n\00t\00-\00i\00n\00t\00e\00g\00r\00a\00t\00i\00o\00n\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $features/js-bigint-integration/internalValue i64 (i64.const 9007199254740991))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (export "internalValue" (global $features/js-bigint-integration/internalValue))
@@ -44,12 +44,12 @@
   global.get $features/js-bigint-integration/internalValue
  )
  (func $start (; 4 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:features/js-bigint-integration
  )

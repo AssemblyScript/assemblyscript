@@ -15,7 +15,8 @@
  (table $0 2 funcref)
  (elem (i32.const 1) $start:infer-generic~anonymous|0)
  (global $infer-generic/arr i32 (i32.const 112))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
  (export "test2" (func $infer-generic/test2))
@@ -80,7 +81,7 @@
    local.get $6
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $0
     i32.load offset=4

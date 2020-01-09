@@ -10,10 +10,11 @@
  (table $0 12 funcref)
  (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|1 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $function-expression/testOmittedReturn1~anonymous|0 $function-expression/testOmittedReturn2~anonymous|0 $function-expression/testOmittedReturn3~anonymous|0 $function-expression/testNullable~anonymous|0)
  (global $function-expression/f1 (mut i32) (i32.const 1))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $function-expression/f2 (mut i32) (i32.const 2))
  (global $function-expression/f3 (mut i32) (i32.const 3))
  (global $function-expression/f4 (mut i32) (i32.const 4))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (start $start)
  (func $start:function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
@@ -35,7 +36,7 @@
  )
  (func $function-expression/testOmitted (; 6 ;) (param $0 i32) (result i32)
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   i32.const 2
   local.get $0
@@ -83,7 +84,7 @@
  )
  (func $start:function-expression (; 17 ;)
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   global.get $function-expression/f1
   call_indirect (type $i32_=>_i32)
@@ -99,7 +100,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 2
   global.get $function-expression/f2
   call_indirect (type $i32_=>_i32)
@@ -115,11 +116,11 @@
    unreachable
   end
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $function-expression/f3
   call_indirect (type $none_=>_none)
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   global.get $function-expression/f4
   call_indirect (type $none_=>_i32)
   i32.const 1
@@ -173,7 +174,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   i32.const 2
   call $function-expression/testOmittedReturn1
@@ -190,7 +191,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   i32.const 2
   call $function-expression/testOmittedReturn2
@@ -207,7 +208,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   i32.const 2
   call $function-expression/testOmittedReturn3

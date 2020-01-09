@@ -229,7 +229,7 @@
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (global $std/array/arr (mut i32) (i32.const 0))
  (global $std/array/i (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
@@ -241,7 +241,8 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "_start" (func $start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 6 ;) (param $0 i32) (param $1 i32)
@@ -3840,7 +3841,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $2
@@ -3916,7 +3917,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $2
@@ -3993,7 +3994,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $2
@@ -4070,7 +4071,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $2
@@ -4236,7 +4237,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $1
     i32.const 2
     i32.shl
@@ -4323,7 +4324,7 @@
    i32.lt_s
    if
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     i32.const 2
     i32.shl
@@ -4409,7 +4410,7 @@
     i32.load
     local.set $3
     i32.const 3
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $2
     local.get $0
@@ -4487,7 +4488,7 @@
    i32.lt_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $0
     i32.load offset=4
@@ -4555,7 +4556,7 @@
    i32.ge_s
    if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $2
     local.get $0
     i32.load offset=4
@@ -4711,7 +4712,7 @@
        f32.load
        local.set $5
        i32.const 2
-       global.set $~lib/argc
+       global.set $~argumentsLength
        local.get $4
        local.get $5
        call $~lib/util/sort/COMPARATOR<f32>~anonymous|0
@@ -4832,7 +4833,7 @@
     f32.load
     local.set $6
     i32.const 2
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $4
     local.get $6
     call $~lib/util/sort/COMPARATOR<f32>~anonymous|0
@@ -4948,7 +4949,7 @@
       f32.load
       local.set $6
       i32.const 2
-      global.set $~lib/argc
+      global.set $~argumentsLength
       local.get $4
       local.get $6
       call $~lib/util/sort/COMPARATOR<f32>~anonymous|0
@@ -5039,7 +5040,7 @@
    f32.load
    local.set $4
    i32.const 2
-   global.set $~lib/argc
+   global.set $~argumentsLength
    local.get $3
    local.get $4
    call $~lib/util/sort/COMPARATOR<f32>~anonymous|0
@@ -5202,7 +5203,7 @@
        f64.load
        local.set $5
        i32.const 2
-       global.set $~lib/argc
+       global.set $~argumentsLength
        local.get $4
        local.get $5
        call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
@@ -5323,7 +5324,7 @@
     f64.load
     local.set $6
     i32.const 2
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $4
     local.get $6
     call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
@@ -5439,7 +5440,7 @@
       f64.load
       local.set $6
       i32.const 2
-      global.set $~lib/argc
+      global.set $~argumentsLength
       local.get $4
       local.get $6
       call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
@@ -5530,7 +5531,7 @@
    f64.load
    local.set $4
    i32.const 2
-   global.set $~lib/argc
+   global.set $~argumentsLength
    local.get $3
    local.get $4
    call $~lib/util/sort/COMPARATOR<f64>~anonymous|0
@@ -5714,7 +5715,7 @@
        i32.load
        local.set $6
        i32.const 2
-       global.set $~lib/argc
+       global.set $~argumentsLength
        local.get $5
        local.get $6
        local.get $2
@@ -5836,7 +5837,7 @@
     i32.load
     local.set $6
     i32.const 2
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $6
     local.get $2
@@ -5953,7 +5954,7 @@
       i32.load
       local.set $6
       i32.const 2
-      global.set $~lib/argc
+      global.set $~argumentsLength
       local.get $3
       local.get $6
       local.get $2
@@ -6044,7 +6045,7 @@
    i32.load
    local.set $4
    i32.const 2
-   global.set $~lib/argc
+   global.set $~argumentsLength
    local.get $2
    local.get $4
    local.get $1
@@ -6208,7 +6209,7 @@
    i32.lt_s
    if
     i32.const 2
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $0
     local.get $2
     i32.const 1
@@ -6399,7 +6400,7 @@
    i32.load
    local.set $4
    i32.const 2
-   global.set $~lib/argc
+   global.set $~argumentsLength
    local.get $2
    local.get $4
    local.get $1
@@ -6441,7 +6442,7 @@
    i32.lt_s
    if
     i32.const 2
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $0
     local.get $2
     i32.const 1
@@ -6565,7 +6566,7 @@
    i32.lt_s
    if
     i32.const 2
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $0
     local.get $1
     i32.const 1
@@ -15154,7 +15155,7 @@
   call $~lib/rt/pure/__retain
   local.set $2
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $2
   call $~lib/array/Array<f32>#sort
   call $~lib/rt/pure/__release
@@ -15184,7 +15185,7 @@
   call $~lib/rt/pure/__retain
   local.set $3
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $3
   call $~lib/array/Array<f64>#sort
   call $~lib/rt/pure/__release
@@ -15214,7 +15215,7 @@
   call $~lib/rt/pure/__retain
   local.set $5
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $5
   i32.const 46
   call $~lib/array/Array<i32>#sort
@@ -15246,7 +15247,7 @@
   call $~lib/rt/pure/__retain
   local.set $7
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $7
   i32.const 47
   call $~lib/array/Array<i32>#sort
@@ -15530,7 +15531,7 @@
   call $~lib/rt/pure/__retain
   local.set $3
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $2
   call $std/array/assertSorted<~lib/string/String | null>
   local.get $2
@@ -15548,7 +15549,7 @@
   call $std/array/createRandomStringArray
   local.set $0
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   i32.const 56
   call $std/array/assertSorted<~lib/array/Array<i32>>
@@ -16240,12 +16241,12 @@
   call $~lib/rt/pure/__release
  )
  (func $start (; 203 ;)
-  global.get $~lib/started
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:std/array
  )
