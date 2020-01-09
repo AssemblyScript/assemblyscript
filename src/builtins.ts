@@ -2038,9 +2038,10 @@ export function compileCall(
         checkArgsRequired(operands, 3, reportNode, compiler)
       ) return module.unreachable();
       if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
+        // use stdlib alternative if not supported
         let instance = compiler.resolver.resolveFunction(prototype, null); // reports
         compiler.currentType = Type.void;
-        if (!instance) return module.unreachable();
+        if (!instance || !compiler.compileFunction(instance, true)) return module.unreachable();
         return compiler.compileCallDirect(instance, operands, reportNode);
       }
       let usizeType = compiler.options.usizeType;
@@ -2057,9 +2058,10 @@ export function compileCall(
         checkArgsRequired(operands, 3, reportNode, compiler)
       ) return module.unreachable();
       if (!compiler.options.hasFeature(Feature.BULK_MEMORY)) {
+        // use stdlib alternative if not supported
         let instance = compiler.resolver.resolveFunction(prototype, null); // reports
         compiler.currentType = Type.void;
-        if (!instance) return module.unreachable();
+        if (!instance || !compiler.compileFunction(instance, true)) return module.unreachable();
         return compiler.compileCallDirect(instance, operands, reportNode);
       }
       let usizeType = compiler.options.usizeType;

@@ -1082,9 +1082,16 @@ export class Compiler extends DiagnosticEmitter {
   // === Functions ================================================================================
 
   /** Compiles a priorly resolved function. */
-  compileFunction(instance: Function): bool {
+  compileFunction(
+    /** Function to compile. */
+    instance: Function,
+    /** Force compilation of stdlib alternative if a builtin. */
+    forceStdAlternative: bool = false
+  ): bool {
     if (instance.is(CommonFlags.COMPILED)) return true;
-    assert(!(instance.is(CommonFlags.AMBIENT) && instance.hasDecorator(DecoratorFlags.BUILTIN)));
+    if (instance.hasDecorator(DecoratorFlags.BUILTIN)) {
+      if (!forceStdAlternative) return true;
+    }
 
     var previousType = this.currentType; // remember to retain it if compiling a function lazily
     instance.set(CommonFlags.COMPILED);
