@@ -3093,7 +3093,7 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
-  private convertExpression(
+  convertExpression(
     expr: ExpressionRef,
     /** Original type. */
     fromType: Type,
@@ -8137,7 +8137,7 @@ export class Compiler extends DiagnosticEmitter {
     return instance;
   }
 
-  private compileInstantiate(
+  compileInstantiate(
     /** Class to instantiate. */
     classInstance: Class,
     /** Constructor arguments. */
