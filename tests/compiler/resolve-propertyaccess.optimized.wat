@@ -23,7 +23,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/util/number/decimalCount32 (; 1 ;) (param $0 i32) (result i32)
   i32.const 1
   i32.const 2
@@ -484,7 +484,7 @@
    unreachable
   end
  )
- (func $start (; 10 ;)
+ (func $~start (; 10 ;)
   call $start:resolve-propertyaccess
  )
 )

@@ -18,7 +18,7 @@
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
- (start $start)
+ (start $~start)
  (func $inlining/test (; 1 ;) (result i32)
   global.get $inlining/constantGlobal
   i32.const 2
@@ -517,7 +517,7 @@
   global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )
- (func $start (; 10 ;)
+ (func $~start (; 10 ;)
   call $start:inlining
  )
 )

@@ -154,7 +154,7 @@
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/builtins/f32.MIN_VALUE f32 (f32.const 1.401298464324817e-45))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $std/math/eulp (; 32 ;) (param $0 f64) (result i32)
   (local $1 i64)
   (local $2 i32)
@@ -55397,7 +55397,7 @@
    unreachable
   end
  )
- (func $start (; 178 ;)
+ (func $~start (; 178 ;)
   call $start:std/math
  )
 )

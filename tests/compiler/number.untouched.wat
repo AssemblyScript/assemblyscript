@@ -60,7 +60,7 @@
  (global $~lib/builtins/f64.EPSILON f64 (f64.const 2.220446049250313e-16))
  (global $~lib/heap/__heap_base i32 (i32.const 2076))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/util/number/decimalCount32 (; 1 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
@@ -4212,7 +4212,7 @@
   local.get $10
   call $~lib/rt/stub/__release
  )
- (func $start (; 30 ;)
+ (func $~start (; 30 ;)
   call $start:number
  )
 )

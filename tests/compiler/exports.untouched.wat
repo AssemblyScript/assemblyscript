@@ -48,7 +48,7 @@
  (export "vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
  (export "vehicles.Car.getNumTires" (func $exports/vehicles.Car.getNumTires))
  (export "outer.inner.a" (global $exports/outer.inner.a))
- (start $start)
+ (start $~start)
  (func $exports/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -240,7 +240,7 @@
  (func $exports/vehicles.Car#openDoors (; 15 ;) (param $0 i32)
   nop
  )
- (func $start (; 16 ;)
+ (func $~start (; 16 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add

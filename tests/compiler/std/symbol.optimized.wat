@@ -51,7 +51,7 @@
  (global $std/symbol/hasInstance (mut i32) (i32.const 0))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/symbol/Symbol (; 1 ;) (result i32)
   (local $0 i32)
   global.get $~lib/symbol/nextId
@@ -1704,7 +1704,7 @@
    unreachable
   end
  )
- (func $start (; 30 ;)
+ (func $~start (; 30 ;)
   call $start:std/symbol
  )
 )

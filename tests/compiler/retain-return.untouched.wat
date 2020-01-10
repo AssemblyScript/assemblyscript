@@ -37,7 +37,7 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 288))
  (global $~lib/heap/__heap_base i32 (i32.const 324))
  (export "__argumentsLength" (global $~argumentsLength))
- (export "_start" (func $start))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -3379,7 +3379,7 @@
   local.get $0
   global.set $retain-return/ref
  )
- (func $start (; 38 ;)
+ (func $~start (; 38 ;)
   global.get $~started
   if
    return

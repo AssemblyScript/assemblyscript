@@ -6,7 +6,7 @@
  (global $infer-type/rf (mut f32) (f32.const 0))
  (global $infer-type/rF (mut f64) (f64.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:infer-type (; 0 ;)
   (local $0 i32)
   i32.const 0
@@ -30,7 +30,7 @@
    end
   end
  )
- (func $start (; 1 ;)
+ (func $~start (; 1 ;)
   call $start:infer-type
  )
 )

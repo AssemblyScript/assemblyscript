@@ -16,7 +16,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/pointer/buf (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/__retain (; 1 ;) (param $0 i32) (result i32)
   local.get $0
  )
@@ -2197,7 +2197,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $start (; 7 ;)
+ (func $~start (; 7 ;)
   call $start:std/pointer
  )
 )

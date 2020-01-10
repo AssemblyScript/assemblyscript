@@ -29,7 +29,7 @@
  (global $~lib/util/math/exp2f_data_tab i32 (i32.const 6848))
  (global $binary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/math/NativeMath.pow (; 0 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
@@ -2595,7 +2595,7 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $start (; 5 ;)
+ (func $~start (; 5 ;)
   call $start:binary
  )
 )

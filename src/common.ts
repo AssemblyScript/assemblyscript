@@ -100,8 +100,8 @@ export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
 /** Path index suffix. */
 export const INDEX_SUFFIX = PATH_DELIMITER + "index";
 
-/** Common compiler symbols. */
-export namespace CommonSymbols {
+/** Common names. */
+export namespace CommonNames {
   // special
   export const EMPTY = "";
   // types

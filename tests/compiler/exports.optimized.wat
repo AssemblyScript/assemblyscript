@@ -46,7 +46,7 @@
  (export "vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
  (export "vehicles.Car.getNumTires" (func $exports/Car.getNumTires))
  (export "outer.inner.a" (global $exports/outer.inner.a))
- (start $start)
+ (start $~start)
  (func $exports/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -141,7 +141,7 @@
  (func $exports/Car#openDoors (; 7 ;) (param $0 i32)
   nop
  )
- (func $start (; 8 ;)
+ (func $~start (; 8 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16

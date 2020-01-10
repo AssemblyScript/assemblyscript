@@ -32,7 +32,7 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 304))
  (global $~lib/heap/__heap_base i32 (i32.const 340))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3269,7 +3269,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $start (; 34 ;)
+ (func $~start (; 34 ;)
   call $start:rc/local-init
  )
  (func $~lib/rt/pure/__visit (; 35 ;) (param $0 i32) (param $1 i32)

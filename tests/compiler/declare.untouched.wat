@@ -10,7 +10,7 @@
  (data (i32.const 16) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s\00")
  (table $0 1 funcref)
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:declare (; 3 ;)
   call $declare/externalFunction
   global.get $declare/externalConstant
@@ -39,7 +39,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:declare
  )
 )

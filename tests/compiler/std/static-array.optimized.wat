@@ -28,7 +28,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/array/Array<i32>#__get (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 76
@@ -1025,7 +1025,7 @@
    unreachable
   end
  )
- (func $start (; 16 ;)
+ (func $~start (; 16 ;)
   call $start:std/static-array
  )
 )

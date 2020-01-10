@@ -8,7 +8,7 @@
  (global $comma/a (mut i32) (i32.const 0))
  (global $comma/b (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:comma (; 1 ;)
   (local $0 i32)
   (local $1 i32)
@@ -181,7 +181,7 @@
   i32.const 3
   drop
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   call $start:comma
  )
 )

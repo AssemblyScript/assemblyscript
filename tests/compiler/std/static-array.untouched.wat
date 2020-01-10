@@ -36,7 +36,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 544))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/array/Array<i32>#get:length (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
@@ -2399,7 +2399,7 @@
    unreachable
   end
  )
- (func $start (; 30 ;)
+ (func $~start (; 30 ;)
   call $start:std/static-array
  )
 )

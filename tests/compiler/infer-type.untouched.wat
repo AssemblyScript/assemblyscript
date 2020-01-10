@@ -16,7 +16,7 @@
  (global $infer-type/inferi (mut i32) (i32.const -2147483648))
  (global $infer-type/inferu (mut i32) (i32.const 2147483647))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $infer-type/locals (; 0 ;)
   (local $0 i32)
   (local $1 i64)
@@ -95,7 +95,7 @@
    end
   end
  )
- (func $start (; 6 ;)
+ (func $~start (; 6 ;)
   call $start:infer-type
  )
 )

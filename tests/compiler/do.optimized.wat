@@ -8,7 +8,7 @@
  (global $do/m (mut i32) (i32.const 0))
  (global $do/o (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:do (; 1 ;)
   (local $0 i32)
   loop $do-continue|0
@@ -145,7 +145,7 @@
    unreachable
   end
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   call $start:do
  )
 )

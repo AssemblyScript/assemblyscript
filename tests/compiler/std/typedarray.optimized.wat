@@ -214,7 +214,7 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
- (export "_start" (func $start))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 6 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -34442,7 +34442,7 @@
   local.get $7
   call $~lib/rt/pure/__release
  )
- (func $start (; 521 ;)
+ (func $~start (; 521 ;)
   global.get $~started
   if
    return

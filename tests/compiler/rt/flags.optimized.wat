@@ -13,7 +13,7 @@
  (data (i32.const 684) "\88\04A")
  (data (i32.const 700) "\88 \t\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/__typeinfo (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 176
@@ -328,7 +328,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   call $start:rt/flags
  )
 )

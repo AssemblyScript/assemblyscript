@@ -46,7 +46,7 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 21168))
  (global $~lib/heap/__heap_base i32 (i32.const 21196))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/pure/increment (; 5 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
@@ -5480,7 +5480,7 @@
   i32.const 13808
   call $std/string-encoding/testLarge
  )
- (func $start (; 57 ;)
+ (func $~start (; 57 ;)
   call $start:std/string-encoding
  )
  (func $~lib/rt/pure/__visit (; 58 ;) (param $0 i32) (param $1 i32)

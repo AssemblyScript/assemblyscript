@@ -5,7 +5,6 @@
 
 import {
   CommonFlags,
-  CommonSymbols,
   PATH_DELIMITER,
   LIBRARY_PREFIX,
   LIBRARY_SUBST
@@ -13,7 +12,6 @@ import {
 
 import {
   Token,
-  Tokenizer,
   Range
 } from "./tokenizer";
 

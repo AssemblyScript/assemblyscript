@@ -15,7 +15,7 @@
  (global $std/mod/js i32 (i32.const 1))
  (export "memory" (memory $0))
  (export "mod" (func $std/mod/mod))
- (start $start)
+ (start $~start)
  (func $~lib/math/NativeMath.mod (; 2 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
@@ -2360,7 +2360,7 @@
    unreachable
   end
  )
- (func $start (; 9 ;)
+ (func $~start (; 9 ;)
   call $start:std/mod
  )
 )

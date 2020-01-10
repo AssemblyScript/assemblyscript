@@ -4,7 +4,7 @@
  *//***/
 
 import {
-  BuiltinSymbols,
+  BuiltinNames,
   compileCall as compileBuiltinCall,
   compileAbort,
   compileVisitGlobals,
@@ -55,7 +55,7 @@ import {
   STATIC_DELIMITER,
   GETTER_PREFIX,
   SETTER_PREFIX,
-  CommonSymbols,
+  CommonNames,
   INDEX_SUFFIX,
   Feature,
   Target
@@ -275,6 +275,18 @@ export const enum RuntimeFeatures {
   visitMembers = 1 << 3
 }
 
+/** Exported names of compiler-generated elements. */
+export namespace ExportNames {
+  /** Name of the explicit start function, if applicable. */
+  export const start = "_start"; // match WASI
+  /** Name of the argumentsLength varargs helper global. */
+  export const argumentsLength = "__argumentsLength";
+  /** Name of the memory instance, if exported. */
+  export const memory = "memory";
+  /** Name of the table instance, if exported. */
+  export const table = "table";
+}
+
 /** Compiler interface. */
 export class Compiler extends DiagnosticEmitter {
 
@@ -352,19 +364,19 @@ export class Compiler extends DiagnosticEmitter {
     program.initialize(options);
 
     // set up the main start function
-    var startFunctionInstance = program.makeNativeFunction("start", new Signature(program, [], Type.void));
-    startFunctionInstance.internalName = "start";
+    var startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, new Signature(program, [], Type.void));
+    startFunctionInstance.internalName = BuiltinNames.start;
     var startFunctionBody = new Array<ExpressionRef>();
     this.currentFlow = startFunctionInstance.flow;
     this.currentBody = startFunctionBody;
 
     // add mutable heap and rtti base dummies
     if (options.isWasm64) {
-      module.addGlobal(BuiltinSymbols.heap_base, NativeType.I64, true, module.i64(0));
-      module.addGlobal(BuiltinSymbols.rtti_base, NativeType.I64, true, module.i64(0));
+      module.addGlobal(BuiltinNames.heap_base, NativeType.I64, true, module.i64(0));
+      module.addGlobal(BuiltinNames.rtti_base, NativeType.I64, true, module.i64(0));
     } else {
-      module.addGlobal(BuiltinSymbols.heap_base, NativeType.I32, true, module.i32(0));
-      module.addGlobal(BuiltinSymbols.rtti_base, NativeType.I32, true, module.i32(0));
+      module.addGlobal(BuiltinNames.heap_base, NativeType.I32, true, module.i32(0));
+      module.addGlobal(BuiltinNames.rtti_base, NativeType.I32, true, module.i32(0));
     }
 
     // compile entry file(s) while traversing reachable elements
@@ -382,12 +394,12 @@ export class Compiler extends DiagnosticEmitter {
     if (!startIsEmpty || explicitStart) {
       let signature = startFunctionInstance.signature;
       if (!startIsEmpty && explicitStart) {
-        module.addGlobal("~started", NativeType.I32, true, module.i32(0));
+        module.addGlobal(BuiltinNames.started, NativeType.I32, true, module.i32(0));
         startFunctionBody.unshift(
           module.if(
-            module.global_get("~started", NativeType.I32),
+            module.global_get(BuiltinNames.started, NativeType.I32),
             module.return(),
-            module.global_set("~started", module.i32(1))
+            module.global_set(BuiltinNames.started, module.i32(1))
           )
         );
       }
@@ -400,31 +412,31 @@ export class Compiler extends DiagnosticEmitter {
       );
       startFunctionInstance.finalize(module, funcRef);
       if (!explicitStart) module.setStart(funcRef);
-      else module.addFunctionExport(startFunctionInstance.internalName, "_start");
+      else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
     }
 
     // compile runtime features
     if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
-    module.removeGlobal(BuiltinSymbols.rtti_base);
+    module.removeGlobal(BuiltinNames.rtti_base);
     if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this);
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
     this.memoryOffset = memoryOffset;
-    module.removeGlobal(BuiltinSymbols.heap_base);
+    module.removeGlobal(BuiltinNames.heap_base);
     if (this.runtimeFeatures & RuntimeFeatures.HEAP) {
       if (options.isWasm64) {
         module.addGlobal(
-          BuiltinSymbols.heap_base,
+          BuiltinNames.heap_base,
           NativeType.I64,
           false,
           module.i64(i64_low(memoryOffset), i64_high(memoryOffset))
         );
       } else {
         module.addGlobal(
-          BuiltinSymbols.heap_base,
+          BuiltinNames.heap_base,
           NativeType.I32,
           false,
           module.i32(i64_low(memoryOffset))
@@ -441,7 +453,7 @@ export class Compiler extends DiagnosticEmitter {
       isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
       this.memorySegments,
       options.target,
-      "memory",
+      ExportNames.memory,
       isSharedMemory
     );
 
@@ -454,7 +466,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) module.addTableImport("0", "env", "table");
-    if (options.exportTable) module.addTableExport("0", "table");
+    if (options.exportTable) module.addTableExport("0", ExportNames.table);
 
     // set up module exports
     for (let file of this.program.filesByName.values()) {
@@ -839,8 +851,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // Handle ambient builtins like '__heap_base' that need to be resolved but are added explicitly
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
-      if (global.internalName == BuiltinSymbols.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
-      else if (global.internalName == BuiltinSymbols.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
+      if (global.internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
+      else if (global.internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
       return true;
     }
 
@@ -1251,7 +1263,7 @@ export class Compiler extends DiagnosticEmitter {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
 
       if (!flow.is(FlowFlags.TERMINATES)) {
-        let thisLocal = assert(flow.lookupLocal(CommonSymbols.this_));
+        let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
 
         // if `this` wasn't accessed before, allocate if necessary and initialize `this`
         if (!flow.is(FlowFlags.ALLOCATES)) {
@@ -4280,7 +4292,7 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.compileExpression(right, Type.f32, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
           if (!(instance = this.f32PowInstance)) {
-            let namespace = this.program.lookupGlobal(CommonSymbols.Mathf);
+            let namespace = this.program.lookupGlobal(CommonNames.Mathf);
             if (!namespace) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
@@ -4289,7 +4301,7 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.unreachable();
               break;
             }
-            let prototype = namespace.members ? namespace.members.get(CommonSymbols.pow) : null;
+            let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
             if (!prototype) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
@@ -4314,7 +4326,7 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.compileExpression(right, Type.f64, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
           if (!(instance = this.f64PowInstance)) {
-            let namespace = this.program.lookupGlobal(CommonSymbols.Math);
+            let namespace = this.program.lookupGlobal(CommonNames.Math);
             if (!namespace) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
@@ -4323,7 +4335,7 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.unreachable();
               break;
             }
-            let prototype = namespace.members ? namespace.members.get(CommonSymbols.pow) : null;
+            let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
             if (!prototype) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
@@ -4556,7 +4568,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F32: {
             let instance = this.f32ModInstance;
             if (!instance) {
-              let namespace = this.program.lookupGlobal(CommonSymbols.Mathf);
+              let namespace = this.program.lookupGlobal(CommonNames.Mathf);
               if (!namespace) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
@@ -4565,7 +4577,7 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
-              let prototype = namespace.members ? namespace.members.get(CommonSymbols.mod) : null;
+              let prototype = namespace.members ? namespace.members.get(CommonNames.mod) : null;
               if (!prototype) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
@@ -4587,7 +4599,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F64: {
             let instance = this.f64ModInstance;
             if (!instance) {
-              let namespace = this.program.lookupGlobal(CommonSymbols.Math);
+              let namespace = this.program.lookupGlobal(CommonNames.Math);
               if (!namespace) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
@@ -4596,7 +4608,7 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
-              let prototype = namespace.members ? namespace.members.get(CommonSymbols.mod) : null;
+              let prototype = namespace.members ? namespace.members.get(CommonNames.mod) : null;
               if (!prototype) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
@@ -5922,7 +5934,7 @@ export class Compiler extends DiagnosticEmitter {
 
       let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
       let baseClassInstance = assert((<Class>classInstance).base);
-      let thisLocal = assert(flow.lookupLocal(CommonSymbols.this_));
+      let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
       let nativeSizeType = this.options.nativeSizeType;
 
       // {
@@ -6350,13 +6362,13 @@ export class Compiler extends DiagnosticEmitter {
     if (thisArg) {
       let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
       let thisType = assert(instance.signature.thisType);
-      let thisLocal = flow.addScopedLocal(CommonSymbols.this_, thisType, usedLocals);
+      let thisLocal = flow.addScopedLocal(CommonNames.this_, thisType, usedLocals);
       // No need to retain `this` as it can't be reassigned and thus can't become prematurely released
       body.unshift(
         module.local_set(thisLocal.index, thisArg)
       );
       let baseInstance = (<Class>classInstance).base;
-      if (baseInstance) flow.addScopedAlias(CommonSymbols.super_, baseInstance.type, thisLocal.index);
+      if (baseInstance) flow.addScopedAlias(CommonNames.super_, baseInstance.type, thisLocal.index);
     } else {
       assert(!instance.signature.thisType);
     }
@@ -6488,10 +6500,10 @@ export class Compiler extends DiagnosticEmitter {
           minArguments
             ? module.binary(
                 BinaryOp.SubI32,
-                module.global_get("~argumentsLength", NativeType.I32),
+                module.global_get(BuiltinNames.argumentsLength, NativeType.I32),
                 module.i32(minArguments)
               )
-            : module.global_get("~argumentsLength", NativeType.I32)
+            : module.global_get(BuiltinNames.argumentsLength, NativeType.I32)
         )
       ]),
       module.unreachable()
@@ -6550,8 +6562,8 @@ export class Compiler extends DiagnosticEmitter {
   ensureBuiltinArgumentsLength(): void {
     if (!this.builtinArgumentsLength) {
       let module = this.module;
-      this.builtinArgumentsLength = module.addGlobal("~argumentsLength", NativeType.I32, true, module.i32(0));
-      module.addGlobalExport("~argumentsLength", "__argumentsLength");
+      this.builtinArgumentsLength = module.addGlobal(BuiltinNames.argumentsLength, NativeType.I32, true, module.i32(0));
+      module.addGlobalExport(BuiltinNames.argumentsLength, ExportNames.argumentsLength);
     }
   }
 
@@ -6963,7 +6975,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           this.ensureBuiltinArgumentsLength();
           return module.block(null, [
-            module.global_set("~argumentsLength", module.i32(numArguments)),
+            module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
             expr
           ], this.currentType.toNativeType());
         }
@@ -7060,7 +7072,7 @@ export class Compiler extends DiagnosticEmitter {
     var returnType = signature.returnType;
     this.ensureBuiltinArgumentsLength();
     var expr = module.block(null, [
-      module.global_set("~argumentsLength", // might be calling a trampoline
+      module.global_set(BuiltinNames.argumentsLength, // might be calling a trampoline
         module.i32(numArguments)
       ),
       module.call_indirect(
@@ -7319,7 +7331,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       case NodeKind.THIS: {
         if (actualFunction.is(CommonFlags.INSTANCE)) {
-          let thisLocal = assert(flow.lookupLocal(CommonSymbols.this_));
+          let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
           let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
           let nativeSizeType = this.options.nativeSizeType;
           if (actualFunction.is(CommonFlags.CONSTRUCTOR)) {
@@ -7376,7 +7388,7 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
         if (flow.isInline) {
-          let scopedThis = flow.lookupLocal(CommonSymbols.this_);
+          let scopedThis = flow.lookupLocal(CommonNames.this_);
           if (scopedThis) {
             let scopedThisClass = assert(scopedThis.type.classReference);
             let base = scopedThisClass.base;
@@ -8065,9 +8077,9 @@ export class Compiler extends DiagnosticEmitter {
     if (baseClass) {
       let baseCtor = this.ensureConstructor(baseClass, reportNode);
       instance = new Function(
-        CommonSymbols.constructor,
+        CommonNames.constructor,
         new FunctionPrototype(
-          CommonSymbols.constructor,
+          CommonNames.constructor,
           classInstance,
           // declaration is important, i.e. to access optional parameter initializers
           (<FunctionDeclaration>baseCtor.declaration).clone()
@@ -8079,11 +8091,11 @@ export class Compiler extends DiagnosticEmitter {
     // otherwise make a default constructor
     } else {
       instance = new Function(
-        CommonSymbols.constructor,
+        CommonNames.constructor,
         new FunctionPrototype(
-          CommonSymbols.constructor,
+          CommonNames.constructor,
           classInstance,
-          this.program.makeNativeFunctionDeclaration(CommonSymbols.constructor,
+          this.program.makeNativeFunctionDeclaration(CommonNames.constructor,
             CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
           )
         ),
@@ -9332,7 +9344,7 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var isInline = flow.isInline;
     var thisLocalIndex = isInline
-      ? assert(flow.lookupLocal(CommonSymbols.this_)).index
+      ? assert(flow.lookupLocal(CommonNames.this_)).index
       : 0;
     var nativeSizeType = this.options.nativeSizeType;
 

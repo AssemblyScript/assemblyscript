@@ -15,7 +15,7 @@
  (global $function-types/i64Adder (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $function-types/makeAdder<i32>~anonymous|0 (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -163,7 +163,7 @@
    unreachable
   end
  )
- (func $start (; 6 ;)
+ (func $~start (; 6 ;)
   call $start:function-types
  )
 )

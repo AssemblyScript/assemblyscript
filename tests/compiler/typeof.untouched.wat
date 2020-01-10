@@ -31,7 +31,7 @@
  (global $typeof/c (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 292))
- (export "_start" (func $start))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/__retain (; 1 ;) (param $0 i32) (result i32)
   local.get $0
@@ -655,7 +655,7 @@
    unreachable
   end
  )
- (func $start (; 11 ;)
+ (func $~start (; 11 ;)
   global.get $~started
   if
    return

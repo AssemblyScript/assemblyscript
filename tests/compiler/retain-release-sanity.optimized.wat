@@ -35,7 +35,7 @@
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2603,7 +2603,7 @@
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__collect
  )
- (func $start (; 42 ;)
+ (func $~start (; 42 ;)
   call $start:retain-release-sanity
  )
  (func $~lib/rt/pure/__visit (; 43 ;) (param $0 i32) (param $1 i32)

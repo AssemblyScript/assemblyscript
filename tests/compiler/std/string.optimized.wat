@@ -510,7 +510,7 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
- (export "_start" (func $start))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (func $~lib/rt/pure/increment (; 8 ;) (param $0 i32)
@@ -16676,7 +16676,7 @@
   global.get $std/string/str
   call $~lib/rt/pure/__retain
  )
- (func $start (; 96 ;)
+ (func $~start (; 96 ;)
   global.get $~started
   if
    return

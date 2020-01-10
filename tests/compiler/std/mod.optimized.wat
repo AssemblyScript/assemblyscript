@@ -13,7 +13,7 @@
  (data (i32.const 16) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
  (export "memory" (memory $0))
  (export "mod" (func $std/mod/mod))
- (start $start)
+ (start $~start)
  (func $~lib/math/NativeMath.mod (; 2 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
@@ -2243,7 +2243,7 @@
    unreachable
   end
  )
- (func $start (; 9 ;)
+ (func $~start (; 9 ;)
   call $start:std/mod
  )
 )

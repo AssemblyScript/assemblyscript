@@ -9,11 +9,11 @@
  (export "exported" (func $abi/exported))
  (export "exportedExported" (func $abi/exported))
  (export "exportedInternal" (func $abi/exported))
- (start $start)
+ (start $~start)
  (func $abi/exported (; 0 ;) (result i32)
   i32.const -128
  )
- (func $start (; 1 ;)
+ (func $~start (; 1 ;)
   i32.const 1
   global.set $abi/condition
   i32.const 0

@@ -34,7 +34,7 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 304))
  (global $~lib/heap/__heap_base i32 (i32.const 332))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $rc/global-init/getRef (; 5 ;) (result i32)
   i32.const 32
  )
@@ -3279,7 +3279,7 @@
   local.get $1
   global.set $rc/global-init/b
  )
- (func $start (; 33 ;)
+ (func $~start (; 33 ;)
   call $start:rc/global-init
  )
  (func $~lib/rt/pure/__visit (; 34 ;) (param $0 i32) (param $1 i32)

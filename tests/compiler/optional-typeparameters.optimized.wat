@@ -8,7 +8,7 @@
  (global $optional-typeparameters/tConcrete (mut i32) (i32.const 0))
  (global $optional-typeparameters/tDerived (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -78,7 +78,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16

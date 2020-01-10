@@ -19,7 +19,7 @@
  (global $retain-i32/ui (mut i32) (i32.const 0))
  (global $retain-i32/ri (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $retain-i32/test (; 1 ;) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
@@ -797,7 +797,7 @@
   global.set $retain-i32/ri
   call $retain-i32/testLocalRetain
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:retain-i32
  )
 )

@@ -44,7 +44,7 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1815,7 +1815,7 @@
    unreachable
   end
  )
- (func $start (; 21 ;)
+ (func $~start (; 21 ;)
   call $start:resolve-elementaccess
  )
 )

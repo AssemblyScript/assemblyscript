@@ -31,7 +31,7 @@
  (global $resolve-unary/foo (mut i32) (i32.const 0))
  (global $resolve-unary/bar (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/util/number/decimalCount32 (; 1 ;) (param $0 i32) (result i32)
   i32.const 1
   i32.const 2
@@ -633,7 +633,7 @@
    unreachable
   end
  )
- (func $start (; 11 ;)
+ (func $~start (; 11 ;)
   call $start:resolve-unary
  )
 )

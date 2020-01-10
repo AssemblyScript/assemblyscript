@@ -16,7 +16,7 @@
  (global $function-expression/f4 (mut i32) (i32.const 4))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
   local.get $0
  )
@@ -238,7 +238,7 @@
    unreachable
   end
  )
- (func $start (; 18 ;)
+ (func $~start (; 18 ;)
   call $start:function-expression
  )
 )

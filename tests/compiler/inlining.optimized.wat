@@ -13,7 +13,7 @@
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
- (start $start)
+ (start $~start)
  (func $inlining/test (; 1 ;) (result i32)
   i32.const 3
  )
@@ -184,7 +184,7 @@
    unreachable
   end
  )
- (func $start (; 5 ;)
+ (func $~start (; 5 ;)
   i32.const 1
   global.set $~argumentsLength
   i32.const 64

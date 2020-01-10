@@ -41,7 +41,7 @@
  (global $builtins/s (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test" (func $start:builtins~anonymous|0))
- (start $start)
+ (start $~start)
  (func $~lib/atomics/Atomics.isLockFree (; 2 ;) (param $0 i32) (result i32)
   i32.const 1
   local.get $0
@@ -849,7 +849,7 @@
    unreachable
   end
  )
- (func $start (; 8 ;)
+ (func $~start (; 8 ;)
   call $start:builtins
  )
 )

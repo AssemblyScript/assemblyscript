@@ -21,7 +21,7 @@
  (export "arrayAccess" (func $resolve-access/arrayAccess))
  (export "fieldAccess" (func $resolve-access/fieldAccess))
  (export "propertyAccess" (func $resolve-access/propertyAccess))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -574,7 +574,7 @@
   i32.wrap_i64
   call $~lib/util/number/utoa32
  )
- (func $start (; 16 ;)
+ (func $~start (; 16 ;)
   i32.const 192
   global.set $~lib/rt/stub/startOffset
   i32.const 192

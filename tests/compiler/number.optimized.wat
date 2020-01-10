@@ -44,7 +44,7 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/util/number/decimalCount32 (; 1 ;) (param $0 i32) (result i32)
   i32.const 1
   i32.const 2
@@ -2139,7 +2139,7 @@
    unreachable
   end
  )
- (func $start (; 22 ;)
+ (func $~start (; 22 ;)
   call $start:number
  )
 )

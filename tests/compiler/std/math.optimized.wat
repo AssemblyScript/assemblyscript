@@ -99,7 +99,7 @@
  (global $~lib/math/NativeMath.sincos_sin (mut f64) (f64.const 0))
  (global $~lib/math/NativeMath.sincos_cos (mut f64) (f64.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/math/NativeMath.scalbn (; 32 ;) (param $0 f64) (param $1 i32) (result f64)
   local.get $1
   i32.const 1023
@@ -46674,7 +46674,7 @@
    unreachable
   end
  )
- (func $start (; 176 ;)
+ (func $~start (; 176 ;)
   call $start:std/math
  )
 )

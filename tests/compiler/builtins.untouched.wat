@@ -76,7 +76,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (export "memory" (memory $0))
  (export "test" (func $builtins/test))
- (start $start)
+ (start $~start)
  (func $~lib/atomics/Atomics.isLockFree (; 2 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 1
@@ -1872,7 +1872,7 @@
  (func $builtins/test (; 11 ;)
   nop
  )
- (func $start (; 12 ;)
+ (func $~start (; 12 ;)
   call $start:builtins
  )
 )

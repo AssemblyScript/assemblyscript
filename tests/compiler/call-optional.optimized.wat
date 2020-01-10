@@ -8,7 +8,7 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $call-optional/opt (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   local.get $0
@@ -131,7 +131,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:call-optional
  )
 )

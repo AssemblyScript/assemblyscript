@@ -8,7 +8,7 @@
  (global $memcpy/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "memcpy" (func $memcpy/memcpy))
- (start $start)
+ (start $~start)
  (func $memcpy/memcpy (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -1037,7 +1037,7 @@
    unreachable
   end
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   call $start:memcpy
  )
 )

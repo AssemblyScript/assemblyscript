@@ -6,7 +6,7 @@
  (global $retain-i32/ui (mut i32) (i32.const 0))
  (global $retain-i32/ri (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:retain-i32 (; 0 ;)
   (local $0 i32)
   i32.const -128
@@ -66,7 +66,7 @@
   i32.load8_s
   drop
  )
- (func $start (; 1 ;)
+ (func $~start (; 1 ;)
   call $start:retain-i32
  )
 )

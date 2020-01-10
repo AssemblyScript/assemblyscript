@@ -28,7 +28,7 @@
  (export "arrayAccess" (func $resolve-access/arrayAccess))
  (export "fieldAccess" (func $resolve-access/fieldAccess))
  (export "propertyAccess" (func $resolve-access/propertyAccess))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2054,7 +2054,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $start (; 25 ;)
+ (func $~start (; 25 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add

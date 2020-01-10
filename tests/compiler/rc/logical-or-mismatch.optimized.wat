@@ -26,7 +26,7 @@
  (global $rc/logical-or-mismatch/gloRef (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1796,7 +1796,7 @@
   global.get $rc/logical-or-mismatch/gloRef
   call $~lib/rt/pure/__release
  )
- (func $start (; 32 ;)
+ (func $~start (; 32 ;)
   call $start:rc/logical-or-mismatch
  )
  (func $~lib/rt/pure/__visit (; 33 ;) (param $0 i32) (param $1 i32)

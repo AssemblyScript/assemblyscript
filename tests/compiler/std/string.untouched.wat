@@ -521,7 +521,7 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 28416))
  (global $~lib/heap/__heap_base i32 (i32.const 28508))
  (export "__argumentsLength" (global $~argumentsLength))
- (export "_start" (func $start))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
  (func $~lib/rt/pure/increment (; 8 ;) (param $0 i32)
@@ -20875,7 +20875,7 @@
   global.get $std/string/str
   call $~lib/rt/pure/__retain
  )
- (func $start (; 108 ;)
+ (func $~start (; 108 ;)
   global.get $~started
   if
    return

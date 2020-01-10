@@ -40,7 +40,7 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4123,7 +4123,7 @@
   local.get $2
   call $~lib/rt/pure/__release
  )
- (func $start (; 62 ;)
+ (func $~start (; 62 ;)
   call $start:std/dataview
  )
  (func $~lib/rt/pure/__visit (; 63 ;) (param $0 i32) (param $1 i32)

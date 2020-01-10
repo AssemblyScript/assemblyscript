@@ -13,7 +13,7 @@
  (global $std/pointer/nextOne (mut i32) (i32.const 0))
  (global $std/pointer/buf (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/memory/memory.fill (; 1 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
@@ -596,7 +596,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:std/pointer
  )
 )

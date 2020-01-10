@@ -39,7 +39,7 @@
  (global $std/array-literal/dynamicArrayRefWithCtor (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/array/Array<i8>#__get (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
@@ -2221,7 +2221,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $start (; 36 ;)
+ (func $~start (; 36 ;)
   call $start:std/array-literal
  )
  (func $~lib/rt/pure/__visit (; 37 ;) (param $0 i32) (param $1 i32)

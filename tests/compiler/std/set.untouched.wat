@@ -51,7 +51,7 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 496))
  (global $~lib/heap/__heap_base i32 (i32.const 684))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -13640,7 +13640,7 @@
   call $std/set/testNumeric<f32>
   call $std/set/testNumeric<f64>
  )
- (func $start (; 202 ;)
+ (func $~start (; 202 ;)
   call $start:std/set
  )
  (func $~lib/rt/pure/__visit (; 203 ;) (param $0 i32) (param $1 i32)

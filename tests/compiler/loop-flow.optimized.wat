@@ -19,7 +19,7 @@
  (export "doReturn" (func $loop-flow/whileReturn))
  (export "doThrow" (func $loop-flow/doThrow))
  (export "doAny" (func $loop-flow/doAny))
- (start $start)
+ (start $~start)
  (func $loop-flow/whileReturn (; 1 ;) (result i32)
   i32.const 1
  )
@@ -156,7 +156,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $start (; 10 ;)
+ (func $~start (; 10 ;)
   call $start:loop-flow
  )
 )

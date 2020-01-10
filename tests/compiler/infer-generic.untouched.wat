@@ -22,7 +22,7 @@
  (export "test2" (func $infer-generic/test2))
  (export "test3" (func $infer-generic/test3))
  (export "test4" (func $infer-generic/test4))
- (start $start)
+ (start $~start)
  (func $infer-generic/inferCompatible<f64> (; 1 ;) (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   local.get $1
@@ -164,7 +164,7 @@
   local.get $0
   call $infer-generic/inferEncapsulatedFunctionMixed<f32,f64>
  )
- (func $start (; 15 ;)
+ (func $~start (; 15 ;)
   call $start:infer-generic
  )
 )

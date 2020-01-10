@@ -11,7 +11,7 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $call-inferred/foo<i32> (; 1 ;) (param $0 i32) (result i32)
   local.get $0
  )
@@ -95,7 +95,7 @@
    unreachable
   end
  )
- (func $start (; 7 ;)
+ (func $~start (; 7 ;)
   call $start:call-inferred
  )
 )

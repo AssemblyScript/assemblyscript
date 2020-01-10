@@ -11,7 +11,7 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $class-static-function/Example.staticFunc (; 1 ;) (result i32)
   i32.const 42
  )
@@ -36,7 +36,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:class-static-function
  )
 )

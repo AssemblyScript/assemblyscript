@@ -39,7 +39,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 676))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4378,7 +4378,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $start (; 51 ;)
+ (func $~start (; 51 ;)
   call $start:std/arraybuffer
  )
  (func $~lib/array/Array<i32>#__visit_impl (; 52 ;) (param $0 i32) (param $1 i32)

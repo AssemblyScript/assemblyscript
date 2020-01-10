@@ -14,7 +14,7 @@
  (data (i32.const 128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b")
  (data (i32.const 164) "\01\00\00\00\01")
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/object/Object.is<f64> (; 1 ;) (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   local.get $1
@@ -664,7 +664,7 @@
    unreachable
   end
  )
- (func $start (; 10 ;)
+ (func $~start (; 10 ;)
   call $start:std/object
  )
 )

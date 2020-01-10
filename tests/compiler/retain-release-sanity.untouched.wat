@@ -40,7 +40,7 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 640))
  (global $~lib/heap/__heap_base i32 (i32.const 708))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4324,7 +4324,7 @@
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__collect
  )
- (func $start (; 48 ;)
+ (func $~start (; 48 ;)
   call $start:retain-release-sanity
  )
  (func $~lib/array/Array<i32>#__visit_impl (; 49 ;) (param $0 i32) (param $1 i32)

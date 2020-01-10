@@ -15,7 +15,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:resolve-function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 40
@@ -392,7 +392,7 @@
    unreachable
   end
  )
- (func $start (; 13 ;)
+ (func $~start (; 13 ;)
   call $start:resolve-function-expression
  )
 )

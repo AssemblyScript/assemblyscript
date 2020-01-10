@@ -14,7 +14,7 @@
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -162,7 +162,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $start (; 8 ;)
+ (func $~start (; 8 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add

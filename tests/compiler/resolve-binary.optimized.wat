@@ -61,7 +61,7 @@
  (global $resolve-binary/bar (mut i32) (i32.const 0))
  (global $resolve-binary/bar2 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/number/Bool#toString (; 1 ;) (param $0 i32) (result i32)
   i32.const 32
   i32.const 64
@@ -2368,7 +2368,7 @@
    unreachable
   end
  )
- (func $start (; 19 ;)
+ (func $~start (; 19 ;)
   call $start:resolve-binary
  )
 )

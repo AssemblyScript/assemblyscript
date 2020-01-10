@@ -20,7 +20,7 @@
  (export "doReturn" (func $loop-flow/doReturn))
  (export "doThrow" (func $loop-flow/doThrow))
  (export "doAny" (func $loop-flow/doAny))
- (start $start)
+ (start $~start)
  (func $loop-flow/whileReturn (; 1 ;) (result i32)
   (local $0 i32)
   loop $while-continue|0
@@ -302,7 +302,7 @@
   end
   unreachable
  )
- (func $start (; 13 ;)
+ (func $~start (; 13 ;)
   call $start:loop-flow
  )
 )

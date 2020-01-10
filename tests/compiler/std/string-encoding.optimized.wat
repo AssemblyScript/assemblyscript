@@ -39,7 +39,7 @@
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/pure/increment (; 5 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
@@ -3669,7 +3669,7 @@
   i32.const 13808
   call $std/string-encoding/testLarge
  )
- (func $start (; 54 ;)
+ (func $~start (; 54 ;)
   call $start:std/string-encoding
  )
  (func $~lib/rt/pure/__visit (; 55 ;) (param $0 i32) (param $1 i32)

@@ -24,7 +24,7 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
- (export "_start" (func $start))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -1800,7 +1800,7 @@
   local.get $1
   global.set $retain-return/ref
  )
- (func $start (; 28 ;)
+ (func $~start (; 28 ;)
   global.get $~started
   if
    return

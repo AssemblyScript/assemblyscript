@@ -22,7 +22,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 596))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:resolve-function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 40
@@ -692,7 +692,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $start (; 17 ;)
+ (func $~start (; 17 ;)
   call $start:resolve-function-expression
  )
 )

@@ -10,7 +10,7 @@
  (data (i32.const 96) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
  (table $0 1 funcref)
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
   local.get $0
  )
@@ -401,7 +401,7 @@
   call $std/hash/check
   drop
  )
- (func $start (; 8 ;)
+ (func $~start (; 8 ;)
   call $start:std/hash
  )
 )

@@ -28,7 +28,7 @@
  (export "memory" (memory $0))
  (export "test1" (func $rc/ternary-mismatch/test1))
  (export "test2" (func $rc/ternary-mismatch/test2))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1797,7 +1797,7 @@
   global.get $rc/ternary-mismatch/gloRef
   call $~lib/rt/pure/__release
  )
- (func $start (; 34 ;)
+ (func $~start (; 34 ;)
   call $start:rc/ternary-mismatch
  )
  (func $~lib/rt/pure/__visit (; 35 ;) (param $0 i32) (param $1 i32)

@@ -79,7 +79,7 @@
  (global $resolve-binary/bar2 (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8744))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/number/Bool#toString (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   if (result i32)
@@ -5531,7 +5531,7 @@
   local.get $62
   call $~lib/rt/stub/__release
  )
- (func $start (; 44 ;)
+ (func $~start (; 44 ;)
   call $start:resolve-binary
  )
 )

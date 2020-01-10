@@ -48,7 +48,7 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 576))
  (global $~lib/heap/__heap_base i32 (i32.const 652))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/array/Array<i8>#get:length (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
@@ -3832,7 +3832,7 @@
   local.get $7
   call $~lib/rt/pure/__release
  )
- (func $start (; 44 ;)
+ (func $~start (; 44 ;)
   call $start:std/array-literal
  )
  (func $~lib/array/Array<i8>#__visit_impl (; 45 ;) (param $0 i32) (param $1 i32)

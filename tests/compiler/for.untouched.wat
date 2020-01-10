@@ -7,7 +7,7 @@
  (table $0 1 funcref)
  (global $for/i (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:for (; 1 ;)
   (local $0 i32)
   (local $1 i32)
@@ -198,7 +198,7 @@
    end
   end
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   call $start:for
  )
 )

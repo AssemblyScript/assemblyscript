@@ -17,7 +17,7 @@
  (table $0 1 funcref)
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/object/Object.is<f64> (; 1 ;) (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   local.get $1
@@ -886,7 +886,7 @@
    unreachable
   end
  )
- (func $start (; 14 ;)
+ (func $~start (; 14 ;)
   call $start:std/object
  )
 )

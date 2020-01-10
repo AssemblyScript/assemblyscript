@@ -27,7 +27,7 @@
  (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 4 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1720,7 +1720,7 @@
   i32.const 0
   global.set $rc/global-init/b
  )
- (func $start (; 27 ;)
+ (func $~start (; 27 ;)
   call $start:rc/global-init
  )
  (func $~lib/rt/pure/__visit (; 28 ;) (param $0 i32) (param $1 i32)

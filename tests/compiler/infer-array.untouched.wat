@@ -24,7 +24,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 364))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1755,7 +1755,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $start (; 20 ;)
+ (func $~start (; 20 ;)
   call $start:infer-array
  )
 )

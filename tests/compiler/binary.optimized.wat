@@ -17,7 +17,7 @@
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/math/NativeMath.pow (; 0 ;) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i32)
@@ -895,7 +895,7 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $start (; 5 ;)
+ (func $~start (; 5 ;)
   call $start:binary
  )
 )

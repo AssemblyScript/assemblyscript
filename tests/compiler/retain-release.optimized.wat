@@ -18,7 +18,7 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
- (export "_start" (func $start))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
  (export "receiveRef" (func $retain-release/receiveRef))
@@ -240,7 +240,7 @@
   call_indirect (type $none_=>_i32)
   drop
  )
- (func $start (; 16 ;)
+ (func $~start (; 16 ;)
   (local $0 i32)
   global.get $~started
   if

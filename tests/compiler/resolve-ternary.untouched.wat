@@ -67,7 +67,7 @@
  (export "__release" (func $~lib/rt/pure/__release))
  (export "__collect" (func $~lib/rt/pure/__collect))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5299,7 +5299,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $start (; 48 ;)
+ (func $~start (; 48 ;)
   call $start:resolve-ternary
  )
  (func $~lib/array/Array<u32>#__visit_impl (; 49 ;) (param $0 i32) (param $1 i32)

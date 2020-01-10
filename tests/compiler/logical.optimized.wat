@@ -9,7 +9,7 @@
  (global $logical/f (mut f32) (f32.const 0))
  (global $logical/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:logical (; 1 ;)
   (local $0 f32)
   (local $1 f64)
@@ -92,7 +92,7 @@
    unreachable
   end
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   call $start:logical
  )
 )

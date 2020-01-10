@@ -5,8 +5,8 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
- (func $start (; 0 ;)
+ (start $~start)
+ (func $~start (; 0 ;)
   i32.const 0
   global.set $~argumentsLength
  )

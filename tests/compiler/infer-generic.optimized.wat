@@ -14,7 +14,7 @@
  (export "test2" (func $infer-generic/test2))
  (export "test3" (func $infer-generic/test2))
  (export "test4" (func $infer-generic/test2))
- (start $start)
+ (start $~start)
  (func $start:infer-generic~anonymous|0 (; 0 ;) (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
   local.get $1
   f32.const 0
@@ -71,7 +71,7 @@
  (func $infer-generic/test2 (; 3 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $~lib/array/Array<f32>#reduce<bool>
  )
 )

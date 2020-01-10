@@ -19,7 +19,7 @@
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 100))
  (export "__argumentsLength" (global $~argumentsLength))
- (export "_start" (func $start))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
  (export "receiveRef" (func $retain-release/receiveRef))
@@ -799,7 +799,7 @@
   call_indirect (type $none_=>_i32)
   call $~lib/rt/stub/__release
  )
- (func $start (; 45 ;)
+ (func $~start (; 45 ;)
   global.get $~started
   if
    return

@@ -56,7 +56,7 @@
  (global $~lib/rt/__rtti_base i32 (i32.const 608))
  (global $~lib/heap/__heap_base i32 (i32.const 868))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -19755,7 +19755,7 @@
   call $std/map/testNumeric<f32,i32>
   call $std/map/testNumeric<f64,i32>
  )
- (func $start (; 286 ;)
+ (func $~start (; 286 ;)
   call $start:std/map
  )
  (func $~lib/rt/pure/__visit (; 287 ;) (param $0 i32) (param $1 i32)
