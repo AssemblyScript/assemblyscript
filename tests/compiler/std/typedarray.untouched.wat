@@ -5246,10 +5246,6 @@
    i32.le_s
    if
     local.get $3
-    local.set $5
-    local.get $3
-    call $~lib/rt/pure/__release
-    local.get $5
     br $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
    end
    local.get $3
@@ -5282,10 +5278,6 @@
      f64.store
     end
     local.get $3
-    local.set $8
-    local.get $3
-    call $~lib/rt/pure/__release
-    local.get $8
     br $~lib/typedarray/SORT<~lib/typedarray/Float64Array,f64>|inlined.0
    end
    local.get $5
