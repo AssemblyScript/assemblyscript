@@ -671,11 +671,11 @@ export namespace String {
           // @ts-ignore: cast
           if (nullTerminated & !c1) break;
           store<u8>(bufOff, c1);
-          bufOff += 1; strOff += 2;
+          bufOff += 1;
         } else if (c1 < 2048) {
           store<u8>(bufOff, c1 >> 6      | 192);
           store<u8>(bufOff, c1      & 63 | 128, 1);
-          bufOff += 2; strOff += 2;
+          bufOff += 2;
         } else {
           if ((c1 & 0xFC00) == 0xD800 && strOff + 2 < strEnd) {
             let c2 = <u32>load<u16>(strOff, 2);
@@ -685,15 +685,16 @@ export namespace String {
               store<u8>(bufOff, c1 >> 12 & 63 | 128, 1);
               store<u8>(bufOff, c1 >> 6  & 63 | 128, 2);
               store<u8>(bufOff, c1       & 63 | 128, 3);
-              strOff += 4; bufOff += 4;
+              bufOff += 4; strOff += 4;
               continue;
             }
           }
           store<u8>(bufOff, c1 >> 12      | 224);
           store<u8>(bufOff, c1 >> 6  & 63 | 128, 1);
           store<u8>(bufOff, c1       & 63 | 128, 2);
-          strOff += 2; bufOff += 3;
+          bufOff += 3;
         }
+        strOff += 2;
       }
       if (nullTerminated) {
         assert(strOff <= strEnd);
