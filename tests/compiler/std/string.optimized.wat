@@ -4383,7 +4383,7 @@
     select
     if
      local.get $10
-     i32.const 2276
+     i32.const 2340
      i32.load
      local.get $0
      i32.const 22
@@ -4420,7 +4420,7 @@
      i32.gt_s
      if
       local.get $10
-      i32.const 2276
+      i32.const 2340
       i32.load
       local.get $0
       i32.const 3
@@ -4431,7 +4431,7 @@
       br $~lib/util/string/scientific|inlined.0
      end
      local.get $10
-     i32.const 2276
+     i32.const 2340
      i32.load
      i32.const 0
      local.get $0
@@ -9494,7 +9494,7 @@
   i32.const 1392
   call $~lib/string/String#trimStart
   local.tee $38
-  i32.const 1328
+  i32.const 1392
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -9508,7 +9508,7 @@
   i32.const 1424
   call $~lib/string/String#trimStart
   local.tee $39
-  i32.const 1408
+  i32.const 1472
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -9536,7 +9536,7 @@
   i32.const 1392
   call $~lib/string/String#trimEnd
   local.tee $41
-  i32.const 1328
+  i32.const 1392
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -9550,7 +9550,7 @@
   i32.const 1424
   call $~lib/string/String#trimEnd
   local.tee $42
-  i32.const 1440
+  i32.const 1504
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -9578,7 +9578,7 @@
   i32.const 1392
   call $~lib/string/String#trim
   local.tee $44
-  i32.const 1328
+  i32.const 1392
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -11269,13 +11269,13 @@
   i32.const 7168
   call $~lib/string/String.__concat
   local.tee $46
-  i32.const 7264
+  i32.const 7328
   call $~lib/string/String.__concat
   local.tee $47
-  i32.const 7424
+  i32.const 7488
   call $~lib/string/String.__concat
   local.tee $48
-  i32.const 7584
+  i32.const 7648
   call $~lib/string/String.__concat
   local.tee $49
   call $~lib/util/string/strtod
@@ -11607,7 +11607,7 @@
   call $~lib/string/String.__concat
   local.tee $2
   local.get $2
-  i32.const 10528
+  i32.const 10592
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12060,7 +12060,7 @@
   i32.const 2
   call $~lib/string/String#repeat
   local.tee $53
-  i32.const 10944
+  i32.const 11008
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12075,7 +12075,7 @@
   i32.const 3
   call $~lib/string/String#repeat
   local.tee $54
-  i32.const 11024
+  i32.const 11088
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12090,7 +12090,7 @@
   i32.const 4
   call $~lib/string/String#repeat
   local.tee $55
-  i32.const 11056
+  i32.const 11120
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12105,7 +12105,7 @@
   i32.const 5
   call $~lib/string/String#repeat
   local.tee $56
-  i32.const 11088
+  i32.const 11152
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12120,7 +12120,7 @@
   i32.const 6
   call $~lib/string/String#repeat
   local.tee $57
-  i32.const 11120
+  i32.const 11184
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12135,7 +12135,7 @@
   i32.const 7
   call $~lib/string/String#repeat
   local.tee $58
-  i32.const 11152
+  i32.const 11216
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12167,7 +12167,7 @@
   i32.const 4720
   call $~lib/string/String#replace
   local.tee $60
-  i32.const 4656
+  i32.const 4720
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12199,7 +12199,7 @@
   i32.const 496
   call $~lib/string/String#replace
   local.tee $62
-  i32.const 4656
+  i32.const 4720
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12231,7 +12231,7 @@
   i32.const 4720
   call $~lib/string/String#replace
   local.tee $64
-  i32.const 4656
+  i32.const 4720
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12279,7 +12279,7 @@
   i32.const 4720
   call $~lib/string/String#replace
   local.tee $67
-  i32.const 11248
+  i32.const 11280
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12295,7 +12295,7 @@
   i32.const 4720
   call $~lib/string/String#replace
   local.tee $68
-  i32.const 11280
+  i32.const 11312
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12311,7 +12311,7 @@
   i32.const 4720
   call $~lib/string/String#replace
   local.tee $69
-  i32.const 11280
+  i32.const 11312
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12327,7 +12327,7 @@
   i32.const 11440
   call $~lib/string/String#replace
   local.tee $70
-  i32.const 11440
+  i32.const 11472
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12343,7 +12343,7 @@
   i32.const 496
   call $~lib/string/String#replace
   local.tee $71
-  i32.const 10528
+  i32.const 10592
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12391,7 +12391,7 @@
   i32.const 4720
   call $~lib/string/String#replaceAll
   local.tee $74
-  i32.const 11408
+  i32.const 11440
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12407,7 +12407,7 @@
   i32.const 4720
   call $~lib/string/String#replaceAll
   local.tee $75
-  i32.const 11520
+  i32.const 11552
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12439,7 +12439,7 @@
   i32.const 11552
   call $~lib/string/String#replaceAll
   local.tee $77
-  i32.const 11584
+  i32.const 11616
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12455,7 +12455,7 @@
   i32.const 11440
   call $~lib/string/String#replaceAll
   local.tee $78
-  i32.const 11632
+  i32.const 11664
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12471,7 +12471,7 @@
   i32.const 11440
   call $~lib/string/String#replaceAll
   local.tee $79
-  i32.const 11728
+  i32.const 11760
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12503,7 +12503,7 @@
   i32.const 11440
   call $~lib/string/String#replaceAll
   local.tee $81
-  i32.const 11184
+  i32.const 1360
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12519,7 +12519,7 @@
   i32.const 4720
   call $~lib/string/String#replaceAll
   local.tee $82
-  i32.const 11824
+  i32.const 11856
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12535,7 +12535,7 @@
   i32.const 4720
   call $~lib/string/String#replaceAll
   local.tee $83
-  i32.const 4656
+  i32.const 4720
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12551,7 +12551,7 @@
   i32.const 4720
   call $~lib/string/String#replaceAll
   local.tee $84
-  i32.const 11856
+  i32.const 11888
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12583,7 +12583,7 @@
   i32.const 4720
   call $~lib/string/String#replaceAll
   local.tee $86
-  i32.const 4656
+  i32.const 4720
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12615,7 +12615,7 @@
   i32.const 496
   call $~lib/string/String#replaceAll
   local.tee $88
-  i32.const 4656
+  i32.const 4720
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -12631,7 +12631,7 @@
   i32.const 4752
   call $~lib/string/String#replaceAll
   local.tee $89
-  i32.const 4688
+  i32.const 4752
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13115,7 +13115,7 @@
   i32.const -3
   call $~lib/string/String#substring
   local.tee $119
-  i32.const 11184
+  i32.const 1360
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13273,7 +13273,7 @@
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 10496
+   i32.const 10560
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13288,7 +13288,7 @@
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 11376
+   i32.const 11408
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13337,7 +13337,7 @@
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 10496
+   i32.const 10560
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13352,7 +13352,7 @@
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 11376
+   i32.const 11408
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13401,7 +13401,7 @@
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 10496
+   i32.const 10560
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13431,7 +13431,7 @@
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 11376
+   i32.const 11408
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13495,7 +13495,7 @@
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 10496
+   i32.const 10560
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13510,7 +13510,7 @@
    i32.const 3
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 11376
+   i32.const 11408
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13559,7 +13559,7 @@
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 10496
+   i32.const 10560
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13574,7 +13574,7 @@
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 11376
+   i32.const 11408
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13788,7 +13788,7 @@
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 10496
+   i32.const 10560
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13803,7 +13803,7 @@
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 11376
+   i32.const 11408
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13852,7 +13852,7 @@
    i32.const 1
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 10496
+   i32.const 10560
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13867,7 +13867,7 @@
    i32.const 2
    call $~lib/array/Array<~lib/string/String>#__get
    local.tee $1
-   i32.const 11376
+   i32.const 11408
    call $~lib/string/String.__eq
    local.set $0
    local.get $1
@@ -13956,7 +13956,7 @@
   i32.const 0
   call $~lib/util/number/itoa32
   local.tee $120
-  i32.const 1472
+  i32.const 1536
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -13970,7 +13970,7 @@
   i32.const 1
   call $~lib/util/number/itoa32
   local.tee $121
-  i32.const 1536
+  i32.const 1600
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -14194,7 +14194,7 @@
   i32.const 0
   call $~lib/util/number/utoa32
   local.tee $137
-  i32.const 1472
+  i32.const 1536
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -14264,7 +14264,7 @@
   i64.const 0
   call $~lib/util/number/utoa64
   local.tee $142
-  i32.const 1472
+  i32.const 1536
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -14558,7 +14558,7 @@
   i64.const 0
   call $~lib/util/number/itoa64
   local.tee $163
-  i32.const 1472
+  i32.const 1536
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -14754,7 +14754,7 @@
   f64.const nan:0x8000000000000
   call $~lib/util/number/dtoa
   local.tee $177
-  i32.const 4912
+  i32.const 4976
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -14782,7 +14782,7 @@
   f64.const -inf
   call $~lib/util/number/dtoa
   local.tee $179
-  i32.const 6128
+  i32.const 6192
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -14796,7 +14796,7 @@
   f64.const 2.220446049250313e-16
   call $~lib/util/number/dtoa
   local.tee $180
-  i32.const 5424
+  i32.const 5488
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -14824,7 +14824,7 @@
   f64.const 1797693134862315708145274e284
   call $~lib/util/number/dtoa
   local.tee $182
-  i32.const 5488
+  i32.const 5552
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -14936,7 +14936,7 @@
   f64.const 5e-324
   call $~lib/util/number/dtoa
   local.tee $190
-  i32.const 5552
+  i32.const 5616
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -14964,7 +14964,7 @@
   f64.const 0.1
   call $~lib/util/number/dtoa
   local.tee $192
-  i32.const 2560
+  i32.const 2624
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -15090,7 +15090,7 @@
   f64.const 1.e+308
   call $~lib/util/number/dtoa
   local.tee $201
-  i32.const 2784
+  i32.const 2848
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -15132,7 +15132,7 @@
   f64.const -inf
   call $~lib/util/number/dtoa
   local.tee $204
-  i32.const 6128
+  i32.const 6192
   call $~lib/string/String.__eq
   i32.eqz
   if
