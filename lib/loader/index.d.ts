@@ -33,7 +33,7 @@ interface ASUtil {
   __getInt8Array(ptr: number): Int8Array;
   /** Copies an Uint8Array's values from the module's memory. */
   __getUint8Array(ptr: number): Uint8Array;
-  /** Copies an Uint8Array's values from the module's memory. */
+  /** Copies an Uint8ClampedArray's values from the module's memory. */
   __getUint8ClampedArray(ptr: number): Uint8ClampedArray;
   /** Copies an Int16Array's values from the module's memory. */
   __getInt16Array(ptr: number): Int16Array;
@@ -56,9 +56,9 @@ interface ASUtil {
   __getArrayView(ptr: number): ArrayBufferView;
   /** Gets a live view on an Int8Array's values in the module's memory. */
   __getInt8ArrayView(ptr: number): Int8Array;
-  /** Gets a live view on an Uint8Array'S values in the module's memory. */
-  __getUint8ArrayView(ptr: number): Uint8Array;
   /** Gets a live view on an Uint8Array's values in the module's memory. */
+  __getUint8ArrayView(ptr: number): Uint8Array;
+  /** Gets a live view on an Uint8ClampedArray's values in the module's memory. */
   __getUint8ClampedArrayView(ptr: number): Uint8ClampedArray;
   /** Gets a live view on an Int16Array's values in the module's memory. */
   __getInt16ArrayView(ptr: number): Int16Array;

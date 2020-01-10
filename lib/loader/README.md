@@ -68,7 +68,7 @@ Besides demangling classes exported from your entry file to a handy object struc
   **__getUint8ClampedArray**(ptr: `number`): `Uint8ClampedArray`<br />
   **__getInt16Array**(ptr: `number`): `Int16Array`<br />
   **__getUint16Array**(ptr: `number`): `Uint16Array`<br />
-  **__getInt32Arraw**(ptr: `number`): `Int32Array`<br />
+  **__getInt32Array**(ptr: `number`): `Int32Array`<br />
   **__getUint32Array**(ptr: `number`): `Uint32Array`<br />
   **__getInt64Array**(ptr: `number`): `BigInt64Array`<br />
   **__getUint64Array**(ptr: `number`): `BigUint64Array`<br />
