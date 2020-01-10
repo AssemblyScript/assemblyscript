@@ -19,14 +19,10 @@
  (export "memory" (memory $0))
  (start $start)
  (func $~lib/object/Object.is<f64> (; 1 ;) (param $0 f64) (param $1 f64) (result i32)
-  i32.const 1
-  drop
   local.get $0
   local.get $1
   f64.eq
   if
-   i32.const 1
-   drop
    local.get $0
    i64.reinterpret_f64
    local.get $1
@@ -44,14 +40,10 @@
   return
  )
  (func $~lib/object/Object.is<f32> (; 2 ;) (param $0 f32) (param $1 f32) (result i32)
-  i32.const 1
-  drop
   local.get $0
   local.get $1
   f32.eq
   if
-   i32.const 0
-   drop
    local.get $0
    i32.reinterpret_f32
    local.get $1
@@ -69,15 +61,11 @@
   return
  )
  (func $~lib/object/Object.is<i32> (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
-  i32.const 0
-  drop
   local.get $0
   local.get $1
   i32.eq
  )
  (func $~lib/object/Object.is<bool> (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
-  i32.const 0
-  drop
   local.get $0
   i32.const 0
   i32.ne
@@ -125,8 +113,6 @@
   i32.shl
   i32.add
   local.set $6
-  i32.const 1
-  drop
   local.get $4
   i32.const 4
   i32.ge_u
@@ -305,8 +291,6 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 0
-  drop
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
@@ -318,8 +302,6 @@
   local.get $2
  )
  (func $~lib/object/Object.is<usize> (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
-  i32.const 0
-  drop
   local.get $0
   local.get $1
   i32.eq
@@ -332,8 +314,6 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  i32.const 0
-  drop
   local.get $0
   local.get $1
   call $~lib/string/String.__eq

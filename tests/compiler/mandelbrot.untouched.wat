@@ -42,8 +42,6 @@
   (local $18 i32)
   (local $19 f64)
   (local $20 f64)
-  i32.const 1
-  drop
   block $~lib/util/math/log_lut|inlined.0 (result f64)
    local.get $0
    local.set $1
@@ -376,8 +374,6 @@
   (local $23 f64)
   (local $24 f64)
   (local $25 f64)
-  i32.const 1
-  drop
   block $~lib/util/math/log2_lut|inlined.0 (result f64)
    local.get $0
    local.set $1

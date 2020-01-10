@@ -125,8 +125,6 @@
   local.get $6
   local.get $5
   i32.store
-  i32.const 1
-  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -146,8 +144,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 0
-  drop
   loop $while-continue|0
    local.get $2
    if (result i32)
@@ -1186,8 +1182,6 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
-   i32.const 1
-   drop
    local.get $4
    local.get $3
    i32.add
@@ -1454,8 +1448,6 @@
   local.get $1
   call $~lib/array/Array<u64>#__unchecked_get
   local.set $2
-  i32.const 0
-  drop
   local.get $2
  )
  (func $~lib/util/number/decimalCount32 (; 9 ;) (param $0 i32) (result i32)
@@ -1906,8 +1898,6 @@
    local.set $5
    local.get $3
    local.set $4
-   i32.const 0
-   drop
    local.get $6
    local.get $5
    local.get $4
@@ -1928,8 +1918,6 @@
    local.set $7
    local.get $3
    local.set $4
-   i32.const 0
-   drop
    local.get $5
    local.get $7
    local.get $4
@@ -1939,12 +1927,6 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<u64> (; 14 ;) (param $0 i64) (result i32)
-  i32.const 0
-  drop
-  i32.const 0
-  drop
-  i32.const 0
-  drop
   local.get $0
   call $~lib/util/number/utoa64
   return
@@ -2039,8 +2021,6 @@
   local.set $4
   local.get $1
   local.set $3
-  i32.const 0
-  drop
   local.get $5
   local.get $4
   local.get $3
@@ -2049,12 +2029,6 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<u32> (; 22 ;) (param $0 i32) (result i32)
-  i32.const 0
-  drop
-  i32.const 0
-  drop
-  i32.const 1
-  drop
   local.get $0
   call $~lib/util/number/utoa32
   return

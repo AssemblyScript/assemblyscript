@@ -535,8 +535,6 @@
   drop
  )
  (func $start:features/threads (; 2 ;)
-  i32.const 1
-  drop
   call $features/threads/testAtomic
   call $features/threads/testAtomicAsm
  )

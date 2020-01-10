@@ -123,8 +123,6 @@
   local.get $6
   local.get $5
   i32.store
-  i32.const 1
-  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -150,8 +148,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 0
-  drop
   loop $while-continue|0
    local.get $2
    if (result i32)
@@ -1190,8 +1186,6 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
-   i32.const 1
-   drop
    local.get $4
    local.get $3
    i32.add
@@ -1427,8 +1421,6 @@
   local.get $2
   i32.load
   local.set $3
-  i32.const 1
-  drop
   local.get $2
   i32.load offset=4
   i32.const 1
@@ -1544,8 +1536,6 @@
   i32.const 16
   i32.sub
   local.set $1
-  i32.const 1
-  drop
   local.get $1
   i32.load offset=4
   i32.const 1

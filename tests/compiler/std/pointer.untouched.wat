@@ -38,8 +38,6 @@
    local.set $4
    local.get $2
    local.set $3
-   i32.const 0
-   drop
    local.get $3
    i32.eqz
    if
@@ -294,8 +292,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 0
-  drop
   loop $while-continue|0
    local.get $2
    if (result i32)
@@ -1334,8 +1330,6 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
-   i32.const 1
-   drop
    local.get $4
    local.get $3
    i32.add
@@ -1592,8 +1586,6 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.0 (result i32)
    global.get $std/pointer/one
    local.set $0
-   i32.const 1
-   drop
    local.get $0
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.0
   end
@@ -1602,8 +1594,6 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1 (result i32)
    global.get $std/pointer/one
    local.set $1
-   i32.const 1
-   drop
    local.get $1
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1
   end
@@ -1877,16 +1867,10 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6 (result i32)
    global.get $std/pointer/two
    local.set $0
-   i32.const 1
-   drop
    local.get $0
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6
   end
   local.set $6
-  i32.const 1
-  drop
-  i32.const 0
-  drop
   local.get $6
   i32.const 0
   i32.eq
@@ -2168,8 +2152,6 @@
   local.set $0
   f32.const 1.399999976158142
   local.set $8
-  i32.const 0
-  drop
   local.get $0
   local.get $8
   f32.store

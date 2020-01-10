@@ -19,25 +19,17 @@
  (start $start)
  (func $instanceof/isI32<i32> (; 1 ;) (param $0 i32) (result i32)
   i32.const 1
-  drop
-  i32.const 1
   return
  )
  (func $instanceof/isI32<f64> (; 2 ;) (param $0 f64) (result i32)
-  i32.const 0
-  drop
   i32.const 0
   return
  )
  (func $instanceof/isI32<u32> (; 3 ;) (param $0 i32) (result i32)
   i32.const 0
-  drop
-  i32.const 0
   return
  )
  (func $instanceof/isI32<u16> (; 4 ;) (param $0 i32) (result i32)
-  i32.const 0
-  drop
   i32.const 0
   return
  )

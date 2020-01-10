@@ -189,8 +189,6 @@
   local.get $6
   local.get $5
   i32.store
-  i32.const 1
-  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -405,8 +403,6 @@
   (local $42 i32)
   (local $43 i64)
   (local $44 i64)
-  i32.const 1
-  drop
   block $~lib/util/math/pow_lut|inlined.0 (result f64)
    local.get $0
    local.set $3

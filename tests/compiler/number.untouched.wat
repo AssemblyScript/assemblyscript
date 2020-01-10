@@ -223,8 +223,6 @@
   local.get $6
   local.get $5
   i32.store
-  i32.const 1
-  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -424,8 +422,6 @@
   local.set $5
   local.get $2
   local.set $4
-  i32.const 0
-  drop
   local.get $6
   local.get $5
   local.get $4
@@ -440,12 +436,6 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<i32> (; 7 ;) (param $0 i32) (result i32)
-  i32.const 0
-  drop
-  i32.const 1
-  drop
-  i32.const 1
-  drop
   local.get $0
   call $~lib/util/number/itoa32
   return
@@ -490,8 +480,6 @@
   i32.shl
   i32.add
   local.set $6
-  i32.const 1
-  drop
   local.get $4
   i32.const 4
   i32.ge_u
@@ -1192,8 +1180,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 0
-  drop
   loop $while-continue|0
    local.get $2
    if (result i32)
@@ -2232,8 +2218,6 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
-   i32.const 1
-   drop
    local.get $4
    local.get $3
    i32.add
@@ -2654,8 +2638,6 @@
       local.set $9
       local.get $7
       local.set $8
-      i32.const 0
-      drop
       local.get $10
       local.get $9
       local.get $8
@@ -2728,8 +2710,6 @@
       local.set $6
       local.get $5
       local.set $10
-      i32.const 0
-      drop
       local.get $11
       local.get $6
       local.get $10
@@ -3311,8 +3291,6 @@
   i32.const 16
   i32.sub
   local.set $1
-  i32.const 1
-  drop
   local.get $1
   i32.load offset=4
   i32.const 1

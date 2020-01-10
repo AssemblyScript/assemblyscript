@@ -27,7 +27,6 @@ import {
   FunctionRef,
   ExpressionId,
   GlobalRef,
-  EventRef,
   FeatureFlags,
   getExpressionId,
   getExpressionType,
@@ -107,10 +106,10 @@ import {
 import {
   Node,
   NodeKind,
-  NamedTypeNode,
   Range,
   DecoratorKind,
   AssertionKind,
+  SourceKind,
 
   Statement,
   BlockStatement,
@@ -121,6 +120,7 @@ import {
   DoStatement,
   EmptyStatement,
   EnumDeclaration,
+  ExportDefaultStatement,
   ExportStatement,
   ExpressionStatement,
   FieldDeclaration,
@@ -129,7 +129,6 @@ import {
   IfStatement,
   ImportStatement,
   InstanceOfExpression,
-  InterfaceDeclaration,
   NamespaceDeclaration,
   ReturnStatement,
   SwitchStatement,
@@ -163,9 +162,7 @@ import {
 
   nodeIsConstantValue,
   findDecorator,
-  isTypeOmitted,
-  ExportDefaultStatement,
-  SourceKind
+  isTypeOmitted
 } from "./ast";
 
 import {
@@ -1910,13 +1907,10 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType
         )
       );
-      let condKind = evaluateConditionKind(condExpr);
+      let condKind = evaluateBooleanConditionKind(condExpr);
 
       // Shortcut if condition is always false
       if (condKind == ConditionKind.FALSE) {
-        bodyStmts.push(
-          module.drop(condExpr)
-        );
         this.performAutoreleases(condFlow, bodyStmts);
         flow.inherit(bodyFlow);
       } else {
@@ -2053,7 +2047,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType
         )
       );
-      condKind = evaluateConditionKind(condExpr);
+      condKind = evaluateBooleanConditionKind(condExpr);
 
       // Shortcut if condition is always false (body never runs)
       if (condKind == ConditionKind.FALSE) {
@@ -2077,7 +2071,9 @@ export class Compiler extends DiagnosticEmitter {
     // Store condition result in a temp while we autorelease
     var tcond = flow.getTempLocal(Type.bool);
     var loopStmts = new Array<ExpressionRef>();
-    loopStmts.push(module.local_set(tcond.index, condExpr));
+    loopStmts.push(
+      module.local_set(tcond.index, condExpr)
+    );
     this.performAutoreleases(condFlow, loopStmts);
     condFlow.freeScopedLocals();
 
@@ -2208,23 +2204,17 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType
       )
     );
-    var condKind = evaluateConditionKind(condExpr);
+    var condKind = evaluateBooleanConditionKind(condExpr);
 
     // Shortcut if the condition is constant
     switch (condKind) {
       case ConditionKind.TRUE: {
-        return module.block(null, [
-          module.drop(condExpr),
-          this.compileStatement(ifTrue)
-        ]);
+        return this.compileStatement(ifTrue);
       }
       case ConditionKind.FALSE: {
         return ifFalse
-          ? module.block(null, [
-              module.drop(condExpr),
-              this.compileStatement(ifFalse)
-            ])
-          : module.drop(condExpr);
+          ? this.compileStatement(ifFalse)
+          : module.nop();
       }
     }
 
@@ -2773,13 +2763,10 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType
       )
     );
-    var condKind = evaluateConditionKind(condExpr);
+    var condKind = evaluateBooleanConditionKind(condExpr);
 
     // Shortcut if condition is always false (body never runs)
     if (condKind == ConditionKind.FALSE) {
-      stmts.push(
-        module.drop(condExpr)
-      );
       this.performAutoreleases(condFlow, stmts);
       assert(!flow.hasScopedLocals);
       outerFlow.popBreakLabel();
@@ -9465,7 +9452,7 @@ var mangleImportName_moduleName: string;
 var mangleImportName_elementName: string;
 
 /** Evaluates the kind of a boolean condition from its expression. */
-function evaluateConditionKind(expr: ExpressionRef): ConditionKind {
+function evaluateBooleanConditionKind(expr: ExpressionRef): ConditionKind {
   assert(getExpressionType(expr) == NativeType.I32);
   if (getExpressionId(expr) == ExpressionId.Const) {
     return getConstValueI32(expr)

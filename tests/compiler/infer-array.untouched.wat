@@ -121,8 +121,6 @@
   local.get $6
   local.get $5
   i32.store
-  i32.const 1
-  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -142,8 +140,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 0
-  drop
   loop $while-continue|0
    local.get $2
    if (result i32)
@@ -1182,8 +1178,6 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
-   i32.const 1
-   drop
    local.get $4
    local.get $3
    i32.add
@@ -1450,8 +1444,6 @@
   local.get $1
   call $~lib/array/Array<i32>#__unchecked_get
   local.set $2
-  i32.const 0
-  drop
   local.get $2
  )
  (func $~lib/rt/stub/__release (; 9 ;) (param $0 i32)
@@ -1484,8 +1476,6 @@
   local.get $1
   call $~lib/array/Array<f64>#__unchecked_get
   local.set $2
-  i32.const 0
-  drop
   local.get $2
  )
  (func $~lib/array/Array<u32>#__unchecked_get (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
@@ -1515,8 +1505,6 @@
   local.get $1
   call $~lib/array/Array<u32>#__unchecked_get
   local.set $2
-  i32.const 0
-  drop
   local.get $2
  )
  (func $~lib/array/Array<f32>#__unchecked_get (; 14 ;) (param $0 i32) (param $1 i32) (result f32)
@@ -1546,8 +1534,6 @@
   local.get $1
   call $~lib/array/Array<f32>#__unchecked_get
   local.set $2
-  i32.const 0
-  drop
   local.get $2
  )
  (func $infer-array/Ref#constructor (; 16 ;) (param $0 i32) (result i32)
@@ -1590,10 +1576,6 @@
   local.get $1
   call $~lib/array/Array<infer-array/Ref | null>#__unchecked_get
   local.set $2
-  i32.const 1
-  drop
-  i32.const 0
-  drop
   local.get $2
  )
  (func $start:infer-array (; 19 ;)

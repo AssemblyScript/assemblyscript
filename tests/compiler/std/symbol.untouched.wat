@@ -183,8 +183,6 @@
   local.get $6
   local.get $5
   i32.store
-  i32.const 1
-  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -211,8 +209,6 @@
    local.set $4
    local.get $2
    local.set $3
-   i32.const 0
-   drop
    local.get $3
    i32.eqz
    if
@@ -714,8 +710,6 @@
   i32.shl
   i32.add
   local.set $6
-  i32.const 1
-  drop
   local.get $4
   i32.const 4
   i32.ge_u
@@ -958,8 +952,6 @@
    local.get $1
    call $~lib/rt/stub/__retain
    local.set $2
-   i32.const 1
-   drop
    local.get $2
    call $~lib/util/hash/hashStr
    local.set $3
@@ -989,8 +981,6 @@
    local.get $1
    call $~lib/rt/stub/__retain
    local.set $2
-   i32.const 1
-   drop
    local.get $2
    call $~lib/util/hash/hashStr
    local.set $3
@@ -1097,8 +1087,6 @@
       i32.load
       call $~lib/rt/stub/__retain
       local.set $12
-      i32.const 1
-      drop
       local.get $12
       call $~lib/util/hash/hashStr
       local.set $13
@@ -1196,8 +1184,6 @@
    local.get $1
    call $~lib/rt/stub/__retain
    local.set $3
-   i32.const 1
-   drop
    local.get $3
    call $~lib/util/hash/hashStr
    local.set $4
@@ -1214,8 +1200,6 @@
   local.set $6
   local.get $6
   if
-   i32.const 0
-   drop
    local.get $6
    local.get $2
    i32.store offset=4
@@ -1468,18 +1452,6 @@
       local.get $10
       i32.load
       local.set $12
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 0
-      drop
-      i32.const 1
-      drop
       local.get $12
       call $~lib/util/hash/hash32
       br $~lib/util/hash/HASH<usize>|inlined.1
@@ -1572,18 +1544,6 @@
   block $~lib/util/hash/HASH<usize>|inlined.0 (result i32)
    local.get $1
    local.set $3
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
    local.get $3
    call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<usize>|inlined.0
@@ -1596,8 +1556,6 @@
   local.set $5
   local.get $5
   if
-   i32.const 1
-   drop
    local.get $5
    i32.load offset=4
    local.set $3
@@ -1766,18 +1724,6 @@
   block $~lib/util/hash/HASH<usize>|inlined.2 (result i32)
    local.get $1
    local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
    local.get $2
    call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<usize>|inlined.2
@@ -1794,18 +1740,6 @@
   block $~lib/util/hash/HASH<usize>|inlined.3 (result i32)
    local.get $1
    local.set $2
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 0
-   drop
-   i32.const 1
-   drop
    local.get $2
    call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<usize>|inlined.3
@@ -1851,8 +1785,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  i32.const 0
-  drop
   loop $while-continue|0
    local.get $2
    if (result i32)
@@ -2891,8 +2823,6 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
-   i32.const 1
-   drop
    local.get $4
    local.get $3
    i32.add

@@ -115,8 +115,6 @@
   local.get $6
   local.get $5
   i32.store
-  i32.const 1
-  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -154,8 +152,6 @@
   i32.const 16
   i32.sub
   local.set $1
-  i32.const 1
-  drop
   local.get $1
   i32.load offset=4
   i32.const 1
@@ -2286,8 +2282,6 @@
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
-  i32.const 1
-  drop
   call $features/simd/test_v128
   call $features/simd/test_i8x16
   call $features/simd/test_i16x8
