@@ -45,7 +45,8 @@ import {
   getLocalSetValue,
   getGlobalGetName,
   isGlobalMutable,
-  createType
+  createType,
+  hasSideEffects
 } from "./module";
 
 import {
@@ -1907,10 +1908,15 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType
         )
       );
-      let condKind = evaluateBooleanConditionKind(condExpr);
+      let condKind = evaluateConditionKind(condExpr);
 
       // Shortcut if condition is always false
       if (condKind == ConditionKind.FALSE) {
+        if (hasSideEffects(condExpr)) {
+          bodyStmts.push(
+            module.drop(condExpr)
+          );
+        }
         this.performAutoreleases(condFlow, bodyStmts);
         flow.inherit(bodyFlow);
       } else {
@@ -2047,10 +2053,15 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType
         )
       );
-      condKind = evaluateBooleanConditionKind(condExpr);
+      condKind = evaluateConditionKind(condExpr);
 
       // Shortcut if condition is always false (body never runs)
       if (condKind == ConditionKind.FALSE) {
+        if (hasSideEffects(condExpr)) {
+          stmts.push(
+            module.drop(condExpr)
+          );
+        }
         this.performAutoreleases(condFlow, stmts);
         condFlow.freeScopedLocals();
         flow.inherit(condFlow);
@@ -2204,14 +2215,28 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType
       )
     );
-    var condKind = evaluateBooleanConditionKind(condExpr);
+    var condKind = evaluateConditionKind(condExpr);
 
     // Shortcut if the condition is constant
     switch (condKind) {
       case ConditionKind.TRUE: {
+        if (hasSideEffects(condExpr)) {
+          return module.block(null, [
+            module.drop(condExpr),
+            this.compileStatement(ifTrue)
+          ]);
+        }
         return this.compileStatement(ifTrue);
       }
       case ConditionKind.FALSE: {
+        if (hasSideEffects(condExpr)) {
+          return ifFalse
+            ? module.block(null, [
+                module.drop(condExpr),
+                this.compileStatement(ifFalse)
+              ])
+            : module.drop(condExpr);
+        }
         return ifFalse
           ? this.compileStatement(ifFalse)
           : module.nop();
@@ -2763,7 +2788,7 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType
       )
     );
-    var condKind = evaluateBooleanConditionKind(condExpr);
+    var condKind = evaluateConditionKind(condExpr);
 
     // Shortcut if condition is always false (body never runs)
     if (condKind == ConditionKind.FALSE) {
@@ -9452,7 +9477,7 @@ var mangleImportName_moduleName: string;
 var mangleImportName_elementName: string;
 
 /** Evaluates the kind of a boolean condition from its expression. */
-function evaluateBooleanConditionKind(expr: ExpressionRef): ConditionKind {
+function evaluateConditionKind(expr: ExpressionRef): ConditionKind {
   assert(getExpressionType(expr) == NativeType.I32);
   if (getExpressionId(expr) == ExpressionId.Const) {
     return getConstValueI32(expr)
