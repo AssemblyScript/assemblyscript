@@ -6022,12 +6022,12 @@
     if
      i32.const 1
      call $~lib/rt/__allocArray
+     call $~lib/rt/pure/__retain
      local.tee $0
      i32.load offset=4
      i32.const 496
      i32.store
      local.get $0
-     call $~lib/rt/pure/__retain
      return
     end
    else
@@ -6042,6 +6042,7 @@
     select
     local.tee $3
     call $~lib/rt/__allocArray
+    call $~lib/rt/pure/__retain
     local.tee $4
     i32.load offset=4
     local.set $5
@@ -6081,7 +6082,6 @@
      end
     end
     local.get $4
-    call $~lib/rt/pure/__retain
     return
    end
    i32.const 0

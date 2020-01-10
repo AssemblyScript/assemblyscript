@@ -9056,6 +9056,7 @@
    i32.const 4
    i32.const 0
    call $~lib/rt/__allocArray
+   call $~lib/rt/pure/__retain
    local.set $4
    local.get $4
    i32.load offset=4
@@ -9100,7 +9101,6 @@
     unreachable
    end
    local.get $4
-   call $~lib/rt/pure/__retain
    local.set $7
    local.get $1
    call $~lib/rt/pure/__release
@@ -9115,13 +9115,13 @@
     i32.const 4
     i32.const 0
     call $~lib/rt/__allocArray
+    call $~lib/rt/pure/__retain
     local.set $3
     local.get $3
     i32.load offset=4
     i32.const 496
     i32.store
     local.get $3
-    call $~lib/rt/pure/__retain
     local.set $4
     local.get $1
     call $~lib/rt/pure/__release
