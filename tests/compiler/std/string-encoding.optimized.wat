@@ -707,7 +707,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $2
+  local.tee $0
   i32.eqz
   if
    i32.const 1
@@ -728,21 +728,18 @@
     unreachable
    end
    i32.const 21200
-   local.set $2
-   i32.const 21200
+   local.tee $0
    i32.const 0
    i32.store
    i32.const 22768
    i32.const 0
    i32.store
-   i32.const 0
-   local.set $0
    loop $loop|0
-    local.get $0
+    local.get $1
     i32.const 23
     i32.lt_u
     if
-     local.get $0
+     local.get $1
      i32.const 2
      i32.shl
      i32.const 21200
@@ -750,16 +747,16 @@
      i32.const 0
      i32.store offset=4
      i32.const 0
-     local.set $1
+     local.set $2
      loop $loop|1
-      local.get $1
+      local.get $2
       i32.const 16
       i32.lt_u
       if
        local.get $1
-       local.get $0
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -767,17 +764,17 @@
        i32.add
        i32.const 0
        i32.store offset=96
-       local.get $1
+       local.get $2
        i32.const 1
        i32.add
-       local.set $1
+       local.set $2
        br $loop|1
       end
      end
-     local.get $0
+     local.get $1
      i32.const 1
      i32.add
-     local.set $0
+     local.set $1
      br $loop|0
     end
    end
@@ -790,7 +787,7 @@
    i32.const 21200
    global.set $~lib/rt/tlsf/ROOT
   end
-  local.get $2
+  local.get $0
  )
  (func $~lib/rt/tlsf/prepareSize (; 13 ;) (param $0 i32) (result i32)
   local.get $0
@@ -2150,7 +2147,7 @@
   local.get $0
   local.get $1
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $1
+  local.tee $3
   i32.const 32
   call $~lib/string/String.__eq
   i32.eqz
@@ -2165,7 +2162,7 @@
   local.get $0
   i32.const 4
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $3
+  local.tee $4
   i32.const 416
   call $~lib/string/String.__eq
   i32.eqz
@@ -2182,7 +2179,7 @@
   i32.add
   i32.const 2
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $4
+  local.tee $5
   i32.const 448
   call $~lib/string/String.__eq
   i32.eqz
@@ -2199,7 +2196,7 @@
   i32.add
   i32.const 4
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $5
+  local.tee $6
   i32.const 480
   call $~lib/string/String.__eq
   i32.eqz
@@ -2216,7 +2213,7 @@
   i32.add
   i32.const 4
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $6
+  local.tee $7
   i32.const 512
   call $~lib/string/String.__eq
   i32.eqz
@@ -2233,7 +2230,7 @@
   i32.add
   i32.const 0
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $7
+  local.tee $1
   i32.const 400
   call $~lib/string/String.__eq
   i32.eqz
@@ -2247,8 +2244,6 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $1
-  call $~lib/rt/pure/__release
   local.get $3
   call $~lib/rt/pure/__release
   local.get $4
@@ -2258,6 +2253,8 @@
   local.get $6
   call $~lib/rt/pure/__release
   local.get $7
+  call $~lib/rt/pure/__release
+  local.get $1
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -2462,10 +2459,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
-    local.get $5
     local.get $4
     i32.const 3
     i32.and
+    local.get $5
     i32.or
     i32.store
     local.get $1
@@ -3413,16 +3410,17 @@
   i32.const 32
   i32.const 1
   call $~lib/string/String.UTF8.encode
-  local.set $0
+  local.set $2
   i32.const 32
   i32.const 0
   call $~lib/string/String.UTF8.byteLength
   local.set $1
-  local.get $0
+  local.get $2
+  local.tee $0
   i32.const 0
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $2
+  local.tee $3
   i32.const 400
   call $~lib/string/String.__eq
   i32.eqz
@@ -3438,7 +3436,7 @@
   local.get $1
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $3
+  local.tee $4
   i32.const 32
   call $~lib/string/String.__eq
   i32.eqz
@@ -3454,7 +3452,7 @@
   i32.const 4
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $4
+  local.tee $5
   i32.const 416
   call $~lib/string/String.__eq
   i32.eqz
@@ -3472,7 +3470,7 @@
   i32.const 2
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $5
+  local.tee $6
   i32.const 480
   call $~lib/string/String.__eq
   i32.eqz
@@ -3490,7 +3488,7 @@
   i32.const 4
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $6
+  local.tee $7
   i32.const 512
   call $~lib/string/String.__eq
   i32.eqz
@@ -3508,7 +3506,7 @@
   i32.const 0
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $7
+  local.tee $8
   i32.const 400
   call $~lib/string/String.__eq
   i32.eqz
@@ -3526,7 +3524,7 @@
   i32.const 100
   i32.const 1
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $8
+  local.tee $9
   i32.const 656
   call $~lib/string/String.__eq
   i32.eqz
@@ -3544,7 +3542,7 @@
   i32.const 100
   i32.const 1
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $9
+  local.tee $1
   i32.const 512
   call $~lib/string/String.__eq
   i32.eqz
@@ -3562,7 +3560,7 @@
   i32.const 100
   i32.const 1
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $1
+  local.tee $0
   i32.const 400
   call $~lib/string/String.__eq
   i32.eqz
@@ -3574,8 +3572,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
-  call $~lib/rt/pure/__release
   local.get $3
   call $~lib/rt/pure/__release
   local.get $4
@@ -3593,6 +3589,8 @@
   local.get $1
   call $~lib/rt/pure/__release
   local.get $0
+  call $~lib/rt/pure/__release
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $std/string-encoding/testLarge (; 52 ;) (param $0 i32)
@@ -3643,7 +3641,7 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $start:std/string-encoding (; 53 ;)
+ (func $start (; 53 ;)
   i32.const 28
   i32.load
   i32.const 12
@@ -3670,10 +3668,7 @@
   i32.const 13808
   call $std/string-encoding/testLarge
  )
- (func $start (; 54 ;)
-  call $start:std/string-encoding
- )
- (func $~lib/rt/pure/__visit (; 55 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 54 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 21196
   i32.lt_u
@@ -3776,7 +3771,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 56 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 55 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2

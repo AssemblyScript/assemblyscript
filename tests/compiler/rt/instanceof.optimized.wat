@@ -407,23 +407,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  else
-   i32.const 0
-  end
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 42
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $start (; 8 ;)
   global.get $~lib/started
