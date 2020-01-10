@@ -814,10 +814,13 @@ export class Compiler extends DiagnosticEmitter {
       if (typeNode) {
         let resolvedType = this.resolver.resolveType(typeNode, global.parent); // reports
         if (!resolvedType) return false;
-        assert(
-          resolvedType != Type.void &&
-          resolvedType != Type.auto
-        );
+        if (resolvedType == Type.void) {
+          this.error(
+            DiagnosticCode.Type_expected,
+            typeNode.range
+          );
+          return false;
+        }
         global.setType(resolvedType);
 
       // Otherwise infer type from initializer
@@ -1347,8 +1350,6 @@ export class Compiler extends DiagnosticEmitter {
               if (instance) this.compileFunction(instance);
             }
             break;
-          }
-          case ElementKind.PROPERTY: {
           }
         }
       }
