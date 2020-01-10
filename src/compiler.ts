@@ -6652,25 +6652,43 @@ export class Compiler extends DiagnosticEmitter {
   ): void {
     // Differs from `performAutoreleases` in that concluding this flow also
     // concludes all its parent flows, for example on a `return`.
-    var module = this.module;
     if (flow.is(FlowFlags.INLINE_CONTEXT)) {
       // Traverse to the top-most flow containing the inlined function's
       // locals as scoped locals and release these instead of all the locals.
+      let current = flow;
       let parent: Flow | null;
-      while (parent = flow.parent) flow = parent;
-      this.performAutoreleases(flow, stmts, /* finalize */ false);
-    } else {
-      for (let local of flow.parentFunction.localsByIndex) {
-        let localIndex = local.index;
-        if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
-          flow.unsetLocalFlag(localIndex, LocalFlags.ANY_RETAINED);
-          stmts.push(
-            this.makeRelease(
-              module.local_get(localIndex, local.type.toNativeType())
-            )
-          );
+      while (parent = current.parent) current = parent;
+      let scopedLocals = current.scopedLocals;
+      if (scopedLocals) {
+        for (let local of scopedLocals.values()) {
+          this.maybeFinishAutorelease(local, flow, stmts);
         }
       }
+    } else {
+      for (let local of flow.parentFunction.localsByIndex) {
+        this.maybeFinishAutorelease(local, flow, stmts);
+      }
+    }
+  }
+
+  /** Finishes a single autorelease of the specified local. */
+  private maybeFinishAutorelease(
+    /** Local to finish autoreleasing. */
+    local: Local,
+    /** Flow releasing its queued autoreleases. */
+    flow: Flow,
+    /** Array of statements to append the releases to. */
+    stmts: ExpressionRef[]
+  ): void {
+    var localIndex = local.index;
+    var module = this.module;
+    if (~localIndex && flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
+      flow.unsetLocalFlag(localIndex, LocalFlags.ANY_RETAINED);
+      stmts.push(
+        this.makeRelease(
+          module.local_get(localIndex, local.type.toNativeType())
+        )
+      );
     }
   }
 
