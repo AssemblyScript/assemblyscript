@@ -784,7 +784,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $2
+  local.tee $0
   i32.eqz
   if
    i32.const 1
@@ -805,21 +805,18 @@
     unreachable
    end
    i32.const 7744
-   local.set $2
-   i32.const 7744
+   local.tee $0
    i32.const 0
    i32.store
    i32.const 9312
    i32.const 0
    i32.store
-   i32.const 0
-   local.set $0
    loop $for-loop|0
-    local.get $0
+    local.get $1
     i32.const 23
     i32.lt_u
     if
-     local.get $0
+     local.get $1
      i32.const 2
      i32.shl
      i32.const 7744
@@ -827,16 +824,16 @@
      i32.const 0
      i32.store offset=4
      i32.const 0
-     local.set $1
+     local.set $2
      loop $for-loop|1
-      local.get $1
+      local.get $2
       i32.const 16
       i32.lt_u
       if
        local.get $1
-       local.get $0
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -844,17 +841,17 @@
        i32.add
        i32.const 0
        i32.store offset=96
-       local.get $1
+       local.get $2
        i32.const 1
        i32.add
-       local.set $1
+       local.set $2
        br $for-loop|1
       end
      end
-     local.get $0
+     local.get $1
      i32.const 1
      i32.add
-     local.set $0
+     local.set $1
      br $for-loop|0
     end
    end
@@ -867,7 +864,7 @@
    i32.const 7744
    global.set $~lib/rt/tlsf/ROOT
   end
-  local.get $2
+  local.get $0
  )
  (func $~lib/rt/tlsf/prepareSize (; 10 ;) (param $0 i32) (result i32)
   local.get $0
@@ -7400,10 +7397,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
-    local.get $5
     local.get $4
     i32.const 3
     i32.and
+    local.get $5
     i32.or
     i32.store
     local.get $1
@@ -12383,8 +12380,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -12394,8 +12391,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -12651,8 +12648,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -12662,8 +12659,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -12866,8 +12863,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -12877,8 +12874,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -13019,11 +13016,11 @@
   call $~lib/rt/pure/__release
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 (; 291 ;) (param $0 i64) (param $1 i32) (param $2 i32)
+  local.get $0
   i32.const 1744
   local.get $1
   call $~lib/array/Array<i32>#__get
   i64.extend_i32_s
-  local.get $0
   i64.ne
   if
    i32.const 0
@@ -13033,8 +13030,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -13044,8 +13041,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -13206,8 +13203,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -13217,8 +13214,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -13329,8 +13326,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -13340,8 +13337,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -33745,10 +33742,9 @@
   i32.const 0
   i32.const 2147483647
   call $~lib/typedarray/Int32Array#slice
-  local.set $0
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $0
+  local.tee $1
   i32.const -4
   i32.const -3
   i32.const -1
@@ -33775,15 +33771,15 @@
   i32.const 0
   i32.const 2147483647
   call $~lib/typedarray/Int32Array#slice
-  local.set $1
-  local.get $0
-  call $~lib/rt/pure/__release
+  local.set $0
   local.get $1
+  call $~lib/rt/pure/__release
+  local.get $0
   i32.const -4
   i32.const -3
   i32.const 2147483647
   call $~lib/typedarray/Int32Array#copyWithin
-  local.tee $0
+  local.tee $1
   i32.const 5
   i32.const 2
   i32.const 15
@@ -33801,7 +33797,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
   local.get $2
   call $~lib/rt/pure/__release
@@ -33849,7 +33845,7 @@
   call $~lib/rt/pure/__release
   local.get $24
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $1
   call $~lib/rt/pure/__release
   local.get $25
   call $~lib/rt/pure/__release

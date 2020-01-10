@@ -162,13 +162,14 @@
   i32.const 12
   call $~lib/rt/stub/__alloc
   local.tee $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    i32.const 0
    i32.const 12
    call $~lib/rt/stub/__alloc
+   local.set $0
   end
+  local.get $0
   global.set $constructor/ctorConditionallyAllocates
  )
  (func $~start (; 3 ;)

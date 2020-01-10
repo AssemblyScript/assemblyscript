@@ -662,15 +662,16 @@ exports.main = function main(argv, options, callback) {
       add("remove-unused-brs");
       add("remove-unused-names");
       add("optimize-instructions");
-      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
+        add("simplify-globals-optimizing"); // differs
       }
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
       } else {
         add("precompute");
       }
-      // this will be done later
+      // this will be done later (1)
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
       // }
@@ -691,15 +692,19 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         add("code-folding");
       }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("simplify-globals-optimizing");
+      }
       add("merge-blocks");
       add("remove-unused-brs");
       add("remove-unused-names");
       add("merge-blocks");
-      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
-        add("precompute-propagate");
-      } else {
-        add("precompute");
-      }
+      // make this later & move to (2)
+      // if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+      //   add("precompute-propagate");
+      // } else {
+      //   add("precompute");
+      // }
       add("optimize-instructions");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
@@ -720,6 +725,13 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("simplify-globals");
       }
+      // moved from (2)
+      // it works better after globals optimizations like simplify-globals, inlining-optimizing and etc
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("precompute-propagate");
+      } else {
+        add("precompute");
+      }
       // replace indirect calls with direct, reduce arity and
       // inline this calls if possible
       add("directize"); // differs
@@ -731,12 +743,8 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
-        add("vacuum");
-
         // rearrange / reduce switch cases again
         add("remove-unused-brs");
-        add("remove-unused-names");
-        add("merge-blocks");
         add("vacuum");
 
         // replace indirect calls with direct and inline if possible again.
@@ -744,16 +752,23 @@ exports.main = function main(argv, options, callback) {
         add("inlining-optimizing");
         // move some code after early return which potentially could reduce computations
         // do this after CFG cleanup (originally it was done before)
+        // moved from (1)
         add("code-pushing");
 
         // this quite expensive so do this only for highest opt level
+        add("simplify-globals-optimizing");
         if (optimizeLevel >= 3) {
           add("simplify-locals-nostructure");
-          add("reorder-locals");
           add("vacuum");
+
+          add("precompute-propagate");
+          add("simplify-locals-nostructure");
+          add("vacuum");
+
+          add("reorder-locals");
+        } else {
+          add("simplify-globals-optimizing");
         }
-        // finally optimize all remaining peepholes
-        add("simplify-globals-optimizing");
         add("optimize-instructions");
       }
       // remove unused elements of table and pack / reduce memory
@@ -761,10 +776,11 @@ exports.main = function main(argv, options, callback) {
       add("remove-unused-nonfunction-module-elements"); // differs
       add("memory-packing");
       add("remove-unused-module-elements"); // differs
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
-        add("generate-stack-ir");
-        add("optimize-stack-ir");
-      }
+      // It seems stack-ir unuseful for our needs.
+      // if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
+      //   add("generate-stack-ir");
+      //   add("optimize-stack-ir");
+      // }
     }
 
     // Append additional passes if requested and execute

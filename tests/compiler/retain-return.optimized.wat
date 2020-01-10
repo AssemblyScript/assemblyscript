@@ -594,7 +594,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $2
+  local.tee $0
   i32.eqz
   if
    i32.const 1
@@ -615,21 +615,18 @@
     unreachable
    end
    i32.const 336
-   local.set $2
-   i32.const 336
+   local.tee $0
    i32.const 0
    i32.store
    i32.const 1904
    i32.const 0
    i32.store
-   i32.const 0
-   local.set $0
    loop $for-loop|0
-    local.get $0
+    local.get $1
     i32.const 23
     i32.lt_u
     if
-     local.get $0
+     local.get $1
      i32.const 2
      i32.shl
      i32.const 336
@@ -637,16 +634,16 @@
      i32.const 0
      i32.store offset=4
      i32.const 0
-     local.set $1
+     local.set $2
      loop $for-loop|1
-      local.get $1
+      local.get $2
       i32.const 16
       i32.lt_u
       if
        local.get $1
-       local.get $0
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -654,17 +651,17 @@
        i32.add
        i32.const 0
        i32.store offset=96
-       local.get $1
+       local.get $2
        i32.const 1
        i32.add
-       local.set $1
+       local.set $2
        br $for-loop|1
       end
      end
-     local.get $0
+     local.get $1
      i32.const 1
      i32.add
-     local.set $0
+     local.set $1
      br $for-loop|0
     end
    end
@@ -677,7 +674,7 @@
    i32.const 336
    global.set $~lib/rt/tlsf/ROOT
   end
-  local.get $2
+  local.get $0
  )
  (func $~lib/rt/tlsf/prepareSize (; 5 ;) (param $0 i32) (result i32)
   local.get $0
@@ -1744,7 +1741,6 @@
  )
  (func $start:retain-return (; 27 ;)
   (local $0 i32)
-  (local $1 i32)
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
   call $retain-return/Ref#constructor
@@ -1797,7 +1793,7 @@
    local.get $0
    call $~lib/rt/pure/__release
   end
-  local.get $1
+  i32.const 0
   global.set $retain-return/ref
  )
  (func $~start (; 28 ;)
