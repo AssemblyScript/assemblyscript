@@ -78,6 +78,17 @@ assert(str.lastIndexOf(", I", -1) == -1);
 assert(str.lastIndexOf("i", 0) == -1);
 assert(str.lastIndexOf("hi", 0) == 0);
 
+assert("".localeCompare("") == 0);
+assert("a".localeCompare("") == 1);
+assert("".localeCompare("a") == -1);
+assert("null".localeCompare("null") == 0);
+assert("abc".localeCompare("abd") == -1);
+assert("abd".localeCompare("abc") == 1);
+assert("abcd".localeCompare("abc") == 1);
+assert("abc".localeCompare("abcd") == -1);
+assert("".localeCompare("   ") == -1);
+assert("\0".localeCompare("") == 1);
+
 assert("".trimStart() == "");
 assert("ab c".trimStart() == "ab c");
 assert(" \n\t\rabc \t\r ".trimStart() == "abc \t\r ");

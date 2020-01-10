@@ -108,8 +108,8 @@ import { idof } from "./builtins";
   @operator(">") private static __gt(left: String | null, right: String | null): bool {
     if (left === right || left === null || right === null) return false;
     var leftLength  = left.length;
+    if (!leftLength) return false;
     var rightLength = right.length;
-    if (!leftLength)  return false;
     if (!rightLength) return true;
     // @ts-ignore: string <-> String
     return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) > 0;
@@ -121,10 +121,10 @@ import { idof } from "./builtins";
 
   @operator("<") private static __lt(left: String, right: String): bool {
     if (left === right || left === null || right === null) return false;
-    var leftLength  = left.length;
     var rightLength = right.length;
     if (!rightLength) return false;
-    if (!leftLength)  return true;
+    var leftLength  = left.length;
+    if (!leftLength) return true;
     // @ts-ignore: string <-> String
     return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) < 0;
   }
@@ -161,6 +161,17 @@ import { idof } from "./builtins";
       if (!compareImpl(this, searchStart, search, 0, searchLen)) return <i32>searchStart;
     }
     return -1;
+  }
+
+  // TODO: implement full locale comparison with locales and Collator options
+  localeCompare(other: String): i32 {
+    if (other === this) return 0; // compare pointers
+    var len: isize = this.length;
+    var otherLen: isize = other.length;
+    if (otherLen != len) return select(1, -1, len > otherLen);
+    if (!otherLen) return 0; // "" == ""
+    // @ts-ignore: string <-> String
+    return compareImpl(this, 0, other, 0, otherLen);
   }
 
   startsWith(search: String, start: i32 = 0): bool {
