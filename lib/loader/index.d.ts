@@ -55,6 +55,8 @@ interface ASUtil {
   __retain(ptr: number): number;
   /** Releases a previously retained reference to a managed object, allowing the runtime to collect it once its reference count reaches zero. */
   __release(ptr: number): void;
+  /** Forcefully resets the heap to its initial offset, effectively clearing dynamic memory. Stub runtime only. */
+  __reset?(): void;
   /** Allocates an instance of the class represented by the specified id. */
   __alloc(size: number, id: number): number;
   /** Tests whether a managed object is an instance of the class represented by the specified base id. */
