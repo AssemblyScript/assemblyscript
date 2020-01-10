@@ -4368,6 +4368,8 @@ declare module "assemblyscript/src/compiler" {
         flow: Flow, 
         /** Array of statements to append the releases to. */
         stmts: ExpressionRef[]): void;
+        /** Finishes a single autorelease of the specified local. */
+        private maybeFinishAutorelease;
         /** Creates a direct call to the specified function. */
         makeCallDirect(instance: Function, operands: ExpressionRef[] | null, reportNode: Node, immediatelyDropped?: boolean, 
         /** Skip the usual autorelease and manage this at the callsite instead. */
