@@ -7425,7 +7425,11 @@ export class Compiler extends DiagnosticEmitter {
       flow,
       this.currentParent || actualFunction
     );
-    if (!target) return module.unreachable();
+    if (!target) {
+      // make a guess to avoid assertions in calling code
+      if (this.currentType == Type.void) this.currentType = Type.i32;
+      return module.unreachable();
+    }
 
     switch (target.kind) {
       case ElementKind.LOCAL: {
