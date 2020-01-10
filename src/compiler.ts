@@ -1272,7 +1272,7 @@ export class Compiler extends DiagnosticEmitter {
               )
             )
           );
-          this.makeFieldInitialization(<Class>classInstance, stmts);
+          this.makeFieldInitializationInConstructor(<Class>classInstance, stmts);
         }
         this.performAutoreleases(flow, stmts); // `this` is excluded anyway
         this.finishAutoreleases(flow, stmts);
@@ -5947,7 +5947,7 @@ export class Compiler extends DiagnosticEmitter {
       let stmts: ExpressionRef[] = [
         module.local_set(thisLocal.index, theCall)
       ];
-      this.makeFieldInitialization(<Class>classInstance, stmts);
+      this.makeFieldInitializationInConstructor(<Class>classInstance, stmts);
 
       // check that super had been called before accessing `this`
       if (flow.isAny(
@@ -7343,7 +7343,7 @@ export class Compiler extends DiagnosticEmitter {
                   )
                 )
               ];
-              this.makeFieldInitialization(<Class>classInstance, stmts);
+              this.makeFieldInitializationInConstructor(<Class>classInstance, stmts);
               stmts.push(
                 module.local_get(thisLocal.index, nativeSizeType)
               );
@@ -8138,7 +8138,7 @@ export class Compiler extends DiagnosticEmitter {
         )
       );
     }
-    this.makeFieldInitialization(classInstance, stmts);
+    this.makeFieldInitializationInConstructor(classInstance, stmts);
     var body = this.performAutoreleasesWithValue(flow, module.local_get(0, nativeSizeType), classInstance.type, stmts);
     flow.freeScopedLocals();
     this.currentFlow = previousFlow;
@@ -9318,13 +9318,15 @@ export class Compiler extends DiagnosticEmitter {
     ], options.nativeSizeType);
   }
 
-  /** Makes the initializers for a class's fields. */
-  makeFieldInitialization(
+  /** Makes the initializers for a class's fields within the constructor. */
+  makeFieldInitializationInConstructor(
+    /** Class being initialized. */
     classInstance: Class,
+    /** Statements to append to also being returned. Created if omitted. */
     stmts: ExpressionRef[] = []
   ): ExpressionRef[] {
     var members = classInstance.members;
-    if (!members) return [];
+    if (!members) return stmts;
 
     var module = this.module;
     var flow = this.currentFlow;
@@ -9340,21 +9342,17 @@ export class Compiler extends DiagnosticEmitter {
         member.parent != classInstance      // inherited field
       ) continue;
 
-      let field = <Field>member; assert(!field.isAny(CommonFlags.CONST));
+      let field = <Field>member;
+      assert(!field.isAny(CommonFlags.CONST));
       let fieldType = field.type;
       let nativeFieldType = fieldType.toNativeType();
       let fieldPrototype = field.prototype;
       let initializerNode = fieldPrototype.initializerNode;
       let parameterIndex = fieldPrototype.parameterIndex;
       let initExpr: ExpressionRef;
-      if (initializerNode) { // use initializer
-        initExpr = this.compileExpression(initializerNode, fieldType, // reports
-          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-        );
-        if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
-          initExpr = this.makeRetain(initExpr);
-        }
-      } else if (parameterIndex >= 0) { // initialized via parameter (here: a local)
+
+      // if declared as a constructor parameter, use its value
+      if (parameterIndex >= 0) {
         initExpr = module.local_get(
           isInline
             ? assert(flow.lookupLocal(field.name)).index
@@ -9362,9 +9360,21 @@ export class Compiler extends DiagnosticEmitter {
           nativeFieldType
         );
         if (fieldType.isManaged) initExpr = this.makeRetain(initExpr);
-      } else { // initialize with zero
+
+      // fall back to use initializer if present
+      } else if (initializerNode) {
+        initExpr = this.compileExpression(initializerNode, fieldType,
+          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
+        );
+        if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
+          initExpr = this.makeRetain(initExpr);
+        }
+
+      // otherwise initialize with zero
+      } else {
         initExpr = this.makeZero(fieldType);
       }
+
       stmts.push(
         module.store(fieldType.byteSize,
           module.local_get(thisLocalIndex, nativeSizeType),
@@ -9376,44 +9386,6 @@ export class Compiler extends DiagnosticEmitter {
     }
     return stmts;
   }
-
-  makeInstanceOfClass(
-    expr: ExpressionRef,
-    classInstance: Class
-  ): ExpressionRef {
-    var module = this.module;
-    var flow = this.currentFlow;
-    var idTemp = flow.getTempLocal(Type.i32);
-    var idExpr = module.load(4, false,
-      module.binary(BinaryOp.SubI32,
-        expr,
-        module.i32(this.program.runtimeHeaderSize)
-      ),
-      NativeType.I32
-    );
-    var label = "instanceof_" + classInstance.name + "|" + flow.pushBreakLabel();
-    var conditions: ExpressionRef[] = [];
-    conditions.push(
-      module.drop( // br_if returns the value too
-        module.br(label,
-          module.binary(BinaryOp.EqI32, // classId == class.id
-            module.local_tee(idTemp.index, idExpr),
-            module.i32(classInstance.id)
-          ),
-          module.i32(1) // ? true
-        )
-      )
-    );
-    // TODO: insert conditions for all possible subclasses (i.e. cat is also animal)
-    // TODO: simplify if there are none
-    conditions.push(
-      module.i32(0) // : false
-    );
-    flow.freeTempLocal(idTemp);
-    flow.popBreakLabel();
-    return module.block(label, conditions, NativeType.I32);
-  }
-
 }
 
 // helpers
