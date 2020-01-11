@@ -12,7 +12,7 @@
  (export "exported" (func $abi/exported))
  (export "exportedExported" (func $abi/exportedExported))
  (export "exportedInternal" (func $abi/exportedInternal))
- (start $start)
+ (start $~start)
  (func $abi/internal (; 1 ;) (result i32)
   i32.const 128
  )
@@ -198,7 +198,7 @@
   i32.const 24
   i32.shr_s
  )
- (func $start (; 6 ;)
+ (func $~start (; 6 ;)
   call $start:abi
  )
 )

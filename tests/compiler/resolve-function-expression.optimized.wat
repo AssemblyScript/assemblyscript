@@ -10,11 +10,12 @@
  (data (i32.const 16) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
  (data (i32.const 96) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
  (data (i32.const 128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:resolve-function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 40
@@ -167,7 +168,7 @@
  )
  (func $~lib/util/number/utoa_simple<u32> (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
-  loop $continue|0
+  loop $do-continue|0
    local.get $1
    i32.const 10
    i32.div_u
@@ -186,7 +187,7 @@
    i32.add
    i32.store16
    local.tee $1
-   br_if $continue|0
+   br_if $do-continue|0
   end
  )
  (func $~lib/util/number/itoa32 (; 8 ;) (param $0 i32) (result i32)
@@ -253,7 +254,7 @@
   i32.ge_u
   select
   if
-   loop $continue|0
+   loop $do-continue|0
     local.get $0
     i64.load
     local.get $2
@@ -274,20 +275,18 @@
      local.tee $1
      i32.const 4
      i32.ge_u
-     br_if $continue|0
+     br_if $do-continue|0
     end
    end
   end
-  loop $continue|1
-   block $break|1
-    local.get $1
-    local.tee $3
-    i32.const 1
-    i32.sub
-    local.set $1
-    local.get $3
-    i32.eqz
-    br_if $break|1
+  loop $while-continue|1
+   local.get $1
+   local.tee $3
+   i32.const 1
+   i32.sub
+   local.set $1
+   local.get $3
+   if
     local.get $0
     i32.load16_u
     local.tee $3
@@ -300,18 +299,16 @@
      local.get $4
      i32.sub
      return
-    else
-     local.get $0
-     i32.const 2
-     i32.add
-     local.set $0
-     local.get $2
-     i32.const 2
-     i32.add
-     local.set $2
-     br $continue|1
     end
-    unreachable
+    local.get $0
+    i32.const 2
+    i32.add
+    local.set $0
+    local.get $2
+    i32.const 2
+    i32.add
+    local.set $2
+    br $while-continue|1
    end
   end
   i32.const 0
@@ -348,7 +345,7 @@
  )
  (func $start:resolve-function-expression (; 12 ;)
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 2
   call $start:resolve-function-expression~anonymous|0
   i32.const 42
@@ -362,7 +359,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   call $start:resolve-function-expression~anonymous|1
   i32.const 42
@@ -380,7 +377,7 @@
   i32.const 160
   global.set $~lib/rt/stub/offset
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 0
   call $start:resolve-function-expression~anonymous|2
   call $~lib/util/number/itoa32
@@ -395,7 +392,7 @@
    unreachable
   end
  )
- (func $start (; 13 ;)
+ (func $~start (; 13 ;)
   call $start:resolve-function-expression
  )
 )

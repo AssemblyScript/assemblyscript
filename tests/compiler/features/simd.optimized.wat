@@ -10,7 +10,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -124,7 +124,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   (local $0 i32)
   i32.const 112
   global.set $~lib/rt/stub/startOffset

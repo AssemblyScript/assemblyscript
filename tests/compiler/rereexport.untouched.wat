@@ -11,7 +11,7 @@
  (export "renamed_a" (global $export/a))
  (export "renamed_b" (global $export/b))
  (export "renamed_renamed_b" (global $export/b))
- (start $start)
+ (start $~start)
  (func $export/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -35,7 +35,7 @@
  (func $start:rereexport (; 3 ;)
   call $start:reexport
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:rereexport
  )
 )

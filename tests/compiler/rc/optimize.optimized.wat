@@ -41,7 +41,7 @@
  (export "OptimizeARC.eliminates.balancedInsideLoop" (func $rc/optimize/eliminated_vii))
  (export "OptimizeARC.eliminates.balancedOutsideLoop" (func $rc/optimize/eliminated_vii))
  (export "OptimizeARC.eliminates.balancedInsideOutsideLoop" (func $rc/optimize/eliminated_vii))
- (export "OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch" (func $rc/optimize/eliminated_viii))
+ (export "OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch" (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch))
  (export "OptimizeARC.eliminates.replace" (func $rc/optimize/eliminated_vii))
  (export "OptimizeARC.eliminates.replaceAlreadyRetained" (func $rc/optimize/eliminated_rr))
  (export "OptimizeARC.keeps.partialRetains" (func $rc/optimize/OptimizeARC.keeps.partialRetains))
@@ -713,7 +713,7 @@
    i32.const 1936
    i32.const 0
    i32.store
-   loop $loop|0
+   loop $for-loop|0
     local.get $1
     i32.const 23
     i32.lt_u
@@ -727,7 +727,7 @@
      i32.store offset=4
      i32.const 0
      local.set $2
-     loop $loop|1
+     loop $for-loop|1
       local.get $2
       i32.const 16
       i32.lt_u
@@ -747,14 +747,14 @@
        i32.const 1
        i32.add
        local.set $2
-       br $loop|1
+       br $for-loop|1
       end
      end
      local.get $1
      i32.const 1
      i32.add
      local.set $1
-     br $loop|0
+     br $for-loop|0
     end
    end
    i32.const 368
@@ -1066,7 +1066,7 @@
   local.set $3
   global.get $~lib/rt/pure/CUR
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $0
    i32.lt_u
@@ -1125,14 +1125,14 @@
     i32.const 4
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
   global.set $~lib/rt/pure/CUR
   local.get $5
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    local.get $2
    i32.lt_u
@@ -1144,12 +1144,12 @@
     i32.const 4
     i32.add
     local.set $0
-    br $loop|1
+    br $for-loop|1
    end
   end
   local.get $5
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.lt_u
@@ -1168,7 +1168,7 @@
     i32.const 4
     i32.add
     local.set $0
-    br $loop|2
+    br $for-loop|2
    end
   end
   local.get $5
@@ -1451,7 +1451,7 @@
     i32.and
     i32.eq
     if
-     loop $continue|0
+     loop $while-continue|0
       local.get $0
       i32.const 7
       i32.and
@@ -1477,10 +1477,10 @@
        local.get $4
        i32.load8_u
        i32.store8
-       br $continue|0
+       br $while-continue|0
       end
      end
-     loop $continue|1
+     loop $while-continue|1
       local.get $3
       i32.const 8
       i32.ge_u
@@ -1501,11 +1501,11 @@
        i32.const 8
        i32.add
        local.set $1
-       br $continue|1
+       br $while-continue|1
       end
      end
     end
-    loop $continue|2
+    loop $while-continue|2
      local.get $3
      if
       local.get $0
@@ -1526,7 +1526,7 @@
       i32.const 1
       i32.sub
       local.set $3
-      br $continue|2
+      br $while-continue|2
      end
     end
    else
@@ -1538,7 +1538,7 @@
     i32.and
     i32.eq
     if
-     loop $continue|3
+     loop $while-continue|3
       local.get $0
       local.get $3
       i32.add
@@ -1559,10 +1559,10 @@
        i32.add
        i32.load8_u
        i32.store8
-       br $continue|3
+       br $while-continue|3
       end
      end
-     loop $continue|4
+     loop $while-continue|4
       local.get $3
       i32.const 8
       i32.ge_u
@@ -1578,11 +1578,11 @@
        i32.add
        i64.load
        i64.store
-       br $continue|4
+       br $while-continue|4
       end
      end
     end
-    loop $continue|5
+    loop $while-continue|5
      local.get $3
      if
       local.get $3
@@ -1596,7 +1596,7 @@
       i32.add
       i32.load8_u
       i32.store8
-      br $continue|5
+      br $while-continue|5
      end
     end
    end
@@ -1797,7 +1797,19 @@
  (func $rc/optimize/eliminated_rr (; 35 ;) (param $0 i32) (result i32)
   call $rc/optimize/getRef
  )
- (func $rc/optimize/OptimizeARC.keeps.partialRetains (; 36 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch (; 36 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+  loop $while-continue|0
+   local.get $1
+   if
+    local.get $2
+    if
+     return
+    end
+    br $while-continue|0
+   end
+  end
+ )
+ (func $rc/optimize/OptimizeARC.keeps.partialRetains (; 37 ;) (param $0 i32) (param $1 i32)
   local.get $1
   if (result i32)
    local.get $0
@@ -1807,7 +1819,7 @@
   end
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.keeps.reachesReturn (; 37 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $rc/optimize/OptimizeARC.keeps.reachesReturn (; 38 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -1820,16 +1832,16 @@
   call $~lib/rt/pure/__release
   i32.const 0
  )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (; 38 ;) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (; 39 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
  )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (; 39 ;) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (; 40 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/__visit (; 40 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 41 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 356
   i32.lt_u
@@ -1932,7 +1944,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 41 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 42 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2

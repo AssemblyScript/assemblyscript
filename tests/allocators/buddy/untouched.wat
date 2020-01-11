@@ -80,39 +80,39 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  block $break|0
-   loop $continue|0
-    local.get $2
-    if (result i32)
-     local.get $1
-     i32.const 3
-     i32.and
-    else
-     i32.const 0
-    end
-    i32.eqz
-    br_if $break|0
+  (local $6 i32)
+  loop $while-continue|0
+   local.get $2
+   if (result i32)
+    local.get $1
+    i32.const 3
+    i32.and
+   else
+    i32.const 0
+   end
+   local.set $5
+   local.get $5
+   if
     local.get $0
-    local.tee $5
+    local.tee $6
     i32.const 1
     i32.add
     local.set $0
-    local.get $5
+    local.get $6
     local.get $1
-    local.tee $5
+    local.tee $6
     i32.const 1
     i32.add
     local.set $1
-    local.get $5
+    local.get $6
     i32.load8_u
     i32.store8
     local.get $2
     i32.const 1
     i32.sub
     local.set $2
-    br $continue|0
+    br $while-continue|0
    end
-   unreachable
   end
   local.get $0
   i32.const 3
@@ -120,13 +120,13 @@
   i32.const 0
   i32.eq
   if
-   block $break|1
-    loop $continue|1
-     local.get $2
-     i32.const 16
-     i32.ge_u
-     i32.eqz
-     br_if $break|1
+   loop $while-continue|1
+    local.get $2
+    i32.const 16
+    i32.ge_u
+    local.set $5
+    local.get $5
+    if
      local.get $0
      local.get $1
      i32.load
@@ -167,9 +167,8 @@
      i32.const 16
      i32.sub
      local.set $2
-     br $continue|1
+     br $while-continue|1
     end
-    unreachable
    end
    local.get $2
    i32.const 8
@@ -326,13 +325,13 @@
       i32.const 3
       i32.sub
       local.set $2
-      block $break|3
-       loop $continue|3
-        local.get $2
-        i32.const 17
-        i32.ge_u
-        i32.eqz
-        br_if $break|3
+      loop $while-continue|3
+       local.get $2
+       i32.const 17
+       i32.ge_u
+       local.set $5
+       local.get $5
+       if
         local.get $1
         i32.const 1
         i32.add
@@ -407,9 +406,8 @@
         i32.const 16
         i32.sub
         local.set $2
-        br $continue|3
+        br $while-continue|3
        end
-       unreachable
       end
       br $break|2
      end
@@ -448,13 +446,13 @@
      i32.const 2
      i32.sub
      local.set $2
-     block $break|4
-      loop $continue|4
-       local.get $2
-       i32.const 18
-       i32.ge_u
-       i32.eqz
-       br_if $break|4
+     loop $while-continue|4
+      local.get $2
+      i32.const 18
+      i32.ge_u
+      local.set $5
+      local.get $5
+      if
        local.get $1
        i32.const 2
        i32.add
@@ -529,9 +527,8 @@
        i32.const 16
        i32.sub
        local.set $2
-       br $continue|4
+       br $while-continue|4
       end
-      unreachable
      end
      br $break|2
     end
@@ -556,13 +553,13 @@
     i32.const 1
     i32.sub
     local.set $2
-    block $break|5
-     loop $continue|5
-      local.get $2
-      i32.const 19
-      i32.ge_u
-      i32.eqz
-      br_if $break|5
+    loop $while-continue|5
+     local.get $2
+     i32.const 19
+     i32.ge_u
+     local.set $5
+     local.get $5
+     if
       local.get $1
       i32.const 3
       i32.add
@@ -637,9 +634,8 @@
       i32.const 16
       i32.sub
       local.set $2
-      br $continue|5
+      br $while-continue|5
      end
-     unreachable
     end
     br $break|2
    end
@@ -1109,6 +1105,7 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
   block $~lib/util/memory/memmove|inlined.0
    local.get $0
    local.set $5
@@ -1155,13 +1152,13 @@
     i32.and
     i32.eq
     if
-     block $break|0
-      loop $continue|0
-       local.get $5
-       i32.const 7
-       i32.and
-       i32.eqz
-       br_if $break|0
+     loop $while-continue|0
+      local.get $5
+      i32.const 7
+      i32.and
+      local.set $6
+      local.get $6
+      if
        local.get $3
        i32.eqz
        if
@@ -1172,30 +1169,29 @@
        i32.sub
        local.set $3
        local.get $5
-       local.tee $6
+       local.tee $7
        i32.const 1
        i32.add
        local.set $5
-       local.get $6
+       local.get $7
        local.get $4
-       local.tee $6
+       local.tee $7
        i32.const 1
        i32.add
        local.set $4
-       local.get $6
+       local.get $7
        i32.load8_u
        i32.store8
-       br $continue|0
+       br $while-continue|0
       end
-      unreachable
      end
-     block $break|1
-      loop $continue|1
-       local.get $3
-       i32.const 8
-       i32.ge_u
-       i32.eqz
-       br_if $break|1
+     loop $while-continue|1
+      local.get $3
+      i32.const 8
+      i32.ge_u
+      local.set $6
+      local.get $6
+      if
        local.get $5
        local.get $4
        i64.load
@@ -1212,37 +1208,35 @@
        i32.const 8
        i32.add
        local.set $4
-       br $continue|1
+       br $while-continue|1
       end
-      unreachable
      end
     end
-    block $break|2
-     loop $continue|2
-      local.get $3
-      i32.eqz
-      br_if $break|2
+    loop $while-continue|2
+     local.get $3
+     local.set $6
+     local.get $6
+     if
       local.get $5
-      local.tee $6
+      local.tee $7
       i32.const 1
       i32.add
       local.set $5
-      local.get $6
+      local.get $7
       local.get $4
-      local.tee $6
+      local.tee $7
       i32.const 1
       i32.add
       local.set $4
-      local.get $6
+      local.get $7
       i32.load8_u
       i32.store8
       local.get $3
       i32.const 1
       i32.sub
       local.set $3
-      br $continue|2
+      br $while-continue|2
      end
-     unreachable
     end
    else
     local.get $4
@@ -1253,15 +1247,15 @@
     i32.and
     i32.eq
     if
-     block $break|3
-      loop $continue|3
-       local.get $5
-       local.get $3
-       i32.add
-       i32.const 7
-       i32.and
-       i32.eqz
-       br_if $break|3
+     loop $while-continue|3
+      local.get $5
+      local.get $3
+      i32.add
+      i32.const 7
+      i32.and
+      local.set $6
+      local.get $6
+      if
        local.get $3
        i32.eqz
        if
@@ -1278,17 +1272,16 @@
        i32.add
        i32.load8_u
        i32.store8
-       br $continue|3
+       br $while-continue|3
       end
-      unreachable
      end
-     block $break|4
-      loop $continue|4
-       local.get $3
-       i32.const 8
-       i32.ge_u
-       i32.eqz
-       br_if $break|4
+     loop $while-continue|4
+      local.get $3
+      i32.const 8
+      i32.ge_u
+      local.set $6
+      local.get $6
+      if
        local.get $3
        i32.const 8
        i32.sub
@@ -1301,16 +1294,15 @@
        i32.add
        i64.load
        i64.store
-       br $continue|4
+       br $while-continue|4
       end
-      unreachable
      end
     end
-    block $break|5
-     loop $continue|5
-      local.get $3
-      i32.eqz
-      br_if $break|5
+    loop $while-continue|5
+     local.get $3
+     local.set $6
+     local.get $6
+     if
       local.get $5
       local.get $3
       i32.const 1
@@ -1322,9 +1314,8 @@
       i32.add
       i32.load8_u
       i32.store8
-      br $continue|5
+      br $while-continue|5
      end
-     unreachable
     end
    end
   end
@@ -1332,19 +1323,20 @@
  (func $~lib/memory/memory.repeat (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   i32.const 0
   local.set $4
   local.get $2
   local.get $3
   i32.mul
   local.set $5
-  block $break|0
-   loop $continue|0
-    local.get $4
-    local.get $5
-    i32.lt_u
-    i32.eqz
-    br_if $break|0
+  loop $while-continue|0
+   local.get $4
+   local.get $5
+   i32.lt_u
+   local.set $6
+   local.get $6
+   if
     local.get $0
     local.get $4
     i32.add
@@ -1355,9 +1347,8 @@
     local.get $2
     i32.add
     local.set $4
-    br $continue|0
+    br $while-continue|0
    end
-   unreachable
   end
  )
  (func $~lib/memory/memory.compare (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -1366,6 +1357,9 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   block $~lib/util/memory/memcmp|inlined.0 (result i32)
    local.get $0
    local.set $5
@@ -1388,13 +1382,13 @@
    i32.and
    i32.eq
    if
-    block $break|0
-     loop $continue|0
-      local.get $5
-      i32.const 7
-      i32.and
-      i32.eqz
-      br_if $break|0
+    loop $while-continue|0
+     local.get $5
+     i32.const 7
+     i32.and
+     local.set $6
+     local.get $6
+     if
       local.get $3
       i32.eqz
       if
@@ -1403,16 +1397,16 @@
       end
       local.get $5
       i32.load8_u
-      local.set $6
+      local.set $7
       local.get $4
       i32.load8_u
-      local.set $7
-      local.get $6
+      local.set $8
       local.get $7
+      local.get $8
       i32.ne
       if
-       local.get $6
        local.get $7
+       local.get $8
        i32.sub
        br $~lib/util/memory/memcmp|inlined.0
       end
@@ -1428,64 +1422,64 @@
       i32.const 1
       i32.add
       local.set $4
-      br $continue|0
+      br $while-continue|0
      end
-     unreachable
     end
-    block $break|1
-     loop $continue|1
+    block $while-break|1
+     loop $while-continue|1
       local.get $3
       i32.const 8
       i32.ge_u
-      i32.eqz
-      br_if $break|1
-      local.get $5
-      i64.load
-      local.get $4
-      i64.load
-      i64.ne
+      local.set $6
+      local.get $6
       if
-       br $break|1
+       local.get $5
+       i64.load
+       local.get $4
+       i64.load
+       i64.ne
+       if
+        br $while-break|1
+       end
+       local.get $5
+       i32.const 8
+       i32.add
+       local.set $5
+       local.get $4
+       i32.const 8
+       i32.add
+       local.set $4
+       local.get $3
+       i32.const 8
+       i32.sub
+       local.set $3
+       br $while-continue|1
       end
-      local.get $5
-      i32.const 8
-      i32.add
-      local.set $5
-      local.get $4
-      i32.const 8
-      i32.add
-      local.set $4
-      local.get $3
-      i32.const 8
-      i32.sub
-      local.set $3
-      br $continue|1
      end
-     unreachable
     end
    end
-   block $break|2
-    loop $continue|2
-     local.get $3
-     local.tee $7
-     i32.const 1
-     i32.sub
-     local.set $3
-     local.get $7
-     i32.eqz
-     br_if $break|2
+   loop $while-continue|2
+    local.get $3
+    local.tee $6
+    i32.const 1
+    i32.sub
+    local.set $3
+    local.get $6
+    local.set $6
+    local.get $6
+    if
      local.get $5
      i32.load8_u
-     local.set $7
+     local.set $9
      local.get $4
      i32.load8_u
-     local.set $6
-     local.get $7
-     local.get $6
+     local.set $10
+     local.get $9
+     local.get $10
      i32.ne
      if
-      local.get $7
-      local.get $6
+      local.get $9
+      local.get $10
       i32.sub
       br $~lib/util/memory/memcmp|inlined.0
      end
@@ -1497,9 +1491,8 @@
      i32.const 1
      i32.add
      local.set $4
-     br $continue|2
+     br $while-continue|2
     end
-    unreachable
    end
    i32.const 0
   end
@@ -1600,19 +1593,20 @@
  (func $assembly/buddy/bucket_for_request (; 13 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   global.get $assembly/buddy/BUCKET_COUNT
   i32.const 1
   i32.sub
   local.set $1
   global.get $assembly/buddy/MIN_ALLOC
   local.set $2
-  block $break|0
-   loop $continue|0
-    local.get $2
-    local.get $0
-    i32.lt_u
-    i32.eqz
-    br_if $break|0
+  loop $while-continue|0
+   local.get $2
+   local.get $0
+   i32.lt_u
+   local.set $3
+   local.get $3
+   if
     local.get $1
     i32.const 1
     i32.sub
@@ -1621,9 +1615,8 @@
     i32.const 2
     i32.mul
     local.set $2
-    br $continue|0
+    br $while-continue|0
    end
-   unreachable
   end
   local.get $1
  )
@@ -1756,18 +1749,19 @@
  (func $assembly/buddy/lower_bucket_limit (; 21 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  block $break|0
-   loop $continue|0
-    local.get $0
-    global.get $assembly/buddy/bucket_limit
-    i32.lt_u
-    i32.eqz
-    br_if $break|0
+  (local $3 i32)
+  loop $while-continue|0
+   local.get $0
+   global.get $assembly/buddy/bucket_limit
+   i32.lt_u
+   local.set $1
+   local.get $1
+   if
     global.get $assembly/buddy/base_ptr
     global.get $assembly/buddy/bucket_limit
     call $assembly/buddy/node_for_ptr
-    local.set $1
-    local.get $1
+    local.set $2
+    local.get $2
     call $assembly/buddy/parent_is_split
     i32.eqz
     if
@@ -1784,15 +1778,15 @@
      call $assembly/buddy/buckets$get
      global.get $assembly/buddy/base_ptr
      call $assembly/buddy/list_push
-     br $continue|0
+     br $while-continue|0
     end
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
     global.get $assembly/buddy/bucket_limit
     call $assembly/buddy/ptr_for_node
-    local.set $2
-    local.get $2
+    local.set $3
+    local.get $3
     i32.const 8
     i32.add
     call $assembly/buddy/update_max_ptr
@@ -1803,7 +1797,7 @@
     end
     global.get $assembly/buddy/bucket_limit
     call $assembly/buddy/buckets$get
-    local.get $2
+    local.get $3
     call $assembly/buddy/list_push
     global.get $assembly/buddy/bucket_limit
     i32.const 1
@@ -1812,22 +1806,21 @@
     global.get $assembly/buddy/bucket_limit
     call $assembly/buddy/buckets$get
     call $assembly/buddy/list_init
-    local.get $1
+    local.get $2
     i32.const 1
     i32.sub
     i32.const 2
     i32.div_u
-    local.set $1
-    local.get $1
+    local.set $2
+    local.get $2
     i32.const 0
     i32.ne
     if
-     local.get $1
+     local.get $2
      call $assembly/buddy/flip_parent_is_split
     end
-    br $continue|0
+    br $while-continue|0
    end
-   unreachable
   end
   i32.const 1
  )
@@ -1854,6 +1847,8 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
   local.get $0
   i32.const 1073741816
   i32.gt_u
@@ -1908,15 +1903,15 @@
   local.set $2
   local.get $2
   local.set $1
-  block $break|0
-   loop $continue|0
-    local.get $2
-    i32.const 1
-    i32.add
-    i32.const 0
-    i32.ne
-    i32.eqz
-    br_if $break|0
+  loop $while-continue|0
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.const 0
+   i32.ne
+   local.set $3
+   local.get $3
+   if
     local.get $2
     call $assembly/buddy/lower_bucket_limit
     i32.eqz
@@ -1927,8 +1922,8 @@
     local.get $2
     call $assembly/buddy/buckets$get
     call $assembly/buddy/list_pop
-    local.set $6
-    local.get $6
+    local.set $7
+    local.get $7
     i32.eqz
     if
      local.get $2
@@ -1946,7 +1941,7 @@
       i32.const 1
       i32.sub
       local.set $2
-      br $continue|0
+      br $while-continue|0
      end
      local.get $2
      i32.const 1
@@ -1960,97 +1955,96 @@
      local.get $2
      call $assembly/buddy/buckets$get
      call $assembly/buddy/list_pop
-     local.set $6
+     local.set $7
     end
     i32.const 1
     global.get $assembly/buddy/MAX_ALLOC_LOG2
     local.get $2
     i32.sub
     i32.shl
-    local.set $3
+    local.set $4
     local.get $2
     local.get $1
     i32.lt_u
     if (result i32)
-     local.get $3
+     local.get $4
      i32.const 2
      i32.div_u
      global.get $assembly/buddy/List.SIZE
      i32.add
     else
-     local.get $3
+     local.get $4
     end
-    local.set $4
-    local.get $6
-    local.get $4
+    local.set $5
+    local.get $7
+    local.get $5
     i32.add
     call $assembly/buddy/update_max_ptr
     i32.eqz
     if
      local.get $2
      call $assembly/buddy/buckets$get
-     local.get $6
+     local.get $7
      call $assembly/buddy/list_push
      i32.const 0
      return
     end
-    local.get $6
+    local.get $7
     local.get $2
     call $assembly/buddy/node_for_ptr
-    local.set $5
-    local.get $5
+    local.set $6
+    local.get $6
     i32.const 0
     i32.ne
     if
-     local.get $5
+     local.get $6
      call $assembly/buddy/flip_parent_is_split
     end
-    block $break|1
-     loop $continue|1
-      local.get $2
-      local.get $1
-      i32.lt_u
-      i32.eqz
-      br_if $break|1
-      local.get $5
+    loop $while-continue|1
+     local.get $2
+     local.get $1
+     i32.lt_u
+     local.set $8
+     local.get $8
+     if
+      local.get $6
       i32.const 2
       i32.mul
       i32.const 1
       i32.add
-      local.set $5
+      local.set $6
       local.get $2
       i32.const 1
       i32.add
       local.set $2
-      local.get $5
+      local.get $6
       call $assembly/buddy/flip_parent_is_split
       local.get $2
       call $assembly/buddy/buckets$get
-      local.get $5
+      local.get $6
       i32.const 1
       i32.add
       local.get $2
       call $assembly/buddy/ptr_for_node
       call $assembly/buddy/list_push
-      br $continue|1
+      br $while-continue|1
      end
-     unreachable
     end
-    local.get $6
+    local.get $7
     local.get $0
     i32.store
-    local.get $6
+    local.get $7
     global.get $assembly/buddy/HEADER_SIZE
     i32.add
     return
    end
-   unreachable
   end
   i32.const 0
  )
  (func $assembly/buddy/__mem_free (; 24 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.eqz
   if
@@ -2070,50 +2064,51 @@
   local.get $1
   call $assembly/buddy/node_for_ptr
   local.set $2
-  block $break|0
-   loop $continue|0
+  block $while-break|0
+   loop $while-continue|0
     local.get $2
     i32.const 0
     i32.ne
-    i32.eqz
-    br_if $break|0
-    local.get $2
-    call $assembly/buddy/flip_parent_is_split
-    local.get $2
-    call $assembly/buddy/parent_is_split
-    if (result i32)
-     i32.const 1
-    else
-     local.get $1
-     global.get $assembly/buddy/bucket_limit
-     i32.eq
-    end
+    local.set $3
+    local.get $3
     if
-     br $break|0
+     local.get $2
+     call $assembly/buddy/flip_parent_is_split
+     local.get $2
+     call $assembly/buddy/parent_is_split
+     if (result i32)
+      i32.const 1
+     else
+      local.get $1
+      global.get $assembly/buddy/bucket_limit
+      i32.eq
+     end
+     if
+      br $while-break|0
+     end
+     local.get $2
+     i32.const 1
+     i32.sub
+     i32.const 1
+     i32.xor
+     i32.const 1
+     i32.add
+     local.get $1
+     call $assembly/buddy/ptr_for_node
+     call $assembly/buddy/list_remove
+     local.get $2
+     i32.const 1
+     i32.sub
+     i32.const 2
+     i32.div_u
+     local.set $2
+     local.get $1
+     i32.const 1
+     i32.sub
+     local.set $1
+     br $while-continue|0
     end
-    local.get $2
-    i32.const 1
-    i32.sub
-    i32.const 1
-    i32.xor
-    i32.const 1
-    i32.add
-    local.get $1
-    call $assembly/buddy/ptr_for_node
-    call $assembly/buddy/list_remove
-    local.get $2
-    i32.const 1
-    i32.sub
-    i32.const 2
-    i32.div_u
-    local.set $2
-    local.get $1
-    i32.const 1
-    i32.sub
-    local.set $1
-    br $continue|0
    end
-   unreachable
   end
   local.get $1
   call $assembly/buddy/buckets$get

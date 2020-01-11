@@ -29,7 +29,7 @@
  (global $~lib/builtins/f64.MIN_SAFE_INTEGER f64 (f64.const -9007199254740991))
  (global $~lib/builtins/f64.MAX_SAFE_INTEGER f64 (f64.const 9007199254740991))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:limits (; 0 ;)
   global.get $~lib/builtins/i8.MIN_VALUE
   drop
@@ -84,7 +84,7 @@
   global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   drop
  )
- (func $start (; 1 ;)
+ (func $~start (; 1 ;)
   call $start:limits
  )
 )

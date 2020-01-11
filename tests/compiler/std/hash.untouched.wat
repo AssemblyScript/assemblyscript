@@ -10,7 +10,7 @@
  (data (i32.const 96) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
  (table $0 1 funcref)
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
   local.get $0
  )
@@ -29,6 +29,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -38,20 +39,20 @@
   i32.const 0
   i32.ne
   if
-   block $break|0
-    i32.const 0
-    local.set $2
-    local.get $0
-    call $~lib/string/String#get:length
-    i32.const 1
-    i32.shl
-    local.set $3
-    loop $loop|0
-     local.get $2
-     local.get $3
-     i32.lt_u
-     i32.eqz
-     br_if $break|0
+   i32.const 0
+   local.set $2
+   local.get $0
+   call $~lib/string/String#get:length
+   i32.const 1
+   i32.shl
+   local.set $3
+   loop $for-loop|0
+    local.get $2
+    local.get $3
+    i32.lt_u
+    local.set $4
+    local.get $4
+    if
      local.get $1
      local.get $0
      local.get $2
@@ -65,9 +66,8 @@
      i32.const 1
      i32.add
      local.set $2
-     br $loop|0
+     br $for-loop|0
     end
-    unreachable
    end
   end
   local.get $1
@@ -401,7 +401,7 @@
   call $std/hash/check
   drop
  )
- (func $start (; 8 ;)
+ (func $~start (; 8 ;)
   call $start:std/hash
  )
 )

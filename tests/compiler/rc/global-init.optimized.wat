@@ -11,7 +11,7 @@
  (global $rc/global-init/a (mut i32) (i32.const 0))
  (global $rc/global-init/b (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:rc/global-init (; 0 ;)
   i32.const 32
   global.set $rc/global-init/a
@@ -22,7 +22,7 @@
   i32.const 0
   global.set $rc/global-init/b
  )
- (func $start (; 1 ;)
+ (func $~start (; 1 ;)
   call $start:rc/global-init
  )
 )

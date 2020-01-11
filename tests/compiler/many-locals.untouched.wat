@@ -9,7 +9,7 @@
  (export "memory" (memory $0))
  (export "testI32" (func $many-locals/testI32))
  (export "testI8" (func $many-locals/testI8))
- (start $start)
+ (start $~start)
  (func $many-locals/testI32 (; 1 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -816,7 +816,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:many-locals
  )
 )

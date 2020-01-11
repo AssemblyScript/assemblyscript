@@ -20,7 +20,7 @@
  (global $constructor/ctorConditionallyAllocates (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -319,7 +319,7 @@
   call $constructor/CtorConditionallyAllocates#constructor
   global.set $constructor/ctorConditionallyAllocates
  )
- (func $start (; 14 ;)
+ (func $~start (; 14 ;)
   call $start:constructor
  )
 )

@@ -15,13 +15,14 @@
  (table $0 2 funcref)
  (elem (i32.const 1) $start:infer-generic~anonymous|0)
  (global $infer-generic/arr i32 (i32.const 112))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
  (export "test2" (func $infer-generic/test2))
  (export "test3" (func $infer-generic/test3))
  (export "test4" (func $infer-generic/test4))
- (start $start)
+ (start $~start)
  (func $infer-generic/inferCompatible<f64> (; 1 ;) (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   local.get $1
@@ -59,28 +60,28 @@
   (local $7 i32)
   local.get $2
   local.set $3
-  block $break|0
-   i32.const 0
-   local.set $4
+  i32.const 0
+  local.set $4
+  local.get $0
+  i32.load offset=12
+  local.set $5
+  loop $for-loop|0
+   local.get $4
+   local.get $5
+   local.tee $6
    local.get $0
    i32.load offset=12
-   local.set $5
-   loop $loop|0
-    local.get $4
-    local.get $5
-    local.tee $6
-    local.get $0
-    i32.load offset=12
-    local.tee $7
-    local.get $6
-    local.get $7
-    i32.lt_s
-    select
-    i32.lt_s
-    i32.eqz
-    br_if $break|0
+   local.tee $7
+   local.get $6
+   local.get $7
+   i32.lt_s
+   select
+   i32.lt_s
+   local.set $6
+   local.get $6
+   if
     i32.const 4
-    global.set $~lib/argc
+    global.set $~argumentsLength
     local.get $3
     local.get $0
     i32.load offset=4
@@ -98,9 +99,8 @@
     i32.const 1
     i32.add
     local.set $4
-    br $loop|0
+    br $for-loop|0
    end
-   unreachable
   end
   local.get $3
  )
@@ -164,7 +164,7 @@
   local.get $0
   call $infer-generic/inferEncapsulatedFunctionMixed<f32,f64>
  )
- (func $start (; 15 ;)
+ (func $~start (; 15 ;)
   call $start:infer-generic
  )
 )

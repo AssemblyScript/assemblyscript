@@ -9,12 +9,13 @@
  (global $memset/dest (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 52))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $memset/memset (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i64)
+  (local $7 i32)
   local.get $0
   local.set $3
   local.get $2
@@ -234,13 +235,13 @@
   i64.shl
   i64.or
   local.set $6
-  block $break|0
-   loop $continue|0
-    local.get $2
-    i32.const 32
-    i32.ge_u
-    i32.eqz
-    br_if $break|0
+  loop $while-continue|0
+   local.get $2
+   i32.const 32
+   i32.ge_u
+   local.set $7
+   local.get $7
+   if
     local.get $0
     local.get $6
     i64.store
@@ -267,9 +268,8 @@
     i32.const 32
     i32.add
     local.set $0
-    br $continue|0
+    br $while-continue|0
    end
-   unreachable
   end
   local.get $3
  )
@@ -375,7 +375,7 @@
    unreachable
   end
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   call $start:memset
  )
 )

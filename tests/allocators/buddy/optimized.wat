@@ -65,7 +65,7 @@
     i32.and
     i32.eq
     if
-     loop $continue|0
+     loop $while-continue|0
       local.get $0
       i32.const 7
       i32.and
@@ -91,10 +91,10 @@
        local.get $4
        i32.load8_u
        i32.store8
-       br $continue|0
+       br $while-continue|0
       end
      end
-     loop $continue|1
+     loop $while-continue|1
       local.get $3
       i32.const 8
       i32.ge_u
@@ -115,11 +115,11 @@
        i32.const 8
        i32.add
        local.set $1
-       br $continue|1
+       br $while-continue|1
       end
      end
     end
-    loop $continue|2
+    loop $while-continue|2
      local.get $3
      if
       local.get $0
@@ -140,7 +140,7 @@
       i32.const 1
       i32.sub
       local.set $3
-      br $continue|2
+      br $while-continue|2
      end
     end
    else
@@ -152,7 +152,7 @@
     i32.and
     i32.eq
     if
-     loop $continue|3
+     loop $while-continue|3
       local.get $0
       local.get $3
       i32.add
@@ -173,10 +173,10 @@
        i32.add
        i32.load8_u
        i32.store8
-       br $continue|3
+       br $while-continue|3
       end
      end
-     loop $continue|4
+     loop $while-continue|4
       local.get $3
       i32.const 8
       i32.ge_u
@@ -192,11 +192,11 @@
        i32.add
        i64.load
        i64.store
-       br $continue|4
+       br $while-continue|4
       end
      end
     end
-    loop $continue|5
+    loop $while-continue|5
      local.get $3
      if
       local.get $3
@@ -210,7 +210,7 @@
       i32.add
       i32.load8_u
       i32.store8
-      br $continue|5
+      br $while-continue|5
      end
     end
    end
@@ -222,7 +222,7 @@
   local.get $3
   i32.mul
   local.set $3
-  loop $continue|0
+  loop $while-continue|0
    local.get $4
    local.get $3
    i32.lt_u
@@ -237,7 +237,7 @@
     local.get $4
     i32.add
     local.set $4
-    br $continue|0
+    br $while-continue|0
    end
   end
  )
@@ -259,7 +259,7 @@
    i32.and
    i32.eq
    if
-    loop $continue|0
+    loop $while-continue|0
      local.get $0
      i32.const 7
      i32.and
@@ -281,62 +281,58 @@
        local.get $4
        i32.sub
        br $~lib/util/memory/memcmp|inlined.0
-      else
-       local.get $2
-       i32.const 1
-       i32.sub
-       local.set $2
-       local.get $0
-       i32.const 1
-       i32.add
-       local.set $0
-       local.get $1
-       i32.const 1
-       i32.add
-       local.set $1
-       br $continue|0
       end
-      unreachable
-     end
-    end
-    loop $continue|1
-     block $break|1
       local.get $2
-      i32.const 8
-      i32.lt_u
-      br_if $break|1
+      i32.const 1
+      i32.sub
+      local.set $2
       local.get $0
-      i64.load
-      local.get $1
-      i64.load
-      i64.ne
-      br_if $break|1
-      local.get $0
-      i32.const 8
+      i32.const 1
       i32.add
       local.set $0
       local.get $1
-      i32.const 8
+      i32.const 1
       i32.add
       local.set $1
-      local.get $2
-      i32.const 8
-      i32.sub
-      local.set $2
-      br $continue|1
+      br $while-continue|0
+     end
+    end
+    loop $while-continue|1
+     local.get $2
+     i32.const 8
+     i32.ge_u
+     if
+      local.get $0
+      i64.load
+      local.get $1
+      i64.load
+      i64.eq
+      if
+       local.get $0
+       i32.const 8
+       i32.add
+       local.set $0
+       local.get $1
+       i32.const 8
+       i32.add
+       local.set $1
+       local.get $2
+       i32.const 8
+       i32.sub
+       local.set $2
+       br $while-continue|1
+      end
      end
     end
    end
-   loop $continue|2
-    block $break|2
-     local.get $2
-     local.tee $3
-     i32.const 1
-     i32.sub
-     local.set $2
-     local.get $3
-     i32.eqz
-     br_if $break|2
+   loop $while-continue|2
+    local.get $2
+    local.tee $3
+    i32.const 1
+    i32.sub
+    local.set $2
+    local.get $3
+    if
      local.get $0
      i32.load8_u
      local.tee $3
@@ -349,18 +345,16 @@
       local.get $4
       i32.sub
       br $~lib/util/memory/memcmp|inlined.0
-     else
-      local.get $0
-      i32.const 1
-      i32.add
-      local.set $0
-      local.get $1
-      i32.const 1
-      i32.add
-      local.set $1
-      br $continue|2
      end
-     unreachable
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     i32.const 1
+     i32.add
+     local.set $1
+     br $while-continue|2
     end
    end
    i32.const 0
@@ -434,7 +428,7 @@
   local.set $1
   i32.const 16
   local.set $2
-  loop $continue|0
+  loop $while-continue|0
    local.get $2
    local.get $0
    i32.lt_u
@@ -447,7 +441,7 @@
     i32.const 1
     i32.shl
     local.set $2
-    br $continue|0
+    br $while-continue|0
    end
   end
   local.get $1
@@ -548,7 +542,7 @@
  (func $assembly/buddy/lower_bucket_limit (; 17 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  loop $continue|0
+  loop $while-continue|0
    local.get $0
    global.get $assembly/buddy/bucket_limit
    i32.lt_u
@@ -573,7 +567,7 @@
      call $assembly/buddy/buckets$get
      global.get $assembly/buddy/base_ptr
      call $assembly/buddy/list_push
-     br $continue|0
+     br $while-continue|0
     end
     local.get $1
     i32.const 1
@@ -610,7 +604,7 @@
      local.get $1
      call $assembly/buddy/flip_parent_is_split
     end
-    br $continue|0
+    br $while-continue|0
    end
   end
   i32.const 1
@@ -678,7 +672,7 @@
   call $assembly/buddy/bucket_for_request
   local.tee $1
   local.set $4
-  loop $continue|0
+  loop $while-continue|0
    local.get $1
    i32.const -1
    i32.ne
@@ -708,7 +702,7 @@
       i32.const 1
       i32.sub
       local.set $1
-      br $continue|0
+      br $while-continue|0
      end
      local.get $1
      i32.const 1
@@ -762,7 +756,7 @@
      local.get $2
      call $assembly/buddy/flip_parent_is_split
     end
-    loop $continue|1
+    loop $while-continue|1
      local.get $1
      local.get $4
      i32.lt_u
@@ -785,7 +779,7 @@
       local.get $1
       call $assembly/buddy/ptr_for_node
       call $assembly/buddy/list_push
-      br $continue|1
+      br $while-continue|1
      end
     end
     local.get $3
@@ -819,43 +813,43 @@
   local.get $0
   call $assembly/buddy/node_for_ptr
   local.set $1
-  loop $continue|0
-   block $break|0
-    local.get $1
-    i32.eqz
-    br_if $break|0
-    local.get $1
-    call $assembly/buddy/flip_parent_is_split
-    local.get $1
-    call $assembly/buddy/parent_is_split
-    if (result i32)
+  loop $while-continue|0
+   local.get $1
+   if
+    block $while-break|0
+     local.get $1
+     call $assembly/buddy/flip_parent_is_split
+     local.get $1
+     call $assembly/buddy/parent_is_split
+     if (result i32)
+      i32.const 1
+     else
+      local.get $0
+      global.get $assembly/buddy/bucket_limit
+      i32.eq
+     end
+     br_if $while-break|0
+     local.get $1
      i32.const 1
-    else
+     i32.sub
+     local.tee $1
+     i32.const 1
+     i32.xor
+     i32.const 1
+     i32.add
      local.get $0
-     global.get $assembly/buddy/bucket_limit
-     i32.eq
+     call $assembly/buddy/ptr_for_node
+     call $assembly/buddy/list_remove
+     local.get $1
+     i32.const 2
+     i32.div_u
+     local.set $1
+     local.get $0
+     i32.const 1
+     i32.sub
+     local.set $0
+     br $while-continue|0
     end
-    br_if $break|0
-    local.get $1
-    i32.const 1
-    i32.sub
-    local.tee $1
-    i32.const 1
-    i32.xor
-    i32.const 1
-    i32.add
-    local.get $0
-    call $assembly/buddy/ptr_for_node
-    call $assembly/buddy/list_remove
-    local.get $1
-    i32.const 2
-    i32.div_u
-    local.set $1
-    local.get $0
-    i32.const 1
-    i32.sub
-    local.set $0
-    br $continue|0
    end
   end
   local.get $0

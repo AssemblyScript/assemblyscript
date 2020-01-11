@@ -12,7 +12,7 @@
  (global $std/new/aClass (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -166,7 +166,7 @@
   call $std/new/AClass#constructor
   global.set $std/new/aClass
  )
- (func $start (; 5 ;)
+ (func $~start (; 5 ;)
   call $start:std/new
  )
 )

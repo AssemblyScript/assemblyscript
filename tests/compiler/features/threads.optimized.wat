@@ -2,7 +2,7 @@
  (type $none_=>_none (func))
  (memory $0 (shared 1 1))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $features/threads/testAtomic (; 0 ;)
   i32.const 0
   i32.atomic.load8_u
@@ -532,7 +532,7 @@
   i64.atomic.rmw.cmpxchg
   drop
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   call $features/threads/testAtomic
   call $features/threads/testAtomicAsm
  )

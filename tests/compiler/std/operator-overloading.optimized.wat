@@ -78,7 +78,7 @@
  (global $std/operator-overloading/aii2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2452,7 +2452,7 @@
    unreachable
   end
  )
- (func $start (; 12 ;)
+ (func $~start (; 12 ;)
   call $start:std/operator-overloading
  )
 )
