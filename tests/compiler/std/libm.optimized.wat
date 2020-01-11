@@ -3476,9 +3476,9 @@
     f64.const inf
     local.get $0
     f64.sqrt
-    local.get $0
     f64.abs
-    f64.const inf
+    local.get $0
+    f64.const -inf
     f64.eq
     select
     return
@@ -3509,8 +3509,7 @@
     f64.sqrt
     f64.div
     local.get $0
-    f64.abs
-    f64.const inf
+    f64.const -inf
     f64.eq
     select
     return
@@ -7836,9 +7835,9 @@
     f32.const inf
     local.get $0
     f32.sqrt
-    local.get $0
     f32.abs
-    f32.const inf
+    local.get $0
+    f32.const -inf
     f32.eq
     select
     return
@@ -7869,8 +7868,7 @@
     f32.sqrt
     f32.div
     local.get $0
-    f32.abs
-    f32.const inf
+    f32.const -inf
     f32.eq
     select
     return
