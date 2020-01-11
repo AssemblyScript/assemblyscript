@@ -2280,12 +2280,11 @@
      local.tee $3
      i32.const 128
      i32.lt_u
-     if
+     if (result i32)
+      local.get $1
       local.get $3
       i32.eqz
-      i32.const 0
-      local.get $1
-      select
+      i32.and
       br_if $while-break|0
       local.get $2
       i32.const 1
@@ -2294,11 +2293,10 @@
       local.get $3
       i32.const 2048
       i32.lt_u
-      if
+      if (result i32)
        local.get $2
        i32.const 2
        i32.add
-       local.set $2
       else
        local.get $0
        i32.const 2
@@ -2320,23 +2318,23 @@
         i32.const 56320
         i32.eq
         if
-         local.get $0
-         i32.const 4
-         i32.add
-         local.set $0
          local.get $2
          i32.const 4
          i32.add
          local.set $2
+         local.get $0
+         i32.const 4
+         i32.add
+         local.set $0
          br $while-continue|0
         end
        end
        local.get $2
        i32.const 3
        i32.add
-       local.set $2
       end
      end
+     local.set $2
      local.get $0
      i32.const 2
      i32.add
@@ -2559,12 +2557,11 @@
      local.tee $3
      i32.const 128
      i32.lt_u
-     if
+     if (result i32)
+      local.get $1
       local.get $3
       i32.eqz
-      i32.const 0
-      local.get $1
-      select
+      i32.and
       br_if $while-break|0
       local.get $2
       local.get $3
@@ -2576,7 +2573,7 @@
       local.get $3
       i32.const 2048
       i32.lt_u
-      if
+      if (result i32)
        local.get $2
        local.get $3
        i32.const 6
@@ -2594,7 +2591,6 @@
        local.get $2
        i32.const 2
        i32.add
-       local.set $2
       else
        local.get $0
        i32.const 2
@@ -2660,14 +2656,14 @@
          i32.const 128
          i32.or
          i32.store8 offset=3
-         local.get $0
-         i32.const 4
-         i32.add
-         local.set $0
          local.get $2
          i32.const 4
          i32.add
          local.set $2
+         local.get $0
+         i32.const 4
+         i32.add
+         local.set $0
          br $while-continue|0
         end
        end
@@ -2697,9 +2693,9 @@
        local.get $2
        i32.const 3
        i32.add
-       local.set $2
       end
      end
+     local.set $2
      local.get $0
      i32.const 2
      i32.add
@@ -3068,177 +3064,159 @@
   i32.const 1
   call $~lib/rt/tlsf/__alloc
   local.tee $6
-  local.set $3
+  local.set $1
   loop $while-continue|0
    local.get $0
-   local.get $5
+   local.get $4
    i32.lt_u
    if
     block $while-break|0
      local.get $0
-     local.tee $1
+     i32.load8_u
+     local.set $3
+     local.get $0
      i32.const 1
      i32.add
      local.set $0
-     local.get $1
-     i32.load8_u
-     local.tee $4
+     local.get $3
      i32.const 128
-     i32.lt_u
+     i32.and
      if
-      local.get $4
-      i32.eqz
-      i32.const 0
-      local.get $2
-      select
-      br_if $while-break|0
-      local.get $3
-      local.get $4
-      i32.store16
-     else
       local.get $0
       local.get $4
+      i32.eq
+      br_if $while-break|0
+      local.get $0
+      i32.load8_u
+      i32.const 63
+      i32.and
+      local.set $5
+      local.get $0
+      i32.const 1
+      i32.add
+      local.set $0
+      local.get $3
       i32.const 224
-      i32.lt_u
-      i32.const 0
-      local.get $4
-      i32.const 191
-      i32.gt_u
-      select
+      i32.and
+      i32.const 192
+      i32.eq
       if
-       local.get $5
-       i32.const 6
-       i32.shl
-       i32.or
-       i32.or
-       local.set $3
-      else
-       local.get $0
-       i32.sub
-       i32.const 1
-       i32.lt_u
-       br_if $while-break|0
-       local.get $0
-       local.tee $1
-       i32.const 1
-       i32.add
-       local.set $0
-       local.get $3
        local.get $1
-       i32.load8_u
-       i32.const 63
-       i32.and
-       local.get $4
+       local.get $5
+       local.get $3
        i32.const 31
        i32.and
        i32.const 6
        i32.shl
        i32.or
        i32.store16
-       local.get $3
-       i32.const 2
-       i32.add
-       local.set $3
       else
+       local.get $0
        local.get $4
-       i32.const 365
-       i32.lt_u
-       i32.const 0
-       local.get $4
-       i32.const 239
-       i32.gt_u
-       select
-       if (result i32)
-        local.get $5
-        local.get $0
-        i32.sub
-        i32.const 3
-        i32.lt_u
-        br_if $while-break|0
+       i32.eq
+       br_if $while-break|0
+       local.get $0
+       i32.load8_u
+       i32.const 63
+       i32.and
+       local.set $7
+       local.get $0
+       i32.const 1
+       i32.add
+       local.set $0
+       local.get $3
+       i32.const 240
+       i32.and
+       i32.const 224
+       i32.eq
+       if
+        local.get $7
         local.get $3
-        local.get $0
-        i32.load8_u offset=2
-        i32.const 63
-        i32.and
-        local.get $4
-        i32.const 7
-        i32.and
-        i32.const 18
-        i32.shl
-        local.get $0
-        i32.load8_u
-        i32.const 63
-        i32.and
-        i32.const 12
-        i32.shl
-        i32.or
-        local.get $0
-        i32.load8_u offset=1
-        i32.const 63
-        i32.and
-        i32.const 6
-        i32.shl
-        i32.or
-        i32.or
-        i32.const 65536
-        i32.sub
-        local.tee $1
-        i32.const 10
-        i32.shr_u
-        i32.const 55296
-        i32.or
-        i32.store16
-        local.get $3
-        local.get $1
-        i32.const 1023
-        i32.and
-        i32.const 56320
-        i32.or
-        i32.store16 offset=2
-        local.get $3
-        i32.const 4
-        i32.add
-        local.set $3
-        local.get $0
-        i32.const 3
-        i32.add
-       else
-        local.get $5
-        local.get $0
-        i32.sub
-        i32.const 2
-        i32.lt_u
-        br_if $while-break|0
-        local.get $3
-        local.get $0
-        i32.load8_u offset=1
-        i32.const 63
-        i32.and
-        local.get $4
         i32.const 15
         i32.and
         i32.const 12
         i32.shl
-        local.get $0
-        i32.load8_u
-        i32.const 63
-        i32.and
+        local.get $5
         i32.const 6
         i32.shl
         i32.or
         i32.or
-        i32.store16
+        local.set $3
+       else
+        local.get $0
+        local.get $4
+        i32.eq
+        br_if $while-break|0
+        local.get $0
+        i32.load8_u
+        i32.const 63
+        i32.and
         local.get $3
-        i32.const 2
-        i32.add
+        i32.const 7
+        i32.and
+        i32.const 18
+        i32.shl
+        local.get $5
+        i32.const 12
+        i32.shl
+        i32.or
+        local.get $7
+        i32.const 6
+        i32.shl
+        i32.or
+        i32.or
         local.set $3
         local.get $0
+        i32.const 1
+        i32.add
+        local.set $0
+       end
+       local.get $3
+       i32.const 65536
+       i32.lt_u
+       if
+        local.get $1
+        local.get $3
+        i32.store16
+       else
+        local.get $1
+        local.get $3
+        i32.const 65536
+        i32.sub
+        local.tee $3
+        i32.const 10
+        i32.shr_u
+        i32.const 55296
+        i32.or
+        local.get $3
+        i32.const 1023
+        i32.and
+        i32.const 56320
+        i32.or
+        i32.const 16
+        i32.shl
+        i32.or
+        i32.store
+        local.get $1
         i32.const 2
         i32.add
+        local.set $1
        end
-       local.set $0
       end
+     else
+      local.get $2
+      local.get $3
+      i32.eqz
+      i32.and
+      br_if $while-break|0
+      local.get $1
+      local.get $3
+      i32.store16
      end
+     local.get $1
+     i32.const 2
+     i32.add
+     local.set $1
      br $while-continue|0
     end
    end
@@ -3640,9 +3618,9 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $~start (; 53 ;)
-  i32.const 28
-  i32.load
+ (func $start:std/string-encoding (; 53 ;)
+  i32.const 32
+  call $~lib/string/String.UTF16.byteLength
   i32.const 12
   i32.ne
   if
@@ -3667,7 +3645,7 @@
   i32.const 13808
   call $std/string-encoding/testLarge
  )
- (func $start (; 54 ;)
+ (func $~start (; 54 ;)
   call $start:std/string-encoding
  )
  (func $~lib/rt/pure/__visit (; 55 ;) (param $0 i32) (param $1 i32)
