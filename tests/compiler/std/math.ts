@@ -2684,6 +2684,59 @@ assert(test_pow(NaN, -1.0, NaN, 0.0, 0));
 assert(test_pow(-2.0, 1.0, -2.0, 0.0, 0));
 assert(test_pow(-2.0, -1.0, -0.5, 0.0, 0));
 
+// Fast pathes
+assert(NativeMath.pow(+0.0,+0.0) == 1.0);
+assert(NativeMath.pow(-0.0,+0.0) == 1.0);
+assert(NativeMath.pow(-0.0,-0.0) == 1.0);
+assert(NativeMath.pow(+0.0,-0.0) == 1.0);
+assert(NativeMath.pow(-1.0, 0.0) == 1.0);
+assert(NativeMath.pow(+Infinity, 0.0) == 1.0);
+assert(NativeMath.pow(-Infinity, 0.0) == 1.0);
+assert(NativeMath.pow(NaN, 0.0) == 1.0);
+
+assert(NativeMath.pow(+0.0,+1.0) == +0.0);
+assert(NativeMath.pow(-0.0,+1.0) == -0.0);
+assert(NativeMath.pow(-1.0, 1.0) == -1.0);
+assert(NativeMath.pow(+Infinity, 1.0) == +Infinity);
+assert(NativeMath.pow(-Infinity, 1.0) == -Infinity);
+assert(isNaN(NativeMath.pow(NaN, 1.0)));
+
+assert(NativeMath.pow(+0.0,-1.0) == +Infinity);
+assert(NativeMath.pow(-0.0,-1.0) == -Infinity);
+assert(NativeMath.pow(-1.0,-1.0) == -1.0);
+assert(NativeMath.pow( 0.5,-1.0) == +2.0);
+assert(NativeMath.pow( 1.0,-1.0) == +1.0);
+assert(NativeMath.pow(+Infinity,-1.0) == +0.0);
+assert(NativeMath.pow(-Infinity,-1.0) == -0.0);
+assert(isNaN(NativeMath.pow(NaN,-1.0)));
+
+assert(NativeMath.pow(+0.0, 2.0) == +0.0);
+assert(NativeMath.pow(-0.0, 2.0) == +0.0);
+assert(NativeMath.pow(-1.0, 2.0) == +1.0);
+assert(NativeMath.pow( 0.5, 2.0) == +0.25);
+assert(NativeMath.pow( 1.0, 2.0) == +1.0);
+assert(NativeMath.pow(+Infinity, 2.0) == +Infinity);
+assert(NativeMath.pow(-Infinity, 2.0) == +Infinity);
+assert(isNaN(NativeMath.pow(NaN, 2.0)));
+
+assert(NativeMath.pow(+0.0, 0.5) == +0.0);
+assert(NativeMath.pow(-0.0, 0.5) == +0.0);
+assert(isNaN(NativeMath.pow(-1.0, 0.5)));
+assert(NativeMath.pow( 4.0, 0.5) == +2.0);
+assert(NativeMath.pow( 1.0, 0.5) == +1.0);
+assert(NativeMath.pow(+Infinity, 0.5) == +Infinity);
+assert(NativeMath.pow(-Infinity, 0.5) == +Infinity);
+assert(isNaN(NativeMath.pow(NaN, 0.5)));
+
+assert(NativeMath.pow(+0.0,-0.5) == +Infinity);
+assert(NativeMath.pow(-0.0,-0.5) == +Infinity);
+assert(isNaN(NativeMath.pow(-1.0,-0.5)));
+assert(NativeMath.pow( 4.0,-0.5) == +0.5);
+assert(NativeMath.pow( 1.0,-0.5) == +1.0);
+assert(NativeMath.pow(+Infinity,-0.5) == +0.0);
+assert(NativeMath.pow(-Infinity,-0.5) == +0.0);
+assert(isNaN(NativeMath.pow(NaN,-0.5)));
+
 // Mathf.pow ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_powf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
