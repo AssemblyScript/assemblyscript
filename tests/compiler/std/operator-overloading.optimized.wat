@@ -257,6 +257,81 @@
   (local $18 f64)
   (local $19 i32)
   (local $20 f64)
+  local.get $1
+  f64.abs
+  f64.const 2
+  f64.le
+  if
+   local.get $1
+   f64.const 2
+   f64.eq
+   if
+    local.get $0
+    local.get $0
+    f64.mul
+    return
+   end
+   local.get $1
+   f64.const 0.5
+   f64.eq
+   if
+    f64.const inf
+    local.get $0
+    f64.sqrt
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const -1
+   f64.eq
+   if
+    f64.const 1
+    local.get $0
+    f64.div
+    return
+   end
+   local.get $1
+   f64.const -0.5
+   f64.eq
+   if
+    local.get $0
+    f64.const 0
+    f64.eq
+    if
+     f64.const inf
+     return
+    end
+    f64.const 0
+    f64.const 1
+    local.get $0
+    f64.sqrt
+    f64.div
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const 1
+   f64.eq
+   if
+    local.get $0
+    return
+   end
+   local.get $1
+   f64.const 0
+   f64.eq
+   if
+    f64.const 1
+    return
+   end
+  end
   local.get $0
   i64.reinterpret_f64
   local.tee $15

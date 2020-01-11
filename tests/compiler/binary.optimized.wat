@@ -18,47 +18,7 @@
  (global $binary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/math/NativeMath.pow (; 0 ;) (param $0 f64) (result f64)
-  (local $1 i64)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  i64.reinterpret_f64
-  local.tee $1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  local.set $2
-  i32.const 1
-  i32.const 0
-  i32.const 1
-  i32.const 0
-  i32.const 1
-  local.get $1
-  i32.wrap_i64
-  i32.const 0
-  local.get $2
-  i32.const 2147483647
-  i32.and
-  local.tee $3
-  i32.const 2146435072
-  i32.eq
-  select
-  local.get $3
-  i32.const 2146435072
-  i32.gt_s
-  select
-  select
-  select
-  if
-   local.get $0
-   f64.const 1
-   f64.add
-   return
-  end
-  local.get $0
- )
- (func $~lib/math/NativeMathf.mod (; 1 ;) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 0 ;) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -202,213 +162,7 @@
   local.get $0
   f32.mul
  )
- (func $~lib/math/NativeMathf.pow (; 2 ;) (param $0 f32) (result f32)
-  (local $1 i32)
-  (local $2 f64)
-  (local $3 f64)
-  (local $4 i32)
-  (local $5 i64)
-  (local $6 i32)
-  block $~lib/util/math/powf_lut|inlined.0 (result f32)
-   local.get $0
-   i32.reinterpret_f32
-   local.tee $1
-   i32.const 8388608
-   i32.sub
-   i32.const 2130706432
-   i32.ge_u
-   if
-    local.get $1
-    i32.const 1
-    i32.shl
-    i32.const 1
-    i32.sub
-    i32.const -16777217
-    i32.ge_u
-    if
-     local.get $0
-     local.get $0
-     f32.mul
-     local.tee $0
-     f32.neg
-     local.get $0
-     i32.const 1
-     i32.const 0
-     local.get $1
-     i32.const 31
-     i32.shr_u
-     select
-     select
-     br $~lib/util/math/powf_lut|inlined.0
-    end
-    local.get $1
-    i32.const 31
-    i32.shr_u
-    if
-     i32.const 65536
-     local.set $4
-     local.get $1
-     i32.const 2147483647
-     i32.and
-     local.set $1
-    end
-    local.get $1
-    i32.const 8388608
-    i32.lt_u
-    if
-     local.get $0
-     f32.const 8388608
-     f32.mul
-     i32.reinterpret_f32
-     i32.const 2147483647
-     i32.and
-     i32.const 192937984
-     i32.sub
-     local.set $1
-    end
-   end
-   local.get $1
-   local.get $1
-   i32.const 1060306944
-   i32.sub
-   local.tee $1
-   i32.const -8388608
-   i32.and
-   local.tee $6
-   i32.sub
-   f32.reinterpret_i32
-   f64.promote_f32
-   i32.const 308
-   i32.load
-   local.get $1
-   i32.const 19
-   i32.shr_u
-   i32.const 15
-   i32.and
-   i32.const 4
-   i32.shl
-   i32.add
-   local.tee $1
-   f64.load
-   f64.mul
-   f64.const 1
-   f64.sub
-   local.tee $2
-   local.get $2
-   f64.mul
-   local.set $3
-   f64.const 1
-   f64.const 0.288457581109214
-   local.get $2
-   f64.mul
-   f64.const -0.36092606229713164
-   f64.add
-   local.get $3
-   local.get $3
-   f64.mul
-   f64.mul
-   f64.const 1.4426950408774342
-   local.get $2
-   f64.mul
-   local.get $1
-   f64.load offset=8
-   local.get $6
-   i32.const 23
-   i32.shr_s
-   f64.convert_i32_s
-   f64.add
-   f64.add
-   f64.const 0.480898481472577
-   local.get $2
-   f64.mul
-   f64.const -0.7213474675006291
-   f64.add
-   local.get $3
-   f64.mul
-   f64.add
-   f64.add
-   f64.mul
-   local.tee $2
-   i64.reinterpret_f64
-   i64.const 47
-   i64.shr_u
-   i64.const 65535
-   i64.and
-   i64.const 32959
-   i64.ge_u
-   if
-    f32.const -1584563250285286751870879e5
-    f32.const 1584563250285286751870879e5
-    local.get $4
-    select
-    f32.const 1584563250285286751870879e5
-    f32.mul
-    local.get $2
-    f64.const 127.99999995700433
-    f64.gt
-    br_if $~lib/util/math/powf_lut|inlined.0
-    drop
-    f32.const -2.524354896707238e-29
-    f32.const 2.524354896707238e-29
-    local.get $4
-    select
-    f32.const 2.524354896707238e-29
-    f32.mul
-    local.get $2
-    f64.const -150
-    f64.le
-    br_if $~lib/util/math/powf_lut|inlined.0
-    drop
-   end
-   local.get $2
-   f64.const 211106232532992
-   f64.add
-   local.tee $3
-   i64.reinterpret_f64
-   local.set $5
-   f64.const 0.6931471806916203
-   local.get $2
-   local.get $3
-   f64.const 211106232532992
-   f64.sub
-   f64.sub
-   local.tee $3
-   f64.mul
-   f64.const 1
-   f64.add
-   f64.const 0.05550361559341535
-   local.get $3
-   f64.mul
-   f64.const 0.2402284522445722
-   f64.add
-   local.get $3
-   local.get $3
-   f64.mul
-   f64.mul
-   f64.add
-   i32.const 612
-   i32.load
-   local.get $5
-   i32.wrap_i64
-   i32.const 31
-   i32.and
-   i32.const 3
-   i32.shl
-   i32.add
-   i64.load
-   local.get $5
-   local.get $4
-   i64.extend_i32_u
-   i64.add
-   i64.const 47
-   i64.shl
-   i64.add
-   f64.reinterpret_i64
-   f64.mul
-   f32.demote_f64
-  end
- )
- (func $~lib/math/NativeMath.mod (; 3 ;) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 1 ;) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -559,14 +313,10 @@
   local.get $0
   f64.mul
  )
- (func $start:binary (; 4 ;)
+ (func $start:binary (; 2 ;)
   global.get $binary/i
   i32.const 1
   i32.rem_s
-  drop
-  global.get $binary/i
-  f64.convert_i32_s
-  call $~lib/math/NativeMath.pow
   drop
   global.get $binary/i
   i32.const 1
@@ -606,7 +356,6 @@
   global.set $binary/i
   global.get $binary/i
   f64.convert_i32_s
-  call $~lib/math/NativeMath.pow
   i32.trunc_f64_s
   global.set $binary/i
   global.get $binary/i
@@ -674,10 +423,6 @@
   i64.rem_s
   drop
   global.get $binary/I
-  f64.convert_i64_s
-  call $~lib/math/NativeMath.pow
-  drop
-  global.get $binary/I
   i64.const 1
   i64.lt_s
   global.set $binary/b
@@ -715,7 +460,6 @@
   global.set $binary/I
   global.get $binary/I
   f64.convert_i64_s
-  call $~lib/math/NativeMath.pow
   i64.trunc_f64_s
   global.set $binary/I
   global.get $binary/I
@@ -782,9 +526,6 @@
   call $~lib/math/NativeMathf.mod
   drop
   global.get $binary/f
-  call $~lib/math/NativeMathf.pow
-  drop
-  global.get $binary/f
   f32.const 1
   f32.lt
   global.set $binary/b
@@ -820,9 +561,6 @@
   call $~lib/math/NativeMathf.mod
   global.set $binary/f
   global.get $binary/f
-  call $~lib/math/NativeMathf.pow
-  global.set $binary/f
-  global.get $binary/f
   f32.const 1
   f32.add
   global.set $binary/f
@@ -833,14 +571,8 @@
   global.get $binary/f
   call $~lib/math/NativeMathf.mod
   global.set $binary/f
-  global.get $binary/f
-  call $~lib/math/NativeMathf.pow
-  global.set $binary/f
   global.get $binary/F
   call $~lib/math/NativeMath.mod
-  drop
-  global.get $binary/F
-  call $~lib/math/NativeMath.pow
   drop
   global.get $binary/F
   f64.const 1
@@ -878,9 +610,6 @@
   call $~lib/math/NativeMath.mod
   global.set $binary/F
   global.get $binary/F
-  call $~lib/math/NativeMath.pow
-  global.set $binary/F
-  global.get $binary/F
   f64.const 1
   f64.add
   global.set $binary/F
@@ -891,11 +620,8 @@
   global.get $binary/F
   call $~lib/math/NativeMath.mod
   global.set $binary/F
-  global.get $binary/F
-  call $~lib/math/NativeMath.pow
-  global.set $binary/F
  )
- (func $start (; 5 ;)
+ (func $start (; 3 ;)
   call $start:binary
  )
 )

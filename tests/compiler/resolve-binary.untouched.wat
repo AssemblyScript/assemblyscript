@@ -717,6 +717,81 @@
   (local $42 i32)
   (local $43 i64)
   (local $44 i64)
+  local.get $1
+  f64.abs
+  f64.const 2
+  f64.le
+  if
+   local.get $1
+   f64.const 2
+   f64.eq
+   if
+    local.get $0
+    local.get $0
+    f64.mul
+    return
+   end
+   local.get $1
+   f64.const 0.5
+   f64.eq
+   if
+    f64.const inf
+    local.get $0
+    f64.sqrt
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const -1
+   f64.eq
+   if
+    f64.const 1
+    local.get $0
+    f64.div
+    return
+   end
+   local.get $1
+   f64.const -0.5
+   f64.eq
+   if
+    local.get $0
+    f64.const 0
+    f64.eq
+    if
+     f64.const inf
+     return
+    end
+    f64.const 0
+    f64.const 1
+    local.get $0
+    f64.sqrt
+    f64.div
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const 1
+   f64.eq
+   if
+    local.get $0
+    return
+   end
+   local.get $1
+   f64.const 0
+   f64.eq
+   if
+    f64.const 1
+    return
+   end
+  end
   block $~lib/util/math/pow_lut|inlined.0 (result f64)
    local.get $0
    local.set $3
