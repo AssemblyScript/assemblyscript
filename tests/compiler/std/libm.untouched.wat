@@ -4712,14 +4712,14 @@
    f64.const 0.5
    f64.eq
    if
-    f64.const inf
     local.get $0
     f64.sqrt
     f64.abs
+    f64.const inf
     local.get $0
     f64.const inf
     f64.neg
-    f64.eq
+    f64.ne
     select
     return
    end
@@ -4736,22 +4736,20 @@
    f64.const -0.5
    f64.eq
    if
-    local.get $0
-    f64.const 0
-    f64.eq
-    if
-     f64.const inf
-     return
-    end
-    f64.const 0
     f64.const 1
     local.get $0
     f64.sqrt
     f64.div
+    f64.const 0
     local.get $0
     f64.const inf
     f64.neg
-    f64.eq
+    f64.ne
+    select
+    f64.const inf
+    local.get $0
+    f64.const 0
+    f64.ne
     select
     return
    end
@@ -10211,14 +10209,14 @@
    f32.const 0.5
    f32.eq
    if
-    f32.const inf
     local.get $0
     f32.sqrt
     f32.abs
+    f32.const inf
     local.get $0
     f32.const inf
     f32.neg
-    f32.eq
+    f32.ne
     select
     return
    end
@@ -10235,22 +10233,20 @@
    f32.const -0.5
    f32.eq
    if
-    local.get $0
-    f32.const 0
-    f32.eq
-    if
-     f32.const inf
-     return
-    end
-    f32.const 0
     f32.const 1
     local.get $0
     f32.sqrt
     f32.div
+    f32.const 0
     local.get $0
     f32.const inf
     f32.neg
-    f32.eq
+    f32.ne
+    select
+    f32.const inf
+    local.get $0
+    f32.const 0
+    f32.ne
     select
     return
    end
