@@ -74,6 +74,81 @@
   (local $42 i32)
   (local $43 i64)
   (local $44 i64)
+  local.get $1
+  f64.abs
+  f64.const 2
+  f64.le
+  if
+   local.get $1
+   f64.const 2
+   f64.eq
+   if
+    local.get $0
+    local.get $0
+    f64.mul
+    return
+   end
+   local.get $1
+   f64.const 0.5
+   f64.eq
+   if
+    f64.const inf
+    local.get $0
+    f64.sqrt
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const -1
+   f64.eq
+   if
+    f64.const 1
+    local.get $0
+    f64.div
+    return
+   end
+   local.get $1
+   f64.const -0.5
+   f64.eq
+   if
+    local.get $0
+    f64.const 0
+    f64.eq
+    if
+     f64.const inf
+     return
+    end
+    f64.const 0
+    f64.const 1
+    local.get $0
+    f64.sqrt
+    f64.div
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const 1
+   f64.eq
+   if
+    local.get $0
+    return
+   end
+   local.get $1
+   f64.const 0
+   f64.eq
+   if
+    f64.const 1
+    return
+   end
+  end
   block $~lib/util/math/pow_lut|inlined.0 (result f64)
    local.get $0
    local.set $3
@@ -1218,6 +1293,81 @@
   (local $23 f64)
   (local $24 i64)
   (local $25 i64)
+  local.get $1
+  f32.abs
+  f32.const 2
+  f32.le
+  if
+   local.get $1
+   f32.const 2
+   f32.eq
+   if
+    local.get $0
+    local.get $0
+    f32.mul
+    return
+   end
+   local.get $1
+   f32.const 0.5
+   f32.eq
+   if
+    f32.const inf
+    local.get $0
+    f32.sqrt
+    local.get $0
+    f32.abs
+    f32.const inf
+    f32.eq
+    select
+    return
+   end
+   local.get $1
+   f32.const -1
+   f32.eq
+   if
+    f32.const 1
+    local.get $0
+    f32.div
+    return
+   end
+   local.get $1
+   f32.const -0.5
+   f32.eq
+   if
+    local.get $0
+    f32.const 0
+    f32.eq
+    if
+     f32.const inf
+     return
+    end
+    f32.const 0
+    f32.const 1
+    local.get $0
+    f32.sqrt
+    f32.div
+    local.get $0
+    f32.abs
+    f32.const inf
+    f32.eq
+    select
+    return
+   end
+   local.get $1
+   f32.const 1
+   f32.eq
+   if
+    local.get $0
+    return
+   end
+   local.get $1
+   f32.const 0
+   f32.eq
+   if
+    f32.const 1
+    return
+   end
+  end
   block $~lib/util/math/powf_lut|inlined.0 (result f32)
    local.get $0
    local.set $3
