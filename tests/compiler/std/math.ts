@@ -2684,7 +2684,7 @@ assert(test_pow(NaN, -1.0, NaN, 0.0, 0));
 assert(test_pow(-2.0, 1.0, -2.0, 0.0, 0));
 assert(test_pow(-2.0, -1.0, -0.5, 0.0, 0));
 
-// Fast pathes
+// Fast paths
 assert(NativeMath.pow(+0.0,+0.0) == 1.0);
 assert(NativeMath.pow(-0.0,+0.0) == 1.0);
 assert(NativeMath.pow(-0.0,-0.0) == 1.0);
