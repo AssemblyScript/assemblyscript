@@ -1183,7 +1183,7 @@ export namespace NativeMath {
     // TODO: remove this fast pathes after introduced own mid-end IR with "stdlib call simplify" transforms
     if (builtin_abs<f64>(y) <= 2) {
       if (y ==  2.0) return x * x;
-      if (y ==  0.5) return select<f64>(Infinity, builtin_sqrt<f64>(x), builtin_abs(x) == Infinity);
+      if (y ==  0.5) return select<f64>(Infinity, builtin_sqrt<f64>(x), builtin_abs<f64>(x) == Infinity);
       if (y == -1.0) return 1 / x;
       if (y == -0.5) {
         if (x == 0.0) return Infinity;
