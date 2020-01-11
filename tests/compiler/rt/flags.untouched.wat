@@ -14,7 +14,7 @@
  (global $rt/flags/KEY_ALIGN_REF i32 (i32.const 65536))
  (global $~lib/rt/__rtti_base i32 (i32.const 176))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/__typeinfo (; 1 ;) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/__rtti_base
@@ -1395,7 +1395,7 @@
   i32.const 16
   call $rt/flags/test<rt/flags/InnerCycleMapValue>
  )
- (func $start (; 62 ;)
+ (func $~start (; 62 ;)
   call $start:rt/flags
  )
 )

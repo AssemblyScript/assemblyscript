@@ -13,7 +13,7 @@
  (global $merge/enumNamespace.val i32 (i32.const 1))
  (global $merge/namespaceEnum.val i32 (i32.const 2))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $merge/namespaceType.test (; 0 ;)
   nop
  )
@@ -88,7 +88,7 @@
   call $merge/namespaceNamespace.test1
   call $merge/namespaceNamespace.test2
  )
- (func $start (; 17 ;)
+ (func $~start (; 17 ;)
   call $start:merge
  )
 )

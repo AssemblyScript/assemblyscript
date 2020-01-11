@@ -21,7 +21,7 @@
  (export "memory" (memory $0))
  (export "external" (func $features/reference-types/external))
  (export "internal" (func $features/reference-types/internal))
- (start $start)
+ (start $~start)
  (func $features/reference-types/someFunc (; 5 ;)
   nop
  )
@@ -156,7 +156,7 @@
   local.set $3
   local.get $3
  )
- (func $start (; 8 ;)
+ (func $~start (; 8 ;)
   call $start:features/reference-types
  )
 )

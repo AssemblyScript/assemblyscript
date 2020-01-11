@@ -6,7 +6,7 @@
  (memory $0 1)
  (data (i32.const 16) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s")
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $switch/doSwitch (; 1 ;) (param $0 i32) (result i32)
   block $case4|0
    block $case2|0
@@ -394,7 +394,7 @@
    unreachable
   end
  )
- (func $start (; 6 ;)
+ (func $~start (; 6 ;)
   call $start:switch
  )
 )

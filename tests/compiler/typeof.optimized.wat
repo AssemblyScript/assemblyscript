@@ -19,8 +19,8 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $typeof/c (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
- (export "_start" (func $start))
+ (global $~started (mut i32) (i32.const 0))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/string/String#get:length (; 1 ;) (param $0 i32) (result i32)
   local.get $0
@@ -47,7 +47,7 @@
   i32.ge_u
   select
   if
-   loop $continue|0
+   loop $do-continue|0
     local.get $0
     i64.load
     local.get $1
@@ -68,20 +68,18 @@
      local.tee $2
      i32.const 4
      i32.ge_u
-     br_if $continue|0
+     br_if $do-continue|0
     end
    end
   end
-  loop $continue|1
-   block $break|1
-    local.get $2
-    local.tee $3
-    i32.const 1
-    i32.sub
-    local.set $2
-    local.get $3
-    i32.eqz
-    br_if $break|1
+  loop $while-continue|1
+   local.get $2
+   local.tee $3
+   i32.const 1
+   i32.sub
+   local.set $2
+   local.get $3
+   if
     local.get $1
     i32.load16_u
     local.tee $3
@@ -94,18 +92,16 @@
      local.get $3
      i32.sub
      return
-    else
-     local.get $0
-     i32.const 2
-     i32.add
-     local.set $0
-     local.get $1
-     i32.const 2
-     i32.add
-     local.set $1
-     br $continue|1
     end
-    unreachable
+    local.get $0
+    i32.const 2
+    i32.add
+    local.set $0
+    local.get $1
+    i32.const 2
+    i32.add
+    local.set $1
+    br $while-continue|1
    end
   end
   i32.const 0
@@ -495,13 +491,13 @@
    unreachable
   end
  )
- (func $start (; 7 ;)
-  global.get $~lib/started
+ (func $~start (; 7 ;)
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:typeof
  )

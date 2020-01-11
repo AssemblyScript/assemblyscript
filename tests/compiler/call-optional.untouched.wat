@@ -7,10 +7,11 @@
  (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s\00")
  (table $0 2 funcref)
  (elem (i32.const 1) $call-optional/opt|trampoline)
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 1))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $call-optional/opt (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
@@ -23,7 +24,7 @@
    block $1of2
     block $0of2
      block $outOfRange
-      global.get $~lib/argc
+      global.get $~argumentsLength
       i32.const 1
       i32.sub
       br_table $0of2 $1of2 $2of2 $outOfRange
@@ -43,7 +44,7 @@
  )
  (func $start:call-optional (; 3 ;)
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 3
   i32.const 0
   i32.const 0
@@ -60,7 +61,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 3
   i32.const 4
   i32.const 0
@@ -92,7 +93,7 @@
    unreachable
   end
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 3
   i32.const 0
   i32.const 0
@@ -110,7 +111,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 3
   i32.const 4
   i32.const 0
@@ -128,7 +129,7 @@
    unreachable
   end
   i32.const 3
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 3
   i32.const 4
   i32.const 5
@@ -146,7 +147,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:call-optional
  )
 )

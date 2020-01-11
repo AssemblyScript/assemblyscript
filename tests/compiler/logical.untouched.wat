@@ -11,7 +11,7 @@
  (global $logical/f (mut f32) (f32.const 0))
  (global $logical/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $logical/testShortcutAnd (; 1 ;) (param $0 i64) (param $1 i32) (result i32)
   local.get $0
   i64.const 0
@@ -542,7 +542,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:logical
  )
 )

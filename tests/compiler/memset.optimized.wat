@@ -7,7 +7,7 @@
  (data (i32.const 16) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00s\00e\00t\00.\00t\00s")
  (global $memset/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $memset/memset (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
@@ -197,7 +197,7 @@
    i64.shl
    i64.or
    local.set $4
-   loop $continue|0
+   loop $while-continue|0
     local.get $2
     i32.const 32
     i32.ge_u
@@ -228,7 +228,7 @@
      i32.const 32
      i32.add
      local.set $0
-     br $continue|0
+     br $while-continue|0
     end
    end
   end
@@ -327,7 +327,7 @@
    unreachable
   end
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   call $start:memset
  )
 )

@@ -17,7 +17,7 @@
  (memory $0 0)
  (table $0 1 funcref)
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $function/_ (; 0 ;)
   nop
  )
@@ -131,7 +131,7 @@
   call $function/ddd
   drop
  )
- (func $start (; 19 ;)
+ (func $~start (; 19 ;)
   call $start:function
  )
 )

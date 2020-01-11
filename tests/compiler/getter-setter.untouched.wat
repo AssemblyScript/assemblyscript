@@ -9,7 +9,7 @@
  (table $0 1 funcref)
  (global $getter-setter/Foo._bar (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $getter-setter/Foo.bar.get:bar (; 1 ;) (result i32)
   global.get $getter-setter/Foo._bar
  )
@@ -59,7 +59,7 @@
    unreachable
   end
  )
- (func $start (; 4 ;)
+ (func $~start (; 4 ;)
   call $start:getter-setter
  )
 )

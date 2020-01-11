@@ -11,7 +11,7 @@
  (export "ifThen" (func $if/ifThen))
  (export "ifThenElseBlock" (func $if/ifThenElse))
  (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
- (start $start)
+ (start $~start)
  (func $if/ifThenElse (; 1 ;) (param $0 i32) (result i32)
   i32.const 1
   i32.const 0
@@ -107,7 +107,7 @@
    unreachable
   end
  )
- (func $start (; 5 ;)
+ (func $~start (; 5 ;)
   call $start:if
  )
 )

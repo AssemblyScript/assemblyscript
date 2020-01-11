@@ -5,26 +5,25 @@
  (export "testInherit" (func $continue/testInherit))
  (func $continue/testInherit (; 0 ;) (param $0 i32)
   (local $1 i32)
-  loop $loop|0
-   block $break|0
-    local.get $1
-    i32.const 10
-    i32.ge_s
-    br_if $break|0
-    block $continue|0
+  loop $for-loop|0
+   local.get $1
+   i32.const 10
+   i32.lt_s
+   if
+    block $for-continue|0
      local.get $0
      i32.const 0
      local.get $1
      i32.const 5
      i32.eq
      select
-     br_if $continue|0
+     br_if $for-continue|0
     end
     local.get $1
     i32.const 1
     i32.add
     local.set $1
-    br $loop|0
+    br $for-loop|0
    end
   end
  )

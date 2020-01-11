@@ -11,10 +11,11 @@
  (table $0 5 funcref)
  (elem (i32.const 1) $function-types/makeAdder<i32>~anonymous|0 $function-types/makeAdder<i64>~anonymous|0 $function-types/makeAdder<f64>~anonymous|0 $function-types/makeAdder<i32>~anonymous|0)
  (global $function-types/i32Adder (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $function-types/i64Adder (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $function-types/makeAdder<i32>~anonymous|0 (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -32,7 +33,7 @@
  )
  (func $function-types/doAddWithFn<i32> (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   local.get $0
   local.get $1
   local.get $2
@@ -42,7 +43,7 @@
   i32.const 1
   global.set $function-types/i32Adder
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   i32.const 2
   call $function-types/makeAdder<i32>~anonymous|0
@@ -59,7 +60,7 @@
   i32.const 2
   global.set $function-types/i64Adder
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i64.const 10
   i64.const 20
   call $function-types/makeAdder<i64>~anonymous|0
@@ -74,7 +75,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   f64.const 1.5
   f64.const 2.5
   call $function-types/makeAdder<f64>~anonymous|0
@@ -103,7 +104,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 3
   i32.const 4
   call $function-types/makeAdder<i32>~anonymous|0
@@ -132,7 +133,7 @@
    unreachable
   end
   i32.const 2
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 1
   i32.const 2
   i32.const 1
@@ -162,7 +163,7 @@
    unreachable
   end
  )
- (func $start (; 6 ;)
+ (func $~start (; 6 ;)
   call $start:function-types
  )
 )

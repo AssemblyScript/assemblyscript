@@ -8,7 +8,7 @@
  (table $0 1 funcref)
  (global $static-this/Foo.bar (mut i32) (i32.const 42))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $static-this/Foo.getBar (; 1 ;) (result i32)
   global.get $static-this/Foo.bar
  )
@@ -26,7 +26,7 @@
    unreachable
   end
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   call $start:static-this
  )
 )

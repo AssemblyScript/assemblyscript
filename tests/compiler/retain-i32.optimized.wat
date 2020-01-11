@@ -6,12 +6,12 @@
  (global $retain-i32/ui (mut i32) (i32.const 0))
  (global $retain-i32/ri (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:retain-i32 (; 0 ;)
   (local $0 i32)
   i32.const -128
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $0
    i32.const 255
    i32.le_s
@@ -20,7 +20,7 @@
     i32.const 1
     i32.add
     local.set $0
-    br $loop|0
+    br $for-loop|0
    end
   end
   i32.const -1
@@ -66,7 +66,7 @@
   i32.load8_s
   drop
  )
- (func $start (; 1 ;)
+ (func $~start (; 1 ;)
   call $start:retain-i32
  )
 )

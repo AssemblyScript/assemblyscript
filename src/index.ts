@@ -5,7 +5,6 @@
 
 import { Target, Feature } from "./common";
 import { Compiler, Options } from "./compiler";
-import { Decompiler } from "./decompiler";
 import { IDLBuilder, TSDBuilder } from "./definitions";
 import { DiagnosticMessage, DiagnosticCategory, formatDiagnosticMessage } from "./diagnostics";
 import { Module } from "./module";
@@ -181,13 +180,6 @@ export function compile(program: Program): Module {
   return new Compiler(program).compile();
 }
 
-/** Decompiles a module to its (low level) source. */
-export function decompile(module: Module): string {
-  var decompiler = new Decompiler();
-  decompiler.decompile(module);
-  return decompiler.finish();
-}
-
 /** Builds WebIDL definitions for the specified program. */
 export function buildIDL(program: Program): string {
   return IDLBuilder.build(program);
@@ -229,10 +221,8 @@ export { LIBRARY_PREFIX } from "./common";
 
 // Full API
 export * from "./ast";
-// export * from "./binary";
 export * from "./common";
 export * from "./compiler";
-export * from "./decompiler";
 export * from "./definitions";
 export * from "./diagnosticMessages.generated";
 export * from "./diagnostics";
