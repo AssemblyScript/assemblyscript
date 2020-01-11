@@ -16209,9 +16209,9 @@
   end
  )
  (func $start:std/math (; 177 ;)
-  (local $0 i32)
+  (local $0 f64)
   (local $1 i32)
-  (local $2 f64)
+  (local $2 i32)
   (local $3 i64)
   (local $4 f32)
   f64.const 2.718281828459045
@@ -44358,22 +44358,22 @@
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
   i32.const 0
-  local.set $0
+  local.set $1
   loop $for-loop|0
-   local.get $0
+   local.get $1
    f64.convert_i32_s
    f64.const 1e6
    f64.lt
-   local.set $1
-   local.get $1
+   local.set $2
+   local.get $2
    if
     call $~lib/math/NativeMath.random
-    local.set $2
-    local.get $2
+    local.set $0
+    local.get $0
     f64.const 0
     f64.ge
     if (result i32)
-     local.get $2
+     local.get $0
      f64.const 1
      f64.lt
     else
@@ -44391,7 +44391,7 @@
     local.get $1
     i32.const 1
     i32.add
-    local.set $0
+    local.set $1
     br $for-loop|0
    end
   end
@@ -44401,14 +44401,14 @@
   local.get $3
   call $~lib/math/NativeMath.seedRandom
   i32.const 0
-  local.set $0
+  local.set $1
   loop $for-loop|1
-   local.get $0
+   local.get $1
    f64.convert_i32_s
    f64.const 1e6
    f64.lt
-   local.set $1
-   local.get $1
+   local.set $2
+   local.get $2
    if
     call $~lib/math/NativeMathf.random
     local.set $4
@@ -44434,7 +44434,7 @@
     local.get $1
     i32.const 1
     i32.add
-    local.set $0
+    local.set $1
     br $for-loop|1
    end
   end
@@ -45447,14 +45447,14 @@
    unreachable
   end
   f64.const 0
-  local.set $2
-  local.get $2
+  local.set $0
+  local.get $0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.get $2
-  local.get $2
+  local.get $0
+  local.get $0
   f64.eq
   i32.and
   i32.const 0
@@ -45471,14 +45471,14 @@
    unreachable
   end
   f64.const -0
-  local.set $2
-  local.get $2
+  local.set $0
+  local.get $0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.get $2
-  local.get $2
+  local.get $0
+  local.get $0
   f64.eq
   i32.and
   i32.const 0
@@ -45495,14 +45495,14 @@
    unreachable
   end
   f64.const 1
-  local.set $2
-  local.get $2
+  local.set $0
+  local.get $0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.get $2
-  local.get $2
+  local.get $0
+  local.get $0
   f64.eq
   i32.and
   i32.const 0
@@ -45519,14 +45519,14 @@
    unreachable
   end
   f64.const -1
-  local.set $2
-  local.get $2
+  local.set $0
+  local.get $0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.get $2
-  local.get $2
+  local.get $0
+  local.get $0
   f64.eq
   i32.and
   i32.const 0
@@ -45543,14 +45543,14 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  local.set $2
-  local.get $2
+  local.set $0
+  local.get $0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.get $2
-  local.get $2
+  local.get $0
+  local.get $0
   f64.eq
   i32.and
   i32.const 0
@@ -45567,14 +45567,14 @@
    unreachable
   end
   f64.const -nan:0x8000000000000
-  local.set $2
-  local.get $2
+  local.set $0
+  local.get $0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.get $2
-  local.get $2
+  local.get $0
+  local.get $0
   f64.eq
   i32.and
   i32.const 0
@@ -45591,14 +45591,14 @@
    unreachable
   end
   f64.const inf
-  local.set $2
-  local.get $2
+  local.set $0
+  local.get $0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.get $2
-  local.get $2
+  local.get $0
+  local.get $0
   f64.eq
   i32.and
   i32.const 0
@@ -45615,14 +45615,14 @@
    unreachable
   end
   f64.const -inf
-  local.set $2
-  local.get $2
+  local.set $0
+  local.get $0
   i64.reinterpret_f64
   i64.const 63
   i64.shr_u
   i32.wrap_i64
-  local.get $2
-  local.get $2
+  local.get $0
+  local.get $0
   f64.eq
   i32.and
   i32.const 0
@@ -56001,8 +56001,8 @@
   f64.const nan:0x8000000000000
   i32.const 1
   call $~lib/math/ipow64f
-  local.tee $2
-  local.get $2
+  local.tee $0
+  local.get $0
   f64.ne
   i32.eqz
   if
@@ -56016,8 +56016,8 @@
   f64.const nan:0x8000000000000
   i32.const -1
   call $~lib/math/ipow64f
-  local.tee $2
-  local.get $2
+  local.tee $0
+  local.get $0
   f64.ne
   i32.eqz
   if
@@ -56031,8 +56031,8 @@
   f64.const nan:0x8000000000000
   i32.const 2
   call $~lib/math/ipow64f
-  local.tee $2
-  local.get $2
+  local.tee $0
+  local.get $0
   f64.ne
   i32.eqz
   if

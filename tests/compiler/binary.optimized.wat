@@ -18,47 +18,7 @@
  (global $binary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/math/NativeMath.pow (; 0 ;) (param $0 f64) (result f64)
-  (local $1 i64)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  i64.reinterpret_f64
-  local.tee $1
-  i64.const 32
-  i64.shr_u
-  i32.wrap_i64
-  local.set $2
-  i32.const 1
-  i32.const 0
-  i32.const 1
-  i32.const 0
-  i32.const 1
-  local.get $1
-  i32.wrap_i64
-  i32.const 0
-  local.get $2
-  i32.const 2147483647
-  i32.and
-  local.tee $3
-  i32.const 2146435072
-  i32.eq
-  select
-  local.get $3
-  i32.const 2146435072
-  i32.gt_s
-  select
-  select
-  select
-  if
-   local.get $0
-   f64.const 1
-   f64.add
-   return
-  end
-  local.get $0
- )
- (func $~lib/math/NativeMathf.mod (; 1 ;) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (; 0 ;) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -661,7 +621,7 @@
   call $~lib/math/NativeMath.mod
   global.set $binary/F
  )
- (func $~start (; 5 ;)
+ (func $~start (; 3 ;)
   call $start:binary
  )
 )
