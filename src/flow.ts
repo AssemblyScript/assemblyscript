@@ -241,13 +241,22 @@ export class Flow {
   unset(flag: FlowFlags): void { this.flags &= ~flag; }
 
   /** Forks this flow to a child flow. */
-  fork(): Flow {
+  fork(resetBreakContext: bool = false): Flow {
     var branch = new Flow();
     branch.parent = this;
-    branch.flags = this.flags;
     branch.parentFunction = this.parentFunction;
-    branch.continueLabel = this.continueLabel;
-    branch.breakLabel = this.breakLabel;
+    if (resetBreakContext) {
+      branch.flags = this.flags & ~(
+        FlowFlags.BREAKS |
+        FlowFlags.CONDITIONALLY_BREAKS |
+        FlowFlags.CONTINUES |
+        FlowFlags.CONDITIONALLY_CONTINUES
+      );
+    } else {
+      branch.flags = this.flags;
+      branch.continueLabel = this.continueLabel;
+      branch.breakLabel = this.breakLabel;
+    }
     branch.returnType = this.returnType;
     branch.contextualTypeArguments = this.contextualTypeArguments;
     branch.localFlags = this.localFlags.slice();
@@ -500,7 +509,20 @@ export class Flow {
   inherit(other: Flow): void {
     assert(other.parentFunction == this.parentFunction);
     assert(other.parent == this); // currently the case, but might change
-    this.flags = other.flags;
+    var otherFlags = other.flags;
+
+    // respective inner flags are irrelevant if contexts differ
+    if (this.breakLabel != other.breakLabel) {
+      if (otherFlags & (FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
+        otherFlags &= ~FlowFlags.TERMINATES;
+      }
+      otherFlags &= ~(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS);
+    }
+    if (this.continueLabel != other.continueLabel) {
+      otherFlags &= ~(FlowFlags.CONTINUES | FlowFlags.CONDITIONALLY_CONTINUES);
+    }
+
+    this.flags = this.flags | otherFlags; // what happens before is still true
     this.localFlags = other.localFlags;
   }
 
@@ -1263,7 +1285,22 @@ export class Flow {
       parent = parent.parent;
       ++levels;
     }
-    return "Flow(" + this.actualFunction + ")[" + levels.toString() + "]";
+    var sb = new Array<string>();
+    if (this.is(FlowFlags.RETURNS)) sb.push("RETURNS");
+    if (this.is(FlowFlags.RETURNS_WRAPPED)) sb.push("RETURNS_WRAPPED");
+    if (this.is(FlowFlags.RETURNS_NONNULL)) sb.push("RETURNS_NONNULL");
+    if (this.is(FlowFlags.THROWS)) sb.push("THROWS");
+    if (this.is(FlowFlags.BREAKS)) sb.push("BREAKS");
+    if (this.is(FlowFlags.CONTINUES)) sb.push("CONTINUES");
+    if (this.is(FlowFlags.ALLOCATES)) sb.push("ALLOCATES");
+    if (this.is(FlowFlags.CALLS_SUPER)) sb.push("CALLS_SUPER");
+    if (this.is(FlowFlags.TERMINATES)) sb.push("TERMINATES");
+    if (this.is(FlowFlags.CONDITIONALLY_RETURNS)) sb.push("CONDITIONALLY_RETURNS");
+    if (this.is(FlowFlags.CONDITIONALLY_THROWS)) sb.push("CONDITIONALLY_THROWS");
+    if (this.is(FlowFlags.CONDITIONALLY_BREAKS)) sb.push("CONDITIONALLY_BREAKS");
+    if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
+    if (this.is(FlowFlags.CONDITIONALLY_ALLOCATES)) sb.push("CONDITIONALLY_ALLOCATES");
+    return "Flow(" + this.actualFunction + ")[" + levels.toString() + "] " + sb.join(" ");
   }
 }
 

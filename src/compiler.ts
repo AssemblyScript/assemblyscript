@@ -1780,7 +1780,7 @@ export class Compiler extends DiagnosticEmitter {
     var stmts = this.compileStatements(statements);
     if (!innerFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) this.performAutoreleases(innerFlow, stmts);
     innerFlow.freeScopedLocals();
-    outerFlow.inherit(innerFlow); // TODO: only if not terminated?
+    outerFlow.inherit(innerFlow);
     this.currentFlow = outerFlow;
     return this.module.flatten(stmts);
   }
@@ -1881,7 +1881,7 @@ export class Compiler extends DiagnosticEmitter {
     // )                                      ┌─┘
 
     var label = outerFlow.pushBreakLabel();
-    var flow = outerFlow.fork();
+    var flow = outerFlow.fork(/* resetBreakContext */ true);
     if (flowAfter) flow.unifyLocalFlags(flowAfter);
     var flowBefore = flow.fork();
     this.currentFlow = flow;
@@ -1959,15 +1959,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // Finalize
     assert(!flow.hasScopedLocals);
-    if (flow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
-      flow.unset(FlowFlags.TERMINATES);
-    }
-    flow.unset(
-      FlowFlags.BREAKS |
-      FlowFlags.CONDITIONALLY_BREAKS |
-      FlowFlags.CONTINUES |
-      FlowFlags.CONDITIONALLY_CONTINUES
-    );
     outerFlow.inherit(flow);
     outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
@@ -1976,7 +1967,7 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(bodyStmts)
       )
     ]);
-    if (flow.is(FlowFlags.TERMINATES)) {
+    if (outerFlow.is(FlowFlags.TERMINATES)) {
       expr = module.block(null, [ expr, module.unreachable() ]);
     }
     return expr;
@@ -2031,7 +2022,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var label = outerFlow.pushBreakLabel();
     var stmts = new Array<ExpressionRef>();
-    var flow = outerFlow.fork();
+    var flow = outerFlow.fork(/* resetBreakContext */ true);
     this.currentFlow = flow;
 
     var breakLabel = "for-break" + label;
@@ -2179,23 +2170,14 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = flow;
 
     // Finalize
-    if (flow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
-      flow.unset(FlowFlags.TERMINATES);
-    }
-    if (flow.is(FlowFlags.TERMINATES)) {
+    flow.freeScopedLocals();
+    outerFlow.inherit(flow);
+    outerFlow.popBreakLabel();
+    if (outerFlow.is(FlowFlags.TERMINATES)) {
       stmts.push(module.unreachable());
     } else {
       this.performAutoreleases(flow, stmts);
     }
-    flow.freeScopedLocals();
-    flow.unset(
-      FlowFlags.BREAKS |
-      FlowFlags.CONDITIONALLY_BREAKS |
-      FlowFlags.CONTINUES |
-      FlowFlags.CONDITIONALLY_CONTINUES
-    );
-    outerFlow.inherit(flow);
-    outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
     return module.flatten(stmts);
   }
@@ -2782,7 +2764,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var label = outerFlow.pushBreakLabel();
     var stmts = new Array<ExpressionRef>();
-    var flow = outerFlow.fork();
+    var flow = outerFlow.fork(/* resetBreakContext */ true);
     if (flowAfter) flow.unifyLocalFlags(flowAfter);
     var flowBefore = flow.fork();
     this.currentFlow = flow;
@@ -2880,15 +2862,6 @@ export class Compiler extends DiagnosticEmitter {
 
     // Finalize
     assert(!flow.hasScopedLocals);
-    if (flow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
-      flow.unset(FlowFlags.TERMINATES);
-    }
-    flow.unset(
-      FlowFlags.BREAKS |
-      FlowFlags.CONDITIONALLY_BREAKS |
-      FlowFlags.CONTINUES |
-      FlowFlags.CONDITIONALLY_CONTINUES
-    );
     outerFlow.inherit(flow);
     outerFlow.popBreakLabel();
     this.currentFlow = outerFlow;
@@ -2897,7 +2870,7 @@ export class Compiler extends DiagnosticEmitter {
         module.flatten(stmts)
       )
     ]);
-    if (condKind == ConditionKind.TRUE && flow.is(FlowFlags.TERMINATES)) {
+    if (condKind == ConditionKind.TRUE && outerFlow.is(FlowFlags.TERMINATES)) {
       expr = module.block(null, [ expr, module.unreachable() ]);
     }
     return expr;
@@ -9467,7 +9440,7 @@ var mangleImportName_elementName: string;
 
 /** Evaluates the kind of a boolean condition from its expression. */
 function evaluateConditionKind(expr: ExpressionRef): ConditionKind {
-  assert(getExpressionType(expr) == NativeType.I32);
+  assert(getExpressionType(expr) == NativeType.I32 || getExpressionType(expr) == NativeType.Unreachable);
   if (getExpressionId(expr) == ExpressionId.Const) {
     return getConstValueI32(expr)
       ? ConditionKind.TRUE
