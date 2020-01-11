@@ -13,7 +13,7 @@
  (data (i32.const 16) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00m\00o\00d\00.\00t\00s")
  (export "memory" (memory $0))
  (export "mod" (func $std/mod/mod))
- (start $start)
+ (start $~start)
  (func $~lib/math/NativeMath.mod (; 2 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
@@ -133,7 +133,7 @@
     i64.or
    end
    local.set $3
-   loop $continue|0
+   loop $while-continue|0
     local.get $4
     local.get $5
     i64.gt_s
@@ -159,7 +159,7 @@
      i64.const 1
      i64.sub
      local.set $4
-     br $continue|0
+     br $while-continue|0
     end
    end
    local.get $2
@@ -372,7 +372,7 @@
     i32.shl
    end
    local.set $3
-   loop $continue|0
+   loop $while-continue|0
     local.get $4
     local.get $5
     i32.gt_s
@@ -398,7 +398,7 @@
      i32.const 1
      i32.sub
      local.set $4
-     br $continue|0
+     br $while-continue|0
     end
    end
    local.get $2
@@ -2243,7 +2243,7 @@
    unreachable
   end
  )
- (func $start (; 9 ;)
+ (func $~start (; 9 ;)
   call $start:std/mod
  )
 )

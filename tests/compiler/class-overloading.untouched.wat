@@ -6,7 +6,7 @@
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (export "test" (func $class-overloading/test))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
   local.get $0
  )
@@ -29,7 +29,7 @@
   i32.const 0
   call $class-overloading/test
  )
- (func $start (; 5 ;)
+ (func $~start (; 5 ;)
   call $start:class-overloading
  )
 )

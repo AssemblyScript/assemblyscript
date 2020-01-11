@@ -12,7 +12,7 @@
  (export "ifThen" (func $if/ifThen))
  (export "ifThenElseBlock" (func $if/ifThenElseBlock))
  (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
- (start $start)
+ (start $~start)
  (func $if/ifThenElse (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   if
@@ -138,7 +138,7 @@
   end
   unreachable
  )
- (func $start (; 6 ;)
+ (func $~start (; 6 ;)
   call $start:if
  )
 )

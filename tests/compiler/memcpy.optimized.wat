@@ -8,7 +8,7 @@
  (global $memcpy/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "memcpy" (func $memcpy/memcpy))
- (start $start)
+ (start $~start)
  (func $memcpy/memcpy (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
@@ -16,7 +16,7 @@
   (local $6 i32)
   local.get $0
   local.set $6
-  loop $continue|0
+  loop $while-continue|0
    local.get $1
    i32.const 3
    i32.and
@@ -42,7 +42,7 @@
     i32.const 1
     i32.sub
     local.set $2
-    br $continue|0
+    br $while-continue|0
    end
   end
   local.get $0
@@ -50,7 +50,7 @@
   i32.and
   i32.eqz
   if
-   loop $continue|1
+   loop $while-continue|1
     local.get $2
     i32.const 16
     i32.ge_u
@@ -95,7 +95,7 @@
      i32.const 16
      i32.sub
      local.set $2
-     br $continue|1
+     br $while-continue|1
     end
    end
    local.get $2
@@ -232,7 +232,7 @@
       i32.const 3
       i32.sub
       local.set $2
-      loop $continue|3
+      loop $while-continue|3
        local.get $2
        i32.const 17
        i32.ge_u
@@ -307,7 +307,7 @@
         i32.const 16
         i32.sub
         local.set $2
-        br $continue|3
+        br $while-continue|3
        end
       end
       br $break|2
@@ -341,7 +341,7 @@
      i32.const 2
      i32.sub
      local.set $2
-     loop $continue|4
+     loop $while-continue|4
       local.get $2
       i32.const 18
       i32.ge_u
@@ -416,7 +416,7 @@
        i32.const 16
        i32.sub
        local.set $2
-       br $continue|4
+       br $while-continue|4
       end
      end
      br $break|2
@@ -442,7 +442,7 @@
     i32.const 1
     i32.sub
     local.set $2
-    loop $continue|5
+    loop $while-continue|5
      local.get $2
      i32.const 19
      i32.ge_u
@@ -517,7 +517,7 @@
       i32.const 16
       i32.sub
       local.set $2
-      br $continue|5
+      br $while-continue|5
      end
     end
    end
@@ -1037,7 +1037,7 @@
    unreachable
   end
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   call $start:memcpy
  )
 )

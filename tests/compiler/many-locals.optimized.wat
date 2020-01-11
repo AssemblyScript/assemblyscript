@@ -8,7 +8,7 @@
  (export "memory" (memory $0))
  (export "testI32" (func $many-locals/testI32))
  (export "testI8" (func $many-locals/testI8))
- (start $start)
+ (start $~start)
  (func $many-locals/testI32 (; 1 ;) (param $0 i32) (result i32)
   local.get $0
  )
@@ -19,7 +19,7 @@
   i32.const 24
   i32.shr_s
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   i32.const 42
   call $many-locals/testI8
   i32.const 42

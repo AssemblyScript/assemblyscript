@@ -12,7 +12,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 60))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -554,7 +554,7 @@
   call $call-super/test4
   call $call-super/test5
  )
- (func $start (; 21 ;)
+ (func $~start (; 21 ;)
   call $start:call-super
  )
 )

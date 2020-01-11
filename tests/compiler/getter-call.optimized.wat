@@ -5,10 +5,11 @@
  (memory $0 0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -79,10 +80,10 @@
  (func $getter-call/test (; 2 ;) (result i32)
   call $~lib/rt/stub/__alloc
   i32.const 0
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 42
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16

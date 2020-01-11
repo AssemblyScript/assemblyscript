@@ -51,7 +51,7 @@
  (global $std/symbol/hasInstance (mut i32) (i32.const 0))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/symbol/Symbol (; 1 ;) (result i32)
   (local $0 i32)
   global.get $~lib/symbol/nextId
@@ -328,7 +328,7 @@
    local.get $2
    i32.sub
    local.set $1
-   loop $continue|0
+   loop $while-continue|0
     local.get $1
     i32.const 32
     i32.ge_u
@@ -359,7 +359,7 @@
      i32.const 32
      i32.add
      local.set $0
-     br $continue|0
+     br $while-continue|0
     end
    end
   end
@@ -489,19 +489,18 @@
   local.get $0
   local.tee $2
   if
-   block $break|0
-    i32.const 0
-    local.set $0
-    local.get $2
-    call $~lib/string/String#get:length
-    i32.const 1
-    i32.shl
-    local.set $3
-    loop $loop|0
-     local.get $0
-     local.get $3
-     i32.ge_u
-     br_if $break|0
+   i32.const 0
+   local.set $0
+   local.get $2
+   call $~lib/string/String#get:length
+   i32.const 1
+   i32.shl
+   local.set $3
+   loop $for-loop|0
+    local.get $0
+    local.get $3
+    i32.lt_u
+    if
      local.get $1
      local.get $0
      local.get $2
@@ -515,9 +514,8 @@
      i32.const 1
      i32.add
      local.set $0
-     br $loop|0
+     br $for-loop|0
     end
-    unreachable
    end
   end
   local.get $1
@@ -539,7 +537,7 @@
   i32.ge_u
   select
   if
-   loop $continue|0
+   loop $do-continue|0
     local.get $0
     i64.load
     local.get $1
@@ -560,20 +558,18 @@
      local.tee $2
      i32.const 4
      i32.ge_u
-     br_if $continue|0
+     br_if $do-continue|0
     end
    end
   end
-  loop $continue|1
-   block $break|1
-    local.get $2
-    local.tee $3
-    i32.const 1
-    i32.sub
-    local.set $2
-    local.get $3
-    i32.eqz
-    br_if $break|1
+  loop $while-continue|1
+   local.get $2
+   local.tee $3
+   i32.const 1
+   i32.sub
+   local.set $2
+   local.get $3
+   if
     local.get $1
     i32.load16_u
     local.tee $3
@@ -586,18 +582,16 @@
      local.get $3
      i32.sub
      return
-    else
-     local.get $0
-     i32.const 2
-     i32.add
-     local.set $0
-     local.get $1
-     i32.const 2
-     i32.add
-     local.set $1
-     br $continue|1
     end
-    unreachable
+    local.get $0
+    i32.const 2
+    i32.add
+    local.set $0
+    local.get $1
+    i32.const 2
+    i32.add
+    local.set $1
+    br $while-continue|1
    end
   end
   i32.const 0
@@ -646,7 +640,7 @@
   i32.add
   i32.load
   local.set $0
-  loop $continue|0
+  loop $while-continue|0
    local.get $0
    if
     local.get $0
@@ -664,15 +658,13 @@
     if
      local.get $0
      return
-    else
-     local.get $0
-     i32.load offset=8
-     i32.const -2
-     i32.and
-     local.set $0
-     br $continue|0
     end
-    unreachable
+    local.get $0
+    i32.load offset=8
+    i32.const -2
+    i32.and
+    local.set $0
+    br $while-continue|0
    end
   end
   i32.const 0
@@ -732,7 +724,7 @@
   local.set $7
   local.get $4
   local.set $3
-  loop $continue|0
+  loop $while-continue|0
    local.get $2
    local.get $7
    i32.ne
@@ -776,7 +768,7 @@
     i32.const 12
     i32.add
     local.set $2
-    br $continue|0
+    br $while-continue|0
    end
   end
   local.get $5
@@ -938,7 +930,7 @@
   i32.add
   i32.load
   local.set $0
-  loop $continue|0
+  loop $while-continue|0
    local.get $0
    if
     local.get $0
@@ -956,15 +948,13 @@
     if
      local.get $0
      return
-    else
-     local.get $0
-     i32.load offset=8
-     i32.const -2
-     i32.and
-     local.set $0
-     br $continue|0
     end
-    unreachable
+    local.get $0
+    i32.load offset=8
+    i32.const -2
+    i32.and
+    local.set $0
+    br $while-continue|0
    end
   end
   i32.const 0
@@ -1006,7 +996,7 @@
   local.set $7
   local.get $4
   local.set $3
-  loop $continue|0
+  loop $while-continue|0
    local.get $2
    local.get $7
    i32.ne
@@ -1050,7 +1040,7 @@
     i32.const 12
     i32.add
     local.set $2
-    br $continue|0
+    br $while-continue|0
    end
   end
   local.get $5
@@ -1280,7 +1270,7 @@
     i32.and
     i32.eq
     if
-     loop $continue|0
+     loop $while-continue|0
       local.get $0
       i32.const 7
       i32.and
@@ -1306,10 +1296,10 @@
        local.get $4
        i32.load8_u
        i32.store8
-       br $continue|0
+       br $while-continue|0
       end
      end
-     loop $continue|1
+     loop $while-continue|1
       local.get $3
       i32.const 8
       i32.ge_u
@@ -1330,11 +1320,11 @@
        i32.const 8
        i32.add
        local.set $1
-       br $continue|1
+       br $while-continue|1
       end
      end
     end
-    loop $continue|2
+    loop $while-continue|2
      local.get $3
      if
       local.get $0
@@ -1355,7 +1345,7 @@
       i32.const 1
       i32.sub
       local.set $3
-      br $continue|2
+      br $while-continue|2
      end
     end
    else
@@ -1367,7 +1357,7 @@
     i32.and
     i32.eq
     if
-     loop $continue|3
+     loop $while-continue|3
       local.get $0
       local.get $3
       i32.add
@@ -1388,10 +1378,10 @@
        i32.add
        i32.load8_u
        i32.store8
-       br $continue|3
+       br $while-continue|3
       end
      end
-     loop $continue|4
+     loop $while-continue|4
       local.get $3
       i32.const 8
       i32.ge_u
@@ -1407,11 +1397,11 @@
        i32.add
        i64.load
        i64.store
-       br $continue|4
+       br $while-continue|4
       end
      end
     end
-    loop $continue|5
+    loop $while-continue|5
      local.get $3
      if
       local.get $3
@@ -1425,7 +1415,7 @@
       i32.add
       i32.load8_u
       i32.store8
-      br $continue|5
+      br $while-continue|5
      end
     end
    end
@@ -1714,7 +1704,7 @@
    unreachable
   end
  )
- (func $start (; 30 ;)
+ (func $~start (; 30 ;)
   call $start:std/symbol
  )
 )
