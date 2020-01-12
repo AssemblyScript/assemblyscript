@@ -18,7 +18,7 @@
  (global $~lib/builtins/u16.MAX_VALUE i32 (i32.const 65535))
  (global $~lib/heap/__heap_base i32 (i32.const 112))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2294,7 +2294,7 @@
   call $features/simd/test_v32x4
   call $features/simd/test_v64x2
  )
- (func $start (; 16 ;)
+ (func $~start (; 16 ;)
   call $start:features/simd
  )
 )

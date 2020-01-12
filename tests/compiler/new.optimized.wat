@@ -9,7 +9,7 @@
  (global $new/gen (mut i32) (i32.const 0))
  (global $new/ref2 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -109,7 +109,7 @@
   call $~lib/rt/stub/__alloc
   global.set $new/ref2
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   call $start:new
  )
 )

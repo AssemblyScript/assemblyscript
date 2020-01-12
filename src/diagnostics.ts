@@ -261,6 +261,8 @@ export abstract class DiagnosticEmitter {
 
   /** Diagnostic messages emitted so far. */
   diagnostics: DiagnosticMessage[];
+  /** Diagnostic messages already seen, by range. */
+  private seen: Map<Range,Set<DiagnosticCode>> = new Map();
 
   /** Initializes this diagnostic emitter. */
   protected constructor(diagnostics: DiagnosticMessage[] | null = null) {
@@ -277,6 +279,19 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
+    // It is possible that the same diagnostic is emitted twice, for example
+    // when compiling generics with different types or when recompiling a loop
+    // because our initial assumptions didn't hold. Deduplicate these.
+    var seen = this.seen;
+    if (seen.has(range)) {
+      let codes = seen.get(range)!;
+      if (codes.has(code)) return;
+      codes.add(code);
+    } else {
+      let codes = new Set<DiagnosticCode>();
+      codes.add(code);
+      seen.set(range, codes);
+    }
     var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2).withRange(range);
     if (relatedRange) message.relatedRange = relatedRange;
     this.diagnostics.push(message);

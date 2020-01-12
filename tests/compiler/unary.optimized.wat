@@ -6,7 +6,7 @@
  (global $unary/f (mut f32) (f32.const 0))
  (global $unary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:unary (; 0 ;)
   (local $0 i32)
   (local $1 i64)
@@ -209,7 +209,7 @@
   local.get $3
   global.set $unary/F
  )
- (func $start (; 1 ;)
+ (func $~start (; 1 ;)
   call $start:unary
  )
 )

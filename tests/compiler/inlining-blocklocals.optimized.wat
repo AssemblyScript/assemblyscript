@@ -9,7 +9,7 @@
  (global $inlining-blocklocals/theCall_b (mut i32) (i32.const 0))
  (global $inlining-blocklocals/theCall_c (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $inlining-blocklocals/test (; 1 ;)
   (local $0 i32)
   global.get $inlining-blocklocals/b
@@ -46,7 +46,7 @@
    unreachable
   end
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   call $inlining-blocklocals/test
  )
 )

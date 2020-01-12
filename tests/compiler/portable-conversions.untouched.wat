@@ -10,7 +10,7 @@
  (global $portable-conversions/f (mut f32) (f32.const 1))
  (global $portable-conversions/F (mut f64) (f64.const 1))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:portable-conversions (; 1 ;)
   global.get $portable-conversions/i
   i32.const 24
@@ -633,7 +633,7 @@
    unreachable
   end
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   call $start:portable-conversions
  )
 )

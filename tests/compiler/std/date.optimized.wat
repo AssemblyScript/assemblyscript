@@ -15,7 +15,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/date/date (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -206,7 +206,7 @@
    unreachable
   end
  )
- (func $start (; 6 ;)
+ (func $~start (; 6 ;)
   call $start:std/date
  )
 )

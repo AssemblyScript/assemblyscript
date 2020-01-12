@@ -25,27 +25,27 @@
   nop
  )
  (func $possibly-null/testWhile (; 1 ;) (param $0 i32)
-  loop $continue|0
+  loop $while-continue|0
    local.get $0
    if
     i32.const 0
     local.set $0
-    br $continue|0
+    br $while-continue|0
    end
   end
  )
  (func $possibly-null/testWhile2 (; 2 ;) (param $0 i32) (param $1 i32)
-  loop $continue|0
+  loop $while-continue|0
    local.get $0
    if
     local.get $1
     local.set $0
-    br $continue|0
+    br $while-continue|0
    end
   end
  )
  (func $possibly-null/testWhile3 (; 3 ;) (param $0 i32) (param $1 i32)
-  loop $continue|0
+  loop $while-continue|0
    local.get $0
    if
     local.get $1
@@ -53,7 +53,7 @@
      local.get $1
      local.set $0
     end
-    br $continue|0
+    br $while-continue|0
    end
   end
  )

@@ -16,7 +16,7 @@
  (export "__reset" (func $~lib/rt/stub/__reset))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
  (export "__free" (func $~lib/rt/stub/__free))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -132,7 +132,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $start (; 7 ;)
+ (func $~start (; 7 ;)
   i32.const 48
   global.set $~lib/rt/stub/startOffset
   i32.const 48

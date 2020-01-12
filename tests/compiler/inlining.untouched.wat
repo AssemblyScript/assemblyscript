@@ -11,13 +11,14 @@
  (table $0 2 funcref)
  (elem (i32.const 1) $inlining/func_fe~anonymous|0)
  (global $inlining/constantGlobal i32 (i32.const 1))
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 56))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
- (start $start)
+ (start $~start)
  (func $inlining/test (; 1 ;) (result i32)
   global.get $inlining/constantGlobal
   i32.const 2
@@ -214,7 +215,7 @@
   i32.const 0
   local.set $2
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 2
   i32.const 1
   call_indirect (type $i32_=>_i32)
@@ -516,7 +517,7 @@
   global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )
- (func $start (; 10 ;)
+ (func $~start (; 10 ;)
   call $start:inlining
  )
 )
