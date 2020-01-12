@@ -89,8 +89,8 @@ declare module "assemblyscript/src/common" {
     export const LIBRARY_PREFIX: string;
     /** Path index suffix. */
     export const INDEX_SUFFIX: string;
-    /** Common compiler symbols. */
-    export namespace CommonSymbols {
+    /** Common names. */
+    export namespace CommonNames {
         const EMPTY = "";
         const i8 = "i8";
         const i16 = "i16";
@@ -631,6 +631,8 @@ declare module "assemblyscript/src/diagnostics" {
     export abstract class DiagnosticEmitter {
         /** Diagnostic messages emitted so far. */
         diagnostics: DiagnosticMessage[];
+        /** Diagnostic messages already seen, by range. */
+        private seen;
         /** Initializes this diagnostic emitter. */
         protected constructor(diagnostics?: DiagnosticMessage[] | null);
         /** Emits a diagnostic message of the specified category. */
@@ -1143,8 +1145,6 @@ declare module "assemblyscript/src/ast" {
         kind: NodeKind;
         /** Textual name. */
         text: string;
-        /** Symbol. */
-        symbol: string;
         /** Whether quoted or not. */
         isQuoted: boolean;
     }
@@ -1227,7 +1227,6 @@ declare module "assemblyscript/src/ast" {
     export class ConstructorExpression extends IdentifierExpression {
         kind: NodeKind;
         text: string;
-        symbol: string;
     }
     /** Represents an element access expression, e.g., array access. */
     export class ElementAccessExpression extends Expression {
@@ -1281,7 +1280,6 @@ declare module "assemblyscript/src/ast" {
     export class NullExpression extends IdentifierExpression {
         kind: NodeKind;
         text: string;
-        symbol: string;
     }
     /** Represents an object literal expression. */
     export class ObjectLiteralExpression extends LiteralExpression {
@@ -1333,25 +1331,21 @@ declare module "assemblyscript/src/ast" {
     export class SuperExpression extends IdentifierExpression {
         kind: NodeKind;
         text: string;
-        symbol: string;
     }
     /** Represents a `this` expression. */
     export class ThisExpression extends IdentifierExpression {
         kind: NodeKind;
         text: string;
-        symbol: string;
     }
     /** Represents a `true` expression. */
     export class TrueExpression extends IdentifierExpression {
         kind: NodeKind;
         text: string;
-        symbol: string;
     }
     /** Represents a `false` expression. */
     export class FalseExpression extends IdentifierExpression {
         kind: NodeKind;
         text: string;
-        symbol: string;
     }
     /** Base class of all unary expressions. */
     export abstract class UnaryExpression extends Expression {
@@ -2170,6 +2164,8 @@ declare module "assemblyscript/src/module" {
         local_set(index: Index, value: ExpressionRef): ExpressionRef;
         global_set(name: string, value: ExpressionRef): ExpressionRef;
         block(label: string | null, children: ExpressionRef[], type?: NativeType): ExpressionRef;
+        /** Attempts to trivially flatten a series of expressions instead of emitting a block. */
+        flatten(stmts: ExpressionRef[], type?: NativeType): ExpressionRef;
         br(label: string | null, condition?: ExpressionRef, value?: ExpressionRef): ExpressionRef;
         drop(expression: ExpressionRef): ExpressionRef;
         loop(label: string | null, body: ExpressionRef): ExpressionRef;
@@ -2564,44 +2560,40 @@ declare module "assemblyscript/src/flow" {
     export const enum FlowFlags {
         /** No specific conditions. */
         NONE = 0,
-        /** This flow returns. */
+        /** This flow always returns. */
         RETURNS = 1,
-        /** This flow returns a wrapped value. */
+        /** This flow always returns a wrapped value. */
         RETURNS_WRAPPED = 2,
-        /** This flow returns a non-null value. */
+        /** This flow always returns a non-null value. */
         RETURNS_NONNULL = 4,
-        /** This flow throws. */
+        /** This flow always throws. */
         THROWS = 8,
-        /** This flow breaks. */
+        /** This flow always breaks. */
         BREAKS = 16,
-        /** This flow continues. */
+        /** This flow always continues. */
         CONTINUES = 32,
-        /** This flow allocates. Constructors only. */
+        /** This flow always allocates. Constructors only. */
         ALLOCATES = 64,
-        /** This flow calls super. Constructors only. */
+        /** This flow always calls super. Constructors only. */
         CALLS_SUPER = 128,
-        /** This flow terminates (returns, throws or continues). */
+        /** This flow always terminates (returns, throws or continues). */
         TERMINATES = 256,
         /** This flow conditionally returns in a child flow. */
         CONDITIONALLY_RETURNS = 512,
         /** This flow conditionally throws in a child flow. */
         CONDITIONALLY_THROWS = 1024,
-        /** This flow conditionally terminates in a child flow. */
-        CONDITIONALLY_TERMINATES = 2048,
         /** This flow conditionally breaks in a child flow. */
-        CONDITIONALLY_BREAKS = 4096,
+        CONDITIONALLY_BREAKS = 2048,
         /** This flow conditionally continues in a child flow. */
-        CONDITIONALLY_CONTINUES = 8192,
+        CONDITIONALLY_CONTINUES = 4096,
         /** This flow conditionally allocates in a child flow. Constructors only. */
-        CONDITIONALLY_ALLOCATES = 16384,
-        /** This is an inlining flow. */
-        INLINE_CONTEXT = 32768,
+        CONDITIONALLY_ALLOCATES = 8192,
         /** This is a flow with explicitly disabled bounds checking. */
-        UNCHECKED_CONTEXT = 65536,
+        UNCHECKED_CONTEXT = 32768,
         /** Any categorical flag. */
         ANY_CATEGORICAL = 511,
         /** Any conditional flag. */
-        ANY_CONDITIONAL = 30208
+        ANY_CONDITIONAL = 15872
     }
     /** Flags indicating the current state of a local. */
     export enum LocalFlags {
@@ -2609,53 +2601,27 @@ declare module "assemblyscript/src/flow" {
         NONE = 0,
         /** Local is constant. */
         CONSTANT = 1,
-        /** Local is a function parameter. */
-        PARAMETER = 2,
         /** Local is properly wrapped. Relevant for small integers. */
-        WRAPPED = 4,
+        WRAPPED = 2,
         /** Local is non-null. */
-        NONNULL = 8,
-        /** Local is read from. */
-        READFROM = 16,
-        /** Local is written to. */
-        WRITTENTO = 32,
+        NONNULL = 4,
+        /** Local is initialized. */
+        INITIALIZED = 8,
         /** Local is retained. */
-        RETAINED = 64,
-        /** Local is conditionally read from. */
-        CONDITIONALLY_READFROM = 128,
-        /** Local is conditionally written to. */
-        CONDITIONALLY_WRITTENTO = 256,
+        RETAINED = 16,
         /** Local must be conditionally retained. */
-        CONDITIONALLY_RETAINED = 512,
-        /** Local is conditionally returned. */
-        CONDITIONALLY_RETURNED = 1024,
-        /** Any categorical flag. */
-        ANY_CATEGORICAL = 127,
-        /** Any conditional flag. */
-        ANY_CONDITIONAL = 1984,
-        /** Any written to flag. */
-        ANY_WRITTENTO = 288,
+        CONDITIONALLY_RETAINED = 32,
         /** Any retained flag. */
-        ANY_RETAINED = 576
+        ANY_RETAINED = 48
     }
-    export namespace LocalFlags {
-        function join(left: LocalFlags, right: LocalFlags): LocalFlags;
-    }
-    /** Flags indicating the current state of a field. */
-    export enum FieldFlags {
-        /** No specific conditions. */
-        NONE = 0,
-        /** Field is initialized. Relevant in constructors. */
-        INITIALIZED = 1,
-        /** Field is conditionally initialized. Relevant in constructors. */
-        CONDITIONALLY_INITIALIZED = 2,
-        /** Any categorical flag. */
-        ANY_CATEGORICAL = 1,
-        /** Any conditional flag. */
-        ANY_CONDITIONAL = 2
-    }
-    export namespace FieldFlags {
-        function join(left: FieldFlags, right: FieldFlags): FieldFlags;
+    /** Condition kinds. */
+    export const enum ConditionKind {
+        /** Outcome of the condition is unknown */
+        UNKNOWN = 0,
+        /** Condition is always true. */
+        TRUE = 1,
+        /** Condition is always false. */
+        FALSE = 2
     }
     /** A control flow evaluator. */
     export class Flow {
@@ -2677,8 +2643,6 @@ declare module "assemblyscript/src/flow" {
         scopedLocals: Map<string, Local> | null;
         /** Local flags. */
         localFlags: LocalFlags[];
-        /** Field flags. Relevant in constructors. */
-        fieldFlags: Map<string, FieldFlags> | null;
         /** Function being inlined, when inlining. */
         inlineFunction: Function | null;
         /** The label we break to when encountering a return statement, when inlining. */
@@ -2688,6 +2652,8 @@ declare module "assemblyscript/src/flow" {
         /** Creates an inline flow within `parentFunction`. */
         static createInline(parentFunction: Function, inlineFunction: Function): Flow;
         private constructor();
+        /** Tests if this is an inline flow. */
+        get isInline(): boolean;
         /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
         get actualFunction(): Function;
         /** Tests if this flow has the specified flag or flags. */
@@ -2699,7 +2665,7 @@ declare module "assemblyscript/src/flow" {
         /** Unsets the specified flag or flags. */
         unset(flag: FlowFlags): void;
         /** Forks this flow to a child flow. */
-        fork(): Flow;
+        fork(resetBreakContext?: boolean): Flow;
         /** Gets a free temporary local of the specified type. */
         getTempLocal(type: Type, except?: Set<number> | null): Local;
         /** Gets a local that sticks around until this flow is exited, and then released. */
@@ -2732,20 +2698,30 @@ declare module "assemblyscript/src/flow" {
         pushBreakLabel(): string;
         /** Pops the most recent break label from the stack. */
         popBreakLabel(): void;
-        /** Inherits flags and local wrap states from the specified flow (e.g. blocks). */
+        /** Inherits flags of another flow into this one, i.e. a finished inner block. */
         inherit(other: Flow): void;
-        /** Inherits categorical flags as conditional flags from the specified flow (e.g. then without else). */
-        inheritConditional(other: Flow): void;
-        /** Inherits mutual flags and local wrap states from the specified flows (e.g. then with else). */
+        /** Inherits flags of a conditional branch joining again with this one, i.e. then without else. */
+        inheritBranch(other: Flow, conditionKind?: ConditionKind): void;
+        /** Inherits mutual flags of two alternate branches becoming this one, i.e. then with else. */
         inheritMutual(left: Flow, right: Flow): void;
+        /** Tests if the specified flows have differing local states. */
+        static hasIncompatibleLocalStates(before: Flow, after: Flow): boolean;
         /** Unifies local flags between this and the other flow. */
         unifyLocalFlags(other: Flow): void;
         /** Checks if an expression of the specified type is known to be non-null, even if the type might be nullable. */
         isNonnull(expr: ExpressionRef, type: Type): boolean;
         /** Updates local states to reflect that this branch is only taken when `expr` is true-ish. */
-        inheritNonnullIfTrue(expr: ExpressionRef): void;
+        inheritNonnullIfTrue(
+        /** Expression being true. */
+        expr: ExpressionRef, 
+        /** If specified, only set the flag if also nonnull in this flow. */
+        iff?: Flow | null): void;
         /** Updates local states to reflect that this branch is only taken when `expr` is false-ish. */
-        inheritNonnullIfFalse(expr: ExpressionRef): void;
+        inheritNonnullIfFalse(
+        /** Expression being false. */
+        expr: ExpressionRef, 
+        /** If specified, only set the flag if also nonnull in this flow. */
+        iff?: Flow | null): void;
         /**
          * Tests if an expression can possibly overflow in the context of this flow. Assumes that the
          * expression might already have overflown and returns `false` only if the operation neglects
@@ -3125,7 +3101,7 @@ declare module "assemblyscript/src/program" {
     import { Options } from "assemblyscript/src/compiler";
     import { DiagnosticMessage, DiagnosticEmitter } from "assemblyscript/src/diagnostics";
     import { Type, Signature } from "assemblyscript/src/types";
-    import { Source, Range, DecoratorNode, DecoratorKind, TypeParameterNode, TypeNode, NamedTypeNode, FunctionTypeNode, ArrowKind, Expression, IdentifierExpression, Statement, ClassDeclaration, DeclarationStatement, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, InterfaceDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, VariableLikeDeclarationStatement, Token } from "assemblyscript/src/ast";
+    import { Token, Source, Range, DecoratorNode, DecoratorKind, TypeParameterNode, TypeNode, NamedTypeNode, FunctionTypeNode, ArrowKind, Expression, IdentifierExpression, Statement, ClassDeclaration, DeclarationStatement, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, InterfaceDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, VariableLikeDeclarationStatement } from "assemblyscript/src/ast";
     import { Module, FunctionRef } from "assemblyscript/src/module";
     import { Resolver } from "assemblyscript/src/resolver";
     import { Flow } from "assemblyscript/src/flow";
@@ -4041,12 +4017,12 @@ declare module "assemblyscript/src/compiler" {
      * @module compiler
      */ /***/
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
-    import { Module, MemorySegment, ExpressionRef, NativeType, FunctionRef, GlobalRef, EventRef } from "assemblyscript/src/module";
+    import { Module, MemorySegment, ExpressionRef, NativeType, GlobalRef } from "assemblyscript/src/module";
     import { Feature, Target } from "assemblyscript/src/common";
-    import { Program, ClassPrototype, Class, Element, Enum, Field, FunctionPrototype, Function, Global, VariableLikeElement, File } from "assemblyscript/src/program";
+    import { Program, Class, Element, Enum, Function, Global, VariableLikeElement, File } from "assemblyscript/src/program";
     import { Flow } from "assemblyscript/src/flow";
     import { Resolver } from "assemblyscript/src/resolver";
-    import { Node, NamedTypeNode, Range, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExpressionStatement, ForStatement, IfStatement, InstanceOfExpression, InterfaceDeclaration, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, VoidStatement, WhileStatement, Expression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, IdentifierExpression, LiteralExpression, NewExpression, ObjectLiteralExpression, PropertyAccessExpression, TernaryExpression, StringLiteralExpression, UnaryPostfixExpression, UnaryPrefixExpression } from "assemblyscript/src/ast";
+    import { Node, Range, Statement, Expression } from "assemblyscript/src/ast";
     import { Type, Signature } from "assemblyscript/src/types";
     /** Compiler options. */
     export class Options {
@@ -4117,6 +4093,17 @@ declare module "assemblyscript/src/compiler" {
         /** Requires the built-in members visitor. */
         visitMembers = 8
     }
+    /** Exported names of compiler-generated elements. */
+    export namespace ExportNames {
+        /** Name of the explicit start function, if applicable. */
+        const start = "_start";
+        /** Name of the argumentsLength varargs helper global. */
+        const argumentsLength = "__argumentsLength";
+        /** Name of the memory instance, if exported. */
+        const memory = "memory";
+        /** Name of the table instance, if exported. */
+        const table = "table";
+    }
     /** Compiler interface. */
     export class Compiler extends DiagnosticEmitter {
         /** Program reference. */
@@ -4129,8 +4116,6 @@ declare module "assemblyscript/src/compiler" {
         module: Module;
         /** Current control flow. */
         currentFlow: Flow;
-        /** Current inline functions stack. */
-        currentInlineFunctions: Function[];
         /** Current parent element if not a function, i.e. an enum or namespace. */
         currentParent: Element | null;
         /** Current type in compilation. */
@@ -4145,16 +4130,14 @@ declare module "assemblyscript/src/compiler" {
         stringSegments: Map<string, MemorySegment>;
         /** Function table being compiled. First elem is blank. */
         functionTable: string[];
-        /** Argument count helper global. */
-        argcVar: GlobalRef;
-        /** Argument count helper setter. */
-        argcSet: FunctionRef;
+        /** Arguments length helper global. */
+        builtinArgumentsLength: GlobalRef;
         /** Requires runtime features. */
         runtimeFeatures: RuntimeFeatures;
         /** Expressions known to have skipped an autorelease. Usually function returns. */
         skippedAutoreleases: Set<ExpressionRef>;
-        /** Registered event types. */
-        events: Map<string, EventRef>;
+        /** Current inline functions stack. */
+        inlineStack: Function[];
         /** Compiles a {@link Program} to a {@link Module} using the specified options. */
         static compile(program: Program): Module;
         /** Constructs a new compiler for a {@link Program} using the specified options. */
@@ -4165,75 +4148,84 @@ declare module "assemblyscript/src/compiler" {
         private ensureModuleExports;
         /** Applies the respective module export(s) for the specified element. */
         private ensureModuleExport;
-        /** Makes a function to get the value of a field of an exported class. */
-        private ensureModuleFieldGetter;
-        /** Makes a function to set the value of a field of an exported class. */
-        private ensureModuleFieldSetter;
+        /** Makes an exported function to get the value of an instance field. */
+        private makeExportedFieldGetter;
+        /** Makes an exported function to set the value of an instance field. */
+        private makeExportedFieldSetter;
         /** Compiles any element. */
         compileElement(element: Element, compileMembers?: boolean): void;
-        /** Compiles an element's members. */
-        compileMembers(element: Element): void;
         /** Compiles a file's exports. */
         compileExports(file: File): void;
         /** Compiles the file matching the specified path. */
         compileFileByPath(normalizedPathWithoutExtension: string, reportNode: Node): void;
         /** Compiles the specified file. */
         compileFile(file: File): void;
+        /** Compiles a global variable. */
         compileGlobal(global: Global): boolean;
+        /** Compiles an enum. */
         compileEnum(element: Enum): boolean;
-        /** Resolves the specified type arguments prior to compiling the resulting function instance. */
-        compileFunctionUsingTypeArguments(prototype: FunctionPrototype, typeArguments: NamedTypeNode[], contextualTypeArguments?: Map<string, Type>, alternativeReportNode?: Node | null): Function | null;
-        /** Compiles the body of a function within the specified flow. */
-        compileFunctionBody(
+        /** Compiles a priorly resolved function. */
+        compileFunction(
         /** Function to compile. */
         instance: Function, 
-        /** Target array of statements. */
-        stmts?: ExpressionRef[] | null): ExpressionRef[];
-        /** Compiles a readily resolved function instance. */
-        compileFunction(instance: Function): boolean;
-        compileClassUsingTypeArguments(prototype: ClassPrototype, typeArguments: NamedTypeNode[], contextualTypeArguments?: Map<string, Type>, alternativeReportNode?: Node | null): void;
+        /** Force compilation of stdlib alternative if a builtin. */
+        forceStdAlternative?: boolean): boolean;
+        /** Compiles the body of a function within the specified flow. */
+        private compileFunctionBody;
+        /** Compiles a priorly resolved class. */
         compileClass(instance: Class): boolean;
-        compileInterfaceDeclaration(declaration: InterfaceDeclaration, typeArguments: NamedTypeNode[], contextualTypeArguments?: Map<string, Type> | null, alternativeReportNode?: Node | null): void;
         /** Adds a static memory segment with the specified data. */
         addMemorySegment(buffer: Uint8Array, alignment?: number): MemorySegment;
-        /** Ensures that the specified string exists in static memory and returns a pointer to it. */
+        /** Ensures that a string exists in static memory and returns a pointer to it. Deduplicates. */
         ensureStaticString(stringValue: string): ExpressionRef;
-        ensureStaticArrayBuffer(elementType: Type, values: ExpressionRef[]): MemorySegment;
-        ensureStaticArrayHeader(elementType: Type, bufferSegment: MemorySegment): MemorySegment;
+        /** Adds a buffer to static memory and returns the created segment. */
+        private addStaticBuffer;
+        /** Adds an array header to static memory and returns the created segment. */
+        private addStaticArrayHeader;
         /** Ensures that a table entry exists for the specified function and returns its index. */
-        ensureFunctionTableEntry(func: Function): number;
+        ensureFunctionTableEntry(instance: Function): number;
+        /** Compiles a top level statement (incl. function declarations etc.) to the specified body. */
         compileTopLevelStatement(statement: Statement, body: ExpressionRef[]): void;
-        compileStatement(statement: Statement, isLastInBody?: boolean): ExpressionRef;
-        compileStatements(statements: Statement[], isBody?: boolean, stmts?: ExpressionRef[] | null): ExpressionRef[];
-        compileBlockStatement(statement: BlockStatement): ExpressionRef;
-        compileBreakStatement(statement: BreakStatement): ExpressionRef;
-        compileContinueStatement(statement: ContinueStatement): ExpressionRef;
-        compileDoStatement(statement: DoStatement): ExpressionRef;
-        compileEmptyStatement(statement: EmptyStatement): ExpressionRef;
-        compileExpressionStatement(statement: ExpressionStatement): ExpressionRef;
-        compileForStatement(statement: ForStatement): ExpressionRef;
-        compileIfStatement(statement: IfStatement): ExpressionRef;
-        /** Compiles an expression that is about to be returned, taking special care of retaining and setting flow states. */
-        compileReturnedExpression(
-        /** Expression to compile. */
-        expression: Expression, 
-        /** Return type of the function. */
-        returnType: Type, 
-        /** Constraints indicating contextual conditions. */
-        constraints?: Constraints): ExpressionRef;
-        compileReturnStatement(statement: ReturnStatement, isLastInBody: boolean): ExpressionRef;
-        compileSwitchStatement(statement: SwitchStatement): ExpressionRef;
-        compileThrowStatement(statement: ThrowStatement): ExpressionRef;
-        compileTryStatement(statement: TryStatement): ExpressionRef;
+        /** Compiles a statement. */
+        compileStatement(
+        /** Statement to compile. */
+        statement: Statement, 
+        /** Whether this is the last statement of the body, if known. */
+        isLastInBody?: boolean): ExpressionRef;
+        /** Compiles a series of statements. */
+        compileStatements(
+        /** Statements to compile. */
+        statements: Statement[], 
+        /** Whether this is an immediate body statement. */
+        isBody?: boolean, 
+        /** Statements to append to that is also returned. Created if omitted. */
+        stmts?: ExpressionRef[] | null): ExpressionRef[];
+        private compileBlockStatement;
+        private compileBreakStatement;
+        private compileContinueStatement;
+        private compileDoStatement;
+        private doCompileDoStatement;
+        private compileEmptyStatement;
+        private compileExpressionStatement;
+        private compileForStatement;
+        private doCompileForStatement;
+        private compileIfStatement;
+        private compileReturnStatement;
+        private compileSwitchStatement;
+        private compileThrowStatement;
+        private compileTryStatement;
         /** Compiles a variable statement. Returns `0` if an initializer is not necessary. */
-        compileVariableStatement(statement: VariableStatement): ExpressionRef;
-        compileVoidStatement(statement: VoidStatement): ExpressionRef;
-        compileWhileStatement(statement: WhileStatement): ExpressionRef;
+        private compileVariableStatement;
+        private compileVoidStatement;
+        private compileWhileStatement;
+        private doCompileWhileStatement;
         /** Compiles the value of an inlined constant element. */
         compileInlineConstant(element: VariableLikeElement, contextualType: Type, constraints: Constraints): ExpressionRef;
         compileExpression(expression: Expression, contextualType: Type, constraints?: Constraints): ExpressionRef;
         /** Compiles and precomputes an expression, possibly yielding a costant value. */
         precomputeExpression(expression: Expression, contextualType: Type, constraints?: Constraints): ExpressionRef;
+        /** Compiles an expression that is about to be returned, taking special care of retaining and setting flow states. */
+        private compileReturnedExpression;
         convertExpression(expr: ExpressionRef, 
         /** Original type. */
         fromType: Type, 
@@ -4243,21 +4235,23 @@ declare module "assemblyscript/src/compiler" {
         explicit: boolean, 
         /** Whether the result should be wrapped, if a small integer. */
         wrap: boolean, reportNode: Node): ExpressionRef;
-        compileAssertionExpression(expression: AssertionExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+        private compileAssertionExpression;
         private f32ModInstance;
         private f64ModInstance;
         private f32PowInstance;
         private f64PowInstance;
-        compileBinaryExpression(expression: BinaryExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
-        compileUnaryOverload(operatorInstance: Function, value: Expression, valueExpr: ExpressionRef, reportNode: Node): ExpressionRef;
-        compileBinaryOverload(operatorInstance: Function, left: Expression, leftExpr: ExpressionRef, right: Expression, reportNode: Node): ExpressionRef;
-        compileAssignment(expression: Expression, valueExpression: Expression, contextualType: Type): ExpressionRef;
+        private compileBinaryExpression;
+        private compileUnaryOverload;
+        private compileBinaryOverload;
+        private compileAssignment;
         /** Makes an assignment expression or block, assigning a value to a target. */
         makeAssignment(
         /** Target element, e.g. a Local. */
         target: Element, 
         /** Value expression that has been compiled in a previous step already. */
         valueExpr: ExpressionRef, 
+        /** Value expression type. */
+        valueType: Type, 
         /** Expression reference. Has already been compiled to `valueExpr`. */
         valueExpression: Expression, 
         /** `this` expression reference if a field or property set. */
@@ -4271,23 +4265,9 @@ declare module "assemblyscript/src/compiler" {
         /** Makes an assignment to a global, possibly retaining and releasing affected references. */
         private makeGlobalAssignment;
         /** Makes an assignment to a field, possibly retaining and releasing affected references. */
-        makeFieldAssignment(
-        /** The field to assign to. */
-        field: Field, 
-        /** The value to assign. */
-        valueExpr: ExpressionRef, 
-        /** The value of `this`. */
-        thisExpr: ExpressionRef, 
-        /** Whether to tee the value. */
-        tee: boolean): ExpressionRef;
+        private makeFieldAssignment;
         /** Compiles a call expression according to the specified context. */
-        compileCallExpression(
-        /** Call expression to compile. */
-        expression: CallExpression, 
-        /** Contextual type indicating the return type the caller expects, if any. */
-        contextualType: Type, 
-        /** Constraints indicating contextual conditions. */
-        constraints: Constraints): ExpressionRef;
+        private compileCallExpression;
         private compileCallExpressionBuiltin;
         /**
          * Checks that a call with the given number as arguments can be performed according to the
@@ -4301,10 +4281,8 @@ declare module "assemblyscript/src/compiler" {
         makeCallInline(instance: Function, operands: ExpressionRef[] | null, thisArg?: ExpressionRef, immediatelyDropped?: boolean): ExpressionRef;
         /** Gets the trampoline for the specified function. */
         ensureTrampoline(original: Function): Function;
-        /** Makes sure that the argument count helper global is present and returns its name. */
-        private ensureArgcVar;
-        /** Makes sure that the argument count helper setter is present and returns its name. */
-        private ensureArgcSet;
+        /** Makes sure that the arguments length helper global is present. */
+        ensureBuiltinArgumentsLength(): void;
         /** Makes a retain call, retaining the expression's value. */
         makeRetain(expr: ExpressionRef): ExpressionRef;
         /** Makes a release call, releasing the expression's value. Changes the current type to void.*/
@@ -4378,23 +4356,18 @@ declare module "assemblyscript/src/compiler" {
         compileCallIndirect(signature: Signature, indexArg: ExpressionRef, argumentExpressions: Expression[], reportNode: Node, thisArg?: ExpressionRef, immediatelyDropped?: boolean): ExpressionRef;
         /** Creates an indirect call to the function at `indexArg` in the function table. */
         makeCallIndirect(signature: Signature, indexArg: ExpressionRef, operands?: ExpressionRef[] | null, immediatelyDropped?: boolean): ExpressionRef;
-        compileCommaExpression(expression: CommaExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
-        compileElementAccessExpression(expression: ElementAccessExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
-        compileFunctionExpression(expression: FunctionExpression, contextualSignature: Signature | null, constraints: Constraints): ExpressionRef;
+        private compileCommaExpression;
+        private compileElementAccessExpression;
+        private compileFunctionExpression;
         /** Makes sure the enclosing source file of the specified expression has been compiled. */
         private maybeCompileEnclosingSource;
-        /**
-         * Compiles an identifier in the specified context.
-         * @param retainConstantType Retains the type of inlined constants if `true`, otherwise
-         *  precomputes them according to context.
-         */
-        compileIdentifierExpression(expression: IdentifierExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
-        compileInstanceOfExpression(expression: InstanceOfExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
-        compileLiteralExpression(expression: LiteralExpression, contextualType: Type, constraints: Constraints, implicitlyNegate?: boolean): ExpressionRef;
-        compileStringLiteral(expression: StringLiteralExpression, constraints: Constraints): ExpressionRef;
-        compileArrayLiteral(elementType: Type, expressions: (Expression | null)[], constraints: Constraints, reportNode: Node): ExpressionRef;
-        compileObjectLiteral(expression: ObjectLiteralExpression, contextualType: Type): ExpressionRef;
-        compileNewExpression(expression: NewExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+        private compileIdentifierExpression;
+        private compileInstanceOfExpression;
+        private compileLiteralExpression;
+        private compileStringLiteral;
+        private compileArrayLiteral;
+        private compileObjectLiteral;
+        private compileNewExpression;
         /** Gets the compiled constructor of the specified class or generates one if none is present. */
         ensureConstructor(classInstance: Class, reportNode: Node): Function;
         compileInstantiate(
@@ -4406,16 +4379,11 @@ declare module "assemblyscript/src/compiler" {
         constraints: Constraints, 
         /** Node to report on. */
         reportNode: Node): ExpressionRef;
-        /**
-         * Compiles a property access in the specified context.
-         * @param retainConstantType Retains the type of inlined constants if `true`, otherwise
-         *  precomputes them according to context.
-         */
-        compilePropertyAccessExpression(expression: PropertyAccessExpression, ctxType: Type, constraints: Constraints): ExpressionRef;
-        compileTernaryExpression(expression: TernaryExpression, ctxType: Type, constraints: Constraints): ExpressionRef;
-        compileUnaryPostfixExpression(expression: UnaryPostfixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
-        compileUnaryPrefixExpression(expression: UnaryPrefixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
-        compileTypeof(expression: UnaryPrefixExpression, contextualType: Type, constraints: Constraints): ExpressionRef;
+        private compilePropertyAccessExpression;
+        private compileTernaryExpression;
+        private compileUnaryPostfixExpression;
+        private compileUnaryPrefixExpression;
+        private compileTypeof;
         /** Makes sure that a 32-bit integer value is wrapped to a valid value of the specified type. */
         ensureSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Adds the debug location of the specified expression at the specified range to the source map. */
@@ -4430,12 +4398,13 @@ declare module "assemblyscript/src/compiler" {
         makeIsTrueish(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Makes an allocation suitable to hold the data of an instance of the given class. */
         makeAllocation(classInstance: Class): ExpressionRef;
-        /** Makes the initializers for a class's fields. */
-        makeFieldInitialization(classInstance: Class, stmts?: ExpressionRef[]): ExpressionRef[];
-        makeInstanceOfClass(expr: ExpressionRef, classInstance: Class): ExpressionRef;
+        /** Makes the initializers for a class's fields within the constructor. */
+        makeFieldInitializationInConstructor(
+        /** Class being initialized. */
+        classInstance: Class, 
+        /** Statements to append to also being returned. Created if omitted. */
+        stmts?: ExpressionRef[]): ExpressionRef[];
     }
-    /** Flattens a series of expressions to a nop, a single statement or a block depending on statement count. */
-    export function flatten(module: Module, stmts: ExpressionRef[], type: NativeType): ExpressionRef;
 }
 declare module "assemblyscript/src/builtins" {
     /**
@@ -4447,8 +4416,11 @@ declare module "assemblyscript/src/builtins" {
     import { Type } from "assemblyscript/src/types";
     import { ExpressionRef } from "assemblyscript/src/module";
     import { FunctionPrototype } from "assemblyscript/src/program";
-    /** Symbols of various compiler built-ins. */
-    export namespace BuiltinSymbols {
+    /** Internal names of various compiler built-ins. */
+    export namespace BuiltinNames {
+        const start = "~start";
+        const started = "~started";
+        const argumentsLength = "~argumentsLength";
         const isInteger = "~lib/builtins/isInteger";
         const isFloat = "~lib/builtins/isFloat";
         const isBoolean = "~lib/builtins/isBoolean";
@@ -4518,7 +4490,6 @@ declare module "assemblyscript/src/builtins" {
         const f32 = "~lib/builtins/f32";
         const f64 = "~lib/builtins/f64";
         const v128 = "~lib/builtins/v128";
-        const void_ = "~lib/builtins/void";
         const i32_clz = "~lib/builtins/i32.clz";
         const i64_clz = "~lib/builtins/i64.clz";
         const i32_ctz = "~lib/builtins/i32.ctz";
@@ -4877,31 +4848,17 @@ declare module "assemblyscript/src/builtins" {
         const memory_grow = "~lib/memory/memory.grow";
         const memory_copy = "~lib/memory/memory.copy";
         const memory_fill = "~lib/memory/memory.fill";
-        const memory_allocate = "~lib/memory/memory.allocate";
-        const memory_free = "~lib/memory/memory.free";
-        const memory_reset = "~lib/memory/memory.reset";
-        const runtime_instanceof = "~lib/runtime/runtime.instanceof";
-        const runtime_flags = "~lib/runtime/runtime.flags";
-        const runtime_allocate = "~lib/util/runtime/allocate";
-        const runtime_reallocate = "~lib/util/runtime/reallocate";
-        const runtime_register = "~lib/util/runtime/register";
-        const runtime_discard = "~lib/util/runtime/discard";
-        const runtime_makeArray = "~lib/util/runtime/makeArray";
         const Int8Array = "~lib/typedarray/Int8Array";
         const Uint8Array = "~lib/typedarray/Uint8Array";
+        const Uint8ClampedArray = "~lib/typedarray/Uint8ClampedArray";
         const Int16Array = "~lib/typedarray/Int16Array";
         const Uint16Array = "~lib/typedarray/Uint16Array";
         const Int32Array = "~lib/typedarray/Int32Array";
         const Uint32Array = "~lib/typedarray/Uint32Array";
         const Int64Array = "~lib/typedarray/Int64Array";
         const Uint64Array = "~lib/typedarray/Uint64Array";
-        const Uint8ClampedArray = "~lib/typedarray/Uint8ClampedArray";
         const Float32Array = "~lib/typedarray/Float32Array";
         const Float64Array = "~lib/typedarray/Float64Array";
-        const started = "~lib/started";
-        const argc = "~lib/argc";
-        const setargc = "~lib/setargc";
-        const capabilities = "~lib/capabilities";
     }
     /** Compiles a call to a built-in function. */
     export function compileCall(compiler: Compiler, 
@@ -4925,25 +4882,6 @@ declare module "assemblyscript/src/builtins" {
     export function compileVisitMembers(compiler: Compiler): void;
     /** Compiles runtime type information for use by stdlib. */
     export function compileRTTI(compiler: Compiler): void;
-}
-declare module "assemblyscript/src/decompiler" {
-    /**
-     * A decompiler that generates low-level AssemblyScript from WebAssembly binaries.
-     * @module decompiler
-     */ /***/
-    import { Module, FunctionRef, ExpressionRef } from "assemblyscript/src/module";
-    export class Decompiler {
-        static decompile(module: Module): string;
-        text: string[];
-        functionId: number;
-        constructor();
-        /** Decompiles a module to an AST that can then be serialized. */
-        decompile(module: Module): void;
-        decompileFunction(func: FunctionRef): void;
-        decompileExpression(expr: ExpressionRef): void;
-        private push;
-        finish(): string;
-    }
 }
 declare module "assemblyscript/src/definitions" {
     /**
@@ -5108,8 +5046,6 @@ declare module "assemblyscript/src/index" {
     export function getDependee(program: Program, file: string): string | null;
     /** Compiles the parsed sources to a module. */
     export function compile(program: Program): Module;
-    /** Decompiles a module to its (low level) source. */
-    export function decompile(module: Module): string;
     /** Builds WebIDL definitions for the specified program. */
     export function buildIDL(program: Program): string;
     /** Builds TypeScript definitions for the specified program. */
@@ -5121,7 +5057,6 @@ declare module "assemblyscript/src/index" {
     export * from "assemblyscript/src/ast";
     export * from "assemblyscript/src/common";
     export * from "assemblyscript/src/compiler";
-    export * from "assemblyscript/src/decompiler";
     export * from "assemblyscript/src/definitions";
     export * from "assemblyscript/src/diagnosticMessages.generated";
     export * from "assemblyscript/src/diagnostics";
