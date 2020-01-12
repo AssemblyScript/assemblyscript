@@ -1,22 +1,21 @@
 (module
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $scoped/aGlobal (mut i32) (i32.const 1))
  (global $scoped/aConstant i32 (i32.const 3))
  (global $scoped/aStartFunctionLocal (mut i32) (i32.const 2))
  (export "memory" (memory $0))
  (start $start)
- (func $scoped/fn (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $scoped/fn (; 0 ;) (param $0 i32)
   (local $1 i32)
   i32.const 0
   local.set $1
   local.get $0
   local.set $1
  )
- (func $start:scoped (; 1 ;) (type $FUNCSIG$v)
+ (func $start:scoped (; 1 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -65,10 +64,7 @@
   i32.const 42
   call $scoped/fn
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $start (; 2 ;)
   call $start:scoped
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

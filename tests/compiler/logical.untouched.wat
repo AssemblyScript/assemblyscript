@@ -1,19 +1,18 @@
 (module
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$iji (func (param i64 i32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i64_i32_=>_i32 (func (param i64 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00l\00o\00g\00i\00c\00a\00l\00.\00t\00s\00")
+ (data (i32.const 16) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00l\00o\00g\00i\00c\00a\00l\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $logical/i (mut i32) (i32.const 0))
  (global $logical/I (mut i64) (i64.const 0))
  (global $logical/f (mut f32) (f32.const 0))
  (global $logical/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $logical/testShortcutAnd (; 1 ;) (type $FUNCSIG$iji) (param $0 i64) (param $1 i32) (result i32)
+ (func $logical/testShortcutAnd (; 1 ;) (param $0 i64) (param $1 i32) (result i32)
   local.get $0
   i64.const 0
   i64.ne
@@ -26,7 +25,7 @@
    i32.const 0
   end
  )
- (func $logical/testShortcutOr (; 2 ;) (type $FUNCSIG$iji) (param $0 i64) (param $1 i32) (result i32)
+ (func $logical/testShortcutOr (; 2 ;) (param $0 i64) (param $1 i32) (result i32)
   local.get $0
   i64.const 0
   i64.ne
@@ -39,7 +38,7 @@
    i64.ne
   end
  )
- (func $start:logical (; 3 ;) (type $FUNCSIG$v)
+ (func $start:logical (; 3 ;)
   (local $0 f64)
   (local $1 f32)
   i32.const 0
@@ -135,7 +134,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 12
    i32.const 0
    call $~lib/builtins/abort
@@ -154,7 +153,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 15
    i32.const 0
    call $~lib/builtins/abort
@@ -175,7 +174,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 20
    i32.const 0
    call $~lib/builtins/abort
@@ -196,7 +195,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 23
    i32.const 0
    call $~lib/builtins/abort
@@ -222,7 +221,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 28
    i32.const 0
    call $~lib/builtins/abort
@@ -248,7 +247,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 31
    i32.const 0
    call $~lib/builtins/abort
@@ -274,7 +273,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 36
    i32.const 0
    call $~lib/builtins/abort
@@ -300,7 +299,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 39
    i32.const 0
    call $~lib/builtins/abort
@@ -326,7 +325,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 44
    i32.const 0
    call $~lib/builtins/abort
@@ -352,7 +351,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 47
    i32.const 0
    call $~lib/builtins/abort
@@ -378,7 +377,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 50
    i32.const 0
    call $~lib/builtins/abort
@@ -404,7 +403,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 53
    i32.const 0
    call $~lib/builtins/abort
@@ -431,7 +430,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 56
    i32.const 0
    call $~lib/builtins/abort
@@ -458,7 +457,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 59
    i32.const 0
    call $~lib/builtins/abort
@@ -485,7 +484,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 62
    i32.const 0
    call $~lib/builtins/abort
@@ -512,7 +511,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 65
    i32.const 0
    call $~lib/builtins/abort
@@ -524,7 +523,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 76
    i32.const 0
    call $~lib/builtins/abort
@@ -536,17 +535,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 77
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 4 ;)
   call $start:logical
- )
- (func $null (; 5 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

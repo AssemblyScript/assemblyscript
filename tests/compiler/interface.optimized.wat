@@ -1,12 +1,12 @@
 (module
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00.\00t\00s")
+ (data (i32.const 16) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00.\00t\00s")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $interface/aFoo (mut i32) (i32.const 0))
@@ -15,7 +15,7 @@
  (global $interface/ibool (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -74,7 +74,7 @@
   i32.const 16
   i32.store
   local.get $1
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $1
   local.get $0
@@ -84,14 +84,14 @@
   i32.store offset=12
   local.get $2
  )
- (func $interface/passAnInterface (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $interface/passAnInterface (; 3 ;) (param $0 i32)
   local.get $0
   call $interface/IFoo#foo
   i32.const 42
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 41
    i32.const 2
    call $~lib/builtins/abort
@@ -110,7 +110,7 @@
    unreachable
   end
  )
- (func $interface/expectX (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $interface/expectX (; 4 ;) (param $0 i32) (param $1 i32)
   block $switch$1$leave
    block $switch$1$default
     local.get $0
@@ -136,18 +136,18 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 50
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start:interface (; 5 ;) (type $FUNCSIG$v)
+ (func $start:interface (; 5 ;)
   (local $0 i32)
-  i32.const 48
+  i32.const 64
   global.set $~lib/rt/stub/startOffset
-  i32.const 48
+  i32.const 64
   global.set $~lib/rt/stub/offset
   i32.const 3
   call $~lib/rt/stub/__alloc
@@ -189,14 +189,14 @@
   global.get $interface/ibool
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 58
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 6 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;)
   call $start:interface
  )
  (func $interface/AFoo#foo (; 7 ;) (param $0 i32) (result i32)
@@ -226,7 +226,7 @@
   local.get $0
   call $interface/AFoo#foo
  )
- (func $interface/IFoo#get:x (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface/IFoo#get:x (; 9 ;) (param $0 i32) (result i32)
   block $switch$1$case$4
    block $switch$1$case$3
     block $switch$1$default
@@ -246,8 +246,5 @@
   end
   local.get $0
   i32.load8_u offset=4
- )
- (func $null (; 10 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

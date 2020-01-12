@@ -24,8 +24,12 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
+const binaryen = global.Binaryen || (global.Binaryen = require("binaryen"));
 
-// global.Binaryen = require("../lib/binaryen");
+// Proxy Binaryen's ready event
+Object.defineProperty(exports, "ready", {
+  get: function() { return binaryen.ready; }
+});
 
 // Emscripten adds an `uncaughtException` listener to Binaryen that results in an additional
 // useless code fragment on top of an actual error. suppress this:
@@ -33,27 +37,26 @@ if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
 
 // Use distribution files if present, otherwise run the sources directly
 var assemblyscript, isDev = false;
-(() => {
-  try { // `asc` on the command line
-    assemblyscript = require("../dist/assemblyscript.js");
-  } catch (e) {
-    try { // `asc` on the command line without dist files
-      require("ts-node").register({
-        project: path.join(__dirname, "..", "src", "tsconfig.json"),
-        skipIgnore: true
-      });
-      require("../src/glue/js");
-      assemblyscript = require("../src");
-      isDev = true;
-    } catch (e_ts) {
-      try { // `require("dist/asc.js")` in explicit browser tests
-        assemblyscript = eval("require('./assemblyscript')");
-      } catch (e) {
-        throw Error(e_ts.stack + "\n---\n" + e.stack);
-      }
+try { // `asc` on the command line
+  assemblyscript = require("../dist/assemblyscript.js");
+} catch (e) {
+  try { // `asc` on the command line without dist files
+    require("ts-node").register({
+      project: path.join(__dirname, "..", "src", "tsconfig.json"),
+      skipIgnore: true,
+      compilerOptions: { target: "ES2016" }
+    });
+    require("../src/glue/js");
+    assemblyscript = require("../src");
+    isDev = true;
+  } catch (e_ts) {
+    try { // `require("dist/asc.js")` in explicit browser tests
+      assemblyscript = eval("require('./assemblyscript')");
+    } catch (e) {
+      throw Error(e_ts.stack + "\n---\n" + e.stack);
     }
   }
-})();
+}
 
 /** Whether this is a webpack bundle or not. */
 exports.isBundle = typeof BUNDLE_VERSION === "string";
@@ -66,9 +69,6 @@ exports.version = exports.isBundle ? BUNDLE_VERSION : require("../package.json")
 
 /** Available CLI options. */
 exports.options = require("./asc.json");
-
-/** Common root used in source maps. */
-exports.sourceMapRoot = "assemblyscript:///";
 
 /** Prefix used for library files. */
 exports.libraryPrefix = assemblyscript.LIBRARY_PREFIX;
@@ -219,6 +219,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setImportMemory(compilerOptions, args.importMemory);
   assemblyscript.setSharedMemory(compilerOptions, args.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, args.importTable);
+  assemblyscript.setExportTable(compilerOptions, args.exportTable);
   assemblyscript.setExplicitStart(compilerOptions, args.explicitStart);
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
@@ -286,10 +287,14 @@ exports.main = function main(argv, options, callback) {
   // Set up transforms
   const transforms = [];
   if (args.transform) {
+    let tsNodeRegistered = false;
     let transformArgs = args.transform;
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
-      if (/\.ts$/.test(filename)) require("ts-node").register({ transpileOnly: true, skipProject: true });
+      if (!tsNodeRegistered && filename.endsWith('.ts')) {
+        require("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
+        tsNodeRegistered = true;
+      }
       try {
         const classOrModule = require(require.resolve(filename, { paths: [baseDir, process.cwd()] }));
         if (typeof classOrModule === "function") {
@@ -370,8 +375,11 @@ exports.main = function main(argv, options, callback) {
     var sourceText = null; // text reported back to the compiler
     var sourcePath = null; // path reported back to the compiler
 
+    const libraryPrefix = exports.libraryPrefix;
+    const libraryFiles = exports.libraryFiles;
+
     // Try file.ts, file/index.ts, file.d.ts
-    if (!internalPath.startsWith(exports.libraryPrefix)) {
+    if (!internalPath.startsWith(libraryPrefix)) {
       if ((sourceText = readFile(sourcePath = internalPath + ".ts", baseDir)) == null) {
         if ((sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir)) == null) {
           // portable d.ts: uses the .js file next to it in JS or becomes an import in Wasm
@@ -381,22 +389,22 @@ exports.main = function main(argv, options, callback) {
 
     // Search library in this order: stdlib, custom lib dirs, paths
     } else {
-      const plainName = internalPath.substring(exports.libraryPrefix.length);
+      const plainName = internalPath.substring(libraryPrefix.length);
       const indexName = plainName + "/index";
-      if (exports.libraryFiles.hasOwnProperty(plainName)) {
-        sourceText = exports.libraryFiles[plainName];
-        sourcePath = exports.libraryPrefix + plainName + ".ts";
-      } else if (exports.libraryFiles.hasOwnProperty(indexName)) {
-        sourceText = exports.libraryFiles[indexName];
-        sourcePath = exports.libraryPrefix + indexName + ".ts";
+      if (libraryFiles.hasOwnProperty(plainName)) {
+        sourceText = libraryFiles[plainName];
+        sourcePath = libraryPrefix + plainName + ".ts";
+      } else if (libraryFiles.hasOwnProperty(indexName)) {
+        sourceText = libraryFiles[indexName];
+        sourcePath = libraryPrefix + indexName + ".ts";
       } else { // custom lib dirs
         for (const libDir of customLibDirs) {
           if ((sourceText = readFile(plainName + ".ts", libDir)) != null) {
-            sourcePath = exports.libraryPrefix + plainName + ".ts";
+            sourcePath = libraryPrefix + plainName + ".ts";
             break;
           } else {
             if ((sourceText = readFile(indexName + ".ts", libDir)) != null) {
-              sourcePath = exports.libraryPrefix + indexName + ".ts";
+              sourcePath = libraryPrefix + indexName + ".ts";
               break;
             }
           }
@@ -412,7 +420,7 @@ exports.main = function main(argv, options, callback) {
             const absBasePath = path.isAbsolute(basePath) ? basePath : path.join(baseDir, basePath);
             const paths = [];
             for (let parts = absBasePath.split(SEP), i = parts.length, k = SEP == "/" ? 0 : 1; i >= k; --i) {
-              if (parts[i - 1] != "node_modules") paths.push(parts.slice(0, i).join(SEP) + SEP + "node_modules");
+              if (parts[i - 1] !== "node_modules") paths.push(parts.slice(0, i).join(SEP) + SEP + "node_modules");
             }
             for (const currentPath of paths.concat(...args.path).map(p => path.relative(baseDir, p))) {
               if (args.traceResolution) stderr.write("  in " + path.join(currentPath, packageName) + EOL);
@@ -435,14 +443,14 @@ exports.main = function main(argv, options, callback) {
               const mainDir = path.join(currentPath, packageName, mainPath);
               const plainName = filePath;
               if ((sourceText = readFile(path.join(mainDir, plainName + ".ts"), baseDir)) != null) {
-                sourcePath = exports.libraryPrefix + packageName + "/" + plainName + ".ts";
+                sourcePath = libraryPrefix + packageName + "/" + plainName + ".ts";
                 packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
                 if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + ".ts") + EOL);
                 break;
               } else if (!isPackageRoot) {
                 const indexName = filePath + "/index";
                 if ((sourceText = readFile(path.join(mainDir, indexName + ".ts"), baseDir)) !== null) {
-                  sourcePath = exports.libraryPrefix + packageName + "/" + indexName + ".ts";
+                  sourcePath = libraryPrefix + packageName + "/" + indexName + ".ts";
                   packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
                   if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, indexName + ".ts") + EOL);
                   break;
@@ -453,10 +461,8 @@ exports.main = function main(argv, options, callback) {
         }
       }
     }
-
     // No such file
     if (sourceText == null) return null;
-
     return { sourceText, sourcePath };
   }
 
@@ -642,12 +648,12 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         add("ssa-nomerge");
       }
-      if (optimizeLevel >= 4) {
+      if (optimizeLevel >= 3) {
         add("flatten");
         add("local-cse");
       }
       if (hasARC) { // differs
-        if (optimizeLevel < 4) {
+        if (optimizeLevel < 3) {
           add("flatten");
         }
         add("post-assemblyscript");
@@ -664,9 +670,10 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
-      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
-        add("code-pushing");
-      }
+      // this will be done later
+      // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+      //   add("code-pushing");
+      // }
       add("simplify-locals-nostructure");
       add("vacuum");
       add("reorder-locals");
@@ -697,11 +704,7 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
       }
-      if (hasARC) { // differs
-        add("post-assemblyscript-finalize");
-      }
       add("vacuum");
-
       // PassRunner::addDefaultGlobalOptimizationPostPasses
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("dae-optimizing");
@@ -709,18 +712,56 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("inlining-optimizing");
       }
-      add("duplicate-function-elimination");
+      // "duplicate-function-elimination" will better done later
+      // add("duplicate-function-elimination");
       add("duplicate-import-elimination");
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("simplify-globals-optimizing");
       } else {
         add("simplify-globals");
       }
-      add("remove-unused-module-elements");
-      add("memory-packing");
-      add("directize");
+      // replace indirect calls with direct, reduce arity and
+      // inline this calls if possible
+      add("directize"); // differs
+      add("dae-optimizing"); // differs
       add("inlining-optimizing"); // differs
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+      // ARC finalization should be done exactly after inlining for better release/retain reduction
+      if (hasARC) { // differs
+        add("post-assemblyscript-finalize");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("rse");
+        add("vacuum");
+
+        // rearrange / reduce switch cases again
+        add("remove-unused-brs");
+        add("remove-unused-names");
+        add("merge-blocks");
+        add("vacuum");
+
+        // replace indirect calls with direct and inline if possible again.
+        add("directize");
+        add("inlining-optimizing");
+        // move some code after early return which potentially could reduce computations
+        // do this after CFG cleanup (originally it was done before)
+        add("code-pushing");
+
+        // this quite expensive so do this only for highest opt level
+        if (optimizeLevel >= 3) {
+          add("simplify-locals-nostructure");
+          add("reorder-locals");
+          add("vacuum");
+        }
+        // finally optimize all remaining peepholes
+        add("simplify-globals-optimizing");
+        add("optimize-instructions");
+      }
+      // remove unused elements of table and pack / reduce memory
+      add("duplicate-function-elimination"); // differs
+      add("remove-unused-nonfunction-module-elements"); // differs
+      add("memory-packing");
+      add("remove-unused-module-elements"); // differs
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
         add("generate-stack-ir");
         add("optimize-stack-ir");
       }
@@ -767,16 +808,17 @@ exports.main = function main(argv, options, callback) {
 
     // Write binary
     if (args.binaryFile != null) {
+      let basename = path.basename(args.binaryFile);
       let sourceMapURL = args.sourceMap != null
         ? args.sourceMap.length
           ? args.sourceMap
-          : path.basename(args.binaryFile) + ".map"
+          : "./" + basename + ".map"
         : null;
 
       let wasm;
       stats.emitCount++;
       stats.emitTime += measure(() => {
-        wasm = module.toBinary(sourceMapURL)
+        wasm = module.toBinary(sourceMapURL);
       });
 
       if (args.binaryFile.length) {
@@ -790,18 +832,19 @@ exports.main = function main(argv, options, callback) {
       // Post-process source map
       if (wasm.sourceMap != null) {
         if (args.binaryFile.length) {
-          let sourceMap = JSON.parse(wasm.sourceMap);
-          sourceMap.sourceRoot = exports.sourceMapRoot;
-          sourceMap.sources.forEach((name, index) => {
+          let map = JSON.parse(wasm.sourceMap);
+          map.sourceRoot = "./" + basename;
+          let contents = [];
+          map.sources.forEach((name, index) => {
             let text = assemblyscript.getSource(program, name.replace(/\.ts$/, ""));
             if (text == null) return callback(Error("Source of file '" + name + "' not found."));
-            if (!sourceMap.sourceContents) sourceMap.sourceContents = [];
-            sourceMap.sourceContents[index] = text;
+            contents[index] = text;
           });
+          map.sourcesContent = contents;
           writeFile(path.join(
             path.dirname(args.binaryFile),
             path.basename(sourceMapURL)
-          ).replace(/^\.\//, ""), JSON.stringify(sourceMap), baseDir);
+          ).replace(/^\.\//, ""), JSON.stringify(map), baseDir);
         } else {
           stderr.write("Skipped source map (stdout already occupied)" + EOL);
         }

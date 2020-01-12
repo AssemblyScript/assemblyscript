@@ -107,8 +107,8 @@ declare function trunc<T = f32 | f64>(value: T): T;
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
 declare function store<T>(ptr: usize, value: any, immOffset?: usize, immAlign?: usize): void;
-/** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression of any type. */
-declare function unreachable(): any; // sic
+/** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression. */
+declare function unreachable(): never;
 
 /** NaN (not a number) as a 32-bit or 64-bit float depending on context. */
 declare const NaN: f32 | f64;
@@ -134,10 +134,6 @@ declare function idof<T>(): u32;
 declare function changetype<T>(value: any): T;
 /** Explicitly requests no bounds checks on the provided expression. Useful for array accesses. */
 declare function unchecked<T>(value: T): T;
-/** Emits a `call_indirect` instruction, calling the specified function in the function table by index with the specified arguments. Does result in a runtime error if the arguments do not match the called function. */
-declare function call_indirect<T>(target: Function | u32, ...args: any[]): T;
-/** Emits a `call` instruction, calling the specified function in the function table directly with the specified arguments. Function index must be a compile-time constant. */
-declare function call_direct<T>(target: Function | u32, ...args: any[]): T;
 /** Instantiates a new instance of `T` using the specified constructor arguments. */
 declare function instantiate<T>(...args: any[]): T;
 /** Tests if a 32-bit or 64-bit float is `NaN`. */
@@ -595,6 +591,8 @@ declare namespace v128 {
   export function max<T>(a: v128, b: v128): v128;
   /** Computes the dot product of two lanes each, yielding lanes one size wider than the input. */
   export function dot<T = i16>(a: v128, b: v128): v128;
+  /** Computes the average of each lane. */
+  export function avgr<T = u8 | u16>(a: v128, b: v128): v128;
   /** Computes the absolute value of each lane. */
   export function abs<T = f32 | f64>(a: v128): v128;
   /** Computes the square root of each lane. */
@@ -651,6 +649,8 @@ declare namespace i8x16 {
   export function max_s(a: v128, b: v128): v128;
   /** Computes the unsigned maximum of each 8-bit integer lane. */
   export function max_u(a: v128, b: v128): v128;
+  /** Computes the unsigned average of each 8-bit integer lane. */
+  export function avgr_u(a: v128, b: v128): v128;
   /** Negates each 8-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 8-bit integer lane using signed saturation. */
@@ -721,6 +721,8 @@ declare namespace i16x8 {
   export function max_s(a: v128, b: v128): v128;
   /** Computes the unsigned maximum of each 16-bit integer lane. */
   export function max_u(a: v128, b: v128): v128;
+  /** Computes the unsigned average of each 16-bit integer lane. */
+  export function avgr_u(a: v128, b: v128): v128;
   /** Negates each 16-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 16-bit integer lane using signed saturation. */
@@ -1294,6 +1296,8 @@ declare abstract class TypedArray<T> implements ArrayBufferView {
   reverse(): this;
   /** The join() method joins all elements of an array into a string. This method has the same algorithm as Array.prototype.join(). */
   join(separator?: string): string;
+  /** The set() method stores multiple values in the typed array, reading input values from a specified array. */
+  set<U extends ArrayBufferView>(source: U, offset?: i32): void
   /** The toString() method returns a string representing the specified array and its elements. This method has the same algorithm as Array.prototype.toString() */
   toString(): string;
 }
@@ -1431,6 +1435,8 @@ declare class String {
   replaceAll(search: string, replacement: string): string;
   slice(beginIndex: i32, endIndex?: i32): string;
   split(separator?: string, limit?: i32): string[];
+  toLowerCase(): string;
+  toUpperCase(): string;
   toString(): string;
 }
 
@@ -1702,6 +1708,8 @@ interface INativeMath<T> extends IMath<T> {
   rem(x: T, y: T): T;
   /** Returns sin and cos simultaneously for same angle. Results stored to `sincos_s32/64` and `sincos_c32/64` globals */
   sincos(x: T): void;
+  /** Returns 2 raised to the given power x. Equivalent to 2 ** x. */
+  exp2(x: T): T;
 }
 
 /** Double precision math imported from JavaScript. */

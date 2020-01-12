@@ -1,21 +1,22 @@
 (module
- (type $FUNCSIG$diiiiiid (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$d (func (result f64)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $none_=>_f64 (func (result f64)))
+ (type $i32_i32_i32_i32_i32_i32_f64_=>_f64 (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
  (memory $0 1)
- (data (i32.const 8) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
+ (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
  (global $std/date/creationTime (mut i64) (i64.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/date/date (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -74,7 +75,7 @@
   i32.const 16
   i32.store
   local.get $0
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $0
   i32.const 3
@@ -84,7 +85,7 @@
   i32.store offset=12
   local.get $1
  )
- (func $start:std/date (; 5 ;) (type $FUNCSIG$v)
+ (func $start:std/date (; 5 ;)
   (local $0 i32)
   (local $1 i64)
   i32.const 1970
@@ -100,7 +101,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 1
    i32.const 0
    call $~lib/builtins/abort
@@ -119,7 +120,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 2
    i32.const 0
    call $~lib/builtins/abort
@@ -140,7 +141,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 5
    i32.const 0
    call $~lib/builtins/abort
@@ -152,15 +153,15 @@
   i64.le_s
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 7
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 48
+  i32.const 64
   global.set $~lib/rt/stub/startOffset
-  i32.const 48
+  i32.const 64
   global.set $~lib/rt/stub/offset
   global.get $std/date/creationTime
   local.set $1
@@ -179,7 +180,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 10
    i32.const 0
    call $~lib/builtins/abort
@@ -198,17 +199,14 @@
   i64.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 12
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 6 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;)
   call $start:std/date
- )
- (func $null (; 7 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

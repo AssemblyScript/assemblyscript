@@ -1,6 +1,9 @@
 import { OptionDescription } from "./util/options";
 export { OptionDescription };
 
+/** Ready promise resolved once/if the compiler is ready. */
+export const ready: Promise<void>;
+
 /** Whether this is a webpack bundle or not. */
 export const isBundle: boolean;
 

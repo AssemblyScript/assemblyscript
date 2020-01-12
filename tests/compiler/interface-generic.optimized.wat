@@ -1,13 +1,13 @@
 (module
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s")
+ (data (i32.const 16) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $interface-generic/aGFoo (mut i32) (i32.const 0))
@@ -16,7 +16,7 @@
  (global $interface-generic/igbool (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -58,7 +58,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -93,7 +93,7 @@
   local.get $4
   i32.store
   local.get $2
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $2
   local.get $1
@@ -103,14 +103,14 @@
   i32.store offset=12
   local.get $3
  )
- (func $interface-generic/passAnGInterface (; 3 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $interface-generic/passAnGInterface (; 3 ;) (param $0 i32)
   local.get $0
   call $interface-generic/GFoo<i32,bool>#foo
   i32.const 42
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 41
    i32.const 2
    call $~lib/builtins/abort
@@ -129,7 +129,7 @@
    unreachable
   end
  )
- (func $interface-generic/expectGX (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $interface-generic/expectGX (; 4 ;) (param $0 i32) (param $1 i32)
   local.get $0
   call $interface-generic/GFoo<i32,bool>#get:x
   i32.const 0
@@ -140,18 +140,18 @@
   i32.ne
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 49
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start:interface-generic (; 5 ;) (type $FUNCSIG$v)
+ (func $start:interface-generic (; 5 ;)
   (local $0 i32)
-  i32.const 64
+  i32.const 80
   global.set $~lib/rt/stub/startOffset
-  i32.const 64
+  i32.const 80
   global.set $~lib/rt/stub/offset
   i32.const 4
   i32.const 3
@@ -193,14 +193,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 57
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 6 ;) (type $FUNCSIG$v)
+ (func $start (; 6 ;)
   call $start:interface-generic
  )
  (func $interface-generic/AGFoo#foo (; 7 ;) (param $0 i32) (result i32)
@@ -230,7 +230,7 @@
   local.get $0
   call $interface-generic/AGFoo#foo
  )
- (func $interface-generic/GFoo<i32,bool>#get:x (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-generic/GFoo<i32,bool>#get:x (; 9 ;) (param $0 i32) (result i32)
   block $switch$1$case$4
    block $switch$1$case$3
     block $switch$1$default
@@ -249,8 +249,5 @@
   end
   local.get $0
   i32.load8_u offset=4
- )
- (func $null (; 10 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

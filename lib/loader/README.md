@@ -30,7 +30,7 @@ API
 
 Besides demangling classes exported from your entry file to a handy object structure one can use like JS objects, instances are automatically populated with useful utility:
 
-* **__start**(): `void`<br />
+* **_start**(): `void`<br />
   Explicit start function if the `--explicitStart` option is used. Must be called before any other exports if present.
 
 * **__allocString**(str: `string`): `number`<br />

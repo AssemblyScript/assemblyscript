@@ -1,6 +1,41 @@
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
 
+// @ts-ignore
+@lazy const lowerTable127: u8[] = [
+  0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+  16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
+  32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
+  48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,
+  64,
+  97,98,99,100,101,102,103,104,105,106,107,108,109,
+  110,111,112,113,114,115,116,117,118,119,120,121,122,
+  91,92,93,94,95,96,
+  97,98,99,100,101,102,103,104,105,106,107,108,109,
+  110,111,112,113,114,115,116,117,118,119,120,121,122,
+  123,124,125,126,127
+];
+
+// @ts-ignore
+@lazy const upperTable127: u8[] = [
+  0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+  16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
+  32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
+  48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,
+  64,
+  65,66,67,68,69,70,71,72,73,74,75,76,77,
+  78,79,80,81,82,83,84,85,86,87,88,89,90,
+  91,92,93,94,95,96,
+  65,66,67,68,69,70,71,72,73,74,75,76,77,
+  78,79,80,81,82,83,84,85,86,87,88,89,90,
+  123,124,125,126,127
+];
+
+// @ts-ignore
+@lazy const lowerTable127Ptr = lowerTable127.dataStart as usize;
+// @ts-ignore
+@lazy const upperTable127Ptr = upperTable127.dataStart as usize;
+
 // @ts-ignore: decorator
 @inline
 export const enum CharCode {
@@ -34,18 +69,12 @@ export const enum CharCode {
   z = 0x7A
 }
 
-// 9 * 8 = 72 bytes
+// 23 * 8 = 184 bytes
 // @ts-ignore: decorator
-@lazy
-const Powers10Hi: f64[] = [1, 1e32, 1e64, 1e96, 1e128, 1e160, 1e192, 1e224, 1e256, 1e288];
-// 32 * 8 = 256 bytes
-// @ts-ignore: decorator
-@lazy
-const Powers10Lo: f64[] = [
+@lazy const Powers10: f64[] = [
   1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
   1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
-  1e20, 1e21, 1e22, 1e23, 1e24, 1e25, 1e26, 1e27, 1e28, 1e29,
-  1e30, 1e31
+  1e20, 1e21, 1e22
 ];
 
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
@@ -565,13 +594,47 @@ function fixmul(a: u64, b: u32): u64 {
 }
 
 // @ts-ignore: decorator
+@inline
 function pow10(n: i32): f64 {
-  // @ts-ignore: type
-  const hi = Powers10Hi.dataStart;
-  // @ts-ignore: type
-  const lo = Powers10Lo.dataStart;
-  return (
-    load<f64>(hi + ((n >> 5) << alignof<f64>())) *
-    load<f64>(lo + ((n & 31) << alignof<f64>()))
-  );
+  // argument `n` should bounds in [0, 22] range
+  // @ts-ignore: cast
+  return load<f64>(Powers10.dataStart as usize + (n << alignof<f64>()));
+}
+
+// @ts-ignore: decorator
+@inline
+export function isAscii(c: u32): bool {
+  return !(c & ~0x7F);
+}
+
+// @ts-ignore: decorator
+@inline
+export function isLower8(c: u32): bool {
+  return c - CharCode.a < 26;
+}
+
+// @ts-ignore: decorator
+@inline
+export function isUpper8(c: u32): bool {
+  return c - CharCode.A < 26;
+}
+
+// @ts-ignore: decorator
+@inline
+export function toLower8(c: i32): u32 {
+  if (ASC_SHRINK_LEVEL > 0) {
+    return c | u32(isUpper8(c)) << 5;
+  } else {
+    return <u32>load<u8>(lowerTable127Ptr + c);
+  }
+}
+
+// @ts-ignore: decorator
+@inline
+export function toUpper8(c: i32): u32 {
+  if (ASC_SHRINK_LEVEL > 0) {
+    return c & ~(u32(isLower8(c)) << 5);
+  } else {
+    return <u32>load<u8>(upperTable127Ptr + c);
+  }
 }

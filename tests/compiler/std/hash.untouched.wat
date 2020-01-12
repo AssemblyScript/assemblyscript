@@ -1,21 +1,20 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$ij (func (param i64) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (memory $0 1)
- (data (i32.const 8) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
- (data (i32.const 24) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a\00")
- (data (i32.const 48) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b\00")
- (data (i32.const 72) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
+ (data (i32.const 16) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 32) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a\00")
+ (data (i32.const 64) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b\00")
+ (data (i32.const 96) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/__retain (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/string/String#get:length (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -23,10 +22,10 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/rt/stub/__release (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 2 ;) (param $0 i32)
   nop
  )
- (func $~lib/util/hash/hashStr (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hashStr (; 3 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -77,10 +76,10 @@
   call $~lib/rt/stub/__release
   local.get $3
  )
- (func $std/hash/check (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $std/hash/check (; 4 ;) (param $0 i32) (result i32)
   i32.const 1
  )
- (func $~lib/util/hash/hash32 (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (; 5 ;) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -122,7 +121,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/util/hash/hash64 (; 6 ;) (type $FUNCSIG$ij) (param $0 i64) (result i32)
+ (func $~lib/util/hash/hash64 (; 6 ;) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -210,7 +209,7 @@
   local.set $3
   local.get $3
  )
- (func $start:std/hash (; 7 ;) (type $FUNCSIG$v)
+ (func $start:std/hash (; 7 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 f32)
@@ -230,7 +229,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.0 (result i32)
-   i32.const 24
+   i32.const 32
    local.set $1
    local.get $1
    call $~lib/util/hash/hashStr
@@ -243,7 +242,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.1 (result i32)
-   i32.const 40
+   i32.const 48
    local.set $0
    local.get $0
    call $~lib/util/hash/hashStr
@@ -256,7 +255,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.2 (result i32)
-   i32.const 64
+   i32.const 80
    local.set $1
    local.get $1
    call $~lib/util/hash/hashStr
@@ -269,7 +268,7 @@
   call $std/hash/check
   drop
   block $~lib/util/hash/HASH<~lib/string/String>|inlined.3 (result i32)
-   i32.const 88
+   i32.const 112
    local.set $0
    local.get $0
    call $~lib/util/hash/hashStr
@@ -402,10 +401,7 @@
   call $std/hash/check
   drop
  )
- (func $start (; 8 ;) (type $FUNCSIG$v)
+ (func $start (; 8 ;)
   call $start:std/hash
- )
- (func $null (; 9 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

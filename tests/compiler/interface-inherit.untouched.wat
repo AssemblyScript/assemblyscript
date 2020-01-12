@@ -1,25 +1,24 @@
 (module
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$iiiiii (func (param i32 i32 i32 i32 i32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00-\00i\00n\00h\00e\00r\00i\00t\00.\00t\00s\00")
- (data (i32.const 64) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00")
+ (data (i32.const 16) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00i\00n\00t\00e\00r\00f\00a\00c\00e\00-\00i\00n\00h\00e\00r\00i\00t\00.\00t\00s\00")
+ (data (i32.const 80) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $interface-inherit/aa (mut i32) (i32.const 0))
  (global $interface-inherit/ac (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 104))
+ (global $~lib/heap/__heap_base i32 (i32.const 120))
  (export "memory" (memory $0))
  (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -73,7 +72,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -116,7 +115,7 @@
   local.get $5
   i32.store
   local.get $6
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $6
   local.get $1
@@ -126,10 +125,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $interface-inherit/AA#constructor (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-inherit/AA#constructor (; 4 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -141,7 +140,7 @@
   end
   local.get $0
  )
- (func $interface-inherit/AC#constructor (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-inherit/AC#constructor (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -153,10 +152,10 @@
   end
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 6 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 6 ;) (param $0 i32)
   nop
  )
- (func $interface-inherit/testIA (; 7 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $interface-inherit/testIA (; 7 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -167,7 +166,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 30
    i32.const 2
    call $~lib/builtins/abort
@@ -176,7 +175,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $~lib/string/String#get:length (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 8 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -184,7 +183,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 9 ;) (type $FUNCSIG$iiiiii) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -304,7 +303,7 @@
   call $~lib/rt/stub/__release
   local.get $8
  )
- (func $~lib/string/String.__eq (; 10 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -377,7 +376,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $interface-inherit/testIC (; 11 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $interface-inherit/testIC (; 11 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -389,7 +388,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 34
    i32.const 2
    call $~lib/builtins/abort
@@ -398,12 +397,12 @@
   local.get $0
   call $interface-inherit/IB#b
   local.tee $1
-  i32.const 80
+  i32.const 96
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 35
    i32.const 2
    call $~lib/builtins/abort
@@ -416,7 +415,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 36
    i32.const 2
    call $~lib/builtins/abort
@@ -427,7 +426,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $interface-inherit/testGIC<interface-inherit/IA> (; 12 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $interface-inherit/testGIC<interface-inherit/IA> (; 12 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -438,7 +437,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 42
    i32.const 2
    call $~lib/builtins/abort
@@ -447,7 +446,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $start:interface-inherit (; 13 ;) (type $FUNCSIG$v)
+ (func $start:interface-inherit (; 13 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -471,16 +470,16 @@
   global.get $interface-inherit/aa
   call $interface-inherit/testGIC<interface-inherit/IA>
  )
- (func $start (; 14 ;) (type $FUNCSIG$v)
+ (func $start (; 14 ;)
   call $start:interface-inherit
  )
- (func $interface-inherit/AC#a (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-inherit/AC#a (; 15 ;) (param $0 i32) (result i32)
   i32.const 42
  )
- (func $interface-inherit/AA#a (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-inherit/AA#a (; 16 ;) (param $0 i32) (result i32)
   i32.const 84
  )
- (func $interface-inherit/IA#a (; 17 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-inherit/IA#a (; 17 ;) (param $0 i32) (result i32)
   block $switch$1$case$4
    block $switch$1$case$3
     block $switch$1$default
@@ -500,10 +499,10 @@
   call $interface-inherit/AA#a
   return
  )
- (func $interface-inherit/AC#b (; 18 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
-  i32.const 80
+ (func $interface-inherit/AC#b (; 18 ;) (param $0 i32) (result i32)
+  i32.const 96
  )
- (func $interface-inherit/IB#b (; 19 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-inherit/IB#b (; 19 ;) (param $0 i32) (result i32)
   block $switch$1$case$3
    block $switch$1$default
     local.get $0
@@ -518,10 +517,10 @@
   call $interface-inherit/AC#b
   return
  )
- (func $interface-inherit/AC#c (; 20 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-inherit/AC#c (; 20 ;) (param $0 i32) (result i32)
   i32.const 1
  )
- (func $interface-inherit/IC#c (; 21 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $interface-inherit/IC#c (; 21 ;) (param $0 i32) (result i32)
   block $switch$1$case$3
    block $switch$1$default
     local.get $0
@@ -535,8 +534,5 @@
   local.get $0
   call $interface-inherit/AC#c
   return
- )
- (func $null (; 22 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

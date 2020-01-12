@@ -17,6 +17,15 @@ function testNumeric<K extends number>(): void {
   }
   assert(set.size == 100);
 
+  // values 
+  let vals = Array.from<K>(set.values());
+  let valSet = new Set<K>(); 
+  for (let index = 0; index < vals.length; ++index) {
+    assert(set.has(vals[index]));
+    valSet.add(vals[index]);
+  }
+  assert(valSet.size == set.size);
+
   // delete
   for (let k: K = 0; k < 50; ++k) {
     assert(set.has(k));

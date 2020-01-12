@@ -1,17 +1,15 @@
 (module
- (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
- (table $0 2 funcref)
- (elem (i32.const 0) $null $getter-call/C#get:x~anonymous|0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/argc (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -53,24 +51,23 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 1 ;) (result i32)
+ (func $~lib/rt/stub/__alloc (; 1 ;)
   (local $0 i32)
-  (local $1 i32)
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $1
+  local.tee $0
   i32.const 16
   i32.add
   call $~lib/rt/stub/maybeGrowMemory
-  local.get $1
+  local.get $0
   i32.const 16
   i32.sub
   local.tee $0
   i32.const 16
   i32.store
   local.get $0
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $0
   i32.const 3
@@ -78,25 +75,17 @@
   local.get $0
   i32.const 0
   i32.store offset=12
-  local.get $1
  )
- (func $getter-call/C#get:x~anonymous|0 (; 2 ;) (type $FUNCSIG$i) (result i32)
-  i32.const 42
- )
- (func $getter-call/test (; 3 ;) (type $FUNCSIG$i) (result i32)
+ (func $getter-call/test (; 2 ;) (result i32)
   call $~lib/rt/stub/__alloc
-  drop
   i32.const 0
   global.set $~lib/argc
   i32.const 42
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $start (; 3 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16
   global.set $~lib/rt/stub/offset
- )
- (func $null (; 5 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )
