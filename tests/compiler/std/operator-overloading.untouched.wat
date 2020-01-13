@@ -442,27 +442,6 @@
     return
    end
    local.get $1
-   f64.const -0.5
-   f64.eq
-   if
-    f64.const 1
-    local.get $0
-    f64.sqrt
-    f64.div
-    f64.const 0
-    local.get $0
-    f64.const inf
-    f64.neg
-    f64.ne
-    select
-    f64.const inf
-    local.get $0
-    f64.const 0
-    f64.ne
-    select
-    return
-   end
-   local.get $1
    f64.const 1
    f64.eq
    if

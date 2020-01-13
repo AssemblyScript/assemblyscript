@@ -1191,13 +1191,6 @@ export namespace NativeMath {
         );
       }
       if (y == -1.0) return 1 / x;
-      if (y == -0.5) {
-        return select<f64>(
-          select<f64>(1 / builtin_sqrt<f64>(x), 0, x != -Infinity),
-          Infinity,
-          x != 0
-        );
-      }
       if (y == 1.0) return x;
       if (y == 0.0) return 1.0;
     }
@@ -2596,13 +2589,6 @@ export namespace NativeMathf {
         );
       }
       if (y == -1.0) return 1 / x;
-      if (y == -0.5) {
-        return select<f32>(
-          select<f32>(1 / builtin_sqrt<f32>(x), 0, x != -Infinity),
-          Infinity,
-          x != 0
-        );
-      }
       if (y == 1.0) return x;
       if (y == 0.0) return 1.0;
     }
