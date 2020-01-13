@@ -2728,15 +2728,6 @@ assert(NativeMath.pow(+Infinity, 0.5) == +Infinity);
 assert(NativeMath.pow(-Infinity, 0.5) == +Infinity);
 assert(isNaN(NativeMath.pow(NaN, 0.5)));
 
-assert(NativeMath.pow(+0.0,-0.5) == +Infinity);
-assert(NativeMath.pow(-0.0,-0.5) == +Infinity);
-assert(isNaN(NativeMath.pow(-1.0,-0.5)));
-assert(NativeMath.pow( 4.0,-0.5) == +0.5);
-assert(NativeMath.pow( 1.0,-0.5) == +1.0);
-assert(NativeMath.pow(+Infinity,-0.5) == +0.0);
-assert(NativeMath.pow(-Infinity,-0.5) == +0.0);
-assert(isNaN(NativeMath.pow(NaN,-0.5)));
-
 // Mathf.pow ///////////////////////////////////////////////////////////////////////////////////////
 
 function test_powf(left: f32, right: f32, expected: f32, error: f32, flags: i32): bool {
