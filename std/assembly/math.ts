@@ -1182,13 +1182,15 @@ export namespace NativeMath {
   export function pow(x: f64, y: f64): f64 { // see: musl/src/math/pow.c and SUN COPYRIGHT NOTICE above
     // TODO: remove this fast pathes after introduced own mid-end IR with "stdlib call simplify" transforms
     if (builtin_abs<f64>(y) <= 2) {
-      if (y ==  2.0) return x * x;
-      if (y ==  0.5) return select<f64>(Infinity, builtin_sqrt<f64>(x), builtin_abs<f64>(x) == Infinity);
-      if (y == -1.0) return 1 / x;
-      if (y == -0.5) {
-        if (x == 0.0) return Infinity;
-        return select<f64>(0, 1 / builtin_sqrt<f64>(x), builtin_abs<f64>(x) == Infinity);
+      if (y == 2.0) return x * x;
+      if (y == 0.5) {
+        return select<f64>(
+          builtin_abs<f64>(builtin_sqrt<f64>(x)),
+          Infinity,
+          x != -Infinity
+        );
       }
+      if (y == -1.0) return 1 / x;
       if (y == 1.0) return x;
       if (y == 0.0) return 1.0;
     }
@@ -2578,13 +2580,15 @@ export namespace NativeMathf {
   export function pow(x: f32, y: f32): f32 { // see: musl/src/math/powf.c and SUN COPYRIGHT NOTICE above
     // TODO: remove this fast pathes after introduced own mid-end IR with "stdlib call simplify" transforms
     if (builtin_abs<f32>(y) <= 2) {
-      if (y ==  2.0) return x * x;
-      if (y ==  0.5) return select<f32>(Infinity, builtin_sqrt<f32>(x), builtin_abs<f32>(x) == Infinity);
-      if (y == -1.0) return 1 / x;
-      if (y == -0.5) {
-        if (x == 0.0) return Infinity;
-        return select<f32>(0, 1 / builtin_sqrt<f32>(x), builtin_abs<f32>(x) == Infinity);
+      if (y == 2.0) return x * x;
+      if (y == 0.5) {
+        return select<f32>(
+          builtin_abs<f32>(builtin_sqrt<f32>(x)),
+          Infinity,
+          x != -Infinity
+        );
       }
+      if (y == -1.0) return 1 / x;
       if (y == 1.0) return x;
       if (y == 0.0) return 1.0;
     }
