@@ -3128,6 +3128,13 @@ export class Compiler extends DiagnosticEmitter {
     if (this.currentFlow.isNonnull(expr, fromType)) fromType = fromType.nonNullableType;
 
     if (!fromType.isAssignableTo(toType)) {
+      if (fromType.is(TypeFlags.REFERENCE) || toType.is(TypeFlags.REFERENCE)) {
+        this.error(
+          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+          reportNode.range, fromType.toString(), toType.toString()
+        );
+        return module.unreachable();
+      }
       if (!explicit) {
         if (fromType.nonNullableType == toType) {
           this.error(
