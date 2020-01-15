@@ -1347,6 +1347,11 @@
     local.tee $2
     i32.eqz
     if
+     unreachable
+    end
+    local.get $2
+    i32.eqz
+    if
      i32.const 0
      i32.const 112
      i32.const 502

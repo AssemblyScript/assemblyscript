@@ -3125,28 +3125,46 @@ export class Compiler extends DiagnosticEmitter {
     // any to void
     if (toType.kind == TypeKind.VOID) return module.drop(expr);
 
-    if (this.currentFlow.isNonnull(expr, fromType)) fromType = fromType.nonNullableType;
+    // reference involved
+    if (fromType.is(TypeFlags.REFERENCE) || toType.is(TypeFlags.REFERENCE)) {
+      if (this.currentFlow.isNonnull(expr, fromType)) {
+        fromType = fromType.nonNullableType;
+      }
+      if (explicit && fromType.is(TypeFlags.NULLABLE) && !toType.is(TypeFlags.NULLABLE)) {
+        // explicit conversion from nullable to non-nullable requires a runtime
+        // check here because nonnull state above already didn't know better
+        if (fromType.nonNullableType.isAssignableTo(toType)) {
+          assert(fromType.kind == toType.kind);
+          if (!this.options.noAssert) {
+            expr = this.makeNonNullCheck(expr, fromType);
+          }
+          this.currentType = toType;
+          return expr;
+        }
+      } else {
+        // TODO: upcast?
+        if (fromType.isAssignableTo(toType)) {
+          assert(fromType.kind == toType.kind);
+          this.currentType = toType;
+          return expr;
+        }
+      }
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
+      this.currentType = toType;
+      return module.unreachable();
+    }
+
+    // not dealing with references from here on
 
     if (!fromType.isAssignableTo(toType)) {
-      if (fromType.is(TypeFlags.REFERENCE) || toType.is(TypeFlags.REFERENCE)) {
-        this.error(
-          DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-          reportNode.range, fromType.toString(), toType.toString()
-        );
-        return module.unreachable();
-      }
       if (!explicit) {
-        if (fromType.nonNullableType == toType) {
-          this.error(
-            DiagnosticCode.Object_is_possibly_null,
-            reportNode.range
-          ); // recoverable
-        } else {
-          this.error(
-            DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
-            reportNode.range, fromType.toString(), toType.toString()
-          ); // recoverable
-        }
+        this.error(
+          DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
+          reportNode.range, fromType.toString(), toType.toString()
+        ); // recoverable
       }
     }
 
@@ -3298,6 +3316,23 @@ export class Compiler extends DiagnosticEmitter {
       : expr;
   }
 
+  /** Makes a runtime non-null check. */
+  private makeNonNullCheck(expr: ExpressionRef, type: Type): ExpressionRef {
+    assert(type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE));
+    var module = this.module;
+    var flow = this.currentFlow;
+    var temp = flow.getTempLocal(type);
+    if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+    flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
+    expr = module.if(
+      module.local_tee(temp.index, expr),
+      module.local_get(temp.index, type.toNativeType()),
+      module.unreachable()
+    );
+    flow.freeTempLocal(temp);
+    return expr;
+  }
+
   private compileAssertionExpression(
     expression: AssertionExpression,
     contextualType: Type,
@@ -3326,17 +3361,7 @@ export class Compiler extends DiagnosticEmitter {
             expression.expression.range
           );
         } else if (!this.options.noAssert) {
-          let module = this.module;
-          let flow = this.currentFlow;
-          let temp = flow.getTempLocal(type);
-          if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-          flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-          expr = module.if(
-            module.local_tee(temp.index, expr),
-            module.local_get(temp.index, type.toNativeType()),
-            module.unreachable()
-          );
-          flow.freeTempLocal(temp);
+          expr = this.makeNonNullCheck(expr, type);
         }
         this.currentType = this.currentType.nonNullableType;
         return expr;
