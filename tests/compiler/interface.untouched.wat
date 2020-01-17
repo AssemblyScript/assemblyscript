@@ -18,7 +18,7 @@
  (global $interface/ibool (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 56))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -278,7 +278,7 @@
    unreachable
   end
  )
- (func $start (; 10 ;)
+ (func $~start (; 10 ;)
   call $start:interface
  )
  (func $interface/AFoo#foo (; 11 ;) (param $0 i32) (param $1 i32) (result i32)

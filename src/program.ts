@@ -13,7 +13,7 @@ import {
   INNER_DELIMITER,
   LIBRARY_SUBST,
   INDEX_SUFFIX,
-  CommonSymbols,
+  CommonNames,
   Feature,
   Target
 } from "./common";
@@ -36,6 +36,7 @@ import {
 } from "./types";
 
 import {
+  Token,
   Node,
   NodeKind,
   Source,
@@ -61,6 +62,7 @@ import {
   EnumDeclaration,
   EnumValueDeclaration,
   ExportMember,
+  ExportDefaultStatement,
   ExportStatement,
   FieldDeclaration,
   FunctionDeclaration,
@@ -73,10 +75,6 @@ import {
   VariableDeclaration,
   VariableLikeDeclarationStatement,
   VariableStatement,
-
-  ExportDefaultStatement,
-  Token,
-  ParameterNode,
   ParameterKind
 } from "./ast";
 
@@ -573,7 +571,7 @@ export class Program extends DiagnosticEmitter {
       null,
       this.nativeDummySignature || (this.nativeDummySignature = Node.createFunctionType([],
         Node.createNamedType( // ^ AST signature doesn't really matter, is overridden anyway
-          Node.createSimpleTypeName(CommonSymbols.void_, range),
+          Node.createSimpleTypeName(CommonNames.void_, range),
           null, false, range
         ),
         null, false, range)
@@ -634,79 +632,79 @@ export class Program extends DiagnosticEmitter {
     this.options = options;
 
     // register native types
-    this.registerNativeType(CommonSymbols.i8, Type.i8);
-    this.registerNativeType(CommonSymbols.i16, Type.i16);
-    this.registerNativeType(CommonSymbols.i32, Type.i32);
-    this.registerNativeType(CommonSymbols.i64, Type.i64);
-    this.registerNativeType(CommonSymbols.isize, options.isizeType);
-    this.registerNativeType(CommonSymbols.u8, Type.u8);
-    this.registerNativeType(CommonSymbols.u16, Type.u16);
-    this.registerNativeType(CommonSymbols.u32, Type.u32);
-    this.registerNativeType(CommonSymbols.u64, Type.u64);
-    this.registerNativeType(CommonSymbols.usize, options.usizeType);
-    this.registerNativeType(CommonSymbols.bool, Type.bool);
-    this.registerNativeType(CommonSymbols.f32, Type.f32);
-    this.registerNativeType(CommonSymbols.f64, Type.f64);
-    this.registerNativeType(CommonSymbols.void_, Type.void);
-    this.registerNativeType(CommonSymbols.number, Type.f64); // alias
-    this.registerNativeType(CommonSymbols.boolean, Type.bool); // alias
-    this.nativeFile.add(CommonSymbols.native, new TypeDefinition(
-      CommonSymbols.native,
+    this.registerNativeType(CommonNames.i8, Type.i8);
+    this.registerNativeType(CommonNames.i16, Type.i16);
+    this.registerNativeType(CommonNames.i32, Type.i32);
+    this.registerNativeType(CommonNames.i64, Type.i64);
+    this.registerNativeType(CommonNames.isize, options.isizeType);
+    this.registerNativeType(CommonNames.u8, Type.u8);
+    this.registerNativeType(CommonNames.u16, Type.u16);
+    this.registerNativeType(CommonNames.u32, Type.u32);
+    this.registerNativeType(CommonNames.u64, Type.u64);
+    this.registerNativeType(CommonNames.usize, options.usizeType);
+    this.registerNativeType(CommonNames.bool, Type.bool);
+    this.registerNativeType(CommonNames.f32, Type.f32);
+    this.registerNativeType(CommonNames.f64, Type.f64);
+    this.registerNativeType(CommonNames.void_, Type.void);
+    this.registerNativeType(CommonNames.number, Type.f64); // alias
+    this.registerNativeType(CommonNames.boolean, Type.bool); // alias
+    this.nativeFile.add(CommonNames.native, new TypeDefinition(
+      CommonNames.native,
       this.nativeFile,
-      this.makeNativeTypeDeclaration(CommonSymbols.native, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      this.makeNativeTypeDeclaration(CommonNames.native, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
-    this.nativeFile.add(CommonSymbols.indexof, new TypeDefinition(
-      CommonSymbols.indexof,
+    this.nativeFile.add(CommonNames.indexof, new TypeDefinition(
+      CommonNames.indexof,
       this.nativeFile,
-      this.makeNativeTypeDeclaration(CommonSymbols.indexof, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      this.makeNativeTypeDeclaration(CommonNames.indexof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
-    this.nativeFile.add(CommonSymbols.valueof, new TypeDefinition(
-      CommonSymbols.valueof,
+    this.nativeFile.add(CommonNames.valueof, new TypeDefinition(
+      CommonNames.valueof,
       this.nativeFile,
-      this.makeNativeTypeDeclaration(CommonSymbols.valueof, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      this.makeNativeTypeDeclaration(CommonNames.valueof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
-    this.nativeFile.add(CommonSymbols.returnof, new TypeDefinition(
-      CommonSymbols.returnof,
+    this.nativeFile.add(CommonNames.returnof, new TypeDefinition(
+      CommonNames.returnof,
       this.nativeFile,
-      this.makeNativeTypeDeclaration(CommonSymbols.returnof, CommonFlags.EXPORT | CommonFlags.GENERIC),
+      this.makeNativeTypeDeclaration(CommonNames.returnof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
-    if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonSymbols.v128, Type.v128);
-    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerNativeType(CommonSymbols.anyref, Type.anyref);
+    if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonNames.v128, Type.v128);
+    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerNativeType(CommonNames.anyref, Type.anyref);
 
     // register compiler hints
-    this.registerConstantInteger(CommonSymbols.ASC_TARGET, Type.i32,
+    this.registerConstantInteger(CommonNames.ASC_TARGET, Type.i32,
       i64_new(options.isWasm64 ? Target.WASM64 : Target.WASM32));
-    this.registerConstantInteger(CommonSymbols.ASC_NO_ASSERT, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_NO_ASSERT, Type.bool,
       i64_new(options.noAssert ? 1 : 0, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_MEMORY_BASE, Type.i32,
+    this.registerConstantInteger(CommonNames.ASC_MEMORY_BASE, Type.i32,
       i64_new(options.memoryBase, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_OPTIMIZE_LEVEL, Type.i32,
+    this.registerConstantInteger(CommonNames.ASC_OPTIMIZE_LEVEL, Type.i32,
       i64_new(options.optimizeLevelHint, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_SHRINK_LEVEL, Type.i32,
+    this.registerConstantInteger(CommonNames.ASC_SHRINK_LEVEL, Type.i32,
       i64_new(options.shrinkLevelHint, 0));
 
     // register feature hints
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_SIGN_EXTENSION, Type.bool,
       i64_new(options.hasFeature(Feature.SIGN_EXTENSION) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_MUTABLE_GLOBALS, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_MUTABLE_GLOBALS, Type.bool,
       i64_new(options.hasFeature(Feature.MUTABLE_GLOBALS) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_NONTRAPPING_F2I, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_NONTRAPPING_F2I, Type.bool,
       i64_new(options.hasFeature(Feature.NONTRAPPING_F2I) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_BULK_MEMORY, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_BULK_MEMORY, Type.bool,
       i64_new(options.hasFeature(Feature.BULK_MEMORY) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_SIMD, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_SIMD, Type.bool,
       i64_new(options.hasFeature(Feature.SIMD) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_THREADS, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_THREADS, Type.bool,
       i64_new(options.hasFeature(Feature.THREADS) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_EXCEPTION_HANDLING, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_EXCEPTION_HANDLING, Type.bool,
       i64_new(options.hasFeature(Feature.EXCEPTION_HANDLING) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_TAIL_CALLS, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_TAIL_CALLS, Type.bool,
       i64_new(options.hasFeature(Feature.TAIL_CALLS) ? 1 : 0, 0));
-    this.registerConstantInteger(CommonSymbols.ASC_FEATURE_REFERENCE_TYPES, Type.bool,
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_REFERENCE_TYPES, Type.bool,
       i64_new(options.hasFeature(Feature.REFERENCE_TYPES) ? 1 : 0, 0));
 
     // remember deferred elements
@@ -871,42 +869,42 @@ export class Program extends DiagnosticEmitter {
 
     // register ArrayBuffer (id=0), String (id=1), ArrayBufferView (id=2)
     assert(this.nextClassId == 0);
-    this.arrayBufferInstance = this.requireClass(CommonSymbols.ArrayBuffer);
+    this.arrayBufferInstance = this.requireClass(CommonNames.ArrayBuffer);
     assert(this.arrayBufferInstance.id == 0);
-    this.stringInstance = this.requireClass(CommonSymbols.String);
+    this.stringInstance = this.requireClass(CommonNames.String);
     assert(this.stringInstance.id == 1);
-    this.arrayBufferViewInstance = this.requireClass(CommonSymbols.ArrayBufferView);
+    this.arrayBufferViewInstance = this.requireClass(CommonNames.ArrayBufferView);
     assert(this.arrayBufferViewInstance.id == 2);
 
     // register classes backing basic types
-    this.registerWrapperClass(Type.i8, CommonSymbols.I8);
-    this.registerWrapperClass(Type.i16, CommonSymbols.I16);
-    this.registerWrapperClass(Type.i32, CommonSymbols.I32);
-    this.registerWrapperClass(Type.i64, CommonSymbols.I64);
-    this.registerWrapperClass(options.isizeType, CommonSymbols.Isize);
-    this.registerWrapperClass(Type.u8, CommonSymbols.U8);
-    this.registerWrapperClass(Type.u16, CommonSymbols.U16);
-    this.registerWrapperClass(Type.u32, CommonSymbols.U32);
-    this.registerWrapperClass(Type.u64, CommonSymbols.U64);
-    this.registerWrapperClass(options.usizeType, CommonSymbols.Usize);
-    this.registerWrapperClass(Type.bool, CommonSymbols.Bool);
-    this.registerWrapperClass(Type.f32, CommonSymbols.F32);
-    this.registerWrapperClass(Type.f64, CommonSymbols.F64);
-    if (options.hasFeature(Feature.SIMD)) this.registerWrapperClass(Type.v128, CommonSymbols.V128);
-    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerWrapperClass(Type.anyref, CommonSymbols.Anyref);
+    this.registerWrapperClass(Type.i8, CommonNames.I8);
+    this.registerWrapperClass(Type.i16, CommonNames.I16);
+    this.registerWrapperClass(Type.i32, CommonNames.I32);
+    this.registerWrapperClass(Type.i64, CommonNames.I64);
+    this.registerWrapperClass(options.isizeType, CommonNames.Isize);
+    this.registerWrapperClass(Type.u8, CommonNames.U8);
+    this.registerWrapperClass(Type.u16, CommonNames.U16);
+    this.registerWrapperClass(Type.u32, CommonNames.U32);
+    this.registerWrapperClass(Type.u64, CommonNames.U64);
+    this.registerWrapperClass(options.usizeType, CommonNames.Usize);
+    this.registerWrapperClass(Type.bool, CommonNames.Bool);
+    this.registerWrapperClass(Type.f32, CommonNames.F32);
+    this.registerWrapperClass(Type.f64, CommonNames.F64);
+    if (options.hasFeature(Feature.SIMD)) this.registerWrapperClass(Type.v128, CommonNames.V128);
+    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerWrapperClass(Type.anyref, CommonNames.Anyref);
 
     // register views but don't instantiate them yet
-    this.i8ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int8Array, ElementKind.CLASS_PROTOTYPE);
-    this.i16ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int16Array, ElementKind.CLASS_PROTOTYPE);
-    this.i32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int32Array, ElementKind.CLASS_PROTOTYPE);
-    this.i64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Int64Array, ElementKind.CLASS_PROTOTYPE);
-    this.u8ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint8Array, ElementKind.CLASS_PROTOTYPE);
-    this.u8ClampedArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint8ClampedArray, ElementKind.CLASS_PROTOTYPE);
-    this.u16ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint16Array, ElementKind.CLASS_PROTOTYPE);
-    this.u32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint32Array, ElementKind.CLASS_PROTOTYPE);
-    this.u64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Uint64Array, ElementKind.CLASS_PROTOTYPE);
-    this.f32ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Float32Array, ElementKind.CLASS_PROTOTYPE);
-    this.f64ArrayPrototype = <ClassPrototype>this.require(CommonSymbols.Float64Array, ElementKind.CLASS_PROTOTYPE);
+    this.i8ArrayPrototype = <ClassPrototype>this.require(CommonNames.Int8Array, ElementKind.CLASS_PROTOTYPE);
+    this.i16ArrayPrototype = <ClassPrototype>this.require(CommonNames.Int16Array, ElementKind.CLASS_PROTOTYPE);
+    this.i32ArrayPrototype = <ClassPrototype>this.require(CommonNames.Int32Array, ElementKind.CLASS_PROTOTYPE);
+    this.i64ArrayPrototype = <ClassPrototype>this.require(CommonNames.Int64Array, ElementKind.CLASS_PROTOTYPE);
+    this.u8ArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint8Array, ElementKind.CLASS_PROTOTYPE);
+    this.u8ClampedArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint8ClampedArray, ElementKind.CLASS_PROTOTYPE);
+    this.u16ArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint16Array, ElementKind.CLASS_PROTOTYPE);
+    this.u32ArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint32Array, ElementKind.CLASS_PROTOTYPE);
+    this.u64ArrayPrototype = <ClassPrototype>this.require(CommonNames.Uint64Array, ElementKind.CLASS_PROTOTYPE);
+    this.f32ArrayPrototype = <ClassPrototype>this.require(CommonNames.Float32Array, ElementKind.CLASS_PROTOTYPE);
+    this.f64ArrayPrototype = <ClassPrototype>this.require(CommonNames.Float64Array, ElementKind.CLASS_PROTOTYPE);
 
     // resolve base prototypes of derived classes
     var resolver = this.resolver;
@@ -973,21 +971,21 @@ export class Program extends DiagnosticEmitter {
     }
 
     // register stdlib components
-    this.arrayPrototype = <ClassPrototype>this.require(CommonSymbols.Array, ElementKind.CLASS_PROTOTYPE);
-    this.fixedArrayPrototype = <ClassPrototype>this.require(CommonSymbols.FixedArray, ElementKind.CLASS_PROTOTYPE);
-    this.setPrototype = <ClassPrototype>this.require(CommonSymbols.Set, ElementKind.CLASS_PROTOTYPE);
-    this.mapPrototype = <ClassPrototype>this.require(CommonSymbols.Map, ElementKind.CLASS_PROTOTYPE);
-    this.abortInstance = this.lookupFunction(CommonSymbols.abort); // can be disabled
-    this.allocInstance = this.requireFunction(CommonSymbols.alloc);
-    this.reallocInstance = this.requireFunction(CommonSymbols.realloc);
-    this.freeInstance = this.requireFunction(CommonSymbols.free);
-    this.retainInstance = this.requireFunction(CommonSymbols.retain);
-    this.releaseInstance = this.requireFunction(CommonSymbols.release);
-    this.collectInstance = this.requireFunction(CommonSymbols.collect);
-    this.typeinfoInstance = this.requireFunction(CommonSymbols.typeinfo);
-    this.instanceofInstance = this.requireFunction(CommonSymbols.instanceof_);
-    this.visitInstance = this.requireFunction(CommonSymbols.visit);
-    this.allocArrayInstance = this.requireFunction(CommonSymbols.allocArray);
+    this.arrayPrototype = <ClassPrototype>this.require(CommonNames.Array, ElementKind.CLASS_PROTOTYPE);
+    this.fixedArrayPrototype = <ClassPrototype>this.require(CommonNames.FixedArray, ElementKind.CLASS_PROTOTYPE);
+    this.setPrototype = <ClassPrototype>this.require(CommonNames.Set, ElementKind.CLASS_PROTOTYPE);
+    this.mapPrototype = <ClassPrototype>this.require(CommonNames.Map, ElementKind.CLASS_PROTOTYPE);
+    this.abortInstance = this.lookupFunction(CommonNames.abort); // can be disabled
+    this.allocInstance = this.requireFunction(CommonNames.alloc);
+    this.reallocInstance = this.requireFunction(CommonNames.realloc);
+    this.freeInstance = this.requireFunction(CommonNames.free);
+    this.retainInstance = this.requireFunction(CommonNames.retain);
+    this.releaseInstance = this.requireFunction(CommonNames.release);
+    this.collectInstance = this.requireFunction(CommonNames.collect);
+    this.typeinfoInstance = this.requireFunction(CommonNames.typeinfo);
+    this.instanceofInstance = this.requireFunction(CommonNames.instanceof_);
+    this.visitInstance = this.requireFunction(CommonNames.visit);
+    this.allocArrayInstance = this.requireFunction(CommonNames.allocArray);
 
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
     for (let file of this.filesByName.values()) {
@@ -2875,12 +2873,12 @@ export class Function extends TypedElement {
       let localIndex = 0;
       if (this.is(CommonFlags.INSTANCE)) {
         let local = new Local(
-          CommonSymbols.this_,
+          CommonNames.this_,
           localIndex++,
           assert(signature.thisType),
           this
         );
-        this.localsByName.set(CommonSymbols.this_, local);
+        this.localsByName.set(CommonNames.this_, local);
         this.localsByIndex[local.index] = local;
       }
       let parameterTypes = signature.parameterTypes;

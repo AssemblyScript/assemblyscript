@@ -6,8 +6,8 @@
  (data (i32.const 16) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s")
  (global $instanceof/an (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
- (func $start (; 1 ;)
+ (start $~start)
+ (func $~start (; 1 ;)
   global.get $instanceof/an
   if
    i32.const 0

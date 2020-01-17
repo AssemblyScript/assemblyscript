@@ -6,7 +6,7 @@
  (global $exportimport-table/f (mut i32) (i32.const 1))
  (export "memory" (memory $0))
  (export "table" (table $0))
- (start $start)
+ (start $~start)
  (func $start:exportimport-table~anonymous|0 (; 0 ;)
   nop
  )
@@ -14,7 +14,7 @@
   global.get $exportimport-table/f
   drop
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   call $start:exportimport-table
  )
 )

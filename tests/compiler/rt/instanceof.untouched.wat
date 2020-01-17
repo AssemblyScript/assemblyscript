@@ -20,10 +20,10 @@
  (global $rt/instanceof/nullAnimal (mut i32) (i32.const 0))
  (global $rt/instanceof/nullCat (mut i32) (i32.const 0))
  (global $rt/instanceof/nullBlackcat (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 64))
  (global $~lib/heap/__heap_base i32 (i32.const 116))
- (export "_start" (func $start))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
@@ -180,6 +180,7 @@
  (func $~lib/rt/__instanceof (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -192,7 +193,7 @@
   i32.load
   i32.le_u
   if
-   loop $continue|0
+   loop $do-continue|0
     local.get $2
     local.get $1
     i32.eq
@@ -209,7 +210,9 @@
     i32.add
     i32.load offset=4
     local.tee $2
-    br_if $continue|0
+    local.set $4
+    local.get $4
+    br_if $do-continue|0
    end
   end
   i32.const 0
@@ -674,13 +677,13 @@
    unreachable
   end
  )
- (func $start (; 9 ;)
-  global.get $~lib/started
+ (func $~start (; 9 ;)
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:rt/instanceof
  )

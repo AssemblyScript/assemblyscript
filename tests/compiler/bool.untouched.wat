@@ -13,7 +13,7 @@
  (global $bool/F (mut f64) (f64.const 2))
  (global $bool/uu (mut i32) (i32.const 2))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $start:bool (; 1 ;)
   global.get $bool/i
   i32.const 0
@@ -114,7 +114,7 @@
    unreachable
   end
  )
- (func $start (; 2 ;)
+ (func $~start (; 2 ;)
   call $start:bool
  )
 )

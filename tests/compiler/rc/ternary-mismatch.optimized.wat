@@ -28,7 +28,7 @@
  (export "memory" (memory $0))
  (export "test1" (func $rc/ternary-mismatch/test1))
  (export "test2" (func $rc/ternary-mismatch/test2))
- (start $start)
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -597,7 +597,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $2
+  local.tee $0
   i32.eqz
   if
    i32.const 1
@@ -618,21 +618,18 @@
     unreachable
    end
    i32.const 336
-   local.set $2
-   i32.const 336
+   local.tee $0
    i32.const 0
    i32.store
    i32.const 1904
    i32.const 0
    i32.store
-   i32.const 0
-   local.set $0
-   loop $loop|0
-    local.get $0
+   loop $for-loop|0
+    local.get $1
     i32.const 23
     i32.lt_u
     if
-     local.get $0
+     local.get $1
      i32.const 2
      i32.shl
      i32.const 336
@@ -640,16 +637,16 @@
      i32.const 0
      i32.store offset=4
      i32.const 0
-     local.set $1
-     loop $loop|1
-      local.get $1
+     local.set $2
+     loop $for-loop|1
+      local.get $2
       i32.const 16
       i32.lt_u
       if
        local.get $1
-       local.get $0
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -657,18 +654,18 @@
        i32.add
        i32.const 0
        i32.store offset=96
-       local.get $1
+       local.get $2
        i32.const 1
        i32.add
-       local.set $1
-       br $loop|1
+       local.set $2
+       br $for-loop|1
       end
      end
-     local.get $0
+     local.get $1
      i32.const 1
      i32.add
-     local.set $0
-     br $loop|0
+     local.set $1
+     br $for-loop|0
     end
    end
    i32.const 336
@@ -680,7 +677,7 @@
    i32.const 336
    global.set $~lib/rt/tlsf/ROOT
   end
-  local.get $2
+  local.get $0
  )
  (func $~lib/rt/tlsf/prepareSize (; 9 ;) (param $0 i32) (result i32)
   local.get $0
@@ -980,7 +977,7 @@
   local.set $3
   global.get $~lib/rt/pure/CUR
   local.set $0
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $0
    i32.lt_u
@@ -1039,14 +1036,14 @@
     i32.const 4
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $2
   global.set $~lib/rt/pure/CUR
   local.get $5
   local.set $0
-  loop $loop|1
+  loop $for-loop|1
    local.get $0
    local.get $2
    i32.lt_u
@@ -1058,12 +1055,12 @@
     i32.const 4
     i32.add
     local.set $0
-    br $loop|1
+    br $for-loop|1
    end
   end
   local.get $5
   local.set $0
-  loop $loop|2
+  loop $for-loop|2
    local.get $0
    local.get $2
    i32.lt_u
@@ -1082,7 +1079,7 @@
     i32.const 4
     i32.add
     local.set $0
-    br $loop|2
+    br $for-loop|2
    end
   end
   local.get $5
@@ -1427,7 +1424,7 @@
     i32.and
     i32.eq
     if
-     loop $continue|0
+     loop $while-continue|0
       local.get $0
       i32.const 7
       i32.and
@@ -1453,10 +1450,10 @@
        local.get $4
        i32.load8_u
        i32.store8
-       br $continue|0
+       br $while-continue|0
       end
      end
-     loop $continue|1
+     loop $while-continue|1
       local.get $3
       i32.const 8
       i32.ge_u
@@ -1477,11 +1474,11 @@
        i32.const 8
        i32.add
        local.set $1
-       br $continue|1
+       br $while-continue|1
       end
      end
     end
-    loop $continue|2
+    loop $while-continue|2
      local.get $3
      if
       local.get $0
@@ -1502,7 +1499,7 @@
       i32.const 1
       i32.sub
       local.set $3
-      br $continue|2
+      br $while-continue|2
      end
     end
    else
@@ -1514,7 +1511,7 @@
     i32.and
     i32.eq
     if
-     loop $continue|3
+     loop $while-continue|3
       local.get $0
       local.get $3
       i32.add
@@ -1535,10 +1532,10 @@
        i32.add
        i32.load8_u
        i32.store8
-       br $continue|3
+       br $while-continue|3
       end
      end
-     loop $continue|4
+     loop $while-continue|4
       local.get $3
       i32.const 8
       i32.ge_u
@@ -1554,11 +1551,11 @@
        i32.add
        i64.load
        i64.store
-       br $continue|4
+       br $while-continue|4
       end
      end
     end
-    loop $continue|5
+    loop $while-continue|5
      local.get $3
      if
       local.get $3
@@ -1572,7 +1569,7 @@
       i32.add
       i32.load8_u
       i32.store8
-      br $continue|5
+      br $while-continue|5
      end
     end
    end
@@ -1797,7 +1794,7 @@
   global.get $rc/ternary-mismatch/gloRef
   call $~lib/rt/pure/__release
  )
- (func $start (; 34 ;)
+ (func $~start (; 34 ;)
   call $start:rc/ternary-mismatch
  )
  (func $~lib/rt/pure/__visit (; 35 ;) (param $0 i32) (param $1 i32)

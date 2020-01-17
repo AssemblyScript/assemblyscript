@@ -11,7 +11,7 @@
  (global $class/Animal.ONE (mut i32) (i32.const 1))
  (export "memory" (memory $0))
  (export "test" (func $class/test))
- (start $start)
+ (start $~start)
  (func $class/Animal.add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -114,7 +114,7 @@
   call $~lib/rt/stub/__release
   local.get $3
  )
- (func $start (; 8 ;)
+ (func $~start (; 8 ;)
   call $start:class
  )
 )

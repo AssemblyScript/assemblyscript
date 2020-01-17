@@ -33,7 +33,6 @@ import {
 } from "./program";
 
 import {
-  FlowFlags,
   Flow
 } from "./flow";
 
@@ -81,7 +80,7 @@ import {
 
 import {
   CommonFlags,
-  CommonSymbols
+  CommonNames
 } from "./common";
 
 import {
@@ -95,7 +94,7 @@ import {
 } from "./tokenizer";
 
 import {
-  BuiltinSymbols
+  BuiltinNames
 } from "./builtins";
 
 /** Indicates whether errors are reported or not. */
@@ -279,11 +278,11 @@ export class Resolver extends DiagnosticEmitter {
 
       // Handle special built-in types
       if (isSimpleType) {
-        switch (nameNode.identifier.symbol) {
-          case CommonSymbols.native: return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
-          case CommonSymbols.indexof: return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
-          case CommonSymbols.valueof: return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
-          case CommonSymbols.returnof: return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
+        switch (nameNode.identifier.text) {
+          case CommonNames.native: return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
+          case CommonNames.indexof: return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
+          case CommonNames.valueof: return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
+          case CommonNames.returnof: return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
         }
       }
 
@@ -714,7 +713,7 @@ export class Resolver extends DiagnosticEmitter {
       }
       return this.resolveFunctionInclTypeArguments(
         prototype,
-        node.typeArguments,
+        typeArguments,
         ctxFlow.actualFunction,
         makeMap(ctxFlow.contextualTypeArguments), // don't inherit
         node,
@@ -2046,8 +2045,8 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    if (ctxFlow.is(FlowFlags.INLINE_CONTEXT)) {
-      let thisLocal = ctxFlow.lookupLocal(CommonSymbols.this_);
+    if (ctxFlow.isInline) {
+      let thisLocal = ctxFlow.lookupLocal(CommonNames.this_);
       if (thisLocal) {
         this.currentThisExpression = null;
         this.currentElementExpression = null;
@@ -2105,8 +2104,8 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    if (ctxFlow.is(FlowFlags.INLINE_CONTEXT)) {
-      let superLocal = ctxFlow.lookupLocal(CommonSymbols.super_);
+    if (ctxFlow.isInline) {
+      let superLocal = ctxFlow.lookupLocal(CommonNames.super_);
       if (superLocal) {
         this.currentThisExpression = null;
         this.currentElementExpression = null;
@@ -2274,7 +2273,7 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.FUNCTION_PROTOTYPE: {
         // `unchecked` behaves like parenthesized
         if (
-          (<FunctionPrototype>target).internalName == BuiltinSymbols.unchecked &&
+          (<FunctionPrototype>target).internalName == BuiltinNames.unchecked &&
           node.arguments.length > 0
         ) {
           return this.resolveExpression(node.arguments[0], ctxFlow, ctxType, reportMode);
@@ -2580,10 +2579,10 @@ export class Resolver extends DiagnosticEmitter {
         reportMode
       );
       if (!thisType) return null;
-      ctxTypes.set(CommonSymbols.this_, thisType);
+      ctxTypes.set(CommonNames.this_, thisType);
     } else if (classInstance) {
       thisType = classInstance.type;
-      ctxTypes.set(CommonSymbols.this_, thisType);
+      ctxTypes.set(CommonNames.this_, thisType);
     }
 
     // resolve parameter types
@@ -2940,7 +2939,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Link _own_ constructor if present
     {
-      let ctorPrototype = instance.lookupInSelf(CommonSymbols.constructor);
+      let ctorPrototype = instance.lookupInSelf(CommonNames.constructor);
       if (ctorPrototype && ctorPrototype.parent === instance) {
         assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
         let ctorInstance = this.resolveFunction(

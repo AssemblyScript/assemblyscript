@@ -16,7 +16,7 @@
  (global $instanceof/F (mut f64) (f64.const 0))
  (global $instanceof/an (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $instanceof/isI32<i32> (; 1 ;) (param $0 i32) (result i32)
   i32.const 1
   return
@@ -129,7 +129,7 @@
    unreachable
   end
  )
- (func $start (; 8 ;)
+ (func $~start (; 8 ;)
   call $start:instanceof
  )
 )

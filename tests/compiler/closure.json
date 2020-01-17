@@ -4,6 +4,8 @@
   ],
   "stderr": [
     "AS100: Not implemented.",
+    "AS100: Not implemented.",
+    "Cannot find name '$local0'.",
     "EOF"
   ]
 }

@@ -13,7 +13,7 @@
  (global $optional-typeparameters/tDerived (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $optional-typeparameters/testConcrete<i32,i32> (; 0 ;) (param $0 i32) (result i32)
   local.get $0
  )
@@ -198,7 +198,7 @@
   call $optional-typeparameters/TestDerived<f64,f64>#test<f64>
   drop
  )
- (func $start (; 10 ;)
+ (func $~start (; 10 ;)
   call $start:optional-typeparameters
  )
 )

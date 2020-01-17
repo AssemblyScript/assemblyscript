@@ -12,7 +12,7 @@
  (global $abstract-method/aastract (mut i32) (i32.const 0))
  (global $abstract-method/aAnotherAbstract (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -189,7 +189,7 @@
   global.get $abstract-method/aastract
   call $abstract-method/testGeneric<abstract-method/AAbstract>
  )
- (func $start (; 8 ;)
+ (func $~start (; 8 ;)
   call $start:abstract-method
  )
  (func $abstract-method/Abstract#abstractMethod (; 9 ;) (param $0 i32) (result i32)

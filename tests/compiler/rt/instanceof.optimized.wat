@@ -17,8 +17,8 @@
  (global $rt/instanceof/nullableAnimal (mut i32) (i32.const 0))
  (global $rt/instanceof/nullableCat (mut i32) (i32.const 0))
  (global $rt/instanceof/nullableBlackcat (mut i32) (i32.const 0))
- (global $~lib/started (mut i32) (i32.const 0))
- (export "_start" (func $start))
+ (global $~started (mut i32) (i32.const 0))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
@@ -125,7 +125,7 @@
   i32.load
   i32.le_u
   if
-   loop $continue|0
+   loop $do-continue|0
     local.get $0
     local.get $1
     i32.eq
@@ -140,7 +140,7 @@
     i32.add
     i32.load offset=4
     local.tee $0
-    br_if $continue|0
+    br_if $do-continue|0
    end
   end
   i32.const 0
@@ -407,31 +407,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 4
-   call $~lib/rt/__instanceof
-  else
-   i32.const 0
-  end
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 42
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
- (func $start (; 8 ;)
-  global.get $~lib/started
+ (func $~start (; 8 ;)
+  global.get $~started
   if
    return
   else
    i32.const 1
-   global.set $~lib/started
+   global.set $~started
   end
   call $start:rt/instanceof
  )

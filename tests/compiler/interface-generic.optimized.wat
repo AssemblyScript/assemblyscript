@@ -15,7 +15,7 @@
  (global $interface-generic/gFoo (mut i32) (i32.const 0))
  (global $interface-generic/igbool (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -200,7 +200,7 @@
    unreachable
   end
  )
- (func $start (; 6 ;)
+ (func $~start (; 6 ;)
   call $start:interface-generic
  )
  (func $interface-generic/AGFoo#foo (; 7 ;) (param $0 i32) (result i32)

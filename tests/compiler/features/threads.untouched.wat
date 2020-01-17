@@ -4,7 +4,7 @@
  (table $0 1 funcref)
  (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $features/threads/testAtomic (; 0 ;)
   i32.const 0
   i32.atomic.load8_u
@@ -538,7 +538,7 @@
   call $features/threads/testAtomic
   call $features/threads/testAtomicAsm
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   call $start:features/threads
  )
 )

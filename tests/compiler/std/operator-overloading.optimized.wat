@@ -78,7 +78,7 @@
  (global $std/operator-overloading/aii2 (mut i32) (i32.const 0))
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -257,6 +257,81 @@
   (local $18 f64)
   (local $19 i32)
   (local $20 f64)
+  local.get $1
+  f64.abs
+  f64.const 2
+  f64.le
+  if
+   local.get $1
+   f64.const 2
+   f64.eq
+   if
+    local.get $0
+    local.get $0
+    f64.mul
+    return
+   end
+   local.get $1
+   f64.const 0.5
+   f64.eq
+   if
+    f64.const inf
+    local.get $0
+    f64.sqrt
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const -1
+   f64.eq
+   if
+    f64.const 1
+    local.get $0
+    f64.div
+    return
+   end
+   local.get $1
+   f64.const -0.5
+   f64.eq
+   if
+    local.get $0
+    f64.const 0
+    f64.eq
+    if
+     f64.const inf
+     return
+    end
+    f64.const 0
+    f64.const 1
+    local.get $0
+    f64.sqrt
+    f64.div
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const 1
+   f64.eq
+   if
+    local.get $0
+    return
+   end
+   local.get $1
+   f64.const 0
+   f64.eq
+   if
+    f64.const 1
+    return
+   end
+  end
   local.get $0
   i64.reinterpret_f64
   local.tee $15
@@ -2377,7 +2452,7 @@
    unreachable
   end
  )
- (func $start (; 12 ;)
+ (func $~start (; 12 ;)
   call $start:std/operator-overloading
  )
 )

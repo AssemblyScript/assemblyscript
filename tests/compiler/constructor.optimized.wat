@@ -16,7 +16,7 @@
  (global $constructor/ctorAllocates (mut i32) (i32.const 0))
  (global $constructor/ctorConditionallyAllocates (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -162,16 +162,17 @@
   i32.const 12
   call $~lib/rt/stub/__alloc
   local.tee $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    i32.const 0
    i32.const 12
    call $~lib/rt/stub/__alloc
+   local.set $0
   end
+  local.get $0
   global.set $constructor/ctorConditionallyAllocates
  )
- (func $start (; 3 ;)
+ (func $~start (; 3 ;)
   call $start:constructor
  )
 )

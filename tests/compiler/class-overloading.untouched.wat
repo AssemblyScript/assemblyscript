@@ -24,7 +24,7 @@
  (export "memory" (memory $0))
  (export "test" (func $class-overloading/test))
  (export "testBar" (func $class-overloading/testBar))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -197,6 +197,7 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -231,15 +232,15 @@
    i32.const 0
   end
   if
-   block $break|0
-    loop $continue|0
+   block $do-break|0
+    loop $do-continue|0
      local.get $5
      i64.load
      local.get $6
      i64.load
      i64.ne
      if
-      br $break|0
+      br $do-break|0
      end
      local.get $5
      i32.const 8
@@ -256,39 +257,41 @@
      local.get $4
      i32.const 4
      i32.ge_u
-     br_if $continue|0
+     local.set $7
+     local.get $7
+     br_if $do-continue|0
     end
    end
   end
-  block $break|1
-   loop $continue|1
-    local.get $4
-    local.tee $7
-    i32.const 1
-    i32.sub
-    local.set $4
-    local.get $7
-    i32.eqz
-    br_if $break|1
+  loop $while-continue|1
+   local.get $4
+   local.tee $7
+   i32.const 1
+   i32.sub
+   local.set $4
+   local.get $7
+   local.set $7
+   local.get $7
+   if
     local.get $5
     i32.load16_u
-    local.set $7
+    local.set $8
     local.get $6
     i32.load16_u
-    local.set $8
-    local.get $7
+    local.set $9
     local.get $8
+    local.get $9
     i32.ne
     if
-     local.get $7
      local.get $8
+     local.get $9
      i32.sub
-     local.set $9
+     local.set $10
      local.get $0
      call $~lib/rt/stub/__release
      local.get $2
      call $~lib/rt/stub/__release
-     local.get $9
+     local.get $10
      return
     end
     local.get $5
@@ -299,17 +302,16 @@
     i32.const 2
     i32.add
     local.set $6
-    br $continue|1
+    br $while-continue|1
    end
-   unreachable
   end
   i32.const 0
-  local.set $8
+  local.set $7
   local.get $0
   call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release
-  local.get $8
+  local.get $7
  )
  (func $~lib/string/String.__eq (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -501,7 +503,7 @@
   i32.const 160
   call $class-overloading/testBar
  )
- (func $start (; 15 ;)
+ (func $~start (; 15 ;)
   call $start:class-overloading
  )
  (func $class-overloading/Foo#baz~virtual (; 16 ;) (param $0 i32) (result i32)

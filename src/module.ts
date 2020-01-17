@@ -701,6 +701,30 @@ export class Module {
     return ret;
   }
 
+  /** Attempts to trivially flatten a series of expressions instead of emitting a block. */
+  flatten(
+    stmts: ExpressionRef[],
+    type: NativeType = NativeType.None
+  ): ExpressionRef {
+    var length = stmts.length;
+    if (length == 0) return this.nop(); // usually filtered out again
+    if (length == 1) {
+      let single = stmts[0];
+      switch (getExpressionId(single)) {
+        case ExpressionId.Return:
+        case ExpressionId.Throw:
+        case ExpressionId.Unreachable: {
+          // type does no matter, terminates anyway
+          return single;
+        }
+      }
+      let singleType = getExpressionType(single);
+      assert(singleType == NativeType.Unreachable || singleType == type);
+      return single;
+    }
+    return this.block(null, stmts, type);
+  }
+
   br(
     label: string | null,
     condition: ExpressionRef = 0,

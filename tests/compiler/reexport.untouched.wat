@@ -18,7 +18,7 @@
  (export "renamed_add" (func $export/add))
  (export "rerenamed_sub" (func $export/mul))
  (export "renamed_ns.two" (func $export/ns.two))
- (start $start)
+ (start $~start)
  (func $export/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -50,7 +50,7 @@
  (func $export/ns.two (; 5 ;)
   nop
  )
- (func $start (; 6 ;)
+ (func $~start (; 6 ;)
   call $start:reexport
  )
 )

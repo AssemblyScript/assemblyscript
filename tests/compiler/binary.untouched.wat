@@ -29,7 +29,7 @@
  (global $~lib/util/math/exp2f_data_tab i32 (i32.const 6848))
  (global $binary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
- (start $start)
+ (start $~start)
  (func $~lib/math/NativeMath.pow (; 0 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
@@ -74,6 +74,81 @@
   (local $42 i32)
   (local $43 i64)
   (local $44 i64)
+  local.get $1
+  f64.abs
+  f64.const 2
+  f64.le
+  if
+   local.get $1
+   f64.const 2
+   f64.eq
+   if
+    local.get $0
+    local.get $0
+    f64.mul
+    return
+   end
+   local.get $1
+   f64.const 0.5
+   f64.eq
+   if
+    f64.const inf
+    local.get $0
+    f64.sqrt
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const -1
+   f64.eq
+   if
+    f64.const 1
+    local.get $0
+    f64.div
+    return
+   end
+   local.get $1
+   f64.const -0.5
+   f64.eq
+   if
+    local.get $0
+    f64.const 0
+    f64.eq
+    if
+     f64.const inf
+     return
+    end
+    f64.const 0
+    f64.const 1
+    local.get $0
+    f64.sqrt
+    f64.div
+    local.get $0
+    f64.abs
+    f64.const inf
+    f64.eq
+    select
+    return
+   end
+   local.get $1
+   f64.const 1
+   f64.eq
+   if
+    local.get $0
+    return
+   end
+   local.get $1
+   f64.const 0
+   f64.eq
+   if
+    f64.const 1
+    return
+   end
+  end
   block $~lib/util/math/pow_lut|inlined.0 (result f64)
    local.get $0
    local.set $3
@@ -955,6 +1030,7 @@
   (local $8 f32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
   local.get $0
   i32.reinterpret_f32
   local.set $2
@@ -1092,13 +1168,13 @@
    i32.or
    local.set $3
   end
-  block $break|0
-   loop $continue|0
-    local.get $4
-    local.get $5
-    i32.gt_s
-    i32.eqz
-    br_if $break|0
+  loop $while-continue|0
+   local.get $4
+   local.get $5
+   i32.gt_s
+   local.set $10
+   local.get $10
+   if
     local.get $2
     local.get $3
     i32.ge_u
@@ -1125,9 +1201,8 @@
     i32.const 1
     i32.sub
     local.set $4
-    br $continue|0
+    br $while-continue|0
    end
-   unreachable
   end
   local.get $2
   local.get $3
@@ -1151,13 +1226,13 @@
   i32.const 8
   i32.shl
   i32.clz
-  local.set $10
+  local.set $11
   local.get $4
-  local.get $10
+  local.get $11
   i32.sub
   local.set $4
   local.get $2
-  local.get $10
+  local.get $11
   i32.shl
   local.set $2
   local.get $4
@@ -1218,6 +1293,81 @@
   (local $23 f64)
   (local $24 i64)
   (local $25 i64)
+  local.get $1
+  f32.abs
+  f32.const 2
+  f32.le
+  if
+   local.get $1
+   f32.const 2
+   f32.eq
+   if
+    local.get $0
+    local.get $0
+    f32.mul
+    return
+   end
+   local.get $1
+   f32.const 0.5
+   f32.eq
+   if
+    f32.const inf
+    local.get $0
+    f32.sqrt
+    local.get $0
+    f32.abs
+    f32.const inf
+    f32.eq
+    select
+    return
+   end
+   local.get $1
+   f32.const -1
+   f32.eq
+   if
+    f32.const 1
+    local.get $0
+    f32.div
+    return
+   end
+   local.get $1
+   f32.const -0.5
+   f32.eq
+   if
+    local.get $0
+    f32.const 0
+    f32.eq
+    if
+     f32.const inf
+     return
+    end
+    f32.const 0
+    f32.const 1
+    local.get $0
+    f32.sqrt
+    f32.div
+    local.get $0
+    f32.abs
+    f32.const inf
+    f32.eq
+    select
+    return
+   end
+   local.get $1
+   f32.const 1
+   f32.eq
+   if
+    local.get $0
+    return
+   end
+   local.get $1
+   f32.const 0
+   f32.eq
+   if
+    f32.const 1
+    return
+   end
+  end
   block $~lib/util/math/powf_lut|inlined.0 (result f32)
    local.get $0
    local.set $3
@@ -1742,7 +1892,8 @@
   (local $7 i64)
   (local $8 f64)
   (local $9 i64)
-  (local $10 i64)
+  (local $10 i32)
+  (local $11 i64)
   local.get $0
   i64.reinterpret_f64
   local.set $2
@@ -1884,13 +2035,13 @@
    i64.or
    local.set $3
   end
-  block $break|0
-   loop $continue|0
-    local.get $4
-    local.get $5
-    i64.gt_s
-    i32.eqz
-    br_if $break|0
+  loop $while-continue|0
+   local.get $4
+   local.get $5
+   i64.gt_s
+   local.set $10
+   local.get $10
+   if
     local.get $2
     local.get $3
     i64.ge_u
@@ -1917,9 +2068,8 @@
     i64.const 1
     i64.sub
     local.set $4
-    br $continue|0
+    br $while-continue|0
    end
-   unreachable
   end
   local.get $2
   local.get $3
@@ -1943,13 +2093,13 @@
   i64.const 11
   i64.shl
   i64.clz
-  local.set $10
+  local.set $11
   local.get $4
-  local.get $10
+  local.get $11
   i64.sub
   local.set $4
   local.get $2
-  local.get $10
+  local.get $11
   i64.shl
   local.set $2
   local.get $4
@@ -2595,7 +2745,7 @@
   call $~lib/math/NativeMath.pow
   global.set $binary/F
  )
- (func $start (; 5 ;)
+ (func $~start (; 5 ;)
   call $start:binary
  )
 )

@@ -7,12 +7,13 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
- (global $~lib/argc (mut i32) (i32.const 0))
+ (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
- (start $start)
+ (start $~start)
  (func $inlining/test (; 1 ;) (result i32)
   i32.const 3
  )
@@ -183,9 +184,9 @@
    unreachable
   end
  )
- (func $start (; 5 ;)
+ (func $~start (; 5 ;)
   i32.const 1
-  global.set $~lib/argc
+  global.set $~argumentsLength
   i32.const 64
   global.set $~lib/rt/stub/startOffset
   i32.const 64
