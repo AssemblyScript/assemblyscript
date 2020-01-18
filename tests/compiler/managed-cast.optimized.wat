@@ -1,8 +1,8 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
@@ -1787,22 +1787,79 @@
   end
   i32.const 0
  )
- (func $~start (; 28 ;)
-  (local $0 i32)
-  (local $1 i32)
-  call $managed-cast/Cat#constructor
-  call $managed-cast/Cat#constructor
-  local.tee $1
+ (func $managed-cast/testUpcastToNullable (; 28 ;) (param $0 i32)
+  local.get $0
   call $~lib/rt/__instanceof
   i32.eqz
   if
    unreachable
   end
+ )
+ (func $start:managed-cast (; 29 ;)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  call $managed-cast/Cat#constructor
+  call $managed-cast/Cat#constructor
+  local.tee $3
+  i32.eqz
+  if
+   unreachable
+  end
+  call $managed-cast/Cat#constructor
+  local.set $4
+  call $managed-cast/Cat#constructor
+  local.set $5
+  call $managed-cast/Cat#constructor
+  local.tee $6
+  call $~lib/rt/__instanceof
+  i32.eqz
+  if
+   unreachable
+  end
+  call $managed-cast/Cat#constructor
+  local.tee $1
+  local.get $1
+  i32.eqz
+  if
+   unreachable
+  end
+  call $~lib/rt/__instanceof
+  i32.eqz
+  if
+   unreachable
+  end
+  call $managed-cast/Cat#constructor
+  local.tee $0
+  call $managed-cast/testUpcastToNullable
+  call $managed-cast/Cat#constructor
+  local.tee $7
+  call $managed-cast/testUpcastToNullable
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $6
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/__visit (; 29 ;) (param $0 i32) (param $1 i32)
+ (func $~start (; 30 ;)
+  call $start:managed-cast
+ )
+ (func $~lib/rt/pure/__visit (; 31 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 332
   i32.lt_u
@@ -1905,7 +1962,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 30 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 32 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2

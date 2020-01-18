@@ -3274,7 +3274,59 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/__instanceof (; 31 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $managed-cast/testDowncastFromNullable (; 31 ;) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  if (result i32)
+   local.get $1
+  else
+   unreachable
+  end
+  call $managed-cast/Animal#tame
+  local.get $0
+  call $~lib/rt/pure/__release
+ )
+ (func $managed-cast/testDowncastToNullable (; 32 ;) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $1
+  local.get $1
+  if
+   local.get $1
+   call $managed-cast/Animal#tame
+  end
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+ )
+ (func $managed-cast/testDowncastFromToNullable (; 33 ;) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $1
+  local.get $1
+  if
+   local.get $1
+   call $managed-cast/Animal#tame
+  end
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+  call $~lib/rt/pure/__release
+ )
+ (func $~lib/rt/__instanceof (; 34 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3314,10 +3366,10 @@
   end
   i32.const 0
  )
- (func $managed-cast/Cat#meow (; 32 ;) (param $0 i32)
+ (func $managed-cast/Cat#meow (; 35 ;) (param $0 i32)
   nop
  )
- (func $managed-cast/testUpcast (; 33 ;) (param $0 i32)
+ (func $managed-cast/testUpcast (; 36 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3335,9 +3387,93 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $start:managed-cast (; 34 ;)
+ (func $managed-cast/testUpcastFromNullable (; 37 ;) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  if (result i32)
+   local.get $1
+  else
+   unreachable
+  end
+  local.tee $1
+  i32.const 3
+  call $~lib/rt/__instanceof
+  if (result i32)
+   local.get $1
+  else
+   unreachable
+  end
+  call $managed-cast/Cat#meow
+  local.get $0
+  call $~lib/rt/pure/__release
+ )
+ (func $managed-cast/testUpcastToNullable (; 38 ;) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  i32.const 3
+  call $~lib/rt/__instanceof
+  if (result i32)
+   local.get $1
+  else
+   unreachable
+  end
+  call $~lib/rt/pure/__retain
+  local.set $2
+  local.get $2
+  if
+   local.get $2
+   call $managed-cast/Cat#meow
+  end
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $managed-cast/testUpcastFromToNullable (; 39 ;) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  local.get $0
+  local.tee $1
+  i32.const 3
+  call $~lib/rt/__instanceof
+  if (result i32)
+   local.get $1
+  else
+   unreachable
+  end
+  call $~lib/rt/pure/__retain
+  local.set $2
+  local.get $2
+  if
+   local.get $2
+   call $managed-cast/Cat#meow
+  end
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+ )
+ (func $start:managed-cast (; 40 ;)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 0
   call $managed-cast/Cat#constructor
   local.tee $0
@@ -3345,16 +3481,52 @@
   i32.const 0
   call $managed-cast/Cat#constructor
   local.tee $1
+  call $managed-cast/testDowncastFromNullable
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.tee $2
+  call $managed-cast/testDowncastToNullable
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.tee $3
+  call $managed-cast/testDowncastFromToNullable
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.tee $4
   call $managed-cast/testUpcast
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.tee $5
+  call $managed-cast/testUpcastFromNullable
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.tee $6
+  call $managed-cast/testUpcastToNullable
+  i32.const 0
+  call $managed-cast/Cat#constructor
+  local.tee $7
+  call $managed-cast/testUpcastFromToNullable
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
+  call $~lib/rt/pure/__release
+  local.get $6
+  call $~lib/rt/pure/__release
+  local.get $7
+  call $~lib/rt/pure/__release
  )
- (func $~start (; 35 ;)
+ (func $~start (; 41 ;)
   call $start:managed-cast
  )
- (func $~lib/rt/pure/__visit (; 36 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 42 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3484,7 +3656,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 37 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 43 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4

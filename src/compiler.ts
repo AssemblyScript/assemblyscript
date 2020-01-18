@@ -3348,7 +3348,7 @@ export class Compiler extends DiagnosticEmitter {
     /** Type casting to. */
     toType: Type,
   ): ExpressionRef {
-    assert(toType.is(TypeFlags.REFERENCE) && toType.isAssignableTo(type));
+    assert(toType.is(TypeFlags.REFERENCE) && toType.nonNullableType.isAssignableTo(type));
     var module = this.module;
     var flow = this.currentFlow;
     var temp = flow.getTempLocal(type);
