@@ -498,12 +498,12 @@ export function allocateBlock(root: Root, size: usize): Block {
       block = searchBlock(root, payloadSize);
       if (!block) {
         growMemory(root, payloadSize);
-        block = <Block>searchBlock(root, payloadSize);
+        block = changetype<Block>(searchBlock(root, payloadSize));
         if (DEBUG) assert(block); // must be found now
       }
     } else {
       growMemory(root, payloadSize);
-      block = <Block>searchBlock(root, payloadSize);
+      block = changetype<Block>(searchBlock(root, payloadSize));
       if (DEBUG) assert(block); // must be found now
     }
   }

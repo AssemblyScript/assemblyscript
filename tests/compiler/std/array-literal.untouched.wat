@@ -1656,7 +1656,6 @@
  (func $~lib/rt/tlsf/allocateBlock (; 25 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
   i32.eqz
   i32.eqz
@@ -1698,12 +1697,6 @@
      local.get $0
      local.get $2
      call $~lib/rt/tlsf/searchBlock
-     local.tee $4
-     if (result i32)
-      local.get $4
-     else
-      unreachable
-     end
      local.set $3
      local.get $3
      i32.eqz
@@ -1723,12 +1716,6 @@
     local.get $0
     local.get $2
     call $~lib/rt/tlsf/searchBlock
-    local.tee $4
-    if (result i32)
-     local.get $4
-    else
-     unreachable
-    end
     local.set $3
     local.get $3
     i32.eqz

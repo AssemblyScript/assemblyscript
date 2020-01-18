@@ -3133,7 +3133,7 @@ export class Compiler extends DiagnosticEmitter {
         // explicit conversion from nullable to non-nullable requires a runtime
         // check here because nonnull state above already didn't know better
         if (!this.options.noAssert) {
-          expr = this.makeRuntimeNonNullCheck(expr, fromType);
+          expr = this.makeRuntimeNonNullCheck(expr, fromType, reportNode);
         }
         fromType = fromType.nonNullableType;
       }
@@ -3145,7 +3145,7 @@ export class Compiler extends DiagnosticEmitter {
         // <Cat | null>(<Animal>animal)
         assert(fromType.kind == toType.kind);
         if (!this.options.noAssert) {
-          expr = this.makeRuntimeUpcastCheck(expr, fromType, toType);
+          expr = this.makeRuntimeUpcastCheck(expr, fromType, toType, reportNode);
         }
         this.currentType = toType;
         return expr;
@@ -3322,7 +3322,9 @@ export class Compiler extends DiagnosticEmitter {
     /** Expression being checked. */
     expr: ExpressionRef,
     /** Type of the expression. */
-    type: Type
+    type: Type,
+    /** Report node. */
+    reportNode: Node
   ): ExpressionRef {
     assert(type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE));
     var module = this.module;
@@ -3333,7 +3335,7 @@ export class Compiler extends DiagnosticEmitter {
     expr = module.if(
       module.local_tee(temp.index, expr),
       module.local_get(temp.index, type.toNativeType()),
-      module.unreachable() // TODO: throw
+      compileAbort(this, null, reportNode) // TODO: throw
     );
     flow.freeTempLocal(temp);
     return expr;
@@ -3347,6 +3349,8 @@ export class Compiler extends DiagnosticEmitter {
     type: Type,
     /** Type casting to. */
     toType: Type,
+    /** Report node. */
+    reportNode: Node
   ): ExpressionRef {
     assert(toType.is(TypeFlags.REFERENCE) && toType.nonNullableType.isAssignableTo(type));
     var module = this.module;
@@ -3360,7 +3364,7 @@ export class Compiler extends DiagnosticEmitter {
         module.i32(assert(toType.classReference).id)
       ], NativeType.I32),
       module.local_get(temp.index, type.toNativeType()),
-      module.unreachable() // TODO: throw
+      compileAbort(this, null, reportNode) // TODO: throw
     );
     flow.freeTempLocal(temp);
     return expr;
@@ -3394,9 +3398,9 @@ export class Compiler extends DiagnosticEmitter {
             expression.expression.range
           );
         } else if (!this.options.noAssert) {
-          expr = this.makeRuntimeNonNullCheck(expr, type);
+          expr = this.makeRuntimeNonNullCheck(expr, type, expression);
         }
-        this.currentType = this.currentType.nonNullableType;
+        this.currentType = type.nonNullableType;
         return expr;
       }
       default: assert(false);
