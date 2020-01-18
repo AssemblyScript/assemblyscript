@@ -6,7 +6,6 @@
 import {
   BuiltinNames,
   compileCall as compileBuiltinCall,
-  compileAbort,
   compileVisitGlobals,
   compileVisitMembers,
   compileRTTI,
@@ -2499,7 +2498,9 @@ export class Compiler extends DiagnosticEmitter {
       let newArgs = (<NewExpression>value).arguments;
       if (newArgs.length) message = newArgs[0]; // FIXME: naively assumes type string
     }
-    stmts.push(compileAbort(this, message, statement));
+    stmts.push(
+      this.makeAbort(message, statement)
+    );
 
     return this.module.flatten(stmts);
   }
@@ -3316,59 +3317,6 @@ export class Compiler extends DiagnosticEmitter {
     return wrap
       ? this.ensureSmallIntegerWrap(expr, toType)
       : expr;
-  }
-
-  /** Makes a runtime non-null check. */
-  private makeRuntimeNonNullCheck(
-    /** Expression being checked. */
-    expr: ExpressionRef,
-    /** Type of the expression. */
-    type: Type,
-    /** Report node. */
-    reportNode: Node
-  ): ExpressionRef {
-    assert(type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE));
-    var module = this.module;
-    var flow = this.currentFlow;
-    var temp = flow.getTempLocal(type);
-    if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-    flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-    expr = module.if(
-      module.local_tee(temp.index, expr),
-      module.local_get(temp.index, type.toNativeType()),
-      compileAbort(this, null, reportNode) // TODO: throw
-    );
-    flow.freeTempLocal(temp);
-    return expr;
-  }
-
-  /** Makes a runtime upcast check. */
-  private makeRuntimeUpcastCheck(
-    /** Expression being upcast. */
-    expr: ExpressionRef,
-    /** Type of the expression. */
-    type: Type,
-    /** Type casting to. */
-    toType: Type,
-    /** Report node. */
-    reportNode: Node
-  ): ExpressionRef {
-    assert(toType.is(TypeFlags.REFERENCE) && toType.nonNullableType.isAssignableTo(type));
-    var module = this.module;
-    var flow = this.currentFlow;
-    var temp = flow.getTempLocal(type);
-    var instanceofInstance = this.program.instanceofInstance;
-    assert(this.compileFunction(instanceofInstance));
-    expr = module.if(
-      module.call(instanceofInstance.internalName, [
-        module.local_tee(temp.index, expr),
-        module.i32(assert(toType.classReference).id)
-      ], NativeType.I32),
-      module.local_get(temp.index, type.toNativeType()),
-      compileAbort(this, null, reportNode) // TODO: throw
-    );
-    flow.freeTempLocal(temp);
-    return expr;
   }
 
   private compileAssertionExpression(
@@ -9445,6 +9393,98 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     return stmts;
+  }
+
+  /** Makes a call to `abort`, if present, otherwise creates a trap. */
+  makeAbort(
+    /** Message argument of type string, if any. */
+    message: Expression | null,
+    /** Code location to report when aborting. */
+    codeLocation: Node
+  ): ExpressionRef {
+    var program = this.program;
+    var module = this.module;
+    var stringInstance = program.stringInstance;
+    var abortInstance = program.abortInstance;
+    if (!abortInstance || !this.compileFunction(abortInstance)) return module.unreachable();
+
+    var messageArg: ExpressionRef;
+    if (message !== null) {
+      // The message argument works much like an arm of an IF that does not become executed if the
+      // assertion succeeds respectively is only being computed if the program actually crashes.
+      // Hence, let's make it so that the autorelease is skipped at the end of the current block,
+      // essentially ignoring the message GC-wise. Doesn't matter anyway on a crash.
+      messageArg = this.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
+    } else {
+      messageArg = this.makeZero(stringInstance.type);
+    }
+
+    var filenameArg = this.ensureStaticString(codeLocation.range.source.normalizedPath);
+    return module.block(null, [
+      module.call(
+        abortInstance.internalName, [
+          messageArg,
+          filenameArg,
+          module.i32(codeLocation.range.line),
+          module.i32(codeLocation.range.column)
+        ],
+        NativeType.None
+      ),
+      module.unreachable()
+    ]);
+  }
+
+  /** Makes a runtime non-null check, e.g. on `<Type>possiblyNull` or `possiblyNull!`. */
+  makeRuntimeNonNullCheck(
+    /** Expression being checked. */
+    expr: ExpressionRef,
+    /** Type of the expression. */
+    type: Type,
+    /** Report node. */
+    reportNode: Node
+  ): ExpressionRef {
+    assert(type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE));
+    var module = this.module;
+    var flow = this.currentFlow;
+    var temp = flow.getTempLocal(type);
+    if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+    flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
+    expr = module.if(
+      module.local_tee(temp.index, expr),
+      module.local_get(temp.index, type.toNativeType()),
+      this.makeAbort(null, reportNode) // TODO: throw
+    );
+    flow.freeTempLocal(temp);
+    return expr;
+  }
+
+  /** Makes a runtime upcast check, e.g. on `<Child>parent`. */
+  makeRuntimeUpcastCheck(
+    /** Expression being upcast. */
+    expr: ExpressionRef,
+    /** Type of the expression. */
+    type: Type,
+    /** Type casting to. */
+    toType: Type,
+    /** Report node. */
+    reportNode: Node
+  ): ExpressionRef {
+    assert(toType.is(TypeFlags.REFERENCE) && toType.nonNullableType.isAssignableTo(type));
+    var module = this.module;
+    var flow = this.currentFlow;
+    var temp = flow.getTempLocal(type);
+    var instanceofInstance = this.program.instanceofInstance;
+    assert(this.compileFunction(instanceofInstance));
+    expr = module.if(
+      module.call(instanceofInstance.internalName, [
+        module.local_tee(temp.index, expr),
+        module.i32(assert(toType.classReference).id)
+      ], NativeType.I32),
+      module.local_get(temp.index, type.toNativeType()),
+      this.makeAbort(null, reportNode) // TODO: throw
+    );
+    flow.freeTempLocal(temp);
+    return expr;
   }
 }
 
