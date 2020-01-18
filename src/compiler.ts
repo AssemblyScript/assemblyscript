@@ -3141,8 +3141,9 @@ export class Compiler extends DiagnosticEmitter {
         assert(fromType.kind == toType.kind);
         this.currentType = toType;
         return expr;
-      } else if (toType.nonNullableType.isAssignableTo(fromType)) { // upcast
-        // <Cat | null>(<Animal>animal)
+      }
+      if (explicit && toType.nonNullableType.isAssignableTo(fromType)) { // upcast
+        // <Cat | null>(<Animal>maybeCat)
         assert(fromType.kind == toType.kind);
         if (!this.options.noAssert) {
           expr = this.makeRuntimeUpcastCheck(expr, fromType, toType, reportNode);
