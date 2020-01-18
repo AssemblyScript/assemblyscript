@@ -677,7 +677,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 569
+   i32.const 565
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -3048,7 +3048,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 593
+   i32.const 589
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -4188,16 +4188,9 @@
   global.get $~lib/heap/__heap_base
   i32.ge_u
   if
-   local.get $1
-   local.get $4
-   i32.const 1
-   i32.or
-   i32.store
    local.get $0
    local.get $1
-   call $~lib/rt/tlsf/insertBlock
-   local.get $1
-   call $~lib/rt/rtrace/onfree
+   call $~lib/rt/tlsf/freeBlock
   end
   local.get $8
  )
@@ -4217,7 +4210,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 586
+   i32.const 582
    i32.const 2
    call $~lib/builtins/abort
    unreachable
