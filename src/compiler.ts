@@ -3129,25 +3129,26 @@ export class Compiler extends DiagnosticEmitter {
     if (fromType.is(TypeFlags.REFERENCE) || toType.is(TypeFlags.REFERENCE)) {
       if (this.currentFlow.isNonnull(expr, fromType)) {
         fromType = fromType.nonNullableType;
-      }
-      if (explicit && fromType.is(TypeFlags.NULLABLE) && !toType.is(TypeFlags.NULLABLE)) {
+      } else if (explicit && fromType.is(TypeFlags.NULLABLE) && !toType.is(TypeFlags.NULLABLE)) {
         // explicit conversion from nullable to non-nullable requires a runtime
         // check here because nonnull state above already didn't know better
-        if (fromType.nonNullableType.isAssignableTo(toType)) {
-          assert(fromType.kind == toType.kind);
-          if (!this.options.noAssert) {
-            expr = this.makeNonNullCheck(expr, fromType);
-          }
-          this.currentType = toType;
-          return expr;
+        if (!this.options.noAssert) {
+          expr = this.makeRuntimeNonNullCheck(expr, fromType);
         }
-      } else {
-        // TODO: upcast?
-        if (fromType.isAssignableTo(toType)) {
-          assert(fromType.kind == toType.kind);
-          this.currentType = toType;
-          return expr;
+        fromType = fromType.nonNullableType;
+      }
+      if (fromType.isAssignableTo(toType)) { // downcast or same
+        assert(fromType.kind == toType.kind);
+        this.currentType = toType;
+        return expr;
+      } else if (toType.nonNullableType.isAssignableTo(fromType)) { // upcast
+        // <Cat | null>(<Animal>animal)
+        assert(fromType.kind == toType.kind);
+        if (!this.options.noAssert) {
+          expr = this.makeRuntimeUpcastCheck(expr, fromType, toType);
         }
+        this.currentType = toType;
+        return expr;
       }
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
@@ -3317,7 +3318,12 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Makes a runtime non-null check. */
-  private makeNonNullCheck(expr: ExpressionRef, type: Type): ExpressionRef {
+  private makeRuntimeNonNullCheck(
+    /** Expression being checked. */
+    expr: ExpressionRef,
+    /** Type of the expression. */
+    type: Type
+  ): ExpressionRef {
     assert(type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE));
     var module = this.module;
     var flow = this.currentFlow;
@@ -3327,7 +3333,34 @@ export class Compiler extends DiagnosticEmitter {
     expr = module.if(
       module.local_tee(temp.index, expr),
       module.local_get(temp.index, type.toNativeType()),
-      module.unreachable()
+      module.unreachable() // TODO: throw
+    );
+    flow.freeTempLocal(temp);
+    return expr;
+  }
+
+  /** Makes a runtime upcast check. */
+  private makeRuntimeUpcastCheck(
+    /** Expression being upcast. */
+    expr: ExpressionRef,
+    /** Type of the expression. */
+    type: Type,
+    /** Type casting to. */
+    toType: Type,
+  ): ExpressionRef {
+    assert(toType.is(TypeFlags.REFERENCE) && toType.isAssignableTo(type));
+    var module = this.module;
+    var flow = this.currentFlow;
+    var temp = flow.getTempLocal(type);
+    var instanceofInstance = this.program.instanceofInstance;
+    assert(this.compileFunction(instanceofInstance));
+    expr = module.if(
+      module.call(instanceofInstance.internalName, [
+        module.local_tee(temp.index, expr),
+        module.i32(assert(toType.classReference).id)
+      ], NativeType.I32),
+      module.local_get(temp.index, type.toNativeType()),
+      module.unreachable() // TODO: throw
     );
     flow.freeTempLocal(temp);
     return expr;
@@ -3361,7 +3394,7 @@ export class Compiler extends DiagnosticEmitter {
             expression.expression.range
           );
         } else if (!this.options.noAssert) {
-          expr = this.makeNonNullCheck(expr, type);
+          expr = this.makeRuntimeNonNullCheck(expr, type);
         }
         this.currentType = this.currentType.nonNullableType;
         return expr;
