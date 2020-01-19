@@ -486,7 +486,7 @@ export function maybeInitialize(): Root {
 var collectLock: bool = false;
 
 /** Allocates a block of the specified size. */
-export function allocateBlock(root: Root, size: usize): Block {
+export function allocateBlock(root: Root, size: usize, id: u32): Block {
   if (DEBUG) assert(!collectLock); // must not allocate while collecting
   var payloadSize = prepareSize(size);
   var block = searchBlock(root, payloadSize);
@@ -509,7 +509,7 @@ export function allocateBlock(root: Root, size: usize): Block {
   }
   if (DEBUG) assert((block.mmInfo & ~TAGS_MASK) >= payloadSize); // must fit
   block.gcInfo = 0; // RC=0
-  // block.rtId = 0; // set by the caller (__alloc)
+  block.rtId = id;
   block.rtSize = size;
   removeBlock(root, <Block>block);
   prepareBlock(root, <Block>block, payloadSize);
@@ -521,12 +521,6 @@ export function allocateBlock(root: Root, size: usize): Block {
 export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   var payloadSize = prepareSize(size);
   var blockInfo = block.mmInfo;
-  if (DEBUG) {
-    assert(
-      !(blockInfo & FREE) &&           // must be used
-      !(block.gcInfo & ~REFCOUNT_MASK) // not buffered or != BLACK
-    );
-  }
 
   // possibly split and update runtime size if it still fits
   if (payloadSize <= (blockInfo & ~TAGS_MASK)) {
@@ -552,8 +546,8 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   }
 
   // otherwise move the block
-  var newBlock = allocateBlock(root, size); // may invalidate cached blockInfo
-  newBlock.rtId = block.rtId;
+  var newBlock = allocateBlock(root, size, block.rtId); // may invalidate cached blockInfo
+  newBlock.gcInfo = block.gcInfo; // keep RC
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
   if (changetype<usize>(block) >= __heap_base) freeBlock(root, block);
   return newBlock;
@@ -562,30 +556,40 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
 /** Frees a block. */
 export function freeBlock(root: Root, block: Block): void {
   var blockInfo = block.mmInfo;
-  assert(!(blockInfo & FREE)); // must be used (user might call through to this)
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
   if (isDefined(ASC_RTRACE)) onfree(block);
 }
 
+/** Checks that a used block is valid to be freed or reallocated. */
+function checkUsedBlock(ref: usize): Block {
+  var block = changetype<Block>(ref - BLOCK_OVERHEAD);
+  assert(
+    ref != 0 && !(ref & AL_MASK) &&  // must exist and be aligned
+    !(block.mmInfo & FREE) &&        // must be used
+    !(block.gcInfo & ~REFCOUNT_MASK) // not buffered or != BLACK
+  );
+  return block;
+}
+
 // @ts-ignore: decorator
 @global @unsafe
 export function __alloc(size: usize, id: u32): usize {
-  var block = allocateBlock(maybeInitialize(), size);
-  block.rtId = id;
-  return changetype<usize>(block) + BLOCK_OVERHEAD;
+  return changetype<usize>(
+    allocateBlock(maybeInitialize(), size, id)
+  ) + BLOCK_OVERHEAD;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __realloc(ref: usize, size: usize): usize {
-  assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
-  return changetype<usize>(reallocateBlock(maybeInitialize(), changetype<Block>(ref - BLOCK_OVERHEAD), size)) + BLOCK_OVERHEAD;
+  return changetype<usize>(
+    reallocateBlock(maybeInitialize(), checkUsedBlock(ref), size)
+  ) + BLOCK_OVERHEAD;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __free(ref: usize): void {
-  assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
-  freeBlock(maybeInitialize(), changetype<Block>(ref - BLOCK_OVERHEAD));
+  freeBlock(maybeInitialize(), checkUsedBlock(ref));
 }
