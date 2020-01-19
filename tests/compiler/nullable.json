@@ -3,7 +3,7 @@
     "--runtime none"
   ],
   "stderr": [
-    "TS2531: Object is possibly 'null'.",
+    "TS2322: Type 'nullable/Example | null' is not assignable to type 'nullable/Example'.",
     "EOF"
   ]
 }

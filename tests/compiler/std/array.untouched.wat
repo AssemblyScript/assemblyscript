@@ -21744,6 +21744,11 @@
   if (result i32)
    local.get $55
   else
+   i32.const 0
+   i32.const 416
+   i32.const 434
+   i32.const 9
+   call $~lib/builtins/abort
    unreachable
   end
   i32.load
@@ -21794,6 +21799,11 @@
   if (result i32)
    local.get $62
   else
+   i32.const 0
+   i32.const 416
+   i32.const 438
+   i32.const 9
+   call $~lib/builtins/abort
    unreachable
   end
   i32.load
