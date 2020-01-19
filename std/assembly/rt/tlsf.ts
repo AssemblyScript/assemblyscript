@@ -552,14 +552,10 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   }
 
   // otherwise move the block
-  var newBlock = allocateBlock(root, size);
+  var newBlock = allocateBlock(root, size); // may invalidate cached blockInfo
   newBlock.rtId = block.rtId;
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
-  if (changetype<usize>(block) >= __heap_base) {
-    block.mmInfo = blockInfo | FREE;
-    insertBlock(root, block);
-    if (isDefined(ASC_RTRACE)) onfree(block);
-  }
+  if (changetype<usize>(block) >= __heap_base) freeBlock(root, block);
   return newBlock;
 }
 
