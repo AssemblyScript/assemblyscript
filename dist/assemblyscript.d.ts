@@ -4404,6 +4404,30 @@ declare module "assemblyscript/src/compiler" {
         classInstance: Class, 
         /** Statements to append to also being returned. Created if omitted. */
         stmts?: ExpressionRef[]): ExpressionRef[];
+        /** Makes a call to `abort`, if present, otherwise creates a trap. */
+        makeAbort(
+        /** Message argument of type string, if any. */
+        message: Expression | null, 
+        /** Code location to report when aborting. */
+        codeLocation: Node): ExpressionRef;
+        /** Makes a runtime non-null check, e.g. on `<Type>possiblyNull` or `possiblyNull!`. */
+        makeRuntimeNonNullCheck(
+        /** Expression being checked. */
+        expr: ExpressionRef, 
+        /** Type of the expression. */
+        type: Type, 
+        /** Report node. */
+        reportNode: Node): ExpressionRef;
+        /** Makes a runtime upcast check, e.g. on `<Child>parent`. */
+        makeRuntimeUpcastCheck(
+        /** Expression being upcast. */
+        expr: ExpressionRef, 
+        /** Type of the expression. */
+        type: Type, 
+        /** Type casting to. */
+        toType: Type, 
+        /** Report node. */
+        reportNode: Node): ExpressionRef;
     }
 }
 declare module "assemblyscript/src/builtins" {
@@ -4412,7 +4436,7 @@ declare module "assemblyscript/src/builtins" {
      * @module builtins
      */ /***/
     import { Compiler } from "assemblyscript/src/compiler";
-    import { Node, Expression, CallExpression } from "assemblyscript/src/ast";
+    import { Expression, CallExpression } from "assemblyscript/src/ast";
     import { Type } from "assemblyscript/src/types";
     import { ExpressionRef } from "assemblyscript/src/module";
     import { FunctionPrototype } from "assemblyscript/src/program";
@@ -4874,8 +4898,6 @@ declare module "assemblyscript/src/builtins" {
     reportNode: CallExpression, 
     /** Indicates that contextual type is ASM type. */
     isAsm?: boolean): ExpressionRef;
-    /** Compiles an abort wired to the conditionally imported 'abort' function. */
-    export function compileAbort(compiler: Compiler, message: Expression | null, reportNode: Node): ExpressionRef;
     /** Compiles the `visit_globals` function. */
     export function compileVisitGlobals(compiler: Compiler): void;
     /** Compiles the `visit_members` function. */
