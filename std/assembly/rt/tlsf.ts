@@ -1,5 +1,5 @@
 import { AL_BITS, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
-import { onfree, onalloc } from "./rtrace";
+import { onfree, onalloc, onrealloc } from "./rtrace";
 import { REFCOUNT_MASK } from "./pure";
 
 /////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
@@ -549,7 +549,10 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   var newBlock = allocateBlock(root, size, block.rtId); // may invalidate cached blockInfo
   newBlock.gcInfo = block.gcInfo; // keep RC
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
-  if (changetype<usize>(block) >= __heap_base) freeBlock(root, block);
+  if (changetype<usize>(block) >= __heap_base) {
+    if (isDefined(ASC_RTRACE)) onrealloc(block, newBlock);
+    freeBlock(root, block);
+  }
   return newBlock;
 }
 
