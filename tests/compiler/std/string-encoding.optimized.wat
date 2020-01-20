@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
@@ -1772,15 +1772,13 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/string/String.UTF16.encode (; 31 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
+ (func $~lib/string/String.UTF16.byteLength (; 31 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=12
  )
- (func $~lib/string/String.UTF16.encode (; 31 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String.UTF16.encode (; 32 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1794,12 +1792,6 @@
   call $~lib/memory/memory.copy
   local.get $2
   call $~lib/rt/pure/__retain
- )
- (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 32 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
  )
  (func $std/string-encoding/testUTF16Encode (; 33 ;)
   (local $0 i32)
@@ -3594,9 +3586,9 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $~start (; 54 ;)
-  i32.const 28
-  i32.load
+ (func $start:std/string-encoding (; 54 ;)
+  i32.const 32
+  call $~lib/string/String.UTF16.byteLength
   i32.const 12
   i32.ne
   if
@@ -3621,7 +3613,10 @@
   i32.const 13808
   call $std/string-encoding/testLarge
  )
- (func $~lib/rt/pure/__visit (; 55 ;) (param $0 i32) (param $1 i32)
+ (func $~start (; 55 ;)
+  call $start:std/string-encoding
+ )
+ (func $~lib/rt/pure/__visit (; 56 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 21196
   i32.lt_u
@@ -3724,7 +3719,7 @@
    unreachable
   end
  )
- (func $~lib/rt/__visit_members (; 56 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 57 ;) (param $0 i32) (param $1 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2
