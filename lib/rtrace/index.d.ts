@@ -1,82 +1,63 @@
-/**
- * This method returns an `RTrace` object used for reference count tracing.
- *
- * @param {TraceEventCallback?} onerror - A method that is called when a trace error event occurs.
- * @param {TraceEventCallback?} oninfo - A method that is called when a trace info event occurs.
- */
-declare function rtrace(onerror?: rtrace.TraceEventCallback, oninfo?: rtrace.TraceEventCallback): rtrace.RTrace;
+/** Creates a new `RTrace` instance, tracking allocations, frees and reference counts. */
+declare function rtrace(
+  /** Function being called when a problem is detected. */
+  onerror?: (error: Error) => void,
+  /** Function being called with information messages. */
+  oninfo?: (info: string) => void
+): rtrace.RTrace;
 
 declare namespace rtrace {
-  /**
-   * The RTrace interface represents a collection of properties that help develoeprs describe the
-   * reference counts and state of the Web Assembly module.
-   */
+  /** The rtrace instance used as the `rtrace` import to the Wasm module. */
   export interface RTrace {
-
-    /**
-     * The current allocation count.
-     */
+    /** Number of allocations so far. */
     allocCount: number;
-
-    /**
-     * The current free count.
-     */
+    /** Number of reallocations so far. */
+    reallocCount: number;
+    /** Number of frees so far. */
     freeCount: number;
-
-    /**
-     * The current increment count.
-     */
+    /** Number of RC increments (retains) so far. */
     incrementCount: number;
-
-    /**
-     * The current decrement count.
-     */
+    /** Number of RC decrements (releases) so far. */
     decrementCount: number;
 
-    /**
-     * This method is called when an allocation occurs.
-     *
-     * @param {number} block - The `ptr - 16` value indicating the start of the block.
-     */
-    onalloc(block: number): void;
+    /** Called when a new block is allocated. */
+    onalloc(
+      /** New block being allocated. */
+      block: number
+    ): void;
 
-    /**
-     * This method is called when a block is freed.
-     *
-     * @param {number} block - The `ptr - 16` value indicating the start of the block.
-     */
-    onfree(block: number): void;
+    /** Called when a block is reallocated and must be moved. */
+    onrealloc(
+      /** Block being moved. */
+      oldBlock: number,
+      /** New block used from now on. */
+      newBlock: number
+    ): void;
 
-    /**
-     * This method is called when a reference count is incrememnted
-     *
-     * @param {number} block - The `ptr - 16` value indicating the start of the block.
-     */
-    onincrement(block: number): void;
+    /** Called when a block is freed, implicitly or explicitly. */
+    onfree(
+      /** Block being freed. */
+      block: number
+    ): void;
 
-    /**
-     * This method is called when a reference count is decremented.
-     *
-     * @param {number} block - The `ptr - 16` value indicating the start of the block.
-     */
-    ondecrement(block: number): void;
+    /** Called when a reference to a block is retained (RC incremented by one). */
+    onincrement(
+      /** Block a reference to is being retained. */
+      block: number
+    ): void;
 
-    /**
-     * This property indicates if rtrace is active.
-     */
+    /** Called when a reference to a block is released (RC decremented by one). */
+    ondecrement(
+      /** Block a reference to is being released. */
+      block: number
+    ): void;
+
+    /** Checks if rtrace is active, i.e. at least one event has occurred. */
     readonly active: boolean;
 
-    /**
-     * This method returns the current number of allocated blocks.
-     */
+    /** Checks if there are any leaks and emits them via `oninfo`. Returns the number of live blocks. */
     check(): number;
-
   }
-
-  /**
-   * This is a trace event callback. It accepts a string containing a message about the event.
-   */
-  export type TraceEventCallback = (info: string) => void;
 }
 
 export = rtrace;

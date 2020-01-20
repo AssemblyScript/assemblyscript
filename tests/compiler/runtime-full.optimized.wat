@@ -1,12 +1,13 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
@@ -857,22 +858,9 @@
   end
  )
  (func $~lib/rt/tlsf/freeBlock (; 8 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
+  local.get $1
   local.get $1
   i32.load
-  local.tee $2
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 569
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.get $2
   i32.const 1
   i32.or
   i32.store
@@ -1219,9 +1207,9 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
   if
    i32.const 0
@@ -1234,9 +1222,9 @@
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/prepareSize
-  local.tee $3
+  local.tee $4
   call $~lib/rt/tlsf/searchBlock
-  local.tee $2
+  local.tee $3
   i32.eqz
   if
    i32.const 1
@@ -1245,18 +1233,18 @@
    i32.const 0
    global.set $~lib/rt/tlsf/collectLock
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/rt/tlsf/searchBlock
-   local.tee $2
+   local.tee $3
    i32.eqz
    if
     local.get $0
-    local.get $3
+    local.get $4
     call $~lib/rt/tlsf/growMemory
     local.get $0
-    local.get $3
+    local.get $4
     call $~lib/rt/tlsf/searchBlock
-    local.tee $2
+    local.tee $3
     i32.eqz
     if
      i32.const 0
@@ -1268,11 +1256,11 @@
     end
    end
   end
-  local.get $2
+  local.get $3
   i32.load
   i32.const -4
   i32.and
-  local.get $3
+  local.get $4
   i32.lt_u
   if
    i32.const 0
@@ -1282,29 +1270,29 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
   i32.const 0
   i32.store offset=4
+  local.get $3
   local.get $2
+  i32.store offset=8
+  local.get $3
   local.get $1
   i32.store offset=12
   local.get $0
-  local.get $2
+  local.get $3
   call $~lib/rt/tlsf/removeBlock
   local.get $0
-  local.get $2
   local.get $3
+  local.get $4
   call $~lib/rt/tlsf/prepareBlock
-  local.get $2
+  local.get $3
  )
  (func $~lib/rt/tlsf/__alloc (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
-  call $~lib/rt/tlsf/allocateBlock
-  local.tee $0
   local.get $1
-  i32.store offset=8
-  local.get $0
+  call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
  )
@@ -1552,7 +1540,12 @@
    end
   end
  )
- (func $~lib/rt/tlsf/__free (; 21 ;) (param $0 i32)
+ (func $~lib/rt/tlsf/checkUsedBlock (; 21 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  local.set $1
   local.get $0
   i32.const 15
   i32.and
@@ -1560,20 +1553,34 @@
   i32.const 0
   local.get $0
   select
+  if (result i32)
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if (result i32)
+   local.get $1
+   i32.load offset=4
+   i32.const -268435456
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
   i32.eqz
   if
    i32.const 0
    i32.const 32
-   i32.const 593
+   i32.const 570
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  i32.const 16
-  i32.sub
-  call $~lib/rt/tlsf/freeBlock
+  local.get $1
  )
  (func $~lib/rt/pure/growRoots (; 22 ;)
   (local $0 i32)
@@ -1602,8 +1609,10 @@
   call $~lib/memory/memory.copy
   local.get $1
   if
+   call $~lib/rt/tlsf/maybeInitialize
    local.get $1
-   call $~lib/rt/tlsf/__free
+   call $~lib/rt/tlsf/checkUsedBlock
+   call $~lib/rt/tlsf/freeBlock
   end
   local.get $0
   global.set $~lib/rt/pure/ROOTS
