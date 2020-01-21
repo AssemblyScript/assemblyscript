@@ -1742,19 +1742,19 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
   if (length < 0) {
     if (length == -1) {
       const mask = <i32>(1 << alignof<T>() - 1);
-      if (buffer.byteLength & mask) {
+      if (bufferByteLength & mask) {
         throw new RangeError(E_INVALIDLENGTH);
       } else {
-        byteLength = buffer.byteLength;
+        byteLength = bufferByteLength - byteOffset;
       }
     } else {
       throw new RangeError(E_INVALIDLENGTH);
     }
   } else {
     byteLength = length << alignof<T>();
-  }
-  if (byteOffset + byteLength > buffer.byteLength) {
-    throw new RangeError(E_INVALIDLENGTH);
+    if (byteOffset + byteLength > bufferByteLength) {
+      throw new RangeError(E_INVALIDLENGTH);
+    }
   }
   var out = __alloc(offsetof<TArray>(), idof<TArray>());
   store<usize>(out, __retain(changetype<usize>(buffer)), offsetof<TArray>("buffer"));
