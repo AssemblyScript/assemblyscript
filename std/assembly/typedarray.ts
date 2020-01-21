@@ -1744,9 +1744,8 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
     if (length == -1) {
       if (bufferByteLength & (sizeof<T>() - 1)) {
         throw new RangeError(E_INVALIDLENGTH);
-      } else {
-        byteLength = bufferByteLength - byteOffset;
       }
+      byteLength = bufferByteLength - byteOffset;
     } else {
       throw new RangeError(E_INVALIDLENGTH);
     }
