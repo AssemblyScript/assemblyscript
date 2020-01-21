@@ -1734,7 +1734,7 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 // @ts-ignore: decorator
 @inline
 function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
-  const mask = <i32>(1 << alignof<T>() - 1);
+  const mask = 1 << alignof<T>() - 1;
   var byteLength: i32;
   var bufferByteLength = buffer.byteLength;
   // @ts-ignore: cast
