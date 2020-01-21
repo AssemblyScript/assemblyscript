@@ -37572,7 +37572,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -37828,7 +37828,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -38082,7 +38082,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -38336,7 +38336,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -38592,7 +38592,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -38846,7 +38846,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -39098,7 +39098,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -39350,7 +39350,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -39603,7 +39603,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -39856,7 +39856,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release
@@ -40109,7 +40109,7 @@
   local.set $6
   local.get $4
   local.get $6
-  i32.ge_u
+  i32.gt_u
   if
    local.get $5
    call $~lib/rt/pure/__release

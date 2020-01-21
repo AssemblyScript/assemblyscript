@@ -25362,7 +25362,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -25505,7 +25505,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -25646,7 +25646,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -25787,7 +25787,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -25930,7 +25930,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -26071,7 +26071,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -26210,7 +26210,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -26349,7 +26349,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -26489,7 +26489,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -26629,7 +26629,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
@@ -26769,7 +26769,7 @@
   i32.const 0
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  i32.ge_u
+  i32.gt_u
   if
    i32.const 304
    i32.const 480
