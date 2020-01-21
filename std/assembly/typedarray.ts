@@ -1737,7 +1737,8 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
   const mask = <i32>(1 << alignof<T>() - 1);
   var byteLength: i32;
   var bufferByteLength = buffer.byteLength;
-  if (u32(<u32>byteOffset > <u32>bufferByteLength) | (byteOffset & mask)) {
+  // @ts-ignore: cast
+  if ((<u32>byteOffset > <u32>bufferByteLength) | (byteOffset & mask)) {
     throw new RangeError(E_INDEXOUTOFRANGE);
   }
   if (length < 0) {
