@@ -1734,14 +1734,14 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 // @ts-ignore: decorator
 @inline
 function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
+  const mask = <i32>(1 << alignof<T>() - 1);
+  var byteLength: i32;
   var bufferByteLength = buffer.byteLength;
-  if (<u32>byteOffset > <u32>bufferByteLength) {
+  if (u32(<u32>byteOffset > <u32>bufferByteLength) | (byteOffset & mask)) {
     throw new RangeError(E_INDEXOUTOFRANGE);
   }
-  var byteLength: i32;
   if (length < 0) {
     if (length == -1) {
-      const mask = <i32>(1 << alignof<T>() - 1);
       if (bufferByteLength & mask) {
         throw new RangeError(E_INVALIDLENGTH);
       } else {

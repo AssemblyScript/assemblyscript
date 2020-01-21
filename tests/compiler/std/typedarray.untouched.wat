@@ -37510,16 +37510,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const -2147483648
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -37532,7 +37536,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const -2147483648
     i32.and
     if
@@ -37545,10 +37549,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -37564,11 +37568,11 @@
    local.get $3
    i32.const 0
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -37590,7 +37594,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -37734,16 +37738,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const -2147483648
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -37756,7 +37764,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const -2147483648
     i32.and
     if
@@ -37769,10 +37777,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -37788,11 +37796,11 @@
    local.get $3
    i32.const 0
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -37814,7 +37822,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -38101,16 +38109,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const -2147483648
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -38123,7 +38135,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const -2147483648
     i32.and
     if
@@ -38136,10 +38148,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -38155,11 +38167,11 @@
    local.get $3
    i32.const 0
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -38181,7 +38193,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -38354,16 +38366,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const 1
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -38376,7 +38392,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const 1
     i32.and
     if
@@ -38389,10 +38405,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -38408,11 +38424,11 @@
    local.get $3
    i32.const 1
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -38434,7 +38450,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -38609,16 +38625,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const 1
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -38631,7 +38651,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const 1
     i32.and
     if
@@ -38644,10 +38664,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -38663,11 +38683,11 @@
    local.get $3
    i32.const 1
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -38689,7 +38709,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -38862,16 +38882,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const 2
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -38884,7 +38908,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const 2
     i32.and
     if
@@ -38897,10 +38921,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -38916,11 +38940,11 @@
    local.get $3
    i32.const 2
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -38942,7 +38966,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -39113,16 +39137,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const 2
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -39135,7 +39163,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const 2
     i32.and
     if
@@ -39148,10 +39176,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -39167,11 +39195,11 @@
    local.get $3
    i32.const 2
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -39193,7 +39221,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -39364,16 +39392,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const 4
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -39386,7 +39418,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const 4
     i32.and
     if
@@ -39399,10 +39431,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -39418,11 +39450,11 @@
    local.get $3
    i32.const 3
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -39444,7 +39476,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -39616,16 +39648,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const 4
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -39638,7 +39674,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const 4
     i32.and
     if
@@ -39651,10 +39687,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -39670,11 +39706,11 @@
    local.get $3
    i32.const 3
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -39696,7 +39732,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -39868,16 +39904,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const 2
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -39890,7 +39930,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const 2
     i32.and
     if
@@ -39903,10 +39943,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -39922,11 +39962,11 @@
    local.get $3
    i32.const 2
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -39948,7 +39988,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5
@@ -40120,16 +40160,20 @@
   local.set $3
   local.get $5
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.gt_u
+  local.get $4
+  i32.const 4
+  i32.and
+  i32.or
   if
    local.get $5
    call $~lib/rt/pure/__release
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -40142,7 +40186,7 @@
    i32.const -1
    i32.eq
    if
-    local.get $6
+    local.get $7
     i32.const 4
     i32.and
     if
@@ -40155,10 +40199,10 @@
      call $~lib/builtins/abort
      unreachable
     else
-     local.get $6
+     local.get $7
      local.get $4
      i32.sub
-     local.set $7
+     local.set $6
     end
    else
     local.get $5
@@ -40174,11 +40218,11 @@
    local.get $3
    i32.const 3
    i32.shl
-   local.set $7
+   local.set $6
    local.get $4
-   local.get $7
-   i32.add
    local.get $6
+   i32.add
+   local.get $7
    i32.gt_s
    if
     local.get $5
@@ -40200,7 +40244,7 @@
   call $~lib/rt/pure/__retain
   i32.store
   local.get $8
-  local.get $7
+  local.get $6
   i32.store offset=8
   local.get $8
   local.get $5

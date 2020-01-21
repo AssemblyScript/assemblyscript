@@ -25314,14 +25314,18 @@
  (func $~lib/typedarray/Uint8Array.wrap (; 421 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
+  i32.const -2147483648
+  i32.and
+  local.get $1
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.tee $3
   i32.gt_u
+  i32.or
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -25494,7 +25498,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -25706,7 +25710,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -25832,7 +25836,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -25960,7 +25964,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -26086,7 +26090,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -26210,7 +26214,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -26334,7 +26338,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -26459,7 +26463,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -26584,7 +26588,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -26709,7 +26713,7 @@
   if
    i32.const 304
    i32.const 480
-   i32.const 1739
+   i32.const 1741
    i32.const 4
    call $~lib/builtins/abort
    unreachable
