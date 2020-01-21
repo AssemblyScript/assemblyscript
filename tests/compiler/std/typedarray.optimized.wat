@@ -25314,14 +25314,10 @@
  (func $~lib/typedarray/Uint8Array.wrap (; 421 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $1
-  i32.const -2147483648
-  i32.and
-  local.get $1
   local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   local.tee $3
   i32.gt_u
-  i32.or
   if
    i32.const 304
    i32.const 480
@@ -25339,20 +25335,8 @@
    i32.eq
    if (result i32)
     local.get $3
-    i32.const -2147483648
-    i32.and
-    if (result i32)
-     i32.const 32
-     i32.const 480
-     i32.const 1747
-     i32.const 8
-     call $~lib/builtins/abort
-     unreachable
-    else
-     local.get $3
-     local.get $1
-     i32.sub
-    end
+    local.get $1
+    i32.sub
    else
     i32.const 32
     i32.const 480
@@ -25500,17 +25484,6 @@
    i32.const 480
    i32.const 1742
    i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  i32.const -2147483648
-  i32.and
-  if
-   i32.const 32
-   i32.const 480
-   i32.const 1747
-   i32.const 8
    call $~lib/builtins/abort
    unreachable
   end
@@ -25712,17 +25685,6 @@
    i32.const 480
    i32.const 1742
    i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  i32.const -2147483648
-  i32.and
-  if
-   i32.const 32
-   i32.const 480
-   i32.const 1747
-   i32.const 8
    call $~lib/builtins/abort
    unreachable
   end
@@ -26096,7 +26058,7 @@
    unreachable
   end
   local.get $2
-  i32.const 2
+  i32.const 3
   i32.and
   if
    i32.const 32
@@ -26220,7 +26182,7 @@
    unreachable
   end
   local.get $2
-  i32.const 2
+  i32.const 3
   i32.and
   if
    i32.const 32
@@ -26344,7 +26306,7 @@
    unreachable
   end
   local.get $2
-  i32.const 4
+  i32.const 7
   i32.and
   if
    i32.const 32
@@ -26469,7 +26431,7 @@
    unreachable
   end
   local.get $2
-  i32.const 4
+  i32.const 7
   i32.and
   if
    i32.const 32
@@ -26594,7 +26556,7 @@
    unreachable
   end
   local.get $2
-  i32.const 2
+  i32.const 3
   i32.and
   if
    i32.const 32
@@ -26719,7 +26681,7 @@
    unreachable
   end
   local.get $2
-  i32.const 4
+  i32.const 7
   i32.and
   if
    i32.const 32
@@ -26892,7 +26854,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -26925,7 +26887,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -27387,7 +27349,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -27420,7 +27382,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -27784,7 +27746,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -27817,7 +27779,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -28406,7 +28368,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -28439,7 +28401,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -28930,7 +28892,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -28970,7 +28932,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -29312,7 +29274,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -29345,7 +29307,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -29867,7 +29829,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -29900,7 +29862,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -30258,7 +30220,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -30291,7 +30253,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -30781,7 +30743,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -30814,7 +30776,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -31172,7 +31134,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -31212,7 +31174,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
@@ -31642,7 +31604,7 @@
   if
    i32.const 0
    i32.const 416
-   i32.const 712
+   i32.const 716
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -31680,7 +31642,7 @@
      call $~lib/builtins/trace
      i32.const 0
      i32.const 416
-     i32.const 718
+     i32.const 722
      i32.const 6
      call $~lib/builtins/abort
      unreachable
