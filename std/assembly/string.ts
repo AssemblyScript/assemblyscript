@@ -661,9 +661,11 @@ export namespace String {
     export function encode(str: string, nullTerminated: bool = false): ArrayBuffer {
       var strOff = changetype<usize>(str);
       var strEnd = changetype<usize>(str) + <usize>changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
-      var buf = __alloc(UTF8.byteLength(str, nullTerminated), idof<ArrayBuffer>());
+      var bufLen = <usize>UTF8.byteLength(str, nullTerminated);
+      var buf = __alloc(bufLen, idof<ArrayBuffer>());
+      var bufEnd = buf + bufLen - i32(nullTerminated);
       var bufOff = buf;
-      while (strOff < strEnd) {
+      while (bufOff < bufEnd) {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
           store<u8>(bufOff, c1);

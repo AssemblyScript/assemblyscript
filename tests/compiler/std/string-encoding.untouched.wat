@@ -4074,6 +4074,8 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -4089,65 +4091,75 @@
   local.get $0
   local.get $1
   call $~lib/string/String.UTF8.byteLength
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
   local.set $4
   local.get $4
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
   local.set $5
+  local.get $5
+  local.get $4
+  i32.add
+  local.get $1
+  i32.const 0
+  i32.ne
+  i32.sub
+  local.set $6
+  local.get $5
+  local.set $7
   loop $while-continue|0
-   local.get $2
-   local.get $3
-   i32.lt_u
-   local.set $6
+   local.get $7
    local.get $6
+   i32.lt_u
+   local.set $8
+   local.get $8
    if
     local.get $2
     i32.load16_u
-    local.set $7
-    local.get $7
+    local.set $9
+    local.get $9
     i32.const 128
     i32.lt_u
     if
-     local.get $5
      local.get $7
+     local.get $9
      i32.store8
-     local.get $5
+     local.get $7
      i32.const 1
      i32.add
-     local.set $5
+     local.set $7
      local.get $2
      i32.const 2
      i32.add
      local.set $2
     else
-     local.get $7
+     local.get $9
      i32.const 2048
      i32.lt_u
      if
-      local.get $5
       local.get $7
+      local.get $9
       i32.const 6
       i32.shr_u
       i32.const 192
       i32.or
       i32.store8
-      local.get $5
       local.get $7
+      local.get $9
       i32.const 63
       i32.and
       i32.const 128
       i32.or
       i32.store8 offset=1
-      local.get $5
+      local.get $7
       i32.const 2
       i32.add
-      local.set $5
+      local.set $7
       local.get $2
       i32.const 2
       i32.add
       local.set $2
      else
-      local.get $7
+      local.get $9
       i32.const 64512
       i32.and
       i32.const 55296
@@ -4164,34 +4176,34 @@
       if
        local.get $2
        i32.load16_u offset=2
-       local.set $8
-       local.get $8
+       local.set $10
+       local.get $10
        i32.const 64512
        i32.and
        i32.const 56320
        i32.eq
        if
         i32.const 65536
-        local.get $7
+        local.get $9
         i32.const 1023
         i32.and
         i32.const 10
         i32.shl
         i32.add
-        local.get $8
+        local.get $10
         i32.const 1023
         i32.and
         i32.or
-        local.set $7
-        local.get $5
+        local.set $9
         local.get $7
+        local.get $9
         i32.const 18
         i32.shr_u
         i32.const 240
         i32.or
         i32.store8
-        local.get $5
         local.get $7
+        local.get $9
         i32.const 12
         i32.shr_u
         i32.const 63
@@ -4199,8 +4211,8 @@
         i32.const 128
         i32.or
         i32.store8 offset=1
-        local.get $5
         local.get $7
+        local.get $9
         i32.const 6
         i32.shr_u
         i32.const 63
@@ -4208,8 +4220,8 @@
         i32.const 128
         i32.or
         i32.store8 offset=2
-        local.get $5
         local.get $7
+        local.get $9
         i32.const 63
         i32.and
         i32.const 128
@@ -4219,22 +4231,22 @@
         i32.const 4
         i32.add
         local.set $2
-        local.get $5
+        local.get $7
         i32.const 4
         i32.add
-        local.set $5
+        local.set $7
         br $while-continue|0
        end
       end
-      local.get $5
       local.get $7
+      local.get $9
       i32.const 12
       i32.shr_u
       i32.const 224
       i32.or
       i32.store8
-      local.get $5
       local.get $7
+      local.get $9
       i32.const 6
       i32.shr_u
       i32.const 63
@@ -4242,8 +4254,8 @@
       i32.const 128
       i32.or
       i32.store8 offset=1
-      local.get $5
       local.get $7
+      local.get $9
       i32.const 63
       i32.and
       i32.const 128
@@ -4253,10 +4265,10 @@
       i32.const 2
       i32.add
       local.set $2
-      local.get $5
+      local.get $7
       i32.const 3
       i32.add
-      local.set $5
+      local.set $7
      end
     end
     br $while-continue|0
@@ -4269,23 +4281,23 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 694
+   i32.const 696
    i32.const 6
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
   if
-   local.get $5
+   local.get $7
    i32.const 0
    i32.store8
   end
-  local.get $4
+  local.get $5
   call $~lib/rt/pure/__retain
-  local.set $6
+  local.set $8
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $6
+  local.get $8
  )
  (func $std/string-encoding/testUTF8Encode (; 48 ;)
   (local $0 i32)
@@ -4759,7 +4771,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 710
+   i32.const 712
    i32.const 6
    call $~lib/builtins/abort
    unreachable
