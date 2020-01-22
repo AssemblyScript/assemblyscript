@@ -637,7 +637,7 @@ export namespace String {
     export function byteLength(str: string, nullTerminated: bool = false): i32 {
       var strOff = changetype<usize>(str);
       var strEnd = strOff + <usize>changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
-      var bufLen = nullTerminated ? 1 : 0;
+      var bufLen = i32(nullTerminated);
       while (strOff < strEnd) {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
@@ -666,7 +666,6 @@ export namespace String {
       while (strOff < strEnd) {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
-          if (nullTerminated && !c1) break;
           store<u8>(bufOff, c1);
           bufOff += 1; strOff += 2;
         } else if (c1 < 2048) {
@@ -692,12 +691,9 @@ export namespace String {
           strOff += 2; bufOff += 3;
         }
       }
+      assert(strOff <= strEnd);
       if (nullTerminated) {
-        assert(strOff <= strEnd);
-        buf = __realloc(buf, bufOff - buf + 1);
         store<u8>(bufOff, 0);
-      } else {
-        assert(strOff == strEnd);
       }
       return changetype<ArrayBuffer>(buf); // retains
     }
