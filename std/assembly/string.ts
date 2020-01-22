@@ -663,7 +663,7 @@ export namespace String {
       var strEnd = changetype<usize>(str) + <usize>changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
       var bufLen = <usize>UTF8.byteLength(str, nullTerminated);
       var buf = __alloc(bufLen, idof<ArrayBuffer>());
-      var bufEnd = buf + bufLen - i32(nullTerminated);
+      var bufEnd = buf + bufLen - usize(nullTerminated);
       var bufOff = buf;
       while (bufOff < bufEnd) {
         let c1 = <u32>load<u16>(strOff);
