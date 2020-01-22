@@ -685,6 +685,16 @@ function testArrayWrap<TArray extends TypedArray<T>, T extends number>(): void {
   }
 }
 
+{
+  let buffer = new ArrayBuffer(0);
+  let array = Uint8Array.wrap(buffer, 0);
+  assert(array.length == 0);
+
+  buffer = new ArrayBuffer(2);
+  array = Uint8Array.wrap(buffer, 2);
+  assert(array.length == 0);
+}
+
 testArrayWrap<Int8Array, i8>();
 testArrayWrap<Uint8Array, u8>();
 testArrayWrap<Uint8ClampedArray, u8>();
