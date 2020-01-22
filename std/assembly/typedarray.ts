@@ -1736,8 +1736,7 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
   var byteLength: i32;
   var bufferByteLength = buffer.byteLength;
-  // @ts-ignore: cast
-  if ((<u32>byteOffset > <u32>bufferByteLength) | (byteOffset & (sizeof<T>() - 1))) {
+  if (i32(<u32>byteOffset > <u32>bufferByteLength) | (byteOffset & (sizeof<T>() - 1))) {
     throw new RangeError(E_INDEXOUTOFRANGE);
   }
   if (length < 0) {
