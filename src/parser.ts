@@ -3619,9 +3619,9 @@ export class Parser extends DiagnosticEmitter {
 
   parseTemplateLiteralExpression(tn: Tokenizer): Expression | null {
     var startPos = tn.pos;
-    // at `(Sring* | ${ Epression }*)`
+    // at `(Sring*${ Epression }*String*)*`
     const parts: Expression[] = [this.parseStringLiteral(tn, startPos)];
-    
+
     var token = tn.next();
     while (token == Token.DOLLAR) {
       tn.skip(token);
@@ -3629,7 +3629,7 @@ export class Parser extends DiagnosticEmitter {
       let expr = this.parseExpressionStart(tn);
       if (expr == null) return null;
       parts.push(expr);
-      tn.skip(Token.OPENBRACE);
+      tn.skip(Token.CLOSEBRACE);
       token = tn.next();
       if (token == Token.TEMPLATELITERAL) {
         tn.skip(token);

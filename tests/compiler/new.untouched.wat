@@ -1,11 +1,10 @@
 (module
- (type $FUNCSIG$iii (func (param i32 i32) (result i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 0)
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $new/ref (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -13,8 +12,8 @@
  (global $new/ref2 (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
- (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (start $~start)
+ (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -68,7 +67,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 1 ;) (type $FUNCSIG$iii) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -111,7 +110,7 @@
   local.get $5
   i32.store
   local.get $6
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $6
   local.get $1
@@ -121,10 +120,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $new/Ref#constructor (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $new/Ref#constructor (; 3 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -136,14 +135,14 @@
   end
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 4 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 4 ;) (param $0 i32)
   nop
  )
- (func $new/Ref#get:ref (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $new/Ref#get:ref (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $new/Gen<i32>#constructor (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $new/Gen<i32>#constructor (; 6 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -155,11 +154,11 @@
   end
   local.get $0
  )
- (func $new/Gen<i32>#get:gen (; 7 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $new/Gen<i32>#get:gen (; 7 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $new/ns.Ref#constructor (; 8 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $new/ns.Ref#constructor (; 8 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -171,11 +170,11 @@
   end
   local.get $0
  )
- (func $new/ns.Ref#get:ref (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $new/ns.Ref#get:ref (; 9 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $start:new (; 10 ;) (type $FUNCSIG$v)
+ (func $start:new (; 10 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -296,10 +295,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $start (; 11 ;) (type $FUNCSIG$v)
+ (func $~start (; 11 ;)
   call $start:new
- )
- (func $null (; 12 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

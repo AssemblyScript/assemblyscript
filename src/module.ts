@@ -7,7 +7,6 @@ import { Target } from "./common";
 import * as binaryen from "./glue/binaryen";
 
 export type ModuleRef = usize;
-export type FunctionTypeRef = usize;
 export type FunctionRef = usize;
 export type ExpressionRef = usize;
 export type GlobalRef = usize;
@@ -18,434 +17,447 @@ export type RelooperRef = usize;
 export type RelooperBlockRef = usize;
 export type Index = u32;
 
+// The following constants must be updated by running scripts/update-constants.
+// This is necessary because the functions are not yet callable with Binaryen
+// compiled to WebAssembly, requiring awaiting the ready promise first. Note
+// that this essentially fixes the compiler to specific versions of Binaryen
+// sometimes, because these constants can differ between Binaryen versions.
+
 export enum NativeType {
-  None = binaryen._BinaryenTypeNone(),
-  I32  = binaryen._BinaryenTypeInt32(),
-  I64  = binaryen._BinaryenTypeInt64(),
-  F32  = binaryen._BinaryenTypeFloat32(),
-  F64  = binaryen._BinaryenTypeFloat64(),
-  V128 = binaryen._BinaryenTypeVec128(),
-  Anyref = binaryen._BinaryenTypeAnyref(),
-  Exnref = binaryen._BinaryenTypeExnref(),
-  Unreachable = binaryen._BinaryenTypeUnreachable()
-  // Auto = binaryen._BinaryenTypeAuto()
+  None = 0 /* _BinaryenTypeNone */,
+  Unreachable = 1 /* _BinaryenTypeUnreachable */,
+  I32 = 2 /* _BinaryenTypeInt32 */,
+  I64 = 3 /* _BinaryenTypeInt64 */,
+  F32 = 4 /* _BinaryenTypeFloat32 */,
+  F64 = 5 /* _BinaryenTypeFloat64 */,
+  V128 = 6 /* _BinaryenTypeVec128 */,
+  Funcref = 7 /* _BinaryenTypeFuncref */,
+  Anyref = 8 /* _BinaryenTypeAnyref */,
+  Nullref = 9 /* _BinaryenTypeNullref */,
+  Exnref = 10 /* _BinaryenTypeExnref */,
+  Auto = -1 /* _BinaryenTypeAuto */
 }
 
 export enum FeatureFlags {
-  MVP = binaryen._BinaryenFeatureMVP(),
-  Atomics = binaryen._BinaryenFeatureAtomics(),
-  MutableGloabls = binaryen._BinaryenFeatureMutableGlobals(),
-  NontrappingFPToInt = binaryen._BinaryenFeatureNontrappingFPToInt(),
-  SIMD128 = binaryen._BinaryenFeatureSIMD128(),
-  BulkMemory = binaryen._BinaryenFeatureBulkMemory(),
-  SignExt = binaryen._BinaryenFeatureSignExt(),
-  ExceptionHandling = binaryen._BinaryenFeatureExceptionHandling(),
-  TailCall = binaryen._BinaryenFeatureTailCall(),
-  ReferenceTypes = binaryen._BinaryenFeatureReferenceTypes(),
-  All = binaryen._BinaryenFeatureAll()
+  MVP = 0 /* _BinaryenFeatureMVP */,
+  Atomics = 1 /* _BinaryenFeatureAtomics */,
+  MutableGloabls = 2 /* _BinaryenFeatureMutableGlobals */,
+  NontrappingFPToInt = 4 /* _BinaryenFeatureNontrappingFPToInt */,
+  SIMD128 = 8 /* _BinaryenFeatureSIMD128 */,
+  BulkMemory = 16 /* _BinaryenFeatureBulkMemory */,
+  SignExt = 32 /* _BinaryenFeatureSignExt */,
+  ExceptionHandling = 64 /* _BinaryenFeatureExceptionHandling */,
+  TailCall = 128 /* _BinaryenFeatureTailCall */,
+  ReferenceTypes = 256 /* _BinaryenFeatureReferenceTypes */,
+  All = 511 /* _BinaryenFeatureAll */
 }
 
 export enum ExpressionId {
-  Invalid = binaryen._BinaryenInvalidId(),
-  Block = binaryen._BinaryenBlockId(),
-  If = binaryen._BinaryenIfId(),
-  Loop = binaryen._BinaryenLoopId(),
-  Break = binaryen._BinaryenBreakId(),
-  Switch = binaryen._BinaryenSwitchId(),
-  Call = binaryen._BinaryenCallId(),
-  CallIndirect = binaryen._BinaryenCallIndirectId(),
-  LocalGet = binaryen._BinaryenLocalGetId(),
-  LocalSet = binaryen._BinaryenLocalSetId(),
-  GlobalGet = binaryen._BinaryenGlobalGetId(),
-  GlobalSet = binaryen._BinaryenGlobalSetId(),
-  Load = binaryen._BinaryenLoadId(),
-  Store = binaryen._BinaryenStoreId(),
-  Const = binaryen._BinaryenConstId(),
-  Unary = binaryen._BinaryenUnaryId(),
-  Binary = binaryen._BinaryenBinaryId(),
-  Select = binaryen._BinaryenSelectId(),
-  Drop = binaryen._BinaryenDropId(),
-  Return = binaryen._BinaryenReturnId(),
-  Host = binaryen._BinaryenHostId(),
-  Nop = binaryen._BinaryenNopId(),
-  Unreachable = binaryen._BinaryenUnreachableId(),
-  AtomicCmpxchg = binaryen._BinaryenAtomicCmpxchgId(),
-  AtomicRMW = binaryen._BinaryenAtomicRMWId(),
-  AtomicWait = binaryen._BinaryenAtomicWaitId(),
-  AtomicNotify = binaryen._BinaryenAtomicNotifyId(),
-  AtomicFence = binaryen._BinaryenAtomicFenceId(),
-  SIMDExtract = binaryen._BinaryenSIMDExtractId(),
-  SIMDReplace = binaryen._BinaryenSIMDReplaceId(),
-  SIMDShuffle = binaryen._BinaryenSIMDShuffleId(),
-  SIMDTernary = binaryen._BinaryenSIMDTernaryId(),
-  SIMDShift = binaryen._BinaryenSIMDShiftId(),
-  SIMDLoad = binaryen._BinaryenSIMDLoadId(),
-  MemoryInit = binaryen._BinaryenMemoryInitId(),
-  DataDrop = binaryen._BinaryenDataDropId(),
-  MemoryCopy = binaryen._BinaryenMemoryCopyId(),
-  MemoryFill = binaryen._BinaryenMemoryFillId(),
-  Try = binaryen._BinaryenTryId(),
-  Throw = binaryen._BinaryenThrowId(),
-  Rethrow = binaryen._BinaryenRethrowId(),
-  BrOnExn = binaryen._BinaryenBrOnExnId(),
-  Push = binaryen._BinaryenPushId(),
-  Pop = binaryen._BinaryenPopId()
+  Invalid = 0 /* _BinaryenInvalidId */,
+  Block = 1 /* _BinaryenBlockId */,
+  If = 2 /* _BinaryenIfId */,
+  Loop = 3 /* _BinaryenLoopId */,
+  Break = 4 /* _BinaryenBreakId */,
+  Switch = 5 /* _BinaryenSwitchId */,
+  Call = 6 /* _BinaryenCallId */,
+  CallIndirect = 7 /* _BinaryenCallIndirectId */,
+  LocalGet = 8 /* _BinaryenLocalGetId */,
+  LocalSet = 9 /* _BinaryenLocalSetId */,
+  GlobalGet = 10 /* _BinaryenGlobalGetId */,
+  GlobalSet = 11 /* _BinaryenGlobalSetId */,
+  Load = 12 /* _BinaryenLoadId */,
+  Store = 13 /* _BinaryenStoreId */,
+  Const = 14 /* _BinaryenConstId */,
+  Unary = 15 /* _BinaryenUnaryId */,
+  Binary = 16 /* _BinaryenBinaryId */,
+  Select = 17 /* _BinaryenSelectId */,
+  Drop = 18 /* _BinaryenDropId */,
+  Return = 19 /* _BinaryenReturnId */,
+  Host = 20 /* _BinaryenHostId */,
+  Nop = 21 /* _BinaryenNopId */,
+  Unreachable = 22 /* _BinaryenUnreachableId */,
+  AtomicCmpxchg = 24 /* _BinaryenAtomicCmpxchgId */,
+  AtomicRMW = 23 /* _BinaryenAtomicRMWId */,
+  AtomicWait = 25 /* _BinaryenAtomicWaitId */,
+  AtomicNotify = 26 /* _BinaryenAtomicNotifyId */,
+  AtomicFence = 27 /* _BinaryenAtomicFenceId */,
+  SIMDExtract = 28 /* _BinaryenSIMDExtractId */,
+  SIMDReplace = 29 /* _BinaryenSIMDReplaceId */,
+  SIMDShuffle = 30 /* _BinaryenSIMDShuffleId */,
+  SIMDTernary = 31 /* _BinaryenSIMDTernaryId */,
+  SIMDShift = 32 /* _BinaryenSIMDShiftId */,
+  SIMDLoad = 33 /* _BinaryenSIMDLoadId */,
+  MemoryInit = 34 /* _BinaryenMemoryInitId */,
+  DataDrop = 35 /* _BinaryenDataDropId */,
+  MemoryCopy = 36 /* _BinaryenMemoryCopyId */,
+  MemoryFill = 37 /* _BinaryenMemoryFillId */,
+  Push = 38 /* _BinaryenPushId */,
+  Pop = 39 /* _BinaryenPopId */,
+  RefNull = 40 /* _BinaryenRefNullId */,
+  RefIsNull = 41 /* _BinaryenRefIsNullId */,
+  RefFunc = 42 /* _BinaryenRefFuncId */,
+  Try = 43 /* _BinaryenTryId */,
+  Throw = 44 /* _BinaryenThrowId */,
+  Rethrow = 45 /* _BinaryenRethrowId */,
+  BrOnExn = 46 /* _BinaryenBrOnExnId */
 }
 
 export enum UnaryOp {
-  ClzI32 = binaryen._BinaryenClzInt32(),
-  CtzI32 = binaryen._BinaryenCtzInt32(),
-  PopcntI32 = binaryen._BinaryenPopcntInt32(),
-  NegF32 = binaryen._BinaryenNegFloat32(),
-  AbsF32 = binaryen._BinaryenAbsFloat32(),
-  CeilF32 = binaryen._BinaryenCeilFloat32(),
-  FloorF32 = binaryen._BinaryenFloorFloat32(),
-  TruncF32 = binaryen._BinaryenTruncFloat32(),
-  NearestF32 = binaryen._BinaryenNearestFloat32(),
-  SqrtF32 = binaryen._BinaryenSqrtFloat32(),
-  EqzI32 = binaryen._BinaryenEqZInt32(),
-  ClzI64 = binaryen._BinaryenClzInt64(),
-  CtzI64 = binaryen._BinaryenCtzInt64(),
-  PopcntI64 = binaryen._BinaryenPopcntInt64(),
-  NegF64 = binaryen._BinaryenNegFloat64(),
-  AbsF64 = binaryen._BinaryenAbsFloat64(),
-  CeilF64 = binaryen._BinaryenCeilFloat64(),
-  FloorF64 = binaryen._BinaryenFloorFloat64(),
-  TruncF64 = binaryen._BinaryenTruncFloat64(),
-  NearestF64 = binaryen._BinaryenNearestFloat64(),
-  SqrtF64 = binaryen._BinaryenSqrtFloat64(),
-  EqzI64 = binaryen._BinaryenEqZInt64(),
-  ExtendI32 = binaryen._BinaryenExtendSInt32(),
-  ExtendU32 = binaryen._BinaryenExtendUInt32(),
-  WrapI64 = binaryen._BinaryenWrapInt64(),
-  TruncF32ToI32 = binaryen._BinaryenTruncSFloat32ToInt32(),
-  TruncF32ToI64 = binaryen._BinaryenTruncSFloat32ToInt64(),
-  TruncF32ToU32 = binaryen._BinaryenTruncUFloat32ToInt32(),
-  TruncF32ToU64 = binaryen._BinaryenTruncUFloat32ToInt64(),
-  TruncF64ToI32 = binaryen._BinaryenTruncSFloat64ToInt32(),
-  TruncF64ToI64 = binaryen._BinaryenTruncSFloat64ToInt64(),
-  TruncF64ToU32 = binaryen._BinaryenTruncUFloat64ToInt32(),
-  TruncF64ToU64 = binaryen._BinaryenTruncUFloat64ToInt64(),
-  ReinterpretF32 = binaryen._BinaryenReinterpretFloat32(),
-  ReinterpretF64 = binaryen._BinaryenReinterpretFloat64(),
-  ConvertI32ToF32 = binaryen._BinaryenConvertSInt32ToFloat32(),
-  ConvertI32ToF64 = binaryen._BinaryenConvertSInt32ToFloat64(),
-  ConvertU32ToF32 = binaryen._BinaryenConvertUInt32ToFloat32(),
-  ConvertU32ToF64 = binaryen._BinaryenConvertUInt32ToFloat64(),
-  ConvertI64ToF32 = binaryen._BinaryenConvertSInt64ToFloat32(),
-  ConvertI64ToF64 = binaryen._BinaryenConvertSInt64ToFloat64(),
-  ConvertU64ToF32 = binaryen._BinaryenConvertUInt64ToFloat32(),
-  ConvertU64ToF64 = binaryen._BinaryenConvertUInt64ToFloat64(),
-  PromoteF32 = binaryen._BinaryenPromoteFloat32(),
-  DemoteF64 = binaryen._BinaryenDemoteFloat64(),
-  ReinterpretI32 = binaryen._BinaryenReinterpretInt32(),
-  ReinterpretI64 = binaryen._BinaryenReinterpretInt64(),
+  ClzI32 = 0 /* _BinaryenClzInt32 */,
+  ClzI64 = 1 /* _BinaryenClzInt64 */,
+  CtzI32 = 2 /* _BinaryenCtzInt32 */,
+  CtzI64 = 3 /* _BinaryenCtzInt64 */,
+  PopcntI32 = 4 /* _BinaryenPopcntInt32 */,
+  PopcntI64 = 5 /* _BinaryenPopcntInt64 */,
+  NegF32 = 6 /* _BinaryenNegFloat32 */,
+  NegF64 = 7 /* _BinaryenNegFloat64 */,
+  AbsF32 = 8 /* _BinaryenAbsFloat32 */,
+  AbsF64 = 9 /* _BinaryenAbsFloat64 */,
+  CeilF32 = 10 /* _BinaryenCeilFloat32 */,
+  CeilF64 = 11 /* _BinaryenCeilFloat64 */,
+  FloorF32 = 12 /* _BinaryenFloorFloat32 */,
+  FloorF64 = 13 /* _BinaryenFloorFloat64 */,
+  TruncF32 = 14 /* _BinaryenTruncFloat32 */,
+  TruncF64 = 15 /* _BinaryenTruncFloat64 */,
+  NearestF32 = 16 /* _BinaryenNearestFloat32 */,
+  NearestF64 = 17 /* _BinaryenNearestFloat64 */,
+  SqrtF32 = 18 /* _BinaryenSqrtFloat32 */,
+  SqrtF64 = 19 /* _BinaryenSqrtFloat64 */,
+  EqzI32 = 20 /* _BinaryenEqZInt32 */,
+  EqzI64 = 21 /* _BinaryenEqZInt64 */,
+  ExtendI32 = 22 /* _BinaryenExtendSInt32 */,
+  ExtendU32 = 23 /* _BinaryenExtendUInt32 */,
+  WrapI64 = 24 /* _BinaryenWrapInt64 */,
+  TruncF32ToI32 = 25 /* _BinaryenTruncSFloat32ToInt32 */,
+  TruncF32ToI64 = 26 /* _BinaryenTruncSFloat32ToInt64 */,
+  TruncF32ToU32 = 27 /* _BinaryenTruncUFloat32ToInt32 */,
+  TruncF32ToU64 = 28 /* _BinaryenTruncUFloat32ToInt64 */,
+  TruncF64ToI32 = 29 /* _BinaryenTruncSFloat64ToInt32 */,
+  TruncF64ToI64 = 30 /* _BinaryenTruncSFloat64ToInt64 */,
+  TruncF64ToU32 = 31 /* _BinaryenTruncUFloat64ToInt32 */,
+  TruncF64ToU64 = 32 /* _BinaryenTruncUFloat64ToInt64 */,
+  ReinterpretF32 = 33 /* _BinaryenReinterpretFloat32 */,
+  ReinterpretF64 = 34 /* _BinaryenReinterpretFloat64 */,
+  ConvertI32ToF32 = 35 /* _BinaryenConvertSInt32ToFloat32 */,
+  ConvertI32ToF64 = 36 /* _BinaryenConvertSInt32ToFloat64 */,
+  ConvertU32ToF32 = 37 /* _BinaryenConvertUInt32ToFloat32 */,
+  ConvertU32ToF64 = 38 /* _BinaryenConvertUInt32ToFloat64 */,
+  ConvertI64ToF32 = 39 /* _BinaryenConvertSInt64ToFloat32 */,
+  ConvertI64ToF64 = 40 /* _BinaryenConvertSInt64ToFloat64 */,
+  ConvertU64ToF32 = 41 /* _BinaryenConvertUInt64ToFloat32 */,
+  ConvertU64ToF64 = 42 /* _BinaryenConvertUInt64ToFloat64 */,
+  PromoteF32 = 43 /* _BinaryenPromoteFloat32 */,
+  DemoteF64 = 44 /* _BinaryenDemoteFloat64 */,
+  ReinterpretI32 = 45 /* _BinaryenReinterpretInt32 */,
+  ReinterpretI64 = 46 /* _BinaryenReinterpretInt64 */,
 
   // see: https://github.com/WebAssembly/sign-extension-ops
-  ExtendI8ToI32 = binaryen._BinaryenExtendS8Int32(),
-  ExtendI16ToI32 = binaryen._BinaryenExtendS16Int32(),
-  ExtendI8ToI64 = binaryen._BinaryenExtendS8Int64(),
-  ExtendI16ToI64 = binaryen._BinaryenExtendS16Int64(),
-  ExtendI32ToI64 = binaryen._BinaryenExtendS32Int64(),
+  ExtendI8ToI32 = 47 /* _BinaryenExtendS8Int32 */,
+  ExtendI16ToI32 = 48 /* _BinaryenExtendS16Int32 */,
+  ExtendI8ToI64 = 49 /* _BinaryenExtendS8Int64 */,
+  ExtendI16ToI64 = 50 /* _BinaryenExtendS16Int64 */,
+  ExtendI32ToI64 = 51 /* _BinaryenExtendS32Int64 */,
 
   // see: https://github.com/WebAssembly/nontrapping-float-to-int-conversions
-  TruncF32ToI32Sat = binaryen._BinaryenTruncSatSFloat32ToInt32(),
-  TruncF32ToU32Sat = binaryen._BinaryenTruncSatUFloat32ToInt32(),
-  TruncF64ToI32Sat = binaryen._BinaryenTruncSatSFloat64ToInt32(),
-  TruncF64ToU32Sat = binaryen._BinaryenTruncSatUFloat64ToInt32(),
-  TruncF32ToI64Sat = binaryen._BinaryenTruncSatSFloat32ToInt64(),
-  TruncF32ToU64Sat = binaryen._BinaryenTruncSatUFloat32ToInt64(),
-  TruncF64ToI64Sat = binaryen._BinaryenTruncSatSFloat64ToInt64(),
-  TruncF64ToU64Sat = binaryen._BinaryenTruncSatUFloat64ToInt64(),
+  TruncF32ToI32Sat = 52 /* _BinaryenTruncSatSFloat32ToInt32 */,
+  TruncF32ToU32Sat = 53 /* _BinaryenTruncSatUFloat32ToInt32 */,
+  TruncF64ToI32Sat = 54 /* _BinaryenTruncSatSFloat64ToInt32 */,
+  TruncF64ToU32Sat = 55 /* _BinaryenTruncSatUFloat64ToInt32 */,
+  TruncF32ToI64Sat = 56 /* _BinaryenTruncSatSFloat32ToInt64 */,
+  TruncF32ToU64Sat = 57 /* _BinaryenTruncSatUFloat32ToInt64 */,
+  TruncF64ToI64Sat = 58 /* _BinaryenTruncSatSFloat64ToInt64 */,
+  TruncF64ToU64Sat = 59 /* _BinaryenTruncSatUFloat64ToInt64 */,
 
   // see: https://github.com/WebAssembly/simd
-  SplatI8x16 = binaryen._BinaryenSplatVecI8x16(),
-  SplatI16x8 = binaryen._BinaryenSplatVecI16x8(),
-  SplatI32x4 = binaryen._BinaryenSplatVecI32x4(),
-  SplatI64x2 = binaryen._BinaryenSplatVecI64x2(),
-  SplatF32x4 = binaryen._BinaryenSplatVecF32x4(),
-  SplatF64x2 = binaryen._BinaryenSplatVecF64x2(),
-  NotV128 = binaryen._BinaryenNotVec128(),
-  NegI8x16 = binaryen._BinaryenNegVecI8x16(),
-  AnyTrueI8x16 = binaryen._BinaryenAnyTrueVecI8x16(),
-  AllTrueI8x16 = binaryen._BinaryenAllTrueVecI8x16(),
-  NegI16x8 = binaryen._BinaryenNegVecI16x8(),
-  AnyTrueI16x8 = binaryen._BinaryenAnyTrueVecI16x8(),
-  AllTrueI16x8 = binaryen._BinaryenAllTrueVecI16x8(),
-  NegI32x4 = binaryen._BinaryenNegVecI32x4(),
-  AnyTrueI32x4 = binaryen._BinaryenAnyTrueVecI32x4(),
-  AllTrueI32x4 = binaryen._BinaryenAllTrueVecI32x4(),
-  NegI64x2 = binaryen._BinaryenNegVecI64x2(),
-  AnyTrueI64x2 = binaryen._BinaryenAnyTrueVecI64x2(),
-  AllTrueI64x2 = binaryen._BinaryenAllTrueVecI64x2(),
-  AbsF32x4 = binaryen._BinaryenAbsVecF32x4(),
-  NegF32x4 = binaryen._BinaryenNegVecF32x4(),
-  SqrtF32x4 = binaryen._BinaryenSqrtVecF32x4(),
-  AbsF64x2 = binaryen._BinaryenAbsVecF64x2(),
-  NegF64x2 = binaryen._BinaryenNegVecF64x2(),
-  SqrtF64x2 = binaryen._BinaryenSqrtVecF64x2(),
-  TruncSatF32x4ToI32x4 = binaryen._BinaryenTruncSatSVecF32x4ToVecI32x4(),
-  TruncSatF32x4ToU32x4 = binaryen._BinaryenTruncSatUVecF32x4ToVecI32x4(),
-  TruncSatF64x2ToI64x2 = binaryen._BinaryenTruncSatSVecF64x2ToVecI64x2(),
-  TruncSatF64x2ToU64x2 = binaryen._BinaryenTruncSatUVecF64x2ToVecI64x2(),
-  ConvertI32x4ToF32x4 = binaryen._BinaryenConvertSVecI32x4ToVecF32x4(),
-  ConvertU32x4ToF32x4 = binaryen._BinaryenConvertUVecI32x4ToVecF32x4(),
-  ConvertI64x2ToF64x2 = binaryen._BinaryenConvertSVecI64x2ToVecF64x2(),
-  ConvertU64x2ToF64x2 = binaryen._BinaryenConvertUVecI64x2ToVecF64x2(),
-  WidenLowI8x16ToI16x8 = binaryen._BinaryenWidenLowSVecI8x16ToVecI16x8(),
-  WidenLowU8x16ToU16x8 = binaryen._BinaryenWidenLowUVecI8x16ToVecI16x8(),
-  WidenHighI8x16ToI16x8 = binaryen._BinaryenWidenHighSVecI8x16ToVecI16x8(),
-  WidenHighU8x16ToU16x8 = binaryen._BinaryenWidenHighUVecI8x16ToVecI16x8(),
-  WidenLowI16x8ToI32x4 = binaryen._BinaryenWidenLowSVecI16x8ToVecI32x4(),
-  WidenLowU16x8ToU32x4 = binaryen._BinaryenWidenLowUVecI16x8ToVecI32x4(),
-  WidenHighI16x8ToI32x4 = binaryen._BinaryenWidenHighSVecI16x8ToVecI32x4(),
-  WidenHighU16x8ToU32x4 = binaryen._BinaryenWidenHighUVecI16x8ToVecI32x4()
+  SplatI8x16 = 60 /* _BinaryenSplatVecI8x16 */,
+  SplatI16x8 = 61 /* _BinaryenSplatVecI16x8 */,
+  SplatI32x4 = 62 /* _BinaryenSplatVecI32x4 */,
+  SplatI64x2 = 63 /* _BinaryenSplatVecI64x2 */,
+  SplatF32x4 = 64 /* _BinaryenSplatVecF32x4 */,
+  SplatF64x2 = 65 /* _BinaryenSplatVecF64x2 */,
+  NotV128 = 66 /* _BinaryenNotVec128 */,
+  NegI8x16 = 67 /* _BinaryenNegVecI8x16 */,
+  AnyTrueI8x16 = 68 /* _BinaryenAnyTrueVecI8x16 */,
+  AllTrueI8x16 = 69 /* _BinaryenAllTrueVecI8x16 */,
+  NegI16x8 = 70 /* _BinaryenNegVecI16x8 */,
+  AnyTrueI16x8 = 71 /* _BinaryenAnyTrueVecI16x8 */,
+  AllTrueI16x8 = 72 /* _BinaryenAllTrueVecI16x8 */,
+  NegI32x4 = 73 /* _BinaryenNegVecI32x4 */,
+  AnyTrueI32x4 = 74 /* _BinaryenAnyTrueVecI32x4 */,
+  AllTrueI32x4 = 75 /* _BinaryenAllTrueVecI32x4 */,
+  NegI64x2 = 76 /* _BinaryenNegVecI64x2 */,
+  AnyTrueI64x2 = 77 /* _BinaryenAnyTrueVecI64x2 */,
+  AllTrueI64x2 = 78 /* _BinaryenAllTrueVecI64x2 */,
+  AbsF32x4 = 79 /* _BinaryenAbsVecF32x4 */,
+  NegF32x4 = 80 /* _BinaryenNegVecF32x4 */,
+  SqrtF32x4 = 81 /* _BinaryenSqrtVecF32x4 */,
+  AbsF64x2 = 82 /* _BinaryenAbsVecF64x2 */,
+  NegF64x2 = 83 /* _BinaryenNegVecF64x2 */,
+  SqrtF64x2 = 84 /* _BinaryenSqrtVecF64x2 */,
+  TruncSatF32x4ToI32x4 = 85 /* _BinaryenTruncSatSVecF32x4ToVecI32x4 */,
+  TruncSatF32x4ToU32x4 = 86 /* _BinaryenTruncSatUVecF32x4ToVecI32x4 */,
+  TruncSatF64x2ToI64x2 = 87 /* _BinaryenTruncSatSVecF64x2ToVecI64x2 */,
+  TruncSatF64x2ToU64x2 = 88 /* _BinaryenTruncSatUVecF64x2ToVecI64x2 */,
+  ConvertI32x4ToF32x4 = 89 /* _BinaryenConvertSVecI32x4ToVecF32x4 */,
+  ConvertU32x4ToF32x4 = 90 /* _BinaryenConvertUVecI32x4ToVecF32x4 */,
+  ConvertI64x2ToF64x2 = 91 /* _BinaryenConvertSVecI64x2ToVecF64x2 */,
+  ConvertU64x2ToF64x2 = 92 /* _BinaryenConvertUVecI64x2ToVecF64x2 */,
+  WidenLowI8x16ToI16x8 = 93 /* _BinaryenWidenLowSVecI8x16ToVecI16x8 */,
+  WidenHighI8x16ToI16x8 = 94 /* _BinaryenWidenHighSVecI8x16ToVecI16x8 */,
+  WidenLowU8x16ToU16x8 = 95 /* _BinaryenWidenLowUVecI8x16ToVecI16x8 */,
+  WidenHighU8x16ToU16x8 = 96 /* _BinaryenWidenHighUVecI8x16ToVecI16x8 */,
+  WidenLowI16x8ToI32x4 = 97 /* _BinaryenWidenLowSVecI16x8ToVecI32x4 */,
+  WidenHighI16x8ToI32x4 = 98 /* _BinaryenWidenHighSVecI16x8ToVecI32x4 */,
+  WidenLowU16x8ToU32x4 = 99 /* _BinaryenWidenLowUVecI16x8ToVecI32x4 */,
+  WidenHighU16x8ToU32x4 = 100 /* _BinaryenWidenHighUVecI16x8ToVecI32x4 */
 }
 
 export enum BinaryOp {
-  AddI32 = binaryen._BinaryenAddInt32(),
-  SubI32 = binaryen._BinaryenSubInt32(),
-  MulI32 = binaryen._BinaryenMulInt32(),
-  DivI32 = binaryen._BinaryenDivSInt32(),
-  DivU32 = binaryen._BinaryenDivUInt32(),
-  RemI32 = binaryen._BinaryenRemSInt32(),
-  RemU32 = binaryen._BinaryenRemUInt32(),
-  AndI32 = binaryen._BinaryenAndInt32(),
-  OrI32 = binaryen._BinaryenOrInt32(),
-  XorI32 = binaryen._BinaryenXorInt32(),
-  ShlI32 = binaryen._BinaryenShlInt32(),
-  ShrU32 = binaryen._BinaryenShrUInt32(),
-  ShrI32 = binaryen._BinaryenShrSInt32(),
-  RotlI32 = binaryen._BinaryenRotLInt32(),
-  RotrI32 = binaryen._BinaryenRotRInt32(),
-  EqI32 = binaryen._BinaryenEqInt32(),
-  NeI32 = binaryen._BinaryenNeInt32(),
-  LtI32 = binaryen._BinaryenLtSInt32(),
-  LtU32 = binaryen._BinaryenLtUInt32(),
-  LeI32 = binaryen._BinaryenLeSInt32(),
-  LeU32 = binaryen._BinaryenLeUInt32(),
-  GtI32 = binaryen._BinaryenGtSInt32(),
-  GtU32 = binaryen._BinaryenGtUInt32(),
-  GeI32 = binaryen._BinaryenGeSInt32(),
-  GeU32 = binaryen._BinaryenGeUInt32(),
-  AddI64 = binaryen._BinaryenAddInt64(),
-  SubI64 = binaryen._BinaryenSubInt64(),
-  MulI64 = binaryen._BinaryenMulInt64(),
-  DivI64 = binaryen._BinaryenDivSInt64(),
-  DivU64 = binaryen._BinaryenDivUInt64(),
-  RemI64 = binaryen._BinaryenRemSInt64(),
-  RemU64 = binaryen._BinaryenRemUInt64(),
-  AndI64 = binaryen._BinaryenAndInt64(),
-  OrI64 = binaryen._BinaryenOrInt64(),
-  XorI64 = binaryen._BinaryenXorInt64(),
-  ShlI64 = binaryen._BinaryenShlInt64(),
-  ShrU64 = binaryen._BinaryenShrUInt64(),
-  ShrI64 = binaryen._BinaryenShrSInt64(),
-  RotlI64 = binaryen._BinaryenRotLInt64(),
-  RotrI64 = binaryen._BinaryenRotRInt64(),
-  EqI64 = binaryen._BinaryenEqInt64(),
-  NeI64 = binaryen._BinaryenNeInt64(),
-  LtI64 = binaryen._BinaryenLtSInt64(),
-  LtU64 = binaryen._BinaryenLtUInt64(),
-  LeI64 = binaryen._BinaryenLeSInt64(),
-  LeU64 = binaryen._BinaryenLeUInt64(),
-  GtI64 = binaryen._BinaryenGtSInt64(),
-  GtU64 = binaryen._BinaryenGtUInt64(),
-  GeI64 = binaryen._BinaryenGeSInt64(),
-  GeU64 = binaryen._BinaryenGeUInt64(),
-  AddF32 = binaryen._BinaryenAddFloat32(),
-  SubF32 = binaryen._BinaryenSubFloat32(),
-  MulF32 = binaryen._BinaryenMulFloat32(),
-  DivF32 = binaryen._BinaryenDivFloat32(),
-  CopysignF32 = binaryen._BinaryenCopySignFloat32(),
-  MinF32 = binaryen._BinaryenMinFloat32(),
-  MaxF32 = binaryen._BinaryenMaxFloat32(),
-  EqF32 = binaryen._BinaryenEqFloat32(),
-  NeF32 = binaryen._BinaryenNeFloat32(),
-  LtF32 = binaryen._BinaryenLtFloat32(),
-  LeF32 = binaryen._BinaryenLeFloat32(),
-  GtF32 = binaryen._BinaryenGtFloat32(),
-  GeF32 = binaryen._BinaryenGeFloat32(),
-  AddF64 = binaryen._BinaryenAddFloat64(),
-  SubF64 = binaryen._BinaryenSubFloat64(),
-  MulF64 = binaryen._BinaryenMulFloat64(),
-  DivF64 = binaryen._BinaryenDivFloat64(),
-  CopysignF64 = binaryen._BinaryenCopySignFloat64(),
-  MinF64 = binaryen._BinaryenMinFloat64(),
-  MaxF64 = binaryen._BinaryenMaxFloat64(),
-  EqF64 = binaryen._BinaryenEqFloat64(),
-  NeF64 = binaryen._BinaryenNeFloat64(),
-  LtF64 = binaryen._BinaryenLtFloat64(),
-  LeF64 = binaryen._BinaryenLeFloat64(),
-  GtF64 = binaryen._BinaryenGtFloat64(),
-  GeF64 = binaryen._BinaryenGeFloat64(),
+  AddI32 = 0 /* _BinaryenAddInt32 */,
+  SubI32 = 1 /* _BinaryenSubInt32 */,
+  MulI32 = 2 /* _BinaryenMulInt32 */,
+  DivI32 = 3 /* _BinaryenDivSInt32 */,
+  DivU32 = 4 /* _BinaryenDivUInt32 */,
+  RemI32 = 5 /* _BinaryenRemSInt32 */,
+  RemU32 = 6 /* _BinaryenRemUInt32 */,
+  AndI32 = 7 /* _BinaryenAndInt32 */,
+  OrI32 = 8 /* _BinaryenOrInt32 */,
+  XorI32 = 9 /* _BinaryenXorInt32 */,
+  ShlI32 = 10 /* _BinaryenShlInt32 */,
+  ShrU32 = 11 /* _BinaryenShrUInt32 */,
+  ShrI32 = 12 /* _BinaryenShrSInt32 */,
+  RotlI32 = 13 /* _BinaryenRotLInt32 */,
+  RotrI32 = 14 /* _BinaryenRotRInt32 */,
+  EqI32 = 15 /* _BinaryenEqInt32 */,
+  NeI32 = 16 /* _BinaryenNeInt32 */,
+  LtI32 = 17 /* _BinaryenLtSInt32 */,
+  LtU32 = 18 /* _BinaryenLtUInt32 */,
+  LeI32 = 19 /* _BinaryenLeSInt32 */,
+  LeU32 = 20 /* _BinaryenLeUInt32 */,
+  GtI32 = 21 /* _BinaryenGtSInt32 */,
+  GtU32 = 22 /* _BinaryenGtUInt32 */,
+  GeI32 = 23 /* _BinaryenGeSInt32 */,
+  GeU32 = 24 /* _BinaryenGeUInt32 */,
+  AddI64 = 25 /* _BinaryenAddInt64 */,
+  SubI64 = 26 /* _BinaryenSubInt64 */,
+  MulI64 = 27 /* _BinaryenMulInt64 */,
+  DivI64 = 28 /* _BinaryenDivSInt64 */,
+  DivU64 = 29 /* _BinaryenDivUInt64 */,
+  RemI64 = 30 /* _BinaryenRemSInt64 */,
+  RemU64 = 31 /* _BinaryenRemUInt64 */,
+  AndI64 = 32 /* _BinaryenAndInt64 */,
+  OrI64 = 33 /* _BinaryenOrInt64 */,
+  XorI64 = 34 /* _BinaryenXorInt64 */,
+  ShlI64 = 35 /* _BinaryenShlInt64 */,
+  ShrU64 = 36 /* _BinaryenShrUInt64 */,
+  ShrI64 = 37 /* _BinaryenShrSInt64 */,
+  RotlI64 = 38 /* _BinaryenRotLInt64 */,
+  RotrI64 = 39 /* _BinaryenRotRInt64 */,
+  EqI64 = 40 /* _BinaryenEqInt64 */,
+  NeI64 = 41 /* _BinaryenNeInt64 */,
+  LtI64 = 42 /* _BinaryenLtSInt64 */,
+  LtU64 = 43 /* _BinaryenLtUInt64 */,
+  LeI64 = 44 /* _BinaryenLeSInt64 */,
+  LeU64 = 45 /* _BinaryenLeUInt64 */,
+  GtI64 = 46 /* _BinaryenGtSInt64 */,
+  GtU64 = 47 /* _BinaryenGtUInt64 */,
+  GeI64 = 48 /* _BinaryenGeSInt64 */,
+  GeU64 = 49 /* _BinaryenGeUInt64 */,
+  AddF32 = 50 /* _BinaryenAddFloat32 */,
+  SubF32 = 51 /* _BinaryenSubFloat32 */,
+  MulF32 = 52 /* _BinaryenMulFloat32 */,
+  DivF32 = 53 /* _BinaryenDivFloat32 */,
+  CopysignF32 = 54 /* _BinaryenCopySignFloat32 */,
+  MinF32 = 55 /* _BinaryenMinFloat32 */,
+  MaxF32 = 56 /* _BinaryenMaxFloat32 */,
+  EqF32 = 57 /* _BinaryenEqFloat32 */,
+  NeF32 = 58 /* _BinaryenNeFloat32 */,
+  LtF32 = 59 /* _BinaryenLtFloat32 */,
+  LeF32 = 60 /* _BinaryenLeFloat32 */,
+  GtF32 = 61 /* _BinaryenGtFloat32 */,
+  GeF32 = 62 /* _BinaryenGeFloat32 */,
+  AddF64 = 63 /* _BinaryenAddFloat64 */,
+  SubF64 = 64 /* _BinaryenSubFloat64 */,
+  MulF64 = 65 /* _BinaryenMulFloat64 */,
+  DivF64 = 66 /* _BinaryenDivFloat64 */,
+  CopysignF64 = 67 /* _BinaryenCopySignFloat64 */,
+  MinF64 = 68 /* _BinaryenMinFloat64 */,
+  MaxF64 = 69 /* _BinaryenMaxFloat64 */,
+  EqF64 = 70 /* _BinaryenEqFloat64 */,
+  NeF64 = 71 /* _BinaryenNeFloat64 */,
+  LtF64 = 72 /* _BinaryenLtFloat64 */,
+  LeF64 = 73 /* _BinaryenLeFloat64 */,
+  GtF64 = 74 /* _BinaryenGtFloat64 */,
+  GeF64 = 75 /* _BinaryenGeFloat64 */,
 
   // see: https://github.com/WebAssembly/simd
-  EqI8x16 = binaryen._BinaryenEqVecI8x16(),
-  NeI8x16 = binaryen._BinaryenNeVecI8x16(),
-  LtI8x16 = binaryen._BinaryenLtSVecI8x16(),
-  LtU8x16 = binaryen._BinaryenLtUVecI8x16(),
-  LeI8x16 = binaryen._BinaryenLeSVecI8x16(),
-  LeU8x16 = binaryen._BinaryenLeUVecI8x16(),
-  GtI8x16 = binaryen._BinaryenGtSVecI8x16(),
-  GtU8x16 = binaryen._BinaryenGtUVecI8x16(),
-  GeI8x16 = binaryen._BinaryenGeSVecI8x16(),
-  GeU8x16 = binaryen._BinaryenGeUVecI8x16(),
-  EqI16x8 = binaryen._BinaryenEqVecI16x8(),
-  NeI16x8 = binaryen._BinaryenNeVecI16x8(),
-  LtI16x8 = binaryen._BinaryenLtSVecI16x8(),
-  LtU16x8 = binaryen._BinaryenLtUVecI16x8(),
-  LeI16x8 = binaryen._BinaryenLeSVecI16x8(),
-  LeU16x8 = binaryen._BinaryenLeUVecI16x8(),
-  GtI16x8 = binaryen._BinaryenGtSVecI16x8(),
-  GtU16x8 = binaryen._BinaryenGtUVecI16x8(),
-  GeI16x8 = binaryen._BinaryenGeSVecI16x8(),
-  GeU16x8 = binaryen._BinaryenGeUVecI16x8(),
-  EqI32x4 = binaryen._BinaryenEqVecI32x4(),
-  NeI32x4 = binaryen._BinaryenNeVecI32x4(),
-  LtI32x4 = binaryen._BinaryenLtSVecI32x4(),
-  LtU32x4 = binaryen._BinaryenLtUVecI32x4(),
-  LeI32x4 = binaryen._BinaryenLeSVecI32x4(),
-  LeU32x4 = binaryen._BinaryenLeUVecI32x4(),
-  GtI32x4 = binaryen._BinaryenGtSVecI32x4(),
-  GtU32x4 = binaryen._BinaryenGtUVecI32x4(),
-  GeI32x4 = binaryen._BinaryenGeSVecI32x4(),
-  GeU32x4 = binaryen._BinaryenGeUVecI32x4(),
-  EqF32x4 = binaryen._BinaryenEqVecF32x4(),
-  NeF32x4 = binaryen._BinaryenNeVecF32x4(),
-  LtF32x4 = binaryen._BinaryenLtVecF32x4(),
-  LeF32x4 = binaryen._BinaryenLeVecF32x4(),
-  GtF32x4 = binaryen._BinaryenGtVecF32x4(),
-  GeF32x4 = binaryen._BinaryenGeVecF32x4(),
-  EqF64x2 = binaryen._BinaryenEqVecF64x2(),
-  NeF64x2 = binaryen._BinaryenNeVecF64x2(),
-  LtF64x2 = binaryen._BinaryenLtVecF64x2(),
-  LeF64x2 = binaryen._BinaryenLeVecF64x2(),
-  GtF64x2 = binaryen._BinaryenGtVecF64x2(),
-  GeF64x2 = binaryen._BinaryenGeVecF64x2(),
-  AndV128 = binaryen._BinaryenAndVec128(),
-  OrV128 = binaryen._BinaryenOrVec128(),
-  XorV128 = binaryen._BinaryenXorVec128(),
-  AndNotV128 = binaryen._BinaryenAndNotVec128(),
-  AddI8x16 = binaryen._BinaryenAddVecI8x16(),
-  AddSatI8x16 = binaryen._BinaryenAddSatSVecI8x16(),
-  AddSatU8x16 = binaryen._BinaryenAddSatUVecI8x16(),
-  SubI8x16 = binaryen._BinaryenSubVecI8x16(),
-  SubSatI8x16 = binaryen._BinaryenSubSatSVecI8x16(),
-  SubSatU8x16 = binaryen._BinaryenSubSatUVecI8x16(),
-  MulI8x16 = binaryen._BinaryenMulVecI8x16(),
-  MinI8x16 = binaryen._BinaryenMinSVecI8x16(),
-  MinU8x16 = binaryen._BinaryenMinUVecI8x16(),
-  MaxI8x16 = binaryen._BinaryenMaxSVecI8x16(),
-  MaxU8x16 = binaryen._BinaryenMaxUVecI8x16(),
-  AddI16x8 = binaryen._BinaryenAddVecI16x8(),
-  AddSatI16x8 = binaryen._BinaryenAddSatSVecI16x8(),
-  AddSatU16x8 = binaryen._BinaryenAddSatUVecI16x8(),
-  SubI16x8 = binaryen._BinaryenSubVecI16x8(),
-  SubSatI16x8 = binaryen._BinaryenSubSatSVecI16x8(),
-  SubSatU16x8 = binaryen._BinaryenSubSatUVecI16x8(),
-  MulI16x8 = binaryen._BinaryenMulVecI16x8(),
-  MinI16x8 = binaryen._BinaryenMinSVecI16x8(),
-  MinU16x8 = binaryen._BinaryenMinUVecI16x8(),
-  MaxI16x8 = binaryen._BinaryenMaxSVecI16x8(),
-  MaxU16x8 = binaryen._BinaryenMaxUVecI16x8(),
-  AddI32x4 = binaryen._BinaryenAddVecI32x4(),
-  SubI32x4 = binaryen._BinaryenSubVecI32x4(),
-  MulI32x4 = binaryen._BinaryenMulVecI32x4(),
-  MinI32x4 = binaryen._BinaryenMinSVecI32x4(),
-  MinU32x4 = binaryen._BinaryenMinUVecI32x4(),
-  MaxI32x4 = binaryen._BinaryenMaxSVecI32x4(),
-  MaxU32x4 = binaryen._BinaryenMaxUVecI32x4(),
-  DotI16x8 = binaryen._BinaryenDotSVecI16x8ToVecI32x4(),
-  AddI64x2 = binaryen._BinaryenAddVecI64x2(),
-  SubI64x2 = binaryen._BinaryenSubVecI64x2(),
-  AddF32x4 = binaryen._BinaryenAddVecF32x4(),
-  SubF32x4 = binaryen._BinaryenSubVecF32x4(),
-  MulF32x4 = binaryen._BinaryenMulVecF32x4(),
-  DivF32x4 = binaryen._BinaryenDivVecF32x4(),
-  MinF32x4 = binaryen._BinaryenMinVecF32x4(),
-  MaxF32x4 = binaryen._BinaryenMaxVecF32x4(),
-  AddF64x2 = binaryen._BinaryenAddVecF64x2(),
-  SubF64x2 = binaryen._BinaryenSubVecF64x2(),
-  MulF64x2 = binaryen._BinaryenMulVecF64x2(),
-  DivF64x2 = binaryen._BinaryenDivVecF64x2(),
-  MinF64x2 = binaryen._BinaryenMinVecF64x2(),
-  MaxF64x2 = binaryen._BinaryenMaxVecF64x2(),
-  NarrowI16x8ToI8x16 = binaryen._BinaryenNarrowSVecI16x8ToVecI8x16(),
-  NarrowU16x8ToU8x16 = binaryen._BinaryenNarrowUVecI16x8ToVecI8x16(),
-  NarrowI32x4ToI16x8 = binaryen._BinaryenNarrowSVecI32x4ToVecI16x8(),
-  NarrowU32x4ToU16x8 = binaryen._BinaryenNarrowUVecI32x4ToVecI16x8(),
-  SwizzleV8x16 = binaryen._BinaryenSwizzleVec8x16()
+  EqI8x16 = 76 /* _BinaryenEqVecI8x16 */,
+  NeI8x16 = 77 /* _BinaryenNeVecI8x16 */,
+  LtI8x16 = 78 /* _BinaryenLtSVecI8x16 */,
+  LtU8x16 = 79 /* _BinaryenLtUVecI8x16 */,
+  GtI8x16 = 80 /* _BinaryenGtSVecI8x16 */,
+  GtU8x16 = 81 /* _BinaryenGtUVecI8x16 */,
+  LeI8x16 = 82 /* _BinaryenLeSVecI8x16 */,
+  LeU8x16 = 83 /* _BinaryenLeUVecI8x16 */,
+  GeI8x16 = 84 /* _BinaryenGeSVecI8x16 */,
+  GeU8x16 = 85 /* _BinaryenGeUVecI8x16 */,
+  EqI16x8 = 86 /* _BinaryenEqVecI16x8 */,
+  NeI16x8 = 87 /* _BinaryenNeVecI16x8 */,
+  LtI16x8 = 88 /* _BinaryenLtSVecI16x8 */,
+  LtU16x8 = 89 /* _BinaryenLtUVecI16x8 */,
+  GtI16x8 = 90 /* _BinaryenGtSVecI16x8 */,
+  GtU16x8 = 91 /* _BinaryenGtUVecI16x8 */,
+  LeI16x8 = 92 /* _BinaryenLeSVecI16x8 */,
+  LeU16x8 = 93 /* _BinaryenLeUVecI16x8 */,
+  GeI16x8 = 94 /* _BinaryenGeSVecI16x8 */,
+  GeU16x8 = 95 /* _BinaryenGeUVecI16x8 */,
+  EqI32x4 = 96 /* _BinaryenEqVecI32x4 */,
+  NeI32x4 = 97 /* _BinaryenNeVecI32x4 */,
+  LtI32x4 = 98 /* _BinaryenLtSVecI32x4 */,
+  LtU32x4 = 99 /* _BinaryenLtUVecI32x4 */,
+  GtI32x4 = 100 /* _BinaryenGtSVecI32x4 */,
+  GtU32x4 = 101 /* _BinaryenGtUVecI32x4 */,
+  LeI32x4 = 102 /* _BinaryenLeSVecI32x4 */,
+  LeU32x4 = 103 /* _BinaryenLeUVecI32x4 */,
+  GeI32x4 = 104 /* _BinaryenGeSVecI32x4 */,
+  GeU32x4 = 105 /* _BinaryenGeUVecI32x4 */,
+  EqF32x4 = 106 /* _BinaryenEqVecF32x4 */,
+  NeF32x4 = 107 /* _BinaryenNeVecF32x4 */,
+  LtF32x4 = 108 /* _BinaryenLtVecF32x4 */,
+  GtF32x4 = 109 /* _BinaryenGtVecF32x4 */,
+  LeF32x4 = 110 /* _BinaryenLeVecF32x4 */,
+  GeF32x4 = 111 /* _BinaryenGeVecF32x4 */,
+  EqF64x2 = 112 /* _BinaryenEqVecF64x2 */,
+  NeF64x2 = 113 /* _BinaryenNeVecF64x2 */,
+  LtF64x2 = 114 /* _BinaryenLtVecF64x2 */,
+  GtF64x2 = 115 /* _BinaryenGtVecF64x2 */,
+  LeF64x2 = 116 /* _BinaryenLeVecF64x2 */,
+  GeF64x2 = 117 /* _BinaryenGeVecF64x2 */,
+  AndV128 = 118 /* _BinaryenAndVec128 */,
+  OrV128 = 119 /* _BinaryenOrVec128 */,
+  XorV128 = 120 /* _BinaryenXorVec128 */,
+  AndNotV128 = 121 /* _BinaryenAndNotVec128 */,
+  AddI8x16 = 122 /* _BinaryenAddVecI8x16 */,
+  AddSatI8x16 = 123 /* _BinaryenAddSatSVecI8x16 */,
+  AddSatU8x16 = 124 /* _BinaryenAddSatUVecI8x16 */,
+  SubI8x16 = 125 /* _BinaryenSubVecI8x16 */,
+  SubSatI8x16 = 126 /* _BinaryenSubSatSVecI8x16 */,
+  SubSatU8x16 = 127 /* _BinaryenSubSatUVecI8x16 */,
+  MulI8x16 = 128 /* _BinaryenMulVecI8x16 */,
+  MinI8x16 = 129 /* _BinaryenMinSVecI8x16 */,
+  MinU8x16 = 130 /* _BinaryenMinUVecI8x16 */,
+  MaxI8x16 = 131 /* _BinaryenMaxSVecI8x16 */,
+  MaxU8x16 = 132 /* _BinaryenMaxUVecI8x16 */,
+  AvgrU8x16 = 133 /* _BinaryenAvgrUVecI8x16 */,
+  AddI16x8 = 134 /* _BinaryenAddVecI16x8 */,
+  AddSatI16x8 = 135 /* _BinaryenAddSatSVecI16x8 */,
+  AddSatU16x8 = 136 /* _BinaryenAddSatUVecI16x8 */,
+  SubI16x8 = 137 /* _BinaryenSubVecI16x8 */,
+  SubSatI16x8 = 138 /* _BinaryenSubSatSVecI16x8 */,
+  SubSatU16x8 = 139 /* _BinaryenSubSatUVecI16x8 */,
+  MulI16x8 = 140 /* _BinaryenMulVecI16x8 */,
+  MinI16x8 = 141 /* _BinaryenMinSVecI16x8 */,
+  MinU16x8 = 142 /* _BinaryenMinUVecI16x8 */,
+  MaxI16x8 = 143 /* _BinaryenMaxSVecI16x8 */,
+  MaxU16x8 = 144 /* _BinaryenMaxUVecI16x8 */,
+  AvgrU16x8 = 145 /* _BinaryenAvgrUVecI16x8 */,
+  AddI32x4 = 146 /* _BinaryenAddVecI32x4 */,
+  SubI32x4 = 147 /* _BinaryenSubVecI32x4 */,
+  MulI32x4 = 148 /* _BinaryenMulVecI32x4 */,
+  MinI32x4 = 149 /* _BinaryenMinSVecI32x4 */,
+  MinU32x4 = 150 /* _BinaryenMinUVecI32x4 */,
+  MaxI32x4 = 151 /* _BinaryenMaxSVecI32x4 */,
+  MaxU32x4 = 152 /* _BinaryenMaxUVecI32x4 */,
+  DotI16x8 = 153 /* _BinaryenDotSVecI16x8ToVecI32x4 */,
+  AddI64x2 = 154 /* _BinaryenAddVecI64x2 */,
+  SubI64x2 = 155 /* _BinaryenSubVecI64x2 */,
+  AddF32x4 = 156 /* _BinaryenAddVecF32x4 */,
+  SubF32x4 = 157 /* _BinaryenSubVecF32x4 */,
+  MulF32x4 = 158 /* _BinaryenMulVecF32x4 */,
+  DivF32x4 = 159 /* _BinaryenDivVecF32x4 */,
+  MinF32x4 = 160 /* _BinaryenMinVecF32x4 */,
+  MaxF32x4 = 161 /* _BinaryenMaxVecF32x4 */,
+  AddF64x2 = 162 /* _BinaryenAddVecF64x2 */,
+  SubF64x2 = 163 /* _BinaryenSubVecF64x2 */,
+  MulF64x2 = 164 /* _BinaryenMulVecF64x2 */,
+  DivF64x2 = 165 /* _BinaryenDivVecF64x2 */,
+  MinF64x2 = 166 /* _BinaryenMinVecF64x2 */,
+  MaxF64x2 = 167 /* _BinaryenMaxVecF64x2 */,
+  NarrowI16x8ToI8x16 = 168 /* _BinaryenNarrowSVecI16x8ToVecI8x16 */,
+  NarrowU16x8ToU8x16 = 169 /* _BinaryenNarrowUVecI16x8ToVecI8x16 */,
+  NarrowI32x4ToI16x8 = 170 /* _BinaryenNarrowSVecI32x4ToVecI16x8 */,
+  NarrowU32x4ToU16x8 = 171 /* _BinaryenNarrowUVecI32x4ToVecI16x8 */,
+  SwizzleV8x16 = 172 /* _BinaryenSwizzleVec8x16 */
 }
 
 export enum HostOp {
-  MemorySize = binaryen._BinaryenMemorySize(),
-  MemoryGrow = binaryen._BinaryenMemoryGrow(),
+  MemorySize = 0 /* _BinaryenMemorySize */,
+  MemoryGrow = 1 /* _BinaryenMemoryGrow */,
 }
 
 export enum AtomicRMWOp {
-  Add = binaryen._BinaryenAtomicRMWAdd(),
-  Sub = binaryen._BinaryenAtomicRMWSub(),
-  And = binaryen._BinaryenAtomicRMWAnd(),
-  Or = binaryen._BinaryenAtomicRMWOr(),
-  Xor = binaryen._BinaryenAtomicRMWXor(),
-  Xchg = binaryen._BinaryenAtomicRMWXchg()
+  Add = 0 /* _BinaryenAtomicRMWAdd */,
+  Sub = 1 /* _BinaryenAtomicRMWSub */,
+  And = 2 /* _BinaryenAtomicRMWAnd */,
+  Or = 3 /* _BinaryenAtomicRMWOr */,
+  Xor = 4 /* _BinaryenAtomicRMWXor */,
+  Xchg = 5 /* _BinaryenAtomicRMWXchg */
 }
 
 export enum SIMDExtractOp {
-  ExtractLaneI8x16 = binaryen._BinaryenExtractLaneSVecI8x16(),
-  ExtractLaneU8x16 = binaryen._BinaryenExtractLaneUVecI8x16(),
-  ExtractLaneI16x8 = binaryen._BinaryenExtractLaneSVecI16x8(),
-  ExtractLaneU16x8 = binaryen._BinaryenExtractLaneUVecI16x8(),
-  ExtractLaneI32x4 = binaryen._BinaryenExtractLaneVecI32x4(),
-  ExtractLaneI64x2 = binaryen._BinaryenExtractLaneVecI64x2(),
-  ExtractLaneF32x4 = binaryen._BinaryenExtractLaneVecF32x4(),
-  ExtractLaneF64x2 = binaryen._BinaryenExtractLaneVecF64x2(),
+  ExtractLaneI8x16 = 0 /* _BinaryenExtractLaneSVecI8x16 */,
+  ExtractLaneU8x16 = 1 /* _BinaryenExtractLaneUVecI8x16 */,
+  ExtractLaneI16x8 = 2 /* _BinaryenExtractLaneSVecI16x8 */,
+  ExtractLaneU16x8 = 3 /* _BinaryenExtractLaneUVecI16x8 */,
+  ExtractLaneI32x4 = 4 /* _BinaryenExtractLaneVecI32x4 */,
+  ExtractLaneI64x2 = 5 /* _BinaryenExtractLaneVecI64x2 */,
+  ExtractLaneF32x4 = 6 /* _BinaryenExtractLaneVecF32x4 */,
+  ExtractLaneF64x2 = 7 /* _BinaryenExtractLaneVecF64x2 */,
 }
 
 export enum SIMDReplaceOp {
-  ReplaceLaneI8x16 = binaryen._BinaryenReplaceLaneVecI8x16(),
-  ReplaceLaneI16x8 = binaryen._BinaryenReplaceLaneVecI16x8(),
-  ReplaceLaneI32x4 = binaryen._BinaryenReplaceLaneVecI32x4(),
-  ReplaceLaneI64x2 = binaryen._BinaryenReplaceLaneVecI64x2(),
-  ReplaceLaneF32x4 = binaryen._BinaryenReplaceLaneVecF32x4(),
-  ReplaceLaneF64x2 = binaryen._BinaryenReplaceLaneVecF64x2()
+  ReplaceLaneI8x16 = 0 /* _BinaryenReplaceLaneVecI8x16 */,
+  ReplaceLaneI16x8 = 1 /* _BinaryenReplaceLaneVecI16x8 */,
+  ReplaceLaneI32x4 = 2 /* _BinaryenReplaceLaneVecI32x4 */,
+  ReplaceLaneI64x2 = 3 /* _BinaryenReplaceLaneVecI64x2 */,
+  ReplaceLaneF32x4 = 4 /* _BinaryenReplaceLaneVecF32x4 */,
+  ReplaceLaneF64x2 = 5 /* _BinaryenReplaceLaneVecF64x2 */
 }
 
 export enum SIMDShiftOp {
-  ShlI8x16 = binaryen._BinaryenShlVecI8x16(),
-  ShrI8x16 = binaryen._BinaryenShrSVecI8x16(),
-  ShrU8x16 = binaryen._BinaryenShrUVecI8x16(),
-  ShlI16x8 = binaryen._BinaryenShlVecI16x8(),
-  ShrI16x8 = binaryen._BinaryenShrSVecI16x8(),
-  ShrU16x8 = binaryen._BinaryenShrUVecI16x8(),
-  ShlI32x4 = binaryen._BinaryenShlVecI32x4(),
-  ShrI32x4 = binaryen._BinaryenShrSVecI32x4(),
-  ShrU32x4 = binaryen._BinaryenShrUVecI32x4(),
-  ShlI64x2 = binaryen._BinaryenShlVecI64x2(),
-  ShrI64x2 = binaryen._BinaryenShrSVecI64x2(),
-  ShrU64x2 = binaryen._BinaryenShrUVecI64x2()
+  ShlI8x16 = 0 /* _BinaryenShlVecI8x16 */,
+  ShrI8x16 = 1 /* _BinaryenShrSVecI8x16 */,
+  ShrU8x16 = 2 /* _BinaryenShrUVecI8x16 */,
+  ShlI16x8 = 3 /* _BinaryenShlVecI16x8 */,
+  ShrI16x8 = 4 /* _BinaryenShrSVecI16x8 */,
+  ShrU16x8 = 5 /* _BinaryenShrUVecI16x8 */,
+  ShlI32x4 = 6 /* _BinaryenShlVecI32x4 */,
+  ShrI32x4 = 7 /* _BinaryenShrSVecI32x4 */,
+  ShrU32x4 = 8 /* _BinaryenShrUVecI32x4 */,
+  ShlI64x2 = 9 /* _BinaryenShlVecI64x2 */,
+  ShrI64x2 = 10 /* _BinaryenShrSVecI64x2 */,
+  ShrU64x2 = 11 /* _BinaryenShrUVecI64x2 */
 }
 
 export enum SIMDTernaryOp {
-  Bitselect = binaryen._BinaryenBitselectVec128(),
-  QFMAF32x4 = binaryen._BinaryenQFMAVecF32x4(),
-  QFMSF32x4 = binaryen._BinaryenQFMSVecF32x4(),
-  QFMAF64x2 = binaryen._BinaryenQFMAVecF64x2(),
-  QFMSF64x2 = binaryen._BinaryenQFMSVecF64x2()
+  Bitselect = 0 /* _BinaryenBitselectVec128 */,
+  QFMAF32x4 = 1 /* _BinaryenQFMAVecF32x4 */,
+  QFMSF32x4 = 2 /* _BinaryenQFMSVecF32x4 */,
+  QFMAF64x2 = 3 /* _BinaryenQFMAVecF64x2 */,
+  QFMSF64x2 = 4 /* _BinaryenQFMSVecF64x2 */
 }
 
 export enum SIMDLoadOp {
-  LoadSplatV8x16 = binaryen._BinaryenLoadSplatVec8x16(),
-  LoadSplatV16x8 = binaryen._BinaryenLoadSplatVec16x8(),
-  LoadSplatV32x4 = binaryen._BinaryenLoadSplatVec32x4(),
-  LoadSplatV64x2 = binaryen._BinaryenLoadSplatVec64x2(),
-  LoadI8ToI16x8 = binaryen._BinaryenLoadExtSVec8x8ToVecI16x8(),
-  LoadU8ToU16x8 = binaryen._BinaryenLoadExtUVec8x8ToVecI16x8(),
-  LoadI16ToI32x4 = binaryen._BinaryenLoadExtSVec16x4ToVecI32x4(),
-  LoadU16ToU32x4 = binaryen._BinaryenLoadExtUVec16x4ToVecI32x4(),
-  LoadI32ToI64x2 = binaryen._BinaryenLoadExtSVec32x2ToVecI64x2(),
-  LoadU32ToU64x2 = binaryen._BinaryenLoadExtUVec32x2ToVecI64x2()
+  LoadSplatV8x16 = 0 /* _BinaryenLoadSplatVec8x16 */,
+  LoadSplatV16x8 = 1 /* _BinaryenLoadSplatVec16x8 */,
+  LoadSplatV32x4 = 2 /* _BinaryenLoadSplatVec32x4 */,
+  LoadSplatV64x2 = 3 /* _BinaryenLoadSplatVec64x2 */,
+  LoadI8ToI16x8 = 4 /* _BinaryenLoadExtSVec8x8ToVecI16x8 */,
+  LoadU8ToU16x8 = 5 /* _BinaryenLoadExtUVec8x8ToVecI16x8 */,
+  LoadI16ToI32x4 = 6 /* _BinaryenLoadExtSVec16x4ToVecI32x4 */,
+  LoadU16ToU32x4 = 7 /* _BinaryenLoadExtUVec16x4ToVecI32x4 */,
+  LoadI32ToI64x2 = 8 /* _BinaryenLoadExtSVec32x2ToVecI64x2 */,
+  LoadU32ToU64x2 = 9 /* _BinaryenLoadExtUVec32x2ToVecI64x2 */
 }
 
 export class MemorySegment {
@@ -519,6 +531,10 @@ export class Module {
     return binaryen._BinaryenConst(this.ref, out);
   }
 
+  ref_null(): ExpressionRef {
+    return binaryen._BinaryenRefNull(this.ref);
+  }
+
   // expressions
 
   unary(
@@ -557,9 +573,11 @@ export class Module {
 
   local_tee(
     index: i32,
-    value: ExpressionRef
+    value: ExpressionRef,
+    type: NativeType = NativeType.Auto
   ): ExpressionRef {
-    return binaryen._BinaryenLocalTee(this.ref, index, value);
+    if (type == NativeType.Auto) type = binaryen._BinaryenExpressionGetType(value);
+    return binaryen._BinaryenLocalTee(this.ref, index, value, type);
   }
 
   global_get(
@@ -683,6 +701,30 @@ export class Module {
     return ret;
   }
 
+  /** Attempts to trivially flatten a series of expressions instead of emitting a block. */
+  flatten(
+    stmts: ExpressionRef[],
+    type: NativeType = NativeType.None
+  ): ExpressionRef {
+    var length = stmts.length;
+    if (length == 0) return this.nop(); // usually filtered out again
+    if (length == 1) {
+      let single = stmts[0];
+      switch (getExpressionId(single)) {
+        case ExpressionId.Return:
+        case ExpressionId.Throw:
+        case ExpressionId.Unreachable: {
+          // type does no matter, terminates anyway
+          return single;
+        }
+      }
+      let singleType = getExpressionType(single);
+      assert(singleType == NativeType.Unreachable || singleType == type);
+      return single;
+    }
+    return this.block(null, stmts, type);
+  }
+
   br(
     label: string | null,
     condition: ExpressionRef = 0,
@@ -727,9 +769,14 @@ export class Module {
   select(
     ifTrue: ExpressionRef,
     ifFalse: ExpressionRef,
-    condition: ExpressionRef
+    condition: ExpressionRef,
+    type: NativeType = NativeType.Auto
   ): ExpressionRef {
-    return binaryen._BinaryenSelect(this.ref, condition, ifTrue, ifFalse);
+    if (type == NativeType.Auto) {
+      type = binaryen._BinaryenExpressionGetType(ifTrue);
+      assert(type == binaryen._BinaryenExpressionGetType(ifFalse));
+    }
+    return binaryen._BinaryenSelect(this.ref, condition, ifTrue, ifFalse, type);
   }
 
   switch(
@@ -776,14 +823,14 @@ export class Module {
   call_indirect(
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
-    typeName: string,
+    params: NativeType,
+    results: NativeType,
     isReturn: bool = false
   ): ExpressionRef {
-    var cStr = this.allocStringCached(typeName);
     var cArr = allocPtrArray(operands);
     var ret = isReturn
-      ? binaryen._BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr)
-      : binaryen._BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, cStr);
+      ? binaryen._BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, params, results)
+      : binaryen._BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, params, results);
     binaryen._free(cArr);
     return ret;
   }
@@ -791,9 +838,10 @@ export class Module {
   return_call_indirect(
     index: ExpressionRef,
     operands: ExpressionRef[] | null,
-    typeName: string,
+    params: NativeType,
+    results: NativeType
   ): ExpressionRef {
-    return this.call_indirect(index, operands, typeName, true);
+    return this.call_indirect(index, operands, params, results, true);
   }
 
   unreachable(): ExpressionRef {
@@ -925,33 +973,19 @@ export class Module {
     return binaryen._BinaryenSIMDLoad(this.ref, op, offset, align, ptr);
   }
 
-  // function types
+  // reference types
 
-  addFunctionType(
-    name: string,
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionTypeRef {
-    var cStr = this.allocStringCached(name);
-    var cArr = allocI32Array(paramTypes);
-    var ret = binaryen._BinaryenAddFunctionType(this.ref, cStr, result, cArr, paramTypes ? paramTypes.length : 0);
-    binaryen._free(cArr);
-    return ret;
+  ref_is_null(
+    expr: ExpressionRef
+  ): ExpressionRef {
+    return binaryen._BinaryenRefIsNull(this.ref, expr);
   }
 
-  getFunctionTypeBySignature(
-    result: NativeType,
-    paramTypes: NativeType[] | null
-  ): FunctionTypeRef {
-    var cArr = allocI32Array(paramTypes);
-    var ret = binaryen._BinaryenGetFunctionTypeBySignature(this.ref, result, cArr, paramTypes ? paramTypes.length : 0);
-    binaryen._free(cArr);
-    return ret;
-  }
-
-  removeFunctionType(name: string): void {
+  ref_func(
+    name: string
+  ): ExpressionRef {
     var cStr = this.allocStringCached(name);
-    binaryen._BinaryenRemoveFunctionType(this.ref, cStr);
+    return binaryen._BinaryenRefFunc(this.ref, cStr);
   }
 
   // globals
@@ -985,10 +1019,11 @@ export class Module {
   addEvent(
     name: string,
     attribute: u32,
-    type: FunctionTypeRef
+    params: NativeType,
+    results: NativeType
   ): EventRef {
     var cStr = this.allocStringCached(name);
-    return binaryen._BinaryenAddEvent(this.ref, cStr, attribute, type);
+    return binaryen._BinaryenAddEvent(this.ref, cStr, attribute, params, results);
   }
 
   getEvent(
@@ -1009,13 +1044,14 @@ export class Module {
 
   addFunction(
     name: string,
-    type: FunctionTypeRef,
+    params: NativeType,
+    results: NativeType,
     varTypes: NativeType[] | null,
     body: ExpressionRef
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
     var cArr = allocI32Array(varTypes);
-    var ret = binaryen._BinaryenAddFunction(this.ref, cStr, type, cArr, varTypes ? varTypes.length : 0, body);
+    var ret = binaryen._BinaryenAddFunction(this.ref, cStr, params, results, cArr, varTypes ? varTypes.length : 0, body);
     binaryen._free(cArr);
     return ret;
   }
@@ -1038,8 +1074,13 @@ export class Module {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
     var tempName = this.allocStringCached("");
     var cArr = allocI32Array(paramTypes);
-    var typeRef = binaryen._BinaryenAddFunctionType(this.ref, tempName, result, cArr, paramTypes ? paramTypes.length : 0);
-    var ret = binaryen._BinaryenAddFunction(this.ref, tempName, typeRef, 0, 0, body);
+    var ret = binaryen._BinaryenAddFunction(this.ref,
+      tempName,
+      createType(paramTypes),
+      result,
+      0, 0,
+      body
+    );
     binaryen._free(cArr);
     return ret;
   }
@@ -1048,7 +1089,6 @@ export class Module {
     this.hasTemporaryFunction = !assert(this.hasTemporaryFunction);
     var tempName = this.allocStringCached("");
     binaryen._BinaryenRemoveFunction(this.ref, tempName);
-    binaryen._BinaryenRemoveFunctionType(this.ref, tempName);
   }
 
   setStart(func: FunctionRef): void {
@@ -1113,12 +1153,13 @@ export class Module {
     internalName: string,
     externalModuleName: string,
     externalBaseName: string,
-    functionType: FunctionTypeRef
+    params: NativeType,
+    results: NativeType
   ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    binaryen._BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, functionType);
+    binaryen._BinaryenAddFunctionImport(this.ref, cStr1, cStr2, cStr3, params, results);
   }
 
   addTableImport(
@@ -1162,12 +1203,13 @@ export class Module {
     externalModuleName: string,
     externalBaseName: string,
     attribute: u32,
-    eventType: FunctionTypeRef
+    params: NativeType,
+    results: NativeType
   ): void {
     var cStr1 = this.allocStringCached(internalName);
     var cStr2 = this.allocStringCached(externalModuleName);
     var cStr3 = this.allocStringCached(externalBaseName);
-    binaryen._BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, eventType);
+    binaryen._BinaryenAddEventImport(this.ref, cStr1, cStr2, cStr3, attribute, params, results);
   }
 
   // memory
@@ -1512,6 +1554,32 @@ export class Module {
   }
 }
 
+// types
+
+export function createType(types: NativeType[] | null): NativeType {
+  if (!types) return NativeType.None;
+  switch (types.length) {
+    case 0: return NativeType.None;
+    case 1: return types[0];
+  }
+  var cArr = allocI32Array(types);
+  var ret = binaryen._BinaryenTypeCreate(cArr, types.length);
+  binaryen._free(cArr);
+  return ret;
+}
+
+export function expandType(type: NativeType): NativeType[] {
+  var arity = binaryen._BinaryenTypeArity(type);
+  var cArr = binaryen._malloc(<usize>arity << 2);
+  binaryen._BinaryenTypeExpand(type, cArr);
+  var types = new Array(arity);
+  for (let i = 0; i < arity; ++i) {
+    types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
+  }
+  binaryen._free(cArr);
+  return types;
+}
+
 // expressions
 
 export function getExpressionId(expr: ExpressionRef): ExpressionId {
@@ -1702,24 +1770,6 @@ export function getHostName(expr: ExpressionRef): string | null {
   return readString(binaryen._BinaryenHostGetNameOperand(expr));
 }
 
-// function types
-
-export function getFunctionTypeName(ftype: FunctionTypeRef): string | null {
-  return readString(binaryen._BinaryenFunctionTypeGetName(ftype));
-}
-
-export function getFunctionTypeParamCount(ftype: FunctionTypeRef): Index {
-  return binaryen._BinaryenFunctionTypeGetNumParams(ftype);
-}
-
-export function getFunctionTypeParam(ftype: FunctionTypeRef, index: Index): NativeType {
-  return binaryen._BinaryenFunctionTypeGetParam(ftype, index);
-}
-
-export function getFunctionTypeResult(ftype: FunctionTypeRef): NativeType {
-  return binaryen._BinaryenFunctionTypeGetResult(ftype);
-}
-
 // functions
 
 export function getFunctionBody(func: FunctionRef): ExpressionRef {
@@ -1730,16 +1780,22 @@ export function getFunctionName(func: FunctionRef): string | null {
   return readString(binaryen._BinaryenFunctionGetName(func));
 }
 
-export function getFunctionParamCount(func: FunctionRef): Index {
-  return binaryen._BinaryenFunctionGetNumParams(func);
+export function getFunctionParams(func: FunctionRef): Index {
+  return binaryen._BinaryenFunctionGetParams(func);
 }
 
-export function getFunctionParamType(func: FunctionRef, index: Index): NativeType {
-  return binaryen._BinaryenFunctionGetParam(func, index);
+export function getFunctionResults(func: FunctionRef): NativeType {
+  return binaryen._BinaryenFunctionGetResults(func);
 }
 
-export function getFunctionResultType(func: FunctionRef): NativeType {
-  return binaryen._BinaryenFunctionGetResult(func);
+export function getFunctionVars(func: FunctionRef): NativeType {
+  // TODO: unify this on Binaryen's side?
+  var count = binaryen._BinaryenFunctionGetNumVars(func);
+  var types = new Array<NativeType>(count);
+  for (let i = 0; i < count; ++i) {
+    types[i] = binaryen._BinaryenFunctionGetVar(func, i);
+  }
+  return createType(types);
 }
 
 // globals
@@ -2110,6 +2166,44 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(binaryen._BinaryenStoreGetValue(expr), data);
       break;
     }
+    case ExpressionId.Const: {
+      break;
+    }
+    case ExpressionId.Unary: {
+      visit(binaryen._BinaryenUnaryGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Binary: {
+      visit(binaryen._BinaryenBinaryGetLeft(expr), data);
+      visit(binaryen._BinaryenBinaryGetRight(expr), data);
+      break;
+    }
+    case ExpressionId.Select: {
+      visit(binaryen._BinaryenSelectGetIfTrue(expr), data);
+      visit(binaryen._BinaryenSelectGetIfFalse(expr), data);
+      visit(binaryen._BinaryenSelectGetCondition(expr), data);
+      break;
+    }
+    case ExpressionId.Drop: {
+      visit(binaryen._BinaryenDropGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Return: {
+      visit(binaryen._BinaryenReturnGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Host: {
+      for (let i = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
+        visit(binaryen._BinaryenHostGetOperand(expr, i), data);
+      }
+      break;
+    }
+    case ExpressionId.Nop: {
+      break;
+    }
+    case ExpressionId.Unreachable: {
+      break;
+    }
     case ExpressionId.AtomicRMW: {
       visit(binaryen._BinaryenAtomicRMWGetPtr(expr), data);
       visit(binaryen._BinaryenAtomicRMWGetValue(expr), data);
@@ -2184,6 +2278,23 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       visit(binaryen._BinaryenMemoryFillGetSize(expr), data);
       break;
     }
+    case ExpressionId.Push: {
+      visit(binaryen._BinaryenPushGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.Pop: {
+      break;
+    }
+    case ExpressionId.RefNull: {
+      break;
+    }
+    case ExpressionId.RefIsNull: {
+      visit(binaryen._BinaryenRefIsNullGetValue(expr), data);
+      break;
+    }
+    case ExpressionId.RefFunc: {
+      break;
+    }
     case ExpressionId.Try: {
       visit(binaryen._BinaryenTryGetBody(expr), data);
       visit(binaryen._BinaryenTryGetCatchBody(expr), data);
@@ -2201,51 +2312,6 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
     }
     case ExpressionId.BrOnExn: {
       visit(binaryen._BinaryenBrOnExnGetExnref(expr), data);
-      break;
-    }
-    case ExpressionId.Push: {
-      visit(binaryen._BinaryenPushGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Pop: {
-      break;
-    }
-    case ExpressionId.Const: {
-      break;
-    }
-    case ExpressionId.Unary: {
-      visit(binaryen._BinaryenUnaryGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Binary: {
-      visit(binaryen._BinaryenBinaryGetLeft(expr), data);
-      visit(binaryen._BinaryenBinaryGetRight(expr), data);
-      break;
-    }
-    case ExpressionId.Select: {
-      visit(binaryen._BinaryenSelectGetIfTrue(expr), data);
-      visit(binaryen._BinaryenSelectGetIfFalse(expr), data);
-      visit(binaryen._BinaryenSelectGetCondition(expr), data);
-      break;
-    }
-    case ExpressionId.Drop: {
-      visit(binaryen._BinaryenDropGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Return: {
-      visit(binaryen._BinaryenReturnGetValue(expr), data);
-      break;
-    }
-    case ExpressionId.Host: {
-      for (let i = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
-        visit(binaryen._BinaryenHostGetOperand(expr, i), data);
-      }
-      break;
-    }
-    case ExpressionId.Nop: {
-      break;
-    }
-    case ExpressionId.Unreachable: {
       break;
     }
     default: assert(false);

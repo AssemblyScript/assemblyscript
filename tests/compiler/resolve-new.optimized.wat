@@ -1,13 +1,14 @@
 (module
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $resolve-new/foo (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
- (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (start $~start)
+ (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -66,7 +67,7 @@
   i32.const 16
   i32.store
   local.get $0
-  i32.const -1
+  i32.const 1
   i32.store offset=4
   local.get $0
   i32.const 3
@@ -76,7 +77,7 @@
   i32.store offset=12
   local.get $1
  )
- (func $start (; 2 ;) (type $FUNCSIG$v)
+ (func $~start (; 2 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16
@@ -85,8 +86,5 @@
   global.set $resolve-new/foo
   call $~lib/rt/stub/__alloc
   drop
- )
- (func $null (; 3 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

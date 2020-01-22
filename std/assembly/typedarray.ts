@@ -1,5 +1,5 @@
 import { COMPARATOR, SORT as SORT_IMPL } from "./util/sort";
-import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH } from "./util/error";
+import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_NOTIMPLEMENTED } from "./util/error";
 import { joinIntegerArray, joinFloatArray } from "./util/string";
 import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
@@ -123,6 +123,10 @@ export class Int8Array extends ArrayBufferView {
     return this.join();
   }
 
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Int8Array, i8, U, valueof<U>>(this, source, offset);
+  }
+
   static wrap(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): Int8Array {
     return WRAP<Int8Array, i8>(buffer, byteOffset, length);
   }
@@ -241,6 +245,10 @@ export class Uint8Array extends ArrayBufferView {
 
   join(separator: string = ","): string {
     return joinIntegerArray<u8>(this.dataStart, this.length, separator);
+  }
+
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Uint8Array, u8, U, valueof<U>>(this, source, offset);
   }
 
   toString(): string {
@@ -367,6 +375,10 @@ export class Uint8ClampedArray extends ArrayBufferView {
     return joinIntegerArray<u8>(this.dataStart, this.length, separator);
   }
 
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Uint8ClampedArray, u8, U, valueof<U>>(this, source, offset);
+  }
+
   toString(): string {
     return this.join();
   }
@@ -489,6 +501,10 @@ export class Int16Array extends ArrayBufferView {
 
   join(separator: string = ","): string {
     return joinIntegerArray<i16>(this.dataStart, this.length, separator);
+  }
+
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Int16Array, i16, U, valueof<U>>(this, source, offset);
   }
 
   toString(): string {
@@ -615,6 +631,10 @@ export class Uint16Array extends ArrayBufferView {
     return joinIntegerArray<u16>(this.dataStart, this.length, separator);
   }
 
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Uint16Array, u16, U, valueof<U>>(this, source, offset);
+  }
+
   toString(): string {
     return this.join();
   }
@@ -737,6 +757,10 @@ export class Int32Array extends ArrayBufferView {
 
   join(separator: string = ","): string {
     return joinIntegerArray<i32>(this.dataStart, this.length, separator);
+  }
+
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Int32Array, i32, U, valueof<U>>(this, source, offset);
   }
 
   toString(): string {
@@ -863,6 +887,10 @@ export class Uint32Array extends ArrayBufferView {
     return joinIntegerArray<u32>(this.dataStart, this.length, separator);
   }
 
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Uint32Array, u32, U, valueof<U>>(this, source, offset);
+  }
+
   toString(): string {
     return this.join();
   }
@@ -985,6 +1013,10 @@ export class Int64Array extends ArrayBufferView {
 
   join(separator: string = ","): string {
     return joinIntegerArray<i64>(this.dataStart, this.length, separator);
+  }
+
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Int64Array, i64, U, valueof<U>>(this, source, offset);
   }
 
   toString(): string {
@@ -1111,6 +1143,10 @@ export class Uint64Array extends ArrayBufferView {
     return joinIntegerArray<u64>(this.dataStart, this.length, separator);
   }
 
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Uint64Array, u64, U, valueof<U>>(this, source, offset);
+  }
+
   toString(): string {
     return this.join();
   }
@@ -1235,6 +1271,10 @@ export class Float32Array extends ArrayBufferView {
     return joinFloatArray<f32>(this.dataStart, this.length, separator);
   }
 
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Float32Array, f32, U, valueof<U>>(this, source, offset);
+  }
+
   toString(): string {
     return this.join();
   }
@@ -1357,6 +1397,10 @@ export class Float64Array extends ArrayBufferView {
 
   join(separator: string = ","): string {
     return joinFloatArray<f64>(this.dataStart, this.length, separator);
+  }
+
+  set<U extends ArrayBufferView>(source: U, offset: i32 = 0): void {
+    SET<Float64Array, f64, U, valueof<U>>(this, source, offset);
   }
 
   toString(): string {
@@ -1690,31 +1734,100 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 // @ts-ignore: decorator
 @inline
 function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
+  var byteLength: i32;
   var bufferByteLength = buffer.byteLength;
-  if (<u32>byteOffset >= <u32>bufferByteLength) {
+  const mask = sizeof<T>() - 1;
+  if (i32(<u32>byteOffset > <u32>bufferByteLength) | (byteOffset & mask)) {
     throw new RangeError(E_INDEXOUTOFRANGE);
   }
-  var byteLength: i32;
   if (length < 0) {
     if (length == -1) {
-      const mask = <i32>(1 << alignof<T>() - 1);
-      if (buffer.byteLength & mask) {
+      if (bufferByteLength & mask) {
         throw new RangeError(E_INVALIDLENGTH);
-      } else {
-        byteLength = buffer.byteLength;
       }
+      byteLength = bufferByteLength - byteOffset;
     } else {
       throw new RangeError(E_INVALIDLENGTH);
     }
   } else {
     byteLength = length << alignof<T>();
-  }
-  if (byteOffset + byteLength > buffer.byteLength) {
-    throw new RangeError(E_INVALIDLENGTH);
+    if (byteOffset + byteLength > bufferByteLength) {
+      throw new RangeError(E_INVALIDLENGTH);
+    }
   }
   var out = __alloc(offsetof<TArray>(), idof<TArray>());
   store<usize>(out, __retain(changetype<usize>(buffer)), offsetof<TArray>("buffer"));
   store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
   store<usize>(out, changetype<usize>(buffer) + <usize>byteOffset, offsetof<TArray>("dataStart"));
   return changetype<TArray>(out); // retains
+}
+
+// @ts-ignore: decorator
+@inline
+function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, U>(target: TArray, source: UArray, offset: i32 = 0): void {
+  // need to assert at compile time that U is not a reference or a function
+  if (isReference<U>()) {
+    ERROR(E_NOTIMPLEMENTED);
+  }
+
+  // Uncaught RangeError: offset is out of bounds
+  if (offset < 0) throw new RangeError(E_INDEXOUTOFRANGE);
+  if (source.length + offset > target.length) throw new RangeError(E_INDEXOUTOFRANGE);
+
+  // if the types align and match, use memory.copy() instead of manual loop
+  if (isInteger<T>() == isInteger<U>() && alignof<T>() == alignof<U>() &&
+    !(target instanceof Uint8ClampedArray && isSigned<U>())) {
+    memory.copy(
+      target.dataStart + (<usize>offset << alignof<T>()),
+      source.dataStart,
+      source.byteLength
+    );
+  } else {
+    let targetDataStart = target.dataStart + (<usize>offset << alignof<T>());
+    let sourceDataStart = source.dataStart;
+    let count = source.length;
+    for (let i = 0; i < count; i++) {
+      // if TArray is Uint8ClampedArray, then values must be clamped
+      if (target instanceof Uint8ClampedArray) {
+        if (isFloat<U>()) {
+          let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
+          store<T>(
+            targetDataStart + (<usize>i << alignof<T>()),
+            isFinite<U>(value) ? <T>max<U>(0, min<U>(255, value)) : 0
+          );
+        } else {
+          let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
+          if (!isSigned<U>()) {
+            store<T>(
+              targetDataStart + (<usize>i << alignof<T>()),
+              // @ts-ignore: cast to T is valid for numeric types here
+              min<U>(255, value)
+            );
+          } else if (sizeof<T>() <= 4) {
+            store<T>(
+              targetDataStart + (<usize>i << alignof<T>()),
+              // @ts-ignore: cast to T is valid for numeric types here
+              ~(<i32>value >> 31) & (((255 - <i32>value) >> 31) | value)
+            );
+          } else {
+            store<T>(
+              targetDataStart + (<usize>i << alignof<T>()),
+              // @ts-ignore: cast to T is valid for numeric types here
+              ~(<i64>value >> 63) & (((255 - <i64>value) >> 63) | value)
+            );
+          }
+        }
+        // if U is a float, then casting float to int must include a finite check
+      } else if (isFloat<U>() && !isFloat<T>()) {
+        let value = load<U>(sourceDataStart + (<usize>i << alignof<U>()));
+        // @ts-ignore: cast to T is valid for numeric types here
+        store<T>(targetDataStart + (<usize>i << alignof<T>()), isFinite<U>(value) ? <T>value : 0);
+      } else if (isFloat<T>() && !isFloat<U>()) {
+        // @ts-ignore: In this case the <T> conversion is required
+        store<T>(targetDataStart + (<usize>i << alignof<T>()), <T>load<U>(sourceDataStart + (<usize>i << alignof<U>())));
+      } else {
+        store<T>(targetDataStart + (<usize>i << alignof<T>()), load<U>(sourceDataStart + (<usize>i << alignof<U>())));
+      }
+    }
+  }
 }

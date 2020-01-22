@@ -1,10 +1,9 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "fib" (func $recursive/fib))
- (func $recursive/fib (; 0 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $recursive/fib (; 0 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.le_s
@@ -21,8 +20,5 @@
   i32.sub
   call $recursive/fib
   i32.add
- )
- (func $null (; 1 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

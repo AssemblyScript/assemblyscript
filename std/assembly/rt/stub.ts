@@ -31,7 +31,7 @@ export function __alloc(size: usize, id: u32): usize {
   maybeGrowMemory(ptr + actualSize);
   var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
   block.mmInfo = actualSize;
-  if (DEBUG) block.gcInfo = -1;
+  if (DEBUG) block.gcInfo = 1;
   block.rtId = id;
   block.rtSize = size;
   return ptr;
@@ -43,7 +43,7 @@ export function __realloc(ptr: usize, size: usize): usize {
   assert(ptr != 0 && !(ptr & AL_MASK)); // must exist and be aligned
   var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
   var actualSize = block.mmInfo;
-  if (DEBUG) assert(block.gcInfo == -1);
+  if (DEBUG) assert(block.gcInfo == 1);
   var isLast = ptr + actualSize == offset;
   var alignedSize = (size + AL_MASK) & ~AL_MASK;
   if (size > actualSize) {
@@ -69,7 +69,7 @@ export function __realloc(ptr: usize, size: usize): usize {
 export function __free(ptr: usize): void {
   assert(ptr != 0 && !(ptr & AL_MASK)); // must exist and be aligned
   var block = changetype<BLOCK>(ptr - BLOCK_OVERHEAD);
-  if (DEBUG) assert(block.gcInfo == -1);
+  if (DEBUG) assert(block.gcInfo == 1);
   if (ptr + block.mmInfo == offset) { // last block: discard
     offset = changetype<usize>(block);
   }

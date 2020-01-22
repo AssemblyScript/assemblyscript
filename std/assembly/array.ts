@@ -14,10 +14,10 @@ function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
     let newCapacity = minSize << alignLog2;
-    let newData = __realloc(oldData, newCapacity);
+    let newData = __realloc(oldData, newCapacity); // keeps RC
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
-      store<usize>(array, __retain(newData), offsetof<ArrayBufferView>("buffer"));
+      store<usize>(array, newData, offsetof<ArrayBufferView>("buffer"));
       store<usize>(array, newData, offsetof<ArrayBufferView>("dataStart"));
     }
     store<u32>(array, newCapacity, offsetof<ArrayBufferView>("byteLength"));

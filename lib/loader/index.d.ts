@@ -16,45 +16,73 @@ interface ASUtil {
   table?: WebAssembly.Table;
 
   /** Explicit start function, if requested. */
-  __start(): void;
+  _start(): void;
   /** Allocates a new string in the module's memory and returns a reference (pointer) to it. */
   __allocString(str: string): number;
-  /** Reads (copies) the value of a string from the module's memory. */
-  __getString(ptr: number): string;
   /** Allocates a new array in the module's memory and returns a reference (pointer) to it. */
   __allocArray(id: number, values: ArrayLike<number>): number;
-  /** Reads (copies) the values of an array from the module's memory. */
-  __getArray(ptr: number): number[];
-  /** Gets a view on the values of an array in the module's memory. */
-  __getArrayView(ptr: number): ArrayBufferView;
-  /** Reads the values of Int8Array from the module's memory. */
-  __getInt8Array(ptr: number): Int8Array;
-  /** Reads the values of Uint8Array from the module's memory. */
-  __getUint8Array(ptr: number): Uint8Array;
-  /** Reads the values of Uint8Array from the module's memory. */
-  __getUint8ClampedArray(ptr: number): Uint8ClampedArray;
-  /** Reads the values of Int16Array from the module's memory. */
-  __getInt16Array(ptr: number): Int16Array;
-  /** Reads the values of Uint16Array from the module's memory. */
-  __getUint16Array(ptr: number): Uint16Array;
-  /** Reads the values of Int32Array from the module's memory. */
-  __getInt32Array(ptr: number): Int32Array;
-  /** Reads the values of Uint32Array from the module's memory. */
-  __getUint32Array(ptr: number): Uint32Array;
-  /** Reads the values of Int32Array from the module's memory. */
-  __getInt64Array?(ptr: number): BigInt64Array;
-  /** Reads the values of Uint32Array from the module's memory. */
-  __getUint64Array?(ptr: number): BigUint64Array;
-  /** Reads the values of Float32Array from the module's memory. */
-  __getFloat32Array(ptr: number): Float32Array;
-    /** Reads the values of Float64Array from the module's memory. */
-  __getFloat64Array(ptr: number): Float64Array;
-  /** Reads (copies) the data of an ArrayBuffer from the module's memory. */
+
+  /** Copies a string's value from the module's memory. */
+  __getString(ptr: number): string;
+  /** Copies an ArrayBuffer's value from the module's memory. */
   __getArrayBuffer(ptr: number): ArrayBuffer;
+
+  /** Copies an array's values from the module's memory. Infers the array type from RTTI. */
+  __getArray(ptr: number): number[];
+  /** Copies an Int8Array's values from the module's memory. */
+  __getInt8Array(ptr: number): Int8Array;
+  /** Copies an Uint8Array's values from the module's memory. */
+  __getUint8Array(ptr: number): Uint8Array;
+  /** Copies an Uint8ClampedArray's values from the module's memory. */
+  __getUint8ClampedArray(ptr: number): Uint8ClampedArray;
+  /** Copies an Int16Array's values from the module's memory. */
+  __getInt16Array(ptr: number): Int16Array;
+  /** Copies an Uint16Array's values from the module's memory. */
+  __getUint16Array(ptr: number): Uint16Array;
+  /** Copies an Int32Array's values from the module's memory. */
+  __getInt32Array(ptr: number): Int32Array;
+  /** Copies an Uint32Array's values from the module's memory. */
+  __getUint32Array(ptr: number): Uint32Array;
+  /** Copies an Int32Array's values from the module's memory. */
+  __getInt64Array?(ptr: number): BigInt64Array;
+  /** Copies an Uint32Array's values from the module's memory. */
+  __getUint64Array?(ptr: number): BigUint64Array;
+  /** Copies a Float32Array's values from the module's memory. */
+  __getFloat32Array(ptr: number): Float32Array;
+  /** Copies a Float64Array's values from the module's memory. */
+  __getFloat64Array(ptr: number): Float64Array;
+
+  /** Gets a live view on an array's values in the module's memory. Infers the array type from RTTI. */
+  __getArrayView(ptr: number): ArrayBufferView;
+  /** Gets a live view on an Int8Array's values in the module's memory. */
+  __getInt8ArrayView(ptr: number): Int8Array;
+  /** Gets a live view on an Uint8Array's values in the module's memory. */
+  __getUint8ArrayView(ptr: number): Uint8Array;
+  /** Gets a live view on an Uint8ClampedArray's values in the module's memory. */
+  __getUint8ClampedArrayView(ptr: number): Uint8ClampedArray;
+  /** Gets a live view on an Int16Array's values in the module's memory. */
+  __getInt16ArrayView(ptr: number): Int16Array;
+  /** Gets a live view on an Uint16Array's values in the module's memory. */
+  __getUint16ArrayView(ptr: number): Uint16Array;
+  /** Gets a live view on an Int32Array's values in the module's memory. */
+  __getInt32ArrayView(ptr: number): Int32Array;
+  /** Gets a live view on an Uint32Array's values in the module's memory. */
+  __getUint32ArrayView(ptr: number): Uint32Array;
+  /** Gets a live view on an Int32Array's values in the module's memory. */
+  __getInt64ArrayView?(ptr: number): BigInt64Array;
+  /** Gets a live view on an Uint32Array's values in the module's memory. */
+  __getUint64ArrayView?(ptr: number): BigUint64Array;
+  /** Gets a live view on a Float32Array's values in the module's memory. */
+  __getFloat32ArrayView(ptr: number): Float32Array;
+  /** Gets a live view on a Float64Array's values in the module's memory. */
+  __getFloat64ArrayView(ptr: number): Float64Array;
+
   /** Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer. */
   __retain(ptr: number): number;
   /** Releases a previously retained reference to a managed object, allowing the runtime to collect it once its reference count reaches zero. */
   __release(ptr: number): void;
+  /** Forcefully resets the heap to its initial offset, effectively clearing dynamic memory. Stub runtime only. */
+  __reset?(): void;
   /** Allocates an instance of the class represented by the specified id. */
   __alloc(size: number, id: number): number;
   /** Tests whether a managed object is an instance of the class represented by the specified base id. */

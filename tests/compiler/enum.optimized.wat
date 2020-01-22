@@ -1,5 +1,5 @@
 (module
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
  (memory $0 0)
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
@@ -60,14 +60,11 @@
  (export "SelfReference.ONE" (global $enum/SelfReference.ONE))
  (export "SelfReferenceConst.ZERO" (global $enum/SelfReferenceConst.ZERO))
  (export "SelfReferenceConst.ONE" (global $enum/SelfReferenceConst.ONE))
- (start $start)
- (func $start (; 0 ;) (type $FUNCSIG$v)
+ (start $~start)
+ (func $~start (; 0 ;)
   i32.const 0
   global.set $enum/NonConstant.ZERO
   i32.const 1
   global.set $enum/NonConstant.ONE
- )
- (func $null (; 1 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

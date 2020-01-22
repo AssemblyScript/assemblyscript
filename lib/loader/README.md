@@ -30,7 +30,7 @@ API
 
 Besides demangling classes exported from your entry file to a handy object structure one can use like JS objects, instances are automatically populated with useful utility:
 
-* **__start**(): `void`<br />
+* **_start**(): `void`<br />
   Explicit start function if the `--explicitStart` option is used. Must be called before any other exports if present.
 
 * **__allocString**(str: `string`): `number`<br />
@@ -43,35 +43,25 @@ Besides demangling classes exported from your entry file to a handy object struc
   ```
 
 * **__getString**(ptr: `number`): `string`<br />
-  Reads (copies) the value of a string from the module's memory.
+  Copies a string's value from the module's memory.
 
   ```ts
   var str = module.__getString(ptr);
   ...
   ```
 
-* **__allocArray**(id: `number`, values: `number[]`): `number`<br />
-  Allocates a new array in the module's memory and returns a reference (pointer) to it.
-  Automatically retains interior pointers. The `id` is the unique runtime id of the respective array class. If you are using `Int32Array` for example, the best way to know the id is an `export const INT32ARRAY_ID = idof<Int32Array>()`. When done with the array, make sure to release it.
-
-  ```ts
-  var ptr = module.__retain(module.__allocArray(module.INT32ARRAY, [1, 2, 3]));
-  ...
-  module.__release(ptr);
-  ```
+* **__getArrayBuffer**(ptr: `number`): `ArrayBuffer`<br />
+  Copies an ArrayBuffer's value from the module's memory.
 
 * **__getArray**(ptr: `number`): `number[]`<br />
-  Reads (copies) the values of an array from the module's memory.
+  Copies an array's values from the module's memory. Infers the array type from RTTI.
 
   ```ts
   var arr = module.__getArray(ptr);
   ...
   ```
 
-* **__getArrayView**(ptr: `number`): `TypedArray`<br />
-  Gets a view on the values of an array in the module's memory. This differs from `__getArray` in that the data isn't copied but remains *live* in both directions. That's faster but also unsafe because if the array grows or becomes released, the view will no longer represent the correct memory region and modifying its values in this state will most likely corrupt memory. Use, but use with care.
-
-  If the type of the array is known beforehand, the following even faster and even more unsafe helpers can be used that don't do any type checking:
+  If the type of the array is known beforehand, the following slightly faster helpers that don't infer the type can be used:
 
   **__getInt8Array**(ptr: `number`): `Int8Array`<br />
   **__getUint8Array**(ptr: `number`): `Uint8Array`<br />
@@ -85,8 +75,24 @@ Besides demangling classes exported from your entry file to a handy object struc
   **__getFloat32Array**(ptr: `number`): `Float32Array`<br />
   **__getFloat64Array**(ptr: `number`): `Float64Array`
 
-* **__getArrayBuffer**(ptr: `number`): `ArrayBuffer`<br />
-  Reads (copies) the data of an ArrayBuffer from the module's memory.
+* **__getArrayView**(ptr: `number`): `TypedArray`<br />
+  Gets a live view on the values of an array in the module's memory. Infers the array type from RTTI.
+  
+  This differs from `__getArray` in that the data isn't copied but remains *live* in both directions. That's faster but also unsafe because if the array grows or becomes released, the view will no longer represent the correct memory region and modifying its values in this state will most likely corrupt memory. Use, but use with care.
+
+  If the type of the array is known beforehand, the following slightly faster helpers that don't infer the type can be used:
+
+  **__getInt8ArrayView**(ptr: `number`): `Int8Array`<br />
+  **__getUint8ArrayView**(ptr: `number`): `Uint8Array`<br />
+  **__getUint8ClampedArrayView**(ptr: `number`): `Uint8ClampedArray`<br />
+  **__getInt16ArrayView**(ptr: `number`): `Int16Array`<br />
+  **__getUint16ArrayView**(ptr: `number`): `Uint16Array`<br />
+  **__getInt32ArrayView**(ptr: `number`): `Int32Array`<br />
+  **__getUint32ArrayView**(ptr: `number`): `Uint32Array`<br />
+  **__getInt64ArrayView**(ptr: `number`): `BigInt64Array`<br />
+  **__getUint64ArrayView**(ptr: `number`): `BigUint64Array`<br />
+  **__getFloat32ArrayView**(ptr: `number`): `Float32Array`<br />
+  **__getFloat64ArrayView**(ptr: `number`): `Float64Array`
 
 * **__retain**(ptr: `number`): `number`<br />
   Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer.
@@ -103,6 +109,16 @@ Besides demangling classes exported from your entry file to a handy object struc
   F32[ptr + MYCLASS_BASICFIELD1_OFFSET >>> 2] = field1_value_f32;
   const U32 = new Uint32Array(module.memory.buffer);
   U32[ptr + MYCLASS_MANAGEDFIELD2_OFFSET >>> 2] = module.__retain(field2_value_ptr);
+  ...
+  module.__release(ptr);
+  ```
+
+* **__allocArray**(id: `number`, values: `number[]`): `number`<br />
+  Allocates a new array in the module's memory and returns a reference (pointer) to it.
+  Automatically retains interior pointers. The `id` is the unique runtime id of the respective array class. If you are using `Int32Array` for example, the best way to know the id is an `export const INT32ARRAY_ID = idof<Int32Array>()`. When done with the array, make sure to release it.
+
+  ```ts
+  var ptr = module.__retain(module.__allocArray(module.INT32ARRAY, [1, 2, 3]));
   ...
   module.__release(ptr);
   ```

@@ -1,5 +1,5 @@
 import { AL_BITS, AL_MASK, DEBUG, BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "rt/common";
-import { onfree, onalloc } from "./rtrace";
+import { onfree, onalloc, onrealloc } from "./rtrace";
 import { REFCOUNT_MASK } from "./pure";
 
 /////////////////////// The TLSF (Two-Level Segregate Fit) memory allocator ///////////////////////
@@ -459,22 +459,26 @@ function prepareSize(size: usize): usize {
 }
 
 /** Initilizes the root structure. */
-export function initializeRoot(): void {
-  var rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
-  var pagesBefore = memory.size();
-  var pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
-  if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
-  var root = changetype<Root>(rootOffset);
-  root.flMap = 0;
-  SETTAIL(root, changetype<Block>(0));
-  for (let fl: usize = 0; fl < FL_BITS; ++fl) {
-    SETSL(root, fl, 0);
-    for (let sl: u32 = 0; sl < SL_SIZE; ++sl) {
-      SETHEAD(root, fl, sl, null);
+export function maybeInitialize(): Root {
+  var root = ROOT;
+  if (!root) {
+    const rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
+    let pagesBefore = memory.size();
+    let pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
+    if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
+    root = changetype<Root>(rootOffset);
+    root.flMap = 0;
+    SETTAIL(root, changetype<Block>(0));
+    for (let fl: usize = 0; fl < FL_BITS; ++fl) {
+      SETSL(root, fl, 0);
+      for (let sl: u32 = 0; sl < SL_SIZE; ++sl) {
+        SETHEAD(root, fl, sl, null);
+      }
     }
+    addMemory(root, (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
+    ROOT = root;
   }
-  addMemory(root, (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
-  ROOT = root;
+  return root;
 }
 
 // @ts-ignore: decorator
@@ -482,7 +486,7 @@ export function initializeRoot(): void {
 var collectLock: bool = false;
 
 /** Allocates a block of the specified size. */
-export function allocateBlock(root: Root, size: usize): Block {
+export function allocateBlock(root: Root, size: usize, id: u32): Block {
   if (DEBUG) assert(!collectLock); // must not allocate while collecting
   var payloadSize = prepareSize(size);
   var block = searchBlock(root, payloadSize);
@@ -494,18 +498,18 @@ export function allocateBlock(root: Root, size: usize): Block {
       block = searchBlock(root, payloadSize);
       if (!block) {
         growMemory(root, payloadSize);
-        block = <Block>searchBlock(root, payloadSize);
+        block = changetype<Block>(searchBlock(root, payloadSize));
         if (DEBUG) assert(block); // must be found now
       }
     } else {
       growMemory(root, payloadSize);
-      block = <Block>searchBlock(root, payloadSize);
+      block = changetype<Block>(searchBlock(root, payloadSize));
       if (DEBUG) assert(block); // must be found now
     }
   }
   if (DEBUG) assert((block.mmInfo & ~TAGS_MASK) >= payloadSize); // must fit
   block.gcInfo = 0; // RC=0
-  // block.rtId = 0; // set by the caller (__alloc)
+  block.rtId = id;
   block.rtSize = size;
   removeBlock(root, <Block>block);
   prepareBlock(root, <Block>block, payloadSize);
@@ -517,12 +521,6 @@ export function allocateBlock(root: Root, size: usize): Block {
 export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   var payloadSize = prepareSize(size);
   var blockInfo = block.mmInfo;
-  if (DEBUG) {
-    assert(
-      !(blockInfo & FREE) &&           // must be used
-      !(block.gcInfo & ~REFCOUNT_MASK) // not buffered or != BLACK
-    );
-  }
 
   // possibly split and update runtime size if it still fits
   if (payloadSize <= (blockInfo & ~TAGS_MASK)) {
@@ -548,49 +546,53 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   }
 
   // otherwise move the block
-  var newBlock = allocateBlock(root, size);
-  newBlock.rtId = block.rtId;
+  var newBlock = allocateBlock(root, size, block.rtId); // may invalidate cached blockInfo
+  newBlock.gcInfo = block.gcInfo; // keep RC
   memory.copy(changetype<usize>(newBlock) + BLOCK_OVERHEAD, changetype<usize>(block) + BLOCK_OVERHEAD, size);
-  block.mmInfo = blockInfo | FREE;
-  insertBlock(root, block);
-  if (isDefined(ASC_RTRACE)) onfree(block);
+  if (changetype<usize>(block) >= __heap_base) {
+    if (isDefined(ASC_RTRACE)) onrealloc(block, newBlock);
+    freeBlock(root, block);
+  }
   return newBlock;
 }
 
 /** Frees a block. */
 export function freeBlock(root: Root, block: Block): void {
   var blockInfo = block.mmInfo;
-  assert(!(blockInfo & FREE)); // must be used (user might call through to this)
   block.mmInfo = blockInfo | FREE;
   insertBlock(root, block);
   if (isDefined(ASC_RTRACE)) onfree(block);
 }
 
+/** Checks that a used block is valid to be freed or reallocated. */
+function checkUsedBlock(ref: usize): Block {
+  var block = changetype<Block>(ref - BLOCK_OVERHEAD);
+  assert(
+    ref != 0 && !(ref & AL_MASK) &&  // must exist and be aligned
+    !(block.mmInfo & FREE) &&        // must be used
+    !(block.gcInfo & ~REFCOUNT_MASK) // not buffered or != BLACK
+  );
+  return block;
+}
+
 // @ts-ignore: decorator
 @global @unsafe
 export function __alloc(size: usize, id: u32): usize {
-  var root = ROOT;
-  if (!root) {
-    initializeRoot();
-    root = ROOT;
-  }
-  var block = allocateBlock(root, size);
-  block.rtId = id;
-  return changetype<usize>(block) + BLOCK_OVERHEAD;
+  return changetype<usize>(
+    allocateBlock(maybeInitialize(), size, id)
+  ) + BLOCK_OVERHEAD;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __realloc(ref: usize, size: usize): usize {
-  if (DEBUG) assert(ROOT); // must be initialized
-  assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
-  return changetype<usize>(reallocateBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD), size)) + BLOCK_OVERHEAD;
+  return changetype<usize>(
+    reallocateBlock(maybeInitialize(), checkUsedBlock(ref), size)
+  ) + BLOCK_OVERHEAD;
 }
 
 // @ts-ignore: decorator
 @global @unsafe
 export function __free(ref: usize): void {
-  if (DEBUG) assert(ROOT); // must be initialized
-  assert(ref != 0 && !(ref & AL_MASK)); // must exist and be aligned
-  freeBlock(ROOT, changetype<Block>(ref - BLOCK_OVERHEAD));
+  freeBlock(maybeInitialize(), checkUsedBlock(ref));
 }

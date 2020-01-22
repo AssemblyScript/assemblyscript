@@ -43,3 +43,9 @@ __release(changetype<usize>(dynamicArrayI8));
 __release(changetype<usize>(dynamicArrayI32));
 __release(changetype<usize>(dynamicArrayRef));
 __release(changetype<usize>(dynamicArrayRefWithCtor));
+
+// Make sure unassigned literals don't
+function doesntLeak(refs: Ref[]): void {}
+{
+  doesntLeak([ new Ref() ]);
+}

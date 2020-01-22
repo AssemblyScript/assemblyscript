@@ -1,31 +1,30 @@
 (module
- (type $FUNCSIG$i (func (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$v (func))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s\00")
+ (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00g\00e\00t\00t\00e\00r\00-\00s\00e\00t\00t\00e\00r\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (global $getter-setter/Foo._bar (mut i32) (i32.const 0))
  (export "memory" (memory $0))
- (start $start)
- (func $getter-setter/Foo.bar.get:bar (; 1 ;) (type $FUNCSIG$i) (result i32)
+ (start $~start)
+ (func $getter-setter/Foo.bar.get:bar (; 1 ;) (result i32)
   global.get $getter-setter/Foo._bar
  )
- (func $getter-setter/Foo.bar.set:bar (; 2 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $getter-setter/Foo.bar.set:bar (; 2 ;) (param $0 i32)
   local.get $0
   global.set $getter-setter/Foo._bar
  )
- (func $start:getter-setter (; 3 ;) (type $FUNCSIG$v)
+ (func $start:getter-setter (; 3 ;)
   call $getter-setter/Foo.bar.get:bar
   i32.const 0
   i32.eq
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 13
    i32.const 0
    call $~lib/builtins/abort
@@ -39,7 +38,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 15
    i32.const 0
    call $~lib/builtins/abort
@@ -53,17 +52,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 16
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 4 ;) (type $FUNCSIG$v)
+ (func $~start (; 4 ;)
   call $start:getter-setter
- )
- (func $null (; 5 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

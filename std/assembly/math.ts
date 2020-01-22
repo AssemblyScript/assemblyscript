@@ -2,6 +2,11 @@ import * as JSMath from "./bindings/Math";
 export { JSMath };
 
 import {
+  pow_lut, exp_lut, exp2_lut, log_lut, log2_lut,
+  powf_lut, expf_lut, exp2f_lut, logf_lut, log2f_lut
+} from "./util/math";
+
+import {
   abs as builtin_abs,
   ceil as builtin_ceil,
   clz as builtin_clz,
@@ -776,47 +781,54 @@ export namespace NativeMath {
   }
 
   export function exp(x: f64): f64 { // see: musl/src/math/exp.c and SUN COPYRIGHT NOTICE above
-    const
-      ln2hi     = reinterpret<f64>(0x3FE62E42FEE00000), //  6.93147180369123816490e-01
-      ln2lo     = reinterpret<f64>(0x3DEA39EF35793C76), //  1.90821492927058770002e-10
-      invln2    = reinterpret<f64>(0x3FF71547652B82FE), //  1.44269504088896338700e+00
-      P1        = reinterpret<f64>(0x3FC555555555553E), //  1.66666666666666019037e-01
-      P2        = reinterpret<f64>(0xBF66C16C16BEBD93), // -2.77777777770155933842e-03
-      P3        = reinterpret<f64>(0x3F11566AAF25DE2C), //  6.61375632143793436117e-05
-      P4        = reinterpret<f64>(0xBEBBBD41C5D26BF1), // -1.65339022054652515390e-06
-      P5        = reinterpret<f64>(0x3E66376972BEA4D0), //  4.13813679705723846039e-08
-      overflow  = reinterpret<f64>(0x40862E42FEFA39EF), //  709.782712893383973096
-      underflow = reinterpret<f64>(0xC0874910D52D3051), // -745.13321910194110842
-      Ox1p1023  = reinterpret<f64>(0x7FE0000000000000);
-    var hx = <u32>(reinterpret<u64>(x) >> 32);
-    var sign_ = <i32>(hx >> 31);
-    hx &= 0x7FFFFFFF;
-    if (hx >= 0x4086232B) {
-      if (isNaN(x)) return x;
-      if (x > overflow)  return x * Ox1p1023;
-      if (x < underflow) return 0;
-    }
-    var hi: f64, lo: f64 = 0;
-    var k = 0;
-    if (hx > 0x3FD62E42) {
-      if (hx >= 0x3FF0A2B2) {
-        k = <i32>(invln2 * x + builtin_copysign<f64>(0.5, x));
-      } else {
-        k = 1 - (sign_ << 1);
+    if (ASC_SHRINK_LEVEL < 1) {
+      return exp_lut(x);
+    } else {
+      const
+        ln2hi     = reinterpret<f64>(0x3FE62E42FEE00000), //  6.93147180369123816490e-01
+        ln2lo     = reinterpret<f64>(0x3DEA39EF35793C76), //  1.90821492927058770002e-10
+        invln2    = reinterpret<f64>(0x3FF71547652B82FE), //  1.44269504088896338700e+00
+        P1        = reinterpret<f64>(0x3FC555555555553E), //  1.66666666666666019037e-01
+        P2        = reinterpret<f64>(0xBF66C16C16BEBD93), // -2.77777777770155933842e-03
+        P3        = reinterpret<f64>(0x3F11566AAF25DE2C), //  6.61375632143793436117e-05
+        P4        = reinterpret<f64>(0xBEBBBD41C5D26BF1), // -1.65339022054652515390e-06
+        P5        = reinterpret<f64>(0x3E66376972BEA4D0), //  4.13813679705723846039e-08
+        overflow  = reinterpret<f64>(0x40862E42FEFA39EF), //  709.782712893383973096
+        underflow = reinterpret<f64>(0xC0874910D52D3051), // -745.13321910194110842
+        Ox1p1023  = reinterpret<f64>(0x7FE0000000000000);
+      let hx = <u32>(reinterpret<u64>(x) >> 32);
+      let sign_ = <i32>(hx >> 31);
+      hx &= 0x7FFFFFFF;
+      if (hx >= 0x4086232B) {
+        if (isNaN(x)) return x;
+        if (x > overflow)  return x * Ox1p1023;
+        if (x < underflow) return 0;
       }
-      hi = x - k * ln2hi;
-      lo = k * ln2lo;
-      x = hi - lo;
-    } else if (hx > 0x3E300000) {
-      hi = x;
-    } else return 1.0 + x;
-    var xs = x * x;
-    // var c = x - xp2 * (P1 + xp2 * (P2 + xp2 * (P3 + xp2 * (P4 + xp2 * P5))));
-    var xq = xs * xs;
-    var c = x - (xs * P1 + xq * ((P2 + xs * P3) + xq * (P4 + xs * P5)));
-    var y = 1.0 + (x * c / (2 - c) - lo + hi);
-    if (k == 0) return y;
-    return scalbn(y, k);
+      let hi: f64, lo: f64 = 0;
+      let k = 0;
+      if (hx > 0x3FD62E42) {
+        if (hx >= 0x3FF0A2B2) {
+          k = <i32>(invln2 * x + builtin_copysign<f64>(0.5, x));
+        } else {
+          k = 1 - (sign_ << 1);
+        }
+        hi = x - k * ln2hi;
+        lo = k * ln2lo;
+        x = hi - lo;
+      } else if (hx > 0x3E300000) {
+        hi = x;
+      } else return 1.0 + x;
+      let xs = x * x;
+      // var c = x - xp2 * (P1 + xp2 * (P2 + xp2 * (P3 + xp2 * (P4 + xp2 * P5))));
+      let xq = xs * xs;
+      let c = x - (xs * P1 + xq * ((P2 + xs * P3) + xq * (P4 + xs * P5)));
+      let y = 1.0 + (x * c / (2 - c) - lo + hi);
+      return k == 0 ? y : scalbn(y, k);
+    }
+  }
+
+  export function exp2(x: f64): f64 {
+    return exp2_lut(x);
   }
 
   export function expm1(x: f64): f64 { // see: musl/src/math/expm1.c and SUN COPYRIGHT NOTICE above
@@ -951,44 +963,48 @@ export namespace NativeMath {
   }
 
   export function log(x: f64): f64 { // see: musl/src/math/log.c and SUN COPYRIGHT NOTICE above
-    const
-      ln2_hi = reinterpret<f64>(0x3FE62E42FEE00000), // 6.93147180369123816490e-01
-      ln2_lo = reinterpret<f64>(0x3DEA39EF35793C76), // 1.90821492927058770002e-10
-      Lg1    = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
-      Lg2    = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
-      Lg3    = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
-      Lg4    = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
-      Lg5    = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
-      Lg6    = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
-      Lg7    = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
-      Ox1p54 = reinterpret<f64>(0x4350000000000000);
-    var u = reinterpret<u64>(x);
-    var hx = <u32>(u >> 32);
-    var k = 0;
-    if (hx < 0x00100000 || <bool>(hx >> 31)) {
-      if (u << 1 == 0) return -1 / (x * x);
-      if (hx >> 31)    return (x - x) / 0.0;
-      k -= 54;
-      x *= Ox1p54;
-      u = reinterpret<u64>(x);
-      hx = <u32>(u >> 32);
-    } else if (hx >= 0x7FF00000) return x;
-      else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
-    hx += 0x3FF00000 - 0x3FE6A09E;
-    k += (<i32>hx >> 20) - 0x3FF;
-    hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
-    u = <u64>hx << 32 | (u & 0xFFFFFFFF);
-    x = reinterpret<f64>(u);
-    var f = x - 1.0;
-    var hfsq = 0.5 * f * f;
-    var s = f / (2.0 + f);
-    var z = s * s;
-    var w = z * z;
-    var t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
-    var t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
-    var r = t2 + t1;
-    var dk = <f64>k;
-    return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
+    if (ASC_SHRINK_LEVEL < 1) {
+      return log_lut(x);
+    } else {
+      const
+        ln2_hi = reinterpret<f64>(0x3FE62E42FEE00000), // 6.93147180369123816490e-01
+        ln2_lo = reinterpret<f64>(0x3DEA39EF35793C76), // 1.90821492927058770002e-10
+        Lg1    = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
+        Lg2    = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
+        Lg3    = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
+        Lg4    = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
+        Lg5    = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
+        Lg6    = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
+        Lg7    = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
+        Ox1p54 = reinterpret<f64>(0x4350000000000000);
+      let u = reinterpret<u64>(x);
+      let hx = <u32>(u >> 32);
+      let k = 0;
+      if (hx < 0x00100000 || <bool>(hx >> 31)) {
+        if (u << 1 == 0) return -1 / (x * x);
+        if (hx >> 31)    return (x - x) / 0.0;
+        k -= 54;
+        x *= Ox1p54;
+        u = reinterpret<u64>(x);
+        hx = <u32>(u >> 32);
+      } else if (hx >= 0x7FF00000) return x;
+        else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
+      hx += 0x3FF00000 - 0x3FE6A09E;
+      k += (<i32>hx >> 20) - 0x3FF;
+      hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
+      u = <u64>hx << 32 | (u & 0xFFFFFFFF);
+      x = reinterpret<f64>(u);
+      let f = x - 1.0;
+      let hfsq = 0.5 * f * f;
+      let s = f / (2.0 + f);
+      let z = s * s;
+      let w = z * z;
+      let t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
+      let t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
+      let r = t2 + t1;
+      let dk = <f64>k;
+      return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
+    }
   }
 
   export function log10(x: f64): f64 { // see: musl/src/math/log10.c and SUN COPYRIGHT NOTICE above
@@ -1097,54 +1113,58 @@ export namespace NativeMath {
   }
 
   export function log2(x: f64): f64 { // see: musl/src/math/log2.c and SUN COPYRIGHT NOTICE above
-    const
-      ivln2hi = reinterpret<f64>(0x3FF7154765200000), // 1.44269504072144627571e+00
-      ivln2lo = reinterpret<f64>(0x3DE705FC2EEFA200), // 1.67517131648865118353e-10
-      Lg1     = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
-      Lg2     = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
-      Lg3     = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
-      Lg4     = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
-      Lg5     = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
-      Lg6     = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
-      Lg7     = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
-      Ox1p54  = reinterpret<f64>(0x4350000000000000);
-    var u = reinterpret<u64>(x);
-    var hx = <u32>(u >> 32);
-    var k = 0;
-    if (hx < 0x00100000 || <bool>(hx >> 31)) {
-      if (u << 1 == 0) return -1 / (x * x);
-      if (hx >> 31) return (x - x) / 0.0;
-      k -= 54;
-      x *= Ox1p54;
-      u = reinterpret<u64>(x);
-      hx = <u32>(u >> 32);
-    } else if (hx >= 0x7FF00000) return x;
-      else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
-    hx += 0x3FF00000 - 0x3FE6A09E;
-    k += <i32>(hx >> 20) - 0x3FF;
-    hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
-    u = <u64>hx << 32 | (u & 0xFFFFFFFF);
-    x = reinterpret<f64>(u);
-    var f = x - 1.0;
-    var hfsq = 0.5 * f * f;
-    var s = f / (2.0 + f);
-    var z = s * s;
-    var w = z * z;
-    var t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
-    var t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
-    var r = t2 + t1;
-    var hi = f - hfsq;
-    u = reinterpret<u64>(hi);
-    u &= 0xFFFFFFFF00000000;
-    hi = reinterpret<f64>(u);
-    var lo = f - hi - hfsq + s * (hfsq + r);
-    var val_hi = hi * ivln2hi;
-    var val_lo = (lo + hi) * ivln2lo + lo * ivln2hi;
-    var y = <f64>k;
-    w = y + val_hi;
-    val_lo += (y - w) + val_hi;
-    val_hi = w;
-    return val_lo + val_hi;
+    if (ASC_SHRINK_LEVEL < 1) {
+      return log2_lut(x);
+    } else {
+      const
+        ivln2hi = reinterpret<f64>(0x3FF7154765200000), // 1.44269504072144627571e+00
+        ivln2lo = reinterpret<f64>(0x3DE705FC2EEFA200), // 1.67517131648865118353e-10
+        Lg1     = reinterpret<f64>(0x3FE5555555555593), // 6.666666666666735130e-01
+        Lg2     = reinterpret<f64>(0x3FD999999997FA04), // 3.999999999940941908e-01
+        Lg3     = reinterpret<f64>(0x3FD2492494229359), // 2.857142874366239149e-01
+        Lg4     = reinterpret<f64>(0x3FCC71C51D8E78AF), // 2.222219843214978396e-01
+        Lg5     = reinterpret<f64>(0x3FC7466496CB03DE), // 1.818357216161805012e-01
+        Lg6     = reinterpret<f64>(0x3FC39A09D078C69F), // 1.531383769920937332e-01
+        Lg7     = reinterpret<f64>(0x3FC2F112DF3E5244), // 1.479819860511658591e-01
+        Ox1p54  = reinterpret<f64>(0x4350000000000000);
+      let u = reinterpret<u64>(x);
+      let hx = <u32>(u >> 32);
+      let k = 0;
+      if (hx < 0x00100000 || <bool>(hx >> 31)) {
+        if (u << 1 == 0) return -1 / (x * x);
+        if (hx >> 31) return (x - x) / 0.0;
+        k -= 54;
+        x *= Ox1p54;
+        u = reinterpret<u64>(x);
+        hx = <u32>(u >> 32);
+      } else if (hx >= 0x7FF00000) return x;
+        else if (hx == 0x3FF00000 && u << 32 == 0) return 0;
+      hx += 0x3FF00000 - 0x3FE6A09E;
+      k += <i32>(hx >> 20) - 0x3FF;
+      hx = (hx & 0x000FFFFF) + 0x3FE6A09E;
+      u = <u64>hx << 32 | (u & 0xFFFFFFFF);
+      x = reinterpret<f64>(u);
+      let f = x - 1.0;
+      let hfsq = 0.5 * f * f;
+      let s = f / (2.0 + f);
+      let z = s * s;
+      let w = z * z;
+      let t1 = w * (Lg2 + w * (Lg4 + w * Lg6));
+      let t2 = z * (Lg1 + w * (Lg3 + w * (Lg5 + w * Lg7)));
+      let r = t2 + t1;
+      let hi = f - hfsq;
+      u = reinterpret<u64>(hi);
+      u &= 0xFFFFFFFF00000000;
+      hi = reinterpret<f64>(u);
+      let lo = f - hi - hfsq + s * (hfsq + r);
+      let val_hi = hi * ivln2hi;
+      let val_lo = (lo + hi) * ivln2lo + lo * ivln2hi;
+      let y = <f64>k;
+      w = y + val_hi;
+      val_lo += (y - w) + val_hi;
+      val_hi = w;
+      return val_lo + val_hi;
+    }
   }
 
   // @ts-ignore: decorator
@@ -1160,203 +1180,221 @@ export namespace NativeMath {
   }
 
   export function pow(x: f64, y: f64): f64 { // see: musl/src/math/pow.c and SUN COPYRIGHT NOTICE above
-    const
-      dp_h1   = reinterpret<f64>(0x3FE2B80340000000), //  5.84962487220764160156e-01
-      dp_l1   = reinterpret<f64>(0x3E4CFDEB43CFD006), //  1.35003920212974897128e-08
-      two53   = reinterpret<f64>(0x4340000000000000), //  9007199254740992.0
-      huge    = reinterpret<f64>(0x7E37E43C8800759C), //  1e+300
-      tiny    = reinterpret<f64>(0x01A56E1FC2F8F359), //  1e-300
-      L1      = reinterpret<f64>(0x3FE3333333333303), //  5.99999999999994648725e-01
-      L2      = reinterpret<f64>(0x3FDB6DB6DB6FABFF), //  4.28571428578550184252e-01
-      L3      = reinterpret<f64>(0x3FD55555518F264D), //  3.33333329818377432918e-01
-      L4      = reinterpret<f64>(0x3FD17460A91D4101), //  2.72728123808534006489e-01
-      L5      = reinterpret<f64>(0x3FCD864A93C9DB65), //  2.30660745775561754067e-01
-      L6      = reinterpret<f64>(0x3FCA7E284A454EEF), //  2.06975017800338417784e-01
-      P1      = reinterpret<f64>(0x3FC555555555553E), //  1.66666666666666019037e-01
-      P2      = reinterpret<f64>(0xBF66C16C16BEBD93), // -2.77777777770155933842e-03
-      P3      = reinterpret<f64>(0x3F11566AAF25DE2C), //  6.61375632143793436117e-05
-      P4      = reinterpret<f64>(0xBEBBBD41C5D26BF1), // -1.65339022054652515390e-06
-      P5      = reinterpret<f64>(0x3E66376972BEA4D0), //  4.13813679705723846039e-08
-      lg2     = reinterpret<f64>(0x3FE62E42FEFA39EF), //  6.93147180559945286227e-01
-      lg2_h   = reinterpret<f64>(0x3FE62E4300000000), //  6.93147182464599609375e-01
-      lg2_l   = reinterpret<f64>(0xBE205C610CA86C39), // -1.90465429995776804525e-09
-      ovt     = reinterpret<f64>(0x3C971547652B82FE), //  8.0085662595372944372e-017
-      cp      = reinterpret<f64>(0x3FEEC709DC3A03FD), //  9.61796693925975554329e-01
-      cp_h    = reinterpret<f64>(0x3FEEC709E0000000), //  9.61796700954437255859e-01
-      cp_l    = reinterpret<f64>(0xBE3E2FE0145B01F5), // -7.02846165095275826516e-09
-      ivln2   = reinterpret<f64>(0x3FF71547652B82FE), //  1.44269504088896338700e+00
-      ivln2_h = reinterpret<f64>(0x3FF7154760000000), //  1.44269502162933349609e+00
-      ivln2_l = reinterpret<f64>(0x3E54AE0BF85DDF44), //  1.92596299112661746887e-08
-      inv3    = reinterpret<f64>(0x3FD5555555555555); //  0.3333333333333333333333
-    var u_ = reinterpret<u64>(x);
-    var hx = <i32>(u_ >> 32);
-    var lx = <u32>u_;
-    u_ = reinterpret<u64>(y);
-    var hy = <i32>(u_ >> 32);
-    var ly = <u32>u_;
-    var ix = hx & 0x7FFFFFFF;
-    var iy = hy & 0x7FFFFFFF;
-    if ((iy | ly) == 0) return 1.0; // x**0 = 1, even if x is NaN
-    // if (hx == 0x3FF00000 && lx == 0) return 1.0; // C: 1**y = 1, even if y is NaN, JS: NaN
-    if ( // NaN if either arg is NaN
-      ix > 0x7FF00000 || (ix == 0x7FF00000 && lx != 0) ||
-      iy > 0x7FF00000 || (iy == 0x7FF00000 && ly != 0)
-    ) return x + y;
-    var yisint = 0, k: i32;
-    if (hx < 0) {
-      if (iy >= 0x43400000) yisint = 2;
-      else if (iy >= 0x3FF00000) {
-        k = (iy >> 20) - 0x3FF;
-        let offset = select<u32>(52, 20, k > 20) - k;
-        let Ly = select<u32>(ly, iy, k > 20);
-        let jj = Ly >> offset;
-        if ((jj << offset) == Ly) yisint = 2 - (jj & 1);
+    // TODO: remove this fast pathes after introduced own mid-end IR with "stdlib call simplify" transforms
+    if (builtin_abs<f64>(y) <= 2) {
+      if (y == 2.0) return x * x;
+      if (y == 0.5) {
+        return select<f64>(
+          builtin_abs<f64>(builtin_sqrt<f64>(x)),
+          Infinity,
+          x != -Infinity
+        );
       }
+      if (y == -1.0) return 1 / x;
+      if (y == 1.0) return x;
+      if (y == 0.0) return 1.0;
     }
-    if (ly == 0) {
-      if (iy == 0x7FF00000) { // y is +-inf
-        if (((ix - 0x3FF00000) | lx) == 0) return NaN; // C: (-1)**+-inf is 1, JS: NaN
-        else if (ix >= 0x3FF00000) return hy >= 0 ? y : 0.0; // (|x|>1)**+-inf = inf,0
-        else return hy >= 0 ? 0.0 : -y; // (|x|<1)**+-inf = 0,inf
-      }
-      if (iy == 0x3FF00000) {
-        if (hy >= 0) return x;
-        return 1 / x;
-      }
-      if (hy == 0x40000000) return x * x;
-      if (hy == 0x3FE00000) {
-        if (hx >= 0) return builtin_sqrt(x);
-      }
-    }
-    var ax = builtin_abs<f64>(x), z: f64;
-    if (lx == 0) {
-      if (ix == 0 || ix == 0x7FF00000 || ix == 0x3FF00000) {
-        z = ax;
-        if (hy < 0) z = 1.0 / z;
-        if (hx < 0) {
-          if (((ix - 0x3FF00000) | yisint) == 0) {
-            let d = z - z;
-            z = d / d;
-          } else if (yisint == 1) z = -z;
-        }
-        return z;
-      }
-    }
-    var s = 1.0;
-    if (hx < 0) {
-      if (yisint == 0) {
-        let d = x - x;
-        return d / d;
-      }
-      if (yisint == 1) s = -1.0;
-    }
-    var t1: f64, t2: f64, p_h: f64, p_l: f64, r: f64, t: f64, u: f64, v: f64, w: f64;
-    var j: i32, n: i32;
-    if (iy > 0x41E00000) {
-      if (iy > 0x43F00000) {
-        if (ix <= 0x3FEFFFFF) return hy < 0 ? huge * huge : tiny * tiny;
-        if (ix >= 0x3FF00000) return hy > 0 ? huge * huge : tiny * tiny;
-      }
-      if (ix < 0x3FEFFFFF) return hy < 0 ? s * huge * huge : s * tiny * tiny;
-      if (ix > 0x3FF00000) return hy > 0 ? s * huge * huge : s * tiny * tiny;
-      t = ax - 1.0;
-      w = (t * t) * (0.5 - t * (inv3 - t * 0.25));
-      u = ivln2_h * t;
-      v = t * ivln2_l - w * ivln2;
-      t1 = u + v;
-      t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
-      t2 = v - (t1 - u);
+    if (ASC_SHRINK_LEVEL < 1) {
+      return pow_lut(x, y);
     } else {
-      let ss: f64, s2: f64, s_h: f64, s_l: f64, t_h: f64, t_l: f64;
+      const
+        dp_h1   = reinterpret<f64>(0x3FE2B80340000000), //  5.84962487220764160156e-01
+        dp_l1   = reinterpret<f64>(0x3E4CFDEB43CFD006), //  1.35003920212974897128e-08
+        two53   = reinterpret<f64>(0x4340000000000000), //  9007199254740992.0
+        huge    = reinterpret<f64>(0x7E37E43C8800759C), //  1e+300
+        tiny    = reinterpret<f64>(0x01A56E1FC2F8F359), //  1e-300
+        L1      = reinterpret<f64>(0x3FE3333333333303), //  5.99999999999994648725e-01
+        L2      = reinterpret<f64>(0x3FDB6DB6DB6FABFF), //  4.28571428578550184252e-01
+        L3      = reinterpret<f64>(0x3FD55555518F264D), //  3.33333329818377432918e-01
+        L4      = reinterpret<f64>(0x3FD17460A91D4101), //  2.72728123808534006489e-01
+        L5      = reinterpret<f64>(0x3FCD864A93C9DB65), //  2.30660745775561754067e-01
+        L6      = reinterpret<f64>(0x3FCA7E284A454EEF), //  2.06975017800338417784e-01
+        P1      = reinterpret<f64>(0x3FC555555555553E), //  1.66666666666666019037e-01
+        P2      = reinterpret<f64>(0xBF66C16C16BEBD93), // -2.77777777770155933842e-03
+        P3      = reinterpret<f64>(0x3F11566AAF25DE2C), //  6.61375632143793436117e-05
+        P4      = reinterpret<f64>(0xBEBBBD41C5D26BF1), // -1.65339022054652515390e-06
+        P5      = reinterpret<f64>(0x3E66376972BEA4D0), //  4.13813679705723846039e-08
+        lg2     = reinterpret<f64>(0x3FE62E42FEFA39EF), //  6.93147180559945286227e-01
+        lg2_h   = reinterpret<f64>(0x3FE62E4300000000), //  6.93147182464599609375e-01
+        lg2_l   = reinterpret<f64>(0xBE205C610CA86C39), // -1.90465429995776804525e-09
+        ovt     = reinterpret<f64>(0x3C971547652B82FE), //  8.0085662595372944372e-017
+        cp      = reinterpret<f64>(0x3FEEC709DC3A03FD), //  9.61796693925975554329e-01
+        cp_h    = reinterpret<f64>(0x3FEEC709E0000000), //  9.61796700954437255859e-01
+        cp_l    = reinterpret<f64>(0xBE3E2FE0145B01F5), // -7.02846165095275826516e-09
+        ivln2   = reinterpret<f64>(0x3FF71547652B82FE), //  1.44269504088896338700e+00
+        ivln2_h = reinterpret<f64>(0x3FF7154760000000), //  1.44269502162933349609e+00
+        ivln2_l = reinterpret<f64>(0x3E54AE0BF85DDF44), //  1.92596299112661746887e-08
+        inv3    = reinterpret<f64>(0x3FD5555555555555); //  0.3333333333333333333333
+      let u_ = reinterpret<u64>(x);
+      let hx = <i32>(u_ >> 32);
+      let lx = <u32>u_;
+      u_ = reinterpret<u64>(y);
+      let hy = <i32>(u_ >> 32);
+      let ly = <u32>u_;
+      let ix = hx & 0x7FFFFFFF;
+      let iy = hy & 0x7FFFFFFF;
+      if ((iy | ly) == 0) return 1.0; // x**0 = 1, even if x is NaN
+      // if (hx == 0x3FF00000 && lx == 0) return 1.0; // C: 1**y = 1, even if y is NaN, JS: NaN
+      if ( // NaN if either arg is NaN
+        ix > 0x7FF00000 || (ix == 0x7FF00000 && lx != 0) ||
+        iy > 0x7FF00000 || (iy == 0x7FF00000 && ly != 0)
+      ) return x + y;
+      let yisint = 0, k: i32;
+      if (hx < 0) {
+        if (iy >= 0x43400000) yisint = 2;
+        else if (iy >= 0x3FF00000) {
+          k = (iy >> 20) - 0x3FF;
+          let offset = select<u32>(52, 20, k > 20) - k;
+          let Ly = select<u32>(ly, iy, k > 20);
+          let jj = Ly >> offset;
+          if ((jj << offset) == Ly) yisint = 2 - (jj & 1);
+        }
+      }
+      if (ly == 0) {
+        if (iy == 0x7FF00000) { // y is +-inf
+          if (((ix - 0x3FF00000) | lx) == 0) return NaN; // C: (-1)**+-inf is 1, JS: NaN
+          else if (ix >= 0x3FF00000) return hy >= 0 ? y : 0.0; // (|x|>1)**+-inf = inf,0
+          else return hy >= 0 ? 0.0 : -y; // (|x|<1)**+-inf = 0,inf
+        }
+        if (iy == 0x3FF00000) {
+          if (hy >= 0) return x;
+          return 1 / x;
+        }
+        if (hy == 0x40000000) return x * x;
+        if (hy == 0x3FE00000) {
+          if (hx >= 0) return builtin_sqrt(x);
+        }
+      }
+      let ax = builtin_abs<f64>(x), z: f64;
+      if (lx == 0) {
+        if (ix == 0 || ix == 0x7FF00000 || ix == 0x3FF00000) {
+          z = ax;
+          if (hy < 0) z = 1.0 / z;
+          if (hx < 0) {
+            if (((ix - 0x3FF00000) | yisint) == 0) {
+              let d = z - z;
+              z = d / d;
+            } else if (yisint == 1) z = -z;
+          }
+          return z;
+        }
+      }
+      let s = 1.0;
+      if (hx < 0) {
+        if (yisint == 0) {
+          let d = x - x;
+          return d / d;
+        }
+        if (yisint == 1) s = -1.0;
+      }
+      let t1: f64, t2: f64, p_h: f64, p_l: f64, r: f64, t: f64, u: f64, v: f64, w: f64;
+      let j: i32, n: i32;
+      if (iy > 0x41E00000) {
+        if (iy > 0x43F00000) {
+          if (ix <= 0x3FEFFFFF) return hy < 0 ? huge * huge : tiny * tiny;
+          if (ix >= 0x3FF00000) return hy > 0 ? huge * huge : tiny * tiny;
+        }
+        if (ix < 0x3FEFFFFF) return hy < 0 ? s * huge * huge : s * tiny * tiny;
+        if (ix > 0x3FF00000) return hy > 0 ? s * huge * huge : s * tiny * tiny;
+        t = ax - 1.0;
+        w = (t * t) * (0.5 - t * (inv3 - t * 0.25));
+        u = ivln2_h * t;
+        v = t * ivln2_l - w * ivln2;
+        t1 = u + v;
+        t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
+        t2 = v - (t1 - u);
+      } else {
+        let ss: f64, s2: f64, s_h: f64, s_l: f64, t_h: f64, t_l: f64;
+        n = 0;
+        if (ix < 0x00100000) {
+          ax *= two53;
+          n -= 53;
+          ix = <u32>(reinterpret<u64>(ax) >> 32);
+        }
+        n += (ix >> 20) - 0x3FF;
+        j = ix & 0x000FFFFF;
+        ix = j | 0x3FF00000;
+        if (j <= 0x3988E) k = 0;
+        else if (j < 0xBB67A) k = 1;
+        else {
+          k = 0;
+          n += 1;
+          ix -= 0x00100000;
+        }
+        ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
+        let bp = select<f64>(1.5, 1.0, k); // k ? 1.5 : 1.0
+        u = ax - bp;
+        v = 1.0 / (ax + bp);
+        ss = u * v;
+        s_h = ss;
+        s_h = reinterpret<f64>(reinterpret<u64>(s_h) & 0xFFFFFFFF00000000);
+        t_h = reinterpret<f64>(<u64>(((ix >> 1) | 0x20000000) + 0x00080000 + (k << 18)) << 32);
+        t_l = ax - (t_h - bp);
+        s_l = v * ((u - s_h * t_h) - s_h * t_l);
+        s2 = ss * ss;
+        r = s2 * s2 * (L1 + s2 * (L2 + s2 * (L3 + s2 * (L4 + s2 * (L5 + s2 * L6)))));
+        r += s_l * (s_h + ss);
+        s2 = s_h * s_h;
+        t_h = 3.0 + s2 + r;
+        t_h = reinterpret<f64>(reinterpret<u64>(t_h) & 0xFFFFFFFF00000000);
+        t_l = r - ((t_h - 3.0) - s2);
+        u = s_h * t_h;
+        v = s_l * t_h + t_l * ss;
+        p_h = u + v;
+        p_h = reinterpret<f64>(reinterpret<u64>(p_h) & 0xFFFFFFFF00000000);
+        p_l = v - (p_h - u);
+        let z_h = cp_h * p_h;
+        let dp_l = select<f64>(dp_l1, 0.0, k);
+        let z_l = cp_l * p_h + p_l * cp + dp_l;
+        t = <f64>n;
+        let dp_h = select<f64>(dp_h1, 0.0, k);
+        t1 = ((z_h + z_l) + dp_h) + t;
+        t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
+        t2 = z_l - (((t1 - t) - dp_h) - z_h);
+      }
+      let y1 = y;
+      y1 = reinterpret<f64>(reinterpret<u64>(y1) & 0xFFFFFFFF00000000);
+      p_l = (y - y1) * t1 + y * t2;
+      p_h = y1 * t1;
+      z = p_l + p_h;
+      u_ = reinterpret<u64>(z);
+      j = <u32>(u_ >> 32);
+      let i = <i32>u_;
+      if (j >= 0x40900000) {
+        if (((j - 0x40900000) | i) != 0) return s * huge * huge;
+        if (p_l + ovt > z - p_h) return s * huge * huge;
+      } else if ((j & 0x7FFFFFFF) >= 0x4090CC00) {
+        if (((j - 0xC090CC00) | i) != 0) return s * tiny * tiny;
+        if (p_l <= z - p_h) return s * tiny * tiny;
+      }
+      i = j & 0x7FFFFFFF;
+      k = (i >> 20) - 0x3FF;
       n = 0;
-      if (ix < 0x00100000) {
-        ax *= two53;
-        n -= 53;
-        ix = <u32>(reinterpret<u64>(ax) >> 32);
+      if (i > 0x3FE00000) {
+        n = j + (0x00100000 >> (k + 1));
+        k = ((n & 0x7FFFFFFF) >> 20) - 0x3FF;
+        t = 0.0;
+        t = reinterpret<f64>(<u64>(n & ~(0x000FFFFF >> k)) << 32);
+        n = ((n & 0x000FFFFF) | 0x00100000) >> (20 - k);
+        if (j < 0) n = -n;
+        p_h -= t;
       }
-      n += (ix >> 20) - 0x3FF;
-      j = ix & 0x000FFFFF;
-      ix = j | 0x3FF00000;
-      if (j <= 0x3988E) k = 0;
-      else if (j < 0xBB67A) k = 1;
-      else {
-        k = 0;
-        n += 1;
-        ix -= 0x00100000;
-      }
-      ax = reinterpret<f64>(reinterpret<u64>(ax) & 0xFFFFFFFF | (<u64>ix << 32));
-      let bp = select<f64>(1.5, 1.0, k); // k ? 1.5 : 1.0
-      u = ax - bp;
-      v = 1.0 / (ax + bp);
-      ss = u * v;
-      s_h = ss;
-      s_h = reinterpret<f64>(reinterpret<u64>(s_h) & 0xFFFFFFFF00000000);
-      t_h = reinterpret<f64>(<u64>(((ix >> 1) | 0x20000000) + 0x00080000 + (k << 18)) << 32);
-      t_l = ax - (t_h - bp);
-      s_l = v * ((u - s_h * t_h) - s_h * t_l);
-      s2 = ss * ss;
-      r = s2 * s2 * (L1 + s2 * (L2 + s2 * (L3 + s2 * (L4 + s2 * (L5 + s2 * L6)))));
-      r += s_l * (s_h + ss);
-      s2 = s_h * s_h;
-      t_h = 3.0 + s2 + r;
-      t_h = reinterpret<f64>(reinterpret<u64>(t_h) & 0xFFFFFFFF00000000);
-      t_l = r - ((t_h - 3.0) - s2);
-      u = s_h * t_h;
-      v = s_l * t_h + t_l * ss;
-      p_h = u + v;
-      p_h = reinterpret<f64>(reinterpret<u64>(p_h) & 0xFFFFFFFF00000000);
-      p_l = v - (p_h - u);
-      let z_h = cp_h * p_h;
-      let dp_l = select<f64>(dp_l1, 0.0, k);
-      let z_l = cp_l * p_h + p_l * cp + dp_l;
-      t = <f64>n;
-      let dp_h = select<f64>(dp_h1, 0.0, k);
-      t1 = ((z_h + z_l) + dp_h) + t;
-      t1 = reinterpret<f64>(reinterpret<u64>(t1) & 0xFFFFFFFF00000000);
-      t2 = z_l - (((t1 - t) - dp_h) - z_h);
+      t = p_l + p_h;
+      t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
+      u = t * lg2_h;
+      v = (p_l - (t - p_h)) * lg2 + t * lg2_l;
+      z = u + v;
+      w = v - (z - u);
+      t = z * z;
+      t1 = z - t * (P1 + t * (P2 + t * (P3 + t * (P4 + t * P5))));
+      r = (z * t1) / (t1 - 2.0) - (w + z * w);
+      z = 1.0 - (r - z);
+      j = <u32>(reinterpret<u64>(z) >> 32);
+      j += n << 20;
+      if ((j >> 20) <= 0) z = scalbn(z, n);
+      else z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF | (<u64>j << 32));
+      return s * z;
     }
-    var y1 = y;
-    y1 = reinterpret<f64>(reinterpret<u64>(y1) & 0xFFFFFFFF00000000);
-    p_l = (y - y1) * t1 + y * t2;
-    p_h = y1 * t1;
-    z = p_l + p_h;
-    u_ = reinterpret<u64>(z);
-    j = <u32>(u_ >> 32);
-    var i = <i32>u_;
-    if (j >= 0x40900000) {
-      if (((j - 0x40900000) | i) != 0) return s * huge * huge;
-      if (p_l + ovt > z - p_h) return s * huge * huge;
-    } else if ((j & 0x7FFFFFFF) >= 0x4090CC00) {
-      if (((j - 0xC090CC00) | i) != 0) return s * tiny * tiny;
-      if (p_l <= z - p_h) return s * tiny * tiny;
-    }
-    i = j & 0x7FFFFFFF;
-    k = (i >> 20) - 0x3FF;
-    n = 0;
-    if (i > 0x3FE00000) {
-      n = j + (0x00100000 >> (k + 1));
-      k = ((n & 0x7FFFFFFF) >> 20) - 0x3FF;
-      t = 0.0;
-      t = reinterpret<f64>(<u64>(n & ~(0x000FFFFF >> k)) << 32);
-      n = ((n & 0x000FFFFF) | 0x00100000) >> (20 - k);
-      if (j < 0) n = -n;
-      p_h -= t;
-    }
-    t = p_l + p_h;
-    t = reinterpret<f64>(reinterpret<u64>(t) & 0xFFFFFFFF00000000);
-    u = t * lg2_h;
-    v = (p_l - (t - p_h)) * lg2 + t * lg2_l;
-    z = u + v;
-    w = v - (z - u);
-    t = z * z;
-    t1 = z - t * (P1 + t * (P2 + t * (P3 + t * (P4 + t * P5))));
-    r = (z * t1) / (t1 - 2.0) - (w + z * w);
-    z = 1.0 - (r - z);
-    j = <u32>(reinterpret<u64>(z) >> 32);
-    j += n << 20;
-    if ((j >> 20) <= 0) z = scalbn(z, n);
-    else z = reinterpret<f64>(reinterpret<u64>(z) & 0xFFFFFFFF | (<u64>j << 32));
-    return s * z;
   }
 
   export function seedRandom(value: i64): void {
@@ -2194,46 +2232,53 @@ export namespace NativeMathf {
   }
 
   export function exp(x: f32): f32 { // see: musl/src/math/expf.c and SUN COPYRIGHT NOTICE above
-    const
-      ln2hi    = reinterpret<f32>(0x3F317200), //  6.9314575195e-1f
-      ln2lo    = reinterpret<f32>(0x35BFBE8E), //  1.4286067653e-6f
-      invln2   = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+0f
-      P1       = reinterpret<f32>(0x3E2AAA8F), //  1.6666625440e-1f
-      P2       = reinterpret<f32>(0xBB355215), // -2.7667332906e-3f
-      Ox1p127f = reinterpret<f32>(0x7F000000);
-    var hx = reinterpret<u32>(x);
-    var sign_ = <i32>(hx >> 31);
-    hx &= 0x7FFFFFFF;
-    if (hx >= 0x42AEAC50) {
-      if (hx > 0x7F800000) return x; // NaN
-      if (hx >= 0x42B17218) {
-        if (!sign_) return x * Ox1p127f;
-        else if (hx >= 0x42CFF1B5) return 0;
-      }
-    }
-    var hi: f32, lo: f32;
-    var k: i32;
-    if (hx > 0x3EB17218) {
-      if (hx > 0x3F851592) {
-        k = <i32>(invln2 * x + builtin_copysign<f32>(0.5, x));
-      } else {
-        k = 1 - (sign_ << 1);
-      }
-      hi = x - <f32>k * ln2hi;
-      lo = <f32>k * ln2lo;
-      x = hi - lo;
-    } else if (hx > 0x39000000) {
-      k = 0;
-      hi = x;
-      lo = 0;
+    if (ASC_SHRINK_LEVEL < 1) {
+      return expf_lut(x);
     } else {
-      return 1 + x;
+      const
+        ln2hi    = reinterpret<f32>(0x3F317200), //  6.9314575195e-1f
+        ln2lo    = reinterpret<f32>(0x35BFBE8E), //  1.4286067653e-6f
+        invln2   = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+0f
+        P1       = reinterpret<f32>(0x3E2AAA8F), //  1.6666625440e-1f
+        P2       = reinterpret<f32>(0xBB355215), // -2.7667332906e-3f
+        Ox1p127f = reinterpret<f32>(0x7F000000);
+      let hx = reinterpret<u32>(x);
+      let sign_ = <i32>(hx >> 31);
+      hx &= 0x7FFFFFFF;
+      if (hx >= 0x42AEAC50) {
+        if (hx > 0x7F800000) return x; // NaN
+        if (hx >= 0x42B17218) {
+          if (!sign_) return x * Ox1p127f;
+          else if (hx >= 0x42CFF1B5) return 0;
+        }
+      }
+      let hi: f32, lo: f32;
+      let k: i32;
+      if (hx > 0x3EB17218) {
+        if (hx > 0x3F851592) {
+          k = <i32>(invln2 * x + builtin_copysign<f32>(0.5, x));
+        } else {
+          k = 1 - (sign_ << 1);
+        }
+        hi = x - <f32>k * ln2hi;
+        lo = <f32>k * ln2lo;
+        x = hi - lo;
+      } else if (hx > 0x39000000) {
+        k = 0;
+        hi = x;
+        lo = 0;
+      } else {
+        return 1 + x;
+      }
+      let xx = x * x;
+      let c = x - xx * (P1 + xx * P2);
+      let y: f32 = 1 + (x * c / (2 - c) - lo + hi);
+      return k == 0 ? y : scalbn(y, k);
     }
-    var xx = x * x;
-    var c = x - xx * (P1 + xx * P2);
-    var y: f32 = 1 + (x * c / (2 - c) - lo + hi);
-    if (k == 0) return y;
-    return scalbn(y, k);
+  }
+
+  export function exp2(x: f32): f32 {
+    return exp2f_lut(x);
   }
 
   export function expm1(x: f32): f32 { // see: musl/src/math/expm1f.c and SUN COPYRIGHT NOTICE above
@@ -2350,38 +2395,42 @@ export namespace NativeMathf {
   }
 
   export function log(x: f32): f32 { // see: musl/src/math/logf.c and SUN COPYRIGHT NOTICE above
-    const
-      ln2_hi  = reinterpret<f32>(0x3F317180), // 6.9313812256e-01f
-      ln2_lo  = reinterpret<f32>(0x3717F7D1), // 9.0580006145e-06f
-      Lg1     = reinterpret<f32>(0x3F2AAAAA), // 0xaaaaaa.0p-24f
-      Lg2     = reinterpret<f32>(0x3ECCCE13), // 0xccce13.0p-25f
-      Lg3     = reinterpret<f32>(0x3E91E9EE), // 0x91e9ee.0p-25f
-      Lg4     = reinterpret<f32>(0x3E789E26), // 0xf89e26.0p-26f
-      Ox1p25f = reinterpret<f32>(0x4C000000);
-    var u = reinterpret<u32>(x);
-    var k = 0;
-    if (u < 0x00800000 || <bool>(u >> 31)) {
-      if (u << 1 == 0) return -1 / (x * x);
-      if (u >> 31) return (x - x) / 0;
-      k -= 25;
-      x *= Ox1p25f;
-      u = reinterpret<u32>(x);
-    } else if (u >= 0x7F800000) return x;
-      else if (u == 0x3F800000) return 0;
-    u += 0x3F800000 - 0x3F3504F3;
-    k += <u32>(<i32>u >> 23) - 0x7F;
-    u = (u & 0x007FFFFF) + 0x3F3504F3;
-    x = reinterpret<f32>(u);
-    var f = x - 1.0;
-    var s = f / (2.0 + f);
-    var z = s * s;
-    var w = z * z;
-    var t1 = w * (Lg2 + w * Lg4);
-    var t2 = z * (Lg1 + w * Lg3);
-    var r = t2 + t1;
-    var hfsq = <f32>0.5 * f * f;
-    var dk = <f32>k;
-    return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
+    if (ASC_SHRINK_LEVEL < 1) {
+      return logf_lut(x);
+    } else {
+      const
+        ln2_hi  = reinterpret<f32>(0x3F317180), // 6.9313812256e-01f
+        ln2_lo  = reinterpret<f32>(0x3717F7D1), // 9.0580006145e-06f
+        Lg1     = reinterpret<f32>(0x3F2AAAAA), // 0xaaaaaa.0p-24f
+        Lg2     = reinterpret<f32>(0x3ECCCE13), // 0xccce13.0p-25f
+        Lg3     = reinterpret<f32>(0x3E91E9EE), // 0x91e9ee.0p-25f
+        Lg4     = reinterpret<f32>(0x3E789E26), // 0xf89e26.0p-26f
+        Ox1p25f = reinterpret<f32>(0x4C000000);
+      let u = reinterpret<u32>(x);
+      let k = 0;
+      if (u < 0x00800000 || <bool>(u >> 31)) {
+        if (u << 1 == 0) return -1 / (x * x);
+        if (u >> 31) return (x - x) / 0;
+        k -= 25;
+        x *= Ox1p25f;
+        u = reinterpret<u32>(x);
+      } else if (u >= 0x7F800000) return x;
+        else if (u == 0x3F800000) return 0;
+      u += 0x3F800000 - 0x3F3504F3;
+      k += <u32>(<i32>u >> 23) - 0x7F;
+      u = (u & 0x007FFFFF) + 0x3F3504F3;
+      x = reinterpret<f32>(u);
+      let f = x - 1.0;
+      let s = f / (2.0 + f);
+      let z = s * s;
+      let w = z * z;
+      let t1 = w * (Lg2 + w * Lg4);
+      let t2 = z * (Lg1 + w * Lg3);
+      let r = t2 + t1;
+      let hfsq = <f32>0.5 * f * f;
+      let dk = <f32>k;
+      return s * (hfsq + r) + dk * ln2_lo - hfsq + f + dk * ln2_hi;
+    }
   }
 
   export function log10(x: f32): f32 { // see: musl/src/math/log10f.c and SUN COPYRIGHT NOTICE above
@@ -2473,43 +2522,47 @@ export namespace NativeMathf {
   }
 
   export function log2(x: f32): f32 { // see: musl/src/math/log2f.c and SUN COPYRIGHT NOTICE above
-    const
-      ivln2hi = reinterpret<f32>(0x3FB8B000), //  1.4428710938e+00f
-      ivln2lo = reinterpret<f32>(0xB9389AD4), // -1.7605285393e-04
-      Lg1     = reinterpret<f32>(0x3F2AAAAA), //  0xaaaaaa.0p-24f, 0.66666662693f
-      Lg2     = reinterpret<f32>(0x3ECCCE13), //  0xccce13.0p-25f, 0.40000972152f
-      Lg3     = reinterpret<f32>(0x3E91E9EE), //  0x91e9ee.0p-25f, 0.28498786688f
-      Lg4     = reinterpret<f32>(0x3E789E26), //  0xf89e26.0p-26f, 0.24279078841f
-      Ox1p25f = reinterpret<f32>(0x4C000000);
-    var ix = reinterpret<u32>(x);
-    var k: i32 = 0;
-    if (ix < 0x00800000 || <bool>(ix >> 31)) {
-      if (ix << 1 == 0) return -1 / (x * x);
-      if (ix >> 31) return (x - x) / 0.0;
-      k -= 25;
-      x *= Ox1p25f;
-      ix = reinterpret<u32>(x);
-    } else if (ix >= 0x7F800000) return x;
-      else if (ix == 0x3F800000) return 0;
-    ix += 0x3F800000 - 0x3F3504F3;
-    k += <i32>(ix >> 23) - 0x7F;
-    ix = (ix & 0x007FFFFF) + 0x3F3504F3;
-    x = reinterpret<f32>(ix);
-    var f = x - 1.0;
-    var s = f / (2.0 + f);
-    var z = s * s;
-    var w = z * z;
-    var t1 = w * (Lg2 + w * Lg4);
-    var t2 = z * (Lg1 + w * Lg3);
-    var r = t2 + t1;
-    var hfsq: f32 = 0.5 * f * f;
-    var hi = f - hfsq;
-    var u = reinterpret<u32>(hi);
-    u &= 0xFFFFF000;
-    hi = reinterpret<f32>(u);
-    var lo: f32 = f - hi - hfsq + s * (hfsq + r);
-    var dk = <f32>k;
-    return (lo + hi) * ivln2lo + lo * ivln2hi + hi * ivln2hi + dk;
+    if (ASC_SHRINK_LEVEL < 1) {
+      return log2f_lut(x);
+    } else {
+      const
+        ivln2hi = reinterpret<f32>(0x3FB8B000), //  1.4428710938e+00f
+        ivln2lo = reinterpret<f32>(0xB9389AD4), // -1.7605285393e-04
+        Lg1     = reinterpret<f32>(0x3F2AAAAA), //  0xaaaaaa.0p-24f, 0.66666662693f
+        Lg2     = reinterpret<f32>(0x3ECCCE13), //  0xccce13.0p-25f, 0.40000972152f
+        Lg3     = reinterpret<f32>(0x3E91E9EE), //  0x91e9ee.0p-25f, 0.28498786688f
+        Lg4     = reinterpret<f32>(0x3E789E26), //  0xf89e26.0p-26f, 0.24279078841f
+        Ox1p25f = reinterpret<f32>(0x4C000000);
+      let ix = reinterpret<u32>(x);
+      let k: i32 = 0;
+      if (ix < 0x00800000 || <bool>(ix >> 31)) {
+        if (ix << 1 == 0) return -1 / (x * x);
+        if (ix >> 31) return (x - x) / 0.0;
+        k -= 25;
+        x *= Ox1p25f;
+        ix = reinterpret<u32>(x);
+      } else if (ix >= 0x7F800000) return x;
+        else if (ix == 0x3F800000) return 0;
+      ix += 0x3F800000 - 0x3F3504F3;
+      k += <i32>(ix >> 23) - 0x7F;
+      ix = (ix & 0x007FFFFF) + 0x3F3504F3;
+      x = reinterpret<f32>(ix);
+      let f = x - 1.0;
+      let s = f / (2.0 + f);
+      let z = s * s;
+      let w = z * z;
+      let t1 = w * (Lg2 + w * Lg4);
+      let t2 = z * (Lg1 + w * Lg3);
+      let r = t2 + t1;
+      let hfsq: f32 = 0.5 * f * f;
+      let hi = f - hfsq;
+      let u = reinterpret<u32>(hi);
+      u &= 0xFFFFF000;
+      hi = reinterpret<f32>(u);
+      let lo: f32 = f - hi - hfsq + s * (hfsq + r);
+      let dk = <f32>k;
+      return (lo + hi) * ivln2lo + lo * ivln2hi + hi * ivln2hi + dk;
+    }
   }
 
   // @ts-ignore: decorator
@@ -2525,192 +2578,21 @@ export namespace NativeMathf {
   }
 
   export function pow(x: f32, y: f32): f32 { // see: musl/src/math/powf.c and SUN COPYRIGHT NOTICE above
-    const
-      dp_h1   = reinterpret<f32>(0x3F15C000), //  5.84960938e-01f
-      dp_l1   = reinterpret<f32>(0x35D1CFDC), //  1.56322085e-06f
-      two24   = reinterpret<f32>(0x4B800000), //  16777216f
-      huge    = reinterpret<f32>(0x7149F2CA), //  1.0e+30f
-      tiny    = reinterpret<f32>(0x0DA24260), //  1.0e-30f
-      L1      = reinterpret<f32>(0x3F19999A), //  6.0000002384e-01f
-      L2      = reinterpret<f32>(0x3EDB6DB7), //  4.2857143283e-01f
-      L3      = reinterpret<f32>(0x3EAAAAAB), //  3.3333334327e-01f
-      L4      = reinterpret<f32>(0x3E8BA305), //  2.7272811532e-01f
-      L5      = reinterpret<f32>(0x3E6C3255), //  2.3066075146e-01f
-      L6      = reinterpret<f32>(0x3E53F142), //  2.0697501302e-01f
-      P1      = reinterpret<f32>(0x3E2AAAAB), //  1.6666667163e-01f
-      P2      = reinterpret<f32>(0xBB360B61), // -2.7777778450e-03f
-      P3      = reinterpret<f32>(0x388AB355), //  6.6137559770e-05f
-      P4      = reinterpret<f32>(0xB5DDEA0E), // -1.6533901999e-06f
-      P5      = reinterpret<f32>(0x3331BB4C), //  4.1381369442e-08f
-      lg2     = reinterpret<f32>(0x3F317218), //  6.9314718246e-01f
-      lg2_h   = reinterpret<f32>(0x3F317200), //  6.93145752e-01f
-      lg2_l   = reinterpret<f32>(0x35BFBE8C), //  1.42860654e-06f
-      ovt     = reinterpret<f32>(0x3338AA3C), //  4.2995665694e-08f
-      cp      = reinterpret<f32>(0x3F76384F), //  9.6179670095e-01
-      cp_h    = reinterpret<f32>(0x3F764000), //  9.6191406250e-01
-      cp_l    = reinterpret<f32>(0xB8F623C6), // -1.1736857402e-04
-      ivln2   = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+00
-      ivln2_h = reinterpret<f32>(0x3FB8AA00), //  1.4426879883e+00
-      ivln2_l = reinterpret<f32>(0x36ECA570), //  7.0526075433e-06
-      inv3    = reinterpret<f32>(0x3EAAAAAB);  // 0.333333333333
-    var hx = reinterpret<i32>(x);
-    var hy = reinterpret<i32>(y);
-    var ix = hx & 0x7FFFFFFF;
-    var iy = hy & 0x7FFFFFFF;
-    if (iy == 0) return 1.0; // x**0 = 1, even if x is NaN
-    // if (hx == 0x3F800000) return 1.0; // C: 1**y = 1, even if y is NaN, JS: NaN
-    if (ix > 0x7F800000 || iy > 0x7F800000) return x + y; // NaN if either arg is NaN
-    var yisint  = 0, j: i32, k: i32;
-    if (hx < 0) {
-      if (iy >= 0x4B800000) yisint = 2;
-      else if (iy >= 0x3F800000) {
-        k = (iy >> 23) - 0x7F;
-        let ki = 23 - k;
-        j = iy >> ki;
-        if ((j << ki) == iy) yisint = 2 - (j & 1);
+    // TODO: remove this fast pathes after introduced own mid-end IR with "stdlib call simplify" transforms
+    if (builtin_abs<f32>(y) <= 2) {
+      if (y == 2.0) return x * x;
+      if (y == 0.5) {
+        return select<f32>(
+          builtin_abs<f32>(builtin_sqrt<f32>(x)),
+          Infinity,
+          x != -Infinity
+        );
       }
+      if (y == -1.0) return 1 / x;
+      if (y == 1.0) return x;
+      if (y == 0.0) return 1.0;
     }
-    if (iy == 0x7F800000) { // y is +-inf
-      if (ix == 0x3F800000) return NaN; // C: (-1)**+-inf is 1, JS: NaN
-      else if (ix > 0x3F800000) return hy >= 0 ? y : 0.0; // (|x|>1)**+-inf = inf,0
-      else return hy >= 0 ? 0.0 : -y; // (|x|<1)**+-inf = 0,inf
-    }
-    if (iy == 0x3F800000) return hy >= 0 ? x : 1.0 / x;
-    if (hy == 0x40000000) return x * x;
-    if (hy == 0x3F000000) {
-      if (hx >= 0) return builtin_sqrt<f32>(x);
-    }
-    var ax = builtin_abs<f32>(x);
-    var z: f32;
-    if (ix == 0x7F800000 || ix == 0 || ix == 0x3F800000) {
-      z = ax;
-      if (hy < 0) z = 1.0 / z;
-      if (hx < 0) {
-        if (((ix - 0x3F800000) | yisint) == 0) {
-          let d = z - z;
-          z = d / d;
-        }
-        else if (yisint == 1) z = -z;
-      }
-      return z;
-    }
-    var sn = <f32>1.0;
-    if (hx < 0) {
-      if (yisint == 0) {
-        let d = x - x;
-        return d / d;
-      }
-      if (yisint == 1) sn = -1.0;
-    }
-    var t1: f32, t2: f32, r: f32, s: f32, t: f32, u: f32, v: f32, w: f32, p_h: f32, p_l: f32;
-    var n: i32, is: i32;
-    if (iy > 0x4D000000) {
-      if (ix < 0x3F7FFFF8) return hy < 0 ? sn * huge * huge : sn * tiny * tiny;
-      if (ix > 0x3F800007) return hy > 0 ? sn * huge * huge : sn * tiny * tiny;
-      t = ax - 1;
-      w = (t * t) * (0.5 - t * (inv3 - t * 0.25));
-      u = ivln2_h * t;
-      v = t * ivln2_l - w * ivln2;
-      t1 = u + v;
-      is = reinterpret<i32>(t1);
-      t1 = reinterpret<f32>(is & 0xFFFFF000);
-      t2 = v - (t1 - u);
-    } else {
-      let s2: f32, s_h: f32, s_l: f32, t_h: f32, t_l: f32;
-      n = 0;
-      if (ix < 0x00800000) {
-        ax *= two24;
-        n -= 24;
-        ix = reinterpret<i32>(ax);
-      }
-      n += (ix >> 23) - 0x7F;
-      j = ix & 0x007FFFFF;
-      ix = j | 0x3F800000;
-      if (j <= 0x1CC471) k = 0;
-      else if (j < 0x5DB3D7) k = 1;
-      else {
-        k = 0;
-        n += 1;
-        ix -= 0x00800000;
-      }
-      ax = reinterpret<f32>(ix);
-      let bp = select<f32>(1.5, 1.0, k); // k ? 1.5 : 1.0
-      u = ax - bp;
-      v = 1.0 / (ax + bp);
-      s = u * v;
-      s_h = s;
-      is = reinterpret<u32>(s_h);
-      s_h = reinterpret<f32>(is & 0xFFFFF000);
-      is = ((ix >> 1) & 0xFFFFF000) | 0x20000000;
-      t_h = reinterpret<f32>(is + 0x00400000 + (k << 21));
-      t_l = ax - (t_h - bp);
-      s_l = v * ((u - s_h * t_h) - s_h * t_l);
-      s2 = s * s;
-      r = s2 * s2 * (L1 + s2 * (L2 + s2 * (L3 + s2 * (L4 + s2 * (L5 + s2 * L6)))));
-      r += s_l * (s_h + s);
-      s2 = s_h * s_h;
-      t_h = 3.0 + s2 + r;
-      is  = reinterpret<u32>(t_h);
-      t_h = reinterpret<f32>(is & 0xFFFFF000);
-      t_l = r - ((t_h - 3.0) - s2);
-      u = s_h * t_h;
-      v = s_l * t_h + t_l * s;
-      p_h = u + v;
-      is  = reinterpret<u32>(p_h);
-      p_h = reinterpret<f32>(is & 0xFFFFF000);
-      p_l = v - (p_h - u);
-      let z_h = cp_h * p_h;
-      let dp_l = select<f32>(dp_l1, 0.0, k);
-      let z_l = cp_l * p_h + p_l * cp + dp_l;
-      t = <f32>n;
-      let dp_h = select<f32>(dp_h1, 0.0, k);
-      t1 = (((z_h + z_l) + dp_h) + t);
-      is = reinterpret<u32>(t1);
-      t1 = reinterpret<f32>(is & 0xFFFFF000);
-      t2 = z_l - (((t1 - t) - dp_h) - z_h);
-    }
-    is = reinterpret<u32>(y);
-    var y1 = reinterpret<f32>(is & 0xFFFFF000);
-    p_l = (y - y1) * t1 + y * t2;
-    p_h = y1 * t1;
-    z = p_l + p_h;
-    j = reinterpret<u32>(z);
-    if (j > 0x43000000) {
-      return sn * huge * huge;
-    } else if (j == 0x43000000) {
-      if (p_l + ovt > z - p_h) return sn * huge * huge;
-    } else if ((j & 0x7FFFFFFF) > 0x43160000) {
-      return sn * tiny * tiny;
-    } else if (j == 0xC3160000) {
-      if (p_l <= z - p_h) return sn * tiny * tiny;
-    }
-    var i = j & 0x7FFFFFFF;
-    k = (i >> 23) - 0x7F;
-    n = 0;
-    if (i > 0x3F000000) {
-      n = j + (0x00800000 >> (k + 1));
-      k = ((n & 0x7FFFFFFF) >> 23) - 0x7F;
-      t = reinterpret<f32>(n & ~(0x007FFFFF >> k));
-      n = ((n & 0x007FFFFF) | 0x00800000) >> (23 - k);
-      if (j < 0) n = -n;
-      p_h -= t;
-    }
-    t = p_l + p_h;
-    is = reinterpret<u32>(t);
-    t = reinterpret<f32>(is & 0xFFFF8000);
-    u = t * lg2_h;
-    v = (p_l - (t - p_h)) * lg2 + t * lg2_l;
-    z = u + v;
-    w = v - (z - u);
-    t = z * z;
-    t1 = z - t * (P1 + t * (P2 + t * (P3 + t * (P4 + t * P5))));
-    r = (z * t1) / (t1 - 2.0) - (w + z * w);
-    z = 1.0 - (r - z);
-    j = reinterpret<u32>(z);
-    j += n << 23;
-    if ((j >> 23) <= 0) z = scalbn(z, n);
-    else z = reinterpret<f32>(j);
-    return sn * z;
+    return powf_lut(x, y);
   }
 
   // @ts-ignore: decorator

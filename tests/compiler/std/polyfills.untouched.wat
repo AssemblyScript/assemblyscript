@@ -1,24 +1,23 @@
 (module
- (type $FUNCSIG$ii (func (param i32) (result i32)))
- (type $FUNCSIG$viiii (func (param i32 i32 i32 i32)))
- (type $FUNCSIG$jj (func (param i64) (result i64)))
- (type $FUNCSIG$v (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
+ (type $i64_=>_i64 (func (param i64) (result i64)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 8) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
+ (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00s\00t\00d\00/\00p\00o\00l\00y\00f\00i\00l\00l\00s\00.\00t\00s\00")
  (table $0 1 funcref)
- (elem (i32.const 0) $null)
  (export "memory" (memory $0))
- (start $start)
- (func $~lib/polyfills/bswap<u8> (; 1 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (start $~start)
+ (func $~lib/polyfills/bswap<u8> (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   return
  )
- (func $~lib/polyfills/bswap<i8> (; 2 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i8> (; 2 ;) (param $0 i32) (result i32)
   local.get $0
   return
  )
- (func $~lib/polyfills/bswap<u16> (; 3 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 3 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -32,7 +31,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<i16> (; 4 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 4 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -48,7 +47,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<u32> (; 5 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -62,7 +61,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<i32> (; 6 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i32> (; 6 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -76,7 +75,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<u64> (; 7 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 7 ;) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -115,7 +114,7 @@
   i64.rotr
   return
  )
- (func $~lib/polyfills/bswap<i64> (; 8 ;) (type $FUNCSIG$jj) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<i64> (; 8 ;) (param $0 i64) (result i64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -154,7 +153,7 @@
   i64.rotr
   return
  )
- (func $~lib/polyfills/bswap<usize> (; 9 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<usize> (; 9 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -168,7 +167,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap<isize> (; 10 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<isize> (; 10 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -182,15 +181,15 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap16<u8> (; 11 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<u8> (; 11 ;) (param $0 i32) (result i32)
   local.get $0
   return
  )
- (func $~lib/polyfills/bswap16<i8> (; 12 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<i8> (; 12 ;) (param $0 i32) (result i32)
   local.get $0
   return
  )
- (func $~lib/polyfills/bswap16<u16> (; 13 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<u16> (; 13 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -204,7 +203,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap16<i16> (; 14 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<i16> (; 14 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -220,7 +219,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap16<u32> (; 15 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<u32> (; 15 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -238,7 +237,7 @@
   i32.or
   return
  )
- (func $~lib/polyfills/bswap16<i32> (; 16 ;) (type $FUNCSIG$ii) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap16<i32> (; 16 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -256,7 +255,7 @@
   i32.or
   return
  )
- (func $start:std/polyfills (; 17 ;) (type $FUNCSIG$v)
+ (func $start:std/polyfills (; 17 ;)
   i32.const 170
   call $~lib/polyfills/bswap<u8>
   i32.const 255
@@ -266,7 +265,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 4
    i32.const 0
    call $~lib/builtins/abort
@@ -283,7 +282,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 5
    i32.const 0
    call $~lib/builtins/abort
@@ -298,7 +297,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 8
    i32.const 0
    call $~lib/builtins/abort
@@ -315,7 +314,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 9
    i32.const 0
    call $~lib/builtins/abort
@@ -328,7 +327,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 12
    i32.const 0
    call $~lib/builtins/abort
@@ -341,7 +340,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 13
    i32.const 0
    call $~lib/builtins/abort
@@ -354,7 +353,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 16
    i32.const 0
    call $~lib/builtins/abort
@@ -367,7 +366,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 17
    i32.const 0
    call $~lib/builtins/abort
@@ -380,7 +379,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 20
    i32.const 0
    call $~lib/builtins/abort
@@ -393,7 +392,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 21
    i32.const 0
    call $~lib/builtins/abort
@@ -408,7 +407,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 24
    i32.const 0
    call $~lib/builtins/abort
@@ -425,7 +424,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 25
    i32.const 0
    call $~lib/builtins/abort
@@ -440,7 +439,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 28
    i32.const 0
    call $~lib/builtins/abort
@@ -457,7 +456,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 29
    i32.const 0
    call $~lib/builtins/abort
@@ -470,7 +469,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 32
    i32.const 0
    call $~lib/builtins/abort
@@ -483,17 +482,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 24
+   i32.const 32
    i32.const 33
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start (; 18 ;) (type $FUNCSIG$v)
+ (func $~start (; 18 ;)
   call $start:std/polyfills
- )
- (func $null (; 19 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )

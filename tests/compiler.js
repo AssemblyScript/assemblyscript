@@ -105,7 +105,10 @@ function runTest(basename) {
   var missing_features = [];
   if (config.features) {
     config.features.forEach(feature => {
-      if (!features.includes(feature)) missing_features.push(feature);
+      if (!features.includes(feature) && !features.includes("*")) {
+        missing_features.push(feature);
+        return;
+      }
       var featureConfig = featuresConfig[feature];
       if (featureConfig.asc_flags) {
         featureConfig.asc_flags.forEach(flag => {
@@ -321,9 +324,9 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
       }
       var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
       Object.setPrototypeOf(exports, instance.exports);
-      if (exports.__start) {
+      if (exports._start) {
         console.log(colorsUtil.white("  [start]"));
-        exports.__start();
+        exports._start();
       }
       if (glue.postInstantiate) {
         console.log(colorsUtil.white("  [postInstantiate]"));
@@ -386,68 +389,71 @@ function evaluateResult() {
   }
 }
 
-// Run tests in parallel if requested
-if (args.parallel && coreCount > 1) {
-  if (cluster.isWorker) {
-    colorsUtil.supported = true;
-    process.on("message", msg => {
-      if (msg.cmd != "run") throw Error("invalid command: " + msg.cmd);
-      try {
-        runTest(msg.test);
-      } catch (e) {
-        process.send({ cmd: "done", failed: true, message: e.message });
-      }
-    });
-    process.send({ cmd: "ready" });
-  } else {
-    const tests = getTests();
-    // const sizes = new Map();
-    // tests.forEach(name => sizes.set(name, fs.statSync(path.join(basedir, name + ".ts")).size));
-    // tests.sort((a, b) => sizes.get(b) - sizes.get(a));
-    const workers = [];
-    const current = [];
-    const outputs = [];
-    let numWorkers = Math.min(coreCount - 1, tests.length);
-    console.log("Spawning " + numWorkers + " workers ...");
-    cluster.settings.silent = true;
-    let index = 0;
-    for (let i = 0; i < numWorkers; ++i) {
-      let worker = cluster.fork();
-      workers[i] = worker;
-      current[i] = null;
-      outputs[i] = [];
-      worker.process.stdout.on("data", buf => outputs[i].push(buf));
-      worker.process.stderr.on("data", buf => outputs[i].push(buf));
-      worker.on("message", msg => {
-        if (msg.cmd == "done") {
-          process.stdout.write(Buffer.concat(outputs[i]).toString());
-          if (msg.failed) failedTests.add(current[i]);
-          if (msg.message) failedMessages.set(current[i], msg.message);
-        } else if (msg.cmd == "skipped") {
-          process.stdout.write(Buffer.concat(outputs[i]).toString());
-          skippedTests.add(current[i]);
-          if (msg.message) skippedMessages.set(current[i], msg.message);
-        } else if (msg.cmd != "ready") {
-          throw Error("invalid command: " + msg.cmd);
-        }
-        if (index >= tests.length) {
-          workers[i] = null;
-          worker.kill();
-          return;
-        }
-        current[i] = tests[index++];
-        outputs[i] = [];
-        worker.send({ cmd: "run", test: current[i] });
-      });
-      worker.on("disconnect", () => {
-        if (workers[i]) throw Error("worker#" + i + " died unexpectedly");
-        if (!--numWorkers) evaluateResult();
-      });
-    }
-  }
+asc.ready.then(() => {
 
-// Otherwise run tests sequentially
-} else {
-  getTests().forEach(runTest);
-  evaluateResult();
-}
+  // Run tests in parallel if requested
+  if (args.parallel && coreCount > 1) {
+    if (cluster.isWorker) {
+      colorsUtil.supported = true;
+      process.on("message", msg => {
+        if (msg.cmd != "run") throw Error("invalid command: " + msg.cmd);
+        try {
+          runTest(msg.test);
+        } catch (e) {
+          process.send({ cmd: "done", failed: true, message: e.message });
+        }
+      });
+      process.send({ cmd: "ready" });
+    } else {
+      const tests = getTests();
+      // const sizes = new Map();
+      // tests.forEach(name => sizes.set(name, fs.statSync(path.join(basedir, name + ".ts")).size));
+      // tests.sort((a, b) => sizes.get(b) - sizes.get(a));
+      const workers = [];
+      const current = [];
+      const outputs = [];
+      let numWorkers = Math.min(coreCount - 1, tests.length);
+      console.log("Spawning " + numWorkers + " workers ...");
+      cluster.settings.silent = true;
+      let index = 0;
+      for (let i = 0; i < numWorkers; ++i) {
+        let worker = cluster.fork();
+        workers[i] = worker;
+        current[i] = null;
+        outputs[i] = [];
+        worker.process.stdout.on("data", buf => outputs[i].push(buf));
+        worker.process.stderr.on("data", buf => outputs[i].push(buf));
+        worker.on("message", msg => {
+          if (msg.cmd == "done") {
+            process.stdout.write(Buffer.concat(outputs[i]).toString());
+            if (msg.failed) failedTests.add(current[i]);
+            if (msg.message) failedMessages.set(current[i], msg.message);
+          } else if (msg.cmd == "skipped") {
+            process.stdout.write(Buffer.concat(outputs[i]).toString());
+            skippedTests.add(current[i]);
+            if (msg.message) skippedMessages.set(current[i], msg.message);
+          } else if (msg.cmd != "ready") {
+            throw Error("invalid command: " + msg.cmd);
+          }
+          if (index >= tests.length) {
+            workers[i] = null;
+            worker.kill();
+            return;
+          }
+          current[i] = tests[index++];
+          outputs[i] = [];
+          worker.send({ cmd: "run", test: current[i] });
+        });
+        worker.on("disconnect", () => {
+          if (workers[i]) throw Error("worker#" + i + " died unexpectedly");
+          if (!--numWorkers) evaluateResult();
+        });
+      }
+    }
+
+  // Otherwise run tests sequentially
+  } else {
+    getTests().forEach(runTest);
+    evaluateResult();
+  }
+});

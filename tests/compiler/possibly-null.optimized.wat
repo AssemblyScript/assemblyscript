@@ -1,7 +1,6 @@
 (module
- (type $FUNCSIG$vi (func (param i32)))
- (type $FUNCSIG$vii (func (param i32 i32)))
- (type $FUNCSIG$v (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (memory $0 0)
  (export "memory" (memory $0))
  (export "testTrue" (func $possibly-null/testTrue))
@@ -22,31 +21,31 @@
  (export "testLogicalOrMulti" (func $possibly-null/testLogicalAndMulti))
  (export "testAssign" (func $possibly-null/testLogicalAndMulti))
  (export "testNeverNull" (func $possibly-null/testTrue))
- (func $possibly-null/testTrue (; 0 ;) (type $FUNCSIG$vi) (param $0 i32)
+ (func $possibly-null/testTrue (; 0 ;) (param $0 i32)
   nop
  )
- (func $possibly-null/testWhile (; 1 ;) (type $FUNCSIG$vi) (param $0 i32)
-  loop $continue|0
+ (func $possibly-null/testWhile (; 1 ;) (param $0 i32)
+  loop $while-continue|0
    local.get $0
    if
     i32.const 0
     local.set $0
-    br $continue|0
+    br $while-continue|0
    end
   end
  )
- (func $possibly-null/testWhile2 (; 2 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  loop $continue|0
+ (func $possibly-null/testWhile2 (; 2 ;) (param $0 i32) (param $1 i32)
+  loop $while-continue|0
    local.get $0
    if
     local.get $1
     local.set $0
-    br $continue|0
+    br $while-continue|0
    end
   end
  )
- (func $possibly-null/testWhile3 (; 3 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
-  loop $continue|0
+ (func $possibly-null/testWhile3 (; 3 ;) (param $0 i32) (param $1 i32)
+  loop $while-continue|0
    local.get $0
    if
     local.get $1
@@ -54,14 +53,11 @@
      local.get $1
      local.set $0
     end
-    br $continue|0
+    br $while-continue|0
    end
   end
  )
- (func $possibly-null/testLogicalAndMulti (; 4 ;) (type $FUNCSIG$vii) (param $0 i32) (param $1 i32)
+ (func $possibly-null/testLogicalAndMulti (; 4 ;) (param $0 i32) (param $1 i32)
   nop
- )
- (func $null (; 5 ;) (type $FUNCSIG$v)
-  unreachable
  )
 )
