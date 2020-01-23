@@ -4114,10 +4114,6 @@
      i32.const 1
      i32.add
      local.set $7
-     local.get $2
-     i32.const 2
-     i32.add
-     local.set $2
     else
      local.get $9
      i32.const 2048
@@ -4141,10 +4137,6 @@
       i32.const 2
       i32.add
       local.set $7
-      local.get $2
-      i32.const 2
-      i32.add
-      local.set $2
      else
       local.get $9
       i32.const 64512
@@ -4214,14 +4206,14 @@
         i32.const 128
         i32.or
         i32.store8 offset=3
-        local.get $2
-        i32.const 4
-        i32.add
-        local.set $2
         local.get $7
         i32.const 4
         i32.add
         local.set $7
+        local.get $2
+        i32.const 4
+        i32.add
+        local.set $2
         br $while-continue|0
        end
       end
@@ -4248,16 +4240,16 @@
       i32.const 128
       i32.or
       i32.store8 offset=2
-      local.get $2
-      i32.const 2
-      i32.add
-      local.set $2
       local.get $7
       i32.const 3
       i32.add
       local.set $7
      end
     end
+    local.get $2
+    i32.const 2
+    i32.add
+    local.set $2
     br $while-continue|0
    end
   end
@@ -4268,7 +4260,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 696
+   i32.const 699
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4761,7 +4753,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 712
+   i32.const 715
    i32.const 6
    call $~lib/builtins/abort
    unreachable
