@@ -637,7 +637,7 @@ export namespace String {
     export function byteLength(str: string, nullTerminated: bool = false): i32 {
       var strOff = changetype<usize>(str);
       var strEnd = strOff + <usize>changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
-      var bufLen = <i32>nullTerminated;
+      var bufLen = i32(nullTerminated);
       while (strOff < strEnd) {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
@@ -663,13 +663,13 @@ export namespace String {
     export function encode(str: string, nullTerminated: bool = false): ArrayBuffer {
       var strOff = changetype<usize>(str);
       var strEnd = changetype<usize>(str) + <usize>changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
-      var buf = __alloc(UTF8.byteLength(str, nullTerminated), idof<ArrayBuffer>());
+      var bufLen = <usize>UTF8.byteLength(str, nullTerminated);
+      var buf = __alloc(bufLen, idof<ArrayBuffer>());
+      var bufEnd = buf + bufLen - usize(nullTerminated);
       var bufOff = buf;
-      while (strOff < strEnd) {
+      while (bufOff < bufEnd) {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
-          // @ts-ignore: cast
-          if (nullTerminated & !c1) break;
           store<u8>(bufOff, c1);
           bufOff += 1;
         } else if (c1 < 2048) {
@@ -696,12 +696,9 @@ export namespace String {
         }
         strOff += 2;
       }
+      assert(strOff <= strEnd);
       if (nullTerminated) {
-        assert(strOff <= strEnd);
-        buf = __realloc(buf, bufOff - buf + 1);
         store<u8>(bufOff, 0);
-      } else {
-        assert(strOff == strEnd);
       }
       return changetype<ArrayBuffer>(buf); // retains
     }
