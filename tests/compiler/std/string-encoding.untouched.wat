@@ -4063,6 +4063,10 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -4119,20 +4123,25 @@
      i32.const 2048
      i32.lt_u
      if
-      local.get $7
       local.get $9
       i32.const 6
       i32.shr_u
       i32.const 192
       i32.or
-      i32.store8
-      local.get $7
+      local.set $10
       local.get $9
       i32.const 63
       i32.and
       i32.const 128
       i32.or
-      i32.store8 offset=1
+      local.set $11
+      local.get $7
+      local.get $11
+      i32.const 8
+      i32.shl
+      local.get $10
+      i32.or
+      i32.store16
       local.get $7
       i32.const 2
       i32.add
@@ -4155,8 +4164,8 @@
       if
        local.get $2
        i32.load16_u offset=2
-       local.set $10
-       local.get $10
+       local.set $11
+       local.get $11
        i32.const 64512
        i32.and
        i32.const 56320
@@ -4169,19 +4178,17 @@
         i32.const 10
         i32.shl
         i32.add
-        local.get $10
+        local.get $11
         i32.const 1023
         i32.and
         i32.or
         local.set $9
-        local.get $7
         local.get $9
         i32.const 18
         i32.shr_u
         i32.const 240
         i32.or
-        i32.store8
-        local.get $7
+        local.set $10
         local.get $9
         i32.const 12
         i32.shr_u
@@ -4189,8 +4196,7 @@
         i32.and
         i32.const 128
         i32.or
-        i32.store8 offset=1
-        local.get $7
+        local.set $12
         local.get $9
         i32.const 6
         i32.shr_u
@@ -4198,14 +4204,28 @@
         i32.and
         i32.const 128
         i32.or
-        i32.store8 offset=2
-        local.get $7
+        local.set $13
         local.get $9
         i32.const 63
         i32.and
         i32.const 128
         i32.or
-        i32.store8 offset=3
+        local.set $14
+        local.get $7
+        local.get $14
+        i32.const 24
+        i32.shl
+        local.get $13
+        i32.const 16
+        i32.shl
+        i32.or
+        local.get $12
+        i32.const 8
+        i32.shl
+        i32.or
+        local.get $10
+        i32.or
+        i32.store
         local.get $7
         i32.const 4
         i32.add
@@ -4217,14 +4237,12 @@
         br $while-continue|0
        end
       end
-      local.get $7
       local.get $9
       i32.const 12
       i32.shr_u
       i32.const 224
       i32.or
-      i32.store8
-      local.get $7
+      local.set $11
       local.get $9
       i32.const 6
       i32.shr_u
@@ -4232,13 +4250,22 @@
       i32.and
       i32.const 128
       i32.or
-      i32.store8 offset=1
-      local.get $7
+      local.set $14
       local.get $9
       i32.const 63
       i32.and
       i32.const 128
       i32.or
+      local.set $13
+      local.get $7
+      local.get $14
+      i32.const 8
+      i32.shl
+      local.get $11
+      i32.or
+      i32.store16
+      local.get $7
+      local.get $13
       i32.store8 offset=2
       local.get $7
       i32.const 3
@@ -4260,7 +4287,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 699
+   i32.const 703
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4753,7 +4780,7 @@
   if
    i32.const 0
    i32.const 544
-   i32.const 715
+   i32.const 719
    i32.const 6
    call $~lib/builtins/abort
    unreachable

@@ -673,25 +673,29 @@ export namespace String {
           store<u8>(bufOff, c1);
           bufOff += 1;
         } else if (c1 < 2048) {
-          store<u8>(bufOff, c1 >> 6      | 192);
-          store<u8>(bufOff, c1      & 63 | 128, 1);
+          let b0 = c1 >> 6 | 192;
+          let b1 = c1 & 63 | 128;
+          store<u16>(bufOff, b1 << 8 | b0);
           bufOff += 2;
         } else {
           if ((c1 & 0xFC00) == 0xD800 && strOff + 2 < strEnd) {
             let c2 = <u32>load<u16>(strOff, 2);
             if ((c2 & 0xFC00) == 0xDC00) {
               c1 = 0x10000 + ((c1 & 0x03FF) << 10) | (c2 & 0x03FF);
-              store<u8>(bufOff, c1 >> 18      | 240);
-              store<u8>(bufOff, c1 >> 12 & 63 | 128, 1);
-              store<u8>(bufOff, c1 >> 6  & 63 | 128, 2);
-              store<u8>(bufOff, c1       & 63 | 128, 3);
+              let b0 = c1 >> 18 | 240;
+              let b1 = c1 >> 12 & 63 | 128;
+              let b2 = c1 >> 6  & 63 | 128;
+              let b3 = c1       & 63 | 128;
+              store<u32>(bufOff, b3 << 24 | b2 << 16 | b1 << 8 | b0);
               bufOff += 4; strOff += 4;
               continue;
             }
           }
-          store<u8>(bufOff, c1 >> 12      | 224);
-          store<u8>(bufOff, c1 >> 6  & 63 | 128, 1);
-          store<u8>(bufOff, c1       & 63 | 128, 2);
+          let b0 = c1 >> 12 | 224;
+          let b1 = c1 >> 6  & 63 | 128;
+          let b2 = c1       & 63 | 128;
+          store<u16>(bufOff, b1 << 8 | b0);
+          store<u8>(bufOff, b2, 2);
           bufOff += 3;
         }
         strOff += 2;
