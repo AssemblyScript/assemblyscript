@@ -152,7 +152,7 @@ export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/
     }
   }
   if (dest < src) {
-    if (ASC_SHRINK_LEVEL < 1) {
+    if (ASC_SHRINK_LEVEL < 2) {
       if ((src & 7) == (dest & 7)) {
         while (dest & 7) {
           if (!n) return;
@@ -172,7 +172,7 @@ export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/
       --n;
     }
   } else {
-    if (ASC_SHRINK_LEVEL < 1) {
+    if (ASC_SHRINK_LEVEL < 2) {
       if ((src & 7) == (dest & 7)) {
         while ((dest + n) & 7) {
           if (!n) return;
