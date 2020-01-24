@@ -3,8 +3,8 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -27,9 +27,6 @@
  (data (i32.const 544) "\10\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\93\04\00\00\02\00\00\001\04\00\00\02\00\00\001\00\00\00\02\00\00\001\00\00\00\02\00\00\00Q\04\00\00\02\00\00\00Q\00\00\00\02\00\00\00\91\04\00\00\02\00\00\00\91\00\00\00\02\00\00\00\11\05\00\00\02\00\00\00\11\01\00\00\02\00\00\00\91\0c\00\00\02\00\00\00\11\0d\00\00\02\00\00\00\10")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
- (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
- (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (export "__argumentsLength" (global $~argumentsLength))
  (export "memory" (memory $0))
@@ -1294,7 +1291,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 112
+   i32.const 109
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1313,7 +1310,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 115
+   i32.const 112
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1578,20 +1575,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/tlsf/freeBlock (; 21 ;) (param $0 i32) (param $1 i32)
-  local.get $1
-  local.get $1
-  i32.load
-  i32.const 1
-  i32.or
-  i32.store
-  local.get $0
-  local.get $1
-  call $~lib/rt/tlsf/insertBlock
-  local.get $1
-  call $~lib/rt/rtrace/onfree
- )
- (func $~lib/rt/__typeinfo (; 22 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/__typeinfo (; 21 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 544
   i32.load
@@ -1611,119 +1595,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/checkUsedBlock (; 23 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  local.set $1
-  local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  i32.const 0
-  local.get $0
-  select
-  if (result i32)
-   local.get $1
-   i32.load
-   i32.const 1
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  if (result i32)
-   local.get $1
-   i32.load offset=4
-   i32.const -268435456
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 570
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
- )
- (func $~lib/rt/pure/growRoots (; 24 ;)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  global.get $~lib/rt/pure/CUR
-  global.get $~lib/rt/pure/ROOTS
-  local.tee $1
-  i32.sub
-  local.tee $2
-  i32.const 1
-  i32.shl
-  local.tee $0
-  i32.const 256
-  local.get $0
-  i32.const 256
-  i32.gt_u
-  select
-  local.tee $3
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.tee $0
-  i32.const 16
-  i32.sub
-  call $~lib/rt/rtrace/onfree
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/memory/memory.copy
-  local.get $1
-  if
-   local.get $1
-   i32.const 16
-   i32.sub
-   call $~lib/rt/rtrace/onalloc
-   call $~lib/rt/tlsf/maybeInitialize
-   local.get $1
-   call $~lib/rt/tlsf/checkUsedBlock
-   call $~lib/rt/tlsf/freeBlock
-  end
-  local.get $0
-  global.set $~lib/rt/pure/ROOTS
-  local.get $0
-  local.get $2
-  i32.add
-  global.set $~lib/rt/pure/CUR
-  local.get $0
-  local.get $3
-  i32.add
-  global.set $~lib/rt/pure/END
- )
- (func $~lib/rt/pure/appendRoot (; 25 ;) (param $0 i32)
-  (local $1 i32)
-  global.get $~lib/rt/pure/CUR
-  local.tee $1
-  global.get $~lib/rt/pure/END
-  i32.ge_u
-  if
-   call $~lib/rt/pure/growRoots
-   global.get $~lib/rt/pure/CUR
-   local.set $1
-  end
-  local.get $1
-  local.get $0
-  i32.store
-  local.get $1
-  i32.const 4
-  i32.add
-  global.set $~lib/rt/pure/CUR
- )
- (func $~lib/rt/pure/decrement (; 26 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 22 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1741,7 +1613,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 123
+   i32.const 120
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1762,9 +1634,17 @@
     i32.const -2147483648
     i32.store offset=4
    else
+    local.get $0
+    local.get $0
+    i32.load
+    i32.const 1
+    i32.or
+    i32.store
     global.get $~lib/rt/tlsf/ROOT
     local.get $0
-    call $~lib/rt/tlsf/freeBlock
+    call $~lib/rt/tlsf/insertBlock
+    local.get $0
+    call $~lib/rt/rtrace/onfree
    end
   else
    local.get $1
@@ -1773,7 +1653,7 @@
    if
     i32.const 0
     i32.const 256
-    i32.const 132
+    i32.const 129
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -1806,13 +1686,12 @@
     i32.and
     i32.eqz
     if
-     local.get $0
-     call $~lib/rt/pure/appendRoot
+     unreachable
     end
    end
   end
  )
- (func $~lib/rt/pure/__release (; 27 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 23 ;) (param $0 i32)
   local.get $0
   i32.const 676
   i32.gt_u
@@ -1823,7 +1702,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 28 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1892,7 +1771,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/rt/__allocArray (; 29 ;) (result i32)
+ (func $~lib/rt/__allocArray (; 25 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -1920,7 +1799,7 @@
   call $~lib/memory/memory.copy
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 30 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 26 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1978,7 +1857,7 @@
   i32.store offset=8
   local.get $2
  )
- (func $start:std/arraybuffer (; 31 ;)
+ (func $start:std/arraybuffer (; 27 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2207,10 +2086,10 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $~start (; 32 ;)
+ (func $~start (; 28 ;)
   call $start:std/arraybuffer
  )
- (func $~lib/rt/__visit_members (; 33 ;) (param $0 i32)
+ (func $~lib/rt/__visit_members (; 29 ;) (param $0 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$2

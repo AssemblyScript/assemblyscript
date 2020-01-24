@@ -62,47 +62,44 @@ import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 @inline const VISIT_COLLECTWHITE = 5;
 
 // @ts-ignore: decorator
-@global @unsafe
+@global @unsafe @lazy
 function __visit(ref: usize, cookie: i32): void {
   if (ref < __heap_base) return;
-  if (cookie == VISIT_DECREMENT) {
+  if (isDefined(__GC_ALL_ACYCLIC)) {
+    if (DEBUG) assert(cookie == VISIT_DECREMENT);
     decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
   } else {
-    __visit_collect(ref, cookie);
-  }
-}
-
-// @ts-ignore: decorator
-@unsafe @builtin
-function __visit_collect(ref: usize, cookie: i32): void {
-  // This logic is only relevant if we also compile __collect. See below.
-
-  var s = changetype<Block>(ref - BLOCK_OVERHEAD);
-  switch (cookie) {
-    case VISIT_MARKGRAY: {
-      if (DEBUG) assert((s.gcInfo & REFCOUNT_MASK) > 0);
-      s.gcInfo = s.gcInfo - 1;
-      markGray(s);
-      break;
-    }
-    case VISIT_SCAN: {
-      scan(s);
-      break;
-    }
-    case VISIT_SCANBLACK: {
-      let info = s.gcInfo;
-      assert((info & ~REFCOUNT_MASK) == ((info + 1) & ~REFCOUNT_MASK)); // overflow
-      s.gcInfo = info + 1;
-      if ((info & COLOR_MASK) != COLOR_BLACK) {
-        scanBlack(s);
+    let s = changetype<Block>(ref - BLOCK_OVERHEAD);
+    switch (cookie) {
+      case VISIT_DECREMENT: {
+        decrement(s);
+        break;
       }
-      break;
+      case VISIT_MARKGRAY: {
+        if (DEBUG) assert((s.gcInfo & REFCOUNT_MASK) > 0);
+        s.gcInfo = s.gcInfo - 1;
+        markGray(s);
+        break;
+      }
+      case VISIT_SCAN: {
+        scan(s);
+        break;
+      }
+      case VISIT_SCANBLACK: {
+        let info = s.gcInfo;
+        assert((info & ~REFCOUNT_MASK) == ((info + 1) & ~REFCOUNT_MASK)); // overflow
+        s.gcInfo = info + 1;
+        if ((info & COLOR_MASK) != COLOR_BLACK) {
+          scanBlack(s);
+        }
+        break;
+      }
+      case VISIT_COLLECTWHITE: {
+        collectWhite(s);
+        break;
+      }
+      default: if (DEBUG) assert(false);
     }
-    case VISIT_COLLECTWHITE: {
-      collectWhite(s);
-      break;
-    }
-    default: if (DEBUG) assert(false);
   }
 }
 
@@ -152,7 +149,13 @@ function decrement(s: Block): void {
 @lazy var END: usize = 0;
 
 /** Appends a block to possible roots. */
+// @ts-ignore: decorator
+@lazy
 function appendRoot(s: Block): void {
+  if (isDefined(__GC_ALL_ACYCLIC)) {
+    unreachable();
+    return;
+  }
   var cur = CUR;
   if (cur >= END) {
     growRoots(); // TBD: either that or pick a default and force collection on overflow
@@ -181,10 +184,9 @@ function growRoots(): void {
 
 /** Collects cyclic garbage. */
 // @ts-ignore: decorator
-@global @unsafe @builtin
+@global @unsafe @lazy
 export function __collect(): void {
-  // This is intercepted as a builtin so we can skip compiling it and its
-  // dependencies if the compiler can prove that all types are acyclic.
+  if (isDefined(__GC_ALL_ACYCLIC)) return;
 
   // markRoots
   var roots = ROOTS;

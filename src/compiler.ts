@@ -271,9 +271,7 @@ export const enum RuntimeFeatures {
   /** Requires the built-in globals visitor. */
   visitGlobals = 1 << 2,
   /** Requires the built-in members visitor. */
-  visitMembers = 1 << 3,
-  /** Requires the built-in collect function. */
-  collect = 1 << 4
+  visitMembers = 1 << 3
 }
 
 /** Exported names of compiler-generated elements. */
@@ -324,6 +322,8 @@ export class Compiler extends DiagnosticEmitter {
   skippedAutoreleases: Set<ExpressionRef> = new Set();
   /** Current inline functions stack. */
   inlineStack: Function[] = [];
+  /** Lazily compiled runtime functions. */
+  lazyLibraryFunctions: Set<Function> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -389,7 +389,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // compile the start function if not empty or explicitly requested
+    // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
     var explicitStart = options.explicitStart;
     if (!startIsEmpty || explicitStart) {
@@ -416,29 +416,28 @@ export class Compiler extends DiagnosticEmitter {
       else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
     }
 
-    // compile runtime features
-    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
-    if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
+    // compile RTTI
     module.removeGlobal(BuiltinNames.rtti_base);
     var allAcyclic = true;
     if (this.runtimeFeatures & RuntimeFeatures.RTTI) allAcyclic = compileRTTI(this);
+    if (allAcyclic) program.registerConstantInteger("__GC_ALL_ACYCLIC", Type.bool, i64_new(1, 0));
 
-    // include full GC support if there are cyclic types, otherwise replace with a dummy
-    if (this.runtimeFeatures & RuntimeFeatures.collect) {
-      if (allAcyclic) {
-        module.addFunction(BuiltinNames.collect, NativeType.None, NativeType.None, null, module.nop());
-        module.addFunction(BuiltinNames.visit_collect, createType([ this.options.nativeSizeType, NativeType.I32 ]), NativeType.None, null, module.unreachable());
-      } else {
-        let collectPrototype = program.elementsByName.get(BuiltinNames.collect)!;
-        assert(collectPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-        let collectInstance = this.resolver.resolveFunction(<FunctionPrototype>collectPrototype, null);
-        if (collectInstance) this.compileFunction(collectInstance, true);
-        let visitCollectPrototype = program.elementsByName.get(BuiltinNames.visit_collect)!;
-        assert(visitCollectPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-        let visitCollectInstance = this.resolver.resolveFunction(<FunctionPrototype>visitCollectPrototype, null);
-        if (visitCollectInstance) this.compileFunction(visitCollectInstance, true);
+    // compile lazy library functions
+    var lazyLibraryFunctions = this.lazyLibraryFunctions;
+    do {
+      let functionsToCompile = new Array<Function>();
+      for (let instance of lazyLibraryFunctions) {
+        functionsToCompile.push(instance);
       }
-    }
+      lazyLibraryFunctions.clear();
+      for (let i = 0, k = functionsToCompile.length; i < k; ++i) {
+        this.compileFunction(unchecked(functionsToCompile[i]), true);
+      }
+    } while (lazyLibraryFunctions.size);
+
+    // finalize runtime features
+    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
+    if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
@@ -1121,11 +1120,15 @@ export class Compiler extends DiagnosticEmitter {
     forceStdAlternative: bool = false
   ): bool {
     if (instance.is(CommonFlags.COMPILED)) return true;
-    if (instance.hasDecorator(DecoratorFlags.BUILTIN)) {
-      if (!forceStdAlternative) return true;
+    if (!forceStdAlternative) {
+      if (instance.hasDecorator(DecoratorFlags.BUILTIN)) return true;
+      if (instance.hasDecorator(DecoratorFlags.LAZY)) {
+        this.lazyLibraryFunctions.add(instance);
+        return true;
+      }
     }
 
-    var previousType = this.currentType; // remember to retain it if compiling a function lazily
+    var previousType = this.currentType;
     instance.set(CommonFlags.COMPILED);
 
     var module = this.module;

@@ -42,9 +42,6 @@
  (global $std/array-literal/dynamicArrayI32 (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayRef (mut i32) (i32.const 0))
  (global $std/array-literal/dynamicArrayRefWithCtor (mut i32) (i32.const 0))
- (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
- (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 576))
  (global $~lib/heap/__heap_base i32 (i32.const 652))
  (export "memory" (memory $0))
@@ -1501,7 +1498,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 112
+   i32.const 109
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1522,7 +1519,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 115
+   i32.const 112
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -2895,137 +2892,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/checkUsedBlock (; 32 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  local.set $1
-  local.get $0
-  i32.const 0
-  i32.ne
-  if (result i32)
-   local.get $0
-   i32.const 15
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  if (result i32)
-   local.get $1
-   i32.load
-   i32.const 1
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  if (result i32)
-   local.get $1
-   i32.load offset=4
-   i32.const -268435456
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 384
-   i32.const 570
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
- )
- (func $~lib/rt/tlsf/__free (; 33 ;) (param $0 i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  call $~lib/rt/tlsf/checkUsedBlock
-  call $~lib/rt/tlsf/freeBlock
- )
- (func $~lib/rt/pure/growRoots (; 34 ;)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  global.get $~lib/rt/pure/ROOTS
-  local.set $0
-  global.get $~lib/rt/pure/CUR
-  local.get $0
-  i32.sub
-  local.set $1
-  local.get $1
-  i32.const 2
-  i32.mul
-  local.tee $2
-  i32.const 64
-  i32.const 2
-  i32.shl
-  local.tee $3
-  local.get $2
-  local.get $3
-  i32.gt_u
-  select
-  local.set $4
-  local.get $4
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.set $5
-  local.get $5
-  i32.const 16
-  i32.sub
-  call $~lib/rt/rtrace/onfree
-  local.get $5
-  local.get $0
-  local.get $1
-  call $~lib/memory/memory.copy
-  local.get $0
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/rtrace/onalloc
-   local.get $0
-   call $~lib/rt/tlsf/__free
-  end
-  local.get $5
-  global.set $~lib/rt/pure/ROOTS
-  local.get $5
-  local.get $1
-  i32.add
-  global.set $~lib/rt/pure/CUR
-  local.get $5
-  local.get $4
-  i32.add
-  global.set $~lib/rt/pure/END
- )
- (func $~lib/rt/pure/appendRoot (; 35 ;) (param $0 i32)
-  (local $1 i32)
-  global.get $~lib/rt/pure/CUR
-  local.set $1
-  local.get $1
-  global.get $~lib/rt/pure/END
-  i32.ge_u
-  if
-   call $~lib/rt/pure/growRoots
-   global.get $~lib/rt/pure/CUR
-   local.set $1
-  end
-  local.get $1
-  local.get $0
-  i32.store
-  local.get $1
-  i32.const 4
-  i32.add
-  global.set $~lib/rt/pure/CUR
- )
- (func $~lib/rt/pure/decrement (; 36 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 32 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3046,7 +2913,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 123
+   i32.const 120
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3085,7 +2952,7 @@
    if
     i32.const 0
     i32.const 496
-    i32.const 132
+    i32.const 129
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -3129,7 +2996,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__release (; 37 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 33 ;) (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -3140,14 +3007,14 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $std/array-literal/doesntLeak (; 38 ;) (param $0 i32)
+ (func $std/array-literal/doesntLeak (; 34 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $start:std/array-literal (; 39 ;)
+ (func $start:std/array-literal (; 35 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3582,16 +3449,16 @@
   local.get $7
   call $~lib/rt/pure/__release
  )
- (func $~start (; 40 ;)
+ (func $~start (; 36 ;)
   call $start:std/array-literal
  )
- (func $~lib/array/Array<i8>#__visit_impl (; 41 ;) (param $0 i32) (param $1 i32)
-  nop
+ (func $~lib/rt/pure/__collect (; 37 ;)
+  return
  )
- (func $~lib/array/Array<i32>#__visit_impl (; 42 ;) (param $0 i32) (param $1 i32)
-  nop
+ (func $~lib/rt/pure/appendRoot (; 38 ;) (param $0 i32)
+  unreachable
  )
- (func $~lib/rt/pure/__visit (; 43 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 39 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -3601,18 +3468,27 @@
   local.get $1
   i32.const 1
   i32.eq
+  i32.eqz
   if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  else
-   local.get $0
-   local.get $1
-   call $~lib/rt/pure/__visit_collect
+   i32.const 0
+   i32.const 496
+   i32.const 69
+   i32.const 15
+   call $~lib/builtins/abort
+   unreachable
   end
+  local.get $0
+  i32.const 16
+  i32.sub
+  call $~lib/rt/pure/decrement
  )
- (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (; 44 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i8>#__visit_impl (; 40 ;) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/array/Array<i32>#__visit_impl (; 41 ;) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (; 42 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3651,7 +3527,7 @@
    end
   end
  )
- (func $~lib/array/Array<std/array-literal/RefWithCtor>#__visit_impl (; 45 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<std/array-literal/RefWithCtor>#__visit_impl (; 43 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3690,7 +3566,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 46 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 44 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
@@ -3741,11 +3617,5 @@
    call $~lib/rt/pure/__visit
   end
   return
- )
- (func $~lib/rt/pure/__collect (; 47 ;)
-  nop
- )
- (func $~lib/rt/pure/__visit_collect (; 48 ;) (param $0 i32) (param $1 i32)
-  unreachable
  )
 )

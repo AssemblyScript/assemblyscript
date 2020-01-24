@@ -1068,7 +1068,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Registers a constant integer value within the global scope. */
-  private registerConstantInteger(name: string, type: Type, value: I64): void {
+  registerConstantInteger(name: string, type: Type, value: I64): void {
     assert(type.is(TypeFlags.INTEGER)); // must be an integer type
     var global = new Global(
       name,
@@ -1797,6 +1797,9 @@ export class Program extends DiagnosticEmitter {
       validDecorators |= DecoratorFlags.EXTERNAL;
     } else {
       validDecorators |= DecoratorFlags.INLINE;
+      if (declaration.range.source.isLibrary) {
+        validDecorators |= DecoratorFlags.LAZY;
+      }
     }
     if (!declaration.is(CommonFlags.INSTANCE)) {
       if (parent.kind != ElementKind.CLASS_PROTOTYPE) {

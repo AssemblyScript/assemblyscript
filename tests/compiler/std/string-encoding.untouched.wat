@@ -2,8 +2,8 @@
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -21,8 +21,8 @@
  (data (i32.const 96) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 144) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00")
  (data (i32.const 208) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00")
- (data (i32.const 256) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
- (data (i32.const 320) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00-\00e\00n\00c\00o\00d\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 256) ",\00\00\00\01\00\00\00\01\00\00\00,\00\00\00s\00t\00d\00/\00s\00t\00r\00i\00n\00g\00-\00e\00n\00c\00o\00d\00i\00n\00g\00.\00t\00s\00")
+ (data (i32.const 320) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
  (data (i32.const 384) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
  (data (i32.const 400) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00\01\d87\dc")
  (data (i32.const 432) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00h\00")
@@ -38,9 +38,6 @@
  (table $0 1 funcref)
  (global $std/string-encoding/str (mut i32) (i32.const 32))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
- (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
- (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -66,7 +63,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 112
+   i32.const 109
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -87,7 +84,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 115
+   i32.const 112
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -706,7 +703,151 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/addMemory (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/pure/decrement (; 12 ;) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.set $1
+  local.get $1
+  i32.const 268435455
+  i32.and
+  local.set $2
+  local.get $0
+  call $~lib/rt/rtrace/ondecrement
+  local.get $0
+  i32.load
+  i32.const 1
+  i32.and
+  i32.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 64
+   i32.const 120
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $2
+  i32.const 1
+  i32.eq
+  if
+   local.get $0
+   i32.const 16
+   i32.add
+   i32.const 1
+   call $~lib/rt/__visit_members
+   local.get $1
+   i32.const -2147483648
+   i32.and
+   i32.eqz
+   if
+    global.get $~lib/rt/tlsf/ROOT
+    local.get $0
+    call $~lib/rt/tlsf/freeBlock
+   else
+    local.get $0
+    i32.const -2147483648
+    i32.const 0
+    i32.or
+    i32.const 0
+    i32.or
+    i32.store offset=4
+   end
+  else
+   local.get $2
+   i32.const 0
+   i32.gt_u
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 64
+    i32.const 129
+    i32.const 15
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   i32.load offset=8
+   call $~lib/rt/__typeinfo
+   i32.const 16
+   i32.and
+   i32.eqz
+   if
+    local.get $0
+    i32.const -2147483648
+    i32.const 805306368
+    i32.or
+    local.get $2
+    i32.const 1
+    i32.sub
+    i32.or
+    i32.store offset=4
+    local.get $1
+    i32.const -2147483648
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     call $~lib/rt/pure/appendRoot
+    end
+   else
+    local.get $0
+    local.get $1
+    i32.const 268435455
+    i32.const -1
+    i32.xor
+    i32.and
+    local.get $2
+    i32.const 1
+    i32.sub
+    i32.or
+    i32.store offset=4
+   end
+  end
+ )
+ (func $~lib/rt/pure/__release (; 13 ;) (param $0 i32)
+  local.get $0
+  global.get $~lib/heap/__heap_base
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+ )
+ (func $~lib/string/String.UTF16.byteLength (; 14 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  call $~lib/rt/pure/__retain
+  local.set $0
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  local.set $1
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $1
+ )
+ (func $std/string-encoding/testUTF16Length (; 15 ;)
+  global.get $std/string-encoding/str
+  call $~lib/string/String.UTF16.byteLength
+  i32.const 12
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 272
+   i32.const 8
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $~lib/rt/tlsf/addMemory (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -854,7 +995,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 13 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (; 17 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1004,14 +1145,14 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 14 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (; 18 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
   i32.const 1073741808
   i32.ge_u
   if
-   i32.const 272
+   i32.const 336
    i32.const 112
    i32.const 457
    i32.const 29
@@ -1033,7 +1174,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1216,7 +1357,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/tlsf/growMemory (; 16 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (; 20 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1300,7 +1441,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1395,7 +1536,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 22 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1506,7 +1647,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $4
  )
- (func $~lib/rt/tlsf/__alloc (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1514,7 +1655,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/util/memory/memcpy (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2538,7 +2679,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 25 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2758,281 +2899,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/checkUsedBlock (; 22 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  local.set $1
-  local.get $0
-  i32.const 0
-  i32.ne
-  if (result i32)
-   local.get $0
-   i32.const 15
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  if (result i32)
-   local.get $1
-   i32.load
-   i32.const 1
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  if (result i32)
-   local.get $1
-   i32.load offset=4
-   i32.const -268435456
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 112
-   i32.const 570
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
- )
- (func $~lib/rt/tlsf/__free (; 23 ;) (param $0 i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  call $~lib/rt/tlsf/checkUsedBlock
-  call $~lib/rt/tlsf/freeBlock
- )
- (func $~lib/rt/pure/growRoots (; 24 ;)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  global.get $~lib/rt/pure/ROOTS
-  local.set $0
-  global.get $~lib/rt/pure/CUR
-  local.get $0
-  i32.sub
-  local.set $1
-  local.get $1
-  i32.const 2
-  i32.mul
-  local.tee $2
-  i32.const 64
-  i32.const 2
-  i32.shl
-  local.tee $3
-  local.get $2
-  local.get $3
-  i32.gt_u
-  select
-  local.set $4
-  local.get $4
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.set $5
-  local.get $5
-  i32.const 16
-  i32.sub
-  call $~lib/rt/rtrace/onfree
-  local.get $5
-  local.get $0
-  local.get $1
-  call $~lib/memory/memory.copy
-  local.get $0
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/rtrace/onalloc
-   local.get $0
-   call $~lib/rt/tlsf/__free
-  end
-  local.get $5
-  global.set $~lib/rt/pure/ROOTS
-  local.get $5
-  local.get $1
-  i32.add
-  global.set $~lib/rt/pure/CUR
-  local.get $5
-  local.get $4
-  i32.add
-  global.set $~lib/rt/pure/END
- )
- (func $~lib/rt/pure/appendRoot (; 25 ;) (param $0 i32)
-  (local $1 i32)
-  global.get $~lib/rt/pure/CUR
-  local.set $1
-  local.get $1
-  global.get $~lib/rt/pure/END
-  i32.ge_u
-  if
-   call $~lib/rt/pure/growRoots
-   global.get $~lib/rt/pure/CUR
-   local.set $1
-  end
-  local.get $1
-  local.get $0
-  i32.store
-  local.get $1
-  i32.const 4
-  i32.add
-  global.set $~lib/rt/pure/CUR
- )
- (func $~lib/rt/pure/decrement (; 26 ;) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.load offset=4
-  local.set $1
-  local.get $1
-  i32.const 268435455
-  i32.and
-  local.set $2
-  local.get $0
-  call $~lib/rt/rtrace/ondecrement
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  i32.eqz
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 64
-   i32.const 123
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  i32.const 1
-  i32.eq
-  if
-   local.get $0
-   i32.const 16
-   i32.add
-   i32.const 1
-   call $~lib/rt/__visit_members
-   local.get $1
-   i32.const -2147483648
-   i32.and
-   i32.eqz
-   if
-    global.get $~lib/rt/tlsf/ROOT
-    local.get $0
-    call $~lib/rt/tlsf/freeBlock
-   else
-    local.get $0
-    i32.const -2147483648
-    i32.const 0
-    i32.or
-    i32.const 0
-    i32.or
-    i32.store offset=4
-   end
-  else
-   local.get $2
-   i32.const 0
-   i32.gt_u
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 64
-    i32.const 132
-    i32.const 15
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   i32.load offset=8
-   call $~lib/rt/__typeinfo
-   i32.const 16
-   i32.and
-   i32.eqz
-   if
-    local.get $0
-    i32.const -2147483648
-    i32.const 805306368
-    i32.or
-    local.get $2
-    i32.const 1
-    i32.sub
-    i32.or
-    i32.store offset=4
-    local.get $1
-    i32.const -2147483648
-    i32.and
-    i32.eqz
-    if
-     local.get $0
-     call $~lib/rt/pure/appendRoot
-    end
-   else
-    local.get $0
-    local.get $1
-    i32.const 268435455
-    i32.const -1
-    i32.xor
-    i32.and
-    local.get $2
-    i32.const 1
-    i32.sub
-    i32.or
-    i32.store offset=4
-   end
-  end
- )
- (func $~lib/rt/pure/__release (; 27 ;) (param $0 i32)
-  local.get $0
-  global.get $~lib/heap/__heap_base
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
- (func $~lib/string/String.UTF16.byteLength (; 28 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  local.set $0
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  local.set $1
-  local.get $0
-  call $~lib/rt/pure/__release
-  local.get $1
- )
- (func $std/string-encoding/testUTF16Length (; 29 ;)
-  global.get $std/string-encoding/str
-  call $~lib/string/String.UTF16.byteLength
-  i32.const 12
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 336
-   i32.const 8
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/string/String.UTF16.encode (; 30 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String.UTF16.encode (; 26 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3059,13 +2926,13 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 31 ;) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 27 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=12
  )
- (func $std/string-encoding/testUTF16Encode (; 32 ;)
+ (func $std/string-encoding/testUTF16Encode (; 28 ;)
   (local $0 i32)
   (local $1 i32)
   global.get $std/string-encoding/str
@@ -3080,7 +2947,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 15
    i32.const 2
    call $~lib/builtins/abort
@@ -3093,7 +2960,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 16
    i32.const 2
    call $~lib/builtins/abort
@@ -3106,7 +2973,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 17
    i32.const 2
    call $~lib/builtins/abort
@@ -3119,7 +2986,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 18
    i32.const 2
    call $~lib/builtins/abort
@@ -3132,7 +2999,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 19
    i32.const 2
    call $~lib/builtins/abort
@@ -3145,7 +3012,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 20
    i32.const 2
    call $~lib/builtins/abort
@@ -3158,7 +3025,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 21
    i32.const 2
    call $~lib/builtins/abort
@@ -3171,7 +3038,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 22
    i32.const 2
    call $~lib/builtins/abort
@@ -3184,7 +3051,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 23
    i32.const 2
    call $~lib/builtins/abort
@@ -3197,7 +3064,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 24
    i32.const 2
    call $~lib/builtins/abort
@@ -3210,7 +3077,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 25
    i32.const 2
    call $~lib/builtins/abort
@@ -3223,7 +3090,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 26
    i32.const 2
    call $~lib/builtins/abort
@@ -3236,7 +3103,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 27
    i32.const 2
    call $~lib/builtins/abort
@@ -3245,7 +3112,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String.UTF16.decodeUnsafe (; 33 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.UTF16.decodeUnsafe (; 29 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 1
@@ -3263,7 +3130,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String.UTF16.decode (; 34 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String.UTF16.decode (; 30 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3277,7 +3144,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/string/String#get:length (; 35 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 31 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -3285,7 +3152,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 36 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 32 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -3407,7 +3274,7 @@
   call $~lib/rt/pure/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 37 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 33 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3480,7 +3347,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $std/string-encoding/testUTF16Decode (; 38 ;)
+ (func $std/string-encoding/testUTF16Decode (; 34 ;)
   (local $0 i32)
   (local $1 i32)
   global.get $std/string-encoding/str
@@ -3494,7 +3361,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 33
    i32.const 2
    call $~lib/builtins/abort
@@ -3505,7 +3372,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $std/string-encoding/testUTF16DecodeUnsafe (; 39 ;)
+ (func $std/string-encoding/testUTF16DecodeUnsafe (; 35 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3533,7 +3400,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 42
    i32.const 2
    call $~lib/builtins/abort
@@ -3548,7 +3415,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 43
    i32.const 2
    call $~lib/builtins/abort
@@ -3563,7 +3430,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 44
    i32.const 2
    call $~lib/builtins/abort
@@ -3580,7 +3447,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 45
    i32.const 2
    call $~lib/builtins/abort
@@ -3597,7 +3464,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 46
    i32.const 2
    call $~lib/builtins/abort
@@ -3614,7 +3481,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 47
    i32.const 2
    call $~lib/builtins/abort
@@ -3631,7 +3498,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 48
    i32.const 2
    call $~lib/builtins/abort
@@ -3654,7 +3521,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String.UTF8.byteLength (; 40 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.UTF8.byteLength (; 36 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3776,7 +3643,7 @@
   call $~lib/rt/pure/__release
   local.get $5
  )
- (func $std/string-encoding/testUTF8Length (; 41 ;)
+ (func $std/string-encoding/testUTF8Length (; 37 ;)
   global.get $std/string-encoding/str
   i32.const 0
   call $~lib/string/String.UTF8.byteLength
@@ -3785,7 +3652,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 55
    i32.const 2
    call $~lib/builtins/abort
@@ -3799,14 +3666,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 56
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~lib/string/String.UTF8.encode (; 42 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.UTF8.encode (; 38 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4039,7 +3906,7 @@
   call $~lib/rt/pure/__release
   local.get $8
  )
- (func $std/string-encoding/testUTF8Encode (; 43 ;)
+ (func $std/string-encoding/testUTF8Encode (; 39 ;)
   (local $0 i32)
   (local $1 i32)
   global.get $std/string-encoding/str
@@ -4055,7 +3922,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 63
    i32.const 2
    call $~lib/builtins/abort
@@ -4068,7 +3935,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 64
    i32.const 2
    call $~lib/builtins/abort
@@ -4081,7 +3948,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 65
    i32.const 2
    call $~lib/builtins/abort
@@ -4094,7 +3961,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 66
    i32.const 2
    call $~lib/builtins/abort
@@ -4107,7 +3974,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 67
    i32.const 2
    call $~lib/builtins/abort
@@ -4120,7 +3987,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 68
    i32.const 2
    call $~lib/builtins/abort
@@ -4133,7 +4000,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 69
    i32.const 2
    call $~lib/builtins/abort
@@ -4146,7 +4013,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 70
    i32.const 2
    call $~lib/builtins/abort
@@ -4159,7 +4026,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 71
    i32.const 2
    call $~lib/builtins/abort
@@ -4172,7 +4039,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 72
    i32.const 2
    call $~lib/builtins/abort
@@ -4185,7 +4052,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 73
    i32.const 2
    call $~lib/builtins/abort
@@ -4194,7 +4061,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $std/string-encoding/testUTF8EncodeNullTerminated (; 44 ;)
+ (func $std/string-encoding/testUTF8EncodeNullTerminated (; 40 ;)
   (local $0 i32)
   (local $1 i32)
   global.get $std/string-encoding/str
@@ -4210,7 +4077,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 80
    i32.const 2
    call $~lib/builtins/abort
@@ -4223,7 +4090,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 81
    i32.const 2
    call $~lib/builtins/abort
@@ -4236,7 +4103,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 82
    i32.const 2
    call $~lib/builtins/abort
@@ -4249,7 +4116,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 83
    i32.const 2
    call $~lib/builtins/abort
@@ -4262,7 +4129,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 84
    i32.const 2
    call $~lib/builtins/abort
@@ -4275,7 +4142,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 85
    i32.const 2
    call $~lib/builtins/abort
@@ -4288,7 +4155,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 86
    i32.const 2
    call $~lib/builtins/abort
@@ -4301,7 +4168,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 87
    i32.const 2
    call $~lib/builtins/abort
@@ -4314,7 +4181,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 88
    i32.const 2
    call $~lib/builtins/abort
@@ -4327,7 +4194,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 89
    i32.const 2
    call $~lib/builtins/abort
@@ -4340,7 +4207,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 90
    i32.const 2
    call $~lib/builtins/abort
@@ -4353,7 +4220,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 91
    i32.const 2
    call $~lib/builtins/abort
@@ -4362,7 +4229,53 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/tlsf/reallocateBlock (; 45 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/checkUsedBlock (; 41 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  local.set $1
+  local.get $0
+  i32.const 0
+  i32.ne
+  if (result i32)
+   local.get $0
+   i32.const 15
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if (result i32)
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if (result i32)
+   local.get $1
+   i32.load offset=4
+   i32.const -268435456
+   i32.and
+   i32.eqz
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 112
+   i32.const 570
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+ )
+ (func $~lib/rt/tlsf/reallocateBlock (; 42 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4481,7 +4394,7 @@
   end
   local.get $8
  )
- (func $~lib/rt/tlsf/__realloc (; 46 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__realloc (; 43 ;) (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   call $~lib/rt/tlsf/checkUsedBlock
@@ -4490,7 +4403,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/string/String.UTF8.decodeUnsafe (; 47 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String.UTF8.decodeUnsafe (; 44 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4721,7 +4634,7 @@
   call $~lib/rt/tlsf/__realloc
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String.UTF8.decode (; 48 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.UTF8.decode (; 45 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -4736,7 +4649,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $std/string-encoding/testUTF8Decode (; 49 ;)
+ (func $std/string-encoding/testUTF8Decode (; 46 ;)
   (local $0 i32)
   (local $1 i32)
   global.get $std/string-encoding/str
@@ -4752,7 +4665,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 97
    i32.const 2
    call $~lib/builtins/abort
@@ -4763,7 +4676,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $std/string-encoding/testUTF8DecodeNullTerminated (; 50 ;)
+ (func $std/string-encoding/testUTF8DecodeNullTerminated (; 47 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4785,7 +4698,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 103
    i32.const 2
    call $~lib/builtins/abort
@@ -4801,7 +4714,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 105
    i32.const 2
    call $~lib/builtins/abort
@@ -4818,7 +4731,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 107
    i32.const 2
    call $~lib/builtins/abort
@@ -4834,7 +4747,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 109
    i32.const 2
    call $~lib/builtins/abort
@@ -4849,7 +4762,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 110
    i32.const 2
    call $~lib/builtins/abort
@@ -4868,7 +4781,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 112
    i32.const 2
    call $~lib/builtins/abort
@@ -4891,7 +4804,7 @@
   local.get $6
   call $~lib/rt/pure/__release
  )
- (func $std/string-encoding/testUTF8DecodeUnsafe (; 51 ;)
+ (func $std/string-encoding/testUTF8DecodeUnsafe (; 48 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4924,7 +4837,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 121
    i32.const 2
    call $~lib/builtins/abort
@@ -4940,7 +4853,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 122
    i32.const 2
    call $~lib/builtins/abort
@@ -4956,7 +4869,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 123
    i32.const 2
    call $~lib/builtins/abort
@@ -4974,7 +4887,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 124
    i32.const 2
    call $~lib/builtins/abort
@@ -4992,7 +4905,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 125
    i32.const 2
    call $~lib/builtins/abort
@@ -5010,7 +4923,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 126
    i32.const 2
    call $~lib/builtins/abort
@@ -5028,7 +4941,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 128
    i32.const 2
    call $~lib/builtins/abort
@@ -5046,7 +4959,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 129
    i32.const 2
    call $~lib/builtins/abort
@@ -5064,7 +4977,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 130
    i32.const 2
    call $~lib/builtins/abort
@@ -5091,7 +5004,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $std/string-encoding/testLarge (; 52 ;) (param $0 i32)
+ (func $std/string-encoding/testLarge (; 49 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5112,7 +5025,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 136
    i32.const 2
    call $~lib/builtins/abort
@@ -5129,7 +5042,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 336
+   i32.const 272
    i32.const 138
    i32.const 2
    call $~lib/builtins/abort
@@ -5146,7 +5059,7 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $start:std/string-encoding (; 53 ;)
+ (func $start:std/string-encoding (; 50 ;)
   call $std/string-encoding/testUTF16Length
   call $std/string-encoding/testUTF16Encode
   call $std/string-encoding/testUTF16Decode
@@ -5162,10 +5075,16 @@
   i32.const 13808
   call $std/string-encoding/testLarge
  )
- (func $~start (; 54 ;)
+ (func $~start (; 51 ;)
   call $start:std/string-encoding
  )
- (func $~lib/rt/pure/__visit (; 55 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/appendRoot (; 52 ;) (param $0 i32)
+  unreachable
+ )
+ (func $~lib/rt/pure/__collect (; 53 ;)
+  return
+ )
+ (func $~lib/rt/pure/__visit (; 54 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -5175,18 +5094,21 @@
   local.get $1
   i32.const 1
   i32.eq
+  i32.eqz
   if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  else
-   local.get $0
-   local.get $1
-   call $~lib/rt/pure/__visit_collect
+   i32.const 0
+   i32.const 64
+   i32.const 69
+   i32.const 15
+   call $~lib/builtins/abort
+   unreachable
   end
+  local.get $0
+  i32.const 16
+  i32.sub
+  call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 56 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 55 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4
@@ -5209,12 +5131,6 @@
    end
    return
   end
-  unreachable
- )
- (func $~lib/rt/pure/__collect (; 57 ;)
-  nop
- )
- (func $~lib/rt/pure/__visit_collect (; 58 ;) (param $0 i32) (param $1 i32)
   unreachable
  )
 )

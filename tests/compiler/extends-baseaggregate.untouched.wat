@@ -29,10 +29,10 @@
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
+ (global $~lib/rt/__rtti_base i32 (i32.const 480))
+ (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
  (global $~lib/rt/pure/CUR (mut i32) (i32.const 0))
  (global $~lib/rt/pure/END (mut i32) (i32.const 0))
- (global $~lib/rt/pure/ROOTS (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 480))
  (global $~lib/heap/__heap_base i32 (i32.const 556))
  (export "memory" (memory $0))
  (start $~start)
@@ -1420,7 +1420,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 112
+   i32.const 109
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1439,7 +1439,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 115
+   i32.const 112
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3273,83 +3273,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/__free (; 24 ;) (param $0 i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  call $~lib/rt/tlsf/checkUsedBlock
-  call $~lib/rt/tlsf/freeBlock
- )
- (func $~lib/rt/pure/growRoots (; 25 ;)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  global.get $~lib/rt/pure/ROOTS
-  local.set $0
-  global.get $~lib/rt/pure/CUR
-  local.get $0
-  i32.sub
-  local.set $1
-  local.get $1
-  i32.const 2
-  i32.mul
-  local.tee $2
-  i32.const 64
-  i32.const 2
-  i32.shl
-  local.tee $3
-  local.get $2
-  local.get $3
-  i32.gt_u
-  select
-  local.set $4
-  local.get $4
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.set $5
-  local.get $5
-  local.get $0
-  local.get $1
-  call $~lib/memory/memory.copy
-  local.get $0
-  if
-   local.get $0
-   call $~lib/rt/tlsf/__free
-  end
-  local.get $5
-  global.set $~lib/rt/pure/ROOTS
-  local.get $5
-  local.get $1
-  i32.add
-  global.set $~lib/rt/pure/CUR
-  local.get $5
-  local.get $4
-  i32.add
-  global.set $~lib/rt/pure/END
- )
- (func $~lib/rt/pure/appendRoot (; 26 ;) (param $0 i32)
-  (local $1 i32)
-  global.get $~lib/rt/pure/CUR
-  local.set $1
-  local.get $1
-  global.get $~lib/rt/pure/END
-  i32.ge_u
-  if
-   call $~lib/rt/pure/growRoots
-   global.get $~lib/rt/pure/CUR
-   local.set $1
-  end
-  local.get $1
-  local.get $0
-  i32.store
-  local.get $1
-  i32.const 4
-  i32.add
-  global.set $~lib/rt/pure/CUR
- )
- (func $~lib/rt/pure/decrement (; 27 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 24 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3368,7 +3292,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 123
+   i32.const 120
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3407,7 +3331,7 @@
    if
     i32.const 0
     i32.const 240
-    i32.const 132
+    i32.const 129
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -3451,7 +3375,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__release (; 28 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 25 ;) (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -3462,7 +3386,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/array/Array<extends-baseaggregate/A2>#push (; 29 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<extends-baseaggregate/A2>#push (; 26 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3498,7 +3422,7 @@
   call $~lib/rt/pure/__release
   local.get $4
  )
- (func $start:extends-baseaggregate (; 30 ;)
+ (func $start:extends-baseaggregate (; 27 ;)
   (local $0 i32)
   (local $1 i32)
   global.get $extends-baseaggregate/poolA
@@ -3510,160 +3434,10 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~start (; 31 ;)
+ (func $~start (; 28 ;)
   call $start:extends-baseaggregate
  )
- (func $~lib/rt/pure/__visit (; 32 ;) (param $0 i32) (param $1 i32)
-  local.get $0
-  global.get $~lib/heap/__heap_base
-  i32.lt_u
-  if
-   return
-  end
-  local.get $1
-  i32.const 1
-  i32.eq
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  else
-   local.get $0
-   local.get $1
-   call $~lib/rt/pure/__visit_collect
-  end
- )
- (func $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl (; 33 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $0
-  i32.load offset=4
-  local.set $2
-  local.get $2
-  local.get $0
-  i32.load offset=12
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $3
-  loop $while-continue|0
-   local.get $2
-   local.get $3
-   i32.lt_u
-   local.set $4
-   local.get $4
-   if
-    local.get $2
-    i32.load
-    local.set $5
-    local.get $5
-    if
-     local.get $5
-     local.get $1
-     call $~lib/rt/pure/__visit
-    end
-    local.get $2
-    i32.const 4
-    i32.add
-    local.set $2
-    br $while-continue|0
-   end
-  end
- )
- (func $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl (; 34 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  local.get $0
-  i32.load offset=4
-  local.set $2
-  local.get $2
-  local.get $0
-  i32.load offset=12
-  i32.const 2
-  i32.shl
-  i32.add
-  local.set $3
-  loop $while-continue|0
-   local.get $2
-   local.get $3
-   i32.lt_u
-   local.set $4
-   local.get $4
-   if
-    local.get $2
-    i32.load
-    local.set $5
-    local.get $5
-    if
-     local.get $5
-     local.get $1
-     call $~lib/rt/pure/__visit
-    end
-    local.get $2
-    i32.const 4
-    i32.add
-    local.set $2
-    br $while-continue|0
-   end
-  end
- )
- (func $~lib/rt/__visit_members (; 35 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  block $block$4$break
-   block $switch$1$default
-    block $switch$1$case$10
-     block $switch$1$case$9
-      block $switch$1$case$6
-       block $switch$1$case$4
-        block $switch$1$case$2
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$6 $switch$1$case$4 $switch$1$case$6 $switch$1$case$9 $switch$1$case$10 $switch$1$default
-        end
-        return
-       end
-       br $block$4$break
-      end
-      local.get $0
-      i32.load offset=16
-      local.tee $2
-      if
-       local.get $2
-       local.get $1
-       call $~lib/rt/pure/__visit
-      end
-      return
-     end
-     local.get $0
-     local.get $1
-     call $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl
-     br $block$4$break
-    end
-    local.get $0
-    local.get $1
-    call $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl
-    br $block$4$break
-   end
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $2
-  if
-   local.get $2
-   local.get $1
-   call $~lib/rt/pure/__visit
-  end
-  return
- )
- (func $~lib/rt/pure/markGray (; 36 ;) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 29 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -3690,7 +3464,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 37 ;) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (; 30 ;) (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -3707,7 +3481,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 38 ;) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 31 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -3744,7 +3518,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 39 ;) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 32 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -3782,7 +3556,7 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__collect (; 40 ;)
+ (func $~lib/rt/pure/__collect (; 33 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3923,38 +3697,129 @@
   local.get $0
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/pure/__visit_collect (; 41 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/__free (; 34 ;) (param $0 i32)
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $0
+  call $~lib/rt/tlsf/checkUsedBlock
+  call $~lib/rt/tlsf/freeBlock
+ )
+ (func $~lib/rt/pure/growRoots (; 35 ;)
+  (local $0 i32)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  global.get $~lib/rt/pure/ROOTS
+  local.set $0
+  global.get $~lib/rt/pure/CUR
+  local.get $0
+  i32.sub
+  local.set $1
+  local.get $1
+  i32.const 2
+  i32.mul
+  local.tee $2
+  i32.const 64
+  i32.const 2
+  i32.shl
+  local.tee $3
+  local.get $2
+  local.get $3
+  i32.gt_u
+  select
+  local.set $4
+  local.get $4
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $5
+  local.get $5
+  local.get $0
+  local.get $1
+  call $~lib/memory/memory.copy
+  local.get $0
+  if
+   local.get $0
+   call $~lib/rt/tlsf/__free
+  end
+  local.get $5
+  global.set $~lib/rt/pure/ROOTS
+  local.get $5
+  local.get $1
+  i32.add
+  global.set $~lib/rt/pure/CUR
+  local.get $5
+  local.get $4
+  i32.add
+  global.set $~lib/rt/pure/END
+ )
+ (func $~lib/rt/pure/appendRoot (; 36 ;) (param $0 i32)
+  (local $1 i32)
+  global.get $~lib/rt/pure/CUR
+  local.set $1
+  local.get $1
+  global.get $~lib/rt/pure/END
+  i32.ge_u
+  if
+   call $~lib/rt/pure/growRoots
+   global.get $~lib/rt/pure/CUR
+   local.set $1
+  end
+  local.get $1
+  local.get $0
+  i32.store
+  local.get $1
+  i32.const 4
+  i32.add
+  global.set $~lib/rt/pure/CUR
+ )
+ (func $~lib/rt/pure/__visit (; 37 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $0
+  global.get $~lib/heap/__heap_base
+  i32.lt_u
+  if
+   return
+  end
   local.get $0
   i32.const 16
   i32.sub
   local.set $2
   block $break|0
-   block $case4|0
-    block $case3|0
-     block $case2|0
-      block $case1|0
-       block $case0|0
-        local.get $1
-        local.set $3
-        local.get $3
-        i32.const 2
-        i32.eq
-        br_if $case0|0
-        local.get $3
-        i32.const 3
-        i32.eq
-        br_if $case1|0
-        local.get $3
-        i32.const 4
-        i32.eq
-        br_if $case2|0
-        local.get $3
-        i32.const 5
-        i32.eq
-        br_if $case3|0
-        br $case4|0
+   block $case5|0
+    block $case4|0
+     block $case3|0
+      block $case2|0
+       block $case1|0
+        block $case0|0
+         local.get $1
+         local.set $3
+         local.get $3
+         i32.const 1
+         i32.eq
+         br_if $case0|0
+         local.get $3
+         i32.const 2
+         i32.eq
+         br_if $case1|0
+         local.get $3
+         i32.const 3
+         i32.eq
+         br_if $case2|0
+         local.get $3
+         i32.const 4
+         i32.eq
+         br_if $case3|0
+         local.get $3
+         i32.const 5
+         i32.eq
+         br_if $case4|0
+         br $case5|0
+        end
+        local.get $2
+        call $~lib/rt/pure/decrement
+        br $break|0
        end
        local.get $2
        i32.load offset=4
@@ -3966,8 +3831,8 @@
        if
         i32.const 0
         i32.const 240
-        i32.const 83
-        i32.const 17
+        i32.const 79
+        i32.const 19
         call $~lib/builtins/abort
         unreachable
        end
@@ -4001,8 +3866,8 @@
      if
       i32.const 0
       i32.const 240
-      i32.const 94
-      i32.const 6
+      i32.const 90
+      i32.const 8
       call $~lib/builtins/abort
       unreachable
      end
@@ -4031,11 +3896,140 @@
    if
     i32.const 0
     i32.const 240
-    i32.const 105
-    i32.const 24
+    i32.const 101
+    i32.const 26
     call $~lib/builtins/abort
     unreachable
    end
   end
+ )
+ (func $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl (; 38 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.load offset=4
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=12
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  loop $while-continue|0
+   local.get $2
+   local.get $3
+   i32.lt_u
+   local.set $4
+   local.get $4
+   if
+    local.get $2
+    i32.load
+    local.set $5
+    local.get $5
+    if
+     local.get $5
+     local.get $1
+     call $~lib/rt/pure/__visit
+    end
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $while-continue|0
+   end
+  end
+ )
+ (func $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl (; 39 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  i32.load offset=4
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load offset=12
+  i32.const 2
+  i32.shl
+  i32.add
+  local.set $3
+  loop $while-continue|0
+   local.get $2
+   local.get $3
+   i32.lt_u
+   local.set $4
+   local.get $4
+   if
+    local.get $2
+    i32.load
+    local.set $5
+    local.get $5
+    if
+     local.get $5
+     local.get $1
+     call $~lib/rt/pure/__visit
+    end
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $while-continue|0
+   end
+  end
+ )
+ (func $~lib/rt/__visit_members (; 40 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  block $block$4$break
+   block $switch$1$default
+    block $switch$1$case$10
+     block $switch$1$case$9
+      block $switch$1$case$6
+       block $switch$1$case$4
+        block $switch$1$case$2
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load
+         br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$6 $switch$1$case$4 $switch$1$case$6 $switch$1$case$9 $switch$1$case$10 $switch$1$default
+        end
+        return
+       end
+       br $block$4$break
+      end
+      local.get $0
+      i32.load offset=16
+      local.tee $2
+      if
+       local.get $2
+       local.get $1
+       call $~lib/rt/pure/__visit
+      end
+      return
+     end
+     local.get $0
+     local.get $1
+     call $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl
+     br $block$4$break
+    end
+    local.get $0
+    local.get $1
+    call $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl
+    br $block$4$break
+   end
+   unreachable
+  end
+  local.get $0
+  i32.load
+  local.tee $2
+  if
+   local.get $2
+   local.get $1
+   call $~lib/rt/pure/__visit
+  end
+  return
  )
 )

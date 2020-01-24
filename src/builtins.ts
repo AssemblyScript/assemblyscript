@@ -536,8 +536,6 @@ export namespace BuiltinNames {
   export const rtti_base = "~lib/rt/__rtti_base";
   export const visit_globals = "~lib/rt/__visit_globals";
   export const visit_members = "~lib/rt/__visit_members";
-  export const collect = "~lib/rt/pure/__collect";
-  export const visit_collect = "~lib/rt/pure/__visit_collect";
 
   // std/number.ts
   export const isNaN = "~lib/number/isNaN";
@@ -4189,31 +4187,6 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.call(BuiltinNames.visit_members, [ arg0, arg1 ], NativeType.None);
     }
-    case BuiltinNames.collect: {
-      if (
-        checkTypeAbsent(typeArguments, reportNode, prototype) |
-        checkArgsRequired(operands, 0, reportNode, compiler)
-      ) {
-        compiler.currentType = Type.void;
-        return module.unreachable();
-      }
-      compiler.runtimeFeatures |= RuntimeFeatures.collect;
-      compiler.currentType = Type.void;
-      return module.call(BuiltinNames.collect, null, NativeType.None);
-    }
-    case BuiltinNames.visit_collect: {
-      if (
-        checkTypeAbsent(typeArguments, reportNode, prototype) |
-        checkArgsRequired(operands, 2, reportNode, compiler)
-      ) {
-        compiler.currentType = Type.void;
-        return module.unreachable();
-      }
-      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
-      let arg1 = compiler.compileExpression(operands[1], Type.u32, Constraints.CONV_IMPLICIT);
-      compiler.currentType = Type.void;
-      return module.call(BuiltinNames.visit_collect, [ arg0, arg1 ], NativeType.None);
-    }
     case BuiltinNames.isNaN: {
       if (
         checkTypeOptional(typeArguments, reportNode, compiler) |
@@ -4760,7 +4733,8 @@ export function compileVisitGlobals(compiler: Compiler): void {
   var nativeSizeType = compiler.options.nativeSizeType;
   var visitInstance = assert(compiler.program.visitInstance);
 
-  compiler.compileFunction(visitInstance);
+  // this function is @lazy: make sure it exists
+  compiler.compileFunction(visitInstance, true);
 
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
@@ -4820,6 +4794,9 @@ export function compileVisitMembers(compiler: Compiler): void {
   var visitInstance = assert(program.visitInstance);
   var blocks = new Array<RelooperBlockRef>();
   var relooper = Relooper.create(module);
+
+  // this function is @lazy: make sure it exists
+  compiler.compileFunction(visitInstance, true);
 
   var outer = relooper.addBlockWithSwitch(
     module.nop(),
