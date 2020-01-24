@@ -671,7 +671,7 @@ export namespace String {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
           store<u8>(bufOff, c1);
-          bufOff += 1;
+          bufOff++;
         } else if (c1 < 2048) {
           let b0 = c1 >> 6 | 192;
           let b1 = c1 & 63 | 128;
