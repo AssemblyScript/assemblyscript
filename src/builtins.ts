@@ -537,6 +537,7 @@ export namespace BuiltinNames {
   export const visit_globals = "~lib/rt/__visit_globals";
   export const visit_members = "~lib/rt/__visit_members";
   export const collect = "~lib/rt/pure/__collect";
+  export const visit_collect = "~lib/rt/pure/__visit_collect";
 
   // std/number.ts
   export const isNaN = "~lib/number/isNaN";
@@ -4198,8 +4199,20 @@ export function compileCall(
       }
       compiler.runtimeFeatures |= RuntimeFeatures.collect;
       compiler.currentType = Type.void;
-      let actual = compiler.program.elementsByName.get(BuiltinNames.collect)!;
-      return module.call(actual.internalName, null, NativeType.None);
+      return module.call(BuiltinNames.collect, null, NativeType.None);
+    }
+    case BuiltinNames.visit_collect: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 2, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.void;
+        return module.unreachable();
+      }
+      let arg0 = compiler.compileExpression(operands[0], compiler.options.usizeType, Constraints.CONV_IMPLICIT);
+      let arg1 = compiler.compileExpression(operands[1], Type.u32, Constraints.CONV_IMPLICIT);
+      compiler.currentType = Type.void;
+      return module.call(BuiltinNames.visit_collect, [ arg0, arg1 ], NativeType.None);
     }
     case BuiltinNames.isNaN: {
       if (

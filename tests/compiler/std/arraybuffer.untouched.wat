@@ -1690,7 +1690,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 104
+   i32.const 112
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1711,7 +1711,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 107
+   i32.const 115
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3278,7 +3278,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 115
+   i32.const 123
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -3317,7 +3317,7 @@
    if
     i32.const 0
     i32.const 256
-    i32.const 124
+    i32.const 132
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -4134,256 +4134,28 @@
  (func $~lib/array/Array<i32>#__visit_impl (; 48 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/pure/markGray (; 49 ;) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.set $1
-  local.get $1
-  i32.const 1879048192
-  i32.and
-  i32.const 268435456
-  i32.ne
-  if
-   local.get $0
-   local.get $1
-   i32.const 1879048192
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.const 268435456
-   i32.or
-   i32.store offset=4
-   local.get $0
-   i32.const 16
-   i32.add
-   i32.const 2
-   call $~lib/rt/__visit_members
-  end
- )
- (func $~lib/rt/pure/scanBlack (; 50 ;) (param $0 i32)
-  local.get $0
-  local.get $0
-  i32.load offset=4
-  i32.const 1879048192
-  i32.const -1
-  i32.xor
-  i32.and
-  i32.const 0
-  i32.or
-  i32.store offset=4
-  local.get $0
-  i32.const 16
-  i32.add
-  i32.const 4
-  call $~lib/rt/__visit_members
- )
- (func $~lib/rt/pure/scan (; 51 ;) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.set $1
-  local.get $1
-  i32.const 1879048192
-  i32.and
-  i32.const 268435456
-  i32.eq
-  if
-   local.get $1
-   i32.const 268435455
-   i32.and
-   i32.const 0
-   i32.gt_u
-   if
-    local.get $0
-    call $~lib/rt/pure/scanBlack
-   else
-    local.get $0
-    local.get $1
-    i32.const 1879048192
-    i32.const -1
-    i32.xor
-    i32.and
-    i32.const 536870912
-    i32.or
-    i32.store offset=4
-    local.get $0
-    i32.const 16
-    i32.add
-    i32.const 3
-    call $~lib/rt/__visit_members
-   end
-  end
- )
- (func $~lib/rt/pure/collectWhite (; 52 ;) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.set $1
-  local.get $1
-  i32.const 1879048192
-  i32.and
-  i32.const 536870912
-  i32.eq
-  if (result i32)
-   local.get $1
-   i32.const -2147483648
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  if
-   local.get $0
-   local.get $1
-   i32.const 1879048192
-   i32.const -1
-   i32.xor
-   i32.and
-   i32.const 0
-   i32.or
-   i32.store offset=4
-   local.get $0
-   i32.const 16
-   i32.add
-   i32.const 5
-   call $~lib/rt/__visit_members
-   global.get $~lib/rt/tlsf/ROOT
-   local.get $0
-   call $~lib/rt/tlsf/freeBlock
-  end
- )
- (func $~lib/rt/pure/__visit (; 53 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
+ (func $~lib/rt/pure/__visit (; 49 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
   if
    return
   end
-  local.get $0
-  i32.const 16
-  i32.sub
-  local.set $2
-  block $break|0
-   block $case5|0
-    block $case4|0
-     block $case3|0
-      block $case2|0
-       block $case1|0
-        block $case0|0
-         local.get $1
-         local.set $3
-         local.get $3
-         i32.const 1
-         i32.eq
-         br_if $case0|0
-         local.get $3
-         i32.const 2
-         i32.eq
-         br_if $case1|0
-         local.get $3
-         i32.const 3
-         i32.eq
-         br_if $case2|0
-         local.get $3
-         i32.const 4
-         i32.eq
-         br_if $case3|0
-         local.get $3
-         i32.const 5
-         i32.eq
-         br_if $case4|0
-         br $case5|0
-        end
-        local.get $2
-        call $~lib/rt/pure/decrement
-        br $break|0
-       end
-       local.get $2
-       i32.load offset=4
-       i32.const 268435455
-       i32.and
-       i32.const 0
-       i32.gt_u
-       i32.eqz
-       if
-        i32.const 0
-        i32.const 256
-        i32.const 75
-        i32.const 17
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $2
-       local.get $2
-       i32.load offset=4
-       i32.const 1
-       i32.sub
-       i32.store offset=4
-       local.get $2
-       call $~lib/rt/pure/markGray
-       br $break|0
-      end
-      local.get $2
-      call $~lib/rt/pure/scan
-      br $break|0
-     end
-     local.get $2
-     i32.load offset=4
-     local.set $3
-     local.get $3
-     i32.const -268435456
-     i32.and
-     local.get $3
-     i32.const 1
-     i32.add
-     i32.const -268435456
-     i32.and
-     i32.eq
-     i32.eqz
-     if
-      i32.const 0
-      i32.const 256
-      i32.const 86
-      i32.const 6
-      call $~lib/builtins/abort
-      unreachable
-     end
-     local.get $2
-     local.get $3
-     i32.const 1
-     i32.add
-     i32.store offset=4
-     local.get $3
-     i32.const 1879048192
-     i32.and
-     i32.const 0
-     i32.ne
-     if
-      local.get $2
-      call $~lib/rt/pure/scanBlack
-     end
-     br $break|0
-    end
-    local.get $2
-    call $~lib/rt/pure/collectWhite
-    br $break|0
-   end
-   i32.const 0
-   i32.eqz
-   if
-    i32.const 0
-    i32.const 256
-    i32.const 97
-    i32.const 24
-    call $~lib/builtins/abort
-    unreachable
-   end
+  local.get $1
+  i32.const 1
+  i32.eq
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  else
+   local.get $0
+   local.get $1
+   call $~lib/rt/pure/__visit_collect
   end
  )
- (func $~lib/rt/__visit_members (; 54 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 50 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
@@ -4417,7 +4189,10 @@
   end
   return
  )
- (func $~lib/rt/pure/__collect (; 55 ;)
+ (func $~lib/rt/pure/__collect (; 51 ;)
   nop
+ )
+ (func $~lib/rt/pure/__visit_collect (; 52 ;) (param $0 i32) (param $1 i32)
+  unreachable
  )
 )

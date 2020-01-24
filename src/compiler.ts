@@ -425,13 +425,18 @@ export class Compiler extends DiagnosticEmitter {
 
     // include full GC support if there are cyclic types, otherwise replace with a dummy
     if (this.runtimeFeatures & RuntimeFeatures.collect) {
-      let collect = program.elementsByName.get(BuiltinNames.collect)!;
       if (allAcyclic) {
-        module.addFunction(collect.internalName, NativeType.None, NativeType.None, null, module.nop());
+        module.addFunction(BuiltinNames.collect, NativeType.None, NativeType.None, null, module.nop());
+        module.addFunction(BuiltinNames.visit_collect, createType([ this.options.nativeSizeType, NativeType.I32 ]), NativeType.None, null, module.unreachable());
       } else {
-        assert(collect.kind == ElementKind.FUNCTION_PROTOTYPE);
-        let instance = this.resolver.resolveFunction(<FunctionPrototype>collect, null);
-        if (instance) this.compileFunction(instance, true);
+        let collectPrototype = program.elementsByName.get(BuiltinNames.collect)!;
+        assert(collectPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+        let collectInstance = this.resolver.resolveFunction(<FunctionPrototype>collectPrototype, null);
+        if (collectInstance) this.compileFunction(collectInstance, true);
+        let visitCollectPrototype = program.elementsByName.get(BuiltinNames.visit_collect)!;
+        assert(visitCollectPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+        let visitCollectInstance = this.resolver.resolveFunction(<FunctionPrototype>visitCollectPrototype, null);
+        if (visitCollectInstance) this.compileFunction(visitCollectInstance, true);
       }
     }
 

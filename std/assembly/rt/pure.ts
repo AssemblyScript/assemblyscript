@@ -65,12 +65,20 @@ import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 @global @unsafe
 function __visit(ref: usize, cookie: i32): void {
   if (ref < __heap_base) return;
+  if (cookie == VISIT_DECREMENT) {
+    decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
+  } else {
+    __visit_collect(ref, cookie);
+  }
+}
+
+// @ts-ignore: decorator
+@unsafe @builtin
+function __visit_collect(ref: usize, cookie: i32): void {
+  // This logic is only relevant if we also compile __collect. See below.
+
   var s = changetype<Block>(ref - BLOCK_OVERHEAD);
   switch (cookie) {
-    case VISIT_DECREMENT: {
-      decrement(s);
-      break;
-    }
     case VISIT_MARKGRAY: {
       if (DEBUG) assert((s.gcInfo & REFCOUNT_MASK) > 0);
       s.gcInfo = s.gcInfo - 1;

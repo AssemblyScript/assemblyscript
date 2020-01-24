@@ -1491,7 +1491,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 104
+   i32.const 112
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1510,7 +1510,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 107
+   i32.const 115
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1868,7 +1868,7 @@
   if
    i32.const 0
    i32.const 256
-   i32.const 115
+   i32.const 123
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1880,7 +1880,6 @@
    local.get $0
    i32.const 16
    i32.add
-   i32.const 1
    call $~lib/rt/__visit_members
    local.get $2
    i32.const -2147483648
@@ -1901,7 +1900,7 @@
    if
     i32.const 0
     i32.const 256
-    i32.const 124
+    i32.const 132
     i32.const 15
     call $~lib/builtins/abort
     unreachable
@@ -34125,214 +34124,7 @@
   end
   call $start:std/typedarray
  )
- (func $~lib/rt/pure/markGray (; 521 ;) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const 1879048192
-  i32.and
-  i32.const 268435456
-  i32.ne
-  if
-   local.get $0
-   local.get $1
-   i32.const -1879048193
-   i32.and
-   i32.const 268435456
-   i32.or
-   i32.store offset=4
-   local.get $0
-   i32.const 16
-   i32.add
-   i32.const 2
-   call $~lib/rt/__visit_members
-  end
- )
- (func $~lib/rt/pure/scanBlack (; 522 ;) (param $0 i32)
-  local.get $0
-  local.get $0
-  i32.load offset=4
-  i32.const -1879048193
-  i32.and
-  i32.store offset=4
-  local.get $0
-  i32.const 16
-  i32.add
-  i32.const 4
-  call $~lib/rt/__visit_members
- )
- (func $~lib/rt/pure/scan (; 523 ;) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const 1879048192
-  i32.and
-  i32.const 268435456
-  i32.eq
-  if
-   local.get $1
-   i32.const 268435455
-   i32.and
-   i32.const 0
-   i32.gt_u
-   if
-    local.get $0
-    call $~lib/rt/pure/scanBlack
-   else
-    local.get $0
-    local.get $1
-    i32.const -1879048193
-    i32.and
-    i32.const 536870912
-    i32.or
-    i32.store offset=4
-    local.get $0
-    i32.const 16
-    i32.add
-    i32.const 3
-    call $~lib/rt/__visit_members
-   end
-  end
- )
- (func $~lib/rt/pure/collectWhite (; 524 ;) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const 1879048192
-  i32.and
-  i32.const 536870912
-  i32.eq
-  if (result i32)
-   local.get $1
-   i32.const -2147483648
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
-  if
-   local.get $0
-   local.get $1
-   i32.const -1879048193
-   i32.and
-   i32.store offset=4
-   local.get $0
-   i32.const 16
-   i32.add
-   i32.const 5
-   call $~lib/rt/__visit_members
-   global.get $~lib/rt/tlsf/ROOT
-   local.get $0
-   call $~lib/rt/tlsf/freeBlock
-  end
- )
- (func $~lib/rt/pure/__visit (; 525 ;) (param $0 i32) (param $1 i32)
-  local.get $0
-  i32.const 7732
-  i32.lt_u
-  if
-   return
-  end
-  local.get $0
-  i32.const 16
-  i32.sub
-  local.set $0
-  block $break|0
-   block $case5|0
-    block $case4|0
-     block $case3|0
-      block $case2|0
-       block $case1|0
-        local.get $1
-        i32.const 1
-        i32.ne
-        if
-         local.get $1
-         i32.const 2
-         i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0
-        end
-        local.get $0
-        call $~lib/rt/pure/decrement
-        br $break|0
-       end
-       local.get $0
-       i32.load offset=4
-       i32.const 268435455
-       i32.and
-       i32.const 0
-       i32.le_u
-       if
-        i32.const 0
-        i32.const 256
-        i32.const 75
-        i32.const 17
-        call $~lib/builtins/abort
-        unreachable
-       end
-       local.get $0
-       local.get $0
-       i32.load offset=4
-       i32.const 1
-       i32.sub
-       i32.store offset=4
-       local.get $0
-       call $~lib/rt/pure/markGray
-       br $break|0
-      end
-      local.get $0
-      call $~lib/rt/pure/scan
-      br $break|0
-     end
-     local.get $0
-     i32.load offset=4
-     local.tee $1
-     i32.const -268435456
-     i32.and
-     local.get $1
-     i32.const 1
-     i32.add
-     i32.const -268435456
-     i32.and
-     i32.ne
-     if
-      i32.const 0
-      i32.const 256
-      i32.const 86
-      i32.const 6
-      call $~lib/builtins/abort
-      unreachable
-     end
-     local.get $0
-     local.get $1
-     i32.const 1
-     i32.add
-     i32.store offset=4
-     local.get $1
-     i32.const 1879048192
-     i32.and
-     if
-      local.get $0
-      call $~lib/rt/pure/scanBlack
-     end
-     br $break|0
-    end
-    local.get $0
-    call $~lib/rt/pure/collectWhite
-    br $break|0
-   end
-   i32.const 0
-   i32.const 256
-   i32.const 97
-   i32.const 24
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/rt/__visit_members (; 526 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 521 ;) (param $0 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$2
@@ -34351,8 +34143,14 @@
   local.tee $0
   if
    local.get $0
-   local.get $1
-   call $~lib/rt/pure/__visit
+   i32.const 7732
+   i32.ge_u
+   if
+    local.get $0
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
  )
 )
