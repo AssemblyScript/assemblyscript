@@ -173,8 +173,10 @@ function growRoots(): void {
 
 /** Collects cyclic garbage. */
 // @ts-ignore: decorator
-@global @unsafe
+@global @unsafe @builtin
 export function __collect(): void {
+  // This is intercepted as a builtin so we can skip compiling it and its
+  // dependencies if the compiler can prove that all types are acyclic.
 
   // markRoots
   var roots = ROOTS;

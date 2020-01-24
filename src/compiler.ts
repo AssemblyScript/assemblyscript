@@ -271,7 +271,9 @@ export const enum RuntimeFeatures {
   /** Requires the built-in globals visitor. */
   visitGlobals = 1 << 2,
   /** Requires the built-in members visitor. */
-  visitMembers = 1 << 3
+  visitMembers = 1 << 3,
+  /** Requires the built-in collect function. */
+  collect = 1 << 4
 }
 
 /** Exported names of compiler-generated elements. */
@@ -418,7 +420,20 @@ export class Compiler extends DiagnosticEmitter {
     if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
     module.removeGlobal(BuiltinNames.rtti_base);
-    if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this);
+    var allAcyclic = true;
+    if (this.runtimeFeatures & RuntimeFeatures.RTTI) allAcyclic = compileRTTI(this);
+
+    // include full GC support if there are cyclic types, otherwise replace with a dummy
+    if (this.runtimeFeatures & RuntimeFeatures.collect) {
+      let collect = program.elementsByName.get(BuiltinNames.collect)!;
+      if (allAcyclic) {
+        module.addFunction(collect.internalName, NativeType.None, NativeType.None, null, module.nop());
+      } else {
+        assert(collect.kind == ElementKind.FUNCTION_PROTOTYPE);
+        let instance = this.resolver.resolveFunction(<FunctionPrototype>collect, null);
+        if (instance) this.compileFunction(instance, true);
+      }
+    }
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;

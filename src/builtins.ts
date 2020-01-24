@@ -536,6 +536,7 @@ export namespace BuiltinNames {
   export const rtti_base = "~lib/rt/__rtti_base";
   export const visit_globals = "~lib/rt/__visit_globals";
   export const visit_members = "~lib/rt/__visit_members";
+  export const collect = "~lib/rt/pure/__collect";
 
   // std/number.ts
   export const isNaN = "~lib/number/isNaN";
@@ -4187,6 +4188,19 @@ export function compileCall(
       compiler.currentType = Type.void;
       return module.call(BuiltinNames.visit_members, [ arg0, arg1 ], NativeType.None);
     }
+    case BuiltinNames.collect: {
+      if (
+        checkTypeAbsent(typeArguments, reportNode, prototype) |
+        checkArgsRequired(operands, 0, reportNode, compiler)
+      ) {
+        compiler.currentType = Type.void;
+        return module.unreachable();
+      }
+      compiler.runtimeFeatures |= RuntimeFeatures.collect;
+      compiler.currentType = Type.void;
+      let actual = compiler.program.elementsByName.get(BuiltinNames.collect)!;
+      return module.call(actual.internalName, null, NativeType.None);
+    }
     case BuiltinNames.isNaN: {
       if (
         checkTypeOptional(typeArguments, reportNode, compiler) |
@@ -4913,7 +4927,7 @@ function typeToRuntimeFlags(type: Type): TypeinfoFlags {
 }
 
 /** Compiles runtime type information for use by stdlib. */
-export function compileRTTI(compiler: Compiler): void {
+export function compileRTTI(compiler: Compiler): bool {
   var program = compiler.program;
   var module = compiler.module;
   var managedClasses = program.managedClasses;
@@ -4928,10 +4942,12 @@ export function compileRTTI(compiler: Compiler): void {
   var setPrototype = program.setPrototype;
   var mapPrototype = program.mapPrototype;
   var lastId = 0;
+  var allAcyclic = true;
   for (let [id, instance] of managedClasses) {
     assert(id == lastId++);
     let flags: TypeinfoFlags = 0;
     if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
+    else allAcyclic = false;
     if (instance !== abvInstance && instance.extends(abvPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAYBUFFERVIEW;
@@ -4963,6 +4979,7 @@ export function compileRTTI(compiler: Compiler): void {
   } else {
     module.addGlobal(BuiltinNames.rtti_base, NativeType.I32, false, module.i32(i64_low(segment.offset)));
   }
+  return allAcyclic;
 }
 
 // Helpers
