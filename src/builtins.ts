@@ -4917,8 +4917,13 @@ function typeToRuntimeFlags(type: Type): TypeinfoFlags {
   return flags / TypeinfoFlags.VALUE_ALIGN_0;
 }
 
-/** Compiles runtime type information for use by stdlib. Returns the set of cyclic classes. */
-export function compileRTTI(compiler: Compiler, cyclics: Set<Class> | null = null): void {
+/** Compiles runtime type information for use by stdlib. */
+export function compileRTTI(
+  /** Compile instance. */
+  compiler: Compiler,
+  /** Optional set to populate with cyclic classes. */
+  cyclicsOut: Set<Class> | null = null
+): void {
   var program = compiler.program;
   var module = compiler.module;
   var managedClasses = program.managedClasses;
@@ -4937,7 +4942,7 @@ export function compileRTTI(compiler: Compiler, cyclics: Set<Class> | null = nul
     assert(id == lastId++);
     let flags: TypeinfoFlags = 0;
     if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
-    else if (cyclics) cyclics.add(instance);
+    else if (cyclicsOut) cyclicsOut.add(instance);
     if (instance !== abvInstance && instance.extends(abvPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAYBUFFERVIEW;
