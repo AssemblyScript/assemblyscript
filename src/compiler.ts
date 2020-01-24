@@ -423,18 +423,19 @@ export class Compiler extends DiagnosticEmitter {
       else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
     }
 
-    // compile RTTI
-    module.removeGlobal(BuiltinNames.rtti_base);
-    var cyclics = new Set<Class>();
-    if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this, cyclics);
-    if (!cyclics.size) program.registerConstantInteger("__GC_ALL_ACYCLIC", Type.bool, i64_new(1, 0));
-    else if (options.pedantic) {
-      for (let classInstance of cyclics) {
-        this.info(
-          DiagnosticCode.Type_0_is_cyclic_Module_will_include_deferred_garbage_collection,
-          classInstance.identifierNode.range, classInstance.internalName
-        );
+    // check if the entire program is acyclic
+    var cyclicClasses = program.findCyclicClasses();
+    if (cyclicClasses.size) {
+      if (options.pedantic) {
+        for (let classInstance of cyclicClasses) {
+          this.info(
+            DiagnosticCode.Type_0_is_cyclic_Module_will_include_deferred_garbage_collection,
+            classInstance.identifierNode.range, classInstance.internalName
+          );
+        }
       }
+    } else {
+      program.registerConstantInteger("__GC_ALL_ACYCLIC", Type.bool, i64_new(1, 0));
     }
 
     // compile lazy library functions
@@ -451,6 +452,8 @@ export class Compiler extends DiagnosticEmitter {
     } while (lazyLibraryFunctions.size);
 
     // finalize runtime features
+    module.removeGlobal(BuiltinNames.rtti_base);
+    if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
     if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
 

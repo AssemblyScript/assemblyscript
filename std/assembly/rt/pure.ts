@@ -113,6 +113,8 @@ function increment(s: Block): void {
 }
 
 /** Decrements the reference count of the specified block by one, possibly freeing it. */
+// @ts-ignore: decorator
+@lazy
 function decrement(s: Block): void {
   var info = s.gcInfo;
   var rc = info & REFCOUNT_MASK;
@@ -120,20 +122,29 @@ function decrement(s: Block): void {
   if (DEBUG) assert(!(s.mmInfo & 1)); // used
   if (rc == 1) {
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_DECREMENT);
-    if (!(info & BUFFERED_MASK)) {
+    if (isDefined(__GC_ALL_ACYCLIC)) {
+      if (DEBUG) assert(!(info & BUFFERED_MASK));
       freeBlock(ROOT, s);
     } else {
-      s.gcInfo = BUFFERED_MASK | COLOR_BLACK | 0;
+      if (!(info & BUFFERED_MASK)) {
+        freeBlock(ROOT, s);
+      } else {
+        s.gcInfo = BUFFERED_MASK | COLOR_BLACK | 0;
+      }
     }
   } else {
     if (DEBUG) assert(rc > 0);
-    if (!(__typeinfo(s.rtId) & TypeinfoFlags.ACYCLIC)) {
-      s.gcInfo = BUFFERED_MASK | COLOR_PURPLE | (rc - 1);
-      if (!(info & BUFFERED_MASK)) {
-        appendRoot(s);
-      }
-    } else {
+    if (isDefined(__GC_ALL_ACYCLIC)) {
       s.gcInfo = (info & ~REFCOUNT_MASK) | (rc - 1);
+    } else {
+      if (!(__typeinfo(s.rtId) & TypeinfoFlags.ACYCLIC)) {
+        s.gcInfo = BUFFERED_MASK | COLOR_PURPLE | (rc - 1);
+        if (!(info & BUFFERED_MASK)) {
+          appendRoot(s);
+        }
+      } else {
+        s.gcInfo = (info & ~REFCOUNT_MASK) | (rc - 1);
+      }
     }
   }
 }
@@ -149,13 +160,7 @@ function decrement(s: Block): void {
 @lazy var END: usize = 0;
 
 /** Appends a block to possible roots. */
-// @ts-ignore: decorator
-@lazy
 function appendRoot(s: Block): void {
-  if (isDefined(__GC_ALL_ACYCLIC)) {
-    unreachable();
-    return;
-  }
   var cur = CUR;
   if (cur >= END) {
     growRoots(); // TBD: either that or pick a default and force collection on overflow
