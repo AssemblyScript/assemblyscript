@@ -210,6 +210,8 @@ export class Options {
   features: Feature = Feature.MUTABLE_GLOBALS;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
+  /** If true, enables pedantic diagnostics. */
+  pedantic: bool = false;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -234,6 +236,11 @@ export class Options {
   /** Gets the native size type matching the target. */
   get nativeSizeType(): NativeType {
     return this.target == Target.WASM64 ? NativeType.I64 : NativeType.I32;
+  }
+
+  /** Gets if any optimizations will be performed. */
+  get willOptimize(): bool {
+    return this.optimizeLevelHint > 0 || this.shrinkLevelHint > 0;
   }
 
   /** Tests if a specific feature is activated. */
@@ -418,9 +425,17 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile RTTI
     module.removeGlobal(BuiltinNames.rtti_base);
-    var allAcyclic = true;
-    if (this.runtimeFeatures & RuntimeFeatures.RTTI) allAcyclic = compileRTTI(this);
-    if (allAcyclic) program.registerConstantInteger("__GC_ALL_ACYCLIC", Type.bool, i64_new(1, 0));
+    var cyclics = new Set<Class>();
+    if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this, cyclics);
+    if (!cyclics.size) program.registerConstantInteger("__GC_ALL_ACYCLIC", Type.bool, i64_new(1, 0));
+    else if (options.pedantic) {
+      for (let classInstance of cyclics) {
+        this.info(
+          DiagnosticCode.Type_0_is_cyclic_Module_will_include_deferred_garbage_collection,
+          classInstance.identifierNode.range, classInstance.internalName
+        );
+      }
+    }
 
     // compile lazy library functions
     var lazyLibraryFunctions = this.lazyLibraryFunctions;
@@ -483,8 +498,24 @@ export class Compiler extends DiagnosticEmitter {
     module.setFunctionTable(1 + functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(1));
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
-    if (options.importTable) module.addTableImport("0", "env", "table");
-    if (options.exportTable) module.addTableExport("0", ExportNames.table);
+    if (options.importTable) {
+      module.addTableImport("0", "env", "table");
+      if (options.pedantic && options.willOptimize) {
+        this.warning(
+          DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
+          null
+        );
+      }
+    }
+    if (options.exportTable) {
+      module.addTableExport("0", ExportNames.table);
+      if (options.pedantic && options.willOptimize) {
+        this.warning(
+          DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
+          null
+        );
+      }
+    }
 
     // set up module exports
     for (let file of this.program.filesByName.values()) {

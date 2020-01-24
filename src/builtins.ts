@@ -63,7 +63,8 @@ import {
   Field,
   Global,
   DecoratorFlags,
-  Element
+  Element,
+  Class
 } from "./program";
 
 import {
@@ -4916,8 +4917,8 @@ function typeToRuntimeFlags(type: Type): TypeinfoFlags {
   return flags / TypeinfoFlags.VALUE_ALIGN_0;
 }
 
-/** Compiles runtime type information for use by stdlib. */
-export function compileRTTI(compiler: Compiler): bool {
+/** Compiles runtime type information for use by stdlib. Returns the set of cyclic classes. */
+export function compileRTTI(compiler: Compiler, cyclics: Set<Class> | null = null): void {
   var program = compiler.program;
   var module = compiler.module;
   var managedClasses = program.managedClasses;
@@ -4932,12 +4933,11 @@ export function compileRTTI(compiler: Compiler): bool {
   var setPrototype = program.setPrototype;
   var mapPrototype = program.mapPrototype;
   var lastId = 0;
-  var allAcyclic = true;
   for (let [id, instance] of managedClasses) {
     assert(id == lastId++);
     let flags: TypeinfoFlags = 0;
     if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
-    else allAcyclic = false;
+    else if (cyclics) cyclics.add(instance);
     if (instance !== abvInstance && instance.extends(abvPrototype)) {
       let valueType = instance.getArrayValueType();
       flags |= TypeinfoFlags.ARRAYBUFFERVIEW;
@@ -4969,7 +4969,6 @@ export function compileRTTI(compiler: Compiler): bool {
   } else {
     module.addGlobal(BuiltinNames.rtti_base, NativeType.I32, false, module.i32(i64_low(segment.offset)));
   }
-  return allAcyclic;
 }
 
 // Helpers
