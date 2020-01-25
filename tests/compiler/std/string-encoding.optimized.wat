@@ -99,7 +99,13 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/rt/tlsf/removeBlock (; 9 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/string/String.UTF16.byteLength (; 9 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+ )
+ (func $~lib/rt/tlsf/removeBlock (; 10 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -265,7 +271,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 10 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (; 11 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -548,7 +554,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -662,7 +668,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 12 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (; 13 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -749,7 +755,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 13 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (; 14 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741808
   i32.ge_u
@@ -773,7 +779,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 256
@@ -904,7 +910,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/growMemory (; 15 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (; 16 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   memory.size
   local.tee $2
@@ -966,7 +972,7 @@
   i32.shl
   call $~lib/rt/tlsf/addMemory
  )
- (func $~lib/rt/tlsf/prepareBlock (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -1042,7 +1048,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1124,7 +1130,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1132,7 +1138,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/memory/memory.copy (; 19 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -1305,15 +1311,7 @@
    end
   end
  )
- (func $~lib/string/String.UTF16.encode (; 20 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
- )
- (func $~lib/string/String.UTF16.encode (; 32 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String.UTF16.encode (; 21 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1327,12 +1325,6 @@
   call $~lib/memory/memory.copy
   local.get $2
   call $~lib/rt/pure/__retain
- )
- (func $~lib/arraybuffer/ArrayBuffer#get:byteLength (; 21 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
  )
  (func $std/string-encoding/testUTF16Encode (; 22 ;)
   (local $0 i32)
@@ -1677,7 +1669,7 @@
   local.tee $0
   i32.const 0
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $2
+  local.tee $3
   i32.const 288
   call $~lib/string/String.__eq
   i32.eqz
@@ -1707,7 +1699,7 @@
   local.get $0
   i32.const 4
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $4
+  local.tee $5
   i32.const 304
   call $~lib/string/String.__eq
   i32.eqz
@@ -1724,7 +1716,7 @@
   i32.add
   i32.const 2
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $5
+  local.tee $6
   i32.const 336
   call $~lib/string/String.__eq
   i32.eqz
@@ -1741,7 +1733,7 @@
   i32.add
   i32.const 4
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $6
+  local.tee $7
   i32.const 368
   call $~lib/string/String.__eq
   i32.eqz
@@ -1758,7 +1750,7 @@
   i32.add
   i32.const 4
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $7
+  local.tee $1
   i32.const 400
   call $~lib/string/String.__eq
   i32.eqz
@@ -1775,7 +1767,7 @@
   i32.add
   i32.const 0
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $1
+  local.tee $0
   i32.const 288
   call $~lib/string/String.__eq
   i32.eqz
@@ -2119,7 +2111,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 696
+   i32.const 703
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -2600,7 +2592,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 712
+   i32.const 719
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -3169,9 +3161,9 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $~start (; 44 ;)
-  i32.const 28
-  i32.load
+ (func $start:std/string-encoding (; 44 ;)
+  i32.const 32
+  call $~lib/string/String.UTF16.byteLength
   i32.const 12
   i32.ne
   if
@@ -3196,7 +3188,10 @@
   i32.const 13696
   call $std/string-encoding/testLarge
  )
- (func $~lib/rt/pure/decrement (; 45 ;) (param $0 i32)
+ (func $~start (; 45 ;)
+  call $start:std/string-encoding
+ )
+ (func $~lib/rt/pure/decrement (; 46 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3264,7 +3259,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 46 ;) (param $0 i32)
+ (func $~lib/rt/__visit_members (; 47 ;) (param $0 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2

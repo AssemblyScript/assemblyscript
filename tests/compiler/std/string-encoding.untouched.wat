@@ -2758,9 +2758,7 @@
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  call $~lib/string/String.UTF16.byteLength
   local.set $1
   local.get $1
   i32.const 0
@@ -3747,7 +3745,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 696
+   i32.const 703
    i32.const 6
    call $~lib/builtins/abort
    unreachable
@@ -4302,7 +4300,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 712
+   i32.const 719
    i32.const 6
    call $~lib/builtins/abort
    unreachable
