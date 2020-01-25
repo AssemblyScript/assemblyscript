@@ -63,7 +63,8 @@ import {
   Field,
   Global,
   DecoratorFlags,
-  Element
+  Element,
+  Class
 } from "./program";
 
 import {
@@ -2170,7 +2171,7 @@ export function compileCall(
       }
 
       // otherwise call abort if the assertion is false-ish
-      let abort = compileAbort(compiler, operands.length == 2 ? operands[1] : null, reportNode);
+      let abort = compiler.makeAbort(operands.length == 2 ? operands[1] : null, reportNode);
       compiler.currentType = type.nonNullableType;
       if (contextualType == Type.void) { // simplify if dropped anyway
         compiler.currentType = Type.void;
@@ -4726,49 +4727,6 @@ function deferASM(
   );
 }
 
-/** Compiles an abort wired to the conditionally imported 'abort' function. */
-export function compileAbort(
-  compiler: Compiler,
-  message: Expression | null,
-  reportNode: Node
-): ExpressionRef {
-  var program = compiler.program;
-  var module = compiler.module;
-
-  var stringInstance = compiler.program.stringInstance;
-  if (!stringInstance) return module.unreachable();
-
-  var abortInstance = program.abortInstance;
-  if (!(abortInstance && compiler.compileFunction(abortInstance))) return module.unreachable();
-
-  var messageArg: ExpressionRef;
-  if (message !== null) {
-    // The message argument works much like an arm of an IF that does not become executed if the
-    // assertion succeeds respectively is only being computed if the program actually crashes.
-    // Hence, let's make it so that the autorelease is skipped at the end of the current block,
-    // essentially ignoring the message GC-wise. Doesn't matter anyway on a crash.
-    messageArg = compiler.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
-  } else {
-    messageArg = compiler.makeZero(stringInstance.type);
-  }
-
-  var filenameArg = compiler.ensureStaticString(reportNode.range.source.normalizedPath);
-
-  compiler.currentType = Type.void;
-  return module.block(null, [
-    module.call(
-      abortInstance.internalName, [
-        messageArg,
-        filenameArg,
-        module.i32(reportNode.range.line),
-        module.i32(reportNode.range.column)
-      ],
-      NativeType.None
-    ),
-    module.unreachable()
-  ]);
-}
-
 /** Compiles the `visit_globals` function. */
 export function compileVisitGlobals(compiler: Compiler): void {
   var module = compiler.module;
@@ -4776,7 +4734,8 @@ export function compileVisitGlobals(compiler: Compiler): void {
   var nativeSizeType = compiler.options.nativeSizeType;
   var visitInstance = assert(compiler.program.visitInstance);
 
-  compiler.compileFunction(visitInstance);
+  // this function is @lazy: make sure it exists
+  compiler.compileFunction(visitInstance, true);
 
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
@@ -4836,6 +4795,9 @@ export function compileVisitMembers(compiler: Compiler): void {
   var visitInstance = assert(program.visitInstance);
   var blocks = new Array<RelooperBlockRef>();
   var relooper = Relooper.create(module);
+
+  // this function is @lazy: make sure it exists
+  compiler.compileFunction(visitInstance, true);
 
   var outer = relooper.addBlockWithSwitch(
     module.nop(),

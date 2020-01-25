@@ -3,10 +3,11 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
@@ -976,15 +977,15 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
+  (local $4 i32)
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/prepareSize
-  local.tee $3
+  local.tee $4
   call $~lib/rt/tlsf/searchBlock
-  local.tee $2
+  local.tee $3
   i32.eqz
   if
    i32.const 1
@@ -993,43 +994,43 @@
    i32.const 0
    global.set $~lib/rt/tlsf/collectLock
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/rt/tlsf/searchBlock
-   local.tee $2
+   local.tee $3
    i32.eqz
    if
     local.get $0
-    local.get $3
+    local.get $4
     call $~lib/rt/tlsf/growMemory
     local.get $0
-    local.get $3
+    local.get $4
     call $~lib/rt/tlsf/searchBlock
-    local.set $2
+    local.set $3
    end
   end
-  local.get $2
+  local.get $3
   i32.const 0
   i32.store offset=4
+  local.get $3
   local.get $2
+  i32.store offset=8
+  local.get $3
   local.get $1
   i32.store offset=12
   local.get $0
-  local.get $2
+  local.get $3
   call $~lib/rt/tlsf/removeBlock
   local.get $0
-  local.get $2
   local.get $3
+  local.get $4
   call $~lib/rt/tlsf/prepareBlock
-  local.get $2
+  local.get $3
  )
  (func $~lib/rt/tlsf/__alloc (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
-  call $~lib/rt/tlsf/allocateBlock
-  local.tee $0
   local.get $1
-  i32.store offset=8
-  local.get $0
+  call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
  )

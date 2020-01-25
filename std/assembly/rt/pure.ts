@@ -62,39 +62,44 @@ import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 @inline const VISIT_COLLECTWHITE = 5;
 
 // @ts-ignore: decorator
-@global @unsafe
+@global @unsafe @lazy
 function __visit(ref: usize, cookie: i32): void {
   if (ref < __heap_base) return;
-  var s = changetype<Block>(ref - BLOCK_OVERHEAD);
-  switch (cookie) {
-    case VISIT_DECREMENT: {
-      decrement(s);
-      break;
-    }
-    case VISIT_MARKGRAY: {
-      if (DEBUG) assert((s.gcInfo & REFCOUNT_MASK) > 0);
-      s.gcInfo = s.gcInfo - 1;
-      markGray(s);
-      break;
-    }
-    case VISIT_SCAN: {
-      scan(s);
-      break;
-    }
-    case VISIT_SCANBLACK: {
-      let info = s.gcInfo;
-      assert((info & ~REFCOUNT_MASK) == ((info + 1) & ~REFCOUNT_MASK)); // overflow
-      s.gcInfo = info + 1;
-      if ((info & COLOR_MASK) != COLOR_BLACK) {
-        scanBlack(s);
+  if (isDefined(__GC_ALL_ACYCLIC)) {
+    if (DEBUG) assert(cookie == VISIT_DECREMENT);
+    decrement(changetype<Block>(ref - BLOCK_OVERHEAD));
+  } else {
+    let s = changetype<Block>(ref - BLOCK_OVERHEAD);
+    switch (cookie) {
+      case VISIT_DECREMENT: {
+        decrement(s);
+        break;
       }
-      break;
+      case VISIT_MARKGRAY: {
+        if (DEBUG) assert((s.gcInfo & REFCOUNT_MASK) > 0);
+        s.gcInfo = s.gcInfo - 1;
+        markGray(s);
+        break;
+      }
+      case VISIT_SCAN: {
+        scan(s);
+        break;
+      }
+      case VISIT_SCANBLACK: {
+        let info = s.gcInfo;
+        assert((info & ~REFCOUNT_MASK) == ((info + 1) & ~REFCOUNT_MASK)); // overflow
+        s.gcInfo = info + 1;
+        if ((info & COLOR_MASK) != COLOR_BLACK) {
+          scanBlack(s);
+        }
+        break;
+      }
+      case VISIT_COLLECTWHITE: {
+        collectWhite(s);
+        break;
+      }
+      default: if (DEBUG) assert(false);
     }
-    case VISIT_COLLECTWHITE: {
-      collectWhite(s);
-      break;
-    }
-    default: if (DEBUG) assert(false);
   }
 }
 
@@ -108,6 +113,8 @@ function increment(s: Block): void {
 }
 
 /** Decrements the reference count of the specified block by one, possibly freeing it. */
+// @ts-ignore: decorator
+@lazy
 function decrement(s: Block): void {
   var info = s.gcInfo;
   var rc = info & REFCOUNT_MASK;
@@ -115,20 +122,29 @@ function decrement(s: Block): void {
   if (DEBUG) assert(!(s.mmInfo & 1)); // used
   if (rc == 1) {
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_DECREMENT);
-    if (!(info & BUFFERED_MASK)) {
+    if (isDefined(__GC_ALL_ACYCLIC)) {
+      if (DEBUG) assert(!(info & BUFFERED_MASK));
       freeBlock(ROOT, s);
     } else {
-      s.gcInfo = BUFFERED_MASK | COLOR_BLACK | 0;
+      if (!(info & BUFFERED_MASK)) {
+        freeBlock(ROOT, s);
+      } else {
+        s.gcInfo = BUFFERED_MASK | COLOR_BLACK | 0;
+      }
     }
   } else {
     if (DEBUG) assert(rc > 0);
-    if (!(__typeinfo(s.rtId) & TypeinfoFlags.ACYCLIC)) {
-      s.gcInfo = BUFFERED_MASK | COLOR_PURPLE | (rc - 1);
-      if (!(info & BUFFERED_MASK)) {
-        appendRoot(s);
-      }
-    } else {
+    if (isDefined(__GC_ALL_ACYCLIC)) {
       s.gcInfo = (info & ~REFCOUNT_MASK) | (rc - 1);
+    } else {
+      if (!(__typeinfo(s.rtId) & TypeinfoFlags.ACYCLIC)) {
+        s.gcInfo = BUFFERED_MASK | COLOR_PURPLE | (rc - 1);
+        if (!(info & BUFFERED_MASK)) {
+          appendRoot(s);
+        }
+      } else {
+        s.gcInfo = (info & ~REFCOUNT_MASK) | (rc - 1);
+      }
     }
   }
 }
@@ -173,8 +189,9 @@ function growRoots(): void {
 
 /** Collects cyclic garbage. */
 // @ts-ignore: decorator
-@global @unsafe
+@global @unsafe @lazy
 export function __collect(): void {
+  if (isDefined(__GC_ALL_ACYCLIC)) return;
 
   // markRoots
   var roots = ROOTS;

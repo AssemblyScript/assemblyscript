@@ -1610,6 +1610,11 @@
   local.tee $0
   i32.eqz
   if
+   i32.const 0
+   i32.const 64
+   i32.const 17
+   i32.const 11
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0
@@ -1619,6 +1624,11 @@
   local.tee $0
   i32.eqz
   if
+   i32.const 0
+   i32.const 64
+   i32.const 18
+   i32.const 11
+   call $~lib/builtins/abort
    unreachable
   end
   local.get $0

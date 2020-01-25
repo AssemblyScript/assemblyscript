@@ -6,7 +6,6 @@
 import {
   BuiltinNames,
   compileCall as compileBuiltinCall,
-  compileAbort,
   compileVisitGlobals,
   compileVisitMembers,
   compileRTTI,
@@ -211,6 +210,8 @@ export class Options {
   features: Feature = Feature.MUTABLE_GLOBALS;
   /** If true, disallows unsafe features in user code. */
   noUnsafe: bool = false;
+  /** If true, enables pedantic diagnostics. */
+  pedantic: bool = false;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -235,6 +236,11 @@ export class Options {
   /** Gets the native size type matching the target. */
   get nativeSizeType(): NativeType {
     return this.target == Target.WASM64 ? NativeType.I64 : NativeType.I32;
+  }
+
+  /** Gets if any optimizations will be performed. */
+  get willOptimize(): bool {
+    return this.optimizeLevelHint > 0 || this.shrinkLevelHint > 0;
   }
 
   /** Tests if a specific feature is activated. */
@@ -323,6 +329,8 @@ export class Compiler extends DiagnosticEmitter {
   skippedAutoreleases: Set<ExpressionRef> = new Set();
   /** Current inline functions stack. */
   inlineStack: Function[] = [];
+  /** Lazily compiled library functions. */
+  lazyLibraryFunctions: Set<Function> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -388,7 +396,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // compile the start function if not empty or explicitly requested
+    // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
     var explicitStart = options.explicitStart;
     if (!startIsEmpty || explicitStart) {
@@ -415,11 +423,39 @@ export class Compiler extends DiagnosticEmitter {
       else module.addFunctionExport(startFunctionInstance.internalName, ExportNames.start);
     }
 
-    // compile runtime features
-    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
-    if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
+    // check if the entire program is acyclic
+    var cyclicClasses = program.findCyclicClasses();
+    if (cyclicClasses.size) {
+      if (options.pedantic) {
+        for (let classInstance of cyclicClasses) {
+          this.info(
+            DiagnosticCode.Type_0_is_cyclic_Module_will_include_deferred_garbage_collection,
+            classInstance.identifierNode.range, classInstance.internalName
+          );
+        }
+      }
+    } else {
+      program.registerConstantInteger("__GC_ALL_ACYCLIC", Type.bool, i64_new(1, 0));
+    }
+
+    // compile lazy library functions
+    var lazyLibraryFunctions = this.lazyLibraryFunctions;
+    do {
+      let functionsToCompile = new Array<Function>();
+      for (let instance of lazyLibraryFunctions) {
+        functionsToCompile.push(instance);
+      }
+      lazyLibraryFunctions.clear();
+      for (let i = 0, k = functionsToCompile.length; i < k; ++i) {
+        this.compileFunction(unchecked(functionsToCompile[i]), true);
+      }
+    } while (lazyLibraryFunctions.size);
+
+    // finalize runtime features
     module.removeGlobal(BuiltinNames.rtti_base);
     if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this);
+    if (this.runtimeFeatures & RuntimeFeatures.visitGlobals) compileVisitGlobals(this);
+    if (this.runtimeFeatures & RuntimeFeatures.visitMembers) compileVisitMembers(this);
 
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
@@ -465,8 +501,24 @@ export class Compiler extends DiagnosticEmitter {
     module.setFunctionTable(1 + functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(1));
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
-    if (options.importTable) module.addTableImport("0", "env", "table");
-    if (options.exportTable) module.addTableExport("0", ExportNames.table);
+    if (options.importTable) {
+      module.addTableImport("0", "env", "table");
+      if (options.pedantic && options.willOptimize) {
+        this.warning(
+          DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
+          null
+        );
+      }
+    }
+    if (options.exportTable) {
+      module.addTableExport("0", ExportNames.table);
+      if (options.pedantic && options.willOptimize) {
+        this.warning(
+          DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
+          null
+        );
+      }
+    }
 
     // set up module exports
     for (let file of this.program.filesByName.values()) {
@@ -1102,11 +1154,15 @@ export class Compiler extends DiagnosticEmitter {
     forceStdAlternative: bool = false
   ): bool {
     if (instance.is(CommonFlags.COMPILED)) return true;
-    if (instance.hasDecorator(DecoratorFlags.BUILTIN)) {
-      if (!forceStdAlternative) return true;
+    if (!forceStdAlternative) {
+      if (instance.hasDecorator(DecoratorFlags.BUILTIN)) return true;
+      if (instance.hasDecorator(DecoratorFlags.LAZY)) {
+        this.lazyLibraryFunctions.add(instance);
+        return true;
+      }
     }
 
-    var previousType = this.currentType; // remember to retain it if compiling a function lazily
+    var previousType = this.currentType;
     instance.set(CommonFlags.COMPILED);
 
     var module = this.module;
@@ -2499,7 +2555,9 @@ export class Compiler extends DiagnosticEmitter {
       let newArgs = (<NewExpression>value).arguments;
       if (newArgs.length) message = newArgs[0]; // FIXME: naively assumes type string
     }
-    stmts.push(compileAbort(this, message, statement));
+    stmts.push(
+      this.makeAbort(message, statement)
+    );
 
     return this.module.flatten(stmts);
   }
@@ -3125,21 +3183,48 @@ export class Compiler extends DiagnosticEmitter {
     // any to void
     if (toType.kind == TypeKind.VOID) return module.drop(expr);
 
-    if (this.currentFlow.isNonnull(expr, fromType)) fromType = fromType.nonNullableType;
+    // reference involved
+    if (fromType.is(TypeFlags.REFERENCE) || toType.is(TypeFlags.REFERENCE)) {
+      if (this.currentFlow.isNonnull(expr, fromType)) {
+        fromType = fromType.nonNullableType;
+      } else if (explicit && fromType.is(TypeFlags.NULLABLE) && !toType.is(TypeFlags.NULLABLE)) {
+        // explicit conversion from nullable to non-nullable requires a runtime
+        // check here because nonnull state above already didn't know better
+        if (!this.options.noAssert) {
+          expr = this.makeRuntimeNonNullCheck(expr, fromType, reportNode);
+        }
+        fromType = fromType.nonNullableType;
+      }
+      if (fromType.isAssignableTo(toType)) { // downcast or same
+        assert(fromType.kind == toType.kind);
+        this.currentType = toType;
+        return expr;
+      }
+      if (explicit && toType.nonNullableType.isAssignableTo(fromType)) { // upcast
+        // <Cat | null>(<Animal>maybeCat)
+        assert(fromType.kind == toType.kind);
+        if (!this.options.noAssert) {
+          expr = this.makeRuntimeUpcastCheck(expr, fromType, toType, reportNode);
+        }
+        this.currentType = toType;
+        return expr;
+      }
+      this.error(
+        DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        reportNode.range, fromType.toString(), toType.toString()
+      );
+      this.currentType = toType;
+      return module.unreachable();
+    }
+
+    // not dealing with references from here on
 
     if (!fromType.isAssignableTo(toType)) {
       if (!explicit) {
-        if (fromType.nonNullableType == toType) {
-          this.error(
-            DiagnosticCode.Object_is_possibly_null,
-            reportNode.range
-          ); // recoverable
-        } else {
-          this.error(
-            DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
-            reportNode.range, fromType.toString(), toType.toString()
-          ); // recoverable
-        }
+        this.error(
+          DiagnosticCode.Conversion_from_type_0_to_1_requires_an_explicit_cast,
+          reportNode.range, fromType.toString(), toType.toString()
+        ); // recoverable
       }
     }
 
@@ -3319,19 +3404,9 @@ export class Compiler extends DiagnosticEmitter {
             expression.expression.range
           );
         } else if (!this.options.noAssert) {
-          let module = this.module;
-          let flow = this.currentFlow;
-          let temp = flow.getTempLocal(type);
-          if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
-          flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
-          expr = module.if(
-            module.local_tee(temp.index, expr),
-            module.local_get(temp.index, type.toNativeType()),
-            module.unreachable()
-          );
-          flow.freeTempLocal(temp);
+          expr = this.makeRuntimeNonNullCheck(expr, type, expression);
         }
-        this.currentType = this.currentType.nonNullableType;
+        this.currentType = type.nonNullableType;
         return expr;
       }
       default: assert(false);
@@ -9375,6 +9450,98 @@ export class Compiler extends DiagnosticEmitter {
       );
     }
     return stmts;
+  }
+
+  /** Makes a call to `abort`, if present, otherwise creates a trap. */
+  makeAbort(
+    /** Message argument of type string, if any. */
+    message: Expression | null,
+    /** Code location to report when aborting. */
+    codeLocation: Node
+  ): ExpressionRef {
+    var program = this.program;
+    var module = this.module;
+    var stringInstance = program.stringInstance;
+    var abortInstance = program.abortInstance;
+    if (!abortInstance || !this.compileFunction(abortInstance)) return module.unreachable();
+
+    var messageArg: ExpressionRef;
+    if (message !== null) {
+      // The message argument works much like an arm of an IF that does not become executed if the
+      // assertion succeeds respectively is only being computed if the program actually crashes.
+      // Hence, let's make it so that the autorelease is skipped at the end of the current block,
+      // essentially ignoring the message GC-wise. Doesn't matter anyway on a crash.
+      messageArg = this.compileExpression(message, stringInstance.type, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
+    } else {
+      messageArg = this.makeZero(stringInstance.type);
+    }
+
+    var filenameArg = this.ensureStaticString(codeLocation.range.source.normalizedPath);
+    return module.block(null, [
+      module.call(
+        abortInstance.internalName, [
+          messageArg,
+          filenameArg,
+          module.i32(codeLocation.range.line),
+          module.i32(codeLocation.range.column)
+        ],
+        NativeType.None
+      ),
+      module.unreachable()
+    ]);
+  }
+
+  /** Makes a runtime non-null check, e.g. on `<Type>possiblyNull` or `possiblyNull!`. */
+  makeRuntimeNonNullCheck(
+    /** Expression being checked. */
+    expr: ExpressionRef,
+    /** Type of the expression. */
+    type: Type,
+    /** Report node. */
+    reportNode: Node
+  ): ExpressionRef {
+    assert(type.is(TypeFlags.NULLABLE | TypeFlags.REFERENCE));
+    var module = this.module;
+    var flow = this.currentFlow;
+    var temp = flow.getTempLocal(type);
+    if (!flow.canOverflow(expr, type)) flow.setLocalFlag(temp.index, LocalFlags.WRAPPED);
+    flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
+    expr = module.if(
+      module.local_tee(temp.index, expr),
+      module.local_get(temp.index, type.toNativeType()),
+      this.makeAbort(null, reportNode) // TODO: throw
+    );
+    flow.freeTempLocal(temp);
+    return expr;
+  }
+
+  /** Makes a runtime upcast check, e.g. on `<Child>parent`. */
+  makeRuntimeUpcastCheck(
+    /** Expression being upcast. */
+    expr: ExpressionRef,
+    /** Type of the expression. */
+    type: Type,
+    /** Type casting to. */
+    toType: Type,
+    /** Report node. */
+    reportNode: Node
+  ): ExpressionRef {
+    assert(toType.is(TypeFlags.REFERENCE) && toType.nonNullableType.isAssignableTo(type));
+    var module = this.module;
+    var flow = this.currentFlow;
+    var temp = flow.getTempLocal(type);
+    var instanceofInstance = this.program.instanceofInstance;
+    assert(this.compileFunction(instanceofInstance));
+    expr = module.if(
+      module.call(instanceofInstance.internalName, [
+        module.local_tee(temp.index, expr),
+        module.i32(assert(toType.classReference).id)
+      ], NativeType.I32),
+      module.local_get(temp.index, type.toNativeType()),
+      this.makeAbort(null, reportNode) // TODO: throw
+    );
+    flow.freeTempLocal(temp);
+    return expr;
   }
 }
 

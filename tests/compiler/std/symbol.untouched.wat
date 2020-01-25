@@ -3405,6 +3405,11 @@
   if (result i32)
    local.get $0
   else
+   i32.const 0
+   i32.const 64
+   i32.const 17
+   i32.const 11
+   call $~lib/builtins/abort
    unreachable
   end
   call $~lib/rt/stub/__retain
@@ -3415,6 +3420,11 @@
   if (result i32)
    local.get $0
   else
+   i32.const 0
+   i32.const 64
+   i32.const 18
+   i32.const 11
+   call $~lib/builtins/abort
    unreachable
   end
   call $~lib/rt/stub/__retain
