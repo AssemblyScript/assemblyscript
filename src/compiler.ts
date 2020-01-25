@@ -329,7 +329,7 @@ export class Compiler extends DiagnosticEmitter {
   skippedAutoreleases: Set<ExpressionRef> = new Set();
   /** Current inline functions stack. */
   inlineStack: Function[] = [];
-  /** Lazily compiled runtime functions. */
+  /** Lazily compiled library functions. */
   lazyLibraryFunctions: Set<Function> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
