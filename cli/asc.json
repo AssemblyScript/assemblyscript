@@ -224,6 +224,11 @@
     "description": "Specifies the path to a custom transform to 'require'.",
     "type": "S"
   },
+  "pedantic": {
+    "description": "Make yourself sad for no good reason.",
+    "type": "b",
+    "default": false
+  },
   "traceResolution": {
     "description": "Enables tracing of package resolution.",
     "type": "b",

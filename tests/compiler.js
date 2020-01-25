@@ -148,6 +148,7 @@ function runTest(basename) {
     "--validate",
     "--measure",
     "--debug",
+    "--pedantic",
     "--textFile" // -> stdout
   ];
   if (asc_flags)
@@ -225,6 +226,7 @@ function runTest(basename) {
       "--baseDir", basedir,
       "--validate",
       "--measure",
+      "--pedantic",
       "--binaryFile", // -> stdout
       "-O"
     ];
