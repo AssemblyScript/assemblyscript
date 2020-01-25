@@ -428,7 +428,7 @@ export class Compiler extends DiagnosticEmitter {
     if (cyclicClasses.size) {
       if (options.pedantic) {
         for (let classInstance of cyclicClasses) {
-          this.info(
+          this.pedantic(
             DiagnosticCode.Type_0_is_cyclic_Module_will_include_deferred_garbage_collection,
             classInstance.identifierNode.range, classInstance.internalName
           );
@@ -504,7 +504,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.importTable) {
       module.addTableImport("0", "env", "table");
       if (options.pedantic && options.willOptimize) {
-        this.warning(
+        this.pedantic(
           DiagnosticCode.Importing_the_table_disables_some_indirect_call_optimizations,
           null
         );
@@ -513,7 +513,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.exportTable) {
       module.addTableExport("0", ExportNames.table);
       if (options.pedantic && options.willOptimize) {
-        this.warning(
+        this.pedantic(
           DiagnosticCode.Exporting_the_table_disables_some_indirect_call_optimizations,
           null
         );
@@ -5532,6 +5532,12 @@ export class Compiler extends DiagnosticEmitter {
         assert(indexedSet.signature.parameterTypes.length == 2); // parser must guarantee this
         targetType = indexedSet.signature.parameterTypes[1];     // 2nd parameter is the element
         if (indexedSet.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
+        if (!isUnchecked && this.options.pedantic) {
+          this.pedantic(
+            DiagnosticCode.Indexed_access_may_involve_bounds_checking,
+            expression.range
+          );
+        }
         break;
       }
       default: {
@@ -7174,11 +7180,18 @@ export class Compiler extends DiagnosticEmitter {
       if (targetType.is(TypeFlags.REFERENCE)) {
         let classReference = targetType.classReference;
         if (classReference) {
-          let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT));
+          let isUnchecked = this.currentFlow.is(FlowFlags.UNCHECKED_CONTEXT);
+          let indexedGet = classReference.lookupOverload(OperatorKind.INDEXED_GET, isUnchecked);
           if (indexedGet) {
             let thisArg = this.compileExpression(targetExpression, classReference.type,
               Constraints.CONV_IMPLICIT
             );
+            if (!isUnchecked && this.options.pedantic) {
+              this.pedantic(
+                DiagnosticCode.Indexed_access_may_involve_bounds_checking,
+                expression.range
+              );
+            }
             return this.compileCallDirect(indexedGet, [
               expression.elementExpression
             ], expression, thisArg, constraints);
@@ -7625,6 +7638,12 @@ export class Compiler extends DiagnosticEmitter {
             ], expression)
           );
           flow.freeTempLocal(temp);
+          if (this.options.pedantic) {
+            this.pedantic(
+              DiagnosticCode.Expression_compiles_to_a_dynamic_check_at_runtime,
+              expression.range
+            );
+          }
           return ret;
         } else {
           this.error(
