@@ -63,7 +63,8 @@ import {
   Field,
   Global,
   DecoratorFlags,
-  Element
+  Element,
+  Class
 } from "./program";
 
 import {
@@ -4733,7 +4734,8 @@ export function compileVisitGlobals(compiler: Compiler): void {
   var nativeSizeType = compiler.options.nativeSizeType;
   var visitInstance = assert(compiler.program.visitInstance);
 
-  compiler.compileFunction(visitInstance);
+  // this function is @lazy: make sure it exists
+  compiler.compileFunction(visitInstance, true);
 
   for (let element of compiler.program.elementsByName.values()) {
     if (element.kind != ElementKind.GLOBAL) continue;
@@ -4793,6 +4795,9 @@ export function compileVisitMembers(compiler: Compiler): void {
   var visitInstance = assert(program.visitInstance);
   var blocks = new Array<RelooperBlockRef>();
   var relooper = Relooper.create(module);
+
+  // this function is @lazy: make sure it exists
+  compiler.compileFunction(visitInstance, true);
 
   var outer = relooper.addBlockWithSwitch(
     module.nop(),

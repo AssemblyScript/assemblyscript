@@ -37,6 +37,9 @@ export enum DiagnosticCode {
   _0_must_be_a_power_of_two = 223,
   _0_is_not_a_valid_operator = 224,
   Expression_cannot_be_represented_by_a_type = 225,
+  Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
+  Importing_the_table_disables_some_indirect_call_optimizations = 901,
+  Exporting_the_table_disables_some_indirect_call_optimizations = 902,
   Unterminated_string_literal = 1002,
   Identifier_expected = 1003,
   _0_expected = 1005,
@@ -181,6 +184,9 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 223: return "'{0}' must be a power of two.";
     case 224: return "'{0}' is not a valid operator.";
     case 225: return "Expression cannot be represented by a type.";
+    case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
+    case 901: return "Importing the table disables some indirect call optimizations.";
+    case 902: return "Exporting the table disables some indirect call optimizations.";
     case 1002: return "Unterminated string literal.";
     case 1003: return "Identifier expected.";
     case 1005: return "'{0}' expected.";

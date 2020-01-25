@@ -1068,7 +1068,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Registers a constant integer value within the global scope. */
-  private registerConstantInteger(name: string, type: Type, value: I64): void {
+  registerConstantInteger(name: string, type: Type, value: I64): void {
     assert(type.is(TypeFlags.INTEGER)); // must be an integer type
     var global = new Global(
       name,
@@ -1797,6 +1797,9 @@ export class Program extends DiagnosticEmitter {
       validDecorators |= DecoratorFlags.EXTERNAL;
     } else {
       validDecorators |= DecoratorFlags.INLINE;
+      if (declaration.range.source.isLibrary) {
+        validDecorators |= DecoratorFlags.LAZY;
+      }
     }
     if (!declaration.is(CommonFlags.INSTANCE)) {
       if (parent.kind != ElementKind.CLASS_PROTOTYPE) {
@@ -1982,6 +1985,16 @@ export class Program extends DiagnosticEmitter {
   //   } while (current = current.base);
   //   return null;
   // }
+
+  /** Finds all cyclic classes. */
+  findCyclicClasses(): Set<Class> {
+    var managedClasses = this.managedClasses;
+    var cyclics = new Set<Class>();
+    for (let instance of managedClasses.values()) {
+      if (!instance.isAcyclic) cyclics.add(instance);
+    }
+    return cyclics;
+  }
 }
 
 /** Indicates the specific kind of an {@link Element}. */
@@ -3220,8 +3233,13 @@ export class ClassPrototype extends DeclaredElement {
   /** Tests if this prototype extends the specified. */
   extends(basePtototype: ClassPrototype | null): bool {
     var current: ClassPrototype | null = this;
-    do if (current === basePtototype) return true;
-    while (current = current.basePrototype);
+    var seen = new Set<ClassPrototype>();
+    do {
+      // cannot directly or indirectly extend itself
+      if (seen.has(current)) break;
+      seen.add(current);
+      if (current === basePtototype) return true;
+    } while (current = current.basePrototype);
     return false;
   }
 

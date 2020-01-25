@@ -103,33 +103,6 @@ export class DiagnosticMessage {
     return new DiagnosticMessage(code, category, message);
   }
 
-  /** Creates a new informatory diagnostic message. */
-  static createInfo(
-    code: DiagnosticCode,
-    arg0: string | null = null,
-    arg1: string | null = null
-  ): DiagnosticMessage {
-    return DiagnosticMessage.create(code, DiagnosticCategory.INFO, arg0, arg1);
-  }
-
-  /** Creates a new warning diagnostic message. */
-  static createWarning(
-    code: DiagnosticCode,
-    arg0: string | null = null,
-    arg1: string | null = null
-  ): DiagnosticMessage {
-    return DiagnosticMessage.create(code, DiagnosticCategory.WARNING, arg0, arg1);
-  }
-
-  /** Creates a new error diagnostic message. */
-  static createError(
-    code: DiagnosticCode,
-    arg0: string | null = null,
-    arg1: string | null = null
-  ): DiagnosticMessage {
-    return DiagnosticMessage.create(code, DiagnosticCategory.ERROR, arg0, arg1);
-  }
-
   /** Adds a source range to this message. */
   withRange(range: Range): this {
     this.range = range;
@@ -273,7 +246,7 @@ export abstract class DiagnosticEmitter {
   emitDiagnostic(
     code: DiagnosticCode,
     category: DiagnosticCategory,
-    range: Range,
+    range: Range | null,
     relatedRange: Range | null,
     arg0: string | null = null,
     arg1: string | null = null,
@@ -282,17 +255,20 @@ export abstract class DiagnosticEmitter {
     // It is possible that the same diagnostic is emitted twice, for example
     // when compiling generics with different types or when recompiling a loop
     // because our initial assumptions didn't hold. Deduplicate these.
-    var seen = this.seen;
-    if (seen.has(range)) {
-      let codes = seen.get(range)!;
-      if (codes.has(code)) return;
-      codes.add(code);
-    } else {
-      let codes = new Set<DiagnosticCode>();
-      codes.add(code);
-      seen.set(range, codes);
+    if (range) {
+      let seen = this.seen;
+      if (seen.has(range)) {
+        let codes = seen.get(range)!;
+        if (codes.has(code)) return;
+        codes.add(code);
+      } else {
+        let codes = new Set<DiagnosticCode>();
+        codes.add(code);
+        seen.set(range, codes);
+      }
     }
-    var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2).withRange(range);
+    var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);
+    if (range) message = message.withRange(range);
     if (relatedRange) message.relatedRange = relatedRange;
     this.diagnostics.push(message);
     // console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
@@ -302,7 +278,7 @@ export abstract class DiagnosticEmitter {
   /** Emits an informatory diagnostic message. */
   info(
     code: DiagnosticCode,
-    range: Range,
+    range: Range | null,
     arg0: string | null = null,
     arg1: string | null = null,
     arg2: string | null = null
@@ -325,7 +301,7 @@ export abstract class DiagnosticEmitter {
   /** Emits a warning diagnostic message. */
   warning(
     code: DiagnosticCode,
-    range: Range,
+    range: Range | null,
     arg0: string | null = null,
     arg1: string | null = null,
     arg2: string | null = null
@@ -348,7 +324,7 @@ export abstract class DiagnosticEmitter {
   /** Emits an error diagnostic message. */
   error(
     code: DiagnosticCode,
-    range: Range,
+    range: Range | null,
     arg0: string | null = null,
     arg1: string | null = null,
     arg2: string | null = null
