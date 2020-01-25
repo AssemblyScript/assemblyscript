@@ -623,9 +623,12 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.FIELD: {
-        this.makeExportedFieldGetter(prefix + GETTER_PREFIX + name, <Field>element);
-        if (!element.is(CommonFlags.READONLY)) {
-          this.makeExportedFieldSetter(prefix + SETTER_PREFIX + name, <Field>element);
+        if (element.is(CommonFlags.COMPILED)) {
+          let module = this.module;
+          module.addFunctionExport((<Field>element).internalGetterName, prefix + GETTER_PREFIX + name);
+          if (!element.is(CommonFlags.READONLY)) {
+            module.addFunctionExport((<Field>element).internalSetterName, prefix + SETTER_PREFIX + name);
+          }
         }
         break;
       }
@@ -672,48 +675,6 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     }
-  }
-
-  /** Makes an exported function to get the value of an instance field. */
-  private makeExportedFieldGetter(name: string, field: Field): void {
-    var type = field.type;
-    var nativeThisType = this.options.nativeSizeType;
-    var nativeValueType = type.toNativeType();
-    var module = this.module;
-    var returnExpr = module.load(type.byteSize, type.is(TypeFlags.SIGNED),
-      module.local_get(0, nativeThisType),
-      nativeValueType, field.memoryOffset
-    );
-    // functions retain the return value for the caller
-    if (type.isManaged) returnExpr = this.makeRetain(returnExpr);
-    module.addFunction(name, nativeThisType, nativeValueType, null, returnExpr);
-    module.addFunctionExport(name, name);
-  }
-
-  /** Makes an exported function to set the value of an instance field. */
-  private makeExportedFieldSetter(name: string, field: Field): void {
-    var type = field.type;
-    var nativeThisType = this.options.nativeSizeType;
-    var nativeValueType = type.toNativeType();
-    var module = this.module;
-    var valueExpr = module.local_get(1, nativeValueType);
-    if (type.isManaged) {
-      valueExpr = this.makeReplace(
-        module.load(type.byteSize, false,
-          module.local_get(0, nativeThisType),
-          nativeValueType, field.memoryOffset
-        ),
-        valueExpr
-      );
-    }
-    module.addFunction(name, createType([ nativeThisType, nativeValueType ]), NativeType.None, null,
-      module.store(type.byteSize,
-        module.local_get(0, nativeThisType),
-        valueExpr,
-        nativeValueType, field.memoryOffset
-      )
-    );
-    module.addFunctionExport(name, name);
   }
 
   // === Elements =================================================================================
@@ -1423,20 +1384,67 @@ export class Compiler extends DiagnosticEmitter {
             }
             break;
           }
-          case ElementKind.FIELD_PROTOTYPE: {
-            element.set(CommonFlags.COMPILED);
+          case ElementKind.FIELD: {
+            this.compileField(<Field>element);
             break;
           }
           case ElementKind.PROPERTY: {
-            let getterInstance = (<Property>element).getterInstance;
-            if (getterInstance) this.compileFunction(getterInstance);
-            let setterInstance = (<Property>element).setterInstance;
-            if (setterInstance) this.compileFunction(setterInstance);
+            this.compileProperty(<Property>element);
             break;
           }
         }
       }
     }
+    return true;
+  }
+
+  /** Compiles an instance field to a getter and a setter. */
+  compileField(instance: Field): bool {
+    if (instance.is(CommonFlags.COMPILED)) return true;
+    instance.set(CommonFlags.COMPILED);
+    var type = instance.type;
+    var nativeThisType = this.options.nativeSizeType;
+    var nativeValueType = type.toNativeType();
+    var module = this.module;
+
+    // Make a getter
+    var returnExpr = module.load(type.byteSize, type.is(TypeFlags.SIGNED),
+      module.local_get(0, nativeThisType),
+      nativeValueType, instance.memoryOffset
+    );
+    if (type.isManaged) returnExpr = this.makeRetain(returnExpr);
+    module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, null, returnExpr);
+
+    // Make a setter
+    var valueExpr = module.local_get(1, nativeValueType);
+    if (type.isManaged) {
+      valueExpr = this.makeReplace(
+        module.load(type.byteSize, false,
+          module.local_get(0, nativeThisType),
+          nativeValueType, instance.memoryOffset
+        ),
+        valueExpr
+      );
+    }
+    module.addFunction(instance.internalSetterName, createType([ nativeThisType, nativeValueType ]), NativeType.None, null,
+      module.store(type.byteSize,
+        module.local_get(0, nativeThisType),
+        valueExpr,
+        nativeValueType, instance.memoryOffset
+      )
+    );
+
+    return true;
+  }
+
+  /** Compiles a property to a getter and potentially a setter. */
+  compileProperty(instance: Property): bool {
+    if (instance.is(CommonFlags.COMPILED)) return true;
+    instance.set(CommonFlags.COMPILED);
+    var getterInstance = instance.getterInstance;
+    if (getterInstance) this.compileFunction(getterInstance);
+    var setterInstance = instance.setterInstance;
+    if (setterInstance) this.compileFunction(setterInstance);
     return true;
   }
 

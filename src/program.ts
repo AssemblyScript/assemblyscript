@@ -3071,6 +3071,16 @@ export class Field extends VariableLikeElement {
     this.setType(type);
     registerConcreteElement(this.program, this);
   }
+
+  /** Gets the internal name of the respective getter function. */
+  get internalGetterName(): string {
+    return this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
+  }
+
+  /** Gets the internal name of the respective setter function. */
+  get internalSetterName(): string {
+    return this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
+  }
 }
 
 /** A property comprised of a getter and a setter function. */
