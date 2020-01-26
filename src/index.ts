@@ -109,6 +109,11 @@ export function setOptimizeLevelHints(options: Options, optimizeLevel: i32, shri
   options.shrinkLevelHint = shrinkLevel;
 }
 
+/** Sets the `pedantic` option. */
+export function setPedantic(options: Options, pedantic: bool): void {
+  options.pedantic = pedantic;
+}
+
 // Program
 
 /** Creates a new Program. */

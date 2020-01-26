@@ -224,6 +224,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
+  assemblyscript.setPedantic(compilerOptions, args.pedantic);
 
   // Initialize default aliases
   assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");

@@ -641,19 +641,21 @@ export namespace String {
       while (strOff < strEnd) {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
-          if (nullTerminated && !c1) break;
-          bufLen += 1; strOff += 2;
+          // @ts-ignore: cast
+          if (nullTerminated & !c1) break;
+          bufLen += 1;
         } else if (c1 < 2048) {
-          bufLen += 2; strOff += 2;
+          bufLen += 2;
         } else {
           if ((c1 & 0xFC00) == 0xD800 && strOff + 2 < strEnd) {
             if ((<u32>load<u16>(strOff, 2) & 0xFC00) == 0xDC00) {
-              strOff += 4; bufLen += 4;
+              bufLen += 4; strOff += 4;
               continue;
             }
           }
-          strOff += 2; bufLen += 3;
+          bufLen += 3;
         }
+        strOff += 2;
       }
       return bufLen;
     }
@@ -669,29 +671,34 @@ export namespace String {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
           store<u8>(bufOff, c1);
-          bufOff += 1; strOff += 2;
+          bufOff++;
         } else if (c1 < 2048) {
-          store<u8>(bufOff, c1 >> 6      | 192);
-          store<u8>(bufOff, c1      & 63 | 128, 1);
-          bufOff += 2; strOff += 2;
+          let b0 = c1 >> 6 | 192;
+          let b1 = c1 & 63 | 128;
+          store<u16>(bufOff, b1 << 8 | b0);
+          bufOff += 2;
         } else {
           if ((c1 & 0xFC00) == 0xD800 && strOff + 2 < strEnd) {
             let c2 = <u32>load<u16>(strOff, 2);
             if ((c2 & 0xFC00) == 0xDC00) {
               c1 = 0x10000 + ((c1 & 0x03FF) << 10) | (c2 & 0x03FF);
-              store<u8>(bufOff, c1 >> 18      | 240);
-              store<u8>(bufOff, c1 >> 12 & 63 | 128, 1);
-              store<u8>(bufOff, c1 >> 6  & 63 | 128, 2);
-              store<u8>(bufOff, c1       & 63 | 128, 3);
-              strOff += 4; bufOff += 4;
+              let b0 = c1 >> 18 | 240;
+              let b1 = c1 >> 12 & 63 | 128;
+              let b2 = c1 >> 6  & 63 | 128;
+              let b3 = c1       & 63 | 128;
+              store<u32>(bufOff, b3 << 24 | b2 << 16 | b1 << 8 | b0);
+              bufOff += 4; strOff += 4;
               continue;
             }
           }
-          store<u8>(bufOff, c1 >> 12      | 224);
-          store<u8>(bufOff, c1 >> 6  & 63 | 128, 1);
-          store<u8>(bufOff, c1       & 63 | 128, 2);
-          strOff += 2; bufOff += 3;
+          let b0 = c1 >> 12 | 224;
+          let b1 = c1 >> 6  & 63 | 128;
+          let b2 = c1       & 63 | 128;
+          store<u16>(bufOff, b1 << 8 | b0);
+          store<u8>(bufOff, b2, 2);
+          bufOff += 3;
         }
+        strOff += 2;
       }
       assert(strOff <= strEnd);
       if (nullTerminated) {
@@ -713,36 +720,38 @@ export namespace String {
       var str = __alloc(len << 1, idof<String>()); // max is one u16 char per u8 byte
       var strOff = str;
       while (bufOff < bufEnd) {
-        let cp = <u32>load<u8>(bufOff++);
-        if (cp < 128) {
-          if (nullTerminated && !cp) break;
-          store<u16>(strOff, cp);
-          strOff += 2;
-        } else if (cp > 191 && cp < 224) {
-          if (bufEnd - bufOff < 1) break;
-          store<u16>(strOff, (cp & 31) << 6 | load<u8>(bufOff++) & 63);
-          strOff += 2;
-        } else if (cp > 239 && cp < 365) {
-          if (bufEnd - bufOff < 3) break;
-          cp = (
-            (cp                  &  7) << 18 |
-            (load<u8>(bufOff)    & 63) << 12 |
-            (load<u8>(bufOff, 1) & 63) << 6  |
-             load<u8>(bufOff, 2) & 63
-          ) - 0x10000;
-          bufOff += 3;
-          store<u16>(strOff, 0xD800 | (cp >> 10));
-          store<u16>(strOff, 0xDC00 | (cp & 1023), 2);
-          strOff += 4;
+        let u0 = <u32>load<u8>(bufOff); ++bufOff;
+        if (!(u0 & 128)) {
+          // @ts-ignore: cast
+          if (nullTerminated & !u0) break;
+          store<u16>(strOff, u0);
         } else {
-          if (bufEnd - bufOff < 2) break;
-          store<u16>(strOff,
-            (cp                  & 15) << 12 |
-            (load<u8>(bufOff)    & 63) << 6  |
-             load<u8>(bufOff, 1) & 63
-          );
-          bufOff += 2; strOff += 2;
+          if (bufEnd == bufOff) break;
+          let u1 = <u32>load<u8>(bufOff) & 63; ++bufOff;
+          if ((u0 & 224) == 192) {
+            store<u16>(strOff, (u0 & 31) << 6 | u1);
+          } else {
+            if (bufEnd == bufOff) break;
+            let u2 = <u32>load<u8>(bufOff) & 63; ++bufOff;
+            if ((u0 & 240) == 224) {
+              u0 = (u0 & 15) << 12 | u1 << 6 | u2;
+            } else {
+              if (bufEnd == bufOff) break;
+              u0 = (u0 & 7) << 18 | u1 << 12 | u2 << 6 | <u32>load<u8>(bufOff) & 63;
+              ++bufOff;
+            }
+            if (u0 < 0x10000) {
+              store<u16>(strOff, u0);
+            } else {
+              u0 -= 0x10000;
+              let lo = u0 >> 10 | 0xD800;
+              let hi = (u0 & 0x03FF) | 0xDC00;
+              store<u32>(strOff, lo | (hi << 16));
+              strOff += 2;
+            }
+          }
         }
+        strOff += 2;
       }
       return changetype<String>(__realloc(str, strOff - str)); // retains
     }
@@ -755,7 +764,7 @@ export namespace String {
     }
 
     export function encode(str: string): ArrayBuffer {
-      var size = changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
+      var size = UTF16.byteLength(str);
       var buf = __alloc(size, idof<ArrayBuffer>());
       memory.copy(buf, changetype<usize>(str), <usize>size);
       return changetype<ArrayBuffer>(buf); // retains
