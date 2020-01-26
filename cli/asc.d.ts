@@ -50,8 +50,92 @@ export interface MemoryStream extends OutputStream {
   toString(): string;
 }
 
-/** Compiler API options. */
+/** Compiler options. */
 interface CompilerOptions {
+  /** Prints just the compiler's version and exits. */
+  version?: boolean;
+  /** Prints the help message and exits. */
+  help?: boolean;
+  /** Optimizes the module. */
+  optimize?: boolean;
+  /** How much to focus on optimizing code. */
+  optimizeLevel?: number;
+  /** How much to focus on shrinking code size. */
+  shrinkLevel?: number;
+  /** Re-optimizes until no further improvements can be made. */
+  converge?: boolean;
+  /** Validates the module using Binaryen. Exits if invalid. */
+  validate?: boolean;
+  /** Specifies the base directory of input and output files. */
+  baseDir?: string;
+  /** Specifies the output file. File extension indicates format. */
+  outFile?: string;
+  /** Specifies the binary output file (.wasm). */
+  binaryFile?: string;
+  /** Specifies the text output file (.wat). */
+  textFile?: string;
+  /** Specifies the asm.js output file (.js). */
+  asmjsFile?: string;
+  /** Specifies the WebIDL output file (.webidl). */
+  idlFile?: string;
+  /** Specifies the TypeScript definition output file (.d.ts). */
+  tsdFile?: string;
+  /** Enables source map generation. Optionally takes the URL. */
+  sourceMap?: boolean | string;
+  /** Specifies the runtime variant to include in the program. */
+  runtime?: string;
+  /** Disallows the use of unsafe features in user code. */
+  noUnsafe?: boolean;
+  /** Enables debug information in emitted binaries. */
+  debug?: boolean;
+  /** Replaces assertions with just their value without trapping. */
+  noAssert?: boolean;
+  /** Performs compilation as usual but does not emit code. */
+  noEmit?: boolean;
+  /** Imports the memory provided as 'env.memory'. */
+  importMemory?: boolean;
+  /** Declare memory as shared by settings the max shared memory. */
+  sharedMemory?: number;
+  /** Sets the start offset of compiler-generated static memory. */
+  memoryBase?: number;
+  /** Imports the function table provided as 'env.table'. */
+  importTable?: boolean;
+  /** Exports the function table as 'table'. */
+  exportTable?: boolean;
+  /** Exports an explicit start function to be called manually. */
+  explicitStart?: boolean;
+  /** "Adds one or multiple paths to custom library components. */
+  lib?: string | string[];
+  /** Adds one or multiple paths to package resolution. */
+  path?: string | string[];
+  /** Aliases a global object under another name. */
+  use?: string | string[];
+  /** Sets the trap mode to use. */
+  trapMode?: "allow" | "clamp" | "js";
+  /** Specifies additional Binaryen passes to run. */
+  runPasses?: string | string[];
+  /** Enables WebAssembly features that are disabled by default. */
+  enable?: string | string[];
+  /** Disables WebAssembly features that are enabled by default. */
+  disable?: string | string[];
+  /** Specifies the path to a custom transform to 'require'. */
+  transform?: string | string[];
+  /** Make yourself sad for no good reason. */
+  pedantic?: boolean;
+  /** Enables tracing of package resolution. */
+  traceResolution?: boolean;
+  /** Lists files to be compiled and exits. */
+  listFiles?: boolean;
+  /** Prints measuring information on I/O and compile times. */
+  measure?: boolean;
+  /** Prints the module's runtime type information to stderr. */
+  printrtti?: boolean;
+  /** Disables terminal colors. */
+  noColors?: boolean;
+}
+
+/** Compiler API options. */
+interface APIOptions {
   /** Standard output stream to use. */
   stdout?: OutputStream;
   /** Standard error stream to use. */
@@ -77,7 +161,7 @@ export function compileString(sources: { [key: string]: string } | string, optio
 }
 
 /** Runs the command line utility using the specified arguments array. */
-export function main(argv: string[], options: CompilerOptions, callback?: (err: Error | null) => number): number;
+export function main(argv: string[], options: APIOptions, callback?: (err: Error | null) => number): number;
 export function main(argv: string[], callback?: (err: Error | null) => number): number;
 
 /** Checks diagnostics emitted so far for errors. */

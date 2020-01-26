@@ -110,8 +110,13 @@ exports.compileString = (sources, options) => {
   ];
   Object.keys(options || {}).forEach(key => {
     var val = options[key];
-    if (Array.isArray(val)) val.forEach(val => argv.push("--" + key, String(val)));
-    else argv.push("--" + key, String(val));
+    var opt = exports.options[key];
+    if (opt && opt.type === "b") {
+      if (val) argv.push("--" + key);
+    } else {
+      if (Array.isArray(val)) val.forEach(val => argv.push("--" + key, String(val)));
+      else argv.push("--" + key, String(val));
+    }
   });
   exports.main(argv.concat(Object.keys(sources)), {
     stdout: output.stdout,
