@@ -237,6 +237,9 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         _0_must_be_a_power_of_two = 223,
         _0_is_not_a_valid_operator = 224,
         Expression_cannot_be_represented_by_a_type = 225,
+        Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
+        Importing_the_table_disables_some_indirect_call_optimizations = 901,
+        Exporting_the_table_disables_some_indirect_call_optimizations = 902,
         Unterminated_string_literal = 1002,
         Identifier_expected = 1003,
         _0_expected = 1005,
@@ -610,12 +613,6 @@ declare module "assemblyscript/src/diagnostics" {
         private constructor();
         /** Creates a new diagnostic message of the specified category. */
         static create(code: DiagnosticCode, category: DiagnosticCategory, arg0?: string | null, arg1?: string | null, arg2?: string | null): DiagnosticMessage;
-        /** Creates a new informatory diagnostic message. */
-        static createInfo(code: DiagnosticCode, arg0?: string | null, arg1?: string | null): DiagnosticMessage;
-        /** Creates a new warning diagnostic message. */
-        static createWarning(code: DiagnosticCode, arg0?: string | null, arg1?: string | null): DiagnosticMessage;
-        /** Creates a new error diagnostic message. */
-        static createError(code: DiagnosticCode, arg0?: string | null, arg1?: string | null): DiagnosticMessage;
         /** Adds a source range to this message. */
         withRange(range: Range): this;
         /** Adds a related source range to this message. */
@@ -636,17 +633,17 @@ declare module "assemblyscript/src/diagnostics" {
         /** Initializes this diagnostic emitter. */
         protected constructor(diagnostics?: DiagnosticMessage[] | null);
         /** Emits a diagnostic message of the specified category. */
-        emitDiagnostic(code: DiagnosticCode, category: DiagnosticCategory, range: Range, relatedRange: Range | null, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
+        emitDiagnostic(code: DiagnosticCode, category: DiagnosticCategory, range: Range | null, relatedRange: Range | null, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
         /** Emits an informatory diagnostic message. */
-        info(code: DiagnosticCode, range: Range, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
+        info(code: DiagnosticCode, range: Range | null, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
         /** Emits an informatory diagnostic message with a related range. */
         infoRelated(code: DiagnosticCode, range: Range, relatedRange: Range, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
         /** Emits a warning diagnostic message. */
-        warning(code: DiagnosticCode, range: Range, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
+        warning(code: DiagnosticCode, range: Range | null, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
         /** Emits a warning diagnostic message with a related range. */
         warningRelated(code: DiagnosticCode, range: Range, relatedRange: Range, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
         /** Emits an error diagnostic message. */
-        error(code: DiagnosticCode, range: Range, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
+        error(code: DiagnosticCode, range: Range | null, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
         /** Emits an error diagnostic message with a related range. */
         errorRelated(code: DiagnosticCode, range: Range, relatedRange: Range, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
     }
@@ -3310,7 +3307,7 @@ declare module "assemblyscript/src/program" {
         /** Registers the backing class of a native type. */
         private registerWrapperClass;
         /** Registers a constant integer value within the global scope. */
-        private registerConstantInteger;
+        registerConstantInteger(name: string, type: Type, value: I64): void;
         /** Registers a constant float value within the global scope. */
         private registerConstantFloat;
         /** Ensures that the given global element exists. Attempts to merge duplicates. */
@@ -3360,6 +3357,9 @@ declare module "assemblyscript/src/program" {
         private initializeTypeDefinition;
         /** Initializes a variable statement. */
         private initializeVariables;
+        /** Determines the element type of a built-in array. */
+        /** Finds all cyclic classes. */
+        findCyclicClasses(): Set<Class>;
     }
     /** Indicates the specific kind of an {@link Element}. */
     export enum ElementKind {
@@ -4050,6 +4050,8 @@ declare module "assemblyscript/src/compiler" {
         features: Feature;
         /** If true, disallows unsafe features in user code. */
         noUnsafe: boolean;
+        /** If true, enables pedantic diagnostics. */
+        pedantic: boolean;
         /** Hinted optimize level. Not applied by the compiler itself. */
         optimizeLevelHint: number;
         /** Hinted shrink level. Not applied by the compiler itself. */
@@ -4062,6 +4064,8 @@ declare module "assemblyscript/src/compiler" {
         get isizeType(): Type;
         /** Gets the native size type matching the target. */
         get nativeSizeType(): NativeType;
+        /** Gets if any optimizations will be performed. */
+        get willOptimize(): boolean;
         /** Tests if a specific feature is activated. */
         hasFeature(feature: Feature): boolean;
     }
@@ -4138,6 +4142,8 @@ declare module "assemblyscript/src/compiler" {
         skippedAutoreleases: Set<ExpressionRef>;
         /** Current inline functions stack. */
         inlineStack: Function[];
+        /** Lazily compiled library functions. */
+        lazyLibraryFunctions: Set<Function>;
         /** Compiles a {@link Program} to a {@link Module} using the specified options. */
         static compile(program: Program): Module;
         /** Constructs a new compiler for a {@link Program} using the specified options. */
@@ -5038,6 +5044,8 @@ declare module "assemblyscript/src/index" {
     export function disableFeature(options: Options, feature: Feature): void;
     /** Gives the compiler a hint at the optimize levels that will be used later on. */
     export function setOptimizeLevelHints(options: Options, optimizeLevel: number, shrinkLevel: number): void;
+    /** Sets the `pedantic` option. */
+    export function setPedantic(options: Options, pedantic: boolean): void;
     /** Creates a new Program. */
     export function newProgram(options: Options): Program;
     /** Obtains the next diagnostic message. Returns `null` once complete. */

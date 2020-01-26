@@ -1,5 +1,5 @@
-const BINARYEN_VERSION = "90.0.0-nightly.20200101";
-const ASSEMBLYSCRIPT_VERSION = "0.8.1";
+const BINARYEN_VERSION = "90.0.0-nightly.20200111";
+const ASSEMBLYSCRIPT_VERSION = "0.9.0";
 
 // AMD/require.js (browser)
 if (typeof define === "function" && define.amd) {
