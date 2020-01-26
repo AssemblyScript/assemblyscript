@@ -3048,6 +3048,10 @@ export class Field extends VariableLikeElement {
   prototype: FieldPrototype;
   /** Field memory offset, if an instance field. */
   memoryOffset: i32 = -1;
+  /** Getter function reference, if compiled. */
+  getterRef: FunctionRef = 0;
+  /** Setter function reference, if compiled. */
+  setterRef: FunctionRef = 0;
 
   /** Constructs a new field. */
   constructor(

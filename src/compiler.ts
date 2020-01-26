@@ -1400,22 +1400,36 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Compiles an instance field to a getter and a setter. */
   compileField(instance: Field): bool {
-    if (instance.is(CommonFlags.COMPILED)) return true;
-    instance.set(CommonFlags.COMPILED);
+    this.compileFieldGetter(instance);
+    this.compileFieldSetter(instance);
+    return instance.is(CommonFlags.COMPILED);
+  }
+
+  /** Compiles the getter of the specified instance field. */
+  compileFieldGetter(instance: Field): bool {
+    // A getter retains, while a load, as of a field access, does not.
+    if (instance.getterRef) return true;
     var type = instance.type;
     var nativeThisType = this.options.nativeSizeType;
     var nativeValueType = type.toNativeType();
     var module = this.module;
-
-    // Make a getter
-    var returnExpr = module.load(type.byteSize, type.is(TypeFlags.SIGNED),
+    var valueExpr = module.load(type.byteSize, type.is(TypeFlags.SIGNED),
       module.local_get(0, nativeThisType),
       nativeValueType, instance.memoryOffset
     );
-    if (type.isManaged) returnExpr = this.makeRetain(returnExpr);
-    module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, null, returnExpr);
+    if (type.isManaged) valueExpr = this.makeRetain(valueExpr);
+    instance.getterRef = module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, null, valueExpr);
+    if (instance.setterRef) instance.set(CommonFlags.COMPILED);
+    return true;
+  }
 
-    // Make a setter
+  /** Compiles the setter of the specified instance field. */
+  compileFieldSetter(instance: Field): bool {
+    if (instance.setterRef) return true;
+    var type = instance.type;
+    var nativeThisType = this.options.nativeSizeType;
+    var nativeValueType = type.toNativeType();
+    var module = this.module;
     var valueExpr = module.local_get(1, nativeValueType);
     if (type.isManaged) {
       valueExpr = this.makeReplace(
@@ -1426,26 +1440,50 @@ export class Compiler extends DiagnosticEmitter {
         valueExpr
       );
     }
-    module.addFunction(instance.internalSetterName, createType([ nativeThisType, nativeValueType ]), NativeType.None, null,
+    instance.setterRef = module.addFunction(instance.internalSetterName, createType([ nativeThisType, nativeValueType ]), NativeType.None, null,
       module.store(type.byteSize,
         module.local_get(0, nativeThisType),
         valueExpr,
         nativeValueType, instance.memoryOffset
       )
     );
-
+    if (instance.getterRef) instance.set(CommonFlags.COMPILED);
     return true;
   }
 
   /** Compiles a property to a getter and potentially a setter. */
   compileProperty(instance: Property): bool {
-    if (instance.is(CommonFlags.COMPILED)) return true;
-    instance.set(CommonFlags.COMPILED);
+    this.compilePropertyGetter(instance);
+    this.compilePropertySetter(instance);
+    return instance.is(CommonFlags.COMPILED);
+  }
+
+  /* Compiles the getter of the specified property. */
+  compilePropertyGetter(instance: Property): bool {
     var getterInstance = instance.getterInstance;
-    if (getterInstance) this.compileFunction(getterInstance);
+    if (getterInstance) {
+      let ret = this.compileFunction(getterInstance);
+      let setterInstance = instance.setterInstance;
+      if (getterInstance.is(CommonFlags.COMPILED) && (!setterInstance || setterInstance.is(CommonFlags.COMPILED))) {
+        instance.set(CommonFlags.COMPILED);
+      }
+      return ret;
+    }
+    return false;
+  }
+
+  /** Compiles the setter of the specified property. */
+  compilePropertySetter(instance: Property): bool {
     var setterInstance = instance.setterInstance;
-    if (setterInstance) this.compileFunction(setterInstance);
-    return true;
+    if (setterInstance) {
+      let ret = this.compileFunction(setterInstance);
+      let getterInstance = instance.getterInstance;
+      if (getterInstance !== null && getterInstance.is(CommonFlags.COMPILED) && setterInstance.is(CommonFlags.COMPILED)) {
+        instance.set(CommonFlags.COMPILED);
+      }
+      return ret;
+    }
+    return false;
   }
 
   // === Memory ===================================================================================
@@ -8298,7 +8336,6 @@ export class Compiler extends DiagnosticEmitter {
         assert((<Field>target).memoryOffset >= 0);
         let thisExpression = assert(this.resolver.currentThisExpression);
         let thisExpr = this.compileExpression(thisExpression, this.options.usizeType);
-        // FIXME
         let thisType = this.currentType;
         if (thisType.is(TypeFlags.NULLABLE)) {
           if (!flow.isNonnull(thisExpr, thisType)) {
