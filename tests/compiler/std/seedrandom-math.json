@@ -1,6 +1,7 @@
 {
   "asc_flags": [
     "--runtime none",
-    "--seedRandom math"
+    "--seedRandom math",
+    "--explicitStart"
   ]
 }

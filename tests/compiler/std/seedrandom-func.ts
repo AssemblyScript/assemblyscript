@@ -2,4 +2,4 @@ function seedRandom(): i64 {
   return 1;
 }
 
-Math.random();
+trace("Math.random =", 1, Math.random());

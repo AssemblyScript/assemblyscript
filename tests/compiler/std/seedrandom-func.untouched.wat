@@ -2,29 +2,33 @@
  (type $none_=>_none (func))
  (type $none_=>_i64 (func (result i64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i64_=>_none (func (param i64)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i64_=>_i64 (func (param i64) (result i64)))
  (type $none_=>_f64 (func (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
+ (import "env" "trace" (func $~lib/builtins/trace (param i32 i32 f64 f64 f64 f64 f64)))
  (memory $0 1)
- (data (i32.const 16) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
+ (data (i32.const 16) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00M\00a\00t\00h\00.\00r\00a\00n\00d\00o\00m\00 \00=\00")
+ (data (i32.const 64) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
+ (global $~started (mut i32) (i32.const 0))
+ (export "_start" (func $~start))
  (export "memory" (memory $0))
- (start $~start)
- (func $std/seedrandom-func/seedRandom (; 1 ;) (result i64)
+ (func $std/seedrandom-func/seedRandom (; 2 ;) (result i64)
   i64.const 1
  )
- (func $~lib/math/seedRandomSelect (; 2 ;) (result i64)
+ (func $~lib/math/seedRandomSelect (; 3 ;) (result i64)
   call $std/seedrandom-func/seedRandom
   return
  )
- (func $~lib/math/murmurHash3 (; 3 ;) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (; 4 ;) (param $0 i64) (result i64)
   local.get $0
   local.get $0
   i64.const 33
@@ -53,7 +57,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/math/splitMix32 (; 4 ;) (param $0 i32) (result i32)
+ (func $~lib/math/splitMix32 (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 1831565813
   i32.add
@@ -88,7 +92,7 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/math/NativeMath.seedRandom (; 5 ;) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 6 ;) (param $0 i64)
   i32.const 1
   global.set $~lib/math/random_seeded
   local.get $0
@@ -133,14 +137,14 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
-   i32.const 1411
+   i32.const 80
+   i32.const 1412
    i32.const 4
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~lib/math/NativeMath.random (; 6 ;) (result f64)
+ (func $~lib/math/NativeMath.random (; 7 ;) (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i64)
@@ -191,11 +195,24 @@
   f64.const 1
   f64.sub
  )
- (func $start:std/seedrandom-func (; 7 ;)
+ (func $start:std/seedrandom-func (; 8 ;)
+  i32.const 32
+  i32.const 1
   call $~lib/math/NativeMath.random
-  drop
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  f64.const 0
+  call $~lib/builtins/trace
  )
- (func $~start (; 8 ;)
+ (func $~start (; 9 ;)
+  global.get $~started
+  if
+   return
+  else
+   i32.const 1
+   global.set $~started
+  end
   call $start:std/seedrandom-func
  )
 )

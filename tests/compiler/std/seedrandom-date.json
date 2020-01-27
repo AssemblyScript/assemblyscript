@@ -1,6 +1,7 @@
 {
   "asc_flags": [
     "--runtime none",
+    "--explicitStart",
     "--seedRandom date"
   ]
 }

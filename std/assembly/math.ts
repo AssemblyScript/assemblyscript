@@ -1,8 +1,9 @@
 /// <reference path="./util/seedrandom.d.ts" />
 
+import { ArrayBufferView } from "./arraybuffer";
 import * as JSMath from "./bindings/Math";
 import * as JSDate from "./bindings/Date";
-import * as wasi from "./bindings/wasi";
+import * as wasi from "./bindings/wasi_snapshot";
 
 export { JSMath };
 
@@ -140,7 +141,7 @@ function umuldi(u: u64, v: u64): u64 {
 
 /** @internal */
 function pio2_large_quot(x: f64, u: i64): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
-  const bits = PIO2_TABLE.dataStart;
+  const bits = changetype<ArrayBufferView>(PIO2_TABLE).dataStart;
 
   var magnitude = u & 0x7FFFFFFFFFFFFFFF;
   var offset = (magnitude >> 52) - 1045;
@@ -1787,7 +1788,7 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
 @inline
 function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
-  const bits = PIO2F_TABLE.dataStart;
+  const bits = changetype<ArrayBufferView>(PIO2F_TABLE).dataStart;
 
   var offset = (u >> 23) - 152;
   var shift  = <u64>(offset & 63);
@@ -3138,9 +3139,9 @@ export function ipow64f(x: f64, e: i32): f64 {
   return sign ? 1.0 / out : out;
 }
 
-// @ts-ignore
+// @ts-ignore: decorator
 @lazy
-const seedRandomSelect_wasiBuf: i64[] = [0];
+const seedRandomSelect_wasiBuf: i64[] = [ 0 ];
 
 function seedRandomSelect(): i64 {
   if (isDefined(ASC_SEEDRANDOM_FUNC)) return ASC_SEEDRANDOM_FUNC();

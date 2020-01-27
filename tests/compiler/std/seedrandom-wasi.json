@@ -2,6 +2,6 @@
   "asc_flags": [
     "--runtime none",
     "--explicitStart",
-    "--seedRandom 9223372036854775807"
+    "--seedRandom wasi"
   ]
 }
