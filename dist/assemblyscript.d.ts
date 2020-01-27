@@ -3844,6 +3844,10 @@ declare module "assemblyscript/src/program" {
         prototype: FieldPrototype;
         /** Field memory offset, if an instance field. */
         memoryOffset: number;
+        /** Getter function reference, if compiled. */
+        getterRef: FunctionRef;
+        /** Setter function reference, if compiled. */
+        setterRef: FunctionRef;
         /** Constructs a new field. */
         constructor(
         /** Respective field prototype. */
@@ -3852,6 +3856,10 @@ declare module "assemblyscript/src/program" {
         parent: Class, 
         /** Concrete type. */
         type: Type);
+        /** Gets the internal name of the respective getter function. */
+        get internalGetterName(): string;
+        /** Gets the internal name of the respective setter function. */
+        get internalSetterName(): string;
     }
     /** A property comprised of a getter and a setter function. */
     export class PropertyPrototype extends DeclaredElement {
@@ -4019,7 +4027,7 @@ declare module "assemblyscript/src/compiler" {
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
     import { Module, MemorySegment, ExpressionRef, NativeType, GlobalRef } from "assemblyscript/src/module";
     import { Feature, Target } from "assemblyscript/src/common";
-    import { Program, Class, Element, Enum, Function, Global, VariableLikeElement, File } from "assemblyscript/src/program";
+    import { Program, Class, Element, Enum, Field, Function, Global, Property, VariableLikeElement, File } from "assemblyscript/src/program";
     import { Flow } from "assemblyscript/src/flow";
     import { Resolver } from "assemblyscript/src/resolver";
     import { Node, Range, Statement, Expression } from "assemblyscript/src/ast";
@@ -4154,10 +4162,6 @@ declare module "assemblyscript/src/compiler" {
         private ensureModuleExports;
         /** Applies the respective module export(s) for the specified element. */
         private ensureModuleExport;
-        /** Makes an exported function to get the value of an instance field. */
-        private makeExportedFieldGetter;
-        /** Makes an exported function to set the value of an instance field. */
-        private makeExportedFieldSetter;
         /** Compiles any element. */
         compileElement(element: Element, compileMembers?: boolean): void;
         /** Compiles a file's exports. */
@@ -4180,6 +4184,17 @@ declare module "assemblyscript/src/compiler" {
         private compileFunctionBody;
         /** Compiles a priorly resolved class. */
         compileClass(instance: Class): boolean;
+        /** Compiles an instance field to a getter and a setter. */
+        compileField(instance: Field): boolean;
+        /** Compiles the getter of the specified instance field. */
+        compileFieldGetter(instance: Field): boolean;
+        /** Compiles the setter of the specified instance field. */
+        compileFieldSetter(instance: Field): boolean;
+        /** Compiles a property to a getter and potentially a setter. */
+        compileProperty(instance: Property): boolean;
+        compilePropertyGetter(instance: Property): boolean;
+        /** Compiles the setter of the specified property. */
+        compilePropertySetter(instance: Property): boolean;
         /** Adds a static memory segment with the specified data. */
         addMemorySegment(buffer: Uint8Array, alignment?: number): MemorySegment;
         /** Ensures that a string exists in static memory and returns a pointer to it. Deduplicates. */
