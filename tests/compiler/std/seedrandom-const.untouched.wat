@@ -20,7 +20,7 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/math/seedRandomSelect (; 1 ;) (result i64)
-  i64.const -7492762599821236752
+  i64.const 9223372036854775807
  )
  (func $~lib/math/murmurHash3 (; 2 ;) (param $0 i64) (result i64)
   local.get $0

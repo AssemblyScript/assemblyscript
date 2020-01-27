@@ -826,8 +826,6 @@ function createReverseOrderedArray(size: i32): Array<i32> {
   return arr;
 }
 
-NativeMath.seedRandom(reinterpret<u64>(JSMath.random()));
-
 function createRandomOrderedArray(size: i32): Array<i32> {
   var arr = new Array<i32>(size);
   for (let i = 0; i < size; i++) {

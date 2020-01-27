@@ -2,6 +2,7 @@
   "asc_flags": [
     "--runtime half",
     "--explicitStart",
+    "--seedRandom math",
     "--use ASC_RTRACE=1"
   ]
 }

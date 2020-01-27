@@ -133,21 +133,21 @@
  (data (i32.const 3840) "\14\00\00\00\01\00\00\00\00\00\00\00\14\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00\04\00\00\00\05\00\00\00")
  (data (i32.const 3888) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 3904) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00")
- (data (i32.const 4016) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
- (data (i32.const 4064) "\ac\00\00\00\01\00\00\00\01\00\00\00\ac\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\000\001\002\003\004\005\006\007\008\009\00_\00-\00,\00.\00+\00/\00\\\00[\00]\00{\00}\00(\00)\00<\00>\00*\00&\00$\00%\00^\00@\00#\00!\00?\00")
- (data (i32.const 4256) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00\00\00\80?\00\00\c0\7f\00\00\80\ff\00\00\80?\00\00\00\00\00\00\80\bf\00\00\00\c0\00\00\80\7f")
- (data (i32.const 4304) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00\00\00\80\ff\00\00\00\c0\00\00\80\bf\00\00\00\00\00\00\80?\00\00\80?\00\00\80\7f\00\00\c0\7f")
- (data (i32.const 4352) "@\00\00\00\01\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\f8\7f\00\00\00\00\00\00\f0\ff\05\00\00\00\00\00\f0?\00\00\00\00\00\00\00\00\00\00\00\00\00\00\f0\bf\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f0\7f")
- (data (i32.const 4432) "@\00\00\00\01\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\00\f0\ff\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f0\bf\00\00\00\00\00\00\00\00\00\00\00\00\00\00\f0?\05\00\00\00\00\00\f0?\00\00\00\00\00\00\f0\7f\00\00\00\00\00\00\f8\7f")
- (data (i32.const 4512) "\14\00\00\00\01\00\00\00\00\00\00\00\14\00\00\00\01\00\00\00\fe\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\02\00\00\00")
- (data (i32.const 4560) "\14\00\00\00\01\00\00\00\00\00\00\00\14\00\00\00\fe\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\01\00\00\00\02\00\00\00")
- (data (i32.const 4608) "\14\00\00\00\01\00\00\00\00\00\00\00\14\00\00\00\01\00\00\00\ff\ff\ff\ff\fe\ff\ff\ff\00\00\00\00\02\00\00\00")
- (data (i32.const 4656) "\14\00\00\00\01\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\fe\ff\ff\ff\ff\ff\ff\ff")
- (data (i32.const 4704) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 4720) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\01\00\00\00")
- (data (i32.const 4752) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\02\00\00\00\01\00\00\00")
- (data (i32.const 4784) "\10\00\00\00\01\00\00\00\00\00\00\00\10\00\00\00\03\00\00\00\02\00\00\00\01\00\00\00\00\00\00\00")
- (data (i32.const 4816) "\10\00\00\00\01\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
+ (data (i32.const 4016) "\ac\00\00\00\01\00\00\00\01\00\00\00\ac\00\00\00A\00B\00C\00D\00E\00F\00G\00H\00I\00J\00K\00L\00M\00N\00O\00P\00Q\00R\00S\00T\00U\00V\00W\00X\00Y\00Z\00a\00b\00c\00d\00e\00f\00g\00h\00i\00j\00k\00l\00m\00n\00o\00p\00q\00r\00s\00t\00u\00v\00w\00x\00y\00z\000\001\002\003\004\005\006\007\008\009\00_\00-\00,\00.\00+\00/\00\\\00[\00]\00{\00}\00(\00)\00<\00>\00*\00&\00$\00%\00^\00@\00#\00!\00?\00")
+ (data (i32.const 4208) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00\00\00\80?\00\00\c0\7f\00\00\80\ff\00\00\80?\00\00\00\00\00\00\80\bf\00\00\00\c0\00\00\80\7f")
+ (data (i32.const 4256) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00\00\00\80\ff\00\00\00\c0\00\00\80\bf\00\00\00\00\00\00\80?\00\00\80?\00\00\80\7f\00\00\c0\7f")
+ (data (i32.const 4304) "@\00\00\00\01\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\00\f0?\00\00\00\00\00\00\f8\7f\00\00\00\00\00\00\f0\ff\05\00\00\00\00\00\f0?\00\00\00\00\00\00\00\00\00\00\00\00\00\00\f0\bf\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f0\7f")
+ (data (i32.const 4384) "@\00\00\00\01\00\00\00\00\00\00\00@\00\00\00\00\00\00\00\00\00\f0\ff\00\00\00\00\00\00\00\c0\00\00\00\00\00\00\f0\bf\00\00\00\00\00\00\00\00\00\00\00\00\00\00\f0?\05\00\00\00\00\00\f0?\00\00\00\00\00\00\f0\7f\00\00\00\00\00\00\f8\7f")
+ (data (i32.const 4464) "\14\00\00\00\01\00\00\00\00\00\00\00\14\00\00\00\01\00\00\00\fe\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\02\00\00\00")
+ (data (i32.const 4512) "\14\00\00\00\01\00\00\00\00\00\00\00\14\00\00\00\fe\ff\ff\ff\ff\ff\ff\ff\00\00\00\00\01\00\00\00\02\00\00\00")
+ (data (i32.const 4560) "\14\00\00\00\01\00\00\00\00\00\00\00\14\00\00\00\01\00\00\00\ff\ff\ff\ff\fe\ff\ff\ff\00\00\00\00\02\00\00\00")
+ (data (i32.const 4608) "\14\00\00\00\01\00\00\00\00\00\00\00\14\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\fe\ff\ff\ff\ff\ff\ff\ff")
+ (data (i32.const 4656) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 4672) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\01\00\00\00")
+ (data (i32.const 4704) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\02\00\00\00\01\00\00\00")
+ (data (i32.const 4736) "\10\00\00\00\01\00\00\00\00\00\00\00\10\00\00\00\03\00\00\00\02\00\00\00\01\00\00\00\00\00\00\00")
+ (data (i32.const 4768) "\10\00\00\00\01\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
+ (data (i32.const 4800) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s\00")
  (data (i32.const 4848) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\01\00\00\00")
  (data (i32.const 4880) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02\00\00\00")
  (data (i32.const 4912) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a\00")
@@ -227,14 +227,12 @@
  (global $~lib/builtins/i32.MAX_VALUE i32 (i32.const 2147483647))
  (global $std/array/i (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
+ (global $std/array/charset i32 (i32.const 4032))
  (global $~lib/math/random_seeded (mut i32) (i32.const 0))
  (global $~lib/math/random_state0_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
- (global $std/array/charset i32 (i32.const 4080))
- (global $~lib/ASC_SEEDRANDOM_HIGH i32 (i32.const 0))
- (global $~lib/ASC_SEEDRANDOM_LOW i32 (i32.const 0))
  (global $~lib/builtins/i32.MIN_VALUE i32 (i32.const -2147483648))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
@@ -6895,123 +6893,7 @@
   call $~lib/rt/pure/__release
   local.get $4
  )
- (func $~lib/math/murmurHash3 (; 137 ;) (param $0 i64) (result i64)
-  local.get $0
-  local.get $0
-  i64.const 33
-  i64.shr_u
-  i64.xor
-  local.set $0
-  local.get $0
-  i64.const -49064778989728563
-  i64.mul
-  local.set $0
-  local.get $0
-  local.get $0
-  i64.const 33
-  i64.shr_u
-  i64.xor
-  local.set $0
-  local.get $0
-  i64.const -4265267296055464877
-  i64.mul
-  local.set $0
-  local.get $0
-  local.get $0
-  i64.const 33
-  i64.shr_u
-  i64.xor
-  local.set $0
-  local.get $0
- )
- (func $~lib/math/splitMix32 (; 138 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 1831565813
-  i32.add
-  local.set $0
-  local.get $0
-  local.get $0
-  i32.const 15
-  i32.shr_u
-  i32.xor
-  local.get $0
-  i32.const 1
-  i32.or
-  i32.mul
-  local.set $0
-  local.get $0
-  local.get $0
-  local.get $0
-  local.get $0
-  i32.const 7
-  i32.shr_u
-  i32.xor
-  local.get $0
-  i32.const 61
-  i32.or
-  i32.mul
-  i32.add
-  i32.xor
-  local.set $0
-  local.get $0
-  local.get $0
-  i32.const 14
-  i32.shr_u
-  i32.xor
- )
- (func $~lib/math/NativeMath.seedRandom (; 139 ;) (param $0 i64)
-  i32.const 1
-  global.set $~lib/math/random_seeded
-  local.get $0
-  call $~lib/math/murmurHash3
-  global.set $~lib/math/random_state0_64
-  global.get $~lib/math/random_state0_64
-  i64.const -1
-  i64.xor
-  call $~lib/math/murmurHash3
-  global.set $~lib/math/random_state1_64
-  local.get $0
-  i32.wrap_i64
-  call $~lib/math/splitMix32
-  global.set $~lib/math/random_state0_32
-  global.get $~lib/math/random_state0_32
-  call $~lib/math/splitMix32
-  global.set $~lib/math/random_state1_32
-  global.get $~lib/math/random_state0_64
-  i64.const 0
-  i64.ne
-  if (result i32)
-   global.get $~lib/math/random_state1_64
-   i64.const 0
-   i64.ne
-  else
-   i32.const 0
-  end
-  if (result i32)
-   global.get $~lib/math/random_state0_32
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
-  if (result i32)
-   global.get $~lib/math/random_state1_32
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 4032
-   i32.const 1411
-   i32.const 4
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/util/sort/insertionSort<f32> (; 140 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<f32> (; 137 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 f32)
@@ -7101,13 +6983,13 @@
    end
   end
  )
- (func $~lib/rt/tlsf/__free (; 141 ;) (param $0 i32)
+ (func $~lib/rt/tlsf/__free (; 138 ;) (param $0 i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/util/sort/weakHeapSort<f32> (; 142 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/weakHeapSort<f32> (; 139 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -7396,7 +7278,7 @@
   local.get $12
   f32.store
  )
- (func $~lib/array/Array<f32>#sort (; 143 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort (; 140 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f32)
@@ -7471,7 +7353,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/sort/COMPARATOR<f32>~anonymous|0 (; 144 ;) (param $0 f32) (param $1 f32) (result i32)
+ (func $~lib/util/sort/COMPARATOR<f32>~anonymous|0 (; 141 ;) (param $0 f32) (param $1 f32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -7504,7 +7386,7 @@
   i32.lt_s
   i32.sub
  )
- (func $~lib/array/Array<f32>#sort|trampoline (; 145 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#sort|trampoline (; 142 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -7523,7 +7405,7 @@
   local.get $1
   call $~lib/array/Array<f32>#sort
  )
- (func $std/array/isArraysEqual<f32> (; 146 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<f32> (; 143 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 f32)
@@ -7630,7 +7512,7 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/util/sort/insertionSort<f64> (; 147 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<f64> (; 144 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 f64)
@@ -7720,7 +7602,7 @@
    end
   end
  )
- (func $~lib/util/sort/weakHeapSort<f64> (; 148 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/weakHeapSort<f64> (; 145 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8009,7 +7891,7 @@
   local.get $12
   f64.store
  )
- (func $~lib/array/Array<f64>#sort (; 149 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort (; 146 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 f64)
@@ -8084,7 +7966,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/sort/COMPARATOR<f64>~anonymous|0 (; 150 ;) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/util/sort/COMPARATOR<f64>~anonymous|0 (; 147 ;) (param $0 f64) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   local.get $0
@@ -8117,7 +7999,7 @@
   i64.lt_s
   i32.sub
  )
- (func $~lib/array/Array<f64>#sort|trampoline (; 151 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#sort|trampoline (; 148 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -8136,11 +8018,11 @@
   local.get $1
   call $~lib/array/Array<f64>#sort
  )
- (func $~lib/array/Array<f64>#get:length (; 152 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f64>#get:length (; 149 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<f64>#__unchecked_get (; 153 ;) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__unchecked_get (; 150 ;) (param $0 i32) (param $1 i32) (result f64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -8149,7 +8031,7 @@
   i32.add
   f64.load
  )
- (func $~lib/array/Array<f64>#__get (; 154 ;) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 151 ;) (param $0 i32) (param $1 i32) (result f64)
   (local $2 f64)
   local.get $1
   local.get $0
@@ -8169,7 +8051,7 @@
   local.set $2
   local.get $2
  )
- (func $std/array/isArraysEqual<f64> (; 155 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array/isArraysEqual<f64> (; 152 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 f64)
@@ -8276,7 +8158,7 @@
   call $~lib/rt/pure/__release
   local.get $3
  )
- (func $~lib/util/sort/insertionSort<i32> (; 156 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<i32> (; 153 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8366,7 +8248,7 @@
    end
   end
  )
- (func $~lib/util/sort/weakHeapSort<i32> (; 157 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/weakHeapSort<i32> (; 154 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8655,7 +8537,7 @@
   local.get $12
   i32.store
  )
- (func $~lib/array/Array<i32>#sort (; 158 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort (; 155 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8728,12 +8610,12 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/sort/COMPARATOR<i32>~anonymous|0 (; 159 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/sort/COMPARATOR<i32>~anonymous|0 (; 156 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $~lib/array/Array<i32>#sort|trampoline (; 160 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#sort|trampoline (; 157 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -8752,7 +8634,7 @@
   local.get $1
   call $~lib/array/Array<i32>#sort
  )
- (func $~lib/util/sort/insertionSort<u32> (; 161 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/insertionSort<u32> (; 158 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8842,7 +8724,7 @@
    end
   end
  )
- (func $~lib/util/sort/weakHeapSort<u32> (; 162 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/sort/weakHeapSort<u32> (; 159 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9131,7 +9013,7 @@
   local.get $12
   i32.store
  )
- (func $~lib/array/Array<u32>#sort (; 163 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort (; 160 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9204,7 +9086,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/sort/COMPARATOR<u32>~anonymous|0 (; 164 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/sort/COMPARATOR<u32>~anonymous|0 (; 161 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.gt_u
@@ -9213,7 +9095,7 @@
   i32.lt_u
   i32.sub
  )
- (func $~lib/array/Array<u32>#sort|trampoline (; 165 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#sort|trampoline (; 162 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -9232,7 +9114,7 @@
   local.get $1
   call $~lib/array/Array<u32>#sort
  )
- (func $std/array/createReverseOrderedArray (; 166 ;) (param $0 i32) (result i32)
+ (func $std/array/createReverseOrderedArray (; 163 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9266,8 +9148,139 @@
   end
   local.get $1
  )
- (func $~lib/math/seedRandomSelect (; 167 ;) (result i64)
-  i64.const 5424538597996285423
+ (func $~lib/math/seedRandomSelect (; 164 ;) (result i64)
+  (local $0 i64)
+  (local $1 i32)
+  loop $do-continue|0
+   call $~lib/bindings/Math/random
+   i64.reinterpret_f64
+   local.set $0
+   local.get $0
+   i64.const 0
+   i64.ne
+   i32.eqz
+   local.set $1
+   local.get $1
+   br_if $do-continue|0
+  end
+  local.get $0
+  return
+ )
+ (func $~lib/math/murmurHash3 (; 165 ;) (param $0 i64) (result i64)
+  local.get $0
+  local.get $0
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $0
+  local.get $0
+  i64.const -49064778989728563
+  i64.mul
+  local.set $0
+  local.get $0
+  local.get $0
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $0
+  local.get $0
+  i64.const -4265267296055464877
+  i64.mul
+  local.set $0
+  local.get $0
+  local.get $0
+  i64.const 33
+  i64.shr_u
+  i64.xor
+  local.set $0
+  local.get $0
+ )
+ (func $~lib/math/splitMix32 (; 166 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 1831565813
+  i32.add
+  local.set $0
+  local.get $0
+  local.get $0
+  i32.const 15
+  i32.shr_u
+  i32.xor
+  local.get $0
+  i32.const 1
+  i32.or
+  i32.mul
+  local.set $0
+  local.get $0
+  local.get $0
+  local.get $0
+  local.get $0
+  i32.const 7
+  i32.shr_u
+  i32.xor
+  local.get $0
+  i32.const 61
+  i32.or
+  i32.mul
+  i32.add
+  i32.xor
+  local.set $0
+  local.get $0
+  local.get $0
+  i32.const 14
+  i32.shr_u
+  i32.xor
+ )
+ (func $~lib/math/NativeMath.seedRandom (; 167 ;) (param $0 i64)
+  i32.const 1
+  global.set $~lib/math/random_seeded
+  local.get $0
+  call $~lib/math/murmurHash3
+  global.set $~lib/math/random_state0_64
+  global.get $~lib/math/random_state0_64
+  i64.const -1
+  i64.xor
+  call $~lib/math/murmurHash3
+  global.set $~lib/math/random_state1_64
+  local.get $0
+  i32.wrap_i64
+  call $~lib/math/splitMix32
+  global.set $~lib/math/random_state0_32
+  global.get $~lib/math/random_state0_32
+  call $~lib/math/splitMix32
+  global.set $~lib/math/random_state1_32
+  global.get $~lib/math/random_state0_64
+  i64.const 0
+  i64.ne
+  if (result i32)
+   global.get $~lib/math/random_state1_64
+   i64.const 0
+   i64.ne
+  else
+   i32.const 0
+  end
+  if (result i32)
+   global.get $~lib/math/random_state0_32
+   i32.const 0
+   i32.ne
+  else
+   i32.const 0
+  end
+  if (result i32)
+   global.get $~lib/math/random_state1_32
+   i32.const 0
+   i32.ne
+  else
+   i32.const 0
+  end
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 4816
+   i32.const 1411
+   i32.const 4
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~lib/math/NativeMath.random (; 168 ;) (result f64)
   (local $0 i64)
@@ -9429,7 +9442,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 881
+   i32.const 879
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -9929,7 +9942,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 881
+   i32.const 879
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -10404,7 +10417,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 881
+   i32.const 879
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -10699,7 +10712,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 881
+   i32.const 879
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -11769,7 +11782,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 881
+   i32.const 879
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22603,13 +22616,10 @@
   i32.const 3
   call $~lib/array/Array<i32>#push
   drop
-  call $~lib/bindings/Math/random
-  i64.reinterpret_f64
-  call $~lib/math/NativeMath.seedRandom
   i32.const 8
   i32.const 2
   i32.const 9
-  i32.const 4272
+  i32.const 4224
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $55
@@ -22623,7 +22633,7 @@
   i32.const 8
   i32.const 2
   i32.const 9
-  i32.const 4320
+  i32.const 4272
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $56
@@ -22633,7 +22643,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 892
+   i32.const 890
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22641,7 +22651,7 @@
   i32.const 8
   i32.const 3
   i32.const 10
-  i32.const 4368
+  i32.const 4320
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $58
@@ -22655,7 +22665,7 @@
   i32.const 8
   i32.const 3
   i32.const 10
-  i32.const 4448
+  i32.const 4400
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $57
@@ -22665,7 +22675,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 896
+   i32.const 894
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22673,7 +22683,7 @@
   i32.const 5
   i32.const 2
   i32.const 3
-  i32.const 4528
+  i32.const 4480
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $54
@@ -22687,7 +22697,7 @@
   i32.const 5
   i32.const 2
   i32.const 3
-  i32.const 4576
+  i32.const 4528
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $53
@@ -22697,7 +22707,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 900
+   i32.const 898
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22705,7 +22715,7 @@
   i32.const 5
   i32.const 2
   i32.const 7
-  i32.const 4624
+  i32.const 4576
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $52
@@ -22719,7 +22729,7 @@
   i32.const 5
   i32.const 2
   i32.const 7
-  i32.const 4672
+  i32.const 4624
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $44
@@ -22729,7 +22739,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 904
+   i32.const 902
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22737,35 +22747,35 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 4720
+  i32.const 4672
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $41
   i32.const 1
   i32.const 2
   i32.const 3
-  i32.const 4736
+  i32.const 4688
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $51
   i32.const 2
   i32.const 2
   i32.const 3
-  i32.const 4768
+  i32.const 4720
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $50
   i32.const 4
   i32.const 2
   i32.const 3
-  i32.const 4800
+  i32.const 4752
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $49
   i32.const 4
   i32.const 2
   i32.const 3
-  i32.const 4832
+  i32.const 4784
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $48
@@ -22802,7 +22812,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 924
+   i32.const 922
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22823,7 +22833,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 927
+   i32.const 925
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22838,7 +22848,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 930
+   i32.const 928
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22853,7 +22863,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 933
+   i32.const 931
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22868,7 +22878,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 936
+   i32.const 934
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22883,7 +22893,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 939
+   i32.const 937
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -22898,7 +22908,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 942
+   i32.const 940
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23010,7 +23020,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 979
+   i32.const 977
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23045,7 +23055,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 988
+   i32.const 986
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23066,7 +23076,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 989
+   i32.const 987
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23087,7 +23097,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 990
+   i32.const 988
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23108,7 +23118,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 991
+   i32.const 989
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23129,7 +23139,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 992
+   i32.const 990
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23150,7 +23160,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 993
+   i32.const 991
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23195,7 +23205,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 995
+   i32.const 993
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23236,7 +23246,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 998
+   i32.const 996
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23318,7 +23328,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1008
+   i32.const 1006
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23332,7 +23342,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1009
+   i32.const 1007
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23346,7 +23356,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1010
+   i32.const 1008
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23360,7 +23370,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1011
+   i32.const 1009
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23380,7 +23390,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1013
+   i32.const 1011
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23400,7 +23410,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1014
+   i32.const 1012
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23420,7 +23430,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1015
+   i32.const 1013
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23440,7 +23450,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1016
+   i32.const 1014
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23461,7 +23471,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1020
+   i32.const 1018
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23481,7 +23491,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1021
+   i32.const 1019
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23527,7 +23537,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1024
+   i32.const 1022
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23573,7 +23583,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1027
+   i32.const 1025
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -23624,7 +23634,7 @@
   if
    i32.const 0
    i32.const 304
-   i32.const 1030
+   i32.const 1028
    i32.const 2
    call $~lib/builtins/abort
    unreachable

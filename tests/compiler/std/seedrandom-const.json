@@ -1,6 +1,6 @@
 {
   "asc_flags": [
     "--runtime none",
-    "--seedRandom const"
+    "--seedRandom 9223372036854775807"
   ]
 }

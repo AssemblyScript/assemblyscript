@@ -3138,6 +3138,10 @@ export function ipow64f(x: f64, e: i32): f64 {
   return sign ? 1.0 / out : out;
 }
 
+// @ts-ignore
+@lazy
+const seedRandomSelect_wasiBuf: i64[] = [0];
+
 function seedRandomSelect(): i64 {
   if (isDefined(ASC_SEEDRANDOM_FUNC)) return ASC_SEEDRANDOM_FUNC();
   if (isDefined(ASC_SEEDRANDOM_MATH)) {
@@ -3148,11 +3152,10 @@ function seedRandomSelect(): i64 {
   }
   if (isDefined(ASC_SEEDRANDOM_DATE)) return <i64>JSDate.now();
   if (isDefined(ASC_SEEDRANDOM_WASI)) {
-    let buf = __alloc(8, 0);
+    let buf = changetype<ArrayBufferView>(seedRandomSelect_wasiBuf).dataStart;
     let val: i64;
     do assert(wasi.random_get(buf, 8) == wasi.errno.SUCCESS);
     while (!(val = load<i64>(buf)));
-    __free(buf);
     return val;
   }
   if (!isDefined(ASC_SEEDRANDOM_CONST)) {

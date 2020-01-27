@@ -69,7 +69,7 @@
  (func $~lib/math/NativeMath.seedRandom (; 3 ;)
   i32.const 1
   global.set $~lib/math/random_seeded
-  i64.const 7353165067917700646
+  i64.const 9223372036854775807
   call $~lib/math/murmurHash3
   global.set $~lib/math/random_state0_64
   global.get $~lib/math/random_state0_64
@@ -77,7 +77,7 @@
   i64.xor
   call $~lib/math/murmurHash3
   global.set $~lib/math/random_state1_64
-  i32.const -1475629530
+  i32.const -1
   call $~lib/math/splitMix32
   global.set $~lib/math/random_state0_32
   global.get $~lib/math/random_state0_32

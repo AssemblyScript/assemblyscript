@@ -2844,7 +2844,6 @@ assert(test_powf(-2.0, -1.0, -0.5, 0.0, 0));
 // Math.random
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-NativeMath.seedRandom(reinterpret<u64>(JSMath.random()));
 for (let i = 0; i < 1e6; ++i) {
   let r = NativeMath.random();
   assert(r >= 0.0 && r < 1.0);
@@ -2852,7 +2851,6 @@ for (let i = 0; i < 1e6; ++i) {
 
 // Mathf.random ////////////////////////////////////////////////////////////////////////////////////
 
-NativeMathf.seedRandom(reinterpret<u64>(JSMath.random()));
 for (let i = 0; i < 1e6; ++i) {
   let r = NativeMathf.random();
   assert(r >= 0.0 && r < 1.0);
