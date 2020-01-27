@@ -5,7 +5,7 @@ if (typeof asc.definitionFiles.portable !== "string") throw Error("missing bundl
 
 const stdout = asc.createMemoryStream();
 const stderr = asc.createMemoryStream();
-const files = { "module.ts": `import "allocator/arena";` };
+const files = { "module.ts": `export function test(): void {}` };
 
 console.log("# asc --version");
 
@@ -73,7 +73,7 @@ process.stdout.write(stderr.toString());
 
 console.log("\n# asc.compileString");
 
-const output = asc.compileString(`import "allocator/arena";`, { optimizeLevel: 2 });
+const output = asc.compileString(`export function test(): void {}`, { optimizeLevel: 3, runtime: "none", exportTable: true, measure: true });
 console.log(">>> .stdout >>>");
 process.stdout.write(output.stdout.toString());
 console.log(">>> .stderr >>>");

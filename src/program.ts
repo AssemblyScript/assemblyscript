@@ -3048,6 +3048,10 @@ export class Field extends VariableLikeElement {
   prototype: FieldPrototype;
   /** Field memory offset, if an instance field. */
   memoryOffset: i32 = -1;
+  /** Getter function reference, if compiled. */
+  getterRef: FunctionRef = 0;
+  /** Setter function reference, if compiled. */
+  setterRef: FunctionRef = 0;
 
   /** Constructs a new field. */
   constructor(
@@ -3070,6 +3074,16 @@ export class Field extends VariableLikeElement {
     assert(type != Type.void);
     this.setType(type);
     registerConcreteElement(this.program, this);
+  }
+
+  /** Gets the internal name of the respective getter function. */
+  get internalGetterName(): string {
+    return this.parent.internalName + INSTANCE_DELIMITER + GETTER_PREFIX + this.name;
+  }
+
+  /** Gets the internal name of the respective setter function. */
+  get internalSetterName(): string {
+    return this.parent.internalName + INSTANCE_DELIMITER + SETTER_PREFIX + this.name;
   }
 }
 

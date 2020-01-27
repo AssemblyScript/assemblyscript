@@ -30,8 +30,8 @@
  (export "animals.Animal.CAT" (global $exports/animals.Animal.CAT))
  (export "animals.Animal.DOG" (global $exports/animals.Animal.DOG))
  (export "Car" (global $exports/Car))
- (export "Car#get:doors" (func $Car#get:doors))
- (export "Car#set:doors" (func $Car#set:doors))
+ (export "Car#get:doors" (func $exports/Car#get:doors))
+ (export "Car#set:doors" (func $exports/Car#set:doors))
  (export "Car#constructor" (func $exports/Car#constructor|trampoline))
  (export "Car#get:numDoors" (func $exports/Car#get:numDoors))
  (export "Car#set:numDoors" (func $exports/Car#set:numDoors))
@@ -39,8 +39,8 @@
  (export "Car.TIRES" (global $exports/Car.TIRES))
  (export "Car.getNumTires" (func $exports/Car.getNumTires))
  (export "vehicles.Car" (global $exports/vehicles.Car))
- (export "vehicles.Car#get:doors" (func $vehicles.Car#get:doors))
- (export "vehicles.Car#set:doors" (func $vehicles.Car#set:doors))
+ (export "vehicles.Car#get:doors" (func $exports/vehicles.Car#get:doors))
+ (export "vehicles.Car#set:doors" (func $exports/vehicles.Car#set:doors))
  (export "vehicles.Car#constructor" (func $exports/vehicles.Car#constructor|trampoline))
  (export "vehicles.Car#get:numDoors" (func $exports/vehicles.Car#get:numDoors))
  (export "vehicles.Car#set:numDoors" (func $exports/vehicles.Car#set:numDoors))
@@ -195,22 +195,31 @@
   i32.store
   local.get $0
  )
- (func $exports/Car#get:numDoors (; 8 ;) (param $0 i32) (result i32)
+ (func $exports/Car#get:doors (; 8 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 9 ;) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:doors (; 9 ;) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#openDoors (; 10 ;) (param $0 i32)
+ (func $exports/Car#get:numDoors (; 10 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
+ (func $exports/Car#set:numDoors (; 11 ;) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+ )
+ (func $exports/Car#openDoors (; 12 ;) (param $0 i32)
   nop
  )
- (func $exports/vehicles.Car.getNumTires (; 11 ;) (result i32)
+ (func $exports/vehicles.Car.getNumTires (; 13 ;) (result i32)
   global.get $exports/vehicles.Car.TIRES
  )
- (func $exports/vehicles.Car#constructor (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -228,19 +237,28 @@
   i32.store
   local.get $0
  )
- (func $exports/vehicles.Car#get:numDoors (; 13 ;) (param $0 i32) (result i32)
+ (func $exports/vehicles.Car#get:doors (; 15 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/vehicles.Car#set:numDoors (; 14 ;) (param $0 i32) (param $1 i32)
+ (func $exports/vehicles.Car#set:doors (; 16 ;) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/vehicles.Car#openDoors (; 15 ;) (param $0 i32)
+ (func $exports/vehicles.Car#get:numDoors (; 17 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.load
+ )
+ (func $exports/vehicles.Car#set:numDoors (; 18 ;) (param $0 i32) (param $1 i32)
+  local.get $0
+  local.get $1
+  i32.store
+ )
+ (func $exports/vehicles.Car#openDoors (; 19 ;) (param $0 i32)
   nop
  )
- (func $~start (; 16 ;)
+ (func $~start (; 20 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -252,7 +270,7 @@
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
  )
- (func $exports/subOpt|trampoline (; 17 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (; 21 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -270,16 +288,7 @@
   local.get $1
   call $exports/subOpt
  )
- (func $Car#get:doors (; 18 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $Car#set:doors (; 19 ;) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store
- )
- (func $exports/Car#constructor|trampoline (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -294,15 +303,6 @@
   local.get $0
   local.get $1
   call $exports/Car#constructor
- )
- (func $vehicles.Car#get:doors (; 21 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $vehicles.Car#set:doors (; 22 ;) (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store
  )
  (func $exports/vehicles.Car#constructor|trampoline (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1

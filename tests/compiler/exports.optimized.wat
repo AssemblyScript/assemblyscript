@@ -28,20 +28,20 @@
  (export "animals.Animal.CAT" (global $exports/animals.Animal.CAT))
  (export "animals.Animal.DOG" (global $exports/animals.Animal.DOG))
  (export "Car" (global $exports/Car))
- (export "Car#get:doors" (func $exports/Car#get:numDoors))
- (export "Car#set:doors" (func $exports/Car#set:numDoors))
+ (export "Car#get:doors" (func $exports/Car#get:doors))
+ (export "Car#set:doors" (func $exports/Car#set:doors))
  (export "Car#constructor" (func $exports/Car#constructor|trampoline))
- (export "Car#get:numDoors" (func $exports/Car#get:numDoors))
- (export "Car#set:numDoors" (func $exports/Car#set:numDoors))
+ (export "Car#get:numDoors" (func $exports/Car#get:doors))
+ (export "Car#set:numDoors" (func $exports/Car#set:doors))
  (export "Car#openDoors" (func $exports/Car#openDoors))
  (export "Car.TIRES" (global $exports/Car.TIRES))
  (export "Car.getNumTires" (func $exports/Car.getNumTires))
  (export "vehicles.Car" (global $exports/vehicles.Car))
- (export "vehicles.Car#get:doors" (func $exports/Car#get:numDoors))
- (export "vehicles.Car#set:doors" (func $exports/Car#set:numDoors))
+ (export "vehicles.Car#get:doors" (func $exports/Car#get:doors))
+ (export "vehicles.Car#set:doors" (func $exports/Car#set:doors))
  (export "vehicles.Car#constructor" (func $exports/vehicles.Car#constructor|trampoline))
- (export "vehicles.Car#get:numDoors" (func $exports/Car#get:numDoors))
- (export "vehicles.Car#set:numDoors" (func $exports/Car#set:numDoors))
+ (export "vehicles.Car#get:numDoors" (func $exports/Car#get:doors))
+ (export "vehicles.Car#set:numDoors" (func $exports/Car#set:doors))
  (export "vehicles.Car#openDoors" (func $exports/Car#openDoors))
  (export "vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
  (export "vehicles.Car.getNumTires" (func $exports/Car.getNumTires))
@@ -129,11 +129,11 @@
   i32.store offset=12
   local.get $2
  )
- (func $exports/Car#get:numDoors (; 5 ;) (param $0 i32) (result i32)
+ (func $exports/Car#get:doors (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:doors (; 6 ;) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
