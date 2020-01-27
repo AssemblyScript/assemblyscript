@@ -86,7 +86,6 @@
  (data (i32.const 2960) "\acG\9a\fd\8c`\ee?=\f5$\9f\ca8\b3?\a0j\02\1f\b3\a4\ec?\ba\918T\a9v\c4?\e6\fcjW6 \eb?\d2\e4\c4J\0b\84\ce?-\aa\a1c\d1\c2\e9?\1ce\c6\f0E\06\d4?\edAx\03\e6\86\e8?\f8\9f\1b,\9c\8e\d8?bHS\f5\dcg\e7?\cc{\b1N\a4\e0\dc?")
  (data (i32.const 3056) "\10\00\00\00\01\00\00\00\04\00\00\00\10\00\00\00\f0\n\00\00\f0\n\00\00\00\01\00\00 ")
  (data (i32.const 3088) "\18\00\00\00\01\00\00\00\01\00\00\00\18\00\00\00~\00l\00i\00b\00/\00m\00a\00t\00h\00.\00t\00s")
- (data (i32.const 3136) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00P\00R\00N\00G\00 \00m\00u\00s\00t\00 \00b\00e\00 \00s\00e\00e\00d\00e\00d\00.")
  (global $~lib/math/rempio2_y0 (mut f64) (f64.const 0))
  (global $~lib/math/rempio2_y1 (mut f64) (f64.const 0))
  (global $~lib/math/res128_hi (mut i64) (i64.const 0))
@@ -8655,7 +8654,7 @@
   if
    i32.const 0
    i32.const 3104
-   i32.const 1406
+   i32.const 1411
    i32.const 4
    call $~lib/builtins/abort
    unreachable
@@ -8667,12 +8666,8 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 3152
-   i32.const 3104
-   i32.const 1413
-   i32.const 24
-   call $~lib/builtins/abort
-   unreachable
+   i64.const -9113062828633802500
+   call $~lib/math/NativeMath.seedRandom
   end
   global.get $~lib/math/random_state0_64
   local.set $0
@@ -8711,12 +8706,8 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   i32.const 3152
-   i32.const 3104
-   i32.const 2606
-   i32.const 24
-   call $~lib/builtins/abort
-   unreachable
+   i64.const -9113062828633802500
+   call $~lib/math/NativeMath.seedRandom
   end
   global.get $~lib/math/random_state0_32
   local.tee $0

@@ -1,0 +1,8 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "AS102: User-defined: \"Falling back to a compile-time constant random seed"
+  ]
+}

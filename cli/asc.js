@@ -24,6 +24,7 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
+const Long = require("long");
 const binaryen = global.Binaryen || (global.Binaryen = require("binaryen"));
 
 // Proxy Binaryen's ready event
@@ -236,6 +237,43 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
   assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/builtins/abort");
   assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/builtins/trace");
+
+  // Initialize randomness source
+  switch (args.seedRandom) {
+    case "const": {
+      assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_CONST", "1");
+      // fall-through
+    }
+    case undefined: {
+      let value = Long.fromBits(Math.random() * 0xffffffff, Math.random() * 0xffffffff, true);
+      assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_LOW", (value.low >>> 0).toString());
+      assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_HIGH", (value.high >>> 0).toString());
+      break;
+    }
+    case "math": {
+      assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_MATH", "1");
+      break;
+    }
+    case "date": {
+      assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_DATE", "1");
+      break;
+    }
+    case "wasi": {
+      assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_WASI", "1");
+      break;
+    }
+    default: {
+      if (/^\d+$/.test(args.seedRandom)) {
+        let value = Long.fromString(args.seedRandom);
+        assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_CONST", "1");
+        assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_LOW", (value.low >>> 0).toString());
+        assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_HIGH", (value.high >>> 0).toString());
+      } else {
+        assemblyscript.setGlobalAlias(compilerOptions, "ASC_SEEDRANDOM_FUNC", String(args.seedRandom));
+      }
+      break;
+    }
+  }
 
   // Add or override aliases if specified
   if (args.use) {

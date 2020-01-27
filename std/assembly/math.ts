@@ -1,4 +1,9 @@
+/// <reference path="./util/seedrandom.d.ts" />
+
 import * as JSMath from "./bindings/Math";
+import * as JSDate from "./bindings/Date";
+import * as wasi from "./bindings/wasi";
+
 export { JSMath };
 
 import {
@@ -1410,7 +1415,7 @@ export namespace NativeMath {
   }
 
   export function random(): f64 { // see: v8/src/base/utils/random-number-generator.cc
-    if (!random_seeded) throw new Error("PRNG must be seeded.");
+    if (!random_seeded) seedRandom(seedRandomSelect());
     var s1 = random_state0_64;
     var s0 = random_state1_64;
     random_state0_64 = s0;
@@ -2603,7 +2608,7 @@ export namespace NativeMathf {
 
   // Using xoroshiro64starstar from http://xoshiro.di.unimi.it/xoroshiro64starstar.c
   export function random(): f32 {
-    if (!random_seeded) throw new Error("PRNG must be seeded.");
+    if (!random_seeded) NativeMath.seedRandom(seedRandomSelect());
 
     var s0 = random_state0_32;
     var s1 = random_state1_32;
@@ -3131,4 +3136,28 @@ export function ipow64f(x: f64, e: i32): f64 {
     x *= x;
   }
   return sign ? 1.0 / out : out;
+}
+
+function seedRandomSelect(): i64 {
+  if (isDefined(ASC_SEEDRANDOM_FUNC)) return ASC_SEEDRANDOM_FUNC();
+  if (isDefined(ASC_SEEDRANDOM_MATH)) {
+    let val: i64;
+    do val = reinterpret<i64>(JSMath.random());
+    while (!val);
+    return val;
+  }
+  if (isDefined(ASC_SEEDRANDOM_DATE)) return <i64>JSDate.now();
+  if (isDefined(ASC_SEEDRANDOM_WASI)) {
+    let buf = __alloc(8, 0);
+    let val: i64;
+    do assert(wasi.random_get(buf, 8) == wasi.errno.SUCCESS);
+    while (!(val = load<i64>(buf)));
+    __free(buf);
+    return val;
+  }
+  if (!isDefined(ASC_SEEDRANDOM_CONST)) {
+    WARNING("Falling back to a compile-time constant random seed. See --seedRandom to silence this warning.");
+  }
+  const value = ((<i64>ASC_SEEDRANDOM_HIGH) << 32) | <i64><u32>ASC_SEEDRANDOM_LOW;
+  return value;
 }

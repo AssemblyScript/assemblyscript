@@ -220,6 +220,21 @@
       ""
     ]
   },
+  "seedRandom": {
+    "description": [
+      "Sets the randomness source used by Math.random. Defalts to",
+      "a compile-time constant while emitting a warning.",
+      "",
+      " const     Compile-time constant without a warning.",
+      " 12345     Custom constant without a warning.",
+      " date      Imports 'Date' from JS and calls Date.now()",
+      " math      Imports 'Math' from JS and calls Math.random()",
+      " wasi      Uses the respective WASI interface.",
+      " ...       Internal name of a custom function returning i64.",
+      ""
+    ],
+    "type": "s"
+  },
   "transform": {
     "description": "Specifies the path to a custom transform to 'require'.",
     "type": "S"
