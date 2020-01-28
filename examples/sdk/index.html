@@ -1,13 +1,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
 <script>
-require([ "https://cdn.jsdelivr.net/npm/assemblyscript@latest/dist/sdk.js" ], sdk => sdk.asc.ready.then(() => main(sdk.asc)));
-
-function main(asc) {
-  console.log("Running simple example...");
-  simpleExample(asc);
-  console.log("\nRunning extended example...");
-  extendedExample(asc);
-}
+require([ "https://cdn.jsdelivr.net/npm/assemblyscript@latest/dist/sdk.js" ], function(sdk) {
+  const { asc } = sdk;
+  asc.ready.then(() => {
+    console.log("Running simple example...");
+    simpleExample(asc);
+    console.log("\nRunning extended example...");
+    extendedExample(asc);
+  });
+});
 
 // This uses `asc.compileString`, a convenience API useful if all one wants to
 // do is to quickly compile a single source string to WebAssembly.
