@@ -766,6 +766,23 @@ export declare function _BinaryenModuleSetFeatures(module: BinaryenModuleRef, fe
 
 export declare function _BinaryenAddCustomSection(module: BinaryenModuleRef, name: usize, contents: usize, contentsSize: BinaryenIndex): void;
 
+type BinaryenSideEffects = u32;
+
+export declare function _BinaryenSideEffectNone(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectBranches(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectCalls(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectReadsLocal(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectWritesLocal(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectReadsGlobal(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectWritesGlobal(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectReadsMemory(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectWritesMemory(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectImplicitTrap(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectIsAtomic(): BinaryenSideEffects;
+export declare function _BinaryenSideEffectAny(): BinaryenSideEffects;
+
+export declare function _BinaryenExpressionGetSideEffects(expr: BinaryenExpressionRef): BinaryenSideEffects;
+
 type BinaryenRelooperRef = usize;
 type BinaryenRelooperBlockRef = usize;
 
