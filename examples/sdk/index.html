@@ -1,0 +1,59 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js"></script>
+<script>
+require([ "https://cdn.jsdelivr.net/npm/assemblyscript@latest/dist/sdk.js" ], function(sdk) {
+  const { asc } = sdk;
+  asc.ready.then(() => {
+    console.log("Running simple example...");
+    simpleExample(asc);
+    console.log("\nRunning extended example...");
+    extendedExample(asc);
+  });
+});
+
+// This uses `asc.compileString`, a convenience API useful if all one wants to
+// do is to quickly compile a single source string to WebAssembly.
+function simpleExample(asc) {
+  const { text, binary } = asc.compileString(`export function test(): void {}`, {
+    optimizeLevel: 3,
+    runtime: "none"
+  });
+  console.log(">>> TEXT >>>\n" + text);
+  console.log(">>> BINARY >>>\n" + binary.length + " bytes");
+}
+
+// The full API works very much like asc on the command line, with additional
+// environment bindings being provided to access the (virtual) file system.
+function extendedExample(asc) {
+  const stdout = asc.createMemoryStream();
+  const stderr = asc.createMemoryStream();
+  asc.main([
+    "module.ts",
+    "-O3",
+    "--runtime", "none",
+    "--binaryFile", "module.wasm",
+    "--textFile", "module.wat",
+    "--sourceMap"
+  ], {
+    stdout: stdout,
+    stderr: stderr,
+    readFile: (name, baseDir) => {
+      if (name === "module.ts") return `export function test(): void {}`;
+      return null;
+    },
+    writeFile: (name, data, baseDir) => {
+      console.log(">>> WRITE:" + name + " >>>\n" + data.length);
+    },
+    listFiles: (dirname, baseDir) => {
+      return [];
+    }
+  }, err => {
+    console.log(">>> STDOUT >>>\n" + stdout.toString());
+    console.log(">>> STDERR >>>\n" + stderr.toString());
+    if (err) {
+      console.log(">>> THROWN >>>");
+      console.log(err);
+    }
+  });
+}
+</script>
+<p>See the browser console!</p>
