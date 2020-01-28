@@ -12,7 +12,7 @@
  (data (i32.const 192) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00")
  (table $0 1 funcref)
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "testVar" (func $assert-nonnull/testVar))
  (export "testObj" (func $assert-nonnull/testObj))
@@ -328,7 +328,11 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $assert-nonnull/testFn (; 14 ;) (param $0 i32) (result i32)
+ (func $~setArgumentsLength (; 14 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $assert-nonnull/testFn (; 15 ;) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 0
   global.set $~argumentsLength
@@ -336,7 +340,7 @@
   call_indirect (type $none_=>_i32)
   local.tee $1
  )
- (func $assert-nonnull/testFn2 (; 15 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testFn2 (; 16 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -358,7 +362,7 @@
   call_indirect (type $none_=>_i32)
   local.tee $1
  )
- (func $assert-nonnull/testRet (; 16 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testRet (; 17 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 0
@@ -383,7 +387,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $assert-nonnull/testObjFn (; 17 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testObjFn (; 18 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -400,7 +404,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $assert-nonnull/testObjRet (; 18 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testObjRet (; 19 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

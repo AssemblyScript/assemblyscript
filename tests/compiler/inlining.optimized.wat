@@ -10,14 +10,18 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
  (start $~start)
  (func $inlining/test (; 1 ;) (result i32)
   i32.const 3
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 2 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -59,7 +63,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -104,7 +108,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $inlining/test_ctor (; 4 ;)
+ (func $inlining/test_ctor (; 5 ;)
   (local $0 i32)
   i32.const 16
   i32.const 4
@@ -184,7 +188,7 @@
    unreachable
   end
  )
- (func $~start (; 5 ;)
+ (func $~start (; 6 ;)
   i32.const 1
   global.set $~argumentsLength
   i32.const 64

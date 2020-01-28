@@ -1,7 +1,7 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -15,7 +15,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 56))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
  (start $~start)
@@ -27,13 +27,17 @@
  (func $inlining/func_fe~anonymous|0 (; 2 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
+ (func $~setArgumentsLength (; 3 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $~lib/rt/stub/__retain (; 4 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 4 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 5 ;) (param $0 i32)
   nop
  )
- (func $inlining/test_funcs (; 5 ;)
+ (func $inlining/test_funcs (; 6 ;)
   (local $0 f32)
   (local $1 f64)
   (local $2 i32)
@@ -276,7 +280,7 @@
   local.get $7
   call $~lib/rt/stub/__release
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 6 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 7 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -330,7 +334,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -383,7 +387,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $inlining/test_ctor (; 8 ;)
+ (func $inlining/test_ctor (; 9 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -491,7 +495,7 @@
   local.get $4
   call $~lib/rt/stub/__release
  )
- (func $start:inlining (; 9 ;)
+ (func $start:inlining (; 10 ;)
   call $inlining/test
   i32.const 3
   i32.eq
@@ -517,7 +521,7 @@
   global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )
- (func $~start (; 10 ;)
+ (func $~start (; 11 ;)
   call $start:inlining
  )
 )

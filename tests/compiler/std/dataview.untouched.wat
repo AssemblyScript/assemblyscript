@@ -38,7 +38,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 512))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
@@ -2722,14 +2722,18 @@
   local.get $3
   call $~lib/dataview/DataView#constructor
  )
- (func $~lib/dataview/DataView#get:byteOffset (; 52 ;) (param $0 i32) (result i32)
+ (func $~setArgumentsLength (; 52 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $~lib/dataview/DataView#get:byteOffset (; 53 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load
   i32.sub
  )
- (func $start:std/dataview (; 53 ;)
+ (func $start:std/dataview (; 54 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4458,13 +4462,13 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~start (; 54 ;)
+ (func $~start (; 55 ;)
   call $start:std/dataview
  )
- (func $~lib/rt/pure/__collect (; 55 ;)
+ (func $~lib/rt/pure/__collect (; 56 ;)
   return
  )
- (func $~lib/rt/tlsf/freeBlock (; 56 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 57 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -4480,7 +4484,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/pure/decrement (; 57 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 58 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -4557,7 +4561,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 58 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 59 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -4581,7 +4585,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 59 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 60 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4

@@ -287,6 +287,8 @@ export namespace ExportNames {
   export const start = "_start"; // match WASI
   /** Name of the argumentsLength varargs helper global. */
   export const argumentsLength = "__argumentsLength";
+  /** Name of the alternative argumentsLength setter function. */
+  export const setArgumentsLength = "__setArgumentsLength";
   /** Name of the memory instance, if exported. */
   export const memory = "memory";
   /** Name of the table instance, if exported. */
@@ -6664,14 +6666,15 @@ export class Compiler extends DiagnosticEmitter {
     if (!this.builtinArgumentsLength) {
       let module = this.module;
       this.builtinArgumentsLength = module.addGlobal(BuiltinNames.argumentsLength, NativeType.I32, true, module.i32(0));
-      if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-        module.addGlobalExport(BuiltinNames.argumentsLength, ExportNames.argumentsLength);
-      } else {
+      // TODO: Enable this once mutable globals are the default nearly everywhere.
+      // if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
+      //   module.addGlobalExport(BuiltinNames.argumentsLength, ExportNames.argumentsLength);
+      // } else {
         module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
           module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
         );
-        module.addFunctionExport(BuiltinNames.setArgumentsLength, SETTER_PREFIX + ExportNames.argumentsLength);
-      }
+        module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
+      // }
     }
   }
 
