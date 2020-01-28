@@ -136,7 +136,7 @@ jobs:
       run: npm ci --no-audit
     - name: Clean distribution files
       run: npm run clean
-    - name: Test full runtime
+    - name: Test the loader
       run: |
         cd lib/loader
         npm run asbuild
