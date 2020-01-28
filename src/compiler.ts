@@ -6664,7 +6664,14 @@ export class Compiler extends DiagnosticEmitter {
     if (!this.builtinArgumentsLength) {
       let module = this.module;
       this.builtinArgumentsLength = module.addGlobal(BuiltinNames.argumentsLength, NativeType.I32, true, module.i32(0));
-      module.addGlobalExport(BuiltinNames.argumentsLength, ExportNames.argumentsLength);
+      if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
+        module.addGlobalExport(BuiltinNames.argumentsLength, ExportNames.argumentsLength);
+      } else {
+        module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
+          module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
+        );
+        module.addFunctionExport(BuiltinNames.setArgumentsLength, SETTER_PREFIX + ExportNames.argumentsLength);
+      }
     }
   }
 

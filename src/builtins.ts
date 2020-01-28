@@ -99,6 +99,7 @@ export namespace BuiltinNames {
   export const start = "~start";
   export const started = "~started";
   export const argumentsLength = "~argumentsLength";
+  export const setArgumentsLength = "~setArgumentsLength";
 
   // std/builtins.ts
   export const isInteger = "~lib/builtins/isInteger";
