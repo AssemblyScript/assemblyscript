@@ -25,8 +25,8 @@
   "types": "index.d.ts",
   "scripts": {
     "asbuild": "npm run asbuild:default && npm run asbuild:legacy",
-    "asbuild:default": "asc tests/assembly/index.ts -b tests/build/default.wasm",
-    "asbuild:legacy": "asc tests/assembly/index.ts --disable mutable-globals -b tests/build/legacy.wasm",
+    "asbuild:default": "node ../../bin/asc tests/assembly/index.ts -b tests/build/default.wasm",
+    "asbuild:legacy": "node ../../bin/asc tests/assembly/index.ts --disable mutable-globals -b tests/build/legacy.wasm",
     "test": "node tests"
   },
   "files": [
