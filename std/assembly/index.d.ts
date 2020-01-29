@@ -46,6 +46,8 @@ declare const ASC_TARGET: i32;
 declare const ASC_NO_ASSERT: bool;
 /** Provided memoryBase option. */
 declare const ASC_MEMORY_BASE: i32;
+/** Provided tableBase option. */
+declare const ASC_TABLE_BASE: i32;
 /** Provided optimizeLevel option. */
 declare const ASC_OPTIMIZE_LEVEL: i32;
 /** Provided shrinkLevel option. */

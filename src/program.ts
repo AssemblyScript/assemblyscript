@@ -679,6 +679,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.noAssert ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_MEMORY_BASE, Type.i32,
       i64_new(options.memoryBase, 0));
+    this.registerConstantInteger(CommonNames.ASC_TABLE_BASE, Type.i32,
+      i64_new(options.tableBase, 0));
     this.registerConstantInteger(CommonNames.ASC_OPTIMIZE_LEVEL, Type.i32,
       i64_new(options.optimizeLevelHint, 0));
     this.registerConstantInteger(CommonNames.ASC_SHRINK_LEVEL, Type.i32,
