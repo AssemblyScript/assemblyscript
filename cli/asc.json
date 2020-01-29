@@ -1,92 +1,62 @@
 {
   "version": {
+    "category": "General",
     "description": "Prints just the compiler's version and exits.",
     "type": "b",
     "alias": "v"
   },
   "help": {
+    "category": "General",
     "description": "Prints this message and exits.",
     "type": "b",
     "alias": "h"
   },
+  "noColors": {
+    "category": "General",
+    "description": "Disables terminal colors.",
+    "type": "b",
+    "default": false
+  },
+
   "optimize": {
+    "category": "Optimizations",
     "description": [
-      "Optimizes the module. Also has the usual shorthands:",
+      "Optimizes the module. Typical shorthands are:",
       "",
-      " -O     Uses defaults. Equivalent to -O3s",
-      " -O0    Equivalent to --optimizeLevel 0",
-      " -O1    Equivalent to --optimizeLevel 1",
-      " -O2    Equivalent to --optimizeLevel 2",
-      " -O3    Equivalent to --optimizeLevel 3",
-      " -Oz    Equivalent to -O but with --shrinkLevel 2",
-      " -O3s   Equivalent to -O3 with --shrinkLevel 1 etc.",
+      " Default optimizations   -O / -O3s",
+      " Make a release build    -O --noAssert",
+      " Make a debug build      --debug",
+      " Optimize for speed      -O3",
+      " Optimize for size       -O3z --converge",
       ""
     ],
     "type": "b",
     "alias": "O"
   },
   "optimizeLevel": {
+    "category": "Optimizations",
     "description": "How much to focus on optimizing code. [0-3]",
     "type": "i"
   },
   "shrinkLevel": {
+    "category": "Optimizations",
     "description": "How much to focus on shrinking code size. [0-2, s=1, z=2]",
     "type": "i"
   },
   "converge": {
+    "category": "Optimizations",
     "description": "Re-optimizes until no further improvements can be made.",
     "type": "b",
     "default": false
   },
-  "validate": {
-    "description": "Validates the module using Binaryen. Exits if invalid.",
+  "noAssert": {
+    "category": "Optimizations",
+    "description": "Replaces assertions with just their value without trapping.",
     "type": "b",
-    "alias": "c",
     "default": false
   },
-  "baseDir": {
-    "description": "Specifies the base directory of input and output files.",
-    "type": "s",
-    "default": "."
-  },
-  "outFile": {
-    "description": "Specifies the output file. File extension indicates format.",
-    "type": "s",
-    "alias": "o"
-  },
-  "binaryFile": {
-    "description": "Specifies the binary output file (.wasm).",
-    "type": "s",
-    "alias": "b"
-  },
-  "textFile": {
-    "description": "Specifies the text output file (.wat).",
-    "type": "s",
-    "alias": "t"
-  },
-  "asmjsFile": {
-    "description": "Specifies the asm.js output file (.js).",
-    "type": "s",
-    "alias": "a"
-  },
-  "idlFile": {
-    "description": "Specifies the WebIDL output file (.webidl).",
-    "type": "s",
-    "alias": "i"
-  },
-  "tsdFile": {
-    "description": "Specifies the TypeScript definition output file (.d.ts).",
-    "type": "s",
-    "alias": "d"
-  },
-  "sourceMap": {
-    "description": [
-      "Enables source map generation. Optionally takes the URL",
-      "used to reference the source map from the binary file."
-    ],
-    "type": "s"
-  },
   "runtime": {
+    "category": "Optimizations",
     "description": [
       "Specifies the runtime variant to include in the program.",
       "",
@@ -99,6 +69,175 @@
     "type": "s",
     "default": "full"
   },
+
+  "outFile": {
+    "category": "Output",
+    "description": "Specifies the output file. File extension indicates format.",
+    "type": "s",
+    "alias": "o"
+  },
+  "binaryFile": {
+    "category": "Output",
+    "description": "Specifies the binary output file (.wasm).",
+    "type": "s",
+    "alias": "b"
+  },
+  "textFile": {
+    "category": "Output",
+    "description": "Specifies the text output file (.wat).",
+    "type": "s",
+    "alias": "t"
+  },
+  "asmjsFile": {
+    "category": "Output",
+    "description": "Specifies the asm.js output file (.js).",
+    "type": "s",
+    "alias": "a"
+  },
+  "idlFile": {
+    "category": "Output",
+    "description": "Specifies the WebIDL output file (.webidl).",
+    "type": "s",
+    "alias": "i"
+  },
+  "tsdFile": {
+    "category": "Output",
+    "description": "Specifies the TypeScript definition output file (.d.ts).",
+    "type": "s",
+    "alias": "d"
+  },
+
+  "sourceMap": {
+    "category": "Debugging",
+    "description": [
+      "Enables source map generation. Optionally takes the URL",
+      "used to reference the source map from the binary file."
+    ],
+    "type": "s"
+  },
+  "debug": {
+    "category": "Debugging",
+    "description": "Enables debug information in emitted binaries.",
+    "type": "b",
+    "default": false
+  },
+
+  "importMemory": {
+    "category": "Features",
+    "description": "Imports the memory provided as 'env.memory'.",
+    "type": "b",
+    "default": false
+  },
+  "sharedMemory": {
+    "category": "Features",
+    "description": "Declare memory as shared by settings the max shared memory.",
+    "type": "i",
+    "default": 0
+  },
+  "importTable": {
+    "category": "Features",
+    "description": "Imports the function table provided as 'env.table'.",
+    "type": "b",
+    "default": false
+  },
+  "exportTable": {
+    "category": "Features",
+    "description": "Exports the function table as 'table'.",
+    "type": "b",
+    "default": false
+  },
+  "explicitStart": {
+    "category": "Features",
+    "description": "Exports an explicit '_start' function to call.",
+    "type": "b",
+    "default": false
+  },
+  "enable": {
+    "category": "Features",
+    "description": [
+      "Enables WebAssembly features being disabled by default.",
+      "",
+      " sign-extension      Sign-extension operations",
+      " bulk-memory         Bulk memory operations.",
+      " simd                SIMD types and operations.",
+      " threads             Threading and atomic operations.",
+      " reference-types     Reference types and operations.",
+      ""
+    ],
+    "TODO_doesNothingYet": [
+      " nontrapping-f2i     Non-trapping float to integer ops.",
+      " exception-handling  Exception handling.",
+      " tail-calls          Tail call operations."
+    ],
+    "type": "S"
+  },
+  "disable": {
+    "category": "Features",
+    "description": [
+      "Disables WebAssembly features being enabled by default.",
+      "",
+      " mutable-globals     Mutable global imports and exports.",
+      ""
+    ],
+    "type": "S"
+  },
+  "use": {
+    "category": "Features",
+    "description": [
+      "Aliases a global object under another name, e.g., to switch",
+      "the default 'Math' implementation used: --use Math=JSMath",
+      "Can also be used to introduce an integer constant."
+    ],
+    "type": "S",
+    "alias": "u"
+  },
+  "memoryBase": {
+    "category": "Features",
+    "description": "Sets the start offset of compiler-generated static memory.",
+    "type": "i",
+    "default": 0
+  },
+
+  "transform": {
+    "category": "API",
+    "description": "Specifies the path to a custom transform to 'require'.",
+    "type": "S"
+  },
+
+  "validate": {
+    "category": "Binaryen",
+    "description": "Validates the module using Binaryen. Exits if invalid.",
+    "type": "b",
+    "alias": "c",
+    "default": false
+  },
+  "trapMode": {
+    "category": "Binaryen",
+    "description": [
+      "Sets the trap mode to use.",
+      "",
+      " allow  Allow trapping operations. This is the default.",
+      " clamp  Replace trapping operations with clamping semantics.",
+      " js     Replace trapping operations with JS semantics.",
+      ""
+    ],
+    "type": "s",
+    "default": "allow"
+  },
+  "runPasses": {
+    "category": "Binaryen",
+    "description":  [
+      "Specifies additional Binaryen passes to run after other",
+      "optimizations, if any. See: Binaryen/src/passes/pass.cpp"
+    ],
+    "type": "s"
+  },
+
+  "baseDir": {
+    "description": "Specifies the base directory of input and output files.",
+    "type": "s",
+    "default": "."
+  },
   "noUnsafe": {
     "description": [
       "Disallows the use of unsafe features in user code.",
@@ -107,48 +246,18 @@
     "type": "b",
     "default": false
   },
-  "debug": {
-    "description": "Enables debug information in emitted binaries.",
-    "type": "b",
-    "default": false
-  },
-  "noAssert": {
-    "description": "Replaces assertions with just their value without trapping.",
-    "type": "b",
-    "default": false
-  },
   "noEmit": {
     "description": "Performs compilation as usual but does not emit code.",
     "type": "b",
     "default": false
   },
-  "importMemory": {
-    "description": "Imports the memory provided as 'env.memory'.",
+  "measure": {
+    "description": "Prints measuring information on I/O and compile times.",
     "type": "b",
     "default": false
   },
-  "sharedMemory": {
-    "description": "Declare memory as shared by settings the max shared memory.",
-    "type": "i",
-    "default": 0
-  },
-  "memoryBase": {
-    "description": "Sets the start offset of compiler-generated static memory.",
-    "type": "i",
-    "default": 0
-  },
-  "importTable": {
-    "description": "Imports the function table provided as 'env.table'.",
-    "type": "b",
-    "default": false
-  },
-  "exportTable": {
-    "description": "Exports the function table as 'table'.",
-    "type": "b",
-    "default": false
-  },
-  "explicitStart": {
-    "description": "Exports an explicit start function to be called manually.",
+  "pedantic": {
+    "description": "Make yourself sad for no good reason.",
     "type": "b",
     "default": false
   },
@@ -167,69 +276,6 @@
     ],
     "type": "S"
   },
-  "use": {
-    "description": [
-      "Aliases a global object under another name, e.g., to switch",
-      "the default 'Math' implementation used: --use Math=JSMath"
-    ],
-    "type": "S",
-    "alias": "u"
-  },
-  "trapMode": {
-    "description": [
-      "Sets the trap mode to use.",
-      "",
-      " allow  Allow trapping operations. This is the default.",
-      " clamp  Replace trapping operations with clamping semantics.",
-      " js     Replace trapping operations with JS semantics.",
-      ""
-    ],
-    "type": "s",
-    "default": "allow"
-  },
-  "runPasses": {
-    "description":  [
-      "Specifies additional Binaryen passes to run after other",
-      "optimizations, if any. See: Binaryen/src/passes/pass.cpp"
-    ],
-    "type": "s"
-  },
-  "enable": {
-    "description": [
-      "Enables WebAssembly features that are disabled by default.",
-      "",
-      " sign-extension      Sign-extension operations",
-      " bulk-memory         Bulk memory operations.",
-      " simd                SIMD types and operations.",
-      " threads             Threading and atomic operations.",
-      " reference-types     Reference types and operations.",
-      ""
-    ],
-    "TODO_doesNothingYet": [
-      " nontrapping-f2i     Non-trapping float to integer ops.",
-      " exception-handling  Exception handling.",
-      " tail-calls          Tail call operations."
-    ],
-    "type": "S"
-  },
-  "disable": {
-    "description": [
-      "Disables WebAssembly features that are enabled by default.",
-      "",
-      " mutable-globals     Mutable global imports and exports.",
-      ""
-    ],
-    "type": "S"
-  },
-  "transform": {
-    "description": "Specifies the path to a custom transform to 'require'.",
-    "type": "S"
-  },
-  "pedantic": {
-    "description": "Make yourself sad for no good reason.",
-    "type": "b",
-    "default": false
-  },
   "traceResolution": {
     "description": "Enables tracing of package resolution.",
     "type": "b",
@@ -240,24 +286,15 @@
     "type": "b",
     "default": false
   },
-  "measure": {
-    "description": "Prints measuring information on I/O and compile times.",
-    "type": "b",
-    "default": false
-  },
   "printrtti": {
     "description": "Prints the module's runtime type information to stderr.",
-    "type": "b",
-    "default": false
-  },
-  "noColors": {
-    "description": "Disables terminal colors.",
     "type": "b",
     "default": false
   },
   " ...": {
     "description": "Specifies node.js options (CLI only). See: node --help"
   },
+  
   "-Os": { "value": { "optimize": true, "shrinkLevel": 1 } },
   "-Oz": { "value": { "optimize": true, "shrinkLevel": 2 } },
   "-O0": { "value": { "optimizeLevel": 0, "shrinkLevel": 0 } },
