@@ -24,6 +24,8 @@ export {
 
 /** Indicates the category of a {@link DiagnosticMessage}. */
 export enum DiagnosticCategory {
+  /** Overly pedantic message. */
+  PEDANTIC,
   /** Informatory message. */
   INFO,
   /** Warning message. */
@@ -35,6 +37,7 @@ export enum DiagnosticCategory {
 /** Returns the string representation of the specified diagnostic category. */
 export function diagnosticCategoryToString(category: DiagnosticCategory): string {
   switch (category) {
+    case DiagnosticCategory.PEDANTIC: return "PEDANTIC";
     case DiagnosticCategory.INFO: return "INFO";
     case DiagnosticCategory.WARNING: return "WARNING";
     case DiagnosticCategory.ERROR: return "ERROR";
@@ -51,12 +54,15 @@ export const COLOR_BLUE: string = "\u001b[96m";
 export const COLOR_YELLOW: string = "\u001b[93m";
 /** ANSI escape sequence for red foreground. */
 export const COLOR_RED: string = "\u001b[91m";
+/** ANSI escape sequence for magenta foreground. */
+export const COLOR_MAGENTA: string = "\u001b[95m";
 /** ANSI escape sequence to reset the foreground color. */
 export const COLOR_RESET: string = "\u001b[0m";
 
 /** Returns the ANSI escape sequence for the specified category. */
 export function diagnosticCategoryToColor(category: DiagnosticCategory): string {
   switch (category) {
+    case DiagnosticCategory.PEDANTIC: return COLOR_MAGENTA;
     case DiagnosticCategory.INFO: return COLOR_BLUE;
     case DiagnosticCategory.WARNING: return COLOR_YELLOW;
     case DiagnosticCategory.ERROR: return COLOR_RED;
@@ -273,6 +279,29 @@ export abstract class DiagnosticEmitter {
     this.diagnostics.push(message);
     // console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
     // console.log(<string>new Error("stack").stack);
+  }
+
+  /** Emits an overly pedantic diagnostic message. */
+  pedantic(
+    code: DiagnosticCode,
+    range: Range | null,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.PEDANTIC, range, null, arg0, arg1, arg2);
+  }
+
+  /** Emits an overly pedantic diagnostic message with a related range. */
+  pedanticRelated(
+    code: DiagnosticCode,
+    range: Range,
+    relatedRange: Range,
+    arg0: string | null = null,
+    arg1: string | null = null,
+    arg2: string | null = null
+  ): void {
+    this.emitDiagnostic(code, DiagnosticCategory.PEDANTIC, range, relatedRange, arg0, arg1, arg2);
   }
 
   /** Emits an informatory diagnostic message. */

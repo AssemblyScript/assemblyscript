@@ -2,6 +2,7 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -10,24 +11,28 @@
  (table $0 12 funcref)
  (elem (i32.const 1) $start:function-expression~anonymous|0 $start:function-expression~anonymous|0 $start:function-expression~someName $start:function-expression~anonymous|2 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|3 $start:function-expression~anonymous|4 $start:function-expression~anonymous|5 $start:function-expression~anonymous|2)
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~someName (; 2 ;)
+ (func $~setArgumentsLength (; 2 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $start:function-expression~someName (; 3 ;)
   nop
  )
- (func $start:function-expression~anonymous|2 (; 3 ;) (result i32)
+ (func $start:function-expression~anonymous|2 (; 4 ;) (result i32)
   i32.const 1
  )
- (func $start:function-expression~anonymous|3 (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|3 (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $function-expression/testOmitted (; 5 ;) (param $0 i32) (result i32)
+ (func $function-expression/testOmitted (; 6 ;) (param $0 i32) (result i32)
   i32.const 2
   global.set $~argumentsLength
   i32.const 1
@@ -35,13 +40,13 @@
   local.get $0
   call_indirect (type $i32_i32_=>_i32)
  )
- (func $start:function-expression~anonymous|4 (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|4 (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~anonymous|5 (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|5 (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $start:function-expression (; 8 ;)
+ (func $start:function-expression (; 9 ;)
   i32.const 1
   global.set $~argumentsLength
   i32.const 1
@@ -106,7 +111,7 @@
   i32.const 2
   global.set $~argumentsLength
  )
- (func $~start (; 9 ;)
+ (func $~start (; 10 ;)
   call $start:function-expression
  )
 )

@@ -20,7 +20,7 @@
  (global $exports/vehicles.Car i32 (i32.const 4))
  (export "memory" (memory $0))
  (export "add" (func $exports/add))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "subOpt" (func $exports/subOpt|trampoline))
  (export "math.sub" (func $exports/subOpt))
  (export "Animal.CAT" (global $exports/Animal.CAT))
@@ -165,7 +165,11 @@
   local.get $1
   call $exports/subOpt
  )
- (func $exports/Car#constructor|trampoline (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~setArgumentsLength (; 10 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $exports/Car#constructor|trampoline (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -192,7 +196,7 @@
   i32.store
   local.get $0
  )
- (func $exports/vehicles.Car#constructor|trampoline (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor|trampoline (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange

@@ -1885,43 +1885,27 @@ export class Relooper {
   }
 }
 
+export enum SideEffects {
+  None = 0 /* _BinaryenSideEffectNone */,
+  Branches = 1 /* _BinaryenSideEffectBranches */,
+  Calls = 2 /* _BinaryenSideEffectCalls */,
+  ReadsLocal = 4 /* _BinaryenSideEffectReadsLocal */,
+  WritesLocal = 8 /* _BinaryenSideEffectWritesLocal */,
+  ReadsGlobal = 16 /* _BinaryenSideEffectReadsGlobal */,
+  WritesGlobal = 32 /* _BinaryenSideEffectWritesGlobal */,
+  ReadsMemory = 64 /* _BinaryenSideEffectReadsMemory */,
+  WritesMemory = 128 /* _BinaryenSideEffectWritesMemory */,
+  ImplicitTrap = 256 /* _BinaryenSideEffectImplicitTrap */,
+  IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
+  Any = 1023 /* _BinaryenSideEffectAny */,
+}
+
+export function getSideEffects(expr: ExpressionRef): SideEffects {
+  return binaryen._BinaryenExpressionGetSideEffects(expr);
+}
+
 export function hasSideEffects(expr: ExpressionRef): bool {
-  // TODO: there's more
-  switch (binaryen._BinaryenExpressionGetId(expr)) {
-    case ExpressionId.LocalGet:
-    case ExpressionId.GlobalGet:
-    case ExpressionId.Const:
-    case ExpressionId.Nop: {
-      return false;
-    }
-    case ExpressionId.Block: {
-      for (let i = 0, k = binaryen._BinaryenBlockGetNumChildren(expr); i < k; ++i) {
-        if (hasSideEffects(binaryen._BinaryenBlockGetChild(expr, i))) return true;
-      }
-      return false;
-    }
-    case ExpressionId.If: {
-      return hasSideEffects(binaryen._BinaryenIfGetCondition(expr))
-          || hasSideEffects(binaryen._BinaryenIfGetIfTrue(expr))
-          || hasSideEffects(binaryen._BinaryenIfGetIfFalse(expr));
-    }
-    case ExpressionId.Unary: {
-      return hasSideEffects(binaryen._BinaryenUnaryGetValue(expr));
-    }
-    case ExpressionId.Binary: {
-      return hasSideEffects(binaryen._BinaryenBinaryGetLeft(expr))
-          || hasSideEffects(binaryen._BinaryenBinaryGetRight(expr));
-    }
-    case ExpressionId.Drop: {
-      return hasSideEffects(binaryen._BinaryenDropGetValue(expr));
-    }
-    case ExpressionId.Select: {
-      return hasSideEffects(binaryen._BinaryenSelectGetIfTrue(expr))
-          || hasSideEffects(binaryen._BinaryenSelectGetIfFalse(expr))
-          || hasSideEffects(binaryen._BinaryenSelectGetCondition(expr));
-    }
-  }
-  return true;
+  return getSideEffects(expr) != SideEffects.None;
 }
 
 // helpers
