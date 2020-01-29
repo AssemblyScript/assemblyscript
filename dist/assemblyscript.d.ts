@@ -240,6 +240,8 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
         Importing_the_table_disables_some_indirect_call_optimizations = 901,
         Exporting_the_table_disables_some_indirect_call_optimizations = 902,
+        Expression_compiles_to_a_dynamic_check_at_runtime = 903,
+        Indexed_access_may_involve_bounds_checking = 904,
         Unterminated_string_literal = 1002,
         Identifier_expected = 1003,
         _0_expected = 1005,
@@ -578,12 +580,14 @@ declare module "assemblyscript/src/diagnostics" {
     export { DiagnosticCode, diagnosticCodeToString } from "assemblyscript/src/diagnosticMessages.generated";
     /** Indicates the category of a {@link DiagnosticMessage}. */
     export enum DiagnosticCategory {
+        /** Overly pedantic message. */
+        PEDANTIC = 0,
         /** Informatory message. */
-        INFO = 0,
+        INFO = 1,
         /** Warning message. */
-        WARNING = 1,
+        WARNING = 2,
         /** Error message. */
-        ERROR = 2
+        ERROR = 3
     }
     /** Returns the string representation of the specified diagnostic category. */
     export function diagnosticCategoryToString(category: DiagnosticCategory): string;
@@ -593,6 +597,8 @@ declare module "assemblyscript/src/diagnostics" {
     export const COLOR_YELLOW: string;
     /** ANSI escape sequence for red foreground. */
     export const COLOR_RED: string;
+    /** ANSI escape sequence for magenta foreground. */
+    export const COLOR_MAGENTA: string;
     /** ANSI escape sequence to reset the foreground color. */
     export const COLOR_RESET: string;
     /** Returns the ANSI escape sequence for the specified category. */
@@ -634,6 +640,10 @@ declare module "assemblyscript/src/diagnostics" {
         protected constructor(diagnostics?: DiagnosticMessage[] | null);
         /** Emits a diagnostic message of the specified category. */
         emitDiagnostic(code: DiagnosticCode, category: DiagnosticCategory, range: Range | null, relatedRange: Range | null, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
+        /** Emits an overly pedantic diagnostic message. */
+        pedantic(code: DiagnosticCode, range: Range | null, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
+        /** Emits an overly pedantic diagnostic message with a related range. */
+        pedanticRelated(code: DiagnosticCode, range: Range, relatedRange: Range, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
         /** Emits an informatory diagnostic message. */
         info(code: DiagnosticCode, range: Range | null, arg0?: string | null, arg1?: string | null, arg2?: string | null): void;
         /** Emits an informatory diagnostic message with a related range. */
@@ -2322,6 +2332,21 @@ declare module "assemblyscript/src/module" {
         addBranchForSwitch(from: number, to: number, indexes: number[], code?: ExpressionRef): void;
         renderAndDispose(entry: number, labelHelper: Index): ExpressionRef;
     }
+    export enum SideEffects {
+        None = 0,
+        Branches = 1,
+        Calls = 2,
+        ReadsLocal = 4,
+        WritesLocal = 8,
+        ReadsGlobal = 16,
+        WritesGlobal = 32,
+        ReadsMemory = 64,
+        WritesMemory = 128,
+        ImplicitTrap = 256,
+        IsAtomic = 512,
+        Any = 1023
+    }
+    export function getSideEffects(expr: ExpressionRef): SideEffects;
     export function hasSideEffects(expr: ExpressionRef): boolean;
     export function readString(ptr: number): string | null;
     /** Result structure of {@link Module#toBinary}. */
