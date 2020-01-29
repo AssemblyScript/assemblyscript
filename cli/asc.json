@@ -19,7 +19,7 @@
   },
 
   "optimize": {
-    "category": "Optimizations",
+    "category": "Optimization",
     "description": [
       "Optimizes the module. Typical shorthands are:",
       "",
@@ -34,29 +34,29 @@
     "alias": "O"
   },
   "optimizeLevel": {
-    "category": "Optimizations",
+    "category": "Optimization",
     "description": "How much to focus on optimizing code. [0-3]",
     "type": "i"
   },
   "shrinkLevel": {
-    "category": "Optimizations",
+    "category": "Optimization",
     "description": "How much to focus on shrinking code size. [0-2, s=1, z=2]",
     "type": "i"
   },
   "converge": {
-    "category": "Optimizations",
+    "category": "Optimization",
     "description": "Re-optimizes until no further improvements can be made.",
     "type": "b",
     "default": false
   },
   "noAssert": {
-    "category": "Optimizations",
+    "category": "Optimization",
     "description": "Replaces assertions with just their value without trapping.",
     "type": "b",
     "default": false
   },
   "runtime": {
-    "category": "Optimizations",
+    "category": "Optimization",
     "description": [
       "Specifies the runtime variant to include in the program.",
       "",
