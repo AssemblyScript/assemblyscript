@@ -210,7 +210,7 @@
       " exception-handling  Exception handling.",
       " tail-calls          Tail call operations."
     ],
-    "type": "s"
+    "type": "S"
   },
   "disable": {
     "description": [
@@ -218,7 +218,8 @@
       "",
       " mutable-globals     Mutable global imports and exports.",
       ""
-    ]
+    ],
+    "type": "S"
   },
   "transform": {
     "description": "Specifies the path to a custom transform to 'require'.",

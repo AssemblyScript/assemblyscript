@@ -2,8 +2,8 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -28,7 +28,7 @@
  (global $retain-return/returnGlobalFnBlock (mut i32) (i32.const 6))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 176))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
@@ -1494,32 +1494,36 @@
   i32.const 0
   call $retain-return/Ref#constructor
  )
- (func $start:retain-return~anonymous|1 (; 19 ;) (param $0 i32) (result i32)
+ (func $~setArgumentsLength (; 19 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $start:retain-return~anonymous|1 (; 20 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
  )
- (func $start:retain-return~anonymous|2 (; 20 ;) (result i32)
+ (func $start:retain-return~anonymous|2 (; 21 ;) (result i32)
   global.get $retain-return/ref
   call $~lib/rt/pure/__retain
  )
- (func $start:retain-return~anonymous|3 (; 21 ;) (result i32)
+ (func $start:retain-return~anonymous|3 (; 22 ;) (result i32)
   i32.const 0
   call $retain-return/Ref#constructor
  )
- (func $start:retain-return~anonymous|4 (; 22 ;) (result i32)
+ (func $start:retain-return~anonymous|4 (; 23 ;) (result i32)
   (local $0 i32)
   i32.const 0
   call $retain-return/Ref#constructor
   local.set $0
   local.get $0
  )
- (func $start:retain-return~anonymous|5 (; 23 ;) (result i32)
+ (func $start:retain-return~anonymous|5 (; 24 ;) (result i32)
   global.get $retain-return/ref
   call $~lib/rt/pure/__retain
  )
- (func $start:retain-return (; 24 ;)
+ (func $start:retain-return (; 25 ;)
   (local $0 i32)
   (local $1 i32)
   call $retain-return/returnNew
@@ -1614,7 +1618,7 @@
   local.get $0
   global.set $retain-return/ref
  )
- (func $~start (; 25 ;)
+ (func $~start (; 26 ;)
   global.get $~started
   if
    return
@@ -1624,10 +1628,10 @@
   end
   call $start:retain-return
  )
- (func $~lib/rt/pure/__collect (; 26 ;)
+ (func $~lib/rt/pure/__collect (; 27 ;)
   return
  )
- (func $~lib/rt/tlsf/freeBlock (; 27 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 28 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -1641,7 +1645,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/pure/decrement (; 28 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 29 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1716,7 +1720,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 29 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 30 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -1740,7 +1744,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 30 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 31 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4

@@ -1,12 +1,13 @@
 (module
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s")
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $call-optional/opt (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -39,7 +40,11 @@
   local.get $2
   call $call-optional/opt
  )
- (func $start:call-optional (; 3 ;)
+ (func $~setArgumentsLength (; 3 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $start:call-optional (; 4 ;)
   i32.const 1
   global.set $~argumentsLength
   i32.const 3
@@ -131,7 +136,7 @@
    unreachable
   end
  )
- (func $~start (; 4 ;)
+ (func $~start (; 5 ;)
   call $start:call-optional
  )
 )

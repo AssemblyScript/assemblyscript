@@ -16,7 +16,7 @@
  (global $retain-return/ref (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
@@ -975,7 +975,11 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $start:retain-return (; 13 ;)
+ (func $~setArgumentsLength (; 13 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $start:retain-return (; 14 ;)
   (local $0 i32)
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
@@ -1032,7 +1036,7 @@
   i32.const 0
   global.set $retain-return/ref
  )
- (func $~start (; 14 ;)
+ (func $~start (; 15 ;)
   global.get $~started
   if
    return
@@ -1042,7 +1046,7 @@
   end
   call $start:retain-return
  )
- (func $~lib/rt/pure/decrement (; 15 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 16 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1114,7 +1118,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 16 ;) (param $0 i32)
+ (func $~lib/rt/__visit_members (; 17 ;) (param $0 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2

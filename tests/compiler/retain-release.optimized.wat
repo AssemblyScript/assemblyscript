@@ -17,7 +17,7 @@
  (global $retain-release/TARGET (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
@@ -226,21 +226,25 @@
    unreachable
   end
  )
- (func $retain-release/provideRefIndirect (; 14 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 14 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $retain-release/provideRefIndirect (; 15 ;) (param $0 i32)
   i32.const 1
   global.set $~argumentsLength
   global.get $retain-release/REF
   local.get $0
   call_indirect (type $i32_=>_none)
  )
- (func $retain-release/receiveRefIndirect (; 15 ;) (param $0 i32)
+ (func $retain-release/receiveRefIndirect (; 16 ;) (param $0 i32)
   i32.const 0
   global.set $~argumentsLength
   local.get $0
   call_indirect (type $none_=>_i32)
   drop
  )
- (func $~start (; 16 ;)
+ (func $~start (; 17 ;)
   (local $0 i32)
   global.get $~started
   if
