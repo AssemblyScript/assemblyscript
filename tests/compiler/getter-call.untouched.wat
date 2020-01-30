@@ -1,7 +1,7 @@
 (module
+ (type $i32_=>_none (func (param i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 0)
@@ -11,7 +11,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $~start)
@@ -143,10 +143,14 @@
  (func $getter-call/C#get:x (; 5 ;) (param $0 i32) (result i32)
   i32.const 1
  )
- (func $~lib/rt/stub/__release (; 6 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 6 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $~lib/rt/stub/__release (; 7 ;) (param $0 i32)
   nop
  )
- (func $getter-call/test (; 7 ;) (result i32)
+ (func $getter-call/test (; 8 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -162,7 +166,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~start (; 8 ;)
+ (func $~start (; 9 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add

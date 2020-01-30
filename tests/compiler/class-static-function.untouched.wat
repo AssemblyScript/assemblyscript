@@ -1,6 +1,7 @@
 (module
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -9,19 +10,23 @@
  (table $0 2 funcref)
  (elem (i32.const 1) $class-static-function/Example.staticFunc)
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $class-static-function/Example.staticFunc (; 1 ;) (result i32)
   i32.const 42
  )
- (func $class-static-function/call (; 2 ;) (param $0 i32) (result i32)
+ (func $~setArgumentsLength (; 2 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $class-static-function/call (; 3 ;) (param $0 i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
   local.get $0
   call_indirect (type $none_=>_i32)
  )
- (func $start:class-static-function (; 3 ;)
+ (func $start:class-static-function (; 4 ;)
   i32.const 1
   call $class-static-function/call
   i32.const 42
@@ -36,7 +41,7 @@
    unreachable
   end
  )
- (func $~start (; 4 ;)
+ (func $~start (; 5 ;)
   call $start:class-static-function
  )
 )

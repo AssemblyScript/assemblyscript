@@ -40,7 +40,7 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1568))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
@@ -2446,12 +2446,16 @@
   i32.const 2
   i32.add
  )
- (func $resolve-ternary/g1 (; 29 ;) (param $0 i32) (result i32)
+ (func $~setArgumentsLength (; 29 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $resolve-ternary/g1 (; 30 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 3
   i32.add
  )
- (func $start:resolve-ternary (; 30 ;)
+ (func $start:resolve-ternary (; 31 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 1
@@ -2539,13 +2543,13 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~start (; 31 ;)
+ (func $~start (; 32 ;)
   call $start:resolve-ternary
  )
- (func $~lib/rt/pure/__collect (; 32 ;)
+ (func $~lib/rt/pure/__collect (; 33 ;)
   nop
  )
- (func $~lib/rt/pure/decrement (; 33 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 34 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2611,7 +2615,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 34 ;) (param $0 i32)
+ (func $~lib/rt/__visit_members (; 35 ;) (param $0 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$2

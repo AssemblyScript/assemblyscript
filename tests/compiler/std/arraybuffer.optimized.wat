@@ -25,7 +25,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
@@ -1738,7 +1738,11 @@
   i32.store offset=8
   local.get $2
  )
- (func $start:std/arraybuffer (; 25 ;)
+ (func $~setArgumentsLength (; 25 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $start:std/arraybuffer (; 26 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1967,10 +1971,10 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $~start (; 26 ;)
+ (func $~start (; 27 ;)
   call $start:std/arraybuffer
  )
- (func $~lib/rt/pure/decrement (; 27 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 28 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2046,7 +2050,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 28 ;) (param $0 i32)
+ (func $~lib/rt/__visit_members (; 29 ;) (param $0 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$2

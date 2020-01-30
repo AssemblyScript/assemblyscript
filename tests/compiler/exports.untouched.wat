@@ -1,8 +1,8 @@
 (module
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $none_=>_none (func))
  (memory $0 0)
@@ -22,7 +22,7 @@
  (global $exports/vehicles.Car i32 (i32.const 4))
  (export "memory" (memory $0))
  (export "add" (func $exports/add))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "subOpt" (func $exports/subOpt|trampoline))
  (export "math.sub" (func $exports/math.sub))
  (export "Animal.CAT" (global $exports/Animal.CAT))
@@ -288,7 +288,11 @@
   local.get $1
   call $exports/subOpt
  )
- (func $exports/Car#constructor|trampoline (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~setArgumentsLength (; 22 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $exports/Car#constructor|trampoline (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -304,7 +308,7 @@
   local.get $1
   call $exports/Car#constructor
  )
- (func $exports/vehicles.Car#constructor|trampoline (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor|trampoline (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange

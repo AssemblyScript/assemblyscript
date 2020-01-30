@@ -3,6 +3,7 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -14,27 +15,31 @@
  (global $function-expression/f2 (mut i32) (i32.const 2))
  (global $function-expression/f3 (mut i32) (i32.const 3))
  (global $function-expression/f4 (mut i32) (i32.const 4))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~anonymous|1 (; 2 ;) (param $0 i32) (result i32)
+ (func $~setArgumentsLength (; 2 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $start:function-expression~anonymous|1 (; 3 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~someName (; 3 ;)
+ (func $start:function-expression~someName (; 4 ;)
   nop
  )
- (func $start:function-expression~anonymous|2 (; 4 ;) (result i32)
+ (func $start:function-expression~anonymous|2 (; 5 ;) (result i32)
   i32.const 1
  )
- (func $start:function-expression~anonymous|3 (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|3 (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $function-expression/testOmitted (; 6 ;) (param $0 i32) (result i32)
+ (func $function-expression/testOmitted (; 7 ;) (param $0 i32) (result i32)
   i32.const 2
   global.set $~argumentsLength
   i32.const 1
@@ -42,36 +47,36 @@
   local.get $0
   call_indirect (type $i32_i32_=>_i32)
  )
- (func $start:function-expression~anonymous|4 (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|4 (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~anonymous|5 (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|5 (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $function-expression/testOmittedReturn1~anonymous|0 (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-expression/testOmittedReturn1~anonymous|0 (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $function-expression/testOmittedReturn1 (; 10 ;) (result i32)
+ (func $function-expression/testOmittedReturn1 (; 11 ;) (result i32)
   i32.const 8
  )
- (func $function-expression/testOmittedReturn2~anonymous|0 (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-expression/testOmittedReturn2~anonymous|0 (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
- (func $function-expression/testOmittedReturn2 (; 12 ;) (result i32)
+ (func $function-expression/testOmittedReturn2 (; 13 ;) (result i32)
   i32.const 9
  )
- (func $function-expression/testOmittedReturn3~anonymous|0 (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-expression/testOmittedReturn3~anonymous|0 (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $function-expression/testOmittedReturn3 (; 14 ;) (result i32)
+ (func $function-expression/testOmittedReturn3 (; 15 ;) (result i32)
   i32.const 10
  )
- (func $function-expression/testNullable~anonymous|0 (; 15 ;) (result i32)
+ (func $function-expression/testNullable~anonymous|0 (; 16 ;) (result i32)
   i32.const 1
  )
- (func $function-expression/testNullable (; 16 ;) (param $0 i32) (result i32)
+ (func $function-expression/testNullable (; 17 ;) (param $0 i32) (result i32)
   local.get $0
   if
    i32.const 11
@@ -82,7 +87,7 @@
   end
   unreachable
  )
- (func $start:function-expression (; 17 ;)
+ (func $start:function-expression (; 18 ;)
   i32.const 1
   global.set $~argumentsLength
   i32.const 1
@@ -238,7 +243,7 @@
    unreachable
   end
  )
- (func $~start (; 18 ;)
+ (func $~start (; 19 ;)
   call $start:function-expression
  )
 )

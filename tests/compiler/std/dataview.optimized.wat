@@ -33,7 +33,7 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__argumentsLength" (global $~argumentsLength))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
@@ -1932,7 +1932,11 @@
   local.get $1
   call $~lib/dataview/DataView#constructor
  )
- (func $start:std/dataview (; 49 ;)
+ (func $~setArgumentsLength (; 49 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $start:std/dataview (; 50 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3489,10 +3493,10 @@
   local.get $2
   call $~lib/rt/pure/__release
  )
- (func $~start (; 50 ;)
+ (func $~start (; 51 ;)
   call $start:std/dataview
  )
- (func $~lib/rt/pure/decrement (; 51 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 52 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3568,7 +3572,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 52 ;) (param $0 i32)
+ (func $~lib/rt/__visit_members (; 53 ;) (param $0 i32)
   block $switch$1$default
    block $switch$1$case$4
     block $switch$1$case$2
