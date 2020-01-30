@@ -7441,6 +7441,12 @@ export class Compiler extends DiagnosticEmitter {
           }
           return module.ref_null();
         }
+        // TODO: this would be a breaking change
+        // this.error(
+        //   DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+        //   expression.range, "null", contextualType.toString()
+        // );
+        // return module.unreachable();
         this.currentType = options.usizeType;
         return options.isWasm64
           ? module.i64(0)
@@ -7778,38 +7784,10 @@ export class Compiler extends DiagnosticEmitter {
     switch (expression.literalKind) {
       case LiteralKind.ARRAY: {
         assert(!implicitlyNegate);
-        let elementExpressions = (<ArrayLiteralExpression>expression).elementExpressions;
-
-        // Infer from first element in auto contexts
-        if (contextualType == Type.auto) {
-          return this.compileArrayLiteral(
-            Type.auto,
-            elementExpressions,
-            constraints,
-            expression
-          );
-        }
-
-        // Use contextual type if an array
-        if (contextualType.is(TypeFlags.REFERENCE)) {
-          let classType = contextualType.classReference;
-          if (classType) {
-            if (classType.prototype == this.program.arrayPrototype) {
-              return this.compileArrayLiteral(
-                assert(classType.typeArguments)[0],
-                elementExpressions,
-                constraints,
-                expression
-              );
-            }
-          }
-        }
-
-        this.error(
-          DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
-          expression.range, "T"
+        return this.compileArrayLiteral(
+          <ArrayLiteralExpression>expression,
+          constraints
         );
-        return module.unreachable();
       }
       case LiteralKind.FLOAT: {
         let floatValue = (<FloatLiteralExpression>expression).value;
@@ -7875,14 +7853,11 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   private compileArrayLiteral(
-    elementType: Type,
-    expressions: (Expression | null)[],
-    constraints: Constraints,
-    reportNode: Node
+    expression: ArrayLiteralExpression,
+    constraints: Constraints
   ): ExpressionRef {
     var module = this.module;
     var program = this.program;
-    var arrayPrototype = assert(program.arrayPrototype);
     var arrayBufferInstance = assert(program.arrayBufferInstance);
     var flow = this.currentFlow;
 
@@ -7890,35 +7865,16 @@ export class Compiler extends DiagnosticEmitter {
     var tempThis = flow.getTempLocal(this.options.usizeType);
     var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
 
-    // infer common element type in auto contexts
-    var length = expressions.length;
-    if (elementType == Type.auto) {
-      for (let i = 0; i < length; ++i) {
-        let expression = expressions[i];
-        if (expression) {
-          let currentType = this.resolver.resolveExpression(expression, this.currentFlow, elementType);
-          if (!currentType) return module.unreachable();
-          if (elementType == Type.auto) elementType = currentType;
-          else if (currentType != elementType) {
-            let commonType = Type.commonDenominator(elementType, currentType, false);
-            if (commonType) elementType = commonType;
-            // otherwise triggers error further down
-          }
-        }
-      }
-      if (elementType /* still */ == Type.auto) {
-        this.error(
-          DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
-          reportNode.range, "T"
-        );
-        return module.unreachable();
-      }
-    }
+    var arrayInstance = this.resolver.lookupExpression(expression, this.currentFlow, this.currentType);
+    if (!arrayInstance) return module.unreachable();
 
-    var arrayInstance = assert(this.resolver.resolveClass(arrayPrototype, [ elementType ]));
-    var arrayType = arrayInstance.type;
+    assert(arrayInstance.kind == ElementKind.CLASS);
+    var arrayType = (<Class>arrayInstance).type;
+    var elementType = assert((<Class>arrayInstance).getTypeArgumentsTo(this.program.arrayPrototype))[0];
+    var expressions = expression.elementExpressions;
 
     // compile value expressions and find out whether all are constant
+    var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
     var isStatic = true;
     var nativeElementType = elementType.toNativeType();
@@ -7966,11 +7922,11 @@ export class Compiler extends DiagnosticEmitter {
           program.options.isWasm64
             ? module.i64(elementType.alignLog2)
             : module.i32(elementType.alignLog2),
-          module.i32(arrayInstance.id),
+          module.i32((<Class>arrayInstance).id),
           program.options.isWasm64
             ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
             : module.i32(i64_low(bufferAddress))
-        ], reportNode);
+        ], expression);
         this.currentType = arrayType;
         expr = this.makeRetain(expr);
         if (arrayType.isManaged) {
@@ -7985,13 +7941,13 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // otherwise compile an explicit instantiation with indexed sets
-    var setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
+    var setter = (<Class>arrayInstance).lookupOverload(OperatorKind.INDEXED_SET, true);
     if (!setter) {
       flow.freeTempLocal(tempThis);
       flow.freeTempLocal(tempDataStart);
       this.error(
         DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
-        reportNode.range, arrayInstance.internalName
+        expression.range, arrayInstance.internalName
       );
       this.currentType = arrayType;
       return module.unreachable();
@@ -8008,11 +7964,11 @@ export class Compiler extends DiagnosticEmitter {
             program.options.isWasm64
               ? module.i64(elementType.alignLog2)
               : module.i32(elementType.alignLog2),
-            module.i32(arrayInstance.id),
+            module.i32((<Class>arrayInstance).id),
             program.options.isWasm64
               ? module.i64(0)
               : module.i32(0)
-          ], reportNode)
+          ], expression)
         )
       )
     );
