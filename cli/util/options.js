@@ -1,3 +1,5 @@
+const colorsUtil = require("./colors");
+
 // type | meaning
 // -----|---------------
 // b    | boolean
@@ -86,7 +88,8 @@ function help(config, options) {
   var indent = options.indent || 2;
   var padding = options.padding || 24;
   var eol = options.eol || "\n";
-  var sb = [];
+  var sbCategories = {};
+  var sbOther = [];
   Object.keys(config).forEach(key => {
     var option = config[key];
     if (option.description == null) return;
@@ -95,6 +98,14 @@ function help(config, options) {
     text += "--" + key;
     if (option.alias) text += ", -" + option.alias;
     while (text.length < padding) text += " ";
+    var sb;
+    if (!options.noCategories && option.category) {
+      if (!(sb = sbCategories[option.category])) {
+        sbCategories[option.category] = sb = [];
+      }
+    } else {
+      sb = sbOther;
+    }
     if (Array.isArray(option.description)) {
       sb.push(text + option.description[0] + option.description.slice(1).map(line => {
         for (let i = 0; i < padding; ++i) line = " " + line;
@@ -102,6 +113,17 @@ function help(config, options) {
       }).join(""));
     } else sb.push(text + option.description);
   });
+  var sb = [];
+  var hasCategories = false;
+  Object.keys(sbCategories).forEach(category => {
+    hasCategories = true;
+    sb.push(eol + " " + colorsUtil.gray(category) + eol);
+    sb.push(sbCategories[category].join(eol));
+  });
+  if (hasCategories) {
+    sb.push(eol + " " + colorsUtil.gray("Other") + eol);
+  }
+  sb.push(sbOther.join(eol));
   return sb.join(eol);
 }
 

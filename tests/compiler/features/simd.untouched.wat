@@ -8,7 +8,7 @@
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s\00")
  (data (i32.const 64) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s\00")
  (table $0 1 funcref)
- (global $~lib/ASC_FEATURE_SIMD i32 (i32.const 0))
+ (global $~lib/ASC_FEATURE_SIMD i32 (i32.const 1))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/builtins/i16.MAX_VALUE i32 (i32.const 32767))
