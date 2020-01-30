@@ -151,6 +151,7 @@ export namespace CommonNames {
   export const ASC_NO_TREESHAKING = "ASC_NO_TREESHAKING";
   export const ASC_NO_ASSERT = "ASC_NO_ASSERT";
   export const ASC_MEMORY_BASE = "ASC_MEMORY_BASE";
+  export const ASC_TABLE_BASE = "ASC_TABLE_BASE";
   export const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
   export const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
   export const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";

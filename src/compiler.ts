@@ -204,6 +204,8 @@ export class Options {
   explicitStart: bool = false;
   /** Static memory start offset. */
   memoryBase: i32 = 0;
+  /** Static table start offset. */
+  tableBase: i32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
   /** Features to activate by default. These are the finished proposals. */
@@ -500,7 +502,9 @@ export class Compiler extends DiagnosticEmitter {
 
     // set up function table (first elem is blank)
     var functionTable = this.functionTable;
-    module.setFunctionTable(1 + functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(1));
+    var tableBase = this.options.tableBase;
+    if (!tableBase) tableBase = 1; // leave first elem blank
+    module.setFunctionTable(tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(tableBase));
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
@@ -992,7 +996,11 @@ export class Compiler extends DiagnosticEmitter {
 
     // Initialize to zero if there's no initializer
     } else {
-      initExpr = this.makeZero(type);
+      if (global.is(CommonFlags.INLINED)) {
+        initExpr = this.compileInlineConstant(global, global.type, Constraints.PREFER_STATIC | Constraints.WILL_RETAIN);
+      } else {
+        initExpr = this.makeZero(type);
+      }
     }
 
     var internalName = global.internalName;
@@ -1644,12 +1652,11 @@ export class Compiler extends DiagnosticEmitter {
   ensureFunctionTableEntry(instance: Function): i32 {
     assert(instance.is(CommonFlags.COMPILED));
     var index = instance.functionTableIndex;
-    if (index >= 0) {
-      assert(index != 0); // first elem must be blank
-      return index;
-    }
+    if (index >= 0) return index;
     var functionTable = this.functionTable;
-    index = 1 + functionTable.length; // first elem is blank
+    var tableBase = this.options.tableBase;
+    if (!tableBase) tableBase = 1; // leave first elem blank
+    index = tableBase + functionTable.length;
     if (!instance.is(CommonFlags.TRAMPOLINE) && instance.signature.requiredParameters < instance.signature.parameterTypes.length) {
       // insert the trampoline if the function has optional parameters
       instance = this.ensureTrampoline(instance);
@@ -2990,7 +2997,7 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type,
     constraints: Constraints
   ): ExpressionRef {
-    assert(element.is(CommonFlags.INLINED));
+    assert(element.is(CommonFlags.INLINED | CommonFlags.RESOLVED));
     var type = element.type;
     switch (
       !(constraints & (Constraints.CONV_IMPLICIT | Constraints.CONV_EXPLICIT)) &&

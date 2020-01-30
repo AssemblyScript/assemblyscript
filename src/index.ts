@@ -57,6 +57,11 @@ export function setMemoryBase(options: Options, memoryBase: u32): void {
   options.memoryBase = memoryBase;
 }
 
+/** Sets the `tableBase` option. */
+export function setTableBase(options: Options, tableBase: u32): void {
+  options.tableBase = tableBase;
+}
+
 /** Sets a 'globalAliases' value. */
 export function setGlobalAlias(options: Options, alias: string, name: string): void {
   var globalAliases = options.globalAliases;
