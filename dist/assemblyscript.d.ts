@@ -4136,6 +4136,8 @@ declare module "assemblyscript/src/compiler" {
         const start = "_start";
         /** Name of the argumentsLength varargs helper global. */
         const argumentsLength = "__argumentsLength";
+        /** Name of the alternative argumentsLength setter function. */
+        const setArgumentsLength = "__setArgumentsLength";
         /** Name of the memory instance, if exported. */
         const memory = "memory";
         /** Name of the table instance, if exported. */
@@ -4491,6 +4493,7 @@ declare module "assemblyscript/src/builtins" {
         const start = "~start";
         const started = "~started";
         const argumentsLength = "~argumentsLength";
+        const setArgumentsLength = "~setArgumentsLength";
         const isInteger = "~lib/builtins/isInteger";
         const isFloat = "~lib/builtins/isFloat";
         const isBoolean = "~lib/builtins/isBoolean";
