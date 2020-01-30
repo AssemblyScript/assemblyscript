@@ -630,7 +630,7 @@
   end
   i32.const 0
   i32.const 0
-  call $~lib/object/Object.is<i32>
+  call $~lib/object/Object.is<~lib/string/String>
   i32.const 1
   i32.ne
   if

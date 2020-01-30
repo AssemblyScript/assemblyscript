@@ -7441,13 +7441,11 @@ export class Compiler extends DiagnosticEmitter {
           }
           return module.ref_null();
         }
-        // TODO: this would be a breaking change
-        // this.error(
-        //   DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-        //   expression.range, "null", contextualType.toString()
-        // );
-        // return module.unreachable();
         this.currentType = options.usizeType;
+        this.warning(
+          DiagnosticCode.Expression_resolves_to_unusual_type_0,
+          expression.range, this.currentType.toString()
+        );
         return options.isWasm64
           ? module.i64(0)
           : module.i32(0);

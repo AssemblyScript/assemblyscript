@@ -2189,13 +2189,14 @@ export class Resolver extends DiagnosticEmitter {
         }
         // otherwise infer, ignoring ctxType
         let expressions = (<ArrayLiteralExpression>node).elementExpressions;
+        let length = expressions.length;
         let elementType = Type.auto;
-        let literallyNullable = false;
-        for (let i = 0, k = expressions.length; i < k; ++i) {
+        let numNullLiterals = 0;
+        for (let i = 0, k = length; i < k; ++i) {
           let expression = expressions[i];
           if (expression) {
-            if (expression.kind == NodeKind.NULL) {
-              literallyNullable = true;
+            if (expression.kind == NodeKind.NULL && length > 1) {
+              ++numNullLiterals;
             } else {
               let currentType = this.resolveExpression(expression, ctxFlow, elementType);
               if (!currentType) return null;
@@ -2209,14 +2210,18 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
         if (elementType /* still */ == Type.auto) {
-          this.error(
-            DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
-            node.range, "T"
-          );
-          return null;
+          if (numNullLiterals == length) { // all nulls infers as usize
+            elementType = this.program.options.usizeType;
+          } else {
+            this.error(
+              DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
+              node.range, "T"
+            );
+            return null;
+          }
         }
         if (
-          literallyNullable &&
+          numNullLiterals > 0 &&
           elementType.is(TypeFlags.REFERENCE) &&
           !elementType.is(TypeFlags.HOST) // TODO: anyref isn't nullable as-is
         ) {
