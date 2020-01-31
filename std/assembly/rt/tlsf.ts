@@ -433,6 +433,10 @@ function addMemory(root: Root, start: usize, end: usize): bool {
 
 /** Grows memory to fit at least another block of the specified size. */
 function growMemory(root: Root, size: usize): void {
+  if (ASC_LOW_MEMORY_LIMIT) {
+    unreachable();
+    return;
+  }
   // Here, both rounding performed in searchBlock ...
   const halfMaxSize = BLOCK_MAXSIZE >> 1;
   if (size < halfMaxSize) { // don't round last fl
@@ -476,7 +480,7 @@ export function maybeInitialize(): Root {
       }
     }
     let memStart = (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK;
-    if (ASC_LOW_MEMORY_LIMIT > 0) {
+    if (ASC_LOW_MEMORY_LIMIT) {
       const memEnd = (<usize>ASC_LOW_MEMORY_LIMIT + AL_MASK) & ~AL_MASK;
       if (memStart <= memEnd) addMemory(root, memStart, memEnd);
       else unreachable(); // low memory limit already exceeded
