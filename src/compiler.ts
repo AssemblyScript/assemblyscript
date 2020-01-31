@@ -7855,16 +7855,17 @@ export class Compiler extends DiagnosticEmitter {
     constraints: Constraints
   ): ExpressionRef {
     var module = this.module;
+    var flow = this.currentFlow;
+
+    var arrayInstance = this.resolver.lookupExpression(expression, flow, this.currentType);
+    if (!arrayInstance) return module.unreachable();
+
     var program = this.program;
     var arrayBufferInstance = assert(program.arrayBufferInstance);
-    var flow = this.currentFlow;
 
     // block those here so compiling expressions doesn't conflict
     var tempThis = flow.getTempLocal(this.options.usizeType);
     var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
-
-    var arrayInstance = this.resolver.lookupExpression(expression, this.currentFlow, this.currentType);
-    if (!arrayInstance) return module.unreachable();
 
     assert(arrayInstance.kind == ElementKind.CLASS);
     var arrayType = (<Class>arrayInstance).type;
