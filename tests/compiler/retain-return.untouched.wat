@@ -16,6 +16,7 @@
  (table $0 7 funcref)
  (elem (i32.const 1) $start:retain-return~anonymous|0 $start:retain-return~anonymous|1 $start:retain-return~anonymous|2 $start:retain-return~anonymous|3 $start:retain-return~anonymous|4 $start:retain-return~anonymous|5)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $retain-return/ref (mut i32) (i32.const 0))
@@ -1289,7 +1290,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 490
+   i32.const 497
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1330,7 +1331,7 @@
      if
       i32.const 0
       i32.const 32
-      i32.const 502
+      i32.const 509
       i32.const 19
       call $~lib/builtins/abort
       unreachable
@@ -1349,7 +1350,7 @@
     if
      i32.const 0
      i32.const 32
-     i32.const 507
+     i32.const 514
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1366,7 +1367,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 510
+   i32.const 517
    i32.const 13
    call $~lib/builtins/abort
    unreachable

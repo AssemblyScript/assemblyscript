@@ -26,6 +26,7 @@
  (global $extends-baseaggregate/poolB i32 (i32.const 48))
  (global $extends-baseaggregate/poolA i32 (i32.const 96))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -1294,7 +1295,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 490
+   i32.const 497
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1335,7 +1336,7 @@
      if
       i32.const 0
       i32.const 128
-      i32.const 502
+      i32.const 509
       i32.const 19
       call $~lib/builtins/abort
       unreachable
@@ -1354,7 +1355,7 @@
     if
      i32.const 0
      i32.const 128
-     i32.const 507
+     i32.const 514
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1371,7 +1372,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 510
+   i32.const 517
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1532,7 +1533,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 570
+   i32.const 577
    i32.const 2
    call $~lib/builtins/abort
    unreachable

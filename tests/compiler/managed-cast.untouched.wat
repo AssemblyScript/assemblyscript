@@ -21,6 +21,7 @@
  (data (i32.const 224) "\05\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\04\00\00\00\10\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~started (mut i32) (i32.const 0))
@@ -1286,7 +1287,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 490
+   i32.const 497
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1327,7 +1328,7 @@
      if
       i32.const 0
       i32.const 32
-      i32.const 502
+      i32.const 509
       i32.const 19
       call $~lib/builtins/abort
       unreachable
@@ -1346,7 +1347,7 @@
     if
      i32.const 0
      i32.const 32
-     i32.const 507
+     i32.const 514
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1363,7 +1364,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 510
+   i32.const 517
    i32.const 13
    call $~lib/builtins/abort
    unreachable
