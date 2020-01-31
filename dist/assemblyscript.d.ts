@@ -135,6 +135,7 @@ declare module "assemblyscript/src/common" {
         const ASC_NO_TREESHAKING = "ASC_NO_TREESHAKING";
         const ASC_NO_ASSERT = "ASC_NO_ASSERT";
         const ASC_MEMORY_BASE = "ASC_MEMORY_BASE";
+        const ASC_TABLE_BASE = "ASC_TABLE_BASE";
         const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
         const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
         const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
@@ -4077,6 +4078,8 @@ declare module "assemblyscript/src/compiler" {
         explicitStart: boolean;
         /** Static memory start offset. */
         memoryBase: number;
+        /** Static table start offset. */
+        tableBase: number;
         /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
         globalAliases: Map<string, string> | null;
         /** Features to activate by default. These are the finished proposals. */
@@ -5057,6 +5060,8 @@ declare module "assemblyscript/src/index" {
     export function setSourceMap(options: Options, sourceMap: boolean): void;
     /** Sets the `memoryBase` option. */
     export function setMemoryBase(options: Options, memoryBase: number): void;
+    /** Sets the `tableBase` option. */
+    export function setTableBase(options: Options, tableBase: number): void;
     /** Sets a 'globalAliases' value. */
     export function setGlobalAlias(options: Options, alias: string, name: string): void;
     /** Sets the `explicitStart` option. */
