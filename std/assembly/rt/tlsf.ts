@@ -462,7 +462,7 @@ function prepareSize(size: usize): usize {
 export function maybeInitialize(): Root {
   var root = ROOT;
   if (!root) {
-    const rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
+    let rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
     let pagesBefore = memory.size();
     let pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
     if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
@@ -475,13 +475,13 @@ export function maybeInitialize(): Root {
         SETHEAD(root, fl, sl, null);
       }
     }
+    let memStart = (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK;
     if (ASC_LOW_MEMORY_LIMIT > 0) {
-      const start = (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK;
-      const end = (<usize>ASC_LOW_MEMORY_LIMIT + AL_MASK) & ~AL_MASK;
-      if (start > end) ERROR("Low memory limit exceeded by TLSF bookkeeping");
-      else if (start < end) addMemory(root, start, end);
+      const memEnd = (<usize>ASC_LOW_MEMORY_LIMIT + AL_MASK) & ~AL_MASK;
+      if (memStart <= memEnd) addMemory(root, memStart, memEnd);
+      else unreachable(); // low memory limit already exceeded
     } else {
-      addMemory(root, (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
+      addMemory(root, memStart, memory.size() << 16);
     }
     ROOT = root;
   }
