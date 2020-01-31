@@ -227,6 +227,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setExportTable(compilerOptions, args.exportTable);
   assemblyscript.setExplicitStart(compilerOptions, args.explicitStart);
   assemblyscript.setMemoryBase(compilerOptions, args.memoryBase >>> 0);
+  assemblyscript.setTableBase(compilerOptions, args.tableBase >>> 0);
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
   assemblyscript.setPedantic(compilerOptions, args.pedantic);

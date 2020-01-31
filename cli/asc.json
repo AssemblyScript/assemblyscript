@@ -191,9 +191,16 @@
     "type": "S",
     "alias": "u"
   },
+
   "memoryBase": {
-    "category": "Features",
-    "description": "Sets the start offset of compiler-generated static memory.",
+    "category": "Linking",
+    "description": "Sets the start offset of emitted memory segments.",
+    "type": "i",
+    "default": 0
+  },
+  "tableBase": {
+    "category": "Linking",
+    "description": "Sets the start offset of emitted table elements.",
     "type": "i",
     "default": 0
   },

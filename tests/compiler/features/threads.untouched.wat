@@ -2,7 +2,7 @@
  (type $none_=>_none (func))
  (memory $0 (shared 1 1))
  (table $0 1 funcref)
- (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 0))
+ (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
  (func $features/threads/testAtomic (; 0 ;)
