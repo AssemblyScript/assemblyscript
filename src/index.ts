@@ -79,6 +79,11 @@ export function setNoUnsafe(options: Options, noUnsafe: bool): void {
   options.noUnsafe = noUnsafe;
 }
 
+/** Sets the `lowMemoryLimit` option. */
+export function setLowMemoryLimit(options: Options, lowMemoryLimit: i32): void {
+  options.lowMemoryLimit = lowMemoryLimit;
+}
+
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */

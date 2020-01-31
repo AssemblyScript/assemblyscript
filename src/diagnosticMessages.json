@@ -3,6 +3,7 @@
   "Operation is unsafe.": 101,
   "User-defined: {0}": 102,
   "Feature '{0}' is not enabled.": 103,
+  "Low memory limit exceeded by static data: {0} > {1}": 104,
 
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 200,
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,

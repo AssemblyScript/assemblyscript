@@ -475,7 +475,14 @@ export function maybeInitialize(): Root {
         SETHEAD(root, fl, sl, null);
       }
     }
-    addMemory(root, (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
+    if (ASC_LOW_MEMORY_LIMIT > 0) {
+      const start = (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK;
+      const end = (<usize>ASC_LOW_MEMORY_LIMIT + AL_MASK) & ~AL_MASK;
+      if (start > end) ERROR("Low memory limit exceeded by TLSF bookkeeping");
+      else if (start < end) addMemory(root, start, end);
+    } else {
+      addMemory(root, (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
+    }
     ROOT = root;
   }
   return root;

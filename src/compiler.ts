@@ -214,6 +214,8 @@ export class Options {
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
   pedantic: bool = false;
+  /** Indicates a very low (<64k) memory limit. */
+  lowMemoryLimit: i32 = 0;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -464,6 +466,13 @@ export class Compiler extends DiagnosticEmitter {
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
+    var lowMemoryLimit = i64_new(this.options.lowMemoryLimit);
+    if (i64_ne(lowMemoryLimit, i64_zero) && i64_gt(memoryOffset, lowMemoryLimit)) {
+      this.error(
+        DiagnosticCode.Low_memory_limit_exceeded_by_static_data_0_1,
+        null, i64_to_string(memoryOffset), i64_to_string(lowMemoryLimit)
+      );
+    }
     this.memoryOffset = memoryOffset;
     module.removeGlobal(BuiltinNames.heap_base);
     if (this.runtimeFeatures & RuntimeFeatures.HEAP) {
