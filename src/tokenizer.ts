@@ -1042,6 +1042,7 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   advance() {
+    this.nextToken = -1;
     ++this.pos;
   }
 

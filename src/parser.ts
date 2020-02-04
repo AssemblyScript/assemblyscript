@@ -3634,9 +3634,6 @@ export class Parser extends DiagnosticEmitter {
       tn.skip(Token.CLOSEBRACE);
       token = tn.next();
       if (token == Token.TEMPLATELITERAL) {
-        tn.skip(Token.TEMPLATELITERAL);
-        tn.advance();
-        tn.inStringTemplate = false;
         break;
       }
       if (token == Token.DOLLAR) {
@@ -3645,6 +3642,10 @@ export class Parser extends DiagnosticEmitter {
       startPos = tn.pos;
       parts.push(this.parseStringLiteral(tn, startPos, CharCode.BACKTICK));
       token = tn.next();
+    }
+    if (token == Token.TEMPLATELITERAL) {
+      tn.advance();
+      tn.inStringTemplate = false;
     }
     if (parts.length == 1) {
       return parts[0];
