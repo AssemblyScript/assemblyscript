@@ -513,6 +513,7 @@ export class Tokenizer extends DiagnosticEmitter {
   nextTokenOnNewLine: bool = false;
 
   onComment: CommentHandler | null = null;
+  public inStringTemplate: bool = false;
 
   /** Constructs a new tokenizer. */
   constructor(source: Source, diagnostics: DiagnosticMessage[] | null = null) {
@@ -935,8 +936,11 @@ export class Tokenizer extends DiagnosticEmitter {
           return Token.AT;
         }
         case CharCode.DOLLAR: {
-          ++this.pos;
-          return Token.DOLLAR;
+          if (this.inStringTemplate) {
+            ++this.pos;
+            return Token.DOLLAR;
+          }
+          // fall through to identifier
         }
         default: {
           if (isIdentifierStart(c)) {
@@ -1035,6 +1039,10 @@ export class Tokenizer extends DiagnosticEmitter {
       this.tokenPos = tokenPosBefore;
       return false;
     }
+  }
+
+  advance() {
+    ++this.pos;
   }
 
   mark(): State {
@@ -1148,6 +1156,7 @@ export class Tokenizer extends DiagnosticEmitter {
       case CharCode.r: return "\r";
       case CharCode.SINGLEQUOTE: return "'";
       case CharCode.DOUBLEQUOTE: return "\"";
+      case CharCode.BACKTICK: return "`";
       case CharCode.u: {
         if (
           this.pos < end &&
@@ -1317,7 +1326,7 @@ export class Tokenizer extends DiagnosticEmitter {
           i64_shl(value, i64_4),
           i64_new(c - CharCode._0)
         );
-       } else if (c >= CharCode.A && c <= CharCode.F) {
+      } else if (c >= CharCode.A && c <= CharCode.F) {
         // value = (value << 4) + 10 + c - CharCode.A;
         value = i64_add(
           i64_shl(value, i64_4),
