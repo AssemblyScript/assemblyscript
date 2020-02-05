@@ -5,7 +5,8 @@
  *//***/
 
 import {
-  Range
+  Range,
+  Source
 } from "./ast";
 
 import {
@@ -241,7 +242,7 @@ export abstract class DiagnosticEmitter {
   /** Diagnostic messages emitted so far. */
   diagnostics: DiagnosticMessage[];
   /** Diagnostic messages already seen, by range. */
-  private seen: Map<Range,Set<DiagnosticCode>> = new Map();
+  private seen: Map<Source,Map<i32,i32[]>> = new Map();
 
   /** Initializes this diagnostic emitter. */
   protected constructor(diagnostics: DiagnosticMessage[] | null = null) {
@@ -260,17 +261,23 @@ export abstract class DiagnosticEmitter {
   ): void {
     // It is possible that the same diagnostic is emitted twice, for example
     // when compiling generics with different types or when recompiling a loop
-    // because our initial assumptions didn't hold. Deduplicate these.
+    // because our initial assumptions didn't hold. It is even possible to get
+    // multiple instances of the same range during parsing. Deduplicate these.
     if (range) {
       let seen = this.seen;
-      if (seen.has(range)) {
-        let codes = seen.get(range)!;
-        if (codes.has(code)) return;
-        codes.add(code);
+      if (seen.has(range.source)) {
+        let seenInSource = seen.get(range.source)!;
+        if (seenInSource.has(range.start)) {
+          let seenCodesAtPos = seenInSource.get(range.start)!;
+          if (seenCodesAtPos.includes(code)) return;
+          seenCodesAtPos.push(code);
+        } else {
+          seenInSource.set(range.start, [ code ]);
+        }
       } else {
-        let codes = new Set<DiagnosticCode>();
-        codes.add(code);
-        seen.set(range, codes);
+        let seenInSource = new Map();
+        seenInSource.set(range.start, [ code ]);
+        seen.set(range.source, seenInSource);
       }
     }
     var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);
