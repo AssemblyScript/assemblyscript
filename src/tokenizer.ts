@@ -26,7 +26,8 @@ import {
   isIdentifierPart,
   isDecimalDigit,
   isOctalDigit,
-  isKeywordCharacter
+  isKeywordCharacter,
+  isDecimalSeparator,
 } from "./util";
 
 /** Named token types. */
@@ -1499,16 +1500,20 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   readDecimalFloat(): f64 {
-    // TODO: numeric separators (parseFloat can't handle these)
     var start = this.pos;
     var end = this.end;
     var text = this.source.text;
-    while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
+
+    while (this.pos < end) {
+      let ch = text.charCodeAt(this.pos);
+      if (!(isDecimalDigit(ch) || isDecimalSeparator(ch))) break;
       ++this.pos;
     }
     if (this.pos < end && text.charCodeAt(this.pos) == CharCode.DOT) {
       ++this.pos;
-      while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
+      while (this.pos < end) {
+        let ch = text.charCodeAt(this.pos);
+        if (!(isDecimalDigit(ch) || isDecimalSeparator(ch))) break;
         ++this.pos;
       }
     }
@@ -1522,12 +1527,14 @@ export class Tokenizer extends DiagnosticEmitter {
         ) {
           ++this.pos;
         }
-        while (this.pos < end && isDecimalDigit(text.charCodeAt(this.pos))) {
+        while (this.pos < end) {
+          let ch = text.charCodeAt(this.pos);
+          if (!(isDecimalDigit(ch) || isDecimalSeparator(ch))) break;
           ++this.pos;
         }
       }
     }
-    return parseFloat(text.substring(start, this.pos));
+    return parseFloat(text.substring(start, this.pos).replace(/_/g, ''));
   }
 
   readHexFloat(): f64 {

@@ -174,7 +174,11 @@ export function isWhiteSpace(c: i32): bool {
 
 /** Tests if the specified character code is a valid decimal digit. */
 export function isDecimalDigit(c: i32): bool {
-  return c >= CharCode._0 && c <= CharCode._9;
+  return c >= CharCode._0 && c <= CharCode._9 ;
+}
+
+export function isDecimalSeparator(c: i32): bool {
+  return c === CharCode._;
 }
 
 /** Tests if the specified character code is a valid octal digit. */
