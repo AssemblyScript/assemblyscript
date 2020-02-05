@@ -1043,8 +1043,9 @@ export class Parser extends DiagnosticEmitter {
 
     // at '<': TypeParameter (',' TypeParameter)* '>'
 
-    var typeParameters: TypeParameterNode[] | null = null;
+    var typeParameters = new Array<TypeParameterNode>();
     var seenOptional = false;
+    var start = tn.tokenPos;
     while (!tn.skip(Token.GREATERTHAN)) {
       let typeParameter = this.parseTypeParameter(tn);
       if (!typeParameter) return null;
@@ -1057,8 +1058,7 @@ export class Parser extends DiagnosticEmitter {
         );
         typeParameter.defaultType = null;
       }
-      if (!typeParameters) typeParameters = [ typeParameter ];
-      else typeParameters.push(typeParameter);
+      typeParameters.push(typeParameter);
       if (!tn.skip(Token.COMMA)) {
         if (tn.skip(Token.GREATERTHAN)) {
           break;
@@ -1071,10 +1071,10 @@ export class Parser extends DiagnosticEmitter {
         }
       }
     }
-    if (!(typeParameters && typeParameters.length)) {
+    if (!typeParameters.length) {
       this.error(
         DiagnosticCode.Type_parameter_list_cannot_be_empty,
-        tn.range()
+        tn.range(start, tn.pos)
       ); // recoverable
     }
     return typeParameters;
