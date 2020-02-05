@@ -1,7 +1,7 @@
 ![](https://avatars1.githubusercontent.com/u/28916798?s=64) AssemblyScript
 =================
 
-[![Actions Status](https://github.com/AssemblyScript/assemblyscript/workflows/CI/badge.svg)](https://github.com/AssemblyScript/assemblyscript/actions) [![npm](https://img.shields.io/npm/v/assemblyscript.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript) [![npm@nightly](https://img.shields.io/npm/v/assemblyscript/nightly.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript)
+[![Actions Status](https://github.com/AssemblyScript/assemblyscript/workflows/CI/badge.svg?branch=master&event=push)](https://github.com/AssemblyScript/assemblyscript/actions) [![npm](https://img.shields.io/npm/v/assemblyscript.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript) [![npm@nightly](https://img.shields.io/npm/v/assemblyscript/nightly.svg?color=0074C1)](https://www.npmjs.com/package/assemblyscript)
 
 **AssemblyScript** compiles a strict subset of [TypeScript](http://www.typescriptlang.org) (basically JavaScript with types) to [WebAssembly](http://webassembly.org) using [Binaryen](https://github.com/WebAssembly/binaryen). It generates lean and mean WebAssembly modules while being just an `npm install` away.
 
@@ -35,7 +35,7 @@ The core team members and most contributors do this open source work in their fr
 Motivation
 ----------
 
-> You are now able to write WebAssembly, without learning a new language, and harness all these benefits WebAssembly might offer you. I think that is kind of powerful. [...] It [AssemblyScript] is absolutely usable, and very enjoyable! - Surma, [WebAssembly for Web Developers (Google I/O ’19)](https://youtu.be/njt-Qzw0mVY) (May 8th, 2019) 
+> You are now able to write WebAssembly, without learning a new language, and harness all these benefits WebAssembly might offer you. I think that is kind of powerful. [...] It [AssemblyScript] is absolutely usable, and very enjoyable! - Surma, [WebAssembly for Web Developers (Google I/O ’19)](https://youtu.be/njt-Qzw0mVY) (May 8th, 2019)
 
 > AssemblyScript was frictionless. Not only does it allow you to use TypeScript to write WebAssembly, [...] it also produces glue-free WebAssembly modules that are very small with decent performance. – Surma, [Replacing a hot path in your app's JavaScript with WebAssembly](https://developers.google.com/web/updates/2019/02/hotpath-with-wasm) (Feb 16, 2019)
 
