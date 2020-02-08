@@ -1043,8 +1043,9 @@ export class Parser extends DiagnosticEmitter {
 
     // at '<': TypeParameter (',' TypeParameter)* '>'
 
-    var typeParameters: TypeParameterNode[] | null = null;
+    var typeParameters = new Array<TypeParameterNode>();
     var seenOptional = false;
+    var start = tn.tokenPos;
     while (!tn.skip(Token.GREATERTHAN)) {
       let typeParameter = this.parseTypeParameter(tn);
       if (!typeParameter) return null;
@@ -1057,8 +1058,7 @@ export class Parser extends DiagnosticEmitter {
         );
         typeParameter.defaultType = null;
       }
-      if (!typeParameters) typeParameters = [ typeParameter ];
-      else typeParameters.push(typeParameter);
+      typeParameters.push(typeParameter);
       if (!tn.skip(Token.COMMA)) {
         if (tn.skip(Token.GREATERTHAN)) {
           break;
@@ -1071,10 +1071,10 @@ export class Parser extends DiagnosticEmitter {
         }
       }
     }
-    if (!(typeParameters && typeParameters.length)) {
+    if (!typeParameters.length) {
       this.error(
         DiagnosticCode.Type_parameter_list_cannot_be_empty,
-        tn.range()
+        tn.range(start, tn.pos)
       ); // recoverable
     }
     return typeParameters;
@@ -3618,7 +3618,8 @@ export class Parser extends DiagnosticEmitter {
 
     var state = tn.mark();
     if (!tn.skip(Token.LESSTHAN)) return null;
-    var typeArguments: TypeNode[] | null = null;
+    var start = tn.tokenPos;
+    var typeArguments = new Array<TypeNode>();
     do {
       if (tn.peek() === Token.GREATERTHAN) {
         break;
@@ -3628,11 +3629,19 @@ export class Parser extends DiagnosticEmitter {
         tn.reset(state);
         return null;
       }
-      if (!typeArguments) typeArguments = [ type ];
-      else typeArguments.push(type);
+      typeArguments.push(type);
     } while (tn.skip(Token.COMMA));
-    if (tn.skip(Token.GREATERTHAN) && tn.skip(Token.OPENPAREN)) {
-      return typeArguments;
+    if (tn.skip(Token.GREATERTHAN)) {
+      let end = tn.pos;
+      if (tn.skip(Token.OPENPAREN)) {
+        if (!typeArguments.length) {
+          this.error(
+            DiagnosticCode.Type_argument_list_cannot_be_empty,
+            tn.range(start, end)
+          );
+        }
+        return typeArguments;
+      }
     }
     tn.reset(state);
     return null;

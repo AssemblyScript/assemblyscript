@@ -60,6 +60,7 @@
   "An accessor cannot have type parameters.": 1094,
   "A 'set' accessor cannot have a return type annotation.": 1095,
   "Type parameter list cannot be empty.": 1098,
+  "Type argument list cannot be empty.": 1099,
   "A 'continue' statement can only be used within an enclosing iteration statement.": 1104,
   "A 'break' statement can only be used within an enclosing iteration or switch statement.": 1105,
   "A 'return' statement can only be used within a function body.": 1108,

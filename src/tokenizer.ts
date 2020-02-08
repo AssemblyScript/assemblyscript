@@ -551,7 +551,11 @@ export class Tokenizer extends DiagnosticEmitter {
 
   next(identifierHandling: IdentifierHandling = IdentifierHandling.DEFAULT): Token {
     this.nextToken = -1;
-    return this.token = this.unsafeNext(identifierHandling);
+    var token: Token;
+    do token = this.unsafeNext(identifierHandling);
+    while (token == Token.INVALID);
+    this.token = token;
+    return token;
   }
 
   private unsafeNext(
@@ -962,11 +966,15 @@ export class Tokenizer extends DiagnosticEmitter {
             ++this.pos;
             break;
           }
+          let start = this.pos++;
+          if ( // surrogate pair?
+            (c & 0xFC00) == 0xD800 && this.pos < this.end &&
+            ((text.charCodeAt(this.pos)) & 0xFC00) == 0xDC00
+          ) ++this.pos;
           this.error(
             DiagnosticCode.Invalid_character,
-            this.range(this.pos, this.pos + 1)
+            this.range(start, this.pos)
           );
-          ++this.pos;
           return Token.INVALID;
         }
       }
@@ -984,7 +992,10 @@ export class Tokenizer extends DiagnosticEmitter {
       let posBefore = this.pos;
       let tokenBefore = this.token;
       let tokenPosBefore = this.tokenPos;
-      this.nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
+      let nextToken: Token;
+      do nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
+      while (nextToken == Token.INVALID);
+      this.nextToken = nextToken;
       this.nextTokenPos = this.tokenPos;
       if (checkOnNewLine) {
         this.nextTokenOnNewLine = false;
@@ -1017,8 +1028,11 @@ export class Tokenizer extends DiagnosticEmitter {
         break;
       }
     }
-    this.token = this.unsafeNext(identifierHandling, maxCompoundLength);
-    if (this.token == token) {
+    var nextToken: Token;
+    do nextToken = this.unsafeNext(identifierHandling, maxCompoundLength);
+    while (nextToken == Token.INVALID);
+    if (nextToken == token) {
+      this.token = token;
       this.nextToken = -1;
       return true;
     } else {
