@@ -44,7 +44,7 @@ export function __allocArray(length: i32, alignLog2: usize, id: u32, data: usize
   store<usize>(array, __retain(buffer), offsetof<ArrayBufferView>("buffer"));
   store<usize>(array, buffer, offsetof<ArrayBufferView>("dataStart"));
   store<u32>(array, bufferSize, offsetof<ArrayBufferView>("byteLength"));
-  store<i32>(changetype<usize>(array), length, offsetof<i32[]>("length_"));
+  store<i32>(array, length, offsetof<i32[]>("length_"));
   if (data) memory.copy(buffer, data, bufferSize);
   return array;
 }
