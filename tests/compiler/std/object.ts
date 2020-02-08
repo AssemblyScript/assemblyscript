@@ -46,6 +46,6 @@ assert(Object.is("a", "a") == true);
 assert(Object.is("a", "b") == false);
 assert(Object.is("a", "ab") == false);
 
-assert(Object.is(null, null) == true);
+assert(Object.is<string | null>(null, null) == true);
 assert(Object.is<string | null>("", null) == false);
 assert(Object.is<string | null>(null, "") == false);
