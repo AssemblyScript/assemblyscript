@@ -1,1 +1,1 @@
-export * from "./wasi_snapshot";
+export * from "./wasi_snapshot_preview1";

@@ -8,7 +8,7 @@ import {
   subscription_fd_readwrite,
   signal,
   prestat_dir
-} from "bindings/wasi_snapshot";
+} from "bindings/wasi_snapshot_preview1";
 
 import { Target } from "shared/target";
 
