@@ -2128,13 +2128,6 @@
  )
  (func $~lib/array/Array.isArray<i32> (; 28 ;) (param $0 i32) (result i32)
   i32.const 0
-  if (result i32)
-   local.get $0
-   i32.const 0
-   i32.ne
-  else
-   i32.const 0
-  end
  )
  (func $~lib/array/Array.isArray<~lib/string/String> (; 29 ;) (param $0 i32) (result i32)
   (local $1 i32)

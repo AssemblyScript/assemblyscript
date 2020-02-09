@@ -65,7 +65,8 @@ import {
   TernaryExpression,
   isTypeOmitted,
   FunctionExpression,
-  NewExpression
+  NewExpression,
+  ArrayLiteralExpression
 } from "./ast";
 
 import {
@@ -2160,10 +2161,10 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
+    this.currentThisExpression = node;
+    this.currentElementExpression = null;
     switch (node.literalKind) {
       case LiteralKind.INTEGER: {
-        this.currentThisExpression = node;
-        this.currentElementExpression = null;
         let intType = this.determineIntegerLiteralType(
           (<IntegerLiteralExpression>node).value,
           ctxType
@@ -2173,20 +2174,61 @@ export class Resolver extends DiagnosticEmitter {
         return wrapperClasses.get(intType)!;
       }
       case LiteralKind.FLOAT: {
-        this.currentThisExpression = node;
-        this.currentElementExpression = null;
         let fltType = ctxType == Type.f32 ? Type.f32 : Type.f64;
         let wrapperClasses = this.program.wrapperClasses;
         assert(wrapperClasses.has(fltType));
         return wrapperClasses.get(fltType)!;
       }
       case LiteralKind.STRING: {
-        this.currentThisExpression = node;
-        this.currentElementExpression = null;
         return this.program.stringInstance;
       }
-      // TODO
-      // case LiteralKind.ARRAY:
+      case LiteralKind.ARRAY: {
+        let classReference = ctxType.classReference;
+        if (ctxType.is(TypeFlags.REFERENCE) && classReference !== null && classReference.prototype == this.program.arrayPrototype) {
+          return this.getElementOfType(ctxType);
+        }
+        // otherwise infer, ignoring ctxType
+        let expressions = (<ArrayLiteralExpression>node).elementExpressions;
+        let length = expressions.length;
+        let elementType = Type.auto;
+        let numNullLiterals = 0;
+        for (let i = 0, k = length; i < k; ++i) {
+          let expression = expressions[i];
+          if (expression) {
+            if (expression.kind == NodeKind.NULL && length > 1) {
+              ++numNullLiterals;
+            } else {
+              let currentType = this.resolveExpression(expression, ctxFlow, elementType);
+              if (!currentType) return null;
+              if (elementType == Type.auto) elementType = currentType;
+              else if (currentType != elementType) {
+                let commonType = Type.commonDenominator(elementType, currentType, false);
+                if (commonType) elementType = commonType;
+                // otherwise triggers error on compilation
+              }
+            }
+          }
+        }
+        if (elementType /* still */ == Type.auto) {
+          if (numNullLiterals == length) { // all nulls infers as usize
+            elementType = this.program.options.usizeType;
+          } else {
+            this.error(
+              DiagnosticCode.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
+              node.range, "T"
+            );
+            return null;
+          }
+        }
+        if (
+          numNullLiterals > 0 &&
+          elementType.is(TypeFlags.REFERENCE) &&
+          !elementType.is(TypeFlags.HOST) // TODO: anyref isn't nullable as-is
+        ) {
+          elementType = elementType.asNullable();
+        }
+        return assert(this.resolveClass(this.program.arrayPrototype, [ elementType ]));
+      }
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(

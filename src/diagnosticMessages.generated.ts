@@ -37,6 +37,7 @@ export enum DiagnosticCode {
   _0_must_be_a_power_of_two = 223,
   _0_is_not_a_valid_operator = 224,
   Expression_cannot_be_represented_by_a_type = 225,
+  Expression_resolves_to_unusual_type_0 = 226,
   Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -65,6 +66,7 @@ export enum DiagnosticCode {
   An_accessor_cannot_have_type_parameters = 1094,
   A_set_accessor_cannot_have_a_return_type_annotation = 1095,
   Type_parameter_list_cannot_be_empty = 1098,
+  Type_argument_list_cannot_be_empty = 1099,
   A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement = 1104,
   A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement = 1105,
   A_return_statement_can_only_be_used_within_a_function_body = 1108,
@@ -186,6 +188,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 223: return "'{0}' must be a power of two.";
     case 224: return "'{0}' is not a valid operator.";
     case 225: return "Expression cannot be represented by a type.";
+    case 226: return "Expression resolves to unusual type '{0}'.";
     case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";
@@ -214,6 +217,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1094: return "An accessor cannot have type parameters.";
     case 1095: return "A 'set' accessor cannot have a return type annotation.";
     case 1098: return "Type parameter list cannot be empty.";
+    case 1099: return "Type argument list cannot be empty.";
     case 1104: return "A 'continue' statement can only be used within an enclosing iteration statement.";
     case 1105: return "A 'break' statement can only be used within an enclosing iteration or switch statement.";
     case 1108: return "A 'return' statement can only be used within a function body.";

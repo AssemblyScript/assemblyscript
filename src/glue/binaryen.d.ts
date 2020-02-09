@@ -781,7 +781,7 @@ export declare function _BinaryenSideEffectImplicitTrap(): BinaryenSideEffects;
 export declare function _BinaryenSideEffectIsAtomic(): BinaryenSideEffects;
 export declare function _BinaryenSideEffectAny(): BinaryenSideEffects;
 
-export declare function _BinaryenExpressionGetSideEffects(expr: BinaryenExpressionRef): BinaryenSideEffects;
+export declare function _BinaryenExpressionGetSideEffects(expr: BinaryenExpressionRef, features: BinaryenFeatureFlags): BinaryenSideEffects;
 
 type BinaryenRelooperRef = usize;
 type BinaryenRelooperBlockRef = usize;
@@ -799,5 +799,10 @@ export declare function _BinaryenGetShrinkLevel(): i32;
 export declare function _BinaryenSetShrinkLevel(level: i32): void;
 export declare function _BinaryenGetDebugInfo(): bool;
 export declare function _BinaryenSetDebugInfo(on: bool): void;
+export declare function _BinaryenGetLowMemoryUnused(): bool;
+export declare function _BinaryenSetLowMemoryUnused(on: bool): void;
+export declare function _BinaryenGetPassArgument(key: usize): usize;
+export declare function _BinaryenSetPassArgument(key: usize, value: usize): void;
+export declare function _BinaryenClearPassArguments(): void;
 
 export declare function _BinaryenSetAPITracing(on: bool): void;

@@ -1283,13 +1283,13 @@ export class Module {
     binaryen._free(cArr);
   }
 
-  // meta
+  // meta (global)
 
   getOptimizeLevel(): i32 {
     return binaryen._BinaryenGetOptimizeLevel();
   }
 
-  setOptimizeLevel(level: i32 = 2): void {
+  setOptimizeLevel(level: i32): void {
     binaryen._BinaryenSetOptimizeLevel(level);
   }
 
@@ -1297,13 +1297,43 @@ export class Module {
     return binaryen._BinaryenGetShrinkLevel();
   }
 
-  setShrinkLevel(level: i32 = 1): void {
+  setShrinkLevel(level: i32): void {
     binaryen._BinaryenSetShrinkLevel(level);
   }
 
-  setDebugInfo(on: bool = false): void {
+  getDebugInfo(): boolean {
+    return binaryen._BinaryenGetDebugInfo();
+  }
+
+  setDebugInfo(on: bool): void {
     binaryen._BinaryenSetDebugInfo(on);
   }
+
+  getLowMemoryUnused(): bool {
+    return binaryen._BinaryenGetLowMemoryUnused();
+  }
+
+  setLowMemoryUnused(on: bool): void {
+    binaryen._BinaryenSetLowMemoryUnused(on);
+  }
+
+  getPassArgument(key: string): string | null {
+    var cStr = this.allocStringCached(key);
+    var ptr = binaryen._BinaryenGetPassArgument(cStr);
+    return ptr ? readString(ptr) : null;
+  }
+
+  setPassArgument(key: string, value: string | null): void {
+    var cStr1 = this.allocStringCached(key);
+    var cStr2 = this.allocStringCached(value);
+    binaryen._BinaryenSetPassArgument(cStr1, cStr2);
+  }
+
+  clearPassArguments(): void {
+    binaryen._BinaryenClearPassArguments();
+  }
+
+  // meta (module)
 
   getFeatures(): FeatureFlags {
     return binaryen._BinaryenModuleGetFeatures(this.ref);
@@ -1897,15 +1927,16 @@ export enum SideEffects {
   WritesMemory = 128 /* _BinaryenSideEffectWritesMemory */,
   ImplicitTrap = 256 /* _BinaryenSideEffectImplicitTrap */,
   IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
-  Any = 1023 /* _BinaryenSideEffectAny */,
+  Throws = 1024 /* _BinaryenSideEffectThrows */,
+  Any = 2047 /* _BinaryenSideEffectAny */,
 }
 
-export function getSideEffects(expr: ExpressionRef): SideEffects {
-  return binaryen._BinaryenExpressionGetSideEffects(expr);
+export function getSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): SideEffects {
+  return binaryen._BinaryenExpressionGetSideEffects(expr, features);
 }
 
-export function hasSideEffects(expr: ExpressionRef): bool {
-  return getSideEffects(expr) != SideEffects.None;
+export function hasSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): bool {
+  return getSideEffects(expr, features) != SideEffects.None;
 }
 
 // helpers

@@ -38,7 +38,7 @@ export class Array<T> extends ArrayBufferView {
   private length_: i32;
 
   static isArray<U>(value: U): bool {
-    return builtin_isArray(value) && value !== null;
+    return isReference<U>() ? builtin_isArray(value) && value !== null : false;
   }
 
   static create<T>(capacity: i32 = 0): Array<T> {
@@ -355,10 +355,7 @@ export class Array<T> extends ArrayBufferView {
       base + sizeof<T>(),
       <usize>lastIndex << alignof<T>()
     );
-    store<T>(base + (<usize>lastIndex << alignof<T>()),
-      // @ts-ignore: cast
-      <T>null
-    );
+    store<T>(base + (<usize>lastIndex << alignof<T>()), isReference<T>() ? null : 0);
     this.length_ = lastIndex;
     return element; // no need to retain -> is moved
   }

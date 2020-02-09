@@ -301,12 +301,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/object/Object.is<usize> (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.eq
- )
- (func $~lib/object/Object.is<~lib/string/String | null> (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String | null> (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -324,7 +319,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:std/object (; 13 ;)
+ (func $start:std/object (; 12 ;)
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -845,7 +840,7 @@
   end
   i32.const 0
   i32.const 0
-  call $~lib/object/Object.is<usize>
+  call $~lib/object/Object.is<~lib/string/String | null>
   i32.const 1
   i32.eq
   i32.eqz
@@ -886,7 +881,7 @@
    unreachable
   end
  )
- (func $~start (; 14 ;)
+ (func $~start (; 13 ;)
   call $start:std/object
  )
 )
