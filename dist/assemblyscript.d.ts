@@ -238,6 +238,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         _0_must_be_a_power_of_two = 223,
         _0_is_not_a_valid_operator = 224,
         Expression_cannot_be_represented_by_a_type = 225,
+        Expression_resolves_to_unusual_type_0 = 226,
         Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
         Importing_the_table_disables_some_indirect_call_optimizations = 901,
         Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -266,6 +267,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         An_accessor_cannot_have_type_parameters = 1094,
         A_set_accessor_cannot_have_a_return_type_annotation = 1095,
         Type_parameter_list_cannot_be_empty = 1098,
+        Type_argument_list_cannot_be_empty = 1099,
         A_continue_statement_can_only_be_used_within_an_enclosing_iteration_statement = 1104,
         A_break_statement_can_only_be_used_within_an_enclosing_iteration_or_switch_statement = 1105,
         A_return_statement_can_only_be_used_within_a_function_body = 1108,
@@ -2235,10 +2237,16 @@ declare module "assemblyscript/src/module" {
         setFunctionTable(initial: Index, maximum: Index, funcs: string[], offset: ExpressionRef): void;
         addCustomSection(name: string, contents: Uint8Array): void;
         getOptimizeLevel(): number;
-        setOptimizeLevel(level?: number): void;
+        setOptimizeLevel(level: number): void;
         getShrinkLevel(): number;
-        setShrinkLevel(level?: number): void;
-        setDebugInfo(on?: boolean): void;
+        setShrinkLevel(level: number): void;
+        getDebugInfo(): boolean;
+        setDebugInfo(on: boolean): void;
+        getLowMemoryUnused(): boolean;
+        setLowMemoryUnused(on: boolean): void;
+        getPassArgument(key: string): string | null;
+        setPassArgument(key: string, value: string | null): void;
+        clearPassArguments(): void;
         getFeatures(): FeatureFlags;
         setFeatures(featureFlags: FeatureFlags): void;
         optimize(func?: FunctionRef): void;
@@ -2345,10 +2353,11 @@ declare module "assemblyscript/src/module" {
         WritesMemory = 128,
         ImplicitTrap = 256,
         IsAtomic = 512,
-        Any = 1023
+        Throws = 1024,
+        Any = 2047
     }
-    export function getSideEffects(expr: ExpressionRef): SideEffects;
-    export function hasSideEffects(expr: ExpressionRef): boolean;
+    export function getSideEffects(expr: ExpressionRef, features?: FeatureFlags): SideEffects;
+    export function hasSideEffects(expr: ExpressionRef, features?: FeatureFlags): boolean;
     export function readString(ptr: number): string | null;
     /** Result structure of {@link Module#toBinary}. */
     export class BinaryModule {
