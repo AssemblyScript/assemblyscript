@@ -16,4 +16,4 @@ function findFiles(dirname, filter) {
 exports.files = findFiles;
 
 exports.TS = /\.ts$/;
-exports.TS_EXCEPT_DTS = /[^\.][^\d]\.ts$/;
+exports.TS_EXCEPT_DTS = /(?:(?!\.d).{2}|^.{0,1})\.ts$/;
