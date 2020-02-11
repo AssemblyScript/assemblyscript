@@ -12,13 +12,11 @@
   i32.load
  )
  (func $extends-recursive/Parent#set:child (; 1 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
   local.get $0
-  local.get $1
-  local.tee $0
   i32.load
   drop
   local.get $0
+  local.get $1
   i32.store
  )
 )

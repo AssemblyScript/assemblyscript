@@ -1440,17 +1440,41 @@ export class Compiler extends DiagnosticEmitter {
     var nativeThisType = this.options.nativeSizeType;
     var nativeValueType = type.toNativeType();
     var module = this.module;
-    var valueExpr = module.local_get(1, nativeValueType);
+    var valueExpr: ExpressionRef;
+    var varTypes: NativeType[] | null = null;
     if (type.isManaged) {
-      valueExpr = this.makeReplace(
-        module.load(type.byteSize, false,
-          module.local_get(0, nativeThisType),
-          nativeValueType, instance.memoryOffset
+      // 0: this, 1: value, 2: oldValue
+      valueExpr = module.block(null, [
+        module.if(
+          module.binary(nativeValueType == NativeType.I64 ? BinaryOp.NeI64 : BinaryOp.NeI32,
+            // value != (oldValue = this.field)
+            module.local_get(1, nativeValueType),
+            module.local_tee(2,
+              module.load(type.byteSize, false,
+                module.local_get(0, nativeThisType),
+                nativeValueType, instance.memoryOffset
+              )
+            )
+          ),
+          module.block(null, [
+            // void(__retain(value)), __release(oldValue)
+            module.drop(
+              this.makeRetain(module.local_get(1, nativeValueType))
+            ),
+            this.makeRelease(module.local_get(2, nativeValueType))
+          ])
         ),
-        valueExpr
-      );
+        module.local_get(1, nativeValueType)
+      ], nativeValueType);
+      varTypes = [ nativeValueType ];
+    } else {
+      valueExpr = module.local_get(1, nativeValueType);
     }
-    instance.setterRef = module.addFunction(instance.internalSetterName, createType([ nativeThisType, nativeValueType ]), NativeType.None, null,
+    instance.setterRef = module.addFunction(
+      instance.internalSetterName,
+      createType([ nativeThisType, nativeValueType ]),
+      NativeType.None,
+      varTypes,
       module.store(type.byteSize,
         module.local_get(0, nativeThisType),
         valueExpr,
@@ -6702,7 +6726,14 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
-  makeReplace(oldExpr: ExpressionRef, newExpr: ExpressionRef, alreadyRetained: bool = false): ExpressionRef {
+  makeReplace(
+    /** Expression of the value to replace. */
+    oldExpr: ExpressionRef,
+    /** Expression of the value to set. */
+    newExpr: ExpressionRef,
+    /** Whether the new value is already retained. */
+    alreadyRetained: bool = false,
+  ): ExpressionRef {
     var module = this.module;
     var flow = this.currentFlow;
     var nativeSizeType = this.options.nativeSizeType;
@@ -6710,10 +6741,11 @@ export class Compiler extends DiagnosticEmitter {
       // (t1=newExpr), __release(oldExpr), t1
       // it is important that `newExpr` evaluates before `oldExpr` is released, hence the local
       let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(oldExpr));
+      let tempIndex = temp.index;
       let ret = module.block(null, [
-        module.local_set(temp.index, newExpr),
+        module.local_set(tempIndex, newExpr),
         this.makeRelease(oldExpr),
-        module.local_get(temp.index, nativeSizeType)
+        module.local_get(tempIndex, nativeSizeType)
       ], nativeSizeType);
       flow.freeTempLocal(temp);
       return ret;
