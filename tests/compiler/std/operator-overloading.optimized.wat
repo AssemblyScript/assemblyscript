@@ -8,7 +8,7 @@
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 1024) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/operator-overloading/a1 (mut i32) (i32.const 0))
@@ -1271,9 +1271,9 @@
  (func $start:std/operator-overloading (; 11 ;)
   (local $0 i32)
   (local $1 i32)
-  i32.const 96
+  i32.const 1104
   global.set $~lib/rt/stub/startOffset
-  i32.const 96
+  i32.const 1104
   global.set $~lib/rt/stub/offset
   i32.const 1
   i32.const 2
@@ -1312,7 +1312,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 145
    i32.const 0
    call $~lib/builtins/abort
@@ -1353,7 +1353,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 151
    i32.const 0
    call $~lib/builtins/abort
@@ -1396,7 +1396,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 157
    i32.const 0
    call $~lib/builtins/abort
@@ -1439,7 +1439,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 163
    i32.const 0
    call $~lib/builtins/abort
@@ -1481,7 +1481,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 169
    i32.const 0
    call $~lib/builtins/abort
@@ -1514,7 +1514,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 175
    i32.const 0
    call $~lib/builtins/abort
@@ -1557,7 +1557,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 181
    i32.const 0
    call $~lib/builtins/abort
@@ -1600,7 +1600,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 187
    i32.const 0
    call $~lib/builtins/abort
@@ -1643,7 +1643,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 193
    i32.const 0
    call $~lib/builtins/abort
@@ -1666,7 +1666,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 199
    i32.const 0
    call $~lib/builtins/abort
@@ -1687,7 +1687,7 @@
   global.get $std/operator-overloading/eqf
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 205
    i32.const 0
    call $~lib/builtins/abort
@@ -1700,7 +1700,7 @@
   global.get $std/operator-overloading/eq
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 209
    i32.const 0
    call $~lib/builtins/abort
@@ -1715,7 +1715,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 213
    i32.const 0
    call $~lib/builtins/abort
@@ -1751,7 +1751,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 219
    i32.const 0
    call $~lib/builtins/abort
@@ -1787,7 +1787,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 225
    i32.const 0
    call $~lib/builtins/abort
@@ -1823,7 +1823,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 231
    i32.const 0
    call $~lib/builtins/abort
@@ -1859,7 +1859,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 237
    i32.const 0
    call $~lib/builtins/abort
@@ -1895,7 +1895,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 242
    i32.const 0
    call $~lib/builtins/abort
@@ -1931,7 +1931,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 247
    i32.const 0
    call $~lib/builtins/abort
@@ -1967,7 +1967,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 252
    i32.const 0
    call $~lib/builtins/abort
@@ -2001,7 +2001,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 257
    i32.const 0
    call $~lib/builtins/abort
@@ -2043,7 +2043,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 262
    i32.const 0
    call $~lib/builtins/abort
@@ -2085,7 +2085,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 267
    i32.const 0
    call $~lib/builtins/abort
@@ -2119,7 +2119,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 272
    i32.const 0
    call $~lib/builtins/abort
@@ -2130,7 +2130,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 273
    i32.const 0
    call $~lib/builtins/abort
@@ -2170,7 +2170,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 279
    i32.const 0
    call $~lib/builtins/abort
@@ -2204,7 +2204,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 282
    i32.const 0
    call $~lib/builtins/abort
@@ -2240,7 +2240,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 287
    i32.const 0
    call $~lib/builtins/abort
@@ -2261,7 +2261,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 288
    i32.const 0
    call $~lib/builtins/abort
@@ -2295,7 +2295,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 291
    i32.const 0
    call $~lib/builtins/abort
@@ -2314,7 +2314,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 292
    i32.const 0
    call $~lib/builtins/abort
@@ -2368,7 +2368,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 312
    i32.const 0
    call $~lib/builtins/abort
@@ -2422,7 +2422,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 332
    i32.const 0
    call $~lib/builtins/abort

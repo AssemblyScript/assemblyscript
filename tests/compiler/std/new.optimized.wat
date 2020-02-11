@@ -98,9 +98,9 @@
   local.get $0
  )
  (func $~start (; 3 ;)
-  i32.const 16
+  i32.const 1024
   global.set $~lib/rt/stub/startOffset
-  i32.const 16
+  i32.const 1024
   global.set $~lib/rt/stub/offset
   call $std/new/AClass#constructor
   global.set $std/new/aClass

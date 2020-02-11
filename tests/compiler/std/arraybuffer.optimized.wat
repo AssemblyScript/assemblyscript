@@ -14,14 +14,14 @@
  (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
- (data (i32.const 16) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
- (data (i32.const 64) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 128) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 176) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 240) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
- (data (i32.const 288) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 352) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02")
- (data (i32.const 384) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
+ (data (i32.const 1024) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
+ (data (i32.const 1072) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 1136) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
+ (data (i32.const 1184) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
+ (data (i32.const 1248) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
+ (data (i32.const 1296) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00s\00t\00d\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+ (data (i32.const 1360) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\02")
+ (data (i32.const 1392) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
@@ -41,7 +41,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 277
    i32.const 13
    call $~lib/builtins/abort
@@ -63,7 +63,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 279
    i32.const 13
    call $~lib/builtins/abort
@@ -108,7 +108,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 292
    i32.const 13
    call $~lib/builtins/abort
@@ -205,7 +205,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 205
    i32.const 13
    call $~lib/builtins/abort
@@ -219,7 +219,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 207
    i32.const 13
    call $~lib/builtins/abort
@@ -292,7 +292,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 144
+    i32.const 1152
     i32.const 228
     i32.const 15
     call $~lib/builtins/abort
@@ -347,7 +347,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 243
    i32.const 13
    call $~lib/builtins/abort
@@ -362,7 +362,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 244
    i32.const 13
    call $~lib/builtins/abort
@@ -412,7 +412,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 260
    i32.const 13
    call $~lib/builtins/abort
@@ -498,7 +498,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 386
    i32.const 4
    call $~lib/builtins/abort
@@ -515,7 +515,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 144
+    i32.const 1152
     i32.const 396
     i32.const 15
     call $~lib/builtins/abort
@@ -543,7 +543,7 @@
    i32.lt_u
    if
     i32.const 0
-    i32.const 144
+    i32.const 1152
     i32.const 408
     i32.const 4
     call $~lib/builtins/abort
@@ -616,11 +616,11 @@
    if
     unreachable
    end
-   i32.const 432
+   i32.const 1440
    local.tee $0
    i32.const 0
    i32.store
-   i32.const 2000
+   i32.const 3008
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -631,7 +631,7 @@
      local.get $1
      i32.const 2
      i32.shl
-     i32.const 432
+     i32.const 1440
      i32.add
      i32.const 0
      i32.store offset=4
@@ -649,7 +649,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 432
+       i32.const 1440
        i32.add
        i32.const 0
        i32.store offset=96
@@ -667,13 +667,13 @@
      br $for-loop|0
     end
    end
-   i32.const 432
-   i32.const 2016
+   i32.const 1440
+   i32.const 3024
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 432
+   i32.const 1440
    global.set $~lib/rt/tlsf/ROOT
   end
   local.get $0
@@ -683,8 +683,8 @@
   i32.const 1073741808
   i32.ge_u
   if
-   i32.const 192
-   i32.const 144
+   i32.const 1200
+   i32.const 1152
    i32.const 457
    i32.const 29
    call $~lib/builtins/abort
@@ -759,7 +759,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 338
    i32.const 13
    call $~lib/builtins/abort
@@ -811,7 +811,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 144
+     i32.const 1152
      i32.const 351
      i32.const 17
      call $~lib/builtins/abort
@@ -906,7 +906,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 365
    i32.const 13
    call $~lib/builtins/abort
@@ -977,7 +977,7 @@
   global.get $~lib/rt/tlsf/collectLock
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 490
    i32.const 13
    call $~lib/builtins/abort
@@ -1011,7 +1011,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 144
+     i32.const 1152
      i32.const 502
      i32.const 19
      call $~lib/builtins/abort
@@ -1027,7 +1027,7 @@
   i32.lt_u
   if
    i32.const 0
-   i32.const 144
+   i32.const 1152
    i32.const 510
    i32.const 13
    call $~lib/builtins/abort
@@ -1082,15 +1082,11 @@
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
    local.get $0
-   i32.const 1
-   i32.add
    i32.const 0
-   i32.store8
+   i32.store8 offset=1
    local.get $0
-   i32.const 2
-   i32.add
    i32.const 0
-   i32.store8
+   i32.store8 offset=2
    local.get $0
    local.get $1
    i32.add
@@ -1109,10 +1105,8 @@
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
    local.get $0
-   i32.const 3
-   i32.add
    i32.const 0
-   i32.store8
+   i32.store8 offset=3
    local.get $0
    local.get $1
    i32.add
@@ -1124,23 +1118,21 @@
    i32.const 8
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
-   local.get $1
+   local.get $0
    i32.const 0
    local.get $0
    i32.sub
    i32.const 3
    i32.and
-   local.tee $1
-   i32.sub
-   local.set $2
-   local.get $0
-   local.get $1
+   local.tee $2
    i32.add
    local.tee $0
    i32.const 0
    i32.store
    local.get $0
+   local.get $1
    local.get $2
+   i32.sub
    i32.const -4
    i32.and
    local.tee $1
@@ -1154,15 +1146,11 @@
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
    local.get $0
-   i32.const 4
-   i32.add
    i32.const 0
-   i32.store
+   i32.store offset=4
    local.get $0
-   i32.const 8
-   i32.add
    i32.const 0
-   i32.store
+   i32.store offset=8
    local.get $0
    local.get $1
    i32.add
@@ -1181,25 +1169,17 @@
    i32.le_u
    br_if $~lib/util/memory/memset|inlined.0
    local.get $0
-   i32.const 12
-   i32.add
    i32.const 0
-   i32.store
+   i32.store offset=12
    local.get $0
-   i32.const 16
-   i32.add
    i32.const 0
-   i32.store
+   i32.store offset=16
    local.get $0
-   i32.const 20
-   i32.add
    i32.const 0
-   i32.store
+   i32.store offset=20
    local.get $0
-   i32.const 24
-   i32.add
    i32.const 0
-   i32.store
+   i32.store offset=24
    local.get $0
    local.get $1
    i32.add
@@ -1245,20 +1225,14 @@
      i64.const 0
      i64.store
      local.get $0
-     i32.const 8
-     i32.add
      i64.const 0
-     i64.store
+     i64.store offset=8
      local.get $0
-     i32.const 16
-     i32.add
      i64.const 0
-     i64.store
+     i64.store offset=16
      local.get $0
-     i32.const 24
-     i32.add
      i64.const 0
-     i64.store
+     i64.store offset=24
      local.get $1
      i32.const 32
      i32.sub
@@ -1287,7 +1261,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 256
+   i32.const 1264
    i32.const 109
    i32.const 2
    call $~lib/builtins/abort
@@ -1306,7 +1280,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 256
+   i32.const 1264
    i32.const 112
    i32.const 13
    call $~lib/builtins/abort
@@ -1315,7 +1289,7 @@
  )
  (func $~lib/rt/pure/__retain (; 17 ;) (param $0 i32) (result i32)
   local.get $0
-  i32.const 432
+  i32.const 1440
   i32.gt_u
   if
    local.get $0
@@ -1574,7 +1548,7 @@
  )
  (func $~lib/rt/pure/__release (; 21 ;) (param $0 i32)
   local.get $0
-  i32.const 432
+  i32.const 1440
   i32.gt_u
   if
    local.get $0
@@ -1593,8 +1567,8 @@
   i32.shr_u
   i32.gt_u
   if
-   i32.const 32
-   i32.const 80
+   i32.const 1040
+   i32.const 1088
    i32.const 23
    i32.const 56
    call $~lib/builtins/abort
@@ -1675,7 +1649,7 @@
   i32.const 2
   i32.store offset=12
   local.get $1
-  i32.const 368
+  i32.const 1376
   i32.const 8
   call $~lib/memory/memory.copy
   local.get $0
@@ -1693,8 +1667,8 @@
   i32.gt_u
   i32.or
   if
-   i32.const 32
-   i32.const 400
+   i32.const 1040
+   i32.const 1408
    i32.const 25
    i32.const 6
    call $~lib/builtins/abort
@@ -1763,7 +1737,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 4
    i32.const 2
    call $~lib/builtins/abort
@@ -1779,7 +1753,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 8
    i32.const 2
    call $~lib/builtins/abort
@@ -1790,7 +1764,7 @@
   i32.eq
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 9
    i32.const 2
    call $~lib/builtins/abort
@@ -1809,7 +1783,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 13
    i32.const 2
    call $~lib/builtins/abort
@@ -1827,7 +1801,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 17
    i32.const 2
    call $~lib/builtins/abort
@@ -1845,7 +1819,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 21
    i32.const 2
    call $~lib/builtins/abort
@@ -1863,7 +1837,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 25
    i32.const 2
    call $~lib/builtins/abort
@@ -1882,7 +1856,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 29
    i32.const 2
    call $~lib/builtins/abort
@@ -1901,7 +1875,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 33
    i32.const 2
    call $~lib/builtins/abort
@@ -1918,7 +1892,7 @@
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 37
    i32.const 2
    call $~lib/builtins/abort
@@ -1928,7 +1902,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 304
+   i32.const 1312
    i32.const 38
    i32.const 2
    call $~lib/builtins/abort
@@ -1991,7 +1965,7 @@
   i32.and
   if
    i32.const 0
-   i32.const 256
+   i32.const 1264
    i32.const 122
    i32.const 13
    call $~lib/builtins/abort
@@ -2010,7 +1984,7 @@
    i32.and
    if
     i32.const 0
-    i32.const 256
+    i32.const 1264
     i32.const 126
     i32.const 17
     call $~lib/builtins/abort
@@ -2033,7 +2007,7 @@
    i32.le_u
    if
     i32.const 0
-    i32.const 256
+    i32.const 1264
     i32.const 136
     i32.const 15
     call $~lib/builtins/abort
@@ -2069,7 +2043,7 @@
   local.tee $0
   if
    local.get $0
-   i32.const 432
+   i32.const 1440
    i32.ge_u
    if
     local.get $0

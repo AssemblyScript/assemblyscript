@@ -80,9 +80,9 @@
   local.get $2
  )
  (func $start:new (; 2 ;)
-  i32.const 16
+  i32.const 1024
   global.set $~lib/rt/stub/startOffset
-  i32.const 16
+  i32.const 1024
   global.set $~lib/rt/stub/offset
   i32.const 3
   call $~lib/rt/stub/__alloc

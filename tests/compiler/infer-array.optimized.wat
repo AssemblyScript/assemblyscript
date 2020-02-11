@@ -9,25 +9,25 @@
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03")
- (data (i32.const 48) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 112) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 160) "\18\00\00\00\01\00\00\00\00\00\00\00\18")
- (data (i32.const 182) "\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@")
- (data (i32.const 208) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\ff\ff\ff\ff")
- (data (i32.const 240) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00i\00n\00f\00e\00r\00-\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 288) "\18\00\00\00\01\00\00\00\00\00\00\00\18")
- (data (i32.const 310) "\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@")
- (data (i32.const 336) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
- (data (i32.const 368) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
- (data (i32.const 400) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\80\01")
- (data (i32.const 432) "\04\00\00\00\01\00\00\00\00\00\00\00\04")
- (data (i32.const 464) "\08\00\00\00\01\00\00\00\00\00\00\00\08")
- (data (i32.const 496) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01")
- (data (i32.const 528) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\01")
- (data (i32.const 560) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\01")
- (data (i32.const 592) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\02")
- (data (i32.const 624) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
+ (data (i32.const 1024) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03")
+ (data (i32.const 1056) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 1120) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 1168) "\18\00\00\00\01\00\00\00\00\00\00\00\18")
+ (data (i32.const 1190) "\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@")
+ (data (i32.const 1216) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01\00\00\00\ff\ff\ff\ff")
+ (data (i32.const 1248) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00i\00n\00f\00e\00r\00-\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 1296) "\18\00\00\00\01\00\00\00\00\00\00\00\18")
+ (data (i32.const 1318) "\f0?\00\00\00\00\00\00\00@\00\00\00\00\00\00\08@")
+ (data (i32.const 1344) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
+ (data (i32.const 1376) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
+ (data (i32.const 1408) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00p\05")
+ (data (i32.const 1440) "\04\00\00\00\01\00\00\00\00\00\00\00\04")
+ (data (i32.const 1472) "\08\00\00\00\01\00\00\00\00\00\00\00\08")
+ (data (i32.const 1504) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01")
+ (data (i32.const 1536) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\00\00\00\00\01")
+ (data (i32.const 1568) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\01")
+ (data (i32.const 1600) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\02")
+ (data (i32.const 1632) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -330,8 +330,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 64
-   i32.const 128
+   i32.const 1072
+   i32.const 1136
    i32.const 93
    i32.const 41
    call $~lib/builtins/abort
@@ -339,9 +339,7 @@
   end
   local.get $0
   i32.load offset=4
-  i32.const 4
-  i32.add
-  i32.load
+  i32.load offset=4
  )
  (func $~lib/array/Array<f32>#__get (; 6 ;) (param $0 i32)
   i32.const 1
@@ -349,8 +347,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 64
-   i32.const 128
+   i32.const 1072
+   i32.const 1136
    i32.const 93
    i32.const 41
    call $~lib/builtins/abort
@@ -358,9 +356,7 @@
   end
   local.get $0
   i32.load offset=4
-  i32.const 4
-  i32.add
-  f32.load
+  f32.load offset=4
   drop
  )
  (func $infer-array/Ref#constructor (; 7 ;) (result i32)
@@ -372,33 +368,33 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  i32.const 736
+  i32.const 1744
   global.set $~lib/rt/stub/startOffset
-  i32.const 736
+  i32.const 1744
   global.set $~lib/rt/stub/offset
   i32.const 3
   i32.const 2
   i32.const 3
-  i32.const 32
+  i32.const 1040
   call $~lib/rt/__allocArray
   drop
   i32.const 3
   i32.const 3
   i32.const 4
-  i32.const 176
+  i32.const 1184
   call $~lib/rt/__allocArray
   drop
   i32.const 2
   i32.const 2
   i32.const 5
-  i32.const 224
+  i32.const 1232
   call $~lib/rt/__allocArray
   call $~lib/array/Array<i32>#__get
   i32.const -1
   i32.ne
   if
    i32.const 0
-   i32.const 256
+   i32.const 1264
    i32.const 14
    i32.const 2
    call $~lib/builtins/abort
@@ -407,13 +403,13 @@
   i32.const 3
   i32.const 3
   i32.const 4
-  i32.const 304
+  i32.const 1312
   call $~lib/rt/__allocArray
   drop
   i32.const 3
   i32.const 2
   i32.const 6
-  i32.const 352
+  i32.const 1360
   call $~lib/rt/__allocArray
   call $~lib/array/Array<f32>#__get
   call $infer-array/Ref#constructor
@@ -465,31 +461,31 @@
   i32.const 2
   i32.const 2
   i32.const 9
-  i32.const 416
+  i32.const 1424
   call $~lib/rt/__allocArray
   drop
   i32.const 1
   i32.const 2
   i32.const 10
-  i32.const 448
+  i32.const 1456
   call $~lib/rt/__allocArray
   drop
   i32.const 2
   i32.const 2
   i32.const 10
-  i32.const 480
+  i32.const 1488
   call $~lib/rt/__allocArray
   drop
   i32.const 2
   i32.const 2
   i32.const 3
-  i32.const 512
+  i32.const 1520
   call $~lib/rt/__allocArray
   drop
   i32.const 2
   i32.const 2
   i32.const 3
-  i32.const 544
+  i32.const 1552
   call $~lib/rt/__allocArray
   drop
   i32.const 2
@@ -502,14 +498,14 @@
   i32.const 1
   i32.const 2
   i32.const 3
-  i32.const 576
+  i32.const 1584
   call $~lib/rt/__allocArray
   i32.store
   local.get $0
   i32.const 1
   i32.const 2
   i32.const 3
-  i32.const 608
+  i32.const 1616
   call $~lib/rt/__allocArray
   i32.store offset=4
  )

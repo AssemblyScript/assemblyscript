@@ -7,8 +7,8 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00e\00r\00r\00o\00r")
- (data (i32.const 48) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00r\00e\00t\00a\00i\00n\00-\00r\00e\00l\00e\00a\00s\00e\00.\00t\00s")
+ (data (i32.const 1024) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00e\00r\00r\00o\00r")
+ (data (i32.const 1056) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00r\00e\00t\00a\00i\00n\00-\00r\00e\00l\00e\00a\00s\00e\00.\00t\00s")
  (table $0 1 funcref)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -212,8 +212,8 @@
  (func $retain-release/scopeThrow (; 12 ;) (param $0 i32)
   local.get $0
   if
-   i32.const 32
-   i32.const 64
+   i32.const 1040
+   i32.const 1072
    i32.const 367
    i32.const 4
    call $~lib/builtins/abort
@@ -253,9 +253,9 @@
    i32.const 1
    global.set $~started
   end
-  i32.const 112
+  i32.const 1120
   global.set $~lib/rt/stub/startOffset
-  i32.const 112
+  i32.const 1120
   global.set $~lib/rt/stub/offset
   call $retain-release/Ref#constructor
   global.set $retain-release/REF

@@ -9,7 +9,7 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "Date" "now" (func $~lib/bindings/Date/now (result f64)))
  (memory $0 1)
- (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
+ (data (i32.const 1024) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
  (global $std/date/creationTime (mut i64) (i64.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -101,7 +101,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 1
    i32.const 0
    call $~lib/builtins/abort
@@ -120,7 +120,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 2
    i32.const 0
    call $~lib/builtins/abort
@@ -141,7 +141,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 5
    i32.const 0
    call $~lib/builtins/abort
@@ -153,15 +153,15 @@
   i64.le_s
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 7
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 64
+  i32.const 1072
   global.set $~lib/rt/stub/startOffset
-  i32.const 64
+  i32.const 1072
   global.set $~lib/rt/stub/offset
   global.get $std/date/creationTime
   local.set $1
@@ -180,7 +180,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 10
    i32.const 0
    call $~lib/builtins/abort
@@ -199,7 +199,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 12
    i32.const 0
    call $~lib/builtins/abort
