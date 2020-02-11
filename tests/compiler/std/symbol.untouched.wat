@@ -1,11 +1,11 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -1172,7 +1172,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $~lib/map/Map<~lib/string/String,usize>#set (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#set (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1283,8 +1283,12 @@
    local.get $3
    call $~lib/rt/stub/__release
   end
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $4
   local.get $1
   call $~lib/rt/stub/__release
+  local.get $4
  )
  (func $~lib/util/hash/hash32 (; 21 ;) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1533,7 +1537,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $~lib/map/Map<usize,~lib/string/String>#set (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#set (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1650,8 +1654,12 @@
    local.get $3
    call $~lib/rt/stub/__release
   end
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $6
   local.get $2
   call $~lib/rt/stub/__release
+  local.get $6
  )
  (func $~lib/symbol/_Symbol.for (; 25 ;) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1707,10 +1715,12 @@
   local.get $0
   local.get $2
   call $~lib/map/Map<~lib/string/String,usize>#set
+  call $~lib/rt/stub/__release
   global.get $~lib/symbol/idToString
   local.get $2
   local.get $0
   call $~lib/map/Map<usize,~lib/string/String>#set
+  call $~lib/rt/stub/__release
   local.get $2
   local.set $1
   local.get $0
