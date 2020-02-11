@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+/* tslint:disable */
+
+try { require("source-map-support").install(); } catch (e) {}
+
+const asbuild = module.exports = require("../cli/asbuild/asbuild.js");
+if (/\basbuild$/.test(process.argv[1])) {
+  process.exitCode = asbuild.main(process.argv.slice(2));
+}

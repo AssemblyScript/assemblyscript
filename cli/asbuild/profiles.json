@@ -1,0 +1,17 @@
+{
+  "debug": {
+    "default_name": "untouched",
+    "args": ["--validate", "--sourceMap", "--debug"],
+    "description": "builds a dbug wasm file: +debuginfo +assertions -optimizations ++size"
+  },
+  "release": {
+    "default_name": "optimized",
+    "args": ["--validate", "--sourceMap", "-O3", "--noAssert"],
+    "description": "builds an optimized wasm file: -debuginfo -assertions +optimizations +size"
+  },
+  "releasemin": {
+    "default_name": "optimizedmin",
+    "args": ["--validate", "--sourceMap", "-O3z", "--noAssert"],
+    "description": "builds a size-optimized wasm file: -debuginfo -assertions +optimizations -size"
+  }
+}

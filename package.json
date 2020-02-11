@@ -44,7 +44,8 @@
   "types": "index.d.ts",
   "bin": {
     "asc": "bin/asc",
-    "asinit": "bin/asinit"
+    "asinit": "bin/asinit",
+    "asbuild": "bin/asbuild"
   },
   "scripts": {
     "build": "npm run build:bundle && npm run build:dts && npm run build:sdk",
