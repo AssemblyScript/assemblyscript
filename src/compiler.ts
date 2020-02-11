@@ -1443,7 +1443,8 @@ export class Compiler extends DiagnosticEmitter {
     var valueExpr: ExpressionRef;
     var varTypes: NativeType[] | null = null;
     if (type.isManaged) {
-      // 0: this, 1: value, 2: oldValue
+      // Can't use makeReplace here since there's no corresponding flow, so
+      // 0: this, 1: value, 2: oldValue (temp)
       valueExpr = module.block(null, [
         module.if(
           module.binary(nativeValueType == NativeType.I64 ? BinaryOp.NeI64 : BinaryOp.NeI32,
@@ -1457,7 +1458,6 @@ export class Compiler extends DiagnosticEmitter {
             )
           ),
           module.block(null, [
-            // void(__retain(value)), __release(oldValue)
             module.drop(
               this.makeRetain(module.local_get(1, nativeValueType))
             ),
@@ -1470,11 +1470,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       valueExpr = module.local_get(1, nativeValueType);
     }
-    instance.setterRef = module.addFunction(
-      instance.internalSetterName,
-      createType([ nativeThisType, nativeValueType ]),
-      NativeType.None,
-      varTypes,
+    instance.setterRef = module.addFunction(instance.internalSetterName, createType([ nativeThisType, nativeValueType ]), NativeType.None, varTypes,
       module.store(type.byteSize,
         module.local_get(0, nativeThisType),
         valueExpr,
@@ -6727,9 +6723,9 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
   makeReplace(
-    /** Expression of the value to replace. */
+    /** Old value being replaced. */
     oldExpr: ExpressionRef,
-    /** Expression of the value to set. */
+    /** New value being assigned. */
     newExpr: ExpressionRef,
     /** Whether the new value is already retained. */
     alreadyRetained: bool = false,
@@ -6741,11 +6737,10 @@ export class Compiler extends DiagnosticEmitter {
       // (t1=newExpr), __release(oldExpr), t1
       // it is important that `newExpr` evaluates before `oldExpr` is released, hence the local
       let temp = flow.getTempLocal(this.options.usizeType, findUsedLocals(oldExpr));
-      let tempIndex = temp.index;
       let ret = module.block(null, [
-        module.local_set(tempIndex, newExpr),
+        module.local_set(temp.index, newExpr),
         this.makeRelease(oldExpr),
-        module.local_get(tempIndex, nativeSizeType)
+        module.local_get(temp.index, nativeSizeType)
       ], nativeSizeType);
       flow.freeTempLocal(temp);
       return ret;
