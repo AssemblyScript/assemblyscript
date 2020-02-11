@@ -193,10 +193,6 @@ export class Set<T> {
     return values;
   }
 
-  forEach(callback: (key: T, value: T, self: Set<T>) => void): void {
-
-  }
-
   toString(): string {
     return "[object Set]";
   }
