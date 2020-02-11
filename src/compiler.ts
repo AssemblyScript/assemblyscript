@@ -2652,7 +2652,7 @@ export class Compiler extends DiagnosticEmitter {
         type = resolver.resolveType( // reports
           declaration.type,
           flow.actualFunction,
-          flow.contextualTypeArguments
+          makeMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
         if (declaration.initializer) {
@@ -3444,7 +3444,7 @@ export class Compiler extends DiagnosticEmitter {
         let toType = this.resolver.resolveType( // reports
           assert(expression.toType),
           flow.actualFunction,
-          flow.contextualTypeArguments
+          makeMap(flow.contextualTypeArguments)
         );
         if (!toType) return this.module.unreachable();
         return this.compileExpression(expression.expression, toType, inheritedConstraints | Constraints.CONV_EXPLICIT);
@@ -7644,9 +7644,14 @@ export class Compiler extends DiagnosticEmitter {
     // time of implementation, this seemed more useful because dynamic rhs expressions are not
     // possible in AS anyway. also note that the code generated below must preserve side-effects of
     // the LHS expression even when the result is a constant, i.e. return a block dropping `expr`.
+    var flow = this.currentFlow;
     var expr = this.compileExpression(expression.expression, this.options.usizeType);
     var actualType = this.currentType;
-    var expectedType = this.resolver.resolveType(expression.isType, this.currentFlow.actualFunction);
+    var expectedType = this.resolver.resolveType(
+      expression.isType,
+      flow.actualFunction,
+      makeMap(flow.contextualTypeArguments)
+    );
     this.currentType = Type.bool;
     if (!expectedType) return module.unreachable();
 
@@ -7687,7 +7692,6 @@ export class Compiler extends DiagnosticEmitter {
       if (expectedType.isAssignableTo(actualType)) {
         let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
-          let flow = this.currentFlow;
           let temp = flow.getTempLocal(actualType);
           let instanceofInstance = assert(program.instanceofInstance);
           this.compileFunction(instanceofInstance);
@@ -7737,7 +7741,6 @@ export class Compiler extends DiagnosticEmitter {
           // FIXME: the temp local and the if can be removed here once flows
           // perform null checking, which would error earlier when checking
           // uninitialized (thus zero) `var a: A` to be an instance of something.
-          let flow = this.currentFlow;
           let temp = flow.getTempLocal(actualType);
           let instanceofInstance = assert(program.instanceofInstance);
           this.compileFunction(instanceofInstance);
