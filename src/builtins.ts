@@ -109,6 +109,8 @@ export namespace BuiltinNames {
   export const isReference = "~lib/builtins/isReference";
   export const isString = "~lib/builtins/isString";
   export const isArray = "~lib/builtins/isArray";
+  export const isMap = "~lib/builtins/isMap";
+  export const isSet = "~lib/builtins/isSet";
   export const isArrayLike = "~lib/builtins/isArrayLike";
   export const isFunction = "~lib/builtins/isFunction";
   export const isNullable = "~lib/builtins/isNullable";
@@ -673,6 +675,30 @@ export function compileCall(
       compiler.currentType = Type.bool;
       if (!type) return module.unreachable();
       return module.i32(type.signatureReference ? 1 : 0);
+    }
+    case BuiltinNames.isMap: { // isArray<T!>() / isArray<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.unreachable();
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          return module.i32(classReference.prototype.extends(compiler.program.mapPrototype) ? 1 : 0);
+        }
+      }
+      return module.i32(0);
+    }
+    case BuiltinNames.isSet: { // isArray<T!>() / isArray<T?>(value: T) -> bool
+      let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);
+      compiler.currentType = Type.bool;
+      if (!type) return module.unreachable();
+      if (type.is(TypeFlags.REFERENCE)) {
+        let classReference = type.classReference;
+        if (classReference) {
+          return module.i32(classReference.prototype.extends(compiler.program.setPrototype) ? 1 : 0);
+        }
+      }
+      return module.i32(0);
     }
     case BuiltinNames.isNullable: { // isNullable<T!> / isNullable<T?>(value: T) -> bool
       let type = evaluateConstantType(compiler, typeArguments, operands, reportNode);

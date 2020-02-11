@@ -491,3 +491,17 @@ assert(isInteger<ReturnType<() => i32>>());
 assert(isInteger<returnof<() => i32>>());
 assert(isManaged<returnof<() => C>>());
 assert(isManaged<ReturnType<() => C>>());
+
+assert(isMap<Map<i32, i32>>());
+assert(!isMap<Set<i32>>());
+assert(isSet<Set<i32>>());
+assert(!isSet<Map<i32, i32>>());
+
+{
+  let a = new Set<i32>();
+  let b = new Map<i32, i32>();
+  assert(isSet(a));
+  assert(!isSet(b));
+  assert(!isMap(a));
+  assert(isMap(b));
+}

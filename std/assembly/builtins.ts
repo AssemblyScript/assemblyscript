@@ -28,6 +28,14 @@ export declare function isArray<T>(value?: T): bool;
 
 // @ts-ignore: decorator
 @builtin
+export declare function isMap<T>(value?: T): bool;
+
+// @ts-ignore: decorator
+@builtin
+export declare function isSet<T>(value?: T): bool;
+
+// @ts-ignore: decorator
+@builtin
 export declare function isArrayLike<T>(value?: T): bool;
 
 // @ts-ignore: decorator
