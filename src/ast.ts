@@ -1094,6 +1094,11 @@ export class NamedTypeNode extends TypeNode {
   name: TypeName;
   /** Type argument references. */
   typeArguments: TypeNode[] | null;
+
+  get hasTypeArguments(): bool {
+    var typeArguments = this.typeArguments;
+    return typeArguments !== null && typeArguments.length > 0;
+  }
 }
 
 /** Represents a function type. */
