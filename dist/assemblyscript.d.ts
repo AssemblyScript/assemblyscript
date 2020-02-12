@@ -4348,7 +4348,13 @@ declare module "assemblyscript/src/compiler" {
         /** Makes a release call, releasing the expression's value. Changes the current type to void.*/
         makeRelease(expr: ExpressionRef): ExpressionRef;
         /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
-        makeReplace(oldExpr: ExpressionRef, newExpr: ExpressionRef, alreadyRetained?: boolean): ExpressionRef;
+        makeReplace(
+        /** Old value being replaced. */
+        oldExpr: ExpressionRef, 
+        /** New value being assigned. */
+        newExpr: ExpressionRef, 
+        /** Whether the new value is already retained. */
+        alreadyRetained?: boolean): ExpressionRef;
         /** Makes an autorelease call at the end of the specified `flow`. */
         makeAutorelease(
         /** Expression to autorelease. */
