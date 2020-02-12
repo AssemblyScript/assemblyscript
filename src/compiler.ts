@@ -1440,17 +1440,37 @@ export class Compiler extends DiagnosticEmitter {
     var nativeThisType = this.options.nativeSizeType;
     var nativeValueType = type.toNativeType();
     var module = this.module;
-    var valueExpr = module.local_get(1, nativeValueType);
+    var valueExpr: ExpressionRef;
+    var varTypes: NativeType[] | null = null;
     if (type.isManaged) {
-      valueExpr = this.makeReplace(
-        module.load(type.byteSize, false,
-          module.local_get(0, nativeThisType),
-          nativeValueType, instance.memoryOffset
+      // Can't use makeReplace here since there's no corresponding flow, so
+      // 0: this, 1: value, 2: oldValue (temp)
+      valueExpr = module.block(null, [
+        module.if(
+          module.binary(nativeValueType == NativeType.I64 ? BinaryOp.NeI64 : BinaryOp.NeI32,
+            // value != (oldValue = this.field)
+            module.local_get(1, nativeValueType),
+            module.local_tee(2,
+              module.load(type.byteSize, false,
+                module.local_get(0, nativeThisType),
+                nativeValueType, instance.memoryOffset
+              )
+            )
+          ),
+          module.block(null, [
+            module.drop(
+              this.makeRetain(module.local_get(1, nativeValueType))
+            ),
+            this.makeRelease(module.local_get(2, nativeValueType))
+          ])
         ),
-        valueExpr
-      );
+        module.local_get(1, nativeValueType)
+      ], nativeValueType);
+      varTypes = [ nativeValueType ];
+    } else {
+      valueExpr = module.local_get(1, nativeValueType);
     }
-    instance.setterRef = module.addFunction(instance.internalSetterName, createType([ nativeThisType, nativeValueType ]), NativeType.None, null,
+    instance.setterRef = module.addFunction(instance.internalSetterName, createType([ nativeThisType, nativeValueType ]), NativeType.None, varTypes,
       module.store(type.byteSize,
         module.local_get(0, nativeThisType),
         valueExpr,
@@ -2652,7 +2672,7 @@ export class Compiler extends DiagnosticEmitter {
         type = resolver.resolveType( // reports
           declaration.type,
           flow.actualFunction,
-          flow.contextualTypeArguments
+          makeMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
         if (declaration.initializer) {
@@ -3444,7 +3464,7 @@ export class Compiler extends DiagnosticEmitter {
         let toType = this.resolver.resolveType( // reports
           assert(expression.toType),
           flow.actualFunction,
-          flow.contextualTypeArguments
+          makeMap(flow.contextualTypeArguments)
         );
         if (!toType) return this.module.unreachable();
         return this.compileExpression(expression.expression, toType, inheritedConstraints | Constraints.CONV_EXPLICIT);
@@ -6702,7 +6722,14 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
-  makeReplace(oldExpr: ExpressionRef, newExpr: ExpressionRef, alreadyRetained: bool = false): ExpressionRef {
+  makeReplace(
+    /** Old value being replaced. */
+    oldExpr: ExpressionRef,
+    /** New value being assigned. */
+    newExpr: ExpressionRef,
+    /** Whether the new value is already retained. */
+    alreadyRetained: bool = false,
+  ): ExpressionRef {
     var module = this.module;
     var flow = this.currentFlow;
     var nativeSizeType = this.options.nativeSizeType;
@@ -7644,9 +7671,14 @@ export class Compiler extends DiagnosticEmitter {
     // time of implementation, this seemed more useful because dynamic rhs expressions are not
     // possible in AS anyway. also note that the code generated below must preserve side-effects of
     // the LHS expression even when the result is a constant, i.e. return a block dropping `expr`.
+    var flow = this.currentFlow;
     var expr = this.compileExpression(expression.expression, this.options.usizeType);
     var actualType = this.currentType;
-    var expectedType = this.resolver.resolveType(expression.isType, this.currentFlow.actualFunction);
+    var expectedType = this.resolver.resolveType(
+      expression.isType,
+      flow.actualFunction,
+      makeMap(flow.contextualTypeArguments)
+    );
     this.currentType = Type.bool;
     if (!expectedType) return module.unreachable();
 
@@ -7687,7 +7719,6 @@ export class Compiler extends DiagnosticEmitter {
       if (expectedType.isAssignableTo(actualType)) {
         let program = this.program;
         if (!(actualType.isUnmanaged || expectedType.isUnmanaged)) {
-          let flow = this.currentFlow;
           let temp = flow.getTempLocal(actualType);
           let instanceofInstance = assert(program.instanceofInstance);
           this.compileFunction(instanceofInstance);
@@ -7737,7 +7768,6 @@ export class Compiler extends DiagnosticEmitter {
           // FIXME: the temp local and the if can be removed here once flows
           // perform null checking, which would error earlier when checking
           // uninitialized (thus zero) `var a: A` to be an instance of something.
-          let flow = this.currentFlow;
           let temp = flow.getTempLocal(actualType);
           let instanceofInstance = assert(program.instanceofInstance);
           this.compileFunction(instanceofInstance);

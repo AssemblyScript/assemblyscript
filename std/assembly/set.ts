@@ -101,7 +101,7 @@ export class Set<T> {
     return this.find(key, HASH<T>(key)) !== null;
   }
 
-  add(key: T): void {
+  add(key: T): this {
     var hashCode = HASH<T>(key);
     var entry = this.find(key, hashCode); // unmanaged!
     if (!entry) {
@@ -124,6 +124,7 @@ export class Set<T> {
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
     }
+    return this;
   }
 
   @operator("[]=")

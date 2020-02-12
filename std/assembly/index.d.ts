@@ -1535,7 +1535,7 @@ interface RegExp {}
 declare class Map<K,V> {
   readonly size: i32;
   has(key: K): bool;
-  set(key: K, value: V): void;
+  set(key: K, value: V): this;
   get(key: K): V;
   delete(key: K): bool;
   clear(): void;
@@ -1547,7 +1547,7 @@ declare class Map<K,V> {
 declare class Set<K> {
   readonly size: i32;
   has(value: K): bool;
-  add(value: K): void;
+  add(value: K): this;
   delete(value: K): bool;
   clear(): void;
   values(): K[]; // preliminary

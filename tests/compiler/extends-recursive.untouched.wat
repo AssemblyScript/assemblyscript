@@ -21,21 +21,21 @@
   nop
  )
  (func $extends-recursive/Parent#set:child (; 3 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
   local.get $0
   local.get $1
-  local.tee $0
   local.get $0
   i32.load
-  local.tee $1
+  local.tee $2
   i32.ne
   if
-   local.get $0
-   call $~lib/rt/stub/__retain
-   local.set $0
    local.get $1
+   call $~lib/rt/stub/__retain
+   drop
+   local.get $2
    call $~lib/rt/stub/__release
   end
-  local.get $0
+  local.get $1
   i32.store
  )
 )
