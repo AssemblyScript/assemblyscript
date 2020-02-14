@@ -1333,6 +1333,30 @@ export class Module {
     binaryen._BinaryenClearPassArguments();
   }
 
+  getAlwaysInlineMaxSize(): Index {
+    return binaryen._BinaryenGetAlwaysInlineMaxSize();
+  }
+
+  setAlwaysInlineMaxSize(size: Index): void {
+    binaryen._BinaryenSetAlwaysInlineMaxSize(size);
+  }
+
+  getFlexibleInlineMaxSize(): Index {
+    return binaryen._BinaryenGetFlexibleInlineMaxSize();
+  }
+
+  setFlexibleInlineMaxSize(size: Index): void {
+    binaryen._BinaryenSetFlexibleInlineMaxSize(size);
+  }
+
+  getOneCallerInlineMaxSize(): Index {
+    return binaryen._BinaryenGetOneCallerInlineMaxSize();
+  }
+
+  setOneCallerInlineMaxSize(size: Index): void {
+    binaryen._BinaryenSetOneCallerInlineMaxSize(size);
+  }
+
   // meta (module)
 
   getFeatures(): FeatureFlags {

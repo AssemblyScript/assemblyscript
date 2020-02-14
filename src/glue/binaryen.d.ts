@@ -804,5 +804,11 @@ export declare function _BinaryenSetLowMemoryUnused(on: bool): void;
 export declare function _BinaryenGetPassArgument(key: usize): usize;
 export declare function _BinaryenSetPassArgument(key: usize, value: usize): void;
 export declare function _BinaryenClearPassArguments(): void;
+export declare function _BinaryenGetAlwaysInlineMaxSize(): BinaryenIndex;
+export declare function _BinaryenSetAlwaysInlineMaxSize(size: BinaryenIndex): void;
+export declare function _BinaryenGetFlexibleInlineMaxSize(): BinaryenIndex;
+export declare function _BinaryenSetFlexibleInlineMaxSize(size: BinaryenIndex): void;
+export declare function _BinaryenGetOneCallerInlineMaxSize(): BinaryenIndex;
+export declare function _BinaryenSetOneCallerInlineMaxSize(size: BinaryenIndex): void;
 
 export declare function _BinaryenSetAPITracing(on: bool): void;
