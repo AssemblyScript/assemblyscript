@@ -5871,8 +5871,8 @@ export class Compiler extends DiagnosticEmitter {
       let alreadyRetained = this.skippedAutoreleases.has(valueExpr);
       if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
         valueExpr = this.makeReplace(
-          module.local_get(localIndex, type.toNativeType()),
           valueExpr,
+          module.local_get(localIndex, type.toNativeType()),
           alreadyRetained
         );
         if (tee) { // local = REPLACE(local, value)
@@ -5927,8 +5927,8 @@ export class Compiler extends DiagnosticEmitter {
       let alreadyRetained = this.skippedAutoreleases.has(valueExpr);
       valueExpr = module.global_set(global.internalName,
         this.makeReplace(
-          module.global_get(global.internalName, nativeType), // oldRef
-          valueExpr, // newRef
+          valueExpr,
+          module.global_get(global.internalName, nativeType),
           alreadyRetained
         )
       );
@@ -5979,7 +5979,8 @@ export class Compiler extends DiagnosticEmitter {
     var nativeThisType = thisType.toNativeType();
 
     if (fieldType.isManaged && thisType.isManaged) {
-      let tempThis = flow.getTempLocal(thisType);
+      let tempThis = flow.getTempLocal(thisType, findUsedLocals(valueExpr));
+      // set before and read after valueExpr executes below ^
       let alreadyRetained = this.skippedAutoreleases.has(valueExpr);
       let ret: ExpressionRef;
       if (tee) { // ((t1 = this).field = REPLACE(t1.field, t2 = value)), t2
@@ -5990,11 +5991,11 @@ export class Compiler extends DiagnosticEmitter {
           module.store(fieldType.byteSize,
             module.local_tee(tempThis.index, thisExpr),
             this.makeReplace(
-              module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED), // oldRef
+              module.local_tee(tempValue.index, valueExpr),
+              module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
                 module.local_get(tempThis.index, nativeThisType),
                 nativeFieldType, field.memoryOffset
               ),
-              module.local_tee(tempValue.index, valueExpr), // newRef
               alreadyRetained
             ),
             nativeFieldType, field.memoryOffset
@@ -6007,11 +6008,11 @@ export class Compiler extends DiagnosticEmitter {
         ret = module.store(fieldType.byteSize,
           module.local_tee(tempThis.index, thisExpr),
           this.makeReplace(
-            module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED), // oldRef
+            valueExpr,
+            module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
               module.local_get(tempThis.index, nativeThisType),
               nativeFieldType, field.memoryOffset
             ),
-            valueExpr, // newRef
             alreadyRetained
           ),
           nativeFieldType, field.memoryOffset
@@ -6733,10 +6734,10 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
   makeReplace(
-    /** Old value being replaced. */
-    oldExpr: ExpressionRef,
     /** New value being assigned. */
     newExpr: ExpressionRef,
+    /** Old value being replaced. */
+    oldExpr: ExpressionRef,
     /** Whether the new value is already retained. */
     alreadyRetained: bool = false,
   ): ExpressionRef {
