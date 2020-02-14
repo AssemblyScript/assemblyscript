@@ -64,7 +64,7 @@ import {
   Global,
   DecoratorFlags,
   Element,
-  Class
+  ClassPrototype
 } from "./program";
 
 import {
@@ -4969,6 +4969,58 @@ export function compileRTTI(compiler: Compiler): void {
   } else {
     module.addGlobal(BuiltinNames.rtti_base, NativeType.I32, false, module.i32(i64_low(segment.offset)));
   }
+}
+
+/** Compiles a class-specific instanceof helper, checking a ref against all concrete instances. */
+export function compileClassInstanceOf(compiler: Compiler, prototype: ClassPrototype): void {
+  var module = compiler.module;
+  var nativeSizeType = compiler.options.nativeSizeType;
+  var instanceofInstance = assert(prototype.program.instanceofInstance);
+  compiler.compileFunction(instanceofInstance);
+
+  var stmts = new Array<ExpressionRef>();
+
+  // if (!ref) return false
+  stmts.push(
+    module.if(
+      module.unary(
+        nativeSizeType == NativeType.I64
+          ? UnaryOp.EqzI64
+          : UnaryOp.EqzI32,
+        module.local_get(0, nativeSizeType)
+      ),
+      module.return(
+        module.i32(0)
+      )
+    )
+  );
+
+  // if (__instanceof(ref, ID[i])) return true
+  var instances = prototype.instances;
+  if (instances !== null && instances.size) {
+    for (let instance of instances.values()) {
+      stmts.push(
+        module.if(
+          module.call(instanceofInstance.internalName, [
+            module.local_get(0, nativeSizeType),
+            module.i32(instance.id)
+          ], NativeType.I32),
+          module.return(
+            module.i32(1)
+          )
+        )
+      );
+    }
+  }
+
+  // return false
+  stmts.push(
+    module.return(
+      module.i32(0)
+    )
+  );
+
+  module.addFunction(prototype.internalName + "~instanceof", nativeSizeType, NativeType.I32, null, module.flatten(stmts));
 }
 
 // Helpers
