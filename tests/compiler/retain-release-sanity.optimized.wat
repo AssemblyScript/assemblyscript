@@ -1835,7 +1835,7 @@
   if
    i32.const 352
    i32.const 304
-   i32.const 288
+   i32.const 291
    i32.const 20
    call $~lib/builtins/abort
    unreachable
@@ -1890,23 +1890,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.tee $1
-  i32.eqz
-  if
-   i32.const 480
-   local.set $3
-   local.get $1
-   i32.const 480
-   i32.ne
-   if
-    local.get $1
-    call $~lib/rt/pure/__release
-   end
-   i32.const 480
-   local.set $1
-  end
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
@@ -1921,10 +1904,7 @@
   local.tee $2
   i32.eqz
   if
-   local.get $1
-   call $~lib/rt/pure/__release
    i32.const 400
-   local.tee $0
    return
   end
   local.get $2
@@ -1941,8 +1921,6 @@
   local.get $1
   local.get $4
   call $~lib/memory/memory.copy
-  local.get $1
-  call $~lib/rt/pure/__release
   local.get $2
  )
  (func $~lib/string/String.__concat (; 31 ;) (param $0 i32) (param $1 i32) (result i32)

@@ -1730,7 +1730,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 54
+   i32.const 56
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -3096,8 +3096,7 @@
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
-  i32.const 0
-  i32.eq
+  i32.eqz
   if
    i32.const 0
    local.set $1
@@ -3121,8 +3120,7 @@
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
-  i32.const 0
-  i32.eq
+  i32.eqz
   if
    i32.const 0
    local.set $1
@@ -3144,8 +3142,7 @@
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
-  i32.const 0
-  i32.eq
+  i32.eqz
   if
    i32.const 0
    local.set $1
@@ -3167,8 +3164,7 @@
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
-  i32.const 0
-  i32.eq
+  i32.eqz
   if
    i32.const 0
    local.set $1

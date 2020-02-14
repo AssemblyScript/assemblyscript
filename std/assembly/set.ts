@@ -98,7 +98,7 @@ export class Set<T> {
 
   @operator("[]")
   has(key: T): bool {
-    return this.find(key, HASH<T>(key)) !== null;
+    return changetype<usize>(this.find(key, HASH<T>(key))) != 0;
   }
 
   add(key: T): this {

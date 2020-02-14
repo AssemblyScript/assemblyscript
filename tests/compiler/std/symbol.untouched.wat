@@ -466,7 +466,7 @@
   if
    i32.const 112
    i32.const 160
-   i32.const 54
+   i32.const 56
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -645,8 +645,6 @@
   i32.const -2128831035
   local.set $1
   local.get $0
-  i32.const 0
-  i32.ne
   if
    i32.const 0
    local.set $2
@@ -830,14 +828,12 @@
    return
   end
   local.get $0
-  i32.const 0
-  i32.eq
+  i32.eqz
   if (result i32)
    i32.const 1
   else
    local.get $1
-   i32.const 0
-   i32.eq
+   i32.eqz
   end
   if
    i32.const 0
@@ -3040,75 +3036,55 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  (local $7 i32)
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
-  local.get $1
-  i32.const 0
-  i32.eq
-  if
-   i32.const 832
-   local.tee $2
-   local.get $1
-   local.tee $3
-   i32.ne
-   if
-    local.get $2
-    call $~lib/rt/stub/__retain
-    local.set $2
-    local.get $3
-    call $~lib/rt/stub/__release
-   end
-   local.get $2
-   local.set $1
-  end
   local.get $0
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
-  local.set $4
+  local.set $2
   local.get $1
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
-  local.set $5
-  local.get $4
-  local.get $5
+  local.set $3
+  local.get $2
+  local.get $3
   i32.add
-  local.set $6
-  local.get $6
+  local.set $4
+  local.get $4
   i32.const 0
   i32.eq
   if
    i32.const 336
    call $~lib/rt/stub/__retain
-   local.set $2
+   local.set $5
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $5
    return
   end
-  local.get $6
+  local.get $4
   i32.const 1
   call $~lib/rt/stub/__alloc
   call $~lib/rt/stub/__retain
-  local.set $7
-  local.get $7
+  local.set $6
+  local.get $6
   local.get $0
-  local.get $4
+  local.get $2
   call $~lib/memory/memory.copy
-  local.get $7
-  local.get $4
+  local.get $6
+  local.get $2
   i32.add
   local.get $1
-  local.get $5
+  local.get $3
   call $~lib/memory/memory.copy
-  local.get $7
-  local.set $2
+  local.get $6
+  local.set $5
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $5
  )
  (func $~lib/string/String.__concat (; 32 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3387,7 +3363,7 @@
   global.set $std/symbol/key2
   global.get $std/symbol/key1
   i32.const 0
-  i32.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
@@ -3399,7 +3375,7 @@
   end
   global.get $std/symbol/key2
   i32.const 0
-  i32.eq
+  call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0

@@ -372,7 +372,7 @@
   if
    i32.const 112
    i32.const 160
-   i32.const 54
+   i32.const 56
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -1431,10 +1431,6 @@
   i32.shl
   local.tee $3
   local.get $1
-  i32.const 832
-  local.get $1
-  select
-  local.tee $1
   call $~lib/string/String#get:length
   i32.const 1
   i32.shl
@@ -1588,6 +1584,9 @@
   call $~lib/symbol/_Symbol.keyFor
   global.set $std/symbol/key2
   global.get $std/symbol/key1
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
   if
    i32.const 0
    i32.const 64
@@ -1597,6 +1596,9 @@
    unreachable
   end
   global.get $std/symbol/key2
+  i32.const 0
+  call $~lib/string/String.__eq
+  i32.eqz
   if
    i32.const 0
    i32.const 64

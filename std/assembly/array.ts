@@ -16,7 +16,7 @@ function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
     let newCapacity = minSize << alignLog2;
     let newData = __realloc(oldData, newCapacity); // keeps RC
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
-    if (newData !== oldData) { // oldData has been free'd
+    if (changetype<usize>(newData) != changetype<usize>(oldData)) { // oldData has been free'd
       store<usize>(array, newData, offsetof<ArrayBufferView>("buffer"));
       store<usize>(array, newData, offsetof<ArrayBufferView>("dataStart"));
     }
@@ -38,7 +38,10 @@ export class Array<T> extends ArrayBufferView {
   private length_: i32;
 
   static isArray<U>(value: U): bool {
-    return isReference<U>() ? builtin_isArray(value) && value !== null : false;
+    if (isReference<U>()) {
+      return value instanceof Array && changetype<usize>(value) != 0;
+    }
+    return false;
   }
 
   static create<T>(capacity: i32 = 0): Array<T> {
@@ -213,7 +216,7 @@ export class Array<T> extends ArrayBufferView {
 
   concat(other: Array<T>): Array<T> {
     var thisLen = this.length_;
-    var otherLen = select(0, other.length_, other === null);
+    var otherLen = select(0, other.length_, changetype<usize>(other) == 0);
     var outLen = thisLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
     var out = changetype<Array<T>>(__allocArray(outLen, alignof<T>(), idof<Array<T>>())); // retains
@@ -472,11 +475,7 @@ export class Array<T> extends ArrayBufferView {
     if (isBoolean<T>())   return joinBooleanArray(dataStart, length, separator);
     if (isInteger<T>())   return joinIntegerArray<T>(dataStart, length, separator);
     if (isFloat<T>())     return joinFloatArray<T>(dataStart, length, separator);
-
-    if (ASC_SHRINK_LEVEL < 1) {
-      if (isString<T>())  return joinStringArray(dataStart, length, separator);
-    }
-    // For rest objects and arrays use general join routine
+    if (isString<T>())    return joinStringArray(dataStart, length, separator);
     if (isReference<T>()) return joinReferenceArray<T>(dataStart, length, separator);
     ERROR("unspported element type");
     return <string>unreachable();

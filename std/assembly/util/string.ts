@@ -412,14 +412,14 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
   for (let i = 0; i < length; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));
     // @ts-ignore: type
-    if (value !== null) estLen += value.length;
+    if (changetype<usize>(value)) estLen += value.length;
   }
   var offset = 0;
   var sepLen = separator.length;
   var result = __alloc((estLen + sepLen * lastIndex) << 1, idof<string>());
   for (let i = 0; i < lastIndex; ++i) {
     value = load<string>(dataStart + (<usize>i << alignof<string>()));
-    if (value !== null) {
+    if (changetype<usize>(value)) {
       let valueLen = value.length;
       memory.copy(
         result + (<usize>offset << 1),
@@ -438,7 +438,7 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
     }
   }
   value = load<string>(dataStart + (<usize>lastIndex << alignof<string>()));
-  if (value !== null) {
+  if (changetype<usize>(value)) {
     memory.copy(
       result + (<usize>offset << 1),
       changetype<usize>(value),
@@ -449,25 +449,26 @@ export function joinStringArray(dataStart: usize, length: i32, separator: string
 }
 
 export function joinReferenceArray<T>(dataStart: usize, length: i32, separator: string): string {
+  assert(!isString<T>());
   var lastIndex = length - 1;
   if (lastIndex < 0) return "";
   var value: T;
   if (!lastIndex) {
     value = load<T>(dataStart);
     // @ts-ignore: type
-    return value !== null ? value.toString() : "";
+    return value ? value.toString() : "";
   }
   var result = "";
   var sepLen = separator.length;
   for (let i = 0; i < lastIndex; ++i) {
     value = load<T>(dataStart + (<usize>i << alignof<T>()));
     // @ts-ignore: type
-    if (value !== null) result += value.toString();
+    if (value) result += value.toString();
     if (sepLen) result += separator;
   }
   value = load<T>(dataStart + (<usize>lastIndex << alignof<T>()));
   // @ts-ignore: type
-  if (value !== null) result += value.toString();
+  if (value) result += value.toString();
   return result;
 }
 

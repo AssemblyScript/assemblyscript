@@ -67,7 +67,10 @@ var nextId: usize = 12; // Symbol.unscopables + 1
   static readonly unscopables: symbol = changetype<symbol>(11);
 
   static for(key: string): symbol {
-    if (!stringToId) { stringToId = new Map(); idToString = new Map(); }
+    if (!stringToId) {
+      stringToId = new Map();
+      idToString = new Map();
+    }
     else if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));
     var id = nextId++;
     if (!id) unreachable(); // out of ids
@@ -77,7 +80,7 @@ var nextId: usize = 12; // Symbol.unscopables + 1
   }
 
   static keyFor(sym: symbol): string | null {
-    return idToString !== null && idToString.has(changetype<usize>(sym))
+    return idToString != null && idToString.has(changetype<usize>(sym))
       ? idToString.get(changetype<usize>(sym))
       : null;
   }
@@ -98,7 +101,7 @@ var nextId: usize = 12; // Symbol.unscopables + 1
       case 10: { str = "toStringTag"; break; }
       case 11: { str = "unscopables"; break; }
       default: {
-        if (idToString !== null && idToString.has(id)) str = idToString.get(id);
+        if (idToString != null && idToString.has(id)) str = idToString.get(id);
         break;
       }
     }

@@ -63,10 +63,10 @@ function hash64(key: u64): u32 {
   return v;
 }
 
-function hashStr(key: string): u32 {
+function hashStr(key: string | null): u32 {
   var v = FNV_OFFSET;
-  if (key !== null) {
-    for (let i: usize = 0, k: usize = key.length << 1; i < k; ++i) {
+  if (changetype<usize>(key)) {
+    for (let i: usize = 0, k: usize = changetype<string>(key).length << 1; i < k; ++i) {
       v = (v ^ <u32>load<u8>(changetype<usize>(key) + i)) * FNV_PRIME;
     }
   }

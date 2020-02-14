@@ -1564,7 +1564,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 160
+  i32.const 160
+  call $~lib/string/String.__eq
   call $~lib/number/Bool#toString
   i32.const 32
   call $~lib/string/String.__eq

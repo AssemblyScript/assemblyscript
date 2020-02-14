@@ -247,14 +247,12 @@
    return
   end
   local.get $0
-  i32.const 0
-  i32.eq
+  i32.eqz
   if (result i32)
    i32.const 1
   else
    local.get $1
-   i32.const 0
-   i32.eq
+   i32.eqz
   end
   if
    i32.const 0
@@ -4699,7 +4697,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 160
+  i32.const 160
+  call $~lib/string/String.__eq
   call $~lib/number/Bool#toString
   local.tee $6
   i32.const 32

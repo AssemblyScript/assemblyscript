@@ -32,21 +32,23 @@ export abstract class ArrayBufferView {
 @sealed export class ArrayBuffer {
 
   static isView<T>(value: T): bool {
-    if (isNullable<T>()) {
-      if (value === null) return false;
+    if (isReference<T>()) {
+      if (isNullable<T>()) {
+        if (!changetype<usize>(value)) return false;
+      }
+      if (value instanceof Int8Array) return true;
+      if (value instanceof Uint8Array) return true;
+      if (value instanceof Uint8ClampedArray) return true;
+      if (value instanceof Int16Array) return true;
+      if (value instanceof Uint16Array) return true;
+      if (value instanceof Int32Array) return true;
+      if (value instanceof Uint32Array) return true;
+      if (value instanceof Int64Array) return true;
+      if (value instanceof Uint64Array) return true;
+      if (value instanceof Float32Array) return true;
+      if (value instanceof Float64Array) return true;
+      if (value instanceof DataView) return true;
     }
-    if (value instanceof Int8Array) return true;
-    if (value instanceof Uint8Array) return true;
-    if (value instanceof Uint8ClampedArray) return true;
-    if (value instanceof Int16Array) return true;
-    if (value instanceof Uint16Array) return true;
-    if (value instanceof Int32Array) return true;
-    if (value instanceof Uint32Array) return true;
-    if (value instanceof Int64Array) return true;
-    if (value instanceof Uint64Array) return true;
-    if (value instanceof Float32Array) return true;
-    if (value instanceof Float64Array) return true;
-    if (value instanceof DataView) return true;
     return false;
   }
 

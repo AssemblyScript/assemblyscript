@@ -36,8 +36,6 @@
   i32.const -2128831035
   local.set $1
   local.get $0
-  i32.const 0
-  i32.ne
   if
    i32.const 0
    local.set $2

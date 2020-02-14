@@ -3935,8 +3935,8 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
-         // check operator overload
-        if (operator == Token.EQUALS_EQUALS && this.currentType.is(TypeFlags.REFERENCE)) {
+        // check operator overload
+        if (this.currentType.is(TypeFlags.REFERENCE)) {
           let classReference = leftType.classReference;
           if (classReference) {
             let overload = classReference.lookupOverload(OperatorKind.EQ);

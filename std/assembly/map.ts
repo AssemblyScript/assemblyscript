@@ -102,7 +102,7 @@ export class Map<K,V> {
   }
 
   has(key: K): bool {
-    return this.find(key, HASH<K>(key)) !== null;
+    return changetype<usize>(this.find(key, HASH<K>(key))) != 0;
   }
 
   @operator("[]")
