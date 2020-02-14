@@ -1788,15 +1788,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -2023,41 +2023,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $13
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $13
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $12
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $12
    call $~lib/rt/pure/__retain
    local.set $12
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $12
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $13
+  local.get $5
+  local.tee $9
+  local.get $13
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -4353,15 +4353,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -4577,41 +4577,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $13
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $13
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $12
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $12
    call $~lib/rt/pure/__retain
    local.set $12
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $12
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $13
+  local.get $5
+  local.tee $9
+  local.get $13
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -5327,15 +5327,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -5577,41 +5577,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $13
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $13
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $12
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $12
    call $~lib/rt/pure/__retain
    local.set $12
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $12
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $13
+  local.get $5
+  local.tee $9
+  local.get $13
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -6339,15 +6339,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -6563,41 +6563,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $13
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $13
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $12
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $12
    call $~lib/rt/pure/__retain
    local.set $12
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $12
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $13
+  local.get $5
+  local.tee $9
+  local.get $13
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -7313,15 +7313,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -7575,41 +7575,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $13
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $13
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $12
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $12
    call $~lib/rt/pure/__retain
    local.set $12
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $12
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $13
+  local.get $5
+  local.tee $9
+  local.get $13
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -8309,15 +8309,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -8529,41 +8529,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $13
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $13
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $12
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $12
    call $~lib/rt/pure/__retain
    local.set $12
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $12
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $13
+  local.get $5
+  local.tee $9
+  local.get $13
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -9263,15 +9263,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 64
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -9572,41 +9572,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $14
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $14
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $13
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $13
    call $~lib/rt/pure/__retain
    local.set $13
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $13
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $14
+  local.get $5
+  local.tee $9
+  local.get $14
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -10309,15 +10309,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 64
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -10530,41 +10530,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $14
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $14
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $13
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $13
    call $~lib/rt/pure/__retain
    local.set $13
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $13
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $14
+  local.get $5
+  local.tee $9
+  local.get $14
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -11267,15 +11267,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 32
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -11490,41 +11490,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $14
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $14
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $13
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $13
    call $~lib/rt/pure/__retain
    local.set $13
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $13
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $14
+  local.get $5
+  local.tee $9
+  local.get $14
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -12229,15 +12229,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 64
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -12452,41 +12452,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $14
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/pure/__retain
-   local.set $11
-   local.get $14
-   call $~lib/rt/pure/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $13
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $13
    call $~lib/rt/pure/__retain
    local.set $13
-   local.get $11
+   local.get $9
    call $~lib/rt/pure/__release
   end
   local.get $13
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $14
+  local.get $5
+  local.tee $9
+  local.get $14
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/pure/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/pure/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
