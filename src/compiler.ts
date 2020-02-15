@@ -9,6 +9,7 @@ import {
   compileVisitGlobals,
   compileVisitMembers,
   compileRTTI,
+  compileClassInstanceOf,
 } from "./builtins";
 
 import {
@@ -159,6 +160,8 @@ import {
   StringLiteralExpression,
   UnaryPostfixExpression,
   UnaryPrefixExpression,
+
+  NamedTypeNode,
 
   nodeIsConstantValue,
   findDecorator,
@@ -335,6 +338,8 @@ export class Compiler extends DiagnosticEmitter {
   inlineStack: Function[] = [];
   /** Lazily compiled library functions. */
   lazyLibraryFunctions: Set<Function> = new Set();
+  /** Pending class-specific instanceof helpers. */
+  pendingClassInstanceOf: Set<ClassPrototype> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -454,6 +459,11 @@ export class Compiler extends DiagnosticEmitter {
         this.compileFunction(unchecked(functionsToCompile[i]), true);
       }
     } while (lazyLibraryFunctions.size);
+
+    // compile pending class-specific instanceof helpers
+    for (let prototype of this.pendingClassInstanceOf.values()) {
+      compileClassInstanceOf(this, prototype);
+    }
 
     // finalize runtime features
     module.removeGlobal(BuiltinNames.rtti_base);
@@ -5861,8 +5871,8 @@ export class Compiler extends DiagnosticEmitter {
       let alreadyRetained = this.skippedAutoreleases.has(valueExpr);
       if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
         valueExpr = this.makeReplace(
-          module.local_get(localIndex, type.toNativeType()),
           valueExpr,
+          module.local_get(localIndex, type.toNativeType()),
           alreadyRetained
         );
         if (tee) { // local = REPLACE(local, value)
@@ -5917,8 +5927,8 @@ export class Compiler extends DiagnosticEmitter {
       let alreadyRetained = this.skippedAutoreleases.has(valueExpr);
       valueExpr = module.global_set(global.internalName,
         this.makeReplace(
-          module.global_get(global.internalName, nativeType), // oldRef
-          valueExpr, // newRef
+          valueExpr,
+          module.global_get(global.internalName, nativeType),
           alreadyRetained
         )
       );
@@ -5969,7 +5979,8 @@ export class Compiler extends DiagnosticEmitter {
     var nativeThisType = thisType.toNativeType();
 
     if (fieldType.isManaged && thisType.isManaged) {
-      let tempThis = flow.getTempLocal(thisType);
+      let tempThis = flow.getTempLocal(thisType, findUsedLocals(valueExpr));
+      // set before and read after valueExpr executes below ^
       let alreadyRetained = this.skippedAutoreleases.has(valueExpr);
       let ret: ExpressionRef;
       if (tee) { // ((t1 = this).field = REPLACE(t1.field, t2 = value)), t2
@@ -5980,11 +5991,11 @@ export class Compiler extends DiagnosticEmitter {
           module.store(fieldType.byteSize,
             module.local_tee(tempThis.index, thisExpr),
             this.makeReplace(
-              module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED), // oldRef
+              module.local_tee(tempValue.index, valueExpr),
+              module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
                 module.local_get(tempThis.index, nativeThisType),
                 nativeFieldType, field.memoryOffset
               ),
-              module.local_tee(tempValue.index, valueExpr), // newRef
               alreadyRetained
             ),
             nativeFieldType, field.memoryOffset
@@ -5997,11 +6008,11 @@ export class Compiler extends DiagnosticEmitter {
         ret = module.store(fieldType.byteSize,
           module.local_tee(tempThis.index, thisExpr),
           this.makeReplace(
-            module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED), // oldRef
+            valueExpr,
+            module.load(fieldType.byteSize, fieldType.is(TypeFlags.SIGNED),
               module.local_get(tempThis.index, nativeThisType),
               nativeFieldType, field.memoryOffset
             ),
-            valueExpr, // newRef
             alreadyRetained
           ),
           nativeFieldType, field.memoryOffset
@@ -6723,10 +6734,10 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
   makeReplace(
-    /** Old value being replaced. */
-    oldExpr: ExpressionRef,
     /** New value being assigned. */
     newExpr: ExpressionRef,
+    /** Old value being replaced. */
+    oldExpr: ExpressionRef,
     /** Whether the new value is already retained. */
     alreadyRetained: bool = false,
   ): ExpressionRef {
@@ -7666,21 +7677,42 @@ export class Compiler extends DiagnosticEmitter {
     contextualType: Type,
     constraints: Constraints
   ): ExpressionRef {
-    var module = this.module;
-    // NOTE that this differs from TypeScript in that the rhs is a type, not an expression. at the
-    // time of implementation, this seemed more useful because dynamic rhs expressions are not
-    // possible in AS anyway. also note that the code generated below must preserve side-effects of
-    // the LHS expression even when the result is a constant, i.e. return a block dropping `expr`.
     var flow = this.currentFlow;
-    var expr = this.compileExpression(expression.expression, this.options.usizeType);
-    var actualType = this.currentType;
+    var isType = expression.isType;
+
+    // Mimic `instanceof CLASS`
+    if (isType.kind == NodeKind.NAMEDTYPE) {
+      let namedType = <NamedTypeNode>isType;
+      if (!(namedType.isNullable || namedType.hasTypeArguments)) {
+        let element = this.resolver.resolveTypeName(namedType.name, flow.actualFunction, ReportMode.SWALLOW);
+        if (element !== null && element.kind == ElementKind.CLASS_PROTOTYPE) {
+          let prototype = <ClassPrototype>element;
+          if (prototype.is(CommonFlags.GENERIC)) {
+            return this.makeInstanceofClass(expression, prototype);
+          }
+        }
+      }
+    }
+
+    // Fall back to `instanceof TYPE`
     var expectedType = this.resolver.resolveType(
       expression.isType,
       flow.actualFunction,
       makeMap(flow.contextualTypeArguments)
     );
+    if (!expectedType) {
+      this.currentType = Type.bool;
+      return this.module.unreachable();
+    }
+    return this.makeInstanceofType(expression, expectedType);
+  }
+
+  private makeInstanceofType(expression: InstanceOfExpression, expectedType: Type): ExpressionRef {
+    var module = this.module;
+    var flow = this.currentFlow;
+    var expr = this.compileExpression(expression.expression, expectedType);
+    var actualType = this.currentType;
     this.currentType = Type.bool;
-    if (!expectedType) return module.unreachable();
 
     // instanceof <basic> - must be exact
     if (!expectedType.is(TypeFlags.REFERENCE)) {
@@ -7792,6 +7824,53 @@ export class Compiler extends DiagnosticEmitter {
             expression.range, "instanceof", actualType.toString(), expectedType.toString()
           );
         }
+      }
+    }
+
+    // false
+    return module.block(null, [
+      module.drop(expr),
+      module.i32(0)
+    ], NativeType.I32);
+  }
+
+  private makeInstanceofClass(expression: InstanceOfExpression, prototype: ClassPrototype): ExpressionRef {
+    var module = this.module;
+    var expr = this.compileExpression(expression.expression, Type.auto);
+    var actualType = this.currentType;
+    var nativeSizeType = actualType.toNativeType();
+
+    this.currentType = Type.bool;
+
+    // exclusively interested in class references here
+    var classReference = actualType.classReference;
+    if (actualType.is(TypeFlags.REFERENCE) && classReference !== null) {
+
+      // static check
+      if (classReference.extends(prototype)) {
+
+        // <nullable> instanceof <PROTOTYPE> - LHS must be != 0
+        if (actualType.is(TypeFlags.NULLABLE)) {
+          return module.binary(
+            nativeSizeType == NativeType.I64
+              ? BinaryOp.NeI64
+              : BinaryOp.NeI32,
+            expr,
+            this.makeZero(actualType)
+          );
+
+        // <nonNullable> is just `true`
+        } else {
+          return module.block(null, [
+            module.drop(expr),
+            module.i32(1)
+          ], NativeType.I32);
+        }
+
+      // dynamic check against all possible concrete ids
+      } else if (prototype.extends(classReference.prototype)) {
+        this.pendingClassInstanceOf.add(prototype);
+        return module.call(prototype.internalName + "~instanceof", [ expr ], NativeType.I32);
       }
     }
 
