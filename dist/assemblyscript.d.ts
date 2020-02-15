@@ -1048,6 +1048,7 @@ declare module "assemblyscript/src/ast" {
         name: TypeName;
         /** Type argument references. */
         typeArguments: TypeNode[] | null;
+        get hasTypeArguments(): boolean;
     }
     /** Represents a function type. */
     export class FunctionTypeNode extends TypeNode {
@@ -2247,6 +2248,12 @@ declare module "assemblyscript/src/module" {
         getPassArgument(key: string): string | null;
         setPassArgument(key: string, value: string | null): void;
         clearPassArguments(): void;
+        getAlwaysInlineMaxSize(): Index;
+        setAlwaysInlineMaxSize(size: Index): void;
+        getFlexibleInlineMaxSize(): Index;
+        setFlexibleInlineMaxSize(size: Index): void;
+        getOneCallerInlineMaxSize(): Index;
+        setOneCallerInlineMaxSize(size: Index): void;
         getFeatures(): FeatureFlags;
         setFeatures(featureFlags: FeatureFlags): void;
         optimize(func?: FunctionRef): void;
@@ -4062,7 +4069,7 @@ declare module "assemblyscript/src/compiler" {
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
     import { Module, MemorySegment, ExpressionRef, NativeType, GlobalRef } from "assemblyscript/src/module";
     import { Feature, Target } from "assemblyscript/src/common";
-    import { Program, Class, Element, Enum, Field, Function, Global, Property, VariableLikeElement, File } from "assemblyscript/src/program";
+    import { Program, ClassPrototype, Class, Element, Enum, Field, Function, Global, Property, VariableLikeElement, File } from "assemblyscript/src/program";
     import { Flow } from "assemblyscript/src/flow";
     import { Resolver } from "assemblyscript/src/resolver";
     import { Node, Range, Statement, Expression } from "assemblyscript/src/ast";
@@ -4191,6 +4198,8 @@ declare module "assemblyscript/src/compiler" {
         inlineStack: Function[];
         /** Lazily compiled library functions. */
         lazyLibraryFunctions: Set<Function>;
+        /** Pending class-specific instanceof helpers. */
+        pendingClassInstanceOf: Set<ClassPrototype>;
         /** Compiles a {@link Program} to a {@link Module} using the specified options. */
         static compile(program: Program): Module;
         /** Constructs a new compiler for a {@link Program} using the specified options. */
@@ -4349,10 +4358,10 @@ declare module "assemblyscript/src/compiler" {
         makeRelease(expr: ExpressionRef): ExpressionRef;
         /** Makes a replace, retaining the new expression's value and releasing the old expression's value, in this order. */
         makeReplace(
-        /** Old value being replaced. */
-        oldExpr: ExpressionRef, 
         /** New value being assigned. */
         newExpr: ExpressionRef, 
+        /** Old value being replaced. */
+        oldExpr: ExpressionRef, 
         /** Whether the new value is already retained. */
         alreadyRetained?: boolean): ExpressionRef;
         /** Makes an autorelease call at the end of the specified `flow`. */
@@ -4429,6 +4438,8 @@ declare module "assemblyscript/src/compiler" {
         private maybeCompileEnclosingSource;
         private compileIdentifierExpression;
         private compileInstanceOfExpression;
+        private makeInstanceofType;
+        private makeInstanceofClass;
         private compileLiteralExpression;
         private compileStringLiteral;
         private compileArrayLiteral;
@@ -4505,7 +4516,7 @@ declare module "assemblyscript/src/builtins" {
     import { Expression, CallExpression } from "assemblyscript/src/ast";
     import { Type } from "assemblyscript/src/types";
     import { ExpressionRef } from "assemblyscript/src/module";
-    import { FunctionPrototype } from "assemblyscript/src/program";
+    import { FunctionPrototype, ClassPrototype } from "assemblyscript/src/program";
     /** Internal names of various compiler built-ins. */
     export namespace BuiltinNames {
         const start = "~start";
@@ -4971,6 +4982,8 @@ declare module "assemblyscript/src/builtins" {
     export function compileVisitMembers(compiler: Compiler): void;
     /** Compiles runtime type information for use by stdlib. */
     export function compileRTTI(compiler: Compiler): void;
+    /** Compiles a class-specific instanceof helper, checking a ref against all concrete instances. */
+    export function compileClassInstanceOf(compiler: Compiler, prototype: ClassPrototype): void;
 }
 declare module "assemblyscript/src/definitions" {
     /**
