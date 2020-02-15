@@ -2959,6 +2959,37 @@ export class Function extends TypedElement {
       }
     }
   }
+
+  /** Gets the value type of an unary operator overload. */
+  get unaryOverloadValueType(): Type {
+    if (this.is(CommonFlags.INSTANCE)) {
+      return assert(this.signature.thisType);
+    }
+    var parameterTypes = this.signature.parameterTypes;
+    assert(parameterTypes.length >= 1);
+    return parameterTypes[0];
+  }
+
+  /** Gets the left type of a binary operator overload. */
+  get binaryOverloadLeftType(): Type {
+    if (this.is(CommonFlags.INSTANCE)) {
+      return assert(this.signature.thisType);
+    }
+    var parameterTypes = this.signature.parameterTypes;
+    assert(parameterTypes.length >= 2);
+    return parameterTypes[0];
+  }
+
+  /** Gets the right type of a binary operator overload. */
+  get binaryOverloadRightType(): Type {
+    var parameterTypes = this.signature.parameterTypes;
+    if (this.is(CommonFlags.INSTANCE)) {
+      assert(parameterTypes.length >= 1);
+      return parameterTypes[0];
+    }
+    assert(parameterTypes.length >= 2);
+    return parameterTypes[1];
+  }
 }
 
 var nextFunctionTarget = 0;
