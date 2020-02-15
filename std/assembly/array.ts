@@ -9,18 +9,18 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "
 
 /** Ensures that the given array has _at least_ the specified backing size. */
 function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
-  var oldCapacity = changetype<ArrayBufferView>(array).byteLength;
+  var oldCapacity = changetype<ArrayBufferView>(array).dataLength;
   if (minSize > <usize>oldCapacity >>> alignLog2) {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
-    let oldData = changetype<usize>(changetype<ArrayBufferView>(array).buffer);
+    let oldData = changetype<usize>(changetype<ArrayBufferView>(array).data);
     let newCapacity = minSize << alignLog2;
     let newData = __realloc(oldData, newCapacity); // keeps RC
     memory.fill(newData + oldCapacity, 0, newCapacity - oldCapacity);
     if (newData !== oldData) { // oldData has been free'd
-      store<usize>(array, newData, offsetof<ArrayBufferView>("buffer"));
+      store<usize>(array, newData, offsetof<ArrayBufferView>("data"));
       store<usize>(array, newData, offsetof<ArrayBufferView>("dataStart"));
     }
-    store<u32>(array, newCapacity, offsetof<ArrayBufferView>("byteLength"));
+    store<i32>(array, newCapacity, offsetof<ArrayBufferView>("dataLength"));
   }
 }
 
@@ -49,8 +49,13 @@ export class Array<T> extends ArrayBufferView {
   }
 
   constructor(length: i32 = 0) {
-    super(length, alignof<T>());
+    super();
+    super.alloc(length, alignof<T>());
     this.length_ = length;
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
   }
 
   get length(): i32 {
@@ -498,6 +503,6 @@ export class Array<T> extends ArrayBufferView {
         cur += sizeof<usize>();
       }
     }
-    // automatically visits ArrayBufferView (.buffer) next
+    // automatically visits ArrayBufferView (.data) next
   }
 }

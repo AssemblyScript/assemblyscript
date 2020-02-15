@@ -1668,9 +1668,9 @@ export class Compiler extends DiagnosticEmitter {
 
     var bufferAddress32 = i64_low(bufferSegment.offset) + runtimeHeaderSize;
     assert(!program.options.isWasm64); // TODO
-    assert(arrayInstance.writeField("buffer", bufferAddress32, buf, runtimeHeaderSize));
+    assert(arrayInstance.writeField("data", bufferAddress32, buf, runtimeHeaderSize));
     assert(arrayInstance.writeField("dataStart", bufferAddress32, buf, runtimeHeaderSize));
-    assert(arrayInstance.writeField("byteLength", bufferLength, buf, runtimeHeaderSize));
+    assert(arrayInstance.writeField("dataLength", bufferLength, buf, runtimeHeaderSize));
     assert(arrayInstance.writeField("length_", arrayLength, buf, runtimeHeaderSize));
 
     return this.addMemorySegment(buf);

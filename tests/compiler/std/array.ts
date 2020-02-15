@@ -1,3 +1,4 @@
+import { ArrayBufferView } from "arraybuffer";
 import { Array } from "array";
 import { COMPARATOR } from "util/sort";
 
@@ -5,7 +6,7 @@ import { COMPARATOR } from "util/sort";
 function internalCapacity<T>(array: Array<T>): i32 {
   // the memory region used by the backing buffer might still be larger in that the ArrayBuffer
   // pre-allocates a power of 2 sized buffer itself and reuses it as long as it isn't exceeded.
-  var buffer: ArrayBuffer = array.buffer;
+  var buffer = changetype<ArrayBufferView>(array).data;
   return buffer.byteLength >> alignof<T>();
 }
 

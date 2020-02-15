@@ -3,6 +3,7 @@ import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_NOTIMPLEMENTED } from "./util/err
 import { joinIntegerArray, joinFloatArray } from "./util/string";
 import { idof } from "./builtins";
 import { ArrayBufferView } from "./arraybuffer";
+import { BLOCK_MAXSIZE } from "./rt/common";
 
 export class Int8Array extends ArrayBufferView {
   [key: number]: i8;
@@ -12,16 +13,29 @@ export class Int8Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
 
   constructor(length: i32) {
-    super(length, alignof<i8>());
+    super();
+    super.alloc(length, alignof<i8>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength;
+    return this.dataLength;
   }
 
   @operator("[]")
   private __get(index: i32): i8 {
-    if (<u32>index >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<i8>(this.dataStart + <usize>index);
   }
 
@@ -32,7 +46,7 @@ export class Int8Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: native<i8>): void {
-    if (<u32>index >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i8>(this.dataStart + <usize>index, value);
   }
 
@@ -140,16 +154,29 @@ export class Uint8Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   constructor(length: i32) {
-    super(length, alignof<u8>());
+    super();
+    super.alloc(length, alignof<u8>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength;
+    return this.dataLength;
   }
 
   @operator("[]")
   private __get(index: i32): u8 {
-    if (<u32>index >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u8>(this.dataStart + <usize>index);
   }
 
@@ -160,7 +187,7 @@ export class Uint8Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: native<u8>): void {
-    if (<u32>index >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u8>(this.dataStart + <usize>index, value);
   }
 
@@ -268,16 +295,29 @@ export class Uint8ClampedArray extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
 
   constructor(length: i32) {
-    super(length, alignof<u8>());
+    super();
+    super.alloc(length, alignof<u8>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength;
+    return this.dataLength;
   }
 
   @operator("[]")
   private __get(index: i32): u8 {
-    if (<u32>index >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u8>(this.dataStart + <usize>index);
   }
 
@@ -288,7 +328,7 @@ export class Uint8ClampedArray extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: native<u8>): void {
-    if (<u32>index >= <u32>this.byteLength) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u8>(this.dataStart + <usize>index, ~(<i32>value >> 31) & (((255 - value) >> 31) | value));
   }
 
@@ -396,16 +436,29 @@ export class Int16Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
 
   constructor(length: i32) {
-    super(length, alignof<i16>());
+    super();
+    super.alloc(length, alignof<i16>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength >>> alignof<i16>();
+    return this.dataLength >>> alignof<i16>();
   }
 
   @operator("[]")
   private __get(index: i32): i16 {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<i16>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i16>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<i16>(this.dataStart + (<usize>index << alignof<i16>()));
   }
 
@@ -416,7 +469,7 @@ export class Int16Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: native<i16>): void {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<i16>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i16>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i16>(this.dataStart + (<usize>index << alignof<i16>()), value);
   }
 
@@ -524,16 +577,29 @@ export class Uint16Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
 
   constructor(length: i32) {
-    super(length, alignof<u16>());
+    super();
+    super.alloc(length, alignof<u16>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength >>> alignof<u16>();
+    return this.dataLength >>> alignof<u16>();
   }
 
   @operator("[]")
   private __get(index: i32): u16 {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<u16>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u16>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u16>(this.dataStart + (<usize>index << alignof<u16>()));
   }
 
@@ -544,7 +610,7 @@ export class Uint16Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: native<u16>): void {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<u16>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u16>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u16>(this.dataStart + (<usize>index << alignof<u16>()), value);
   }
 
@@ -652,16 +718,29 @@ export class Int32Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
 
   constructor(length: i32) {
-    super(length, alignof<i32>());
+    super();
+    super.alloc(length, alignof<i32>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength >>> alignof<i32>();
+    return this.dataLength >>> alignof<i32>();
   }
 
   @operator("[]")
   private __get(index: i32): i32 {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<i32>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<i32>(this.dataStart + (<usize>index << alignof<i32>()));
   }
 
@@ -672,7 +751,7 @@ export class Int32Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: i32): void {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<i32>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i32>(this.dataStart + (<usize>index << alignof<i32>()), value);
   }
 
@@ -780,16 +859,29 @@ export class Uint32Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
 
   constructor(length: i32) {
-    super(length, alignof<u32>());
+    super();
+    super.alloc(length, alignof<u32>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength >>> alignof<u32>();
+    return this.dataLength >>> alignof<u32>();
   }
 
   @operator("[]")
   private __get(index: i32): u32 {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<u32>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u32>(this.dataStart + (<usize>index << alignof<u32>()));
   }
 
@@ -800,7 +892,7 @@ export class Uint32Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: u32): void {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<u32>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u32>(this.dataStart + (<usize>index << alignof<u32>()), value);
   }
 
@@ -908,16 +1000,29 @@ export class Int64Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
 
   constructor(length: i32) {
-    super(length, alignof<i64>());
+    super();
+    super.alloc(length, alignof<i64>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength >>> alignof<i64>();
+    return this.dataLength >>> alignof<i64>();
   }
 
   @operator("[]")
   private __get(index: i32): i64 {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<i64>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<i64>(this.dataStart + (<usize>index << alignof<i64>()));
   }
 
@@ -928,7 +1033,7 @@ export class Int64Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: i64): void {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<i64>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<i64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<i64>(this.dataStart + (<usize>index << alignof<i64>()), value);
   }
 
@@ -1036,16 +1141,29 @@ export class Uint64Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
 
   constructor(length: i32) {
-    super(length, alignof<u64>());
+    super();
+    super.alloc(length, alignof<u64>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength >>> alignof<u64>();
+    return this.dataLength >>> alignof<u64>();
   }
 
   @operator("[]")
   private __get(index: i32): u64 {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<u64>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<u64>(this.dataStart + (<usize>index << alignof<u64>()));
   }
 
@@ -1056,7 +1174,7 @@ export class Uint64Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: u64): void {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<u64>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<u64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<u64>(this.dataStart + (<usize>index << alignof<u64>()), value);
   }
 
@@ -1164,16 +1282,29 @@ export class Float32Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
 
   constructor(length: i32) {
-    super(length, alignof<f32>());
+    super();
+    super.alloc(length, alignof<f32>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength >>> alignof<f32>();
+    return this.dataLength >>> alignof<f32>();
   }
 
   @operator("[]")
   private __get(index: i32): f32 {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<f32>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<f32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<f32>(this.dataStart + (<usize>index << alignof<f32>()));
   }
 
@@ -1184,7 +1315,7 @@ export class Float32Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: f32): void {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<f32>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<f32>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<f32>(this.dataStart + (<usize>index << alignof<f32>()), value);
   }
 
@@ -1292,16 +1423,29 @@ export class Float64Array extends ArrayBufferView {
   static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
 
   constructor(length: i32) {
-    super(length, alignof<f64>());
+    super();
+    super.alloc(length, alignof<f64>());
+  }
+
+  get buffer(): ArrayBuffer {
+    return this.data;
+  }
+
+  get byteOffset(): i32 {
+    return <i32>(this.dataStart - changetype<usize>(this.data));
+  }
+
+  get byteLength(): i32 {
+    return this.dataLength;
   }
 
   get length(): i32 {
-    return this.byteLength >>> alignof<f64>();
+    return this.dataLength >>> alignof<f64>();
   }
 
   @operator("[]")
   private __get(index: i32): f64 {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<f64>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<f64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     return load<f64>(this.dataStart + (<usize>index << alignof<f64>()));
   }
 
@@ -1312,7 +1456,7 @@ export class Float64Array extends ArrayBufferView {
 
   @operator("[]=")
   private __set(index: i32, value: f64): void {
-    if (<u32>index >= <u32>this.byteLength >>> alignof<f64>()) throw new RangeError(E_INDEXOUTOFRANGE);
+    if (<u32>index >= <u32>this.dataLength >>> alignof<f64>()) throw new RangeError(E_INDEXOUTOFRANGE);
     store<f64>(this.dataStart + (<usize>index << alignof<f64>()), value);
   }
 
@@ -1489,9 +1633,9 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   end   = max(end, begin);
 
   var out = __alloc(offsetof<TArray>(), idof<TArray>());
-  store<usize>(out, __retain(changetype<usize>(array.buffer)), offsetof<TArray>("buffer"));
+  store<usize>(out, __retain(changetype<usize>(array.data)), offsetof<TArray>("data"));
   store<usize>(out, array.dataStart + (<usize>begin << alignof<T>()), offsetof<TArray>("dataStart"));
-  store<u32>(out, (end - begin) << alignof<T>(), offsetof<TArray>("byteLength"));
+  store<i32>(out, (end - begin) << alignof<T>(), offsetof<TArray>("dataLength"));
   return changetype<TArray>(out); // retains
 }
 
@@ -1566,9 +1710,9 @@ function MAP<TArray extends ArrayBufferView, T>(
       fn(load<T>(dataStart + (<usize>i << alignof<T>())), i, array)
     );
   }
-  store<usize>(out, __retain(buffer), offsetof<TArray>("buffer"));
+  store<usize>(out, __retain(buffer), offsetof<TArray>("data"));
   store<usize>(out, buffer, offsetof<TArray>("dataStart"));
-  store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
+  store<i32>(out, byteLength, offsetof<TArray>("dataLength"));
   return changetype<TArray>(out); // retains
 }
 
@@ -1595,9 +1739,9 @@ function FILTER<TArray extends ArrayBufferView, T>(
   // shrink output buffer
   var byteLength = j << alignof<T>();
   var data = __realloc(buffer, byteLength);
-  store<usize>(out, __retain(data), offsetof<TArray>("buffer"));
-  store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
+  store<usize>(out, __retain(data), offsetof<TArray>("data"));
   store<usize>(out, data, offsetof<TArray>("dataStart"));
+  store<i32>(out, byteLength, offsetof<TArray>("dataLength"));
   return changetype<TArray>(out); // retains
 }
 
@@ -1756,9 +1900,9 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
     }
   }
   var out = __alloc(offsetof<TArray>(), idof<TArray>());
-  store<usize>(out, __retain(changetype<usize>(buffer)), offsetof<TArray>("buffer"));
-  store<u32>(out, byteLength, offsetof<TArray>("byteLength"));
+  store<usize>(out, __retain(changetype<usize>(buffer)), offsetof<TArray>("data"));
   store<usize>(out, changetype<usize>(buffer) + <usize>byteOffset, offsetof<TArray>("dataStart"));
+  store<i32>(out, byteLength, offsetof<TArray>("dataLength"));
   return changetype<TArray>(out); // retains
 }
 
@@ -1780,7 +1924,7 @@ function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, 
     memory.copy(
       target.dataStart + (<usize>offset << alignof<T>()),
       source.dataStart,
-      source.byteLength
+      source.dataLength
     );
   } else {
     let targetDataStart = target.dataStart + (<usize>offset << alignof<T>());

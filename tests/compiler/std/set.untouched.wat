@@ -2,8 +2,8 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
@@ -1741,7 +1741,7 @@
   if
    i32.const 192
    i32.const 240
-   i32.const 54
+   i32.const 45
    i32.const 42
    call $~lib/builtins/abort
    unreachable
@@ -2172,35 +2172,7 @@
   local.get $0
   i32.load offset=20
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 29 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  local.get $1
-  i32.const 1073741808
-  local.get $2
-  i32.shr_u
-  i32.gt_u
-  if
-   i32.const 192
-   i32.const 240
-   i32.const 23
-   i32.const 56
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.get $2
-  i32.shl
-  local.tee $1
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.set $3
-  local.get $3
-  i32.const 0
-  local.get $1
-  call $~lib/memory/memory.fill
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 29 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -2219,6 +2191,37 @@
   local.get $0
   i32.const 0
   i32.store offset=8
+  local.get $0
+ )
+ (func $~lib/arraybuffer/ArrayBufferView#alloc (; 30 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $1
+  i32.const 1073741808
+  local.get $2
+  i32.shr_u
+  i32.gt_u
+  if
+   i32.const 192
+   i32.const 240
+   i32.const 14
+   i32.const 56
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  local.get $2
+  i32.shl
+  local.tee $1
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.set $3
+  local.get $3
+  i32.const 0
+  local.get $1
+  call $~lib/memory/memory.fill
   local.get $0
   local.tee $4
   local.get $3
@@ -2242,9 +2245,8 @@
   local.get $0
   local.get $1
   i32.store offset=8
-  local.get $0
  )
- (func $~lib/array/Array<i8>#constructor (; 30 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#constructor (; 31 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -2254,8 +2256,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -2263,10 +2263,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/rt/tlsf/checkUsedBlock (; 31 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/checkUsedBlock (; 32 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 16
@@ -2312,7 +2316,7 @@
   end
   local.get $1
  )
- (func $~lib/util/memory/memcpy (; 32 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 33 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3336,7 +3340,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 33 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 34 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3556,7 +3560,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/freeBlock (; 34 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 35 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -3572,7 +3576,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/tlsf/reallocateBlock (; 35 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/reallocateBlock (; 36 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3691,7 +3695,7 @@
   end
   local.get $8
  )
- (func $~lib/rt/tlsf/__realloc (; 36 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__realloc (; 37 ;) (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   call $~lib/rt/tlsf/checkUsedBlock
@@ -3700,7 +3704,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/array/ensureSize (; 37 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureSize (; 38 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3762,7 +3766,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i8>#__unchecked_set (; 38 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i8>#__unchecked_set (; 39 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3772,7 +3776,7 @@
   local.get $2
   i32.store8
  )
- (func $~lib/array/Array<i8>#__set (; 39 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i8>#__set (; 40 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -3784,7 +3788,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -3806,7 +3810,7 @@
   local.get $2
   call $~lib/array/Array<i8>#__unchecked_set
  )
- (func $~lib/set/Set<i8>#values (; 40 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i8>#values (; 41 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3868,11 +3872,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<i8>#get:length (; 41 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i8>#get:length (; 42 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<i8>#__unchecked_get (; 42 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#__unchecked_get (; 43 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3881,7 +3885,7 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/array/Array<i8>#__get (; 43 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#__get (; 44 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -3890,7 +3894,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -3901,7 +3905,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<i8>#delete (; 44 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i8>#delete (; 45 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3977,7 +3981,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<i8> (; 45 ;)
+ (func $std/set/testNumeric<i8> (; 46 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4333,7 +4337,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u8>#clear (; 46 ;) (param $0 i32)
+ (func $~lib/set/Set<u8>#clear (; 47 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -4373,7 +4377,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u8>#constructor (; 47 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u8>#constructor (; 48 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -4405,7 +4409,7 @@
   call $~lib/set/Set<u8>#clear
   local.get $0
  )
- (func $~lib/set/Set<u8>#find (; 48 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u8>#find (; 49 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -4455,7 +4459,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u8>#has (; 49 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#has (; 50 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -4472,7 +4476,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u8>#rehash (; 50 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#rehash (; 51 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4625,7 +4629,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u8>#add (; 51 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#add (; 52 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4720,11 +4724,11 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/set/Set<u8>#get:size (; 52 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u8>#get:size (; 53 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/array/Array<u8>#constructor (; 53 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#constructor (; 54 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -4734,8 +4738,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -4743,10 +4745,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<u8>#__unchecked_set (; 54 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<u8>#__unchecked_set (; 55 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -4756,7 +4762,7 @@
   local.get $2
   i32.store8
  )
- (func $~lib/array/Array<u8>#__set (; 55 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<u8>#__set (; 56 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -4768,7 +4774,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -4790,7 +4796,7 @@
   local.get $2
   call $~lib/array/Array<u8>#__unchecked_set
  )
- (func $~lib/set/Set<u8>#values (; 56 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u8>#values (; 57 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4852,11 +4858,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<u8>#get:length (; 57 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u8>#get:length (; 58 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<u8>#__unchecked_get (; 58 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#__unchecked_get (; 59 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -4865,7 +4871,7 @@
   i32.add
   i32.load8_u
  )
- (func $~lib/array/Array<u8>#__get (; 59 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#__get (; 60 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -4874,7 +4880,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -4885,7 +4891,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<u8>#delete (; 60 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u8>#delete (; 61 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4959,7 +4965,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<u8> (; 61 ;)
+ (func $std/set/testNumeric<u8> (; 62 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -5307,7 +5313,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<i16>#clear (; 62 ;) (param $0 i32)
+ (func $~lib/set/Set<i16>#clear (; 63 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -5347,7 +5353,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i16>#constructor (; 63 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i16>#constructor (; 64 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -5379,7 +5385,7 @@
   call $~lib/set/Set<i16>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash16 (; 64 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash16 (; 65 ;) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -5401,7 +5407,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/set/Set<i16>#find (; 65 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i16>#find (; 66 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -5453,7 +5459,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i16>#has (; 66 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#has (; 67 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -5472,7 +5478,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i16>#rehash (; 67 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#rehash (; 68 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5625,7 +5631,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<i16>#add (; 68 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#add (; 69 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5722,11 +5728,11 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/set/Set<i16>#get:size (; 69 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i16>#get:size (; 70 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/array/Array<i16>#constructor (; 70 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i16>#constructor (; 71 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -5736,8 +5742,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 1
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -5745,10 +5749,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 1
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<i16>#__unchecked_set (; 71 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i16>#__unchecked_set (; 72 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -5758,7 +5766,7 @@
   local.get $2
   i32.store16
  )
- (func $~lib/array/Array<i16>#__set (; 72 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i16>#__set (; 73 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -5770,7 +5778,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -5792,7 +5800,7 @@
   local.get $2
   call $~lib/array/Array<i16>#__unchecked_set
  )
- (func $~lib/set/Set<i16>#values (; 73 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i16>#values (; 74 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5854,11 +5862,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<i16>#get:length (; 74 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i16>#get:length (; 75 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<i16>#__unchecked_get (; 75 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i16>#__unchecked_get (; 76 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -5867,7 +5875,7 @@
   i32.add
   i32.load16_s
  )
- (func $~lib/array/Array<i16>#__get (; 76 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i16>#__get (; 77 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -5876,7 +5884,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -5887,7 +5895,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<i16>#delete (; 77 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i16>#delete (; 78 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5963,7 +5971,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<i16> (; 78 ;)
+ (func $std/set/testNumeric<i16> (; 79 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -6319,7 +6327,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u16>#clear (; 79 ;) (param $0 i32)
+ (func $~lib/set/Set<u16>#clear (; 80 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -6359,7 +6367,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u16>#constructor (; 80 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u16>#constructor (; 81 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -6391,7 +6399,7 @@
   call $~lib/set/Set<u16>#clear
   local.get $0
  )
- (func $~lib/set/Set<u16>#find (; 81 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u16>#find (; 82 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -6441,7 +6449,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u16>#has (; 82 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#has (; 83 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -6458,7 +6466,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u16>#rehash (; 83 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#rehash (; 84 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6611,7 +6619,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u16>#add (; 84 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#add (; 85 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6706,11 +6714,11 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/set/Set<u16>#get:size (; 85 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u16>#get:size (; 86 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/array/Array<u16>#constructor (; 86 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u16>#constructor (; 87 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -6720,8 +6728,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 1
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -6729,10 +6735,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 1
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<u16>#__unchecked_set (; 87 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<u16>#__unchecked_set (; 88 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -6742,7 +6752,7 @@
   local.get $2
   i32.store16
  )
- (func $~lib/array/Array<u16>#__set (; 88 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<u16>#__set (; 89 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -6754,7 +6764,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -6776,7 +6786,7 @@
   local.get $2
   call $~lib/array/Array<u16>#__unchecked_set
  )
- (func $~lib/set/Set<u16>#values (; 89 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u16>#values (; 90 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6838,11 +6848,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<u16>#get:length (; 90 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u16>#get:length (; 91 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<u16>#__unchecked_get (; 91 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u16>#__unchecked_get (; 92 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -6851,7 +6861,7 @@
   i32.add
   i32.load16_u
  )
- (func $~lib/array/Array<u16>#__get (; 92 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u16>#__get (; 93 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -6860,7 +6870,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -6871,7 +6881,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<u16>#delete (; 93 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u16>#delete (; 94 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6945,7 +6955,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<u16> (; 94 ;)
+ (func $std/set/testNumeric<u16> (; 95 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -7293,7 +7303,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<i32>#clear (; 95 ;) (param $0 i32)
+ (func $~lib/set/Set<i32>#clear (; 96 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -7333,7 +7343,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i32>#constructor (; 96 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i32>#constructor (; 97 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -7365,7 +7375,7 @@
   call $~lib/set/Set<i32>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash32 (; 97 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (; 98 ;) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -7407,7 +7417,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/set/Set<i32>#find (; 98 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i32>#find (; 99 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -7455,7 +7465,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i32>#has (; 99 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#has (; 100 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -7470,7 +7480,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i32>#rehash (; 100 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#rehash (; 101 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7623,7 +7633,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<i32>#add (; 101 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#add (; 102 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7716,11 +7726,11 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/set/Set<i32>#get:size (; 102 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i32>#get:size (; 103 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/array/Array<i32>#constructor (; 103 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 104 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -7730,8 +7740,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -7739,10 +7747,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<i32>#__unchecked_set (; 104 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__unchecked_set (; 105 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -7752,7 +7764,7 @@
   local.get $2
   i32.store
  )
- (func $~lib/array/Array<i32>#__set (; 105 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 106 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -7764,7 +7776,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -7786,7 +7798,7 @@
   local.get $2
   call $~lib/array/Array<i32>#__unchecked_set
  )
- (func $~lib/set/Set<i32>#values (; 106 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i32>#values (; 107 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -7848,11 +7860,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<i32>#get:length (; 107 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#get:length (; 108 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<i32>#__unchecked_get (; 108 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__unchecked_get (; 109 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -7861,7 +7873,7 @@
   i32.add
   i32.load
  )
- (func $~lib/array/Array<i32>#__get (; 109 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 110 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -7870,7 +7882,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -7881,7 +7893,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<i32>#delete (; 110 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<i32>#delete (; 111 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7953,7 +7965,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<i32> (; 111 ;)
+ (func $std/set/testNumeric<i32> (; 112 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -8289,7 +8301,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u32>#clear (; 112 ;) (param $0 i32)
+ (func $~lib/set/Set<u32>#clear (; 113 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -8329,7 +8341,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u32>#constructor (; 113 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u32>#constructor (; 114 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -8361,7 +8373,7 @@
   call $~lib/set/Set<u32>#clear
   local.get $0
  )
- (func $~lib/set/Set<u32>#find (; 114 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u32>#find (; 115 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -8409,7 +8421,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u32>#has (; 115 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u32>#has (; 116 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -8424,7 +8436,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u32>#rehash (; 116 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u32>#rehash (; 117 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8577,7 +8589,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u32>#add (; 117 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u32>#add (; 118 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8670,11 +8682,11 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/set/Set<u32>#get:size (; 118 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u32>#get:size (; 119 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/array/Array<u32>#constructor (; 119 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#constructor (; 120 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -8684,8 +8696,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -8693,10 +8703,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<u32>#__unchecked_set (; 120 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<u32>#__unchecked_set (; 121 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -8706,7 +8720,7 @@
   local.get $2
   i32.store
  )
- (func $~lib/array/Array<u32>#__set (; 121 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<u32>#__set (; 122 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -8718,7 +8732,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -8740,7 +8754,7 @@
   local.get $2
   call $~lib/array/Array<u32>#__unchecked_set
  )
- (func $~lib/set/Set<u32>#values (; 122 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u32>#values (; 123 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8802,11 +8816,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<u32>#get:length (; 123 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u32>#get:length (; 124 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<u32>#__unchecked_get (; 124 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#__unchecked_get (; 125 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -8815,7 +8829,7 @@
   i32.add
   i32.load
  )
- (func $~lib/array/Array<u32>#__get (; 125 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#__get (; 126 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -8824,7 +8838,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -8835,7 +8849,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<u32>#delete (; 126 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/set/Set<u32>#delete (; 127 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8907,7 +8921,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<u32> (; 127 ;)
+ (func $std/set/testNumeric<u32> (; 128 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -9243,7 +9257,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<i64>#clear (; 128 ;) (param $0 i32)
+ (func $~lib/set/Set<i64>#clear (; 129 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -9283,7 +9297,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<i64>#constructor (; 129 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i64>#constructor (; 130 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -9315,7 +9329,7 @@
   call $~lib/set/Set<i64>#clear
   local.get $0
  )
- (func $~lib/util/hash/hash64 (; 130 ;) (param $0 i64) (result i32)
+ (func $~lib/util/hash/hash64 (; 131 ;) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9403,7 +9417,7 @@
   local.set $3
   local.get $3
  )
- (func $~lib/set/Set<i64>#find (; 131 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<i64>#find (; 132 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -9451,7 +9465,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<i64>#has (; 132 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#has (; 133 ;) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   local.get $0
   local.get $1
@@ -9466,7 +9480,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<i64>#rehash (; 133 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i64>#rehash (; 134 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9620,7 +9634,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<i64>#add (; 134 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#add (; 135 ;) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -9714,11 +9728,11 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/set/Set<i64>#get:size (; 135 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i64>#get:size (; 136 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/array/Array<i64>#constructor (; 136 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i64>#constructor (; 137 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -9728,8 +9742,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 3
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -9737,10 +9749,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 3
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<i64>#__unchecked_set (; 137 ;) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<i64>#__unchecked_set (; 138 ;) (param $0 i32) (param $1 i32) (param $2 i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -9750,7 +9766,7 @@
   local.get $2
   i64.store
  )
- (func $~lib/array/Array<i64>#__set (; 138 ;) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<i64>#__set (; 139 ;) (param $0 i32) (param $1 i32) (param $2 i64)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -9762,7 +9778,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -9784,7 +9800,7 @@
   local.get $2
   call $~lib/array/Array<i64>#__unchecked_set
  )
- (func $~lib/set/Set<i64>#values (; 139 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<i64>#values (; 140 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9846,11 +9862,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<i64>#get:length (; 140 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i64>#get:length (; 141 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<i64>#__unchecked_get (; 141 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<i64>#__unchecked_get (; 142 ;) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -9859,7 +9875,7 @@
   i32.add
   i64.load
  )
- (func $~lib/array/Array<i64>#__get (; 142 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (; 143 ;) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   local.get $1
   local.get $0
@@ -9868,7 +9884,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -9879,7 +9895,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<i64>#delete (; 143 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<i64>#delete (; 144 ;) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -9952,7 +9968,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<i64> (; 144 ;)
+ (func $std/set/testNumeric<i64> (; 145 ;)
   (local $0 i32)
   (local $1 i64)
   (local $2 i32)
@@ -10289,7 +10305,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u64>#clear (; 145 ;) (param $0 i32)
+ (func $~lib/set/Set<u64>#clear (; 146 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -10329,7 +10345,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<u64>#constructor (; 146 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u64>#constructor (; 147 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -10361,7 +10377,7 @@
   call $~lib/set/Set<u64>#clear
   local.get $0
  )
- (func $~lib/set/Set<u64>#find (; 147 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<u64>#find (; 148 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -10409,7 +10425,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<u64>#has (; 148 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<u64>#has (; 149 ;) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   local.get $0
   local.get $1
@@ -10424,7 +10440,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<u64>#rehash (; 149 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u64>#rehash (; 150 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10578,7 +10594,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<u64>#add (; 150 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<u64>#add (; 151 ;) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -10672,11 +10688,11 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/set/Set<u64>#get:size (; 151 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u64>#get:size (; 152 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/array/Array<u64>#constructor (; 152 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u64>#constructor (; 153 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -10686,8 +10702,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 3
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -10695,10 +10709,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 3
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<u64>#__unchecked_set (; 153 ;) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<u64>#__unchecked_set (; 154 ;) (param $0 i32) (param $1 i32) (param $2 i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -10708,7 +10726,7 @@
   local.get $2
   i64.store
  )
- (func $~lib/array/Array<u64>#__set (; 154 ;) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<u64>#__set (; 155 ;) (param $0 i32) (param $1 i32) (param $2 i64)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -10720,7 +10738,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -10742,7 +10760,7 @@
   local.get $2
   call $~lib/array/Array<u64>#__unchecked_set
  )
- (func $~lib/set/Set<u64>#values (; 155 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<u64>#values (; 156 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -10804,11 +10822,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<u64>#get:length (; 156 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u64>#get:length (; 157 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<u64>#__unchecked_get (; 157 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<u64>#__unchecked_get (; 158 ;) (param $0 i32) (param $1 i32) (result i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -10817,7 +10835,7 @@
   i32.add
   i64.load
  )
- (func $~lib/array/Array<u64>#__get (; 158 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<u64>#__get (; 159 ;) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   local.get $1
   local.get $0
@@ -10826,7 +10844,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -10837,7 +10855,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<u64>#delete (; 159 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/set/Set<u64>#delete (; 160 ;) (param $0 i32) (param $1 i64) (result i32)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -10910,7 +10928,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<u64> (; 160 ;)
+ (func $std/set/testNumeric<u64> (; 161 ;)
   (local $0 i32)
   (local $1 i64)
   (local $2 i32)
@@ -11247,7 +11265,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<f32>#clear (; 161 ;) (param $0 i32)
+ (func $~lib/set/Set<f32>#clear (; 162 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -11287,7 +11305,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<f32>#constructor (; 162 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f32>#constructor (; 163 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -11319,7 +11337,7 @@
   call $~lib/set/Set<f32>#clear
   local.get $0
  )
- (func $~lib/set/Set<f32>#find (; 163 ;) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f32>#find (; 164 ;) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -11367,7 +11385,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f32>#has (; 164 ;) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#has (; 165 ;) (param $0 i32) (param $1 f32) (result i32)
   (local $2 f32)
   local.get $0
   local.get $1
@@ -11383,7 +11401,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f32>#rehash (; 165 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f32>#rehash (; 166 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11538,7 +11556,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<f32>#add (; 166 ;) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#add (; 167 ;) (param $0 i32) (param $1 f32) (result i32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -11633,11 +11651,11 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/set/Set<f32>#get:size (; 167 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f32>#get:size (; 168 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/array/Array<f32>#constructor (; 168 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f32>#constructor (; 169 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -11647,8 +11665,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -11656,10 +11672,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<f32>#__unchecked_set (; 169 ;) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $~lib/array/Array<f32>#__unchecked_set (; 170 ;) (param $0 i32) (param $1 i32) (param $2 f32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -11669,7 +11689,7 @@
   local.get $2
   f32.store
  )
- (func $~lib/array/Array<f32>#__set (; 170 ;) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $~lib/array/Array<f32>#__set (; 171 ;) (param $0 i32) (param $1 i32) (param $2 f32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -11681,7 +11701,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -11703,7 +11723,7 @@
   local.get $2
   call $~lib/array/Array<f32>#__unchecked_set
  )
- (func $~lib/set/Set<f32>#values (; 171 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f32>#values (; 172 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11765,11 +11785,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<f32>#get:length (; 172 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f32>#get:length (; 173 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<f32>#__unchecked_get (; 173 ;) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__unchecked_get (; 174 ;) (param $0 i32) (param $1 i32) (result f32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -11778,7 +11798,7 @@
   i32.add
   f32.load
  )
- (func $~lib/array/Array<f32>#__get (; 174 ;) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 175 ;) (param $0 i32) (param $1 i32) (result f32)
   (local $2 f32)
   local.get $1
   local.get $0
@@ -11787,7 +11807,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -11798,7 +11818,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<f32>#delete (; 175 ;) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/set/Set<f32>#delete (; 176 ;) (param $0 i32) (param $1 f32) (result i32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
@@ -11872,7 +11892,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<f32> (; 176 ;)
+ (func $std/set/testNumeric<f32> (; 177 ;)
   (local $0 i32)
   (local $1 f32)
   (local $2 i32)
@@ -12209,7 +12229,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<f64>#clear (; 177 ;) (param $0 i32)
+ (func $~lib/set/Set<f64>#clear (; 178 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -12249,7 +12269,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/set/Set<f64>#constructor (; 178 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f64>#constructor (; 179 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -12281,7 +12301,7 @@
   call $~lib/set/Set<f64>#clear
   local.get $0
  )
- (func $~lib/set/Set<f64>#find (; 179 ;) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/set/Set<f64>#find (; 180 ;) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -12329,7 +12349,7 @@
   end
   i32.const 0
  )
- (func $~lib/set/Set<f64>#has (; 180 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#has (; 181 ;) (param $0 i32) (param $1 f64) (result i32)
   (local $2 f64)
   local.get $0
   local.get $1
@@ -12345,7 +12365,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/set/Set<f64>#rehash (; 181 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f64>#rehash (; 182 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12500,7 +12520,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/set/Set<f64>#add (; 182 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#add (; 183 ;) (param $0 i32) (param $1 f64) (result i32)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -12595,11 +12615,11 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/set/Set<f64>#get:size (; 183 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f64>#get:size (; 184 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=20
  )
- (func $~lib/array/Array<f64>#constructor (; 184 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<f64>#constructor (; 185 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -12609,8 +12629,6 @@
    call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
   end
-  local.get $1
-  i32.const 3
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $0
   local.get $0
@@ -12618,10 +12636,14 @@
   i32.store offset=12
   local.get $0
   local.get $1
+  i32.const 3
+  call $~lib/arraybuffer/ArrayBufferView#alloc
+  local.get $0
+  local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/array/Array<f64>#__unchecked_set (; 185 ;) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $~lib/array/Array<f64>#__unchecked_set (; 186 ;) (param $0 i32) (param $1 i32) (param $2 f64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -12631,7 +12653,7 @@
   local.get $2
   f64.store
  )
- (func $~lib/array/Array<f64>#__set (; 186 ;) (param $0 i32) (param $1 i32) (param $2 f64)
+ (func $~lib/array/Array<f64>#__set (; 187 ;) (param $0 i32) (param $1 i32) (param $2 f64)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -12643,7 +12665,7 @@
    if
     i32.const 352
     i32.const 416
-    i32.const 109
+    i32.const 114
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -12665,7 +12687,7 @@
   local.get $2
   call $~lib/array/Array<f64>#__unchecked_set
  )
- (func $~lib/set/Set<f64>#values (; 187 ;) (param $0 i32) (result i32)
+ (func $~lib/set/Set<f64>#values (; 188 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -12727,11 +12749,11 @@
   end
   local.get $3
  )
- (func $~lib/array/Array<f64>#get:length (; 188 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<f64>#get:length (; 189 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=12
  )
- (func $~lib/array/Array<f64>#__unchecked_get (; 189 ;) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__unchecked_get (; 190 ;) (param $0 i32) (param $1 i32) (result f64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -12740,7 +12762,7 @@
   i32.add
   f64.load
  )
- (func $~lib/array/Array<f64>#__get (; 190 ;) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 191 ;) (param $0 i32) (param $1 i32) (result f64)
   (local $2 f64)
   local.get $1
   local.get $0
@@ -12749,7 +12771,7 @@
   if
    i32.const 352
    i32.const 416
-   i32.const 93
+   i32.const 98
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -12760,7 +12782,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/set/Set<f64>#delete (; 191 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/set/Set<f64>#delete (; 192 ;) (param $0 i32) (param $1 f64) (result i32)
   (local $2 f64)
   (local $3 i32)
   (local $4 i32)
@@ -12834,7 +12856,7 @@
   end
   i32.const 1
  )
- (func $std/set/testNumeric<f64> (; 192 ;)
+ (func $std/set/testNumeric<f64> (; 193 ;)
   (local $0 i32)
   (local $1 f64)
   (local $2 i32)
@@ -13171,7 +13193,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $start:std/set (; 193 ;)
+ (func $start:std/set (; 194 ;)
   call $std/set/testNumeric<i8>
   call $std/set/testNumeric<u8>
   call $std/set/testNumeric<i16>
@@ -13183,13 +13205,13 @@
   call $std/set/testNumeric<f32>
   call $std/set/testNumeric<f64>
  )
- (func $~start (; 194 ;)
+ (func $~start (; 195 ;)
   call $start:std/set
  )
- (func $~lib/rt/pure/__collect (; 195 ;)
+ (func $~lib/rt/pure/__collect (; 196 ;)
   return
  )
- (func $~lib/rt/pure/decrement (; 196 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 197 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -13266,7 +13288,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 197 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 198 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -13290,7 +13312,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/set/Set<i8>#__visit_impl (; 198 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i8>#__visit_impl (; 199 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13303,10 +13325,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<i8>#__visit_impl (; 199 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i8>#__visit_impl (; 200 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<u8>#__visit_impl (; 200 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u8>#__visit_impl (; 201 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13319,10 +13341,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u8>#__visit_impl (; 201 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>#__visit_impl (; 202 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<i16>#__visit_impl (; 202 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i16>#__visit_impl (; 203 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13335,10 +13357,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<i16>#__visit_impl (; 203 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i16>#__visit_impl (; 204 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<u16>#__visit_impl (; 204 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u16>#__visit_impl (; 205 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13351,10 +13373,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u16>#__visit_impl (; 205 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>#__visit_impl (; 206 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<i32>#__visit_impl (; 206 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i32>#__visit_impl (; 207 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13367,10 +13389,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<i32>#__visit_impl (; 207 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#__visit_impl (; 208 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<u32>#__visit_impl (; 208 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u32>#__visit_impl (; 209 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13383,10 +13405,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u32>#__visit_impl (; 209 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>#__visit_impl (; 210 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<i64>#__visit_impl (; 210 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<i64>#__visit_impl (; 211 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13399,10 +13421,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<i64>#__visit_impl (; 211 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i64>#__visit_impl (; 212 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<u64>#__visit_impl (; 212 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<u64>#__visit_impl (; 213 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13415,10 +13437,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u64>#__visit_impl (; 213 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u64>#__visit_impl (; 214 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<f32>#__visit_impl (; 214 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f32>#__visit_impl (; 215 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13431,10 +13453,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<f32>#__visit_impl (; 215 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f32>#__visit_impl (; 216 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/set/Set<f64>#__visit_impl (; 216 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/set/Set<f64>#__visit_impl (; 217 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   i32.load
@@ -13447,10 +13469,10 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<f64>#__visit_impl (; 217 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f64>#__visit_impl (; 218 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/__visit_members (; 218 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 219 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default

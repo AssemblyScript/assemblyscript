@@ -6,26 +6,17 @@ import { E_INVALIDLENGTH } from "./util/error";
 
 export abstract class ArrayBufferView {
 
-  readonly buffer: ArrayBuffer;
-  @unsafe readonly dataStart: usize;
-  readonly byteLength: i32;
+  @unsafe data: ArrayBuffer;
+  @unsafe dataStart: usize;
+  @unsafe dataLength: i32;
 
-  get byteOffset(): i32 {
-    return <i32>(this.dataStart - changetype<usize>(this.buffer));
-  }
-
-  get length(): i32 {
-    ERROR("missing implementation: subclasses must implement ArrayBufferView#length");
-    return unreachable();
-  }
-
-  protected constructor(length: i32, alignLog2: i32) {
+  @unsafe protected alloc(length: i32, alignLog2: i32): void {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
-    var buffer = __alloc(length = length << alignLog2, idof<ArrayBuffer>());
-    memory.fill(buffer, 0, <usize>length);
-    this.buffer = changetype<ArrayBuffer>(buffer); // retains
-    this.dataStart = buffer;
-    this.byteLength = length;
+    var data = __alloc(length = length << alignLog2, idof<ArrayBuffer>());
+    memory.fill(data, 0, <usize>length);
+    this.data = changetype<ArrayBuffer>(data); // retains
+    this.dataStart = data;
+    this.dataLength = length;
   }
 }
 

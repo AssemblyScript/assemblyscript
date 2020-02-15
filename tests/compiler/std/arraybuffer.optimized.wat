@@ -1,9 +1,9 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
@@ -1583,32 +1583,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  i32.const 1
-  i32.const 1073741808
-  local.get $1
-  i32.shr_u
-  i32.gt_u
-  if
-   i32.const 32
-   i32.const 80
-   i32.const 23
-   i32.const 56
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  local.get $1
-  i32.shl
-  local.tee $3
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.tee $1
-  local.get $3
-  call $~lib/memory/memory.fill
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 22 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1627,6 +1602,34 @@
   local.get $0
   i32.const 0
   i32.store offset=8
+  local.get $0
+ )
+ (func $~lib/arraybuffer/ArrayBufferView#alloc (; 23 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  i32.const 1
+  i32.const 1073741808
+  local.get $1
+  i32.shr_u
+  i32.gt_u
+  if
+   i32.const 32
+   i32.const 80
+   i32.const 14
+   i32.const 56
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  local.get $1
+  i32.shl
+  local.tee $3
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.tee $1
+  local.get $3
+  call $~lib/memory/memory.fill
   local.get $1
   local.set $2
   local.get $0
@@ -1650,9 +1653,8 @@
   local.get $0
   local.get $3
   i32.store offset=8
-  local.get $0
  )
- (func $~lib/rt/__allocArray (; 23 ;) (result i32)
+ (func $~lib/rt/__allocArray (; 24 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -1680,7 +1682,7 @@
   call $~lib/memory/memory.copy
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 25 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1738,17 +1740,19 @@
   i32.store offset=8
   local.get $2
  )
- (func $~setArgumentsLength (; 25 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 26 ;) (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $start:std/arraybuffer (; 26 ;)
+ (func $start:std/arraybuffer (; 27 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   i32.const 8
   i32.const 0
   call $~lib/rt/tlsf/__alloc
@@ -1819,9 +1823,10 @@
   i32.const -1
   i32.const 1073741808
   call $~lib/arraybuffer/ArrayBuffer#slice
+  local.set $0
   local.get $1
   call $~lib/rt/pure/__release
-  local.tee $1
+  local.get $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 1
   i32.ne
@@ -1837,9 +1842,9 @@
   i32.const 1
   i32.const 3
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
-  local.tee $1
+  local.tee $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 2
   i32.ne
@@ -1855,9 +1860,9 @@
   i32.const 1
   i32.const -1
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
-  local.tee $1
+  local.tee $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 6
   i32.ne
@@ -1873,10 +1878,9 @@
   i32.const -3
   i32.const -1
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $0
-  local.get $1
-  call $~lib/rt/pure/__release
   local.get $0
+  call $~lib/rt/pure/__release
+  local.tee $0
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 2
   i32.ne
@@ -1892,10 +1896,10 @@
   i32.const -4
   i32.const 42
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $3
+  local.set $1
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $3
+  local.get $1
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 4
   i32.ne
@@ -1911,10 +1915,10 @@
   i32.const 42
   i32.const 1073741808
   call $~lib/arraybuffer/ArrayBuffer#slice
-  local.set $1
-  local.get $3
-  call $~lib/rt/pure/__release
+  local.set $3
   local.get $1
+  call $~lib/rt/pure/__release
+  local.get $3
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   if
    i32.const 0
@@ -1924,7 +1928,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $3
   i32.eqz
   if
    i32.const 0
@@ -1938,43 +1942,63 @@
   i32.const 5
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.set $0
+  local.tee $4
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#alloc
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   i32.const 12
   i32.const 9
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.set $5
+  local.tee $1
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#alloc
   i32.const 1
   global.set $~argumentsLength
-  local.get $0
+  local.get $4
   i32.load
-  local.tee $3
-  local.get $3
-  call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+  call $~lib/rt/pure/__retain
+  local.tee $0
+  local.set $6
+  block $2of2
+   block $1of2
+    block $outOfRange
+     global.get $~argumentsLength
+     i32.const 1
+     i32.sub
+     br_table $1of2 $1of2 $2of2 $outOfRange
+    end
+    unreachable
+   end
+   local.get $0
+   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
+   local.set $7
+  end
+  local.get $0
+  local.get $7
   call $~lib/dataview/DataView#constructor
-  local.set $3
+  local.set $0
   local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
+  local.get $6
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
-  call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
  )
- (func $~start (; 27 ;)
+ (func $~start (; 28 ;)
   call $start:std/arraybuffer
  )
- (func $~lib/rt/pure/decrement (; 28 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 29 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2050,7 +2074,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 29 ;) (param $0 i32)
+ (func $~lib/rt/__visit_members (; 30 ;) (param $0 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$2
