@@ -470,32 +470,34 @@
  (data (i32.const 31936) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\00\c3\03 \00")
  (data (i32.const 31968) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00;\00\a3\03 \00")
  (data (i32.const 32000) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00;\00\c3\03 \00")
- (data (i32.const 32032) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\00\fb")
- (data (i32.const 32064) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00F\00")
- (data (i32.const 32096) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00I\00")
- (data (i32.const 32128) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\02\fb")
- (data (i32.const 32160) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00L\00")
- (data (i32.const 32192) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\03\fb")
- (data (i32.const 32224) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00F\00F\00I\00")
- (data (i32.const 32256) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\04\fb")
- (data (i32.const 32288) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00F\00F\00L\00")
- (data (i32.const 32320) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\05\fb")
- (data (i32.const 32352) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00S\00T\00")
- (data (i32.const 32384) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\06\fb")
- (data (i32.const 32416) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\f0\01")
- (data (i32.const 32448) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00J\00\0c\03")
- (data (i32.const 32480) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\96\1e")
- (data (i32.const 32512) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00H\001\03")
- (data (i32.const 32544) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\97\1e")
- (data (i32.const 32576) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00T\00\08\03")
- (data (i32.const 32608) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\98\1e")
- (data (i32.const 32640) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00W\00\n\03")
- (data (i32.const 32672) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\99\1e")
- (data (i32.const 32704) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00Y\00\n\03")
- (data (i32.const 32736) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\9a\1e")
- (data (i32.const 32768) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00A\00\be\02")
- (data (i32.const 32800) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00L\00o\00w\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00L\00o\00w\00e\00r\00C\00o\00d\00e\00")
- (data (i32.const 32880) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00")
+ (data (i32.const 32032) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00\01\03\a3\03 \00")
+ (data (i32.const 32064) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00\01\03\c3\03 \00")
+ (data (i32.const 32096) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\00\fb")
+ (data (i32.const 32128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00F\00")
+ (data (i32.const 32160) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00I\00")
+ (data (i32.const 32192) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\02\fb")
+ (data (i32.const 32224) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00L\00")
+ (data (i32.const 32256) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\03\fb")
+ (data (i32.const 32288) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00F\00F\00I\00")
+ (data (i32.const 32320) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\04\fb")
+ (data (i32.const 32352) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00F\00F\00L\00")
+ (data (i32.const 32384) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\05\fb")
+ (data (i32.const 32416) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00S\00T\00")
+ (data (i32.const 32448) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\06\fb")
+ (data (i32.const 32480) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\f0\01")
+ (data (i32.const 32512) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00J\00\0c\03")
+ (data (i32.const 32544) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\96\1e")
+ (data (i32.const 32576) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00H\001\03")
+ (data (i32.const 32608) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\97\1e")
+ (data (i32.const 32640) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00T\00\08\03")
+ (data (i32.const 32672) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\98\1e")
+ (data (i32.const 32704) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00W\00\n\03")
+ (data (i32.const 32736) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\99\1e")
+ (data (i32.const 32768) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00Y\00\n\03")
+ (data (i32.const 32800) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\9a\1e")
+ (data (i32.const 32832) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00A\00\be\02")
+ (data (i32.const 32864) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00L\00o\00w\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00L\00o\00w\00e\00r\00C\00o\00d\00e\00")
+ (data (i32.const 32944) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e\00")
  (table $0 1 funcref)
  (global $std/string/str (mut i32) (i32.const 32))
  (global $std/string/nullStr (mut i32) (i32.const 0))
@@ -537,7 +539,7 @@
  (global $~lib/util/string/lowerTable127Ptr (mut i32) (i32.const 0))
  (global $~lib/util/string/alphaTable i32 (i32.const 27536))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 32960))
+ (global $~lib/heap/__heap_base i32 (i32.const 33024))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
@@ -12059,12 +12061,13 @@
   (local $275 i32)
   (local $276 i32)
   (local $277 i32)
-  (local $278 i64)
+  (local $278 i32)
   (local $279 i64)
   (local $280 i64)
   (local $281 i64)
   (local $282 i64)
   (local $283 i64)
+  (local $284 i64)
   global.get $std/string/str
   i32.const 32
   i32.eq
@@ -19908,7 +19911,7 @@
    unreachable
   end
   i32.const 32048
-  call $~lib/string/String#toUpperCase
+  call $~lib/string/String#toLowerCase
   local.tee $260
   i32.const 32080
   call $~lib/string/String.__eq
@@ -19916,26 +19919,26 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 670
+   i32.const 668
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 30912
+  i32.const 32112
   call $~lib/string/String#toUpperCase
   local.tee $261
-  i32.const 32112
+  i32.const 32144
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 671
+   i32.const 677
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 32144
+  i32.const 30912
   call $~lib/string/String#toUpperCase
   local.tee $262
   i32.const 32176
@@ -19944,7 +19947,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 672
+   i32.const 678
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -19958,7 +19961,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 673
+   i32.const 679
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -19972,7 +19975,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 674
+   i32.const 680
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -19986,7 +19989,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 675
+   i32.const 681
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -19994,27 +19997,27 @@
   i32.const 32400
   call $~lib/string/String#toUpperCase
   local.tee $266
-  i32.const 32368
+  i32.const 32432
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 676
+   i32.const 682
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 32432
+  i32.const 32464
   call $~lib/string/String#toUpperCase
   local.tee $267
-  i32.const 32464
+  i32.const 32432
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 677
+   i32.const 683
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -20028,7 +20031,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 678
+   i32.const 684
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -20042,7 +20045,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 679
+   i32.const 685
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -20056,7 +20059,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 680
+   i32.const 686
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -20070,7 +20073,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 681
+   i32.const 687
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -20084,64 +20087,43 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 682
+   i32.const 688
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 32816
+  call $~lib/string/String#toUpperCase
+  local.tee $273
+  i32.const 32848
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 689
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 0
-  local.set $273
+  local.set $274
   loop $for-loop|0
-   local.get $273
+   local.get $274
    i32.const 1114111
    i32.le_s
-   local.set $274
-   local.get $274
+   local.set $275
+   local.get $275
    if
-    local.get $273
+    local.get $274
     call $~lib/string/String.fromCodePoint
-    local.set $275
-    local.get $275
-    call $~lib/string/String#toLowerCase
     local.set $276
-    local.get $275
-    call $~lib/string/String#toUpperCase
+    local.get $276
+    call $~lib/string/String#toLowerCase
     local.set $277
     local.get $276
-    i32.const 0
-    call $~lib/string/String#codePointAt
-    i64.extend_i32_s
-    local.set $280
-    local.get $276
-    i32.const 1
-    call $~lib/string/String#codePointAt
-    i64.extend_i32_s
-    local.tee $278
-    i64.const 0
-    i64.ge_u
-    if
-     local.get $280
-     local.get $278
-     i64.const 16
-     i64.shl
-     i64.add
-     local.set $280
-    end
-    local.get $276
-    i32.const 2
-    call $~lib/string/String#codePointAt
-    i64.extend_i32_s
-    local.tee $279
-    i64.const 0
-    i64.ge_u
-    if
-     local.get $280
-     local.get $279
-     i64.const 32
-     i64.shl
-     i64.add
-     local.set $280
-    end
+    call $~lib/string/String#toUpperCase
+    local.set $278
     local.get $277
     i32.const 0
     call $~lib/string/String#codePointAt
@@ -20151,12 +20133,12 @@
     i32.const 1
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
-    local.tee $278
+    local.tee $279
     i64.const 0
     i64.ge_u
     if
      local.get $281
-     local.get $278
+     local.get $279
      i64.const 16
      i64.shl
      i64.add
@@ -20166,40 +20148,25 @@
     i32.const 2
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
-    local.tee $279
+    local.tee $280
     i64.const 0
     i64.ge_u
     if
      local.get $281
-     local.get $279
+     local.get $280
      i64.const 32
      i64.shl
      i64.add
      local.set $281
     end
-    local.get $273
+    local.get $278
     i32.const 0
-    call $std/string/toLowerCaseFromIndex
+    call $~lib/string/String#codePointAt
     i64.extend_i32_s
     local.set $282
-    local.get $273
+    local.get $278
     i32.const 1
-    call $std/string/toLowerCaseFromIndex
-    i64.extend_i32_s
-    local.tee $278
-    i64.const 0
-    i64.ge_u
-    if
-     local.get $282
-     local.get $278
-     i64.const 16
-     i64.shl
-     i64.add
-     local.set $282
-    end
-    local.get $273
-    i32.const 2
-    call $std/string/toLowerCaseFromIndex
+    call $~lib/string/String#codePointAt
     i64.extend_i32_s
     local.tee $279
     i64.const 0
@@ -20207,69 +20174,103 @@
     if
      local.get $282
      local.get $279
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $282
+    end
+    local.get $278
+    i32.const 2
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $280
+    i64.const 0
+    i64.ge_u
+    if
+     local.get $282
+     local.get $280
      i64.const 32
      i64.shl
      i64.add
      local.set $282
     end
-    local.get $273
+    local.get $274
+    i32.const 0
+    call $std/string/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.set $283
+    local.get $274
+    i32.const 1
+    call $std/string/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.tee $279
+    i64.const 0
+    i64.ge_u
+    if
+     local.get $283
+     local.get $279
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $283
+    end
+    local.get $274
+    i32.const 2
+    call $std/string/toLowerCaseFromIndex
+    i64.extend_i32_s
+    local.tee $280
+    i64.const 0
+    i64.ge_u
+    if
+     local.get $283
+     local.get $280
+     i64.const 32
+     i64.shl
+     i64.add
+     local.set $283
+    end
+    local.get $274
     i32.const 0
     call $std/string/toUpperCaseFromIndex
     i64.extend_i32_s
-    local.set $283
-    local.get $273
+    local.set $284
+    local.get $274
     i32.const 1
-    call $std/string/toUpperCaseFromIndex
-    i64.extend_i32_s
-    local.tee $278
-    i64.const 0
-    i64.ge_u
-    if
-     local.get $283
-     local.get $278
-     i64.const 16
-     i64.shl
-     i64.add
-     local.set $283
-    end
-    local.get $273
-    i32.const 2
     call $std/string/toUpperCaseFromIndex
     i64.extend_i32_s
     local.tee $279
     i64.const 0
     i64.ge_u
     if
-     local.get $283
+     local.get $284
      local.get $279
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $284
+    end
+    local.get $274
+    i32.const 2
+    call $std/string/toUpperCaseFromIndex
+    i64.extend_i32_s
+    local.tee $280
+    i64.const 0
+    i64.ge_u
+    if
+     local.get $284
+     local.get $280
      i64.const 32
      i64.shl
      i64.add
-     local.set $283
-    end
-    local.get $280
-    local.get $282
-    i64.ne
-    if
-     i32.const 32816
-     i32.const 3
-     local.get $273
-     f64.convert_i32_s
-     local.get $280
-     f64.convert_i64_u
-     local.get $282
-     f64.convert_i64_u
-     f64.const 0
-     f64.const 0
-     call $~lib/builtins/trace
+     local.set $284
     end
     local.get $281
     local.get $283
     i64.ne
     if
-     i32.const 32896
+     i32.const 32880
      i32.const 3
-     local.get $273
+     local.get $274
      f64.convert_i32_s
      local.get $281
      f64.convert_i64_u
@@ -20279,17 +20280,21 @@
      f64.const 0
      call $~lib/builtins/trace
     end
-    local.get $280
     local.get $282
-    i64.eq
-    i32.eqz
+    local.get $284
+    i64.ne
     if
-     i32.const 0
-     i32.const 80
-     i32.const 719
-     i32.const 2
-     call $~lib/builtins/abort
-     unreachable
+     i32.const 32960
+     i32.const 3
+     local.get $274
+     f64.convert_i32_s
+     local.get $282
+     f64.convert_i64_u
+     local.get $284
+     f64.convert_i64_u
+     f64.const 0
+     f64.const 0
+     call $~lib/builtins/trace
     end
     local.get $281
     local.get $283
@@ -20298,21 +20303,33 @@
     if
      i32.const 0
      i32.const 80
-     i32.const 720
+     i32.const 726
      i32.const 2
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $275
-    call $~lib/rt/pure/__release
+    local.get $282
+    local.get $284
+    i64.eq
+    i32.eqz
+    if
+     i32.const 0
+     i32.const 80
+     i32.const 727
+     i32.const 2
+     call $~lib/builtins/abort
+     unreachable
+    end
     local.get $276
     call $~lib/rt/pure/__release
     local.get $277
     call $~lib/rt/pure/__release
-    local.get $273
+    local.get $278
+    call $~lib/rt/pure/__release
+    local.get $274
     i32.const 1
     i32.add
-    local.set $273
+    local.set $274
     br $for-loop|0
    end
   end
@@ -20861,6 +20878,8 @@
   local.get $271
   call $~lib/rt/pure/__release
   local.get $272
+  call $~lib/rt/pure/__release
+  local.get $273
   call $~lib/rt/pure/__release
  )
  (func $std/string/getString (; 103 ;) (result i32)

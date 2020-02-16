@@ -521,32 +521,34 @@
  (data (i32.const 31136) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\00\c3\03 ")
  (data (i32.const 31168) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00;\00\a3\03 ")
  (data (i32.const 31200) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00;\00\c3\03 ")
- (data (i32.const 31232) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\00\fb")
- (data (i32.const 31264) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00F")
- (data (i32.const 31296) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00I")
- (data (i32.const 31328) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\02\fb")
- (data (i32.const 31360) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00L")
- (data (i32.const 31392) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\03\fb")
- (data (i32.const 31424) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00F\00F\00I")
- (data (i32.const 31456) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\04\fb")
- (data (i32.const 31488) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00F\00F\00L")
- (data (i32.const 31520) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\05\fb")
- (data (i32.const 31552) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00S\00T")
- (data (i32.const 31584) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\06\fb")
- (data (i32.const 31616) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\f0\01")
- (data (i32.const 31648) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00J\00\0c\03")
- (data (i32.const 31680) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\96\1e")
- (data (i32.const 31712) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00H\001\03")
- (data (i32.const 31744) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\97\1e")
- (data (i32.const 31776) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00T\00\08\03")
- (data (i32.const 31808) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\98\1e")
- (data (i32.const 31840) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00W\00\n\03")
- (data (i32.const 31872) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\99\1e")
- (data (i32.const 31904) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00Y\00\n\03")
- (data (i32.const 31936) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\9a\1e")
- (data (i32.const 31968) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00A\00\be\02")
- (data (i32.const 32000) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00L\00o\00w\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00L\00o\00w\00e\00r\00C\00o\00d\00e")
- (data (i32.const 32080) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e")
+ (data (i32.const 31232) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00\01\03\a3\03 ")
+ (data (i32.const 31264) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00\01\03\c3\03 ")
+ (data (i32.const 31296) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\00\fb")
+ (data (i32.const 31328) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00F")
+ (data (i32.const 31360) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00I")
+ (data (i32.const 31392) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\02\fb")
+ (data (i32.const 31424) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00F\00L")
+ (data (i32.const 31456) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\03\fb")
+ (data (i32.const 31488) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00F\00F\00I")
+ (data (i32.const 31520) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\04\fb")
+ (data (i32.const 31552) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00F\00F\00L")
+ (data (i32.const 31584) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\05\fb")
+ (data (i32.const 31616) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00S\00T")
+ (data (i32.const 31648) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\06\fb")
+ (data (i32.const 31680) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\f0\01")
+ (data (i32.const 31712) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00J\00\0c\03")
+ (data (i32.const 31744) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\96\1e")
+ (data (i32.const 31776) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00H\001\03")
+ (data (i32.const 31808) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\97\1e")
+ (data (i32.const 31840) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00T\00\08\03")
+ (data (i32.const 31872) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\98\1e")
+ (data (i32.const 31904) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00W\00\n\03")
+ (data (i32.const 31936) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\99\1e")
+ (data (i32.const 31968) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00Y\00\n\03")
+ (data (i32.const 32000) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00\9a\1e")
+ (data (i32.const 32032) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00A\00\be\02")
+ (data (i32.const 32064) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00L\00o\00w\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00L\00o\00w\00e\00r\00C\00o\00d\00e")
+ (data (i32.const 32144) "@\00\00\00\01\00\00\00\01\00\00\00@\00\00\00o\00r\00i\00g\00U\00p\00p\00e\00r\00C\00o\00d\00e\00 \00!\00=\00 \00e\00x\00p\00e\00c\00t\00U\00p\00p\00e\00r\00C\00o\00d\00e")
  (global $std/string/str (mut i32) (i32.const 32))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
@@ -606,7 +608,7 @@
  )
  (func $~lib/rt/pure/__retain (; 10 ;) (param $0 i32) (result i32)
   local.get $0
-  i32.const 32160
+  i32.const 32224
   i32.gt_u
   if
    local.get $0
@@ -618,7 +620,7 @@
  )
  (func $~lib/rt/pure/__release (; 11 ;) (param $0 i32)
   local.get $0
-  i32.const 32160
+  i32.const 32224
   i32.gt_u
   if
    local.get $0
@@ -1348,11 +1350,11 @@
    if
     unreachable
    end
-   i32.const 32160
+   i32.const 32224
    local.tee $0
    i32.const 0
    i32.store
-   i32.const 33728
+   i32.const 33792
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -1363,7 +1365,7 @@
      local.get $1
      i32.const 2
      i32.shl
-     i32.const 32160
+     i32.const 32224
      i32.add
      i32.const 0
      i32.store offset=4
@@ -1381,7 +1383,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 32160
+       i32.const 32224
        i32.add
        i32.const 0
        i32.store offset=96
@@ -1399,13 +1401,13 @@
      br $for-loop|0
     end
    end
-   i32.const 32160
-   i32.const 33744
+   i32.const 32224
+   i32.const 33808
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 32160
+   i32.const 32224
    global.set $~lib/rt/tlsf/ROOT
   end
   local.get $0
@@ -4743,7 +4745,7 @@
   local.get $2
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 32160
+  i32.const 32224
   i32.ge_u
   if
    local.get $1
@@ -8279,6 +8281,7 @@
   (local $279 i32)
   (local $280 i32)
   (local $281 i32)
+  (local $282 i32)
   global.get $std/string/str
   i32.const 32
   i32.ne
@@ -15762,7 +15765,7 @@
    unreachable
   end
   i32.const 31248
-  call $~lib/string/String#toUpperCase
+  call $~lib/string/String#toLowerCase
   local.tee $273
   i32.const 31280
   call $~lib/string/String.__eq
@@ -15770,26 +15773,26 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 670
+   i32.const 668
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 30112
+  i32.const 31312
   call $~lib/string/String#toUpperCase
   local.tee $274
-  i32.const 31312
+  i32.const 31344
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 671
+   i32.const 677
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 31344
+  i32.const 30112
   call $~lib/string/String#toUpperCase
   local.tee $275
   i32.const 31376
@@ -15798,7 +15801,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 672
+   i32.const 678
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15812,7 +15815,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 673
+   i32.const 679
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15826,7 +15829,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 674
+   i32.const 680
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15840,7 +15843,7 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 675
+   i32.const 681
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15848,27 +15851,27 @@
   i32.const 31600
   call $~lib/string/String#toUpperCase
   local.tee $279
-  i32.const 31568
+  i32.const 31632
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 676
+   i32.const 682
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 31632
+  i32.const 31664
   call $~lib/string/String#toUpperCase
   local.tee $280
-  i32.const 31664
+  i32.const 31632
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 677
+   i32.const 683
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -15882,63 +15885,77 @@
   if
    i32.const 0
    i32.const 80
-   i32.const 678
+   i32.const 684
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 31760
   call $~lib/string/String#toUpperCase
-  local.tee $0
+  local.tee $282
   i32.const 31792
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 679
+   i32.const 685
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 31824
   call $~lib/string/String#toUpperCase
-  local.tee $10
+  local.tee $0
   i32.const 31856
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 680
+   i32.const 686
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 31888
   call $~lib/string/String#toUpperCase
-  local.tee $2
+  local.tee $10
   i32.const 31920
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 681
+   i32.const 687
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 31952
   call $~lib/string/String#toUpperCase
-  local.tee $1
+  local.tee $2
   i32.const 31984
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 80
-   i32.const 682
+   i32.const 688
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 32016
+  call $~lib/string/String#toUpperCase
+  local.tee $1
+  i32.const 32048
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 80
+   i32.const 689
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -16100,7 +16117,7 @@
     local.get $8
     i64.ne
     if
-     i32.const 32016
+     i32.const 32080
      i32.const 3
      local.get $5
      f64.convert_i32_s
@@ -16116,7 +16133,7 @@
     local.get $9
     i64.ne
     if
-     i32.const 32096
+     i32.const 32160
      i32.const 3
      local.get $5
      f64.convert_i32_s
@@ -16134,7 +16151,7 @@
     if
      i32.const 0
      i32.const 80
-     i32.const 719
+     i32.const 726
      i32.const 2
      call $~lib/builtins/abort
      unreachable
@@ -16145,7 +16162,7 @@
     if
      i32.const 0
      i32.const 80
-     i32.const 720
+     i32.const 727
      i32.const 2
      call $~lib/builtins/abort
      unreachable
@@ -16701,6 +16718,8 @@
   call $~lib/rt/pure/__release
   local.get $281
   call $~lib/rt/pure/__release
+  local.get $282
+  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
   local.get $10
@@ -16794,7 +16813,7 @@
  )
  (func $~lib/rt/pure/__visit (; 93 ;) (param $0 i32)
   local.get $0
-  i32.const 32160
+  i32.const 32224
   i32.lt_u
   if
    return
