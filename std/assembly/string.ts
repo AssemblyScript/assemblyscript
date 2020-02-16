@@ -1,7 +1,7 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
-import { compareImpl, strtol, strtod, isSpace, isAscii, toLower8, toUpper8 } from "./util/string";
+import { compareImpl, strtol, strtod, isSpace, isAlpha, isAscii, toLower8, toUpper8 } from "./util/string";
 import { specialsUpper, casemap, bsearch } from "./util/casemap";
 import { E_INVALIDLENGTH } from "./util/error";
 import { ArrayBufferView } from "./arraybuffer";
@@ -532,7 +532,7 @@ import { idof } from "./builtins";
           // Σ maps to σ but except at the end of a word where it maps to ς
           let sigma = 0x03C3; // σ
           if (len > 1) {
-            let prevIsLetter = !(prevCode == 0 || isSpace(prevCode));
+            let prevIsLetter = isAlpha(prevCode);
             let nextIsEOW = (i == len - 1) || isSpace(
               load<u16>(changetype<usize>(this) + (i << 1), 2)
             );

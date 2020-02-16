@@ -662,6 +662,9 @@ assert("aΣ ".toLowerCase() == "aς ");
 assert("aΣ\n".toLowerCase() == "aς\n");
 assert("aΣ".toLowerCase() == "aς");
 assert("aΣb".toLowerCase() == "aσb");
+assert("ΣΣ ".toLowerCase() == "σς ");
+assert("1Σ ".toLowerCase() == "1σ ");
+assert(";Σ ".toLowerCase() == ";σ ");
 
 // Tests some special casing for upper case mapping
 assert("\uFB00".toUpperCase() == "FF");
