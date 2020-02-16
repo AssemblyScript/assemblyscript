@@ -7661,11 +7661,6 @@
   local.get $0
   i32.const 196606
   i32.lt_u
-  if
-   i32.const 1
-   return
-  end
-  i32.const 0
  )
  (func $~lib/string/String#toLowerCase (; 87 ;) (param $0 i32) (result i32)
   (local $1 i32)

@@ -307,8 +307,7 @@ export function isAlpha(c: u32): bool {
       (<u32>load<u8>(table + (<u32>load<u8>(table + (c >>> 8)) << 5) + ((c & 255) >> 3)) >>> (c & 7)) & 1
     );
   }
-  if (c < 0x2FFFE) return true;
-  return false;
+  return c < 0x2FFFE;
 }
 
 /** Parses a string to an integer (usually), using the specified radix. */
