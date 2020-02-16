@@ -665,7 +665,7 @@ assert("aΣb".toLowerCase() == "aσb");
 assert("ΣΣ ".toLowerCase() == "σς ");
 assert("1Σ ".toLowerCase() == "1σ ");
 assert(";Σ ".toLowerCase() == ";σ ");
-assert("\u0301Σ ".toLowerCase() == "́σ ");
+assert("\u0301Σ ".toLowerCase() == "\u0301σ ");
 
 // TODO: Failed
 // assert("Σ\u0301Σ\u0301 ".toLowerCase() == "σ́ς́ ");
