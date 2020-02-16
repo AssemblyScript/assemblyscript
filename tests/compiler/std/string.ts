@@ -654,6 +654,15 @@ assert("\u1F88".toLowerCase() == "\u1F80");
 assert("\u1F8F".toLowerCase() == "\u1F87");
 assert("\u1FFC".toLowerCase() == "\u1FF3");
 
+// Tests sigma 'Σ' special cases
+assert("Σ".toLowerCase() == "σ");
+assert(" Σ".toLowerCase() == " σ");
+assert("Σ ".toLowerCase() == "σ ");
+assert("aΣ ".toLowerCase() == "aς ");
+assert("aΣ\n".toLowerCase() == "aς\n");
+assert("aΣ".toLowerCase() == "aς");
+assert("aΣb".toLowerCase() == "aσb");
+
 // Tests some special casing for upper case mapping
 assert("\uFB00".toUpperCase() == "FF");
 assert("\uFB01".toUpperCase() == "FI");
