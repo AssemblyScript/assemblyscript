@@ -532,11 +532,12 @@ import { idof } from "./builtins";
           // Σ maps to σ but except at the end of a word where it maps to ς
           let sigma = 0x03C3; // σ
           if (len > 1) {
-            let prevIsLetter = isAlpha(prevCode);
-            let nextIsEOW = (i == len - 1) || isSpace(
-              load<u16>(changetype<usize>(this) + (i << 1), 2)
-            );
-            if (prevIsLetter && nextIsEOW) {
+            if (
+              // check if next char is end of word
+              ((i == len - 1) || isSpace(load<u16>(changetype<usize>(this) + (i << 1), 2)))
+              // and previus char is letter
+              && isAlpha(prevCode)
+            ) {
               sigma = 0x03C2; // ς
             }
           }

@@ -11583,17 +11583,13 @@
         i32.const 1
         i32.gt_u
         if
-         local.get $4
-         call $~lib/util/string/isAlpha
-         local.set $9
          local.get $5
          local.get $1
          i32.const 1
          i32.sub
          i32.eq
-         local.tee $10
          if (result i32)
-          local.get $10
+          i32.const 1
          else
           local.get $0
           local.get $5
@@ -11603,10 +11599,9 @@
           i32.load16_u offset=2
           call $~lib/util/string/isSpace
          end
-         local.set $10
-         local.get $9
          if (result i32)
-          local.get $10
+          local.get $4
+          call $~lib/util/string/isAlpha
          else
           i32.const 0
          end
@@ -11666,20 +11661,20 @@
           i32.shr_u
           i32.const 55296
           i32.or
-          local.set $10
+          local.set $9
           local.get $8
           i32.const 1023
           i32.and
           i32.const 56320
           i32.or
-          local.set $9
+          local.set $10
           local.get $2
           local.get $3
           i32.const 1
           i32.shl
           i32.add
-          local.get $10
           local.get $9
+          local.get $10
           i32.const 16
           i32.shl
           i32.or

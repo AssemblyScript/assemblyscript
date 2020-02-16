@@ -7688,15 +7688,15 @@
   i32.shl
   i32.const 1
   call $~lib/rt/tlsf/__alloc
-  local.set $5
+  local.set $4
   loop $for-loop|0
-   local.get $4
+   local.get $3
    local.get $6
    i32.lt_u
    if
     block $for-continue|0
      local.get $0
-     local.get $4
+     local.get $3
      i32.const 1
      i32.shl
      i32.add
@@ -7705,7 +7705,7 @@
      i32.const -128
      i32.and
      if
-      local.get $4
+      local.get $3
       local.get $6
       i32.const 1
       i32.sub
@@ -7719,7 +7719,7 @@
       select
       if
        local.get $0
-       local.get $4
+       local.get $3
        i32.const 1
        i32.shl
        i32.add
@@ -7730,10 +7730,10 @@
        i32.const 1025
        i32.lt_u
        if
-        local.get $4
+        local.get $3
         i32.const 1
         i32.add
-        local.set $4
+        local.set $3
         local.get $7
         i32.const 1023
         i32.and
@@ -7750,7 +7750,7 @@
         i32.const 131072
         i32.ge_u
         if
-         local.get $5
+         local.get $4
          local.get $1
          i32.const 1
          i32.shl
@@ -7773,7 +7773,7 @@
       i32.const 304
       i32.eq
       if
-       local.get $5
+       local.get $4
        local.get $1
        i32.const 1
        i32.shl
@@ -7791,7 +7791,7 @@
        if
         i32.const 963
         local.set $8
-        local.get $5
+        local.get $4
         local.get $1
         i32.const 1
         i32.shl
@@ -7801,33 +7801,32 @@
         i32.gt_u
         if (result i32)
          local.get $3
-         call $~lib/util/string/isAlpha
-         local.get $4
          local.get $6
          i32.const 1
          i32.sub
          i32.eq
-         local.tee $3
-         i32.eqz
-         if
+         if (result i32)
+          i32.const 1
+         else
           local.get $0
-          local.get $4
+          local.get $3
           i32.const 1
           i32.shl
           i32.add
           i32.load16_u offset=2
           call $~lib/util/string/isSpace
-          local.set $3
          end
-         i32.eqz
-         if
+         if (result i32)
+          local.get $5
+          call $~lib/util/string/isAlpha
+         else
           i32.const 0
-          local.set $3
          end
-         i32.const 962
-         i32.const 963
-         local.get $3
-         select
+         if (result i32)
+          i32.const 962
+         else
+          i32.const 963
+         end
         else
          i32.const 963
         end
@@ -7839,7 +7838,7 @@
         i32.const 25
         i32.le_u
         if
-         local.get $5
+         local.get $4
          local.get $1
          i32.const 1
          i32.shl
@@ -7854,32 +7853,32 @@
          call $~lib/util/casemap/casemap
          i32.const 2097151
          i32.and
-         local.tee $3
+         local.tee $5
          i32.const 65536
          i32.lt_s
          if
-          local.get $5
+          local.get $4
           local.get $1
           i32.const 1
           i32.shl
           i32.add
-          local.get $3
+          local.get $5
           i32.store16
          else
-          local.get $5
+          local.get $4
           local.get $1
           i32.const 1
           i32.shl
           i32.add
-          local.get $3
+          local.get $5
           i32.const 65536
           i32.sub
-          local.tee $3
+          local.tee $5
           i32.const 10
           i32.shr_u
           i32.const 55296
           i32.or
-          local.get $3
+          local.get $5
           i32.const 1023
           i32.and
           i32.const 56320
@@ -7897,7 +7896,7 @@
        end
       end
      else
-      local.get $5
+      local.get $4
       local.get $1
       i32.const 1
       i32.shl
@@ -7916,12 +7915,12 @@
       i32.store16
      end
      local.get $2
-     local.set $3
+     local.set $5
     end
-    local.get $4
+    local.get $3
     i32.const 1
     i32.add
-    local.set $4
+    local.set $3
     local.get $1
     i32.const 1
     i32.add
@@ -7929,7 +7928,7 @@
     br $for-loop|0
    end
   end
-  local.get $5
+  local.get $4
   local.get $1
   i32.const 1
   i32.shl
