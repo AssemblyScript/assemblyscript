@@ -278,14 +278,14 @@ export function compareImpl(str1: string, index1: usize, str2: string, index2: u
   return 0;
 }
 
-export function isSpace(c: i32): bool {
+export function isSpace(c: u32): bool {
   if (c < 0x1680) { // < <LS> (1)
     // <SP>, <TAB>, <LF>, <VT>, <FF>, <CR> and <NBSP>
     // (c == 0x20 || c == 0xA0) was optimized to (c | 0x80) == 0xA0
     // @ts-ignore: cast
-    return ((c | 0x80) == 0xA0) | (u32(c - 0x09) <= 0x0D - 0x09);
+    return ((c | 0x80) == 0xA0) | (c - 0x09 <= 0x0D - 0x09);
   }
-  if (u32(c - 0x2000) <= 0x200A - 0x2000) return true;
+  if (c - 0x2000 <= 0x200A - 0x2000) return true;
   switch (c) {
     case 0x1680: // <LS> (1)
     case 0x2028: // <LS> (2)
@@ -298,13 +298,13 @@ export function isSpace(c: i32): bool {
   return false;
 }
 
-export function isAlpha(c: i32): bool {
-  if (isAscii(c)) return (u32(c) | 32) - CharCode.a < 26;
+export function isAlpha(c: u32): bool {
+  if (isAscii(c)) return (c | 32) - CharCode.a < 26;
   if (c < 0x20000) {
     // @ts-ignore
     let table = alphaTable.dataStart as usize;
     return bool(
-      (u32(<u32>load<u8>(table + (<u32>load<u8>(table + (c >>> 8)) << 5) + ((c & 255) >> 3))) >>> (c & 7)) & 1
+      (<u32>load<u8>(table + (<u32>load<u8>(table + (c >>> 8)) << 5) + ((c & 255) >> 3)) >>> (c & 7)) & 1
     );
   }
   if (c < 0x2FFFE) return true;

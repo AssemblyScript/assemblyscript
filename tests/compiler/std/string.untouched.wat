@@ -4207,7 +4207,7 @@
   (local $1 i32)
   local.get $0
   i32.const 5760
-  i32.lt_s
+  i32.lt_u
   if
    local.get $0
    i32.const 128
@@ -11374,7 +11374,7 @@
   end
   local.get $0
   i32.const 131072
-  i32.lt_s
+  i32.lt_u
   if
    global.get $~lib/util/string/alphaTable
    i32.load offset=4
@@ -11393,7 +11393,7 @@
    i32.const 255
    i32.and
    i32.const 3
-   i32.shr_s
+   i32.shr_u
    i32.add
    i32.load8_u
    local.get $0
@@ -11406,7 +11406,7 @@
   end
   local.get $0
   i32.const 196606
-  i32.lt_s
+  i32.lt_u
   if
    i32.const 1
    return
