@@ -814,7 +814,7 @@ export function isUpper8(c: u32): bool {
 
 // @ts-ignore: decorator
 @inline
-export function toLower8(c: i32): u32 {
+export function toLower8(c: u32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c | u32(isUpper8(c)) << 5;
   } else {
@@ -824,7 +824,7 @@ export function toLower8(c: i32): u32 {
 
 // @ts-ignore: decorator
 @inline
-export function toUpper8(c: i32): u32 {
+export function toUpper8(c: u32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c & ~(u32(isLower8(c)) << 5);
   } else {
