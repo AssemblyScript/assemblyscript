@@ -1084,10 +1084,16 @@ export class Compiler extends DiagnosticEmitter {
               (<EnumValue>member).identifierNode.range.atEnd
             );
           }
-          initExpr = module.binary(BinaryOp.AddI32,
-            module.global_get(previousValue.internalName, NativeType.I32),
-            module.i32(1)
-          );
+          if (isInline) {
+            let value = i64_add(previousValue.constantIntegerValue, i64_new(1));
+            assert(!i64_high(value));
+            initExpr = module.i32(i64_low(value));
+          } else {
+            initExpr = module.binary(BinaryOp.AddI32,
+              module.global_get(previousValue.internalName, NativeType.I32),
+              module.i32(1)
+            );
+          }
           initExpr = module.precomputeExpression(initExpr);
           if (getExpressionId(initExpr) != ExpressionId.Const) {
             if (element.is(CommonFlags.CONST)) {
