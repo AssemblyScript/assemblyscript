@@ -2050,33 +2050,45 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 29 ;) (param $0 i32)
-  block $block$4$break
-   block $switch$1$default
-    block $switch$1$case$2
+ (func $~lib/rt/pure/__visit (; 29 ;) (param $0 i32)
+  local.get $0
+  i32.const 432
+  i32.lt_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 16
+  i32.sub
+  call $~lib/rt/pure/decrement
+ )
+ (func $~lib/rt/__visit_members (; 30 ;) (param $0 i32)
+  block $switch$1$default
+   block $switch$1$case$5
+    block $switch$1$case$4
+     block $switch$1$case$2
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $0
+    if
      local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+     call $~lib/rt/pure/__visit
     end
     return
    end
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $0
-  if
    local.get $0
-   i32.const 432
-   i32.ge_u
-   if
-    local.get $0
-    i32.const 16
-    i32.sub
-    call $~lib/rt/pure/decrement
-   end
+   i32.load
+   call $~lib/rt/pure/__visit
+   return
   end
+  unreachable
  )
 )

@@ -43,7 +43,7 @@
   if
    i32.const 160
    i32.const 224
-   i32.const 93
+   i32.const 104
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -62,7 +62,7 @@
   if
    i32.const 160
    i32.const 224
-   i32.const 93
+   i32.const 104
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -1678,9 +1678,15 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (; 27 ;) (param $0 i32)
+ (func $~lib/array/Array<i8>#__visit_impl (; 27 ;) (param $0 i32)
+  local.get $0
+  i32.load
+  call $~lib/rt/pure/__visit
+ )
+ (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (; 28 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.load offset=4
   local.tee $1
@@ -1689,17 +1695,17 @@
   i32.const 2
   i32.shl
   i32.add
-  local.set $0
+  local.set $2
   loop $while-continue|0
    local.get $1
-   local.get $0
+   local.get $2
    i32.lt_u
    if
     local.get $1
     i32.load
-    local.tee $2
+    local.tee $3
     if
-     local.get $2
+     local.get $3
      call $~lib/rt/pure/__visit
     end
     local.get $1
@@ -1709,37 +1715,51 @@
     br $while-continue|0
    end
   end
+  local.get $0
+  i32.load
+  call $~lib/rt/pure/__visit
  )
- (func $~lib/rt/__visit_members (; 28 ;) (param $0 i32)
-  block $block$4$break
-   block $switch$1$default
-    block $switch$1$case$10
-     block $switch$1$case$8
-      block $switch$1$case$2
+ (func $~lib/rt/__visit_members (; 29 ;) (param $0 i32)
+  block $switch$1$default
+   block $switch$1$case$10
+    block $switch$1$case$8
+     block $switch$1$case$6
+      block $switch$1$case$5
+       block $switch$1$case$4
+        block $switch$1$case$2
+         local.get $0
+         i32.const 8
+         i32.sub
+         i32.load
+         br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$2 $switch$1$case$8 $switch$1$case$2 $switch$1$case$10 $switch$1$default
+        end
+        return
+       end
        local.get $0
-       i32.const 8
-       i32.sub
        i32.load
-       br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $block$4$break $block$4$break $switch$1$case$2 $switch$1$case$8 $switch$1$case$2 $switch$1$case$10 $switch$1$default
+       local.tee $0
+       if
+        local.get $0
+        call $~lib/rt/pure/__visit
+       end
+       return
       end
+      local.get $0
+      call $~lib/array/Array<i8>#__visit_impl
       return
      end
      local.get $0
-     call $~lib/array/Array<std/array-literal/Ref>#__visit_impl
-     br $block$4$break
+     call $~lib/array/Array<i8>#__visit_impl
+     return
     end
     local.get $0
     call $~lib/array/Array<std/array-literal/Ref>#__visit_impl
-    br $block$4$break
+    return
    end
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $0
-  if
    local.get $0
-   call $~lib/rt/pure/__visit
+   call $~lib/array/Array<std/array-literal/Ref>#__visit_impl
+   return
   end
+  unreachable
  )
 )

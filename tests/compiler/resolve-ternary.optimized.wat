@@ -29,7 +29,7 @@
  (data (i32.const 1488) "\10\00\00\00\01\00\00\00\05\00\00\00\10\00\00\00\a0\05\00\00\a0\05\00\00(\00\00\00\n")
  (data (i32.const 1524) "\01\00\00\00\01")
  (data (i32.const 1536) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\00.\000")
- (data (i32.const 1568) "\06\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\13\01\00\00\02\00\00\00S\04\00\00\02\00\00\00\93\00\00\00\02")
+ (data (i32.const 1568) "\06\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\12\01\00\00\00\00\00\00R\04\00\00\00\00\00\00\92")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
@@ -2615,15 +2615,37 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 35 ;) (param $0 i32)
-  block $block$4$break
+ (func $~lib/rt/pure/__visit (; 35 ;) (param $0 i32)
+  local.get $0
+  i32.const 1620
+  i32.lt_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 16
+  i32.sub
+  call $~lib/rt/pure/decrement
+ )
+ (func $~lib/rt/__visit_members (; 36 ;) (param $0 i32)
+  block $folding-inner0
    block $switch$1$default
-    block $switch$1$case$2
+    block $switch$1$case$4
+     block $switch$1$case$2
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $folding-inner0 $folding-inner0 $folding-inner0 $switch$1$default
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $0
+    if
      local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+     call $~lib/rt/pure/__visit
     end
     return
    end
@@ -2631,17 +2653,6 @@
   end
   local.get $0
   i32.load
-  local.tee $0
-  if
-   local.get $0
-   i32.const 1620
-   i32.ge_u
-   if
-    local.get $0
-    i32.const 16
-    i32.sub
-    call $~lib/rt/pure/decrement
-   end
-  end
+  call $~lib/rt/pure/__visit
  )
 )

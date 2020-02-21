@@ -5748,7 +5748,7 @@
   if
    i32.const 12240
    i32.const 12192
-   i32.const 93
+   i32.const 104
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -5768,7 +5768,7 @@
    call $~lib/rt/pure/__release
    i32.const 12304
    i32.const 12192
-   i32.const 97
+   i32.const 108
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -16474,6 +16474,7 @@
  (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 93 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.load offset=4
   local.tee $1
@@ -16482,17 +16483,17 @@
   i32.const 2
   i32.shl
   i32.add
-  local.set $0
+  local.set $2
   loop $while-continue|0
    local.get $1
-   local.get $0
+   local.get $2
    i32.lt_u
    if
     local.get $1
     i32.load
-    local.tee $2
+    local.tee $3
     if
-     local.get $2
+     local.get $3
      call $~lib/rt/pure/__visit
     end
     local.get $1
@@ -16502,32 +16503,41 @@
     br $while-continue|0
    end
   end
+  local.get $0
+  i32.load
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/rt/__visit_members (; 94 ;) (param $0 i32)
-  block $block$4$break
+  block $folding-inner0
    block $switch$1$default
     block $switch$1$case$6
-     block $switch$1$case$2
+     block $switch$1$case$4
+      block $switch$1$case$2
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $folding-inner0 $switch$1$case$6 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $switch$1$default
+      end
+      return
+     end
+     local.get $0
+     i32.load
+     local.tee $0
+     if
       local.get $0
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $block$4$break $switch$1$case$6 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+      call $~lib/rt/pure/__visit
      end
      return
     end
     local.get $0
     call $~lib/array/Array<~lib/string/String>#__visit_impl
-    br $block$4$break
+    return
    end
    unreachable
   end
   local.get $0
   i32.load
-  local.tee $0
-  if
-   local.get $0
-   call $~lib/rt/pure/__visit
-  end
+  call $~lib/rt/pure/__visit
  )
 )

@@ -3300,7 +3300,7 @@
   if
    i32.const 368
    i32.const 528
-   i32.const 93
+   i32.const 104
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -3523,7 +3523,7 @@
   if
    i32.const 368
    i32.const 528
-   i32.const 93
+   i32.const 104
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -34014,15 +34014,37 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/__visit_members (; 519 ;) (param $0 i32)
-  block $block$4$break
+ (func $~lib/rt/pure/__visit (; 519 ;) (param $0 i32)
+  local.get $0
+  i32.const 7484
+  i32.lt_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 16
+  i32.sub
+  call $~lib/rt/pure/decrement
+ )
+ (func $~lib/rt/__visit_members (; 520 ;) (param $0 i32)
+  block $folding-inner0
    block $switch$1$default
-    block $switch$1$case$2
+    block $switch$1$case$4
+     block $switch$1$case$2
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $switch$1$default
+     end
+     return
+    end
+    local.get $0
+    i32.load
+    local.tee $0
+    if
      local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+     call $~lib/rt/pure/__visit
     end
     return
    end
@@ -34030,17 +34052,6 @@
   end
   local.get $0
   i32.load
-  local.tee $0
-  if
-   local.get $0
-   i32.const 7484
-   i32.ge_u
-   if
-    local.get $0
-    i32.const 16
-    i32.sub
-    call $~lib/rt/pure/decrement
-   end
-  end
+  call $~lib/rt/pure/__visit
  )
 )

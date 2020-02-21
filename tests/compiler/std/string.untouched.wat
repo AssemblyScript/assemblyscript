@@ -8756,7 +8756,7 @@
   if
    i32.const 12240
    i32.const 12192
-   i32.const 93
+   i32.const 104
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -8772,7 +8772,7 @@
    call $~lib/rt/pure/__release
    i32.const 12304
    i32.const 12192
-   i32.const 97
+   i32.const 108
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -20679,7 +20679,10 @@
   call $~lib/rt/pure/decrement
  )
  (func $~lib/array/Array<f64>#__visit_impl (; 107 ;) (param $0 i32) (param $1 i32)
-  nop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 108 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -20719,99 +20722,118 @@
     br $while-continue|0
    end
   end
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<i32>#__visit_impl (; 109 ;) (param $0 i32) (param $1 i32)
-  nop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<u32>#__visit_impl (; 110 ;) (param $0 i32) (param $1 i32)
-  nop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<u64>#__visit_impl (; 111 ;) (param $0 i32) (param $1 i32)
-  nop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<i16>#__visit_impl (; 112 ;) (param $0 i32) (param $1 i32)
-  nop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<u16>#__visit_impl (; 113 ;) (param $0 i32) (param $1 i32)
-  nop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<u8>#__visit_impl (; 114 ;) (param $0 i32) (param $1 i32)
-  nop
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/rt/__visit_members (; 115 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  block $block$4$break
-   block $switch$1$default
-    block $switch$1$case$12
-     block $switch$1$case$11
-      block $switch$1$case$10
-       block $switch$1$case$9
-        block $switch$1$case$8
-         block $switch$1$case$7
-          block $switch$1$case$6
-           block $switch$1$case$5
-            block $switch$1$case$4
-             block $switch$1$case$2
-              local.get $0
-              i32.const 8
-              i32.sub
-              i32.load
-              br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$8 $switch$1$case$9 $switch$1$case$10 $switch$1$case$11 $switch$1$case$12 $switch$1$default
-             end
-             return
+  block $switch$1$default
+   block $switch$1$case$12
+    block $switch$1$case$11
+     block $switch$1$case$10
+      block $switch$1$case$9
+       block $switch$1$case$8
+        block $switch$1$case$7
+         block $switch$1$case$6
+          block $switch$1$case$5
+           block $switch$1$case$4
+            block $switch$1$case$2
+             local.get $0
+             i32.const 8
+             i32.sub
+             i32.load
+             br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$case$8 $switch$1$case$9 $switch$1$case$10 $switch$1$case$11 $switch$1$case$12 $switch$1$default
             end
-            br $block$4$break
+            return
            end
            local.get $0
-           local.get $1
-           call $~lib/array/Array<f64>#__visit_impl
-           br $block$4$break
+           i32.load
+           local.tee $2
+           if
+            local.get $2
+            local.get $1
+            call $~lib/rt/pure/__visit
+           end
+           return
           end
           local.get $0
           local.get $1
-          call $~lib/array/Array<~lib/string/String>#__visit_impl
-          br $block$4$break
+          call $~lib/array/Array<f64>#__visit_impl
+          return
          end
          local.get $0
          local.get $1
-         call $~lib/array/Array<i32>#__visit_impl
-         br $block$4$break
+         call $~lib/array/Array<~lib/string/String>#__visit_impl
+         return
         end
         local.get $0
         local.get $1
-        call $~lib/array/Array<u32>#__visit_impl
-        br $block$4$break
+        call $~lib/array/Array<i32>#__visit_impl
+        return
        end
        local.get $0
        local.get $1
-       call $~lib/array/Array<u64>#__visit_impl
-       br $block$4$break
+       call $~lib/array/Array<u32>#__visit_impl
+       return
       end
       local.get $0
       local.get $1
-      call $~lib/array/Array<i16>#__visit_impl
-      br $block$4$break
+      call $~lib/array/Array<u64>#__visit_impl
+      return
      end
      local.get $0
      local.get $1
-     call $~lib/array/Array<u16>#__visit_impl
-     br $block$4$break
+     call $~lib/array/Array<i16>#__visit_impl
+     return
     end
     local.get $0
     local.get $1
-    call $~lib/array/Array<u8>#__visit_impl
-    br $block$4$break
+    call $~lib/array/Array<u16>#__visit_impl
+    return
    end
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $2
-  if
-   local.get $2
+   local.get $0
    local.get $1
-   call $~lib/rt/pure/__visit
+   call $~lib/array/Array<u8>#__visit_impl
+   return
   end
-  return
+  unreachable
  )
 )

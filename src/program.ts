@@ -3552,6 +3552,10 @@ export class Class extends TypedElement {
   getArrayValueType(): Type {
     var current: Class = this;
     var program = this.program;
+    var arrayPrototype = program.arrayPrototype;
+    if (this.extends(arrayPrototype)) {
+      return assert(this.getTypeArgumentsTo(arrayPrototype))[0];
+    }
     var abvInstance = program.arrayBufferViewInstance;
     while (current.base !== abvInstance) {
       current = assert(current.base);
@@ -3568,7 +3572,6 @@ export class Class extends TypedElement {
       case program.u64ArrayPrototype: return Type.u64;
       case program.f32ArrayPrototype: return Type.f32;
       case program.f64ArrayPrototype: return Type.f64;
-      case program.arrayPrototype: return assert(this.getTypeArgumentsTo(program.arrayPrototype))[0];
       default: assert(false);
     }
     return Type.void;
