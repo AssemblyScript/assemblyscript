@@ -11863,11 +11863,9 @@
              local.get $10
              local.get $9
              i32.const 1
-             i32.add
-             i32.const 1
              i32.shl
              i32.add
-             i32.load16_u
+             i32.load16_u offset=2
              local.set $17
              local.get $17
              i32.const 64512

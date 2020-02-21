@@ -1184,11 +1184,11 @@ function isCased(c: u32): bool {
 @inline
 function codePointBefore(buffer: usize, index: i32): i32 {
   if (index <= 0) return -1;
-  var c = <u32>load<u16>(buffer + (<usize>(index - 1) << 1));
+  var c = <u32>load<u16>(buffer + (<usize>index - 1 << 1));
   if (u32((c & 0xFC00) == 0xDC00) & u32(index - 2 >= 0)) {
-    let c1 = <u32>load<u16>(buffer + (<usize>(index - 2) << 1));
+    let c1 = <u32>load<u16>(buffer + (<usize>index - 2 << 1));
     if ((c1 & 0xFC00) == 0xD800) {
-      return 0x10000 + ((c1 & 0x3FF) << 10) + (c & 0x3FF);
+      return ((c1 & 0x3FF) << 10) + (c & 0x3FF) + 0x10000;
     }
   }
   return (c & 0xF800) == 0xD800 ? 0xFFFD : c;
@@ -1213,7 +1213,7 @@ export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
   while (index < len) {
     let c = <u32>load<u16>(buffer + (<usize>index << 1));
     if (u32((c & 0xFC00) == 0xD800) & u32(index + 1 != len)) {
-      let c1 = <u32>load<u16>(buffer + ((<usize>index + 1) << 1));
+      let c1 = <u32>load<u16>(buffer + (<usize>index << 1), 2);
       if ((c1 & 0xFC00) == 0xDC00) {
         c = (c - 0xD800 << 10) + (c1 - 0xDC00) + 0x10000;
       }
