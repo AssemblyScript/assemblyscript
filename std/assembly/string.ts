@@ -1,11 +1,9 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
-import { compareImpl, strtol, strtod, isSpace, isAlpha, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
+import { compareImpl, strtol, strtod, isSpace, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
 import { specialsUpper, casemap, bsearch } from "./util/casemap";
 import { E_INVALIDLENGTH } from "./util/error";
-import { ArrayBufferView } from "./arraybuffer";
-import { idof } from "./builtins";
 
 @sealed export abstract class String {
 
