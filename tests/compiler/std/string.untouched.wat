@@ -11643,16 +11643,16 @@
               i32.const 55296
               i32.eq
               if
-               i32.const 65536
                local.get $17
                i32.const 1023
                i32.and
                i32.const 10
                i32.shl
-               i32.add
                local.get $16
                i32.const 1023
                i32.and
+               i32.add
+               i32.const 65536
                i32.add
                br $~lib/util/string/codePointBefore|inlined.0
               end
@@ -12191,11 +12191,9 @@
   local.get $0
   local.get $1
   i32.const 1
-  i32.add
-  i32.const 1
   i32.shl
   i32.add
-  i32.load16_u
+  i32.load16_u offset=2
   local.set $4
   local.get $4
   i32.const 64512
