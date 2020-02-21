@@ -672,6 +672,27 @@ assert("ΣΣ-".toLowerCase() == "σς-");
 assert("Σ\u0301Σ\u0301-".toLowerCase() == "σ́ς́-");
 assert("Σ\u0301Σ\u0301猪".toLowerCase() == "σ́ς́猪");
 
+// sigma tests from Test262
+assert("\uD835\uDCA2\u03A3".toLowerCase() == "\uD835\uDCA2\u03C2");
+assert("A.\u03A3".toLowerCase() == "a.\u03C2");
+assert("A\u00AD\u03A3".toLowerCase() == "a\u00AD\u03C2");
+assert("A\uD834\uDE42\u03A3".toLowerCase() == "a\uD834\uDE42\u03C2");
+// assert("\u0345\u03A3".toLowerCase() == "\u0345\u03C3"); // fail
+assert("\u0391\u0345\u03A3".toLowerCase() == "\u03B1\u0345\u03C2");
+assert("A\u03A3B".toLowerCase() == "a\u03C3b");
+assert("A\u03A3\uD835\uDCA2".toLowerCase() == "a\u03C3\uD835\uDCA2");
+assert("A\u03A3.b".toLowerCase() == "a\u03C3.b");
+assert("A\u03A3\u00ADB".toLowerCase() == "a\u03C3\u00ADb");
+assert("A\u03A3\uD834\uDE42B".toLowerCase() == "a\u03C3\uD834\uDE42b");
+// assert("A\u03A3\u0345".toLowerCase() == "a\u03C2\u0345"); // fail
+assert("A\u03A3\u0345\u0391".toLowerCase() == "a\u03C3\u0345\u03B1");
+assert("A\u180E\u03A3".toLowerCase() == "a\u180E\u03C2");
+assert("A\u180E\u03A3B".toLowerCase() == "a\u180E\u03C3b");
+assert("A\u03A3\u180E".toLowerCase() == "a\u03C2\u180E");
+assert("A\u03A3\u180EB".toLowerCase() == "a\u03C3\u180Eb");
+assert("A\u180E\u03A3\u180E".toLowerCase() == "a\u180E\u03C2\u180E");
+assert("A\u180E\u03A3\u180EB".toLowerCase() == "a\u180E\u03C3\u180Eb");
+
 // Tests some special casing for upper case mapping
 assert("\uFB00".toUpperCase() == "FF");
 assert("\uFB01".toUpperCase() == "FI");
