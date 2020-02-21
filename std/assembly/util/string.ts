@@ -1166,16 +1166,52 @@ function triebitSearch(buffer: usize, c: u32): bool {
   return false;
 }
 
-export function isCaseIgnarable(c: u32): bool {
+// @ts-ignore: decorator
+@inline
+function isCaseIgnorable(c: u32): bool {
   // @ts-ignore: cast
   return triebitSearch(caseIgnorables.dataStart, c);
 }
 
-export function isCased(c: u32): bool {
+// @ts-ignore: decorator
+@inline
+function isCased(c: u32): bool {
   // @ts-ignore: cast
   return triebitSearch(cased.dataStart, c);
 }
 
+function codePointBefore(str: String, index: i32): i32 {
+  var c = str.charCodeAt(index - 1);
+  if ((c & 0xFC00) == 0xdc00 && index - 2 >= 0 && (str.charCodeAt(index - 2) & 0xFC00) == 0xD800) {
+    return 0x10000 + ((str.charCodeAt(index - 2) & 0x3FF) << 10) + (c & 0x3FF);
+  }
+  return (c & 0xF800) == 0xD800 ? 0xFFFD : c;
+}
+
+export function isFinalSigma(str: String, index: i32): bool {
+  var len   = str.length;
+  var saved = index;
+  var found = false;
+
+  while (index > 0) {
+    let c = codePointBefore(str, index);
+    index -= i32(c >= 0x10000) + 1;
+    if (isCased(c)) {
+      found = true;
+    } else if (!isCaseIgnorable(c)) {
+      return false;
+    }
+  }
+  if (!found) return false;
+  index = saved + 1;
+  while (index < len) {
+    let c = str.codePointAt(index);
+    index += i32(c >= 0x10000) + 1;
+    if (isCased(c)) return false;
+    if (!isCaseIgnorable(c)) return true;
+  }
+  return true;
+}
 
 // @ts-ignore: decorator
 @inline
