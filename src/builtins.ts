@@ -20,6 +20,7 @@ import {
   LiteralKind,
   LiteralExpression,
   StringLiteralExpression,
+  ArrayLiteralExpression,
   CallExpression,
   isNumericLiteral
 } from "./ast";
@@ -159,6 +160,7 @@ export namespace BuiltinNames {
   export const unchecked = "~lib/builtins/unchecked";
   export const instantiate = "~lib/builtins/instantiate";
   export const idof = "~lib/builtins/idof";
+  export const fixed = "~lib/builtins/fixed";
 
   export const i8 = "~lib/builtins/i8";
   export const i16 = "~lib/builtins/i16";
@@ -2314,6 +2316,49 @@ export function compileCall(
       }
       compiler.currentType = classInstance.type;
       return compiler.compileInstantiate(classInstance, operands, Constraints.NONE, reportNode);
+    }
+    case BuiltinNames.fixed: { // fixed<T!>(values: T[]) -> FixedArray<T>
+      if (
+        checkTypeRequired(typeArguments, reportNode, compiler, true) |
+        checkArgsRequired(operands, 1, reportNode, compiler)
+      ) return module.unreachable();
+      let typeArgument = typeArguments![0];
+      if (!typeArgument.is(TypeFlags.VALUE)) {
+        compiler.error(
+          DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+          reportNode.typeArgumentsRange, "fixed", typeArgument.toString()
+        );
+        return module.unreachable();
+      }
+      let operand = operands[0];
+      if (operand.kind != NodeKind.LITERAL || (<LiteralExpression>operand).literalKind != LiteralKind.ARRAY) {
+        compiler.error(
+          DiagnosticCode.Array_literal_expected,
+          operand.range
+        );
+        return module.unreachable();
+      }
+      let classInstance = compiler.resolver.resolveClass(compiler.program.fixedArrayPrototype, [ typeArgument ]);
+      if (!classInstance) return module.unreachable();
+      let elementExpressions = (<ArrayLiteralExpression>operand).elementExpressions;
+      let numElements = elementExpressions.length;
+      let elementExprs = new Array<ExpressionRef>(numElements);
+      for (let i = 0; i < numElements; ++i) {
+        let element = elementExpressions[i];
+        if (element) {
+          elementExprs[i] = compiler.compileExpression(element, typeArgument);
+        } else {
+          elementExprs[i] = compiler.makeZero(typeArgument);
+        }
+      }
+      let offset = i64_add(
+        compiler.addStaticBuffer(typeArgument, elementExprs, classInstance.id).offset,
+        i64_new(compiler.program.runtimeHeaderSize)
+      );
+      compiler.currentType = classInstance.type;
+      return compiler.options.isWasm64
+        ? module.i64(i64_low(offset), i64_high(offset))
+        : module.i32(i64_low(offset));
     }
 
     // === User-defined diagnostics ===============================================================

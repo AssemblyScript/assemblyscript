@@ -1398,6 +1398,9 @@ declare class Array<T> {
   toString(): string;
 }
 
+/** Creates a fixed array data segment. */
+declare function fixed<T>(values: T[]): FixedArray<T>;
+
 /** Class representing a fixed sequence of values of type `T`. */
 declare class FixedArray<T> {
   [key: number]: T;

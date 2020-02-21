@@ -4,11 +4,7 @@ import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
 import { idof } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 
-// NOTE: DO NOT USE YET!
-
-// TODO: FixedArray<T,S> with S being the static size, i.e. `new FixedArray<i32,10>`.
-// Then hard-wire this special type to the compiler and do static length checks instead :)
-
+@sealed
 export class FixedArray<T> {
   [key: number]: T;
 

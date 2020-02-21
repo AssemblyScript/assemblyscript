@@ -502,7 +502,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Writes a common runtime header to the specified buffer. */
-  writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void {
+  writeRuntimeHeader(buffer: Uint8Array, offset: i32, id: u32, payloadSize: u32): void {
     // BLOCK {
     //   mmInfo: usize // WASM64 TODO
     //   gcInfo: u32
@@ -512,7 +512,7 @@ export class Program extends DiagnosticEmitter {
     assert(payloadSize < (1 << 28)); // 1 bit BUFFERED + 3 bits color
     writeI32(payloadSize, buffer, offset);
     writeI32(1, buffer, offset + 4); // RC=1
-    writeI32(classInstance.id, buffer, offset + 8);
+    writeI32(id, buffer, offset + 8);
     writeI32(payloadSize, buffer, offset + 12);
   }
 

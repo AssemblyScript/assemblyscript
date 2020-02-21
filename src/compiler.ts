@@ -1549,7 +1549,7 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       let length = stringValue.length;
       let buffer = new Uint8Array(rtHeaderSize + (length << 1));
-      program.writeRuntimeHeader(buffer, 0, stringInstance, length << 1);
+      program.writeRuntimeHeader(buffer, 0, stringInstance.id, length << 1);
       for (let i = 0; i < length; ++i) {
         writeI16(stringValue.charCodeAt(i), buffer, rtHeaderSize + (i << 1));
       }
@@ -1567,16 +1567,15 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Adds a buffer to static memory and returns the created segment. */
-  private addStaticBuffer(elementType: Type, values: ExpressionRef[]): MemorySegment {
+  addStaticBuffer(elementType: Type, values: ExpressionRef[], id: u32 = this.program.arrayBufferInstance.id): MemorySegment {
     var program = this.program;
     var length = values.length;
     var byteSize = elementType.byteSize;
     var byteLength = length * byteSize;
-    var bufferInstance = assert(program.arrayBufferInstance);
     var runtimeHeaderSize = program.runtimeHeaderSize;
 
     var buf = new Uint8Array(runtimeHeaderSize + byteLength);
-    program.writeRuntimeHeader(buf, 0, bufferInstance, byteLength);
+    program.writeRuntimeHeader(buf, 0, id, byteLength);
     var pos = runtimeHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (nativeType) {
@@ -1664,7 +1663,7 @@ export class Compiler extends DiagnosticEmitter {
     var arrayLength = i32(bufferLength / elementType.byteSize);
 
     var buf = new Uint8Array(runtimeHeaderSize + arrayInstanceSize);
-    program.writeRuntimeHeader(buf, 0, arrayInstance, arrayInstanceSize);
+    program.writeRuntimeHeader(buf, 0, arrayInstance.id, arrayInstanceSize);
 
     var bufferAddress32 = i64_low(bufferSegment.offset) + runtimeHeaderSize;
     assert(!program.options.isWasm64); // TODO

@@ -37,14 +37,14 @@ var rempio2_y0: f64,
 /** @internal */
 // @ts-ignore: decorator
 @lazy
-const PIO2_TABLE: u64[] = [
+const PIO2_TABLE = fixed<u64>([
   0x00000000A2F9836E, 0x4E441529FC2757D1, 0xF534DDC0DB629599, 0x3C439041FE5163AB,
   0xDEBBC561B7246E3A, 0x424DD2E006492EEA, 0x09D1921CFE1DEB1C, 0xB129A73EE88235F5,
   0x2EBB4484E99C7026, 0xB45F7E413991D639, 0x835339F49C845F8B, 0xBDF9283B1FF897FF,
   0xDE05980FEF2F118B, 0x5A0A6D1F6D367ECF, 0x27CB09B74F463F66, 0x9E5FEA2D7527BAC7,
   0xEBE5F17B3D0739F7, 0x8A5292EA6BFB5FB1, 0x1F8D5D0856033046, 0xFC7B6BABF0CFBC20,
   0x9AF4361DA9E39161, 0x5EE61B086599855F, 0x14A068408DFFD880, 0x4D73273106061557
-];
+]);
 
 /** @internal */
 function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
@@ -135,7 +135,7 @@ function umuldi(u: u64, v: u64): u64 {
 
 /** @internal */
 function pio2_large_quot(x: f64, u: i64): i32 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
-  const bits = PIO2_TABLE.dataStart;
+  const bits = changetype<usize>(PIO2_TABLE);
 
   var magnitude = u & 0x7FFFFFFFFFFFFFFF;
   var offset = (magnitude >> 52) - 1045;
@@ -1750,12 +1750,12 @@ var rempio2f_y: f64;
 
 // @ts-ignore: decorator
 @lazy
-const PIO2F_TABLE: u64[] = [
+const PIO2F_TABLE = fixed<u64>([
   0xA2F9836E4E441529,
   0xFC2757D1F534DDC0,
   0xDB6295993C439041,
   0xFE5163ABDEBBC561
-];
+]);
 
 function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   const                    // see: musl/src/math/asinf.c and SUN COPYRIGHT NOTICE above
@@ -1782,7 +1782,7 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
 @inline
 function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
-  const bits = PIO2F_TABLE.dataStart;
+  const bits = changetype<usize>(PIO2F_TABLE);
 
   var offset = (u >> 23) - 152;
   var shift  = <u64>(offset & 63);
