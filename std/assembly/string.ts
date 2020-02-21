@@ -503,7 +503,6 @@ import { idof } from "./builtins";
     if (!len) return this;
     var codes = __alloc(len * 2 * 2, idof<String>());
     var j: usize = 0;
-    var prevCode: u32 = 0;
     for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <u32>load<u16>(changetype<usize>(this) + (i << 1));
       if (isAscii(c)) {
@@ -531,18 +530,8 @@ import { idof } from "./builtins";
         } else if (c == 0x03A3) { // 'Σ'
           // Σ maps to σ but except at the end of a word where it maps to ς
           let sigma = 0x03C3; // σ
-          if (len > 1) {
-            // if (
-            //   // check if next char is end of word
-            //   ((i == len - 1) || isSpace(load<u16>(changetype<usize>(this) + (i << 1), 2)))
-            //   // and previus char is letter
-            //   && isAlpha(prevCode)
-            // ) {
-            //   sigma = 0x03C2; // ς
-            // }
-            if (isFinalSigma(this, i)) {
-              sigma = 0x03C2; // ς
-            }
+          if (len > 1 && isFinalSigma(changetype<usize>(this), i, len)) {
+            sigma = 0x03C2; // ς
           }
           store<u16>(codes + (j << 1), sigma);
         } else if (c - 0x24B6 <= 0x24CF - 0x24B6) {
@@ -562,7 +551,6 @@ import { idof } from "./builtins";
           }
         }
       }
-      prevCode = c;
     }
     codes = __realloc(codes, j << 1);
     return changetype<String>(codes); // retains

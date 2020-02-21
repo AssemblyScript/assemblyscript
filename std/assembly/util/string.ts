@@ -1180,21 +1180,27 @@ function isCased(c: u32): bool {
   return triebitSearch(cased.dataStart, c);
 }
 
-function codePointBefore(str: String, index: i32): i32 {
-  var c = str.charCodeAt(index - 1);
-  if ((c & 0xFC00) == 0xdc00 && index - 2 >= 0 && (str.charCodeAt(index - 2) & 0xFC00) == 0xD800) {
-    return 0x10000 + ((str.charCodeAt(index - 2) & 0x3FF) << 10) + (c & 0x3FF);
+// @ts-ignore: decorator
+@inline
+function codePointBefore(buffer: usize, index: i32): i32 {
+  if (index <= 0) return -1;
+  var c = <u32>load<u16>(buffer + (<usize>(index - 1) << 1));
+  if (u32((c & 0xFC00) == 0xDC00) & u32(index - 2 >= 0)) {
+    let c1 = <u32>load<u16>(buffer + (<usize>(index - 2) << 1));
+    if ((c1 & 0xFC00) == 0xD800) {
+      return 0x10000 + ((c1 & 0x3FF) << 10) + (c & 0x3FF);
+    }
   }
   return (c & 0xF800) == 0xD800 ? 0xFFFD : c;
 }
 
-export function isFinalSigma(str: String, index: i32): bool {
-  var len   = str.length;
+// @ts-ignore: decorator
+@inline
+export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
   var saved = index;
   var found = false;
-
   while (index > 0) {
-    let c = codePointBefore(str, index);
+    let c = codePointBefore(buffer, index);
     index -= i32(c >= 0x10000) + 1;
     if (isCased(c)) {
       found = true;
@@ -1205,10 +1211,16 @@ export function isFinalSigma(str: String, index: i32): bool {
   if (!found) return false;
   index = saved + 1;
   while (index < len) {
-    let c = str.codePointAt(index);
-    index += i32(c >= 0x10000) + 1;
+    let c = <u32>load<u16>(buffer + (<usize>index << 1));
+    if (u32((c & 0xFC00) == 0xD800) & u32(index + 1 != len)) {
+      let c1 = <u32>load<u16>(buffer + ((<usize>index + 1) << 1));
+      if ((c1 & 0xFC00) == 0xDC00) {
+        c = (c - 0xD800 << 10) + (c1 - 0xDC00) + 0x10000;
+      }
+    }
     if (isCased(c)) return false;
     if (!isCaseIgnorable(c)) return true;
+    index += i32(c >= 0x10000) + 1;
   }
   return true;
 }
