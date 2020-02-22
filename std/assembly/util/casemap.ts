@@ -1,7 +1,9 @@
 // Total tables size: ~5 kb (usually compressed to ~4 kb)
 // See: https://git.musl-libc.org/cgit/musl/tree/src/ctype/casemap.h
+
 // @ts-ignore: decorator
-@lazy const tab: u8[] = [
+@lazy @inline
+const tab = [<u8>
   7, 8, 9, 10, 11, 12, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
   13, 6, 6, 14, 6, 6, 6, 6, 6, 6, 6, 6, 15, 16, 17, 18,
   6, 19, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 20, 21, 6, 6,
@@ -169,10 +171,11 @@
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-];
+] as const;
 
 // @ts-ignore: decorator
-@lazy const rules: i32[] = [
+@lazy @inline
+const rules = [<i32>
   0x0, 0x2001, -0x2000, 0x1dbf00, 0x2e700, 0x7900,
   0x2402, 0x101, -0x100, 0x0, 0x201, -0x200,
   -0xc6ff, -0xe800, -0x78ff, -0x12c00, 0xc300, 0xd201,
@@ -213,10 +216,11 @@
   0x0, 0x2001, -0x2000, 0x0, 0x2801, -0x2800,
   0x0, 0x4001, -0x4000, 0x0, 0x2001, -0x2000,
   0x0, 0x2001, -0x2000, 0x0, 0x2201, -0x2200,
-];
+] as const;
 
 // @ts-ignore: decorator
-@lazy const ruleBases: u8[] = [
+@lazy @inline
+const ruleBases = [<u8>
   0, 6, 39, 81, 111, 119, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   124, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 131, 142, 146, 151,
   0, 170, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 180, 196, 0, 0,
@@ -249,10 +253,11 @@
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 237, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-];
+] as const;
 
 // @ts-ignore: decorator
-@lazy const exceptions: u8[] = [
+@lazy @inline
+const exceptions = [<u8>
   48, 12,  49, 13,  120, 14,  127, 15,
   128, 16,  129, 17,  134, 18,  137, 19,
   138, 19,  142, 20,  143, 21,  144, 22,
@@ -303,19 +308,22 @@
   125, 207,  141, 208,  148, 209,  171, 210,
   172, 211,  173, 212,  176, 213,  177, 214,
   178, 215,  196, 216,  197, 217,  198, 218,
-];
+] as const;
 
 /* Special Case Mappings
  * See: https://unicode.org/Public/UNIDATA/SpecialCasing.txt
  */
 
- /*
-@lazy const specialsLower: u16[] = [
+/*
+@lazy @inline
+const specialsLower = [<u16>
   0x0130,  0x0069, 0x0307, 0x0000,
-];
+] as const;
 */
+
 // @ts-ignore: decorator
-@lazy export const specialsUpper: u16[] = [
+@lazy @inlne
+export const specialsUpper = [<u16>
   0x00DF,  0x0053, 0x0053, 0x0000,
   0x0149,  0x02BC, 0x004E, 0x0000,
   0x01F0,  0x004A, 0x030C, 0x0000,
@@ -418,10 +426,13 @@
   0xFB15,  0x0544, 0x053B, 0x0000,
   0xFB16,  0x054E, 0x0546, 0x0000,
   0xFB17,  0x0544, 0x053D, 0x0000
-];
+] as const;
 
 // @ts-ignore: decorator
-@lazy const mt: i32[] = [2048, 342, 57];
+@lazy @inline
+const mt = [<i32>
+  2048, 342, 57
+] as const;
 
 // Special binary search routine for Special Casing Tables
 // @ts-ignore: decorator
@@ -448,21 +459,16 @@ export function casemap(c: u32, dir: i32): i32 {
   var x = c / 3;
   var y = c % 3;
 
-  const mtPtr = mt.dataStart as usize;
-  const tabPtr = tab.dataStart as usize;
-  const ruleBasesPtr = ruleBases.dataStart as usize;
-  const rulesPtr = rules.dataStart as usize;
-
   /* lookup entry in two-level base-6 table */
   // v = tab[(tab[b] as i32) * 86 + x] as u32;
-  var v = <usize>load<u8>(tabPtr + <usize>load<u8>(tabPtr + b) * 86 + x);
+  var v = <usize>load<u8>(changetype<usize>(tab) + <usize>load<u8>(changetype<usize>(tab) + b) * 86 + x);
   // v = (v * mt[y] >> 11) % 6;
-  v = (v * load<i32>(mtPtr + (y << alignof<i32>())) >> 11) % 6;
+  v = (v * load<i32>(changetype<usize>(mt) + (y << alignof<i32>())) >> 11) % 6;
   /* use the bit vector out of the tables as an index into
    * a block-specific set of rules and decode the rule into
    * a type and a case-mapping delta. */
   // r = rules[(ruleBases[b] as u32) + v];
-  var r = load<i32>(rulesPtr + ((<usize>load<u8>(ruleBasesPtr + b) + v) << alignof<i32>()));
+  var r = load<i32>(changetype<usize>(rules) + ((<usize>load<u8>(changetype<usize>(ruleBases) + b) + v) << alignof<i32>()));
   var rt: u32 = r & 255;
   var rd: i32 = r >> 8;
   /* rules 0/1 are simple lower/upper case with a delta.
@@ -472,14 +478,13 @@ export function casemap(c: u32, dir: i32): i32 {
    * this block are stored in the rule delta field. */
   var xn: u32 = rd & 0xff;
   var xb: u32 = rd >>> 8;
-  var exceptionsPtr = exceptions.dataStart as usize;
   while (xn) {
     let h = xn >> 1;
     // let t = exceptions[(xb + h) * 2 + 0] as u32;
-    let t = <u32>load<u8>(exceptionsPtr + (xb + h) * 2, 0);
+    let t = <u32>load<u8>(changetype<usize>(exceptions) + (xb + h) * 2, 0);
     if (t == c) {
       // r = rules[exceptions[(xb + h) * 2 + 1]];
-      r = load<i32>(rulesPtr + <usize>(load<u8>(exceptionsPtr + (xb + h) * 2, 1) << alignof<i32>()));
+      r = load<i32>(changetype<usize>(rules) + <usize>(load<u8>(changetype<usize>(exceptions) + (xb + h) * 2, 1) << alignof<i32>()));
       rt = r & 255;
       rd = r >> 8;
       if (rt < 2) return c0 + (rd & -(rt ^ dir));

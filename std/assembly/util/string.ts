@@ -3,7 +3,7 @@ import { ipow32 } from "../math";
 
 // @ts-ignore: decorator
 @lazy @inline
-const lowerTable127 = [<u8>
+const LOWER127 = [<u8>
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -19,7 +19,7 @@ const lowerTable127 = [<u8>
 
 // @ts-ignore: decorator
 @lazy @inline
-const upperTable127 = [<u8>
+const UPPER127 = [<u8>
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -68,11 +68,12 @@ export const enum CharCode {
 
 // 23 * 8 = 184 bytes
 // @ts-ignore: decorator
-@lazy const Powers10: f64[] = [
+@lazy @inline
+const POWERS10 = [<f64>
   1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
   1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
   1e20, 1e21, 1e22
-];
+] as const;
 
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
   var ptr1 = changetype<usize>(str1) + (index1 << 1);
@@ -596,8 +597,7 @@ function fixmul(a: u64, b: u32): u64 {
 @inline
 function pow10(n: i32): f64 {
   // argument `n` should bounds in [0, 22] range
-  // @ts-ignore: cast
-  return load<f64>(Powers10.dataStart as usize + (n << alignof<f64>()));
+  return load<f64>(changetype<usize>(POWERS10) + (n << alignof<f64>()));
 }
 
 // @ts-ignore: decorator
@@ -624,7 +624,7 @@ export function toLower8(c: i32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c | u32(isUpper8(c)) << 5;
   } else {
-    return <u32>load<u8>(changetype<usize>(lowerTable127) + c);
+    return <u32>load<u8>(changetype<usize>(LOWER127) + c);
   }
 }
 
@@ -634,6 +634,6 @@ export function toUpper8(c: i32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c & ~(u32(isLower8(c)) << 5);
   } else {
-    return <u32>load<u8>(changetype<usize>(upperTable127) + c);
+    return <u32>load<u8>(changetype<usize>(UPPER127) + c);
   }
 }

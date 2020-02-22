@@ -3502,6 +3502,7 @@ export class Compiler extends DiagnosticEmitter {
           DiagnosticCode.Not_implemented,
           expression.range
         );
+        return this.module.unreachable();
       }
       default: assert(false);
     }
