@@ -11784,7 +11784,9 @@
           i32.const 1
           i32.add
           local.set $9
+          local.get $9
           i32.const 30
+          i32.add
           local.tee $14
           local.get $8
           local.tee $16

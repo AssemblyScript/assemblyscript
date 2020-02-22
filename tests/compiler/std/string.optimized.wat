@@ -7921,7 +7921,7 @@
         i32.const 1023
         i32.and
         local.get $1
-        local.tee $3
+        local.tee $2
         i32.const 1023
         i32.and
         i32.const 10
@@ -7934,20 +7934,20 @@
         i32.ge_u
         if
          local.get $5
-         local.get $2
+         local.get $3
          i32.const 1
          i32.shl
          i32.add
-         local.get $3
+         local.get $2
          local.get $8
          i32.const 16
          i32.shl
          i32.or
          i32.store
-         local.get $2
+         local.get $3
          i32.const 1
          i32.add
-         local.set $2
+         local.set $3
          br $for-continue|0
         end
        end
@@ -7957,16 +7957,16 @@
       i32.eq
       if
        local.get $5
-       local.get $2
+       local.get $3
        i32.const 1
        i32.shl
        i32.add
        i32.const 50790505
        i32.store
-       local.get $2
+       local.get $3
        i32.const 1
        i32.add
-       local.set $2
+       local.set $3
       else
        local.get $1
        i32.const 931
@@ -7975,7 +7975,7 @@
         i32.const 963
         local.set $8
         local.get $5
-        local.get $2
+        local.get $3
         i32.const 1
         i32.shl
         i32.add
@@ -7991,9 +7991,9 @@
           local.tee $1
           i32.const 30
           i32.sub
-          local.tee $3
+          local.tee $2
           i32.const 0
-          local.get $3
+          local.get $2
           i32.gt_s
           select
           local.set $9
@@ -8005,10 +8005,10 @@
             local.get $0
             local.get $1
             call $~lib/util/string/codePointBefore
-            local.set $3
+            local.set $2
             i32.const 24708
             i32.load
-            local.get $3
+            local.get $2
             call $~lib/util/string/triebitSearch
             if
              i32.const 1
@@ -8017,14 +8017,14 @@
              i32.const 0
              i32.const 28404
              i32.load
-             local.get $3
+             local.get $2
              call $~lib/util/string/triebitSearch
              i32.eqz
              br_if $~lib/util/string/isFinalSigma|inlined.0
              drop
             end
             local.get $1
-            local.get $3
+            local.get $2
             i32.const 65536
             i32.ge_s
             i32.const 1
@@ -8042,10 +8042,12 @@
           local.get $4
           i32.const 1
           i32.add
-          local.set $1
+          local.tee $1
           i32.const 30
+          i32.add
+          local.tee $2
           local.get $6
-          i32.const 30
+          local.get $2
           local.get $6
           i32.lt_s
           select
@@ -8064,7 +8066,7 @@
             i32.shl
             i32.add
             i32.load16_u
-            local.tee $3
+            local.tee $2
             i32.const 64512
             i32.and
             i32.const 55296
@@ -8088,30 +8090,30 @@
              i32.const 56320
              i32.eq
              if
-              local.get $3
+              local.get $2
               i32.const 10
               i32.shl
               local.get $9
               i32.add
               i32.const -56613888
               i32.add
-              local.set $3
+              local.set $2
              end
             end
-            local.get $3
+            local.get $2
             call $~lib/util/string/triebitSearch
             br_if $~lib/util/string/isFinalSigma|inlined.0
             drop
             i32.const 1
             i32.const 28404
             i32.load
-            local.get $3
+            local.get $2
             call $~lib/util/string/triebitSearch
             i32.eqz
             br_if $~lib/util/string/isFinalSigma|inlined.0
             drop
             local.get $1
-            local.get $3
+            local.get $2
             i32.const 65536
             i32.ge_u
             i32.const 1
@@ -8140,7 +8142,7 @@
         i32.le_u
         if
          local.get $5
-         local.get $2
+         local.get $3
          i32.const 1
          i32.shl
          i32.add
@@ -8159,7 +8161,7 @@
          i32.lt_s
          if
           local.get $5
-          local.get $2
+          local.get $3
           i32.const 1
           i32.shl
           i32.add
@@ -8167,7 +8169,7 @@
           i32.store16
          else
           local.get $5
-          local.get $2
+          local.get $3
           i32.const 1
           i32.shl
           i32.add
@@ -8188,10 +8190,10 @@
           i32.shl
           i32.or
           i32.store
-          local.get $2
+          local.get $3
           i32.const 1
           i32.add
-          local.set $2
+          local.set $3
          end
         end
        end
@@ -8199,7 +8201,7 @@
      end
     else
      local.get $5
-     local.get $2
+     local.get $3
      i32.const 1
      i32.shl
      i32.add
@@ -8220,15 +8222,15 @@
     i32.const 1
     i32.add
     local.set $4
-    local.get $2
+    local.get $3
     i32.const 1
     i32.add
-    local.set $2
+    local.set $3
     br $for-loop|0
    end
   end
   local.get $5
-  local.get $2
+  local.get $3
   i32.const 1
   i32.shl
   call $~lib/rt/tlsf/__realloc

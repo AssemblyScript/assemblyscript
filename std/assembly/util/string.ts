@@ -1208,7 +1208,7 @@ export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
   }
   if (!found) return false;
   index = saved + 1;
-  var maxIndex = min(lookaheadLimit, len);
+  var maxIndex = min(index + lookaheadLimit, len);
   while (index < maxIndex) {
     let c = <u32>load<u16>(buffer + (<usize>index << 1));
     if (u32((c & 0xFC00) == 0xD800) & u32(index + 1 != len)) {
