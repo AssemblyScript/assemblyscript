@@ -170,10 +170,6 @@ export declare function unchecked<T>(expr: T): T;
 @builtin
 export declare function instantiate<T>(...args: void[]): T;
 
-// @ts-ignore: decorator
-@builtin
-export declare function fixed<T>(values: T[]): FixedArray<T>;
-
 export namespace atomic {
   // @ts-ignore: decorator
   @unsafe @builtin
