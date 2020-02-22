@@ -1149,8 +1149,6 @@ function pow10(n: i32): f64 {
   return load<f64>(Powers10.dataStart as usize + (n << alignof<f64>()));
 }
 
-// @ts-ignore: decorator
-@inline
 function triebitSearch(buffer: usize, c: u32): bool {
   var idx = c >> 16;
   if (idx < load<u32>(buffer)) {
@@ -1180,8 +1178,6 @@ function isCased(c: u32): bool {
   return triebitSearch(cased.dataStart, c);
 }
 
-// @ts-ignore: decorator
-@inline
 function codePointBefore(buffer: usize, index: i32): i32 {
   if (index <= 0) return -1;
   var c = <u32>load<u16>(buffer + (<usize>index - 1 << 1));
@@ -1197,20 +1193,23 @@ function codePointBefore(buffer: usize, index: i32): i32 {
 // @ts-ignore: decorator
 @inline
 export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
+  const lookaheadLimit = 30; // max lookahead limit
   var saved = index;
   var found = false;
-  while (index > 0) {
+  var minIndex = max(0, index - lookaheadLimit);
+  while (index > minIndex) {
     let c = codePointBefore(buffer, index);
-    index -= i32(c >= 0x10000) + 1;
     if (isCased(c)) {
       found = true;
     } else if (!isCaseIgnorable(c)) {
       return false;
     }
+    index -= i32(c >= 0x10000) + 1;
   }
   if (!found) return false;
   index = saved + 1;
-  while (index < len) {
+  var maxIndex = min(lookaheadLimit, len);
+  while (index < maxIndex) {
     let c = <u32>load<u16>(buffer + (<usize>index << 1));
     if (u32((c & 0xFC00) == 0xD800) & u32(index + 1 != len)) {
       let c1 = <u32>load<u16>(buffer + (<usize>index << 1), 2);

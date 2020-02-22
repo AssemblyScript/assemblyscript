@@ -11398,7 +11398,139 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#toLowerCase (; 99 ;) (param $0 i32) (result i32)
+ (func $~lib/util/string/codePointBefore (; 99 ;) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $1
+  i32.const 0
+  i32.le_s
+  if
+   i32.const -1
+   return
+  end
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.sub
+  i32.const 1
+  i32.shl
+  i32.add
+  i32.load16_u
+  local.set $2
+  local.get $2
+  i32.const 64512
+  i32.and
+  i32.const 56320
+  i32.eq
+  local.get $1
+  i32.const 2
+  i32.sub
+  i32.const 0
+  i32.ge_s
+  i32.and
+  if
+   local.get $0
+   local.get $1
+   i32.const 2
+   i32.sub
+   i32.const 1
+   i32.shl
+   i32.add
+   i32.load16_u
+   local.set $3
+   local.get $3
+   i32.const 64512
+   i32.and
+   i32.const 55296
+   i32.eq
+   if
+    local.get $3
+    i32.const 1023
+    i32.and
+    i32.const 10
+    i32.shl
+    local.get $2
+    i32.const 1023
+    i32.and
+    i32.add
+    i32.const 65536
+    i32.add
+    return
+   end
+  end
+  local.get $2
+  i32.const 63488
+  i32.and
+  i32.const 55296
+  i32.eq
+  if (result i32)
+   i32.const 65533
+  else
+   local.get $2
+  end
+ )
+ (func $~lib/util/string/triebitSearch (; 100 ;) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  i32.const 16
+  i32.shr_u
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.load
+  i32.lt_u
+  if
+   local.get $0
+   local.get $2
+   i32.const 2
+   i32.shl
+   i32.add
+   i32.load offset=4
+   local.set $2
+   local.get $2
+   if
+    local.get $0
+    local.get $2
+    local.get $1
+    i32.const 9
+    i32.shr_u
+    i32.const 127
+    i32.and
+    i32.add
+    i32.const 1
+    i32.shl
+    i32.add
+    i32.load16_u
+    local.set $2
+    local.get $2
+    if
+     local.get $0
+     local.get $2
+     local.get $1
+     i32.const 5
+     i32.shr_u
+     i32.const 15
+     i32.and
+     i32.add
+     i32.const 2
+     i32.shl
+     i32.add
+     i32.load
+     local.set $2
+     local.get $2
+     local.get $1
+     i32.const 31
+     i32.and
+     i32.shr_u
+     i32.const 1
+     i32.and
+     return
+    end
+   end
+  end
+  i32.const 0
+ )
+ (func $~lib/string/String#toLowerCase (; 101 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -11417,7 +11549,6 @@
   (local $16 i32)
   (local $17 i32)
   (local $18 i32)
-  (local $19 i32)
   local.get $0
   call $~lib/string/String#get:length
   local.set $1
@@ -11588,239 +11719,58 @@
           local.set $11
           i32.const 0
           local.set $12
+          i32.const 0
+          local.tee $13
+          local.get $9
+          i32.const 30
+          i32.sub
+          local.tee $14
+          local.get $13
+          local.get $14
+          i32.gt_s
+          select
+          local.set $13
           loop $while-continue|1
            local.get $9
-           i32.const 0
-           i32.gt_s
-           local.set $13
            local.get $13
+           i32.gt_s
+           local.set $14
+           local.get $14
            if
-            block $~lib/util/string/codePointBefore|inlined.0 (result i32)
-             local.get $10
-             local.set $15
-             local.get $9
-             local.set $14
-             local.get $14
-             i32.const 0
-             i32.le_s
-             if
-              i32.const -1
-              br $~lib/util/string/codePointBefore|inlined.0
-             end
-             local.get $15
-             local.get $14
-             i32.const 1
-             i32.sub
-             i32.const 1
-             i32.shl
-             i32.add
-             i32.load16_u
-             local.set $16
-             local.get $16
-             i32.const 64512
-             i32.and
-             i32.const 56320
-             i32.eq
-             local.get $14
-             i32.const 2
-             i32.sub
-             i32.const 0
-             i32.ge_s
-             i32.and
-             if
-              local.get $15
-              local.get $14
-              i32.const 2
-              i32.sub
-              i32.const 1
-              i32.shl
-              i32.add
-              i32.load16_u
-              local.set $17
-              local.get $17
-              i32.const 64512
-              i32.and
-              i32.const 55296
-              i32.eq
-              if
-               local.get $17
-               i32.const 1023
-               i32.and
-               i32.const 10
-               i32.shl
-               local.get $16
-               i32.const 1023
-               i32.and
-               i32.add
-               i32.const 65536
-               i32.add
-               br $~lib/util/string/codePointBefore|inlined.0
-              end
-             end
-             local.get $16
-             i32.const 63488
-             i32.and
-             i32.const 55296
-             i32.eq
-             if (result i32)
-              i32.const 65533
-             else
-              local.get $16
-             end
-            end
-            local.set $16
+            local.get $10
             local.get $9
+            call $~lib/util/string/codePointBefore
+            local.set $15
+            local.get $15
+            local.set $16
+            i32.const 25504
+            i32.load offset=4
             local.get $16
-            i32.const 65536
-            i32.ge_s
-            i32.const 1
-            i32.add
-            i32.sub
-            local.set $9
-            local.get $16
-            local.set $17
-            block $~lib/util/string/triebitSearch|inlined.0 (result i32)
-             i32.const 25504
-             i32.load offset=4
-             local.set $15
-             local.get $17
-             local.set $14
-             local.get $14
-             i32.const 16
-             i32.shr_u
-             local.set $18
-             local.get $18
-             local.get $15
-             i32.load
-             i32.lt_u
-             if
-              local.get $15
-              local.get $18
-              i32.const 2
-              i32.shl
-              i32.add
-              i32.load offset=4
-              local.set $18
-              local.get $18
-              if
-               local.get $15
-               local.get $18
-               local.get $14
-               i32.const 9
-               i32.shr_u
-               i32.const 127
-               i32.and
-               i32.add
-               i32.const 1
-               i32.shl
-               i32.add
-               i32.load16_u
-               local.set $18
-               local.get $18
-               if
-                local.get $15
-                local.get $18
-                local.get $14
-                i32.const 5
-                i32.shr_u
-                i32.const 15
-                i32.and
-                i32.add
-                i32.const 2
-                i32.shl
-                i32.add
-                i32.load
-                local.set $18
-                local.get $18
-                local.get $14
-                i32.const 31
-                i32.and
-                i32.shr_u
-                i32.const 1
-                i32.and
-                br $~lib/util/string/triebitSearch|inlined.0
-               end
-              end
-             end
-             i32.const 0
-            end
+            call $~lib/util/string/triebitSearch
             if
              i32.const 1
              local.set $12
             else
+             local.get $15
+             local.set $16
+             i32.const 29200
+             i32.load offset=4
              local.get $16
-             local.set $14
-             block $~lib/util/string/triebitSearch|inlined.1 (result i32)
-              i32.const 29200
-              i32.load offset=4
-              local.set $18
-              local.get $14
-              local.set $15
-              local.get $15
-              i32.const 16
-              i32.shr_u
-              local.set $17
-              local.get $17
-              local.get $18
-              i32.load
-              i32.lt_u
-              if
-               local.get $18
-               local.get $17
-               i32.const 2
-               i32.shl
-               i32.add
-               i32.load offset=4
-               local.set $17
-               local.get $17
-               if
-                local.get $18
-                local.get $17
-                local.get $15
-                i32.const 9
-                i32.shr_u
-                i32.const 127
-                i32.and
-                i32.add
-                i32.const 1
-                i32.shl
-                i32.add
-                i32.load16_u
-                local.set $17
-                local.get $17
-                if
-                 local.get $18
-                 local.get $17
-                 local.get $15
-                 i32.const 5
-                 i32.shr_u
-                 i32.const 15
-                 i32.and
-                 i32.add
-                 i32.const 2
-                 i32.shl
-                 i32.add
-                 i32.load
-                 local.set $17
-                 local.get $17
-                 local.get $15
-                 i32.const 31
-                 i32.and
-                 i32.shr_u
-                 i32.const 1
-                 i32.and
-                 br $~lib/util/string/triebitSearch|inlined.1
-                end
-               end
-              end
-              i32.const 0
-             end
+             call $~lib/util/string/triebitSearch
              i32.eqz
              if
               i32.const 0
               br $~lib/util/string/isFinalSigma|inlined.0
              end
             end
+            local.get $9
+            local.get $15
+            i32.const 65536
+            i32.ge_s
+            i32.const 1
+            i32.add
+            i32.sub
+            local.set $9
             br $while-continue|1
            end
           end
@@ -11834,12 +11784,21 @@
           i32.const 1
           i32.add
           local.set $9
+          i32.const 30
+          local.tee $14
+          local.get $8
+          local.tee $16
+          local.get $14
+          local.get $16
+          i32.lt_s
+          select
+          local.set $14
           loop $while-continue|2
            local.get $9
-           local.get $8
+           local.get $14
            i32.lt_s
-           local.set $13
-           local.get $13
+           local.set $16
+           local.get $16
            if
             local.get $10
             local.get $9
@@ -11847,8 +11806,8 @@
             i32.shl
             i32.add
             i32.load16_u
-            local.set $14
-            local.get $14
+            local.set $17
+            local.get $17
             i32.const 64512
             i32.and
             i32.const 55296
@@ -11866,172 +11825,50 @@
              i32.shl
              i32.add
              i32.load16_u offset=2
-             local.set $17
-             local.get $17
+             local.set $18
+             local.get $18
              i32.const 64512
              i32.and
              i32.const 56320
              i32.eq
              if
-              local.get $14
+              local.get $17
               i32.const 55296
               i32.sub
               i32.const 10
               i32.shl
-              local.get $17
+              local.get $18
               i32.const 56320
               i32.sub
               i32.add
               i32.const 65536
               i32.add
-              local.set $14
+              local.set $17
              end
             end
-            local.get $14
-            local.set $15
-            block $~lib/util/string/triebitSearch|inlined.2 (result i32)
-             i32.const 25504
-             i32.load offset=4
-             local.set $17
-             local.get $15
-             local.set $18
-             local.get $18
-             i32.const 16
-             i32.shr_u
-             local.set $19
-             local.get $19
-             local.get $17
-             i32.load
-             i32.lt_u
-             if
-              local.get $17
-              local.get $19
-              i32.const 2
-              i32.shl
-              i32.add
-              i32.load offset=4
-              local.set $19
-              local.get $19
-              if
-               local.get $17
-               local.get $19
-               local.get $18
-               i32.const 9
-               i32.shr_u
-               i32.const 127
-               i32.and
-               i32.add
-               i32.const 1
-               i32.shl
-               i32.add
-               i32.load16_u
-               local.set $19
-               local.get $19
-               if
-                local.get $17
-                local.get $19
-                local.get $18
-                i32.const 5
-                i32.shr_u
-                i32.const 15
-                i32.and
-                i32.add
-                i32.const 2
-                i32.shl
-                i32.add
-                i32.load
-                local.set $19
-                local.get $19
-                local.get $18
-                i32.const 31
-                i32.and
-                i32.shr_u
-                i32.const 1
-                i32.and
-                br $~lib/util/string/triebitSearch|inlined.2
-               end
-              end
-             end
-             i32.const 0
-            end
+            local.get $17
+            local.set $18
+            i32.const 25504
+            i32.load offset=4
+            local.get $18
+            call $~lib/util/string/triebitSearch
             if
              i32.const 0
              br $~lib/util/string/isFinalSigma|inlined.0
             end
-            local.get $14
+            local.get $17
             local.set $18
-            block $~lib/util/string/triebitSearch|inlined.3 (result i32)
-             i32.const 29200
-             i32.load offset=4
-             local.set $19
-             local.get $18
-             local.set $17
-             local.get $17
-             i32.const 16
-             i32.shr_u
-             local.set $15
-             local.get $15
-             local.get $19
-             i32.load
-             i32.lt_u
-             if
-              local.get $19
-              local.get $15
-              i32.const 2
-              i32.shl
-              i32.add
-              i32.load offset=4
-              local.set $15
-              local.get $15
-              if
-               local.get $19
-               local.get $15
-               local.get $17
-               i32.const 9
-               i32.shr_u
-               i32.const 127
-               i32.and
-               i32.add
-               i32.const 1
-               i32.shl
-               i32.add
-               i32.load16_u
-               local.set $15
-               local.get $15
-               if
-                local.get $19
-                local.get $15
-                local.get $17
-                i32.const 5
-                i32.shr_u
-                i32.const 15
-                i32.and
-                i32.add
-                i32.const 2
-                i32.shl
-                i32.add
-                i32.load
-                local.set $15
-                local.get $15
-                local.get $17
-                i32.const 31
-                i32.and
-                i32.shr_u
-                i32.const 1
-                i32.and
-                br $~lib/util/string/triebitSearch|inlined.3
-               end
-              end
-             end
-             i32.const 0
-            end
+            i32.const 29200
+            i32.load offset=4
+            local.get $18
+            call $~lib/util/string/triebitSearch
             i32.eqz
             if
              i32.const 1
              br $~lib/util/string/isFinalSigma|inlined.0
             end
             local.get $9
-            local.get $14
+            local.get $17
             i32.const 65536
             i32.ge_u
             i32.const 1
@@ -12101,20 +11938,20 @@
           i32.shr_u
           i32.const 55296
           i32.or
-          local.set $12
+          local.set $14
           local.get $7
           i32.const 1023
           i32.and
           i32.const 56320
           i32.or
-          local.set $11
+          local.set $13
           local.get $2
           local.get $3
           i32.const 1
           i32.shl
           i32.add
-          local.get $12
-          local.get $11
+          local.get $14
+          local.get $13
           i32.const 16
           i32.shl
           i32.or
@@ -12149,7 +11986,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#codePointAt (; 100 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#codePointAt (; 102 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12216,7 +12053,7 @@
   i32.const 65536
   i32.add
  )
- (func $start:std/string (; 101 ;)
+ (func $start:std/string (; 103 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -21673,11 +21510,11 @@
   local.get $294
   call $~lib/rt/pure/__release
  )
- (func $std/string/getString (; 102 ;) (result i32)
+ (func $std/string/getString (; 104 ;) (result i32)
   global.get $std/string/str
   call $~lib/rt/pure/__retain
  )
- (func $~start (; 103 ;)
+ (func $~start (; 105 ;)
   global.get $~started
   if
    return
@@ -21687,7 +21524,7 @@
   end
   call $start:std/string
  )
- (func $~lib/rt/pure/decrement (; 104 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 106 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -21764,10 +21601,10 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__collect (; 105 ;)
+ (func $~lib/rt/pure/__collect (; 107 ;)
   return
  )
- (func $~lib/rt/pure/__visit (; 106 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 108 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -21791,10 +21628,10 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/array/Array<f64>#__visit_impl (; 107 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f64>#__visit_impl (; 109 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 108 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 110 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -21833,25 +21670,25 @@
    end
   end
  )
- (func $~lib/array/Array<i32>#__visit_impl (; 109 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#__visit_impl (; 111 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u32>#__visit_impl (; 110 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>#__visit_impl (; 112 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u64>#__visit_impl (; 111 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u64>#__visit_impl (; 113 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<i16>#__visit_impl (; 112 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i16>#__visit_impl (; 114 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u16>#__visit_impl (; 113 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>#__visit_impl (; 115 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u8>#__visit_impl (; 114 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>#__visit_impl (; 116 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/__visit_members (; 115 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 117 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
