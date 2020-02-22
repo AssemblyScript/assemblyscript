@@ -8000,17 +8000,16 @@ export class Compiler extends DiagnosticEmitter {
     if (!element) return module.unreachable();
     assert(element.kind == ElementKind.CLASS);
     var arrayInstance = <Class>element;
-    var arrayType = (<Class>arrayInstance).type;
+    var arrayType = arrayInstance.type;
+    var elementType = assert(arrayInstance.getTypeArgumentsTo(program.arrayPrototype))[0];
     var arrayBufferInstance = assert(program.arrayBufferInstance);
 
     // block those here so compiling expressions doesn't conflict
     var tempThis = flow.getTempLocal(this.options.usizeType);
     var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
 
-    var elementType = assert((<Class>arrayInstance).getTypeArgumentsTo(program.arrayPrototype))[0];
-    var expressions = expression.elementExpressions;
-
     // compile value expressions and find out whether all are constant
+    var expressions = expression.elementExpressions;
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
     var isStatic = true;
@@ -8053,7 +8052,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // otherwise allocate a new array header and make it wrap a copy of the static buffer
       } else {
-        // makeArray(length, alignLog2, classId, staticBuffer)
+        // __allocArray(length, alignLog2, classId, staticBuffer)
         let expr = this.makeCallDirect(program.allocArrayInstance, [
           module.i32(length),
           program.options.isWasm64
@@ -8092,7 +8091,7 @@ export class Compiler extends DiagnosticEmitter {
     var nativeArrayType = arrayType.toNativeType();
 
     var stmts = new Array<ExpressionRef>();
-    // tempThis = makeArray(length, alignLog2, classId, source = 0)
+    // tempThis = __allocArray(length, alignLog2, classId, source = 0)
     stmts.push(
       module.local_set(tempThis.index,
         this.makeRetain(
@@ -8156,7 +8155,7 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
-  /** Compiles a fixed array literal, i.e. a `ReadonlyArray` or `FixedArray`. */
+  /** Compiles a special `fixed` array literal. */
   private compileFixedArrayLiteral(
     expression: ArrayLiteralExpression,
     contextualType: Type,
@@ -8192,6 +8191,7 @@ export class Compiler extends DiagnosticEmitter {
             DiagnosticCode.Expression_must_be_a_compile_time_constant,
             expression.range
           );
+          this.currentType = arrayType;
           return module.unreachable();
         }
       } else {
@@ -8200,11 +8200,11 @@ export class Compiler extends DiagnosticEmitter {
       values[i] = expr;
     }
 
-    // return the ReadonlyArray<T> reference
+    // make a static memory segment
     var bufferSegment = this.addStaticBuffer(elementType, values, arrayInstance.id);
     var bufferAddress = i64_add(bufferSegment.offset, i64_new(program.runtimeHeaderSize));
 
-    // return just the static buffer if assigned to a global
+    // return the static buffer directly if assigned to a global
     if (constraints & Constraints.PREFER_STATIC) {
       let expr = this.options.isWasm64
         ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
@@ -8218,7 +8218,7 @@ export class Compiler extends DiagnosticEmitter {
       this.currentType = arrayType;
       return expr;
 
-    // otherwise allocate a new chunk of memory and copy the static buffer
+    // otherwise allocate a new chunk of memory and return a copy of the buffer
     } else {
       let isWasm64 = this.options.isWasm64;
       let size = values.length << elementType.alignLog2;

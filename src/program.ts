@@ -917,14 +917,10 @@ export class Program extends DiagnosticEmitter {
       if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
         let basePrototype = <ClassPrototype>baseElement;
         if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
-          // FIXME: This is problematic, but required since FixedArray extends ReadonlyArray
-          // with both being non-extensible (with fields) and thus sealed.
-          if (!basePrototype.identifierNode.range.source.isLibrary) {
-            this.error(
-              DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
-              extendsNode.range, (<ClassPrototype>baseElement).identifierNode.text
-            );
-          }
+          this.error(
+            DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
+            extendsNode.range, (<ClassPrototype>baseElement).identifierNode.text
+          );
         }
         if (
           basePrototype.hasDecorator(DecoratorFlags.UNMANAGED) !=
