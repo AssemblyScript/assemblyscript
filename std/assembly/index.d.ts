@@ -1399,10 +1399,16 @@ declare class Array<T> {
 }
 
 /** Class representing a readonly sequence of values of type `T`. */
-declare class ReadonlyArray<T> {
+declare abstract class ReadonlyArray<T> {
   readonly [key: number]: T;
   readonly length: i32;
   constructor(capacity?: i32);
+  indexOf(searchElement: T, fromIndex?: i32): i32;
+  lastIndexOf(searchElement: T, fromIndex?: i32): i32;
+  concat(items: T[]): T[];
+  slice(from: i32, to?: i32): Array<T>;
+  join(separator?: string): string;
+  toString(): string;
 }
 
 /** Class representing a fixed sequence of values of type `T`. */
