@@ -4837,11 +4837,12 @@ export function compileVisitMembers(compiler: Compiler): void {
         );
       } else {
         let visitSig = visitFunc.signature;
+        let visitThisType = assert(visitSig.thisType);
         assert(
           visitSig.parameterTypes.length == 1 &&
           visitSig.parameterTypes[0] == Type.u32 &&
           visitSig.returnType == Type.void &&
-          visitSig.thisType == instance.type
+          instance.type.isStrictlyAssignableTo(visitThisType) // incl. implemented on super
         );
         code.push(
           module.call(visitFunc.internalName, [

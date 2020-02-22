@@ -3,7 +3,7 @@ import { ipow32 } from "../math";
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOWER127 = [<u8>
+const LOWER127: FixedArray<u8> = [
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -15,11 +15,11 @@ const LOWER127 = [<u8>
   97,98,99,100,101,102,103,104,105,106,107,108,109,
   110,111,112,113,114,115,116,117,118,119,120,121,122,
   123,124,125,126,127
-] as const;
+];
 
 // @ts-ignore: decorator
 @lazy @inline
-const UPPER127 = [<u8>
+const UPPER127: FixedArray<u8> = [
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -31,7 +31,7 @@ const UPPER127 = [<u8>
   65,66,67,68,69,70,71,72,73,74,75,76,77,
   78,79,80,81,82,83,84,85,86,87,88,89,90,
   123,124,125,126,127
-] as const;
+];
 
 // @ts-ignore: decorator
 @inline
@@ -69,11 +69,11 @@ export const enum CharCode {
 // 23 * 8 = 184 bytes
 // @ts-ignore: decorator
 @lazy @inline
-const POWERS10 = [<f64>
+const POWERS10: FixedArray<f64> = [
   1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
   1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
   1e20, 1e21, 1e22
-] as const;
+];
 
 export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
   var ptr1 = changetype<usize>(str1) + (index1 << 1);

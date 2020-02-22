@@ -214,6 +214,7 @@ export namespace CommonNames {
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";
   export const visit = "__visit";
+  export const allocBuffer = "__allocBuffer";
   export const allocArray = "__allocArray";
 }
 

@@ -413,8 +413,6 @@ export class Program extends DiagnosticEmitter {
   arrayBufferInstance: Class;
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype;
-  /** Read-only array prototype reference. */
-  readonlyArrayPrototype: ClassPrototype;
   /** Fixed array prototype reference. */
   fixedArrayPrototype: ClassPrototype;
   /** Set prototype reference. */
@@ -468,6 +466,8 @@ export class Program extends DiagnosticEmitter {
   typeinfoInstance: Function;
   /** RT `__instanceof(ptr: usize, superId: u32): bool` */
   instanceofInstance: Function;
+  /** RT `__allocBuffer(size: usize, id: u32, data: usize = 0): usize` */
+  allocBufferInstance: Function;
   /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
   allocArrayInstance: Function;
 
@@ -968,7 +968,6 @@ export class Program extends DiagnosticEmitter {
 
     // register stdlib components
     this.arrayPrototype = <ClassPrototype>this.require(CommonNames.Array, ElementKind.CLASS_PROTOTYPE);
-    this.readonlyArrayPrototype = <ClassPrototype>this.require(CommonNames.ReadonlyArray, ElementKind.CLASS_PROTOTYPE);
     this.fixedArrayPrototype = <ClassPrototype>this.require(CommonNames.FixedArray, ElementKind.CLASS_PROTOTYPE);
     this.setPrototype = <ClassPrototype>this.require(CommonNames.Set, ElementKind.CLASS_PROTOTYPE);
     this.mapPrototype = <ClassPrototype>this.require(CommonNames.Map, ElementKind.CLASS_PROTOTYPE);
@@ -982,6 +981,7 @@ export class Program extends DiagnosticEmitter {
     this.typeinfoInstance = this.requireFunction(CommonNames.typeinfo);
     this.instanceofInstance = this.requireFunction(CommonNames.instanceof_);
     this.visitInstance = this.requireFunction(CommonNames.visit);
+    this.allocBufferInstance = this.requireFunction(CommonNames.allocBuffer);
     this.allocArrayInstance = this.requireFunction(CommonNames.allocArray);
 
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries

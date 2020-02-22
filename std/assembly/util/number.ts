@@ -9,7 +9,7 @@ export const MAX_DOUBLE_LENGTH = 28;
 
 // @ts-ignore: decorator
 @lazy @inline
-const POWERS10 = [<u32>
+const POWERS10: FixedArray<u32> = [
   1,
   10,
   100,
@@ -20,7 +20,7 @@ const POWERS10 = [<u32>
   10000000,
   100000000,
   1000000000
-] as const;
+];
 
 /*
   Lookup table for pairwise char codes in range [0-99]
@@ -38,7 +38,7 @@ const POWERS10 = [<u32>
 */
 // @ts-ignore: decorator
 @lazy @inline
-const DIGITS = [<u32>
+const DIGITS: FixedArray<u32> = [
   0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
   0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
   0x00300031, 0x00310031, 0x00320031, 0x00330031, 0x00340031,
@@ -59,11 +59,11 @@ const DIGITS = [<u32>
   0x00350038, 0x00360038, 0x00370038, 0x00380038, 0x00390038,
   0x00300039, 0x00310039, 0x00320039, 0x00330039, 0x00340039,
   0x00350039, 0x00360039, 0x00370039, 0x00380039, 0x00390039
-] as const;
+];
 
 // @ts-ignore: decorator
 @lazy @inline
-const EXP_POWERS = [<i16>
+const EXP_POWERS: FixedArray<i16> = [
   -1220, -1193, -1166, -1140, -1113, -1087, -1060, -1034, -1007,  -980,
    -954,  -927,  -901,  -874,  -847,  -821,  -794,  -768,  -741,  -715,
    -688,  -661,  -635,  -608,  -582,  -555,  -529,  -502,  -475,  -449,
@@ -73,12 +73,12 @@ const EXP_POWERS = [<i16>
     375,   402,   428,   455,   481,   508,   534,   561,   588,   614,
     641,   667,   694,   720,   747,   774,   800,   827,   853,   880,
     907,   933,   960,   986,  1013,  1039,  1066
-] as const;
+];
 
 // 1e-348, 1e-340, ..., 1e340
 // @ts-ignore: decorator
 @lazy @inline
-const FRC_POWERS = [<u64>
+const FRC_POWERS: FixedArray<u64> = [
   0xFA8FD5A0081C0288, 0xBAAEE17FA23EBF76, 0x8B16FB203055AC76, 0xCF42894A5DCE35EA,
   0x9A6BB0AA55653B2D, 0xE61ACF033D1A45DF, 0xAB70FE17C79AC6CA, 0xFF77B1FCBEBCDC4F,
   0xBE5691EF416BD60C, 0x8DD01FAD907FFC3C, 0xD3515C2831559A83, 0x9D71AC8FADA6C9B5,
@@ -101,7 +101,7 @@ const FRC_POWERS = [<u64>
   0xD01FEF10A657842C, 0x9B10A4E5E9913129, 0xE7109BFBA19C0C9D, 0xAC2820D9623BF429,
   0x80444B5E7AA7CF85, 0xBF21E44003ACDD2D, 0x8E679C2F5E44FF8F, 0xD433179D9C8CB841,
   0x9E19DB92B4E31BA9, 0xEB96BF6EBADF77D9, 0xAF87023B9BF0EE6B
-] as const;
+];
 
 // Count number of decimals for u32 values
 // In our case input value always non-zero so we can simplify some parts

@@ -859,7 +859,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentFlow = global.file.startFunction.flow;
         }
         initExpr = this.compileExpression(initializerNode, Type.auto, // reports
-          Constraints.MUST_WRAP | Constraints.WILL_RETAIN
+          Constraints.MUST_WRAP | Constraints.WILL_RETAIN | Constraints.PREFER_STATIC
         );
         this.currentFlow = previousFlow;
         if (this.currentType == Type.void) {
@@ -3494,10 +3494,18 @@ export class Compiler extends DiagnosticEmitter {
         return expr;
       }
       case AssertionKind.CONST: {
-        let operand = expression.expression;
-        if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.ARRAY) {
-          return this.compileConstArrayLiteral(expression, contextualType, constraints);
-        }
+        // TODO: decide on the layout of ReadonlyArray first
+        // let operand = expression.expression;
+        // if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.ARRAY) {
+        //   let element = this.resolver.lookupExpression(expression /* ! */, this.currentFlow, contextualType);
+        //   if (!element) return this.module.unreachable();
+        //   if (element.kind == ElementKind.CLASS) {
+        //     let arrayInstance = <Class>element;
+        //     if (arrayInstance.extends(this.program.readonlyArrayPrototype)) {
+        //       return this.compileFixedArrayLiteral(<ArrayLiteralExpression>operand, arrayInstance.type, constraints);
+        //     }
+        //   }
+        // }
         this.error(
           DiagnosticCode.Not_implemented,
           expression.range
@@ -7903,6 +7911,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(!implicitlyNegate);
         return this.compileArrayLiteral(
           <ArrayLiteralExpression>expression,
+          contextualType,
           constraints
         );
       }
@@ -7971,24 +7980,34 @@ export class Compiler extends DiagnosticEmitter {
 
   private compileArrayLiteral(
     expression: ArrayLiteralExpression,
+    contextualType: Type,
     constraints: Constraints
   ): ExpressionRef {
     var module = this.module;
     var flow = this.currentFlow;
-
-    var arrayInstance = this.resolver.lookupExpression(expression, flow, this.currentType);
-    if (!arrayInstance) return module.unreachable();
-
     var program = this.program;
+
+    // handle fixed arrays
+    if (contextualType.is(TypeFlags.REFERENCE)) {
+      let classReference = contextualType.classReference;
+      if (classReference !== null && classReference.extends(program.fixedArrayPrototype)) {
+        return this.compileFixedArrayLiteral(expression, contextualType, constraints);
+      }
+    }
+
+    // handle normal arrays
+    var element = this.resolver.lookupExpression(expression, flow, this.currentType);
+    if (!element) return module.unreachable();
+    assert(element.kind == ElementKind.CLASS);
+    var arrayInstance = <Class>element;
+    var arrayType = (<Class>arrayInstance).type;
     var arrayBufferInstance = assert(program.arrayBufferInstance);
 
     // block those here so compiling expressions doesn't conflict
     var tempThis = flow.getTempLocal(this.options.usizeType);
     var tempDataStart = flow.getTempLocal(arrayBufferInstance.type);
 
-    assert(arrayInstance.kind == ElementKind.CLASS);
-    var arrayType = (<Class>arrayInstance).type;
-    var elementType = assert((<Class>arrayInstance).getTypeArgumentsTo(this.program.arrayPrototype))[0];
+    var elementType = assert((<Class>arrayInstance).getTypeArgumentsTo(program.arrayPrototype))[0];
     var expressions = expression.elementExpressions;
 
     // compile value expressions and find out whether all are constant
@@ -8137,27 +8156,23 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
-  /** Compiles a constant array literal expression, i.e. `[1,2,3] as const`. */
-  private compileConstArrayLiteral(
-    expression: AssertionExpression,
+  /** Compiles a fixed array literal, i.e. a `ReadonlyArray` or `FixedArray`. */
+  private compileFixedArrayLiteral(
+    expression: ArrayLiteralExpression,
     contextualType: Type,
     constraints: Constraints
   ): ExpressionRef {
     var module = this.module;
-    var flow = this.currentFlow;
+    var program = this.program;
 
-    // make sure we are dealing with a ReadonlyArray<T> and an ArrayLiteralExpression
-    var element = this.resolver.lookupExpression(expression, flow, contextualType);
-    if (!element) return module.unreachable();
-    assert(element.kind == ElementKind.CLASS);
-    var arrayInstance = <Class>element;
-    assert(arrayInstance.extends(this.program.readonlyArrayPrototype));
-    var elementType = assert((<Class>arrayInstance).getTypeArgumentsTo(this.program.readonlyArrayPrototype))[0];
-    var operand = expression.expression;
-    assert(operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.ARRAY);
+    // make sure this method is only called with a valid contextualType
+    assert(contextualType.is(TypeFlags.REFERENCE));
+    var arrayInstance = assert(contextualType.classReference);
+    var arrayType = arrayInstance.type;
+    var elementType = assert(arrayInstance.getTypeArgumentsTo(program.fixedArrayPrototype))[0];
 
     // compile value expressions and assert that all are compile-time constants
-    var expressions = (<ArrayLiteralExpression>operand).elementExpressions;
+    var expressions = expression.elementExpressions;
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
     var nativeElementType = elementType.toNativeType();
@@ -8186,20 +8201,48 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // return the ReadonlyArray<T> reference
-    var offset = i64_add(
-      this.addStaticBuffer(elementType, values, arrayInstance.id).offset,
-      i64_new(this.program.runtimeHeaderSize)
-    );
-    this.currentType = arrayInstance.type;
-    var expr = this.options.isWasm64
-      ? module.i64(i64_low(offset), i64_high(offset))
-      : module.i32(i64_low(offset));
-    if (!(constraints & Constraints.WILL_RETAIN)) {
-      expr = this.makeAutorelease(expr, arrayInstance.type, flow);
+    var bufferSegment = this.addStaticBuffer(elementType, values, arrayInstance.id);
+    var bufferAddress = i64_add(bufferSegment.offset, i64_new(program.runtimeHeaderSize));
+
+    // return just the static buffer if assigned to a global
+    if (constraints & Constraints.PREFER_STATIC) {
+      let expr = this.options.isWasm64
+        ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
+        : module.i32(i64_low(bufferAddress));
+      if (constraints & Constraints.WILL_RETAIN) {
+        this.skippedAutoreleases.add(expr);
+      } else {
+        // not necessary since this is static data anyway
+        // expr = this.makeAutorelease(expr, arrayType, flow);
+      }
+      this.currentType = arrayType;
+      return expr;
+
+    // otherwise allocate a new chunk of memory and copy the static buffer
     } else {
-      this.skippedAutoreleases.add(expr);
+      let isWasm64 = this.options.isWasm64;
+      let size = values.length << elementType.alignLog2;
+      let expr = this.makeRetain(
+        this.makeCallDirect(program.allocBufferInstance, [
+          isWasm64
+            ? module.i64(size)
+            : module.i32(size),
+          module.i32(arrayInstance.id),
+          isWasm64
+            ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
+            : module.i32(i64_low(bufferAddress))
+        ], expression)
+      );
+      if (arrayType.isManaged) {
+        if (constraints & Constraints.WILL_RETAIN) {
+          this.skippedAutoreleases.add(expr);
+        } else {
+          expr = this.makeAutorelease(expr, arrayType);
+        }
+      }
+      this.currentType = arrayType;
+      return expr;
     }
-    return expr;
   }
 
   private compileObjectLiteral(expression: ObjectLiteralExpression, contextualType: Type): ExpressionRef {

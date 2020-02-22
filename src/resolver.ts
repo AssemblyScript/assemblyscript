@@ -1609,12 +1609,13 @@ export class Resolver extends DiagnosticEmitter {
         return this.lookupExpression(node.expression, ctxFlow, ctxType, reportMode);
       }
       case AssertionKind.CONST: {
-        let element = this.lookupExpression(node.expression, ctxFlow, ctxType, reportMode);
-        if (!element) return null;
-        if (element.kind == ElementKind.CLASS && (<Class>element).extends(this.program.arrayPrototype)) {
-          let elementType = assert((<Class>element).getTypeArgumentsTo(this.program.arrayPrototype))[0];
-          return this.resolveClass(this.program.readonlyArrayPrototype, [ elementType ]);
-        }
+        // TODO: decide on the layout of ReadonlyArray first
+        // let element = this.lookupExpression(node.expression, ctxFlow, ctxType, reportMode);
+        // if (!element) return null;
+        // if (element.kind == ElementKind.CLASS && (<Class>element).extends(this.program.arrayPrototype)) {
+        //   let elementType = assert((<Class>element).getTypeArgumentsTo(this.program.arrayPrototype))[0];
+        //   return this.resolveClass(this.program.readonlyArrayPrototype, [ elementType ]);
+        // }
         this.error(
           DiagnosticCode.Not_implemented,
           node.range
