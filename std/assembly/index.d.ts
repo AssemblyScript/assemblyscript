@@ -1402,7 +1402,6 @@ declare class Array<T> {
 declare abstract class ReadonlyArray<T> {
   readonly [key: number]: T;
   readonly length: i32;
-  constructor(capacity?: i32);
   indexOf(searchElement: T, fromIndex?: i32): i32;
   lastIndexOf(searchElement: T, fromIndex?: i32): i32;
   concat(items: T[]): T[];
@@ -1412,10 +1411,9 @@ declare abstract class ReadonlyArray<T> {
 }
 
 /** Class representing a fixed sequence of values of type `T`. */
-declare class FixedArray<T> {
+declare class FixedArray<T> extends ReadonlyArray<T> {
   [key: number]: T;
-  readonly length: i32;
-  constructor(capacity?: i32);
+  constructor(length?: i32);
 }
 
 /** Class representing a sequence of characters. */
