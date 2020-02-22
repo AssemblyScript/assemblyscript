@@ -658,6 +658,7 @@ assert("\u1FFC".toLowerCase() == "\u1FF3");
 assert("Σ".toLowerCase() == "σ");
 assert(" Σ".toLowerCase() == " σ");
 assert("Σ ".toLowerCase() == "σ ");
+assert(" Σ ".toLowerCase() == " σ ");
 assert("aΣ ".toLowerCase() == "aς ");
 assert("aΣ\n".toLowerCase() == "aς\n");
 assert("aΣ".toLowerCase() == "aς");
