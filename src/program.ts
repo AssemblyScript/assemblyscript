@@ -413,12 +413,14 @@ export class Program extends DiagnosticEmitter {
   arrayBufferInstance: Class;
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype;
+  /** Read-only array prototype reference. */
+  readonlyArrayPrototype: ClassPrototype;
+  /** Fixed array prototype reference. */
+  fixedArrayPrototype: ClassPrototype;
   /** Set prototype reference. */
   setPrototype: ClassPrototype;
   /** Map prototype reference. */
   mapPrototype: ClassPrototype;
-  /** Fixed array prototype reference. */
-  fixedArrayPrototype: ClassPrototype;
   /** Int8Array prototype. */
   i8ArrayPrototype: ClassPrototype;
   /** Int16Array prototype. */
@@ -962,6 +964,7 @@ export class Program extends DiagnosticEmitter {
 
     // register stdlib components
     this.arrayPrototype = <ClassPrototype>this.require(CommonNames.Array, ElementKind.CLASS_PROTOTYPE);
+    this.readonlyArrayPrototype = <ClassPrototype>this.require(CommonNames.ReadonlyArray, ElementKind.CLASS_PROTOTYPE);
     this.fixedArrayPrototype = <ClassPrototype>this.require(CommonNames.FixedArray, ElementKind.CLASS_PROTOTYPE);
     this.setPrototype = <ClassPrototype>this.require(CommonNames.Set, ElementKind.CLASS_PROTOTYPE);
     this.mapPrototype = <ClassPrototype>this.require(CommonNames.Map, ElementKind.CLASS_PROTOTYPE);

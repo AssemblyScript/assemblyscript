@@ -3693,14 +3693,23 @@ export class Parser extends DiagnosticEmitter {
 
         // AssertionExpression
         case Token.AS: {
-          let toType = this.parseType(tn); // reports
-          if (!toType) return null;
-          expr = Node.createAssertionExpression(
-            AssertionKind.AS,
-            expr,
-            toType,
-            tn.range(startPos, tn.pos)
-          );
+          if (tn.skip(Token.CONST)) {
+            expr = Node.createAssertionExpression(
+              AssertionKind.CONST,
+              expr,
+              null,
+              tn.range(startPos, tn.pos)
+            );
+          } else {
+            let toType = this.parseType(tn); // reports
+            if (!toType) return null;
+            expr = Node.createAssertionExpression(
+              AssertionKind.AS,
+              expr,
+              toType,
+              tn.range(startPos, tn.pos)
+            );
+          }
           break;
         }
         case Token.EXCLAMATION: {

@@ -181,6 +181,7 @@ export namespace CommonNames {
   export const Anyref = "Anyref";
   export const String = "String";
   export const Array = "Array";
+  export const ReadonlyArray = "ReadonlyArray";
   export const FixedArray = "FixedArray";
   export const Set = "Set";
   export const Map = "Map";

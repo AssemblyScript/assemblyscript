@@ -3493,6 +3493,16 @@ export class Compiler extends DiagnosticEmitter {
         this.currentType = type.nonNullableType;
         return expr;
       }
+      case AssertionKind.CONST: {
+        let operand = expression.expression;
+        if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.ARRAY) {
+          return this.compileConstArrayLiteral(expression, contextualType, constraints);
+        }
+        this.error(
+          DiagnosticCode.Not_implemented,
+          expression.range
+        );
+      }
       default: assert(false);
     }
     return this.module.unreachable();
@@ -8122,6 +8132,71 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         this.skippedAutoreleases.add(expr);
       }
+    }
+    return expr;
+  }
+
+  /** Compiles a constant array literal expression, i.e. `[1,2,3] as const`. */
+  private compileConstArrayLiteral(
+    expression: AssertionExpression,
+    contextualType: Type,
+    constraints: Constraints
+  ): ExpressionRef {
+    var module = this.module;
+    var flow = this.currentFlow;
+
+    // make sure we are dealing with a ReadonlyArray<T> and an ArrayLiteralExpression
+    var element = this.resolver.lookupExpression(expression, flow, contextualType);
+    if (!element) return module.unreachable();
+    assert(element.kind == ElementKind.CLASS);
+    var arrayInstance = <Class>element;
+    assert(arrayInstance.extends(this.program.readonlyArrayPrototype));
+    var elementType = assert((<Class>arrayInstance).getTypeArgumentsTo(this.program.readonlyArrayPrototype))[0];
+    var operand = expression.expression;
+    assert(operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.ARRAY);
+
+    // compile value expressions and assert that all are compile-time constants
+    var expressions = (<ArrayLiteralExpression>operand).elementExpressions;
+    var length = expressions.length;
+    var values = new Array<ExpressionRef>(length);
+    var nativeElementType = elementType.toNativeType();
+    for (let i = 0; i < length; ++i) {
+      let expression = expressions[i];
+      let expr: ExpressionRef;
+      if (expression) {
+        expr = module.precomputeExpression(
+          this.compileExpression(<Expression>expression, elementType,
+            Constraints.CONV_IMPLICIT
+          )
+        );
+        if (getExpressionId(expr) == ExpressionId.Const) {
+          assert(getExpressionType(expr) == nativeElementType);
+        } else {
+          this.error(
+            DiagnosticCode.Expression_must_be_a_compile_time_constant,
+            expression.range
+          );
+          return module.unreachable();
+        }
+      } else {
+        expr = this.makeZero(elementType);
+      }
+      values[i] = expr;
+    }
+
+    // return the ReadonlyArray<T> reference
+    var offset = i64_add(
+      this.addStaticBuffer(elementType, values, arrayInstance.id).offset,
+      i64_new(this.program.runtimeHeaderSize)
+    );
+    this.currentType = arrayInstance.type;
+    var expr = this.options.isWasm64
+      ? module.i64(i64_low(offset), i64_high(offset))
+      : module.i32(i64_low(offset));
+    if (!(constraints & Constraints.WILL_RETAIN)) {
+      expr = this.makeAutorelease(expr, arrayInstance.type, flow);
+    } else {
+      this.skippedAutoreleases.add(expr);
     }
     return expr;
   }

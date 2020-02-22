@@ -10,16 +10,15 @@
  (memory $0 1)
  (data (i32.const 16) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s\00")
  (data (i32.const 96) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000\00")
- (data (i32.const 128) "\90\01\00\00\01\00\00\00\00\00\00\00\90\01\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
- (data (i32.const 544) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00\90\00\00\00\90\00\00\00\90\01\00\00d\00\00\00")
- (data (i32.const 576) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002\00")
+ (data (i32.const 128) "\90\01\00\00\01\00\00\00\04\00\00\00\90\01\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
+ (data (i32.const 544) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002\00")
  (table $0 4 funcref)
  (elem (i32.const 1) $start:resolve-function-expression~anonymous|0 $start:resolve-function-expression~anonymous|1 $start:resolve-function-expression~anonymous|2)
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 596))
+ (global $~lib/heap/__heap_base i32 (i32.const 564))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
@@ -221,53 +220,49 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
+  (local $8 i64)
   (local $9 i64)
-  (local $10 i64)
+  (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  i32.const 560
-  i32.load offset=4
-  local.set $3
   loop $while-continue|0
    local.get $1
    i32.const 10000
    i32.ge_u
-   local.set $4
-   local.get $4
+   local.set $3
+   local.get $3
    if
     local.get $1
     i32.const 10000
     i32.div_u
-    local.set $5
+    local.set $4
     local.get $1
     i32.const 10000
     i32.rem_u
-    local.set $6
-    local.get $5
+    local.set $5
+    local.get $4
     local.set $1
-    local.get $6
+    local.get $5
     i32.const 100
     i32.div_u
-    local.set $7
-    local.get $6
+    local.set $6
+    local.get $5
     i32.const 100
     i32.rem_u
+    local.set $7
+    i32.const 144
+    local.get $6
+    i32.const 2
+    i32.shl
+    i32.add
+    i64.load32_u
     local.set $8
-    local.get $3
+    i32.const 144
     local.get $7
     i32.const 2
     i32.shl
     i32.add
     i64.load32_u
     local.set $9
-    local.get $3
-    local.get $8
-    i32.const 2
-    i32.shl
-    i32.add
-    i64.load32_u
-    local.set $10
     local.get $2
     i32.const 4
     i32.sub
@@ -277,8 +272,8 @@
     i32.const 1
     i32.shl
     i32.add
+    local.get $8
     local.get $9
-    local.get $10
     i64.const 32
     i64.shl
     i64.or
@@ -293,30 +288,30 @@
    local.get $1
    i32.const 100
    i32.div_u
-   local.set $4
+   local.set $3
    local.get $1
    i32.const 100
    i32.rem_u
-   local.set $11
-   local.get $4
+   local.set $10
+   local.get $3
    local.set $1
    local.get $2
    i32.const 2
    i32.sub
    local.set $2
-   local.get $3
-   local.get $11
+   i32.const 144
+   local.get $10
    i32.const 2
    i32.shl
    i32.add
    i32.load
-   local.set $12
+   local.set $11
    local.get $0
    local.get $2
    i32.const 1
    i32.shl
    i32.add
-   local.get $12
+   local.get $11
    i32.store
   end
   local.get $1
@@ -327,19 +322,19 @@
    i32.const 2
    i32.sub
    local.set $2
-   local.get $3
+   i32.const 144
    local.get $1
    i32.const 2
    i32.shl
    i32.add
    i32.load
-   local.set $12
+   local.set $11
    local.get $0
    local.get $2
    i32.const 1
    i32.shl
    i32.add
-   local.get $12
+   local.get $11
    i32.store
   else
    local.get $2
@@ -349,13 +344,13 @@
    i32.const 48
    local.get $1
    i32.add
-   local.set $12
+   local.set $11
    local.get $0
    local.get $2
    i32.const 1
    i32.shl
    i32.add
-   local.get $12
+   local.get $11
    i32.store16
   end
  )
@@ -682,7 +677,7 @@
   call_indirect (type $i32_=>_i32)
   call $~lib/number/I32#toString
   local.tee $0
-  i32.const 592
+  i32.const 560
   call $~lib/string/String.__eq
   i32.eqz
   if

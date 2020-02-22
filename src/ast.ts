@@ -1339,7 +1339,8 @@ export class ArrayLiteralExpression extends LiteralExpression {
 export enum AssertionKind {
   PREFIX,
   AS,
-  NONNULL
+  NONNULL,
+  CONST
 }
 
 /** Represents an assertion expression. */

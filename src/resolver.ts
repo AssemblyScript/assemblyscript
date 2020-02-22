@@ -1583,26 +1583,46 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
-    if (node.assertionKind == AssertionKind.NONNULL) {
-      return this.lookupExpression(node.expression, ctxFlow, ctxType, reportMode);
+    switch (node.assertionKind) {
+      case AssertionKind.AS:
+      case AssertionKind.PREFIX: {
+        let type = this.resolveType(
+          assert(node.toType), // must be set if not NONNULL
+          ctxFlow.actualFunction,
+          ctxFlow.contextualTypeArguments,
+          reportMode
+        );
+        if (!type) return null;
+        let element = this.getElementOfType(type);
+        if (element) return element;
+        if (reportMode == ReportMode.REPORT) {
+          this.error(
+            DiagnosticCode.Type_0_is_illegal_in_this_context,
+            node.range, type.toString()
+          );
+        }
+        this.currentThisExpression = null;
+        this.currentElementExpression = null;
+        return null;
+      }
+      case AssertionKind.NONNULL: {
+        return this.lookupExpression(node.expression, ctxFlow, ctxType, reportMode);
+      }
+      case AssertionKind.CONST: {
+        let element = this.lookupExpression(node.expression, ctxFlow, ctxType, reportMode);
+        if (!element) return null;
+        if (element.kind == ElementKind.CLASS && (<Class>element).extends(this.program.arrayPrototype)) {
+          let elementType = assert((<Class>element).getTypeArgumentsTo(this.program.arrayPrototype))[0];
+          return this.resolveClass(this.program.readonlyArrayPrototype, [ elementType ]);
+        }
+        this.error(
+          DiagnosticCode.Not_implemented,
+          node.range
+        );
+        return null;
+      }
+      default: assert(false);
     }
-    var type = this.resolveType(
-      assert(node.toType), // must be set if not NONNULL
-      ctxFlow.actualFunction,
-      ctxFlow.contextualTypeArguments,
-      reportMode
-    );
-    if (!type) return null;
-    var element = this.getElementOfType(type);
-    if (element) return element;
-    if (reportMode == ReportMode.REPORT) {
-      this.error(
-        DiagnosticCode.Type_0_is_illegal_in_this_context,
-        node.range, type.toString()
-      );
-    }
-    this.currentThisExpression = null;
-    this.currentElementExpression = null;
     return null;
   }
 
@@ -1617,16 +1637,37 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Type | null {
-    if (node.assertionKind == AssertionKind.NONNULL) {
-      let type = this.resolveExpression(node.expression, ctxFlow, ctxType, reportMode);
-      return type ? type.nonNullableType : null;
+    switch (node.assertionKind) {
+      case AssertionKind.AS:
+      case AssertionKind.PREFIX: {
+        return this.resolveType(
+          assert(node.toType),
+          ctxFlow.actualFunction,
+          ctxFlow.contextualTypeArguments,
+          reportMode
+        );
+      }
+      case AssertionKind.NONNULL: {
+        let type = this.resolveExpression(node.expression, ctxFlow, ctxType, reportMode);
+        return type ? type.nonNullableType : null;
+      }
+      case AssertionKind.CONST: {
+        let element = this.lookupExpression(node, ctxFlow, ctxType, reportMode);
+        if (!element) return null;
+        let type = this.getTypeOfElement(element);
+        if (!type) {
+          if (reportMode == ReportMode.REPORT) {
+            this.error(
+              DiagnosticCode.Expression_cannot_be_represented_by_a_type,
+              node.range
+            );
+          }
+        }
+        return type;
+      }
+      default: assert(false);
     }
-    return this.resolveType(
-      assert(node.toType), // must be set if not NONNULL
-      ctxFlow.actualFunction,
-      ctxFlow.contextualTypeArguments,
-      reportMode
-    );
+    return null;
   }
 
   /** Looks up the program element the specified unary prefix expression refers to. */
