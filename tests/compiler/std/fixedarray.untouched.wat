@@ -1,10 +1,10 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -33,6 +33,7 @@
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $std/fixedarray/arr4 (mut i32) (i32.const 0))
+ (global $std/fixedarray/arr5 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 496))
  (export "_start" (func $~start))
@@ -2785,6 +2786,7 @@
   local.get $0
  )
  (func $std/fixedarray/test (; 25 ;) (result i32)
+  (local $0 i32)
   i32.const 12
   i32.const 3
   i32.const 320
@@ -2802,7 +2804,19 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $start:std/fixedarray (; 27 ;)
+ (func $std/fixedarray/Ref#constructor (; 27 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 4
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $start:std/fixedarray (; 28 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 32
@@ -3035,6 +3049,22 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 8
+  i32.const 5
+  i32.const 0
+  call $~lib/rt/__allocBuffer
+  call $~lib/rt/pure/__retain
+  local.set $0
+  local.get $0
+  i32.const 0
+  call $std/fixedarray/Ref#constructor
+  i32.store
+  local.get $0
+  i32.const 0
+  call $std/fixedarray/Ref#constructor
+  i32.store offset=4
+  local.get $0
+  global.set $std/fixedarray/arr5
   i32.const 0
   local.tee $0
   global.get $std/fixedarray/arr4
@@ -3049,8 +3079,22 @@
   end
   local.get $0
   global.set $std/fixedarray/arr4
+  i32.const 0
+  local.tee $1
+  global.get $std/fixedarray/arr5
+  local.tee $0
+  i32.ne
+  if
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $1
+   local.get $0
+   call $~lib/rt/pure/__release
+  end
+  local.get $1
+  global.set $std/fixedarray/arr5
  )
- (func $~start (; 28 ;)
+ (func $~start (; 29 ;)
   global.get $~started
   if
    return
@@ -3060,10 +3104,10 @@
   end
   call $start:std/fixedarray
  )
- (func $~lib/rt/pure/__collect (; 29 ;)
+ (func $~lib/rt/pure/__collect (; 30 ;)
   return
  )
- (func $~lib/rt/tlsf/freeBlock (; 30 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 31 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -3079,7 +3123,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/pure/decrement (; 31 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 32 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3156,7 +3200,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 32 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 33 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -3180,27 +3224,80 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 33 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/fixedarray/FixedArray<i32>#__visit_impl (; 34 ;) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/fixedarray/FixedArray<std/fixedarray/Ref>#__visit_impl (; 35 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  local.get $0
+  local.set $2
+  local.get $2
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.add
+  local.set $3
+  loop $while-continue|0
+   local.get $2
+   local.get $3
+   i32.lt_u
+   local.set $4
+   local.get $4
+   if
+    local.get $2
+    i32.load
+    local.set $5
+    local.get $5
+    if
+     local.get $5
+     local.get $1
+     call $~lib/rt/pure/__visit
+    end
+    local.get $2
+    i32.const 4
+    i32.add
+    local.set $2
+    br $while-continue|0
+   end
+  end
+ )
+ (func $~lib/rt/__visit_members (; 36 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
-   block $switch$1$case$4
-    block $switch$1$case$2
+   block $switch$1$case$7
+    block $switch$1$case$5
+     block $switch$1$case$4
+      block $switch$1$case$2
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$2 $switch$1$case$7 $switch$1$default
+      end
+      return
+     end
      local.get $0
-     i32.const 8
-     i32.sub
      i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$default
+     local.tee $2
+     if
+      local.get $2
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     return
     end
+    local.get $0
+    local.get $1
+    call $~lib/fixedarray/FixedArray<i32>#__visit_impl
     return
    end
    local.get $0
-   i32.load
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
+   local.get $1
+   call $~lib/fixedarray/FixedArray<std/fixedarray/Ref>#__visit_impl
    return
   end
   unreachable

@@ -4931,27 +4931,54 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 43 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/fixedarray/FixedArray<u32>#__visit_impl (; 43 ;) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/fixedarray/FixedArray<u64>#__visit_impl (; 44 ;) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/fixedarray/FixedArray<i16>#__visit_impl (; 45 ;) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/rt/__visit_members (; 46 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
-   block $switch$1$case$4
-    block $switch$1$case$2
+   block $switch$1$case$7
+    block $switch$1$case$6
+     block $switch$1$case$5
+      block $switch$1$case$4
+       block $switch$1$case$2
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $switch$1$case$7 $switch$1$default
+       end
+       return
+      end
+      local.get $0
+      i32.load
+      local.tee $2
+      if
+       local.get $2
+       local.get $1
+       call $~lib/rt/pure/__visit
+      end
+      return
+     end
      local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$case$2 $switch$1$case$2 $switch$1$default
+     local.get $1
+     call $~lib/fixedarray/FixedArray<u32>#__visit_impl
+     return
     end
+    local.get $0
+    local.get $1
+    call $~lib/fixedarray/FixedArray<u64>#__visit_impl
     return
    end
    local.get $0
-   i32.load
-   local.tee $2
-   if
-    local.get $2
-    local.get $1
-    call $~lib/rt/pure/__visit
-   end
+   local.get $1
+   call $~lib/fixedarray/FixedArray<i16>#__visit_impl
    return
   end
   unreachable

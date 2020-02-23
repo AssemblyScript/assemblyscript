@@ -34017,31 +34017,33 @@
   end
  )
  (func $~lib/rt/__visit_members (; 518 ;) (param $0 i32)
-  block $block$4$break
-   block $switch$1$default
-    block $switch$1$case$2
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$case$2 $switch$1$case$2 $switch$1$case$2 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+  block $folding-inner0
+   block $block$4$break
+    block $switch$1$default
+     block $switch$1$case$2
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $folding-inner0 $folding-inner0 $folding-inner0 $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+     end
+     return
     end
-    return
+    unreachable
    end
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $0
-  if
    local.get $0
-   i32.const 7388
-   i32.ge_u
+   i32.load
+   local.tee $0
    if
     local.get $0
-    i32.const 16
-    i32.sub
-    call $~lib/rt/pure/decrement
+    i32.const 7388
+    i32.ge_u
+    if
+     local.get $0
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
    end
   end
  )

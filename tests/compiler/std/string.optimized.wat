@@ -16499,30 +16499,32 @@
   end
  )
  (func $~lib/rt/__visit_members (; 94 ;) (param $0 i32)
-  block $block$4$break
-   block $switch$1$default
-    block $switch$1$case$6
-     block $switch$1$case$2
-      local.get $0
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $switch$1$case$2 $switch$1$case$6 $block$4$break $switch$1$case$2 $switch$1$case$2 $switch$1$case$2 $switch$1$case$2 $switch$1$case$2 $switch$1$case$2 $switch$1$default
+  block $folding-inner0
+   block $block$4$break
+    block $switch$1$default
+     block $switch$1$case$6
+      block $switch$1$case$2
+       local.get $0
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $switch$1$case$2 $switch$1$case$2 $block$4$break $folding-inner0 $switch$1$case$6 $block$4$break $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $switch$1$default
+      end
+      return
      end
-     return
+     local.get $0
+     call $~lib/array/Array<~lib/string/String>#__visit_impl
+     br $block$4$break
     end
-    local.get $0
-    call $~lib/array/Array<~lib/string/String>#__visit_impl
-    br $block$4$break
+    unreachable
    end
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $0
-  if
    local.get $0
-   call $~lib/rt/pure/__visit
+   i32.load
+   local.tee $0
+   if
+    local.get $0
+    call $~lib/rt/pure/__visit
+   end
   end
  )
 )

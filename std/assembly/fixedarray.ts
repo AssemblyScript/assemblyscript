@@ -145,4 +145,18 @@ export class FixedArray<T> {
   toString(): string {
     return this.join();
   }
+
+  // RT integration
+
+  @unsafe private __visit_impl(cookie: u32): void {
+    if (isManaged<T>()) {
+      let cur = changetype<usize>(this);
+      let end = cur + changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize;
+      while (cur < end) {
+        let val = load<usize>(cur);
+        if (val) __visit(val, cookie);
+        cur += sizeof<usize>();
+      }
+    }
+  }
 }

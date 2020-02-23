@@ -1704,7 +1704,6 @@
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -1939,8 +1938,6 @@
   i32.const 576
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
-  local.tee $3
-  call $~lib/rt/stub/__retain
   i32.store
   local.get $4
   i32.const 1
@@ -1949,15 +1946,9 @@
   i32.const 608
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
-  local.tee $5
-  call $~lib/rt/stub/__retain
   i32.store offset=4
   local.get $1
   local.set $4
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $5
-  call $~lib/rt/stub/__release
   local.get $4
   call $~lib/rt/stub/__release
   local.get $1

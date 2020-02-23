@@ -2878,13 +2878,6 @@
  (func $start:std/array-literal (; 33 ;)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
   i32.const 64
   call $~lib/array/Array<i8>#get:length
   i32.const 3
@@ -3191,20 +3184,14 @@
   local.get $0
   i32.const 0
   call $std/array-literal/Ref#constructor
-  local.tee $2
-  call $~lib/rt/pure/__retain
   i32.store
   local.get $0
   i32.const 0
   call $std/array-literal/Ref#constructor
-  local.tee $3
-  call $~lib/rt/pure/__retain
   i32.store offset=4
   local.get $0
   i32.const 0
   call $std/array-literal/Ref#constructor
-  local.tee $4
-  call $~lib/rt/pure/__retain
   i32.store offset=8
   local.get $1
   global.set $std/array-literal/dynamicArrayRef
@@ -3234,20 +3221,14 @@
   local.get $1
   i32.const 0
   call $std/array-literal/RefWithCtor#constructor
-  local.tee $5
-  call $~lib/rt/pure/__retain
   i32.store
   local.get $1
   i32.const 0
   call $std/array-literal/RefWithCtor#constructor
-  local.tee $6
-  call $~lib/rt/pure/__retain
   i32.store offset=4
   local.get $1
   i32.const 0
   call $std/array-literal/RefWithCtor#constructor
-  local.tee $7
-  call $~lib/rt/pure/__retain
   i32.store offset=8
   local.get $0
   global.set $std/array-literal/dynamicArrayRefWithCtor
@@ -3287,27 +3268,11 @@
   local.get $0
   i32.const 0
   call $std/array-literal/Ref#constructor
-  local.tee $8
-  call $~lib/rt/pure/__retain
   i32.store
   local.get $1
   local.tee $0
   call $std/array-literal/doesntLeak
-  local.get $8
-  call $~lib/rt/pure/__release
   local.get $0
-  call $~lib/rt/pure/__release
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $6
-  call $~lib/rt/pure/__release
-  local.get $7
   call $~lib/rt/pure/__release
  )
  (func $~start (; 34 ;)

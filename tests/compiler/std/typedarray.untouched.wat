@@ -52941,31 +52941,40 @@
  (func $~lib/array/Array<i32>#__visit_impl (; 707 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<f32>#__visit_impl (; 708 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/fixedarray/FixedArray<u32>#__visit_impl (; 708 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<f64>#__visit_impl (; 709 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/fixedarray/FixedArray<u64>#__visit_impl (; 709 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u8>#__visit_impl (; 710 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/fixedarray/FixedArray<i16>#__visit_impl (; 710 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<i16>#__visit_impl (; 711 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f32>#__visit_impl (; 711 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u16>#__visit_impl (; 712 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f64>#__visit_impl (; 712 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u32>#__visit_impl (; 713 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>#__visit_impl (; 713 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<i64>#__visit_impl (; 714 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i16>#__visit_impl (; 714 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u64>#__visit_impl (; 715 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>#__visit_impl (; 715 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/__visit_members (; 716 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>#__visit_impl (; 716 ;) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/array/Array<i64>#__visit_impl (; 717 ;) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/array/Array<u64>#__visit_impl (; 718 ;) (param $0 i32) (param $1 i32)
+  nop
+ )
+ (func $~lib/rt/__visit_members (; 719 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default
@@ -52977,29 +52986,47 @@
          block $switch$1$case$23
           block $switch$1$case$22
            block $switch$1$case$21
-            block $switch$1$case$17
-             block $switch$1$case$16
-              block $switch$1$case$4
-               block $switch$1$case$2
+            block $switch$1$case$20
+             block $switch$1$case$19
+              block $switch$1$case$18
+               block $switch$1$case$17
+                block $switch$1$case$16
+                 block $switch$1$case$4
+                  block $switch$1$case$2
+                   local.get $0
+                   i32.const 8
+                   i32.sub
+                   i32.load
+                   br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$16 $switch$1$case$17 $switch$1$case$18 $switch$1$case$19 $switch$1$case$20 $switch$1$case$21 $switch$1$case$22 $switch$1$case$23 $switch$1$case$24 $switch$1$case$25 $switch$1$case$26 $switch$1$case$27 $switch$1$case$28 $switch$1$default
+                  end
+                  return
+                 end
+                 br $block$4$break
+                end
                 local.get $0
-                i32.const 8
-                i32.sub
-                i32.load
-                br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$16 $switch$1$case$17 $switch$1$case$2 $switch$1$case$2 $switch$1$case$2 $switch$1$case$21 $switch$1$case$22 $switch$1$case$23 $switch$1$case$24 $switch$1$case$25 $switch$1$case$26 $switch$1$case$27 $switch$1$case$28 $switch$1$default
+                local.get $1
+                call $~lib/array/Array<i8>#__visit_impl
+                br $block$4$break
                end
-               return
+               local.get $0
+               local.get $1
+               call $~lib/array/Array<i32>#__visit_impl
+               br $block$4$break
               end
-              br $block$4$break
+              local.get $0
+              local.get $1
+              call $~lib/fixedarray/FixedArray<u32>#__visit_impl
+              return
              end
              local.get $0
              local.get $1
-             call $~lib/array/Array<i8>#__visit_impl
-             br $block$4$break
+             call $~lib/fixedarray/FixedArray<u64>#__visit_impl
+             return
             end
             local.get $0
             local.get $1
-            call $~lib/array/Array<i32>#__visit_impl
-            br $block$4$break
+            call $~lib/fixedarray/FixedArray<i16>#__visit_impl
+            return
            end
            local.get $0
            local.get $1

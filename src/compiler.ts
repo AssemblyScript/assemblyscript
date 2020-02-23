@@ -8019,7 +8019,7 @@ export class Compiler extends DiagnosticEmitter {
       let expr = expression
         ? module.precomputeExpression(
             this.compileExpression(<Expression>expression, elementType,
-              Constraints.CONV_IMPLICIT
+              Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
             )
           )
         : this.makeZero(elementType);
@@ -8125,7 +8125,9 @@ export class Compiler extends DiagnosticEmitter {
       let valueExpr = values[i];
       if (isManaged) {
         // value = __retain(value)
-        valueExpr = this.makeRetain(valueExpr);
+        if (!this.skippedAutoreleases.has(valueExpr)) {
+          valueExpr = this.makeRetain(valueExpr);
+        }
       }
       // store<T>(tempData, value, immOffset)
       stmts.push(
@@ -8146,10 +8148,10 @@ export class Compiler extends DiagnosticEmitter {
     this.currentType = arrayType;
     var expr = module.flatten(stmts, nativeArrayType);
     if (arrayType.isManaged) {
-      if (!(constraints & Constraints.WILL_RETAIN)) {
-        expr = this.makeAutorelease(expr, arrayType, this.currentFlow);
-      } else {
+      if (constraints & Constraints.WILL_RETAIN) {
         this.skippedAutoreleases.add(expr);
+      } else {
+        expr = this.makeAutorelease(expr, arrayType, this.currentFlow);
       }
     }
     return expr;
@@ -8162,6 +8164,7 @@ export class Compiler extends DiagnosticEmitter {
     constraints: Constraints
   ): ExpressionRef {
     var module = this.module;
+    var flow = this.currentFlow;
     var program = this.program;
 
     // make sure this method is only called with a valid contextualType
@@ -8170,29 +8173,28 @@ export class Compiler extends DiagnosticEmitter {
     var arrayType = arrayInstance.type;
     var elementType = assert(arrayInstance.getTypeArgumentsTo(program.fixedArrayPrototype))[0];
 
-    // compile value expressions and assert that all are compile-time constants
+    // block those here so compiling expressions doesn't conflict
+    var tempThis = flow.getTempLocal(this.options.usizeType);
+
+    // compile value expressions and check if all are compile-time constants
     var expressions = expression.elementExpressions;
     var length = expressions.length;
     var values = new Array<ExpressionRef>(length);
     var nativeElementType = elementType.toNativeType();
+    var isStatic = true;
     for (let i = 0; i < length; ++i) {
       let expression = expressions[i];
       let expr: ExpressionRef;
       if (expression) {
         expr = module.precomputeExpression(
           this.compileExpression(<Expression>expression, elementType,
-            Constraints.CONV_IMPLICIT
+            Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
           )
         );
         if (getExpressionId(expr) == ExpressionId.Const) {
           assert(getExpressionType(expr) == nativeElementType);
         } else {
-          this.error(
-            DiagnosticCode.Expression_must_be_a_compile_time_constant,
-            expression.range
-          );
-          this.currentType = arrayType;
-          return module.unreachable();
+          isStatic = false;
         }
       } else {
         expr = this.makeZero(elementType);
@@ -8200,49 +8202,117 @@ export class Compiler extends DiagnosticEmitter {
       values[i] = expr;
     }
 
-    // make a static memory segment
-    var bufferSegment = this.addStaticBuffer(elementType, values, arrayInstance.id);
-    var bufferAddress = i64_add(bufferSegment.offset, i64_new(program.runtimeHeaderSize));
+    var isWasm64 = this.options.isWasm64;
+    var bufferSize = values.length << elementType.alignLog2;
 
-    // return the static buffer directly if assigned to a global
-    if (constraints & Constraints.PREFER_STATIC) {
-      let expr = this.options.isWasm64
-        ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
-        : module.i32(i64_low(bufferAddress));
-      if (constraints & Constraints.WILL_RETAIN) {
-        this.skippedAutoreleases.add(expr);
-      } else {
-        // not necessary since this is static data anyway
-        // expr = this.makeAutorelease(expr, arrayType, flow);
-      }
-      this.currentType = arrayType;
-      return expr;
+    // if the array is static, make a static arraybuffer segment
+    if (isStatic) {
+      flow.freeTempLocal(tempThis);
 
-    // otherwise allocate a new chunk of memory and return a copy of the buffer
-    } else {
-      let isWasm64 = this.options.isWasm64;
-      let size = values.length << elementType.alignLog2;
-      let expr = this.makeRetain(
-        this.makeCallDirect(program.allocBufferInstance, [
-          isWasm64
-            ? module.i64(size)
-            : module.i32(size),
-          module.i32(arrayInstance.id),
-          isWasm64
-            ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
-            : module.i32(i64_low(bufferAddress))
-        ], expression)
-      );
-      if (arrayType.isManaged) {
+      let bufferSegment = this.addStaticBuffer(elementType, values, arrayInstance.id);
+      let bufferAddress = i64_add(bufferSegment.offset, i64_new(program.runtimeHeaderSize));
+
+      // return the static buffer directly if assigned to a global
+      if (constraints & Constraints.PREFER_STATIC) {
+        let expr = this.options.isWasm64
+          ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
+          : module.i32(i64_low(bufferAddress));
         if (constraints & Constraints.WILL_RETAIN) {
           this.skippedAutoreleases.add(expr);
         } else {
-          expr = this.makeAutorelease(expr, arrayType);
+          // not necessary since this is static data anyway
+          // expr = this.makeAutorelease(expr, arrayType, flow);
+        }
+        this.currentType = arrayType;
+        return expr;
+
+      // otherwise allocate a new chunk of memory and return a copy of the buffer
+      } else {
+        // __allocBuffer(bufferSize, id, buffer)
+        let expr = this.makeRetain(
+          this.makeCallDirect(program.allocBufferInstance, [
+            isWasm64
+              ? module.i64(bufferSize)
+              : module.i32(bufferSize),
+            module.i32(arrayInstance.id),
+            isWasm64
+              ? module.i64(i64_low(bufferAddress), i64_high(bufferAddress))
+              : module.i32(i64_low(bufferAddress))
+          ], expression)
+        );
+        if (arrayType.isManaged) {
+          if (constraints & Constraints.WILL_RETAIN) {
+            this.skippedAutoreleases.add(expr);
+          } else {
+            expr = this.makeAutorelease(expr, arrayType);
+          }
+        }
+        this.currentType = arrayType;
+        return expr;
+      }
+    }
+
+    // otherwise compile an explicit instantiation with indexed sets
+    var setter = arrayInstance.lookupOverload(OperatorKind.INDEXED_SET, true);
+    if (!setter) {
+      flow.freeTempLocal(tempThis);
+      this.error(
+        DiagnosticCode.Index_signature_in_type_0_only_permits_reading,
+        expression.range, arrayInstance.internalName
+      );
+      this.currentType = arrayType;
+      return module.unreachable();
+    }
+    var nativeArrayType = arrayType.toNativeType();
+
+    var stmts = new Array<ExpressionRef>();
+    // tempThis = __allocBuffer(bufferSize, classId)
+    stmts.push(
+      module.local_set(tempThis.index,
+        this.makeRetain(
+          this.makeCallDirect(program.allocBufferInstance, [
+            isWasm64
+              ? module.i64(bufferSize)
+              : module.i32(bufferSize),
+            module.i32(arrayInstance.id)
+          ], expression)
+        )
+      )
+    );
+    var isManaged = elementType.isManaged;
+    for (let i = 0, alignLog2 = elementType.alignLog2; i < length; ++i) {
+      let valueExpr = values[i];
+      if (isManaged) {
+        // value = __retain(value)
+        if (!this.skippedAutoreleases.has(valueExpr)) {
+          valueExpr = this.makeRetain(valueExpr);
         }
       }
-      this.currentType = arrayType;
-      return expr;
+      // store<T>(tempThis, value, immOffset)
+      stmts.push(
+        module.store(elementType.byteSize,
+          module.local_get(tempThis.index, nativeArrayType),
+          valueExpr,
+          nativeElementType,
+          i << alignLog2
+        )
+      );
     }
+    // -> tempThis
+    stmts.push(
+      module.local_get(tempThis.index, nativeArrayType)
+    );
+    flow.freeTempLocal(tempThis);
+    this.currentType = arrayType;
+    var expr = module.flatten(stmts, nativeArrayType);
+    if (arrayType.isManaged) {
+      if (constraints & Constraints.WILL_RETAIN) {
+        this.skippedAutoreleases.add(expr);
+      } else {
+        expr = this.makeAutorelease(expr, arrayType, this.currentFlow);
+      }
+    }
+    return expr;
   }
 
   private compileObjectLiteral(expression: ObjectLiteralExpression, contextualType: Type): ExpressionRef {

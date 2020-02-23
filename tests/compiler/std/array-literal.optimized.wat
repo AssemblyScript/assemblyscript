@@ -1213,12 +1213,6 @@
  (func $start:std/array-literal (; 23 ;)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   i32.const 76
   i32.load
   i32.const 3
@@ -1488,18 +1482,12 @@
   i32.load offset=4
   local.tee $0
   call $std/array-literal/Ref#constructor
-  local.tee $2
-  call $~lib/rt/pure/__retain
   i32.store
   local.get $0
   call $std/array-literal/Ref#constructor
-  local.tee $3
-  call $~lib/rt/pure/__retain
   i32.store offset=4
   local.get $0
   call $std/array-literal/Ref#constructor
-  local.tee $4
-  call $~lib/rt/pure/__retain
   i32.store offset=8
   local.get $1
   global.set $std/array-literal/dynamicArrayRef
@@ -1524,18 +1512,12 @@
   i32.load offset=4
   local.tee $0
   call $std/array-literal/RefWithCtor#constructor
-  local.tee $5
-  call $~lib/rt/pure/__retain
   i32.store
   local.get $0
   call $std/array-literal/RefWithCtor#constructor
-  local.tee $6
-  call $~lib/rt/pure/__retain
   i32.store offset=4
   local.get $0
   call $std/array-literal/RefWithCtor#constructor
-  local.tee $0
-  call $~lib/rt/pure/__retain
   i32.store offset=8
   local.get $1
   global.set $std/array-literal/dynamicArrayRefWithCtor
@@ -1564,26 +1546,10 @@
   i32.const 6
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $1
+  local.tee $0
   i32.load offset=4
   call $std/array-literal/Ref#constructor
-  local.tee $7
-  call $~lib/rt/pure/__retain
   i32.store
-  local.get $7
-  call $~lib/rt/pure/__release
-  local.get $1
-  call $~lib/rt/pure/__release
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $6
-  call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
  )

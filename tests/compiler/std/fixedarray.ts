@@ -33,4 +33,9 @@ assert(arr4[1] == 8);
 arr4 = test();
 assert(arr4[1] == 6);
 
+// non-static instantiation
+class Ref {}
+var arr5: FixedArray<Ref> = [ new Ref(), new Ref() ];
+
 arr4 = changetype<FixedArray<i32>>(0); // unleak
+arr5 = changetype<FixedArray<Ref>>(0);
