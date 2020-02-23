@@ -4160,36 +4160,32 @@
              end
             end
             local.set $17
-            block $~lib/util/string/isCaseIgnorable|inlined.0 (result i32)
-             local.get $17
-             local.set $18
+            local.get $17
+            local.set $18
+            local.get $18
+            i32.const 918000
+            i32.lt_u
+            if (result i32)
+             i32.const 9296
+             i32.load offset=4
              local.get $18
-             i32.const 918000
-             i32.lt_u
-             if
-              i32.const 9296
-              i32.load offset=4
-              local.get $18
-              call $~lib/util/string/stagedBinaryLookup
-              br $~lib/util/string/isCaseIgnorable|inlined.0
-             end
+             call $~lib/util/string/stagedBinaryLookup
+            else
              i32.const 0
             end
             i32.eqz
             if
-             block $~lib/util/string/isCased|inlined.0 (result i32)
-              local.get $17
-              local.set $15
+             local.get $17
+             local.set $15
+             local.get $15
+             i32.const 127370
+             i32.lt_u
+             if (result i32)
+              i32.const 10912
+              i32.load offset=4
               local.get $15
-              i32.const 127370
-              i32.lt_u
-              if
-               i32.const 10912
-               i32.load offset=4
-               local.get $15
-               call $~lib/util/string/stagedBinaryLookup
-               br $~lib/util/string/isCased|inlined.0
-              end
+              call $~lib/util/string/stagedBinaryLookup
+             else
               i32.const 0
              end
              if
@@ -4285,36 +4281,32 @@
               local.set $18
              end
             end
-            block $~lib/util/string/isCaseIgnorable|inlined.1 (result i32)
-             local.get $18
-             local.set $16
+            local.get $18
+            local.set $16
+            local.get $16
+            i32.const 918000
+            i32.lt_u
+            if (result i32)
+             i32.const 9296
+             i32.load offset=4
              local.get $16
-             i32.const 918000
-             i32.lt_u
-             if
-              i32.const 9296
-              i32.load offset=4
-              local.get $16
-              call $~lib/util/string/stagedBinaryLookup
-              br $~lib/util/string/isCaseIgnorable|inlined.1
-             end
+             call $~lib/util/string/stagedBinaryLookup
+            else
              i32.const 0
             end
             i32.eqz
             if
-             block $~lib/util/string/isCased|inlined.1 (result i32)
-              local.get $18
-              local.set $16
+             local.get $18
+             local.set $16
+             local.get $16
+             i32.const 127370
+             i32.lt_u
+             if (result i32)
+              i32.const 10912
+              i32.load offset=4
               local.get $16
-              i32.const 127370
-              i32.lt_u
-              if
-               i32.const 10912
-               i32.load offset=4
-               local.get $16
-               call $~lib/util/string/stagedBinaryLookup
-               br $~lib/util/string/isCased|inlined.1
-              end
+              call $~lib/util/string/stagedBinaryLookup
+             else
               i32.const 0
              end
              i32.eqz
