@@ -1060,11 +1060,12 @@ export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
   var minIndex = max(0, index - lookaheadLimit);
   while (index > minIndex) {
     let c = codePointBefore(buffer, index);
-    let notIgnorable = !isCaseIgnorable(c);
-    if (notIgnorable && isCased(c)) {
-      found = true;
-    } else if (notIgnorable) {
-      return false;
+    if (!isCaseIgnorable(c)) {
+      if (isCased(c)) {
+        found = true;
+      } else {
+        return false;
+      }
     }
     index -= i32(c >= 0x10000) + 1;
   }
@@ -1079,9 +1080,9 @@ export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
         c = (c - 0xD800 << 10) + (c1 - 0xDC00) + 0x10000;
       }
     }
-    let notIgnorable = !isCaseIgnorable(c);
-    if (notIgnorable && isCased(c)) return false;
-    if (notIgnorable) return true;
+    if (!isCaseIgnorable(c)) {
+      return !isCased(c);
+    }
     index += i32(c >= 0x10000) + 1;
   }
   return true;
