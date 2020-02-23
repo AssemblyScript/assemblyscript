@@ -4164,8 +4164,8 @@
              local.get $17
              local.set $18
              local.get $18
-             i32.const 917999
-             i32.le_u
+             i32.const 918000
+             i32.lt_u
              if
               i32.const 9296
               i32.load offset=4
@@ -4181,8 +4181,8 @@
               local.get $17
               local.set $15
               local.get $15
-              i32.const 127369
-              i32.le_u
+              i32.const 127370
+              i32.lt_u
               if
                i32.const 10912
                i32.load offset=4
@@ -4289,8 +4289,8 @@
              local.get $18
              local.set $16
              local.get $16
-             i32.const 917999
-             i32.le_u
+             i32.const 918000
+             i32.lt_u
              if
               i32.const 9296
               i32.load offset=4
@@ -4306,8 +4306,8 @@
               local.get $18
               local.set $16
               local.get $16
-              i32.const 127369
-              i32.le_u
+              i32.const 127370
+              i32.lt_u
               if
                i32.const 10912
                i32.load offset=4

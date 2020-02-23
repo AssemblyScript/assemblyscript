@@ -530,7 +530,7 @@ export function isAlpha(c: u32): bool {
 // @ts-ignore: decorator
 @inline
 export function isCased(c: u32): bool {
-  if (c <= 0x1F189) {
+  if (c < 0x1F18A) {
     // @ts-ignore: cast
     return stagedBinaryLookup(cased.dataStart as usize, c);
   }
@@ -540,7 +540,7 @@ export function isCased(c: u32): bool {
 // @ts-ignore: decorator
 @inline
 export function isCaseIgnorable(c: u32): bool {
-  if (c <= 0xE01EF) {
+  if (c < 0xE01F0) {
     // @ts-ignore: cast
     return stagedBinaryLookup(caseIgnorables.dataStart as usize, c);
   }

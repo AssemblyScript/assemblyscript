@@ -2586,8 +2586,8 @@
              local.get $1
              local.set $10
              local.get $1
-             i32.const 917999
-             i32.le_u
+             i32.const 918000
+             i32.lt_u
              if
               i32.const 8948
               i32.load
@@ -2601,8 +2601,8 @@
             if
              block $~lib/util/string/isCased|inlined.0 (result i32)
               local.get $1
-              i32.const 127369
-              i32.le_u
+              i32.const 127370
+              i32.lt_u
               if
                i32.const 10564
                i32.load
@@ -2696,8 +2696,8 @@
               end
              end
              local.get $3
-             i32.const 917999
-             i32.le_u
+             i32.const 918000
+             i32.lt_u
              if
               i32.const 8948
               i32.load
@@ -2711,8 +2711,8 @@
             if
              block $~lib/util/string/isCased|inlined.1 (result i32)
               local.get $3
-              i32.const 127369
-              i32.le_u
+              i32.const 127370
+              i32.lt_u
               if
                i32.const 10564
                i32.load
