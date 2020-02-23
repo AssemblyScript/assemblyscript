@@ -1039,6 +1039,8 @@ function pow10(n: i32): f64 {
   return load<f64>(Powers10.dataStart as usize + (n << alignof<f64>()));
 }
 
+// @ts-ignore: decorator
+@inline
 function codePointBefore(buffer: usize, index: i32): i32 {
   if (index <= 0) return -1;
   var c = <u32>load<u16>(buffer + (<usize>index - 1 << 1));
