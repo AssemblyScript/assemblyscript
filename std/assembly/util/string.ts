@@ -180,9 +180,9 @@ import { ipow32 } from "../math";
   255,255,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 ];
 
-// size: 1568 bytes (compressed to ~1100 bytes)
+// size: 1568 bytes (compressed to ~1380 bytes after binaryen)
 // @ts-ignore: decorator
-@lazy export const cased: u8[] = [
+@lazy const cased: u8[] = [
   18,19,20,21,22,23,16,16,16,16,16,16,16,16,16,16,
   24,16,16,25,16,16,16,16,16,16,16,16,26,27,17,28,
   29,30,16,16,31,16,16,16,16,16,16,16,32,33,16,16,
@@ -263,9 +263,9 @@ import { ipow32 } from "../math";
   0,0,0,0,0,0,0,0
 ];
 
-// size: 2976 bytes
+// size: 2976 bytes (compressed to ~2050 bytes after binaryen)
 // @ts-ignore: decorator
-@lazy export const caseIgnorables: u8[] = [
+@lazy const caseIgnorables: u8[] = [
   18,16,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
   33,16,16,34,16,16,16,35,36,37,38,39,40,41,16,42,
   43,16,16,16,16,16,16,16,16,16,16,16,44,45,46,16,
