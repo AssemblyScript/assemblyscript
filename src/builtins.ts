@@ -20,7 +20,6 @@ import {
   LiteralKind,
   LiteralExpression,
   StringLiteralExpression,
-  ArrayLiteralExpression,
   CallExpression,
   isNumericLiteral
 } from "./ast";
@@ -160,7 +159,6 @@ export namespace BuiltinNames {
   export const unchecked = "~lib/builtins/unchecked";
   export const instantiate = "~lib/builtins/instantiate";
   export const idof = "~lib/builtins/idof";
-  export const fixed = "~lib/builtins/fixed";
 
   export const i8 = "~lib/builtins/i8";
   export const i16 = "~lib/builtins/i16";
