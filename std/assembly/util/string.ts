@@ -551,11 +551,11 @@ export function isCaseIgnorable(c: u32): bool {
 @inline
 export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
   const lookaheadLimit = 30; // max lookahead limit
-  var saved = index;
   var found = false;
-  var minIndex = max(0, index - lookaheadLimit);
-  while (index > minIndex) {
-    let c = codePointBefore(buffer, index);
+  var pos = index;
+  var minPos = max(0, pos - lookaheadLimit);
+  while (pos > minPos) {
+    let c = codePointBefore(buffer, pos);
     if (!isCaseIgnorable(c)) {
       if (isCased(c)) {
         found = true;
@@ -563,15 +563,15 @@ export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
         return false;
       }
     }
-    index -= i32(c >= 0x10000) + 1;
+    pos -= i32(c >= 0x10000) + 1;
   }
   if (!found) return false;
-  index = saved + 1;
-  var maxIndex = min(index + lookaheadLimit, len);
-  while (index < maxIndex) {
-    let c = <u32>load<u16>(buffer + (<usize>index << 1));
-    if (u32((c & 0xFC00) == 0xD800) & u32(index + 1 != len)) {
-      let c1 = <u32>load<u16>(buffer + (<usize>index << 1), 2);
+  pos = index + 1;
+  var maxPos = min(pos + lookaheadLimit, len);
+  while (pos < maxPos) {
+    let c = <u32>load<u16>(buffer + (<usize>pos << 1));
+    if (u32((c & 0xFC00) == 0xD800) & u32(pos + 1 != len)) {
+      let c1 = <u32>load<u16>(buffer + (<usize>pos << 1), 2);
       if ((c1 & 0xFC00) == 0xDC00) {
         c = (c - 0xD800 << 10) + (c1 - 0xDC00) + 0x10000;
       }
@@ -579,7 +579,7 @@ export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
     if (!isCaseIgnorable(c)) {
       return !isCased(c);
     }
-    index += i32(c >= 0x10000) + 1;
+    pos += i32(c >= 0x10000) + 1;
   }
   return true;
 }
