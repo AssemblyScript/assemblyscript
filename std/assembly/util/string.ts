@@ -434,6 +434,14 @@ import { ipow32 } from "../math";
   123,124,125,126,127
 ];
 
+// 23 * 8 = 184 bytes
+// @ts-ignore: decorator
+@lazy const Powers10: f64[] = [
+  1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
+  1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
+  1e20, 1e21, 1e22
+];
+
 // @ts-ignore
 @lazy const lowerTable127Ptr = lowerTable127.dataStart as usize;
 // @ts-ignore
@@ -472,35 +480,22 @@ export const enum CharCode {
   z = 0x7A
 }
 
-// 23 * 8 = 184 bytes
 // @ts-ignore: decorator
-@lazy const Powers10: f64[] = [
-  1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
-  1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
-  1e20, 1e21, 1e22
-];
+@inline
+export function isAscii(c: u32): bool {
+  return !(c & ~0x7F);
+}
 
-export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
-  var ptr1 = changetype<usize>(str1) + (index1 << 1);
-  var ptr2 = changetype<usize>(str2) + (index2 << 1);
-  if (ASC_SHRINK_LEVEL < 2) {
-    if (len >= 4 && !((ptr1 & 7) | (ptr2 & 7))) {
-      do {
-        if (load<u64>(ptr1) != load<u64>(ptr2)) break;
-        ptr1 += 8;
-        ptr2 += 8;
-        len  -= 4;
-      } while (len >= 4);
-    }
-  }
-  while (len--) {
-    let a = <i32>load<u16>(ptr1);
-    let b = <i32>load<u16>(ptr2);
-    if (a != b) return a - b;
-    ptr1 += 2;
-    ptr2 += 2;
-  }
-  return 0;
+// @ts-ignore: decorator
+@inline
+export function isLower8(c: u32): bool {
+  return c - CharCode.a < 26;
+}
+
+// @ts-ignore: decorator
+@inline
+export function isUpper8(c: u32): bool {
+  return c - CharCode.A < 26;
 }
 
 export function isSpace(c: u32): bool {
@@ -552,8 +547,102 @@ export function isCaseIgnorable(c: u32): bool {
   return false;
 }
 
+// @ts-ignore: decorator
+@inline
+export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
+  const lookaheadLimit = 30; // max lookahead limit
+  var saved = index;
+  var found = false;
+  var minIndex = max(0, index - lookaheadLimit);
+  while (index > minIndex) {
+    let c = codePointBefore(buffer, index);
+    if (!isCaseIgnorable(c)) {
+      if (isCased(c)) {
+        found = true;
+      } else {
+        return false;
+      }
+    }
+    index -= i32(c >= 0x10000) + 1;
+  }
+  if (!found) return false;
+  index = saved + 1;
+  var maxIndex = min(index + lookaheadLimit, len);
+  while (index < maxIndex) {
+    let c = <u32>load<u16>(buffer + (<usize>index << 1));
+    if (u32((c & 0xFC00) == 0xD800) & u32(index + 1 != len)) {
+      let c1 = <u32>load<u16>(buffer + (<usize>index << 1), 2);
+      if ((c1 & 0xFC00) == 0xDC00) {
+        c = (c - 0xD800 << 10) + (c1 - 0xDC00) + 0x10000;
+      }
+    }
+    if (!isCaseIgnorable(c)) {
+      return !isCased(c);
+    }
+    index += i32(c >= 0x10000) + 1;
+  }
+  return true;
+}
+
+// @ts-ignore: decorator
+@inline
+function codePointBefore(buffer: usize, index: i32): i32 {
+  if (index <= 0) return -1;
+  var c = <u32>load<u16>(buffer + (<usize>index - 1 << 1));
+  if (u32((c & 0xFC00) == 0xDC00) & u32(index - 2 >= 0)) {
+    let c1 = <u32>load<u16>(buffer + (<usize>index - 2 << 1));
+    if ((c1 & 0xFC00) == 0xD800) {
+      return ((c1 & 0x3FF) << 10) + (c & 0x3FF) + 0x10000;
+    }
+  }
+  return (c & 0xF800) == 0xD800 ? 0xFFFD : c;
+}
+
 function stagedBinaryLookup(table: usize, c: u32): bool {
   return <bool>((load<u8>(table + (<u32>load<u8>(table + (c >>> 8)) << 5) + ((c & 255) >> 3)) >>> (c & 7)) & 1);
+}
+
+export function compareImpl(str1: string, index1: usize, str2: string, index2: usize, len: usize): i32 {
+  var ptr1 = changetype<usize>(str1) + (index1 << 1);
+  var ptr2 = changetype<usize>(str2) + (index2 << 1);
+  if (ASC_SHRINK_LEVEL < 2) {
+    if (len >= 4 && !((ptr1 & 7) | (ptr2 & 7))) {
+      do {
+        if (load<u64>(ptr1) != load<u64>(ptr2)) break;
+        ptr1 += 8;
+        ptr2 += 8;
+        len  -= 4;
+      } while (len >= 4);
+    }
+  }
+  while (len--) {
+    let a = <i32>load<u16>(ptr1);
+    let b = <i32>load<u16>(ptr2);
+    if (a != b) return a - b;
+    ptr1 += 2;
+    ptr2 += 2;
+  }
+  return 0;
+}
+
+// @ts-ignore: decorator
+@inline
+export function toLower8(c: u32): u32 {
+  if (ASC_SHRINK_LEVEL > 0) {
+    return c | u32(isUpper8(c)) << 5;
+  } else {
+    return <u32>load<u8>(lowerTable127Ptr + c);
+  }
+}
+
+// @ts-ignore: decorator
+@inline
+export function toUpper8(c: u32): u32 {
+  if (ASC_SHRINK_LEVEL > 0) {
+    return c & ~(u32(isLower8(c)) << 5);
+  } else {
+    return <u32>load<u8>(upperTable127Ptr + c);
+  }
 }
 
 /** Parses a string to an integer (usually), using the specified radix. */
@@ -1037,93 +1126,4 @@ function pow10(n: i32): f64 {
   // argument `n` should bounds in [0, 22] range
   // @ts-ignore: cast
   return load<f64>(Powers10.dataStart as usize + (n << alignof<f64>()));
-}
-
-// @ts-ignore: decorator
-@inline
-function codePointBefore(buffer: usize, index: i32): i32 {
-  if (index <= 0) return -1;
-  var c = <u32>load<u16>(buffer + (<usize>index - 1 << 1));
-  if (u32((c & 0xFC00) == 0xDC00) & u32(index - 2 >= 0)) {
-    let c1 = <u32>load<u16>(buffer + (<usize>index - 2 << 1));
-    if ((c1 & 0xFC00) == 0xD800) {
-      return ((c1 & 0x3FF) << 10) + (c & 0x3FF) + 0x10000;
-    }
-  }
-  return (c & 0xF800) == 0xD800 ? 0xFFFD : c;
-}
-
-// @ts-ignore: decorator
-@inline
-export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
-  const lookaheadLimit = 30; // max lookahead limit
-  var saved = index;
-  var found = false;
-  var minIndex = max(0, index - lookaheadLimit);
-  while (index > minIndex) {
-    let c = codePointBefore(buffer, index);
-    if (!isCaseIgnorable(c)) {
-      if (isCased(c)) {
-        found = true;
-      } else {
-        return false;
-      }
-    }
-    index -= i32(c >= 0x10000) + 1;
-  }
-  if (!found) return false;
-  index = saved + 1;
-  var maxIndex = min(index + lookaheadLimit, len);
-  while (index < maxIndex) {
-    let c = <u32>load<u16>(buffer + (<usize>index << 1));
-    if (u32((c & 0xFC00) == 0xD800) & u32(index + 1 != len)) {
-      let c1 = <u32>load<u16>(buffer + (<usize>index << 1), 2);
-      if ((c1 & 0xFC00) == 0xDC00) {
-        c = (c - 0xD800 << 10) + (c1 - 0xDC00) + 0x10000;
-      }
-    }
-    if (!isCaseIgnorable(c)) {
-      return !isCased(c);
-    }
-    index += i32(c >= 0x10000) + 1;
-  }
-  return true;
-}
-
-// @ts-ignore: decorator
-@inline
-export function isAscii(c: u32): bool {
-  return !(c & ~0x7F);
-}
-
-// @ts-ignore: decorator
-@inline
-export function isLower8(c: u32): bool {
-  return c - CharCode.a < 26;
-}
-
-// @ts-ignore: decorator
-@inline
-export function isUpper8(c: u32): bool {
-  return c - CharCode.A < 26;
-}
-
-// @ts-ignore: decorator
-@inline
-export function toLower8(c: u32): u32 {
-  if (ASC_SHRINK_LEVEL > 0) {
-    return c | u32(isUpper8(c)) << 5;
-  } else {
-    return <u32>load<u8>(lowerTable127Ptr + c);
-  }
-}
-
-// @ts-ignore: decorator
-@inline
-export function toUpper8(c: u32): u32 {
-  if (ASC_SHRINK_LEVEL > 0) {
-    return c & ~(u32(isLower8(c)) << 5);
-  } else {
-    return <u32>load<u8>(upperTable127Ptr + c);
-  }
 }
