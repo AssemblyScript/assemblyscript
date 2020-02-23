@@ -3921,7 +3921,32 @@
    local.get $2
   end
  )
- (func $~lib/string/String#toLowerCase (; 35 ;) (param $0 i32) (result i32)
+ (func $~lib/util/string/stagedBinaryLookup (; 35 ;) (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $0
+  local.get $1
+  i32.const 8
+  i32.shr_u
+  i32.add
+  i32.load8_u
+  i32.const 5
+  i32.shl
+  i32.add
+  local.get $1
+  i32.const 255
+  i32.and
+  i32.const 3
+  i32.shr_u
+  i32.add
+  i32.load8_u
+  local.get $1
+  i32.const 7
+  i32.and
+  i32.shr_u
+  i32.const 1
+  i32.and
+ )
+ (func $~lib/string/String#toLowerCase (; 36 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3940,7 +3965,6 @@
   (local $16 i32)
   (local $17 i32)
   (local $18 i32)
-  (local $19 i32)
   local.get $0
   call $~lib/string/String#get:length
   local.set $1
@@ -4142,30 +4166,8 @@
              if
               i32.const 7888
               i32.load offset=4
-              local.set $17
-              local.get $17
-              local.get $17
               local.get $16
-              i32.const 8
-              i32.shr_u
-              i32.add
-              i32.load8_u
-              i32.const 5
-              i32.shl
-              i32.add
-              local.get $16
-              i32.const 255
-              i32.and
-              i32.const 3
-              i32.shr_u
-              i32.add
-              i32.load8_u
-              local.get $16
-              i32.const 7
-              i32.and
-              i32.shr_u
-              i32.const 1
-              i32.and
+              call $~lib/util/string/stagedBinaryLookup
               br $~lib/util/string/isCased|inlined.0
              end
              i32.const 0
@@ -4176,37 +4178,15 @@
             else
              block $~lib/util/string/isCaseIgnorable|inlined.0 (result i32)
               local.get $15
-              local.set $17
-              local.get $17
+              local.set $16
+              local.get $16
               i32.const 917999
               i32.le_u
               if
                i32.const 10912
                i32.load offset=4
-               local.set $16
                local.get $16
-               local.get $16
-               local.get $17
-               i32.const 8
-               i32.shr_u
-               i32.add
-               i32.load8_u
-               i32.const 5
-               i32.shl
-               i32.add
-               local.get $17
-               i32.const 255
-               i32.and
-               i32.const 3
-               i32.shr_u
-               i32.add
-               i32.load8_u
-               local.get $17
-               i32.const 7
-               i32.and
-               i32.shr_u
-               i32.const 1
-               i32.and
+               call $~lib/util/string/stagedBinaryLookup
                br $~lib/util/string/isCaseIgnorable|inlined.0
               end
               i32.const 0
@@ -4243,9 +4223,9 @@
           i32.add
           local.tee $14
           local.get $8
-          local.tee $17
+          local.tee $16
           local.get $14
-          local.get $17
+          local.get $16
           i32.lt_s
           select
           local.set $14
@@ -4253,8 +4233,8 @@
            local.get $9
            local.get $14
            i32.lt_s
-           local.set $17
-           local.get $17
+           local.set $16
+           local.get $16
            if
             local.get $10
             local.get $9
@@ -4262,8 +4242,8 @@
             i32.shl
             i32.add
             i32.load16_u
-            local.set $16
-            local.get $16
+            local.set $17
+            local.get $17
             i32.const 64512
             i32.and
             i32.const 55296
@@ -4288,7 +4268,7 @@
              i32.const 56320
              i32.eq
              if
-              local.get $16
+              local.get $17
               i32.const 55296
               i32.sub
               i32.const 10
@@ -4299,11 +4279,11 @@
               i32.add
               i32.const 65536
               i32.add
-              local.set $16
+              local.set $17
              end
             end
             block $~lib/util/string/isCased|inlined.1 (result i32)
-             local.get $16
+             local.get $17
              local.set $18
              local.get $18
              i32.const 127369
@@ -4311,30 +4291,8 @@
              if
               i32.const 7888
               i32.load offset=4
-              local.set $19
-              local.get $19
-              local.get $19
               local.get $18
-              i32.const 8
-              i32.shr_u
-              i32.add
-              i32.load8_u
-              i32.const 5
-              i32.shl
-              i32.add
-              local.get $18
-              i32.const 255
-              i32.and
-              i32.const 3
-              i32.shr_u
-              i32.add
-              i32.load8_u
-              local.get $18
-              i32.const 7
-              i32.and
-              i32.shr_u
-              i32.const 1
-              i32.and
+              call $~lib/util/string/stagedBinaryLookup
               br $~lib/util/string/isCased|inlined.1
              end
              i32.const 0
@@ -4344,38 +4302,16 @@
              br $~lib/util/string/isFinalSigma|inlined.0
             end
             block $~lib/util/string/isCaseIgnorable|inlined.1 (result i32)
-             local.get $16
-             local.set $19
-             local.get $19
+             local.get $17
+             local.set $18
+             local.get $18
              i32.const 917999
              i32.le_u
              if
               i32.const 10912
               i32.load offset=4
-              local.set $18
               local.get $18
-              local.get $18
-              local.get $19
-              i32.const 8
-              i32.shr_u
-              i32.add
-              i32.load8_u
-              i32.const 5
-              i32.shl
-              i32.add
-              local.get $19
-              i32.const 255
-              i32.and
-              i32.const 3
-              i32.shr_u
-              i32.add
-              i32.load8_u
-              local.get $19
-              i32.const 7
-              i32.and
-              i32.shr_u
-              i32.const 1
-              i32.and
+              call $~lib/util/string/stagedBinaryLookup
               br $~lib/util/string/isCaseIgnorable|inlined.1
              end
              i32.const 0
@@ -4386,7 +4322,7 @@
              br $~lib/util/string/isFinalSigma|inlined.0
             end
             local.get $9
-            local.get $16
+            local.get $17
             i32.const 65536
             i32.ge_u
             i32.const 1
@@ -4504,7 +4440,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String.fromCodePoint (; 36 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String.fromCodePoint (; 37 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4565,7 +4501,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String#codePointAt (; 37 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#codePointAt (; 38 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4632,7 +4568,7 @@
   i32.const 65536
   i32.add
  )
- (func $start:std/string-casemapping (; 38 ;)
+ (func $start:std/string-casemapping (; 39 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -6246,7 +6182,7 @@
   local.get $83
   call $~lib/rt/pure/__release
  )
- (func $~start (; 39 ;)
+ (func $~start (; 40 ;)
   global.get $~started
   if
    return
@@ -6256,10 +6192,10 @@
   end
   call $start:std/string-casemapping
  )
- (func $~lib/rt/pure/__collect (; 40 ;)
+ (func $~lib/rt/pure/__collect (; 41 ;)
   return
  )
- (func $~lib/rt/pure/decrement (; 41 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 42 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -6336,7 +6272,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 42 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 43 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -6360,16 +6296,16 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/array/Array<u16>#__visit_impl (; 43 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>#__visit_impl (; 44 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<u8>#__visit_impl (; 44 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>#__visit_impl (; 45 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<i32>#__visit_impl (; 45 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#__visit_impl (; 46 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/rt/__visit_members (; 46 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 47 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $block$4$break
    block $switch$1$default

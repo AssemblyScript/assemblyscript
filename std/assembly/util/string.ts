@@ -526,13 +526,34 @@ export function isSpace(c: u32): bool {
 export function isAlpha(c: u32): bool {
   if (isAscii(c)) return (c | 32) - CharCode.a < 26;
   if (c < 0x20000) {
-    // @ts-ignore
-    let table = alphaTable.dataStart as usize;
-    return bool(
-      (<u32>load<u8>(table + (<u32>load<u8>(table + (c >>> 8)) << 5) + ((c & 255) >> 3)) >>> (c & 7)) & 1
-    );
+    // @ts-ignore: cast
+    return stagedBinaryLookup(alphaTable.dataStart as usize, c);
   }
   return c < 0x2FFFE;
+}
+
+// @ts-ignore: decorator
+@inline
+export function isCased(c: u32): bool {
+  if (c <= 0x1F189) {
+    // @ts-ignore: cast
+    return stagedBinaryLookup(cased.dataStart as usize, c);
+  }
+  return false;
+}
+
+// @ts-ignore: decorator
+@inline
+export function isCaseIgnorable(c: u32): bool {
+  if (c <= 0xE01EF) {
+    // @ts-ignore: cast
+    return stagedBinaryLookup(caseIgnorables.dataStart as usize, c);
+  }
+  return false;
+}
+
+function stagedBinaryLookup(table: usize, c: u32): bool {
+  return <bool>((load<u8>(table + (<u32>load<u8>(table + (c >>> 8)) << 5) + ((c & 255) >> 3)) >>> (c & 7)) & 1);
 }
 
 /** Parses a string to an integer (usually), using the specified radix. */
@@ -1016,32 +1037,6 @@ function pow10(n: i32): f64 {
   // argument `n` should bounds in [0, 22] range
   // @ts-ignore: cast
   return load<f64>(Powers10.dataStart as usize + (n << alignof<f64>()));
-}
-
-// @ts-ignore: decorator
-@inline
-function isCased(c: u32): bool {
-  if (c <= 0x1F189) {
-    // @ts-ignore: cast
-    let table = cased.dataStart as usize;
-    return bool(
-      (<u32>load<u8>(table + (<u32>load<u8>(table + (c >>> 8)) << 5) + ((c & 255) >> 3)) >>> (c & 7)) & 1
-    );
-  }
-  return false;
-}
-
-// @ts-ignore: decorator
-@inline
-function isCaseIgnorable(c: u32): bool {
-  if (c <= 0xE01EF) {
-    // @ts-ignore: cast
-    let table = caseIgnorables.dataStart as usize;
-    return bool(
-      (<u32>load<u8>(table + (<u32>load<u8>(table + (c >>> 8)) << 5) + ((c & 255) >> 3)) >>> (c & 7)) & 1
-    );
-  }
-  return false;
 }
 
 function codePointBefore(buffer: usize, index: i32): i32 {
