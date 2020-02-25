@@ -12,6 +12,75 @@ export type fixed<T> = FixedArray<T>;
 export class FixedArray<T> {
   [key: number]: T;
 
+  // Note that the interface of FixedArray instances must be a semantically
+  // compatible subset of Array<T> in order for syntax highlighting to work
+  // properly, for instance when creating fixed arrays from array literals.
+  // The additionally provided static methods take care of dealing with fixed
+  // arrays exclusively, without having to converte to Array<T> first.
+
+  static fromArray<T>(source: Array<T>): FixedArray<T> {
+    var length = source.length;
+    var outSize = <usize>length << alignof<T>();
+    var out = __alloc(outSize, idof<FixedArray<T>>());
+    if (isManaged<T>()) {
+      let sourcePtr = source.dataStart;
+      for (let i = 0; i < length; ++i) {
+        let off = <usize>i << alignof<T>();
+        store<usize>(out + off, __retain(load<usize>(sourcePtr + off)));
+      }
+    } else {
+      memory.copy(out, source.dataStart, outSize);
+    }
+    return changetype<FixedArray<T>>(out);
+  }
+
+  static concat<T>(source: FixedArray<T>, other: FixedArray<T>): FixedArray<T> {
+    var sourceLen = source.length;
+    var otherLen = select(0, other.length, other === null);
+    var outLen = sourceLen + otherLen;
+    if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
+    var out = changetype<FixedArray<T>>(__alloc(<usize>outLen << alignof<T>(), idof<FixedArray<T>>())); // retains
+    var outStart = changetype<usize>(out);
+    var sourceSize = <usize>sourceLen << alignof<T>();
+    if (isManaged<T>()) {
+      for (let offset: usize = 0; offset < sourceSize; offset += sizeof<T>()) {
+        let ref = load<usize>(changetype<usize>(source) + offset);
+        store<usize>(outStart + offset, __retain(ref));
+      }
+      outStart += sourceSize;
+      let otherSize = <usize>otherLen << alignof<T>();
+      for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
+        let ref = load<usize>(changetype<usize>(other) + offset);
+        store<usize>(outStart + offset, __retain(ref));
+      }
+    } else {
+      memory.copy(outStart, changetype<usize>(source), sourceSize);
+      memory.copy(outStart + sourceSize, changetype<usize>(other), <usize>otherLen << alignof<T>());
+    }
+    return out;
+  }
+
+  static slice<T>(source: FixedArray<T>, start: i32 = 0, end: i32 = i32.MAX_VALUE): FixedArray<T> {
+    var length = source.length;
+    start = start < 0 ? max(start + length, 0) : min(start, length);
+    end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
+    length = max(end - start, 0);
+    var sliceSize = <usize>length << alignof<T>();
+    var slice = changetype<FixedArray<T>>(__alloc(sliceSize, idof<FixedArray<T>>())); // retains
+    var sourcePtr = changetype<usize>(source) + (<usize>start << alignof<T>());
+    if (isManaged<T>()) {
+      let off: usize = 0;
+      while (off < sliceSize) {
+        let ref = load<usize>(sourcePtr + off);
+        store<usize>(changetype<usize>(slice) + off, __retain(ref));
+        off += sizeof<usize>();
+      }
+    } else {
+      memory.copy(changetype<usize>(slice), sourcePtr, sliceSize);
+    }
+    return slice;
+  }
+
   constructor(length: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     var outSize = <usize>length << alignof<T>();
@@ -54,6 +123,23 @@ export class FixedArray<T> {
       }
     } else {
       store<T>(changetype<usize>(this) + (<usize>index << alignof<T>()), value);
+    }
+  }
+
+  includes(value: T, fromIndex: i32 = 0): bool {
+    if (isFloat<T>()) {
+      let length = this.length;
+      if (length == 0 || fromIndex >= length) return false;
+      if (fromIndex < 0) fromIndex = max(length + fromIndex, 0);
+      while (fromIndex < length) {
+        let elem = load<T>(changetype<usize>(this) + (<usize>fromIndex << alignof<T>()));
+        // @ts-ignore
+        if (elem == value || isNaN(elem) & isNaN(value)) return true;
+        ++fromIndex;
+      }
+      return false;
+    } else {
+      return this.indexOf(value, fromIndex) >= 0;
     }
   }
 
