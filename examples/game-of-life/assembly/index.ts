@@ -3,43 +3,49 @@
 // Configuration imported from JS
 import { BGR_ALIVE, BGR_DEAD, BIT_ROT } from "./config";
 
-var w: i32, h: i32, s: i32;
+var width: i32, height: i32, offset: i32;
 
 /** Gets an input pixel in the range [0, s]. */
 @inline
 function get(x: u32, y: u32): u32 {
-  return load<u32>((y * w + x) << 2);
+  return load<u32>((y * width + x) << 2);
 }
 
 /** Sets an output pixel in the range [s, 2*s]. */
 @inline
 function set(x: u32, y: u32, v: u32): void {
-  store<u32>((s + y * w + x) << 2, v);
+  store<u32>((offset + y * width + x) << 2, v);
 }
 
 /** Sets an output pixel in the range [s, 2*s] while fading it out. */
 @inline
 function rot(x: u32, y: u32, v: u32): void {
-  var a = max<i32>((v >>> 24) - BIT_ROT, 0);
-  set(x, y, (a << 24) | (v & 0x00ffffff));
+  var alpha = max<i32>((v >> 24) - BIT_ROT, 0);
+  set(x, y, (alpha << 24) | (v & 0x00ffffff));
 }
 
 /** Initializes width and height. Called once from JS. */
-export function init(width: i32, height: i32): void {
-  w = width;
-  h = height;
-  s = width * height;
+export function init(w: i32, h: i32): void {
+  width  = w;
+  height = h;
+  offset = w * h;
 
   // Start by filling output with random live cells.
   for (let y = 0; y < h; ++y) {
     for (let x = 0; x < w; ++x) {
-      set(x, y, Math.random() > 0.1 ? BGR_DEAD & 0x00ffffff : BGR_ALIVE | 0xff000000);
+      let c = Math.random() > 0.1
+        ? BGR_DEAD  & 0x00ffffff
+        : BGR_ALIVE | 0xff000000;
+      set(x, y, c);
     }
   }
 }
 
 /** Performs one step. Called about 30 times a second from JS. */
 export function step(): void {
+  var w = width,
+      h = height;
+
   var hm1 = h - 1, // h - 1
       wm1 = w - 1; // w - 1
 
@@ -55,9 +61,9 @@ export function step(): void {
       // Every cell interacts with its eight neighbours, which are the cells that are horizontally,
       // vertically, or diagonally adjacent. Least significant bit indicates alive or dead.
       let aliveNeighbors = (
-        (get(xm1, ym1) & 1) + (get(x  , ym1) & 1) + (get(xp1, ym1) & 1) +
-        (get(xm1, y  ) & 1)                       + (get(xp1, y  ) & 1) +
-        (get(xm1, yp1) & 1) + (get(x  , yp1) & 1) + (get(xp1, yp1) & 1)
+        (get(xm1, ym1) & 1) + (get(x, ym1) & 1) + (get(xp1, ym1) & 1) +
+        (get(xm1, y  ) & 1)                     + (get(xp1, y  ) & 1) +
+        (get(xm1, yp1) & 1) + (get(x, yp1) & 1) + (get(xp1, yp1) & 1)
       );
 
       let self = get(x, y);
@@ -78,10 +84,10 @@ export function step(): void {
 
 /** Fills the row and column indicated by `x` and `y` with random live cells. */
 export function fill(x: u32, y: u32, p: f64): void {
-  for (let ix = 0; ix < w; ++ix) {
+  for (let ix = 0; ix < width; ++ix) {
     if (Math.random() < p) set(ix, y, BGR_ALIVE | 0xff000000);
   }
-  for (let iy = 0; iy < h; ++iy) {
+  for (let iy = 0; iy < height; ++iy) {
     if (Math.random() < p) set(x, iy, BGR_ALIVE | 0xff000000);
   }
 }
