@@ -529,6 +529,11 @@ export class ASTBuilder {
         sb.push("!");
         break;
       }
+      case AssertionKind.CONST: {
+        this.visitNode(node.expression);
+        sb.push(" as const");
+        break;
+      }
       default: assert(false);
     }
   }

@@ -419,8 +419,9 @@ import { ipow32 } from "../math";
   123,124,125,126,127
 ];
 
-// @ts-ignore
-@lazy const upperTable127: u8[] = [
+// @ts-ignore: decorator
+@lazy @inline
+const UPPER127: StaticArray<u8> = [
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -485,6 +486,7 @@ export const enum CharCode {
 export function isAscii(c: u32): bool {
   return !(c & ~0x7F);
 }
+const POWERS10: StaticArray<f64> = [
 
 // @ts-ignore: decorator
 @inline
@@ -1118,6 +1120,5 @@ function fixmul(a: u64, b: u32): u64 {
 @inline
 function pow10(n: i32): f64 {
   // argument `n` should bounds in [0, 22] range
-  // @ts-ignore: cast
-  return load<f64>(Powers10.dataStart as usize + (n << alignof<f64>()));
+  return load<f64>(changetype<usize>(POWERS10) + (n << alignof<f64>()));
 }

@@ -37,15 +37,22 @@ export function __instanceof(ref: usize, superId: u32): bool { // keyword
 
 // @ts-ignore: decorator
 @unsafe
+export function __allocBuffer(size: usize, id: u32, data: usize = 0): usize {
+  var buffer = __alloc(size, id);
+  if (data) memory.copy(buffer, data, size);
+  return buffer;
+}
+
+// @ts-ignore: decorator
+@unsafe
 export function __allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize {
   var array = __alloc(offsetof<i32[]>(), id);
   var bufferSize = <usize>length << alignLog2;
-  var buffer = __alloc(bufferSize, idof<ArrayBuffer>());
+  var buffer = __allocBuffer(bufferSize, idof<ArrayBuffer>(), data);
   store<usize>(array, __retain(buffer), offsetof<ArrayBufferView>("buffer"));
   store<usize>(array, buffer, offsetof<ArrayBufferView>("dataStart"));
-  store<u32>(array, bufferSize, offsetof<ArrayBufferView>("byteLength"));
+  store<i32>(array, bufferSize, offsetof<ArrayBufferView>("byteLength"));
   store<i32>(array, length, offsetof<i32[]>("length_"));
-  if (data) memory.copy(buffer, data, bufferSize);
   return array;
 }
 

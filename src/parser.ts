@@ -1962,14 +1962,16 @@ export class Parser extends DiagnosticEmitter {
             tn.range(abstractStart, abstractEnd), "abstract"
           ); // recoverable
         }
-        if (flags & CommonFlags.READONLY) {
-          this.error(
-            DiagnosticCode._0_modifier_cannot_be_used_here,
-            tn.range(readonlyStart, readonlyEnd), "readonly"
-          ); // recoverable
+        let retIndex = this.parseIndexSignatureDeclaration(tn, flags, decorators);
+        if (!retIndex) {
+          if (flags & CommonFlags.READONLY) {
+            this.error(
+              DiagnosticCode._0_modifier_cannot_be_used_here,
+              tn.range(readonlyStart, readonlyEnd), "readonly"
+            ); // recoverable
+          }
+          return null;
         }
-        let retIndex = this.parseIndexSignatureDeclaration(tn, decorators);
-        if (!retIndex) return null;
         tn.skip(Token.SEMICOLON);
         return retIndex;
       }
@@ -2199,7 +2201,11 @@ export class Parser extends DiagnosticEmitter {
     return null;
   }
 
-  parseIndexSignatureDeclaration(tn: Tokenizer, decorators: DecoratorNode[] | null): IndexSignatureDeclaration | null {
+  parseIndexSignatureDeclaration(
+    tn: Tokenizer,
+    flags: CommonFlags,
+    decorators: DecoratorNode[] | null,
+  ): IndexSignatureDeclaration | null {
 
     // at: '[': 'key' ':' Type ']' ':' Type
 
@@ -2228,7 +2234,7 @@ export class Parser extends DiagnosticEmitter {
             if (tn.skip(Token.COLON)) {
               let valueType = this.parseType(tn);
               if (!valueType) return null;
-              return Node.createIndexSignatureDeclaration(<NamedTypeNode>keyType, valueType, tn.range(start, tn.pos));
+              return Node.createIndexSignatureDeclaration(<NamedTypeNode>keyType, valueType, flags, tn.range(start, tn.pos));
             } else {
               this.error(
                 DiagnosticCode._0_expected,
@@ -3693,14 +3699,23 @@ export class Parser extends DiagnosticEmitter {
 
         // AssertionExpression
         case Token.AS: {
-          let toType = this.parseType(tn); // reports
-          if (!toType) return null;
-          expr = Node.createAssertionExpression(
-            AssertionKind.AS,
-            expr,
-            toType,
-            tn.range(startPos, tn.pos)
-          );
+          if (tn.skip(Token.CONST)) {
+            expr = Node.createAssertionExpression(
+              AssertionKind.CONST,
+              expr,
+              null,
+              tn.range(startPos, tn.pos)
+            );
+          } else {
+            let toType = this.parseType(tn); // reports
+            if (!toType) return null;
+            expr = Node.createAssertionExpression(
+              AssertionKind.AS,
+              expr,
+              toType,
+              tn.range(startPos, tn.pos)
+            );
+          }
           break;
         }
         case Token.EXCLAMATION: {
