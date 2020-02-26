@@ -5,7 +5,8 @@ import { ipow32 } from "../math";
 // See: https://git.musl-libc.org/cgit/musl/tree/src/ctype/alpha.h
 // size: 3904 bytes
 // @ts-ignore
-@lazy const alphaTable: u8[] = [
+@inline @lazy
+const ALPHA_TABLE: StaticArray<u8> = [
   18,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,17,34,35,36,17,37,38,39,40,
   41,42,43,44,17,45,46,47,16,16,48,16,16,16,16,16,16,16,49,50,51,16,52,53,16,16,
   17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,54,
@@ -182,7 +183,8 @@ import { ipow32 } from "../math";
 
 // size: 1568 bytes (compressed to ~1380 bytes after binaryen)
 // @ts-ignore: decorator
-@lazy const cased: u8[] = [
+@lazy @inline
+const CASED: StaticArray<u8> = [
   18,19,20,21,22,23,16,16,16,16,16,16,16,16,16,16,
   24,16,16,25,16,16,16,16,16,16,16,16,26,27,17,28,
   29,30,16,16,31,16,16,16,16,16,16,16,32,33,16,16,
@@ -265,7 +267,8 @@ import { ipow32 } from "../math";
 
 // size: 2976 bytes (compressed to ~2050 bytes after binaryen)
 // @ts-ignore: decorator
-@lazy const caseIgnorables: u8[] = [
+@lazy @inline
+const CASE_IGNORABLES: StaticArray<u8> = [
   18,16,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
   33,16,16,34,16,16,16,35,36,37,38,39,40,41,16,42,
   43,16,16,16,16,16,16,16,16,16,16,16,44,45,46,16,
@@ -405,7 +408,8 @@ import { ipow32 } from "../math";
 ];
 
 // @ts-ignore: decorator
-@lazy const lowerTable127: u8[] = [
+@lazy @inline
+const LOWER127: StaticArray<u8> = [
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -437,16 +441,12 @@ const UPPER127: StaticArray<u8> = [
 
 // 23 * 8 = 184 bytes
 // @ts-ignore: decorator
-@lazy const Powers10: f64[] = [
+@lazy @inline
+const POWERS10: StaticArray<f64> = [
   1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
   1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
   1e20, 1e21, 1e22
 ];
-
-// @ts-ignore
-@lazy const lowerTable127Ptr = lowerTable127.dataStart as usize;
-// @ts-ignore
-@lazy const upperTable127Ptr = upperTable127.dataStart as usize;
 
 // @ts-ignore: decorator
 @inline
@@ -486,7 +486,6 @@ export const enum CharCode {
 export function isAscii(c: u32): bool {
   return !(c & ~0x7F);
 }
-const POWERS10: StaticArray<f64> = [
 
 // @ts-ignore: decorator
 @inline
@@ -524,7 +523,7 @@ export function isAlpha(c: u32): bool {
   if (isAscii(c)) return (c | 32) - CharCode.a < 26;
   if (c < 0x20000) {
     // @ts-ignore: cast
-    return stagedBinaryLookup(alphaTable.dataStart as usize, c);
+    return stagedBinaryLookup(changetype<usize>(ALPHA_TABLE), c);
   }
   return c < 0x2FFFE;
 }
@@ -533,14 +532,14 @@ export function isAlpha(c: u32): bool {
 @inline
 export function isCased(c: u32): bool {
   // @ts-ignore: cast
-  return c < 0x1F18A && stagedBinaryLookup(cased.dataStart as usize, c);
+  return c < 0x1F18A && stagedBinaryLookup(changetype<usize>(CASED), c);
 }
 
 // @ts-ignore: decorator
 @inline
 export function isCaseIgnorable(c: u32): bool {
   // @ts-ignore: cast
-  return c < 0xE01F0 && stagedBinaryLookup(caseIgnorables.dataStart as usize, c);
+  return c < 0xE01F0 && stagedBinaryLookup(changetype<usize>(CASE_IGNORABLES), c);
 }
 
 // @ts-ignore: decorator
@@ -627,7 +626,7 @@ export function toLower8(c: u32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c | u32(isUpper8(c)) << 5;
   } else {
-    return <u32>load<u8>(lowerTable127Ptr + c);
+    return <u32>load<u8>(changetype<usize>(LOWER127) + c);
   }
 }
 
@@ -637,7 +636,7 @@ export function toUpper8(c: u32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c & ~(u32(isLower8(c)) << 5);
   } else {
-    return <u32>load<u8>(upperTable127Ptr + c);
+    return <u32>load<u8>(changetype<usize>(UPPER127) + c);
   }
 }
 
