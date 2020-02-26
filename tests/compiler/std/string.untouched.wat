@@ -10721,7 +10721,7 @@
   call $~lib/rt/tlsf/__free
   local.get $3
  )
- (func $~lib/fixedarray/FixedArray<u16>#get:length (; 95 ;) (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<u16>#get:length (; 95 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -10954,7 +10954,7 @@
   call $~lib/rt/tlsf/__alloc
   local.set $2
   global.get $~lib/util/casemap/SPECIALS_UPPER
-  call $~lib/fixedarray/FixedArray<u16>#get:length
+  call $~lib/staticarray/StaticArray<u16>#get:length
   local.set $3
   i32.const 0
   local.set $4
@@ -20611,7 +20611,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/fixedarray/FixedArray<f64>#__visit_impl (; 106 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<f64>#__visit_impl (; 106 ;) (param $0 i32) (param $1 i32)
   nop
  )
  (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 107 ;) (param $0 i32) (param $1 i32)
@@ -20656,22 +20656,22 @@
  (func $~lib/array/Array<i32>#__visit_impl (; 108 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<u32>#__visit_impl (; 109 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u32>#__visit_impl (; 109 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<u64>#__visit_impl (; 110 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u64>#__visit_impl (; 110 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<i16>#__visit_impl (; 111 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<i16>#__visit_impl (; 111 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<u16>#__visit_impl (; 112 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u16>#__visit_impl (; 112 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<u8>#__visit_impl (; 113 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u8>#__visit_impl (; 113 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<i32>#__visit_impl (; 114 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<i32>#__visit_impl (; 114 ;) (param $0 i32) (param $1 i32)
   nop
  )
  (func $~lib/rt/__visit_members (; 115 ;) (param $0 i32) (param $1 i32)
@@ -20701,7 +20701,7 @@
             end
             local.get $0
             local.get $1
-            call $~lib/fixedarray/FixedArray<f64>#__visit_impl
+            call $~lib/staticarray/StaticArray<f64>#__visit_impl
             return
            end
            local.get $0
@@ -20716,32 +20716,32 @@
          end
          local.get $0
          local.get $1
-         call $~lib/fixedarray/FixedArray<u32>#__visit_impl
+         call $~lib/staticarray/StaticArray<u32>#__visit_impl
          return
         end
         local.get $0
         local.get $1
-        call $~lib/fixedarray/FixedArray<u64>#__visit_impl
+        call $~lib/staticarray/StaticArray<u64>#__visit_impl
         return
        end
        local.get $0
        local.get $1
-       call $~lib/fixedarray/FixedArray<i16>#__visit_impl
+       call $~lib/staticarray/StaticArray<i16>#__visit_impl
        return
       end
       local.get $0
       local.get $1
-      call $~lib/fixedarray/FixedArray<u16>#__visit_impl
+      call $~lib/staticarray/StaticArray<u16>#__visit_impl
       return
      end
      local.get $0
      local.get $1
-     call $~lib/fixedarray/FixedArray<u8>#__visit_impl
+     call $~lib/staticarray/StaticArray<u8>#__visit_impl
      return
     end
     local.get $0
     local.get $1
-    call $~lib/fixedarray/FixedArray<i32>#__visit_impl
+    call $~lib/staticarray/StaticArray<i32>#__visit_impl
     return
    end
    unreachable

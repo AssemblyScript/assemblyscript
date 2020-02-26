@@ -413,8 +413,8 @@ export class Program extends DiagnosticEmitter {
   arrayBufferInstance: Class;
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype;
-  /** Fixed array prototype reference. */
-  fixedArrayPrototype: ClassPrototype;
+  /** Static array prototype reference. */
+  staticArrayPrototype: ClassPrototype;
   /** Set prototype reference. */
   setPrototype: ClassPrototype;
   /** Map prototype reference. */
@@ -964,7 +964,7 @@ export class Program extends DiagnosticEmitter {
 
     // register stdlib components
     this.arrayPrototype = <ClassPrototype>this.require(CommonNames.Array, ElementKind.CLASS_PROTOTYPE);
-    this.fixedArrayPrototype = <ClassPrototype>this.require(CommonNames.FixedArray, ElementKind.CLASS_PROTOTYPE);
+    this.staticArrayPrototype = <ClassPrototype>this.require(CommonNames.StaticArray, ElementKind.CLASS_PROTOTYPE);
     this.setPrototype = <ClassPrototype>this.require(CommonNames.Set, ElementKind.CLASS_PROTOTYPE);
     this.mapPrototype = <ClassPrototype>this.require(CommonNames.Map, ElementKind.CLASS_PROTOTYPE);
     this.abortInstance = this.lookupFunction(CommonNames.abort); // can be disabled

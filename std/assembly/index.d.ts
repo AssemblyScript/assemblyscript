@@ -1398,15 +1398,12 @@ declare class Array<T> {
   toString(): string;
 }
 
-/** Fixed array convenience type. */
-declare type fixed<T> = FixedArray<T>;
-
-/** Class representing a readonly sequence of values of type `T`. */
-declare abstract class FixedArray<T> {
+/** Class representing a static (not resizable) sequence of values of type `T`. */
+declare abstract class StaticArray<T> {
   [key: number]: T;
-  static fromArray<T>(source: Array<T>): FixedArray<T>;
-  static concat<T>(source: FixedArray<T>, other: FixedArray<T>): FixedArray<T>;
-  static slice<T>(source: FixedArray<T>, start?: i32, end?: i32): FixedArray<T>;
+  static fromArray<T>(source: Array<T>): StaticArray<T>;
+  static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T>;
+  static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
   readonly length: i32;
   constructor(length?: i32);
   includes(searchElement: T, fromIndex?: i32): bool;

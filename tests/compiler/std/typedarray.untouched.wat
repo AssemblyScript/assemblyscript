@@ -52941,13 +52941,13 @@
  (func $~lib/array/Array<i32>#__visit_impl (; 707 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<u32>#__visit_impl (; 708 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u32>#__visit_impl (; 708 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<u64>#__visit_impl (; 709 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u64>#__visit_impl (; 709 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<i16>#__visit_impl (; 710 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<i16>#__visit_impl (; 710 ;) (param $0 i32) (param $1 i32)
   nop
  )
  (func $~lib/array/Array<f32>#__visit_impl (; 711 ;) (param $0 i32) (param $1 i32)
@@ -53015,17 +53015,17 @@
               end
               local.get $0
               local.get $1
-              call $~lib/fixedarray/FixedArray<u32>#__visit_impl
+              call $~lib/staticarray/StaticArray<u32>#__visit_impl
               return
              end
              local.get $0
              local.get $1
-             call $~lib/fixedarray/FixedArray<u64>#__visit_impl
+             call $~lib/staticarray/StaticArray<u64>#__visit_impl
              return
             end
             local.get $0
             local.get $1
-            call $~lib/fixedarray/FixedArray<i16>#__visit_impl
+            call $~lib/staticarray/StaticArray<i16>#__visit_impl
             return
            end
            local.get $0

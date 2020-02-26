@@ -4931,13 +4931,13 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/fixedarray/FixedArray<u32>#__visit_impl (; 43 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u32>#__visit_impl (; 43 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<u64>#__visit_impl (; 44 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u64>#__visit_impl (; 44 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<i16>#__visit_impl (; 45 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<i16>#__visit_impl (; 45 ;) (param $0 i32) (param $1 i32)
   nop
  )
  (func $~lib/rt/__visit_members (; 46 ;) (param $0 i32) (param $1 i32)
@@ -4968,17 +4968,17 @@
      end
      local.get $0
      local.get $1
-     call $~lib/fixedarray/FixedArray<u32>#__visit_impl
+     call $~lib/staticarray/StaticArray<u32>#__visit_impl
      return
     end
     local.get $0
     local.get $1
-    call $~lib/fixedarray/FixedArray<u64>#__visit_impl
+    call $~lib/staticarray/StaticArray<u64>#__visit_impl
     return
    end
    local.get $0
    local.get $1
-   call $~lib/fixedarray/FixedArray<i16>#__visit_impl
+   call $~lib/staticarray/StaticArray<i16>#__visit_impl
    return
   end
   unreachable

@@ -8,7 +8,7 @@ const EXP2F_TABLE_BITS = 5;
 
 // @ts-ignore: decorator
 @lazy @inline
-const EXP2F_DATA_TAB: FixedArray<u64> = [
+const EXP2F_DATA_TAB: StaticArray<u64> = [
   // exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
   // used for computing 2^(k/N) for an int |k| < 150 N as
   // double(tab[k%N] + (k << 52-BITS))
@@ -129,7 +129,7 @@ const LOG2F_TABLE_BITS = 4;
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG2F_DATA_TAB: FixedArray<f64> = [
+const LOG2F_DATA_TAB: StaticArray<f64> = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019), // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4), // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
   reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD7418B0A1FB77B), // 0x1.49539f0f010bp+0 , -0x1.7418b0a1fb77bp-2,
@@ -212,7 +212,7 @@ const LOGF_TABLE_BITS = 4;
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOGF_DATA_TAB: FixedArray<f64> = [
+const LOGF_DATA_TAB: StaticArray<f64> = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFD57BF7808CAADE), // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFD2BEF0A7C06DDB), // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
   reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD01EAE7F513A67), // 0x1.49539f0f010bp+0 , -0x1.01eae7f513a67p-2,
@@ -466,7 +466,7 @@ const EXP_TABLE_BITS = 7;
 
 // @ts-ignore: decorator
 @lazy @inline
-const EXP_DATA_TAB: FixedArray<u64> = [
+const EXP_DATA_TAB: StaticArray<u64> = [
   0x0000000000000000, 0x3FF0000000000000,
   0x3C9B3B4F1A88BF6E, 0x3FEFF63DA9FB3335,
   0xBC7160139CD8DC5D, 0x3FEFEC9A3E778061,
@@ -840,7 +840,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG2_DATA_TAB1: FixedArray<f64> = [
+const LOG2_DATA_TAB1: StaticArray<f64> = [
   //            invc                  ,                logc
   reinterpret<f64>(0x3FF724286BB1ACF8), reinterpret<f64>(0xBFE1095FEECDB000),
   reinterpret<f64>(0x3FF6E1F766D2CCA1), reinterpret<f64>(0xBFE08494BD76D000),
@@ -910,7 +910,7 @@ const LOG2_DATA_TAB1: FixedArray<f64> = [
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG2_DATA_TAB2: FixedArray<f64> = [
+const LOG2_DATA_TAB2: StaticArray<f64> = [
   //              chi                 ,                 clo
   reinterpret<f64>(0x3FE6200012B90A8E), reinterpret<f64>(0x3C8904AB0644B605),
   reinterpret<f64>(0x3FE66000045734A6), reinterpret<f64>(0x3C61FF9BEA62F7A9),
@@ -1128,7 +1128,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG_DATA_TAB1: FixedArray<f64> = [
+const LOG_DATA_TAB1: StaticArray<f64> = [
   //              invc                ,                 logc
   reinterpret<f64>(0x3FF734F0C3E0DE9F), reinterpret<f64>(0xBFD7CC7F79E69000),
   reinterpret<f64>(0x3FF713786A2CE91F), reinterpret<f64>(0xBFD76FEEC20D0000),
@@ -1262,7 +1262,7 @@ const LOG_DATA_TAB1: FixedArray<f64> = [
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG_DATA_TAB2: FixedArray<f64> = [
+const LOG_DATA_TAB2: StaticArray<f64> = [
   //               chi                ,                  clo
   reinterpret<f64>(0x3FE61000014FB66B), reinterpret<f64>(0x3C7E026C91425B3C),
   reinterpret<f64>(0x3FE63000034DB495), reinterpret<f64>(0x3C8DBFEA48005D41),
@@ -1531,7 +1531,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 
 // @ts-ignore: decorator
 @lazy @inline
-const POW_LOG_DATA_TAB: FixedArray<f64> = [
+const POW_LOG_DATA_TAB: StaticArray<f64> = [
   //             invc                 ,pad,               logc                 ,               logctail
   reinterpret<f64>(0x3FF6A00000000000), 0, reinterpret<f64>(0xBFD62C82F2B9C800), reinterpret<f64>(0x3CFAB42428375680),
   reinterpret<f64>(0x3FF6800000000000), 0, reinterpret<f64>(0xBFD5D1BDBF580800), reinterpret<f64>(0xBD1CA508D8E0F720),

@@ -82,7 +82,7 @@ function Neptune(): Body {
 
 class NBodySystem {
 
-  constructor(public bodies: FixedArray<Body>) {
+  constructor(public bodies: StaticArray<Body>) {
     var px: float = 0.0;
     var py: float = 0.0;
     var pz: float = 0.0;

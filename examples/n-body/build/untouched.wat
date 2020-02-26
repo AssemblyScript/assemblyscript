@@ -30,7 +30,7 @@
  (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/fixedarray/FixedArray<assembly/index/Body>#get:length (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<assembly/index/Body>#get:length (; 1 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -38,7 +38,7 @@
   i32.const 2
   i32.shr_u
  )
- (func $~lib/fixedarray/FixedArray<assembly/index/Body>#__unchecked_get (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<assembly/index/Body>#__unchecked_get (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -199,7 +199,7 @@
   f64.const 0
   local.set $4
   local.get $1
-  call $~lib/fixedarray/FixedArray<assembly/index/Body>#get:length
+  call $~lib/staticarray/StaticArray<assembly/index/Body>#get:length
   local.set $5
   i32.const 0
   local.set $6
@@ -212,7 +212,7 @@
    if
     local.get $1
     local.get $6
-    call $~lib/fixedarray/FixedArray<assembly/index/Body>#__unchecked_get
+    call $~lib/staticarray/StaticArray<assembly/index/Body>#__unchecked_get
     local.tee $8
     call $~lib/rt/stub/__retain
     local.set $9
@@ -253,7 +253,7 @@
   end
   local.get $1
   i32.const 0
-  call $~lib/fixedarray/FixedArray<assembly/index/Body>#__unchecked_get
+  call $~lib/staticarray/StaticArray<assembly/index/Body>#__unchecked_get
   local.tee $6
   local.get $2
   local.get $3
@@ -1725,7 +1725,7 @@
   call $~lib/rt/stub/__retain
   local.set $2
   local.get $2
-  call $~lib/fixedarray/FixedArray<assembly/index/Body>#get:length
+  call $~lib/staticarray/StaticArray<assembly/index/Body>#get:length
   local.set $3
   i32.const 0
   local.set $4
@@ -1738,7 +1738,7 @@
    if
     local.get $2
     local.get $4
-    call $~lib/fixedarray/FixedArray<assembly/index/Body>#__unchecked_get
+    call $~lib/staticarray/StaticArray<assembly/index/Body>#__unchecked_get
     local.tee $6
     call $~lib/rt/stub/__retain
     local.set $7
@@ -1776,7 +1776,7 @@
      if
       local.get $2
       local.get $15
-      call $~lib/fixedarray/FixedArray<assembly/index/Body>#__unchecked_get
+      call $~lib/staticarray/StaticArray<assembly/index/Body>#__unchecked_get
       local.tee $17
       call $~lib/rt/stub/__retain
       local.set $18
@@ -1959,7 +1959,7 @@
   i32.const 0
   local.set $3
   local.get $2
-  call $~lib/fixedarray/FixedArray<assembly/index/Body>#get:length
+  call $~lib/staticarray/StaticArray<assembly/index/Body>#get:length
   local.set $4
   loop $for-loop|0
    local.get $3
@@ -1970,7 +1970,7 @@
    if
     local.get $2
     local.get $3
-    call $~lib/fixedarray/FixedArray<assembly/index/Body>#__unchecked_get
+    call $~lib/staticarray/StaticArray<assembly/index/Body>#__unchecked_get
     local.tee $6
     call $~lib/rt/stub/__retain
     local.set $7
@@ -2026,7 +2026,7 @@
      if
       local.get $2
       local.get $15
-      call $~lib/fixedarray/FixedArray<assembly/index/Body>#__unchecked_get
+      call $~lib/staticarray/StaticArray<assembly/index/Body>#__unchecked_get
       local.tee $17
       call $~lib/rt/stub/__retain
       local.set $18
@@ -2136,12 +2136,12 @@
   local.set $1
   local.get $0
   local.get $1
-  call $~lib/fixedarray/FixedArray<assembly/index/Body>#get:length
+  call $~lib/staticarray/StaticArray<assembly/index/Body>#get:length
   i32.lt_u
   if (result i32)
    local.get $1
    local.get $0
-   call $~lib/fixedarray/FixedArray<assembly/index/Body>#__unchecked_get
+   call $~lib/staticarray/StaticArray<assembly/index/Body>#__unchecked_get
    local.tee $2
   else
    i32.const 0

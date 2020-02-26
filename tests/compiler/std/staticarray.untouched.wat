@@ -16,29 +16,27 @@
  (memory $0 1)
  (data (i32.const 16) "\0c\00\00\00\01\00\00\00\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
  (data (i32.const 48) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00")
- (data (i32.const 112) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00~\00l\00i\00b\00/\00f\00i\00x\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
- (data (i32.const 176) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00s\00t\00d\00/\00f\00i\00x\00e\00d\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 112) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00s\00t\00a\00t\00i\00c\00a\00r\00r\00a\00y\00.\00t\00s\00")
+ (data (i32.const 176) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00s\00t\00d\00/\00s\00t\00a\00t\00i\00c\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 240) "\0c\00\00\00\01\00\00\00\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
- (data (i32.const 272) "\0c\00\00\00\01\00\00\00\03\00\00\00\0c\00\00\00\01\00\00\00\02\00\00\00\03\00\00\00")
- (data (i32.const 304) "\0c\00\00\00\01\00\00\00\03\00\00\00\0c\00\00\00\05\00\00\00\06\00\00\00\07\00\00\00")
- (data (i32.const 336) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
- (data (i32.const 384) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
- (data (i32.const 448) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
+ (data (i32.const 272) "\0c\00\00\00\01\00\00\00\03\00\00\00\0c\00\00\00\05\00\00\00\06\00\00\00\07\00\00\00")
+ (data (i32.const 304) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
+ (data (i32.const 352) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
+ (data (i32.const 416) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
  (table $0 1 funcref)
- (global $std/fixedarray/arr1 i32 (i32.const 32))
- (global $std/fixedarray/arr2 i32 (i32.const 256))
- (global $std/fixedarray/arr3 i32 (i32.const 288))
+ (global $std/staticarray/arr1 i32 (i32.const 32))
+ (global $std/staticarray/arr2 i32 (i32.const 256))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
- (global $std/fixedarray/arr4 (mut i32) (i32.const 0))
- (global $std/fixedarray/arr5 (mut i32) (i32.const 0))
+ (global $std/staticarray/arr3 (mut i32) (i32.const 0))
+ (global $std/staticarray/arr4 (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 496))
+ (global $~lib/heap/__heap_base i32 (i32.const 464))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/fixedarray/FixedArray<i32>#get:length (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#get:length (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -46,7 +44,7 @@
   i32.const 2
   i32.shr_u
  )
- (func $~lib/fixedarray/FixedArray<i32>#__unchecked_get (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#__unchecked_get (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -54,27 +52,27 @@
   i32.add
   i32.load
  )
- (func $~lib/fixedarray/FixedArray<i32>#__get (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#__get (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
-  call $~lib/fixedarray/FixedArray<i32>#get:length
+  call $~lib/staticarray/StaticArray<i32>#get:length
   i32.ge_u
   if
    i32.const 64
    i32.const 128
-   i32.const 97
+   i32.const 95
    i32.const 40
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   local.get $1
-  call $~lib/fixedarray/FixedArray<i32>#__unchecked_get
+  call $~lib/staticarray/StaticArray<i32>#__unchecked_get
   local.set $2
   local.get $2
  )
- (func $~lib/fixedarray/FixedArray<i32>#__unchecked_set (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<i32>#__unchecked_set (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -83,15 +81,15 @@
   local.get $2
   i32.store
  )
- (func $~lib/fixedarray/FixedArray<i32>#__set (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<i32>#__set (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
-  call $~lib/fixedarray/FixedArray<i32>#get:length
+  call $~lib/staticarray/StaticArray<i32>#get:length
   i32.ge_u
   if
    i32.const 64
    i32.const 128
-   i32.const 112
+   i32.const 110
    i32.const 40
    call $~lib/builtins/abort
    unreachable
@@ -99,7 +97,7 @@
   local.get $0
   local.get $1
   local.get $2
-  call $~lib/fixedarray/FixedArray<i32>#__unchecked_set
+  call $~lib/staticarray/StaticArray<i32>#__unchecked_set
  )
  (func $~lib/rt/tlsf/removeBlock (; 10 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -121,7 +119,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 277
    i32.const 13
    call $~lib/builtins/abort
@@ -146,7 +144,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 279
    i32.const 13
    call $~lib/builtins/abort
@@ -198,7 +196,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 292
    i32.const 13
    call $~lib/builtins/abort
@@ -328,7 +326,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 205
    i32.const 13
    call $~lib/builtins/abort
@@ -343,7 +341,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 207
    i32.const 13
    call $~lib/builtins/abort
@@ -436,7 +434,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 352
+    i32.const 320
     i32.const 228
     i32.const 15
     call $~lib/builtins/abort
@@ -499,7 +497,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 243
    i32.const 13
    call $~lib/builtins/abort
@@ -515,7 +513,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 244
    i32.const 13
    call $~lib/builtins/abort
@@ -572,7 +570,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 260
    i32.const 13
    call $~lib/builtins/abort
@@ -691,7 +689,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 386
    i32.const 4
    call $~lib/builtins/abort
@@ -714,7 +712,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 352
+    i32.const 320
     i32.const 396
     i32.const 15
     call $~lib/builtins/abort
@@ -745,7 +743,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 352
+    i32.const 320
     i32.const 408
     i32.const 4
     call $~lib/builtins/abort
@@ -966,8 +964,8 @@
   i32.const 1073741808
   i32.ge_u
   if
-   i32.const 400
-   i32.const 352
+   i32.const 368
+   i32.const 320
    i32.const 457
    i32.const 29
    call $~lib/builtins/abort
@@ -1061,7 +1059,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 338
    i32.const 13
    call $~lib/builtins/abort
@@ -1124,7 +1122,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 352
+     i32.const 320
      i32.const 351
      i32.const 17
      call $~lib/builtins/abort
@@ -1269,7 +1267,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 365
    i32.const 13
    call $~lib/builtins/abort
@@ -1358,7 +1356,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 490
    i32.const 13
    call $~lib/builtins/abort
@@ -1399,7 +1397,7 @@
      i32.eqz
      if
       i32.const 0
-      i32.const 352
+      i32.const 320
       i32.const 502
       i32.const 19
       call $~lib/builtins/abort
@@ -1418,7 +1416,7 @@
     i32.eqz
     if
      i32.const 0
-     i32.const 352
+     i32.const 320
      i32.const 507
      i32.const 17
      call $~lib/builtins/abort
@@ -1435,7 +1433,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 352
+   i32.const 320
    i32.const 510
    i32.const 13
    call $~lib/builtins/abort
@@ -2745,7 +2743,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 432
    i32.const 109
    i32.const 2
    call $~lib/builtins/abort
@@ -2766,7 +2764,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 432
    i32.const 112
    i32.const 13
    call $~lib/builtins/abort
@@ -2785,11 +2783,11 @@
   end
   local.get $0
  )
- (func $std/fixedarray/test (; 25 ;) (result i32)
+ (func $std/staticarray/test (; 25 ;) (result i32)
   (local $0 i32)
   i32.const 12
   i32.const 3
-  i32.const 320
+  i32.const 288
   call $~lib/rt/__allocBuffer
   call $~lib/rt/pure/__retain
  )
@@ -2804,7 +2802,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $std/fixedarray/Ref#constructor (; 27 ;) (param $0 i32) (result i32)
+ (func $std/staticarray/Ref#constructor (; 27 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -2816,12 +2814,12 @@
   end
   local.get $0
  )
- (func $start:std/fixedarray (; 28 ;)
+ (func $start:std/staticarray (; 28 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 32
   i32.const 1
-  call $~lib/fixedarray/FixedArray<i32>#__get
+  call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 2
   i32.eq
   i32.eqz
@@ -2834,7 +2832,7 @@
    unreachable
   end
   i32.const 32
-  call $~lib/fixedarray/FixedArray<i32>#get:length
+  call $~lib/staticarray/StaticArray<i32>#get:length
   i32.const 3
   i32.eq
   i32.eqz
@@ -2846,13 +2844,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/fixedarray/arr1
+  global.get $std/staticarray/arr1
   i32.const 1
   i32.const 4
-  call $~lib/fixedarray/FixedArray<i32>#__set
+  call $~lib/staticarray/StaticArray<i32>#__set
   i32.const 32
   i32.const 1
-  call $~lib/fixedarray/FixedArray<i32>#__get
+  call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 4
   i32.eq
   i32.eqz
@@ -2866,7 +2864,7 @@
   end
   i32.const 256
   i32.const 1
-  call $~lib/fixedarray/FixedArray<i32>#__get
+  call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 2
   i32.eq
   i32.eqz
@@ -2879,7 +2877,7 @@
    unreachable
   end
   i32.const 256
-  call $~lib/fixedarray/FixedArray<i32>#get:length
+  call $~lib/staticarray/StaticArray<i32>#get:length
   i32.const 3
   i32.eq
   i32.eqz
@@ -2891,13 +2889,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/fixedarray/arr2
+  global.get $std/staticarray/arr2
   i32.const 1
   i32.const 4
-  call $~lib/fixedarray/FixedArray<i32>#__set
+  call $~lib/staticarray/StaticArray<i32>#__set
   i32.const 256
   i32.const 1
-  call $~lib/fixedarray/FixedArray<i32>#__get
+  call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 4
   i32.eq
   i32.eqz
@@ -2909,41 +2907,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 288
-  i32.const 1
-  call $~lib/fixedarray/FixedArray<i32>#__get
-  i32.const 2
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
-   i32.const 17
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 288
-  call $~lib/fixedarray/FixedArray<i32>#get:length
-  i32.const 3
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
-   i32.const 18
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $std/fixedarray/arr3
-  i32.const 1
-  i32.const 4
-  call $~lib/fixedarray/FixedArray<i32>#__set
-  i32.const 288
-  i32.const 1
-  call $~lib/fixedarray/FixedArray<i32>#__get
-  i32.const 4
+  call $std/staticarray/test
+  global.set $std/staticarray/arr3
+  global.get $std/staticarray/arr3
+  i32.const 0
+  call $~lib/staticarray/StaticArray<i32>#__get
+  i32.const 5
   i32.eq
   i32.eqz
   if
@@ -2954,97 +2923,81 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $std/fixedarray/test
-  global.set $std/fixedarray/arr4
-  global.get $std/fixedarray/arr4
-  i32.const 0
-  call $~lib/fixedarray/FixedArray<i32>#__get
-  i32.const 5
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 192
-   i32.const 27
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $std/fixedarray/arr4
+  global.get $std/staticarray/arr3
   i32.const 1
-  call $~lib/fixedarray/FixedArray<i32>#__get
+  call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 6
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 192
-   i32.const 28
+   i32.const 21
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/fixedarray/arr4
+  global.get $std/staticarray/arr3
   i32.const 2
-  call $~lib/fixedarray/FixedArray<i32>#__get
+  call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 7
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 192
-   i32.const 29
+   i32.const 22
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/fixedarray/arr4
-  call $~lib/fixedarray/FixedArray<i32>#get:length
+  global.get $std/staticarray/arr3
+  call $~lib/staticarray/StaticArray<i32>#get:length
   i32.const 3
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 192
-   i32.const 30
+   i32.const 23
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/fixedarray/arr4
+  global.get $std/staticarray/arr3
   i32.const 1
   i32.const 8
-  call $~lib/fixedarray/FixedArray<i32>#__set
-  global.get $std/fixedarray/arr4
+  call $~lib/staticarray/StaticArray<i32>#__set
+  global.get $std/staticarray/arr3
   i32.const 1
-  call $~lib/fixedarray/FixedArray<i32>#__get
+  call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 8
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 192
-   i32.const 32
+   i32.const 25
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
-  call $std/fixedarray/test
+  call $std/staticarray/test
   local.set $0
-  global.get $std/fixedarray/arr4
+  global.get $std/staticarray/arr3
   call $~lib/rt/pure/__release
   local.get $0
-  global.set $std/fixedarray/arr4
-  global.get $std/fixedarray/arr4
+  global.set $std/staticarray/arr3
+  global.get $std/staticarray/arr3
   i32.const 1
-  call $~lib/fixedarray/FixedArray<i32>#__get
+  call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 6
   i32.eq
   i32.eqz
   if
    i32.const 0
    i32.const 192
-   i32.const 34
+   i32.const 27
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -3057,17 +3010,17 @@
   local.set $0
   local.get $0
   i32.const 0
-  call $std/fixedarray/Ref#constructor
+  call $std/staticarray/Ref#constructor
   i32.store
   local.get $0
   i32.const 0
-  call $std/fixedarray/Ref#constructor
+  call $std/staticarray/Ref#constructor
   i32.store offset=4
   local.get $0
-  global.set $std/fixedarray/arr5
+  global.set $std/staticarray/arr4
   i32.const 0
   local.tee $0
-  global.get $std/fixedarray/arr4
+  global.get $std/staticarray/arr3
   local.tee $1
   i32.ne
   if
@@ -3078,10 +3031,10 @@
    call $~lib/rt/pure/__release
   end
   local.get $0
-  global.set $std/fixedarray/arr4
+  global.set $std/staticarray/arr3
   i32.const 0
   local.tee $1
-  global.get $std/fixedarray/arr5
+  global.get $std/staticarray/arr4
   local.tee $0
   i32.ne
   if
@@ -3092,7 +3045,7 @@
    call $~lib/rt/pure/__release
   end
   local.get $1
-  global.set $std/fixedarray/arr5
+  global.set $std/staticarray/arr4
  )
  (func $~start (; 29 ;)
   global.get $~started
@@ -3102,7 +3055,7 @@
    i32.const 1
    global.set $~started
   end
-  call $start:std/fixedarray
+  call $start:std/staticarray
  )
  (func $~lib/rt/pure/__collect (; 30 ;)
   return
@@ -3143,7 +3096,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 432
    i32.const 122
    i32.const 13
    call $~lib/builtins/abort
@@ -3165,7 +3118,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 464
+    i32.const 432
     i32.const 126
     i32.const 17
     call $~lib/builtins/abort
@@ -3181,7 +3134,7 @@
    i32.eqz
    if
     i32.const 0
-    i32.const 464
+    i32.const 432
     i32.const 136
     i32.const 15
     call $~lib/builtins/abort
@@ -3213,7 +3166,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 464
+   i32.const 432
    i32.const 69
    i32.const 15
    call $~lib/builtins/abort
@@ -3224,10 +3177,10 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/fixedarray/FixedArray<i32>#__visit_impl (; 34 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<i32>#__visit_impl (; 34 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/fixedarray/FixedArray<std/fixedarray/Ref>#__visit_impl (; 35 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit_impl (; 35 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3292,12 +3245,12 @@
     end
     local.get $0
     local.get $1
-    call $~lib/fixedarray/FixedArray<i32>#__visit_impl
+    call $~lib/staticarray/StaticArray<i32>#__visit_impl
     return
    end
    local.get $0
    local.get $1
-   call $~lib/fixedarray/FixedArray<std/fixedarray/Ref>#__visit_impl
+   call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit_impl
    return
   end
   unreachable

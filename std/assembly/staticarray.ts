@@ -6,22 +6,20 @@ import { Array } from "./array";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 
-export type fixed<T> = FixedArray<T>;
-
 @sealed
-export class FixedArray<T> {
+export class StaticArray<T> {
   [key: number]: T;
 
-  // Note that the interface of FixedArray instances must be a semantically
+  // Note that the interface of StaticArray instances must be a semantically
   // compatible subset of Array<T> in order for syntax highlighting to work
-  // properly, for instance when creating fixed arrays from array literals.
-  // The additionally provided static methods take care of dealing with fixed
-  // arrays exclusively, without having to converte to Array<T> first.
+  // properly, for instance when creating static arrays from array literals.
+  // The additionally provided static methods take care of dealing with static
+  // arrays exclusively, without having to convert to Array<T> first.
 
-  static fromArray<T>(source: Array<T>): FixedArray<T> {
+  static fromArray<T>(source: Array<T>): StaticArray<T> {
     var length = source.length;
     var outSize = <usize>length << alignof<T>();
-    var out = __alloc(outSize, idof<FixedArray<T>>());
+    var out = __alloc(outSize, idof<StaticArray<T>>());
     if (isManaged<T>()) {
       let sourcePtr = source.dataStart;
       for (let i = 0; i < length; ++i) {
@@ -31,15 +29,15 @@ export class FixedArray<T> {
     } else {
       memory.copy(out, source.dataStart, outSize);
     }
-    return changetype<FixedArray<T>>(out);
+    return changetype<StaticArray<T>>(out);
   }
 
-  static concat<T>(source: FixedArray<T>, other: FixedArray<T>): FixedArray<T> {
+  static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T> {
     var sourceLen = source.length;
     var otherLen = select(0, other.length, other === null);
     var outLen = sourceLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
-    var out = changetype<FixedArray<T>>(__alloc(<usize>outLen << alignof<T>(), idof<FixedArray<T>>())); // retains
+    var out = changetype<StaticArray<T>>(__alloc(<usize>outLen << alignof<T>(), idof<StaticArray<T>>())); // retains
     var outStart = changetype<usize>(out);
     var sourceSize = <usize>sourceLen << alignof<T>();
     if (isManaged<T>()) {
@@ -60,13 +58,13 @@ export class FixedArray<T> {
     return out;
   }
 
-  static slice<T>(source: FixedArray<T>, start: i32 = 0, end: i32 = i32.MAX_VALUE): FixedArray<T> {
+  static slice<T>(source: StaticArray<T>, start: i32 = 0, end: i32 = i32.MAX_VALUE): StaticArray<T> {
     var length = source.length;
     start = start < 0 ? max(start + length, 0) : min(start, length);
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
     length = max(end - start, 0);
     var sliceSize = <usize>length << alignof<T>();
-    var slice = changetype<FixedArray<T>>(__alloc(sliceSize, idof<FixedArray<T>>())); // retains
+    var slice = changetype<StaticArray<T>>(__alloc(sliceSize, idof<StaticArray<T>>())); // retains
     var sourcePtr = changetype<usize>(source) + (<usize>start << alignof<T>());
     if (isManaged<T>()) {
       let off: usize = 0;
@@ -84,9 +82,9 @@ export class FixedArray<T> {
   constructor(length: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
     var outSize = <usize>length << alignof<T>();
-    var out = __alloc(outSize, idof<FixedArray<T>>());
+    var out = __alloc(outSize, idof<StaticArray<T>>());
     memory.fill(out, 0, outSize);
-    return changetype<FixedArray<T>>(out); // retains
+    return changetype<StaticArray<T>>(out); // retains
   }
 
   get length(): i32 {

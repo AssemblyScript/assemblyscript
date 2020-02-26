@@ -3502,7 +3502,7 @@ export class Compiler extends DiagnosticEmitter {
         //   if (element.kind == ElementKind.CLASS) {
         //     let arrayInstance = <Class>element;
         //     if (arrayInstance.extends(this.program.readonlyArrayPrototype)) {
-        //       return this.compileFixedArrayLiteral(<ArrayLiteralExpression>operand, arrayInstance.type, constraints);
+        //       return this.compileStaticArrayLiteral(<ArrayLiteralExpression>operand, arrayInstance.type, constraints);
         //     }
         //   }
         // }
@@ -7987,11 +7987,11 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var program = this.program;
 
-    // handle fixed arrays
+    // handle static arrays
     if (contextualType.is(TypeFlags.REFERENCE)) {
       let classReference = contextualType.classReference;
-      if (classReference !== null && classReference.extends(program.fixedArrayPrototype)) {
-        return this.compileFixedArrayLiteral(expression, contextualType, constraints);
+      if (classReference !== null && classReference.extends(program.staticArrayPrototype)) {
+        return this.compileStaticArrayLiteral(expression, contextualType, constraints);
       }
     }
 
@@ -8158,7 +8158,7 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Compiles a special `fixed` array literal. */
-  private compileFixedArrayLiteral(
+  private compileStaticArrayLiteral(
     expression: ArrayLiteralExpression,
     contextualType: Type,
     constraints: Constraints
@@ -8171,7 +8171,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(contextualType.is(TypeFlags.REFERENCE));
     var arrayInstance = assert(contextualType.classReference);
     var arrayType = arrayInstance.type;
-    var elementType = assert(arrayInstance.getTypeArgumentsTo(program.fixedArrayPrototype))[0];
+    var elementType = assert(arrayInstance.getTypeArgumentsTo(program.staticArrayPrototype))[0];
 
     // block those here so compiling expressions doesn't conflict
     var tempThis = flow.getTempLocal(this.options.usizeType);
