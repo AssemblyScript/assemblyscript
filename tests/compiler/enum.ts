@@ -12,6 +12,13 @@ export const enum ImplicitConst {
   THREE
 }
 
+const enum ImplicitConstNoExport {
+  ZERO,
+  ONE,
+  TWO,
+  THREE
+}
+
 export enum Explicit {
   ZERO = 0,
   ONE = 0 + 1,
