@@ -8467,6 +8467,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // clone base constructor if a derived class
     var baseClass = classInstance.base;
+    var contextualTypeArguments = makeMap(classInstance.contextualTypeArguments);
     if (baseClass) {
       let baseCtor = this.ensureConstructor(baseClass, reportNode);
       instance = new Function(
@@ -8478,7 +8479,7 @@ export class Compiler extends DiagnosticEmitter {
           (<FunctionDeclaration>baseCtor.declaration).clone()
         ),
         baseCtor.signature,
-        null
+        contextualTypeArguments
       );
 
     // otherwise make a default constructor
@@ -8493,7 +8494,7 @@ export class Compiler extends DiagnosticEmitter {
           )
         ),
         new Signature(this.program, null, classInstance.type, classInstance.type),
-        null
+        contextualTypeArguments
       );
     }
 
