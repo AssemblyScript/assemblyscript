@@ -3,9 +3,12 @@
 //
 
 // @ts-ignore: decorator
-@lazy const EXP2F_TABLE_BITS = 5;
+@inline
+const EXP2F_TABLE_BITS = 5;
+
 // @ts-ignore: decorator
-@lazy const exp2f_data_tab: u64[] = [
+@lazy @inline
+const EXP2F_DATA_TAB: StaticArray<u64> = [
   // exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
   // used for computing 2^(k/N) for an int |k| < 150 N as
   // double(tab[k%N] + (k << 52-BITS))
@@ -23,7 +26,8 @@
 // Relative error: 1.69 * 2^-34 in [-1/64, 1/64] (before rounding.)
 // Wrong count: 168353 (all nearest rounding wrong results with fma.)
 // @ts-ignore: decorator
-@inline export function exp2f_lut(x: f32): f32 {
+@inline
+export function exp2f_lut(x: f32): f32 {
   const
     N      = 1 << EXP2F_TABLE_BITS,
     N_MASK = N - 1,
@@ -52,11 +56,8 @@
   var r  = xd - (kd - shift);
   var t: u64, y: f64, s: f64;
 
-  // @ts-ignore: cast
-  const tab = exp2f_data_tab.dataStart as usize;
-
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(tab + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t  = load<u64>(changetype<usize>(EXP2F_DATA_TAB) + ((<usize>ki & N_MASK) << alignof<u64>()));
   t += ki << (52 - EXP2F_TABLE_BITS);
   s  = reinterpret<f64>(t);
   y  = C2 * r + 1;
@@ -70,7 +71,8 @@
 // Relative error: 1.69 * 2^-34 in [-ln2/64, ln2/64] (before rounding.)
 // Wrong count: 170635 (all nearest rounding wrong results with fma.)
 // @ts-ignore: decorator
-@inline export function expf_lut(x: f32): f32 {
+@inline
+export function expf_lut(x: f32): f32 {
   const
     N        = 1 << EXP2F_TABLE_BITS,
     N_MASK   = N - 1,
@@ -105,11 +107,8 @@
   var r  = z - (kd - shift);
   var s: f64, y: f64, t: u64;
 
-  // @ts-ignore: cast
-  const tab = exp2f_data_tab.dataStart as usize;
-
   // exp(x) = 2^(k/N) * 2^(r/N) ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(tab + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t  = load<u64>(changetype<usize>(EXP2F_DATA_TAB) + ((<usize>ki & N_MASK) << alignof<u64>()));
   t += ki << (52 - EXP2F_TABLE_BITS);
   s  = reinterpret<f64>(t);
   z  = C0 * r + C1;
@@ -125,9 +124,12 @@
 //
 
 // @ts-ignore: decorator
-@lazy const LOG2F_TABLE_BITS = 4;
+@inline
+const LOG2F_TABLE_BITS = 4;
+
 // @ts-ignore: decorator
-@lazy const log2f_data_tab: f64[] = [
+@lazy @inline
+const LOG2F_DATA_TAB: StaticArray<f64> = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019), // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4), // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
   reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD7418B0A1FB77B), // 0x1.49539f0f010bp+0 , -0x1.7418b0a1fb77bp-2,
@@ -149,7 +151,8 @@
 // ULP error: 0.752 (nearest rounding.)
 // Relative error: 1.9 * 2^-26 (before rounding.)
 // @ts-ignore: decorator
-@inline export function log2f_lut(x: f32): f32 {
+@inline
+export function log2f_lut(x: f32): f32 {
   const
     N_MASK  = (1 << LOG2F_TABLE_BITS) - 1,
     Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
@@ -181,11 +184,8 @@
   var iz   = ux - top;
   var k    = <i32>tmp >> 23;
 
-  // @ts-ignore: cast
-  var tab = log2f_data_tab.dataStart as usize;
-
-  var invc = load<f64>(tab + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  var logc = load<f64>(tab + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  var invc = load<f64>(changetype<usize>(LOG2F_DATA_TAB) + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(changetype<usize>(LOG2F_DATA_TAB) + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
   var z    = <f64>reinterpret<f32>(iz);
 
   // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
@@ -207,9 +207,12 @@
 //
 
 // @ts-ignore: decorator
-@lazy const LOGF_TABLE_BITS = 4;
+@inline
+const LOGF_TABLE_BITS = 4;
+
 // @ts-ignore: decorator
-@lazy const logf_data_tab: f64[] = [
+@lazy @inline
+const LOGF_DATA_TAB: StaticArray<f64> = [
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFD57BF7808CAADE), // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFD2BEF0A7C06DDB), // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
   reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD01EAE7F513A67), // 0x1.49539f0f010bp+0 , -0x1.01eae7f513a67p-2,
@@ -231,7 +234,8 @@
 // ULP error: 0.818 (nearest rounding.)
 // Relative error: 1.957 * 2^-26 (before rounding.)
 // @ts-ignore: decorator
-@inline export function logf_lut(x: f32): f32 {
+@inline
+export function logf_lut(x: f32): f32 {
   const
     N_MASK  = (1 << LOGF_TABLE_BITS) - 1,
     Ox1p23f = reinterpret<f32>(0x4B000000); // 0x1p23f
@@ -261,11 +265,9 @@
   var i   = (tmp >> (23 - LOGF_TABLE_BITS)) & N_MASK;
   var k   = <i32>tmp >> 23;
   var iz  = ux - (tmp & 0x1FF << 23);
-  // @ts-ignore: cast
-  var tab = logf_data_tab.dataStart as usize;
 
-  var invc = load<f64>(tab + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  var logc = load<f64>(tab + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  var invc = load<f64>(changetype<usize>(LOGF_DATA_TAB) + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(changetype<usize>(LOGF_DATA_TAB) + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
 
   var z = <f64>reinterpret<f32>(iz);
 
@@ -287,14 +289,16 @@
 //
 
 // @ts-ignore: decorator
-@inline function zeroinfnanf(ux: u32): bool {
+@inline
+function zeroinfnanf(ux: u32): bool {
   return (ux << 1) - 1 >= (<u32>0x7f800000 << 1) - 1;
 }
 
 // Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
 // the bit representation of a non-zero finite floating-point value.
 // @ts-ignore: decorator
-@inline function checkintf(iy: u32): i32 {
+@inline
+function checkintf(iy: u32): i32 {
   var e = iy >> 23 & 0xFF;
   if (e < 0x7F     ) return 0;
   if (e > 0x7F + 23) return 2;
@@ -307,7 +311,8 @@
 // Subnormal input is normalized so ix has negative biased exponent.
 // Output is multiplied by N (POWF_SCALE) if TOINT_INTRINICS is set.
 // @ts-ignore: decorator
-@inline function log2f_inline(ux: u32): f64 {
+@inline
+function log2f_inline(ux: u32): f64 {
   const N_MASK = (1 << LOG2F_TABLE_BITS) - 1;
 
   const
@@ -326,11 +331,8 @@
   var uz   = ux - top;
   var k    = <i32>(<i32>top >> 23);
 
-  // @ts-ignore: cast
-  const tab = log2f_data_tab.dataStart as usize;
-
-  var invc = load<f64>(tab + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  var logc = load<f64>(tab + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  var invc = load<f64>(changetype<usize>(LOG2F_DATA_TAB) + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(changetype<usize>(LOG2F_DATA_TAB) + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
   var z    = <f64>reinterpret<f32>(uz);
 
   // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
@@ -353,7 +355,8 @@
 // (in case of fast toint intrinsics) or not.  The unscaled xd must be
 // in [-1021,1023], sign_bias sets the sign of the result.
 // @ts-ignore: decorator
-@inline function exp2f_inline(xd: f64, signBias: u32): f32 {
+@inline
+function exp2f_inline(xd: f64, signBias: u32): f32 {
   const
     N      = 1 << EXP2F_TABLE_BITS,
     N_MASK = N - 1,
@@ -371,11 +374,7 @@
   var t: u64, z: f64, y: f64, s: f64;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  // @ts-ignore: cast
-  const tab = exp2f_data_tab.dataStart as usize;
-
-  // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(tab + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t  = load<u64>(changetype<usize>(EXP2F_DATA_TAB) + ((<usize>ki & N_MASK) << alignof<u64>()));
   t += (ki + signBias) << (52 - EXP2F_TABLE_BITS);
   s  = reinterpret<f64>(t);
   z  = C0 * r + C1;
@@ -386,22 +385,26 @@
 }
 
 // @ts-ignore: decorator
-@inline function xflowf(sign: u32, y: f32): f32 {
+@inline
+function xflowf(sign: u32, y: f32): f32 {
   return select<f32>(-y, y, sign) * y;
 }
 
 // @ts-ignore: decorator
-@inline function oflowf(sign: u32): f32 {
+@inline
+function oflowf(sign: u32): f32 {
   return xflowf(sign, reinterpret<f32>(0x70000000)); // 0x1p97f
 }
 
 // @ts-ignore: decorator
-@inline function uflowf(sign: u32): f32 {
+@inline
+function uflowf(sign: u32): f32 {
   return xflowf(sign, reinterpret<f32>(0x10000000)); // 0x1p-95f
 }
 
 // @ts-ignore: decorator
-@inline export function powf_lut(x: f32, y: f32): f32 {
+@inline
+export function powf_lut(x: f32, y: f32): f32 {
   const
     Ox1p23f     = reinterpret<f32>(0x4B000000), // 0x1p23f
     UPPER_LIMIT = reinterpret<f64>(0x405FFFFFFFD1D571), // 0x1.fffffffd1d571p+6
@@ -458,10 +461,12 @@
 //
 
 // @ts-ignore: decorator
-@lazy const EXP_TABLE_BITS = 7;
+@inline
+const EXP_TABLE_BITS = 7;
 
 // @ts-ignore: decorator
-@lazy const exp_data_tab: u64[] = [
+@lazy @inline
+const EXP_DATA_TAB: StaticArray<u64> = [
   0x0000000000000000, 0x3FF0000000000000,
   0x3C9B3B4F1A88BF6E, 0x3FEFF63DA9FB3335,
   0xBC7160139CD8DC5D, 0x3FEFEC9A3E778061,
@@ -600,7 +605,8 @@
 // adjustment of scale, positive k here means the result may overflow and
 // negative k means the result may underflow.
 // @ts-ignore: decorator
-@inline function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
+@inline
+function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
   const
     Ox1p_1022 = reinterpret<f64>(0x0010000000000000), // 0x1p-1022
     Ox1p1009  = reinterpret<f64>(0x7F00000000000000); // 0x1p1009
@@ -634,7 +640,8 @@
 }
 
 // @ts-ignore: decorator
-@inline export function exp_lut(x: f64): f64 {
+@inline
+export function exp_lut(x: f64): f64 {
   const
     N      = 1 << EXP_TABLE_BITS,
     N_MASK = N - 1;
@@ -686,12 +693,9 @@
   var idx = <usize>((ki & N_MASK) << 1);
   var top = ki << (52 - EXP_TABLE_BITS);
 
-  // @ts-ignore: cast
-  const tab = exp_data_tab.dataStart as usize;
-
-  var tail = reinterpret<f64>(load<u64>(tab + (idx << alignof<u64>()))); // T[idx]
+  var tail = reinterpret<f64>(load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()))); // T[idx]
   // This is only a valid scale when -1023*N < k < 1024*N
-  var sbits = load<u64>(tab + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
+  var sbits = load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
   // exp(x) = 2^(k/N) * exp(r) ~= scale + scale * (tail + exp(r) - 1).
   // Evaluation is optimized assuming superscalar pipelined execution.
   var r2 = r * r;
@@ -717,7 +721,8 @@
 // adjustment of scale, positive k here means the result may overflow and
 // negative k means the result may underflow.
 // @ts-ignore: decorator
-@inline function specialcase2(tmp: f64, sbits: u64, ki: u64): f64 {
+@inline
+function specialcase2(tmp: f64, sbits: u64, ki: u64): f64 {
   const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022
   var scale: f64;
   if ((ki & 0x80000000) == 0) {
@@ -745,7 +750,8 @@
 }
 
 // @ts-ignore: decorator
-@inline export function exp2_lut(x: f64): f64 {
+@inline
+export function exp2_lut(x: f64): f64 {
   const
     N      = 1 << EXP_TABLE_BITS,
     N_MASK = N - 1,
@@ -781,12 +787,9 @@
   var idx = <usize>((ki & N_MASK) << 1);
   var top = ki << (52 - EXP_TABLE_BITS);
 
-  // @ts-ignore: cast
-  const tab = exp_data_tab.dataStart as usize;
-
-  var tail = reinterpret<f64>(load<u64>(tab + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
+  var tail = reinterpret<f64>(load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
   // This is only a valid scale when -1023*N < k < 1024*N
-  var sbits = load<u64>(tab + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
+  var sbits = load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
   // exp2(x) = 2^(k/N) * 2^r ~= scale + scale * (tail + 2^r - 1).
   // Evaluation is optimized assuming superscalar pipelined execution
   var r2 = r * r;
@@ -805,7 +808,8 @@
 //
 
 // @ts-ignore: decorator
-@lazy const LOG2_TABLE_BITS = 6;
+@inline
+const LOG2_TABLE_BITS = 6;
 
 /* Algorithm:
 
@@ -835,7 +839,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 |log2(x)| < 0x1p-4, this is not enough so that is special cased. */
 
 // @ts-ignore: decorator
-@lazy const log2_data_tab1: f64[] = [
+@lazy @inline
+const LOG2_DATA_TAB1: StaticArray<f64> = [
   //            invc                  ,                logc
   reinterpret<f64>(0x3FF724286BB1ACF8), reinterpret<f64>(0xBFE1095FEECDB000),
   reinterpret<f64>(0x3FF6E1F766D2CCA1), reinterpret<f64>(0xBFE08494BD76D000),
@@ -904,7 +909,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 ];
 
 // @ts-ignore: decorator
-@lazy const log2_data_tab2: f64[] = [
+@lazy @inline
+const LOG2_DATA_TAB2: StaticArray<f64> = [
   //              chi                 ,                 clo
   reinterpret<f64>(0x3FE6200012B90A8E), reinterpret<f64>(0x3C8904AB0644B605),
   reinterpret<f64>(0x3FE66000045734A6), reinterpret<f64>(0x3C61FF9BEA62F7A9),
@@ -973,7 +979,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 ];
 
 // @ts-ignore: decorator
-@inline export function log2_lut(x: f64): f64 {
+@inline
+export function log2_lut(x: f64): f64 {
   const N_MASK = (1 << LOG2_TABLE_BITS) - 1;
 
   const
@@ -1046,13 +1053,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   var k    = <i64>tmp >> 52;
   var iz   = ix - (tmp & 0xFFF0000000000000);
 
-  // @ts-ignore: cast
-  const tab1 = log2_data_tab1.dataStart as usize;
-  // @ts-ignore: cast
-  const tab2 = log2_data_tab2.dataStart as usize;
-
-  var invc = load<f64>(tab1 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
-  var logc = load<f64>(tab1 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
+  var invc = load<f64>(changetype<usize>(LOG2_DATA_TAB1)  + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
+  var logc = load<f64>(changetype<usize>(LOG2_DATA_TAB1)  + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
   var z    = reinterpret<f64>(iz);
   var kd   = <f64>k;
 
@@ -1065,8 +1067,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 // 	t2 = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -t1);
 // #else
   // rounding error: 0x1p-55/N + 0x1p-65.
-  var chi = load<f64>(tab2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].chi;
-  var clo = load<f64>(tab2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].clo;
+  var chi = load<f64>(changetype<usize>(LOG2_DATA_TAB2) + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].chi;
+  var clo = load<f64>(changetype<usize>(LOG2_DATA_TAB2) + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].clo;
 
   var r   = (z - chi - clo) * invc;
   var rhi = reinterpret<f64>(reinterpret<u64>(r) & 0xFFFFFFFF00000000);
@@ -1094,7 +1096,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 //
 
 // @ts-ignore: decorator
-@lazy const LOG_TABLE_BITS = 7;
+@inline
+const LOG_TABLE_BITS = 7;
 
 /* Algorithm:
 
@@ -1124,7 +1127,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 |log(x)| < 0x1p-4, this is not enough so that is special cased.*/
 
 // @ts-ignore: decorator
-@lazy const log_data_tab1: f64[] = [
+@lazy @inline
+const LOG_DATA_TAB1: StaticArray<f64> = [
   //              invc                ,                 logc
   reinterpret<f64>(0x3FF734F0C3E0DE9F), reinterpret<f64>(0xBFD7CC7F79E69000),
   reinterpret<f64>(0x3FF713786A2CE91F), reinterpret<f64>(0xBFD76FEEC20D0000),
@@ -1257,7 +1261,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 ];
 
 // @ts-ignore: decorator
-@lazy const log_data_tab2: f64[] = [
+@lazy @inline
+const LOG_DATA_TAB2: StaticArray<f64> = [
   //               chi                ,                  clo
   reinterpret<f64>(0x3FE61000014FB66B), reinterpret<f64>(0x3C7E026C91425B3C),
   reinterpret<f64>(0x3FE63000034DB495), reinterpret<f64>(0x3C8DBFEA48005D41),
@@ -1390,7 +1395,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 ];
 
 // @ts-ignore: decorator
-@inline export function log_lut(x: f64): f64 {
+@inline
+export function log_lut(x: f64): f64 {
   const N_MASK = (1 << LOG_TABLE_BITS) - 1;
 
   const
@@ -1461,13 +1467,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
   var k    = <i64>tmp >> 52;
   var iz   = ix - (tmp & (u64(0xFFF) << 52));
 
-  // @ts-ignore: cast
-  const tab1 = log_data_tab1.dataStart as usize;
-  // @ts-ignore: cast
-  const tab2 = log_data_tab2.dataStart as usize;
-
-  var invc = load<f64>(tab1 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
-  var logc = load<f64>(tab1 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
+  var invc = load<f64>(changetype<usize>(LOG_DATA_TAB1) + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
+  var logc = load<f64>(changetype<usize>(LOG_DATA_TAB1) + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
   var z    = reinterpret<f64>(iz);
 
   // log(x) = log1p(z/c-1) + log(c) + k*Ln2.
@@ -1477,8 +1478,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 // 	r = __builtin_fma(z, invc, -1.0);
 // #else
   // rounding error: 0x1p-55/N + 0x1p-66
-  const chi = load<f64>(tab2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T2[i].chi
-  const clo = load<f64>(tab2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T2[i].clo
+  const chi = load<f64>(changetype<usize>(LOG_DATA_TAB2) + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T2[i].chi
+  const clo = load<f64>(changetype<usize>(LOG_DATA_TAB2) + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T2[i].clo
   var r = (z - chi - clo) * invc;
 // #endif
   var kd = <f64>k;
@@ -1502,7 +1503,8 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 //
 
 // @ts-ignore: decorator
-@lazy const POW_LOG_TABLE_BITS = 7;
+@inline
+const POW_LOG_TABLE_BITS = 7;
 
 /* Algorithm:
 
@@ -1528,7 +1530,8 @@ error and the interval for z is selected such that near x == 1, where log(x)
 is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 
 // @ts-ignore: decorator
-@lazy const pow_log_data_tab: f64[] = [
+@lazy @inline
+const POW_LOG_DATA_TAB: StaticArray<f64> = [
   //             invc                 ,pad,               logc                 ,               logctail
   reinterpret<f64>(0x3FF6A00000000000), 0, reinterpret<f64>(0xBFD62C82F2B9C800), reinterpret<f64>(0x3CFAB42428375680),
   reinterpret<f64>(0x3FF6800000000000), 0, reinterpret<f64>(0xBFD5D1BDBF580800), reinterpret<f64>(0xBD1CA508D8E0F720),
@@ -1663,7 +1666,8 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 // Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
 // the bit representation of a non-zero finite floating-point value.
 // @ts-ignore: decorator
-@inline function checkint(iy: u64): i32 {
+@inline
+function checkint(iy: u64): i32 {
   var e = iy >> 52 & 0x7FF;
   if (e < 0x3FF     ) return 0;
   if (e > 0x3FF + 52) return 2;
@@ -1674,34 +1678,40 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 }
 
 // @ts-ignore: decorator
-@inline function xflow(sign: u32, y: f64): f64 {
+@inline
+function xflow(sign: u32, y: f64): f64 {
   return select(-y, y, sign) * y;
 }
 
 // @ts-ignore: decorator
-@inline function uflow(sign: u32): f64 {
+@inline
+function uflow(sign: u32): f64 {
   return xflow(sign, reinterpret<f64>(0x1000000000000000)); // 0x1p-767
 }
 
 // @ts-ignore: decorator
-@inline function oflow(sign: u32): f64 {
+@inline
+function oflow(sign: u32): f64 {
   return xflow(sign, reinterpret<f64>(0x7000000000000000)); // 0x1p769
 }
 
 // Returns 1 if input is the bit representation of 0, infinity or nan.
 // @ts-ignore: decorator
-@inline function zeroinfnan(u: u64): bool {
+@inline
+function zeroinfnan(u: u64): bool {
   return (u << 1) - 1 >= 0xFFE0000000000000 - 1;
 }
 
 // @ts-ignore: decorator
-@lazy var log_tail: f64 = 0;
+@lazy
+var log_tail: f64 = 0;
 
 // Compute y+TAIL = log(x) where the rounded result is y and TAIL has about
 // additional 15 bits precision. IX is the bit representation of x, but
 // normalized in the subnormal range using the sign bit for the exponent.
 // @ts-ignore: decorator
-@inline function log_inline(ix: u64): f64 {
+@inline
+function log_inline(ix: u64): f64 {
   const N = 1 << POW_LOG_TABLE_BITS;
   const N_MASK = N - 1;
 
@@ -1729,12 +1739,9 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   var kd  = <f64>k;
 
   // log(x) = k*Ln2 + log(c) + log1p(z/c-1).
-  // @ts-ignore: cast
-  const tab = pow_log_data_tab.dataStart as usize;
-
-  var invc     = load<f64>(tab + (i << (2 + alignof<f64>())), 0 << alignof<f64>()); // tab[i].invc
-  var logc     = load<f64>(tab + (i << (2 + alignof<f64>())), 2 << alignof<f64>()); // tab[i].logc
-  var logctail = load<f64>(tab + (i << (2 + alignof<f64>())), 3 << alignof<f64>()); // tab[i].logctail
+  var invc     = load<f64>(changetype<usize>(POW_LOG_DATA_TAB) + (i << (2 + alignof<f64>())), 0 << alignof<f64>()); // tab[i].invc
+  var logc     = load<f64>(changetype<usize>(POW_LOG_DATA_TAB) + (i << (2 + alignof<f64>())), 2 << alignof<f64>()); // tab[i].logc
+  var logctail = load<f64>(changetype<usize>(POW_LOG_DATA_TAB) + (i << (2 + alignof<f64>())), 3 << alignof<f64>()); // tab[i].logctail
 
   // Note: 1/c is j/N or j/N/2 where j is an integer in [N,2N) and
   // |z/c - 1| < 1/N, so r = z/c - 1 is exactly representible.
@@ -1772,12 +1779,14 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 }
 
 // @ts-ignore: decorator
-@lazy const SIGN_BIAS = 0x800 << EXP_TABLE_BITS;
+@inline
+const SIGN_BIAS = 0x800 << EXP_TABLE_BITS;
 
 // Computes sign*exp(x+xtail) where |xtail| < 2^-8/N and |xtail| <= |x|.
 // The sign_bias argument is SIGN_BIAS or 0 and sets the sign to -1 or 1.
 // @ts-ignore: decorator
-@inline function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
+@inline
+function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   const N      = 1 << EXP_TABLE_BITS;
   const N_MASK = N - 1;
 
@@ -1840,12 +1849,9 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
   idx = <usize>((ki & N_MASK) << 1);
   top = (ki + sign_bias) << (52 - EXP_TABLE_BITS);
 
-  // @ts-ignore: cast
-  const tab = exp_data_tab.dataStart as usize;
-
-  tail = reinterpret<f64>(load<u64>(tab + (idx << alignof<u64>())));
+  tail = reinterpret<f64>(load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>())));
   // This is only a valid scale when -1023*N < k < 1024*N
-  sbits = load<u64>(tab + (idx << alignof<u64>()), 1 << alignof<u64>()) + top;
+  sbits = load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()), 1 << alignof<u64>()) + top;
   // exp(x) = 2^(k/N) * exp(r) ~= scale + scale * (tail + exp(r) - 1).
   // Evaluation is optimized assuming superscalar pipelined execution.
   r2 = r * r;
@@ -1860,7 +1866,8 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 }
 
 // @ts-ignore: decorator
-@inline export function pow_lut(x: f64, y: f64): f64 {
+@inline
+export function pow_lut(x: f64, y: f64): f64 {
   const Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
 
   var sign_bias: u32 = 0;

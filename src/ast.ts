@@ -860,12 +860,14 @@ export abstract class Node {
   static createIndexSignatureDeclaration(
     keyType: NamedTypeNode,
     valueType: TypeNode,
+    flags: CommonFlags,
     range: Range
   ): IndexSignatureDeclaration {
     var elem = new IndexSignatureDeclaration();
     elem.range = range;
     elem.keyType = keyType;
     elem.valueType = valueType;
+    elem.flags = flags;
     return elem;
   }
 
@@ -1339,7 +1341,8 @@ export class ArrayLiteralExpression extends LiteralExpression {
 export enum AssertionKind {
   PREFIX,
   AS,
-  NONNULL
+  NONNULL,
+  CONST
 }
 
 /** Represents an assertion expression. */

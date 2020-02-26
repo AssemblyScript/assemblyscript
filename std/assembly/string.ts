@@ -2,9 +2,8 @@
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
 import { compareImpl, strtol, strtod, isSpace, isAscii, toLower8, toUpper8 } from "./util/string";
-import { specialsUpper, casemap, bsearch } from "./util/casemap";
+import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
 import { E_INVALIDLENGTH } from "./util/error";
-import { ArrayBufferView } from "./arraybuffer";
 import { idof } from "./builtins";
 
 @sealed export abstract class String {
@@ -553,9 +552,7 @@ import { idof } from "./builtins";
     var len = <usize>this.length;
     if (!len) return this;
     var codes = __alloc(len * 3 * 2, idof<String>());
-    // @ts-ignore: cast
-    var specialsUpperPtr = specialsUpper.dataStart as usize;
-    var specialsUpperLen = specialsUpper.length;
+    var specialsUpperLen = SPECIALS_UPPER.length;
     var j: usize = 0;
     for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <u32>load<u16>(changetype<usize>(this) + (i << 1));
@@ -584,12 +581,12 @@ import { idof } from "./builtins";
           let index = -1;
           // Fast range check. See first and last rows in specialsUpper table
           if (c - 0x00DF <= 0xFB17 - 0x00DF) {
-            index = <usize>bsearch(c, specialsUpperPtr, specialsUpperLen);
+            index = <usize>bsearch(c, changetype<usize>(SPECIALS_UPPER), specialsUpperLen);
           }
           if (~index) {
             // load next 3 code points from row with `index` offset for specialsUpper table
-            let ab = load<u32>(specialsUpperPtr + (index << 1), 2);
-            let cc = load<u16>(specialsUpperPtr + (index << 1), 6);
+            let ab = load<u32>(changetype<usize>(SPECIALS_UPPER) + (index << 1), 2);
+            let cc = load<u16>(changetype<usize>(SPECIALS_UPPER) + (index << 1), 6);
             store<u32>(codes + (j << 1), ab, 0);
             store<u16>(codes + (j << 1), cc, 4);
             j += 1 + usize(cc != 0);

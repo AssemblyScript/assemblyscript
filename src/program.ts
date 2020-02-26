@@ -413,12 +413,12 @@ export class Program extends DiagnosticEmitter {
   arrayBufferInstance: Class;
   /** Array prototype reference. */
   arrayPrototype: ClassPrototype;
+  /** Static array prototype reference. */
+  staticArrayPrototype: ClassPrototype;
   /** Set prototype reference. */
   setPrototype: ClassPrototype;
   /** Map prototype reference. */
   mapPrototype: ClassPrototype;
-  /** Fixed array prototype reference. */
-  fixedArrayPrototype: ClassPrototype;
   /** Int8Array prototype. */
   i8ArrayPrototype: ClassPrototype;
   /** Int16Array prototype. */
@@ -466,6 +466,8 @@ export class Program extends DiagnosticEmitter {
   typeinfoInstance: Function;
   /** RT `__instanceof(ptr: usize, superId: u32): bool` */
   instanceofInstance: Function;
+  /** RT `__allocBuffer(size: usize, id: u32, data: usize = 0): usize` */
+  allocBufferInstance: Function;
   /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
   allocArrayInstance: Function;
 
@@ -502,7 +504,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Writes a common runtime header to the specified buffer. */
-  writeRuntimeHeader(buffer: Uint8Array, offset: i32, classInstance: Class, payloadSize: u32): void {
+  writeRuntimeHeader(buffer: Uint8Array, offset: i32, id: u32, payloadSize: u32): void {
     // BLOCK {
     //   mmInfo: usize // WASM64 TODO
     //   gcInfo: u32
@@ -512,7 +514,7 @@ export class Program extends DiagnosticEmitter {
     assert(payloadSize < (1 << 28)); // 1 bit BUFFERED + 3 bits color
     writeI32(payloadSize, buffer, offset);
     writeI32(1, buffer, offset + 4); // RC=1
-    writeI32(classInstance.id, buffer, offset + 8);
+    writeI32(id, buffer, offset + 8);
     writeI32(payloadSize, buffer, offset + 12);
   }
 
@@ -962,7 +964,7 @@ export class Program extends DiagnosticEmitter {
 
     // register stdlib components
     this.arrayPrototype = <ClassPrototype>this.require(CommonNames.Array, ElementKind.CLASS_PROTOTYPE);
-    this.fixedArrayPrototype = <ClassPrototype>this.require(CommonNames.FixedArray, ElementKind.CLASS_PROTOTYPE);
+    this.staticArrayPrototype = <ClassPrototype>this.require(CommonNames.StaticArray, ElementKind.CLASS_PROTOTYPE);
     this.setPrototype = <ClassPrototype>this.require(CommonNames.Set, ElementKind.CLASS_PROTOTYPE);
     this.mapPrototype = <ClassPrototype>this.require(CommonNames.Map, ElementKind.CLASS_PROTOTYPE);
     this.abortInstance = this.lookupFunction(CommonNames.abort); // can be disabled
@@ -975,6 +977,7 @@ export class Program extends DiagnosticEmitter {
     this.typeinfoInstance = this.requireFunction(CommonNames.typeinfo);
     this.instanceofInstance = this.requireFunction(CommonNames.instanceof_);
     this.visitInstance = this.requireFunction(CommonNames.visit);
+    this.allocBufferInstance = this.requireFunction(CommonNames.allocBuffer);
     this.allocArrayInstance = this.requireFunction(CommonNames.allocArray);
 
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
