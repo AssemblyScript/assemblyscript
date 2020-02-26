@@ -1,6 +1,10 @@
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
 
+// All tables uses two staged lookups due to unicode properties has
+// wide range [0 - 0x110000].
+// About Multistage Tables see Unicode spec ch 5, p.196:
+// https://www.unicode.org/versions/Unicode12.0.0/ch05.pdf
 // Lookup table for speedup check is char alpha or not
 // See: https://git.musl-libc.org/cgit/musl/tree/src/ctype/alpha.h
 // size: 3904 bytes
