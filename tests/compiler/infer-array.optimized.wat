@@ -294,6 +294,8 @@
  )
  (func $~lib/rt/__allocArray (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   i32.const 16
   local.get $2
   call $~lib/rt/stub/__alloc
@@ -301,27 +303,30 @@
   local.get $0
   local.get $1
   i32.shl
-  local.tee $1
+  local.tee $4
+  local.set $6
+  local.get $4
   i32.const 0
   call $~lib/rt/stub/__alloc
-  local.tee $4
+  local.set $1
+  local.get $3
+  if
+   local.get $1
+   local.get $3
+   local.get $6
+   call $~lib/memory/memory.copy
+  end
+  local.get $1
   i32.store
   local.get $2
-  local.get $4
+  local.get $1
   i32.store offset=4
   local.get $2
-  local.get $1
+  local.get $4
   i32.store offset=8
   local.get $2
   local.get $0
   i32.store offset=12
-  local.get $3
-  if
-   local.get $4
-   local.get $3
-   local.get $1
-   call $~lib/memory/memory.copy
-  end
   local.get $2
  )
  (func $~lib/array/Array<i32>#__get (; 5 ;) (param $0 i32) (result i32)

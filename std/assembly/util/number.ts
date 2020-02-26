@@ -2,7 +2,6 @@
 
 import { idof } from "../builtins";
 import { CharCode } from "./string";
-import { ArrayBufferView } from "../arraybuffer";
 
 // @ts-ignore: decorator
 @inline
@@ -10,7 +9,7 @@ export const MAX_DOUBLE_LENGTH = 28;
 
 // @ts-ignore: decorator
 @lazy @inline
-const POWERS10: u32[] = [
+const POWERS10: StaticArray<u32> = [
   1,
   10,
   100,
@@ -39,7 +38,7 @@ const POWERS10: u32[] = [
 */
 // @ts-ignore: decorator
 @lazy @inline
-const DIGITS: u32[] = [
+const DIGITS: StaticArray<u32> = [
   0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
   0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
   0x00300031, 0x00310031, 0x00320031, 0x00330031, 0x00340031,
@@ -64,7 +63,7 @@ const DIGITS: u32[] = [
 
 // @ts-ignore: decorator
 @lazy @inline
-const EXP_POWERS: i16[] = [
+const EXP_POWERS: StaticArray<i16> = [
   -1220, -1193, -1166, -1140, -1113, -1087, -1060, -1034, -1007,  -980,
    -954,  -927,  -901,  -874,  -847,  -821,  -794,  -768,  -741,  -715,
    -688,  -661,  -635,  -608,  -582,  -555,  -529,  -502,  -475,  -449,
@@ -79,7 +78,7 @@ const EXP_POWERS: i16[] = [
 // 1e-348, 1e-340, ..., 1e340
 // @ts-ignore: decorator
 @lazy @inline
-const FRC_POWERS: u64[] = [
+const FRC_POWERS: StaticArray<u64> = [
   0xFA8FD5A0081C0288, 0xBAAEE17FA23EBF76, 0x8B16FB203055AC76, 0xCF42894A5DCE35EA,
   0x9A6BB0AA55653B2D, 0xE61ACF033D1A45DF, 0xAB70FE17C79AC6CA, 0xFF77B1FCBEBCDC4F,
   0xBE5691EF416BD60C, 0x8DD01FAD907FFC3C, 0xD3515C2831559A83, 0x9D71AC8FADA6C9B5,
@@ -146,7 +145,6 @@ export function decimalCount64(value: u64): u32 {
 }
 
 function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
-  var lut = changetype<ArrayBufferView>(DIGITS).dataStart;
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
     let t = num / 10000;
@@ -156,8 +154,8 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     let d1 = r / 100;
     let d2 = r % 100;
 
-    let digits1 = <u64>load<u32>(lut + (<usize>d1 << alignof<u32>()));
-    let digits2 = <u64>load<u32>(lut + (<usize>d2 << alignof<u32>()));
+    let digits1 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>d1 << alignof<u32>()));
+    let digits2 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>d2 << alignof<u32>()));
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
@@ -168,13 +166,13 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     let d1 = num % 100;
     num = t;
     offset -= 2;
-    let digits = load<u32>(lut + (<usize>d1 << alignof<u32>()));
+    let digits = load<u32>(changetype<usize>(DIGITS) + (<usize>d1 << alignof<u32>()));
     store<u32>(buffer + (offset << 1), digits);
   }
 
   if (num >= 10) {
     offset -= 2;
-    let digits = load<u32>(lut + (<usize>num << alignof<u32>()));
+    let digits = load<u32>(changetype<usize>(DIGITS) + (<usize>num << alignof<u32>()));
     store<u32>(buffer + (offset << 1), digits);
   } else {
     offset -= 1;
@@ -184,7 +182,6 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
 }
 
 function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
-  var lut = changetype<ArrayBufferView>(DIGITS).dataStart;
   while (num >= 100000000) {
     let t = num / 100000000;
     let r = <usize>(num - t * 100000000);
@@ -198,14 +195,14 @@ function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
     let c1 = c / 100;
     let c2 = c % 100;
 
-    let digits1 = <u64>load<u32>(lut + (<usize>c1 << alignof<u32>()));
-    let digits2 = <u64>load<u32>(lut + (<usize>c2 << alignof<u32>()));
+    let digits1 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>c1 << alignof<u32>()));
+    let digits2 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>c2 << alignof<u32>()));
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
 
-    digits1 = <u64>load<u32>(lut + (<usize>b1 << alignof<u32>()));
-    digits2 = <u64>load<u32>(lut + (<usize>b2 << alignof<u32>()));
+    digits1 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>b1 << alignof<u32>()));
+    digits2 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>b2 << alignof<u32>()));
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
@@ -423,8 +420,8 @@ function getCachedPower(minExp: i32): void {
 
   var index = (k >> 3) + 1;
   _K = 348 - (index << 3);	// decimal exponent no need lookup table
-  _frc_pow = unchecked(FRC_POWERS[index]);
-  _exp_pow = unchecked(<i32>EXP_POWERS[index]);
+  _frc_pow = load<u64>(changetype<usize>(FRC_POWERS) + (<usize>index << alignof<u64>()));
+  _exp_pow = load<i16>(changetype<usize>(EXP_POWERS) + (<usize>index << alignof<i16>()));
 }
 
 // @ts-ignore: decorator
@@ -475,8 +472,6 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
   var kappa = <i32>decimalCount32(p1);
   var len = sign;
 
-  var lut = changetype<ArrayBufferView>(POWERS10).dataStart;
-
   while (kappa > 0) {
     let d: u32;
     switch (kappa) {
@@ -499,7 +494,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     let tmp = ((<u64>p1) << one_exp) + p2;
     if (tmp <= delta) {
       _K += kappa;
-      grisuRound(buffer, len, delta, tmp, <u64>load<u32>(lut + (<usize>kappa << alignof<u32>())) << one_exp, wp_w_frc);
+      grisuRound(buffer, len, delta, tmp, <u64>load<u32>(changetype<usize>(POWERS10) + (<usize>kappa << alignof<u32>())) << one_exp, wp_w_frc);
       return len;
     }
   }
@@ -515,7 +510,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     --kappa;
     if (p2 < delta) {
       _K += kappa;
-      wp_w_frc *= <u64>load<u32>(lut + (<usize>-kappa << alignof<u32>()));
+      wp_w_frc *= <u64>load<u32>(changetype<usize>(POWERS10) + (<usize>-kappa << alignof<u32>()));
       grisuRound(buffer, len, delta, p2, one_frc, wp_w_frc);
       return len;
     }

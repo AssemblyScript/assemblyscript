@@ -2,7 +2,6 @@
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $f64_f64_f64_f64_f64_f64_f64_=>_i32 (func (param f64 f64 f64 f64 f64 f64 f64) (result i32)))
  (type $none_=>_f64 (func (result f64)))
@@ -16,7 +15,7 @@
  (export "step" (func $assembly/index/step))
  (export "bench" (func $assembly/index/bench))
  (export "getBody" (func $assembly/index/getBody))
- (start $start)
+ (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -113,15 +112,18 @@
   (local $6 f64)
   (local $7 i32)
   local.get $0
+  i32.const 16
+  i32.sub
   i32.load offset=12
+  i32.const 2
+  i32.shr_u
   local.set $7
-  loop $loop|0
+  loop $for-loop|0
    local.get $1
    local.get $7
    i32.lt_s
    if
     local.get $0
-    i32.load offset=4
     local.get $1
     i32.const 2
     i32.shl
@@ -155,11 +157,10 @@
     i32.const 1
     i32.add
     local.set $1
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $0
-  i32.load offset=4
   i32.load
   local.tee $1
   local.get $4
@@ -215,35 +216,11 @@
   f64.store offset=48
   local.get $7
  )
- (func $~lib/rt/__allocArray (; 4 ;) (result i32)
+ (func $assembly/index/init (; 4 ;)
   (local $0 i32)
-  (local $1 i32)
-  i32.const 16
+  i32.const 20
   i32.const 5
   call $~lib/rt/stub/__alloc
-  local.tee $0
-  i32.const 20
-  i32.const 0
-  call $~lib/rt/stub/__alloc
-  local.tee $1
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  i32.const 20
-  i32.store offset=8
-  local.get $0
-  i32.const 5
-  i32.store offset=12
-  local.get $0
- )
- (func $assembly/index/init (; 5 ;)
-  (local $0 i32)
-  (local $1 i32)
-  call $~lib/rt/__allocArray
-  local.tee $1
-  i32.load offset=4
   local.tee $0
   f64.const 0
   f64.const 0
@@ -294,11 +271,11 @@
   f64.const 2.0336868699246304e-03
   call $assembly/index/Body#constructor
   i32.store offset=16
-  local.get $1
+  local.get $0
   call $assembly/index/NBodySystem#constructor
   global.set $assembly/index/system
  )
- (func $assembly/index/NBodySystem#advance (; 6 ;) (param $0 i32)
+ (func $assembly/index/NBodySystem#advance (; 5 ;) (param $0 i32)
   (local $1 i32)
   (local $2 f64)
   (local $3 i32)
@@ -319,15 +296,18 @@
   local.get $0
   i32.load
   local.tee $12
+  i32.const 16
+  i32.sub
   i32.load offset=12
+  i32.const 2
+  i32.shr_u
   local.set $13
-  loop $loop|0
+  loop $for-loop|0
    local.get $3
    local.get $13
    i32.lt_u
    if
     local.get $12
-    i32.load offset=4
     local.get $3
     i32.const 2
     i32.shl
@@ -358,14 +338,13 @@
     i32.const 1
     i32.add
     local.set $7
-    loop $loop|1
+    loop $for-loop|1
      local.get $7
      local.get $13
      i32.lt_u
      if
       local.get $14
       local.get $12
-      i32.load offset=4
       local.get $7
       i32.const 2
       i32.shl
@@ -454,7 +433,7 @@
       i32.const 1
       i32.add
       local.set $7
-      br $loop|1
+      br $for-loop|1
      end
     end
     local.get $0
@@ -494,11 +473,11 @@
     i32.const 1
     i32.add
     local.set $3
-    br $loop|0
+    br $for-loop|0
    end
   end
  )
- (func $assembly/index/NBodySystem#energy (; 7 ;) (param $0 i32) (result f64)
+ (func $assembly/index/NBodySystem#energy (; 6 ;) (param $0 i32) (result f64)
   (local $1 f64)
   (local $2 i32)
   (local $3 i32)
@@ -512,15 +491,18 @@
   local.get $0
   i32.load
   local.tee $4
+  i32.const 16
+  i32.sub
   i32.load offset=12
+  i32.const 2
+  i32.shr_u
   local.set $5
-  loop $loop|0
+  loop $for-loop|0
    local.get $2
    local.get $5
    i32.lt_u
    if
     local.get $4
-    i32.load offset=4
     local.get $2
     i32.const 2
     i32.shl
@@ -565,14 +547,13 @@
     i32.const 1
     i32.add
     local.set $0
-    loop $loop|1
+    loop $for-loop|1
      local.get $0
      local.get $5
      i32.lt_u
      if
       local.get $7
       local.get $4
-      i32.load offset=4
       local.get $0
       i32.const 2
       i32.shl
@@ -614,53 +595,55 @@
       i32.const 1
       i32.add
       local.set $0
-      br $loop|1
+      br $for-loop|1
      end
     end
     local.get $2
     i32.const 1
     i32.add
     local.set $2
-    br $loop|0
+    br $for-loop|0
    end
   end
   local.get $1
  )
- (func $assembly/index/step (; 8 ;) (result f64)
+ (func $assembly/index/step (; 7 ;) (result f64)
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#advance
   global.get $assembly/index/system
   call $assembly/index/NBodySystem#energy
  )
- (func $assembly/index/bench (; 9 ;) (param $0 i32)
+ (func $assembly/index/bench (; 8 ;) (param $0 i32)
   (local $1 i32)
-  loop $loop|0
-   block $break|0
-    local.get $1
-    local.get $0
-    i32.ge_u
-    br_if $break|0
+  loop $for-loop|0
+   local.get $1
+   local.get $0
+   i32.lt_u
+   if
     global.get $assembly/index/system
     call $assembly/index/NBodySystem#advance
     local.get $1
     i32.const 1
     i32.add
     local.set $1
-    br $loop|0
+    br $for-loop|0
    end
   end
  )
- (func $assembly/index/getBody (; 10 ;) (param $0 i32) (result i32)
+ (func $assembly/index/getBody (; 9 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   global.get $assembly/index/system
   i32.load
   local.tee $1
+  i32.const 16
+  i32.sub
   i32.load offset=12
+  i32.const 2
+  i32.shr_u
   i32.lt_u
   if (result i32)
    local.get $1
-   i32.load offset=4
    local.get $0
    i32.const 2
    i32.shl
@@ -670,7 +653,7 @@
    i32.const 0
   end
  )
- (func $start (; 11 ;)
+ (func $~start (; 10 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16
