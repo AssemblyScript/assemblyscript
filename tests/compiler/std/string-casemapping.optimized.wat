@@ -1924,8 +1924,8 @@
     i32.add
     i32.load16_u
     local.tee $1
-    i32.const -128
-    i32.and
+    i32.const 7
+    i32.shr_u
     if
      block $for-continue|0
       local.get $6
@@ -2373,8 +2373,8 @@
     i32.add
     i32.load16_u
     local.tee $1
-    i32.const -128
-    i32.and
+    i32.const 7
+    i32.shr_u
     if
      block $for-continue|0
       local.get $5

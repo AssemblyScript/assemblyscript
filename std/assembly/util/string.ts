@@ -491,7 +491,7 @@ export const enum CharCode {
 // @ts-ignore: decorator
 @inline
 export function isAscii(c: u32): bool {
-  return !(c & ~0x7F);
+  return !(c >> 7);
 }
 
 // @ts-ignore: decorator

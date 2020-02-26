@@ -3320,8 +3320,8 @@
      local.get $8
      local.set $9
      local.get $9
-     i32.const -128
-     i32.and
+     i32.const 7
+     i32.shr_u
      i32.eqz
      if
       local.get $2
@@ -3900,8 +3900,8 @@
      local.get $6
      local.set $7
      local.get $7
-     i32.const -128
-     i32.and
+     i32.const 7
+     i32.shr_u
      i32.eqz
      if
       local.get $2
