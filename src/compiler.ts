@@ -3456,6 +3456,14 @@ export class Compiler extends DiagnosticEmitter {
             expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
             wrap = false;
           }
+        // same size
+        } else {
+          if (!explicit && !this.options.isWasm64 && fromType.is(TypeFlags.POINTER) && !toType.is(TypeFlags.POINTER)) {
+            this.warning(
+              DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
+              reportNode.range, fromType.toString(), toType.toString()
+            );
+          }
         }
       }
     }

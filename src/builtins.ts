@@ -730,7 +730,7 @@ export function compileCall(
       }
       return module.i32(signatureReference.parameterTypes.length);
     }
-    case BuiltinNames.sizeof: { // sizeof<T!>() -> usize
+    case BuiltinNames.sizeof: { // sizeof<T!>() -> usize*
       compiler.currentType = compiler.options.usizeType;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
@@ -745,23 +745,9 @@ export function compileCall(
         );
         return module.unreachable();
       }
-      if (compiler.options.isWasm64) {
-        // implicitly wrap if contextual type is a 32-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
-          compiler.currentType = Type.u32;
-          return module.i32(byteSize);
-        }
-        return module.i64(byteSize, 0);
-      } else {
-        // implicitly extend if contextual type is a 64-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
-          compiler.currentType = Type.u64;
-          return module.i64(byteSize, 0);
-        }
-        return module.i32(byteSize);
-      }
+      return contextualUsize(compiler, i64_new(byteSize), contextualType);
     }
-    case BuiltinNames.alignof: { // alignof<T!>() -> usize
+    case BuiltinNames.alignof: { // alignof<T!>() -> usize*
       compiler.currentType = compiler.options.usizeType;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
@@ -776,24 +762,9 @@ export function compileCall(
         );
         return module.unreachable();
       }
-      let alignLog2 = ctz<i32>(byteSize);
-      if (compiler.options.isWasm64) {
-        // implicitly wrap if contextual type is a 32-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
-          compiler.currentType = Type.u32;
-          return module.i32(alignLog2);
-        }
-        return module.i64(alignLog2, 0);
-      } else {
-        // implicitly extend if contextual type is a 64-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
-          compiler.currentType = Type.u64;
-          return module.i64(alignLog2, 0);
-        }
-        return module.i32(alignLog2);
-      }
+      return contextualUsize(compiler, i64_new(ctz<i32>(byteSize)), contextualType);
     }
-    case BuiltinNames.offsetof: { // offsetof<T!>(fieldName?: string) -> usize
+    case BuiltinNames.offsetof: { // offsetof<T!>(fieldName?: string) -> usize*
       compiler.currentType = compiler.options.usizeType;
       if (
         checkTypeRequired(typeArguments, reportNode, compiler) |
@@ -842,21 +813,7 @@ export function compileCall(
       } else {
         offset = classType.nextMemoryOffset;
       }
-      if (compiler.options.isWasm64) {
-        // implicitly wrap if contextual type is a 32-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size <= 32) {
-          compiler.currentType = Type.u32;
-          return module.i32(offset);
-        }
-        return module.i64(offset);
-      } else {
-        // implicitly extend if contextual type is a 64-bit integer
-        if (contextualType.is(TypeFlags.INTEGER) && contextualType.size == 64) {
-          compiler.currentType = Type.u64;
-          return module.i64(offset);
-        }
-        return module.i32(offset);
-      }
+      return contextualUsize(compiler, i64_new(offset), contextualType);
     }
     case BuiltinNames.nameof: {
       let resultType = evaluateConstantType(compiler, typeArguments, operands, reportNode);
@@ -5224,4 +5181,44 @@ function checkArgsOptional(
     return 1;
   }
   return 0;
+}
+
+/** Makes an usize constant matching contextual type if reasonable. */
+function contextualUsize(compiler: Compiler, value: I64, contextualType: Type): ExpressionRef {
+  var module = compiler.module;
+  // Check if contextual type fits
+  if (contextualType != Type.auto && contextualType.is(TypeFlags.INTEGER | TypeFlags.VALUE)) {
+    switch (contextualType.kind) {
+      case TypeKind.I32: {
+        if (i64_is_i32(value)) {
+          compiler.currentType = Type.i32;
+          return module.i32(i64_low(value));
+        }
+        break;
+      }
+      case TypeKind.U32: {
+        if (i64_is_u32(value)) {
+          compiler.currentType = Type.u32;
+          return module.i32(i64_low(value));
+        }
+        break;
+      }
+      case TypeKind.I64:
+      case TypeKind.U64: {
+        compiler.currentType = contextualType;
+        return module.i64(i64_low(value), i64_high(value));
+      }
+      // isize/usize falls through
+      // small int is probably not intended
+    }
+  }
+  // Default to usize
+  if (compiler.options.isWasm64) {
+    compiler.currentType = Type.usize64;
+    return module.i64(i64_low(value), i64_high(value));
+  } else {
+    compiler.currentType = Type.usize32;
+    assert(!i64_high(value));
+    return module.i32(i64_low(value));
+  }
 }

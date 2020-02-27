@@ -133,6 +133,7 @@ export class Type {
 
   /** Returns the closest int type representing this type. */
   get intType(): Type {
+    if (this == Type.auto) return this; // keep auto as a hint
     switch (this.kind) {
       case TypeKind.I8: return Type.i8;
       case TypeKind.I16: return Type.i16;

@@ -8,7 +8,7 @@ import { idof } from "./builtins";
 
 @sealed export abstract class String {
 
-  @lazy static readonly MAX_LENGTH: i32 = BLOCK_MAXSIZE >>> alignof<u16>();
+  @lazy static readonly MAX_LENGTH: i32 = <i32>(BLOCK_MAXSIZE >>> alignof<u16>());
 
   static fromCharCode(unit: i32, surr: i32 = -1): String {
     var hasSur = surr > 0;
@@ -446,13 +446,13 @@ import { idof } from "./builtins";
     if (!limit) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
     if (separator === null) return [this];
     var length: isize = this.length;
-    var sepLen: isize = separator.length;
+    var sepLen = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
       if (!length) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>()));  // retains
       // split by chars
       length = min<isize>(length, <isize>limit);
-      let result = changetype<Array<String>>(__allocArray(length, alignof<String>(), idof<Array<String>>())); // retains
+      let result = changetype<Array<String>>(__allocArray(<i32>length, alignof<String>(), idof<Array<String>>())); // retains
       // @ts-ignore: cast
       let resultStart = result.dataStart as usize;
       for (let i: isize = 0; i < length; ++i) {
@@ -578,7 +578,7 @@ import { idof } from "./builtins";
           // monkey patch
           store<u16>(codes + (j << 1), c - 26);
         } else {
-          let index = -1;
+          let index: usize = -1;
           // Fast range check. See first and last rows in specialsUpper table
           if (c - 0x00DF <= 0xFB17 - 0x00DF) {
             index = <usize>bsearch(c, changetype<usize>(SPECIALS_UPPER), specialsUpperLen);
