@@ -1977,7 +1977,7 @@ export class Parser extends DiagnosticEmitter {
         tn.skip(Token.SEMICOLON);
         return retIndex;
       }
-      if (!tn.skipIdentifier()) {
+      if (!tn.skipIdentifier(IdentifierHandling.ALWAYS)) {
         this.error(
           DiagnosticCode.Identifier_expected,
           tn.range()
@@ -3901,7 +3901,7 @@ export class Parser extends DiagnosticEmitter {
         }
         // PropertyAccessExpression
         case Token.DOT: {
-          if (tn.skipIdentifier()) { // expr '.' Identifier
+          if (tn.skipIdentifier(IdentifierHandling.ALWAYS)) { // expr '.' Identifier
             let next = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
             expr = Node.createPropertyAccessExpression(
               expr,

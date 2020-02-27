@@ -2188,7 +2188,7 @@ export abstract class Element {
   }
 
   /** Looks up the element with the specified name relative to this element, like in JS. */
-  abstract lookup(name: string): Element | null;
+  /* abstract */ lookup(name: string): Element | null { return unreachable(); }
 
   /** Adds an element as a member of this one. Reports and returns `false` if a duplicate. */
   add(name: string, element: DeclaredElement): bool {

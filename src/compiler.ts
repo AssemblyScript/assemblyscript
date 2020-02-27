@@ -549,7 +549,14 @@ export class Compiler extends DiagnosticEmitter {
   /** Applies the respective module exports for the specified file. */
   private ensureModuleExports(file: File): void {
     var members = file.exports;
-    if (members) for (let [name, member] of members) this.ensureModuleExport(name, member);
+    if (members) {
+      // for (let [memberName, member] of members) {
+      for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+        let memberName = unchecked(_keys[i]);
+        let member = members.get(memberName)!;
+        this.ensureModuleExport(memberName, member);
+      }
+    }
     var exportsStar = file.exportsStar;
     if (exportsStar)  {
       for (let i = 0, k = exportsStar.length; i < k; ++i) this.ensureModuleExports(exportsStar[i]);

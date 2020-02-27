@@ -168,14 +168,14 @@ export abstract class ExportsWalker {
     assert(false);
   }
 
-  abstract visitGlobal(name: string, element: Global): void;
-  abstract visitEnum(name: string, element: Enum): void;
-  abstract visitFunction(name: string, element: Function): void;
-  abstract visitClass(name: string, element: Class): void;
-  abstract visitInterface(name: string, element: Interface): void;
-  abstract visitField(name: string, element: Field): void;
-  abstract visitNamespace(name: string, element: Element): void;
-  abstract visitAlias(name: string, element: Element, originalName: string): void;
+  /* abstract */ visitGlobal(name: string, element: Global): void { unreachable(); }
+  /* abstract */ visitEnum(name: string, element: Enum): void { unreachable(); }
+  /* abstract */ visitFunction(name: string, element: Function): void { unreachable(); }
+  /* abstract */ visitClass(name: string, element: Class): void { unreachable(); }
+  /* abstract */ visitInterface(name: string, element: Interface): void { unreachable(); }
+  /* abstract */ visitField(name: string, element: Field): void { unreachable(); }
+  /* abstract */ visitNamespace(name: string, element: Element): void { unreachable(); }
+  /* abstract */ visitAlias(name: string, element: Element, originalName: string): void { unreachable(); }
 }
 
 /** A WebIDL definitions builder. */
