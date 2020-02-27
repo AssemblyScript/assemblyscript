@@ -1563,9 +1563,9 @@
   local.set $1
   i32.const 12
   local.set $6
-  i32.const 23
+  i32.const 24
   local.set $7
-  i32.const 23
+  i32.const 24
   local.set $8
   i32.const 128
   i32.const 5

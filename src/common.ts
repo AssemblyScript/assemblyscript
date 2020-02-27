@@ -181,7 +181,7 @@ export namespace CommonNames {
   export const Anyref = "Anyref";
   export const String = "String";
   export const Array = "Array";
-  export const FixedArray = "FixedArray";
+  export const StaticArray = "StaticArray";
   export const Set = "Set";
   export const Map = "Map";
   export const ArrayBufferView = "ArrayBufferView";
@@ -213,6 +213,7 @@ export namespace CommonNames {
   export const typeinfo = "__typeinfo";
   export const instanceof_ = "__instanceof";
   export const visit = "__visit";
+  export const allocBuffer = "__allocBuffer";
   export const allocArray = "__allocArray";
 }
 
