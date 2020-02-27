@@ -1,7 +1,7 @@
 import { itoa, dtoa, itoa_stream, dtoa_stream, MAX_DOUBLE_LENGTH } from "./number";
 import { ipow32 } from "../math";
 
-// All tables use two staged lookup tables (aka static tries) due to unicode has
+// All tables stored as two staged lookup tables (aka static tries) due to unicode has
 // a wide range of symbols [0 - 0x110000] which can't represent in memory as is.
 // Multistage Table approach described in Unicode spec ch 5, p.196:
 // https://www.unicode.org/versions/Unicode12.0.0/ch05.pdf
@@ -600,6 +600,7 @@ function codePointBefore(buffer: usize, index: i32): i32 {
   return (c & 0xF800) == 0xD800 ? 0xFFFD : c;
 }
 
+// Search routine for two-staged lookup tables
 function stagedBinaryLookup(table: usize, c: u32): bool {
   return <bool>((load<u8>(table + (<u32>load<u8>(table + (c >>> 8)) << 5) + ((c & 255) >> 3)) >>> (c & 7)) & 1);
 }
