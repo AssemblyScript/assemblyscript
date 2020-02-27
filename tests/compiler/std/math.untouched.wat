@@ -2038,10 +2038,10 @@
    f64.const -0.4999997485802103
    f64.add
    local.set $13
-   local.get $13
    f64.const -0.25089342214237154
    local.get $12
    f64.mul
+   local.get $13
    f64.add
    local.set $13
    local.get $13
@@ -8762,8 +8762,8 @@
    i32.ge_u
    if
     local.get $2
-    i32.const 2
-    i32.mul
+    i32.const 1
+    i32.shl
     i32.const 0
     i32.eq
     if
@@ -8785,8 +8785,8 @@
      i32.const 1
     else
      local.get $2
-     i32.const 2
-     i32.mul
+     i32.const 1
+     i32.shl
      i32.const -16777216
      i32.ge_u
     end
@@ -8869,35 +8869,35 @@
    f64.convert_i32_s
    f64.add
    local.set $12
+   local.get $11
+   local.get $11
+   f64.mul
+   local.set $13
    f64.const 0.4811247078767291
    local.get $11
    f64.mul
    f64.const -0.7213476299867769
    f64.add
-   local.set $13
+   local.set $14
    f64.const 1.4426950186867042
    local.get $11
    f64.mul
    local.get $12
    f64.add
-   local.set $14
-   local.get $11
-   local.get $11
-   f64.mul
    local.set $15
-   local.get $13
    f64.const -0.36051725506874704
-   local.get $15
-   f64.mul
-   f64.add
-   local.set $13
    local.get $13
-   local.get $15
    f64.mul
    local.get $14
    f64.add
-   local.set $13
+   local.set $14
+   local.get $14
    local.get $13
+   f64.mul
+   local.get $15
+   f64.add
+   local.set $14
+   local.get $14
    f32.demote_f64
   end
   return

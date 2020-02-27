@@ -168,9 +168,9 @@ export function log2f_lut(x: f32): f32 {
   // if (WANT_ROUNDING && predict_false(ix == 0x3f800000)) return 0;
   if (ux - 0x00800000 >= 0x7F800000 - 0x00800000) {
     // x < 0x1p-126 or inf or nan.
-    if (ux * 2 == 0) return -Infinity;
+    if ((ux << 1) == 0) return -Infinity;
     if (ux == 0x7F800000) return x; // log2(inf) == inf.
-    if ((ux >> 31) || ux * 2 >= 0xFF000000) return (x - x) / (x - x);
+    if ((ux >> 31) || (ux << 1) >= 0xFF000000) return (x - x) / (x - x);
     // x is subnormal, normalize it.
     ux = reinterpret<u32>(x * Ox1p23f);
     ux -= 23 << 23;
@@ -193,11 +193,11 @@ export function log2f_lut(x: f32): f32 {
   var y0 = logc + <f64>k;
 
   // Pipelined polynomial evaluation to approximate log1p(r)/ln2.
+  var r2 = r * r;
   var y  = A1 * r + A2;
   var p  = A3 * r + y0;
-  var r2 = r * r;
-  y += A0 * r2;
-  y  = y * r2 + p;
+      y  = A0 * r2 + y;
+      y  = y * r2 + p;
 
   return <f32>y;
 }
@@ -278,7 +278,7 @@ export function logf_lut(x: f32): f32 {
   // Pipelined polynomial evaluation to approximate log1p(r).
   var r2 = r * r;
   var y  = A1 * r + A2;
-  y += A0 * r2;
+  y = A0 * r2 + y;
   y = y * r2 + (y0 + r);
 
   return <f32>y;
