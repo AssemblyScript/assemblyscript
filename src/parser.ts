@@ -64,7 +64,7 @@ import {
   ExportMember,
   ExportStatement,
   ExpressionStatement,
-  ForStatement,
+  ForOfStatement,
   FunctionDeclaration,
   IfStatement,
   ImportDeclaration,
@@ -846,14 +846,15 @@ export class Parser extends DiagnosticEmitter {
     tn: Tokenizer,
     flags: CommonFlags,
     decorators: DecoratorNode[] | null,
-    startPos: i32
+    startPos: i32,
+    isFor: bool = false
   ): VariableStatement | null {
 
     // at ('const' | 'let' | 'var'): VariableDeclaration (',' VariableDeclaration)* ';'?
 
     var members = new Array<VariableDeclaration>();
     do {
-      let member = this.parseVariableDeclaration(tn, flags, decorators);
+      let member = this.parseVariableDeclaration(tn, flags, decorators, isFor);
       if (!member) return null;
       members.push(<VariableDeclaration>member);
     } while (tn.skip(Token.COMMA));
@@ -866,7 +867,8 @@ export class Parser extends DiagnosticEmitter {
   parseVariableDeclaration(
     tn: Tokenizer,
     parentFlags: CommonFlags,
-    parentDecorators: DecoratorNode[] | null
+    parentDecorators: DecoratorNode[] | null,
+    isFor: bool = false
   ): VariableDeclaration | null {
 
     // before: Identifier (':' Type)? ('=' Expression)?
@@ -892,7 +894,7 @@ export class Parser extends DiagnosticEmitter {
 
     var type: TypeNode | null = null;
     if (tn.skip(Token.COLON)) {
-      type = this.parseType(tn);
+      type = this.parseType(tn, true);
     }
 
     var initializer: Expression | null = null;
@@ -905,7 +907,7 @@ export class Parser extends DiagnosticEmitter {
       }
       initializer = this.parseExpression(tn, Precedence.COMMA + 1);
       if (!initializer) return null;
-    } else {
+    } else if (!isFor) {
       if (flags & CommonFlags.CONST) {
         if (!(flags & CommonFlags.AMBIENT)) {
           this.error(
@@ -2853,7 +2855,7 @@ export class Parser extends DiagnosticEmitter {
 
   parseForStatement(
     tn: Tokenizer
-  ): ForStatement | null {
+  ): Statement | null {
 
     // at 'for': '(' Statement? Expression? ';' Expression? ')' Statement
 
@@ -2863,15 +2865,69 @@ export class Parser extends DiagnosticEmitter {
       let initializer: Statement | null = null;
 
       if (tn.skip(Token.CONST)) {
-        initializer = this.parseVariable(tn, CommonFlags.CONST, null, tn.tokenPos);
+        initializer = this.parseVariable(tn, CommonFlags.CONST, null, tn.tokenPos, true);
       } else if (tn.skip(Token.LET)) {
-        initializer = this.parseVariable(tn, CommonFlags.LET, null, tn.tokenPos);
+        initializer = this.parseVariable(tn, CommonFlags.LET, null, tn.tokenPos, true);
       } else if (tn.skip(Token.VAR)) {
-        initializer = this.parseVariable(tn, CommonFlags.NONE, null, tn.tokenPos);
+        initializer = this.parseVariable(tn, CommonFlags.NONE, null, tn.tokenPos, true);
 
       } else if (!tn.skip(Token.SEMICOLON)) {
         initializer = this.parseExpressionStatement(tn);
         if (!initializer) return null;
+      }
+
+      if (initializer) {
+        if (tn.skip(Token.OF)) {
+          // TODO: for (let [key, val] of ...)
+          if (initializer.kind == NodeKind.EXPRESSION) {
+            if ((<ExpressionStatement>initializer).expression.kind != NodeKind.IDENTIFIER) {
+              this.error(
+                DiagnosticCode.Identifier_expected,
+                initializer.range
+              );
+              return null;
+            }
+            return this.parseForOfStatement(tn, startPos, initializer);
+          }
+          if (initializer.kind == NodeKind.VARIABLE) {
+            let declarations = (<VariableStatement>initializer).declarations;
+            for (let i = 0, k = declarations.length; i < k; ++i) {
+              let declaration = declarations[i];
+              if (declaration.initializer) {
+                this.error(
+                  DiagnosticCode.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer,
+                  declaration.initializer.range
+                ); // recoverable
+              }
+            }
+            return this.parseForOfStatement(tn, startPos, initializer);
+          }
+          this.error(
+            DiagnosticCode.Identifier_expected,
+            initializer.range
+          );
+          return null;
+        }
+        // non-for..of needs type or initializer
+        if (initializer.kind == NodeKind.VARIABLE) {
+          let declarations = (<VariableStatement>initializer).declarations;
+          for (let i = 0, k = declarations.length; i < k; ++i) {
+            let declaration = declarations[i];
+            if (!declaration.initializer) {
+              if (declaration.flags & CommonFlags.CONST) {
+                this.error(
+                  DiagnosticCode._const_declarations_must_be_initialized,
+                  declaration.name.range
+                );
+              } else if (!declaration.type) {
+                this.error(
+                  DiagnosticCode.Type_expected,
+                  declaration.name.range.atEnd
+                );
+              }
+            }
+          }
+        }
       }
 
       if (tn.token == Token.SEMICOLON) {
@@ -2928,6 +2984,36 @@ export class Parser extends DiagnosticEmitter {
       );
     }
     return null;
+  }
+
+  parseForOfStatement(
+    tn: Tokenizer,
+    startPos: i32,
+    variable: Statement,
+  ): ForOfStatement | null {
+
+    // at 'of': Expression ')' Statement
+
+    var iterable = this.parseExpression(tn);
+    if (!iterable) return null;
+
+    if (!tn.skip(Token.CLOSEPAREN)) {
+      this.error(
+        DiagnosticCode._0_expected,
+        tn.range(), ")"
+      );
+      return null;
+    }
+
+    var statement = this.parseStatement(tn);
+    if (!statement) return null;
+
+    return Node.createForOfStatement(
+      variable,
+      iterable,
+      statement,
+      tn.range(startPos, tn.pos)
+    );
   }
 
   parseIfStatement(

@@ -70,6 +70,7 @@ export enum NodeKind {
   EXPORTIMPORT,
   EXPRESSION,
   FOR,
+  FOROF,
   IF,
   IMPORT,
   RETURN,
@@ -831,6 +832,20 @@ export abstract class Node {
     stmt.initializer = initializer;
     stmt.condition = condition;
     stmt.incrementor = incrementor;
+    stmt.statement = statement;
+    return stmt;
+  }
+
+  static createForOfStatement(
+    variable: Statement,
+    iterable: Expression,
+    statement: Statement,
+    range: Range
+  ): ForOfStatement {
+    var stmt = new ForOfStatement();
+    stmt.range = range;
+    stmt.variable = variable;
+    stmt.iterable = iterable;
     stmt.statement = statement;
     return stmt;
   }
@@ -1844,15 +1859,24 @@ export class FieldDeclaration extends VariableLikeDeclarationStatement {
 export class ForStatement extends Statement {
   kind = NodeKind.FOR;
 
-  /**
-   * Initializer statement, if present.
-   * Either a {@link VariableStatement} or {@link ExpressionStatement}.
-   */
+  /** Initializer statement, if present. Either a `VariableStatement` or `ExpressionStatement`. */
   initializer: Statement | null;
   /** Condition expression, if present. */
   condition: Expression | null;
   /** Incrementor expression, if present. */
   incrementor: Expression | null;
+  /** Statement being looped over. */
+  statement: Statement;
+}
+
+/** Represents a `for..of` statement. */
+export class ForOfStatement extends Statement {
+  kind = NodeKind.FOROF;
+
+  /** Variable statement. Either a `VariableStatement` or `ExpressionStatement` of `IdentifierExpression`. */
+  variable: Statement;
+  /** Iterable expression being iterated. */
+  iterable: Expression;
   /** Statement being looped over. */
   statement: Statement;
 }

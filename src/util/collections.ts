@@ -11,7 +11,11 @@ export function makeArray<V>(original: Array<V> | null = null): Array<V> {
 export function makeSet<V>(original: Set<V> | null = null): Set<V> {
   if (original) {
     let cloned = new Set<V>();
-    for (let v of original) cloned.add(v);
+    // for (let v of original) {
+    for (let _values = Set_values(original), i = 0, k = _values.length; i < k; ++i) {
+      let v = unchecked(_values[i]);
+      cloned.add(v);
+    }
     return cloned;
   }
   return new Set<V>();
@@ -20,10 +24,20 @@ export function makeSet<V>(original: Set<V> | null = null): Set<V> {
 export function makeMap<K,V>(original: Map<K,V> | null = null, overrides: Map<K,V> | null = null): Map<K,V> {
   var cloned = new Map<K,V>();
   if (original) {
-    for (let [k, v] of original) cloned.set(k, v);
-    if (overrides) for (let [k, v] of overrides) cloned.set(k, v);
-  } else if (overrides) {
-    for (let [k, v] of overrides) cloned.set(k, v);
+    // for (let [k, v] of original) {
+    for (let _keys = Map_keys(original), i = 0, k = _keys.length; i < k; ++i) {
+      let k = unchecked(_keys[i]);
+      let v = original.get(k)!;
+      cloned.set(k, v);
+    }
+  }
+  if (overrides) {
+    // for (let [k, v] of overrides) {
+    for (let _keys = Map_keys(overrides), i = 0, k = _keys.length; i < k; ++i) {
+      let k = unchecked(_keys[i]);
+      let v = overrides.get(k)!;
+      cloned.set(k, v);
+    }
   }
   return cloned;
 }

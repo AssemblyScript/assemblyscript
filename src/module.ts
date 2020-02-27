@@ -1477,7 +1477,11 @@ export class Module {
 
   dispose(): void {
     assert(this.ref);
-    for (let ptr of this.cachedStrings.values()) binaryen._free(ptr);
+    // for (let ptr of this.cachedStrings.values()) {
+    for (let _values = Map_values(this.cachedStrings), i = 0, k = _values.length; i < k; ++i) {
+      let ptr = unchecked(_values[i]);
+      binaryen._free(ptr);
+    }
     this.cachedStrings = new Map();
     binaryen._free(this.lit);
     binaryen._free(this.cachedPrecomputeNames);

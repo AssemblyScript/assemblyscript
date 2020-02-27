@@ -4695,7 +4695,9 @@ export function compileVisitGlobals(compiler: Compiler): void {
   // this function is @lazy: make sure it exists
   compiler.compileFunction(visitInstance, true);
 
-  for (let element of compiler.program.elementsByName.values()) {
+  // for (let element of compiler.program.elementsByName.values()) {
+  for (let _values = Map_values(compiler.program.elementsByName), i = 0, k = _values.length; i < k; ++i) {
+    let element = unchecked(_values[i]);
     if (element.kind != ElementKind.GLOBAL) continue;
     let global = <Global>element;
     let globalType = global.type;
@@ -4775,9 +4777,12 @@ export function compileVisitMembers(compiler: Compiler): void {
   );
 
   var lastId = 0;
-  for (let [id, instance] of managedClasses) {
+  // for (let [instanceId, instance] of managedClasses) {
+  for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
+    let instanceId = _keys[i];
+    let instance = managedClasses.get(instanceId)!;
     assert(instance.type.isManaged);
-    assert(id == lastId++);
+    assert(instanceId == lastId++);
 
     let visitImpl: Element | null;
     let code = new Array<ExpressionRef>();
@@ -4811,7 +4816,9 @@ export function compileVisitMembers(compiler: Compiler): void {
     } else {
       let members = instance.members;
       if (members) {
-        for (let member of members.values()) {
+        // for (let member of members.values()) {
+        for (let _values = Map_values(members), j = 0, l = _values.length; j < l; ++j) {
+          let member = unchecked(_values[j]);
           if (member.kind == ElementKind.FIELD) {
             if ((<Field>member).parent === instance) {
               let fieldType = (<Field>member).type;
@@ -4843,14 +4850,15 @@ export function compileVisitMembers(compiler: Compiler): void {
     let block = relooper.addBlock(
       module.flatten(code)
     );
-    relooper.addBranchForSwitch(outer, block, [ id ]);
+    relooper.addBranchForSwitch(outer, block, [ instanceId ]);
     blocks.push(block);
   }
-  for (let [id, instance] of managedClasses) {
+  // for (let [instanceId, instance] of managedClasses) {
+  for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
+    let instanceId = unchecked(_keys[i]);
+    let instance = managedClasses.get(instanceId)!;
     let base = instance.base;
-    if (base) {
-      relooper.addBranch(blocks[id], blocks[base.id]);
-    }
+    if (base) relooper.addBranch(blocks[instanceId], blocks[base.id]);
   }
   blocks.push(
     relooper.addBlock(
@@ -4892,8 +4900,11 @@ export function compileRTTI(compiler: Compiler): void {
   var setPrototype = program.setPrototype;
   var mapPrototype = program.mapPrototype;
   var lastId = 0;
-  for (let [id, instance] of managedClasses) {
-    assert(id == lastId++);
+  // for (let [instanceId, instance] of managedClasses) {
+  for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
+    let instanceId = unchecked(_keys[i]);
+    let instance = managedClasses.get(instanceId)!;
+    assert(instanceId == lastId++);
     let flags: TypeinfoFlags = 0;
     if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
     if (instance !== abvInstance && instance.extends(abvPrototype)) {
@@ -4956,7 +4967,9 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
   // if (__instanceof(ref, ID[i])) return true
   var instances = prototype.instances;
   if (instances !== null && instances.size) {
-    for (let instance of instances.values()) {
+    // for (let instance of instances.values()) {
+    for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+      let instance = unchecked(_values[i]);
       stmts.push(
         module.if(
           module.call(instanceofInstance.internalName, [

@@ -476,7 +476,7 @@ export declare function _BinaryenBinary(module: BinaryenModuleRef, op: BinaryenO
 export declare function _BinaryenSelect(module: BinaryenModuleRef, condition: BinaryenExpressionRef, ifTrue: BinaryenExpressionRef, ifFalse: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 export declare function _BinaryenDrop(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenReturn(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
-export declare function _BinaryenHost(module: BinaryenModuleRef, op: BinaryenOp, name: usize | 0, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenHost(module: BinaryenModuleRef, op: BinaryenOp, name: usize, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
 export declare function _BinaryenNop(module: BinaryenModuleRef): BinaryenExpressionRef;
 export declare function _BinaryenUnreachable(module: BinaryenModuleRef): BinaryenExpressionRef;
 

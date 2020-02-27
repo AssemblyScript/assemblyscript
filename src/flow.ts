@@ -413,9 +413,12 @@ export class Flow {
 
   /** Tests if this flow has any scoped locals that must be free'd. */
   get hasScopedLocals(): bool {
-    if (this.scopedLocals) {
-      for (let scopedLocal of this.scopedLocals.values()) {
-        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
+    var scopedLocals = this.scopedLocals;
+    if (scopedLocals) {
+      // for (let local of scopedLocals.values()) {
+      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
+        let local = unchecked(_values[i]);
+        if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
           return true;
         }
       }
@@ -425,10 +428,13 @@ export class Flow {
 
   /** Frees this flow's scoped variables and returns its parent flow. */
   freeScopedLocals(): void {
-    if (this.scopedLocals) {
-      for (let scopedLocal of this.scopedLocals.values()) {
-        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
-          this.freeTempLocal(scopedLocal);
+    var scopedLocals = this.scopedLocals;
+    if (scopedLocals) {
+      // for (let local of scopedLocals.values()) {
+      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
+        let local = unchecked(_values[i]);
+        if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
+          this.freeTempLocal(local);
         }
       }
       this.scopedLocals = null;

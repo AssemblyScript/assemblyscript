@@ -2913,7 +2913,10 @@ export class Resolver extends DiagnosticEmitter {
       assert(!pendingClasses.includes(base));
       let baseMembers = base.members;
       if (baseMembers) {
-        for (let [baseMemberName, baseMember] of baseMembers) {
+        // for (let [baseMemberName, baseMember] of baseMembers) {
+        for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
+          let baseMemberName = unchecked(_keys[i]);
+          let baseMember = baseMembers.get(baseMemberName)!;
           instanceMembers.set(baseMemberName, baseMember);
         }
       }
@@ -2924,7 +2927,9 @@ export class Resolver extends DiagnosticEmitter {
     var prototype = instance.prototype;
     var instanceMemberPrototypes = prototype.instanceMembers;
     if (instanceMemberPrototypes) {
-      for (let member of instanceMemberPrototypes.values()) {
+      // for (let member of instanceMemberPrototypes.values()) {
+      for (let _values = Map_values(instanceMemberPrototypes), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
         switch (member.kind) {
 
           case ElementKind.FIELD_PROTOTYPE: {
@@ -3031,8 +3036,12 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Fully resolve operator overloads (don't have type parameters on their own)
-    for (let [kind, overloadPrototype] of prototype.overloadPrototypes) {
-      assert(kind != OperatorKind.INVALID);
+    var overloadPrototypes = prototype.overloadPrototypes;
+    // for (let [overloadKind, overloadPrototype] of overloadPrototypes) {
+    for (let _keys = Map_keys(overloadPrototypes), i = 0, k = _keys.length; i < k; ++i) {
+      let overloadKind = unchecked(_keys[i]);
+      let overloadPrototype = overloadPrototypes.get(overloadKind)!;
+      assert(overloadKind != OperatorKind.INVALID);
       let operatorInstance: Function | null;
       if (overloadPrototype.is(CommonFlags.INSTANCE)) {
         let boundPrototype = overloadPrototype.toBound(instance);
@@ -3057,7 +3066,7 @@ export class Resolver extends DiagnosticEmitter {
       // the corresponding value, thus requiring a matching return type, while a
       // static overload works like any other overload.
       if (operatorInstance.is(CommonFlags.INSTANCE)) {
-        switch (kind) {
+        switch (overloadKind) {
           case OperatorKind.PREFIX_INC:
           case OperatorKind.PREFIX_DEC:
           case OperatorKind.POSTFIX_INC:
@@ -3074,12 +3083,12 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
       }
-      if (!overloads.has(kind)) {
-        overloads.set(kind, operatorInstance);
-        if (kind == OperatorKind.INDEXED_GET || kind == OperatorKind.INDEXED_SET) {
+      if (!overloads.has(overloadKind)) {
+        overloads.set(overloadKind, operatorInstance);
+        if (overloadKind == OperatorKind.INDEXED_GET || overloadKind == OperatorKind.INDEXED_SET) {
           let index = instance.indexSignature;
           if (!index) instance.indexSignature = index = new IndexSignature(instance);
-          if (kind == OperatorKind.INDEXED_GET) {
+          if (overloadKind == OperatorKind.INDEXED_GET) {
             index.setType(operatorInstance.signature.returnType);
           }
         }

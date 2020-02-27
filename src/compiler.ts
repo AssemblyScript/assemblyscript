@@ -126,6 +126,7 @@ import {
   ExpressionStatement,
   FieldDeclaration,
   ForStatement,
+  ForOfStatement,
   FunctionDeclaration,
   IfStatement,
   ImportStatement,
@@ -1827,6 +1828,10 @@ export class Compiler extends DiagnosticEmitter {
         stmt = this.compileForStatement(<ForStatement>statement);
         break;
       }
+      case NodeKind.FOROF: {
+        stmt = this.compileForOfStatement(<ForOfStatement>statement);
+        break;
+      }
       case NodeKind.IF: {
         stmt = this.compileIfStatement(<IfStatement>statement);
         break;
@@ -2326,6 +2331,16 @@ export class Compiler extends DiagnosticEmitter {
     }
     this.currentFlow = outerFlow;
     return module.flatten(stmts);
+  }
+
+  private compileForOfStatement(
+    statement: ForOfStatement
+  ): ExpressionRef {
+    this.error(
+      DiagnosticCode.Not_implemented,
+      statement.range
+    );
+    return this.module.unreachable();
   }
 
   private compileIfStatement(
@@ -6933,7 +6948,9 @@ export class Compiler extends DiagnosticEmitter {
     var scopedLocals = flow.scopedLocals;
     if (scopedLocals) {
       let module = this.module;
-      for (let local of scopedLocals.values()) {
+      // for (let local of scopedLocals.values()) {
+      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
+        let local = unchecked(_values[i]);
         if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
           let localIndex = local.index;
           if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
@@ -7005,12 +7022,16 @@ export class Compiler extends DiagnosticEmitter {
       while (parent = current.parent) current = parent;
       let scopedLocals = current.scopedLocals;
       if (scopedLocals) {
-        for (let local of scopedLocals.values()) {
+        // for (let local of scopedLocals.values()) {
+        for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
+          let local = unchecked(_values[i]);
           this.maybeFinishAutorelease(local, flow, stmts);
         }
       }
     } else {
-      for (let local of flow.parentFunction.localsByIndex) {
+      let localsByIndex = flow.parentFunction.localsByIndex;
+      for (let i = 0, k = localsByIndex.length; i < k; ++i) {
+        let local = unchecked(localsByIndex[i]);
         this.maybeFinishAutorelease(local, flow, stmts);
       }
     }
@@ -9749,7 +9770,9 @@ export class Compiler extends DiagnosticEmitter {
       : 0;
     var nativeSizeType = this.options.nativeSizeType;
 
-    for (let member of members.values()) {
+    // for (let member of members.values()) {
+    for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+      let member = unchecked(_values[i]);
       if (
         member.kind != ElementKind.FIELD || // not a field
         member.parent != classInstance      // inherited field

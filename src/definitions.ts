@@ -58,20 +58,30 @@ export abstract class ExportsWalker {
 
   /** Walks all elements and calls the respective handlers. */
   walk(): void {
-    for (let file of this.program.filesByName.values()) {
+    // for (let file of this.program.filesByName.values()) {
+    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
+      let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.visitFile(file);
     }
   }
 
   /** Visits all exported elements of a file. */
   visitFile(file: File): void {
-    var members = file.exports;
-    if (members) {
-      for (let [name, member] of members) this.visitElement(name, member);
+    var exports = file.exports;
+    if (exports) {
+      // for (let [memberName, member] of exports) {
+      for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
+        let memberName = unchecked(_keys[i]);
+        let member = exports.get(memberName)!;
+        this.visitElement(memberName, member);
+      }
     }
     var exportsStar = file.exportsStar;
     if (exportsStar) {
-      for (let exportStar of exportsStar) this.visitFile(exportStar);
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        let exportStar = unchecked(exportsStar[i]);
+        this.visitFile(exportStar);
+      }
     }
   }
 
@@ -129,8 +139,10 @@ export abstract class ExportsWalker {
   private visitFunctionInstances(name: string, element: FunctionPrototype): void {
     var instances = element.instances;
     if (instances) {
-      for (let instance of instances.values()) {
-        if (instance.is(CommonFlags.COMPILED)) this.visitFunction(name, <Function>instance);
+      // for (let instance of instances.values()) {
+      for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+        let instance = unchecked(_values[i]);
+        if (instance.is(CommonFlags.COMPILED)) this.visitFunction(name, instance);
       }
     }
   }
@@ -138,8 +150,10 @@ export abstract class ExportsWalker {
   private visitClassInstances(name: string, element: ClassPrototype): void {
     var instances = element.instances;
     if (instances) {
-      for (let instance of instances.values()) {
-        if (instance.is(CommonFlags.COMPILED)) this.visitClass(name, <Class>instance);
+      // for (let instance of instances.values()) {
+      for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+        let instance = unchecked(_values[i]);
+        if (instance.is(CommonFlags.COMPILED)) this.visitClass(name, instance);
       }
     }
   }
@@ -214,23 +228,29 @@ export class IDLBuilder extends ExportsWalker {
     sb.push(" {\n");
     var members = element.members;
     if (members) {
-      for (let [name, member] of members) {
+      // for (let [memberName, member] of members) {
+      for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+        let memberName = unchecked(_keys[i]);
+        let member = members.get(memberName)!;
         if (member.kind == ElementKind.ENUMVALUE) {
-          let isConst = (<EnumValue>member).is(CommonFlags.INLINED);
+          let value = <EnumValue>member;
+          let isConst = value.is(CommonFlags.INLINED);
           indent(sb, this.indentLevel);
           if (isConst) sb.push("const ");
           else sb.push("readonly ");
           sb.push("unsigned long ");
-          sb.push(name);
+          sb.push(memberName);
           if (isConst) {
             sb.push(" = ");
-            assert((<EnumValue>member).constantValueKind == ConstantValueKind.INTEGER);
-            sb.push(i64_low((<EnumValue>member).constantIntegerValue).toString(10));
+            assert(value.constantValueKind == ConstantValueKind.INTEGER);
+            sb.push(i64_low(value.constantIntegerValue).toString(10));
           }
           sb.push(";\n");
         }
       }
-      for (let member of members.values()) {
+      // for (let member of members.values()) {
+      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
         if (member.kind != ElementKind.ENUMVALUE) this.visitElement(member.name, member);
       }
     }
@@ -258,12 +278,16 @@ export class IDLBuilder extends ExportsWalker {
     }
     sb.push(");\n");
     var members = element.members;
-    if (members && members.size) {
+    if (members !== null && members.size) {
       indent(sb, this.indentLevel);
       sb.push("interface ");
       sb.push(element.name);
       sb.push(" {\n");
-      for (let member of members.values()) this.visitElement(member.name, member);
+      // for (let member of members.values()) {
+      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
+        this.visitElement(member.name, member);
+      }
       indent(sb, --this.indentLevel);
       sb.push("}\n");
     }
@@ -296,7 +320,11 @@ export class IDLBuilder extends ExportsWalker {
     sb.push(" {\n");
     var members = element.members;
     if (members) {
-      for (let member of members.values()) this.visitElement(member.name, member);
+      // for (let member of members.values()) {
+      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
+        this.visitElement(member.name, member);
+      }
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
@@ -385,21 +413,25 @@ export class TSDBuilder extends ExportsWalker {
     sb.push(" {\n");
     var members = element.members;
     if (members) {
-      let numMembers = members.size;
-      for (let [name, member] of members) {
+      let remainingMembers = members.size;
+      // for (let [memberName, member] of members) {
+      for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+        let memberName = unchecked(_keys[i]);
+        let member = members.get(memberName)!;
         if (member.kind == ElementKind.ENUMVALUE) {
+          let value = <EnumValue>member;
           indent(sb, this.indentLevel);
-          sb.push(name);
+          sb.push(memberName);
           if (member.is(CommonFlags.INLINED)) {
             sb.push(" = ");
-            assert((<EnumValue>member).constantValueKind == ConstantValueKind.INTEGER);
-            sb.push(i64_low((<EnumValue>member).constantIntegerValue).toString(10));
+            assert(value.constantValueKind == ConstantValueKind.INTEGER);
+            sb.push(i64_low(value.constantIntegerValue).toString(10));
           }
           sb.push(",\n");
-          --numMembers;
+          --remainingMembers;
         }
       }
-      if (numMembers) this.visitNamespace(name, element);
+      if (remainingMembers) this.visitNamespace(name, element);
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
@@ -463,11 +495,19 @@ export class TSDBuilder extends ExportsWalker {
     sb.push(" {\n");
     var staticMembers = element.prototype.members;
     if (staticMembers) {
-      for (let member of staticMembers.values()) this.visitElement(member.name, member);
+      // for (let member of staticMembers.values()) {
+      for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
+        this.visitElement(member.name, member);
+      }
     }
     var instanceMembers = element.members;
     if (instanceMembers) {
-      for (let member of instanceMembers.values()) this.visitElement(member.name, member);
+      // for (let member of instanceMembers.values()) {
+      for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
+        this.visitElement(member.name, member);
+      }
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
@@ -492,13 +532,17 @@ export class TSDBuilder extends ExportsWalker {
 
   visitNamespace(name: string, element: Element): void {
     var members = element.members;
-    if (members && members.size) {
+    if (members !== null && members.size) {
       let sb = this.sb;
       indent(sb, this.indentLevel++);
       sb.push("export namespace ");
       sb.push(name);
       sb.push(" {\n");
-      for (let member of members.values()) this.visitElement(member.name, member);
+      // for (let member of members.values()) {
+      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
+        this.visitElement(member.name, member);
+      }
       indent(sb, --this.indentLevel);
       sb.push("}\n");
     }
@@ -567,12 +611,16 @@ export class TSDBuilder extends ExportsWalker {
 function hasCompiledMember(element: Element): bool {
   var members = element.members;
   if (members) {
-    for (let member of members.values()) {
+    // for (let member of members.values()) {
+    for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+      let member = unchecked(_values[i]);
       switch (member.kind) {
         case ElementKind.FUNCTION_PROTOTYPE: {
           let instances = (<FunctionPrototype>member).instances;
           if (instances) {
-            for (let instance of instances.values()) {
+            // for (let instance of instances.values()) {
+            for (let _values = Map_values(instances), j = 0, l = _values.length; j < l; ++j) {
+              let instance = unchecked(_values[j]);
               if (instance.is(CommonFlags.COMPILED)) return true;
             }
           }
@@ -581,7 +629,9 @@ function hasCompiledMember(element: Element): bool {
         case ElementKind.CLASS_PROTOTYPE: {
           let instances = (<ClassPrototype>member).instances;
           if (instances) {
-            for (let instance of instances.values()) {
+            // for (let instance of instances.values()) {
+            for (let _values = Map_values(instances), j = 0, l = _values.length; j < l; ++j) {
+              let instance = unchecked(_values[j]);
               if (instance.is(CommonFlags.COMPILED)) return true;
             }
           }
