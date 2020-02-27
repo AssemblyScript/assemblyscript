@@ -164,7 +164,7 @@ declare module "assemblyscript/src/common" {
         const Anyref = "Anyref";
         const String = "String";
         const Array = "Array";
-        const FixedArray = "FixedArray";
+        const StaticArray = "StaticArray";
         const Set = "Set";
         const Map = "Map";
         const ArrayBufferView = "ArrayBufferView";
@@ -195,6 +195,7 @@ declare module "assemblyscript/src/common" {
         const typeinfo = "__typeinfo";
         const instanceof_ = "__instanceof";
         const visit = "__visit";
+        const allocBuffer = "__allocBuffer";
         const allocArray = "__allocArray";
     }
     export { Feature, featureToString } from "assemblyscript/std/assembly/shared/feature";
@@ -1013,7 +1014,7 @@ declare module "assemblyscript/src/ast" {
         static createFieldDeclaration(name: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): FieldDeclaration;
         static createForStatement(initializer: Statement | null, condition: Expression | null, incrementor: Expression | null, statement: Statement, range: Range): ForStatement;
         static createFunctionDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, signature: FunctionTypeNode, body: Statement | null, decorators: DecoratorNode[] | null, flags: CommonFlags, arrowKind: ArrowKind, range: Range): FunctionDeclaration;
-        static createIndexSignatureDeclaration(keyType: NamedTypeNode, valueType: TypeNode, range: Range): IndexSignatureDeclaration;
+        static createIndexSignatureDeclaration(keyType: NamedTypeNode, valueType: TypeNode, flags: CommonFlags, range: Range): IndexSignatureDeclaration;
         static createMethodDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, signature: FunctionTypeNode, body: Statement | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): MethodDeclaration;
         static createNamespaceDeclaration(name: IdentifierExpression, members: Statement[], decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): NamespaceDeclaration;
         static createReturnStatement(value: Expression | null, range: Range): ReturnStatement;
@@ -1186,7 +1187,8 @@ declare module "assemblyscript/src/ast" {
     export enum AssertionKind {
         PREFIX = 0,
         AS = 1,
-        NONNULL = 2
+        NONNULL = 2,
+        CONST = 3
     }
     /** Represents an assertion expression. */
     export class AssertionExpression extends Expression {
@@ -3071,7 +3073,7 @@ declare module "assemblyscript/src/parser" {
         parseClassOrInterface(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): ClassDeclaration | null;
         parseClassExpression(tn: Tokenizer): ClassExpression | null;
         parseClassMember(tn: Tokenizer, parent: ClassDeclaration): DeclarationStatement | null;
-        parseIndexSignatureDeclaration(tn: Tokenizer, decorators: DecoratorNode[] | null): IndexSignatureDeclaration | null;
+        parseIndexSignatureDeclaration(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null): IndexSignatureDeclaration | null;
         parseNamespace(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): NamespaceDeclaration | null;
         parseExport(tn: Tokenizer, startPos: number, isDeclare: boolean): ExportStatement | null;
         parseExportMember(tn: Tokenizer): ExportMember | null;
@@ -3225,12 +3227,12 @@ declare module "assemblyscript/src/program" {
         arrayBufferInstance: Class;
         /** Array prototype reference. */
         arrayPrototype: ClassPrototype;
+        /** Static array prototype reference. */
+        staticArrayPrototype: ClassPrototype;
         /** Set prototype reference. */
         setPrototype: ClassPrototype;
         /** Map prototype reference. */
         mapPrototype: ClassPrototype;
-        /** Fixed array prototype reference. */
-        fixedArrayPrototype: ClassPrototype;
         /** Int8Array prototype. */
         i8ArrayPrototype: ClassPrototype;
         /** Int16Array prototype. */
@@ -3275,6 +3277,8 @@ declare module "assemblyscript/src/program" {
         typeinfoInstance: Function;
         /** RT `__instanceof(ptr: usize, superId: u32): bool` */
         instanceofInstance: Function;
+        /** RT `__allocBuffer(size: usize, id: u32, data: usize = 0): usize` */
+        allocBufferInstance: Function;
         /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
         allocArrayInstance: Function;
         /** Next class id. */
@@ -3290,7 +3294,7 @@ declare module "assemblyscript/src/program" {
         /** Obtains the source matching the specified internal path. */
         getSource(internalPath: string): string | null;
         /** Writes a common runtime header to the specified buffer. */
-        writeRuntimeHeader(buffer: Uint8Array, offset: number, classInstance: Class, payloadSize: number): void;
+        writeRuntimeHeader(buffer: Uint8Array, offset: number, id: number, payloadSize: number): void;
         /** Gets the size of a runtime header. */
         get runtimeHeaderSize(): number;
         /** Creates a native variable declaration. */
@@ -4248,7 +4252,7 @@ declare module "assemblyscript/src/compiler" {
         /** Ensures that a string exists in static memory and returns a pointer to it. Deduplicates. */
         ensureStaticString(stringValue: string): ExpressionRef;
         /** Adds a buffer to static memory and returns the created segment. */
-        private addStaticBuffer;
+        addStaticBuffer(elementType: Type, values: ExpressionRef[], id?: number): MemorySegment;
         /** Adds an array header to static memory and returns the created segment. */
         private addStaticArrayHeader;
         /** Ensures that a table entry exists for the specified function and returns its index. */
@@ -4443,6 +4447,8 @@ declare module "assemblyscript/src/compiler" {
         private compileLiteralExpression;
         private compileStringLiteral;
         private compileArrayLiteral;
+        /** Compiles a special `fixed` array literal. */
+        private compileStaticArrayLiteral;
         private compileObjectLiteral;
         private compileNewExpression;
         /** Gets the compiled constructor of the specified class or generates one if none is present. */
