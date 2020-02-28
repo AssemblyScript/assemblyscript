@@ -1538,7 +1538,7 @@ assert(test_expm1f(NaN, NaN, 0.0, 0));
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.exp2
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/*
 function test_exp2(value: f64, expected: f64, error: f64, flags: i32): bool {
   return  check<f64>(NativeMath.exp2(value), expected, error, flags) &&
   (!js || check<f64>(    JSMath.pow(2, value), expected, error, flags));
@@ -1602,7 +1602,7 @@ assert(test_exp2f(<f32>reinterpret<f64>(0xBFDA05CC80000000), <f32>reinterpret<f6
 assert(test_exp2f(<f32>reinterpret<f64>(0x3FE1F9EFA0000000), <f32>reinterpret<f64>(0x3FF79DFA20000000), <f32>reinterpret<f64>(0x3FC34B9680000000), INEXACT));
 assert(test_exp2f(<f32>reinterpret<f64>(0x3FE8C5DB00000000), <f32>reinterpret<f64>(0x3FFB5CEAC0000000), <f32>reinterpret<f64>(0xBFD906A1E0000000), INEXACT));
 assert(test_exp2f(<f32>reinterpret<f64>(0xBFE5B86EA0000000), <f32>reinterpret<f64>(0x3FE3FD8BA0000000), <f32>reinterpret<f64>(0xBFCAC1F220000000), INEXACT));
-
+*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.floor
 ////////////////////////////////////////////////////////////////////////////////////////////////////

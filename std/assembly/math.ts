@@ -1,10 +1,11 @@
 import * as JSMath from "./bindings/Math";
 export { JSMath };
 
-import {
-  pow_lut, exp_lut, exp2_lut, log_lut, log2_lut,
-  powf_lut, expf_lut, exp2f_lut, logf_lut, log2f_lut
-} from "./util/math";
+// TODO: Fast methods with lookup tables have some preicision issues so temporary disabled
+// import {
+//   pow_lut, exp_lut, exp2_lut, log_lut, log2_lut,
+//   powf_lut, expf_lut, exp2f_lut, logf_lut, log2f_lut
+// } from "./util/math";
 
 import {
   abs as builtin_abs,
@@ -781,9 +782,10 @@ export namespace NativeMath {
   }
 
   export function exp(x: f64): f64 { // see: musl/src/math/exp.c and SUN COPYRIGHT NOTICE above
-    if (ASC_SHRINK_LEVEL < 1) {
-      return exp_lut(x);
-    } else {
+    // if (ASC_SHRINK_LEVEL < 1) {
+    //   return exp_lut(x);
+    // } else
+    {
       const
         ln2hi     = reinterpret<f64>(0x3FE62E42FEE00000), //  6.93147180369123816490e-01
         ln2lo     = reinterpret<f64>(0x3DEA39EF35793C76), //  1.90821492927058770002e-10
@@ -827,9 +829,9 @@ export namespace NativeMath {
     }
   }
 
-  export function exp2(x: f64): f64 {
-    return exp2_lut(x);
-  }
+  // export function exp2(x: f64): f64 {
+  //   return exp2_lut(x);
+  // }
 
   export function expm1(x: f64): f64 { // see: musl/src/math/expm1.c and SUN COPYRIGHT NOTICE above
     const
@@ -963,9 +965,10 @@ export namespace NativeMath {
   }
 
   export function log(x: f64): f64 { // see: musl/src/math/log.c and SUN COPYRIGHT NOTICE above
-    if (ASC_SHRINK_LEVEL < 1) {
-      return log_lut(x);
-    } else {
+    // if (ASC_SHRINK_LEVEL < 1) {
+    //   return log_lut(x);
+    // } else
+    {
       const
         ln2_hi = reinterpret<f64>(0x3FE62E42FEE00000), // 6.93147180369123816490e-01
         ln2_lo = reinterpret<f64>(0x3DEA39EF35793C76), // 1.90821492927058770002e-10
@@ -1113,9 +1116,10 @@ export namespace NativeMath {
   }
 
   export function log2(x: f64): f64 { // see: musl/src/math/log2.c and SUN COPYRIGHT NOTICE above
-    if (ASC_SHRINK_LEVEL < 1) {
-      return log2_lut(x);
-    } else {
+    // if (ASC_SHRINK_LEVEL < 1) {
+    //   return log2_lut(x);
+    // } else
+    {
       const
         ivln2hi = reinterpret<f64>(0x3FF7154765200000), // 1.44269504072144627571e+00
         ivln2lo = reinterpret<f64>(0x3DE705FC2EEFA200), // 1.67517131648865118353e-10
@@ -1194,9 +1198,10 @@ export namespace NativeMath {
       if (y == 1.0) return x;
       if (y == 0.0) return 1.0;
     }
-    if (ASC_SHRINK_LEVEL < 1) {
-      return pow_lut(x, y);
-    } else {
+    // if (ASC_SHRINK_LEVEL < 1) {
+    //   return pow_lut(x, y);
+    // } else
+    {
       const
         dp_h1   = reinterpret<f64>(0x3FE2B80340000000), //  5.84962487220764160156e-01
         dp_l1   = reinterpret<f64>(0x3E4CFDEB43CFD006), //  1.35003920212974897128e-08
@@ -2232,9 +2237,10 @@ export namespace NativeMathf {
   }
 
   export function exp(x: f32): f32 { // see: musl/src/math/expf.c and SUN COPYRIGHT NOTICE above
-    if (ASC_SHRINK_LEVEL < 1) {
-      return expf_lut(x);
-    } else {
+    // if (ASC_SHRINK_LEVEL < 1) {
+    //   return expf_lut(x);
+    // } else
+    {
       const
         ln2hi    = reinterpret<f32>(0x3F317200), //  6.9314575195e-1f
         ln2lo    = reinterpret<f32>(0x35BFBE8E), //  1.4286067653e-6f
@@ -2277,9 +2283,9 @@ export namespace NativeMathf {
     }
   }
 
-  export function exp2(x: f32): f32 {
-    return exp2f_lut(x);
-  }
+  // export function exp2(x: f32): f32 {
+  //   return exp2f_lut(x);
+  // }
 
   export function expm1(x: f32): f32 { // see: musl/src/math/expm1f.c and SUN COPYRIGHT NOTICE above
     const
@@ -2395,9 +2401,10 @@ export namespace NativeMathf {
   }
 
   export function log(x: f32): f32 { // see: musl/src/math/logf.c and SUN COPYRIGHT NOTICE above
-    if (ASC_SHRINK_LEVEL < 1) {
-      return logf_lut(x);
-    } else {
+    // if (ASC_SHRINK_LEVEL < 1) {
+    //   return logf_lut(x);
+    // } else
+    {
       const
         ln2_hi  = reinterpret<f32>(0x3F317180), // 6.9313812256e-01f
         ln2_lo  = reinterpret<f32>(0x3717F7D1), // 9.0580006145e-06f
@@ -2522,9 +2529,10 @@ export namespace NativeMathf {
   }
 
   export function log2(x: f32): f32 { // see: musl/src/math/log2f.c and SUN COPYRIGHT NOTICE above
-    if (ASC_SHRINK_LEVEL < 1) {
-      return log2f_lut(x);
-    } else {
+    // if (ASC_SHRINK_LEVEL < 1) {
+    //   return log2f_lut(x);
+    // } else
+    {
       const
         ivln2hi = reinterpret<f32>(0x3FB8B000), //  1.4428710938e+00f
         ivln2lo = reinterpret<f32>(0xB9389AD4), // -1.7605285393e-04
@@ -2592,7 +2600,193 @@ export namespace NativeMathf {
       if (y == 1.0) return x;
       if (y == 0.0) return 1.0;
     }
-    return powf_lut(x, y);
+    // return powf_lut(x, y);
+    const
+      dp_h1   = reinterpret<f32>(0x3F15C000), //  5.84960938e-01f
+      dp_l1   = reinterpret<f32>(0x35D1CFDC), //  1.56322085e-06f
+      two24   = reinterpret<f32>(0x4B800000), //  16777216f
+      huge    = reinterpret<f32>(0x7149F2CA), //  1.0e+30f
+      tiny    = reinterpret<f32>(0x0DA24260), //  1.0e-30f
+      L1      = reinterpret<f32>(0x3F19999A), //  6.0000002384e-01f
+      L2      = reinterpret<f32>(0x3EDB6DB7), //  4.2857143283e-01f
+      L3      = reinterpret<f32>(0x3EAAAAAB), //  3.3333334327e-01f
+      L4      = reinterpret<f32>(0x3E8BA305), //  2.7272811532e-01f
+      L5      = reinterpret<f32>(0x3E6C3255), //  2.3066075146e-01f
+      L6      = reinterpret<f32>(0x3E53F142), //  2.0697501302e-01f
+      P1      = reinterpret<f32>(0x3E2AAAAB), //  1.6666667163e-01f
+      P2      = reinterpret<f32>(0xBB360B61), // -2.7777778450e-03f
+      P3      = reinterpret<f32>(0x388AB355), //  6.6137559770e-05f
+      P4      = reinterpret<f32>(0xB5DDEA0E), // -1.6533901999e-06f
+      P5      = reinterpret<f32>(0x3331BB4C), //  4.1381369442e-08f
+      lg2     = reinterpret<f32>(0x3F317218), //  6.9314718246e-01f
+      lg2_h   = reinterpret<f32>(0x3F317200), //  6.93145752e-01f
+      lg2_l   = reinterpret<f32>(0x35BFBE8C), //  1.42860654e-06f
+      ovt     = reinterpret<f32>(0x3338AA3C), //  4.2995665694e-08f
+      cp      = reinterpret<f32>(0x3F76384F), //  9.6179670095e-01
+      cp_h    = reinterpret<f32>(0x3F764000), //  9.6191406250e-01
+      cp_l    = reinterpret<f32>(0xB8F623C6), // -1.1736857402e-04
+      ivln2   = reinterpret<f32>(0x3FB8AA3B), //  1.4426950216e+00
+      ivln2_h = reinterpret<f32>(0x3FB8AA00), //  1.4426879883e+00
+      ivln2_l = reinterpret<f32>(0x36ECA570), //  7.0526075433e-06
+      inv3    = reinterpret<f32>(0x3EAAAAAB);  // 0.333333333333
+    var hx = reinterpret<i32>(x);
+    var hy = reinterpret<i32>(y);
+    var ix = hx & 0x7FFFFFFF;
+    var iy = hy & 0x7FFFFFFF;
+    if (iy == 0) return 1.0; // x**0 = 1, even if x is NaN
+    // if (hx == 0x3F800000) return 1.0; // C: 1**y = 1, even if y is NaN, JS: NaN
+    if (ix > 0x7F800000 || iy > 0x7F800000) return x + y; // NaN if either arg is NaN
+    var yisint  = 0, j: i32, k: i32;
+    if (hx < 0) {
+      if (iy >= 0x4B800000) yisint = 2;
+      else if (iy >= 0x3F800000) {
+        k = (iy >> 23) - 0x7F;
+        let ki = 23 - k;
+        j = iy >> ki;
+        if ((j << ki) == iy) yisint = 2 - (j & 1);
+      }
+    }
+    if (iy == 0x7F800000) { // y is +-inf
+      if (ix == 0x3F800000) return NaN; // C: (-1)**+-inf is 1, JS: NaN
+      else if (ix > 0x3F800000) return hy >= 0 ? y : 0.0; // (|x|>1)**+-inf = inf,0
+      else return hy >= 0 ? 0.0 : -y; // (|x|<1)**+-inf = 0,inf
+    }
+    if (iy == 0x3F800000) return hy >= 0 ? x : 1.0 / x;
+    if (hy == 0x40000000) return x * x;
+    if (hy == 0x3F000000) {
+      if (hx >= 0) return builtin_sqrt<f32>(x);
+    }
+    var ax = builtin_abs<f32>(x);
+    var z: f32;
+    if (ix == 0x7F800000 || ix == 0 || ix == 0x3F800000) {
+      z = ax;
+      if (hy < 0) z = 1.0 / z;
+      if (hx < 0) {
+        if (((ix - 0x3F800000) | yisint) == 0) {
+          let d = z - z;
+          z = d / d;
+        }
+        else if (yisint == 1) z = -z;
+      }
+      return z;
+    }
+    var sn = <f32>1.0;
+    if (hx < 0) {
+      if (yisint == 0) {
+        let d = x - x;
+        return d / d;
+      }
+      if (yisint == 1) sn = -1.0;
+    }
+    var t1: f32, t2: f32, r: f32, s: f32, t: f32, u: f32, v: f32, w: f32, p_h: f32, p_l: f32;
+    var n: i32, is: i32;
+    if (iy > 0x4D000000) {
+      if (ix < 0x3F7FFFF8) return hy < 0 ? sn * huge * huge : sn * tiny * tiny;
+      if (ix > 0x3F800007) return hy > 0 ? sn * huge * huge : sn * tiny * tiny;
+      t = ax - 1;
+      w = (t * t) * (0.5 - t * (inv3 - t * 0.25));
+      u = ivln2_h * t;
+      v = t * ivln2_l - w * ivln2;
+      t1 = u + v;
+      is = reinterpret<i32>(t1);
+      t1 = reinterpret<f32>(is & 0xFFFFF000);
+      t2 = v - (t1 - u);
+    } else {
+      let s2: f32, s_h: f32, s_l: f32, t_h: f32, t_l: f32;
+      n = 0;
+      if (ix < 0x00800000) {
+        ax *= two24;
+        n -= 24;
+        ix = reinterpret<i32>(ax);
+      }
+      n += (ix >> 23) - 0x7F;
+      j = ix & 0x007FFFFF;
+      ix = j | 0x3F800000;
+      if (j <= 0x1CC471) k = 0;
+      else if (j < 0x5DB3D7) k = 1;
+      else {
+        k = 0;
+        n += 1;
+        ix -= 0x00800000;
+      }
+      ax = reinterpret<f32>(ix);
+      let bp = select<f32>(1.5, 1.0, k); // k ? 1.5 : 1.0
+      u = ax - bp;
+      v = 1.0 / (ax + bp);
+      s = u * v;
+      s_h = s;
+      is = reinterpret<u32>(s_h);
+      s_h = reinterpret<f32>(is & 0xFFFFF000);
+      is = ((ix >> 1) & 0xFFFFF000) | 0x20000000;
+      t_h = reinterpret<f32>(is + 0x00400000 + (k << 21));
+      t_l = ax - (t_h - bp);
+      s_l = v * ((u - s_h * t_h) - s_h * t_l);
+      s2 = s * s;
+      r = s2 * s2 * (L1 + s2 * (L2 + s2 * (L3 + s2 * (L4 + s2 * (L5 + s2 * L6)))));
+      r += s_l * (s_h + s);
+      s2 = s_h * s_h;
+      t_h = 3.0 + s2 + r;
+      is  = reinterpret<u32>(t_h);
+      t_h = reinterpret<f32>(is & 0xFFFFF000);
+      t_l = r - ((t_h - 3.0) - s2);
+      u = s_h * t_h;
+      v = s_l * t_h + t_l * s;
+      p_h = u + v;
+      is  = reinterpret<u32>(p_h);
+      p_h = reinterpret<f32>(is & 0xFFFFF000);
+      p_l = v - (p_h - u);
+      let z_h = cp_h * p_h;
+      let dp_l = select<f32>(dp_l1, 0.0, k);
+      let z_l = cp_l * p_h + p_l * cp + dp_l;
+      t = <f32>n;
+      let dp_h = select<f32>(dp_h1, 0.0, k);
+      t1 = (((z_h + z_l) + dp_h) + t);
+      is = reinterpret<u32>(t1);
+      t1 = reinterpret<f32>(is & 0xFFFFF000);
+      t2 = z_l - (((t1 - t) - dp_h) - z_h);
+    }
+    is = reinterpret<u32>(y);
+    var y1 = reinterpret<f32>(is & 0xFFFFF000);
+    p_l = (y - y1) * t1 + y * t2;
+    p_h = y1 * t1;
+    z = p_l + p_h;
+    j = reinterpret<u32>(z);
+    if (j > 0x43000000) {
+      return sn * huge * huge;
+    } else if (j == 0x43000000) {
+      if (p_l + ovt > z - p_h) return sn * huge * huge;
+    } else if ((j & 0x7FFFFFFF) > 0x43160000) {
+      return sn * tiny * tiny;
+    } else if (j == 0xC3160000) {
+      if (p_l <= z - p_h) return sn * tiny * tiny;
+    }
+    var i = j & 0x7FFFFFFF;
+    k = (i >> 23) - 0x7F;
+    n = 0;
+    if (i > 0x3F000000) {
+      n = j + (0x00800000 >> (k + 1));
+      k = ((n & 0x7FFFFFFF) >> 23) - 0x7F;
+      t = reinterpret<f32>(n & ~(0x007FFFFF >> k));
+      n = ((n & 0x007FFFFF) | 0x00800000) >> (23 - k);
+      if (j < 0) n = -n;
+      p_h -= t;
+    }
+    t = p_l + p_h;
+    is = reinterpret<u32>(t);
+    t = reinterpret<f32>(is & 0xFFFF8000);
+    u = t * lg2_h;
+    v = (p_l - (t - p_h)) * lg2 + t * lg2_l;
+    z = u + v;
+    w = v - (z - u);
+    t = z * z;
+    t1 = z - t * (P1 + t * (P2 + t * (P3 + t * (P4 + t * P5))));
+    r = (z * t1) / (t1 - 2.0) - (w + z * w);
+    z = 1.0 - (r - z);
+    j = reinterpret<u32>(z);
+    j += n << 23;
+    if ((j >> 23) <= 0) z = scalbn(z, n);
+    else z = reinterpret<f32>(j);
+    return sn * z;
   }
 
   // @ts-ignore: decorator
