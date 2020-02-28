@@ -656,7 +656,7 @@ export class ASTBuilder {
   }
 
   visitFloatLiteralExpression(node: FloatLiteralExpression): void {
-    this.sb.push(node.value.toString(10));
+    this.sb.push(node.value.toString());
   }
 
   visitInstanceOfExpression(node: InstanceOfExpression): void {

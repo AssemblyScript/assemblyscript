@@ -696,7 +696,7 @@ var cachedDefaultParameterNames: string[] | null = null;
 export function getDefaultParameterName(index: i32): string {
   if (!cachedDefaultParameterNames) cachedDefaultParameterNames = [];
   for (let i = cachedDefaultParameterNames.length; i <= index; ++i) {
-    cachedDefaultParameterNames.push("arg$" + i.toString(10));
+    cachedDefaultParameterNames.push("arg$" + i.toString());
   }
   return cachedDefaultParameterNames[index - 1];
 }

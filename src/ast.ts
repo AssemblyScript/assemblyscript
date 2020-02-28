@@ -21,8 +21,6 @@ import {
   CharCode
 } from "./util";
 
-export { Token, Range };
-
 /** Indicates the kind of a node. */
 export enum NodeKind {
 
@@ -417,7 +415,7 @@ export abstract class Node {
   }
 
   static createIntegerLiteralExpression(
-    value: I64,
+    value: i64,
     range: Range
   ): IntegerLiteralExpression {
     var node = new IntegerLiteralExpression();
@@ -1518,7 +1516,7 @@ export class InstanceOfExpression extends Expression {
 /** Represents an integer literal expression. */
 export class IntegerLiteralExpression extends LiteralExpression {
   /** Integer value. */
-  value: I64;
+  value: i64;
 }
 
 /** Represents a `new` expression. Like a call but with its own kind. */

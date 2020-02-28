@@ -1272,7 +1272,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return true;
   }
 
-  readInteger(): I64 {
+  readInteger(): i64 {
     var text = this.source.text;
     if (this.pos + 2 < this.end && text.charCodeAt(this.pos) == CharCode._0) {
       switch (text.charCodeAt(this.pos + 1) | 32) {
@@ -1303,7 +1303,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.readDecimalInteger();
   }
 
-  readHexInteger(): I64 {
+  readHexInteger(): i64 {
     var text = this.source.text;
     var start = this.pos;
     var value = i64_new(0);
@@ -1360,7 +1360,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return value;
   }
 
-  readDecimalInteger(): I64 {
+  readDecimalInteger(): i64 {
     var text = this.source.text;
     var start = this.pos;
     var end = this.end;
@@ -1405,7 +1405,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return value;
   }
 
-  readOctalInteger(): I64 {
+  readOctalInteger(): i64 {
     var text = this.source.text;
     var start = this.pos;
     var value = i64_new(0);
@@ -1450,7 +1450,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return value;
   }
 
-  readBinaryInteger(): I64 {
+  readBinaryInteger(): i64 {
     var text = this.source.text;
     var start = this.pos;
     var value = i64_new(0);

@@ -35,6 +35,10 @@ import {
 } from "./flow";
 
 import {
+  Range
+} from "./tokenizer";
+
+import {
   FunctionTypeNode,
   ParameterKind,
   TypeNode,
@@ -43,7 +47,6 @@ import {
   TypeName,
   TypeParameterNode,
   Node,
-  Range,
   IdentifierExpression,
   CallExpression,
   ElementAccessExpression,
@@ -436,7 +439,7 @@ export class Resolver extends DiagnosticEmitter {
       if (reportMode == ReportMode.REPORT) {
         this.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString()
         );
       }
       return null;
@@ -479,7 +482,7 @@ export class Resolver extends DiagnosticEmitter {
       if (reportMode == ReportMode.REPORT) {
         this.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString()
         );
       }
       return null;
@@ -530,7 +533,7 @@ export class Resolver extends DiagnosticEmitter {
       if (reportMode == ReportMode.REPORT) {
         this.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString()
         );
       }
       return null;
@@ -574,7 +577,7 @@ export class Resolver extends DiagnosticEmitter {
       if (reportMode == ReportMode.REPORT) {
         this.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString(10)
+          node.range, "1", (typeArgumentNodes ? typeArgumentNodes.length : 1).toString()
         );
       }
       return null;
@@ -662,8 +665,8 @@ export class Resolver extends DiagnosticEmitter {
               (<NamedTypeNode[]>typeArgumentNodes)[argumentCount - 1].range
             )
           : assert(alternativeReportNode).range,
-        (argumentCount < minParameterCount ? minParameterCount : maxParameterCount).toString(10),
-        argumentCount.toString(10)
+        (argumentCount < minParameterCount ? minParameterCount : maxParameterCount).toString(),
+        argumentCount.toString()
       );
       return null;
     }
@@ -746,7 +749,7 @@ export class Resolver extends DiagnosticEmitter {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Expected_0_arguments_but_got_1,
-              node.range, numParameters.toString(10), numArguments.toString(10)
+              node.range, numParameters.toString(), numArguments.toString()
             );
           }
           return null;
@@ -1511,7 +1514,7 @@ export class Resolver extends DiagnosticEmitter {
   /** Determines the final type of an integer literal given the specified contextual type. */
   determineIntegerLiteralType(
     /** Integer literal value. */
-    intValue: I64,
+    intValue: i64,
     /** Contextual type. */
     ctxType: Type
   ): Type {

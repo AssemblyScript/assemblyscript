@@ -5007,7 +5007,7 @@ function evaluateConstantType(
     if (!typeArguments || typeArguments.length != 1) {
       compiler.error(
         DiagnosticCode.Expected_0_type_arguments_but_got_1,
-        reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString(10) : "0"
+        reportNode.typeArgumentsRange, "1", typeArguments ? typeArguments.length.toString() : "0"
       );
       return null;
     }
@@ -5018,7 +5018,7 @@ function evaluateConstantType(
       if (typeArguments.length > 1) {
         compiler.error(
           DiagnosticCode.Expected_0_type_arguments_but_got_1,
-          reportNode.typeArgumentsRange, "1", typeArguments.length.toString(10)
+          reportNode.typeArgumentsRange, "1", typeArguments.length.toString()
         );
         return null;
       }
@@ -5031,12 +5031,12 @@ function evaluateConstantType(
   if (typeArguments && typeArguments.length > 1) {
     compiler.error(
       DiagnosticCode.Expected_0_type_arguments_but_got_1,
-      reportNode.typeArgumentsRange, "1", typeArguments.length.toString(10)
+      reportNode.typeArgumentsRange, "1", typeArguments.length.toString()
     );
   }
   compiler.error(
     DiagnosticCode.Expected_0_arguments_but_got_1,
-    reportNode.argumentsRange, "1", operands.length.toString(10)
+    reportNode.argumentsRange, "1", operands.length.toString()
   );
   return null;
 }
@@ -5197,7 +5197,7 @@ function checkArgsOptional(
 }
 
 /** Makes an usize constant matching contextual type if reasonable. */
-function contextualUsize(compiler: Compiler, value: I64, contextualType: Type): ExpressionRef {
+function contextualUsize(compiler: Compiler, value: i64, contextualType: Type): ExpressionRef {
   var module = compiler.module;
   // Check if contextual type fits
   if (contextualType != Type.auto && contextualType.is(TypeFlags.INTEGER | TypeFlags.VALUE)) {

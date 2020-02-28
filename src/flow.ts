@@ -213,7 +213,7 @@ export class Flow {
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
     var flow = Flow.create(parentFunction);
     flow.inlineFunction = inlineFunction;
-    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString(10);
+    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
     flow.returnType = inlineFunction.signature.returnType;
     flow.contextualTypeArguments = inlineFunction.contextualTypeArguments;
     return flow;
@@ -494,7 +494,7 @@ export class Flow {
     var stack = parentFunction.breakStack;
     if (!stack) parentFunction.breakStack = [ id ];
     else stack.push(id);
-    return parentFunction.breakLabel = id.toString(10);
+    return parentFunction.breakLabel = id.toString();
   }
 
   /** Pops the most recent break label from the stack. */
@@ -504,7 +504,7 @@ export class Flow {
     var length = assert(stack.length);
     stack.pop();
     if (length > 1) {
-      parentFunction.breakLabel = stack[length - 2].toString(10);
+      parentFunction.breakLabel = stack[length - 2].toString();
     } else {
       parentFunction.breakLabel = null;
       parentFunction.breakStack = null;

@@ -140,5 +140,5 @@ global.i64_to_f64 = function(value) {
 };
 
 global.i64_to_string = function(value, unsigned) {
-  return (unsigned ? value.toUnsigned() : value).toString(10);
+  return (unsigned ? value.toUnsigned() : value).toString();
 };

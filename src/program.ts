@@ -37,11 +37,14 @@ import {
 
 import {
   Token,
+  Range
+} from "./tokenizer";
+
+import {
   Node,
   NodeKind,
   Source,
   SourceKind,
-  Range,
   DecoratorNode,
   DecoratorKind,
   TypeParameterNode,
@@ -1102,7 +1105,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Registers a constant integer value within the global scope. */
-  registerConstantInteger(name: string, type: Type, value: I64): void {
+  registerConstantInteger(name: string, type: Type, value: i64): void {
     assert(type.is(TypeFlags.INTEGER)); // must be an integer type
     var global = new Global(
       name,
@@ -1473,7 +1476,7 @@ export class Program extends DiagnosticEmitter {
             } else {
               this.error(
                 DiagnosticCode.Expected_0_arguments_but_got_1,
-                decorator.range, "1", numArgs.toString(10)
+                decorator.range, "1", numArgs.toString()
               );
             }
           }
@@ -2575,7 +2578,7 @@ export abstract class VariableLikeElement extends TypedElement {
   /** Constant value kind. */
   constantValueKind: ConstantValueKind = ConstantValueKind.NONE;
   /** Constant integer value, if applicable. */
-  constantIntegerValue: I64;
+  constantIntegerValue: i64;
   /** Constant float value, if applicable. */
   constantFloatValue: f64;
 
@@ -2612,7 +2615,7 @@ export abstract class VariableLikeElement extends TypedElement {
   }
 
   /** Applies a constant integer value to this element. */
-  setConstantIntegerValue(value: I64, type: Type): void {
+  setConstantIntegerValue(value: i64, type: Type): void {
     assert(type.is(TypeFlags.INTEGER));
     this.type = type;
     this.constantValueKind = ConstantValueKind.INTEGER;

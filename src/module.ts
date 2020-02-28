@@ -463,9 +463,9 @@ export enum SIMDLoadOp {
 export class MemorySegment {
 
   buffer: Uint8Array;
-  offset: I64;
+  offset: i64;
 
-  static create(buffer: Uint8Array, offset: I64): MemorySegment {
+  static create(buffer: Uint8Array, offset: i64): MemorySegment {
     var segment = new MemorySegment();
     segment.buffer = buffer;
     segment.offset = offset;
@@ -1440,20 +1440,17 @@ export class Module {
     var cStr = allocString(sourceMapUrl);
     var binaryPtr: usize = 0;
     var sourceMapPtr: usize = 0;
-    try {
-      binaryen._BinaryenModuleAllocateAndWrite(out, this.ref, cStr);
-      binaryPtr = binaryen.__i32_load(out);
-      let binaryLen = binaryen.__i32_load(out + 4);
-      sourceMapPtr = binaryen.__i32_load(out + 8);
-      let ret = new BinaryModule();
-      ret.output = readBuffer(binaryPtr, binaryLen);
-      ret.sourceMap = readString(sourceMapPtr);
-      return ret;
-    } finally {
-      if (cStr) binaryen._free(cStr);
-      if (binaryPtr) binaryen._free(binaryPtr);
-      if (sourceMapPtr) binaryen._free(sourceMapPtr);
-    }
+    binaryen._BinaryenModuleAllocateAndWrite(out, this.ref, cStr);
+    binaryPtr = assert(binaryen.__i32_load(out));
+    var binaryLen = binaryen.__i32_load(out + 4);
+    sourceMapPtr = binaryen.__i32_load(out + 8); // may be NULL
+    var ret = new BinaryModule();
+    ret.output = readBuffer(binaryPtr, binaryLen);
+    ret.sourceMap = readString(sourceMapPtr);
+    binaryen._free(cStr);
+    binaryen._free(binaryPtr);
+    if (sourceMapPtr) binaryen._free(sourceMapPtr);
+    return ret;
   }
 
   toText(): string {
@@ -1630,8 +1627,8 @@ export function expandType(type: NativeType): NativeType[] {
   var arity = binaryen._BinaryenTypeArity(type);
   var cArr = binaryen._malloc(<usize>arity << 2);
   binaryen._BinaryenTypeExpand(type, cArr);
-  var types = new Array(arity);
-  for (let i = 0; i < arity; ++i) {
+  var types = new Array<u32>(arity);
+  for (let i: u32 = 0; i < arity; ++i) {
     types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
   }
   binaryen._free(cArr);

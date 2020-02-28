@@ -101,13 +101,13 @@ import {
 
 import {
   Token,
+  Range,
   operatorTokenToString
 } from "./tokenizer";
 
 import {
   Node,
   NodeKind,
-  Range,
   DecoratorKind,
   AssertionKind,
   SourceKind,
@@ -322,7 +322,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Start function statements. */
   currentBody: ExpressionRef[];
   /** Counting memory offset. */
-  memoryOffset: I64;
+  memoryOffset: i64;
   /** Memory segments being compiled. */
   memorySegments: MemorySegment[] = [];
   /** Map of already compiled static string segments. */
@@ -399,7 +399,9 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile entry file(s) while traversing reachable elements
     var files = program.filesByName;
-    for (let file of files.values()) {
+    // for (let file of files.values()) {
+    for (let _values = Map_values(files), i = 0, k = _values.length; i < k; ++i) {
+      let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.compileFile(file);
         this.compileExports(file);
@@ -437,7 +439,9 @@ export class Compiler extends DiagnosticEmitter {
     var cyclicClasses = program.findCyclicClasses();
     if (cyclicClasses.size) {
       if (options.pedantic) {
-        for (let classInstance of cyclicClasses) {
+        // for (let classInstance of cyclicClasses) {
+        for (let _values = Set_values(cyclicClasses), i = 0, k = _values.length; i < k; ++i) {
+          let classInstance = unchecked(_values[i]);
           this.pedantic(
             DiagnosticCode.Type_0_is_cyclic_Module_will_include_deferred_garbage_collection,
             classInstance.identifierNode.range, classInstance.internalName
@@ -452,7 +456,9 @@ export class Compiler extends DiagnosticEmitter {
     var lazyLibraryFunctions = this.lazyLibraryFunctions;
     do {
       let functionsToCompile = new Array<Function>();
-      for (let instance of lazyLibraryFunctions) {
+      // for (let instance of lazyLibraryFunctions) {
+      for (let _values = Set_values(lazyLibraryFunctions), i = 0, k = _values.length; i < k; ++i) {
+        let instance = unchecked(_values[i]);
         functionsToCompile.push(instance);
       }
       lazyLibraryFunctions.clear();
@@ -462,7 +468,9 @@ export class Compiler extends DiagnosticEmitter {
     } while (lazyLibraryFunctions.size);
 
     // compile pending class-specific instanceof helpers
-    for (let prototype of this.pendingClassInstanceOf.values()) {
+    // for (let prototype of this.pendingClassInstanceOf.values()) {
+    for (let _values = Set_values(this.pendingClassInstanceOf), i = 0, k = _values.length; i < k; ++i) {
+      let prototype = unchecked(_values[i]);
       compileClassInstanceOf(this, prototype);
     }
 
@@ -538,7 +546,9 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up module exports
-    for (let file of this.program.filesByName.values()) {
+    // for (let file of this.program.filesByName.values()) {
+    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
+      let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
     return module;
@@ -571,7 +581,9 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FUNCTION_PROTOTYPE: {
         let instances = (<FunctionPrototype>element).instances;
         if (instances) {
-          for (let instance of instances.values()) {
+          // for (let instance of instances.values()) {
+          for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+            let instance = unchecked(_values[i]);
             let instanceName = name;
             if (instance.is(CommonFlags.GENERIC)) {
               let fullName = instance.internalName;
@@ -585,7 +597,9 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS_PROTOTYPE: {
         let instances = (<ClassPrototype>element).instances;
         if (instances) {
-          for (let instance of instances.values()) {
+          // for (let instance of instances.values()) {
+          for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+            let instance = unchecked(_values[i]);
             let instanceName = name;
             if (instance.is(CommonFlags.GENERIC)) {
               let fullName = instance.internalName;
@@ -688,12 +702,16 @@ export class Compiler extends DiagnosticEmitter {
         element.kind == ElementKind.NAMESPACE ||
         element.kind == ElementKind.FILE
       ) {
-        for (let member of members.values()) {
+        // for (let member of members.values()) {
+        for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+          let member = unchecked(_values[i]);
           if (!member.is(CommonFlags.EXPORT)) continue;
           this.ensureModuleExport(member.name, member, subPrefix);
         }
       } else {
-        for (let member of members.values()) {
+        // for (let member of members.values()) {
+        for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+          let member = unchecked(_values[i]);
           if (member.is(CommonFlags.PRIVATE)) continue;
           this.ensureModuleExport(member.name, member, subPrefix);
         }
@@ -751,17 +769,30 @@ export class Compiler extends DiagnosticEmitter {
     }
     if (compileMembers) {
       let members = element.members;
-      if (members) for (let element of members.values()) this.compileElement(element);
+      if (members) {
+        // for (let element of members.values()) {
+        for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+          let element = unchecked(_values[i]);
+          this.compileElement(element);
+        }
+      }
     }
   }
 
   /** Compiles a file's exports. */
   compileExports(file: File): void {
     var exports = file.exports;
-    if (exports) for (let element of exports.values()) this.compileElement(element);
-    var exportsStar = file.exportsStar;
-    if (exportsStar) {
-      for (let exportStar of exportsStar) {
+    if (exports) {
+      // for (let element of exports.values()) {
+      for (let _values = Map_values(exports), i = 0, k = _values.length; i < k; ++i) {
+        let element = unchecked(_values[i]);
+        this.compileElement(element);
+      }
+    }
+    var starExports = file.exportsStar;
+    if (starExports) {
+      for (let i = 0, k = starExports.length; i < k; ++i) {
+        let exportStar = unchecked(starExports[i]);
         this.compileFile(exportStar);
         this.compileExports(exportStar);
       }
@@ -1056,7 +1087,9 @@ export class Compiler extends DiagnosticEmitter {
     var isInline = element.is(CommonFlags.CONST) || element.hasDecorator(DecoratorFlags.INLINE);
 
     if (element.members) {
-      for (let member of element.members.values()) {
+      // for (let member of element.members.values()) {
+      for (let _values = Map_values(element.members), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
         if (member.kind != ElementKind.ENUMVALUE) continue; // happens if an enum is also a namespace
         let initInStart = false;
         let val = <EnumValue>member;
@@ -1374,7 +1407,9 @@ export class Compiler extends DiagnosticEmitter {
     var prototype = instance.prototype;
     var staticMembers = (<ClassPrototype>prototype).members;
     if (staticMembers) {
-      for (let element of staticMembers.values()) {
+      // for (let element of staticMembers.values()) {
+      for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
+        let element = unchecked(_values[i]);
         switch (element.kind) {
           case ElementKind.GLOBAL: {
             this.compileGlobal(<Global>element);
@@ -1409,7 +1444,9 @@ export class Compiler extends DiagnosticEmitter {
     if (ctorInstance) this.compileFunction(ctorInstance);
     var instanceMembers = instance.members;
     if (instanceMembers) {
-      for (let element of instanceMembers.values()) {
+      // for (let element of instanceMembers.values()) {
+      for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
+        let element = unchecked(_values[i]);
         switch (element.kind) {
           case ElementKind.FUNCTION_PROTOTYPE: {
             if (!element.is(CommonFlags.GENERIC)) {
@@ -2572,7 +2609,7 @@ export class Compiler extends DiagnosticEmitter {
       let case_ = cases[i];
       let label = case_.label;
       if (label) {
-        breaks[breakIndex++] = module.br("case" + i.toString(10) + "|" + context,
+        breaks[breakIndex++] = module.br("case" + i.toString() + "|" + context,
           module.binary(BinaryOp.EqI32,
             module.local_get(tempLocalIndex, NativeType.I32),
             this.compileExpression(label, Type.u32,
@@ -2589,7 +2626,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise br to default respectively out of the switch if there is no default case
     breaks[breakIndex] = module.br((defaultIndex >= 0
-        ? "case" + defaultIndex.toString(10)
+        ? "case" + defaultIndex.toString()
         : "break"
       ) + "|" + context);
 
@@ -2609,7 +2646,7 @@ export class Compiler extends DiagnosticEmitter {
       innerFlow.breakLabel = breakLabel;
 
       let isLast = i == numCases - 1;
-      let nextLabel = isLast ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
+      let nextLabel = isLast ? breakLabel : "case" + (i + 1).toString() + "|" + context;
       let stmts = new Array<ExpressionRef>(1 + numStatements);
       stmts[0] = currentBlock;
       let count = 1;
@@ -6683,9 +6720,9 @@ export class Compiler extends DiagnosticEmitter {
     // create a br_table switching over the number of optional parameters provided
     var numNames = numOptional + 1; // incl. outer block
     var names = new Array<string>(numNames);
-    var ofN = "of" + numOptional.toString(10);
+    var ofN = "of" + numOptional.toString();
     for (let i = 0; i < numNames; ++i) {
-      let label = i.toString(10) + ofN;
+      let label = i.toString() + ofN;
       names[i] = label;
     }
     var body = module.block(names[0], [
@@ -7379,7 +7416,7 @@ export class Compiler extends DiagnosticEmitter {
     var prototype = new FunctionPrototype(
       declaration.name.text.length
         ? declaration.name.text
-        : "anonymous|" + (actualFunction.nextAnonymousId++).toString(10),
+        : "anonymous|" + (actualFunction.nextAnonymousId++).toString(),
       actualFunction,
       declaration,
       DecoratorFlags.NONE

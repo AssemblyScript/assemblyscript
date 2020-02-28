@@ -243,7 +243,7 @@ export class IDLBuilder extends ExportsWalker {
           if (isConst) {
             sb.push(" = ");
             assert(value.constantValueKind == ConstantValueKind.INTEGER);
-            sb.push(i64_low(value.constantIntegerValue).toString(10));
+            sb.push(i64_low(value.constantIntegerValue).toString());
           }
           sb.push(";\n");
         }
@@ -425,7 +425,7 @@ export class TSDBuilder extends ExportsWalker {
           if (member.is(CommonFlags.INLINED)) {
             sb.push(" = ");
             assert(value.constantValueKind == ConstantValueKind.INTEGER);
-            sb.push(i64_low(value.constantIntegerValue).toString(10));
+            sb.push(i64_low(value.constantIntegerValue).toString());
           }
           sb.push(",\n");
           --remainingMembers;

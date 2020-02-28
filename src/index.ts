@@ -204,20 +204,26 @@ export function buildTSD(program: Program): string {
 export function buildRTTI(program: Program): string {
   var sb = new Array<string>();
   sb.push("{\n  \"names\": [\n");
-  for (let cls of program.managedClasses.values()) {
+  // for (let cls of program.managedClasses.values()) {
+  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
+    let cls = unchecked(_values[i]);
     sb.push("    \"");
     sb.push(cls.internalName);
     sb.push("\",\n");
   }
   sb.push("  ],\n  \"base\": [\n");
-  for (let cls of program.managedClasses.values()) {
+  // for (let cls of program.managedClasses.values()) {
+  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
+    let cls = unchecked(_values[i]);
     let base = cls.base;
     sb.push("    ");
     sb.push(base ? base.id.toString() : "0");
     sb.push(",\n");
   }
   sb.push("  ],\n  \"flags\": [\n");
-  for (let cls of program.managedClasses.values()) {
+  // for (let cls of program.managedClasses.values()) {
+  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
+    let cls = unchecked(_values[i]);
     sb.push("    ");
     sb.push(cls.rttiFlags.toString());
     sb.push(",\n");
@@ -226,15 +232,11 @@ export function buildRTTI(program: Program): string {
   return sb.join("");
 }
 
-/** Prefix indicating a library file. */
-export { LIBRARY_PREFIX } from "./common";
-
 // Full API
 export * from "./ast";
 export * from "./common";
 export * from "./compiler";
 export * from "./definitions";
-export * from "./diagnosticMessages.generated";
 export * from "./diagnostics";
 export * from "./flow";
 export * from "./module";

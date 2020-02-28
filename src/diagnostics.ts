@@ -5,7 +5,10 @@
  *//***/
 
 import {
-  Range,
+  Range
+} from "./tokenizer";
+
+import {
   Source
 } from "./ast";
 
@@ -128,21 +131,21 @@ export class DiagnosticMessage {
       return (
         diagnosticCategoryToString(this.category) +
         " " +
-        this.code.toString(10) +
+        this.code.toString() +
         ": \"" +
         this.message +
         "\" in " +
         this.range.source.normalizedPath +
         ":" +
-        this.range.line.toString(10) +
+        this.range.line.toString() +
         ":" +
-        this.range.column.toString(10)
+        this.range.column.toString()
       );
     }
     return (
       diagnosticCategoryToString(this.category) +
       " " +
-      this.code.toString(10) +
+      this.code.toString() +
       ": " +
       this.message
     );
@@ -162,7 +165,7 @@ export function formatDiagnosticMessage(
   sb.push(diagnosticCategoryToString(message.category));
   if (useColors) sb.push(COLOR_RESET);
   sb.push(message.code < 1000 ? " AS" : " TS");
-  sb.push(message.code.toString(10));
+  sb.push(message.code.toString());
   sb.push(": ");
   sb.push(message.message);
 
@@ -179,9 +182,9 @@ export function formatDiagnosticMessage(
     sb.push(" in ");
     sb.push(range.source.normalizedPath);
     sb.push("(");
-    sb.push(range.line.toString(10));
+    sb.push(range.line.toString());
     sb.push(",");
-    sb.push(range.column.toString(10));
+    sb.push(range.column.toString());
     sb.push(")");
 
     let relatedRange = message.relatedRange;
@@ -194,9 +197,9 @@ export function formatDiagnosticMessage(
       sb.push(" in ");
       sb.push(relatedRange.source.normalizedPath);
       sb.push("(");
-      sb.push(relatedRange.line.toString(10));
+      sb.push(relatedRange.line.toString());
       sb.push(",");
-      sb.push(relatedRange.column.toString(10));
+      sb.push(relatedRange.column.toString());
       sb.push(")");
     }
   }

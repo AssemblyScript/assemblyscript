@@ -485,7 +485,10 @@ exports.main = function main(argv, options, callback) {
         assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
       });
     }
-    if (checkDiagnostics(program, stderr)) return callback(Error("Parse error"));
+    var numErrors = checkDiagnostics(program, stderr);
+    if (numErrors) {
+      return callback(Error(numErrors + " parse error(s)"));
+    }
   }
 
   // Include runtime template before entry files so its setup runs first
@@ -580,9 +583,10 @@ exports.main = function main(argv, options, callback) {
   } catch (e) {
     return callback(e);
   }
-  if (checkDiagnostics(program, stderr)) {
+  var numErrors = checkDiagnostics(program, stderr);
+  if (numErrors) {
     if (module) module.dispose();
-    return callback(Error("Compile error"));
+    return callback(Error(numErrors + " compile error(s)"));
   }
 
   // Call afterCompile transform hook
@@ -1024,7 +1028,7 @@ exports.main = function main(argv, options, callback) {
 /** Checks diagnostics emitted so far for errors. */
 function checkDiagnostics(program, stderr) {
   var diagnostic;
-  var hasErrors = false;
+  var numErrors = 0;
   while ((diagnostic = assemblyscript.nextDiagnostic(program)) != null) {
     if (stderr) {
       stderr.write(
@@ -1032,9 +1036,9 @@ function checkDiagnostics(program, stderr) {
         EOL + EOL
       );
     }
-    if (assemblyscript.isError(diagnostic)) hasErrors = true;
+    if (assemblyscript.isError(diagnostic)) ++numErrors;
   }
-  return hasErrors;
+  return numErrors;
 }
 
 exports.checkDiagnostics = checkDiagnostics;
