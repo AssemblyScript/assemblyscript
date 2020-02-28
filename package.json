@@ -63,7 +63,8 @@
     "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
     "prepublishOnly": "node scripts/prepublish",
-    "postpublish": "node scripts/postpublish"
+    "postpublish": "node scripts/postpublish",
+    "asbuild": "node bin/asc src/glue/wasm/index.ts src/index.ts"
   },
   "releaseFiles": [
     "lib/rtrace/index.d.ts",

@@ -1847,7 +1847,7 @@ export function getFunctionVars(func: FunctionRef): NativeType {
   // TODO: unify this on Binaryen's side?
   var count = binaryen._BinaryenFunctionGetNumVars(func);
   var types = new Array<NativeType>(count);
-  for (let i = 0; i < count; ++i) {
+  for (let i: Index = 0; i < count; ++i) {
     types[i] = binaryen._BinaryenFunctionGetVar(func, i);
   }
   return createType(types);
@@ -2061,10 +2061,10 @@ function allocString(str: string | null): usize {
   return ptr;
 }
 
-function readBuffer(ptr: usize, length: usize): Uint8Array {
+function readBuffer(ptr: usize, length: i32): Uint8Array {
   var ret = new Uint8Array(length);
-  for (let i: usize = 0; i < length; ++i) {
-    ret[i] = binaryen.__i32_load8_u(ptr + i);
+  for (let i = 0; i < length; ++i) {
+    ret[i] = binaryen.__i32_load8_u(ptr + <usize>i);
   }
   return ret;
 }

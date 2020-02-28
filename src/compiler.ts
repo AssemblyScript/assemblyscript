@@ -765,7 +765,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.TYPEDEFINITION:
       case ElementKind.ENUMVALUE:
       case ElementKind.INDEXSIGNATURE: break;
-      default: assert(false, ElementKind[element.kind]);
+      default: assert(false);
     }
     if (compileMembers) {
       let members = element.members;

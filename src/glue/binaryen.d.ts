@@ -14,13 +14,13 @@ export declare function __i32_store16(ptr: usize, value: number): void;
 export declare function __i32_store(ptr: usize, value: number): void;
 export declare function __f32_store(ptr: usize, value: number): void;
 export declare function __f64_store(ptr: usize, value: number): void;
-export declare function __i32_load8_s(ptr: usize): number;
-export declare function __i32_load8_u(ptr: usize): number;
-export declare function __i32_load16_s(ptr: usize): number;
-export declare function __i32_load16_u(ptr: usize): number;
-export declare function __i32_load(ptr: usize): number;
-export declare function __f32_load(ptr: usize): number;
-export declare function __f64_load(ptr: usize): number;
+export declare function __i32_load8_s(ptr: usize): i8;
+export declare function __i32_load8_u(ptr: usize): u8;
+export declare function __i32_load16_s(ptr: usize): i16;
+export declare function __i32_load16_u(ptr: usize): u16;
+export declare function __i32_load(ptr: usize): i32;
+export declare function __f32_load(ptr: usize): f32;
+export declare function __f64_load(ptr: usize): f64;
 
 type BinaryenIndex = u32;
 
