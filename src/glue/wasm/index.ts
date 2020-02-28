@@ -4,7 +4,6 @@
  * @preferred
  *//***/
 
-import "../binaryen.d";
 import "./i64";
 import "./float";
 import "./mapset";

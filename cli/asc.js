@@ -390,7 +390,8 @@ exports.main = function main(argv, options, callback) {
       if ((sourceText = readFile(sourcePath = internalPath + ".ts", baseDir)) == null) {
         if ((sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir)) == null) {
           // portable d.ts: uses the .js file next to it in JS or becomes an import in Wasm
-          sourceText = readFile(sourcePath = internalPath + ".d.ts", baseDir);
+          sourcePath = internalPath + ".ts";
+          sourceText = readFile(internalPath + ".d.ts", baseDir);
         }
       }
 
@@ -478,7 +479,7 @@ exports.main = function main(argv, options, callback) {
     var internalPath;
     while ((internalPath = assemblyscript.nextFile(program)) != null) {
       let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
-      if (!file) return callback(Error("Import file '" + internalPath + ".ts' not found."))
+      if (!file) return callback(Error("Import '" + internalPath + "' not found."))
       stats.parseCount++;
       stats.parseTime += measure(() => {
         assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
