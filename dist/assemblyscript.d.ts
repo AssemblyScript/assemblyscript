@@ -3528,7 +3528,7 @@ declare module "assemblyscript/src/program" {
         /** Looks up the element with the specified name relative to this element, like in JS. */
         abstract lookup(name: string): Element | null;
         /** Adds an element as a member of this one. Reports and returns `false` if a duplicate. */
-        add(name: string, element: DeclaredElement): boolean;
+        add(name: string, element: DeclaredElement, localIdentifierIfImport?: IdentifierExpression | null): boolean;
         /** Returns a string representation of this element. */
         toString(): string;
     }
@@ -3597,7 +3597,7 @@ declare module "assemblyscript/src/program" {
         program: Program, 
         /** Source of this file. */
         source: Source);
-        add(name: string, element: DeclaredElement, isImport?: boolean): boolean;
+        add(name: string, element: DeclaredElement, localIdentifierIfImport?: IdentifierExpression | null): boolean;
         lookupInSelf(name: string): DeclaredElement | null;
         lookup(name: string): Element | null;
         /** Ensures that an element is an export of this file. */
@@ -3607,7 +3607,7 @@ declare module "assemblyscript/src/program" {
         /** Looks up the export of the specified name. */
         lookupExport(name: string): DeclaredElement | null;
         /** Creates an imported namespace from this file. */
-        asImportedNamespace(name: string, parent: Element): Namespace;
+        asImportedNamespace(name: string, parent: Element, localIdentifier: IdentifierExpression): Namespace;
     }
     /** A type definition. */
     export class TypeDefinition extends TypedElement {
