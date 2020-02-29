@@ -787,8 +787,9 @@ export class Parser extends DiagnosticEmitter {
       return null;
     }
     this.tryParseSignatureIsSignature = true;
+    if (!parameters) parameters = [];
     return Node.createFunctionType(
-      parameters || [],
+      parameters,
       returnType,
       thisType,
       false,
@@ -923,7 +924,7 @@ export class Parser extends DiagnosticEmitter {
       }
     }
     var range = Range.join(identifier.range, tn.range());
-    if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) && initializer) {
+    if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) != 0 && initializer !== null) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
         range);
@@ -2048,7 +2049,7 @@ export class Parser extends DiagnosticEmitter {
             name.range
           );
         }
-        if (parameters.length && parameters[0].initializer) {
+        if (parameters.length > 0 && parameters[0].initializer !== null) {
           this.error(
             DiagnosticCode.A_set_accessor_parameter_cannot_have_an_initializer,
             name.range
@@ -2903,10 +2904,11 @@ export class Parser extends DiagnosticEmitter {
             let declarations = (<VariableStatement>initializer).declarations;
             for (let i = 0, k = declarations.length; i < k; ++i) {
               let declaration = declarations[i];
-              if (declaration.initializer) {
+              let initializer = declaration.initializer;
+              if (initializer) {
                 this.error(
                   DiagnosticCode.The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer,
-                  declaration.initializer.range
+                  initializer.range
                 ); // recoverable
               }
             }

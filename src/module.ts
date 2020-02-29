@@ -607,7 +607,6 @@ export class Module {
     offset: Index = 0,
     align: Index = bytes // naturally aligned by default
   ): ExpressionRef {
-    if (type < NativeType.None || type > NativeType.V128) throw new Error("here: " + type);
     return binaryen._BinaryenStore(this.ref, bytes, offset, align, ptr, value, type);
   }
 
@@ -790,7 +789,7 @@ export class Module {
     for (let i = 0; i < numNames; ++i) {
       strs[i] = this.allocStringCached(names[i]);
     }
-    var cArr = allocI32Array(strs);
+    var cArr = allocPtrArray(strs);
     var cStr = this.allocStringCached(defaultName);
     var ret = binaryen._BinaryenSwitch(this.ref, cArr, numNames, cStr, condition, value);
     binaryen._free(cArr);
@@ -806,8 +805,8 @@ export class Module {
     var cStr = this.allocStringCached(target);
     var cArr = allocPtrArray(operands);
     var ret = isReturn
-      ? binaryen._BinaryenReturnCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType)
-      : binaryen._BinaryenCall(this.ref, cStr, cArr, operands && operands.length || 0, returnType);
+      ? binaryen._BinaryenReturnCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType)
+      : binaryen._BinaryenCall(this.ref, cStr, cArr, operands ? operands.length : 0, returnType);
       binaryen._free(cArr);
     return ret;
   }
@@ -829,8 +828,8 @@ export class Module {
   ): ExpressionRef {
     var cArr = allocPtrArray(operands);
     var ret = isReturn
-      ? binaryen._BinaryenReturnCallIndirect(this.ref, index, cArr, operands && operands.length || 0, params, results)
-      : binaryen._BinaryenCallIndirect(this.ref, index, cArr, operands && operands.length || 0, params, results);
+      ? binaryen._BinaryenReturnCallIndirect(this.ref, index, cArr, operands ? operands.length : 0, params, results)
+      : binaryen._BinaryenCallIndirect(this.ref, index, cArr, operands ? operands.length : 0, params, results);
     binaryen._free(cArr);
     return ret;
   }
@@ -1407,7 +1406,7 @@ export class Module {
     var func = this.addTemporaryFunction(type, null, expr);
     var names = this.cachedPrecomputeNames;
     if (!names) {
-      this.cachedPrecomputeNames = names = allocI32Array([
+      this.cachedPrecomputeNames = names = allocPtrArray([
         this.allocStringCached("vacuum"),
         this.allocStringCached("precompute")
       ]);
@@ -1464,7 +1463,7 @@ export class Module {
   private cachedStrings: Map<string,usize> = new Map();
 
   private allocStringCached(str: string | null): usize {
-    if (str == null) return 0;
+    if (str === null) return 0;
     var cachedStrings = this.cachedStrings;
     if (cachedStrings.has(str)) return <usize>cachedStrings.get(str);
     var ptr = allocString(str);
@@ -1661,7 +1660,7 @@ export function getConstValueF32(expr: ExpressionRef): f32 {
   return binaryen._BinaryenConstGetValueF32(expr);
 }
 
-export function getConstValueF64(expr: ExpressionRef): f32 {
+export function getConstValueF64(expr: ExpressionRef): f64 {
   return binaryen._BinaryenConstGetValueF64(expr);
 }
 
@@ -2041,7 +2040,7 @@ function stringLengthUTF8(str: string): usize {
 }
 
 function allocString(str: string | null): usize {
-  if (str == null) return 0;
+  if (str === null) return 0;
   var ptr = binaryen._malloc(stringLengthUTF8(str) + 1);
   // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
@@ -2168,7 +2167,7 @@ export function needsExplicitUnreachable(expr: ExpressionRef): bool {
 export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: ExpressionRef, data: T) => void): bool {
   switch (getExpressionId(expr)) {
     case ExpressionId.Block: {
-      for (let i = 0, n = binaryen._BinaryenBlockGetNumChildren(expr); i < n; ++i) {
+      for (let i: Index = 0, n = binaryen._BinaryenBlockGetNumChildren(expr); i < n; ++i) {
         visit(binaryen._BinaryenBlockGetChild(expr, i), data);
       }
       break;
@@ -2194,13 +2193,13 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       break;
     }
     case ExpressionId.Call: {
-      for (let i = 0, n = binaryen._BinaryenCallGetNumOperands(expr); i < n; ++i) {
+      for (let i: Index = 0, n = binaryen._BinaryenCallGetNumOperands(expr); i < n; ++i) {
         visit(binaryen._BinaryenCallGetOperand(expr, i), data);
       }
       break;
     }
     case ExpressionId.CallIndirect: {
-      for (let i = 0, n = binaryen._BinaryenCallIndirectGetNumOperands(expr); i < n; ++i) {
+      for (let i: Index = 0, n = binaryen._BinaryenCallIndirectGetNumOperands(expr); i < n; ++i) {
         visit(binaryen._BinaryenCallIndirectGetOperand(expr, i), data);
       }
       break;
@@ -2255,7 +2254,7 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       break;
     }
     case ExpressionId.Host: {
-      for (let i = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
+      for (let i: Index = 0, n = binaryen._BinaryenHostGetNumOperands(expr); i < n; ++i) {
         visit(binaryen._BinaryenHostGetOperand(expr, i), data);
       }
       break;
@@ -2363,7 +2362,7 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
       break;
     }
     case ExpressionId.Throw: {
-      for (let i = 0, n = binaryen._BinaryenThrowGetNumOperands(expr); i < n; ++i) {
+      for (let i: Index = 0, n = binaryen._BinaryenThrowGetNumOperands(expr); i < n; ++i) {
         visit(binaryen._BinaryenThrowGetOperand(expr, i), data);
       }
       break;

@@ -1146,7 +1146,7 @@ export abstract class TypeNode extends Node {
     if (this.kind == NodeKind.NAMEDTYPE) {
       if (!(<NamedTypeNode>self).name.next) {
         let typeArgumentNodes = (<NamedTypeNode>self).typeArguments;
-        if (typeArgumentNodes !== null && typeArgumentNodes.length) {
+        if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
           for (let i = 0, k = typeArgumentNodes.length; i < k; ++i) {
             if (typeArgumentNodes[i].hasGenericComponent(typeParameterNodes)) return true;
           }

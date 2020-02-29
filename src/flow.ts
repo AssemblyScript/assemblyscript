@@ -283,7 +283,7 @@ export class Flow {
     }
     var local: Local;
     if (except) {
-      if (temps && temps.length) {
+      if (temps !== null && temps.length > 0) {
         for (let i = 0, k = temps.length; i < k; ++i) {
           if (!except.has(temps[i].index)) {
             local = temps[i];
@@ -299,8 +299,8 @@ export class Flow {
       }
       local = parentFunction.addLocal(type);
     } else {
-      if (temps && temps.length) {
-        local = temps.pop()!;
+      if (temps !== null && temps.length > 0) {
+        local = assert(temps.pop());
         local.type = type;
         local.flags = CommonFlags.NONE;
       } else {
@@ -317,7 +317,7 @@ export class Flow {
     local.set(CommonFlags.SCOPED);
     var scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
-    scopedLocals.set("~auto" + (this.parentFunction.nextAutoreleaseId++), local);
+    scopedLocals.set("~auto" + (this.parentFunction.nextAutoreleaseId++).toString(), local);
     this.setLocalFlag(local.index, LocalFlags.RETAINED);
     return local;
   }
@@ -381,7 +381,7 @@ export class Flow {
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
     var scopedLocals = this.scopedLocals;
-    if (scopedLocals && scopedLocals.has(name)) return scopedLocals.get(name)!;
+    if (scopedLocals !== null && scopedLocals.has(name)) return assert(scopedLocals.get(name));
     return null;
   }
 
@@ -460,10 +460,14 @@ export class Flow {
   /** Looks up the local of the specified name in the current scope. */
   lookupLocal(name: string): Local | null {
     var current: Flow | null = this;
-    var scope: Map<String,Local> | null;
-    do if ((scope = current.scopedLocals) && scope.has(name)) return scope.get(name)!;
-    while (current = current.parent);
-    return this.parentFunction.localsByName.get(name)!;
+    do {
+      let scope = current.scopedLocals;
+      if (scope !== null && scope.has(name)) return assert(scope.get(name));
+      current = current.parent;
+    } while (current);
+    var localsByName = this.parentFunction.localsByName;
+    if (localsByName.has(name)) return assert(localsByName.get(name));
+    return null;
   }
 
   /** Looks up the element with the specified name relative to the scope of this flow. */
@@ -510,7 +514,9 @@ export class Flow {
     var stack = parentFunction.breakStack;
     if (!stack) parentFunction.breakStack = [ id ];
     else stack.push(id);
-    return parentFunction.breakLabel = id.toString();
+    var label = id.toString();
+    parentFunction.breakLabel = label;
+    return label;
   }
 
   /** Pops the most recent break label from the stack. */
@@ -950,6 +956,7 @@ export class Flow {
         let name = getCallTarget(expr);
         let program = this.parentFunction.program;
         if (name == program.retainInstance.internalName) {
+          // __retain just passes through the argument
           this.inheritNonnullIfTrue(getCallOperand(expr, 0), iff);
         }
         break;
@@ -1076,7 +1083,7 @@ export class Flow {
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
-        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr)))!);
+        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
         assert(global.kind == ElementKind.GLOBAL);
         return canConversionOverflow(assert((<Global>global).type), type);
       }
@@ -1231,10 +1238,10 @@ export class Flow {
           default: assert(false);
         }
         switch (type.kind) {
-          case TypeKind.I8: return value < i8.MIN_VALUE || value > i8.MAX_VALUE;
-          case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
-          case TypeKind.U8: return value < 0 || value > u8.MAX_VALUE;
-          case TypeKind.U16: return value < 0 || value > u16.MAX_VALUE;
+          case TypeKind.I8: return value < <i32>i8.MIN_VALUE || value > <i32>i8.MAX_VALUE;
+          case TypeKind.I16: return value < <i32>i16.MIN_VALUE || value > <i32>i16.MAX_VALUE;
+          case TypeKind.U8: return value < 0 || value > <i32>u8.MAX_VALUE;
+          case TypeKind.U16: return value < 0 || value > <i32>u16.MAX_VALUE;
           case TypeKind.BOOL: return (value & ~1) != 0;
         }
         break;
@@ -1282,7 +1289,7 @@ export class Flow {
         let instancesByName = program.instancesByName;
         let instanceName = assert(getCallTarget(expr));
         if (instancesByName.has(instanceName)) {
-          let instance = instancesByName.get(instanceName)!;
+          let instance = assert(instancesByName.get(instanceName));
           assert(instance.kind == ElementKind.FUNCTION);
           let returnType = (<Function>instance).signature.returnType;
           return !(<Function>instance).flow.is(FlowFlags.RETURNS_WRAPPED)
@@ -1331,7 +1338,7 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
 }
 
 /** Finds all indexes of locals used in the specified expression. */
-export function findUsedLocals(expr: ExpressionRef, used: Set<i32> = new Set()): Set<i32> {
+export function findUsedLocals(expr: ExpressionRef, used: Set<i32> = new Set<i32>()): Set<i32> {
   traverse(expr, used, findUsedLocalsVisit);
   return used;
 }

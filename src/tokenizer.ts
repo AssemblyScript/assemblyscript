@@ -479,7 +479,8 @@ export class Tokenizer extends DiagnosticEmitter {
     this.source = source;
     this.pos = 0;
     this.end = source.text.length;
-    this.diagnostics = diagnostics || new Array();
+    if (!diagnostics) diagnostics = [];
+    this.diagnostics = diagnostics;
 
     var end = this.end;
     var text = source.text;
@@ -1004,13 +1005,9 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   mark(): State {
-    var state: State;
-    if (reusableState) {
-      state = reusableState;
-      reusableState = null;
-    } else {
-      state = new State();
-    }
+    var state = reusableState;
+    if (state) reusableState = null;
+    else state = new State();
     state.pos = this.pos;
     state.token = this.token;
     state.tokenPos = this.tokenPos;

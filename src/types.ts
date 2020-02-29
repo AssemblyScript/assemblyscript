@@ -108,7 +108,7 @@ export class Type {
   /** Type flags. */
   flags: TypeFlags;
   /** Size in bits. */
-  size: u32;
+  size: i32;
   /** Size in bytes. */
   byteSize: i32;
   /** Underlying class reference, if a class type. */
@@ -180,12 +180,12 @@ export class Type {
   }
 
   /** Computes the sign-extending shift in the target type. */
-  computeSmallIntegerShift(targetType: Type): u32 {
+  computeSmallIntegerShift(targetType: Type): i32 {
     return targetType.size - this.size;
   }
 
   /** Computes the truncating mask in the target type. */
-  computeSmallIntegerMask(targetType: Type): u32 {
+  computeSmallIntegerMask(targetType: Type): i32 {
     var size = this.is(TypeFlags.UNSIGNED) ? this.size : this.size - 1;
     return ~0 >>> (targetType.size - size);
   }
@@ -610,7 +610,7 @@ export class Signature {
   /** Gets the known or, alternatively, generic parameter name at the specified index. */
   getParameterName(index: i32): string {
     var parameterNames = this.parameterNames;
-    return parameterNames && parameterNames.length > index
+    return parameterNames !== null && parameterNames.length > index
       ? parameterNames[index]
       : getDefaultParameterName(index);
   }
@@ -627,8 +627,8 @@ export class Signature {
     // check `this` type
     var thisThisType = this.thisType;
     var targetThisType = value.thisType;
-    if (thisThisType) {
-      if (!(targetThisType && thisThisType.isAssignableTo(targetThisType))) return false;
+    if (thisThisType !== null) {
+      if (targetThisType === null || !thisThisType.isAssignableTo(targetThisType)) return false;
     } else if (targetThisType) {
       return false;
     }
@@ -691,11 +691,10 @@ export class Signature {
 // helpers
 
 // Cached default parameter names used where names are unknown.
-var cachedDefaultParameterNames: string[] | null = null;
+var cachedDefaultParameterNames: string[] = [];
 
 /** Gets the cached default parameter name for the specified index. */
 export function getDefaultParameterName(index: i32): string {
-  if (!cachedDefaultParameterNames) cachedDefaultParameterNames = [];
   for (let i = cachedDefaultParameterNames.length; i <= index; ++i) {
     cachedDefaultParameterNames.push("arg$" + i.toString());
   }

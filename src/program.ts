@@ -568,17 +568,19 @@ export class Program extends DiagnosticEmitter {
     flags: CommonFlags = CommonFlags.NONE
   ): FunctionDeclaration {
     var range = this.nativeSource.range;
-    return Node.createFunctionDeclaration(
-      Node.createIdentifierExpression(name, range),
-      null,
-      this.nativeDummySignature || (this.nativeDummySignature = Node.createFunctionType([],
+    var signature = this.nativeDummySignature;
+    if (!signature) {
+      this.nativeDummySignature = signature = Node.createFunctionType([],
         Node.createNamedType( // ^ AST signature doesn't really matter, is overridden anyway
           Node.createSimpleTypeName(CommonNames.void_, range),
           null, false, range
         ),
-        null, false, range)
-      ),
-      null, null, flags, ArrowKind.NONE, range
+        null, false, range
+      );
+    }
+    return Node.createFunctionDeclaration(
+      Node.createIdentifierExpression(name, range),
+      null, signature, null, null, flags, ArrowKind.NONE, range
     );
   }
 
@@ -625,7 +627,7 @@ export class Program extends DiagnosticEmitter {
   getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement | null {
     var elementsByDeclaration = this.elementsByDeclaration;
     return elementsByDeclaration.has(declaration)
-      ? elementsByDeclaration.get(declaration)!
+      ? assert(elementsByDeclaration.get(declaration))
       : null;
   }
 
@@ -2175,8 +2177,11 @@ export abstract class Element {
   /** Gets the enclosing file. */
   get file(): File {
     var current: Element = this;
-    do if ((current = current.parent).kind == ElementKind.FILE) return <File>current;
-    while (true);
+    do {
+      current = current.parent;
+      if (current.kind == ElementKind.FILE) return <File>current;
+    } while (true);
+    return <File>unreachable();
   }
 
   /** Tests if this element has a specific flag or flags. */
@@ -2214,7 +2219,9 @@ export abstract class Element {
         if (merged) {
           element = merged; // use merged element
         } else {
-          let reportedIdentifier = localIdentifierIfImport || element.identifierNode;
+          let reportedIdentifier = localIdentifierIfImport
+            ? localIdentifierIfImport
+            : element.identifierNode;
           if (isDeclaredElement(existing.kind)) {
             this.program.errorRelated(
               DiagnosticCode.Duplicate_identifier_0,
@@ -2244,7 +2251,7 @@ export abstract class Element {
 
   /** Returns a string representation of this element. */
   toString(): string {
-    return ElementKind[this.kind] + ":" + this.internalName;
+    return this.internalName + ", kind=" + this.kind.toString();
   }
 }
 
@@ -2948,12 +2955,13 @@ export class Function extends TypedElement {
     var localName = name !== null
       ? name
       : "var$" + localIndex.toString();
+    if (!declaration) declaration = this.program.makeNativeVariableDeclaration(localName);
     var local = new Local(
       localName,
       localIndex,
       type,
       this,
-      declaration || this.program.makeNativeVariableDeclaration(localName)
+      declaration
     );
     if (name) {
       if (this.localsByName.has(name)) throw new Error("duplicate local name");
@@ -2967,7 +2975,7 @@ export class Function extends TypedElement {
   /* @override */
   lookup(name: string): Element | null {
     var locals = this.localsByName;
-    if (locals.has(name)) return locals.get(name)!;
+    if (locals.has(name)) return assert(locals.get(name));
     return this.parent.lookup(name);
   }
 
@@ -3302,7 +3310,8 @@ export class ClassPrototype extends DeclaredElement {
       if (seen.has(current)) break;
       seen.add(current);
       if (current === basePtototype) return true;
-    } while (current = current.basePrototype);
+      current = current.basePrototype;
+    } while (current);
     return false;
   }
 
@@ -3375,7 +3384,7 @@ export class Class extends TypedElement {
   /** Resolved type arguments. */
   typeArguments: Type[] | null;
   /** Base class, if applicable. */
-  base: Class | null;
+  base: Class | null = null;
   /** Contextual type arguments for fields and methods. */
   contextualTypeArguments: Map<string,Type> | null = null;
   /** Current member memory offset. */
@@ -3497,8 +3506,10 @@ export class Class extends TypedElement {
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
-    do if (current == target) return true;
-    while (current = current.base);
+    do {
+      if (current == target) return true;
+      current = current.base;
+    } while (current);
     return false;
   }
 
@@ -3526,7 +3537,8 @@ export class Class extends TypedElement {
         let overload = overloads.get(kind);
         if (overload) return overload;
       }
-    } while (instance = instance.base);
+      instance = instance.base;
+    } while (instance);
     return null;
   }
 
