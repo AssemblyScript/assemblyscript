@@ -1268,9 +1268,48 @@
    end
   end
  )
- (func $~lib/rt/pure/__retain (; 15 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/increment (; 15 ;) (param $0 i32)
   (local $1 i32)
-  (local $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.tee $1
+  i32.const -268435456
+  i32.and
+  local.get $1
+  i32.const 1
+  i32.add
+  i32.const -268435456
+  i32.and
+  i32.ne
+  if
+   i32.const 0
+   i32.const 256
+   i32.const 109
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.add
+  i32.store offset=4
+  local.get $0
+  call $~lib/rt/rtrace/onincrement
+  local.get $0
+  i32.load
+  i32.const 1
+  i32.and
+  if
+   i32.const 0
+   i32.const 256
+   i32.const 112
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $~lib/rt/pure/__retain (; 16 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 432
   i32.gt_u
@@ -1278,48 +1317,11 @@
    local.get $0
    i32.const 16
    i32.sub
-   local.tee $1
-   i32.load offset=4
-   local.tee $2
-   i32.const -268435456
-   i32.and
-   local.get $2
-   i32.const 1
-   i32.add
-   i32.const -268435456
-   i32.and
-   i32.ne
-   if
-    i32.const 0
-    i32.const 256
-    i32.const 109
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   local.get $2
-   i32.const 1
-   i32.add
-   i32.store offset=4
-   local.get $1
-   call $~lib/rt/rtrace/onincrement
-   local.get $1
-   i32.load
-   i32.const 1
-   i32.and
-   if
-    i32.const 0
-    i32.const 256
-    i32.const 112
-    i32.const 13
-    call $~lib/builtins/abort
-    unreachable
-   end
+   call $~lib/rt/pure/increment
   end
   local.get $0
  )
- (func $~lib/memory/memory.copy (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -1492,7 +1494,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.const 16
@@ -1562,7 +1564,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/pure/__release (; 18 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 19 ;) (param $0 i32)
   local.get $0
   i32.const 432
   i32.gt_u
@@ -1573,7 +1575,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1642,7 +1644,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 21 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1702,11 +1704,11 @@
   i32.store offset=8
   local.get $2
  )
- (func $~setArgumentsLength (; 21 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 22 ;) (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $start:std/arraybuffer (; 22 ;)
+ (func $start:std/arraybuffer (; 23 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1983,10 +1985,10 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~start (; 23 ;)
+ (func $~start (; 24 ;)
   call $start:std/arraybuffer
  )
- (func $~lib/rt/pure/decrement (; 24 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 25 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

@@ -1104,9 +1104,48 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/__retain (; 16 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/increment (; 16 ;) (param $0 i32)
   (local $1 i32)
-  (local $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.tee $1
+  i32.const -268435456
+  i32.and
+  local.get $1
+  i32.const 1
+  i32.add
+  i32.const -268435456
+  i32.and
+  i32.ne
+  if
+   i32.const 0
+   i32.const 496
+   i32.const 109
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.add
+  i32.store offset=4
+  local.get $0
+  call $~lib/rt/rtrace/onincrement
+  local.get $0
+  i32.load
+  i32.const 1
+  i32.and
+  if
+   i32.const 0
+   i32.const 496
+   i32.const 112
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $~lib/rt/pure/__retain (; 17 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 528
   i32.gt_u
@@ -1114,48 +1153,11 @@
    local.get $0
    i32.const 16
    i32.sub
-   local.tee $1
-   i32.load offset=4
-   local.tee $2
-   i32.const -268435456
-   i32.and
-   local.get $2
-   i32.const 1
-   i32.add
-   i32.const -268435456
-   i32.and
-   i32.ne
-   if
-    i32.const 0
-    i32.const 496
-    i32.const 109
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   local.get $2
-   i32.const 1
-   i32.add
-   i32.store offset=4
-   local.get $1
-   call $~lib/rt/rtrace/onincrement
-   local.get $1
-   i32.load
-   i32.const 1
-   i32.and
-   if
-    i32.const 0
-    i32.const 496
-    i32.const 112
-    i32.const 13
-    call $~lib/builtins/abort
-    unreachable
-   end
+   call $~lib/rt/pure/increment
   end
   local.get $0
  )
- (func $~lib/rt/__allocArray (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/__allocArray (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   i32.const 16
   local.get $2
@@ -1181,7 +1183,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/pure/__release (; 18 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 19 ;) (param $0 i32)
   local.get $0
   i32.const 528
   i32.gt_u
@@ -1192,7 +1194,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $start:std/array-literal (; 19 ;)
+ (func $start:std/array-literal (; 20 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 76
@@ -1556,10 +1558,10 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~start (; 20 ;)
+ (func $~start (; 21 ;)
   call $start:std/array-literal
  )
- (func $~lib/rt/pure/decrement (; 21 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 22 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1663,7 +1665,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 22 ;) (param $0 i32)
+ (func $~lib/rt/pure/__visit (; 23 ;) (param $0 i32)
   local.get $0
   i32.const 528
   i32.lt_u
@@ -1675,7 +1677,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (; 23 ;) (param $0 i32)
+ (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (; 24 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

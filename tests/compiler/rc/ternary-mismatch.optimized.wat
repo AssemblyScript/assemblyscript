@@ -911,9 +911,48 @@
   call $~lib/rt/rtrace/onalloc
   local.get $1
  )
- (func $~lib/rt/pure/__retain (; 13 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/increment (; 13 ;) (param $0 i32)
   (local $1 i32)
-  (local $2 i32)
+  local.get $0
+  i32.load offset=4
+  local.tee $1
+  i32.const -268435456
+  i32.and
+  local.get $1
+  i32.const 1
+  i32.add
+  i32.const -268435456
+  i32.and
+  i32.ne
+  if
+   i32.const 0
+   i32.const 144
+   i32.const 109
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.add
+  i32.store offset=4
+  local.get $0
+  call $~lib/rt/rtrace/onincrement
+  local.get $0
+  i32.load
+  i32.const 1
+  i32.and
+  if
+   i32.const 0
+   i32.const 144
+   i32.const 112
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
+ )
+ (func $~lib/rt/pure/__retain (; 14 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 176
   i32.gt_u
@@ -921,55 +960,18 @@
    local.get $0
    i32.const 16
    i32.sub
-   local.tee $1
-   i32.load offset=4
-   local.tee $2
-   i32.const -268435456
-   i32.and
-   local.get $2
-   i32.const 1
-   i32.add
-   i32.const -268435456
-   i32.and
-   i32.ne
-   if
-    i32.const 0
-    i32.const 144
-    i32.const 109
-    i32.const 2
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $1
-   local.get $2
-   i32.const 1
-   i32.add
-   i32.store offset=4
-   local.get $1
-   call $~lib/rt/rtrace/onincrement
-   local.get $1
-   i32.load
-   i32.const 1
-   i32.and
-   if
-    i32.const 0
-    i32.const 144
-    i32.const 112
-    i32.const 13
-    call $~lib/builtins/abort
-    unreachable
-   end
+   call $~lib/rt/pure/increment
   end
   local.get $0
  )
- (func $rc/ternary-mismatch/Ref#constructor (; 14 ;) (result i32)
+ (func $rc/ternary-mismatch/Ref#constructor (; 15 ;) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
   call $~lib/rt/pure/__retain
  )
- (func $rc/ternary-mismatch/test1 (; 15 ;) (param $0 i32) (result i32)
+ (func $rc/ternary-mismatch/test1 (; 16 ;) (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    call $rc/ternary-mismatch/Ref#constructor
@@ -978,7 +980,7 @@
    call $~lib/rt/pure/__retain
   end
  )
- (func $~lib/rt/pure/__release (; 16 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 17 ;) (param $0 i32)
   local.get $0
   i32.const 176
   i32.gt_u
@@ -989,7 +991,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $rc/ternary-mismatch/test2 (; 17 ;) (param $0 i32) (result i32)
+ (func $rc/ternary-mismatch/test2 (; 18 ;) (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    global.get $rc/ternary-mismatch/gloRef
@@ -998,7 +1000,7 @@
    call $rc/ternary-mismatch/Ref#constructor
   end
  )
- (func $~start (; 18 ;)
+ (func $~start (; 19 ;)
   call $rc/ternary-mismatch/Ref#constructor
   global.set $rc/ternary-mismatch/gloRef
   i32.const 1
@@ -1016,7 +1018,7 @@
   global.get $rc/ternary-mismatch/gloRef
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/decrement (; 19 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 20 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

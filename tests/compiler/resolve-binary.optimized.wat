@@ -2,9 +2,9 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_i32_i64_i32_i64_=>_i32 (func (param i32 i64 i32 i64 i32 i64) (result i32)))
@@ -221,12 +221,52 @@
   i32.lt_u
   select
  )
- (func $~lib/rt/stub/__alloc (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/maybeGrowMemory (; 5 ;) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  memory.size
+  local.tee $2
+  i32.const 16
+  i32.shl
+  local.tee $1
+  i32.gt_u
+  if
+   local.get $2
+   local.get $0
+   local.get $1
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $1
+   local.get $2
+   local.get $1
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $1
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $0
+  global.set $~lib/rt/stub/offset
+ )
+ (func $~lib/rt/stub/__alloc (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   local.get $0
   i32.const 1073741808
   i32.gt_u
@@ -236,7 +276,7 @@
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $4
+  local.tee $3
   local.get $0
   i32.const 15
   i32.add
@@ -248,51 +288,14 @@
   i32.const 16
   i32.gt_u
   select
-  local.tee $6
+  local.tee $4
   i32.add
-  local.tee $2
-  memory.size
-  local.tee $5
-  i32.const 16
-  i32.shl
-  local.tee $3
-  i32.gt_u
-  if
-   local.get $5
-   local.get $2
-   local.get $3
-   i32.sub
-   i32.const 65535
-   i32.add
-   i32.const -65536
-   i32.and
-   i32.const 16
-   i32.shr_u
-   local.tee $3
-   local.get $5
-   local.get $3
-   i32.gt_s
-   select
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    local.get $3
-    memory.grow
-    i32.const 0
-    i32.lt_s
-    if
-     unreachable
-    end
-   end
-  end
-  local.get $2
-  global.set $~lib/rt/stub/offset
-  local.get $4
+  call $~lib/rt/stub/maybeGrowMemory
+  local.get $3
   i32.const 16
   i32.sub
   local.tee $2
-  local.get $6
+  local.get $4
   i32.store
   local.get $2
   i32.const 1
@@ -303,9 +306,9 @@
   local.get $2
   local.get $0
   i32.store offset=12
-  local.get $4
+  local.get $3
  )
- (func $~lib/util/number/utoa_simple<u32> (; 6 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u32> (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -329,7 +332,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/number/I32#toString (; 7 ;) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (; 8 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -369,7 +372,7 @@
    i32.const 192
   end
  )
- (func $~lib/util/number/genDigits (; 8 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
+ (func $~lib/util/number/genDigits (; 9 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i64)
@@ -760,7 +763,7 @@
   i32.store16
   local.get $2
  )
- (func $~lib/memory/memory.copy (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -933,7 +936,7 @@
    end
   end
  )
- (func $~lib/util/number/prettify (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -1178,7 +1181,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 11 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/dtoa_core (; 12 ;) (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -1323,7 +1326,7 @@
   global.get $~lib/util/number/_K
   call $~lib/util/number/prettify
  )
- (func $~lib/string/String#substring (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1395,7 +1398,7 @@
   call $~lib/memory/memory.copy
   local.get $2
  )
- (func $~lib/rt/stub/__free (; 13 ;) (param $0 i32)
+ (func $~lib/rt/stub/__free (; 14 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 15
@@ -1439,7 +1442,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~lib/util/number/dtoa (; 14 ;) (result i32)
+ (func $~lib/util/number/dtoa (; 15 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 56
@@ -1460,7 +1463,7 @@
   local.get $0
   call $~lib/rt/stub/__free
  )
- (func $start:resolve-binary (; 15 ;)
+ (func $start:resolve-binary (; 16 ;)
   i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
@@ -2167,7 +2170,7 @@
    unreachable
   end
  )
- (func $~start (; 16 ;)
+ (func $~start (; 17 ;)
   call $start:resolve-binary
  )
 )

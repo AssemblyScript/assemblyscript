@@ -650,8 +650,8 @@ exports.main = function main(argv, options, callback) {
       module.setOneCallerInlineMaxSize(60);
     } else {
       module.setAlwaysInlineMaxSize(4);     // default:  2
-      module.setFlexibleInlineMaxSize(40);  // default: 20
-      module.setOneCallerInlineMaxSize(40); // default: 15
+      module.setFlexibleInlineMaxSize(35);  // default: 20
+      module.setOneCallerInlineMaxSize(35); // default: 15
     }
 
     // Optimize the module if requested
