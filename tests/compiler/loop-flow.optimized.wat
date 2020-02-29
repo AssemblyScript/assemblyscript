@@ -68,10 +68,13 @@
   end
  )
  (func $loop-flow/doAny (; 4 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 1
+  i32.eq
+  local.set $1
   loop $do-continue|0 (result i32)
-   local.get $0
-   i32.const 1
-   i32.eq
+   local.get $1
    if (result i32)
     i32.const 1
    else

@@ -694,6 +694,9 @@ exports.main = function main(argv, options, callback) {
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
       // }
+      if (optimizeLevel >= 3 && shrinkLevel <= 1) { // differs
+        add("licm");
+      }
       add("simplify-locals-nostructure");
       add("vacuum");
       add("reorder-locals");
