@@ -774,7 +774,7 @@ exports.main = function main(argv, options, callback) {
         add("code-pushing");
 
         // this quite expensive so do this only for highest opt level
-        add("simplify-globals-optimizing");
+        add("simplify-globals");
         if (optimizeLevel >= 3) {
           add("simplify-locals-nostructure");
           add("vacuum");
