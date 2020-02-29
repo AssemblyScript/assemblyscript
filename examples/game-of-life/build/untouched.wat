@@ -25,9 +25,9 @@
   (local $7 i32)
   (local $8 i32)
   local.get $0
-  global.set $assembly/index/w
+  global.set $assembly/index/width
   local.get $1
-  global.set $assembly/index/h
+  global.set $assembly/index/height
   local.get $0
   local.get $1
   i32.mul
@@ -116,8 +116,8 @@
   global.get $assembly/index/h
   i32.const 1
   i32.sub
-  local.set $0
-  global.get $assembly/index/w
+  local.set $2
+  local.get $0
   i32.const 1
   i32.sub
   local.set $1
@@ -137,12 +137,13 @@
      local.get $0
     else
      local.get $2
+    else
+     local.get $4
      i32.const 1
      i32.sub
     end
     local.set $4
     local.get $2
-    local.get $0
     i32.eq
     if (result i32)
      i32.const 0
@@ -465,7 +466,7 @@
       br $for-loop|1
      end
     end
-    local.get $2
+    local.get $4
     i32.const 1
     i32.add
     local.set $2

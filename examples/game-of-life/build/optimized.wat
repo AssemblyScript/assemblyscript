@@ -8,19 +8,21 @@
  (import "config" "BGR_ALIVE" (global $assembly/config/BGR_ALIVE i32))
  (import "config" "BIT_ROT" (global $assembly/config/BIT_ROT i32))
  (import "Math" "random" (func $~lib/bindings/Math/random (result f64)))
- (global $assembly/index/w (mut i32) (i32.const 0))
- (global $assembly/index/h (mut i32) (i32.const 0))
- (global $assembly/index/s (mut i32) (i32.const 0))
+ (global $assembly/index/width (mut i32) (i32.const 0))
+ (global $assembly/index/height (mut i32) (i32.const 0))
+ (global $assembly/index/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "init" (func $assembly/index/init))
  (export "step" (func $assembly/index/step))
  (export "fill" (func $assembly/index/fill))
  (func $assembly/index/init (; 1 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   local.get $0
-  global.set $assembly/index/w
+  global.set $assembly/index/width
   local.get $1
-  global.set $assembly/index/h
+  global.set $assembly/index/height
   local.get $0
   local.get $1
   i32.mul
@@ -61,16 +63,16 @@
       i32.add
       i32.const 2
       i32.shl
-      local.get $2
+      local.get $4
       i32.store
-      local.get $1
+      local.get $2
       i32.const 1
       i32.add
       local.set $1
       br $for-loop|1
      end
     end
-    local.get $0
+    local.get $3
     i32.const 1
     i32.add
     local.set $0
@@ -87,11 +89,15 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  global.get $assembly/index/h
+  (local $8 i32)
+  (local $9 i32)
+  global.get $assembly/index/height
+  local.tee $8
   i32.const 1
   i32.sub
   local.set $6
-  global.get $assembly/index/w
+  global.get $assembly/index/width
+  local.tee $9
   i32.const 1
   i32.sub
   local.set $7

@@ -8,7 +8,7 @@ declare module ASModule {
   type f32 = number;
   type f64 = number;
   type bool = any;
-  export function init(width: i32, height: i32): void;
+  export function init(w: i32, h: i32): void;
   export function step(): void;
   export function fill(x: u32, y: u32, p: f64): void;
 }
