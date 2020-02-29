@@ -214,14 +214,15 @@ export class Type {
   /** Composes the respective nullable type of this type. */
   asNullable(): Type {
     assert(this.is(TypeFlags.REFERENCE));
-    if (!this.cachedNullableType) {
+    var cachedNullableType = this.cachedNullableType;
+    if (!cachedNullableType) {
       assert(!this.is(TypeFlags.NULLABLE));
-      this.cachedNullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
-      this.cachedNullableType.nonNullableType = this;
-      this.cachedNullableType.classReference = this.classReference;       // either a class reference
-      this.cachedNullableType.signatureReference = this.signatureReference; // or a function reference
+      this.cachedNullableType = cachedNullableType = new Type(this.kind, this.flags | TypeFlags.NULLABLE, this.size);
+      cachedNullableType.nonNullableType = this;
+      cachedNullableType.classReference = this.classReference;       // either a class reference
+      cachedNullableType.signatureReference = this.signatureReference; // or a function reference
     }
-    return this.cachedNullableType;
+    return cachedNullableType;
   }
 
   /** Tests if a value of this type is assignable to the target type incl. implicit conversion. */

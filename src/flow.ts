@@ -228,7 +228,9 @@ export class Flow {
 
   /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
   get actualFunction(): Function {
-    return this.inlineFunction || this.parentFunction;
+    var inlineFunction = this.inlineFunction;
+    if (inlineFunction) return inlineFunction;
+    return this.parentFunction;
   }
 
   /** Tests if this flow has the specified flag or flags. */

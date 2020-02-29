@@ -269,16 +269,16 @@ export abstract class DiagnosticEmitter {
     if (range) {
       let seen = this.seen;
       if (seen.has(range.source)) {
-        let seenInSource = seen.get(range.source)!;
+        let seenInSource = assert(seen.get(range.source));
         if (seenInSource.has(range.start)) {
-          let seenCodesAtPos = seenInSource.get(range.start)!;
+          let seenCodesAtPos = assert(seenInSource.get(range.start));
           if (seenCodesAtPos.includes(code)) return;
           seenCodesAtPos.push(code);
         } else {
           seenInSource.set(range.start, [ code ]);
         }
       } else {
-        let seenInSource = new Map();
+        let seenInSource = new Map<i32,i32[]>();
         seenInSource.set(range.start, [ code ]);
         seen.set(range.source, seenInSource);
       }

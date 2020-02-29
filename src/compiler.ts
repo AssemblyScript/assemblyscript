@@ -5,7 +5,8 @@
 
 import {
   BuiltinNames,
-  compileCall as compileBuiltinCall,
+  BuiltinContext,
+  builtins,
   compileVisitGlobals,
   compileVisitMembers,
   compileRTTI,
@@ -6382,16 +6383,24 @@ export class Compiler extends DiagnosticEmitter {
         expression
       );
     }
-
-    // now compile the builtin, which usually returns a block of code that replaces the call.
-    return compileBuiltinCall(
-      this,
-      prototype,
-      typeArguments,
-      expression.arguments,
-      contextualType,
-      expression
+    var ctx = new BuiltinContext();
+    ctx.compiler = this;
+    ctx.prototype = prototype;
+    ctx.typeArguments = typeArguments;
+    ctx.operands = expression.arguments;
+    ctx.contextualType = contextualType;
+    ctx.reportNode = expression;
+    ctx.contextIsExact = false;
+    var internalName = prototype.internalName;
+    if (builtins.has(internalName)) {
+      let fn = builtins.get(internalName)!;
+      return fn(ctx);
+    }
+    this.error(
+      DiagnosticCode.Not_implemented,
+      expression.expression.range
     );
+    return this.module.unreachable();
   }
 
   /**

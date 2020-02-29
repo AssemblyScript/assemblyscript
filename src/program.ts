@@ -1629,7 +1629,7 @@ export class Program extends DiagnosticEmitter {
       let queued: QueuedExportStar[];
       if (queuedExportsStar.has(parent)) queued = queuedExportsStar.get(parent)!;
       else queuedExportsStar.set(parent, queued = []);
-      let foreignPath = assert(statement.internalPath); // must be set for export *
+      let foreignPath = statement.internalPath!; // must be set for export *
       queued.push(new QueuedExportStar(
         foreignPath,
         foreignPath.endsWith(INDEX_SUFFIX) // strip or add index depending on what's already present
@@ -2186,7 +2186,7 @@ export abstract class Element {
   /** Looks up the element with the specified name within this element. */
   lookupInSelf(name: string): DeclaredElement | null {
     var members = this.members;
-    if (members && members.has(name)) return members.get(name)!;
+    if (members !== null && members.has(name)) return members.get(name)!;
     return null;
   }
 
@@ -2199,7 +2199,7 @@ export abstract class Element {
     var members = this.members;
     if (!members) this.members = members = new Map();
     else if (members.has(name)) {
-      let existing = members.get(name)!;
+      let existing = assert(members.get(name));
       if (existing.parent !== this) {
         // override non-own element
       } else {
@@ -2807,7 +2807,7 @@ export class FunctionPrototype extends DeclaredElement {
     assert(!this.isBound);
     var boundPrototypes = this.boundPrototypes;
     if (!boundPrototypes) this.boundPrototypes = boundPrototypes = new Map();
-    else if (boundPrototypes.has(classInstance)) return boundPrototypes.get(classInstance)!;
+    else if (boundPrototypes.has(classInstance)) return assert(boundPrototypes.get(classInstance));
     var declaration = this.declaration; assert(declaration.kind == NodeKind.METHODDECLARATION);
     var bound = new FunctionPrototype(
       this.name,
@@ -2825,7 +2825,7 @@ export class FunctionPrototype extends DeclaredElement {
   /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Function | null {
     var instances = this.instances;
-    if (instances && instances.has(instanceKey)) return <Function>instances.get(instanceKey);
+    if (instances !== null && instances.has(instanceKey)) return <Function>instances.get(instanceKey);
     return null;
   }
 
@@ -3335,7 +3335,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Class | null {
     var instances = this.instances;
-    if (instances && instances.has(instanceKey)) return <Class>instances.get(instanceKey);
+    if (instances !== null && instances.has(instanceKey)) return <Class>instances.get(instanceKey);
     return null;
   }
 
@@ -3457,7 +3457,7 @@ export class Class extends TypedElement {
           this.contextualTypeArguments.set(typeParameters[i].name.text, typeArguments[i]);
         }
       }
-    } else if (typeParameters && typeParameters.length) {
+    } else if (typeParameters !== null && typeParameters.length > 0) {
       throw new Error("type argument count mismatch");
     }
     registerConcreteElement(program, this);
@@ -3475,7 +3475,7 @@ export class Class extends TypedElement {
       // for (let [baseName, baseType] of inheritedTypeArguments) {
       for (let _keys = Map_keys(inheritedTypeArguments), i = 0, k = _keys.length; i < k; ++i) {
         let baseName = unchecked(_keys[i]);
-        let baseType = inheritedTypeArguments.get(baseName)!;
+        let baseType = assert(inheritedTypeArguments.get(baseName));
         if (!contextualTypeArguments) {
           this.contextualTypeArguments = contextualTypeArguments = new Map();
           contextualTypeArguments.set(baseName, baseType);
@@ -3598,21 +3598,22 @@ export class Class extends TypedElement {
     while (current.base !== abvInstance) {
       current = assert(current.base);
     }
-    switch (current.prototype) {
-      case program.i8ArrayPrototype: return Type.i8;
-      case program.i16ArrayPrototype: return Type.i16;
-      case program.i32ArrayPrototype: return Type.i32;
-      case program.i64ArrayPrototype: return Type.i64;
-      case program.u8ArrayPrototype:
-      case program.u8ClampedArrayPrototype: return Type.u8;
-      case program.u16ArrayPrototype: return Type.u16;
-      case program.u32ArrayPrototype: return Type.u32;
-      case program.u64ArrayPrototype: return Type.u64;
-      case program.f32ArrayPrototype: return Type.f32;
-      case program.f64ArrayPrototype: return Type.f64;
-      case program.arrayPrototype: return assert(this.getTypeArgumentsTo(program.arrayPrototype))[0];
-      default: assert(false);
+    var prototype = current.prototype;
+    if (prototype == program.arrayPrototype) {
+      return assert(this.getTypeArgumentsTo(program.arrayPrototype))[0];
     }
+    if (prototype == program.i8ArrayPrototype) return Type.i8;
+    if (prototype == program.i16ArrayPrototype) return Type.i16;
+    if (prototype == program.i32ArrayPrototype) return Type.i32;
+    if (prototype == program.i64ArrayPrototype) return Type.i64;
+    if (prototype == program.u8ArrayPrototype) return Type.u8;
+    if (prototype == program.u8ClampedArrayPrototype) return Type.u8;
+    if (prototype == program.u16ArrayPrototype) return Type.u16;
+    if (prototype == program.u32ArrayPrototype) return Type.u32;
+    if (prototype == program.u64ArrayPrototype) return Type.u64;
+    if (prototype == program.f32ArrayPrototype) return Type.f32;
+    if (prototype == program.f64ArrayPrototype) return Type.f64;
+    assert(false);
     return Type.void;
   }
 
@@ -3863,7 +3864,7 @@ function copyMembers(src: Element, dest: Element): void {
     // for (let [memberName, member] of srcMembers) {
     for (let _keys = Map_keys(srcMembers), i = 0, k = _keys.length; i < k; ++i) {
       let memberName = unchecked(_keys[i]);
-      let member = srcMembers.get(memberName)!;
+      let member = assert(srcMembers.get(memberName));
       destMembers.set(memberName, member);
     }
   }

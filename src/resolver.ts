@@ -181,8 +181,8 @@ export class Resolver extends DiagnosticEmitter {
     if (isSimpleType) {
       let simpleName = nameNode.identifier.text;
       if (ctxTypes !== null && ctxTypes.has(simpleName)) {
-        let type = ctxTypes.get(simpleName)!;
-        if (typeArgumentNodes !== null && typeArgumentNodes.length) {
+        let type = assert(ctxTypes.get(simpleName));
+        if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Type_0_is_not_generic,
@@ -208,14 +208,15 @@ export class Resolver extends DiagnosticEmitter {
     if (!element) return null;
 
     // Use shadow type if present (i.e. namespace sharing a type)
-    if (element.shadowType) {
-      element = element.shadowType;
+    var shadowType = element.shadowType;
+    if (shadowType) {
+      element = shadowType;
 
     } else {
 
       // Handle enums (become i32)
       if (element.kind == ElementKind.ENUM) {
-        if (typeArgumentNodes !== null && typeArgumentNodes.length) {
+        if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
               DiagnosticCode.Type_0_is_not_generic,
@@ -604,7 +605,7 @@ export class Resolver extends DiagnosticEmitter {
     /** Contextual element. */
     ctxElement: Element,
     /** How to proceed with eventual diagnostics. */
-    reportMode = ReportMode.REPORT
+    reportMode: ReportMode = ReportMode.REPORT
   ): Element | null {
     var element = ctxElement.lookup(node.identifier.text);
     if (!element) {
@@ -661,8 +662,8 @@ export class Resolver extends DiagnosticEmitter {
         DiagnosticCode.Expected_0_type_arguments_but_got_1,
         argumentCount
           ? Range.join(
-              (<NamedTypeNode[]>typeArgumentNodes)[0].range,
-              (<NamedTypeNode[]>typeArgumentNodes)[argumentCount - 1].range
+              typeArgumentNodes![0].range,
+              typeArgumentNodes![argumentCount - 1].range
             )
           : assert(alternativeReportNode).range,
         (argumentCount < minParameterCount ? minParameterCount : maxParameterCount).toString(),
@@ -674,7 +675,7 @@ export class Resolver extends DiagnosticEmitter {
     for (let i = 0; i < maxParameterCount; ++i) {
       let type = i < argumentCount
         ? this.resolveType( // reports
-            (<NamedTypeNode[]>typeArgumentNodes)[i],
+            typeArgumentNodes![i],
             ctxElement,
             ctxTypes,
             reportMode
@@ -2639,8 +2640,8 @@ export class Resolver extends DiagnosticEmitter {
     var signatureNode = prototype.functionTypeNode;
     var typeParameterNodes = prototype.typeParameterNodes;
     var numFunctionTypeArguments: i32;
-    if (typeArguments && (numFunctionTypeArguments = typeArguments.length)) {
-      assert(typeParameterNodes && numFunctionTypeArguments == typeParameterNodes.length);
+    if (typeArguments !== null && (numFunctionTypeArguments = typeArguments.length) > 0) {
+      assert(typeParameterNodes !== null && numFunctionTypeArguments == typeParameterNodes.length);
       for (let i = 0; i < numFunctionTypeArguments; ++i) {
         ctxTypes.set(
           (<TypeParameterNode[]>typeParameterNodes)[i].name.text,
@@ -2856,7 +2857,7 @@ export class Resolver extends DiagnosticEmitter {
       }
     } else {
       let typeParameterNodes = prototype.typeParameterNodes;
-      assert(!(typeParameterNodes && typeParameterNodes.length));
+      assert(!(typeParameterNodes !== null && typeParameterNodes.length > 0));
     }
     instance.contextualTypeArguments = ctxTypes;
 
@@ -2942,8 +2943,8 @@ export class Resolver extends DiagnosticEmitter {
             if (!fieldTypeNode) {
               if (base) {
                 let baseMembers = base.members;
-                if (baseMembers && baseMembers.has((<FieldPrototype>member).name)) {
-                  let baseField = baseMembers.get((<FieldPrototype>member).name)!;
+                if (baseMembers !== null && baseMembers.has((<FieldPrototype>member).name)) {
+                  let baseField = assert(baseMembers.get((<FieldPrototype>member).name));
                   if (!baseField.is(CommonFlags.PRIVATE)) {
                     assert(baseField.kind == ElementKind.FIELD);
                     fieldType = (<Field>baseField).type;
@@ -3155,7 +3156,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Otherwise make sure that no type arguments have been specified
     } else {
-      if (typeArgumentNodes !== null && typeArgumentNodes.length) {
+      if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
         if (reportMode == ReportMode.REPORT) {
           this.error(
             DiagnosticCode.Type_0_is_not_generic,
