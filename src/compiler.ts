@@ -564,7 +564,7 @@ export class Compiler extends DiagnosticEmitter {
       // for (let [memberName, member] of members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
-        let member = members.get(memberName)!;
+        let member = assert(members.get(memberName));
         this.ensureModuleExport(memberName, member);
       }
     }

@@ -1324,10 +1324,8 @@ export namespace DecoratorKind {
             break;
           }
           case CharCode.p: {
-            switch (propStr) {
-              case "prefix": return DecoratorKind.OPERATOR_PREFIX;
-              case "postfix": return DecoratorKind.OPERATOR_POSTFIX;
-            }
+            if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
+            if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
             break;
           }
         }
@@ -1534,7 +1532,7 @@ export class NewExpression extends Expression {
   get typeArgumentsRange(): Range {
     var typeArguments = this.typeArguments;
     var numTypeArguments: i32;
-    if (typeArguments && (numTypeArguments = typeArguments.length)) {
+    if (typeArguments !== null && (numTypeArguments = typeArguments.length) > 0) {
       return Range.join(typeArguments[0].range, typeArguments[numTypeArguments - 1].range);
     }
     return this.typeName.range;
@@ -1789,7 +1787,7 @@ export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
 }
 
 /** Represents an `export import` statement of an interface. */
-export class ExportImportStatement extends Node {
+export class ExportImportStatement extends Statement {
   /** Identifier being imported. */
   name: IdentifierExpression;
   /** Identifier being exported. */

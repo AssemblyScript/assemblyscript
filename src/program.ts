@@ -775,7 +775,7 @@ export class Program extends DiagnosticEmitter {
     // for (let [file, starExports] of queuedExportsStar) {
     for (let _keys = Map_keys(queuedExportsStar), i = 0, k = _keys.length; i < k; ++i) {
       let file = _keys[i];
-      let starExports = queuedExportsStar.get(file)!;
+      let starExports = assert(queuedExportsStar.get(file));
       for (let j = 0, l = starExports.length; j < l; ++j) {
         let exportStar = unchecked(starExports[j]);
         let foreignFile = this.lookupForeignFile(exportStar.foreignPath, exportStar.foreignPathAlt);
@@ -837,11 +837,11 @@ export class Program extends DiagnosticEmitter {
     // for (let [file, exports] of queuedExports) {
     for (let _keys = Map_keys(queuedExports), i = 0, k = _keys.length; i < k; ++i) {
       let file = unchecked(_keys[i]);
-      let exports = queuedExports.get(file)!;
+      let exports = assert(queuedExports.get(file));
       // for (let [exportName, queuedExport] of exports) {
       for (let exportNames = Map_keys(exports), j = 0, l = exportNames.length; j < l; ++j) {
         let exportName = unchecked(exportNames[j]);
-        let queuedExport = exports.get(exportName)!;
+        let queuedExport = assert(exports.get(exportName));
         let localName = queuedExport.localIdentifier.text;
         let foreignPath = queuedExport.foreignPath;
         if (foreignPath) { // i.e. export { foo [as bar] } from "./baz"
@@ -866,7 +866,7 @@ export class Program extends DiagnosticEmitter {
             file.ensureExport(exportName, element);
           } else {
             let globalElement = this.lookupGlobal(localName);
-            if (globalElement && globalElement instanceof DeclaredElement) { // export { memory }
+            if (globalElement !== null && isDeclaredElement(globalElement.kind)) { // export { memory }
               file.ensureExport(exportName, <DeclaredElement>globalElement);
             } else {
               this.error(
@@ -959,7 +959,7 @@ export class Program extends DiagnosticEmitter {
         // for (let [alias, name] of globalAliases) {
         for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
           let alias = unchecked(_keys[i]);
-          let name = globalAliases.get(alias)!;
+          let name = assert(globalAliases.get(alias));
           if (!name.length) continue; // explicitly disabled
           let firstChar = name.charCodeAt(0);
           if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
@@ -1134,7 +1134,7 @@ export class Program extends DiagnosticEmitter {
   ensureGlobal(name: string, element: DeclaredElement): DeclaredElement {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
-      let existing = elementsByName.get(name)!;
+      let existing = assert(elementsByName.get(name));
       // NOTE: this is effectively only performed when merging native types with
       // their respective namespaces in std/builtins, but can also trigger when a
       // user has multiple global elements of the same name in different files,
@@ -1168,14 +1168,14 @@ export class Program extends DiagnosticEmitter {
   /** Looks up the element of the specified name in the global scope. */
   lookupGlobal(name: string): Element | null {
     var elements = this.elementsByName;
-    if (elements.has(name)) return elements.get(name)!;
+    if (elements.has(name)) return assert(elements.get(name));
     return null;
   }
 
   /** Looks up the element of the specified name in the global scope. Errors if not present. */
   requireGlobal(name: string): Element {
     var elements = this.elementsByName;
-    if (elements.has(name)) return elements.get(name)!;
+    if (elements.has(name)) return assert(elements.get(name));
     throw new Error("missing global");
   }
 
@@ -1188,9 +1188,9 @@ export class Program extends DiagnosticEmitter {
   ): File | null {
     var filesByName = this.filesByName;
     return filesByName.has(foreignPath)
-         ? filesByName.get(foreignPath)!
+         ? assert(filesByName.get(foreignPath))
          : filesByName.has(foreignPathAlt)
-         ? filesByName.get(foreignPathAlt)!
+         ? assert(filesByName.get(foreignPathAlt))
          : null;
   }
 
@@ -1215,12 +1215,13 @@ export class Program extends DiagnosticEmitter {
 
       // otherwise traverse queued exports
       if (queuedExports.has(foreignFile)) {
-        let fileQueuedExports = queuedExports.get(foreignFile)!;
+        let fileQueuedExports = assert(queuedExports.get(foreignFile));
         if (fileQueuedExports.has(foreignName)) {
-          let queuedExport = fileQueuedExports.get(foreignName)!;
-          if (queuedExport.foreignPath) { // imported from another file
+          let queuedExport = assert(fileQueuedExports.get(foreignName));
+          let queuedExportForeignPath = queuedExport.foreignPath;
+          if (queuedExportForeignPath) { // imported from another file
             foreignName = queuedExport.localIdentifier.text;
-            foreignPath = queuedExport.foreignPath;
+            foreignPath = queuedExportForeignPath;
             foreignPathAlt = assert(queuedExport.foreignPathAlt);
             continue;
           } else { // local element of this file
@@ -1441,7 +1442,8 @@ export class Program extends DiagnosticEmitter {
           case DecoratorKind.OPERATOR_BINARY:
           case DecoratorKind.OPERATOR_PREFIX:
           case DecoratorKind.OPERATOR_POSTFIX: {
-            let numArgs = decorator.arguments && decorator.arguments.length || 0;
+            let args = decorator.arguments;
+            let numArgs = args ? args.length : 0;
             if (numArgs == 1) {
               let firstArg = (<Expression[]>decorator.arguments)[0];
               if (
@@ -1495,8 +1497,8 @@ export class Program extends DiagnosticEmitter {
     var name = declaration.name.text;
     if (declaration.is(CommonFlags.STATIC)) {
       let parentMembers = parent.members;
-      if (parentMembers && parentMembers.has(name)) {
-        let element = <Element>parentMembers.get(name)!;
+      if (parentMembers !== null && parentMembers.has(name)) {
+        let element = assert(parentMembers.get(name));
         if (element.kind == ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
       } else {
         let element = new PropertyPrototype(name, parent, declaration);
@@ -1505,8 +1507,8 @@ export class Program extends DiagnosticEmitter {
       }
     } else {
       let parentMembers = parent.instanceMembers;
-      if (parentMembers && parentMembers.has(name)) {
-        let element = <Element>parentMembers.get(name);
+      if (parentMembers !== null && parentMembers.has(name)) {
+        let element = assert(parentMembers.get(name));
         if (element.kind == ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
       } else {
         let element = new PropertyPrototype(name, parent, declaration);
@@ -1627,7 +1629,7 @@ export class Program extends DiagnosticEmitter {
       }
     } else { // export * from "./baz"
       let queued: QueuedExportStar[];
-      if (queuedExportsStar.has(parent)) queued = queuedExportsStar.get(parent)!;
+      if (queuedExportsStar.has(parent)) queued = assert(queuedExportsStar.get(parent));
       else queuedExportsStar.set(parent, queued = []);
       let foreignPath = statement.internalPath!; // must be set for export *
       queued.push(new QueuedExportStar(
@@ -1673,7 +1675,7 @@ export class Program extends DiagnosticEmitter {
       // otherwise queue it
       } else {
         let queued: Map<string,QueuedExport>;
-        if (queuedExports.has(localFile)) queued = queuedExports.get(localFile)!;
+        if (queuedExports.has(localFile)) queued = assert(queuedExports.get(localFile));
         else queuedExports.set(localFile, queued = new Map());
         queued.set(foreignName, new QueuedExport(
           member.localName,
@@ -1685,7 +1687,7 @@ export class Program extends DiagnosticEmitter {
     // foreign element, i.e. export { foo } from "./bar"
     } else {
       let queued: Map<string,QueuedExport>;
-      if (queuedExports.has(localFile)) queued = queuedExports.get(localFile)!;
+      if (queuedExports.has(localFile)) queued = assert(queuedExports.get(localFile));
       else queuedExports.set(localFile, queued = new Map());
       queued.set(foreignName, new QueuedExport(
         member.localName,
@@ -1738,7 +1740,7 @@ export class Program extends DiagnosticEmitter {
       if (!exports) parent.exports = exports = new Map();
       else {
         if (exports.has("default")) {
-          let existing = exports.get("default")!;
+          let existing = assert(exports.get("default"));
           this.errorRelated(
             DiagnosticCode.Duplicate_identifier_0,
             declaration.name.range,
@@ -1774,16 +1776,19 @@ export class Program extends DiagnosticEmitter {
           queuedExports
         );
       }
-    } else if (statement.namespaceName) { // import * as foo from "./bar"
-      queuedImports.push(new QueuedImport(
-        parent,
-        statement.namespaceName,
-        null, // indicates import *
-        statement.internalPath,
-        statement.internalPath + INDEX_SUFFIX
-      ));
     } else {
-      // import "./foo"
+      let namespaceName = statement.namespaceName;
+      if (namespaceName) { // import * as foo from "./bar"
+        queuedImports.push(new QueuedImport(
+          parent,
+          namespaceName,
+          null, // indicates import *
+          statement.internalPath,
+          statement.internalPath + INDEX_SUFFIX
+        ));
+      } else {
+        // import "./foo"
+      }
     }
   }
 
@@ -1902,7 +1907,7 @@ export class Program extends DiagnosticEmitter {
     queuedExtends: ClassPrototype[],
     /** So far queued `implements` clauses. */
     queuedImplements: ClassPrototype[]
-  ): Namespace | null {
+  ): DeclaredElement | null {
     var name = declaration.name.text;
     var original = new Namespace(
       name,
@@ -2186,7 +2191,7 @@ export abstract class Element {
   /** Looks up the element with the specified name within this element. */
   lookupInSelf(name: string): DeclaredElement | null {
     var members = this.members;
-    if (members !== null && members.has(name)) return members.get(name)!;
+    if (members !== null && members.has(name)) return assert(members.get(name));
     return null;
   }
 
@@ -2425,7 +2430,7 @@ export class File extends Element {
   /** Looks up the export of the specified name. */
   lookupExport(name: string): DeclaredElement | null {
     var exports = this.exports;
-    if (exports && exports.has(name)) return exports.get(name)!;
+    if (exports !== null && exports.has(name)) return assert(exports.get(name));
     var exportsStar = this.exportsStar;
     if (exportsStar) {
       for (let i = 0, k = exportsStar.length; i < k; ++i) {
@@ -2448,7 +2453,7 @@ export class File extends Element {
       // for (let [memberName, member] of exports) {
       for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
-        let member = exports.get(memberName)!;
+        let member = assert(exports.get(memberName));
         ns.add(memberName, member);
       }
     }
@@ -2524,8 +2529,9 @@ export class Namespace extends DeclaredElement {
 
   /* @override */
   lookup(name: string): Element | null {
-    return this.lookupInSelf(name)
-        || this.parent.lookup(name);
+    var inSelf = this.lookupInSelf(name);
+    if (inSelf) return inSelf;
+    return this.parent.lookup(name);
   }
 }
 
@@ -2557,8 +2563,9 @@ export class Enum extends TypedElement {
 
   /* @override */
   lookup(name: string): Element | null {
-    return this.lookupInSelf(name)
-        || this.parent.lookup(name);
+    var inSelf = this.lookupInSelf(name);
+    if (inSelf) return inSelf;
+    return this.parent.lookup(name);
   }
 }
 
@@ -3304,7 +3311,7 @@ export class ClassPrototype extends DeclaredElement {
     var instanceMembers = this.instanceMembers;
     if (!instanceMembers) this.instanceMembers = instanceMembers = new Map();
     else if (instanceMembers.has(name)) {
-      let existing = instanceMembers.get(name)!;
+      let existing = assert(instanceMembers.get(name));
       let merged = tryMerge(existing, element);
       if (!merged) {
         if (isDeclaredElement(existing.kind)) {
@@ -3585,8 +3592,10 @@ export class Class extends TypedElement {
   /** Gets the concrete type arguments to the specified extendend prototype. */
   getTypeArgumentsTo(extendedPrototype: ClassPrototype): Type[] | null {
     var current: Class | null = this;
-    do if (current.prototype === extendedPrototype) return current.typeArguments;
-    while (current = current.base);
+    do {
+      if (current.prototype === extendedPrototype) return current.typeArguments;
+      current = current.base;
+    } while (current);
     return null;
   }
 
@@ -3600,7 +3609,7 @@ export class Class extends TypedElement {
     }
     var prototype = current.prototype;
     if (prototype == program.arrayPrototype) {
-      return assert(this.getTypeArgumentsTo(program.arrayPrototype))[0];
+      return this.getTypeArgumentsTo(program.arrayPrototype)![0];
     }
     if (prototype == program.i8ArrayPrototype) return Type.i8;
     if (prototype == program.i16ArrayPrototype) return Type.i16;
@@ -3629,7 +3638,7 @@ export class Class extends TypedElement {
   }
 
   /** Tests if this class potentially forms a reference cycle to another one. */
-  private cyclesTo(other: Class, except: Set<Class> = new Set()): bool {
+  private cyclesTo(other: Class, except: Set<Class> = new Set<Class>()): bool {
     // TODO: The pure RC paper describes acyclic data structures as classes that may contain
     //
     // - scalars
@@ -3666,7 +3675,7 @@ export class Class extends TypedElement {
     var basePrototype: ClassPrototype | null;
 
     // Array<T->other?>
-    if ((basePrototype = this.program.arrayPrototype) && this.prototype.extends(basePrototype)) {
+    if ((basePrototype = this.program.arrayPrototype) !== null && this.prototype.extends(basePrototype)) {
       let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
       assert(typeArguments.length == 1);
       if (
@@ -3678,7 +3687,7 @@ export class Class extends TypedElement {
       ) return true;
 
     // Set<K->other?>
-    } else if ((basePrototype = this.program.setPrototype) && this.prototype.extends(basePrototype)) {
+    } else if ((basePrototype = this.program.setPrototype) !== null && this.prototype.extends(basePrototype)) {
       let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
       assert(typeArguments.length == 1);
       if (
@@ -3690,7 +3699,7 @@ export class Class extends TypedElement {
       ) return true;
 
     // Map<K->other?,V->other?>
-    } else if ((basePrototype = this.program.mapPrototype) && this.prototype.extends(basePrototype)) {
+    } else if ((basePrototype = this.program.mapPrototype) !== null && this.prototype.extends(basePrototype)) {
       let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
       assert(typeArguments.length == 2);
       if (

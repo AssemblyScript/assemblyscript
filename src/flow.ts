@@ -331,31 +331,45 @@ export class Flow {
     assert(local.type != null); // internal error
     switch (local.type.toNativeType()) {
       case NativeType.I32: {
-        temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
+        let tempI32s = parentFunction.tempI32s;
+        if (tempI32s) temps = tempI32s;
+        else parentFunction.tempI32s = temps = [];
         break;
       }
       case NativeType.I64: {
-        temps = parentFunction.tempI64s || (parentFunction.tempI64s = []);
+        let tempI64s = parentFunction.tempI64s;
+        if (tempI64s) temps = tempI64s;
+        else parentFunction.tempI64s = temps = [];
         break;
       }
       case NativeType.F32: {
-        temps = parentFunction.tempF32s || (parentFunction.tempF32s = []);
+        let tempF32s = parentFunction.tempF32s;
+        if (tempF32s) temps = tempF32s;
+        else parentFunction.tempF32s = temps = [];
         break;
       }
       case NativeType.F64: {
-        temps = parentFunction.tempF64s || (parentFunction.tempF64s = []);
+        let tempF64s = parentFunction.tempF64s;
+        if (tempF64s) temps = tempF64s;
+        else parentFunction.tempF64s = temps = [];
         break;
       }
       case NativeType.V128: {
-        temps = parentFunction.tempV128s || (parentFunction.tempV128s = []);
+        let tempV128s = parentFunction.tempV128s;
+        if (tempV128s) temps = tempV128s;
+        else parentFunction.tempV128s = temps = [];
         break;
       }
       case NativeType.Anyref: {
-        temps = parentFunction.tempAnyrefs || (parentFunction.tempAnyrefs = []);
+        let tempAnyrefs = parentFunction.tempAnyrefs;
+        if (tempAnyrefs) temps = tempAnyrefs;
+        else parentFunction.tempAnyrefs = temps = [];
         break;
       }
       case NativeType.Exnref: {
-        temps = parentFunction.tempExnrefs || (parentFunction.tempExnrefs = []);
+        let tempExnrefs = parentFunction.tempExnrefs;
+        if (tempExnrefs) temps = tempExnrefs;
+        else parentFunction.tempExnrefs = temps = [];
         break;
       }
       default: throw new Error("concrete type expected");
@@ -935,11 +949,8 @@ export class Flow {
       case ExpressionId.Call: {
         let name = getCallTarget(expr);
         let program = this.parentFunction.program;
-        switch (name) {
-          case program.retainInstance.internalName: {
-            this.inheritNonnullIfTrue(getCallOperand(expr, 0), iff);
-            break;
-          }
+        if (name == program.retainInstance.internalName) {
+          this.inheritNonnullIfTrue(getCallOperand(expr, 0), iff);
         }
         break;
       }
@@ -1308,7 +1319,7 @@ export class Flow {
     if (this.is(FlowFlags.CONDITIONALLY_BREAKS)) sb.push("CONDITIONALLY_BREAKS");
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
     if (this.is(FlowFlags.CONDITIONALLY_ALLOCATES)) sb.push("CONDITIONALLY_ALLOCATES");
-    return "Flow(" + this.actualFunction + ")[" + levels.toString() + "] " + sb.join(" ");
+    return "Flow(" + this.actualFunction.toString() + ")[" + levels.toString() + "] " + sb.join(" ");
   }
 }
 

@@ -72,7 +72,7 @@ export abstract class ExportsWalker {
       // for (let [memberName, member] of exports) {
       for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
-        let member = exports.get(memberName)!;
+        let member = assert(exports.get(memberName));
         this.visitElement(memberName, member);
       }
     }
@@ -231,7 +231,7 @@ export class IDLBuilder extends ExportsWalker {
       // for (let [memberName, member] of members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
-        let member = members.get(memberName)!;
+        let member = assert(members.get(memberName));
         if (member.kind == ElementKind.ENUMVALUE) {
           let value = <EnumValue>member;
           let isConst = value.is(CommonFlags.INLINED);
@@ -278,7 +278,7 @@ export class IDLBuilder extends ExportsWalker {
     }
     sb.push(");\n");
     var members = element.members;
-    if (members !== null && members.size) {
+    if (members !== null && members.size > 0) {
       indent(sb, this.indentLevel);
       sb.push("interface ");
       sb.push(element.name);
@@ -417,7 +417,7 @@ export class TSDBuilder extends ExportsWalker {
       // for (let [memberName, member] of members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
-        let member = members.get(memberName)!;
+        let member = assert(members.get(memberName));
         if (member.kind == ElementKind.ENUMVALUE) {
           let value = <EnumValue>member;
           indent(sb, this.indentLevel);
@@ -532,7 +532,7 @@ export class TSDBuilder extends ExportsWalker {
 
   visitNamespace(name: string, element: Element): void {
     var members = element.members;
-    if (members !== null && members.size) {
+    if (members !== null && members.size > 0) {
       let sb = this.sb;
       indent(sb, this.indentLevel++);
       sb.push("export namespace ");

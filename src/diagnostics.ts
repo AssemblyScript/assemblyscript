@@ -107,9 +107,9 @@ export class DiagnosticMessage {
     arg2: string | null = null
   ): DiagnosticMessage {
     var message = diagnosticCodeToString(code);
-    if (arg0 != null) message = message.replace("{0}", arg0);
-    if (arg1 != null) message = message.replace("{1}", arg1);
-    if (arg2 != null) message = message.replace("{2}", arg2);
+    if (arg0 !== null) message = message.replace("{0}", arg0);
+    if (arg1 !== null) message = message.replace("{1}", arg1);
+    if (arg2 !== null) message = message.replace("{2}", arg2);
     return new DiagnosticMessage(code, category, message);
   }
 
@@ -127,7 +127,8 @@ export class DiagnosticMessage {
 
   /** Converts this message to a string. */
   toString(): string {
-    if (this.range) {
+    var range = this.range;
+    if (range) {
       return (
         diagnosticCategoryToString(this.category) +
         " " +
@@ -135,11 +136,11 @@ export class DiagnosticMessage {
         ": \"" +
         this.message +
         "\" in " +
-        this.range.source.normalizedPath +
+        range.source.normalizedPath +
         ":" +
-        this.range.line.toString() +
+        range.line.toString() +
         ":" +
-        this.range.column.toString()
+        range.column.toString()
       );
     }
     return (
@@ -170,10 +171,10 @@ export function formatDiagnosticMessage(
   sb.push(message.message);
 
   // include range information if available
-  if (message.range) {
+  var range = message.range;
+  if (range) {
 
     // include context information if requested
-    let range = message.range;
     if (showContext) {
       sb.push("\n");
       sb.push(formatDiagnosticContext(range, useColors));

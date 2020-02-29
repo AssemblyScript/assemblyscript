@@ -1241,10 +1241,10 @@ export class Module {
         : this.i32(i64_low(offset));
       sizs[i] = buffer.length;
     }
-    var cArr1 = allocI32Array(segs);
+    var cArr1 = allocPtrArray(segs);
     var cArr2 = allocU8Array(psvs);
-    var cArr3 = allocI32Array(offs);
-    var cArr4 = allocI32Array(sizs);
+    var cArr3 = allocPtrArray(offs);
+    var cArr4 = allocU32Array(sizs);
     binaryen._BinaryenSetMemory(this.ref, initial, maximum, cStr, cArr1, cArr2, cArr3, cArr4, k, shared);
     binaryen._free(cArr4);
     binaryen._free(cArr3);
@@ -1269,7 +1269,7 @@ export class Module {
     for (let i = 0; i < numNames; ++i) {
       names[i] = this.allocStringCached(funcs[i]);
     }
-    var cArr = allocI32Array(names);
+    var cArr = allocPtrArray(names);
     binaryen._BinaryenSetFunctionTable(this.ref, initial, maximum, cArr, numNames, offset);
     binaryen._free(cArr);
   }
@@ -1381,7 +1381,7 @@ export class Module {
     for (let i = 0; i < numNames; ++i) {
       names[i] = allocString(passes[i]);
     }
-    var cArr = allocI32Array(names);
+    var cArr = allocPtrArray(names);
     if (func) {
       binaryen._BinaryenFunctionRunPasses(func, this.ref, cArr, numNames);
     } else {
@@ -1627,7 +1627,7 @@ export function expandType(type: NativeType): NativeType[] {
   var arity = binaryen._BinaryenTypeArity(type);
   var cArr = binaryen._malloc(<usize>arity << 2);
   binaryen._BinaryenTypeExpand(type, cArr);
-  var types = new Array<u32>(arity);
+  var types = new Array<NativeType>(arity);
   for (let i: u32 = 0; i < arity; ++i) {
     types[i] = binaryen.__i32_load(cArr + (<usize>i << 2));
   }
@@ -1990,8 +1990,30 @@ function allocI32Array(i32s: i32[] | null): usize {
   return ptr;
 }
 
+function allocU32Array(u32s: u32[] | null): usize {
+  if (!u32s) return 0;
+  var ptr = binaryen._malloc(u32s.length << 2);
+  var idx = ptr;
+  for (let i = 0, k = u32s.length; i < k; ++i) {
+    let val = u32s[i];
+    binaryen.__i32_store(idx, val);
+    idx += 4;
+  }
+  return ptr;
+}
+
 function allocPtrArray(ptrs: usize[] | null): usize {
-  return allocI32Array(ptrs); // TODO: WASM64 one day
+  if (!ptrs) return 0;
+  // TODO: WASM64
+  assert(ASC_TARGET != Target.WASM64);
+  var ptr = binaryen._malloc(ptrs.length << 2);
+  var idx = ptr;
+  for (let i = 0, k = ptrs.length; i < k; ++i) {
+    let val = ptrs[i];
+    binaryen.__i32_store(idx, <i32>val);
+    idx += 4;
+  }
+  return ptr;
 }
 
 function stringLengthUTF8(str: string): usize {

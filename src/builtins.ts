@@ -598,9 +598,7 @@ function builtin_isInteger(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return type.is(TypeFlags.INTEGER) && !type.is(TypeFlags.REFERENCE)
-    ? module.i32(1)
-    : module.i32(0);
+  return module.i32(type.is(TypeFlags.INTEGER) && !type.is(TypeFlags.REFERENCE) ? 1 : 0);
 }
 builtins.set(BuiltinNames.isInteger, builtin_isInteger);
 
@@ -611,9 +609,7 @@ function builtin_isFloat(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return type.is(TypeFlags.FLOAT)
-    ? module.i32(1)
-    : module.i32(0);
+  return module.i32(type.is(TypeFlags.FLOAT) ? 1 : 0);
 }
 builtins.set(BuiltinNames.isFloat, builtin_isFloat);
 
@@ -624,9 +620,7 @@ function builtin_isBoolean(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return type == Type.bool
-    ? module.i32(1)
-    : module.i32(0);
+  return module.i32(type == Type.bool ? 1 : 0);
 }
 builtins.set(BuiltinNames.isBoolean, builtin_isBoolean);
 
@@ -637,7 +631,7 @@ function builtin_isSigned(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return module.i32(i32(type.is(TypeFlags.SIGNED)));
+  return module.i32(type.is(TypeFlags.SIGNED) ? 1 : 0);
 }
 builtins.set(BuiltinNames.isSigned, builtin_isSigned);
 
@@ -648,9 +642,7 @@ function builtin_isReference(ctx: BuiltinContext): ExpressionRef {
   var type = evaluateConstantType(ctx);
   compiler.currentType = Type.bool;
   if (!type) return module.unreachable();
-  return type.is(TypeFlags.REFERENCE)
-    ? module.i32(1)
-    : module.i32(0);
+  return module.i32(type.is(TypeFlags.REFERENCE) ? 1 : 0);
 }
 builtins.set(BuiltinNames.isReference, builtin_isReference);
 
@@ -665,7 +657,7 @@ function builtin_isString(ctx: BuiltinContext): ExpressionRef {
     let classReference = type.classReference;
     if (classReference) {
       let stringInstance = compiler.program.stringInstance;
-      if (stringInstance && classReference.isAssignableTo(stringInstance)) return module.i32(1);
+      if (stringInstance !== null && classReference.isAssignableTo(stringInstance)) return module.i32(1);
     }
   }
   return module.i32(0);
@@ -876,7 +868,6 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     }
     return module.unreachable();
   }
-  var offset: i32;
   if (operands.length) {
     if (
       operands[0].kind != NodeKind.LITERAL ||
@@ -889,19 +880,20 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
       return module.unreachable();
     }
     let fieldName = (<StringLiteralExpression>operands[0]).value;
-    let field = classType.members ? classType.members.get(fieldName) : null;
-    if (!(field && field.kind == ElementKind.FIELD)) {
-      compiler.error(
-        DiagnosticCode.Type_0_has_no_property_1,
-        operands[0].range, classType.internalName, fieldName
-      );
-      return module.unreachable();
+    let classMembers = classType.members;
+    if (classMembers !== null && classMembers.has(fieldName)) {
+      let member = assert(classMembers.get(fieldName));
+      if (member.kind == ElementKind.FIELD) {
+        return contextualUsize(compiler, i64_new((<Field>member).memoryOffset), contextualType);
+      }
     }
-    offset = (<Field>field).memoryOffset;
-  } else {
-    offset = classType.nextMemoryOffset;
+    compiler.error(
+      DiagnosticCode.Type_0_has_no_property_1,
+      operands[0].range, classType.internalName, fieldName
+    );
+    return module.unreachable();
   }
-  return contextualUsize(compiler, i64_new(offset), contextualType);
+  return contextualUsize(compiler, i64_new(classType.nextMemoryOffset), contextualType);
 }
 builtins.set(BuiltinNames.offsetof, builtin_offsetof);
 
@@ -3230,25 +3222,25 @@ function builtin_v128_extract_lane(ctx: BuiltinContext): ExpressionRef {
       idx = 0;
     }
     switch (type.kind) {
-      case TypeKind.I8: return module.simd_extract(SIMDExtractOp.ExtractLaneI8x16, arg0, idx);
-      case TypeKind.U8: return module.simd_extract(SIMDExtractOp.ExtractLaneU8x16, arg0, idx);
-      case TypeKind.I16: return module.simd_extract(SIMDExtractOp.ExtractLaneI16x8, arg0, idx);
-      case TypeKind.U16: return module.simd_extract(SIMDExtractOp.ExtractLaneU16x8, arg0, idx);
+      case TypeKind.I8: return module.simd_extract(SIMDExtractOp.ExtractLaneI8x16, arg0, <u8>idx);
+      case TypeKind.U8: return module.simd_extract(SIMDExtractOp.ExtractLaneU8x16, arg0, <u8>idx);
+      case TypeKind.I16: return module.simd_extract(SIMDExtractOp.ExtractLaneI16x8, arg0, <u8>idx);
+      case TypeKind.U16: return module.simd_extract(SIMDExtractOp.ExtractLaneU16x8, arg0, <u8>idx);
       case TypeKind.I32:
-      case TypeKind.U32: return module.simd_extract(SIMDExtractOp.ExtractLaneI32x4, arg0, idx);
+      case TypeKind.U32: return module.simd_extract(SIMDExtractOp.ExtractLaneI32x4, arg0, <u8>idx);
       case TypeKind.I64:
-      case TypeKind.U64: return module.simd_extract(SIMDExtractOp.ExtractLaneI64x2, arg0, idx);
+      case TypeKind.U64: return module.simd_extract(SIMDExtractOp.ExtractLaneI64x2, arg0, <u8>idx);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: {
         return module.simd_extract(
           compiler.options.isWasm64
             ? SIMDExtractOp.ExtractLaneI64x2
             : SIMDExtractOp.ExtractLaneI32x4,
-          arg0, idx
+          arg0, <u8>idx
         );
       }
-      case TypeKind.F32: return module.simd_extract(SIMDExtractOp.ExtractLaneF32x4, arg0, idx);
-      case TypeKind.F64: return module.simd_extract(SIMDExtractOp.ExtractLaneF64x2, arg0, idx);
+      case TypeKind.F32: return module.simd_extract(SIMDExtractOp.ExtractLaneF32x4, arg0, <u8>idx);
+      case TypeKind.F64: return module.simd_extract(SIMDExtractOp.ExtractLaneF64x2, arg0, <u8>idx);
     }
   }
   compiler.error(
@@ -3299,24 +3291,24 @@ function builtin_v128_replace_lane(ctx: BuiltinContext): ExpressionRef {
     }
     switch (type.kind) {
       case TypeKind.I8:
-      case TypeKind.U8: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI8x16, arg0, idx, arg2);
+      case TypeKind.U8: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI8x16, arg0, <u8>idx, arg2);
       case TypeKind.I16:
-      case TypeKind.U16: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI16x8, arg0, idx, arg2);
+      case TypeKind.U16: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI16x8, arg0, <u8>idx, arg2);
       case TypeKind.I32:
-      case TypeKind.U32: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI32x4, arg0, idx, arg2);
+      case TypeKind.U32: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI32x4, arg0, <u8>idx, arg2);
       case TypeKind.I64:
-      case TypeKind.U64: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI64x2, arg0, idx, arg2);
+      case TypeKind.U64: return module.simd_replace(SIMDReplaceOp.ReplaceLaneI64x2, arg0, <u8>idx, arg2);
       case TypeKind.ISIZE:
       case TypeKind.USIZE: {
         return module.simd_replace(
           compiler.options.isWasm64
             ? SIMDReplaceOp.ReplaceLaneI64x2
             : SIMDReplaceOp.ReplaceLaneI32x4,
-          arg0, idx, arg2
+          arg0, <u8>idx, arg2
         );
       }
-      case TypeKind.F32: return module.simd_replace(SIMDReplaceOp.ReplaceLaneF32x4, arg0, idx, arg2);
-      case TypeKind.F64: return module.simd_replace(SIMDReplaceOp.ReplaceLaneF64x2, arg0, idx, arg2);
+      case TypeKind.F32: return module.simd_replace(SIMDReplaceOp.ReplaceLaneF32x4, arg0, <u8>idx, arg2);
+      case TypeKind.F64: return module.simd_replace(SIMDReplaceOp.ReplaceLaneF64x2, arg0, <u8>idx, arg2);
     }
   }
   compiler.error(
@@ -3797,7 +3789,7 @@ function builtin_v128_add_saturate(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments!;
-  var type = typeArguments![0];
+  var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
   if (!type.is(TypeFlags.REFERENCE)) {
@@ -3830,7 +3822,7 @@ function builtin_v128_sub_saturate(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments!;
-  var type = typeArguments![0];
+  var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
   if (!type.is(TypeFlags.REFERENCE)) {
@@ -4151,7 +4143,7 @@ function builtin_v128_le(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments!;
-  var type = typeArguments![0];
+  var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
   if (!type.is(TypeFlags.REFERENCE)) {
@@ -4200,7 +4192,7 @@ function builtin_v128_gt(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments!;
-  var type = typeArguments![0];
+  var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
   if (!type.is(TypeFlags.REFERENCE)) {
@@ -4249,7 +4241,7 @@ function builtin_v128_ge(ctx: BuiltinContext): ExpressionRef {
   }
   var operands = ctx.operands;
   var typeArguments = ctx.typeArguments!;
-  var type = typeArguments![0];
+  var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
   var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
   if (!type.is(TypeFlags.REFERENCE)) {
@@ -6281,6 +6273,7 @@ function builtin_i8x16_shr_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_shr_u, builtin_i8x16_shr_u);
 
+// i8x16.any_true -> v128.any_true<i8>
 function builtin_i8x16_any_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6289,6 +6282,7 @@ function builtin_i8x16_any_true(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_any_true, builtin_i8x16_any_true);
 
+// i8x16.all_true -> v128.all_true<i8>
 function builtin_i8x16_all_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6297,6 +6291,7 @@ function builtin_i8x16_all_true(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_all_true, builtin_i8x16_all_true);
 
+// i8x16.eq -> v128.eq<i8>
 function builtin_i8x16_eq(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6305,6 +6300,7 @@ function builtin_i8x16_eq(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_eq, builtin_i8x16_eq);
 
+// i8x16.ne -> v128.ne<i8>
 function builtin_i8x16_ne(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6313,6 +6309,7 @@ function builtin_i8x16_ne(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_ne, builtin_i8x16_ne);
 
+// i8x16.lt_s -> v128.lt<i8>
 function builtin_i8x16_lt_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6321,6 +6318,7 @@ function builtin_i8x16_lt_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_lt_s, builtin_i8x16_lt_s);
 
+// i8x16.lt_u -> v128.lt<u8>
 function builtin_i8x16_lt_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
@@ -6329,6 +6327,7 @@ function builtin_i8x16_lt_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_lt_u, builtin_i8x16_lt_u);
 
+// i8x16.le_s -> v128.le<i8>
 function builtin_i8x16_le_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6337,6 +6336,7 @@ function builtin_i8x16_le_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_le_s, builtin_i8x16_le_s);
 
+// i8x16.le_u -> v128.le<u8>
 function builtin_i8x16_le_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
@@ -6345,6 +6345,7 @@ function builtin_i8x16_le_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_le_u, builtin_i8x16_le_u);
 
+// i8x16.gt_s -> v128.gt<i8>
 function builtin_i8x16_gt_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6353,6 +6354,7 @@ function builtin_i8x16_gt_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_gt_s, builtin_i8x16_gt_s);
 
+// i8x16.gt_u -> v128.gt<u8>
 function builtin_i8x16_gt_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
@@ -6361,6 +6363,7 @@ function builtin_i8x16_gt_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_gt_u, builtin_i8x16_gt_u);
 
+// i8x16.ge_s -> v128.ge<i8>
 function builtin_i8x16_ge_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6369,6 +6372,7 @@ function builtin_i8x16_ge_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_ge_s, builtin_i8x16_ge_s);
 
+// i8x16.ge_u -> v128.ge<u8>
 function builtin_i8x16_ge_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
@@ -6377,6 +6381,7 @@ function builtin_i8x16_ge_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_ge_u, builtin_i8x16_ge_u);
 
+// i8x16.narrow_i16x8_s -> v128.narrow<i16>
 function builtin_i8x16_narrow_i16x8_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6385,6 +6390,7 @@ function builtin_i8x16_narrow_i16x8_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_narrow_i16x8_s, builtin_i8x16_narrow_i16x8_s);
 
+// i8x16.narrow_i16x8_u -> v128.narrow<u16>
 function builtin_i8x16_narrow_i16x8_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6393,6 +6399,7 @@ function builtin_i8x16_narrow_i16x8_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i8x16_narrow_i16x8_u, builtin_i8x16_narrow_i16x8_u);
 
+// i16x8.splat -> v128.splat<i16>
 function builtin_i16x8_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6401,22 +6408,25 @@ function builtin_i16x8_splat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_splat, builtin_i16x8_splat);
 
+// i16x8.extract_lane_s -> v128.extract_lane<i16>
 function builtin_i16x8_extract_lane_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
-  ctx.contextualType = Type.i16;
+  ctx.contextualType = Type.i32;
   return builtin_v128_extract_lane(ctx);
 }
 builtins.set(BuiltinNames.i16x8_extract_lane_s, builtin_i16x8_extract_lane_s);
 
+// i16x8..extract_lane_u -> v128.extract_lane<u16>
 function builtin_i16x8_extract_lane_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
-  ctx.contextualType = Type.u16;
+  ctx.contextualType = Type.i32;
   return builtin_v128_extract_lane(ctx);
 }
 builtins.set(BuiltinNames.i16x8_extract_lane_u, builtin_i16x8_extract_lane_u);
 
+// i16x8.replace_lane -> v128.replace_lane<i16>
 function builtin_i16x8_replace_lane(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6425,6 +6435,7 @@ function builtin_i16x8_replace_lane(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_replace_lane, builtin_i16x8_replace_lane);
 
+// i16x8.add -> v128.add<i16>
 function builtin_i16x8_add(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6433,6 +6444,7 @@ function builtin_i16x8_add(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_add, builtin_i16x8_add);
 
+// i16x8.sub -> v128.sub<i16>
 function builtin_i16x8_sub(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6441,6 +6453,7 @@ function builtin_i16x8_sub(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_sub, builtin_i16x8_sub);
 
+// i16x8.mul -> v128.mul<i16>
 function builtin_i16x8_mul(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6449,6 +6462,7 @@ function builtin_i16x8_mul(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_mul, builtin_i16x8_mul);
 
+// i16x8.min_s -> v128.min<i16>
 function builtin_i16x8_min_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6457,6 +6471,7 @@ function builtin_i16x8_min_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_min_s, builtin_i16x8_min_s);
 
+// i16x8.min_u -> v128.min<u16>
 function builtin_i16x8_min_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6465,6 +6480,7 @@ function builtin_i16x8_min_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_min_u, builtin_i16x8_min_u);
 
+// i16x8.max_s -> v128.max<i16>
 function builtin_i16x8_max_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6473,6 +6489,7 @@ function builtin_i16x8_max_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_max_s, builtin_i16x8_max_s);
 
+// i16x8.max_u -> v128.max<u16>
 function builtin_i16x8_max_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6481,6 +6498,7 @@ function builtin_i16x8_max_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_max_u, builtin_i16x8_max_u);
 
+// i16x8.avgr_u -> v128.avgr<u16>
 function builtin_i16x8_avgr_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6489,6 +6507,7 @@ function builtin_i16x8_avgr_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_avgr_u, builtin_i16x8_avgr_u);
 
+// i16x8.neg -> v128.neg<i16>
 function builtin_i16x8_neg(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6497,6 +6516,7 @@ function builtin_i16x8_neg(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_neg, builtin_i16x8_neg);
 
+// i16x8.add_saturate_s -> v128.add_saturate<i16>
 function builtin_i16x8_add_saturate_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6505,6 +6525,7 @@ function builtin_i16x8_add_saturate_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_add_saturate_s, builtin_i16x8_add_saturate_s);
 
+// i16x8.add_saturate_u -> v128.add_saturate<u16>
 function builtin_i16x8_add_saturate_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6513,6 +6534,7 @@ function builtin_i16x8_add_saturate_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_add_saturate_u, builtin_i16x8_add_saturate_u);
 
+// i16x8.sub_saturate_s -> v128.sub_saturate<i16>
 function builtin_i16x8_sub_saturate_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6521,6 +6543,7 @@ function builtin_i16x8_sub_saturate_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_sub_saturate_s, builtin_i16x8_sub_saturate_s);
 
+// i16x8.sub_saturate_u -> v128.sub_saturate<u16>
 function builtin_i16x8_sub_saturate_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6529,6 +6552,7 @@ function builtin_i16x8_sub_saturate_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_sub_saturate_u, builtin_i16x8_sub_saturate_u);
 
+// i16x8.shl -> v128.shl<i16>
 function builtin_i16x8_shl(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6537,6 +6561,7 @@ function builtin_i16x8_shl(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_shl, builtin_i16x8_shl);
 
+// i16x8.shr_s -> v128.shr<i16>
 function builtin_i16x8_shr_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6545,6 +6570,7 @@ function builtin_i16x8_shr_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_shr_s, builtin_i16x8_shr_s);
 
+// i16x8.shr_u -> v128.shr<u16>
 function builtin_i16x8_shr_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6553,6 +6579,7 @@ function builtin_i16x8_shr_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_shr_u, builtin_i16x8_shr_u);
 
+// i16x8.any_true -> v128.any_true<i16>
 function builtin_i16x8_any_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6561,6 +6588,7 @@ function builtin_i16x8_any_true(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_any_true, builtin_i16x8_any_true);
 
+// i16x8.all_true -> v128.all_true<i16>
 function builtin_i16x8_all_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6569,6 +6597,7 @@ function builtin_i16x8_all_true(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_all_true, builtin_i16x8_all_true);
 
+// i16x8.eq -> v128.eq<i16>
 function builtin_i16x8_eq(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6577,6 +6606,7 @@ function builtin_i16x8_eq(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_eq, builtin_i16x8_eq);
 
+// i16x8.ne -> v128.ne<i16>
 function builtin_i16x8_ne(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6585,6 +6615,7 @@ function builtin_i16x8_ne(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_ne, builtin_i16x8_ne);
 
+// i16x8.lt_s -> v128.lt<i16>
 function builtin_i16x8_lt_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6593,6 +6624,7 @@ function builtin_i16x8_lt_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_lt_s, builtin_i16x8_lt_s);
 
+// i16x8.lt_u -> v128.lt<u16>
 function builtin_i16x8_lt_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6601,6 +6633,7 @@ function builtin_i16x8_lt_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_lt_u, builtin_i16x8_lt_u);
 
+// i16x8.le_s -> v128.le<i16>
 function builtin_i16x8_le_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6609,6 +6642,7 @@ function builtin_i16x8_le_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_le_s, builtin_i16x8_le_s);
 
+// i16x8.le_u -> v128.le<u16>
 function builtin_i16x8_le_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6617,6 +6651,7 @@ function builtin_i16x8_le_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_le_u, builtin_i16x8_le_u);
 
+// i16x8.gt_s -> v128.gt<i16>
 function builtin_i16x8_gt_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6625,6 +6660,7 @@ function builtin_i16x8_gt_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_gt_s, builtin_i16x8_gt_s);
 
+// i16x8.gt_u -> v128.gt<u16>
 function builtin_i16x8_gt_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6633,6 +6669,7 @@ function builtin_i16x8_gt_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_gt_u, builtin_i16x8_gt_u);
 
+// i16x8.ge_s -> v128.ge<i16>
 function builtin_i16x8_ge_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6641,6 +6678,7 @@ function builtin_i16x8_ge_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_ge_s, builtin_i16x8_ge_s);
 
+// i16x8.ge_u -> v128.ge<u16>
 function builtin_i16x8_ge_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -6649,6 +6687,7 @@ function builtin_i16x8_ge_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_ge_u, builtin_i16x8_ge_u);
 
+// i16x8.narrow_i32x4_s -> v128.narrow<i32>
 function builtin_i16x8_narrow_i32x4_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6657,6 +6696,7 @@ function builtin_i16x8_narrow_i32x4_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_narrow_i32x4_s, builtin_i16x8_narrow_i32x4_s);
 
+// i16x8.narrow_i32x4_u -> v128.narrow<u32>
 function builtin_i16x8_narrow_i32x4_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -7610,7 +7650,7 @@ export function compileVisitMembers(compiler: Compiler): void {
   // for (let [instanceId, instance] of managedClasses) {
   for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
     let instanceId = _keys[i];
-    let instance = managedClasses.get(instanceId)!;
+    let instance = assert(managedClasses.get(instanceId));
     assert(instance.type.isManaged);
     assert(instanceId == lastId++);
 
@@ -7618,7 +7658,7 @@ export function compileVisitMembers(compiler: Compiler): void {
     let code = new Array<ExpressionRef>();
 
     // if a library element, check if it implements a custom traversal function
-    if (instance.isDeclaredInLibrary && (visitImpl = instance.lookupInSelf("__visit_impl"))) {
+    if (instance.isDeclaredInLibrary && (visitImpl = instance.lookupInSelf("__visit_impl")) !== null) {
       assert(visitImpl.kind == ElementKind.FUNCTION_PROTOTYPE);
       let visitFunc = program.resolver.resolveFunction(<FunctionPrototype>visitImpl, null);
       if (!visitFunc || !compiler.compileFunction(visitFunc)) {
@@ -7686,7 +7726,7 @@ export function compileVisitMembers(compiler: Compiler): void {
   // for (let [instanceId, instance] of managedClasses) {
   for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
     let instanceId = unchecked(_keys[i]);
-    let instance = managedClasses.get(instanceId)!;
+    let instance = assert(managedClasses.get(instanceId));
     let base = instance.base;
     if (base) relooper.addBranch(blocks[instanceId], blocks[base.id]);
   }
@@ -7733,7 +7773,7 @@ export function compileRTTI(compiler: Compiler): void {
   // for (let [instanceId, instance] of managedClasses) {
   for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
     let instanceId = unchecked(_keys[i]);
-    let instance = managedClasses.get(instanceId)!;
+    let instance = assert(managedClasses.get(instanceId));
     assert(instanceId == lastId++);
     let flags: TypeinfoFlags = 0;
     if (instance.isAcyclic) flags |= TypeinfoFlags.ACYCLIC;
@@ -7796,7 +7836,7 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
 
   // if (__instanceof(ref, ID[i])) return true
   var instances = prototype.instances;
-  if (instances !== null && instances.size) {
+  if (instances !== null && instances.size > 0) {
     // for (let instance of instances.values()) {
     for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
       let instance = unchecked(_values[i]);

@@ -5,6 +5,7 @@ import { compareImpl, strtol, strtod, isSpace, isAscii, toLower8, toUpper8 } fro
 import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
 import { E_INVALIDLENGTH } from "./util/error";
 import { idof } from "./builtins";
+import { Array} from "./array";
 
 @sealed export abstract class String {
 
@@ -16,6 +17,16 @@ import { idof } from "./builtins";
     store<u16>(out, <u16>unit);
     if (hasSur) store<u16>(out, <u16>surr, 2);
     return changetype<String>(out); // retains
+  }
+
+  static fromCharCodes(units: Array<i32>): String {
+    var length = units.length;
+    var out = __alloc(<usize>length << 1, idof<String>());
+    var ptr = units.dataStart;
+    for (let i = 0; i < length; ++i) {
+      store<u16>(out + (<usize>i << 1), load<i32>(ptr + (<usize>i << 2)));
+    }
+    return changetype<String>(out);
   }
 
   static fromCodePoint(code: i32): String {

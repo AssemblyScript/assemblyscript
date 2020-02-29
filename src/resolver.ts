@@ -281,12 +281,11 @@ export class Resolver extends DiagnosticEmitter {
 
       // Handle special built-in types
       if (isSimpleType) {
-        switch (nameNode.identifier.text) {
-          case CommonNames.native: return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
-          case CommonNames.indexof: return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
-          case CommonNames.valueof: return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
-          case CommonNames.returnof: return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
-        }
+        let text = nameNode.identifier.text;
+        if (text == CommonNames.native) return this.resolveBuiltinNativeType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.indexof) return this.resolveBuiltinIndexofType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.valueof) return this.resolveBuiltinValueofType(node, ctxElement, ctxTypes, reportMode);
+        if (text == CommonNames.returnof) return this.resolveBuiltinReturnTypeType(node, ctxElement, ctxTypes, reportMode);
       }
 
       // Resolve normally
@@ -665,7 +664,7 @@ export class Resolver extends DiagnosticEmitter {
               typeArgumentNodes![0].range,
               typeArgumentNodes![argumentCount - 1].range
             )
-          : assert(alternativeReportNode).range,
+          : alternativeReportNode!.range,
         (argumentCount < minParameterCount ? minParameterCount : maxParameterCount).toString(),
         argumentCount.toString()
       );
@@ -2874,7 +2873,8 @@ export class Resolver extends DiagnosticEmitter {
           );
           return null;
         }
-      } while (current = current.basePrototype);
+        current = current.basePrototype;
+      } while (current);
       let extendsNode = assert(prototype.extendsNode); // must be present if it has a base prototype
       let base = this.resolveClassInclTypeArguments(
         basePrototype,
@@ -2920,7 +2920,7 @@ export class Resolver extends DiagnosticEmitter {
         // for (let [baseMemberName, baseMember] of baseMembers) {
         for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
           let baseMemberName = unchecked(_keys[i]);
-          let baseMember = baseMembers.get(baseMemberName)!;
+          let baseMember = assert(baseMembers.get(baseMemberName));
           instanceMembers.set(baseMemberName, baseMember);
         }
       }

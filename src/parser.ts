@@ -378,7 +378,7 @@ export class Parser extends DiagnosticEmitter {
   /** Obtains the next file to parse. */
   nextFile(): string | null {
     var backlog = this.backlog;
-    return backlog.length ? backlog.shift()! : null;
+    return backlog.length ? assert(backlog.shift()) : null;
   }
 
   /** Obtains the dependee of the given imported file. */
@@ -1186,7 +1186,7 @@ export class Parser extends DiagnosticEmitter {
     while (!tn.skip(Token.CLOSEPAREN)) {
       let param = this.parseParameter(tn, isConstructor); // reports
       if (!param) return null;
-      if (seenRest && !reportedRest) {
+      if (seenRest !== null && !reportedRest) {
         this.error(
           DiagnosticCode.A_rest_parameter_must_be_last_in_a_parameter_list,
           seenRest.name.range
@@ -1389,7 +1389,7 @@ export class Parser extends DiagnosticEmitter {
           name.range
         ); // recoverable
       }
-      if (parameters.length && parameters[0].initializer) {
+      if (parameters.length > 0 && parameters[0].initializer !== null) {
         this.error(
           DiagnosticCode.A_set_accessor_parameter_cannot_have_an_initializer,
           name.range
@@ -1773,7 +1773,7 @@ export class Parser extends DiagnosticEmitter {
         if (!decorators) decorators = [<DecoratorNode>decorator];
         else decorators.push(<DecoratorNode>decorator);
       } while (tn.skip(Token.AT));
-      if (decorators && isInterface) {
+      if (decorators !== null && isInterface) {
         this.error(
           DiagnosticCode.Decorators_are_not_valid_here,
           Range.join(decorators[0].range, decorators[decorators.length - 1].range)
@@ -2183,7 +2183,7 @@ export class Parser extends DiagnosticEmitter {
         if (!initializer) return null;
       }
       let range = tn.range(startPos, tn.pos);
-      if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) && ((flags & CommonFlags.STATIC) || isInterface || initializer)) {
+      if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) != 0 && ((flags & CommonFlags.STATIC) != 0 || isInterface || initializer !== null)) {
         this.error(
           DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
           range
@@ -2211,7 +2211,7 @@ export class Parser extends DiagnosticEmitter {
 
     // at: '[': 'key' ':' Type ']' ':' Type
 
-    if (decorators && decorators.length) {
+    if (decorators !== null && decorators.length > 0) {
       this.error(
         DiagnosticCode.Decorators_are_not_valid_here,
         Range.join(decorators[0].range, decorators[decorators.length - 1].range)
@@ -2426,12 +2426,17 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
+      if (asIdentifier) {
+        return Node.createExportMember(
+          identifier,
+          asIdentifier,
+          Range.join(identifier.range, asIdentifier.range)
+        );
+      }
       return Node.createExportMember(
         identifier,
-        asIdentifier,
-        asIdentifier
-          ? Range.join(identifier.range, asIdentifier.range)
-          : identifier.range
+        null,
+        identifier.range
       );
     } else {
       this.error(
@@ -2586,12 +2591,17 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
+      if (asIdentifier) {
+        return Node.createImportDeclaration(
+          identifier,
+          asIdentifier,
+          Range.join(identifier.range, asIdentifier.range)
+        );
+      }
       return Node.createImportDeclaration(
         identifier,
-        asIdentifier,
-        asIdentifier
-          ? Range.join(identifier.range, asIdentifier.range)
-          : identifier.range
+        null,
+        identifier.range
       );
     } else {
       this.error(

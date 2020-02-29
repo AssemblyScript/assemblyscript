@@ -108,7 +108,7 @@ declare function isDefined(expression: any): bool;
 /** Tests if the specified expression evaluates to a constant value. */
 declare function isConstant(expression: any): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the value. */
-declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
+declare function assert<T>(isTrueish: T, message?: string): T & (object | string | number); // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
 /** Parses a floating point string to a 64-bit float. */
