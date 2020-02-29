@@ -1,0 +1,37 @@
+{
+  "help": {
+    "description": "Prints this message and exits.",
+    "type": "b",
+    "alias": "h"
+  },
+  "baseDir": {
+    "description": "Specifies the base directory of input and output files.",
+    "type": "s",
+    "default": "."
+  },
+  "outFile": {
+    "description": "Specifies an output file. File extension indicates format.",
+    "type": "s",
+    "alias": "o"
+  },
+  "binaryFile": {
+    "description": "Specifies the WebAssembly output file (.wasm).",
+    "type": "s",
+    "alias": "b"
+  },
+  "textFile": {
+    "description": "Specifies the text output file (.wat).",
+    "type": "s",
+    "alias": "t"
+  },
+  "idlFile": {
+    "description": "Specifies the interface definition output file (.idl).",
+    "type": "s",
+    "alias": "t"
+  },
+  "tsdFile": {
+    "description": "Specifies the TypeScript definition output file (.tsd).",
+    "type": "s",
+    "alias": "t"
+  }
+}
