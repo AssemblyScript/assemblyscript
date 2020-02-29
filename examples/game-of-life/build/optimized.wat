@@ -26,19 +26,17 @@
   local.get $0
   local.get $1
   i32.mul
-  global.set $assembly/index/s
-  i32.const 0
-  local.set $0
+  global.set $assembly/index/offset
   loop $for-loop|0
-   local.get $0
-   global.get $assembly/index/h
+   local.get $3
+   local.get $1
    i32.lt_s
    if
     i32.const 0
-    local.set $1
+    local.set $2
     loop $for-loop|1
-     local.get $1
-     global.get $assembly/index/w
+     local.get $2
+     local.get $0
      i32.lt_s
      if
       call $~lib/bindings/Math/random
@@ -53,11 +51,11 @@
        i32.const -16777216
        i32.or
       end
-      local.set $2
-      local.get $1
-      global.get $assembly/index/s
-      local.get $0
-      global.get $assembly/index/w
+      local.set $4
+      local.get $2
+      global.get $assembly/index/offset
+      local.get $3
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.add
@@ -68,14 +66,14 @@
       local.get $2
       i32.const 1
       i32.add
-      local.set $1
+      local.set $2
       br $for-loop|1
      end
     end
     local.get $3
     i32.const 1
     i32.add
-    local.set $0
+    local.set $3
     br $for-loop|0
    end
   end
@@ -103,7 +101,7 @@
   local.set $7
   loop $for-loop|0
    local.get $1
-   global.get $assembly/index/h
+   local.get $8
    i32.lt_s
    if
     local.get $1
@@ -126,7 +124,7 @@
     local.set $0
     loop $for-loop|1
      local.get $0
-     global.get $assembly/index/w
+     local.get $9
      i32.lt_s
      if
       local.get $0
@@ -137,7 +135,7 @@
       select
       local.tee $3
       local.get $4
-      global.get $assembly/index/w
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.const 2
@@ -147,7 +145,7 @@
       i32.and
       local.get $0
       local.get $4
-      global.get $assembly/index/w
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.const 2
@@ -166,7 +164,7 @@
       select
       local.tee $2
       local.get $4
-      global.get $assembly/index/w
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.const 2
@@ -177,7 +175,7 @@
       i32.add
       local.get $3
       local.get $1
-      global.get $assembly/index/w
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.const 2
@@ -188,7 +186,7 @@
       i32.add
       local.get $2
       local.get $1
-      global.get $assembly/index/w
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.const 2
@@ -199,7 +197,7 @@
       i32.add
       local.get $3
       local.get $5
-      global.get $assembly/index/w
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.const 2
@@ -210,7 +208,7 @@
       i32.add
       local.get $0
       local.get $5
-      global.get $assembly/index/w
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.const 2
@@ -221,7 +219,7 @@
       i32.add
       local.get $2
       local.get $5
-      global.get $assembly/index/w
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.const 2
@@ -233,7 +231,7 @@
       local.set $2
       local.get $0
       local.get $1
-      global.get $assembly/index/w
+      global.get $assembly/index/width
       i32.mul
       i32.add
       i32.const 2
@@ -250,9 +248,9 @@
        i32.eq
        if
         local.get $0
-        global.get $assembly/index/s
+        global.get $assembly/index/offset
         local.get $1
-        global.get $assembly/index/w
+        global.get $assembly/index/width
         i32.mul
         i32.add
         i32.add
@@ -278,9 +276,9 @@
         i32.store
        else
         local.get $0
-        global.get $assembly/index/s
+        global.get $assembly/index/offset
         local.get $1
-        global.get $assembly/index/w
+        global.get $assembly/index/width
         i32.mul
         i32.add
         i32.add
@@ -297,9 +295,9 @@
        i32.eq
        if
         local.get $0
-        global.get $assembly/index/s
+        global.get $assembly/index/offset
         local.get $1
-        global.get $assembly/index/w
+        global.get $assembly/index/width
         i32.mul
         i32.add
         i32.add
@@ -311,9 +309,9 @@
         i32.store
        else
         local.get $0
-        global.get $assembly/index/s
+        global.get $assembly/index/offset
         local.get $1
-        global.get $assembly/index/w
+        global.get $assembly/index/width
         i32.mul
         i32.add
         i32.add
@@ -358,7 +356,7 @@
   (local $3 i32)
   loop $for-loop|0
    local.get $3
-   global.get $assembly/index/w
+   global.get $assembly/index/width
    i32.lt_s
    if
     call $~lib/bindings/Math/random
@@ -366,9 +364,9 @@
     f64.lt
     if
      local.get $3
-     global.get $assembly/index/s
+     global.get $assembly/index/offset
      local.get $1
-     global.get $assembly/index/w
+     global.get $assembly/index/width
      i32.mul
      i32.add
      i32.add
@@ -390,7 +388,7 @@
   local.set $3
   loop $for-loop|1
    local.get $3
-   global.get $assembly/index/h
+   global.get $assembly/index/height
    i32.lt_s
    if
     call $~lib/bindings/Math/random
@@ -398,9 +396,9 @@
     f64.lt
     if
      local.get $0
-     global.get $assembly/index/s
+     global.get $assembly/index/offset
      local.get $3
-     global.get $assembly/index/w
+     global.get $assembly/index/width
      i32.mul
      i32.add
      i32.add
