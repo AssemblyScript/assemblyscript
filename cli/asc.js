@@ -784,10 +784,9 @@ exports.main = function main(argv, options, callback) {
           add("vacuum");
 
           add("reorder-locals");
-        } else {
-          add("simplify-globals-optimizing");
         }
         add("optimize-instructions");
+        add("simplify-globals-optimizing");
       }
       // remove unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs

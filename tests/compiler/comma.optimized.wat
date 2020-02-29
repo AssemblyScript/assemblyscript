@@ -73,9 +73,7 @@
   global.set $comma/a
   i32.const 1
   global.set $comma/b
-  global.get $comma/a
-  i32.const 1
-  i32.add
+  i32.const 2
   global.set $comma/a
   global.get $comma/a
   global.set $comma/b

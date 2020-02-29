@@ -239,13 +239,13 @@
   global.set $std/pointer/one
   i32.const 24
   global.set $std/pointer/two
-  global.get $std/pointer/one
+  i32.const 8
   i32.const 1
   i32.store
-  global.get $std/pointer/one
+  i32.const 12
   i32.const 2
-  i32.store offset=4
-  global.get $std/pointer/one
+  i32.store
+  i32.const 8
   i32.load
   i32.const 1
   i32.ne
