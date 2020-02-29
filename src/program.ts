@@ -793,6 +793,7 @@ export class Program extends DiagnosticEmitter {
     // queued imports should be resolvable now through traversing exports and queued exports
     for (let i = 0, k = queuedImports.length; i < k; ++i) {
       let queuedImport = queuedImports[i];
+      let localIdentifier = queuedImport.localIdentifier;
       let foreignIdentifier = queuedImport.foreignIdentifier;
       if (foreignIdentifier) { // i.e. import { foo [as bar] } from "./baz"
         let element = this.lookupForeign(
@@ -803,9 +804,9 @@ export class Program extends DiagnosticEmitter {
         );
         if (element) {
           queuedImport.localFile.add(
-            queuedImport.localIdentifier.text,
+            localIdentifier.text,
             element,
-            true // isImport
+            localIdentifier // isImport
           );
         } else {
           // FIXME: file not found is not reported if this happens?
@@ -818,14 +819,15 @@ export class Program extends DiagnosticEmitter {
         let foreignFile = this.lookupForeignFile(queuedImport.foreignPath, queuedImport.foreignPathAlt);
         if (foreignFile) {
           let localFile = queuedImport.localFile;
-          let localName = queuedImport.localIdentifier.text;
+          let localName = localIdentifier.text;
           localFile.add(
             localName,
             foreignFile.asImportedNamespace(
               localName,
-              localFile
+              localFile,
+              localIdentifier
             ),
-            true // isImport
+            localIdentifier // isImport
           );
         } else {
           assert(false); // already reported by the parser not finding the file
@@ -1812,7 +1814,7 @@ export class Program extends DiagnosticEmitter {
     // resolve right away if the element exists
     var element = this.lookupForeign(declaration.foreignName.text, foreignPath, foreignPathAlt, queuedExports);
     if (element) {
-      parent.add(declaration.name.text, element, true);
+      parent.add(declaration.name.text, element, declaration.name /* isImport */);
       return;
     }
 
@@ -2199,7 +2201,7 @@ export abstract class Element {
   /* abstract */ lookup(name: string): Element | null { return unreachable(); }
 
   /** Adds an element as a member of this one. Reports and returns `false` if a duplicate. */
-  add(name: string, element: DeclaredElement): bool {
+  add(name: string, element: DeclaredElement, localIdentifierIfImport: IdentifierExpression | null = null): bool {
     var originalDeclaration = element.declaration;
     var members = this.members;
     if (!members) this.members = members = new Map();
@@ -2212,17 +2214,18 @@ export abstract class Element {
         if (merged) {
           element = merged; // use merged element
         } else {
+          let reportedIdentifier = localIdentifierIfImport || element.identifierNode;
           if (isDeclaredElement(existing.kind)) {
             this.program.errorRelated(
               DiagnosticCode.Duplicate_identifier_0,
-              element.identifierNode.range,
-              (<DeclaredElement>existing).declaration.name.range,
-              element.identifierNode.text
+              reportedIdentifier.range,
+              (<DeclaredElement>existing).identifierNode.range,
+              reportedIdentifier.text
             );
           } else {
             this.program.error(
               DiagnosticCode.Duplicate_identifier_0,
-              element.identifierNode.range, element.identifierNode.text
+              reportedIdentifier.range, reportedIdentifier.text
             );
           }
           return false;
@@ -2376,13 +2379,13 @@ export class File extends Element {
   }
 
   /* @override */
-  add(name: string, element: DeclaredElement, isImport: bool = false): bool {
+  add(name: string, element: DeclaredElement, localIdentifierIfImport: IdentifierExpression | null = null): bool {
     if (element.hasDecorator(DecoratorFlags.GLOBAL)) {
       element = this.program.ensureGlobal(name, element); // possibly merged globally
     }
-    if (!super.add(name, element)) return false;
+    if (!super.add(name, element, localIdentifierIfImport)) return false;
     element = assert(this.lookupInSelf(name)); // possibly merged locally
-    if (element.is(CommonFlags.EXPORT) && !isImport) {
+    if (element.is(CommonFlags.EXPORT) && !localIdentifierIfImport) {
       this.ensureExport(
         element.name,
         element
@@ -2442,12 +2445,10 @@ export class File extends Element {
   }
 
   /** Creates an imported namespace from this file. */
-  asImportedNamespace(name: string, parent: Element): Namespace {
-    var ns = new Namespace(
-      name,
-      parent,
-      this.program.makeNativeNamespaceDeclaration(name)
-    );
+  asImportedNamespace(name: string, parent: Element, localIdentifier: IdentifierExpression): Namespace {
+    var declaration = this.program.makeNativeNamespaceDeclaration(name);
+    declaration.name = localIdentifier;
+    var ns = new Namespace(name, parent, declaration);
     var exports = this.exports;
     if (exports) {
       // for (let [memberName, member] of exports) {
@@ -3770,7 +3771,7 @@ function tryMerge(older: Element, newer: Element): DeclaredElement | null {
   // NOTE: some of the following cases are not supported by TS, not sure why exactly.
   // suggesting to just merge what seems to be possible for now and revisit later.
   assert(older.program === newer.program);
-  assert(!newer.members);
+  if (newer.members) return null;
   var merged: DeclaredElement | null = null;
   switch (older.kind) {
     case ElementKind.FUNCTION_PROTOTYPE: {
