@@ -157,10 +157,10 @@
       br $while-continue|2
      end
     end
+    local.get $2
     local.get $6
     i32.const 1
     i32.shl
-    local.get $2
     i32.add
     local.get $4
     local.get $4
