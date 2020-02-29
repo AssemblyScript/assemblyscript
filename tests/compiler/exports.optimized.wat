@@ -60,20 +60,28 @@
  (func $exports/Car.getNumTires (; 2 ;) (result i32)
   i32.const 4
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (param $0 i32)
+ (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  local.get $0
+  (local $3 i32)
+  (local $4 i32)
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.tee $3
+  i32.const 16
+  i32.add
+  local.tee $1
   memory.size
-  local.tee $2
+  local.tee $4
   i32.const 16
   i32.shl
-  local.tee $1
+  local.tee $2
   i32.gt_u
   if
-   local.get $2
-   local.get $0
+   local.get $4
    local.get $1
+   local.get $2
    i32.sub
    i32.const 65535
    i32.add
@@ -81,16 +89,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $1
+   local.tee $2
+   local.get $4
    local.get $2
-   local.get $1
    i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $1
+    local.get $2
     memory.grow
     i32.const 0
     i32.lt_s
@@ -99,20 +107,9 @@
     end
    end
   end
-  local.get $0
+  local.get $1
   global.set $~lib/rt/stub/offset
- )
- (func $~lib/rt/stub/__alloc (; 4 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.tee $2
-  i32.const 16
-  i32.add
-  call $~lib/rt/stub/maybeGrowMemory
-  local.get $2
+  local.get $3
   i32.const 16
   i32.sub
   local.tee $1
@@ -127,27 +124,27 @@
   local.get $1
   i32.const 4
   i32.store offset=12
-  local.get $2
+  local.get $3
  )
- (func $exports/Car#get:doors (; 5 ;) (param $0 i32) (result i32)
+ (func $exports/Car#get:doors (; 4 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/Car#set:doors (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:doors (; 5 ;) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#openDoors (; 7 ;) (param $0 i32)
+ (func $exports/Car#openDoors (; 6 ;) (param $0 i32)
   nop
  )
- (func $~start (; 8 ;)
+ (func $~start (; 7 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16
   global.set $~lib/rt/stub/offset
  )
- (func $exports/subOpt|trampoline (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -165,11 +162,11 @@
   local.get $1
   i32.sub
  )
- (func $~setArgumentsLength (; 10 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 9 ;) (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $exports/Car#constructor|trampoline (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -196,7 +193,7 @@
   i32.store
   local.get $0
  )
- (func $exports/vehicles.Car#constructor|trampoline (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor|trampoline (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange

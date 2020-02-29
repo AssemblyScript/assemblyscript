@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -8,9 +8,6 @@
  (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
- (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
- (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
- (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (memory $0 1)
  (data (i32.const 20) "\01\00\00\00\01")
  (data (i32.const 32) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
@@ -20,7 +17,7 @@
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (; 2 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -186,7 +183,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (; 3 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -469,7 +466,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -583,7 +580,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 8 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (; 5 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -670,7 +667,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/searchBlock (; 9 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 6 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -727,7 +724,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/growMemory (; 10 ;) (param $0 i32)
+ (func $~lib/rt/tlsf/growMemory (; 7 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   memory.size
@@ -774,7 +771,7 @@
   i32.shl
   call $~lib/rt/tlsf/addMemory
  )
- (func $~lib/rt/tlsf/prepareBlock (; 11 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 8 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $1
@@ -835,7 +832,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 12 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 9 ;) (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/tlsf/collectLock
   if
@@ -909,172 +906,9 @@
   call $~lib/rt/rtrace/onalloc
   local.get $1
  )
- (func $~lib/rt/pure/increment (; 13 ;) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const -268435456
-  i32.and
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const -268435456
-  i32.and
-  i32.ne
-  if
-   i32.const 0
-   i32.const 160
-   i32.const 109
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.store offset=4
-  local.get $0
-  call $~lib/rt/rtrace/onincrement
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 160
-   i32.const 112
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~start (; 14 ;)
-  (local $0 i32)
+ (func $~start (; 10 ;)
   call $~lib/rt/tlsf/maybeInitialize
   call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  local.tee $0
-  i32.const 192
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/increment
-  end
-  local.get $0
-  i32.const 192
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
- (func $~lib/rt/pure/decrement (; 15 ;) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $2
-  i32.const 268435455
-  i32.and
-  local.set $1
-  local.get $0
-  call $~lib/rt/rtrace/ondecrement
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 160
-   i32.const 122
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  i32.const 1
-  i32.eq
-  if
-   block $__inlined_func$~lib/rt/__visit_members
-    block $switch$1$default
-     block $switch$1$case$4
-      local.get $0
-      i32.const 16
-      i32.add
-      local.tee $1
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$default
-     end
-     local.get $1
-     i32.load
-     local.tee $1
-     if
-      local.get $1
-      i32.const 192
-      i32.ge_u
-      if
-       local.get $1
-       i32.const 16
-       i32.sub
-       call $~lib/rt/pure/decrement
-      end
-     end
-     br $__inlined_func$~lib/rt/__visit_members
-    end
-    unreachable
-   end
-   local.get $2
-   i32.const -2147483648
-   i32.and
-   if
-    i32.const 0
-    i32.const 160
-    i32.const 126
-    i32.const 17
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $0
-   i32.load
-   i32.const 1
-   i32.or
-   i32.store
-   global.get $~lib/rt/tlsf/ROOT
-   local.get $0
-   call $~lib/rt/tlsf/insertBlock
-   local.get $0
-   call $~lib/rt/rtrace/onfree
-  else
-   local.get $1
-   i32.const 0
-   i32.le_u
-   if
-    i32.const 0
-    i32.const 160
-    i32.const 136
-    i32.const 15
-    call $~lib/builtins/abort
-    unreachable
-   end
-   local.get $0
-   local.get $1
-   i32.const 1
-   i32.sub
-   local.get $2
-   i32.const -268435456
-   i32.and
-   i32.or
-   i32.store offset=4
-  end
+  drop
  )
 )

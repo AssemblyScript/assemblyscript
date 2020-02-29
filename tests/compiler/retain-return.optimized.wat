@@ -3,9 +3,9 @@
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
@@ -906,46 +906,9 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $1
  )
- (func $~lib/rt/pure/increment (; 9 ;) (param $0 i32)
+ (func $~lib/rt/pure/__retain (; 9 ;) (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const -268435456
-  i32.and
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const -268435456
-  i32.and
-  i32.ne
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 109
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.store offset=4
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 112
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/rt/pure/__retain (; 10 ;) (param $0 i32) (result i32)
+  (local $2 i32)
   local.get $0
   i32.const 176
   i32.gt_u
@@ -953,44 +916,87 @@
    local.get $0
    i32.const 16
    i32.sub
-   call $~lib/rt/pure/increment
+   local.tee $1
+   i32.load offset=4
+   local.tee $2
+   i32.const -268435456
+   i32.and
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.const -268435456
+   i32.and
+   i32.ne
+   if
+    i32.const 0
+    i32.const 144
+    i32.const 109
+    i32.const 2
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.store offset=4
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   if
+    i32.const 0
+    i32.const 144
+    i32.const 112
+    i32.const 13
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
   local.get $0
  )
- (func $~setArgumentsLength (; 11 ;) (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
- )
- (func $start:retain-return (; 12 ;)
-  (local $0 i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
+ (func $retain-return/Ref#constructor (; 10 ;) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
   call $~lib/rt/pure/__retain
+ )
+ (func $~lib/rt/pure/__release (; 11 ;) (param $0 i32)
+  local.get $0
+  i32.const 176
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+ )
+ (func $~setArgumentsLength (; 12 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $start:retain-return (; 13 ;)
+  (local $0 i32)
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
+  call $retain-return/Ref#constructor
   global.set $retain-return/ref
   i32.const 0
   global.set $~argumentsLength
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
   i32.const 1
   global.set $~argumentsLength
   i32.const 1
@@ -1001,24 +1007,20 @@
   global.set $~argumentsLength
   i32.const 0
   global.set $~argumentsLength
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  drop
+  call $retain-return/Ref#constructor
+  call $~lib/rt/pure/__release
   i32.const 0
   global.set $~argumentsLength
   i32.const 0
@@ -1027,19 +1029,12 @@
   local.tee $0
   if
    local.get $0
-   i32.const 176
-   i32.gt_u
-   if
-    local.get $0
-    i32.const 16
-    i32.sub
-    call $~lib/rt/pure/decrement
-   end
+   call $~lib/rt/pure/__release
   end
   i32.const 0
   global.set $retain-return/ref
  )
- (func $~start (; 13 ;)
+ (func $~start (; 14 ;)
   global.get $~started
   if
    return
@@ -1049,7 +1044,7 @@
   end
   call $start:retain-return
  )
- (func $~lib/rt/pure/decrement (; 14 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 15 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

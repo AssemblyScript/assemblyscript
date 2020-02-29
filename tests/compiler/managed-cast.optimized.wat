@@ -1,7 +1,7 @@
 (module
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -912,48 +912,16 @@
   call $~lib/rt/rtrace/onalloc
   local.get $2
  )
- (func $~lib/rt/pure/increment (; 13 ;) (param $0 i32)
-  (local $1 i32)
+ (func $~lib/rt/tlsf/__alloc (; 13 ;) (param $0 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const -268435456
-  i32.and
-  local.get $1
-  i32.const 1
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
   i32.add
-  i32.const -268435456
-  i32.and
-  i32.ne
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 109
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.store offset=4
-  local.get $0
-  call $~lib/rt/rtrace/onincrement
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 112
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $~lib/rt/pure/__retain (; 14 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
   local.get $0
   i32.const 268
   i32.gt_u
@@ -961,29 +929,61 @@
    local.get $0
    i32.const 16
    i32.sub
-   call $~lib/rt/pure/increment
+   local.tee $1
+   i32.load offset=4
+   local.tee $2
+   i32.const -268435456
+   i32.and
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.const -268435456
+   i32.and
+   i32.ne
+   if
+    i32.const 0
+    i32.const 144
+    i32.const 109
+    i32.const 2
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.store offset=4
+   local.get $1
+   call $~lib/rt/rtrace/onincrement
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   if
+    i32.const 0
+    i32.const 144
+    i32.const 112
+    i32.const 13
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
   local.get $0
  )
  (func $managed-cast/Cat#constructor (; 15 ;) (result i32)
   (local $0 i32)
-  call $~lib/rt/tlsf/maybeInitialize
   i32.const 3
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
+  call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
-  if (result i32)
-   local.get $0
-  else
-   call $~lib/rt/tlsf/maybeInitialize
+  i32.eqz
+  if
    i32.const 4
-   call $~lib/rt/tlsf/allocateBlock
-   i32.const 16
-   i32.add
+   call $~lib/rt/tlsf/__alloc
    call $~lib/rt/pure/__retain
+   local.set $0
   end
+  local.get $0
  )
  (func $~lib/rt/pure/__release (; 16 ;) (param $0 i32)
   local.get $0

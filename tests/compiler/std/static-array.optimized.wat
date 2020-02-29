@@ -1,11 +1,11 @@
 (module
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_i64 (func (param i32) (result i64)))
  (type $i32_=>_f32 (func (param i32) (result f32)))
  (type $i32_=>_f64 (func (param i32) (result f64)))
@@ -92,52 +92,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  local.get $0
-  i32.const 1073741808
-  i32.gt_u
-  if
-   unreachable
-  end
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.tee $3
-  local.get $0
-  i32.const 15
-  i32.add
-  i32.const -16
-  i32.and
-  local.tee $2
-  i32.const 16
-  local.get $2
-  i32.const 16
-  i32.gt_u
-  select
-  local.tee $4
-  i32.add
-  call $~lib/rt/stub/maybeGrowMemory
-  local.get $3
-  i32.const 16
-  i32.sub
-  local.tee $2
-  local.get $4
-  i32.store
-  local.get $2
-  i32.const 1
-  i32.store offset=4
-  local.get $2
-  local.get $1
-  i32.store offset=8
-  local.get $2
-  local.get $0
-  i32.store offset=12
-  local.get $3
- )
- (func $~lib/memory/memory.copy (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -310,11 +265,13 @@
    end
   end
  )
- (func $~lib/rt/stub/__realloc (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__realloc (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.const 15
   i32.and
@@ -334,10 +291,10 @@
   local.get $0
   i32.const 16
   i32.sub
-  local.tee $3
+  local.tee $4
   i32.load
-  local.set $4
-  local.get $3
+  local.set $2
+  local.get $4
   i32.load offset=4
   i32.const 1
   i32.ne
@@ -351,7 +308,7 @@
   end
   global.get $~lib/rt/stub/offset
   local.get $0
-  local.get $4
+  local.get $2
   i32.add
   i32.eq
   local.set $5
@@ -360,9 +317,9 @@
   i32.add
   i32.const -16
   i32.and
-  local.set $2
+  local.set $3
   local.get $1
-  local.get $4
+  local.get $2
   i32.gt_u
   if
    local.get $5
@@ -374,54 +331,93 @@
      unreachable
     end
     local.get $0
+    local.get $3
+    i32.add
+    call $~lib/rt/stub/maybeGrowMemory
+    local.get $4
+    local.get $3
+    i32.store
+   else
+    local.get $4
+    i32.load offset=8
+    local.set $6
+    local.get $3
     local.get $2
+    i32.const 1
+    i32.shl
+    local.tee $2
+    local.get $3
+    local.get $2
+    i32.gt_u
+    select
+    local.tee $5
+    i32.const 1073741808
+    i32.gt_u
+    if
+     unreachable
+    end
+    global.get $~lib/rt/stub/offset
+    i32.const 16
+    i32.add
+    local.tee $3
+    local.get $5
+    i32.const 15
+    i32.add
+    i32.const -16
+    i32.and
+    local.tee $2
+    i32.const 16
+    local.get $2
+    i32.const 16
+    i32.gt_u
+    select
+    local.tee $7
     i32.add
     call $~lib/rt/stub/maybeGrowMemory
     local.get $3
-    local.get $2
-    i32.store
-   else
-    local.get $2
-    local.get $4
-    i32.const 1
-    i32.shl
-    local.tee $4
-    local.get $2
-    local.get $4
-    i32.gt_u
-    select
-    local.get $3
-    i32.load offset=8
-    call $~lib/rt/stub/__alloc
+    i32.const 16
+    i32.sub
     local.tee $2
-    local.get $0
+    local.get $7
+    i32.store
+    local.get $2
+    i32.const 1
+    i32.store offset=4
+    local.get $2
+    local.get $6
+    i32.store offset=8
+    local.get $2
+    local.get $5
+    i32.store offset=12
     local.get $3
+    local.get $0
+    local.get $4
     i32.load offset=12
     call $~lib/memory/memory.copy
-    local.get $2
+    local.get $3
     local.tee $0
     i32.const 16
     i32.sub
-    local.set $3
+    local.set $4
    end
   else
    local.get $5
    if
     local.get $0
-    local.get $2
+    local.get $3
     i32.add
     global.set $~lib/rt/stub/offset
+    local.get $4
     local.get $3
-    local.get $2
     i32.store
    end
   end
-  local.get $3
+  local.get $4
   local.get $1
   i32.store offset=12
   local.get $0
  )
- (func $~lib/memory/memory.fill (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 5 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -632,7 +628,7 @@
    end
   end
  )
- (func $~lib/array/ensureSize (; 7 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureSize (; 6 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -688,7 +684,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i64>#__get (; 8 ;) (param $0 i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (; 7 ;) (param $0 i32) (result i64)
   local.get $0
   i32.const 140
   i32.load
@@ -709,7 +705,7 @@
   i32.add
   i64.load
  )
- (func $~lib/array/Array<f32>#__get (; 9 ;) (param $0 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 8 ;) (param $0 i32) (result f32)
   local.get $0
   i32.const 204
   i32.load
@@ -730,7 +726,7 @@
   i32.add
   f32.load
  )
- (func $~lib/array/Array<f64>#__get (; 10 ;) (param $0 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 9 ;) (param $0 i32) (result f64)
   local.get $0
   i32.const 268
   i32.load
@@ -751,7 +747,7 @@
   i32.add
   f64.load
  )
- (func $start:std/static-array (; 11 ;)
+ (func $start:std/static-array (; 10 ;)
   i32.const 76
   i32.load
   i32.const 2
@@ -1013,7 +1009,7 @@
    unreachable
   end
  )
- (func $~start (; 12 ;)
+ (func $~start (; 11 ;)
   call $start:std/static-array
  )
 )

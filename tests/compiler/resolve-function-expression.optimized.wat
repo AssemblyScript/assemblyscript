@@ -67,52 +67,12 @@
   i32.lt_u
   select
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  memory.size
-  local.tee $2
-  i32.const 16
-  i32.shl
-  local.tee $1
-  i32.gt_u
-  if
-   local.get $2
-   local.get $0
-   local.get $1
-   i32.sub
-   i32.const 65535
-   i32.add
-   i32.const -65536
-   i32.and
-   i32.const 16
-   i32.shr_u
-   local.tee $1
-   local.get $2
-   local.get $1
-   i32.gt_s
-   select
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    local.get $1
-    memory.grow
-    i32.const 0
-    i32.lt_s
-    if
-     unreachable
-    end
-   end
-  end
-  local.get $0
-  global.set $~lib/rt/stub/offset
- )
- (func $~lib/rt/stub/__alloc (; 4 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   local.get $0
   i32.const 1073741808
   i32.gt_u
@@ -122,7 +82,7 @@
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $2
+  local.tee $3
   local.get $0
   i32.const 15
   i32.add
@@ -134,14 +94,51 @@
   i32.const 16
   i32.gt_u
   select
-  local.tee $3
+  local.tee $5
   i32.add
-  call $~lib/rt/stub/maybeGrowMemory
-  local.get $2
+  local.tee $1
+  memory.size
+  local.tee $4
+  i32.const 16
+  i32.shl
+  local.tee $2
+  i32.gt_u
+  if
+   local.get $4
+   local.get $1
+   local.get $2
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $2
+   local.get $4
+   local.get $2
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $2
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $1
+  global.set $~lib/rt/stub/offset
+  local.get $3
   i32.const 16
   i32.sub
   local.tee $1
-  local.get $3
+  local.get $5
   i32.store
   local.get $1
   i32.const 1
@@ -152,9 +149,9 @@
   local.get $1
   local.get $0
   i32.store offset=12
-  local.get $2
+  local.get $3
  )
- (func $~lib/util/number/itoa32 (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 4 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -215,7 +212,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String#get:length (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -223,7 +220,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -298,7 +295,7 @@
   end
   i32.const 0
  )
- (func $start:resolve-function-expression (; 8 ;)
+ (func $start:resolve-function-expression (; 7 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 1
@@ -351,7 +348,7 @@
    unreachable
   end
  )
- (func $~start (; 9 ;)
+ (func $~start (; 8 ;)
   call $start:resolve-function-expression
  )
 )

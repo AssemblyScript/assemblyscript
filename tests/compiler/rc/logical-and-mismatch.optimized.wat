@@ -2,10 +2,10 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
@@ -909,48 +909,9 @@
   call $~lib/rt/rtrace/onalloc
   local.get $1
  )
- (func $~lib/rt/pure/increment (; 13 ;) (param $0 i32)
+ (func $~lib/rt/pure/__retain (; 13 ;) (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const -268435456
-  i32.and
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const -268435456
-  i32.and
-  i32.ne
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 109
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.store offset=4
-  local.get $0
-  call $~lib/rt/rtrace/onincrement
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 112
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/rt/pure/__retain (; 14 ;) (param $0 i32) (result i32)
+  (local $2 i32)
   local.get $0
   i32.const 176
   i32.gt_u
@@ -958,9 +919,53 @@
    local.get $0
    i32.const 16
    i32.sub
-   call $~lib/rt/pure/increment
+   local.tee $1
+   i32.load offset=4
+   local.tee $2
+   i32.const -268435456
+   i32.and
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.const -268435456
+   i32.and
+   i32.ne
+   if
+    i32.const 0
+    i32.const 144
+    i32.const 109
+    i32.const 2
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.store offset=4
+   local.get $1
+   call $~lib/rt/rtrace/onincrement
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   if
+    i32.const 0
+    i32.const 144
+    i32.const 112
+    i32.const 13
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
   local.get $0
+ )
+ (func $rc/logical-and-mismatch/Ref#constructor (; 14 ;) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
  )
  (func $~lib/rt/pure/__release (; 15 ;) (param $0 i32)
   local.get $0
@@ -973,19 +978,11 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $start:rc/logical-and-mismatch (; 16 ;)
+ (func $~start (; 16 ;)
   (local $0 i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
+  call $rc/logical-and-mismatch/Ref#constructor
   global.set $rc/logical-and-mismatch/gloRef
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
+  call $rc/logical-and-mismatch/Ref#constructor
   local.tee $0
   if
    local.get $0
@@ -999,30 +996,18 @@
   global.get $rc/logical-and-mismatch/gloRef
   local.tee $0
   if (result i32)
-   call $~lib/rt/tlsf/maybeInitialize
-   call $~lib/rt/tlsf/allocateBlock
-   i32.const 16
-   i32.add
-   call $~lib/rt/pure/__retain
+   call $rc/logical-and-mismatch/Ref#constructor
   else
    local.get $0
    call $~lib/rt/pure/__retain
   end
   call $~lib/rt/pure/__release
-  call $~lib/rt/tlsf/maybeInitialize
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
+  call $rc/logical-and-mismatch/Ref#constructor
   local.tee $0
   if
    local.get $0
    call $~lib/rt/pure/__release
-   call $~lib/rt/tlsf/maybeInitialize
-   call $~lib/rt/tlsf/allocateBlock
-   i32.const 16
-   i32.add
-   call $~lib/rt/pure/__retain
+   call $rc/logical-and-mismatch/Ref#constructor
    local.set $0
   end
   local.get $0
@@ -1030,10 +1015,7 @@
   global.get $rc/logical-and-mismatch/gloRef
   call $~lib/rt/pure/__release
  )
- (func $~start (; 17 ;)
-  call $start:rc/logical-and-mismatch
- )
- (func $~lib/rt/pure/decrement (; 18 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 17 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
