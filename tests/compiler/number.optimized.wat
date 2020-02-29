@@ -5,10 +5,7 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_i32_i64_i32_i64_=>_i32 (func (param i32 i64 i32 i64 i32 i64) (result i32)))
- (type $f32_=>_i32 (func (param f32) (result i32)))
- (type $f64_=>_i32 (func (param f64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
@@ -1374,94 +1371,10 @@
   call $~lib/memory/memory.copy
   local.get $2
  )
- (func $~lib/util/number/dtoa (; 12 ;) (result i32)
+ (func $start:number (; 12 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  i32.const 56
-  call $~lib/rt/stub/__alloc
-  local.tee $0
-  call $~lib/util/number/dtoa_core
-  local.tee $1
-  i32.const 28
-  i32.eq
-  if
-   local.get $0
-   return
-  end
-  local.get $0
-  local.get $1
-  call $~lib/string/String#substring
-  local.get $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  i32.const 0
-  local.get $0
-  select
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1280
-   i32.const 70
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.const 16
-  i32.sub
-  local.tee $2
-  i32.load offset=4
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1280
-   i32.const 72
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/rt/stub/offset
-  local.get $0
-  local.get $2
-  i32.load
-  i32.add
-  i32.eq
-  if
-   local.get $2
-   global.set $~lib/rt/stub/offset
-  end
- )
- (func $~lib/number/F32.isInteger (; 13 ;) (param $0 f32) (result i32)
-  local.get $0
-  f32.trunc
-  local.get $0
-  f32.eq
-  i32.const 0
-  local.get $0
-  local.get $0
-  f32.sub
-  f32.const 0
-  f32.eq
-  select
- )
- (func $~lib/number/F64.isInteger (; 14 ;) (param $0 f64) (result i32)
-  local.get $0
-  f64.trunc
-  local.get $0
-  f64.eq
-  i32.const 0
-  local.get $0
-  local.get $0
-  f64.sub
-  f64.const 0
-  f64.eq
-  select
- )
- (func $start:number (; 15 ;)
-  (local $0 i32)
   i32.const 1536
   global.set $~lib/rt/stub/startOffset
   i32.const 1536
@@ -1479,7 +1392,61 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/util/number/dtoa
+  i32.const 56
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  call $~lib/util/number/dtoa_core
+  local.tee $1
+  i32.const 28
+  i32.ne
+  if
+   local.get $0
+   local.get $1
+   call $~lib/string/String#substring
+   local.get $0
+   i32.const 15
+   i32.and
+   i32.eqz
+   i32.const 0
+   local.get $0
+   select
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1280
+    i32.const 70
+    i32.const 2
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $0
+   i32.const 16
+   i32.sub
+   local.tee $2
+   i32.load offset=4
+   i32.const 1
+   i32.ne
+   if
+    i32.const 0
+    i32.const 1280
+    i32.const 72
+    i32.const 13
+    call $~lib/builtins/abort
+    unreachable
+   end
+   global.get $~lib/rt/stub/offset
+   local.get $0
+   local.get $2
+   i32.load
+   i32.add
+   i32.eq
+   if
+    local.get $2
+    global.set $~lib/rt/stub/offset
+   end
+   local.set $0
+  end
+  local.get $0
   i32.const 1328
   call $~lib/string/String.__eq
   i32.eqz
@@ -1624,252 +1591,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 0
-  call $~lib/number/F32.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 34
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -0
-  call $~lib/number/F32.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 35
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const nan:0x400000
-  call $~lib/number/F32.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 36
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const inf
-  call $~lib/number/F32.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 37
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1.1920928955078125e-07
-  call $~lib/number/F32.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 38
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 1
-  call $~lib/number/F32.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 39
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1
-  call $~lib/number/F32.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 40
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -16777215
-  call $~lib/number/F32.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 41
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 16777215
-  call $~lib/number/F32.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 42
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const 0.5
-  call $~lib/number/F32.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 43
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -1.5
-  call $~lib/number/F32.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 44
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0
-  call $~lib/number/F64.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 57
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -0
-  call $~lib/number/F64.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 58
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const nan:0x8000000000000
-  call $~lib/number/F64.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 59
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const inf
-  call $~lib/number/F64.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 60
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 2.220446049250313e-16
-  call $~lib/number/F64.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 61
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 1
-  call $~lib/number/F64.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 62
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1
-  call $~lib/number/F64.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 63
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -9007199254740991
-  call $~lib/number/F64.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 64
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 9007199254740991
-  call $~lib/number/F64.isInteger
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 65
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const 0.5
-  call $~lib/number/F64.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 66
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -1.5
-  call $~lib/number/F64.isInteger
-  if
-   i32.const 0
-   i32.const 96
-   i32.const 67
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
- (func $~start (; 16 ;)
+ (func $~start (; 13 ;)
   call $start:number
  )
 )

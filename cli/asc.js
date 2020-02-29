@@ -643,18 +643,14 @@ exports.main = function main(argv, options, callback) {
     const passes = [];
     function add(pass) { passes.push(pass); }
 
-    // console.log('AlwaysInlineMaxSize: ' + module.getAlwaysInlineMaxSize());
-    // console.log('FlexibleInlineMaxSize: ' + module.getFlexibleInlineMaxSize());
-    // console.log('OneCallerInlineMaxSize: ' + module.getOneCallerInlineMaxSize());
-
+    // enchance options for inline passes
     if (optimizeLevel >= 2 && shrinkLevel < 2) {
-      module.setAlwaysInlineMaxSize(10);
-      module.setFlexibleInlineMaxSize(50);
-      module.setOneCallerInlineMaxSize(50);
+      module.setAlwaysInlineMaxSize(12);
+      module.setFlexibleInlineMaxSize(60);
+      module.setOneCallerInlineMaxSize(60);
     } else {
-      // tune defaults
-      module.setAlwaysInlineMaxSize(5); // default: 2
-      module.setFlexibleInlineMaxSize(30); // default: 20
+      module.setAlwaysInlineMaxSize(5);     // default:  2
+      module.setFlexibleInlineMaxSize(30);  // default: 20
       module.setOneCallerInlineMaxSize(30); // default: 15
     }
 

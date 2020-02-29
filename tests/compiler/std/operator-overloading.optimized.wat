@@ -1,6 +1,5 @@
 (module
  (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
@@ -1177,39 +1176,7 @@
   f64.const 1e-300
   f64.mul
  )
- (func $std/operator-overloading/Tester.equals (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load
-  local.get $1
-  i32.load
-  i32.eq
-  if (result i32)
-   local.get $0
-   i32.load offset=4
-   local.get $1
-   i32.load offset=4
-   i32.eq
-  else
-   i32.const 0
-  end
- )
- (func $std/operator-overloading/Tester.notEquals (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load
-  local.get $1
-  i32.load
-  i32.ne
-  if (result i32)
-   local.get $0
-   i32.load offset=4
-   local.get $1
-   i32.load offset=4
-   i32.ne
-  else
-   i32.const 0
-  end
- )
- (func $start:std/operator-overloading (; 6 ;)
+ (func $start:std/operator-overloading (; 4 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1827,8 +1794,21 @@
   local.get $0
   global.set $std/operator-overloading/eq2
   global.get $std/operator-overloading/eq1
+  local.tee $0
+  i32.load
   global.get $std/operator-overloading/eq2
-  call $std/operator-overloading/Tester.equals
+  local.tee $1
+  i32.load
+  i32.eq
+  if (result i32)
+   local.get $0
+   i32.load offset=4
+   local.get $1
+   i32.load offset=4
+   i32.eq
+  else
+   i32.const 0
+  end
   global.set $std/operator-overloading/eq
   global.get $std/operator-overloading/eq
   i32.const 1
@@ -1862,8 +1842,21 @@
   local.get $0
   global.set $std/operator-overloading/eq4
   global.get $std/operator-overloading/eq3
+  local.tee $0
+  i32.load
   global.get $std/operator-overloading/eq4
-  call $std/operator-overloading/Tester.equals
+  local.tee $1
+  i32.load
+  i32.eq
+  if (result i32)
+   local.get $0
+   i32.load offset=4
+   local.get $1
+   i32.load offset=4
+   i32.eq
+  else
+   i32.const 0
+  end
   global.set $std/operator-overloading/eqf
   global.get $std/operator-overloading/eqf
   if
@@ -1875,8 +1868,21 @@
    unreachable
   end
   global.get $std/operator-overloading/eq1
+  local.tee $0
+  i32.load
   global.get $std/operator-overloading/eq2
-  call $std/operator-overloading/Tester.notEquals
+  local.tee $1
+  i32.load
+  i32.ne
+  if (result i32)
+   local.get $0
+   i32.load offset=4
+   local.get $1
+   i32.load offset=4
+   i32.ne
+  else
+   i32.const 0
+  end
   global.set $std/operator-overloading/eq
   global.get $std/operator-overloading/eq
   if
@@ -1888,8 +1894,21 @@
    unreachable
   end
   global.get $std/operator-overloading/eq3
+  local.tee $0
+  i32.load
   global.get $std/operator-overloading/eq4
-  call $std/operator-overloading/Tester.notEquals
+  local.tee $1
+  i32.load
+  i32.ne
+  if (result i32)
+   local.get $0
+   i32.load offset=4
+   local.get $1
+   i32.load offset=4
+   i32.ne
+  else
+   i32.const 0
+  end
   global.set $std/operator-overloading/eqf
   global.get $std/operator-overloading/eqf
   i32.const 1
@@ -2856,7 +2875,7 @@
    unreachable
   end
  )
- (func $~start (; 7 ;)
+ (func $~start (; 5 ;)
   call $start:std/operator-overloading
  )
 )

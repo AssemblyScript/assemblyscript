@@ -1,7 +1,6 @@
 (module
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -94,8 +93,12 @@
   i32.store offset=12
   local.get $4
  )
- (func $call-super/B#constructor (; 2 ;) (result i32)
+ (func $~start (; 2 ;)
   (local $0 i32)
+  i32.const 64
+  global.set $~lib/rt/stub/startOffset
+  i32.const 64
+  global.set $~lib/rt/stub/offset
   i32.const 8
   i32.const 3
   call $~lib/rt/stub/__alloc
@@ -150,15 +153,6 @@
    unreachable
   end
   local.get $0
- )
- (func $~start (; 3 ;)
-  (local $0 i32)
-  i32.const 64
-  global.set $~lib/rt/stub/startOffset
-  i32.const 64
-  global.set $~lib/rt/stub/offset
-  call $call-super/B#constructor
-  local.tee $0
   i32.load
   i32.const 1
   i32.ne

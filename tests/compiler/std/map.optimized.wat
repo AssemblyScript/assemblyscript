@@ -1,10 +1,10 @@
 (module
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
@@ -849,69 +849,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/growMemory (; 12 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  memory.size
-  local.tee $2
-  i32.const 16
-  local.get $0
-  i32.load offset=1568
-  local.get $2
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.sub
-  i32.ne
-  i32.shl
-  local.get $1
-  i32.const 1
-  i32.const 27
-  local.get $1
-  i32.clz
-  i32.sub
-  i32.shl
-  i32.const 1
-  i32.sub
-  i32.add
-  local.get $1
-  local.get $1
-  i32.const 536870904
-  i32.lt_u
-  select
-  i32.add
-  i32.const 65535
-  i32.add
-  i32.const -65536
-  i32.and
-  i32.const 16
-  i32.shr_u
-  local.tee $1
-  local.get $2
-  local.get $1
-  i32.gt_s
-  select
-  memory.grow
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $1
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    unreachable
-   end
-  end
-  local.get $0
-  local.get $2
-  i32.const 16
-  i32.shl
-  memory.size
-  i32.const 16
-  i32.shl
-  call $~lib/rt/tlsf/addMemory
- )
- (func $~lib/rt/tlsf/prepareBlock (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -987,9 +925,10 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 14 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   global.get $~lib/rt/tlsf/collectLock
   if
    i32.const 0
@@ -1017,9 +956,65 @@
    local.tee $3
    i32.eqz
    if
+    memory.size
+    local.tee $3
+    i32.const 16
     local.get $0
+    i32.load offset=1568
+    local.get $3
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.sub
+    i32.ne
+    i32.shl
     local.get $4
-    call $~lib/rt/tlsf/growMemory
+    i32.const 1
+    i32.const 27
+    local.get $4
+    i32.clz
+    i32.sub
+    i32.shl
+    i32.const 1
+    i32.sub
+    i32.add
+    local.get $4
+    local.get $4
+    i32.const 536870904
+    i32.lt_u
+    select
+    i32.add
+    i32.const 65535
+    i32.add
+    i32.const -65536
+    i32.and
+    i32.const 16
+    i32.shr_u
+    local.tee $5
+    local.get $3
+    local.get $5
+    i32.gt_s
+    select
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $5
+     memory.grow
+     i32.const 0
+     i32.lt_s
+     if
+      unreachable
+     end
+    end
+    local.get $0
+    local.get $3
+    i32.const 16
+    i32.shl
+    memory.size
+    i32.const 16
+    i32.shl
+    call $~lib/rt/tlsf/addMemory
     local.get $0
     local.get $4
     call $~lib/rt/tlsf/searchBlock
@@ -1069,7 +1064,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/pure/__retain (; 15 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (; 14 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1120,7 +1115,7 @@
   end
   local.get $0
  )
- (func $~lib/memory/memory.fill (; 16 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 15 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -1331,7 +1326,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 17 ;) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (; 16 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741808
@@ -1356,7 +1351,7 @@
   local.get $1
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i8,i32>#clear (; 18 ;) (param $0 i32)
+ (func $~lib/map/Map<i8,i32>#clear (; 17 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 16
@@ -1406,7 +1401,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<i8,i32>#find (; 19 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#find (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -1449,7 +1444,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i8,i32>#has (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#has (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1465,7 +1460,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i8,i32>#rehash (; 21 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#rehash (; 20 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1627,7 +1622,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i8,i32>#set (; 22 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#set (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1726,7 +1721,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i8,i32>#get (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#get (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1752,7 +1747,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 23 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -1832,7 +1827,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/memory/memory.copy (; 25 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -2005,20 +2000,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/freeBlock (; 26 ;) (param $0 i32) (param $1 i32)
-  local.get $1
-  local.get $1
-  i32.load
-  i32.const 1
-  i32.or
-  i32.store
-  local.get $0
-  local.get $1
-  call $~lib/rt/tlsf/insertBlock
-  local.get $1
-  call $~lib/rt/rtrace/onfree
- )
- (func $~lib/rt/tlsf/reallocateBlock (; 27 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/reallocateBlock (; 25 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2074,10 +2056,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
+    local.get $4
     local.get $5
     i32.const 3
     i32.and
-    local.get $4
     i32.or
     i32.store
     local.get $1
@@ -2115,13 +2097,21 @@
    local.get $1
    local.get $3
    call $~lib/rt/rtrace/onrealloc
+   local.get $1
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.or
+   i32.store
    local.get $0
    local.get $1
-   call $~lib/rt/tlsf/freeBlock
+   call $~lib/rt/tlsf/insertBlock
+   local.get $1
+   call $~lib/rt/rtrace/onfree
   end
   local.get $3
  )
- (func $~lib/array/ensureSize (; 28 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureSize (; 26 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2224,7 +2214,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i8>#__set (; 29 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i8>#__set (; 27 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   local.get $0
@@ -2260,19 +2250,84 @@
   local.get $2
   i32.store8
  )
- (func $~lib/array/Array<i8>#set:length (; 30 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#keys (; 28 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
+  i32.load offset=8
+  local.set $4
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 16
+  i32.const 4
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.get $2
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $2
+  i32.store offset=12
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $3
+   local.get $2
+   i32.lt_s
+   if
+    local.get $4
+    local.get $3
+    i32.const 12
+    i32.mul
+    i32.add
+    local.tee $5
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     local.tee $6
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     local.get $6
+     local.get $5
+     i32.load8_s
+     call $~lib/array/Array<i8>#__set
+    end
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|0
+   end
+  end
+  local.get $1
   i32.load offset=12
   drop
-  local.get $0
   local.get $1
+  local.get $0
   i32.const 0
   call $~lib/array/ensureSize
-  local.get $0
   local.get $1
+  local.get $0
   i32.store offset=12
+  local.get $1
  )
- (func $~lib/array/Array<i32>#constructor (; 31 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (; 29 ;) (param $0 i32) (result i32)
   (local $1 i32)
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 16
@@ -2292,7 +2347,7 @@
   i32.store offset=12
   local.get $1
  )
- (func $~lib/array/Array<i32>#__set (; 32 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (; 30 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   local.get $0
@@ -2330,19 +2385,7 @@
   local.get $2
   i32.store
  )
- (func $~lib/array/Array<i32>#set:length (; 33 ;) (param $0 i32) (param $1 i32)
-  local.get $0
-  i32.load offset=12
-  drop
-  local.get $0
-  local.get $1
-  i32.const 2
-  call $~lib/array/ensureSize
-  local.get $0
-  local.get $1
-  i32.store offset=12
- )
- (func $~lib/map/Map<i8,i32>#values (; 34 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#values (; 31 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2394,11 +2437,18 @@
    end
   end
   local.get $1
+  i32.load offset=12
+  drop
+  local.get $1
   local.get $0
-  call $~lib/array/Array<i32>#set:length
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $1
+  local.get $0
+  i32.store offset=12
   local.get $1
  )
- (func $~lib/map/Map<i8,i8>#clear (; 35 ;) (param $0 i32)
+ (func $~lib/map/Map<i8,i8>#clear (; 32 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 16
@@ -2448,7 +2498,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<i32,i32>#constructor (; 36 ;) (result i32)
+ (func $~lib/map/Map<i32,i32>#constructor (; 33 ;) (result i32)
   (local $0 i32)
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
@@ -2479,7 +2529,7 @@
   call $~lib/map/Map<i8,i32>#clear
   local.get $0
  )
- (func $~lib/array/Array<i32>#__get (; 37 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 34 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -2500,7 +2550,7 @@
   i32.add
   i32.load
  )
- (func $~lib/map/Map<i8,i8>#rehash (; 38 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i8>#rehash (; 35 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2662,7 +2712,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i8,i8>#set (; 39 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i8,i8>#set (; 36 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2797,7 +2847,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/hash/hash32 (; 40 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (; 37 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
@@ -2828,7 +2878,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<i32,i32>#find (; 41 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#find (; 38 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -2869,7 +2919,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i32,i32>#rehash (; 42 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>#rehash (; 39 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3028,7 +3078,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i32,i32>#set (; 43 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#set (; 40 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3118,7 +3168,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i8,i32>#delete (; 44 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#delete (; 41 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -3184,7 +3234,7 @@
    call $~lib/map/Map<i8,i32>#rehash
   end
  )
- (func $std/map/testNumeric<i8,i32> (; 45 ;)
+ (func $std/map/testNumeric<i8,i32> (; 42 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3421,66 +3471,8 @@
    unreachable
   end
   local.get $1
-  i32.load offset=8
-  local.set $6
-  local.get $1
-  i32.load offset=16
-  local.set $3
-  call $~lib/rt/tlsf/maybeInitialize
-  i32.const 16
-  i32.const 4
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
-  local.get $3
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
-  i32.const 0
-  i32.store offset=12
-  local.get $2
-  local.get $3
-  i32.store offset=12
-  i32.const 0
-  local.set $0
-  loop $for-loop|0
-   local.get $4
-   local.get $3
-   i32.lt_s
-   if
-    local.get $6
-    local.get $4
-    i32.const 12
-    i32.mul
-    i32.add
-    local.tee $7
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $0
-     local.tee $5
-     i32.const 1
-     i32.add
-     local.set $0
-     local.get $2
-     local.get $5
-     local.get $7
-     i32.load8_s
-     call $~lib/array/Array<i8>#__set
-    end
-    local.get $4
-    i32.const 1
-    i32.add
-    local.set $4
-    br $for-loop|0
-   end
-  end
-  local.get $2
-  local.get $0
-  call $~lib/array/Array<i8>#set:length
+  call $~lib/map/Map<i8,i32>#keys
+  local.set $2
   local.get $1
   call $~lib/map/Map<i8,i32>#values
   local.set $6
@@ -3512,9 +3504,9 @@
   local.get $0
   call $~lib/map/Map<i8,i8>#clear
   local.get $0
-  local.set $5
-  call $~lib/map/Map<i32,i32>#constructor
   local.set $4
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $5
   i32.const 0
   local.set $0
   loop $for-loop|4
@@ -3572,7 +3564,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $5
+    local.get $4
     local.get $0
     local.get $0
     call $~lib/map/Map<i8,i8>#set
@@ -3585,7 +3577,7 @@
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $4
+    local.get $5
     local.get $7
     i32.const 20
     i32.sub
@@ -3608,7 +3600,7 @@
     br $for-loop|4
    end
   end
-  local.get $5
+  local.get $4
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -3620,7 +3612,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $5
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -3823,20 +3815,20 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $5
-  i32.const 556
-  i32.gt_u
-  if
-   local.get $5
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
   local.get $4
   i32.const 556
   i32.gt_u
   if
    local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+  local.get $5
+  i32.const 556
+  i32.gt_u
+  if
+   local.get $5
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -3851,21 +3843,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<u8,i32>#has (; 46 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  local.get $1
-  i32.const 255
-  i32.and
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
-  call $~lib/map/Map<i8,i32>#find
-  i32.const 0
-  i32.ne
- )
- (func $~lib/map/Map<u8,i32>#rehash (; 47 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#rehash (; 43 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4027,7 +4005,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<u8,i32>#set (; 48 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#set (; 44 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4124,7 +4102,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<u8,i32>#get (; 49 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#get (; 45 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -4148,7 +4126,84 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/map/Map<u8,u8>#rehash (; 50 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#keys (; 46 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $4
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 16
+  i32.const 9
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.get $2
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $2
+  i32.store offset=12
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $3
+   local.get $2
+   i32.lt_s
+   if
+    local.get $4
+    local.get $3
+    i32.const 12
+    i32.mul
+    i32.add
+    local.tee $5
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     local.tee $6
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     local.get $6
+     local.get $5
+     i32.load8_u
+     call $~lib/array/Array<i8>#__set
+    end
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|0
+   end
+  end
+  local.get $1
+  i32.load offset=12
+  drop
+  local.get $1
+  local.get $0
+  i32.const 0
+  call $~lib/array/ensureSize
+  local.get $1
+  local.get $0
+  i32.store offset=12
+  local.get $1
+ )
+ (func $~lib/map/Map<u8,u8>#rehash (; 47 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4310,7 +4365,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<u8,u8>#set (; 51 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u8,u8>#set (; 48 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4443,7 +4498,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<u8,i32>#delete (; 52 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#delete (; 49 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -4507,7 +4562,7 @@
    call $~lib/map/Map<u8,i32>#rehash
   end
  )
- (func $std/map/testNumeric<u8,i32> (; 53 ;)
+ (func $std/map/testNumeric<u8,i32> (; 50 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4516,6 +4571,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 8
@@ -4552,7 +4608,14 @@
    if
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     if
      i32.const 0
      i32.const 304
@@ -4580,7 +4643,14 @@
     end
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -4637,7 +4707,14 @@
    if
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -4683,7 +4760,14 @@
     end
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -4730,66 +4814,8 @@
    unreachable
   end
   local.get $1
-  i32.load offset=8
-  local.set $6
-  local.get $1
-  i32.load offset=16
-  local.set $3
-  call $~lib/rt/tlsf/maybeInitialize
-  i32.const 16
-  i32.const 9
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
-  local.get $3
-  i32.const 0
-  call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
-  i32.const 0
-  i32.store offset=12
-  local.get $2
-  local.get $3
-  i32.store offset=12
-  i32.const 0
-  local.set $0
-  loop $for-loop|0
-   local.get $4
-   local.get $3
-   i32.lt_s
-   if
-    local.get $6
-    local.get $4
-    i32.const 12
-    i32.mul
-    i32.add
-    local.tee $7
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $0
-     local.tee $5
-     i32.const 1
-     i32.add
-     local.set $0
-     local.get $2
-     local.get $5
-     local.get $7
-     i32.load8_u
-     call $~lib/array/Array<i8>#__set
-    end
-    local.get $4
-    i32.const 1
-    i32.add
-    local.set $4
-    br $for-loop|0
-   end
-  end
-  local.get $2
-  local.get $0
-  call $~lib/array/Array<i8>#set:length
+  call $~lib/map/Map<u8,i32>#keys
+  local.set $2
   local.get $1
   call $~lib/map/Map<i8,i32>#values
   local.set $6
@@ -4821,9 +4847,9 @@
   local.get $0
   call $~lib/map/Map<i8,i8>#clear
   local.get $0
-  local.set $5
-  call $~lib/map/Map<i32,i32>#constructor
   local.set $4
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $5
   i32.const 0
   local.set $0
   loop $for-loop|4
@@ -4857,7 +4883,14 @@
     local.set $7
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -4871,7 +4904,15 @@
     local.get $7
     i32.const 20
     i32.sub
-    call $~lib/map/Map<u8,i32>#has
+    local.tee $8
+    local.get $8
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -4881,7 +4922,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $5
+    local.get $4
     local.get $0
     local.get $0
     call $~lib/map/Map<u8,u8>#set
@@ -4894,7 +4935,7 @@
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $4
+    local.get $5
     local.get $7
     i32.const 20
     i32.sub
@@ -4917,7 +4958,7 @@
     br $for-loop|4
    end
   end
-  local.get $5
+  local.get $4
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -4929,7 +4970,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $5
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -4952,7 +4993,14 @@
    if
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -4984,7 +5032,14 @@
     call $~lib/map/Map<u8,i32>#delete
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     if
      i32.const 0
      i32.const 304
@@ -5023,7 +5078,14 @@
    if
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     if
      i32.const 0
      i32.const 304
@@ -5051,7 +5113,14 @@
     end
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -5066,7 +5135,14 @@
     call $~lib/map/Map<u8,i32>#delete
     local.get $1
     local.get $0
-    call $~lib/map/Map<u8,i32>#has
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
+    call $~lib/map/Map<i8,i32>#find
     if
      i32.const 0
      i32.const 304
@@ -5124,20 +5200,20 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $5
-  i32.const 556
-  i32.gt_u
-  if
-   local.get $5
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
   local.get $4
   i32.const 556
   i32.gt_u
   if
    local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+  local.get $5
+  i32.const 556
+  i32.gt_u
+  if
+   local.get $5
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -5152,7 +5228,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/util/hash/hash16 (; 54 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash16 (; 51 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
@@ -5167,7 +5243,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<i16,i32>#find (; 55 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#find (; 52 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -5210,20 +5286,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i16,i32>#has (; 56 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  call $~lib/util/hash/hash16
-  call $~lib/map/Map<i16,i32>#find
-  i32.const 0
-  i32.ne
- )
- (func $~lib/map/Map<i16,i32>#rehash (; 57 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#rehash (; 53 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5382,7 +5445,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i16,i32>#set (; 58 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#set (; 54 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5476,7 +5539,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i16,i32>#get (; 59 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#get (; 55 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -5499,7 +5562,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/array/Array<i16>#__set (; 60 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i16>#__set (; 56 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   local.get $0
@@ -5537,19 +5600,84 @@
   local.get $2
   i32.store16
  )
- (func $~lib/array/Array<i16>#set:length (; 61 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#keys (; 57 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
+  i32.load offset=8
+  local.set $4
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 16
+  i32.const 12
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.get $2
+  i32.const 1
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $2
+  i32.store offset=12
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $3
+   local.get $2
+   i32.lt_s
+   if
+    local.get $4
+    local.get $3
+    i32.const 12
+    i32.mul
+    i32.add
+    local.tee $5
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     local.tee $6
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     local.get $6
+     local.get $5
+     i32.load16_s
+     call $~lib/array/Array<i16>#__set
+    end
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|0
+   end
+  end
+  local.get $1
   i32.load offset=12
   drop
-  local.get $0
   local.get $1
+  local.get $0
   i32.const 1
   call $~lib/array/ensureSize
-  local.get $0
   local.get $1
+  local.get $0
   i32.store offset=12
+  local.get $1
  )
- (func $~lib/map/Map<i16,i16>#rehash (; 62 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i16>#rehash (; 58 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5708,7 +5836,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i16,i16>#set (; 63 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i16>#set (; 59 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5841,7 +5969,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i16,i32>#delete (; 64 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#delete (; 60 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -5904,7 +6032,7 @@
    call $~lib/map/Map<i16,i32>#rehash
   end
  )
- (func $std/map/testNumeric<i16,i32> (; 65 ;)
+ (func $std/map/testNumeric<i16,i32> (; 61 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -5913,6 +6041,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 11
@@ -5951,7 +6080,13 @@
    if
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     if
      i32.const 0
      i32.const 304
@@ -5981,7 +6116,13 @@
     end
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -6042,7 +6183,13 @@
    if
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -6092,7 +6239,13 @@
     end
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -6141,66 +6294,8 @@
    unreachable
   end
   local.get $1
-  i32.load offset=8
-  local.set $6
-  local.get $1
-  i32.load offset=16
-  local.set $3
-  call $~lib/rt/tlsf/maybeInitialize
-  i32.const 16
-  i32.const 12
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
-  local.get $3
-  i32.const 1
-  call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
-  i32.const 0
-  i32.store offset=12
-  local.get $2
-  local.get $3
-  i32.store offset=12
-  i32.const 0
-  local.set $0
-  loop $for-loop|0
-   local.get $4
-   local.get $3
-   i32.lt_s
-   if
-    local.get $6
-    local.get $4
-    i32.const 12
-    i32.mul
-    i32.add
-    local.tee $7
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $0
-     local.tee $5
-     i32.const 1
-     i32.add
-     local.set $0
-     local.get $2
-     local.get $5
-     local.get $7
-     i32.load16_s
-     call $~lib/array/Array<i16>#__set
-    end
-    local.get $4
-    i32.const 1
-    i32.add
-    local.set $4
-    br $for-loop|0
-   end
-  end
-  local.get $2
-  local.get $0
-  call $~lib/array/Array<i16>#set:length
+  call $~lib/map/Map<i16,i32>#keys
+  local.set $2
   local.get $1
   call $~lib/map/Map<i8,i32>#values
   local.set $6
@@ -6232,9 +6327,9 @@
   local.get $0
   call $~lib/map/Map<i8,i8>#clear
   local.get $0
-  local.set $5
-  call $~lib/map/Map<i32,i32>#constructor
   local.set $4
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $5
   i32.const 0
   local.set $0
   loop $for-loop|4
@@ -6270,7 +6365,13 @@
     local.set $7
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -6284,7 +6385,14 @@
     local.get $7
     i32.const 20
     i32.sub
-    call $~lib/map/Map<i16,i32>#has
+    local.tee $8
+    local.get $8
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -6294,7 +6402,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $5
+    local.get $4
     local.get $0
     local.get $0
     call $~lib/map/Map<i16,i16>#set
@@ -6307,7 +6415,7 @@
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $4
+    local.get $5
     local.get $7
     i32.const 20
     i32.sub
@@ -6330,7 +6438,7 @@
     br $for-loop|4
    end
   end
-  local.get $5
+  local.get $4
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -6342,7 +6450,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $5
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -6367,7 +6475,13 @@
    if
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -6401,7 +6515,13 @@
     call $~lib/map/Map<i16,i32>#delete
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     if
      i32.const 0
      i32.const 304
@@ -6442,7 +6562,13 @@
    if
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     if
      i32.const 0
      i32.const 304
@@ -6472,7 +6598,13 @@
     end
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     i32.eqz
     if
      i32.const 0
@@ -6487,7 +6619,13 @@
     call $~lib/map/Map<i16,i32>#delete
     local.get $1
     local.get $0
-    call $~lib/map/Map<i16,i32>#has
+    local.get $0
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.shr_s
+    call $~lib/util/hash/hash16
+    call $~lib/map/Map<i16,i32>#find
     if
      i32.const 0
      i32.const 304
@@ -6545,20 +6683,20 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $5
-  i32.const 556
-  i32.gt_u
-  if
-   local.get $5
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
   local.get $4
   i32.const 556
   i32.gt_u
   if
    local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+  local.get $5
+  i32.const 556
+  i32.gt_u
+  if
+   local.get $5
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -6573,7 +6711,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<u16,i32>#rehash (; 66 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#rehash (; 62 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6732,7 +6870,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<u16,i32>#set (; 67 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#set (; 63 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6824,7 +6962,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<u16,i32>#get (; 68 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#get (; 64 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -6845,7 +6983,84 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/map/Map<u16,u16>#rehash (; 69 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#keys (; 65 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $4
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 16
+  i32.const 15
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.get $2
+  i32.const 1
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $2
+  i32.store offset=12
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $3
+   local.get $2
+   i32.lt_s
+   if
+    local.get $4
+    local.get $3
+    i32.const 12
+    i32.mul
+    i32.add
+    local.tee $5
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     local.tee $6
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     local.get $6
+     local.get $5
+     i32.load16_u
+     call $~lib/array/Array<i16>#__set
+    end
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|0
+   end
+  end
+  local.get $1
+  i32.load offset=12
+  drop
+  local.get $1
+  local.get $0
+  i32.const 1
+  call $~lib/array/ensureSize
+  local.get $1
+  local.get $0
+  i32.store offset=12
+  local.get $1
+ )
+ (func $~lib/map/Map<u16,u16>#rehash (; 66 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -7004,7 +7219,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<u16,u16>#set (; 70 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u16,u16>#set (; 67 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -7135,7 +7350,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<u16,i32>#delete (; 71 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#delete (; 68 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -7196,7 +7411,7 @@
    call $~lib/map/Map<u16,i32>#rehash
   end
  )
- (func $std/map/testNumeric<u16,i32> (; 72 ;)
+ (func $std/map/testNumeric<u16,i32> (; 69 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -7436,66 +7651,8 @@
    unreachable
   end
   local.get $1
-  i32.load offset=8
-  local.set $6
-  local.get $1
-  i32.load offset=16
-  local.set $3
-  call $~lib/rt/tlsf/maybeInitialize
-  i32.const 16
-  i32.const 15
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
-  local.get $3
-  i32.const 1
-  call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
-  i32.const 0
-  i32.store offset=12
-  local.get $2
-  local.get $3
-  i32.store offset=12
-  i32.const 0
-  local.set $0
-  loop $for-loop|0
-   local.get $4
-   local.get $3
-   i32.lt_s
-   if
-    local.get $6
-    local.get $4
-    i32.const 12
-    i32.mul
-    i32.add
-    local.tee $7
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $0
-     local.tee $5
-     i32.const 1
-     i32.add
-     local.set $0
-     local.get $2
-     local.get $5
-     local.get $7
-     i32.load16_u
-     call $~lib/array/Array<i16>#__set
-    end
-    local.get $4
-    i32.const 1
-    i32.add
-    local.set $4
-    br $for-loop|0
-   end
-  end
-  local.get $2
-  local.get $0
-  call $~lib/array/Array<i16>#set:length
+  call $~lib/map/Map<u16,i32>#keys
+  local.set $2
   local.get $1
   call $~lib/map/Map<i8,i32>#values
   local.set $6
@@ -7527,9 +7684,9 @@
   local.get $0
   call $~lib/map/Map<i8,i8>#clear
   local.get $0
-  local.set $5
-  call $~lib/map/Map<i32,i32>#constructor
   local.set $4
+  call $~lib/map/Map<i32,i32>#constructor
+  local.set $5
   i32.const 0
   local.set $0
   loop $for-loop|4
@@ -7598,7 +7755,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $5
+    local.get $4
     local.get $0
     local.get $0
     call $~lib/map/Map<u16,u16>#set
@@ -7611,7 +7768,7 @@
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $4
+    local.get $5
     local.get $7
     i32.const 20
     i32.sub
@@ -7634,7 +7791,7 @@
     br $for-loop|4
    end
   end
-  local.get $5
+  local.get $4
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -7646,7 +7803,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $5
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -7861,20 +8018,20 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $5
-  i32.const 556
-  i32.gt_u
-  if
-   local.get $5
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
   local.get $4
   i32.const 556
   i32.gt_u
   if
    local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+  local.get $5
+  i32.const 556
+  i32.gt_u
+  if
+   local.get $5
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -7889,7 +8046,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i32,i32>#get (; 73 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#get (; 70 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -7908,7 +8065,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/map/Map<i32,i32>#delete (; 74 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>#delete (; 71 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -7967,7 +8124,7 @@
    call $~lib/map/Map<i32,i32>#rehash
   end
  )
- (func $std/map/testNumeric<i32,i32> (; 75 ;)
+ (func $std/map/testNumeric<i32,i32> (; 72 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -8161,21 +8318,21 @@
   end
   local.get $1
   i32.load offset=8
-  local.set $0
+  local.set $2
   local.get $1
   i32.load offset=16
-  local.tee $2
+  local.tee $6
   call $~lib/array/Array<i32>#constructor
-  local.set $4
-  i32.const 0
   local.set $3
-  loop $for-loop|05
-   local.get $5
-   local.get $2
+  i32.const 0
+  local.set $0
+  loop $for-loop|00
+   local.get $4
+   local.get $6
    i32.lt_s
    if
-    local.get $0
-    local.get $5
+    local.get $2
+    local.get $4
     i32.const 12
     i32.mul
     i32.add
@@ -8185,36 +8342,41 @@
     i32.and
     i32.eqz
     if
-     local.get $3
-     local.tee $6
+     local.get $0
+     local.tee $5
      i32.const 1
      i32.add
-     local.set $3
-     local.get $4
-     local.get $6
+     local.set $0
+     local.get $3
+     local.get $5
      local.get $7
      i32.load
      call $~lib/array/Array<i32>#__set
     end
-    local.get $5
+    local.get $4
     i32.const 1
     i32.add
-    local.set $5
-    br $for-loop|05
+    local.set $4
+    br $for-loop|00
    end
   end
-  local.get $4
   local.get $3
-  call $~lib/array/Array<i32>#set:length
-  local.get $4
-  local.set $3
+  i32.load offset=12
+  drop
+  local.get $3
+  local.get $0
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $3
+  local.get $0
+  i32.store offset=12
   local.get $1
   call $~lib/map/Map<i8,i32>#values
+  local.set $6
+  call $~lib/map/Map<i32,i32>#constructor
   local.set $5
   call $~lib/map/Map<i32,i32>#constructor
   local.set $4
-  call $~lib/map/Map<i32,i32>#constructor
-  local.set $6
   i32.const 0
   local.set $0
   loop $for-loop|2
@@ -8227,7 +8389,7 @@
     local.get $0
     call $~lib/array/Array<i32>#__get
     local.set $2
-    local.get $5
+    local.get $6
     local.get $0
     call $~lib/array/Array<i32>#__get
     local.set $7
@@ -8262,7 +8424,7 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $4
+    local.get $5
     local.get $2
     local.get $2
     call $~lib/map/Map<i32,i32>#set
@@ -8275,7 +8437,7 @@
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $6
+    local.get $4
     local.get $7
     i32.const 20
     i32.sub
@@ -8298,7 +8460,7 @@
     br $for-loop|2
    end
   end
-  local.get $4
+  local.get $5
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -8310,7 +8472,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $6
+  local.get $4
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -8498,6 +8660,15 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
+  local.get $6
+  i32.const 556
+  i32.gt_u
+  if
+   local.get $6
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $5
   i32.const 556
   i32.gt_u
@@ -8516,15 +8687,6 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $6
-  i32.const 556
-  i32.gt_u
-  if
-   local.get $6
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
   local.get $1
   i32.const 556
   i32.gt_u
@@ -8535,7 +8697,84 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $std/map/testNumeric<u32,i32> (; 76 ;)
+ (func $~lib/map/Map<u32,i32>#keys (; 73 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $4
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 16
+  i32.const 18
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.get $2
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $2
+  i32.store offset=12
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $3
+   local.get $2
+   i32.lt_s
+   if
+    local.get $4
+    local.get $3
+    i32.const 12
+    i32.mul
+    i32.add
+    local.tee $5
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     local.tee $6
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     local.get $6
+     local.get $5
+     i32.load
+     call $~lib/array/Array<i32>#__set
+    end
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|0
+   end
+  end
+  local.get $1
+  i32.load offset=12
+  drop
+  local.get $1
+  local.get $0
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $1
+  local.get $0
+  i32.store offset=12
+  local.get $1
+ )
+ (func $std/map/testNumeric<u32,i32> (; 74 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -8753,66 +8992,8 @@
    unreachable
   end
   local.get $1
-  i32.load offset=8
-  local.set $6
-  local.get $1
-  i32.load offset=16
+  call $~lib/map/Map<u32,i32>#keys
   local.set $4
-  call $~lib/rt/tlsf/maybeInitialize
-  i32.const 16
-  i32.const 18
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
-  local.get $4
-  i32.const 2
-  call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
-  i32.const 0
-  i32.store offset=12
-  local.get $2
-  local.get $4
-  i32.store offset=12
-  loop $for-loop|05
-   local.get $3
-   local.get $4
-   i32.lt_s
-   if
-    local.get $6
-    local.get $3
-    i32.const 12
-    i32.mul
-    i32.add
-    local.tee $7
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $5
-     local.tee $0
-     i32.const 1
-     i32.add
-     local.set $5
-     local.get $2
-     local.get $0
-     local.get $7
-     i32.load
-     call $~lib/array/Array<i32>#__set
-    end
-    local.get $3
-    i32.const 1
-    i32.add
-    local.set $3
-    br $for-loop|05
-   end
-  end
-  local.get $2
-  local.get $5
-  call $~lib/array/Array<i32>#set:length
-  local.get $2
-  local.set $5
   local.get $1
   call $~lib/map/Map<i8,i32>#values
   local.set $6
@@ -8844,16 +9025,16 @@
   local.get $2
   call $~lib/map/Map<i8,i32>#clear
   call $~lib/map/Map<i32,i32>#constructor
-  local.set $4
+  local.set $5
   i32.const 0
   local.set $0
   loop $for-loop|2
    local.get $0
-   local.get $5
+   local.get $4
    i32.load offset=12
    i32.lt_s
    if
-    local.get $5
+    local.get $4
     local.get $0
     call $~lib/array/Array<i32>#__get
     local.set $3
@@ -8905,7 +9086,7 @@
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $4
+    local.get $5
     local.get $7
     i32.const 20
     i32.sub
@@ -8940,7 +9121,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $5
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -9119,11 +9300,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $4
   i32.const 556
   i32.gt_u
   if
-   local.get $5
+   local.get $4
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -9146,11 +9327,11 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $4
+  local.get $5
   i32.const 556
   i32.gt_u
   if
-   local.get $4
+   local.get $5
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -9165,7 +9346,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i64,i32>#clear (; 77 ;) (param $0 i32)
+ (func $~lib/map/Map<i64,i32>#clear (; 75 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 16
@@ -9215,7 +9396,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/util/hash/hash64 (; 78 ;) (param $0 i64) (result i32)
+ (func $~lib/util/hash/hash64 (; 76 ;) (param $0 i64) (result i32)
   (local $1 i32)
   local.get $0
   i32.wrap_i64
@@ -9281,7 +9462,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<i64,i32>#find (; 79 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#find (; 77 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -9322,7 +9503,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i64,i32>#rehash (; 80 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i32>#rehash (; 78 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9481,7 +9662,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i64,i32>#set (; 81 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#set (; 79 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9571,7 +9752,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i64,i32>#get (; 82 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#get (; 80 ;) (param $0 i32) (param $1 i64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -9590,7 +9771,7 @@
   local.get $0
   i32.load offset=8
  )
- (func $~lib/array/Array<i64>#__set (; 83 ;) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<i64>#__set (; 81 ;) (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   local.get $1
   local.get $0
@@ -9628,19 +9809,84 @@
   local.get $2
   i64.store
  )
- (func $~lib/array/Array<i64>#set:length (; 84 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i32>#keys (; 82 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
+  i32.load offset=8
+  local.set $4
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 16
+  i32.const 21
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.get $2
+  i32.const 3
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $2
+  i32.store offset=12
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $3
+   local.get $2
+   i32.lt_s
+   if
+    local.get $4
+    local.get $3
+    i32.const 4
+    i32.shl
+    i32.add
+    local.tee $5
+    i32.load offset=12
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     local.tee $6
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     local.get $6
+     local.get $5
+     i64.load
+     call $~lib/array/Array<i64>#__set
+    end
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|0
+   end
+  end
+  local.get $1
   i32.load offset=12
   drop
-  local.get $0
   local.get $1
+  local.get $0
   i32.const 3
   call $~lib/array/ensureSize
-  local.get $0
   local.get $1
+  local.get $0
   i32.store offset=12
+  local.get $1
  )
- (func $~lib/map/Map<i64,i32>#values (; 85 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#values (; 83 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9692,11 +9938,18 @@
    end
   end
   local.get $1
+  i32.load offset=12
+  drop
+  local.get $1
   local.get $0
-  call $~lib/array/Array<i32>#set:length
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $1
+  local.get $0
+  i32.store offset=12
   local.get $1
  )
- (func $~lib/map/Map<i64,i64>#clear (; 86 ;) (param $0 i32)
+ (func $~lib/map/Map<i64,i64>#clear (; 84 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 16
@@ -9746,7 +9999,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/array/Array<i64>#__get (; 87 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (; 85 ;) (param $0 i32) (param $1 i32) (result i64)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -9767,7 +10020,7 @@
   i32.add
   i64.load
  )
- (func $~lib/map/Map<i64,i64>#rehash (; 88 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i64>#rehash (; 86 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9926,7 +10179,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i64,i64>#set (; 89 ;) (param $0 i32) (param $1 i64) (param $2 i64) (result i32)
+ (func $~lib/map/Map<i64,i64>#set (; 87 ;) (param $0 i32) (param $1 i64) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -10052,7 +10305,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i64,i32>#delete (; 90 ;) (param $0 i32) (param $1 i64)
+ (func $~lib/map/Map<i64,i32>#delete (; 88 ;) (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -10112,7 +10365,7 @@
    call $~lib/map/Map<i64,i32>#rehash
   end
  )
- (func $std/map/testNumeric<i64,i32> (; 91 ;)
+ (func $std/map/testNumeric<i64,i32> (; 89 ;)
   (local $0 i64)
   (local $1 i32)
   (local $2 i32)
@@ -10121,9 +10374,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
+  (local $8 i64)
   (local $9 i32)
-  (local $10 i64)
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 20
@@ -10337,69 +10589,11 @@
    unreachable
   end
   local.get $1
-  i32.load offset=8
-  local.set $8
-  local.get $1
-  i32.load offset=16
-  local.set $4
-  call $~lib/rt/tlsf/maybeInitialize
-  i32.const 16
-  i32.const 21
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
-  local.get $4
-  i32.const 3
-  call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
-  i32.const 0
-  i32.store offset=12
-  local.get $2
-  local.get $4
-  i32.store offset=12
-  loop $for-loop|05
-   local.get $3
-   local.get $4
-   i32.lt_s
-   if
-    local.get $8
-    local.get $3
-    i32.const 4
-    i32.shl
-    i32.add
-    local.tee $9
-    i32.load offset=12
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $5
-     local.tee $6
-     i32.const 1
-     i32.add
-     local.set $5
-     local.get $2
-     local.get $6
-     local.get $9
-     i64.load
-     call $~lib/array/Array<i64>#__set
-    end
-    local.get $3
-    i32.const 1
-    i32.add
-    local.set $3
-    br $for-loop|05
-   end
-  end
-  local.get $2
-  local.get $5
-  call $~lib/array/Array<i64>#set:length
-  local.get $2
+  call $~lib/map/Map<i64,i32>#keys
   local.set $5
   local.get $1
   call $~lib/map/Map<i64,i32>#values
-  local.set $4
+  local.set $7
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 22
@@ -10430,19 +10624,19 @@
   call $~lib/map/Map<i32,i32>#constructor
   local.set $6
   loop $for-loop|2
-   local.get $7
+   local.get $3
    local.get $5
    i32.load offset=12
    i32.lt_s
    if
     local.get $5
-    local.get $7
+    local.get $3
     call $~lib/array/Array<i64>#__get
     local.set $0
-    local.get $4
     local.get $7
+    local.get $3
     call $~lib/array/Array<i32>#__get
-    local.set $3
+    local.set $4
     local.get $1
     local.get $0
     local.get $0
@@ -10458,12 +10652,12 @@
      unreachable
     end
     local.get $1
-    local.get $3
+    local.get $4
     i32.const 20
     i32.sub
     i64.extend_i32_s
-    local.tee $10
-    local.get $10
+    local.tee $8
+    local.get $8
     call $~lib/util/hash/hash64
     call $~lib/map/Map<i64,i32>#find
     i32.eqz
@@ -10479,35 +10673,35 @@
     local.get $0
     local.get $0
     call $~lib/map/Map<i64,i64>#set
-    local.tee $8
+    local.tee $9
     i32.const 556
     i32.gt_u
     if
-     local.get $8
+     local.get $9
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
     end
     local.get $6
-    local.get $3
+    local.get $4
     i32.const 20
     i32.sub
-    local.tee $3
-    local.get $3
+    local.tee $4
+    local.get $4
     call $~lib/map/Map<i32,i32>#set
-    local.tee $3
+    local.tee $4
     i32.const 556
     i32.gt_u
     if
-     local.get $3
+     local.get $4
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $7
+    local.get $3
     i32.const 1
     i32.add
-    local.set $7
+    local.set $3
     br $for-loop|2
    end
   end
@@ -10634,11 +10828,11 @@
     i32.const 10
     i32.add
     call $~lib/map/Map<i64,i32>#set
-    local.tee $7
+    local.tee $3
     i32.const 556
     i32.gt_u
     if
-     local.get $7
+     local.get $3
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
@@ -10713,11 +10907,11 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $4
+  local.get $7
   i32.const 556
   i32.gt_u
   if
-   local.get $4
+   local.get $7
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -10750,7 +10944,84 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $std/map/testNumeric<u64,i32> (; 92 ;)
+ (func $~lib/map/Map<u64,i32>#keys (; 90 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  local.get $0
+  i32.load offset=8
+  local.set $4
+  local.get $0
+  i32.load offset=16
+  local.set $2
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 16
+  i32.const 24
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.get $2
+  i32.const 3
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $2
+  i32.store offset=12
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $3
+   local.get $2
+   i32.lt_s
+   if
+    local.get $4
+    local.get $3
+    i32.const 4
+    i32.shl
+    i32.add
+    local.tee $5
+    i32.load offset=12
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     local.tee $6
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     local.get $6
+     local.get $5
+     i64.load
+     call $~lib/array/Array<i64>#__set
+    end
+    local.get $3
+    i32.const 1
+    i32.add
+    local.set $3
+    br $for-loop|0
+   end
+  end
+  local.get $1
+  i32.load offset=12
+  drop
+  local.get $1
+  local.get $0
+  i32.const 3
+  call $~lib/array/ensureSize
+  local.get $1
+  local.get $0
+  i32.store offset=12
+  local.get $1
+ )
+ (func $std/map/testNumeric<u64,i32> (; 91 ;)
   (local $0 i64)
   (local $1 i32)
   (local $2 i32)
@@ -10759,9 +11030,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
+  (local $8 i64)
   (local $9 i32)
-  (local $10 i64)
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 23
@@ -10975,69 +11245,11 @@
    unreachable
   end
   local.get $1
-  i32.load offset=8
-  local.set $8
-  local.get $1
-  i32.load offset=16
-  local.set $4
-  call $~lib/rt/tlsf/maybeInitialize
-  i32.const 16
-  i32.const 24
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
-  local.get $4
-  i32.const 3
-  call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
-  i32.const 0
-  i32.store offset=12
-  local.get $2
-  local.get $4
-  i32.store offset=12
-  loop $for-loop|05
-   local.get $3
-   local.get $4
-   i32.lt_s
-   if
-    local.get $8
-    local.get $3
-    i32.const 4
-    i32.shl
-    i32.add
-    local.tee $9
-    i32.load offset=12
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $5
-     local.tee $6
-     i32.const 1
-     i32.add
-     local.set $5
-     local.get $2
-     local.get $6
-     local.get $9
-     i64.load
-     call $~lib/array/Array<i64>#__set
-    end
-    local.get $3
-    i32.const 1
-    i32.add
-    local.set $3
-    br $for-loop|05
-   end
-  end
-  local.get $2
-  local.get $5
-  call $~lib/array/Array<i64>#set:length
-  local.get $2
+  call $~lib/map/Map<u64,i32>#keys
   local.set $5
   local.get $1
   call $~lib/map/Map<i64,i32>#values
-  local.set $4
+  local.set $7
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 25
@@ -11068,19 +11280,19 @@
   call $~lib/map/Map<i32,i32>#constructor
   local.set $6
   loop $for-loop|2
-   local.get $7
+   local.get $3
    local.get $5
    i32.load offset=12
    i32.lt_s
    if
     local.get $5
-    local.get $7
+    local.get $3
     call $~lib/array/Array<i64>#__get
     local.set $0
-    local.get $4
     local.get $7
+    local.get $3
     call $~lib/array/Array<i32>#__get
-    local.set $3
+    local.set $4
     local.get $1
     local.get $0
     local.get $0
@@ -11096,12 +11308,12 @@
      unreachable
     end
     local.get $1
-    local.get $3
+    local.get $4
     i32.const 20
     i32.sub
     i64.extend_i32_s
-    local.tee $10
-    local.get $10
+    local.tee $8
+    local.get $8
     call $~lib/util/hash/hash64
     call $~lib/map/Map<i64,i32>#find
     i32.eqz
@@ -11117,35 +11329,35 @@
     local.get $0
     local.get $0
     call $~lib/map/Map<i64,i64>#set
-    local.tee $8
+    local.tee $9
     i32.const 556
     i32.gt_u
     if
-     local.get $8
+     local.get $9
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
     end
     local.get $6
-    local.get $3
+    local.get $4
     i32.const 20
     i32.sub
-    local.tee $3
-    local.get $3
+    local.tee $4
+    local.get $4
     call $~lib/map/Map<i32,i32>#set
-    local.tee $3
+    local.tee $4
     i32.const 556
     i32.gt_u
     if
-     local.get $3
+     local.get $4
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $7
+    local.get $3
     i32.const 1
     i32.add
-    local.set $7
+    local.set $3
     br $for-loop|2
    end
   end
@@ -11272,11 +11484,11 @@
     i32.const 10
     i32.add
     call $~lib/map/Map<i64,i32>#set
-    local.tee $7
+    local.tee $3
     i32.const 556
     i32.gt_u
     if
-     local.get $7
+     local.get $3
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
@@ -11351,11 +11563,11 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $4
+  local.get $7
   i32.const 556
   i32.gt_u
   if
-   local.get $4
+   local.get $7
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -11388,7 +11600,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<f32,i32>#find (; 93 ;) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#find (; 92 ;) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -11429,7 +11641,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<f32,i32>#rehash (; 94 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,i32>#rehash (; 93 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11589,7 +11801,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<f32,i32>#set (; 95 ;) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#set (; 94 ;) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11680,7 +11892,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<f32,i32>#get (; 96 ;) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#get (; 95 ;) (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -11699,6 +11911,117 @@
   end
   local.get $0
   i32.load offset=4
+ )
+ (func $~lib/map/Map<f32,i32>#keys (; 96 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 f32)
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $0
+  i32.load offset=16
+  local.set $3
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 16
+  i32.const 27
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.get $3
+  i32.const 2
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $3
+  i32.store offset=12
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $4
+   local.get $3
+   i32.lt_s
+   if
+    local.get $6
+    local.get $4
+    i32.const 12
+    i32.mul
+    i32.add
+    local.tee $5
+    i32.load offset=8
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     local.tee $2
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $5
+     f32.load
+     local.set $7
+     local.get $2
+     local.get $1
+     i32.load offset=12
+     i32.ge_u
+     if
+      local.get $2
+      i32.const 0
+      i32.lt_s
+      if
+       i32.const 464
+       i32.const 528
+       i32.const 109
+       i32.const 21
+       call $~lib/builtins/abort
+       unreachable
+      end
+      local.get $1
+      local.get $2
+      i32.const 1
+      i32.add
+      local.tee $5
+      i32.const 2
+      call $~lib/array/ensureSize
+      local.get $1
+      local.get $5
+      i32.store offset=12
+     end
+     local.get $1
+     i32.load offset=4
+     local.get $2
+     i32.const 2
+     i32.shl
+     i32.add
+     local.get $7
+     f32.store
+    end
+    local.get $4
+    i32.const 1
+    i32.add
+    local.set $4
+    br $for-loop|0
+   end
+  end
+  local.get $1
+  i32.load offset=12
+  drop
+  local.get $1
+  local.get $0
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $1
+  local.get $0
+  i32.store offset=12
+  local.get $1
  )
  (func $~lib/map/Map<f32,f32>#rehash (; 97 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -12021,9 +12344,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
+  (local $8 f32)
   (local $9 i32)
-  (local $10 f32)
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 26
@@ -12241,100 +12563,11 @@
    unreachable
   end
   local.get $1
-  i32.load offset=8
-  local.set $8
-  local.get $1
-  i32.load offset=16
+  call $~lib/map/Map<f32,i32>#keys
   local.set $5
-  call $~lib/rt/tlsf/maybeInitialize
-  i32.const 16
-  i32.const 27
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
-  local.get $5
-  i32.const 2
-  call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
-  i32.const 0
-  i32.store offset=12
-  local.get $2
-  local.get $5
-  i32.store offset=12
-  loop $for-loop|05
-   local.get $4
-   local.get $5
-   i32.lt_s
-   if
-    local.get $8
-    local.get $4
-    i32.const 12
-    i32.mul
-    i32.add
-    local.tee $9
-    i32.load offset=8
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $6
-     local.tee $3
-     i32.const 1
-     i32.add
-     local.set $6
-     local.get $9
-     f32.load
-     local.set $0
-     local.get $3
-     local.get $2
-     i32.load offset=12
-     i32.ge_u
-     if
-      local.get $3
-      i32.const 0
-      i32.lt_s
-      if
-       i32.const 464
-       i32.const 528
-       i32.const 109
-       i32.const 21
-       call $~lib/builtins/abort
-       unreachable
-      end
-      local.get $2
-      local.get $3
-      i32.const 1
-      i32.add
-      local.tee $9
-      i32.const 2
-      call $~lib/array/ensureSize
-      local.get $2
-      local.get $9
-      i32.store offset=12
-     end
-     local.get $2
-     i32.load offset=4
-     local.get $3
-     i32.const 2
-     i32.shl
-     i32.add
-     local.get $0
-     f32.store
-    end
-    local.get $4
-    i32.const 1
-    i32.add
-    local.set $4
-    br $for-loop|05
-   end
-  end
-  local.get $2
-  local.get $6
-  call $~lib/array/Array<i32>#set:length
   local.get $1
   call $~lib/map/Map<i8,i32>#values
-  local.set $5
+  local.set $7
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 28
@@ -12342,36 +12575,36 @@
   i32.const 16
   i32.add
   call $~lib/rt/pure/__retain
-  local.tee $3
+  local.tee $2
   i32.const 0
   i32.store
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=4
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=8
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=12
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=16
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=20
-  local.get $3
+  local.get $2
   call $~lib/map/Map<i8,i32>#clear
   call $~lib/map/Map<i32,i32>#constructor
   local.set $6
   loop $for-loop|2
-   local.get $7
-   local.get $2
+   local.get $3
+   local.get $5
    i32.load offset=12
    i32.lt_s
    if
-    local.get $7
-    local.get $2
+    local.get $3
+    local.get $5
     i32.load offset=12
     i32.ge_u
     if
@@ -12382,16 +12615,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
+    local.get $5
     i32.load offset=4
-    local.get $7
+    local.get $3
     i32.const 2
     i32.shl
     i32.add
     f32.load
     local.set $0
-    local.get $5
     local.get $7
+    local.get $3
     call $~lib/array/Array<i32>#__get
     local.set $4
     local.get $1
@@ -12414,8 +12647,8 @@
     i32.const 20
     i32.sub
     f32.convert_i32_s
-    local.tee $10
-    local.get $10
+    local.tee $8
+    local.get $8
     i32.reinterpret_f32
     call $~lib/util/hash/hash32
     call $~lib/map/Map<f32,i32>#find
@@ -12428,15 +12661,15 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $3
+    local.get $2
     local.get $0
     local.get $0
     call $~lib/map/Map<f32,f32>#set
-    local.tee $8
+    local.tee $9
     i32.const 556
     i32.gt_u
     if
-     local.get $8
+     local.get $9
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
@@ -12457,14 +12690,14 @@
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $7
+    local.get $3
     i32.const 1
     i32.add
-    local.set $7
+    local.set $3
     br $for-loop|2
    end
   end
-  local.get $3
+  local.get $2
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -12590,11 +12823,11 @@
     i32.const 10
     i32.add
     call $~lib/map/Map<f32,i32>#set
-    local.tee $7
+    local.tee $3
     i32.const 556
     i32.gt_u
     if
-     local.get $7
+     local.get $3
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
@@ -12662,15 +12895,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
-  i32.const 556
-  i32.gt_u
-  if
-   local.get $2
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
   local.get $5
   i32.const 556
   i32.gt_u
@@ -12680,11 +12904,20 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $3
+  local.get $7
   i32.const 556
   i32.gt_u
   if
-   local.get $3
+   local.get $7
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+  local.get $2
+  i32.const 556
+  i32.gt_u
+  if
+   local.get $2
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -13020,7 +13253,118 @@
   local.get $0
   i32.load offset=8
  )
- (func $~lib/map/Map<f64,f64>#rehash (; 105 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f64,i32>#keys (; 105 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 f64)
+  local.get $0
+  i32.load offset=8
+  local.set $6
+  local.get $0
+  i32.load offset=16
+  local.set $3
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 16
+  i32.const 30
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
+  local.get $3
+  i32.const 3
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.tee $1
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.get $3
+  i32.store offset=12
+  i32.const 0
+  local.set $0
+  loop $for-loop|0
+   local.get $4
+   local.get $3
+   i32.lt_s
+   if
+    local.get $6
+    local.get $4
+    i32.const 4
+    i32.shl
+    i32.add
+    local.tee $5
+    i32.load offset=12
+    i32.const 1
+    i32.and
+    i32.eqz
+    if
+     local.get $0
+     local.tee $2
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $5
+     f64.load
+     local.set $7
+     local.get $2
+     local.get $1
+     i32.load offset=12
+     i32.ge_u
+     if
+      local.get $2
+      i32.const 0
+      i32.lt_s
+      if
+       i32.const 464
+       i32.const 528
+       i32.const 109
+       i32.const 21
+       call $~lib/builtins/abort
+       unreachable
+      end
+      local.get $1
+      local.get $2
+      i32.const 1
+      i32.add
+      local.tee $5
+      i32.const 3
+      call $~lib/array/ensureSize
+      local.get $1
+      local.get $5
+      i32.store offset=12
+     end
+     local.get $1
+     i32.load offset=4
+     local.get $2
+     i32.const 3
+     i32.shl
+     i32.add
+     local.get $7
+     f64.store
+    end
+    local.get $4
+    i32.const 1
+    i32.add
+    local.set $4
+    br $for-loop|0
+   end
+  end
+  local.get $1
+  i32.load offset=12
+  drop
+  local.get $1
+  local.get $0
+  i32.const 3
+  call $~lib/array/ensureSize
+  local.get $1
+  local.get $0
+  i32.store offset=12
+  local.get $1
+ )
+ (func $~lib/map/Map<f64,f64>#rehash (; 106 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -13180,7 +13524,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<f64,f64>#set (; 106 ;) (param $0 i32) (param $1 f64) (param $2 f64) (result i32)
+ (func $~lib/map/Map<f64,f64>#set (; 107 ;) (param $0 i32) (param $1 f64) (param $2 f64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -13307,7 +13651,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<f64,i32>#delete (; 107 ;) (param $0 i32) (param $1 f64)
+ (func $~lib/map/Map<f64,i32>#delete (; 108 ;) (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -13368,7 +13712,7 @@
    call $~lib/map/Map<f64,i32>#rehash
   end
  )
- (func $std/map/testNumeric<f64,i32> (; 108 ;)
+ (func $std/map/testNumeric<f64,i32> (; 109 ;)
   (local $0 f64)
   (local $1 i32)
   (local $2 i32)
@@ -13377,9 +13721,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
+  (local $8 f64)
   (local $9 i32)
-  (local $10 f64)
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 29
@@ -13597,100 +13940,11 @@
    unreachable
   end
   local.get $1
-  i32.load offset=8
-  local.set $8
-  local.get $1
-  i32.load offset=16
+  call $~lib/map/Map<f64,i32>#keys
   local.set $5
-  call $~lib/rt/tlsf/maybeInitialize
-  i32.const 16
-  i32.const 30
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
-  call $~lib/rt/pure/__retain
-  local.get $5
-  i32.const 3
-  call $~lib/arraybuffer/ArrayBufferView#constructor
-  local.tee $2
-  i32.const 0
-  i32.store offset=12
-  local.get $2
-  local.get $5
-  i32.store offset=12
-  loop $for-loop|05
-   local.get $4
-   local.get $5
-   i32.lt_s
-   if
-    local.get $8
-    local.get $4
-    i32.const 4
-    i32.shl
-    i32.add
-    local.tee $9
-    i32.load offset=12
-    i32.const 1
-    i32.and
-    i32.eqz
-    if
-     local.get $6
-     local.tee $3
-     i32.const 1
-     i32.add
-     local.set $6
-     local.get $9
-     f64.load
-     local.set $0
-     local.get $3
-     local.get $2
-     i32.load offset=12
-     i32.ge_u
-     if
-      local.get $3
-      i32.const 0
-      i32.lt_s
-      if
-       i32.const 464
-       i32.const 528
-       i32.const 109
-       i32.const 21
-       call $~lib/builtins/abort
-       unreachable
-      end
-      local.get $2
-      local.get $3
-      i32.const 1
-      i32.add
-      local.tee $9
-      i32.const 3
-      call $~lib/array/ensureSize
-      local.get $2
-      local.get $9
-      i32.store offset=12
-     end
-     local.get $2
-     i32.load offset=4
-     local.get $3
-     i32.const 3
-     i32.shl
-     i32.add
-     local.get $0
-     f64.store
-    end
-    local.get $4
-    i32.const 1
-    i32.add
-    local.set $4
-    br $for-loop|05
-   end
-  end
-  local.get $2
-  local.get $6
-  call $~lib/array/Array<i64>#set:length
   local.get $1
   call $~lib/map/Map<i64,i32>#values
-  local.set $5
+  local.set $7
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 24
   i32.const 31
@@ -13698,36 +13952,36 @@
   i32.const 16
   i32.add
   call $~lib/rt/pure/__retain
-  local.tee $3
+  local.tee $2
   i32.const 0
   i32.store
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=4
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=8
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=12
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=16
-  local.get $3
+  local.get $2
   i32.const 0
   i32.store offset=20
-  local.get $3
+  local.get $2
   call $~lib/map/Map<i64,i64>#clear
   call $~lib/map/Map<i32,i32>#constructor
   local.set $6
   loop $for-loop|2
-   local.get $7
-   local.get $2
+   local.get $3
+   local.get $5
    i32.load offset=12
    i32.lt_s
    if
-    local.get $7
-    local.get $2
+    local.get $3
+    local.get $5
     i32.load offset=12
     i32.ge_u
     if
@@ -13738,16 +13992,16 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
+    local.get $5
     i32.load offset=4
-    local.get $7
+    local.get $3
     i32.const 3
     i32.shl
     i32.add
     f64.load
     local.set $0
-    local.get $5
     local.get $7
+    local.get $3
     call $~lib/array/Array<i32>#__get
     local.set $4
     local.get $1
@@ -13770,8 +14024,8 @@
     i32.const 20
     i32.sub
     f64.convert_i32_s
-    local.tee $10
-    local.get $10
+    local.tee $8
+    local.get $8
     i64.reinterpret_f64
     call $~lib/util/hash/hash64
     call $~lib/map/Map<f64,i32>#find
@@ -13784,15 +14038,15 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $3
+    local.get $2
     local.get $0
     local.get $0
     call $~lib/map/Map<f64,f64>#set
-    local.tee $8
+    local.tee $9
     i32.const 556
     i32.gt_u
     if
-     local.get $8
+     local.get $9
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
@@ -13813,14 +14067,14 @@
      i32.sub
      call $~lib/rt/pure/decrement
     end
-    local.get $7
+    local.get $3
     i32.const 1
     i32.add
-    local.set $7
+    local.set $3
     br $for-loop|2
    end
   end
-  local.get $3
+  local.get $2
   i32.load offset=20
   i32.const 100
   i32.ne
@@ -13946,11 +14200,11 @@
     i32.const 10
     i32.add
     call $~lib/map/Map<f64,i32>#set
-    local.tee $7
+    local.tee $3
     i32.const 556
     i32.gt_u
     if
-     local.get $7
+     local.get $3
      i32.const 16
      i32.sub
      call $~lib/rt/pure/decrement
@@ -14018,15 +14272,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
-  i32.const 556
-  i32.gt_u
-  if
-   local.get $2
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
   local.get $5
   i32.const 556
   i32.gt_u
@@ -14036,11 +14281,20 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
-  local.get $3
+  local.get $7
   i32.const 556
   i32.gt_u
   if
-   local.get $3
+   local.get $7
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+  local.get $2
+  i32.const 556
+  i32.gt_u
+  if
+   local.get $2
    i32.const 16
    i32.sub
    call $~lib/rt/pure/decrement
@@ -14064,7 +14318,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~start (; 109 ;)
+ (func $~start (; 110 ;)
   call $std/map/testNumeric<i8,i32>
   call $std/map/testNumeric<u8,i32>
   call $std/map/testNumeric<i16,i32>
@@ -14076,7 +14330,7 @@
   call $std/map/testNumeric<f32,i32>
   call $std/map/testNumeric<f64,i32>
  )
- (func $~lib/rt/pure/decrement (; 110 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 111 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -14169,9 +14423,17 @@
     call $~lib/builtins/abort
     unreachable
    end
+   local.get $0
+   local.get $0
+   i32.load
+   i32.const 1
+   i32.or
+   i32.store
    global.get $~lib/rt/tlsf/ROOT
    local.get $0
-   call $~lib/rt/tlsf/freeBlock
+   call $~lib/rt/tlsf/insertBlock
+   local.get $0
+   call $~lib/rt/rtrace/onfree
   else
    local.get $1
    i32.const 0

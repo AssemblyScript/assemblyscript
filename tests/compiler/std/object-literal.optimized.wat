@@ -1,7 +1,6 @@
 (module
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -170,8 +169,22 @@
   end
   i32.const 0
  )
- (func $std/object-literal/bar (; 3 ;) (param $0 i32)
+ (func $start:std/object-literal (; 3 ;)
+  (local $0 i32)
   (local $1 i32)
+  i32.const 128
+  global.set $~lib/rt/stub/startOffset
+  i32.const 128
+  global.set $~lib/rt/stub/offset
+  i32.const 8
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 1
+  i32.store
+  local.get $0
+  i32.const 32
+  i32.store offset=4
   local.get $0
   i32.load
   i32.const 1
@@ -188,7 +201,7 @@
    i32.const 1
    local.get $0
    i32.load offset=4
-   local.tee $0
+   local.tee $1
    i32.const 32
    i32.eq
    br_if $__inlined_func$~lib/string/String.__eq
@@ -196,24 +209,24 @@
    block $folding-inner0
     i32.const 0
     i32.const 1
-    local.get $0
+    local.get $1
     select
     br_if $folding-inner0
-    local.get $0
+    local.get $1
     i32.const 16
     i32.sub
     i32.load offset=12
     i32.const 1
     i32.shr_u
-    local.tee $1
+    local.tee $0
     i32.const 28
     i32.load
     i32.const 1
     i32.shr_u
     i32.ne
     br_if $folding-inner0
-    local.get $0
     local.get $1
+    local.get $0
     call $~lib/util/string/compareImpl
     i32.eqz
     br $__inlined_func$~lib/string/String.__eq
@@ -229,24 +242,6 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $start:std/object-literal (; 4 ;)
-  (local $0 i32)
-  i32.const 128
-  global.set $~lib/rt/stub/startOffset
-  i32.const 128
-  global.set $~lib/rt/stub/offset
-  i32.const 8
-  i32.const 3
-  call $~lib/rt/stub/__alloc
-  local.tee $0
-  i32.const 1
-  i32.store
-  local.get $0
-  i32.const 32
-  i32.store offset=4
-  local.get $0
-  call $std/object-literal/bar
   i32.const 4
   i32.const 4
   call $~lib/rt/stub/__alloc
@@ -284,7 +279,7 @@
    unreachable
   end
  )
- (func $~start (; 5 ;)
+ (func $~start (; 4 ;)
   call $start:std/object-literal
  )
 )

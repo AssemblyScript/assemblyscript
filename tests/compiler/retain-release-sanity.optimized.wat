@@ -842,69 +842,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/growMemory (; 12 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  memory.size
-  local.tee $2
-  i32.const 16
-  local.get $0
-  i32.load offset=1568
-  local.get $2
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.sub
-  i32.ne
-  i32.shl
-  local.get $1
-  i32.const 1
-  i32.const 27
-  local.get $1
-  i32.clz
-  i32.sub
-  i32.shl
-  i32.const 1
-  i32.sub
-  i32.add
-  local.get $1
-  local.get $1
-  i32.const 536870904
-  i32.lt_u
-  select
-  i32.add
-  i32.const 65535
-  i32.add
-  i32.const -65536
-  i32.and
-  i32.const 16
-  i32.shr_u
-  local.tee $1
-  local.get $2
-  local.get $1
-  i32.gt_s
-  select
-  memory.grow
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $1
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    unreachable
-   end
-  end
-  local.get $0
-  local.get $2
-  i32.const 16
-  i32.shl
-  memory.size
-  i32.const 16
-  i32.shl
-  call $~lib/rt/tlsf/addMemory
- )
- (func $~lib/rt/tlsf/prepareBlock (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -980,9 +918,10 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 14 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   global.get $~lib/rt/tlsf/collectLock
   if
    i32.const 0
@@ -1011,9 +950,65 @@
    local.tee $3
    i32.eqz
    if
+    memory.size
+    local.tee $3
+    i32.const 16
     local.get $0
+    i32.load offset=1568
+    local.get $3
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.sub
+    i32.ne
+    i32.shl
     local.get $4
-    call $~lib/rt/tlsf/growMemory
+    i32.const 1
+    i32.const 27
+    local.get $4
+    i32.clz
+    i32.sub
+    i32.shl
+    i32.const 1
+    i32.sub
+    i32.add
+    local.get $4
+    local.get $4
+    i32.const 536870904
+    i32.lt_u
+    select
+    i32.add
+    i32.const 65535
+    i32.add
+    i32.const -65536
+    i32.and
+    i32.const 16
+    i32.shr_u
+    local.tee $5
+    local.get $3
+    local.get $5
+    i32.gt_s
+    select
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $5
+     memory.grow
+     i32.const 0
+     i32.lt_s
+     if
+      unreachable
+     end
+    end
+    local.get $0
+    local.get $3
+    i32.const 16
+    i32.shl
+    memory.size
+    i32.const 16
+    i32.shl
+    call $~lib/rt/tlsf/addMemory
     local.get $0
     local.get $4
     call $~lib/rt/tlsf/searchBlock
@@ -1063,7 +1058,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/memory/memory.fill (; 15 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 14 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -1274,7 +1269,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__retain (; 16 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (; 15 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1325,7 +1320,7 @@
   end
   local.get $0
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 17 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1404,7 +1399,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/rt/tlsf/checkUsedBlock (; 18 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/checkUsedBlock (; 17 ;) (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 16
@@ -1446,7 +1441,7 @@
   end
   local.get $1
  )
- (func $~lib/memory/memory.copy (; 19 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -1619,20 +1614,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/freeBlock (; 20 ;) (param $0 i32) (param $1 i32)
-  local.get $1
-  local.get $1
-  i32.load
-  i32.const 1
-  i32.or
-  i32.store
-  local.get $0
-  local.get $1
-  call $~lib/rt/tlsf/insertBlock
-  local.get $1
-  call $~lib/rt/rtrace/onfree
- )
- (func $~lib/rt/tlsf/reallocateBlock (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/reallocateBlock (; 19 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1688,10 +1670,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
+    local.get $4
     local.get $5
     i32.const 3
     i32.and
-    local.get $4
     i32.or
     i32.store
     local.get $1
@@ -1729,13 +1711,21 @@
    local.get $1
    local.get $3
    call $~lib/rt/rtrace/onrealloc
+   local.get $1
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.or
+   i32.store
    local.get $0
    local.get $1
-   call $~lib/rt/tlsf/freeBlock
+   call $~lib/rt/tlsf/insertBlock
+   local.get $1
+   call $~lib/rt/rtrace/onfree
   end
   local.get $3
  )
- (func $~lib/array/ensureSize (; 22 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureSize (; 20 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1794,7 +1784,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i32>#push (; 23 ;) (param $0 i32)
+ (func $~lib/array/Array<i32>#push (; 21 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1817,7 +1807,7 @@
   local.get $2
   i32.store offset=12
  )
- (func $~lib/string/String#concat (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#concat (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1909,7 +1899,7 @@
   end
   local.get $2
  )
- (func $start:retain-release-sanity (; 25 ;)
+ (func $start:retain-release-sanity (; 23 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2275,10 +2265,10 @@
   end
   call $~lib/rt/pure/__collect
  )
- (func $~start (; 26 ;)
+ (func $~start (; 24 ;)
   call $start:retain-release-sanity
  )
- (func $~lib/rt/pure/markGray (; 27 ;) (param $0 i32)
+ (func $~lib/rt/pure/markGray (; 25 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2302,20 +2292,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 28 ;) (param $0 i32)
-  local.get $0
-  local.get $0
-  i32.load offset=4
-  i32.const -1879048193
-  i32.and
-  i32.store offset=4
-  local.get $0
-  i32.const 16
-  i32.add
-  i32.const 4
-  call $~lib/rt/__visit_members
- )
- (func $~lib/rt/pure/scan (; 29 ;) (param $0 i32)
+ (func $~lib/rt/pure/scan (; 26 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2332,7 +2309,16 @@
    i32.gt_u
    if
     local.get $0
-    call $~lib/rt/pure/scanBlack
+    local.get $0
+    i32.load offset=4
+    i32.const -1879048193
+    i32.and
+    i32.store offset=4
+    local.get $0
+    i32.const 16
+    i32.add
+    i32.const 4
+    call $~lib/rt/__visit_members
    else
     local.get $0
     local.get $1
@@ -2349,7 +2335,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 30 ;) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (; 27 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2377,12 +2363,20 @@
    i32.add
    i32.const 5
    call $~lib/rt/__visit_members
+   local.get $0
+   local.get $0
+   i32.load
+   i32.const 1
+   i32.or
+   i32.store
    global.get $~lib/rt/tlsf/ROOT
    local.get $0
-   call $~lib/rt/tlsf/freeBlock
+   call $~lib/rt/tlsf/insertBlock
+   local.get $0
+   call $~lib/rt/rtrace/onfree
   end
  )
- (func $~lib/rt/pure/__collect (; 31 ;)
+ (func $~lib/rt/pure/__collect (; 28 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2391,26 +2385,26 @@
   (local $5 i32)
   global.get $~lib/rt/pure/ROOTS
   local.tee $5
-  local.tee $2
-  local.set $3
+  local.tee $3
+  local.set $4
   global.get $~lib/rt/pure/CUR
   local.set $0
   loop $for-loop|0
-   local.get $3
+   local.get $4
    local.get $0
    i32.lt_u
    if
-    local.get $3
+    local.get $4
     i32.load
-    local.tee $4
-    i32.load offset=4
     local.tee $1
+    i32.load offset=4
+    local.tee $2
     i32.const 1879048192
     i32.and
     i32.const 805306368
     i32.eq
     if (result i32)
-     local.get $1
+     local.get $2
      i32.const 268435455
      i32.and
      i32.const 0
@@ -2419,51 +2413,59 @@
      i32.const 0
     end
     if
-     local.get $4
+     local.get $1
      call $~lib/rt/pure/markGray
-     local.get $2
-     local.get $4
+     local.get $3
+     local.get $1
      i32.store
-     local.get $2
+     local.get $3
      i32.const 4
      i32.add
-     local.set $2
+     local.set $3
     else
      i32.const 0
-     local.get $1
+     local.get $2
      i32.const 268435455
      i32.and
      i32.eqz
-     local.get $1
+     local.get $2
      i32.const 1879048192
      i32.and
      select
      if
-      global.get $~lib/rt/tlsf/ROOT
-      local.get $4
-      call $~lib/rt/tlsf/freeBlock
-     else
-      local.get $4
       local.get $1
+      local.get $1
+      i32.load
+      i32.const 1
+      i32.or
+      i32.store
+      global.get $~lib/rt/tlsf/ROOT
+      local.get $1
+      call $~lib/rt/tlsf/insertBlock
+      local.get $1
+      call $~lib/rt/rtrace/onfree
+     else
+      local.get $1
+      local.get $2
       i32.const 2147483647
       i32.and
       i32.store offset=4
      end
     end
-    local.get $3
+    local.get $4
     i32.const 4
     i32.add
-    local.set $3
+    local.set $4
     br $for-loop|0
    end
   end
-  local.get $2
+  local.get $3
   global.set $~lib/rt/pure/CUR
   local.get $5
   local.set $0
   loop $for-loop|1
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_u
    if
     local.get $0
@@ -2480,18 +2482,18 @@
   local.set $0
   loop $for-loop|2
    local.get $0
-   local.get $2
+   local.get $3
    i32.lt_u
    if
     local.get $0
     i32.load
-    local.tee $1
-    local.get $1
+    local.tee $2
+    local.get $2
     i32.load offset=4
     i32.const 2147483647
     i32.and
     i32.store offset=4
-    local.get $1
+    local.get $2
     call $~lib/rt/pure/collectWhite
     local.get $0
     i32.const 4
@@ -2503,11 +2505,75 @@
   local.get $5
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/pure/decrement (; 32 ;) (param $0 i32)
+ (func $~lib/rt/pure/growRoots (; 29 ;)
+  (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  global.get $~lib/rt/pure/CUR
+  global.get $~lib/rt/pure/ROOTS
+  local.tee $0
+  i32.sub
+  local.tee $2
+  i32.const 1
+  i32.shl
+  local.tee $1
+  i32.const 256
+  local.get $1
+  i32.const 256
+  i32.gt_u
+  select
+  local.set $3
+  call $~lib/rt/tlsf/maybeInitialize
+  local.get $3
+  i32.const 0
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  local.tee $1
+  i32.const 16
+  i32.sub
+  call $~lib/rt/rtrace/onfree
+  local.get $1
+  local.get $0
+  local.get $2
+  call $~lib/memory/memory.copy
+  local.get $0
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/rtrace/onalloc
+   call $~lib/rt/tlsf/maybeInitialize
+   local.get $0
+   call $~lib/rt/tlsf/checkUsedBlock
+   local.tee $0
+   local.get $0
+   i32.load
+   i32.const 1
+   i32.or
+   i32.store
+   local.get $0
+   call $~lib/rt/tlsf/insertBlock
+   local.get $0
+   call $~lib/rt/rtrace/onfree
+  end
+  local.get $1
+  global.set $~lib/rt/pure/ROOTS
+  local.get $1
+  local.get $2
+  i32.add
+  global.set $~lib/rt/pure/CUR
+  local.get $1
+  local.get $3
+  i32.add
+  global.set $~lib/rt/pure/END
+ )
+ (func $~lib/rt/pure/decrement (; 30 ;) (param $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.load offset=4
   local.tee $2
@@ -2545,9 +2611,17 @@
     i32.const -2147483648
     i32.store offset=4
    else
+    local.get $0
+    local.get $0
+    i32.load
+    i32.const 1
+    i32.or
+    i32.store
     global.get $~lib/rt/tlsf/ROOT
     local.get $0
-    call $~lib/rt/tlsf/freeBlock
+    call $~lib/rt/tlsf/insertBlock
+    local.get $0
+    call $~lib/rt/rtrace/onfree
    end
   else
    local.get $1
@@ -2611,55 +2685,7 @@
      global.get $~lib/rt/pure/END
      i32.ge_u
      if
-      global.get $~lib/rt/pure/CUR
-      global.get $~lib/rt/pure/ROOTS
-      local.tee $1
-      i32.sub
-      local.tee $3
-      i32.const 1
-      i32.shl
-      local.tee $2
-      i32.const 256
-      local.get $2
-      i32.const 256
-      i32.gt_u
-      select
-      local.set $4
-      call $~lib/rt/tlsf/maybeInitialize
-      local.get $4
-      i32.const 0
-      call $~lib/rt/tlsf/allocateBlock
-      i32.const 16
-      i32.add
-      local.tee $2
-      i32.const 16
-      i32.sub
-      call $~lib/rt/rtrace/onfree
-      local.get $2
-      local.get $1
-      local.get $3
-      call $~lib/memory/memory.copy
-      local.get $1
-      if
-       local.get $1
-       i32.const 16
-       i32.sub
-       call $~lib/rt/rtrace/onalloc
-       call $~lib/rt/tlsf/maybeInitialize
-       local.get $1
-       call $~lib/rt/tlsf/checkUsedBlock
-       call $~lib/rt/tlsf/freeBlock
-      end
-      local.get $2
-      global.set $~lib/rt/pure/ROOTS
-      local.get $2
-      local.get $3
-      i32.add
-      global.set $~lib/rt/pure/CUR
-      local.get $2
-      local.get $4
-      i32.add
-      global.set $~lib/rt/pure/END
+      call $~lib/rt/pure/growRoots
       global.get $~lib/rt/pure/CUR
       local.set $1
      end
@@ -2674,7 +2700,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__visit (; 33 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 31 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.const 708
   i32.lt_u
@@ -2761,7 +2787,16 @@
      i32.and
      if
       local.get $0
-      call $~lib/rt/pure/scanBlack
+      local.get $0
+      i32.load offset=4
+      i32.const -1879048193
+      i32.and
+      i32.store offset=4
+      local.get $0
+      i32.const 16
+      i32.add
+      i32.const 4
+      call $~lib/rt/__visit_members
      end
      br $break|0
     end
@@ -2777,7 +2812,7 @@
    unreachable
   end
  )
- (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 34 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 32 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -2810,7 +2845,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 35 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 33 ;) (param $0 i32) (param $1 i32)
   block $block$4$break
    block $switch$1$default
     block $switch$1$case$7

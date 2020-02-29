@@ -1,12 +1,12 @@
 (module
  (type $none_=>_i32 (func (result i32)))
- (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i64_=>_i32 (func (param i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01")
@@ -347,60 +347,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/decimalCount64 (; 5 ;) (param $0 i64) (result i32)
-  i32.const 10
-  i32.const 11
-  i32.const 12
-  local.get $0
-  i64.const 100000000000
-  i64.lt_u
-  select
-  local.get $0
-  i64.const 10000000000
-  i64.lt_u
-  select
-  i32.const 13
-  i32.const 14
-  i32.const 15
-  local.get $0
-  i64.const 100000000000000
-  i64.lt_u
-  select
-  local.get $0
-  i64.const 10000000000000
-  i64.lt_u
-  select
-  local.get $0
-  i64.const 1000000000000
-  i64.lt_u
-  select
-  i32.const 16
-  i32.const 17
-  local.get $0
-  i64.const 10000000000000000
-  i64.lt_u
-  select
-  i32.const 18
-  i32.const 19
-  i32.const 20
-  local.get $0
-  i64.const -8446744073709551616
-  i64.lt_u
-  select
-  local.get $0
-  i64.const 1000000000000000000
-  i64.lt_u
-  select
-  local.get $0
-  i64.const 100000000000000000
-  i64.lt_u
-  select
-  local.get $0
-  i64.const 1000000000000000
-  i64.lt_u
-  select
- )
- (func $~lib/util/number/utoa64 (; 6 ;) (param $0 i64) (result i32)
+ (func $~lib/util/number/utoa64 (; 5 ;) (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -429,8 +376,57 @@
    local.get $1
    call $~lib/util/number/utoa_simple<u32>
   else
+   i32.const 10
+   i32.const 11
+   i32.const 12
    local.get $0
-   call $~lib/util/number/decimalCount64
+   i64.const 100000000000
+   i64.lt_u
+   select
+   local.get $0
+   i64.const 10000000000
+   i64.lt_u
+   select
+   i32.const 13
+   i32.const 14
+   i32.const 15
+   local.get $0
+   i64.const 100000000000000
+   i64.lt_u
+   select
+   local.get $0
+   i64.const 10000000000000
+   i64.lt_u
+   select
+   local.get $0
+   i64.const 1000000000000
+   i64.lt_u
+   select
+   i32.const 16
+   i32.const 17
+   local.get $0
+   i64.const 10000000000000000
+   i64.lt_u
+   select
+   i32.const 18
+   i32.const 19
+   i32.const 20
+   local.get $0
+   i64.const -8446744073709551616
+   i64.lt_u
+   select
+   local.get $0
+   i64.const 1000000000000000000
+   i64.lt_u
+   select
+   local.get $0
+   i64.const 100000000000000000
+   i64.lt_u
+   select
+   local.get $0
+   i64.const 1000000000000000
+   i64.lt_u
+   select
    local.tee $1
    i32.const 1
    i32.shl
@@ -465,7 +461,7 @@
   end
   local.get $3
  )
- (func $resolve-access/arrayAccess (; 7 ;) (result i32)
+ (func $resolve-access/arrayAccess (; 6 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -506,7 +502,7 @@
   i64.load
   call $~lib/util/number/utoa64
  )
- (func $resolve-access/fieldAccess (; 8 ;) (result i32)
+ (func $resolve-access/fieldAccess (; 7 ;) (result i32)
   (local $0 i32)
   i32.const 8
   i32.const 5
@@ -521,7 +517,7 @@
   i64.load
   call $~lib/util/number/utoa64
  )
- (func $resolve-access/propertyAccess (; 9 ;) (result i32)
+ (func $resolve-access/propertyAccess (; 8 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -556,7 +552,7 @@
   end
   local.get $0
  )
- (func $~start (; 10 ;)
+ (func $~start (; 9 ;)
   i32.const 192
   global.set $~lib/rt/stub/startOffset
   i32.const 192

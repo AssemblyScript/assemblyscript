@@ -1,8 +1,8 @@
 (module
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -730,68 +730,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/prepareBlock (; 10 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $1
-  i32.load
-  local.tee $2
-  i32.const -4
-  i32.and
-  i32.const 16
-  i32.sub
-  local.tee $3
-  i32.const 32
-  i32.ge_u
-  if
-   local.get $1
-   local.get $2
-   i32.const 2
-   i32.and
-   i32.const 16
-   i32.or
-   i32.store
-   local.get $1
-   i32.const 32
-   i32.add
-   local.tee $1
-   local.get $3
-   i32.const 16
-   i32.sub
-   i32.const 1
-   i32.or
-   i32.store
-   local.get $0
-   local.get $1
-   call $~lib/rt/tlsf/insertBlock
-  else
-   local.get $1
-   local.get $2
-   i32.const -2
-   i32.and
-   i32.store
-   local.get $1
-   i32.const 16
-   i32.add
-   local.tee $0
-   local.get $1
-   i32.load
-   i32.const -4
-   i32.and
-   i32.add
-   local.get $0
-   local.get $1
-   i32.load
-   i32.const -4
-   i32.and
-   i32.add
-   i32.load
-   i32.const -3
-   i32.and
-   i32.store
-  end
- )
- (func $~lib/rt/tlsf/allocateBlock (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -900,14 +839,68 @@
   local.get $0
   local.get $2
   call $~lib/rt/tlsf/removeBlock
-  local.get $0
   local.get $2
-  call $~lib/rt/tlsf/prepareBlock
+  i32.load
+  local.tee $1
+  i32.const -4
+  i32.and
+  i32.const 16
+  i32.sub
+  local.tee $3
+  i32.const 32
+  i32.ge_u
+  if
+   local.get $2
+   local.get $1
+   i32.const 2
+   i32.and
+   i32.const 16
+   i32.or
+   i32.store
+   local.get $2
+   i32.const 32
+   i32.add
+   local.tee $1
+   local.get $3
+   i32.const 16
+   i32.sub
+   i32.const 1
+   i32.or
+   i32.store
+   local.get $0
+   local.get $1
+   call $~lib/rt/tlsf/insertBlock
+  else
+   local.get $2
+   local.get $1
+   i32.const -2
+   i32.and
+   i32.store
+   local.get $2
+   i32.const 16
+   i32.add
+   local.tee $0
+   local.get $2
+   i32.load
+   i32.const -4
+   i32.and
+   i32.add
+   local.get $0
+   local.get $2
+   i32.load
+   i32.const -4
+   i32.and
+   i32.add
+   i32.load
+   i32.const -3
+   i32.and
+   i32.store
+  end
   local.get $2
   call $~lib/rt/rtrace/onalloc
   local.get $2
  )
- (func $~lib/rt/pure/__retain (; 12 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (; 11 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -958,7 +951,7 @@
   end
   local.get $0
  )
- (func $managed-cast/Cat#constructor (; 13 ;) (result i32)
+ (func $managed-cast/Cat#constructor (; 12 ;) (result i32)
   (local $0 i32)
   call $~lib/rt/tlsf/maybeInitialize
   i32.const 3
@@ -978,7 +971,7 @@
    call $~lib/rt/pure/__retain
   end
  )
- (func $~lib/rt/__instanceof (; 14 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/__instanceof (; 13 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -1008,7 +1001,7 @@
   end
   i32.const 0
  )
- (func $start:managed-cast (; 15 ;)
+ (func $start:managed-cast (; 14 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1164,7 +1157,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~start (; 16 ;)
+ (func $~start (; 15 ;)
   global.get $~started
   if
    return
@@ -1174,7 +1167,7 @@
   end
   call $start:managed-cast
  )
- (func $~lib/rt/pure/decrement (; 17 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 16 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

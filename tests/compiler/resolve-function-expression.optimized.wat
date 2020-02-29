@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -283,7 +283,7 @@
   end
   i32.const 0
  )
- (func $start:resolve-function-expression (; 5 ;)
+ (func $~start (; 5 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 1
@@ -341,8 +341,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start (; 6 ;)
-  call $start:resolve-function-expression
  )
 )
