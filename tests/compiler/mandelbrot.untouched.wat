@@ -214,7 +214,6 @@
   f64.const 0.6931471803691238
   f64.mul
   f64.add
-  return
  )
  (func $~lib/math/NativeMath.log2 (; 1 ;) (param $0 f64) (result f64)
   (local $1 i64)
@@ -468,7 +467,6 @@
   local.get $15
   local.get $14
   f64.add
-  return
  )
  (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)

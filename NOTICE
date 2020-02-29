@@ -43,8 +43,3 @@ the following terms:
 
   Copyright (c) the V8 project authors
   The 3-Clause BSD License (https://opensource.org/licenses/BSD-3-Clause)
-
-* Arm Optimized Routines: https://github.com/ARM-software/optimized-routines
-  
-  Copyright (c) Arm Limited
-  The MIT License (https://opensource.org/licenses/MIT)
