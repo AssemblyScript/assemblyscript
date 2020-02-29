@@ -1,5 +1,6 @@
 (module
  (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -13,7 +14,51 @@
  (global $std/pointer/buf (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/memory/memory.copy (; 1 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (; 1 ;) (param $0 i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 0
+  i32.store8
+  local.get $0
+  i32.const 8
+  i32.add
+  local.tee $1
+  i32.const 1
+  i32.sub
+  i32.const 0
+  i32.store8
+  local.get $0
+  i32.const 1
+  i32.add
+  i32.const 0
+  i32.store8
+  local.get $0
+  i32.const 2
+  i32.add
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 2
+  i32.sub
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 3
+  i32.sub
+  i32.const 0
+  i32.store8
+  local.get $0
+  i32.const 3
+  i32.add
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 4
+  i32.sub
+  i32.const 0
+  i32.store8
+ )
+ (func $~lib/memory/memory.copy (; 2 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -187,7 +232,7 @@
    end
   end
  )
- (func $start:std/pointer (; 2 ;)
+ (func $start:std/pointer (; 3 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 8
@@ -357,46 +402,7 @@
    call $~lib/memory/memory.copy
   else
    local.get $0
-   i32.const 0
-   i32.store8
-   local.get $0
-   i32.const 8
-   i32.add
-   local.tee $1
-   i32.const 1
-   i32.sub
-   i32.const 0
-   i32.store8
-   local.get $0
-   i32.const 1
-   i32.add
-   i32.const 0
-   i32.store8
-   local.get $0
-   i32.const 2
-   i32.add
-   i32.const 0
-   i32.store8
-   local.get $1
-   i32.const 2
-   i32.sub
-   i32.const 0
-   i32.store8
-   local.get $1
-   i32.const 3
-   i32.sub
-   i32.const 0
-   i32.store8
-   local.get $0
-   i32.const 3
-   i32.add
-   i32.const 0
-   i32.store8
-   local.get $1
-   i32.const 4
-   i32.sub
-   i32.const 0
-   i32.store8
+   call $~lib/memory/memory.fill
   end
   global.get $std/pointer/one
   global.get $std/pointer/two
@@ -590,7 +596,7 @@
    unreachable
   end
  )
- (func $~start (; 3 ;)
+ (func $~start (; 4 ;)
   call $start:std/pointer
  )
 )

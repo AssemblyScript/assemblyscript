@@ -4,6 +4,7 @@
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $f32_f32_f32_=>_i32 (func (param f32 f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
+ (type $f64_f64_f64_=>_i32 (func (param f64 f64 f64) (result i32)))
  (type $f32_f32_=>_f32 (func (param f32 f32) (result f32)))
  (import "mod" "mod" (func $std/mod/mod (param f64 f64) (result f64)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -242,7 +243,23 @@
   local.get $1
   f64.eq
  )
- (func $~lib/math/NativeMathf.mod (; 4 ;) (param $0 f32) (param $1 f32) (result f32)
+ (func $std/mod/test_fmod (; 4 ;) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+  local.get $0
+  local.get $1
+  call $~lib/math/NativeMath.mod
+  local.get $2
+  call $std/mod/check<f64>
+  if (result i32)
+   local.get $0
+   local.get $1
+   call $std/mod/mod
+   local.get $2
+   call $std/mod/check<f64>
+  else
+   i32.const 0
+  end
+ )
+ (func $~lib/math/NativeMathf.mod (; 5 ;) (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -434,7 +451,7 @@
   local.get $0
   f32.mul
  )
- (func $std/mod/test_fmodf (; 5 ;) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/mod/test_fmodf (; 6 ;) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   block $__inlined_func$std/mod/check<f32> (result i32)
    local.get $0
    local.get $1
@@ -464,21 +481,11 @@
    f32.eq
   end
  )
- (func $start:std/mod (; 6 ;)
+ (func $start:std/mod (; 7 ;)
   f64.const 3
   f64.const 2
-  call $~lib/math/NativeMath.mod
   f64.const 1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 3
-   f64.const 2
-   call $std/mod/mod
-   f64.const 1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -490,18 +497,8 @@
   end
   f64.const 3
   f64.const -2
-  call $~lib/math/NativeMath.mod
   f64.const 1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 3
-   f64.const -2
-   call $std/mod/mod
-   f64.const 1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -513,18 +510,8 @@
   end
   f64.const -3
   f64.const 2
-  call $~lib/math/NativeMath.mod
   f64.const -1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -3
-   f64.const 2
-   call $std/mod/mod
-   f64.const -1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -536,18 +523,8 @@
   end
   f64.const -3
   f64.const -2
-  call $~lib/math/NativeMath.mod
   f64.const -1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -3
-   f64.const -2
-   call $std/mod/mod
-   f64.const -1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -559,18 +536,8 @@
   end
   f64.const 3.5
   f64.const 2
-  call $~lib/math/NativeMath.mod
   f64.const 1.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 3.5
-   f64.const 2
-   call $std/mod/mod
-   f64.const 1.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -582,18 +549,8 @@
   end
   f64.const 3.5
   f64.const -2
-  call $~lib/math/NativeMath.mod
   f64.const 1.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 3.5
-   f64.const -2
-   call $std/mod/mod
-   f64.const 1.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -605,18 +562,8 @@
   end
   f64.const -3.5
   f64.const 2
-  call $~lib/math/NativeMath.mod
   f64.const -1.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -3.5
-   f64.const 2
-   call $std/mod/mod
-   f64.const -1.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -628,18 +575,8 @@
   end
   f64.const -3.5
   f64.const -2
-  call $~lib/math/NativeMath.mod
   f64.const -1.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -3.5
-   f64.const -2
-   call $std/mod/mod
-   f64.const -1.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -651,18 +588,8 @@
   end
   f64.const 3
   f64.const 2.5
-  call $~lib/math/NativeMath.mod
   f64.const 0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 3
-   f64.const 2.5
-   call $std/mod/mod
-   f64.const 0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -674,18 +601,8 @@
   end
   f64.const 3
   f64.const -2.5
-  call $~lib/math/NativeMath.mod
   f64.const 0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 3
-   f64.const -2.5
-   call $std/mod/mod
-   f64.const 0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -697,18 +614,8 @@
   end
   f64.const -3
   f64.const 2.5
-  call $~lib/math/NativeMath.mod
   f64.const -0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -3
-   f64.const 2.5
-   call $std/mod/mod
-   f64.const -0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -720,18 +627,8 @@
   end
   f64.const -3
   f64.const -2.5
-  call $~lib/math/NativeMath.mod
   f64.const -0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -3
-   f64.const -2.5
-   call $std/mod/mod
-   f64.const -0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -743,18 +640,8 @@
   end
   f64.const 0.5
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const 0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 0.5
-   f64.const 1
-   call $std/mod/mod
-   f64.const 0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -766,18 +653,8 @@
   end
   f64.const 0.5
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const 0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 0.5
-   f64.const -1
-   call $std/mod/mod
-   f64.const 0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -789,18 +666,8 @@
   end
   f64.const -0.5
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const -0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -0.5
-   f64.const 1
-   call $std/mod/mod
-   f64.const -0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -812,18 +679,8 @@
   end
   f64.const -0.5
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const -0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -0.5
-   f64.const -1
-   call $std/mod/mod
-   f64.const -0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -835,18 +692,8 @@
   end
   f64.const 1.5
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const 0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1.5
-   f64.const 1
-   call $std/mod/mod
-   f64.const 0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -858,18 +705,8 @@
   end
   f64.const 1.5
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const 0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1.5
-   f64.const -1
-   call $std/mod/mod
-   f64.const 0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -881,18 +718,8 @@
   end
   f64.const -1.5
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const -0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1.5
-   f64.const 1
-   call $std/mod/mod
-   f64.const -0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -904,18 +731,8 @@
   end
   f64.const -1.5
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const -0.5
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1.5
-   f64.const -1
-   call $std/mod/mod
-   f64.const -0.5
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -927,18 +744,8 @@
   end
   f64.const 1.25
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const 0.25
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1.25
-   f64.const 1
-   call $std/mod/mod
-   f64.const 0.25
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -950,18 +757,8 @@
   end
   f64.const 1.25
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const 0.25
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1.25
-   f64.const -1
-   call $std/mod/mod
-   f64.const 0.25
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -973,18 +770,8 @@
   end
   f64.const -1.25
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const -0.25
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1.25
-   f64.const 1
-   call $std/mod/mod
-   f64.const -0.25
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -996,18 +783,8 @@
   end
   f64.const -1.25
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const -0.25
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1.25
-   f64.const -1
-   call $std/mod/mod
-   f64.const -0.25
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1019,18 +796,8 @@
   end
   f64.const 1
   f64.const 1.25
-  call $~lib/math/NativeMath.mod
   f64.const 1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1
-   f64.const 1.25
-   call $std/mod/mod
-   f64.const 1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1042,18 +809,8 @@
   end
   f64.const 1
   f64.const -1.25
-  call $~lib/math/NativeMath.mod
   f64.const 1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1
-   f64.const -1.25
-   call $std/mod/mod
-   f64.const 1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1065,18 +822,8 @@
   end
   f64.const -1
   f64.const 1.25
-  call $~lib/math/NativeMath.mod
   f64.const -1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1
-   f64.const 1.25
-   call $std/mod/mod
-   f64.const -1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1088,18 +835,8 @@
   end
   f64.const -1
   f64.const -1.25
-  call $~lib/math/NativeMath.mod
   f64.const -1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1
-   f64.const -1.25
-   call $std/mod/mod
-   f64.const -1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1111,18 +848,8 @@
   end
   f64.const -13
   f64.const 64
-  call $~lib/math/NativeMath.mod
   f64.const -13
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -13
-   f64.const 64
-   call $std/mod/mod
-   f64.const -13
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1134,18 +861,8 @@
   end
   f64.const 0
   f64.const 0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 0
-   f64.const 0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1157,18 +874,8 @@
   end
   f64.const -0
   f64.const 0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -0
-   f64.const 0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1180,18 +887,8 @@
   end
   f64.const 0
   f64.const -0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 0
-   f64.const -0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1203,18 +900,8 @@
   end
   f64.const -0
   f64.const -0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -0
-   f64.const -0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1226,18 +913,8 @@
   end
   f64.const 0
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const 0
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 0
-   f64.const 1
-   call $std/mod/mod
-   f64.const 0
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1249,18 +926,8 @@
   end
   f64.const -0
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const -0
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -0
-   f64.const 1
-   call $std/mod/mod
-   f64.const -0
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1272,18 +939,8 @@
   end
   f64.const 0
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const 0
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 0
-   f64.const -1
-   call $std/mod/mod
-   f64.const 0
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1295,18 +952,8 @@
   end
   f64.const -0
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const -0
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -0
-   f64.const -1
-   call $std/mod/mod
-   f64.const -0
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1318,18 +965,8 @@
   end
   f64.const 1
   f64.const 0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1
-   f64.const 0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1341,18 +978,8 @@
   end
   f64.const -1
   f64.const 0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1
-   f64.const 0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1364,18 +991,8 @@
   end
   f64.const 1
   f64.const -0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1
-   f64.const -0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1387,18 +1004,8 @@
   end
   f64.const -1
   f64.const -0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1
-   f64.const -0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1410,18 +1017,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const 0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const 0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1433,18 +1030,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const -0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const -0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1456,18 +1043,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const 1
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1479,18 +1056,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const -1
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1502,18 +1069,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const 0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const 0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1525,18 +1082,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const -0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const -0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1548,18 +1095,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const 1
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1571,18 +1108,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const -1
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1594,18 +1121,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const nan:0x8000000000000
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const nan:0x8000000000000
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1617,18 +1134,8 @@
   end
   f64.const 0
   f64.const inf
-  call $~lib/math/NativeMath.mod
   f64.const 0
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 0
-   f64.const inf
-   call $std/mod/mod
-   f64.const 0
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1640,18 +1147,8 @@
   end
   f64.const -0
   f64.const inf
-  call $~lib/math/NativeMath.mod
   f64.const -0
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -0
-   f64.const inf
-   call $std/mod/mod
-   f64.const -0
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1663,18 +1160,8 @@
   end
   f64.const 0
   f64.const -inf
-  call $~lib/math/NativeMath.mod
   f64.const 0
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 0
-   f64.const -inf
-   call $std/mod/mod
-   f64.const 0
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1686,18 +1173,8 @@
   end
   f64.const -0
   f64.const -inf
-  call $~lib/math/NativeMath.mod
   f64.const -0
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -0
-   f64.const -inf
-   call $std/mod/mod
-   f64.const -0
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1709,18 +1186,8 @@
   end
   f64.const 1
   f64.const inf
-  call $~lib/math/NativeMath.mod
   f64.const 1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1
-   f64.const inf
-   call $std/mod/mod
-   f64.const 1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1732,18 +1199,8 @@
   end
   f64.const -1
   f64.const inf
-  call $~lib/math/NativeMath.mod
   f64.const -1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1
-   f64.const inf
-   call $std/mod/mod
-   f64.const -1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1755,18 +1212,8 @@
   end
   f64.const 1
   f64.const -inf
-  call $~lib/math/NativeMath.mod
   f64.const 1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const 1
-   f64.const -inf
-   call $std/mod/mod
-   f64.const 1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1778,18 +1225,8 @@
   end
   f64.const -1
   f64.const -inf
-  call $~lib/math/NativeMath.mod
   f64.const -1
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -1
-   f64.const -inf
-   call $std/mod/mod
-   f64.const -1
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1801,18 +1238,8 @@
   end
   f64.const inf
   f64.const 0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const inf
-   f64.const 0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1824,18 +1251,8 @@
   end
   f64.const inf
   f64.const -0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const inf
-   f64.const -0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1847,18 +1264,8 @@
   end
   f64.const -inf
   f64.const 0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -inf
-   f64.const 0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1870,18 +1277,8 @@
   end
   f64.const -inf
   f64.const -0
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -inf
-   f64.const -0
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1893,18 +1290,8 @@
   end
   f64.const inf
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const inf
-   f64.const 1
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1916,18 +1303,8 @@
   end
   f64.const inf
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const inf
-   f64.const -1
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1939,18 +1316,8 @@
   end
   f64.const -inf
   f64.const 1
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -inf
-   f64.const 1
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1962,18 +1329,8 @@
   end
   f64.const -inf
   f64.const -1
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -inf
-   f64.const -1
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -1985,18 +1342,8 @@
   end
   f64.const inf
   f64.const inf
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const inf
-   f64.const inf
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -2008,18 +1355,8 @@
   end
   f64.const -inf
   f64.const inf
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -inf
-   f64.const inf
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -2031,18 +1368,8 @@
   end
   f64.const inf
   f64.const -inf
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const inf
-   f64.const -inf
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -2054,18 +1381,8 @@
   end
   f64.const -inf
   f64.const -inf
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -inf
-   f64.const -inf
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -2077,18 +1394,8 @@
   end
   f64.const inf
   f64.const nan:0x8000000000000
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const inf
-   f64.const nan:0x8000000000000
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -2100,18 +1407,8 @@
   end
   f64.const -inf
   f64.const nan:0x8000000000000
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const -inf
-   f64.const nan:0x8000000000000
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -2123,18 +1420,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const inf
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const inf
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -2146,18 +1433,8 @@
   end
   f64.const nan:0x8000000000000
   f64.const -inf
-  call $~lib/math/NativeMath.mod
   f64.const nan:0x8000000000000
-  call $std/mod/check<f64>
-  if (result i32)
-   f64.const nan:0x8000000000000
-   f64.const -inf
-   call $std/mod/mod
-   f64.const nan:0x8000000000000
-   call $std/mod/check<f64>
-  else
-   i32.const 0
-  end
+  call $std/mod/test_fmod
   i32.eqz
   if
    i32.const 0
@@ -2961,7 +2238,7 @@
    unreachable
   end
  )
- (func $~start (; 7 ;)
+ (func $~start (; 8 ;)
   call $start:std/mod
  )
 )

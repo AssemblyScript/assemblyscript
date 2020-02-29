@@ -409,9 +409,51 @@
   i32.store offset=12
   local.get $0
  )
- (func $start:rt/stub-realloc (; 9 ;)
-  (local $0 i32)
+ (func $~lib/rt/stub/__free (; 9 ;) (param $0 i32)
   (local $1 i32)
+  local.get $0
+  i32.const 15
+  i32.and
+  i32.eqz
+  i32.const 0
+  local.get $0
+  select
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 70
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  i32.const 16
+  i32.sub
+  local.tee $1
+  i32.load offset=4
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 72
+   i32.const 13
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $~lib/rt/stub/offset
+  local.get $0
+  local.get $1
+  i32.load
+  i32.add
+  i32.eq
+  if
+   local.get $1
+   global.set $~lib/rt/stub/offset
+  end
+ )
+ (func $start:rt/stub-realloc (; 10 ;)
   i32.const 10
   i32.const 0
   call $~lib/rt/stub/__alloc
@@ -530,47 +572,7 @@
    unreachable
   end
   global.get $rt/stub-realloc/ptr
-  local.tee $0
-  i32.const 15
-  i32.and
-  i32.eqz
-  i32.const 0
-  local.get $0
-  select
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 70
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.const 16
-  i32.sub
-  local.tee $1
-  i32.load offset=4
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 72
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $~lib/rt/stub/offset
-  local.get $0
-  local.get $1
-  i32.load
-  i32.add
-  i32.eq
-  if
-   local.get $1
-   global.set $~lib/rt/stub/offset
-  end
+  call $~lib/rt/stub/__free
   i32.const 1
   i32.const 0
   call $~lib/rt/stub/__alloc
@@ -585,7 +587,7 @@
    unreachable
   end
  )
- (func $~start (; 10 ;)
+ (func $~start (; 11 ;)
   global.get $~started
   if
    return

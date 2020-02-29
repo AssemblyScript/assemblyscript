@@ -644,7 +644,7 @@ exports.main = function main(argv, options, callback) {
     function add(pass) { passes.push(pass); }
 
     // enchance options for inline passes
-    if (optimizeLevel >= 2 && shrinkLevel < 2) {
+    if (optimizeLevel >= 2 && shrinkLevel === 0) {
       module.setAlwaysInlineMaxSize(12);
       module.setFlexibleInlineMaxSize(60);
       module.setOneCallerInlineMaxSize(60);

@@ -70,17 +70,21 @@
   i32.add
   i32.load
  )
- (func $std/array-access/stringArrayPropertyAccess (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
   local.get $0
-  i32.const 0
-  call $~lib/array/Array<~lib/array/Array<i32>>#__get
   i32.const 16
   i32.sub
   i32.load offset=12
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $std/array-access/stringArrayPropertyAccess (; 4 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 0
+  call $~lib/array/Array<~lib/array/Array<i32>>#__get
+  call $~lib/string/String#get:length
+ )
+ (func $~lib/util/string/compareImpl (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   i32.const 256
@@ -159,29 +163,21 @@
   end
   i32.const 0
  )
- (func $~lib/string/String#startsWith (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#startsWith (; 6 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 252
-  i32.load
-  i32.const 1
-  i32.shr_u
-  local.tee $1
-  local.set $2
-  local.get $1
   i32.const 0
   local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
+  call $~lib/string/String#get:length
   local.tee $1
   i32.const 0
   local.get $1
   i32.lt_s
   select
+  local.tee $2
+  i32.const 256
+  call $~lib/string/String#get:length
   local.tee $3
   i32.add
   local.get $1
@@ -191,30 +187,26 @@
    return
   end
   local.get $0
-  local.get $3
   local.get $2
+  local.get $3
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $std/array-access/stringArrayMethodCall (; 6 ;) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayMethodCall (; 7 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
   call $~lib/string/String#startsWith
  )
- (func $std/array-access/stringArrayArrayPropertyAccess (; 7 ;) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayPropertyAccess (; 8 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
   i32.const 1
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
+  call $~lib/string/String#get:length
  )
- (func $std/array-access/stringArrayArrayMethodCall (; 8 ;) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayMethodCall (; 9 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<~lib/array/Array<i32>>#__get
