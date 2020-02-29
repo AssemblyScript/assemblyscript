@@ -2637,7 +2637,6 @@
   local.set $4
   local.get $5
   i32.wrap_i64
-  local.set $6
   local.get $1
   i64.reinterpret_f64
   local.tee $5
@@ -2676,7 +2675,6 @@
   i32.const 2147483647
   i32.and
   local.tee $4
-  local.get $6
   i32.or
   i32.eqz
   if

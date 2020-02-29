@@ -679,11 +679,12 @@ exports.main = function main(argv, options, callback) {
       add("dce");
       add("remove-unused-brs");
       add("remove-unused-names");
-      add("optimize-instructions");
+      // add("optimize-instructions"); // differs move 2 lines above
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
         add("simplify-globals-optimizing"); // differs
       }
+      add("optimize-instructions"); // differs
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
       } else {
