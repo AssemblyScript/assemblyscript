@@ -2,7 +2,6 @@
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_f32_i32_i32_=>_i32 (func (param i32 f32 i32 i32) (result i32)))
  (type $f32_=>_f32 (func (param f32) (result f32)))
  (memory $0 1)
  (data (i32.const 16) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00i\00n\00f\00e\00r\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s")
@@ -16,19 +15,17 @@
  (export "test3" (func $infer-generic/test2))
  (export "test4" (func $infer-generic/test2))
  (start $~start)
- (func $start:infer-generic~anonymous|0 (; 0 ;) (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
-  local.get $1
-  f32.const 0
-  f32.ne
-  i32.const 0
-  local.get $0
-  select
- )
- (func $~setArgumentsLength (; 1 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 0 ;) (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $~lib/array/Array<f32>#reduce<bool> (; 2 ;)
+ (func $infer-generic/test1 (; 1 ;) (param $0 f32) (result f32)
+  local.get $0
+ )
+ (func $infer-generic/test2 (; 2 ;) (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $~start (; 3 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -50,7 +47,6 @@
    if
     i32.const 4
     global.set $~argumentsLength
-    local.get $3
     i32.const 116
     i32.load
     local.get $0
@@ -58,9 +54,11 @@
     i32.shl
     i32.add
     f32.load
-    local.get $0
-    i32.const 112
-    call $start:infer-generic~anonymous|0
+    f32.const 0
+    f32.ne
+    i32.const 0
+    local.get $3
+    select
     local.set $3
     local.get $0
     i32.const 1
@@ -69,14 +67,5 @@
     br $for-loop|0
    end
   end
- )
- (func $infer-generic/test1 (; 3 ;) (param $0 f32) (result f32)
-  local.get $0
- )
- (func $infer-generic/test2 (; 4 ;) (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~start (; 5 ;)
-  call $~lib/array/Array<f32>#reduce<bool>
  )
 )

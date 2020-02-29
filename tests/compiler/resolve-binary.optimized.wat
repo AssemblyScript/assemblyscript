@@ -2,11 +2,10 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_i32_i64_i32_i64_=>_i32 (func (param i32 i64 i32 i64 i32 i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -57,21 +56,7 @@
  (global $resolve-binary/bar2 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/number/Bool#toString (; 1 ;) (param $0 i32) (result i32)
-  i32.const 32
-  i32.const 64
-  local.get $0
-  select
- )
- (func $~lib/string/String#get:length (; 2 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
- )
- (func $~lib/util/string/compareImpl (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -147,7 +132,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -164,10 +149,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -179,7 +172,7 @@
   end
   i32.const 0
  )
- (func $~lib/util/number/decimalCount32 (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 3 ;) (param $0 i32) (result i32)
   i32.const 1
   i32.const 2
   local.get $0
@@ -227,52 +220,12 @@
   i32.lt_u
   select
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 6 ;) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  memory.size
-  local.tee $2
-  i32.const 16
-  i32.shl
-  local.tee $1
-  i32.gt_u
-  if
-   local.get $2
-   local.get $0
-   local.get $1
-   i32.sub
-   i32.const 65535
-   i32.add
-   i32.const -65536
-   i32.and
-   i32.const 16
-   i32.shr_u
-   local.tee $1
-   local.get $2
-   local.get $1
-   i32.gt_s
-   select
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    local.get $1
-    memory.grow
-    i32.const 0
-    i32.lt_s
-    if
-     unreachable
-    end
-   end
-  end
-  local.get $0
-  global.set $~lib/rt/stub/offset
- )
- (func $~lib/rt/stub/__alloc (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   i32.const 1073741808
   i32.gt_u
@@ -282,7 +235,7 @@
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $3
+  local.tee $4
   local.get $0
   i32.const 15
   i32.add
@@ -294,14 +247,51 @@
   i32.const 16
   i32.gt_u
   select
-  local.tee $4
+  local.tee $6
   i32.add
-  call $~lib/rt/stub/maybeGrowMemory
-  local.get $3
+  local.tee $2
+  memory.size
+  local.tee $5
+  i32.const 16
+  i32.shl
+  local.tee $3
+  i32.gt_u
+  if
+   local.get $5
+   local.get $2
+   local.get $3
+   i32.sub
+   i32.const 65535
+   i32.add
+   i32.const -65536
+   i32.and
+   i32.const 16
+   i32.shr_u
+   local.tee $3
+   local.get $5
+   local.get $3
+   i32.gt_s
+   select
+   memory.grow
+   i32.const 0
+   i32.lt_s
+   if
+    local.get $3
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     unreachable
+    end
+   end
+  end
+  local.get $2
+  global.set $~lib/rt/stub/offset
+  local.get $4
   i32.const 16
   i32.sub
   local.tee $2
-  local.get $4
+  local.get $6
   i32.store
   local.get $2
   i32.const 1
@@ -312,9 +302,9 @@
   local.get $2
   local.get $0
   i32.store offset=12
-  local.get $3
+  local.get $4
  )
- (func $~lib/util/number/utoa_simple<u32> (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u32> (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -338,48 +328,47 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/itoa32 (; 9 ;) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (; 6 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i32.eqz
-  if
-   i32.const 192
-   return
-  end
-  local.get $0
-  i32.const 0
-  i32.lt_s
-  local.tee $1
-  if
-   i32.const 0
+  if (result i32)
    local.get $0
-   i32.sub
-   local.set $0
-  end
-  local.get $0
-  call $~lib/util/number/decimalCount32
-  local.get $1
-  i32.add
-  local.tee $3
-  i32.const 1
-  i32.shl
-  i32.const 1
-  call $~lib/rt/stub/__alloc
-  local.tee $2
-  local.get $0
-  local.get $3
-  call $~lib/util/number/utoa_simple<u32>
-  local.get $1
-  if
+   i32.const 0
+   i32.lt_s
+   local.tee $1
+   if
+    i32.const 0
+    local.get $0
+    i32.sub
+    local.set $0
+   end
+   local.get $0
+   call $~lib/util/number/decimalCount32
+   local.get $1
+   i32.add
+   local.tee $3
+   i32.const 1
+   i32.shl
+   i32.const 1
+   call $~lib/rt/stub/__alloc
+   local.tee $2
+   local.get $0
+   local.get $3
+   call $~lib/util/number/utoa_simple<u32>
+   local.get $1
+   if
+    local.get $2
+    i32.const 45
+    i32.store16
+   end
    local.get $2
-   i32.const 45
-   i32.store16
+  else
+   i32.const 192
   end
-  local.get $2
  )
- (func $~lib/util/number/genDigits (; 10 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
+ (func $~lib/util/number/genDigits (; 7 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i64)
@@ -770,7 +759,7 @@
   i32.store16
   local.get $2
  )
- (func $~lib/memory/memory.copy (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -943,7 +932,7 @@
    end
   end
  )
- (func $~lib/util/number/prettify (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -1188,7 +1177,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 13 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/dtoa_core (; 10 ;) (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -1333,13 +1322,17 @@
   global.get $~lib/util/number/_K
   call $~lib/util/number/prettify
  )
- (func $~lib/string/String#substring (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   i32.const 0
   local.get $0
-  call $~lib/string/String#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
   local.tee $2
   i32.const 0
   local.get $2
@@ -1405,8 +1398,25 @@
   call $~lib/memory/memory.copy
   local.get $2
  )
- (func $~lib/rt/stub/__free (; 15 ;) (param $0 i32)
+ (func $~lib/util/number/dtoa (; 12 ;) (result i32)
+  (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  i32.const 56
+  i32.const 1
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  call $~lib/util/number/dtoa_core
+  local.tee $1
+  i32.const 28
+  i32.eq
+  if
+   local.get $0
+   return
+  end
+  local.get $0
+  local.get $1
+  call $~lib/string/String#substring
   local.get $0
   i32.const 15
   i32.and
@@ -1449,35 +1459,8 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~lib/util/number/dtoa (; 16 ;) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  i32.const 56
-  i32.const 1
-  call $~lib/rt/stub/__alloc
-  local.tee $0
-  call $~lib/util/number/dtoa_core
-  local.tee $1
-  i32.const 28
-  i32.eq
-  if
-   local.get $0
-   return
-  end
-  local.get $0
-  local.get $1
-  call $~lib/string/String#substring
-  local.get $0
-  call $~lib/rt/stub/__free
- )
- (func $resolve-binary/Bar#constructor (; 17 ;) (result i32)
-  i32.const 0
-  i32.const 7
-  call $~lib/rt/stub/__alloc
- )
- (func $start:resolve-binary (; 18 ;)
-  i32.const 1
-  call $~lib/number/Bool#toString
+ (func $start:resolve-binary (; 13 ;)
+  i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
   i32.eqz
@@ -1489,8 +1472,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/number/Bool#toString
+  i32.const 64
   i32.const 64
   call $~lib/string/String.__eq
   i32.eqz
@@ -1502,8 +1484,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  call $~lib/number/Bool#toString
+  i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
   i32.eqz
@@ -1515,8 +1496,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/number/Bool#toString
+  i32.const 64
   i32.const 64
   call $~lib/string/String.__eq
   i32.eqz
@@ -1528,8 +1508,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/number/Bool#toString
+  i32.const 64
   i32.const 64
   call $~lib/string/String.__eq
   i32.eqz
@@ -1541,8 +1520,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  call $~lib/number/Bool#toString
+  i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
   i32.eqz
@@ -1554,8 +1532,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  call $~lib/number/Bool#toString
+  i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
   i32.eqz
@@ -1567,8 +1544,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $~lib/number/Bool#toString
+  i32.const 64
   i32.const 64
   call $~lib/string/String.__eq
   i32.eqz
@@ -1587,7 +1563,7 @@
   i32.const 1
   global.set $resolve-binary/a
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 224
   call $~lib/string/String.__eq
   i32.eqz
@@ -1604,7 +1580,7 @@
   i32.add
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -1621,7 +1597,7 @@
   i32.sub
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 224
   call $~lib/string/String.__eq
   i32.eqz
@@ -1638,7 +1614,7 @@
   i32.shl
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -1671,7 +1647,7 @@
   i32.const 2
   global.set $resolve-binary/a
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -1688,7 +1664,7 @@
   i32.rem_s
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -1705,7 +1681,7 @@
   i32.shl
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1504
   call $~lib/string/String.__eq
   i32.eqz
@@ -1722,7 +1698,7 @@
   i32.shr_s
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -1739,7 +1715,7 @@
   i32.shr_u
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 224
   call $~lib/string/String.__eq
   i32.eqz
@@ -1756,7 +1732,7 @@
   i32.and
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 224
   call $~lib/string/String.__eq
   i32.eqz
@@ -1773,7 +1749,7 @@
   i32.or
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1536
   call $~lib/string/String.__eq
   i32.eqz
@@ -1790,7 +1766,7 @@
   i32.xor
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 224
   call $~lib/string/String.__eq
   i32.eqz
@@ -1803,7 +1779,7 @@
    unreachable
   end
   i32.const 3
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1536
   call $~lib/string/String.__eq
   i32.eqz
@@ -1816,7 +1792,7 @@
    unreachable
   end
   i32.const -1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1568
   call $~lib/string/String.__eq
   i32.eqz
@@ -1829,7 +1805,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -1842,7 +1818,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -1855,7 +1831,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 224
   call $~lib/string/String.__eq
   i32.eqz
@@ -1880,7 +1856,7 @@
    unreachable
   end
   i32.const 4
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1504
   call $~lib/string/String.__eq
   i32.eqz
@@ -1893,7 +1869,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 224
   call $~lib/string/String.__eq
   i32.eqz
@@ -1906,7 +1882,7 @@
    unreachable
   end
   i32.const 3
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1536
   call $~lib/string/String.__eq
   i32.eqz
@@ -1919,7 +1895,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 224
   call $~lib/string/String.__eq
   i32.eqz
@@ -1932,7 +1908,7 @@
    unreachable
   end
   i32.const 3
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1536
   call $~lib/string/String.__eq
   i32.eqz
@@ -1945,7 +1921,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -1958,7 +1934,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -1971,7 +1947,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 192
   call $~lib/string/String.__eq
   i32.eqz
@@ -1984,7 +1960,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 224
   call $~lib/string/String.__eq
   i32.eqz
@@ -1997,7 +1973,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 256
   call $~lib/string/String.__eq
   i32.eqz
@@ -2157,9 +2133,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $resolve-binary/Bar#constructor
+  i32.const 0
+  i32.const 7
+  call $~lib/rt/stub/__alloc
   global.set $resolve-binary/bar
-  call $resolve-binary/Bar#constructor
+  i32.const 0
+  i32.const 7
+  call $~lib/rt/stub/__alloc
   global.set $resolve-binary/bar2
   global.get $resolve-binary/bar2
   global.set $resolve-binary/bar
@@ -2186,7 +2166,7 @@
    unreachable
   end
  )
- (func $~start (; 19 ;)
+ (func $~start (; 14 ;)
   call $start:resolve-binary
  )
 )

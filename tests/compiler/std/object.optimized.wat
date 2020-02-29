@@ -1,8 +1,7 @@
 (module
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
@@ -55,29 +54,7 @@
   f32.ne
   i32.and
  )
- (func $~lib/object/Object.is<i32> (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.eq
- )
- (func $~lib/object/Object.is<bool> (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.const 0
-  i32.ne
-  local.get $1
-  i32.const 0
-  i32.ne
-  i32.eq
- )
- (func $~lib/string/String#get:length (; 5 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
- )
- (func $~lib/util/string/compareImpl (; 6 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -153,44 +130,48 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String> (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  local.get $0
-  local.get $1
-  i32.eq
-  if
-   i32.const 1
-   return
-  end
-  block $folding-inner0
-   local.get $1
-   i32.eqz
+  block $__inlined_func$~lib/string/String.__eq (result i32)
    i32.const 1
    local.get $0
-   select
-   br_if $folding-inner0
-   local.get $0
-   call $~lib/string/String#get:length
-   local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
-   i32.ne
-   br_if $folding-inner0
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/util/string/compareImpl
-   i32.eqz
-   return
+   i32.eq
+   br_if $__inlined_func$~lib/string/String.__eq
+   drop
+   block $folding-inner0
+    local.get $1
+    i32.eqz
+    i32.const 1
+    local.get $0
+    select
+    br_if $folding-inner0
+    local.get $0
+    i32.const 16
+    i32.sub
+    i32.load offset=12
+    i32.const 1
+    i32.shr_u
+    local.tee $2
+    local.get $1
+    i32.const 16
+    i32.sub
+    i32.load offset=12
+    i32.const 1
+    i32.shr_u
+    i32.ne
+    br_if $folding-inner0
+    local.get $0
+    local.get $1
+    local.get $2
+    call $~lib/util/string/compareImpl
+    i32.eqz
+    br $__inlined_func$~lib/string/String.__eq
+   end
+   i32.const 0
   end
-  i32.const 0
  )
- (func $~lib/object/Object.is<~lib/string/String> (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  call $~lib/string/String.__eq
- )
- (func $start:std/object (; 9 ;)
+ (func $start:std/object (; 5 ;)
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -532,67 +513,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  i32.const 0
-  call $~lib/object/Object.is<i32>
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 38
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const -1
-  call $~lib/object/Object.is<i32>
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 39
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 1
-  call $~lib/object/Object.is<bool>
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 41
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  i32.const 0
-  call $~lib/object/Object.is<bool>
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 42
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  i32.const 0
-  call $~lib/object/Object.is<bool>
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 43
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 80
   i32.const 80
   call $~lib/object/Object.is<~lib/string/String>
@@ -664,7 +584,7 @@
    unreachable
   end
  )
- (func $~start (; 10 ;)
+ (func $~start (; 6 ;)
   call $start:std/object
  )
 )

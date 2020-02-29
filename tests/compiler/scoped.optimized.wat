@@ -3,7 +3,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $~start)
- (func $start:scoped (; 0 ;)
+ (func $~start (; 0 ;)
   (local $0 i32)
   loop $for-loop|0
    local.get $0
@@ -31,8 +31,5 @@
     br $for-loop|1
    end
   end
- )
- (func $~start (; 1 ;)
-  call $start:scoped
  )
 )

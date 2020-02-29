@@ -2,12 +2,12 @@
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
@@ -30,18 +30,14 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/staticarray/StaticArray<i32>#get:length (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#__get (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=12
   i32.const 2
   i32.shr_u
- )
- (func $~lib/staticarray/StaticArray<i32>#__get (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $1
-  local.get $0
-  call $~lib/staticarray/StaticArray<i32>#get:length
   i32.ge_u
   if
    i32.const 64
@@ -58,10 +54,14 @@
   i32.add
   i32.load
  )
- (func $~lib/staticarray/StaticArray<i32>#__set (; 7 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<i32>#__set (; 6 ;) (param $0 i32) (param $1 i32)
   i32.const 1
   local.get $0
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 2
+  i32.shr_u
   i32.ge_u
   if
    i32.const 64
@@ -77,7 +77,7 @@
   local.get $1
   i32.store
  )
- (func $~lib/rt/tlsf/removeBlock (; 8 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (; 7 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -243,7 +243,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 9 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (; 8 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -526,7 +526,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -640,7 +640,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 11 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (; 10 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -727,31 +727,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 12 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.const 1073741808
-  i32.ge_u
-  if
-   i32.const 368
-   i32.const 320
-   i32.const 457
-   i32.const 29
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.const 15
-  i32.add
-  i32.const -16
-  i32.and
-  local.tee $0
-  i32.const 16
-  local.get $0
-  i32.const 16
-  i32.gt_u
-  select
- )
- (func $~lib/rt/tlsf/searchBlock (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 256
@@ -882,7 +858,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/growMemory (; 14 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (; 12 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   memory.size
   local.tee $2
@@ -944,7 +920,7 @@
   i32.shl
   call $~lib/rt/tlsf/addMemory
  )
- (func $~lib/rt/tlsf/prepareBlock (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -1020,7 +996,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 14 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1032,9 +1008,29 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $1
+  i32.const 1073741808
+  i32.ge_u
+  if
+   i32.const 368
+   i32.const 320
+   i32.const 457
+   i32.const 29
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   local.get $1
-  call $~lib/rt/tlsf/prepareSize
+  i32.const 15
+  i32.add
+  i32.const -16
+  i32.and
+  local.tee $3
+  i32.const 16
+  local.get $3
+  i32.const 16
+  i32.gt_u
+  select
   local.tee $4
   call $~lib/rt/tlsf/searchBlock
   local.tee $3
@@ -1102,15 +1098,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 17 ;) (param $0 i32) (param $1 i32) (result i32)
-  call $~lib/rt/tlsf/maybeInitialize
-  local.get $0
-  local.get $1
-  call $~lib/rt/tlsf/allocateBlock
-  i32.const 16
-  i32.add
- )
- (func $~lib/memory/memory.copy (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -1283,10 +1271,13 @@
    end
   end
  )
- (func $~lib/rt/__allocBuffer (; 19 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/__allocBuffer (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
-  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
   local.set $1
   local.get $2
   if
@@ -1297,48 +1288,9 @@
   end
   local.get $1
  )
- (func $~lib/rt/pure/increment (; 20 ;) (param $0 i32)
+ (func $~lib/rt/pure/__retain (; 17 ;) (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const -268435456
-  i32.and
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const -268435456
-  i32.and
-  i32.ne
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 109
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.store offset=4
-  local.get $0
-  call $~lib/rt/rtrace/onincrement
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 432
-   i32.const 112
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/rt/pure/__retain (; 21 ;) (param $0 i32) (result i32)
+  (local $2 i32)
   local.get $0
   i32.const 464
   i32.gt_u
@@ -1346,35 +1298,48 @@
    local.get $0
    i32.const 16
    i32.sub
-   call $~lib/rt/pure/increment
+   local.tee $1
+   i32.load offset=4
+   local.tee $2
+   i32.const -268435456
+   i32.and
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.const -268435456
+   i32.and
+   i32.ne
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 109
+    i32.const 2
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.store offset=4
+   local.get $1
+   call $~lib/rt/rtrace/onincrement
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   if
+    i32.const 0
+    i32.const 432
+    i32.const 112
+    i32.const 13
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
   local.get $0
  )
- (func $std/staticarray/test (; 22 ;) (result i32)
-  i32.const 12
-  i32.const 3
-  i32.const 288
-  call $~lib/rt/__allocBuffer
-  call $~lib/rt/pure/__retain
- )
- (func $~lib/rt/pure/__release (; 23 ;) (param $0 i32)
-  local.get $0
-  i32.const 464
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
- (func $std/staticarray/Ref#constructor (; 24 ;) (result i32)
-  i32.const 0
-  i32.const 4
-  call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
- )
- (func $start:std/staticarray (; 25 ;)
+ (func $start:std/staticarray (; 18 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 32
@@ -1390,8 +1355,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 32
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 28
+  i32.load
+  i32.const 2
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -1431,8 +1398,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 256
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 252
+  i32.load
+  i32.const 2
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -1459,7 +1428,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $std/staticarray/test
+  i32.const 12
+  i32.const 3
+  i32.const 288
+  call $~lib/rt/__allocBuffer
+  call $~lib/rt/pure/__retain
   global.set $std/staticarray/arr3
   global.get $std/staticarray/arr3
   i32.const 0
@@ -1501,7 +1474,11 @@
    unreachable
   end
   global.get $std/staticarray/arr3
-  call $~lib/staticarray/StaticArray<i32>#get:length
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 2
+  i32.shr_u
   i32.const 3
   i32.ne
   if
@@ -1528,9 +1505,21 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $std/staticarray/test
+  i32.const 12
+  i32.const 3
+  i32.const 288
+  call $~lib/rt/__allocBuffer
+  call $~lib/rt/pure/__retain
   global.get $std/staticarray/arr3
-  call $~lib/rt/pure/__release
+  local.tee $0
+  i32.const 464
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   global.set $std/staticarray/arr3
   global.get $std/staticarray/arr3
   i32.const 1
@@ -1550,35 +1539,60 @@
   i32.const 0
   call $~lib/rt/__allocBuffer
   call $~lib/rt/pure/__retain
-  local.tee $0
-  call $std/staticarray/Ref#constructor
+  local.tee $1
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 0
+  i32.const 4
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   i32.store
-  local.get $0
-  call $std/staticarray/Ref#constructor
+  local.get $1
+  call $~lib/rt/tlsf/maybeInitialize
+  i32.const 0
+  i32.const 4
+  call $~lib/rt/tlsf/allocateBlock
+  i32.const 16
+  i32.add
+  call $~lib/rt/pure/__retain
   i32.store offset=4
-  local.get $0
+  local.get $1
   global.set $std/staticarray/arr4
   i32.const 0
-  local.tee $0
+  local.set $1
   global.get $std/staticarray/arr3
-  local.tee $1
-  i32.ne
+  local.tee $0
   if
-   local.get $1
-   call $~lib/rt/pure/__release
+   local.get $0
+   i32.const 464
+   i32.gt_u
+   if
+    local.get $0
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   i32.const 0
   global.set $std/staticarray/arr3
   global.get $std/staticarray/arr4
-  local.tee $1
+  local.tee $0
   if
-   local.get $1
-   call $~lib/rt/pure/__release
+   local.get $0
+   i32.const 464
+   i32.gt_u
+   if
+    local.get $0
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   i32.const 0
   global.set $std/staticarray/arr4
  )
- (func $~start (; 26 ;)
+ (func $~start (; 19 ;)
   global.get $~started
   if
    return
@@ -1588,9 +1602,11 @@
   end
   call $start:std/staticarray
  )
- (func $~lib/rt/pure/decrement (; 27 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 20 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
   local.get $0
   i32.load offset=4
   local.tee $2
@@ -1615,10 +1631,72 @@
   i32.const 1
   i32.eq
   if
-   local.get $0
-   i32.const 16
-   i32.add
-   call $~lib/rt/__visit_members
+   block $__inlined_func$~lib/rt/__visit_members
+    block $switch$1$default
+     block $switch$1$case$7
+      block $switch$1$case$4
+       local.get $0
+       i32.const 16
+       i32.add
+       local.tee $1
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$7 $switch$1$default
+      end
+      local.get $1
+      i32.load
+      local.tee $1
+      if
+       local.get $1
+       i32.const 464
+       i32.ge_u
+       if
+        local.get $1
+        i32.const 16
+        i32.sub
+        call $~lib/rt/pure/decrement
+       end
+      end
+      br $__inlined_func$~lib/rt/__visit_members
+     end
+     local.get $1
+     local.get $1
+     i32.const 16
+     i32.sub
+     i32.load offset=12
+     i32.add
+     local.set $4
+     loop $while-continue|0
+      local.get $1
+      local.get $4
+      i32.lt_u
+      if
+       local.get $1
+       i32.load
+       local.tee $3
+       if
+        local.get $3
+        i32.const 464
+        i32.ge_u
+        if
+         local.get $3
+         i32.const 16
+         i32.sub
+         call $~lib/rt/pure/decrement
+        end
+       end
+       local.get $1
+       i32.const 4
+       i32.add
+       local.set $1
+       br $while-continue|0
+      end
+     end
+     br $__inlined_func$~lib/rt/__visit_members
+    end
+    unreachable
+   end
    local.get $2
    i32.const -2147483648
    i32.and
@@ -1663,78 +1741,5 @@
    i32.or
    i32.store offset=4
   end
- )
- (func $~lib/rt/pure/__visit (; 28 ;) (param $0 i32)
-  local.get $0
-  i32.const 464
-  i32.lt_u
-  if
-   return
-  end
-  local.get $0
-  i32.const 16
-  i32.sub
-  call $~lib/rt/pure/decrement
- )
- (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit_impl (; 29 ;) (param $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  local.get $0
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.add
-  local.set $1
-  loop $while-continue|0
-   local.get $0
-   local.get $1
-   i32.lt_u
-   if
-    local.get $0
-    i32.load
-    local.tee $2
-    if
-     local.get $2
-     call $~lib/rt/pure/__visit
-    end
-    local.get $0
-    i32.const 4
-    i32.add
-    local.set $0
-    br $while-continue|0
-   end
-  end
- )
- (func $~lib/rt/__visit_members (; 30 ;) (param $0 i32)
-  block $switch$1$default
-   block $switch$1$case$7
-    block $switch$1$case$5
-     block $switch$1$case$4
-      block $switch$1$case$2
-       local.get $0
-       i32.const 8
-       i32.sub
-       i32.load
-       br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$5 $switch$1$case$2 $switch$1$case$7 $switch$1$default
-      end
-      return
-     end
-     local.get $0
-     i32.load
-     local.tee $0
-     if
-      local.get $0
-      call $~lib/rt/pure/__visit
-     end
-     return
-    end
-    return
-   end
-   local.get $0
-   call $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit_impl
-   return
-  end
-  unreachable
  )
 )

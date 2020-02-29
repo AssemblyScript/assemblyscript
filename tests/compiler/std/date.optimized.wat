@@ -1,6 +1,5 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $none_=>_f64 (func (result f64)))
@@ -16,18 +15,26 @@
  (global $std/date/date (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (param $0 i32)
+ (func $~lib/rt/stub/__alloc (; 3 ;) (result i32)
+  (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  local.get $0
-  memory.size
+  (local $3 i32)
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
   local.tee $2
+  i32.const 16
+  i32.add
+  local.tee $0
+  memory.size
+  local.tee $3
   i32.const 16
   i32.shl
   local.tee $1
   i32.gt_u
   if
-   local.get $2
+   local.get $3
    local.get $0
    local.get $1
    i32.sub
@@ -38,7 +45,7 @@
    i32.const 16
    i32.shr_u
    local.tee $1
-   local.get $2
+   local.get $3
    local.get $1
    i32.gt_s
    select
@@ -57,18 +64,7 @@
   end
   local.get $0
   global.set $~lib/rt/stub/offset
- )
- (func $~lib/rt/stub/__alloc (; 4 ;) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.tee $1
-  i32.const 16
-  i32.add
-  call $~lib/rt/stub/maybeGrowMemory
-  local.get $1
+  local.get $2
   i32.const 16
   i32.sub
   local.tee $0
@@ -83,9 +79,9 @@
   local.get $0
   i32.const 8
   i32.store offset=12
-  local.get $1
+  local.get $2
  )
- (func $start:std/date (; 5 ;)
+ (func $start:std/date (; 4 ;)
   (local $0 i32)
   (local $1 i64)
   i32.const 1970
@@ -206,7 +202,7 @@
    unreachable
   end
  )
- (func $~start (; 6 ;)
+ (func $~start (; 5 ;)
   call $start:std/date
  )
 )

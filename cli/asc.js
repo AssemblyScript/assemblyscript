@@ -643,6 +643,21 @@ exports.main = function main(argv, options, callback) {
     const passes = [];
     function add(pass) { passes.push(pass); }
 
+    // console.log('AlwaysInlineMaxSize: ' + module.getAlwaysInlineMaxSize());
+    // console.log('FlexibleInlineMaxSize: ' + module.getFlexibleInlineMaxSize());
+    // console.log('OneCallerInlineMaxSize: ' + module.getOneCallerInlineMaxSize());
+
+    if (optimizeLevel >= 2 && shrinkLevel < 2) {
+      module.setAlwaysInlineMaxSize(10);
+      module.setFlexibleInlineMaxSize(50);
+      module.setOneCallerInlineMaxSize(50);
+    } else {
+      // tune defaults
+      module.setAlwaysInlineMaxSize(5); // default: 2
+      module.setFlexibleInlineMaxSize(30); // default: 20
+      module.setOneCallerInlineMaxSize(30); // default: 15
+    }
+
     // Optimize the module if requested
     if (optimizeLevel > 0 || shrinkLevel > 0) {
       // Binaryen's default passes with Post-AssemblyScript passes added.

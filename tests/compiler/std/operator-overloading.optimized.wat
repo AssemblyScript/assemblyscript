@@ -1,7 +1,6 @@
 (module
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
@@ -79,20 +78,28 @@
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
+ (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  local.get $0
+  (local $3 i32)
+  (local $4 i32)
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.tee $3
+  i32.const 16
+  i32.add
+  local.tee $1
   memory.size
-  local.tee $2
+  local.tee $4
   i32.const 16
   i32.shl
-  local.tee $1
+  local.tee $2
   i32.gt_u
   if
-   local.get $2
-   local.get $0
+   local.get $4
    local.get $1
+   local.get $2
    i32.sub
    i32.const 65535
    i32.add
@@ -100,16 +107,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $1
+   local.tee $2
+   local.get $4
    local.get $2
-   local.get $1
    i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $1
+    local.get $2
     memory.grow
     i32.const 0
     i32.lt_s
@@ -118,20 +125,9 @@
     end
    end
   end
-  local.get $0
+  local.get $1
   global.set $~lib/rt/stub/offset
- )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.tee $2
-  i32.const 16
-  i32.add
-  call $~lib/rt/stub/maybeGrowMemory
-  local.get $2
+  local.get $3
   i32.const 16
   i32.sub
   local.tee $1
@@ -146,21 +142,9 @@
   local.get $1
   i32.const 8
   i32.store offset=12
-  local.get $2
+  local.get $3
  )
- (func $std/operator-overloading/Tester#constructor (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  i32.const 3
-  call $~lib/rt/stub/__alloc
-  local.tee $2
-  local.get $0
-  i32.store
-  local.get $2
-  local.get $1
-  i32.store offset=4
-  local.get $2
- )
- (func $~lib/math/NativeMath.scalbn (; 4 ;) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (; 2 ;) (param $0 f64) (param $1 i32) (result f64)
   local.get $1
   i32.const 1023
   i32.gt_s
@@ -237,7 +221,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/math/NativeMath.pow (; 5 ;) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (; 3 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -1193,26 +1177,7 @@
   f64.const 1e-300
   f64.mul
  )
- (func $std/operator-overloading/Tester.pow (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load
-  f64.convert_i32_s
-  local.get $1
-  i32.load
-  f64.convert_i32_s
-  call $~lib/math/NativeMath.pow
-  i32.trunc_f64_s
-  local.get $0
-  i32.load offset=4
-  f64.convert_i32_s
-  local.get $1
-  i32.load offset=4
-  f64.convert_i32_s
-  call $~lib/math/NativeMath.pow
-  i32.trunc_f64_s
-  call $std/operator-overloading/Tester#constructor
- )
- (func $std/operator-overloading/Tester.equals (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.equals (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
@@ -1228,7 +1193,7 @@
    i32.const 0
   end
  )
- (func $std/operator-overloading/Tester.notEquals (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.notEquals (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
@@ -1244,44 +1209,34 @@
    i32.const 0
   end
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  i32.const 4
-  call $~lib/rt/stub/__alloc
-  local.tee $2
-  local.get $0
-  i32.store
-  local.get $2
-  local.get $1
-  i32.store offset=4
-  local.get $2
- )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  i32.const 5
-  call $~lib/rt/stub/__alloc
-  local.tee $2
-  local.get $0
-  i32.store
-  local.get $2
-  local.get $1
-  i32.store offset=4
-  local.get $2
- )
- (func $start:std/operator-overloading (; 11 ;)
+ (func $start:std/operator-overloading (; 6 ;)
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   i32.const 96
   global.set $~lib/rt/stub/startOffset
   i32.const 96
   global.set $~lib/rt/stub/offset
-  i32.const 1
-  i32.const 2
-  call $std/operator-overloading/Tester#constructor
-  global.set $std/operator-overloading/a1
-  i32.const 2
   i32.const 3
-  call $std/operator-overloading/Tester#constructor
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 1
+  i32.store
+  local.get $0
+  i32.const 2
+  i32.store offset=4
+  local.get $0
+  global.set $std/operator-overloading/a1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 2
+  i32.store
+  local.get $0
+  i32.const 3
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/a2
   global.get $std/operator-overloading/a1
   local.tee $0
@@ -1290,12 +1245,22 @@
   local.tee $1
   i32.load
   i32.add
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.add
-  call $std/operator-overloading/Tester#constructor
+  local.set $1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/a
   global.get $std/operator-overloading/a
   i32.load
@@ -1318,13 +1283,25 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
   i32.const 3
-  call $std/operator-overloading/Tester#constructor
-  global.set $std/operator-overloading/s1
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 2
+  i32.store
+  local.get $0
+  i32.const 3
+  i32.store offset=4
+  local.get $0
+  global.set $std/operator-overloading/s1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 2
+  i32.store
+  local.get $0
   i32.const -3
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/s2
   global.get $std/operator-overloading/s1
   local.tee $0
@@ -1333,12 +1310,22 @@
   local.tee $1
   i32.load
   i32.sub
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.sub
-  call $std/operator-overloading/Tester#constructor
+  local.set $1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/s
   global.get $std/operator-overloading/s
   i32.load
@@ -1359,13 +1346,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 2
+  i32.store
+  local.get $0
   i32.const 5
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/m1
   i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 3
+  i32.store
+  local.get $0
   i32.const 2
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/m2
   global.get $std/operator-overloading/m1
   local.tee $0
@@ -1374,12 +1373,22 @@
   local.tee $1
   i32.load
   i32.mul
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.mul
-  call $std/operator-overloading/Tester#constructor
+  local.set $1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/m
   global.get $std/operator-overloading/m
   i32.load
@@ -1402,13 +1411,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 6
+  i32.store
+  local.get $0
   i32.const 50
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/d1
   i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 3
+  i32.store
+  local.get $0
   i32.const 10
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/d2
   global.get $std/operator-overloading/d1
   local.tee $0
@@ -1417,12 +1438,22 @@
   local.tee $1
   i32.load
   i32.div_s
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.div_s
-  call $std/operator-overloading/Tester#constructor
+  local.set $1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/d
   global.get $std/operator-overloading/d
   i32.load
@@ -1445,13 +1476,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 10
+  i32.store
+  local.get $0
   i32.const 10
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/f1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 6
+  i32.store
+  local.get $0
   i32.const 10
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/f2
   global.get $std/operator-overloading/f1
   local.tee $0
@@ -1460,12 +1503,22 @@
   local.tee $1
   i32.load
   i32.rem_s
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.rem_s
-  call $std/operator-overloading/Tester#constructor
+  local.set $1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/f
   global.get $std/operator-overloading/f
   i32.load
@@ -1487,17 +1540,55 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
   i32.const 3
-  call $std/operator-overloading/Tester#constructor
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 2
+  i32.store
+  local.get $0
+  i32.const 3
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/p1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 4
+  i32.store
+  local.get $0
   i32.const 5
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/p2
   global.get $std/operator-overloading/p1
+  local.tee $0
+  i32.load
+  f64.convert_i32_s
   global.get $std/operator-overloading/p2
-  call $std/operator-overloading/Tester.pow
+  local.tee $1
+  i32.load
+  f64.convert_i32_s
+  call $~lib/math/NativeMath.pow
+  i32.trunc_f64_s
+  local.set $2
+  local.get $0
+  i32.load offset=4
+  f64.convert_i32_s
+  local.get $1
+  i32.load offset=4
+  f64.convert_i32_s
+  call $~lib/math/NativeMath.pow
+  i32.trunc_f64_s
+  local.set $1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/p
   global.get $std/operator-overloading/p
   i32.load
@@ -1520,13 +1611,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 255
+  i32.store
+  local.get $0
   i32.const 15
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/n1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 15
+  i32.store
+  local.get $0
   i32.const 255
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/n2
   global.get $std/operator-overloading/n1
   local.tee $0
@@ -1535,12 +1638,22 @@
   local.tee $1
   i32.load
   i32.and
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.and
-  call $std/operator-overloading/Tester#constructor
+  local.set $1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/n
   global.get $std/operator-overloading/n
   i32.load
@@ -1563,13 +1676,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 3855
+  i32.store
+  local.get $0
   i32.const 255
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/o1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 61680
+  i32.store
+  local.get $0
   i32.const 0
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/o2
   global.get $std/operator-overloading/o1
   local.tee $0
@@ -1578,12 +1703,22 @@
   local.tee $1
   i32.load
   i32.or
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.or
-  call $std/operator-overloading/Tester#constructor
+  local.set $1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/o
   global.get $std/operator-overloading/o
   i32.load
@@ -1606,13 +1741,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 255
+  i32.store
+  local.get $0
   i32.const 255
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/x1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 65280
+  i32.store
+  local.get $0
   i32.const 0
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/x2
   global.get $std/operator-overloading/x1
   local.tee $0
@@ -1621,12 +1768,22 @@
   local.tee $1
   i32.load
   i32.xor
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.xor
-  call $std/operator-overloading/Tester#constructor
+  local.set $1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/x
   global.get $std/operator-overloading/x
   i32.load
@@ -1649,13 +1806,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 1
+  i32.store
+  local.get $0
   i32.const -2
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/eq1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 1
+  i32.store
+  local.get $0
   i32.const -2
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/eq2
   global.get $std/operator-overloading/eq1
   global.get $std/operator-overloading/eq2
@@ -1672,13 +1841,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 1
+  i32.store
+  local.get $0
   i32.const 0
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/eq3
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 0
+  i32.store
+  local.get $0
   i32.const 1
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/eq4
   global.get $std/operator-overloading/eq3
   global.get $std/operator-overloading/eq4
@@ -1721,13 +1902,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 2
+  i32.store
+  local.get $0
   i32.const 2147483647
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/gt1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 1
+  i32.store
+  local.get $0
   i32.const 0
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/gt2
   global.get $std/operator-overloading/gt1
   local.tee $0
@@ -1757,13 +1950,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 2
+  i32.store
+  local.get $0
   i32.const 2
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/gte1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 2
+  i32.store
+  local.get $0
   i32.const 2
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/gte2
   global.get $std/operator-overloading/gte1
   local.tee $0
@@ -1793,13 +1998,25 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 5
+  i32.store
+  local.get $0
   i32.const -1
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/le1
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 6
+  i32.store
+  local.get $0
   i32.const 6
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/le2
   global.get $std/operator-overloading/le1
   local.tee $0
@@ -1829,13 +2046,25 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 4
   i32.const 3
-  call $std/operator-overloading/Tester#constructor
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 4
+  i32.store
+  local.get $0
+  i32.const 3
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/leq1
-  i32.const 4
   i32.const 3
-  call $std/operator-overloading/Tester#constructor
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.const 4
+  i32.store
+  local.get $0
+  i32.const 3
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/leq2
   global.get $std/operator-overloading/leq1
   local.tee $0
@@ -1865,20 +2094,36 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 8
+  i32.store
+  local.get $0
   i32.const 16
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/shr
   global.get $std/operator-overloading/shr
   local.tee $0
   i32.load
   i32.const 3
   i32.shr_s
+  local.set $1
   local.get $0
   i32.load offset=4
   i32.const 3
   i32.shr_s
-  call $std/operator-overloading/Tester#constructor
+  local.set $2
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $2
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/sres
   global.get $std/operator-overloading/sres
   i32.load
@@ -1901,20 +2146,36 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const -8
+  i32.store
+  local.get $0
   i32.const -16
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/shu
   global.get $std/operator-overloading/shu
   local.tee $0
   i32.load
   i32.const 3
   i32.shr_u
+  local.set $1
   local.get $0
   i32.load offset=4
   i32.const 3
   i32.shr_u
-  call $std/operator-overloading/Tester#constructor
+  local.set $2
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $2
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/ures
   global.get $std/operator-overloading/ures
   i32.load
@@ -1937,20 +2198,36 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 1
+  i32.store
+  local.get $0
   i32.const 2
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/shl
   global.get $std/operator-overloading/shl
   local.tee $0
   i32.load
   i32.const 3
   i32.shl
+  local.set $1
   local.get $0
   i32.load offset=4
   i32.const 3
   i32.shl
-  call $std/operator-overloading/Tester#constructor
+  local.set $2
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $2
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/sres
   global.get $std/operator-overloading/sres
   i32.load
@@ -1973,16 +2250,32 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 1
+  i32.store
+  local.get $0
   i32.const -2
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/pos
   global.get $std/operator-overloading/pos
   local.tee $0
   i32.load
+  local.set $1
   local.get $0
   i32.load offset=4
-  call $std/operator-overloading/Tester#constructor
+  local.set $2
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $2
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/pres
   global.get $std/operator-overloading/pres
   i32.load
@@ -2007,20 +2300,36 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const -1
+  i32.store
+  local.get $0
   i32.const -2
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/neg
   i32.const 0
   global.get $std/operator-overloading/neg
   local.tee $0
   i32.load
   i32.sub
+  local.set $1
   i32.const 0
   local.get $0
   i32.load offset=4
   i32.sub
-  call $std/operator-overloading/Tester#constructor
+  local.set $2
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $2
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/nres
   global.get $std/operator-overloading/nres
   i32.load
@@ -2049,20 +2358,36 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 255
+  i32.store
+  local.get $0
   i32.const 16
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/not
   global.get $std/operator-overloading/not
   local.tee $0
   i32.load
   i32.const -1
   i32.xor
+  local.set $1
   local.get $0
   i32.load offset=4
   i32.const -1
   i32.xor
-  call $std/operator-overloading/Tester#constructor
+  local.set $2
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $2
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/res
   global.get $std/operator-overloading/res
   i32.load
@@ -2091,9 +2416,15 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 0
+  i32.store
+  local.get $0
   i32.const 0
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/excl
   global.get $std/operator-overloading/excl
   local.tee $0
@@ -2136,9 +2467,15 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 0
+  i32.store
+  local.get $0
   i32.const 1
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/incdec
   global.get $std/operator-overloading/incdec
   local.tee $0
@@ -2210,20 +2547,36 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 0
+  i32.store
+  local.get $0
   i32.const 1
-  call $std/operator-overloading/Tester#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/incdec
   global.get $std/operator-overloading/incdec
   local.tee $0
   i32.load
   i32.const 1
   i32.add
+  local.set $2
   local.get $0
   i32.load offset=4
   i32.const 1
   i32.add
-  call $std/operator-overloading/Tester#constructor
+  local.set $3
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $1
+  local.get $2
+  i32.store
+  local.get $1
+  local.get $3
+  i32.store offset=4
+  local.get $1
   global.set $std/operator-overloading/incdec
   local.get $0
   global.set $std/operator-overloading/tmp
@@ -2272,11 +2625,21 @@
   i32.load
   i32.const 1
   i32.sub
+  local.set $2
   local.get $0
   i32.load offset=4
   i32.const 1
   i32.sub
-  call $std/operator-overloading/Tester#constructor
+  local.set $3
+  i32.const 3
+  call $~lib/rt/stub/__alloc
+  local.tee $1
+  local.get $2
+  i32.store
+  local.get $1
+  local.get $3
+  i32.store offset=4
+  local.get $1
   global.set $std/operator-overloading/incdec
   local.get $0
   global.set $std/operator-overloading/tmp
@@ -2320,24 +2683,46 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 1
+  i32.store
+  local.get $0
   i32.const 2
-  call $std/operator-overloading/TesterInlineStatic#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/ais1
   global.get $std/operator-overloading/ais1
   local.tee $0
   i32.load
   i32.const 1
   i32.add
+  local.set $1
   local.get $0
   i32.load offset=4
   i32.const 1
   i32.add
-  call $std/operator-overloading/TesterInlineStatic#constructor
+  local.set $2
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $2
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/ais1
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 2
+  i32.store
+  local.get $0
   i32.const 3
-  call $std/operator-overloading/TesterInlineStatic#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/ais2
   global.get $std/operator-overloading/ais1
   local.tee $0
@@ -2346,12 +2731,22 @@
   local.tee $1
   i32.load
   i32.add
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.add
-  call $std/operator-overloading/TesterInlineStatic#constructor
+  local.set $1
+  i32.const 4
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/ais
   global.get $std/operator-overloading/ais
   i32.load
@@ -2374,24 +2769,46 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 5
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 1
+  i32.store
+  local.get $0
   i32.const 2
-  call $std/operator-overloading/TesterInlineInstance#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/aii1
   global.get $std/operator-overloading/aii1
   local.tee $0
   i32.load
   i32.const 1
   i32.add
+  local.set $1
   local.get $0
   i32.load offset=4
   i32.const 1
   i32.add
-  call $std/operator-overloading/TesterInlineInstance#constructor
+  local.set $2
+  i32.const 5
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $1
+  i32.store
+  local.get $0
+  local.get $2
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/aii1
+  i32.const 5
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 2
+  i32.store
+  local.get $0
   i32.const 3
-  call $std/operator-overloading/TesterInlineInstance#constructor
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/aii2
   global.get $std/operator-overloading/aii1
   local.tee $0
@@ -2400,12 +2817,22 @@
   local.tee $1
   i32.load
   i32.add
+  local.set $2
   local.get $0
   i32.load offset=4
   local.get $1
   i32.load offset=4
   i32.add
-  call $std/operator-overloading/TesterInlineInstance#constructor
+  local.set $1
+  i32.const 5
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  local.get $2
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
   global.set $std/operator-overloading/aii
   global.get $std/operator-overloading/aii
   i32.load
@@ -2429,7 +2856,7 @@
    unreachable
   end
  )
- (func $~start (; 12 ;)
+ (func $~start (; 7 ;)
   call $start:std/operator-overloading
  )
 )
