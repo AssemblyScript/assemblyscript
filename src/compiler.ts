@@ -560,18 +560,20 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Applies the respective module exports for the specified file. */
   private ensureModuleExports(file: File): void {
-    var members = file.exports;
-    if (members) {
-      // for (let [memberName, member] of members) {
-      for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
-        let memberName = unchecked(_keys[i]);
-        let member = assert(members.get(memberName));
-        this.ensureModuleExport(memberName, member);
+    var exports = file.exports;
+    if (exports) {
+      // for (let [elementName, element] of exports) {
+      for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
+        let elementName = unchecked(_keys[i]);
+        let element = assert(exports.get(elementName));
+        this.ensureModuleExport(elementName, element);
       }
     }
     var exportsStar = file.exportsStar;
     if (exportsStar)  {
-      for (let i = 0, k = exportsStar.length; i < k; ++i) this.ensureModuleExports(exportsStar[i]);
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        this.ensureModuleExports(exportsStar[i]);
+      }
     }
   }
 
@@ -641,11 +643,6 @@ export class Compiler extends DiagnosticEmitter {
             enumValue.identifierNode.range
           );
         } else {
-          if (enumValue.is(CommonFlags.INLINED)) {
-            let value = enumValue.constantIntegerValue;
-            assert(!i64_high(value));
-            this.module.addGlobal(element.internalName, NativeType.I32, false, this.module.i32(i64_low(value)));
-          }
           this.module.addGlobalExport(element.internalName, prefix + name);
         }
         break;

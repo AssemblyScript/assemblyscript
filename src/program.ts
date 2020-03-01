@@ -1003,12 +1003,8 @@ export class Program extends DiagnosticEmitter {
     // for (let file of this.filesByName.values()) {
     for (let _values = Map_values(this.filesByName), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
-      let exports = file.exports;
-      if (exports !== null && file.source.sourceKind == SourceKind.USER_ENTRY) {
-        for (let _values = Map_values(exports), j = 0, l = _values.length; j < l; ++j) {
-          let element = unchecked(_values[j]);
-          this.markModuleExport(element);
-        }
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) {
+        this.markModuleExports(file);
       }
     }
   }
@@ -1044,6 +1040,24 @@ export class Program extends DiagnosticEmitter {
     return resolved;
   }
 
+  /** Marks all exports of the specified file as module exports. */
+  private markModuleExports(file: File): void {
+    var exports = file.exports;
+    if (exports) {
+      // for (let element of exports.values()) {
+      for (let _values = Map_values(exports), j = 0, l = _values.length; j < l; ++j) {
+        let element = unchecked(_values[j]);
+        this.markModuleExport(element);
+      }
+    }
+    var exportsStar = file.exportsStar;
+    if (exportsStar) {
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        this.markModuleExports(exportsStar[i]);
+      }
+    }
+  }
+
   /** Marks an element and its children as a module export. */
   private markModuleExport(element: Element): void {
     element.set(CommonFlags.MODULE_EXPORT);
@@ -1071,14 +1085,12 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.FIELD:
       case ElementKind.CLASS: assert(false); // assumes that there are no instances yet
     }
-    {
-      let staticMembers = element.members;
-      if (staticMembers) {
-        // for (let member of staticMembers.values()) {
-        for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
-          let member = unchecked(_values[i]);
-          this.markModuleExport(member);
-        }
+    var staticMembers = element.members;
+    if (staticMembers) {
+      // for (let member of staticMembers.values()) {
+      for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
+        this.markModuleExport(member);
       }
     }
   }
