@@ -46,7 +46,7 @@
  (func $start:function-expression~anonymous|5 (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $start:function-expression (; 9 ;)
+ (func $~start (; 9 ;)
   i32.const 1
   global.set $~argumentsLength
   i32.const 1
@@ -97,8 +97,5 @@
   global.set $~argumentsLength
   i32.const 2
   global.set $~argumentsLength
- )
- (func $~start (; 10 ;)
-  call $start:function-expression
  )
 )

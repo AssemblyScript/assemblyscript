@@ -1066,48 +1066,9 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/increment (; 14 ;) (param $0 i32)
+ (func $~lib/rt/pure/__retain (; 14 ;) (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const -268435456
-  i32.and
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const -268435456
-  i32.and
-  i32.ne
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 109
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.store offset=4
-  local.get $0
-  call $~lib/rt/rtrace/onincrement
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 144
-   i32.const 112
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/rt/pure/__retain (; 15 ;) (param $0 i32) (result i32)
+  (local $2 i32)
   local.get $0
   i32.const 220
   i32.gt_u
@@ -1115,11 +1076,48 @@
    local.get $0
    i32.const 16
    i32.sub
-   call $~lib/rt/pure/increment
+   local.tee $1
+   i32.load offset=4
+   local.tee $2
+   i32.const -268435456
+   i32.and
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.const -268435456
+   i32.and
+   i32.ne
+   if
+    i32.const 0
+    i32.const 144
+    i32.const 109
+    i32.const 2
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.store offset=4
+   local.get $1
+   call $~lib/rt/rtrace/onincrement
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   if
+    i32.const 0
+    i32.const 144
+    i32.const 112
+    i32.const 13
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
   local.get $0
  )
- (func $~lib/rt/pure/__release (; 16 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 15 ;) (param $0 i32)
   local.get $0
   i32.const 220
   i32.gt_u
@@ -1130,7 +1128,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $implicit-getter-setter/Basic#constructor (; 17 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $implicit-getter-setter/Basic#constructor (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1145,16 +1143,16 @@
   i32.store
   local.get $0
  )
- (func $implicit-getter-setter/Basic#get:val (; 18 ;) (param $0 i32) (result i32)
+ (func $implicit-getter-setter/Basic#get:val (; 17 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $implicit-getter-setter/Basic#set:val (; 19 ;) (param $0 i32) (param $1 i32)
+ (func $implicit-getter-setter/Basic#set:val (; 18 ;) (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $implicit-getter-setter/Managed#constructor (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $implicit-getter-setter/Managed#constructor (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1170,12 +1168,12 @@
   i32.store
   local.get $0
  )
- (func $implicit-getter-setter/Managed#get:foo (; 21 ;) (param $0 i32) (result i32)
+ (func $implicit-getter-setter/Managed#get:foo (; 20 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load
   call $~lib/rt/pure/__retain
  )
- (func $implicit-getter-setter/Managed#set:foo (; 22 ;) (param $0 i32) (param $1 i32)
+ (func $implicit-getter-setter/Managed#set:foo (; 21 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1193,10 +1191,10 @@
   local.get $1
   i32.store
  )
- (func $~lib/rt/pure/__collect (; 23 ;)
+ (func $~lib/rt/pure/__collect (; 22 ;)
   nop
  )
- (func $~lib/rt/pure/decrement (; 24 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 23 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

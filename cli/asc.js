@@ -646,12 +646,12 @@ exports.main = function main(argv, options, callback) {
     // enchance options for inline passes
     if (optimizeLevel >= 2 && shrinkLevel === 0) {
       module.setAlwaysInlineMaxSize(12);
-      module.setFlexibleInlineMaxSize(60);
-      module.setOneCallerInlineMaxSize(60);
+      module.setFlexibleInlineMaxSize(80);
+      module.setOneCallerInlineMaxSize(80);
     } else {
       module.setAlwaysInlineMaxSize(4);     // default:  2
-      module.setFlexibleInlineMaxSize(35);  // default: 20
-      module.setOneCallerInlineMaxSize(35); // default: 15
+      module.setFlexibleInlineMaxSize(55);  // default: 20
+      module.setOneCallerInlineMaxSize(55); // default: 15
     }
 
     // Optimize the module if requested

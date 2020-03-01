@@ -1065,92 +1065,9 @@
   i32.const 16
   i32.add
  )
- (func $~lib/memory/memory.fill (; 14 ;) (param $0 i32)
+ (func $~lib/rt/pure/__retain (; 14 ;) (param $0 i32) (result i32)
   (local $1 i32)
-  local.get $0
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 8
-  i32.add
-  local.tee $1
-  i32.const 1
-  i32.sub
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 1
-  i32.add
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 2
-  i32.add
-  i32.const 0
-  i32.store8
-  local.get $1
-  i32.const 2
-  i32.sub
-  i32.const 0
-  i32.store8
-  local.get $1
-  i32.const 3
-  i32.sub
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 3
-  i32.add
-  i32.const 0
-  i32.store8
-  local.get $1
-  i32.const 4
-  i32.sub
-  i32.const 0
-  i32.store8
- )
- (func $~lib/rt/pure/increment (; 15 ;) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.load offset=4
-  local.tee $1
-  i32.const -268435456
-  i32.and
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.const -268435456
-  i32.and
-  i32.ne
-  if
-   i32.const 0
-   i32.const 256
-   i32.const 109
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.add
-  i32.store offset=4
-  local.get $0
-  call $~lib/rt/rtrace/onincrement
-  local.get $0
-  i32.load
-  i32.const 1
-  i32.and
-  if
-   i32.const 0
-   i32.const 256
-   i32.const 112
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
- )
- (func $~lib/rt/pure/__retain (; 16 ;) (param $0 i32) (result i32)
+  (local $2 i32)
   local.get $0
   i32.const 512
   i32.gt_u
@@ -1158,11 +1075,48 @@
    local.get $0
    i32.const 16
    i32.sub
-   call $~lib/rt/pure/increment
+   local.tee $1
+   i32.load offset=4
+   local.tee $2
+   i32.const -268435456
+   i32.and
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.const -268435456
+   i32.and
+   i32.ne
+   if
+    i32.const 0
+    i32.const 256
+    i32.const 109
+    i32.const 2
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $1
+   local.get $2
+   i32.const 1
+   i32.add
+   i32.store offset=4
+   local.get $1
+   call $~lib/rt/rtrace/onincrement
+   local.get $1
+   i32.load
+   i32.const 1
+   i32.and
+   if
+    i32.const 0
+    i32.const 256
+    i32.const 112
+    i32.const 13
+    call $~lib/builtins/abort
+    unreachable
+   end
   end
   local.get $0
  )
- (func $~lib/rt/pure/__release (; 17 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 15 ;) (param $0 i32)
   local.get $0
   i32.const 512
   i32.gt_u
@@ -1173,7 +1127,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 18 ;) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 16 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1181,7 +1135,46 @@
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   local.tee $1
-  call $~lib/memory/memory.fill
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 8
+  i32.add
+  local.tee $2
+  i32.const 1
+  i32.sub
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 1
+  i32.add
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 2
+  i32.add
+  i32.const 0
+  i32.store8
+  local.get $2
+  i32.const 2
+  i32.sub
+  i32.const 0
+  i32.store8
+  local.get $2
+  i32.const 3
+  i32.sub
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 3
+  i32.add
+  i32.const 0
+  i32.store8
+  local.get $2
+  i32.const 4
+  i32.sub
+  i32.const 0
+  i32.store8
   local.get $0
   i32.eqz
   if
@@ -1225,7 +1218,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Uint8Array#__set (; 19 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8Array#__set (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1245,7 +1238,7 @@
   local.get $2
   i32.store8
  )
- (func $~lib/dataview/DataView#constructor (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1309,14 +1302,14 @@
   i32.store offset=8
   local.get $3
  )
- (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 21 ;) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 19 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load
   i32.sub
  )
- (func $~lib/polyfills/bswap<u32> (; 22 ;) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 20 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -1329,7 +1322,7 @@
   i32.rotr
   i32.or
  )
- (func $~lib/dataview/DataView#getFloat32 (; 23 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $~lib/dataview/DataView#getFloat32 (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1365,7 +1358,7 @@
    f32.reinterpret_i32
   end
  )
- (func $~lib/polyfills/bswap<u64> (; 24 ;) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 22 ;) (param $0 i64) (result i64)
   local.get $0
   i64.const 8
   i64.shr_u
@@ -1391,7 +1384,7 @@
   i64.const 32
   i64.rotr
  )
- (func $~lib/dataview/DataView#getFloat64 (; 25 ;) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/dataview/DataView#getFloat64 (; 23 ;) (param $0 i32) (param $1 i32) (result f64)
   i32.const 8
   local.get $0
   i32.load offset=8
@@ -1417,7 +1410,7 @@
    f64.reinterpret_i64
   end
  )
- (func $~lib/dataview/DataView#getInt8 (; 26 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt8 (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1436,7 +1429,7 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/polyfills/bswap<i16> (; 27 ;) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 25 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.shl
@@ -1449,7 +1442,7 @@
   i32.shl
   i32.or
  )
- (func $~lib/dataview/DataView#getInt16 (; 28 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt16 (; 26 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1483,7 +1476,7 @@
   end
   local.get $0
  )
- (func $~lib/dataview/DataView#getInt32 (; 29 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt32 (; 27 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1517,7 +1510,7 @@
   end
   local.get $0
  )
- (func $~lib/dataview/DataView#getInt64 (; 30 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/dataview/DataView#getInt64 (; 28 ;) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   i32.const 8
   local.get $0
@@ -1543,7 +1536,7 @@
    call $~lib/polyfills/bswap<u64>
   end
  )
- (func $~lib/dataview/DataView#getUint8 (; 31 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint8 (; 29 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1562,7 +1555,7 @@
   i32.add
   i32.load8_u
  )
- (func $~lib/polyfills/bswap<u16> (; 32 ;) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 30 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -1573,7 +1566,7 @@
   i32.shr_u
   i32.or
  )
- (func $~lib/dataview/DataView#getUint16 (; 33 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint16 (; 31 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1607,7 +1600,7 @@
   end
   local.get $0
  )
- (func $~lib/dataview/DataView#getUint32 (; 34 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint32 (; 32 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1641,7 +1634,7 @@
   end
   local.get $0
  )
- (func $~lib/dataview/DataView#getUint64 (; 35 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/dataview/DataView#getUint64 (; 33 ;) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   i32.const 8
   local.get $0
@@ -1667,7 +1660,7 @@
    call $~lib/polyfills/bswap<u64>
   end
  )
- (func $~lib/dataview/DataView#setFloat32 (; 36 ;) (param $0 i32) (param $1 f32) (param $2 i32)
+ (func $~lib/dataview/DataView#setFloat32 (; 34 ;) (param $0 i32) (param $1 f32) (param $2 i32)
   i32.const 4
   local.get $0
   i32.load offset=8
@@ -1695,7 +1688,7 @@
    i32.store
   end
  )
- (func $~lib/dataview/DataView#setFloat64 (; 37 ;) (param $0 i32) (param $1 f64) (param $2 i32)
+ (func $~lib/dataview/DataView#setFloat64 (; 35 ;) (param $0 i32) (param $1 f64) (param $2 i32)
   i32.const 8
   local.get $0
   i32.load offset=8
@@ -1723,7 +1716,7 @@
    i64.store
   end
  )
- (func $~lib/dataview/DataView#setInt16 (; 38 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt16 (; 36 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 2
   local.get $0
   i32.load offset=8
@@ -1747,7 +1740,7 @@
   end
   i32.store16
  )
- (func $~lib/dataview/DataView#setInt32 (; 39 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt32 (; 37 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 4
   local.get $0
   i32.load offset=8
@@ -1771,7 +1764,7 @@
   end
   i32.store
  )
- (func $~lib/dataview/DataView#setInt64 (; 40 ;) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt64 (; 38 ;) (param $0 i32) (param $1 i64) (param $2 i32)
   i32.const 8
   local.get $0
   i32.load offset=8
@@ -1795,7 +1788,7 @@
   end
   i64.store
  )
- (func $~lib/dataview/DataView#setUint16 (; 41 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint16 (; 39 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 2
   local.get $0
   i32.load offset=8
@@ -1819,7 +1812,7 @@
   end
   i32.store16
  )
- (func $~lib/dataview/DataView#setUint32 (; 42 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint32 (; 40 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 4
   local.get $0
   i32.load offset=8
@@ -1843,7 +1836,7 @@
   end
   i32.store
  )
- (func $~lib/dataview/DataView#setUint64 (; 43 ;) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint64 (; 41 ;) (param $0 i32) (param $1 i64) (param $2 i32)
   i32.const 8
   local.get $0
   i32.load offset=8
@@ -1867,11 +1860,11 @@
   end
   i64.store
  )
- (func $~setArgumentsLength (; 44 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 42 ;) (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $start:std/dataview (; 45 ;)
+ (func $start:std/dataview (; 43 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3462,10 +3455,10 @@
   local.get $2
   call $~lib/rt/pure/__release
  )
- (func $~start (; 46 ;)
+ (func $~start (; 44 ;)
   call $start:std/dataview
  )
- (func $~lib/rt/pure/decrement (; 47 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 45 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
