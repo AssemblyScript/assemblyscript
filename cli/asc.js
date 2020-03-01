@@ -791,8 +791,8 @@ exports.main = function main(argv, options, callback) {
           add("simplify-locals-nostructure");
           add("vacuum");
 
-          add("reorder-locals");
           add("inlining-optimizing");
+          add("reorder-locals");
         }
         add("optimize-instructions");
         add("simplify-globals-optimizing");
