@@ -713,6 +713,9 @@ exports.main = function main(argv, options, callback) {
       add("reorder-locals");
       add("coalesce-locals");
       add("reorder-locals");
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs
+        add("merge-locals");
+      }
       add("vacuum");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         add("code-folding");
@@ -783,7 +786,7 @@ exports.main = function main(argv, options, callback) {
         add("simplify-globals");
         if (optimizeLevel >= 3) {
           add("directize");
-          add("coalesce-locals-learning");
+          add("coalesce-locals");
           add("simplify-locals-nostructure");
           add("vacuum");
 
