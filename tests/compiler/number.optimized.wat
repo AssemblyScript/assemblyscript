@@ -1170,7 +1170,6 @@
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
-  (local $4 i64)
   i64.const -9223372036854774784
   global.set $~lib/util/number/_frc_plus
   i64.const 9223372036854775296
@@ -1221,30 +1220,25 @@
   i32.const 2
   i32.add
   local.get $3
-  i64.const -9223372036854774784
-  local.tee $1
-  i64.const 32
-  i64.shr_u
-  local.tee $4
+  i64.const 2147483648
   i64.mul
   local.get $2
   i64.const 2147483648
   i64.mul
   local.get $2
   i64.const 1024
-  local.tee $1
   i64.mul
   i64.const 32
   i64.shr_u
   i64.add
-  local.tee $4
+  local.tee $1
   i64.const 32
   i64.shr_u
   i64.add
   local.get $3
   i64.const 1024
   i64.mul
-  local.get $4
+  local.get $1
   i64.const 4294967295
   i64.and
   i64.add
@@ -1261,18 +1255,13 @@
   i32.add
   local.get $1
   local.get $3
-  i64.const 9223372036854775296
-  local.tee $1
-  i64.const 32
-  i64.shr_u
-  local.tee $4
+  i64.const 2147483647
   i64.mul
   local.get $2
   i64.const 2147483647
   i64.mul
   local.get $2
   i64.const 4294966784
-  local.tee $2
   i64.mul
   i64.const 32
   i64.shr_u

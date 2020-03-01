@@ -19575,14 +19575,12 @@
   local.set $0
   i32.const 1
   global.set $~argumentsLength
-  i32.const -1
-  local.set $2
   i32.const 0
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=12
-  local.tee $3
+  local.tee $2
   i32.gt_u
   if
    i32.const 368
@@ -19592,24 +19590,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
-  local.set $2
+  local.get $2
+  local.set $3
   i32.const 12
   i32.const 3
   call $~lib/rt/tlsf/__alloc
-  local.tee $3
+  local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
   i32.store
-  local.get $3
   local.get $2
-  i32.store offset=8
   local.get $3
+  i32.store offset=8
+  local.get $2
   local.get $0
   i32.store offset=4
-  local.get $3
+  local.get $2
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   loop $for-loop|1
    local.get $4
    local.get $5
@@ -19618,7 +19616,7 @@
     local.get $1
     local.get $4
     call $~lib/typedarray/Int8Array#__get
-    local.get $2
+    local.get $3
     local.get $4
     call $~lib/typedarray/Int8Array#__get
     i32.ne
@@ -19641,7 +19639,7 @@
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Uint8Array,u8> (; 284 ;)
@@ -19775,14 +19773,12 @@
   local.set $0
   i32.const 1
   global.set $~argumentsLength
-  i32.const -1
-  local.set $2
   i32.const 0
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=12
-  local.tee $3
+  local.tee $2
   i32.gt_u
   if
    i32.const 368
@@ -19792,24 +19788,24 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
-  local.set $2
+  local.get $2
+  local.set $3
   i32.const 12
   i32.const 5
   call $~lib/rt/tlsf/__alloc
-  local.tee $3
+  local.tee $2
   local.get $0
   call $~lib/rt/pure/__retain
   i32.store
-  local.get $3
   local.get $2
-  i32.store offset=8
   local.get $3
+  i32.store offset=8
+  local.get $2
   local.get $0
   i32.store offset=4
-  local.get $3
+  local.get $2
   call $~lib/rt/pure/__retain
-  local.set $2
+  local.set $3
   loop $for-loop|1
    local.get $4
    local.get $5
@@ -19818,7 +19814,7 @@
     local.get $1
     local.get $4
     call $~lib/typedarray/Uint8ClampedArray#__get
-    local.get $2
+    local.get $3
     local.get $4
     call $~lib/typedarray/Uint8ClampedArray#__get
     i32.ne
@@ -19841,7 +19837,7 @@
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $3
   call $~lib/rt/pure/__release
  )
  (func $std/typedarray/testArrayWrap<~lib/typedarray/Int16Array,i16> (; 286 ;)
