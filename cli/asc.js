@@ -647,11 +647,11 @@ exports.main = function main(argv, options, callback) {
     if (optimizeLevel >= 2 && shrinkLevel === 0) {
       module.setAlwaysInlineMaxSize(12);
       module.setFlexibleInlineMaxSize(70);
-      module.setOneCallerInlineMaxSize(90);
+      module.setOneCallerInlineMaxSize(120);
     } else {
       module.setAlwaysInlineMaxSize(4);     // default:  2
-      module.setFlexibleInlineMaxSize(55);  // default: 20
-      module.setOneCallerInlineMaxSize(55); // default: 15
+      module.setFlexibleInlineMaxSize(65);  // default: 20
+      module.setOneCallerInlineMaxSize(70); // default: 15
     }
 
     // Optimize the module if requested

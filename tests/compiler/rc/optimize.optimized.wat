@@ -892,69 +892,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/growMemory (; 15 ;) (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  memory.size
-  local.tee $2
-  i32.const 16
-  local.get $0
-  i32.load offset=1568
-  local.get $2
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.sub
-  i32.ne
-  i32.shl
-  local.get $1
-  i32.const 1
-  i32.const 27
-  local.get $1
-  i32.clz
-  i32.sub
-  i32.shl
-  i32.const 1
-  i32.sub
-  i32.add
-  local.get $1
-  local.get $1
-  i32.const 536870904
-  i32.lt_u
-  select
-  i32.add
-  i32.const 65535
-  i32.add
-  i32.const -65536
-  i32.and
-  i32.const 16
-  i32.shr_u
-  local.tee $1
-  local.get $2
-  local.get $1
-  i32.gt_s
-  select
-  memory.grow
-  i32.const 0
-  i32.lt_s
-  if
-   local.get $1
-   memory.grow
-   i32.const 0
-   i32.lt_s
-   if
-    unreachable
-   end
-  end
-  local.get $0
-  local.get $2
-  i32.const 16
-  i32.shl
-  memory.size
-  i32.const 16
-  i32.shl
-  call $~lib/rt/tlsf/addMemory
- )
- (func $~lib/rt/tlsf/prepareBlock (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -1030,9 +968,10 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   global.get $~lib/rt/tlsf/collectLock
   if
    i32.const 0
@@ -1080,9 +1019,65 @@
    local.tee $3
    i32.eqz
    if
+    memory.size
+    local.tee $3
+    i32.const 16
     local.get $0
+    i32.load offset=1568
+    local.get $3
+    i32.const 16
+    i32.shl
+    i32.const 16
+    i32.sub
+    i32.ne
+    i32.shl
     local.get $4
-    call $~lib/rt/tlsf/growMemory
+    i32.const 1
+    i32.const 27
+    local.get $4
+    i32.clz
+    i32.sub
+    i32.shl
+    i32.const 1
+    i32.sub
+    i32.add
+    local.get $4
+    local.get $4
+    i32.const 536870904
+    i32.lt_u
+    select
+    i32.add
+    i32.const 65535
+    i32.add
+    i32.const -65536
+    i32.and
+    i32.const 16
+    i32.shr_u
+    local.tee $5
+    local.get $3
+    local.get $5
+    i32.gt_s
+    select
+    memory.grow
+    i32.const 0
+    i32.lt_s
+    if
+     local.get $5
+     memory.grow
+     i32.const 0
+     i32.lt_s
+     if
+      unreachable
+     end
+    end
+    local.get $0
+    local.get $3
+    i32.const 16
+    i32.shl
+    memory.size
+    i32.const 16
+    i32.shl
+    call $~lib/rt/tlsf/addMemory
     local.get $0
     local.get $4
     call $~lib/rt/tlsf/searchBlock
@@ -1132,7 +1127,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (; 17 ;) (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1140,13 +1135,13 @@
   i32.const 16
   i32.add
  )
- (func $rc/optimize/getRef (; 19 ;) (result i32)
+ (func $rc/optimize/getRef (; 18 ;) (result i32)
   i32.const 0
   i32.const 3
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/pure/__release (; 20 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 19 ;) (param $0 i32)
   local.get $0
   i32.const 196
   i32.gt_u
@@ -1157,13 +1152,13 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $rc/optimize/eliminated_rr (; 21 ;) (param $0 i32) (result i32)
+ (func $rc/optimize/eliminated_rr (; 20 ;) (param $0 i32) (result i32)
   i32.const 0
   i32.const 3
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch (; 22 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   loop $while-continue|0
    local.get $1
    if
@@ -1175,7 +1170,7 @@
    end
   end
  )
- (func $rc/optimize/OptimizeARC.keeps.partialRetains (; 23 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.keeps.partialRetains (; 22 ;) (param $0 i32) (param $1 i32)
   local.get $1
   if (result i32)
    local.get $0
@@ -1185,7 +1180,7 @@
   end
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.keeps.reachesReturn (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $rc/optimize/OptimizeARC.keeps.reachesReturn (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -1198,16 +1193,16 @@
   call $~lib/rt/pure/__release
   i32.const 0
  )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (; 25 ;) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (; 24 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   drop
  )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (; 26 ;) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (; 25 ;) (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/decrement (; 27 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 26 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

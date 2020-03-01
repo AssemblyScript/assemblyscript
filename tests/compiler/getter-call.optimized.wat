@@ -10,7 +10,11 @@
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 0 ;)
+ (func $~setArgumentsLength (; 0 ;) (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
+ )
+ (func $getter-call/test (; 1 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -74,18 +78,11 @@
   local.get $0
   i32.const 0
   i32.store offset=12
- )
- (func $~setArgumentsLength (; 1 ;) (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
- )
- (func $getter-call/test (; 2 ;) (result i32)
-  call $~lib/rt/stub/__alloc
   i32.const 0
   global.set $~argumentsLength
   i32.const 42
  )
- (func $~start (; 3 ;)
+ (func $~start (; 2 ;)
   i32.const 16
   global.set $~lib/rt/stub/startOffset
   i32.const 16
