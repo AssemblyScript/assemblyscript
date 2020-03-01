@@ -646,8 +646,8 @@ exports.main = function main(argv, options, callback) {
     // enchance options for inline passes
     if (optimizeLevel >= 2 && shrinkLevel === 0) {
       module.setAlwaysInlineMaxSize(12);
-      module.setFlexibleInlineMaxSize(80);
-      module.setOneCallerInlineMaxSize(80);
+      module.setFlexibleInlineMaxSize(70);
+      module.setOneCallerInlineMaxSize(90);
     } else {
       module.setAlwaysInlineMaxSize(4);     // default:  2
       module.setFlexibleInlineMaxSize(55);  // default: 20
