@@ -65,7 +65,7 @@
     "prepublishOnly": "node scripts/prepublish",
     "postpublish": "node scripts/postpublish",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
-    "asbuild:untouched": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.untouched.wat -b out/assemblyscript.untouched.wasm -d out/assemblyscript.untouched.d.ts --validate --debug --measure",
+    "asbuild:untouched": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.untouched.wat -b out/assemblyscript.untouched.wasm -d out/assemblyscript.d.ts --validate --debug --measure",
     "asbuild:optimized": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.optimized.wat -b out/assemblyscript.optimized.wasm -O3 --validate --measure",
     "astest": "ts-node tests/bootstrap"
   },
