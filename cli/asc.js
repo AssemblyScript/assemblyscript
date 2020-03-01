@@ -668,6 +668,8 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 3) {
         add("simplify-locals-nostructure"); // differs
+        add("vacuum");
+        add("reorder-locals");
         add("flatten");
         add("local-cse");
       }

@@ -8,7 +8,7 @@
  (global $logical/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~start (; 0 ;)
+ (func $start:logical (; 0 ;)
   i32.const 2
   global.set $logical/i
   i32.const 1
@@ -41,5 +41,8 @@
   global.set $logical/F
   f64.const nan:0x8000000000000
   global.set $logical/F
+ )
+ (func $~start (; 1 ;)
+  call $start:logical
  )
 )

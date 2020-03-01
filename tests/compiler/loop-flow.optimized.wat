@@ -24,10 +24,13 @@
   i32.const 1
  )
  (func $loop-flow/whileAny (; 2 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 1
+  i32.eq
+  local.set $1
   loop $while-continue|0 (result i32)
-   local.get $0
-   i32.const 1
-   i32.eq
+   local.get $1
    if (result i32)
     i32.const 1
    else
@@ -45,10 +48,13 @@
   end
  )
  (func $loop-flow/forAny (; 3 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 1
+  i32.eq
+  local.set $1
   loop $for-loop|0 (result i32)
-   local.get $0
-   i32.const 1
-   i32.eq
+   local.get $1
    if (result i32)
     i32.const 1
    else

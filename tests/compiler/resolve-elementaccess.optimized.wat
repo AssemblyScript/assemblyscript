@@ -305,6 +305,7 @@
   (local $11 i64)
   (local $12 i64)
   (local $13 i64)
+  (local $14 i64)
   local.get $3
   local.get $1
   i64.sub
@@ -565,6 +566,9 @@
     br $while-continue|0
    end
   end
+  local.get $10
+  i64.extend_i32_s
+  local.set $14
   loop $while-continue|4 (result i32)
    local.get $5
    i64.const 10
@@ -574,8 +578,7 @@
    i64.const 10
    i64.mul
    local.tee $3
-   local.get $10
-   i64.extend_i32_s
+   local.get $14
    i64.shr_u
    local.tee $1
    local.get $6
@@ -1142,7 +1145,6 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i64)
-  (local $11 i64)
   local.get $1
   f64.const 0
   f64.lt
@@ -1287,17 +1289,17 @@
   i64.shr_u
   local.tee $10
   i64.mul
+  local.get $5
   local.get $3
   i64.const 4294967295
   i64.and
-  local.tee $11
-  local.get $5
+  local.tee $5
   i64.mul
   local.get $2
   i64.const 4294967295
   i64.and
   local.tee $2
-  local.get $11
+  local.get $5
   i64.mul
   i64.const 32
   i64.shr_u
@@ -1383,11 +1385,11 @@
   i64.shr_u
   local.tee $5
   i64.mul
+  local.get $6
   local.get $3
   i64.const 4294967295
   i64.and
   local.tee $3
-  local.get $6
   i64.mul
   local.get $2
   i64.const 4294967295

@@ -625,6 +625,9 @@
     br $while-continue|0
    end
   end
+  local.get $10
+  i64.extend_i32_s
+  local.set $1
   loop $while-continue|4
    local.get $5
    i64.const 10
@@ -633,11 +636,10 @@
    local.get $8
    i64.const 10
    i64.mul
-   local.tee $1
-   local.get $10
-   i64.extend_i32_s
-   i64.shr_u
    local.tee $3
+   local.get $1
+   i64.shr_u
+   local.tee $8
    local.get $2
    i64.extend_i32_s
    i64.or
@@ -654,7 +656,7 @@
     i32.const 1
     i32.shl
     i32.add
-    local.get $3
+    local.get $8
     i32.wrap_i64
     i32.const 65535
     i32.and
@@ -666,7 +668,7 @@
    i32.const 1
    i32.sub
    local.set $4
-   local.get $1
+   local.get $3
    local.get $12
    i64.and
    local.tee $8
