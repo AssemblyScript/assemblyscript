@@ -2124,16 +2124,16 @@ export function readString(ptr: usize): string | null {
       }
     }
     arr.push(cp);
-    // if (cp < 0x10000) {
-    //   arr.push(cp);
-    // } else {
-    //   var ch = cp - 0x10000;
-    //   arr.push(0xD800 | (ch >> 10));
-    //   arr.push(0xDC00 | (ch & 0x3FF));
-    // }
+    if (cp < 0x10000) {
+      arr.push(cp);
+    } else {
+      let ch = cp - 0x10000;
+      arr.push(0xD800 | (ch >> 10));
+      arr.push(0xDC00 | (ch & 0x3FF));
+    }
   }
-  // return String.fromCharCodes(arr);
-  return String.fromCodePoints(arr);
+  return String.fromCharCodes(arr);
+  // return String.fromCodePoints(arr);
 }
 
 /** Result structure of {@link Module#toBinary}. */

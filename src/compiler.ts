@@ -2463,7 +2463,8 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       thenStmts.push(this.compileStatement(ifTrue));
     }
-    if (thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
+    var thenTerminates = thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS);
+    if (thenTerminates) {
       thenStmts.push(module.unreachable());
     } else {
       this.performAutoreleases(thenFlow, thenStmts);
@@ -2482,14 +2483,19 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         elseStmts.push(this.compileStatement(ifFalse));
       }
-      if (elseFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
+      let elseTerminates = elseFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS);
+      if (elseTerminates) {
         elseStmts.push(module.unreachable());
       } else {
         this.performAutoreleases(elseFlow, elseStmts);
       }
       elseFlow.freeScopedLocals();
       this.currentFlow = flow;
-      flow.inheritMutual(thenFlow, elseFlow);
+      if (elseTerminates && !thenTerminates) {
+        flow.inherit(thenFlow);
+      } else {
+        flow.inheritMutual(thenFlow, elseFlow);
+      }
       return module.if(condExpr,
         module.flatten(thenStmts),
         module.flatten(elseStmts)
@@ -3749,15 +3755,17 @@ export class Compiler extends DiagnosticEmitter {
         commonType = Type.commonDenominator(leftType, rightType, true);
         if (commonType) {
           leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
+            leftType, commonType,
             false, true, // !
             left
           );
+          leftType = commonType;
           rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
+            rightType, commonType,
             false, true, // !
             right
           );
+          rightType = commonType;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4050,17 +4058,20 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+        commonType = Type.commonDenominator(leftType, rightType, false);
+        if (commonType) {
           leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
+            leftType, commonType,
             false, true, // !
             left
           );
+          leftType = commonType;
           rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
+            rightType, commonType,
             false, true, // !
             right
           );
+          rightType = commonType;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4147,17 +4158,20 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+        commonType = Type.commonDenominator(leftType, rightType, false);
+        if (commonType) {
           leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
+            leftType, commonType,
             false, true, // !
             left
           );
+          leftType = commonType;
           rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
+            rightType, commonType,
             false, true, // !
             right
           );
+          rightType = commonType;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4344,17 +4358,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, false,
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, false,
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4434,17 +4451,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, false,
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, false,
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4525,7 +4545,8 @@ export class Compiler extends DiagnosticEmitter {
         if (this.currentType.kind == TypeKind.F32) {
           rightExpr = this.compileExpression(right, Type.f32, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
-          if (!(instance = this.f32PowInstance)) {
+          instance = this.f32PowInstance;
+          if (!instance) {
             let namespace = this.program.lookupGlobal(CommonNames.Mathf);
             if (!namespace) {
               this.error(
@@ -4559,7 +4580,8 @@ export class Compiler extends DiagnosticEmitter {
           leftType = this.currentType;
           rightExpr = this.compileExpression(right, Type.f64, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
-          if (!(instance = this.f64PowInstance)) {
+          instance = this.f64PowInstance;
+          if (!instance) {
             let namespace = this.program.lookupGlobal(CommonNames.Math);
             if (!namespace) {
               this.error(
@@ -4622,17 +4644,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, true, // !
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, true, // !
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4731,17 +4756,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, true, // !
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, true, // !
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -5209,17 +5237,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, false,
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, false,
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -5302,17 +5333,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, false,
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, false,
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -6236,7 +6270,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileCallExpressionBuiltin(prototype, expression, contextualType);
         }
 
-        let thisExpression = this.resolver.currentThisExpression;
+        let thisExpression = this.resolver.currentThisExpression; // compileCallDirect may reset
         let instance = this.resolver.maybeInferCall(expression, prototype, flow);
         if (!instance) return this.module.unreachable();
         return this.compileCallDirect(
@@ -6252,36 +6286,37 @@ export class Compiler extends DiagnosticEmitter {
 
       // indirect call: index argument with signature (non-generic, can't be inlined)
       case ElementKind.LOCAL: {
-        if (signature = (<Local>target).type.signatureReference) {
+        signature = (<Local>target).type.signatureReference;
+        if (signature) {
           if ((<Local>target).is(CommonFlags.INLINED)) {
             indexArg = module.i32(i64_low((<Local>target).constantIntegerValue));
           } else {
             indexArg = module.local_get((<Local>target).index, NativeType.I32);
           }
           break;
-        } else {
-          this.error(
-            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, (<Local>target).type.toString()
-          );
-          return module.unreachable();
         }
+        this.error(
+          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+          expression.range, (<Local>target).type.toString()
+        );
+        return module.unreachable();
       }
       case ElementKind.GLOBAL: {
-        if (signature = (<Global>target).type.signatureReference) {
+        signature = (<Global>target).type.signatureReference;
+        if (signature) {
           indexArg = module.global_get((<Global>target).internalName, (<Global>target).type.toNativeType());
           break;
-        } else {
-          this.error(
-            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, (<Global>target).type.toString()
-          );
-          return module.unreachable();
         }
+        this.error(
+          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+          expression.range, (<Global>target).type.toString()
+        );
+        return module.unreachable();
       }
       case ElementKind.FIELD: {
         let type = (<Field>target).type;
-        if (signature = type.signatureReference) {
+        signature = type.signatureReference;
+        if (signature) {
           let thisExpression = assert(this.resolver.currentThisExpression);
           let thisExpr = this.compileExpression(thisExpression, this.options.usizeType);
           indexArg = module.load(
@@ -6355,7 +6390,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     return this.compileCallIndirect(
-      signature,
+      assert(signature), // FIXME: asc can't see this yet
       indexArg,
       expression.arguments,
       expression,

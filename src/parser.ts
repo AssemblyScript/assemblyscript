@@ -532,7 +532,7 @@ export class Parser extends DiagnosticEmitter {
     } else if (token == Token.IDENTIFIER) {
       let name = this.parseTypeName(tn);
       if (!name) return null;
-      let parameters: NamedTypeNode[] | null = null;
+      let parameters: TypeNode[] | null = null;
       let nullable = false;
 
       // Name<T>
@@ -540,8 +540,8 @@ export class Parser extends DiagnosticEmitter {
         do {
           let parameter = this.parseType(tn, true, suppressErrors);
           if (!parameter) return null;
-          if (!parameters) parameters = [<NamedTypeNode>parameter];
-          else parameters.push(<NamedTypeNode>parameter);
+          if (!parameters) parameters = [ parameter ];
+          else parameters.push(parameter);
         } while (tn.skip(Token.COMMA));
         if (!tn.skip(Token.GREATERTHAN)) {
           if (!suppressErrors) {
@@ -567,7 +567,8 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
       }
-      type = Node.createNamedType(name, parameters || [], nullable, tn.range(startPos, tn.pos));
+      if (!parameters) parameters = [];
+      type = Node.createNamedType(name, parameters, nullable, tn.range(startPos, tn.pos));
     } else {
       if (!suppressErrors) {
         this.error(
