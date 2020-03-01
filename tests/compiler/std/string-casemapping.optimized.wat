@@ -491,11 +491,7 @@
     i32.const 2
     i32.shl
     i32.add
-    local.get $0
-    local.get $3
-    i32.const 2
-    i32.shl
-    i32.add
+    local.tee $4
     i32.load offset=4
     i32.const 1
     local.get $2
@@ -503,7 +499,9 @@
     i32.const -1
     i32.xor
     i32.and
-    local.tee $1
+    local.set $1
+    local.get $4
+    local.get $1
     i32.store offset=4
     local.get $1
     i32.eqz
@@ -793,12 +791,11 @@
   i32.const 2
   i32.shl
   i32.add
-  local.get $0
-  local.get $3
-  i32.const 2
-  i32.shl
-  i32.add
+  local.tee $0
   i32.load offset=4
+  local.set $1
+  local.get $0
+  local.get $1
   i32.const 1
   local.get $4
   i32.shl
@@ -1394,6 +1391,10 @@
   i32.const 8
   i32.shr_u
   local.tee $2
+  i32.const 4736
+  i32.add
+  i32.load8_u
+  local.get $2
   i32.const 1040
   i32.add
   i32.load8_u
@@ -1422,10 +1423,6 @@
   i32.shr_u
   i32.const 6
   i32.rem_u
-  local.get $2
-  i32.const 4736
-  i32.add
-  i32.load8_u
   i32.add
   i32.const 2
   i32.shl
@@ -2067,10 +2064,7 @@
         i32.shl
         i32.const 208
         i32.add
-        local.tee $1
-        i32.load offset=2
-        local.set $3
-        local.get $1
+        local.tee $3
         i32.load16_u offset=6
         local.set $1
         local.get $5
@@ -2080,6 +2074,7 @@
         i32.add
         local.tee $4
         local.get $3
+        i32.load offset=2
         i32.store
         local.get $4
         local.get $1

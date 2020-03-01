@@ -180,11 +180,7 @@
     i32.const 2
     i32.shl
     i32.add
-    local.get $0
-    local.get $3
-    i32.const 2
-    i32.shl
-    i32.add
+    local.tee $4
     i32.load offset=4
     i32.const 1
     local.get $2
@@ -192,7 +188,9 @@
     i32.const -1
     i32.xor
     i32.and
-    local.tee $1
+    local.set $1
+    local.get $4
+    local.get $1
     i32.store offset=4
     local.get $1
     i32.eqz
@@ -482,12 +480,11 @@
   i32.const 2
   i32.shl
   i32.add
-  local.get $0
-  local.get $3
-  i32.const 2
-  i32.shl
-  i32.add
+  local.tee $0
   i32.load offset=4
+  local.set $1
+  local.get $0
+  local.get $1
   i32.const 1
   local.get $4
   i32.shl
@@ -1180,7 +1177,12 @@
   loop $do-continue|0
    local.get $1
    i32.const 10
+   i32.rem_u
+   local.set $3
+   local.get $1
+   i32.const 10
    i32.div_u
+   local.set $1
    local.get $0
    local.get $2
    i32.const 1
@@ -1189,13 +1191,11 @@
    i32.const 1
    i32.shl
    i32.add
-   local.get $1
-   i32.const 10
-   i32.rem_u
+   local.get $3
    i32.const 48
    i32.add
    i32.store16
-   local.tee $1
+   local.get $1
    br_if $do-continue|0
   end
  )
@@ -2131,7 +2131,6 @@
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
-  (local $5 i64)
   i64.const -9223372036854774784
   global.set $~lib/util/number/_frc_plus
   i64.const 9223372036854775296
@@ -2146,95 +2145,28 @@
   i32.const 1272
   i32.load16_s
   global.set $~lib/util/number/_exp_pow
+  local.get $0
+  local.get $0
   global.get $~lib/util/number/_frc_pow
   local.tee $2
-  i64.const 4294967295
-  i64.and
-  local.set $1
-  i64.const -9223372036854774784
-  local.tee $4
-  i64.const 4294967295
-  i64.and
-  local.tee $3
-  local.get $2
   i64.const 32
   i64.shr_u
+  local.tee $3
+  i64.const 2147483648
+  i64.mul
+  local.get $2
+  i64.const 4294967295
+  i64.and
   local.tee $2
-  i64.mul
-  local.get $1
-  i64.const 2147483648
-  local.tee $4
-  i64.mul
-  local.get $1
-  i64.const 1024
-  i64.mul
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.tee $3
-  i64.const 4294967295
-  i64.and
-  i64.add
-  i64.const 2147483647
-  i64.add
-  i64.const 32
-  i64.shr_u
-  local.get $2
-  i64.const 2147483648
-  i64.mul
-  local.get $3
-  i64.const 32
-  i64.shr_u
-  i64.add
-  i64.add
-  i64.const 1
-  i64.sub
-  local.tee $4
-  i64.const 9223372036854775296
-  local.tee $3
-  i64.const 4294967295
-  i64.and
-  local.tee $5
-  local.get $2
-  i64.mul
-  local.get $1
-  i64.const 2147483647
-  local.tee $3
-  i64.mul
-  local.get $1
-  i64.const 4294966784
-  i64.mul
-  i64.const 32
-  i64.shr_u
-  i64.add
-  local.tee $5
-  i64.const 4294967295
-  i64.and
-  i64.add
-  i64.const 2147483647
-  i64.add
-  i64.const 32
-  i64.shr_u
-  local.get $2
-  i64.const 2147483647
-  i64.mul
-  local.get $5
-  i64.const 32
-  i64.shr_u
-  i64.add
-  i64.add
-  i64.const 1
-  i64.add
-  i64.sub
-  local.set $3
-  local.get $0
-  local.get $0
-  local.get $1
   i64.const 2147483648
   i64.mul
   i64.const 0
   i64.add
   local.tee $1
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.get $1
   i64.const 4294967295
   i64.and
   i64.const 0
@@ -2243,23 +2175,87 @@
   i64.add
   i64.const 32
   i64.shr_u
-  local.get $2
-  i64.const 2147483648
-  i64.mul
-  local.get $1
-  i64.const 32
-  i64.shr_u
-  i64.add
   i64.add
   global.get $~lib/util/number/_exp_pow
   local.tee $0
   i32.const 1
   i32.add
+  local.get $3
+  i64.const -9223372036854774784
+  local.tee $1
+  i64.const 32
+  i64.shr_u
+  local.tee $4
+  i64.mul
+  local.get $2
+  i64.const 2147483648
+  i64.mul
+  local.get $2
+  i64.const 1024
+  local.tee $1
+  i64.mul
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.tee $4
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.get $3
+  i64.const 1024
+  i64.mul
   local.get $4
+  i64.const 4294967295
+  i64.and
+  i64.add
+  i64.const 2147483647
+  i64.add
+  i64.const 32
+  i64.shr_u
+  i64.add
+  i64.const 1
+  i64.sub
+  local.tee $1
   local.get $0
   i32.const 1
   i32.add
+  local.get $1
   local.get $3
+  i64.const 9223372036854775296
+  local.tee $1
+  i64.const 32
+  i64.shr_u
+  local.tee $4
+  i64.mul
+  local.get $2
+  i64.const 2147483647
+  i64.mul
+  local.get $2
+  i64.const 4294966784
+  local.tee $2
+  i64.mul
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.tee $1
+  i64.const 32
+  i64.shr_u
+  i64.add
+  local.get $3
+  i64.const 4294966784
+  i64.mul
+  local.get $1
+  i64.const 4294967295
+  i64.and
+  i64.add
+  i64.const 2147483647
+  i64.add
+  i64.const 32
+  i64.shr_u
+  i64.add
+  i64.const 1
+  i64.add
+  i64.sub
   call $~lib/util/number/genDigits
   global.get $~lib/util/number/_K
   call $~lib/util/number/prettify

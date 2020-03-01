@@ -12,13 +12,13 @@
  (start $~start)
  (func $~start (; 1 ;)
   (local $0 i32)
+  i32.const 1
+  global.set $inlining-blocklocals/theCall_a
   global.get $inlining-blocklocals/b
   local.tee $0
   i32.const 1
   i32.add
   global.set $inlining-blocklocals/b
-  i32.const 1
-  global.set $inlining-blocklocals/theCall_a
   local.get $0
   global.set $inlining-blocklocals/theCall_b
   i32.const 3

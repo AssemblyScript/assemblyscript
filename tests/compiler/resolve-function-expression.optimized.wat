@@ -182,7 +182,12 @@
   loop $do-continue|0
    local.get $0
    i32.const 10
+   i32.rem_u
+   local.set $5
+   local.get $0
+   i32.const 10
    i32.div_u
+   local.set $0
    local.get $4
    local.get $2
    i32.const 1
@@ -191,13 +196,11 @@
    i32.const 1
    i32.shl
    i32.add
-   local.get $0
-   i32.const 10
-   i32.rem_u
+   local.get $5
    i32.const 48
    i32.add
    i32.store16
-   local.tee $0
+   local.get $0
    br_if $do-continue|0
   end
   local.get $1
