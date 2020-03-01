@@ -571,7 +571,7 @@ export class Compiler extends DiagnosticEmitter {
     var elementsByName = program.elementsByName;
     for (let i = 0, k = functionTable.length; i < k; ++i) {
       let instanceName = unchecked(functionTable[i]);
-      if(elementsByName.has(instanceName)) { // otherwise ~anonymous
+      if (elementsByName.has(instanceName)) { // otherwise ~anonymous
         let instance = assert(elementsByName.get(instanceName));
         if (instance.is(CommonFlags.INSTANCE | CommonFlags.VIRTUAL)) {
           assert(instance.kind == ElementKind.FUNCTION);
