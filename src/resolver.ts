@@ -2169,7 +2169,7 @@ export class Resolver extends DiagnosticEmitter {
       if (base) {
         this.currentThisExpression = null;
         this.currentElementExpression = null;
-        return parent;
+        return base;
       }
     }
     if (reportMode == ReportMode.REPORT) {

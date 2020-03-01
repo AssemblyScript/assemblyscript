@@ -17,7 +17,7 @@ async function test(build) {
     nextFilePtr = assemblyscript.nextFile(programPtr);
   }
   // assemblyscript.compile(programPtr);
-  // ^ fails, most likely due to confused virtual overloads
+  // ^ abort: missing ArrayBuffer at src/program.ts:1015:18
   console.log("So far, so good.");
 }
 test("untouched");
