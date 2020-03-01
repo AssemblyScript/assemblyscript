@@ -157,4 +157,4 @@ jobs:
     - name: Test self-compilation
       run: |
         npm run asbuild
-        ts-node tests/bootstrap
+        npm run astest
