@@ -1167,17 +1167,18 @@
   (local $2 i32)
   local.get $1
   local.get $0
-  i32.load
   local.tee $2
+  i32.load
+  local.tee $0
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    drop
-   local.get $2
+   local.get $0
    call $~lib/rt/pure/__release
   end
-  local.get $0
+  local.get $2
   local.get $1
   i32.store
  )

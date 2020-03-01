@@ -1264,9 +1264,9 @@
   i32.const 0
   global.set $for/ran
   call $for/Ref#constructor
-  local.set $1
+  local.set $0
   loop $for-loop|06
-   local.get $1
+   local.get $0
    if
     local.get $2
     i32.const 1
@@ -1276,20 +1276,20 @@
     i32.eq
     if
      i32.const 0
-     local.set $0
-     local.get $1
+     local.set $1
+     local.get $0
      if
-      local.get $1
+      local.get $0
       call $~lib/rt/pure/__release
      end
     else
      call $for/Ref#constructor
-     local.set $0
-     local.get $1
+     local.set $1
+     local.get $0
      call $~lib/rt/pure/__release
     end
-    local.get $0
-    local.set $1
+    local.get $1
+    local.set $0
     br $for-loop|06
    end
   end
@@ -1304,7 +1304,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   if
    i32.const 0
    i32.const 32
@@ -1315,7 +1315,7 @@
   end
   i32.const 1
   global.set $for/ran
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
   global.get $for/ran
   i32.eqz

@@ -1323,9 +1323,6 @@
   (local $10 i32)
   (local $11 i64)
   (local $12 i64)
-  (local $13 i32)
-  i32.const 0
-  local.set $2
   local.get $3
   local.get $1
   i64.sub
@@ -1380,7 +1377,7 @@
                local.get $6
                i32.const 1000000000
                i32.div_u
-               local.set $7
+               local.set $2
                local.get $6
                i32.const 1000000000
                i32.rem_u
@@ -1390,7 +1387,7 @@
               local.get $6
               i32.const 100000000
               i32.div_u
-              local.set $7
+              local.set $2
               local.get $6
               i32.const 100000000
               i32.rem_u
@@ -1400,7 +1397,7 @@
              local.get $6
              i32.const 10000000
              i32.div_u
-             local.set $7
+             local.set $2
              local.get $6
              i32.const 10000000
              i32.rem_u
@@ -1410,7 +1407,7 @@
             local.get $6
             i32.const 1000000
             i32.div_u
-            local.set $7
+            local.set $2
             local.get $6
             i32.const 1000000
             i32.rem_u
@@ -1420,7 +1417,7 @@
            local.get $6
            i32.const 100000
            i32.div_u
-           local.set $7
+           local.set $2
            local.get $6
            i32.const 100000
            i32.rem_u
@@ -1430,7 +1427,7 @@
           local.get $6
           i32.const 10000
           i32.div_u
-          local.set $7
+          local.set $2
           local.get $6
           i32.const 10000
           i32.rem_u
@@ -1440,7 +1437,7 @@
          local.get $6
          i32.const 1000
          i32.div_u
-         local.set $7
+         local.set $2
          local.get $6
          i32.const 1000
          i32.rem_u
@@ -1450,7 +1447,7 @@
         local.get $6
         i32.const 100
         i32.div_u
-        local.set $7
+        local.set $2
         local.get $6
         i32.const 100
         i32.rem_u
@@ -1460,7 +1457,7 @@
        local.get $6
        i32.const 10
        i32.div_u
-       local.set $7
+       local.set $2
        local.get $6
        i32.const 10
        i32.rem_u
@@ -1468,34 +1465,33 @@
        br $break|1
       end
       local.get $6
-      local.set $7
+      local.set $2
       i32.const 0
       local.set $6
       br $break|1
      end
      i32.const 0
-     local.set $7
+     local.set $2
     end
     local.get $2
     local.get $7
     i32.or
     if
-     local.get $2
-     local.tee $13
-     i32.const 1
-     i32.add
-     local.set $2
      local.get $0
-     local.get $13
+     local.get $7
      i32.const 1
      i32.shl
      i32.add
-     local.get $7
+     local.get $2
      i32.const 65535
      i32.and
      i32.const 48
      i32.add
      i32.store16
+     local.get $7
+     i32.const 1
+     i32.add
+     local.set $7
     end
     local.get $4
     i32.const 1
@@ -1527,7 +1523,7 @@
      i64.shl
      local.set $3
      local.get $0
-     local.get $2
+     local.get $7
      i32.const 1
      i32.sub
      i32.const 1
@@ -1579,7 +1575,7 @@
      local.get $0
      local.get $4
      i32.store16
-     local.get $2
+     local.get $7
      return
     end
     br $while-continue|0
@@ -1600,19 +1596,14 @@
    local.get $1
    i64.shr_u
    local.tee $8
-   local.get $2
+   local.get $7
    i64.extend_i32_s
    i64.or
    i64.const 0
    i64.ne
    if
-    local.get $2
-    local.tee $6
-    i32.const 1
-    i32.add
-    local.set $2
     local.get $0
-    local.get $6
+    local.get $7
     i32.const 1
     i32.shl
     i32.add
@@ -1623,6 +1614,10 @@
     i32.const 48
     i32.add
     i32.store16
+    local.get $7
+    i32.const 1
+    i32.add
+    local.set $7
    end
    local.get $4
    i32.const 1
@@ -1654,7 +1649,7 @@
   i64.mul
   local.set $3
   local.get $0
-  local.get $2
+  local.get $7
   i32.const 1
   i32.sub
   i32.const 1
@@ -1706,7 +1701,7 @@
   local.get $0
   local.get $4
   i32.store16
-  local.get $2
+  local.get $7
  )
  (func $~lib/memory/memory.copy (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)

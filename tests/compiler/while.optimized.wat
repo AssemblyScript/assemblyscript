@@ -1156,17 +1156,17 @@
   i32.const 0
   global.set $while/ran
   i32.const 0
-  local.set $1
+  local.set $0
   loop $while-continue|01
-   local.get $1
+   local.get $0
    i32.const 1
    i32.add
-   local.tee $1
+   local.tee $0
    i32.const 10
    i32.ne
    br_if $while-continue|01
   end
-  local.get $1
+  local.get $0
   i32.const 10
   i32.ne
   if
@@ -1194,18 +1194,18 @@
   i32.const 0
   global.set $while/ran
   i32.const 10
-  local.set $1
+  local.set $0
   loop $while-continue|02
-   local.get $1
+   local.get $0
    if
-    local.get $1
+    local.get $0
     i32.const 1
     i32.sub
-    local.set $1
+    local.set $0
     br $while-continue|02
    end
   end
-  local.get $1
+  local.get $0
   if
    i32.const 0
    i32.const 32

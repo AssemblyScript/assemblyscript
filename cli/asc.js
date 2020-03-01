@@ -704,9 +704,9 @@ exports.main = function main(argv, options, callback) {
       add("vacuum");
       add("reorder-locals");
       add("remove-unused-brs");
-      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
-        add("merge-locals");
-      }
+      // if (optimizeLevel >= 3 || shrinkLevel >= 2) { // do it later
+      //   add("merge-locals");
+      // }
       add("coalesce-locals");
       add("simplify-locals");
       add("vacuum");
