@@ -667,7 +667,7 @@ exports.main = function main(argv, options, callback) {
         add("ssa-nomerge");
       }
       if (optimizeLevel >= 3) {
-        add("simplify-locals-nostructure");
+        add("simplify-locals-nostructure"); // differs
         add("flatten");
         add("local-cse");
       }
