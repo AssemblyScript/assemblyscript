@@ -634,12 +634,18 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.ENUMVALUE: {
-        if (!(<EnumValue>element).isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
+        let enumValue = <EnumValue>element;
+        if (!enumValue.isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
           this.error(
             DiagnosticCode.Cannot_export_a_mutable_global,
-            (<EnumValue>element).identifierNode.range
+            enumValue.identifierNode.range
           );
         } else {
+          if (enumValue.is(CommonFlags.INLINED)) {
+            let value = enumValue.constantIntegerValue;
+            assert(!i64_high(value));
+            this.module.addGlobal(element.internalName, NativeType.I32, false, this.module.i32(i64_low(value)));
+          }
           this.module.addGlobalExport(element.internalName, prefix + name);
         }
         break;
