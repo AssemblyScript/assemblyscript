@@ -725,7 +725,7 @@ export declare function _BinaryenRemoveGlobal(module: BinaryenModuleRef, name: u
 export declare function _BinaryenGlobalGetName(global: BinaryenGlobalRef): usize;
 export declare function _BinaryenGlobalGetType(global: BinaryenGlobalRef): BinaryenType;
 export declare function _BinaryenGlobalIsMutable(global: BinaryenGlobalRef): bool;
-export declare function _BinaryenGlobalGetInit(global: BinaryenGlobalRef): BinaryenExpressionRef;
+export declare function _BinaryenGlobalGetInitExpr(global: BinaryenGlobalRef): BinaryenExpressionRef;
 
 type BinaryenEventRef = usize;
 
@@ -735,9 +735,8 @@ export declare function _BinaryenRemoveEvent(module: BinaryenModuleRef, name: us
 
 export declare function _BinaryenEventGetName(event: BinaryenEventRef): usize;
 export declare function _BinaryenEventGetAttribute(event: BinaryenEventRef): u32;
-export declare function _BinaryenEventGetType(event: BinaryenEventRef): usize;
-export declare function _BinaryenEventGetNumParams(event: BinaryenEventRef): BinaryenIndex;
-export declare function _BinaryenEventGetParam(event: BinaryenEventRef, index: BinaryenIndex): BinaryenType;
+export declare function _BinaryenEventGetParams(event: BinaryenEventRef): BinaryenType;
+export declare function _BinaryenEventGetResults(event: BinaryenEventRef): BinaryenType;
 
 export declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, funcs: usize, numFuncs: BinaryenIndex, offset: BinaryenExpressionRef): void;
 

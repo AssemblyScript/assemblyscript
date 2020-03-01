@@ -155,4 +155,6 @@ jobs:
     - name: Clean distribution files
       run: npm run clean
     - name: Test self-compilation
-      run: npm run asbuild
+      run: |
+        npm run asbuild
+        node tests/bootstrap

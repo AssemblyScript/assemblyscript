@@ -1867,7 +1867,7 @@ export function isGlobalMutable(global: GlobalRef): bool {
 }
 
 export function getGlobalInit(global: GlobalRef): ExpressionRef {
-  return binaryen._BinaryenGlobalGetInit(global);
+  return binaryen._BinaryenGlobalGetInitExpr(global);
 }
 
 // events
@@ -1880,16 +1880,12 @@ export function getEventAttribute(event: EventRef): u32 {
   return binaryen._BinaryenEventGetAttribute(event);
 }
 
-export function getEventType(event: EventRef): string | null {
-  return readString(binaryen._BinaryenEventGetType(event));
+export function getEventParams(event: EventRef): NativeType {
+  return binaryen._BinaryenEventGetParams(event);
 }
 
-export function getEventParamCount(event: EventRef): Index {
-  return binaryen._BinaryenEventGetNumParams(event);
-}
-
-export function getEventParam(event: EventRef, index: Index): NativeType {
-  return binaryen._BinaryenEventGetParam(event, index);
+export function getEventResults(event: EventRef): NativeType {
+  return binaryen._BinaryenEventGetResults(event);
 }
 
 export class Relooper {

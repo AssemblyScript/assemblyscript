@@ -245,4 +245,5 @@ export * from "./program";
 export * from "./resolver";
 export * from "./tokenizer";
 export * from "./types";
-export * from "./util/index";
+import * as util from "./util/index";
+export { util };
