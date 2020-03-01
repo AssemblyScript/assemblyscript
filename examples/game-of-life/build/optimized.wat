@@ -127,6 +127,10 @@
      local.get $9
      i32.lt_s
      if
+      local.get $4
+      global.get $assembly/index/width
+      i32.mul
+      local.tee $2
       local.get $0
       i32.const 1
       i32.sub
@@ -134,9 +138,6 @@
       local.get $0
       select
       local.tee $3
-      local.get $4
-      global.get $assembly/index/width
-      i32.mul
       i32.add
       i32.const 2
       i32.shl
