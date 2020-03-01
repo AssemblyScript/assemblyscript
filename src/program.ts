@@ -3270,6 +3270,8 @@ export class ClassPrototype extends DeclaredElement {
   overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
+  /** Classes extending this class. */
+  extendees: Set<ClassPrototype> = new Set();
 
   constructor(
     /** Simple name. */
@@ -3496,6 +3498,30 @@ export class Class extends TypedElement {
   setBase(base: Class): void {
     assert(!this.base);
     this.base = base;
+
+    // Remember extendees and mark overloaded methods virtual
+    var basePrototype: ClassPrototype  = base.prototype;
+    var thisPrototype = this.prototype;
+    assert(basePrototype != thisPrototype);
+    basePrototype.extendees.add(thisPrototype);
+    var thisInstanceMembers = thisPrototype.instanceMembers;
+    if (thisInstanceMembers) {
+      do {
+        let baseInstanceMembers = basePrototype.instanceMembers;
+        if (baseInstanceMembers) {
+          for (let _keys = Map_keys(baseInstanceMembers), i = 0, k = _keys.length; i < k; ++i) {
+            let memberName = _keys[i];
+            let member = assert(baseInstanceMembers.get(memberName));
+            if (thisInstanceMembers.has(memberName)) {
+              member.set(CommonFlags.VIRTUAL);
+            }
+          }
+        }
+        let nextPrototype = basePrototype.basePrototype;
+        if (!nextPrototype) break;
+        basePrototype = nextPrototype;
+      } while (true);
+    }
 
     // Inherit contextual type arguments from base class
     var inheritedTypeArguments = base.contextualTypeArguments;

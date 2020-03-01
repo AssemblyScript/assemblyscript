@@ -343,6 +343,8 @@ export class Compiler extends DiagnosticEmitter {
   lazyLibraryFunctions: Set<Function> = new Set();
   /** Pending class-specific instanceof helpers. */
   pendingClassInstanceOf: Set<ClassPrototype> = new Set();
+  /** Functions potentially involving a virtual call. */
+  virtualCalls: Set<Function> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -476,6 +478,9 @@ export class Compiler extends DiagnosticEmitter {
       compileClassInstanceOf(this, prototype);
     }
 
+    // set up virtual lookup tables
+    this.setupVirtualLookupTables();
+
     // finalize runtime features
     module.removeGlobal(BuiltinNames.rtti_base);
     if (this.runtimeFeatures & RuntimeFeatures.RTTI) compileRTTI(this);
@@ -554,6 +559,36 @@ export class Compiler extends DiagnosticEmitter {
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
     return module;
+  }
+
+  private setupVirtualLookupTables(): void {
+    // TODO: :-)
+    var program = this.program;
+    var virtualCalls = this.virtualCalls;
+
+    // Virtual instance methods in the function table are potentially called virtually
+    var functionTable = this.functionTable;
+    var elementsByName = program.elementsByName;
+    for (let i = 0, k = functionTable.length; i < k; ++i) {
+      let instanceName = unchecked(functionTable[i]);
+      if(elementsByName.has(instanceName)) { // otherwise ~anonymous
+        let instance = assert(elementsByName.get(instanceName));
+        if (instance.is(CommonFlags.INSTANCE | CommonFlags.VIRTUAL)) {
+          assert(instance.kind == ElementKind.FUNCTION);
+          virtualCalls.add(<Function>instance);
+        }
+      }
+    }
+
+    // Inject a virtual lookup table into each function potentially called virtually
+    /// for (let instance of virtualCalls.values()) {
+    for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
+      let instance = unchecked(_values[i]);
+      this.warning(
+        DiagnosticCode.Function_0_is_possibly_called_virtually_which_is_not_yet_supported,
+        instance.identifierNode.range, instance.internalName
+      );
+    }
   }
 
   // === Exports ==================================================================================
@@ -1262,12 +1297,16 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFlow = previousFlow;
 
       // create the function
+      let body = module.flatten(stmts, instance.signature.returnType.toNativeType());
+      if (instance.is(CommonFlags.VIRTUAL)) {
+        body = module.block("vtable", [ body ], getExpressionType(body));
+      }
       funcRef = module.addFunction(
         instance.internalName,
         signature.nativeParams,
         signature.nativeResults,
         typesToNativeTypes(instance.additionalLocals),
-        module.flatten(stmts, instance.signature.returnType.toNativeType())
+        body
       );
 
     // imported function
@@ -6211,8 +6250,10 @@ export class Compiler extends DiagnosticEmitter {
         return module.unreachable();
       }
 
-      let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
-      let baseClassInstance = assert((<Class>classInstance).base);
+      let parent = assert(actualFunction.parent);
+      assert(parent.kind == ElementKind.CLASS);
+      let classInstance = <Class>parent;
+      let baseClassInstance = assert(classInstance.base);
       let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
       let nativeSizeType = this.options.nativeSizeType;
 
@@ -6229,7 +6270,7 @@ export class Compiler extends DiagnosticEmitter {
           module.local_get(thisLocal.index, nativeSizeType),
           module.local_get(thisLocal.index, nativeSizeType),
           this.makeRetain(
-            this.makeAllocation(<Class>classInstance)
+            this.makeAllocation(classInstance)
           )
         ),
         Constraints.WILL_RETAIN
@@ -6238,7 +6279,7 @@ export class Compiler extends DiagnosticEmitter {
       let stmts: ExpressionRef[] = [
         module.local_set(thisLocal.index, theCall)
       ];
-      this.makeFieldInitializationInConstructor(<Class>classInstance, stmts);
+      this.makeFieldInitializationInConstructor(classInstance, stmts);
 
       // check that super had been called before accessing `this`
       if (flow.isAny(
@@ -7169,6 +7210,9 @@ export class Compiler extends DiagnosticEmitter {
     /** Skip the usual autorelease and manage this at the callsite instead. */
     skipAutorelease: bool = false
   ): ExpressionRef {
+    if (instance.is(CommonFlags.VIRTUAL)) {
+      this.virtualCalls.add(instance);
+    }
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
       assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
       let inlineStack = this.inlineStack;

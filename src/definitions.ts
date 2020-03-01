@@ -89,7 +89,7 @@ export abstract class ExportsWalker {
   visitElement(name: string, element: Element): void {
     if (element.is(CommonFlags.PRIVATE) && !this.includePrivate) return;
     var seen = this.seen;
-    if (seen.has(element)) {
+    if (seen.has(element) && !element.is(CommonFlags.INSTANCE)) {
       this.visitAlias(name, element, <string>seen.get(element));
       return;
     }
@@ -103,6 +103,7 @@ export abstract class ExportsWalker {
         if (element.is(CommonFlags.COMPILED)) this.visitEnum(name, <Enum>element);
         break;
       }
+      case ElementKind.ENUMVALUE: break; // handled by visitEnum
       case ElementKind.FUNCTION_PROTOTYPE: {
         this.visitFunctionInstances(name, <FunctionPrototype>element);
         break;
@@ -412,8 +413,9 @@ export class TSDBuilder extends ExportsWalker {
     sb.push(name);
     sb.push(" {\n");
     var members = element.members;
+    var remainingMembers = 0;
     if (members) {
-      let remainingMembers = members.size;
+      remainingMembers = members.size;
       // for (let [memberName, member] of members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
@@ -431,10 +433,10 @@ export class TSDBuilder extends ExportsWalker {
           --remainingMembers;
         }
       }
-      if (remainingMembers) this.visitNamespace(name, element);
     }
     indent(sb, --this.indentLevel);
     sb.push("}\n");
+    if (remainingMembers) this.visitNamespace(name, element);
   }
 
   visitFunction(name: string, element: Function): void {
@@ -483,15 +485,17 @@ export class TSDBuilder extends ExportsWalker {
     if (isInterface) {
       sb.push("export interface ");
     } else {
+      sb.push("export ");
       if (element.is(CommonFlags.ABSTRACT)) sb.push("abstract ");
-      sb.push("export class ");
+      sb.push("class ");
     }
     sb.push(name);
-    // var base = element.base;
-    // if (base && base.is(CommonFlags.COMPILED | CommonFlags.MODULE_EXPORT)) {
-    //   sb.push(" extends ");
-    //   sb.push(base.name); // TODO: fqn
-    // }
+    var base = element.base;
+    if (base !== null && base.is(CommonFlags.COMPILED | CommonFlags.MODULE_EXPORT)) {
+      sb.push(" extends ");
+      let extendsNode = assert(element.prototype.extendsNode);
+      sb.push(extendsNode.name.identifier.text); // TODO: fqn?
+    }
     sb.push(" {\n");
     var staticMembers = element.prototype.members;
     if (staticMembers) {
@@ -563,14 +567,14 @@ export class TSDBuilder extends ExportsWalker {
       case TypeKind.I8: return "i8";
       case TypeKind.I16: return "i16";
       case TypeKind.I32: return "i32";
-      case TypeKind.I64: return "I64";
-      case TypeKind.ISIZE: return this.program.options.isWasm64 ? "I64" : "i32";
+      case TypeKind.I64: return "i64";
+      case TypeKind.ISIZE: return "isize";
       case TypeKind.U8: return "u8";
       case TypeKind.U16: return "u16";
       case TypeKind.U32: return "u32";
         // ^ TODO: function types
-      case TypeKind.U64: return "U64";
-      case TypeKind.USIZE: return this.program.options.isWasm64 ? "U64" : "u32";
+      case TypeKind.U64: return "u64";
+      case TypeKind.USIZE: return "usize";
         // ^ TODO: class types
       case TypeKind.BOOL: return "bool";
       case TypeKind.F32: return "f32";
@@ -586,13 +590,26 @@ export class TSDBuilder extends ExportsWalker {
 
   build(): string {
     var sb = this.sb;
+    var isWasm64 = this.program.options.isWasm64;
     sb.push("declare module ASModule {\n");
     sb.push("  type i8 = number;\n");
     sb.push("  type i16 = number;\n");
     sb.push("  type i32 = number;\n");
+    sb.push("  type i64 = BigInt;\n");
+    if (isWasm64) {
+      sb.push("  type isize = BigInt;\n");
+    } else {
+      sb.push("  type isize = number;\n");
+    }
     sb.push("  type u8 = number;\n");
     sb.push("  type u16 = number;\n");
     sb.push("  type u32 = number;\n");
+    sb.push("  type u64 = BigInt;\n");
+    if (isWasm64) {
+      sb.push("  type usize = BigInt;\n");
+    } else {
+      sb.push("  type usize = number;\n");
+    }
     sb.push("  type f32 = number;\n");
     sb.push("  type f64 = number;\n");
     sb.push("  type bool = any;\n");

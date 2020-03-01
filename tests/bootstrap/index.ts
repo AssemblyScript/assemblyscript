@@ -1,10 +1,11 @@
-const fs = require("fs");
-const binaryen = require("binaryen");
-const loader = require("../../lib/loader");
+import * as fs from "fs";
+import * as binaryen from "binaryen";
+import * as loader from "../../lib/loader";
+import AssemblyScript from "../../out/assemblyscript";
 
-async function test(build) {
+async function test(build: string): Promise<void> {
   await binaryen.ready;
-  const assemblyscript = await loader.instantiate(fs.promises.readFile(__dirname + "/../../out/assemblyscript." + build + ".wasm"), { binaryen });
+  const assemblyscript = await loader.instantiate<typeof AssemblyScript>(fs.promises.readFile(__dirname + "/../../out/assemblyscript." + build + ".wasm"), { binaryen });
   console.log(assemblyscript);
   const optionsPtr = assemblyscript.newOptions();
   const programPtr = assemblyscript.newProgram(optionsPtr);
