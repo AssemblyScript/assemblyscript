@@ -451,8 +451,6 @@ export class Range {
   debugInfoRef: usize = 0;
 }
 
-declare function parseFloat(str: string): f64;
-
 /** Handler for intercepting comments while tokenizing. */
 export type CommentHandler = (kind: CommentKind, text: string, range: Range) => void;
 
