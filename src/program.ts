@@ -3689,7 +3689,7 @@ export class Class extends TypedElement {
   }
 
   /** Tests if this class potentially forms a reference cycle to another one. */
-  private cyclesTo(other: Class, except: Set<Class> = new Set<Class>()): bool {
+  private cyclesTo(other: Class, except: Set<Class> = new Set()): bool {
     // TODO: The pure RC paper describes acyclic data structures as classes that may contain
     //
     // - scalars

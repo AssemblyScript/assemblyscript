@@ -665,17 +665,19 @@ export class Resolver extends DiagnosticEmitter {
     }
     var argumentCount = typeArgumentNodes ? typeArgumentNodes.length : 0;
     if (argumentCount < minParameterCount || argumentCount > maxParameterCount) {
-      this.error(
-        DiagnosticCode.Expected_0_type_arguments_but_got_1,
-        argumentCount
-          ? Range.join(
-              typeArgumentNodes![0].range,
-              typeArgumentNodes![argumentCount - 1].range
-            )
-          : alternativeReportNode!.range,
-        (argumentCount < minParameterCount ? minParameterCount : maxParameterCount).toString(),
-        argumentCount.toString()
-      );
+      if (reportMode == ReportMode.REPORT) {
+        this.error(
+          DiagnosticCode.Expected_0_type_arguments_but_got_1,
+          argumentCount
+            ? Range.join(
+                typeArgumentNodes![0].range,
+                typeArgumentNodes![argumentCount - 1].range
+              )
+            : alternativeReportNode!.range,
+          (argumentCount < minParameterCount ? minParameterCount : maxParameterCount).toString(),
+          argumentCount.toString()
+        );
+      }
       return null;
     }
     var typeArguments = new Array<Type>(maxParameterCount);
