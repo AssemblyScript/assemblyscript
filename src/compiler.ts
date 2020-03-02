@@ -2175,6 +2175,20 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.performAutoreleases(condFlow, bodyStmts);
         flow.inherit(bodyFlow);
+
+      // Terminate if condition is always true and body never breaks
+      } else if (condKind == ConditionKind.TRUE && !bodyFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
+        if (hasSideEffects(condExpr)) {
+          bodyStmts.push(
+            module.drop(condExpr)
+          );
+        }
+        this.performAutoreleases(condFlow, bodyStmts);
+        bodyStmts.push(
+          module.br(continueLabel)
+        );
+        flow.set(FlowFlags.TERMINATES);
+
       } else {
         let tcond = condFlow.getTempLocal(Type.bool);
         bodyStmts.push(
@@ -3082,13 +3096,22 @@ export class Compiler extends DiagnosticEmitter {
       bodyStmts.push(this.compileStatement(body));
     }
 
-    // Check if body terminates
+    // Simplify if body always terminates
     if (bodyFlow.is(FlowFlags.TERMINATES)) {
       bodyStmts.push(
         module.unreachable()
       );
       if (condKind == ConditionKind.TRUE) flow.inherit(bodyFlow);
       else flow.inheritBranch(bodyFlow);
+
+    // Terminate if condition is always true and body never breaks
+    } else if (condKind == ConditionKind.TRUE && !bodyFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
+      this.performAutoreleases(bodyFlow, bodyStmts);
+      bodyStmts.push(
+        module.br(continueLabel)
+      );
+      flow.set(FlowFlags.TERMINATES);
+
     } else {
       let breaks = bodyFlow.is(FlowFlags.BREAKS);
       if (breaks) {
