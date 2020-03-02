@@ -2467,6 +2467,13 @@ export class File extends Element {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);
     declaration.name = localIdentifier;
     var ns = new Namespace(name, parent, declaration);
+    ns.set(CommonFlags.SCOPED);
+    this.copyExportsToNamespace(ns);
+    return ns;
+  }
+
+  /** Recursively copies the exports of this file to the specified namespace. */
+  private copyExportsToNamespace(ns: Namespace): void {
     var exports = this.exports;
     if (exports) {
       // for (let [memberName, member] of exports) {
@@ -2476,7 +2483,12 @@ export class File extends Element {
         ns.add(memberName, member);
       }
     }
-    return ns;
+    var exportsStar = this.exportsStar;
+    if (exportsStar) {
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        exportsStar[i].copyExportsToNamespace(ns);
+      }
+    }
   }
 }
 

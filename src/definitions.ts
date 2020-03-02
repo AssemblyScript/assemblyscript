@@ -409,7 +409,9 @@ export class TSDBuilder extends ExportsWalker {
   visitEnum(name: string, element: Enum): void {
     var sb = this.sb;
     indent(sb, this.indentLevel++);
-    sb.push("export enum ");
+    sb.push("export ");
+    if (element.is(CommonFlags.CONST)) sb.push("const ");
+    sb.push("enum ");
     sb.push(name);
     sb.push(" {\n");
     var members = element.members;
@@ -510,7 +512,9 @@ export class TSDBuilder extends ExportsWalker {
       // for (let member of instanceMembers.values()) {
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
-        this.visitElement(member.name, member);
+        if (member.parent == element) { // own member
+          this.visitElement(member.name, member);
+        }
       }
     }
     indent(sb, --this.indentLevel);

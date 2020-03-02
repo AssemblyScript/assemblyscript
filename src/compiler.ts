@@ -85,7 +85,8 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName
+  mangleInternalName,
+  Namespace
 } from "./program";
 
 import {
@@ -724,7 +725,6 @@ export class Compiler extends DiagnosticEmitter {
       // just traverse members below
       case ElementKind.ENUM:
       case ElementKind.NAMESPACE:
-      case ElementKind.FILE:
       case ElementKind.TYPEDEFINITION:
       case ElementKind.INDEXSIGNATURE: break;
 
@@ -738,22 +738,24 @@ export class Compiler extends DiagnosticEmitter {
         ? INSTANCE_DELIMITER
         : STATIC_DELIMITER
       );
-      if (
-        element.kind == ElementKind.NAMESPACE ||
-        element.kind == ElementKind.FILE
-      ) {
-        // for (let member of members.values()) {
-        for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
-          let member = unchecked(_values[i]);
-          if (!member.is(CommonFlags.EXPORT)) continue;
-          this.ensureModuleExport(member.name, member, subPrefix);
+      if (element.kind == ElementKind.NAMESPACE) {
+        let implicitExport = element.is(CommonFlags.SCOPED);
+        // for (let [memberName, member] of members) {
+        for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+          let memberName = unchecked(_keys[i]);
+          let member = assert(members.get(memberName));
+          if (implicitExport || member.is(CommonFlags.EXPORT)) {
+            this.ensureModuleExport(memberName, member, subPrefix);
+          }
         }
       } else {
-        // for (let member of members.values()) {
-        for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
-          let member = unchecked(_values[i]);
-          if (member.is(CommonFlags.PRIVATE)) continue;
-          this.ensureModuleExport(member.name, member, subPrefix);
+        // for (let [memberName, member] of members) {
+        for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+          let memberName = unchecked(_keys[i]);
+          let member = assert(members.get(memberName));
+          if (!member.is(CommonFlags.PRIVATE)) {
+            this.ensureModuleExport(memberName, member, subPrefix);
+          }
         }
       }
     }
@@ -829,10 +831,10 @@ export class Compiler extends DiagnosticEmitter {
         this.compileElement(element);
       }
     }
-    var starExports = file.exportsStar;
-    if (starExports) {
-      for (let i = 0, k = starExports.length; i < k; ++i) {
-        let exportStar = unchecked(starExports[i]);
+    var exportsStar = file.exportsStar;
+    if (exportsStar) {
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        let exportStar = unchecked(exportsStar[i]);
         this.compileFile(exportStar);
         this.compileExports(exportStar);
       }
