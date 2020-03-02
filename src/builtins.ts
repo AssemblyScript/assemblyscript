@@ -6705,6 +6705,7 @@ function builtin_i16x8_narrow_i32x4_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_narrow_i32x4_u, builtin_i16x8_narrow_i32x4_u);
 
+// i16x8.widen_low_i8x16_s -> v128.widen_low<i8>
 function builtin_i16x8_widen_low_i8x16_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6713,6 +6714,7 @@ function builtin_i16x8_widen_low_i8x16_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_widen_low_i8x16_s, builtin_i16x8_widen_low_i8x16_s);
 
+// i16x8.widen_low_i8x16_u -> v128.widen_low<u8>
 function builtin_i16x8_widen_low_i8x16_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
@@ -6721,6 +6723,7 @@ function builtin_i16x8_widen_low_i8x16_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_widen_low_i8x16_u, builtin_i16x8_widen_low_i8x16_u);
 
+// i16x8.widen_high_i8x16_s -> v128.widen_high<i8>
 function builtin_i16x8_widen_high_i8x16_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6729,6 +6732,7 @@ function builtin_i16x8_widen_high_i8x16_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_widen_high_i8x16_s, builtin_i16x8_widen_high_i8x16_s);
 
+// i16x8.widen_high_i8x16_u -> v128.widen_high<u8>
 function builtin_i16x8_widen_high_i8x16_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
@@ -6737,6 +6741,7 @@ function builtin_i16x8_widen_high_i8x16_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_widen_high_i8x16_u, builtin_i16x8_widen_high_i8x16_u);
 
+// i16x8.load8x8_s -> v128.load_ext<i8>
 function builtin_i16x8_load8x8_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -6745,6 +6750,7 @@ function builtin_i16x8_load8x8_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_load8x8_s, builtin_i16x8_load8x8_s);
 
+// i16x8.load8x8_u -> v128.load_ext<u8>
 function builtin_i16x8_load8x8_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
@@ -6753,6 +6759,7 @@ function builtin_i16x8_load8x8_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i16x8_load8x8_u, builtin_i16x8_load8x8_u);
 
+// i32x4.splat -> v128.splat<i32>
 function builtin_i32x4_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6761,6 +6768,7 @@ function builtin_i32x4_splat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_splat, builtin_i32x4_splat);
 
+// i32x4.extract_lane -> <i32>v128.extract_lane<i32>
 function builtin_i32x4_extract_lane(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6769,6 +6777,7 @@ function builtin_i32x4_extract_lane(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_extract_lane, builtin_i32x4_extract_lane);
 
+// i32x4.replace_lane -> v128.replace_lane<i32>
 function builtin_i32x4_replace_lane(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6777,6 +6786,7 @@ function builtin_i32x4_replace_lane(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_replace_lane, builtin_i32x4_replace_lane);
 
+// i32x4.add -> v128.add<i32>
 function builtin_i32x4_add(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6785,6 +6795,7 @@ function builtin_i32x4_add(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_add, builtin_i32x4_add);
 
+// i32x4.sub -> v128.sub<i32>
 function builtin_i32x4_sub(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6793,6 +6804,7 @@ function builtin_i32x4_sub(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_sub, builtin_i32x4_sub);
 
+// i32x4.mul -> v128.mul<i32>
 function builtin_i32x4_mul(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6801,6 +6813,7 @@ function builtin_i32x4_mul(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_mul, builtin_i32x4_mul);
 
+// i32x4.min_s -> v128.min<i32>
 function builtin_i32x4_min_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6809,6 +6822,7 @@ function builtin_i32x4_min_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_min_s, builtin_i32x4_min_s);
 
+// i32x4.min_u -> v128.min<u32>
 function builtin_i32x4_min_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -6817,6 +6831,7 @@ function builtin_i32x4_min_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_min_u, builtin_i32x4_min_u);
 
+// i32x4.max_s -> v128.max<i32>
 function builtin_i32x4_max_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6825,6 +6840,7 @@ function builtin_i32x4_max_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_max_s, builtin_i32x4_max_s);
 
+// i32x4.max_u -> v128.max<u32>
 function builtin_i32x4_max_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -6833,6 +6849,7 @@ function builtin_i32x4_max_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_max_u, builtin_i32x4_max_u);
 
+// i32x4.dot_i16x8_s -> v128.dot<i16>
 function builtin_i32x4_dot_i16x8_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6841,6 +6858,7 @@ function builtin_i32x4_dot_i16x8_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_dot_i16x8_s, builtin_i32x4_dot_i16x8_s);
 
+// i32x4.neg -> v128.neg<i32>
 function builtin_i32x4_neg(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6849,6 +6867,7 @@ function builtin_i32x4_neg(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_neg, builtin_i32x4_neg);
 
+// i32x4.shl -> v128.shl<i32>
 function builtin_i32x4_shl(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6857,6 +6876,7 @@ function builtin_i32x4_shl(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_shl, builtin_i32x4_shl);
 
+// i32x4.shr_s -> v128.shr<i32>
 function builtin_i32x4_shr_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6865,6 +6885,7 @@ function builtin_i32x4_shr_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_shr_s, builtin_i32x4_shr_s);
 
+// i32x4.shr_u -> v128.shr<u32>
 function builtin_i32x4_shr_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -6873,6 +6894,7 @@ function builtin_i32x4_shr_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_shr_u, builtin_i32x4_shr_u);
 
+// i32x4.any_true -> v128.any_true<i32>
 function builtin_i32x4_any_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6881,6 +6903,7 @@ function builtin_i32x4_any_true(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_any_true, builtin_i32x4_any_true);
 
+// i32x4.all_true -> v128.all_true<i32>
 function builtin_i32x4_all_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6889,6 +6912,7 @@ function builtin_i32x4_all_true(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_all_true, builtin_i32x4_all_true);
 
+// i32x4.eq -> v128.eq<i32>
 function builtin_i32x4_eq(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6897,6 +6921,7 @@ function builtin_i32x4_eq(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_eq, builtin_i32x4_eq);
 
+// i32x4.ne -> v128.ne<i32>
 function builtin_i32x4_ne(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6905,6 +6930,7 @@ function builtin_i32x4_ne(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_ne, builtin_i32x4_ne);
 
+// i32x4.lt_s -> v128.lt<i32>
 function builtin_i32x4_lt_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6913,6 +6939,7 @@ function builtin_i32x4_lt_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_lt_s, builtin_i32x4_lt_s);
 
+// i32x4.lt_u -> v128.lt<u32>
 function builtin_i32x4_lt_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -6921,6 +6948,7 @@ function builtin_i32x4_lt_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_lt_u, builtin_i32x4_lt_u);
 
+// i32x4.le_s -> v128.le<i32>
 function builtin_i32x4_le_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6929,6 +6957,7 @@ function builtin_i32x4_le_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_le_s, builtin_i32x4_le_s);
 
+// i32x4.le_u -> v128.le<u32>
 function builtin_i32x4_le_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -6937,6 +6966,7 @@ function builtin_i32x4_le_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_le_u, builtin_i32x4_le_u);
 
+// i32x4.gt_s -> v128.gt<i32>
 function builtin_i32x4_gt_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6945,6 +6975,7 @@ function builtin_i32x4_gt_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_gt_s, builtin_i32x4_gt_s);
 
+// i32x4.gt_u -> v128.gt<u32>
 function builtin_i32x4_gt_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -6953,6 +6984,7 @@ function builtin_i32x4_gt_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_gt_u, builtin_i32x4_gt_u);
 
+// i32x4.ge_s -> v128.ge<i32>
 function builtin_i32x4_ge_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6961,6 +6993,7 @@ function builtin_i32x4_ge_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_ge_s, builtin_i32x4_ge_s);
 
+// i32x4.ge_u -> v128.ge<u32>
 function builtin_i32x4_ge_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -6969,6 +7002,7 @@ function builtin_i32x4_ge_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_ge_u, builtin_i32x4_ge_u);
 
+// i32x4.trunc_sat_f32x4_s -> v128.trunc_sat<i32>
 function builtin_i32x4_trunc_sat_f32x4_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -6977,6 +7011,7 @@ function builtin_i32x4_trunc_sat_f32x4_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_trunc_sat_f32x4_s, builtin_i32x4_trunc_sat_f32x4_s);
 
+// i32x4.trunc_sat_f32x4_u -> v128.trunc_sat<u32>
 function builtin_i32x4_trunc_sat_f32x4_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -6985,6 +7020,7 @@ function builtin_i32x4_trunc_sat_f32x4_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_trunc_sat_f32x4_u, builtin_i32x4_trunc_sat_f32x4_u);
 
+// i32x4.widen_low_i16x8_s -> // v128.widen_low<i16>
 function builtin_i32x4_widen_low_i16x8_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -6993,6 +7029,7 @@ function builtin_i32x4_widen_low_i16x8_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_widen_low_i16x8_s, builtin_i32x4_widen_low_i16x8_s);
 
+// i32x4.widen_low_i16x8_u -> v128.widen_low<u16>
 function builtin_i32x4_widen_low_i16x8_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -7001,6 +7038,7 @@ function builtin_i32x4_widen_low_i16x8_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_widen_low_i16x8_u, builtin_i32x4_widen_low_i16x8_u);
 
+// i32x4.widen_high_i16x8_s -> v128.widen_high<i16>
 function builtin_i32x4_widen_high_i16x8_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -7009,6 +7047,7 @@ function builtin_i32x4_widen_high_i16x8_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_widen_high_i16x8_s, builtin_i32x4_widen_high_i16x8_s);
 
+// i32x4.widen_high_i16x8_u -> v128.widen_high<u16>
 function builtin_i32x4_widen_high_i16x8_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -7017,6 +7056,7 @@ function builtin_i32x4_widen_high_i16x8_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_widen_high_i16x8_u, builtin_i32x4_widen_high_i16x8_u);
 
+// i32x4.load16x4_s -> v128.load_ext<i16>
 function builtin_i32x4_load16x4_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i16 ];
@@ -7025,6 +7065,7 @@ function builtin_i32x4_load16x4_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_load16x4_s, builtin_i32x4_load16x4_s);
 
+// i32x4.load16x4_u -> v128.load_ext<u16>
 function builtin_i32x4_load16x4_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -7033,6 +7074,7 @@ function builtin_i32x4_load16x4_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i32x4_load16x4_u, builtin_i32x4_load16x4_u);
 
+// i64x2.splat -> v128.splat<i64>
 function builtin_i64x2_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7041,6 +7083,7 @@ function builtin_i64x2_splat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_splat, builtin_i64x2_splat);
 
+// i64x2.extract_lane -> <i64>v128.extract_lane<i64>
 function builtin_i64x2_extract_lane(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7049,6 +7092,7 @@ function builtin_i64x2_extract_lane(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_extract_lane, builtin_i64x2_extract_lane);
 
+// i64x2.replace_lane -> v128.replace_lane<i64>
 function builtin_i64x2_replace_lane(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7057,6 +7101,7 @@ function builtin_i64x2_replace_lane(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_replace_lane, builtin_i64x2_replace_lane);
 
+// i64x2.add -> v128.add<i64>
 function builtin_i64x2_add(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7065,6 +7110,7 @@ function builtin_i64x2_add(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_add, builtin_i64x2_add);
 
+// i64x2.sub -> v128.sub<i64>
 function builtin_i64x2_sub(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7073,6 +7119,7 @@ function builtin_i64x2_sub(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_sub, builtin_i64x2_sub);
 
+// i64x2.neg -> v128.neg<i64>
 function builtin_i64x2_neg(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7081,6 +7128,7 @@ function builtin_i64x2_neg(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_neg, builtin_i64x2_neg);
 
+// i64x2.shl -> v128.shl<i64>
 function builtin_i64x2_shl(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7089,6 +7137,7 @@ function builtin_i64x2_shl(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_shl, builtin_i64x2_shl);
 
+// i64x2.shr_s -> v128.shr<i64>
 function builtin_i64x2_shr_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7097,6 +7146,7 @@ function builtin_i64x2_shr_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_shr_s, builtin_i64x2_shr_s);
 
+// i64x2.shr_u -> v128.shr<u64>
 function builtin_i64x2_shr_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u64 ];
@@ -7105,6 +7155,7 @@ function builtin_i64x2_shr_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_shr_u, builtin_i64x2_shr_u);
 
+// i64x2.any_true -> v128.any_true<i64>
 function builtin_i64x2_any_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7113,6 +7164,7 @@ function builtin_i64x2_any_true(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_any_true, builtin_i64x2_any_true);
 
+// i64x2.all_true -> v128.all_true<i64>
 function builtin_i64x2_all_true(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7121,6 +7173,7 @@ function builtin_i64x2_all_true(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_all_true, builtin_i64x2_all_true);
 
+// i64x2.trunc_sat_f64x2_s -> v128.trunc_sat<i64>
 function builtin_i64x2_trunc_sat_f64x2_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7129,6 +7182,7 @@ function builtin_i64x2_trunc_sat_f64x2_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_trunc_sat_f64x2_s, builtin_i64x2_trunc_sat_f64x2_s);
 
+// i64x2.trunc_sat_f64x2_u -> v128.trunc_sat<u64>
 function builtin_i64x2_trunc_sat_f64x2_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u64 ];
@@ -7137,6 +7191,7 @@ function builtin_i64x2_trunc_sat_f64x2_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_trunc_sat_f64x2_u, builtin_i64x2_trunc_sat_f64x2_u);
 
+// i64x2.load32x2_s -> v128.load_ext<i32>
 function builtin_i64x2_load32x2_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -7145,6 +7200,7 @@ function builtin_i64x2_load32x2_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_load32x2_s, builtin_i64x2_load32x2_s);
 
+// i64x2.load32x2_u -> v128.load_ext<u32>
 function builtin_i64x2_load32x2_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -7153,6 +7209,7 @@ function builtin_i64x2_load32x2_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.i64x2_load32x2_u, builtin_i64x2_load32x2_u);
 
+// f32x4.splat -> v128.splat<f32>
 function builtin_f32x4_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7161,6 +7218,7 @@ function builtin_f32x4_splat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_splat, builtin_f32x4_splat);
 
+// f32x4.extract_lane -> <f32>v128.extract_lane<f32>
 function builtin_f32x4_extract_lane(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7169,6 +7227,7 @@ function builtin_f32x4_extract_lane(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_extract_lane, builtin_f32x4_extract_lane);
 
+// f32x4.replace_lane -> v128.replace_lane<f32>
 function builtin_f32x4_replace_lane(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7177,6 +7236,7 @@ function builtin_f32x4_replace_lane(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_replace_lane, builtin_f32x4_replace_lane);
 
+// f32x4.add -> v128.add<f32>
 function builtin_f32x4_add(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7185,6 +7245,7 @@ function builtin_f32x4_add(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_add, builtin_f32x4_add);
 
+// f32x4.sub -> v128.sub<f32>
 function builtin_f32x4_sub(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7193,6 +7254,7 @@ function builtin_f32x4_sub(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_sub, builtin_f32x4_sub);
 
+// f32x4.mul -> v128.mul<f32>
 function builtin_f32x4_mul(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7201,6 +7263,7 @@ function builtin_f32x4_mul(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_mul, builtin_f32x4_mul);
 
+// f32x4.div -> v128.div<f32>
 function builtin_f32x4_div(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7209,6 +7272,7 @@ function builtin_f32x4_div(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_div, builtin_f32x4_div);
 
+// f32x4.neg -> v128.neg<f32>
 function builtin_f32x4_neg(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7217,6 +7281,7 @@ function builtin_f32x4_neg(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_neg, builtin_f32x4_neg);
 
+// f32x4.min -> v128.min<f32>
 function builtin_f32x4_min(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7225,6 +7290,7 @@ function builtin_f32x4_min(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_min, builtin_f32x4_min);
 
+// f32x4.max -> v128.max<f32>
 function builtin_f32x4_max(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7233,6 +7299,7 @@ function builtin_f32x4_max(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_max, builtin_f32x4_max);
 
+// f32x4.abs -> v128.abs<f32>
 function builtin_f32x4_abs(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7241,6 +7308,7 @@ function builtin_f32x4_abs(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_abs, builtin_f32x4_abs);
 
+// f32x4.sqrt -> v128.sqrt<f32>
 function builtin_f32x4_sqrt(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7249,6 +7317,7 @@ function builtin_f32x4_sqrt(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_sqrt, builtin_f32x4_sqrt);
 
+// f32x4.eq -> v128.eq<f32>
 function builtin_f32x4_eq(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7257,6 +7326,7 @@ function builtin_f32x4_eq(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_eq, builtin_f32x4_eq);
 
+// f32x4.ne -> v128.ne<f32>
 function builtin_f32x4_ne(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7265,6 +7335,7 @@ function builtin_f32x4_ne(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_ne, builtin_f32x4_ne);
 
+// f32x4.lt -> v128.lt<f32>
 function builtin_f32x4_lt(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7273,6 +7344,7 @@ function builtin_f32x4_lt(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_lt, builtin_f32x4_lt);
 
+// f32x4.le -> v128.le<f32>
 function builtin_f32x4_le(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7281,6 +7353,7 @@ function builtin_f32x4_le(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_le, builtin_f32x4_le);
 
+// f32x4.gt -> v128.gt<f32>
 function builtin_f32x4_gt(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7289,6 +7362,7 @@ function builtin_f32x4_gt(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_gt, builtin_f32x4_gt);
 
+// f32x4.ge -> v128.ge<f32>
 function builtin_f32x4_ge(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7297,6 +7371,7 @@ function builtin_f32x4_ge(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_ge, builtin_f32x4_ge);
 
+// f32x4.convert_i32x4_s -> v128.convert<i32>
 function builtin_f32x4_convert_i32x4_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i32 ];
@@ -7305,6 +7380,7 @@ function builtin_f32x4_convert_i32x4_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_convert_i32x4_s, builtin_f32x4_convert_i32x4_s);
 
+// f32x4.convert_i32x4_u -> v128.convert<u32>
 function builtin_f32x4_convert_i32x4_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -7313,6 +7389,7 @@ function builtin_f32x4_convert_i32x4_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_convert_i32x4_u, builtin_f32x4_convert_i32x4_u);
 
+// f32x4.qfma -> v128.qfma<f32>
 function builtin_f32x4_qfma(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7321,6 +7398,7 @@ function builtin_f32x4_qfma(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_qfma, builtin_f32x4_qfma);
 
+// f32x4.qfms -> v128.qfms<f32>
 function builtin_f32x4_qfms(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f32 ];
@@ -7329,6 +7407,7 @@ function builtin_f32x4_qfms(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_qfms, builtin_f32x4_qfms);
 
+// f64x2.splat -> v128.splat<f64>
 function builtin_f64x2_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7337,6 +7416,7 @@ function builtin_f64x2_splat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_splat, builtin_f64x2_splat);
 
+// f64x2.extract_lane -> <f64>v128.extract_lane<f64>
 function builtin_f64x2_extract_lane(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7345,6 +7425,7 @@ function builtin_f64x2_extract_lane(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_extract_lane, builtin_f64x2_extract_lane);
 
+// f64x2.replace_lane -> v128.replace_lane
 function builtin_f64x2_replace_lane(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7353,6 +7434,7 @@ function builtin_f64x2_replace_lane(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_replace_lane, builtin_f64x2_replace_lane);
 
+// f64x2.add -> v128.add<f64>
 function builtin_f64x2_add(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7361,6 +7443,7 @@ function builtin_f64x2_add(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_add, builtin_f64x2_add);
 
+// f64x2.sub -> v128.sub<f64>
 function builtin_f64x2_sub(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7369,6 +7452,7 @@ function builtin_f64x2_sub(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_sub, builtin_f64x2_sub);
 
+// f64x2.mul -> v128.mul<f64>
 function builtin_f64x2_mul(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7377,6 +7461,7 @@ function builtin_f64x2_mul(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_mul, builtin_f64x2_mul);
 
+// f64x2.div -> v128.div<f64>
 function builtin_f64x2_div(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7385,6 +7470,7 @@ function builtin_f64x2_div(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_div, builtin_f64x2_div);
 
+// f64x2.neg -> v128.neg<f64>
 function builtin_f64x2_neg(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7393,6 +7479,7 @@ function builtin_f64x2_neg(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_neg, builtin_f64x2_neg);
 
+// f64x2.min -> v128.min<f64>
 function builtin_f64x2_min(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7401,6 +7488,7 @@ function builtin_f64x2_min(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_min, builtin_f64x2_min);
 
+// f64x2.max -> v128.max<f64>
 function builtin_f64x2_max(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7409,6 +7497,7 @@ function builtin_f64x2_max(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_max, builtin_f64x2_max);
 
+// f64x2.abs -> v128.abs<f64>
 function builtin_f64x2_abs(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7417,6 +7506,7 @@ function builtin_f64x2_abs(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_abs, builtin_f64x2_abs);
 
+// f64x2.sqrt -> v128.sqrt<f64>
 function builtin_f64x2_sqrt(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7425,6 +7515,7 @@ function builtin_f64x2_sqrt(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_sqrt, builtin_f64x2_sqrt);
 
+// f64x2.eq -> v128.eq<f64>
 function builtin_f64x2_eq(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7433,6 +7524,7 @@ function builtin_f64x2_eq(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_eq, builtin_f64x2_eq);
 
+// f64x2.ne -> v128.ne<f64>
 function builtin_f64x2_ne(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7441,6 +7533,7 @@ function builtin_f64x2_ne(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_ne, builtin_f64x2_ne);
 
+// f64x2.lt -> v128.lt<f64>
 function builtin_f64x2_lt(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7449,6 +7542,7 @@ function builtin_f64x2_lt(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_lt, builtin_f64x2_lt);
 
+// f64x2.le -> v128.le<f64>
 function builtin_f64x2_le(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7457,6 +7551,7 @@ function builtin_f64x2_le(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_le, builtin_f64x2_le);
 
+// f64x2.gt -> v128.gt<f64>
 function builtin_f64x2_gt(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7465,6 +7560,7 @@ function builtin_f64x2_gt(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_gt, builtin_f64x2_gt);
 
+// f64x2.ge -> v128.ge<f64>
 function builtin_f64x2_ge(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7473,6 +7569,7 @@ function builtin_f64x2_ge(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_ge, builtin_f64x2_ge);
 
+// f64x2.convert_i64x2_s -> v128.convert<i64>
 function builtin_f64x2_convert_i64x2_s(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i64 ];
@@ -7481,6 +7578,7 @@ function builtin_f64x2_convert_i64x2_s(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_convert_i64x2_s, builtin_f64x2_convert_i64x2_s);
 
+// f64x2.convert_i64x2_u -> v128.convert<u64>
 function builtin_f64x2_convert_i64x2_u(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u64 ];
@@ -7489,6 +7587,7 @@ function builtin_f64x2_convert_i64x2_u(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_convert_i64x2_u, builtin_f64x2_convert_i64x2_u);
 
+// f64x2.qfma -> v128.qfma<f64>
 function builtin_f64x2_qfma(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7497,6 +7596,7 @@ function builtin_f64x2_qfma(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_qfma, builtin_f64x2_qfma);
 
+// f64x2.qfms -> v128.qfms<f64>
 function builtin_f64x2_qfms(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.f64 ];
@@ -7505,6 +7605,7 @@ function builtin_f64x2_qfms(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f64x2_qfms, builtin_f64x2_qfms);
 
+// v8x16.shuffle -> v128.shuffle<i8>
 function builtin_v8x16_shuffle(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.i8 ];
@@ -7513,6 +7614,7 @@ function builtin_v8x16_shuffle(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v8x16_shuffle, builtin_v8x16_shuffle);
 
+// v8x16.swizzle -> v128.swizzle
 function builtin_v8x16_swizzle(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = null;
@@ -7521,6 +7623,7 @@ function builtin_v8x16_swizzle(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v8x16_swizzle, builtin_v8x16_swizzle);
 
+// v8x16.load_splat -> v128.load_splat<u8>
 function builtin_v8x16_load_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u8 ];
@@ -7529,6 +7632,7 @@ function builtin_v8x16_load_splat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v8x16_load_splat, builtin_v8x16_load_splat);
 
+// v16x8.load_splat -> v128.load_splat<u16>
 function builtin_v16x8_load_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u16 ];
@@ -7537,6 +7641,7 @@ function builtin_v16x8_load_splat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v16x8_load_splat, builtin_v16x8_load_splat);
 
+// v32x4.load_splat -> v128.load_splat<u32>
 function builtin_v32x4_load_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u32 ];
@@ -7545,6 +7650,7 @@ function builtin_v32x4_load_splat(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.v32x4_load_splat, builtin_v32x4_load_splat);
 
+// v64x2.load_splat -> v128.load_splat<u64>
 function builtin_v64x2_load_splat(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
   ctx.typeArguments = [ Type.u64 ];
