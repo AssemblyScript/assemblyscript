@@ -780,8 +780,6 @@ exports.main = function main(argv, options, callback) {
         add("remove-unused-brs");
         add("vacuum");
 
-        // replace indirect calls with direct and inline if possible again.
-        // add("directize");
         // move some code after early return which potentially could reduce computations
         // do this after CFG cleanup (originally it was done before)
         // moved from (1)
@@ -790,6 +788,7 @@ exports.main = function main(argv, options, callback) {
         // this quite expensive so do this only for highest opt level
         add("simplify-globals");
         if (optimizeLevel >= 3) {
+          // replace indirect calls with direct and inline if possible again.
           add("directize");
           add("coalesce-locals");
           add("simplify-locals-nostructure");
