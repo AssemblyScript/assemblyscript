@@ -1,9 +1,13 @@
 /**
- * Definition builders for WebIDL and TypeScript.
- * @module definitions
- *//***/
+ * @fileoverview Builders for various definitions describing a module.
+ *
+ * - TSDBuilder: Creates a TypeScript definition file (.d.ts)
+ * - IDLBuilder: Creates a WebIDL interface definition (.webidl)
+ *
+ * @license Apache-2.0
+ */
 
- import {
+import {
   CommonFlags
 } from "./common";
 

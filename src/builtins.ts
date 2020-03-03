@@ -1,9 +1,29 @@
 /**
- * Built-in elements providing WebAssembly core functionality.
- * @module builtins
- *//***/
+ * @fileoverview Built-in elements providing core WebAssembly functionality.
+ *
+ * Each builtin is linked to its definition in std/assembly/builtins.ts.
+ * When its prototype is called, the compiler recognizes the `@builtin`
+ * decorator, looks up the respective handler in the global builtins map
+ * and executes it, with the handler directly emitting WebAssembly code
+ * according to context.
+ *
+ * Builtins can be categorized into core builtins that typically are generic
+ * and emit code directly and aliases calling core builtins with overridden
+ * contexts. The latter is used by inline assembler aliases of WebAssembly
+ * instructions, like `i64.load8_u` deferring to `<i64>load<u8>`.
+ *
+ * The `contextIsExact` modifier is used to force a specific instruction
+ * family. A `i32.store8` deferring to `<i32>store<i8>` for example is
+ * ambiguous in that the input can still be an i32 or an i64, leading to
+ * either an `i32.store8` or an `i64.store8`, so `i32` is forced there.
+ * This behavior is indicated by `from i32/i64` in the comments below.
+ *
+ * @license Apache-2.0
+ */
 
- import {
+// TODO: Add builtins for `i32.add` etc. that do not have a core builtin.
+
+import {
   Compiler,
   Constraints,
   RuntimeFeatures
@@ -586,7 +606,7 @@ export class BuiltinContext {
   contextIsExact: bool;
 }
 
-/** Registered builtins. */
+/** Global builtins map. */
 export const builtins = new Map<string,(ctx: BuiltinContext) => ExpressionRef>();
 
 // === Static type evaluation =================================================================

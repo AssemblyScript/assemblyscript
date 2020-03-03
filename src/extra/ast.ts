@@ -1,10 +1,10 @@
 /**
- * Abstract Syntax Tree extras.
+ * @fileoverview Abstract Syntax Tree extras.
  *
- * Not needed in a standalone compiler but useful for testing the parser.
+ * Provides serialization of the AssemblyScript AST back to it source form.
  *
- * @module extra/ast
- *//***/
+ * @license Apache-2.0
+ */
 
 import {
   Node,

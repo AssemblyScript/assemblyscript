@@ -1,4 +1,7 @@
-/** @module util *//***/
+/**
+ * @fileoverview Various binary reading and writing utility.
+ * @license Apache-2.0
+ */
 
 /** Reads an 8-bit integer from the specified buffer. */
 export function readI8(buffer: Uint8Array, offset: i32): i32 {
