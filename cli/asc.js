@@ -802,6 +802,7 @@ exports.main = function main(argv, options, callback) {
           add("reorder-locals");
         }
         add("dae-optimizing");
+        add("inlining-optimizing");
         add("optimize-instructions");
         add("simplify-globals-optimizing");
       }
