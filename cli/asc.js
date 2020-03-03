@@ -789,6 +789,7 @@ exports.main = function main(argv, options, callback) {
         add("simplify-globals");
         if (optimizeLevel >= 3) {
           // replace indirect calls with direct and inline if possible again.
+          add("dae-optimizing");
           add("directize");
           add("coalesce-locals");
           add("simplify-locals-nostructure");
@@ -797,8 +798,6 @@ exports.main = function main(argv, options, callback) {
           add("precompute-propagate");
           add("simplify-locals-nostructure");
           add("vacuum");
-
-          add("dae-optimizing");
           add("inlining-optimizing");
           add("reorder-locals");
         }

@@ -758,25 +758,6 @@
  (func $~lib/rt/tlsf/searchBlock (; 14 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  i32.const 1
-  local.set $1
-  i32.const 0
-  i32.const 23
-  i32.lt_u
-  if (result i32)
-   i32.const 1
-  else
-   i32.const 0
-  end
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 80
-   i32.const 338
-   i32.const 13
-   call $~lib/builtins/abort
-   unreachable
-  end
   local.get $0
   i32.load offset=4
   i32.const -2
