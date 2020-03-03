@@ -1,7 +1,18 @@
 /**
- * Abstract syntax tree representing a source file once parsed.
- * @module ast
- *//***/
+ * @fileoverview Abstract syntax tree representing a source file once parsed.
+ *
+ * Each node in the AST is represented by an instance of a subclass of `Node`,
+ * with its `Node#kind` represented by one of the `NodeKind` constants, which
+ * dependent code typically switches over. The intended way to create a node
+ * is to use the respective `Node.createX` method instead of its constructor.
+ *
+ * Note that the AST does not contain any type information except type names.
+ *
+ * @license Apache-2.0
+ */
+
+// TODO: Make the AST more easily serializable by refactoring `Node#range` so
+// it doesn't reference the non-serializable `Source` object.
 
 import {
   CommonFlags,

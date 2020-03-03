@@ -1,7 +1,7 @@
 /**
- * Generated from diagnosticsMessages.json. Do not edit.
- * @module diagnostics
- *//***/
+ * @fileoverview Generated from diagnosticsMessages.json. Do not edit.
+ * @license Apache-2.0
+ */
 
 /* tslint:disable:max-line-length */
 

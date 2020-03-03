@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Command line options utility definitions.
+ * @license Apache-2.0
+ */
+
 /** Command line option description. */
 export interface OptionDescription {
   /** Textual description. */

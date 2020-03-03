@@ -1,7 +1,7 @@
 /**
- * Definitions for custom compiler transforms that can be applied with the `--transform` option.
- * @module cli/transform
- *//***/
+ * @fileoverview Compiler transform interface definitions.
+ * @license Apache-2.0
+ */
 
 import { Program, Parser, Module } from "..";
 import { OutputStream } from "./asc";

@@ -1,8 +1,7 @@
 /**
- * Shared diagnostic handling inherited by the parser and the compiler.
- * @module diagnostics
- * @preferred
- *//***/
+ * @fileoverview Shared diagnostic handling.
+ * @license Apache-2.0
+ */
 
 import {
   Range

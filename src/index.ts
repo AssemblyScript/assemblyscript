@@ -1,7 +1,37 @@
 /**
- * Low-level C-like compiler API.
- * @module index
- *//***/
+ * @license
+ * Copyright 2020 Daniel Wirtz / The AssemblyScript Authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The C-like and re-exported public compiler interface.
+ *
+ * The intended way to consume the compiler sources is to import this
+ * file, which again exports all relevant functions, classes and constants
+ * as a flat namespace.
+ *
+ * Note though that the compiler sources are written in "portable
+ * AssemblyScript" that can be compiled to both JavaScript with tsc and
+ * to WebAssembly with asc, and as such require additional glue code
+ * depending on the target.
+ *
+ * When compiling to JavaScript `glue/js/index.js` must be included.
+ * When compiling to WebAssembly `glue/wasm/index.ts` must be included.
+ */
 
 import { Target, Feature } from "./common";
 import { Compiler, Options } from "./compiler";

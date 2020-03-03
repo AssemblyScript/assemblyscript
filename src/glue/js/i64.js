@@ -1,3 +1,8 @@
+/**
+ * @fileoverview 64-bit integer glue code for JavaScript.
+ * @license Apache-2.0
+ */
+
 const Long = global.Long || require("long");
 
 global.i64_zero = Long.ZERO;

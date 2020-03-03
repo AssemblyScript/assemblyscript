@@ -1,7 +1,7 @@
 /**
- * The AssemblyScript compiler.
- * @module compiler
- *//***/
+ * @fileoverview The AssemblyScript compiler.
+ * @license Apache-2.0
+ */
 
 import {
   BuiltinNames,

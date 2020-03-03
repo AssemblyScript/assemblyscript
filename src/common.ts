@@ -1,7 +1,7 @@
 /**
- * Common constants.
- * @module common
- *//***/
+ * @fileoverview Common constants used by various parts of the compiler.
+ * @license Apache-2.0
+ */
 
 /** Indicates traits of a {@link Node} or {@link Element}. */
 export enum CommonFlags {

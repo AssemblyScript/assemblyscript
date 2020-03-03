@@ -1,4 +1,7 @@
-/** @module glue/wasm *//***/
+/**
+ * @fileoverview Floating point glue code for WebAssembly.
+ * @license Apache-2.0
+ */
 
 // @ts-ignore: decorator
 @global

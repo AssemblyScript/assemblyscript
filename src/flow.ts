@@ -1,7 +1,19 @@
 /**
- * A control flow analyzer.
- * @module flow
- *//***/
+ * @fileoverview A concurrent code flow analyzer.
+ *
+ * Flows keep track of compilation state and can be queried for various
+ * conditions, like whether the current branch always terminates, whether
+ * a local is known to be non-null or whether an expression has possibly
+ * overflown its value range.
+ *
+ * To accomplish this, compilation of each function begins with a clean
+ * flow populated with initial local states etc. While compilation
+ * progresses, statements and expressions update flow state while control
+ * constructs fork, potentially add scoped locals and later merge these
+ * forked branches as necessary.
+ *
+ * @license Apache-2.0
+ */
 
 import {
   Type,
@@ -21,6 +33,8 @@ import {
   NativeType,
   ExpressionId,
   ExpressionRef,
+  BinaryOp,
+  UnaryOp,
 
   getExpressionId,
   getLocalGetIndex,
@@ -28,12 +42,10 @@ import {
   getLocalSetValue,
   getGlobalGetName,
   getBinaryOp,
-  BinaryOp,
   getBinaryLeft,
   getConstValueI32,
   getBinaryRight,
   getUnaryOp,
-  UnaryOp,
   getExpressionType,
   getConstValueI64Low,
   getConstValueF32,
