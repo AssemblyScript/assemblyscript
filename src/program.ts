@@ -491,6 +491,8 @@ export class Program extends DiagnosticEmitter {
   nextClassId: u32 = 0;
   /** Next signature id. */
   nextSignatureId: i32 = 0;
+  /** An indicator if the program has been initialized. */
+  initialized: bool = false;
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
     /** Compiler options. */
@@ -646,6 +648,10 @@ export class Program extends DiagnosticEmitter {
 
   /** Initializes the program and its elements prior to compilation. */
   initialize(options: Options): void {
+    // Initialize only once
+    if (this.initialized) return;
+
+    this.initialized = true;
     this.options = options;
 
     // register native types

@@ -214,6 +214,11 @@ export function getDependee(program: Program, file: string): string | null {
 
 // Compiler
 
+/** Initializes the program pre-emptively for transform hooks. */
+export function initializeProgram(program: Program, options: Options): void {
+  program.initialize(options);
+}
+
 /** Compiles the parsed sources to a module. */
 export function compile(program: Program): Module {
   program.parser.finish();
