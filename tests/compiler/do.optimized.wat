@@ -105,7 +105,105 @@
   i32.const 1
   global.set $do/ran
  )
- (func $~lib/rt/tlsf/removeBlock (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $do/testAlwaysTrue (; 8 ;)
+  (local $0 i32)
+  loop $do-continue|0
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   i32.const 10
+   i32.ne
+   br_if $do-continue|0
+  end
+  local.get $0
+  i32.const 10
+  i32.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 56
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $do/ran
+ )
+ (func $do/testContinue (; 9 ;)
+  (local $0 i32)
+  loop $do-continue|0
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   i32.const 10
+   i32.ne
+   br_if $do-continue|0
+  end
+  local.get $0
+  i32.const 10
+  i32.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 116
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $do/ran
+ )
+ (func $do/testNestedContinue (; 10 ;)
+  (local $0 i32)
+  (local $1 i32)
+  loop $do-continue|0
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   i32.const 10
+   i32.ne
+   if
+    loop $do-continue|1
+     local.get $1
+     i32.const 1
+     i32.add
+     local.tee $1
+     i32.const 10
+     i32.rem_s
+     br_if $do-continue|1
+    end
+    br $do-continue|0
+   end
+  end
+  local.get $0
+  i32.const 10
+  i32.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 134
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 90
+  i32.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 135
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1
+  global.set $do/ran
+ )
+ (func $~lib/rt/tlsf/removeBlock (; 11 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1069,7 +1167,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 10
+   i32.const 150
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1080,7 +1178,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 11
+   i32.const 151
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1106,13 +1204,27 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 21
+   i32.const 170
+   i32.const 2
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $0
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 171
    i32.const 2
    call $~lib/builtins/abort
    unreachable
   end
   i32.const 1
   global.set $do/ran
+  local.get $0
+  call $~lib/rt/pure/__release
+ )
+ (func $start:do (; 24 ;)
+  (local $0 i32)
   i32.const 0
   global.set $do/ran
   call $do/testNested
@@ -1238,6 +1350,28 @@
    call $~lib/builtins/abort
    unreachable
   end
+  loop $do-continue|0
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   i32.const 10
+   i32.ne
+   br_if $do-continue|0
+  end
+  local.get $0
+  i32.const 10
+  i32.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 70
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  global.set $do/ran
   i32.const 1
   global.set $do/ran
   i32.const 0
@@ -1275,13 +1409,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 141
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  if
+   i32.const 121
    i32.const 0
    i32.const 32
    i32.const 142
@@ -1298,7 +1426,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 147
+   i32.const 140
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -1342,13 +1470,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 161
-   i32.const 2
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  if
+   i32.const 156
    i32.const 0
    i32.const 32
    i32.const 162
@@ -1365,7 +1487,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 167
+   i32.const 176
    i32.const 0
    call $~lib/builtins/abort
    unreachable

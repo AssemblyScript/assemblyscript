@@ -9,7 +9,7 @@ export class Int8Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<i8>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<i8>();
 
   constructor(length: i32) {
     super(length, alignof<i8>());
@@ -137,7 +137,7 @@ export class Uint8Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<u8>();
 
   constructor(length: i32) {
     super(length, alignof<u8>());
@@ -265,7 +265,7 @@ export class Uint8ClampedArray extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u8>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<u8>();
 
   constructor(length: i32) {
     super(length, alignof<u8>());
@@ -393,7 +393,7 @@ export class Int16Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<i16>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<i16>();
 
   constructor(length: i32) {
     super(length, alignof<i16>());
@@ -521,7 +521,7 @@ export class Uint16Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u16>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<u16>();
 
   constructor(length: i32) {
     super(length, alignof<u16>());
@@ -649,7 +649,7 @@ export class Int32Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<i32>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<i32>();
 
   constructor(length: i32) {
     super(length, alignof<i32>());
@@ -777,7 +777,7 @@ export class Uint32Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u32>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<u32>();
 
   constructor(length: i32) {
     super(length, alignof<u32>());
@@ -905,7 +905,7 @@ export class Int64Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<i64>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<i64>();
 
   constructor(length: i32) {
     super(length, alignof<i64>());
@@ -1033,7 +1033,7 @@ export class Uint64Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<u64>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<u64>();
 
   constructor(length: i32) {
     super(length, alignof<u64>());
@@ -1161,7 +1161,7 @@ export class Float32Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<f32>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<f32>();
 
   constructor(length: i32) {
     super(length, alignof<f32>());
@@ -1289,7 +1289,7 @@ export class Float64Array extends ArrayBufferView {
 
   // @ts-ignore: decorator
   @lazy
-  static readonly BYTES_PER_ELEMENT: usize = sizeof<f64>();
+  static readonly BYTES_PER_ELEMENT: i32 = sizeof<f64>();
 
   constructor(length: i32) {
     super(length, alignof<f64>());
@@ -1736,7 +1736,7 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
 function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
   var byteLength: i32;
   var bufferByteLength = buffer.byteLength;
-  const mask = sizeof<T>() - 1;
+  const mask: u32 = sizeof<T>() - 1;
   if (i32(<u32>byteOffset > <u32>bufferByteLength) | (byteOffset & mask)) {
     throw new RangeError(E_INDEXOUTOFRANGE);
   }

@@ -5,7 +5,10 @@
  *//***/
 
 import {
-  Range,
+  Range
+} from "./tokenizer";
+
+import {
   Source
 } from "./ast";
 
@@ -104,9 +107,9 @@ export class DiagnosticMessage {
     arg2: string | null = null
   ): DiagnosticMessage {
     var message = diagnosticCodeToString(code);
-    if (arg0 != null) message = message.replace("{0}", arg0);
-    if (arg1 != null) message = message.replace("{1}", arg1);
-    if (arg2 != null) message = message.replace("{2}", arg2);
+    if (arg0 !== null) message = message.replace("{0}", arg0);
+    if (arg1 !== null) message = message.replace("{1}", arg1);
+    if (arg2 !== null) message = message.replace("{2}", arg2);
     return new DiagnosticMessage(code, category, message);
   }
 
@@ -124,25 +127,26 @@ export class DiagnosticMessage {
 
   /** Converts this message to a string. */
   toString(): string {
-    if (this.range) {
+    var range = this.range;
+    if (range) {
       return (
         diagnosticCategoryToString(this.category) +
         " " +
-        this.code.toString(10) +
+        this.code.toString() +
         ": \"" +
         this.message +
         "\" in " +
-        this.range.source.normalizedPath +
+        range.source.normalizedPath +
         ":" +
-        this.range.line.toString(10) +
+        range.line.toString() +
         ":" +
-        this.range.column.toString(10)
+        range.column.toString()
       );
     }
     return (
       diagnosticCategoryToString(this.category) +
       " " +
-      this.code.toString(10) +
+      this.code.toString() +
       ": " +
       this.message
     );
@@ -162,15 +166,15 @@ export function formatDiagnosticMessage(
   sb.push(diagnosticCategoryToString(message.category));
   if (useColors) sb.push(COLOR_RESET);
   sb.push(message.code < 1000 ? " AS" : " TS");
-  sb.push(message.code.toString(10));
+  sb.push(message.code.toString());
   sb.push(": ");
   sb.push(message.message);
 
   // include range information if available
-  if (message.range) {
+  var range = message.range;
+  if (range) {
 
     // include context information if requested
-    let range = message.range;
     if (showContext) {
       sb.push("\n");
       sb.push(formatDiagnosticContext(range, useColors));
@@ -179,9 +183,9 @@ export function formatDiagnosticMessage(
     sb.push(" in ");
     sb.push(range.source.normalizedPath);
     sb.push("(");
-    sb.push(range.line.toString(10));
+    sb.push(range.line.toString());
     sb.push(",");
-    sb.push(range.column.toString(10));
+    sb.push(range.column.toString());
     sb.push(")");
 
     let relatedRange = message.relatedRange;
@@ -194,9 +198,9 @@ export function formatDiagnosticMessage(
       sb.push(" in ");
       sb.push(relatedRange.source.normalizedPath);
       sb.push("(");
-      sb.push(relatedRange.line.toString(10));
+      sb.push(relatedRange.line.toString());
       sb.push(",");
-      sb.push(relatedRange.column.toString(10));
+      sb.push(relatedRange.column.toString());
       sb.push(")");
     }
   }
@@ -266,16 +270,16 @@ export abstract class DiagnosticEmitter {
     if (range) {
       let seen = this.seen;
       if (seen.has(range.source)) {
-        let seenInSource = seen.get(range.source)!;
+        let seenInSource = assert(seen.get(range.source));
         if (seenInSource.has(range.start)) {
-          let seenCodesAtPos = seenInSource.get(range.start)!;
+          let seenCodesAtPos = assert(seenInSource.get(range.start));
           if (seenCodesAtPos.includes(code)) return;
           seenCodesAtPos.push(code);
         } else {
           seenInSource.set(range.start, [ code ]);
         }
       } else {
-        let seenInSource = new Map();
+        let seenInSource = new Map<i32,i32[]>();
         seenInSource.set(range.start, [ code ]);
         seen.set(range.source, seenInSource);
       }

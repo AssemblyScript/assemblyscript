@@ -1731,8 +1731,7 @@
     if (result f64)
      global.get $~lib/math/NativeMath.PI
     else
-     i32.const 0
-     f64.convert_i32_s
+     f64.const 0
     end
     local.set $9
     local.get $7

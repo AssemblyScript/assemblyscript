@@ -3868,7 +3868,7 @@
   i32.const 31
   i32.add
   i32.const 5
-  i32.shr_s
+  i32.shr_u
   i32.const 2
   i32.shl
   local.tee $3
@@ -3896,7 +3896,7 @@
      local.get $6
      local.get $3
      i32.const 6
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -3947,7 +3947,7 @@
      local.get $6
      local.get $4
      i32.const 5
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -4013,7 +4013,7 @@
      local.get $6
      local.get $1
      i32.const 5
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -4064,7 +4064,7 @@
        local.get $6
        local.get $1
        i32.const 5
-       i32.shr_s
+       i32.shr_u
        i32.const 2
        i32.shl
        i32.add
@@ -4316,7 +4316,7 @@
   i32.const 31
   i32.add
   i32.const 5
-  i32.shr_s
+  i32.shr_u
   i32.const 2
   i32.shl
   local.tee $3
@@ -4344,7 +4344,7 @@
      local.get $6
      local.get $3
      i32.const 6
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -4395,7 +4395,7 @@
      local.get $6
      local.get $4
      i32.const 5
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -4461,7 +4461,7 @@
      local.get $6
      local.get $1
      i32.const 5
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -4512,7 +4512,7 @@
        local.get $6
        local.get $1
        i32.const 5
-       i32.shr_s
+       i32.shr_u
        i32.const 2
        i32.shl
        i32.add
@@ -4785,7 +4785,7 @@
   i32.const 31
   i32.add
   i32.const 5
-  i32.shr_s
+  i32.shr_u
   i32.const 2
   i32.shl
   local.tee $3
@@ -4813,7 +4813,7 @@
      local.get $5
      local.get $3
      i32.const 6
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -4864,7 +4864,7 @@
      local.get $5
      local.get $4
      i32.const 5
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -4930,7 +4930,7 @@
      local.get $5
      local.get $1
      i32.const 5
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -4981,7 +4981,7 @@
        local.get $5
        local.get $1
        i32.const 5
-       i32.shr_s
+       i32.shr_u
        i32.const 2
        i32.shl
        i32.add

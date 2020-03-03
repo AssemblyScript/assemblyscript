@@ -37,11 +37,14 @@ import {
 
 import {
   Token,
+  Range
+} from "./tokenizer";
+
+import {
   Node,
   NodeKind,
   Source,
   SourceKind,
-  Range,
   DecoratorNode,
   DecoratorKind,
   TypeParameterNode,
@@ -565,17 +568,19 @@ export class Program extends DiagnosticEmitter {
     flags: CommonFlags = CommonFlags.NONE
   ): FunctionDeclaration {
     var range = this.nativeSource.range;
-    return Node.createFunctionDeclaration(
-      Node.createIdentifierExpression(name, range),
-      null,
-      this.nativeDummySignature || (this.nativeDummySignature = Node.createFunctionType([],
+    var signature = this.nativeDummySignature;
+    if (!signature) {
+      this.nativeDummySignature = signature = Node.createFunctionType([],
         Node.createNamedType( // ^ AST signature doesn't really matter, is overridden anyway
           Node.createSimpleTypeName(CommonNames.void_, range),
           null, false, range
         ),
-        null, false, range)
-      ),
-      null, null, flags, ArrowKind.NONE, range
+        null, false, range
+      );
+    }
+    return Node.createFunctionDeclaration(
+      Node.createIdentifierExpression(name, range),
+      null, signature, null, null, flags, ArrowKind.NONE, range
     );
   }
 
@@ -622,7 +627,7 @@ export class Program extends DiagnosticEmitter {
   getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement | null {
     var elementsByDeclaration = this.elementsByDeclaration;
     return elementsByDeclaration.has(declaration)
-      ? elementsByDeclaration.get(declaration)!
+      ? assert(elementsByDeclaration.get(declaration))
       : null;
   }
 
@@ -769,9 +774,12 @@ export class Program extends DiagnosticEmitter {
     }
 
     // queued exports * should be linkable now that all files have been processed
-    for (let [file, exportsStar] of queuedExportsStar) {
-      for (let i = 0, k = exportsStar.length; i < k; ++i) {
-        let exportStar = exportsStar[i];
+    // TODO: for (let [file, starExports] of queuedExportsStar) {
+    for (let _keys = Map_keys(queuedExportsStar), i = 0, k = _keys.length; i < k; ++i) {
+      let file = _keys[i];
+      let starExports = assert(queuedExportsStar.get(file));
+      for (let j = 0, l = starExports.length; j < l; ++j) {
+        let exportStar = unchecked(starExports[j]);
         let foreignFile = this.lookupForeignFile(exportStar.foreignPath, exportStar.foreignPathAlt);
         if (!foreignFile) {
           this.error(
@@ -830,8 +838,14 @@ export class Program extends DiagnosticEmitter {
     }
 
     // queued exports should be resolvable now that imports are finalized
-    for (let [file, exports] of queuedExports) {
-      for (let [exportName, queuedExport] of exports) {
+    // TODO: for (let [file, exports] of queuedExports) {
+    for (let _keys = Map_keys(queuedExports), i = 0, k = _keys.length; i < k; ++i) {
+      let file = unchecked(_keys[i]);
+      let exports = assert(queuedExports.get(file));
+      // TODO: for (let [exportName, queuedExport] of exports) {
+      for (let exportNames = Map_keys(exports), j = 0, l = exportNames.length; j < l; ++j) {
+        let exportName = unchecked(exportNames[j]);
+        let queuedExport = assert(exports.get(exportName));
         let localName = queuedExport.localIdentifier.text;
         let foreignPath = queuedExport.foreignPath;
         if (foreignPath) { // i.e. export { foo [as bar] } from "./baz"
@@ -856,7 +870,7 @@ export class Program extends DiagnosticEmitter {
             file.ensureExport(exportName, element);
           } else {
             let globalElement = this.lookupGlobal(localName);
-            if (globalElement && globalElement instanceof DeclaredElement) { // export { memory }
+            if (globalElement !== null && isDeclaredElement(globalElement.kind)) { // export { memory }
               file.ensureExport(exportName, <DeclaredElement>globalElement);
             } else {
               this.error(
@@ -946,7 +960,10 @@ export class Program extends DiagnosticEmitter {
     {
       let globalAliases = options.globalAliases;
       if (globalAliases) {
-        for (let [alias, name] of globalAliases) {
+        // TODO: for (let [alias, name] of globalAliases) {
+        for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
+          let alias = unchecked(_keys[i]);
+          let name = assert(globalAliases.get(alias));
           if (!name.length) continue; // explicitly disabled
           let firstChar = name.charCodeAt(0);
           if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
@@ -983,10 +1000,11 @@ export class Program extends DiagnosticEmitter {
     this.allocArrayInstance = this.requireFunction(CommonNames.allocArray);
 
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
-    for (let file of this.filesByName.values()) {
-      let exports = file.exports;
-      if (exports !== null && file.source.sourceKind == SourceKind.USER_ENTRY) {
-        for (let element of exports.values()) this.markModuleExport(element);
+    // TODO: for (let file of this.filesByName.values()) {
+    for (let _values = Map_values(this.filesByName), i = 0, k = _values.length; i < k; ++i) {
+      let file = unchecked(_values[i]);
+      if (file.source.sourceKind == SourceKind.USER_ENTRY) {
+        this.markModuleExports(file);
       }
     }
   }
@@ -1022,13 +1040,37 @@ export class Program extends DiagnosticEmitter {
     return resolved;
   }
 
+  /** Marks all exports of the specified file as module exports. */
+  private markModuleExports(file: File): void {
+    var exports = file.exports;
+    if (exports) {
+      // TODO: for (let element of exports.values()) {
+      for (let _values = Map_values(exports), j = 0, l = _values.length; j < l; ++j) {
+        let element = unchecked(_values[j]);
+        this.markModuleExport(element);
+      }
+    }
+    var exportsStar = file.exportsStar;
+    if (exportsStar) {
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        this.markModuleExports(exportsStar[i]);
+      }
+    }
+  }
+
   /** Marks an element and its children as a module export. */
   private markModuleExport(element: Element): void {
     element.set(CommonFlags.MODULE_EXPORT);
     switch (element.kind) {
       case ElementKind.CLASS_PROTOTYPE: {
         let instanceMembers = (<ClassPrototype>element).instanceMembers;
-        if (instanceMembers) for (let member of instanceMembers.values()) this.markModuleExport(member);
+        if (instanceMembers) {
+          // TODO: for (let member of instanceMembers.values()) {
+          for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
+            let member = unchecked(_values[i]);
+            this.markModuleExport(member);
+          }
+        }
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
@@ -1043,9 +1085,13 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.FIELD:
       case ElementKind.CLASS: assert(false); // assumes that there are no instances yet
     }
-    {
-      let members = element.members;
-      if (members) for (let member of members.values()) this.markModuleExport(member);
+    var staticMembers = element.members;
+    if (staticMembers) {
+      // TODO: for (let member of staticMembers.values()) {
+      for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
+        this.markModuleExport(member);
+      }
     }
   }
 
@@ -1075,7 +1121,7 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Registers a constant integer value within the global scope. */
-  registerConstantInteger(name: string, type: Type, value: I64): void {
+  registerConstantInteger(name: string, type: Type, value: i64): void {
     assert(type.is(TypeFlags.INTEGER)); // must be an integer type
     var global = new Global(
       name,
@@ -1104,7 +1150,7 @@ export class Program extends DiagnosticEmitter {
   ensureGlobal(name: string, element: DeclaredElement): DeclaredElement {
     var elementsByName = this.elementsByName;
     if (elementsByName.has(name)) {
-      let existing = elementsByName.get(name)!;
+      let existing = assert(elementsByName.get(name));
       // NOTE: this is effectively only performed when merging native types with
       // their respective namespaces in std/builtins, but can also trigger when a
       // user has multiple global elements of the same name in different files,
@@ -1138,14 +1184,14 @@ export class Program extends DiagnosticEmitter {
   /** Looks up the element of the specified name in the global scope. */
   lookupGlobal(name: string): Element | null {
     var elements = this.elementsByName;
-    if (elements.has(name)) return elements.get(name)!;
+    if (elements.has(name)) return assert(elements.get(name));
     return null;
   }
 
   /** Looks up the element of the specified name in the global scope. Errors if not present. */
   requireGlobal(name: string): Element {
     var elements = this.elementsByName;
-    if (elements.has(name)) return elements.get(name)!;
+    if (elements.has(name)) return assert(elements.get(name));
     throw new Error("missing global");
   }
 
@@ -1158,9 +1204,9 @@ export class Program extends DiagnosticEmitter {
   ): File | null {
     var filesByName = this.filesByName;
     return filesByName.has(foreignPath)
-         ? filesByName.get(foreignPath)!
+         ? assert(filesByName.get(foreignPath))
          : filesByName.has(foreignPathAlt)
-         ? filesByName.get(foreignPathAlt)!
+         ? assert(filesByName.get(foreignPathAlt))
          : null;
   }
 
@@ -1185,12 +1231,13 @@ export class Program extends DiagnosticEmitter {
 
       // otherwise traverse queued exports
       if (queuedExports.has(foreignFile)) {
-        let fileQueuedExports = queuedExports.get(foreignFile)!;
+        let fileQueuedExports = assert(queuedExports.get(foreignFile));
         if (fileQueuedExports.has(foreignName)) {
-          let queuedExport = fileQueuedExports.get(foreignName)!;
-          if (queuedExport.foreignPath) { // imported from another file
+          let queuedExport = assert(fileQueuedExports.get(foreignName));
+          let queuedExportForeignPath = queuedExport.foreignPath;
+          if (queuedExportForeignPath) { // imported from another file
             foreignName = queuedExport.localIdentifier.text;
-            foreignPath = queuedExport.foreignPath;
+            foreignPath = queuedExportForeignPath;
             foreignPathAlt = assert(queuedExport.foreignPathAlt);
             continue;
           } else { // local element of this file
@@ -1411,7 +1458,8 @@ export class Program extends DiagnosticEmitter {
           case DecoratorKind.OPERATOR_BINARY:
           case DecoratorKind.OPERATOR_PREFIX:
           case DecoratorKind.OPERATOR_POSTFIX: {
-            let numArgs = decorator.arguments && decorator.arguments.length || 0;
+            let args = decorator.arguments;
+            let numArgs = args ? args.length : 0;
             if (numArgs == 1) {
               let firstArg = (<Expression[]>decorator.arguments)[0];
               if (
@@ -1446,7 +1494,7 @@ export class Program extends DiagnosticEmitter {
             } else {
               this.error(
                 DiagnosticCode.Expected_0_arguments_but_got_1,
-                decorator.range, "1", numArgs.toString(10)
+                decorator.range, "1", numArgs.toString()
               );
             }
           }
@@ -1465,8 +1513,8 @@ export class Program extends DiagnosticEmitter {
     var name = declaration.name.text;
     if (declaration.is(CommonFlags.STATIC)) {
       let parentMembers = parent.members;
-      if (parentMembers && parentMembers.has(name)) {
-        let element = <Element>parentMembers.get(name)!;
+      if (parentMembers !== null && parentMembers.has(name)) {
+        let element = assert(parentMembers.get(name));
         if (element.kind == ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
       } else {
         let element = new PropertyPrototype(name, parent, declaration);
@@ -1475,8 +1523,8 @@ export class Program extends DiagnosticEmitter {
       }
     } else {
       let parentMembers = parent.instanceMembers;
-      if (parentMembers && parentMembers.has(name)) {
-        let element = <Element>parentMembers.get(name);
+      if (parentMembers !== null && parentMembers.has(name)) {
+        let element = assert(parentMembers.get(name));
         if (element.kind == ElementKind.PROPERTY_PROTOTYPE) return <PropertyPrototype>element;
       } else {
         let element = new PropertyPrototype(name, parent, declaration);
@@ -1597,9 +1645,9 @@ export class Program extends DiagnosticEmitter {
       }
     } else { // export * from "./baz"
       let queued: QueuedExportStar[];
-      if (queuedExportsStar.has(parent)) queued = queuedExportsStar.get(parent)!;
+      if (queuedExportsStar.has(parent)) queued = assert(queuedExportsStar.get(parent));
       else queuedExportsStar.set(parent, queued = []);
-      let foreignPath = assert(statement.internalPath); // must be set for export *
+      let foreignPath = statement.internalPath!; // must be set for export *
       queued.push(new QueuedExportStar(
         foreignPath,
         foreignPath.endsWith(INDEX_SUFFIX) // strip or add index depending on what's already present
@@ -1643,7 +1691,7 @@ export class Program extends DiagnosticEmitter {
       // otherwise queue it
       } else {
         let queued: Map<string,QueuedExport>;
-        if (queuedExports.has(localFile)) queued = queuedExports.get(localFile)!;
+        if (queuedExports.has(localFile)) queued = assert(queuedExports.get(localFile));
         else queuedExports.set(localFile, queued = new Map());
         queued.set(foreignName, new QueuedExport(
           member.localName,
@@ -1655,7 +1703,7 @@ export class Program extends DiagnosticEmitter {
     // foreign element, i.e. export { foo } from "./bar"
     } else {
       let queued: Map<string,QueuedExport>;
-      if (queuedExports.has(localFile)) queued = queuedExports.get(localFile)!;
+      if (queuedExports.has(localFile)) queued = assert(queuedExports.get(localFile));
       else queuedExports.set(localFile, queued = new Map());
       queued.set(foreignName, new QueuedExport(
         member.localName,
@@ -1708,7 +1756,7 @@ export class Program extends DiagnosticEmitter {
       if (!exports) parent.exports = exports = new Map();
       else {
         if (exports.has("default")) {
-          let existing = exports.get("default")!;
+          let existing = assert(exports.get("default"));
           this.errorRelated(
             DiagnosticCode.Duplicate_identifier_0,
             declaration.name.range,
@@ -1744,16 +1792,19 @@ export class Program extends DiagnosticEmitter {
           queuedExports
         );
       }
-    } else if (statement.namespaceName) { // import * as foo from "./bar"
-      queuedImports.push(new QueuedImport(
-        parent,
-        statement.namespaceName,
-        null, // indicates import *
-        statement.internalPath,
-        statement.internalPath + INDEX_SUFFIX
-      ));
     } else {
-      // import "./foo"
+      let namespaceName = statement.namespaceName;
+      if (namespaceName) { // import * as foo from "./bar"
+        queuedImports.push(new QueuedImport(
+          parent,
+          namespaceName,
+          null, // indicates import *
+          statement.internalPath,
+          statement.internalPath + INDEX_SUFFIX
+        ));
+      } else {
+        // import "./foo"
+      }
     }
   }
 
@@ -1872,7 +1923,7 @@ export class Program extends DiagnosticEmitter {
     queuedExtends: ClassPrototype[],
     /** So far queued `implements` clauses. */
     queuedImplements: ClassPrototype[]
-  ): Namespace | null {
+  ): DeclaredElement | null {
     var name = declaration.name.text;
     var original = new Namespace(
       name,
@@ -1995,9 +2046,10 @@ export class Program extends DiagnosticEmitter {
 
   /** Finds all cyclic classes. */
   findCyclicClasses(): Set<Class> {
-    var managedClasses = this.managedClasses;
     var cyclics = new Set<Class>();
-    for (let instance of managedClasses.values()) {
+    // TODO: for (let instance of this.managedClasses.values()) {
+    for (let _values = Map_values(this.managedClasses), i = 0, k = _values.length; i < k; ++i) {
+      let instance = unchecked(_values[i]);
       if (!instance.isAcyclic) cyclics.add(instance);
     }
     return cyclics;
@@ -2137,8 +2189,10 @@ export abstract class Element {
   /** Gets the enclosing file. */
   get file(): File {
     var current: Element = this;
-    do if ((current = current.parent).kind == ElementKind.FILE) return <File>current;
-    while (true);
+    do {
+      current = current.parent;
+      if (current.kind == ElementKind.FILE) return <File>current;
+    } while (true);
   }
 
   /** Tests if this element has a specific flag or flags. */
@@ -2155,7 +2209,7 @@ export abstract class Element {
   /** Looks up the element with the specified name within this element. */
   lookupInSelf(name: string): DeclaredElement | null {
     var members = this.members;
-    if (members && members.has(name)) return members.get(name)!;
+    if (members !== null && members.has(name)) return assert(members.get(name));
     return null;
   }
 
@@ -2168,7 +2222,7 @@ export abstract class Element {
     var members = this.members;
     if (!members) this.members = members = new Map();
     else if (members.has(name)) {
-      let existing = members.get(name)!;
+      let existing = assert(members.get(name));
       if (existing.parent !== this) {
         // override non-own element
       } else {
@@ -2176,7 +2230,9 @@ export abstract class Element {
         if (merged) {
           element = merged; // use merged element
         } else {
-          let reportedIdentifier = localIdentifierIfImport || element.identifierNode;
+          let reportedIdentifier = localIdentifierIfImport
+            ? localIdentifierIfImport
+            : element.identifierNode;
           if (isDeclaredElement(existing.kind)) {
             this.program.errorRelated(
               DiagnosticCode.Duplicate_identifier_0,
@@ -2206,7 +2262,7 @@ export abstract class Element {
 
   /** Returns a string representation of this element. */
   toString(): string {
-    return ElementKind[this.kind] + ":" + this.internalName;
+    return this.internalName + ", kind=" + this.kind.toString();
   }
 }
 
@@ -2395,7 +2451,7 @@ export class File extends Element {
   /** Looks up the export of the specified name. */
   lookupExport(name: string): DeclaredElement | null {
     var exports = this.exports;
-    if (exports && exports.has(name)) return exports.get(name)!;
+    if (exports !== null && exports.has(name)) return assert(exports.get(name));
     var exportsStar = this.exportsStar;
     if (exportsStar) {
       for (let i = 0, k = exportsStar.length; i < k; ++i) {
@@ -2411,13 +2467,28 @@ export class File extends Element {
     var declaration = this.program.makeNativeNamespaceDeclaration(name);
     declaration.name = localIdentifier;
     var ns = new Namespace(name, parent, declaration);
+    ns.set(CommonFlags.SCOPED);
+    this.copyExportsToNamespace(ns);
+    return ns;
+  }
+
+  /** Recursively copies the exports of this file to the specified namespace. */
+  private copyExportsToNamespace(ns: Namespace): void {
     var exports = this.exports;
     if (exports) {
-      for (let [memberName, member] of exports) {
+      // TODO: for (let [memberName, member] of exports) {
+      for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
+        let memberName = unchecked(_keys[i]);
+        let member = assert(exports.get(memberName));
         ns.add(memberName, member);
       }
     }
-    return ns;
+    var exportsStar = this.exportsStar;
+    if (exportsStar) {
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        exportsStar[i].copyExportsToNamespace(ns);
+      }
+    }
   }
 }
 
@@ -2489,8 +2560,9 @@ export class Namespace extends DeclaredElement {
 
   /* @override */
   lookup(name: string): Element | null {
-    return this.lookupInSelf(name)
-        || this.parent.lookup(name);
+    var inSelf = this.lookupInSelf(name);
+    if (inSelf) return inSelf;
+    return this.parent.lookup(name);
   }
 }
 
@@ -2522,8 +2594,9 @@ export class Enum extends TypedElement {
 
   /* @override */
   lookup(name: string): Element | null {
-    return this.lookupInSelf(name)
-        || this.parent.lookup(name);
+    var inSelf = this.lookupInSelf(name);
+    if (inSelf) return inSelf;
+    return this.parent.lookup(name);
   }
 }
 
@@ -2543,7 +2616,7 @@ export abstract class VariableLikeElement extends TypedElement {
   /** Constant value kind. */
   constantValueKind: ConstantValueKind = ConstantValueKind.NONE;
   /** Constant integer value, if applicable. */
-  constantIntegerValue: I64;
+  constantIntegerValue: i64;
   /** Constant float value, if applicable. */
   constantFloatValue: f64;
 
@@ -2580,7 +2653,7 @@ export abstract class VariableLikeElement extends TypedElement {
   }
 
   /** Applies a constant integer value to this element. */
-  setConstantIntegerValue(value: I64, type: Type): void {
+  setConstantIntegerValue(value: i64, type: Type): void {
     assert(type.is(TypeFlags.INTEGER));
     this.type = type;
     this.constantValueKind = ConstantValueKind.INTEGER;
@@ -2772,7 +2845,7 @@ export class FunctionPrototype extends DeclaredElement {
     assert(!this.isBound);
     var boundPrototypes = this.boundPrototypes;
     if (!boundPrototypes) this.boundPrototypes = boundPrototypes = new Map();
-    else if (boundPrototypes.has(classInstance)) return boundPrototypes.get(classInstance)!;
+    else if (boundPrototypes.has(classInstance)) return assert(boundPrototypes.get(classInstance));
     var declaration = this.declaration; assert(declaration.kind == NodeKind.METHODDECLARATION);
     var bound = new FunctionPrototype(
       this.name,
@@ -2790,7 +2863,7 @@ export class FunctionPrototype extends DeclaredElement {
   /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Function | null {
     var instances = this.instances;
-    if (instances && instances.has(instanceKey)) return <Function>instances.get(instanceKey);
+    if (instances !== null && instances.has(instanceKey)) return <Function>instances.get(instanceKey);
     return null;
   }
 
@@ -2905,12 +2978,13 @@ export class Function extends TypedElement {
     var localName = name !== null
       ? name
       : "var$" + localIndex.toString();
+    if (!declaration) declaration = this.program.makeNativeVariableDeclaration(localName);
     var local = new Local(
       localName,
       localIndex,
       type,
       this,
-      declaration || this.program.makeNativeVariableDeclaration(localName)
+      declaration
     );
     if (name) {
       if (this.localsByName.has(name)) throw new Error("duplicate local name");
@@ -2924,7 +2998,7 @@ export class Function extends TypedElement {
   /* @override */
   lookup(name: string): Element | null {
     var locals = this.localsByName;
-    if (locals.has(name)) return locals.get(name)!;
+    if (locals.has(name)) return assert(locals.get(name));
     return this.parent.lookup(name);
   }
 
@@ -3207,6 +3281,8 @@ export class ClassPrototype extends DeclaredElement {
   overloadPrototypes: Map<OperatorKind, FunctionPrototype> = new Map();
   /** Already resolved instances. */
   instances: Map<string,Class> | null = null;
+  /** Classes extending this class. */
+  extendees: Set<ClassPrototype> = new Set();
 
   constructor(
     /** Simple name. */
@@ -3259,7 +3335,8 @@ export class ClassPrototype extends DeclaredElement {
       if (seen.has(current)) break;
       seen.add(current);
       if (current === basePtototype) return true;
-    } while (current = current.basePrototype);
+      current = current.basePrototype;
+    } while (current);
     return false;
   }
 
@@ -3269,7 +3346,7 @@ export class ClassPrototype extends DeclaredElement {
     var instanceMembers = this.instanceMembers;
     if (!instanceMembers) this.instanceMembers = instanceMembers = new Map();
     else if (instanceMembers.has(name)) {
-      let existing = instanceMembers.get(name)!;
+      let existing = assert(instanceMembers.get(name));
       let merged = tryMerge(existing, element);
       if (!merged) {
         if (isDeclaredElement(existing.kind)) {
@@ -3300,7 +3377,7 @@ export class ClassPrototype extends DeclaredElement {
   /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Class | null {
     var instances = this.instances;
-    if (instances && instances.has(instanceKey)) return <Class>instances.get(instanceKey);
+    if (instances !== null && instances.has(instanceKey)) return <Class>instances.get(instanceKey);
     return null;
   }
 
@@ -3332,7 +3409,7 @@ export class Class extends TypedElement {
   /** Resolved type arguments. */
   typeArguments: Type[] | null;
   /** Base class, if applicable. */
-  base: Class | null;
+  base: Class | null = null;
   /** Contextual type arguments for fields and methods. */
   contextualTypeArguments: Map<string,Type> | null = null;
   /** Current member memory offset. */
@@ -3422,7 +3499,7 @@ export class Class extends TypedElement {
           this.contextualTypeArguments.set(typeParameters[i].name.text, typeArguments[i]);
         }
       }
-    } else if (typeParameters && typeParameters.length) {
+    } else if (typeParameters !== null && typeParameters.length > 0) {
       throw new Error("type argument count mismatch");
     }
     registerConcreteElement(program, this);
@@ -3433,11 +3510,38 @@ export class Class extends TypedElement {
     assert(!this.base);
     this.base = base;
 
+    // Remember extendees and mark overloaded methods virtual
+    var basePrototype: ClassPrototype  = base.prototype;
+    var thisPrototype = this.prototype;
+    assert(basePrototype != thisPrototype);
+    basePrototype.extendees.add(thisPrototype);
+    var thisInstanceMembers = thisPrototype.instanceMembers;
+    if (thisInstanceMembers) {
+      do {
+        let baseInstanceMembers = basePrototype.instanceMembers;
+        if (baseInstanceMembers) {
+          for (let _keys = Map_keys(baseInstanceMembers), i = 0, k = _keys.length; i < k; ++i) {
+            let memberName = _keys[i];
+            let member = assert(baseInstanceMembers.get(memberName));
+            if (thisInstanceMembers.has(memberName)) {
+              member.set(CommonFlags.VIRTUAL);
+            }
+          }
+        }
+        let nextPrototype = basePrototype.basePrototype;
+        if (!nextPrototype) break;
+        basePrototype = nextPrototype;
+      } while (true);
+    }
+
     // Inherit contextual type arguments from base class
     var inheritedTypeArguments = base.contextualTypeArguments;
     if (inheritedTypeArguments) {
       let contextualTypeArguments = this.contextualTypeArguments;
-      for (let [baseName, baseType] of inheritedTypeArguments) {
+      // TODO: for (let [baseName, baseType] of inheritedTypeArguments) {
+      for (let _keys = Map_keys(inheritedTypeArguments), i = 0, k = _keys.length; i < k; ++i) {
+        let baseName = unchecked(_keys[i]);
+        let baseType = assert(inheritedTypeArguments.get(baseName));
         if (!contextualTypeArguments) {
           this.contextualTypeArguments = contextualTypeArguments = new Map();
           contextualTypeArguments.set(baseName, baseType);
@@ -3451,8 +3555,10 @@ export class Class extends TypedElement {
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
-    do if (current == target) return true;
-    while (current = current.base);
+    do {
+      if (current == target) return true;
+      current = current.base;
+    } while (current);
     return false;
   }
 
@@ -3480,7 +3586,8 @@ export class Class extends TypedElement {
         let overload = overloads.get(kind);
         if (overload) return overload;
       }
-    } while (instance = instance.base);
+      instance = instance.base;
+    } while (instance);
     return null;
   }
 
@@ -3547,8 +3654,10 @@ export class Class extends TypedElement {
   /** Gets the concrete type arguments to the specified extendend prototype. */
   getTypeArgumentsTo(extendedPrototype: ClassPrototype): Type[] | null {
     var current: Class | null = this;
-    do if (current.prototype === extendedPrototype) return current.typeArguments;
-    while (current = current.base);
+    do {
+      if (current.prototype === extendedPrototype) return current.typeArguments;
+      current = current.base;
+    } while (current);
     return null;
   }
 
@@ -3560,21 +3669,22 @@ export class Class extends TypedElement {
     while (current.base !== abvInstance) {
       current = assert(current.base);
     }
-    switch (current.prototype) {
-      case program.i8ArrayPrototype: return Type.i8;
-      case program.i16ArrayPrototype: return Type.i16;
-      case program.i32ArrayPrototype: return Type.i32;
-      case program.i64ArrayPrototype: return Type.i64;
-      case program.u8ArrayPrototype:
-      case program.u8ClampedArrayPrototype: return Type.u8;
-      case program.u16ArrayPrototype: return Type.u16;
-      case program.u32ArrayPrototype: return Type.u32;
-      case program.u64ArrayPrototype: return Type.u64;
-      case program.f32ArrayPrototype: return Type.f32;
-      case program.f64ArrayPrototype: return Type.f64;
-      case program.arrayPrototype: return assert(this.getTypeArgumentsTo(program.arrayPrototype))[0];
-      default: assert(false);
+    var prototype = current.prototype;
+    if (prototype == program.arrayPrototype) {
+      return this.getTypeArgumentsTo(program.arrayPrototype)![0];
     }
+    if (prototype == program.i8ArrayPrototype) return Type.i8;
+    if (prototype == program.i16ArrayPrototype) return Type.i16;
+    if (prototype == program.i32ArrayPrototype) return Type.i32;
+    if (prototype == program.i64ArrayPrototype) return Type.i64;
+    if (prototype == program.u8ArrayPrototype) return Type.u8;
+    if (prototype == program.u8ClampedArrayPrototype) return Type.u8;
+    if (prototype == program.u16ArrayPrototype) return Type.u16;
+    if (prototype == program.u32ArrayPrototype) return Type.u32;
+    if (prototype == program.u64ArrayPrototype) return Type.u64;
+    if (prototype == program.f32ArrayPrototype) return Type.f32;
+    if (prototype == program.f64ArrayPrototype) return Type.f64;
+    assert(false);
     return Type.void;
   }
 
@@ -3606,13 +3716,15 @@ export class Class extends TypedElement {
 
     // Find out if any field references 'other' directly or indirectly
     var current: Class | null;
-    var members = this.members;
-    if (members) {
-      for (let member of members.values()) {
+    var instanceMembers = this.members;
+    if (instanceMembers) {
+      // TODO: for (let member of instanceMembers.values()) {
+      for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
         if (member.kind == ElementKind.FIELD) {
-          let type = (<Field>member).type;
-          if (type.is(TypeFlags.REFERENCE)) {
-            if ((current = type.classReference) !== null && (
+          let fieldType = (<Field>member).type;
+          if (fieldType.is(TypeFlags.REFERENCE)) {
+            if ((current = fieldType.classReference) !== null && (
               current === other ||
               current.cyclesTo(other, except)
             )) return true;
@@ -3625,7 +3737,7 @@ export class Class extends TypedElement {
     var basePrototype: ClassPrototype | null;
 
     // Array<T->other?>
-    if ((basePrototype = this.program.arrayPrototype) && this.prototype.extends(basePrototype)) {
+    if ((basePrototype = this.program.arrayPrototype) !== null && this.prototype.extends(basePrototype)) {
       let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
       assert(typeArguments.length == 1);
       if (
@@ -3637,7 +3749,7 @@ export class Class extends TypedElement {
       ) return true;
 
     // Set<K->other?>
-    } else if ((basePrototype = this.program.setPrototype) && this.prototype.extends(basePrototype)) {
+    } else if ((basePrototype = this.program.setPrototype) !== null && this.prototype.extends(basePrototype)) {
       let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
       assert(typeArguments.length == 1);
       if (
@@ -3649,7 +3761,7 @@ export class Class extends TypedElement {
       ) return true;
 
     // Map<K->other?,V->other?>
-    } else if ((basePrototype = this.program.mapPrototype) && this.prototype.extends(basePrototype)) {
+    } else if ((basePrototype = this.program.mapPrototype) !== null && this.prototype.extends(basePrototype)) {
       let typeArguments = assert(this.getTypeArgumentsTo(basePrototype));
       assert(typeArguments.length == 2);
       if (
@@ -3820,7 +3932,10 @@ function copyMembers(src: Element, dest: Element): void {
   if (srcMembers) {
     let destMembers = dest.members;
     if (!destMembers) dest.members = destMembers = new Map();
-    for (let [memberName, member] of srcMembers) {
+    // TODO: for (let [memberName, member] of srcMembers) {
+    for (let _keys = Map_keys(srcMembers), i = 0, k = _keys.length; i < k; ++i) {
+      let memberName = unchecked(_keys[i]);
+      let member = assert(srcMembers.get(memberName));
       destMembers.set(memberName, member);
     }
   }
