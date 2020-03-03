@@ -582,9 +582,9 @@ exports.main = function main(argv, options, callback) {
     return callback(e);
   }
 
-  // Call postInitialize transform hook
+  // Call afterInitialize transform hook
   {
-    let error = applyTransform("postInitialize", program);
+    let error = applyTransform("afterInitialize", program);
     if (error) return callback(error);
   }
 

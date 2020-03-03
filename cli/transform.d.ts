@@ -35,6 +35,9 @@ export abstract class Transform {
   /** Called when parsing is complete, before a program is instantiated from the AST. */
   afterParse?(parser: Parser): void;
 
+  /** Called after the program is instantiated. */
+  afterInitialize?(program: Program): void;
+
   /** Called when compilation is complete, before the module is being validated. */
   afterCompile?(module: Module): void;
 }
