@@ -759,7 +759,7 @@
   (local $1 i32)
   (local $2 i32)
   i32.const 1
-  local.set $2
+  local.set $1
   i32.const 0
   i32.const 23
   i32.lt_u
@@ -781,13 +781,13 @@
   i32.load offset=4
   i32.const -2
   i32.and
-  local.tee $2
+  local.tee $1
   if (result i32)
-   local.get $2
+   local.get $0
+   local.get $1
    i32.ctz
    i32.const 2
    i32.shl
-   local.get $0
    i32.add
    i32.load offset=96
   else
@@ -795,17 +795,17 @@
    i32.load
    i32.const -2
    i32.and
-   local.tee $1
+   local.tee $2
    if (result i32)
-    local.get $1
+    local.get $0
+    local.get $2
     i32.ctz
-    local.tee $2
+    local.tee $1
     i32.const 2
     i32.shl
-    local.get $0
     i32.add
     i32.load offset=4
-    local.tee $1
+    local.tee $2
     i32.eqz
     if
      i32.const 0
@@ -815,15 +815,15 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
-    i32.ctz
+    local.get $0
     local.get $2
+    i32.ctz
+    local.get $1
     i32.const 4
     i32.shl
     i32.add
     i32.const 2
     i32.shl
-    local.get $0
     i32.add
     i32.load offset=96
    else
@@ -988,11 +988,11 @@
    i32.const -4
    i32.and
    i32.add
+   local.get $0
    local.get $1
    i32.load
    i32.const -4
    i32.and
-   local.get $0
    i32.add
    i32.load
    i32.const -3

@@ -798,13 +798,12 @@ exports.main = function main(argv, options, callback) {
           add("simplify-locals-nostructure");
           add("vacuum");
 
+          add("dae-optimizing");
           add("inlining-optimizing");
           add("reorder-locals");
         }
         add("optimize-instructions");
         add("simplify-globals-optimizing");
-        add("dae-optimizing");
-        add("inlining-optimizing");
       }
       // remove unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs
