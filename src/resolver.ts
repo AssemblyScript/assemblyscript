@@ -2930,7 +2930,7 @@ export class Resolver extends DiagnosticEmitter {
       assert(!pendingClasses.includes(base));
       let baseMembers = base.members;
       if (baseMembers) {
-        // for (let [baseMemberName, baseMember] of baseMembers) {
+        // TODO: for (let [baseMemberName, baseMember] of baseMembers) {
         for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
           let baseMemberName = unchecked(_keys[i]);
           let baseMember = assert(baseMembers.get(baseMemberName));
@@ -2944,7 +2944,7 @@ export class Resolver extends DiagnosticEmitter {
     var prototype = instance.prototype;
     var instanceMemberPrototypes = prototype.instanceMembers;
     if (instanceMemberPrototypes) {
-      // for (let member of instanceMemberPrototypes.values()) {
+      // TODO: for (let member of instanceMemberPrototypes.values()) {
       for (let _values = Map_values(instanceMemberPrototypes), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         switch (member.kind) {
@@ -3054,7 +3054,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Fully resolve operator overloads (don't have type parameters on their own)
     var overloadPrototypes = prototype.overloadPrototypes;
-    // for (let [overloadKind, overloadPrototype] of overloadPrototypes) {
+    // TODO: for (let [overloadKind, overloadPrototype] of overloadPrototypes) {
     for (let _keys = Map_keys(overloadPrototypes), i = 0, k = _keys.length; i < k; ++i) {
       let overloadKind = unchecked(_keys[i]);
       let overloadPrototype = assert(overloadPrototypes.get(overloadKind));

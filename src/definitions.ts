@@ -58,7 +58,7 @@ export abstract class ExportsWalker {
 
   /** Walks all elements and calls the respective handlers. */
   walk(): void {
-    // for (let file of this.program.filesByName.values()) {
+    // TODO: for (let file of this.program.filesByName.values()) {
     for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.visitFile(file);
@@ -69,7 +69,7 @@ export abstract class ExportsWalker {
   visitFile(file: File): void {
     var exports = file.exports;
     if (exports) {
-      // for (let [memberName, member] of exports) {
+      // TODO: for (let [memberName, member] of exports) {
       for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
         let member = assert(exports.get(memberName));
@@ -140,7 +140,7 @@ export abstract class ExportsWalker {
   private visitFunctionInstances(name: string, element: FunctionPrototype): void {
     var instances = element.instances;
     if (instances) {
-      // for (let instance of instances.values()) {
+      // TODO: for (let instance of instances.values()) {
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
         if (instance.is(CommonFlags.COMPILED)) this.visitFunction(name, instance);
@@ -151,7 +151,7 @@ export abstract class ExportsWalker {
   private visitClassInstances(name: string, element: ClassPrototype): void {
     var instances = element.instances;
     if (instances) {
-      // for (let instance of instances.values()) {
+      // TODO: for (let instance of instances.values()) {
       for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
         if (instance.is(CommonFlags.COMPILED)) this.visitClass(name, instance);
@@ -229,7 +229,7 @@ export class IDLBuilder extends ExportsWalker {
     sb.push(" {\n");
     var members = element.members;
     if (members) {
-      // for (let [memberName, member] of members) {
+      // TODO: for (let [memberName, member] of members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
         let member = assert(members.get(memberName));
@@ -249,7 +249,7 @@ export class IDLBuilder extends ExportsWalker {
           sb.push(";\n");
         }
       }
-      // for (let member of members.values()) {
+      // TODO: for (let member of members.values()) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         if (member.kind != ElementKind.ENUMVALUE) this.visitElement(member.name, member);
@@ -284,7 +284,7 @@ export class IDLBuilder extends ExportsWalker {
       sb.push("interface ");
       sb.push(element.name);
       sb.push(" {\n");
-      // for (let member of members.values()) {
+      // TODO: for (let member of members.values()) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         this.visitElement(member.name, member);
@@ -321,7 +321,7 @@ export class IDLBuilder extends ExportsWalker {
     sb.push(" {\n");
     var members = element.members;
     if (members) {
-      // for (let member of members.values()) {
+      // TODO: for (let member of members.values()) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         this.visitElement(member.name, member);
@@ -418,7 +418,7 @@ export class TSDBuilder extends ExportsWalker {
     var remainingMembers = 0;
     if (members) {
       remainingMembers = members.size;
-      // for (let [memberName, member] of members) {
+      // TODO: for (let [memberName, member] of members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
         let member = assert(members.get(memberName));
@@ -501,7 +501,7 @@ export class TSDBuilder extends ExportsWalker {
     sb.push(" {\n");
     var staticMembers = element.prototype.members;
     if (staticMembers) {
-      // for (let member of staticMembers.values()) {
+      // TODO: for (let member of staticMembers.values()) {
       for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         this.visitElement(member.name, member);
@@ -509,7 +509,7 @@ export class TSDBuilder extends ExportsWalker {
     }
     var instanceMembers = element.members;
     if (instanceMembers) {
-      // for (let member of instanceMembers.values()) {
+      // TODO: for (let member of instanceMembers.values()) {
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         if (member.parent == element) { // own member
@@ -546,7 +546,7 @@ export class TSDBuilder extends ExportsWalker {
       sb.push("export namespace ");
       sb.push(name);
       sb.push(" {\n");
-      // for (let member of members.values()) {
+      // TODO: for (let member of members.values()) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         this.visitElement(member.name, member);
@@ -632,14 +632,14 @@ export class TSDBuilder extends ExportsWalker {
 function hasCompiledMember(element: Element): bool {
   var members = element.members;
   if (members) {
-    // for (let member of members.values()) {
+    // TODO: for (let member of members.values()) {
     for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
       let member = unchecked(_values[i]);
       switch (member.kind) {
         case ElementKind.FUNCTION_PROTOTYPE: {
           let instances = (<FunctionPrototype>member).instances;
           if (instances) {
-            // for (let instance of instances.values()) {
+            // TODO: for (let instance of instances.values()) {
             for (let _values = Map_values(instances), j = 0, l = _values.length; j < l; ++j) {
               let instance = unchecked(_values[j]);
               if (instance.is(CommonFlags.COMPILED)) return true;
@@ -650,7 +650,7 @@ function hasCompiledMember(element: Element): bool {
         case ElementKind.CLASS_PROTOTYPE: {
           let instances = (<ClassPrototype>member).instances;
           if (instances) {
-            // for (let instance of instances.values()) {
+            // TODO: for (let instance of instances.values()) {
             for (let _values = Map_values(instances), j = 0, l = _values.length; j < l; ++j) {
               let instance = unchecked(_values[j]);
               if (instance.is(CommonFlags.COMPILED)) return true;

@@ -7671,7 +7671,7 @@ export function compileVisitGlobals(compiler: Compiler): void {
   // this function is @lazy: make sure it exists
   compiler.compileFunction(visitInstance, true);
 
-  // for (let element of compiler.program.elementsByName.values()) {
+  // TODO: for (let element of compiler.program.elementsByName.values()) {
   for (let _values = Map_values(compiler.program.elementsByName), i = 0, k = _values.length; i < k; ++i) {
     let element = unchecked(_values[i]);
     if (element.kind != ElementKind.GLOBAL) continue;
@@ -7753,7 +7753,7 @@ export function compileVisitMembers(compiler: Compiler): void {
   );
 
   var lastId = 0;
-  // for (let [instanceId, instance] of managedClasses) {
+  // TODO: for (let [instanceId, instance] of managedClasses) {
   for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
     let instanceId = _keys[i];
     let instance = assert(managedClasses.get(instanceId));
@@ -7792,7 +7792,7 @@ export function compileVisitMembers(compiler: Compiler): void {
     } else {
       let members = instance.members;
       if (members) {
-        // for (let member of members.values()) {
+        // TODO: for (let member of members.values()) {
         for (let _values = Map_values(members), j = 0, l = _values.length; j < l; ++j) {
           let member = unchecked(_values[j]);
           if (member.kind == ElementKind.FIELD) {
@@ -7829,7 +7829,7 @@ export function compileVisitMembers(compiler: Compiler): void {
     relooper.addBranchForSwitch(outer, block, [ instanceId ]);
     blocks.push(block);
   }
-  // for (let [instanceId, instance] of managedClasses) {
+  // TODO: for (let [instanceId, instance] of managedClasses) {
   for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
     let instanceId = unchecked(_keys[i]);
     let instance = assert(managedClasses.get(instanceId));
@@ -7876,7 +7876,7 @@ export function compileRTTI(compiler: Compiler): void {
   var setPrototype = program.setPrototype;
   var mapPrototype = program.mapPrototype;
   var lastId = 0;
-  // for (let [instanceId, instance] of managedClasses) {
+  // TODO: for (let [instanceId, instance] of managedClasses) {
   for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
     let instanceId = unchecked(_keys[i]);
     let instance = assert(managedClasses.get(instanceId));
@@ -7943,7 +7943,7 @@ export function compileClassInstanceOf(compiler: Compiler, prototype: ClassProto
   // if (__instanceof(ref, ID[i])) return true
   var instances = prototype.instances;
   if (instances !== null && instances.size > 0) {
-    // for (let instance of instances.values()) {
+    // TODO: for (let instance of instances.values()) {
     for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
       let instance = unchecked(_values[i]);
       stmts.push(

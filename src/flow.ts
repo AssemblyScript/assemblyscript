@@ -431,7 +431,7 @@ export class Flow {
   get hasScopedLocals(): bool {
     var scopedLocals = this.scopedLocals;
     if (scopedLocals) {
-      // for (let local of scopedLocals.values()) {
+      // TODO: for (let local of scopedLocals.values()) {
       for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
         let local = unchecked(_values[i]);
         if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
@@ -446,7 +446,7 @@ export class Flow {
   freeScopedLocals(): void {
     var scopedLocals = this.scopedLocals;
     if (scopedLocals) {
-      // for (let local of scopedLocals.values()) {
+      // TODO: for (let local of scopedLocals.values()) {
       for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
         let local = unchecked(_values[i]);
         if (local.is(CommonFlags.SCOPED)) { // otherwise an alias

@@ -204,7 +204,7 @@ export function buildTSD(program: Program): string {
 export function buildRTTI(program: Program): string {
   var sb = new Array<string>();
   sb.push("{\n  \"names\": [\n");
-  // for (let cls of program.managedClasses.values()) {
+  // TODO: for (let cls of program.managedClasses.values()) {
   for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
     let cls = unchecked(_values[i]);
     sb.push("    \"");
@@ -212,7 +212,7 @@ export function buildRTTI(program: Program): string {
     sb.push("\",\n");
   }
   sb.push("  ],\n  \"base\": [\n");
-  // for (let cls of program.managedClasses.values()) {
+  // TODO: for (let cls of program.managedClasses.values()) {
   for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
     let cls = unchecked(_values[i]);
     let base = cls.base;
@@ -221,7 +221,7 @@ export function buildRTTI(program: Program): string {
     sb.push(",\n");
   }
   sb.push("  ],\n  \"flags\": [\n");
-  // for (let cls of program.managedClasses.values()) {
+  // TODO: for (let cls of program.managedClasses.values()) {
   for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
     let cls = unchecked(_values[i]);
     sb.push("    ");

@@ -403,7 +403,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile entry file(s) while traversing reachable elements
     var files = program.filesByName;
-    // for (let file of files.values()) {
+    // TODO: for (let file of files.values()) {
     for (let _values = Map_values(files), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
@@ -443,7 +443,7 @@ export class Compiler extends DiagnosticEmitter {
     var cyclicClasses = program.findCyclicClasses();
     if (cyclicClasses.size) {
       if (options.pedantic) {
-        // for (let classInstance of cyclicClasses) {
+        // TODO: for (let classInstance of cyclicClasses) {
         for (let _values = Set_values(cyclicClasses), i = 0, k = _values.length; i < k; ++i) {
           let classInstance = unchecked(_values[i]);
           this.pedantic(
@@ -460,7 +460,7 @@ export class Compiler extends DiagnosticEmitter {
     var lazyLibraryFunctions = this.lazyLibraryFunctions;
     do {
       let functionsToCompile = new Array<Function>();
-      // for (let instance of lazyLibraryFunctions) {
+      // TODO: for (let instance of lazyLibraryFunctions) {
       for (let _values = Set_values(lazyLibraryFunctions), i = 0, k = _values.length; i < k; ++i) {
         let instance = unchecked(_values[i]);
         functionsToCompile.push(instance);
@@ -472,7 +472,7 @@ export class Compiler extends DiagnosticEmitter {
     } while (lazyLibraryFunctions.size);
 
     // compile pending class-specific instanceof helpers
-    // for (let prototype of this.pendingClassInstanceOf.values()) {
+    // TODO: for (let prototype of this.pendingClassInstanceOf.values()) {
     for (let _values = Set_values(this.pendingClassInstanceOf), i = 0, k = _values.length; i < k; ++i) {
       let prototype = unchecked(_values[i]);
       compileClassInstanceOf(this, prototype);
@@ -553,7 +553,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up module exports
-    // for (let file of this.program.filesByName.values()) {
+    // TODO: for (let file of this.program.filesByName.values()) {
     for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
@@ -581,7 +581,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Inject a virtual lookup table into each function potentially called virtually
-    /// for (let instance of virtualCalls.values()) {
+    // TODO: for (let instance of virtualCalls.values()) {
     for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
       let instance = unchecked(_values[i]);
       this.warning(
@@ -597,7 +597,7 @@ export class Compiler extends DiagnosticEmitter {
   private ensureModuleExports(file: File): void {
     var exports = file.exports;
     if (exports) {
-      // for (let [elementName, element] of exports) {
+      // TODO: for (let [elementName, element] of exports) {
       for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
         let elementName = unchecked(_keys[i]);
         let element = assert(exports.get(elementName));
@@ -620,7 +620,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FUNCTION_PROTOTYPE: {
         let instances = (<FunctionPrototype>element).instances;
         if (instances) {
-          // for (let instance of instances.values()) {
+          // TODO: for (let instance of instances.values()) {
           for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
             let instance = unchecked(_values[i]);
             let instanceName = name;
@@ -636,7 +636,7 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS_PROTOTYPE: {
         let instances = (<ClassPrototype>element).instances;
         if (instances) {
-          // for (let instance of instances.values()) {
+          // TODO: for (let instance of instances.values()) {
           for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
             let instance = unchecked(_values[i]);
             let instanceName = name;
@@ -739,7 +739,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       if (element.kind == ElementKind.NAMESPACE) {
         let implicitExport = element.is(CommonFlags.SCOPED);
-        // for (let [memberName, member] of members) {
+        // TODO: for (let [memberName, member] of members) {
         for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
           let memberName = unchecked(_keys[i]);
           let member = assert(members.get(memberName));
@@ -748,7 +748,7 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
       } else {
-        // for (let [memberName, member] of members) {
+        // TODO: for (let [memberName, member] of members) {
         for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
           let memberName = unchecked(_keys[i]);
           let member = assert(members.get(memberName));
@@ -811,7 +811,7 @@ export class Compiler extends DiagnosticEmitter {
     if (compileMembers) {
       let members = element.members;
       if (members) {
-        // for (let element of members.values()) {
+        // TODO: for (let element of members.values()) {
         for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
           let element = unchecked(_values[i]);
           this.compileElement(element);
@@ -824,7 +824,7 @@ export class Compiler extends DiagnosticEmitter {
   compileExports(file: File): void {
     var exports = file.exports;
     if (exports) {
-      // for (let element of exports.values()) {
+      // TODO: for (let element of exports.values()) {
       for (let _values = Map_values(exports), i = 0, k = _values.length; i < k; ++i) {
         let element = unchecked(_values[i]);
         this.compileElement(element);
@@ -1129,7 +1129,7 @@ export class Compiler extends DiagnosticEmitter {
 
     var members = element.members;
     if (members) {
-      // for (let member of element.members.values()) {
+      // TODO: for (let member of element.members.values()) {
       for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         if (member.kind != ElementKind.ENUMVALUE) continue; // happens if an enum is also a namespace
@@ -1463,7 +1463,7 @@ export class Compiler extends DiagnosticEmitter {
     var prototype = instance.prototype;
     var staticMembers = (<ClassPrototype>prototype).members;
     if (staticMembers) {
-      // for (let element of staticMembers.values()) {
+      // TODO: for (let element of staticMembers.values()) {
       for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
         let element = unchecked(_values[i]);
         switch (element.kind) {
@@ -1500,7 +1500,7 @@ export class Compiler extends DiagnosticEmitter {
     if (ctorInstance) this.compileFunction(ctorInstance);
     var instanceMembers = instance.members;
     if (instanceMembers) {
-      // for (let element of instanceMembers.values()) {
+      // TODO: for (let element of instanceMembers.values()) {
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         let element = unchecked(_values[i]);
         switch (element.kind) {
@@ -7124,7 +7124,7 @@ export class Compiler extends DiagnosticEmitter {
     var scopedLocals = flow.scopedLocals;
     if (scopedLocals) {
       let module = this.module;
-      // for (let local of scopedLocals.values()) {
+      // TODO: for (let local of scopedLocals.values()) {
       for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
         let local = unchecked(_values[i]);
         if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
@@ -7198,7 +7198,7 @@ export class Compiler extends DiagnosticEmitter {
       while (parent = current.parent) current = parent;
       let scopedLocals = current.scopedLocals;
       if (scopedLocals) {
-        // for (let local of scopedLocals.values()) {
+        // TODO: for (let local of scopedLocals.values()) {
         for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
           let local = unchecked(_values[i]);
           this.maybeFinishAutorelease(local, flow, stmts);
@@ -9948,7 +9948,7 @@ export class Compiler extends DiagnosticEmitter {
       : 0;
     var nativeSizeType = this.options.nativeSizeType;
 
-    // for (let member of members.values()) {
+    // TODO: for (let member of members.values()) {
     for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
       let member = unchecked(_values[i]);
       if (

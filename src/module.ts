@@ -1473,7 +1473,7 @@ export class Module {
 
   dispose(): void {
     assert(this.ref);
-    // for (let ptr of this.cachedStrings.values()) {
+    // TODO: for (let ptr of this.cachedStrings.values()) {
     for (let _values = Map_values(this.cachedStrings), i = 0, k = _values.length; i < k; ++i) {
       let ptr = unchecked(_values[i]);
       binaryen._free(ptr);

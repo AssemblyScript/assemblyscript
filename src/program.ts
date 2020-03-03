@@ -774,7 +774,7 @@ export class Program extends DiagnosticEmitter {
     }
 
     // queued exports * should be linkable now that all files have been processed
-    // for (let [file, starExports] of queuedExportsStar) {
+    // TODO: for (let [file, starExports] of queuedExportsStar) {
     for (let _keys = Map_keys(queuedExportsStar), i = 0, k = _keys.length; i < k; ++i) {
       let file = _keys[i];
       let starExports = assert(queuedExportsStar.get(file));
@@ -838,11 +838,11 @@ export class Program extends DiagnosticEmitter {
     }
 
     // queued exports should be resolvable now that imports are finalized
-    // for (let [file, exports] of queuedExports) {
+    // TODO: for (let [file, exports] of queuedExports) {
     for (let _keys = Map_keys(queuedExports), i = 0, k = _keys.length; i < k; ++i) {
       let file = unchecked(_keys[i]);
       let exports = assert(queuedExports.get(file));
-      // for (let [exportName, queuedExport] of exports) {
+      // TODO: for (let [exportName, queuedExport] of exports) {
       for (let exportNames = Map_keys(exports), j = 0, l = exportNames.length; j < l; ++j) {
         let exportName = unchecked(exportNames[j]);
         let queuedExport = assert(exports.get(exportName));
@@ -960,7 +960,7 @@ export class Program extends DiagnosticEmitter {
     {
       let globalAliases = options.globalAliases;
       if (globalAliases) {
-        // for (let [alias, name] of globalAliases) {
+        // TODO: for (let [alias, name] of globalAliases) {
         for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
           let alias = unchecked(_keys[i]);
           let name = assert(globalAliases.get(alias));
@@ -1000,7 +1000,7 @@ export class Program extends DiagnosticEmitter {
     this.allocArrayInstance = this.requireFunction(CommonNames.allocArray);
 
     // mark module exports, i.e. to apply proper wrapping behavior on the boundaries
-    // for (let file of this.filesByName.values()) {
+    // TODO: for (let file of this.filesByName.values()) {
     for (let _values = Map_values(this.filesByName), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
@@ -1044,7 +1044,7 @@ export class Program extends DiagnosticEmitter {
   private markModuleExports(file: File): void {
     var exports = file.exports;
     if (exports) {
-      // for (let element of exports.values()) {
+      // TODO: for (let element of exports.values()) {
       for (let _values = Map_values(exports), j = 0, l = _values.length; j < l; ++j) {
         let element = unchecked(_values[j]);
         this.markModuleExport(element);
@@ -1065,7 +1065,7 @@ export class Program extends DiagnosticEmitter {
       case ElementKind.CLASS_PROTOTYPE: {
         let instanceMembers = (<ClassPrototype>element).instanceMembers;
         if (instanceMembers) {
-          // for (let member of instanceMembers.values()) {
+          // TODO: for (let member of instanceMembers.values()) {
           for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
             let member = unchecked(_values[i]);
             this.markModuleExport(member);
@@ -1087,7 +1087,7 @@ export class Program extends DiagnosticEmitter {
     }
     var staticMembers = element.members;
     if (staticMembers) {
-      // for (let member of staticMembers.values()) {
+      // TODO: for (let member of staticMembers.values()) {
       for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         this.markModuleExport(member);
@@ -2047,7 +2047,7 @@ export class Program extends DiagnosticEmitter {
   /** Finds all cyclic classes. */
   findCyclicClasses(): Set<Class> {
     var cyclics = new Set<Class>();
-    // for (let instance of this.managedClasses.values()) {
+    // TODO: for (let instance of this.managedClasses.values()) {
     for (let _values = Map_values(this.managedClasses), i = 0, k = _values.length; i < k; ++i) {
       let instance = unchecked(_values[i]);
       if (!instance.isAcyclic) cyclics.add(instance);
@@ -2476,7 +2476,7 @@ export class File extends Element {
   private copyExportsToNamespace(ns: Namespace): void {
     var exports = this.exports;
     if (exports) {
-      // for (let [memberName, member] of exports) {
+      // TODO: for (let [memberName, member] of exports) {
       for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
         let memberName = unchecked(_keys[i]);
         let member = assert(exports.get(memberName));
@@ -3538,7 +3538,7 @@ export class Class extends TypedElement {
     var inheritedTypeArguments = base.contextualTypeArguments;
     if (inheritedTypeArguments) {
       let contextualTypeArguments = this.contextualTypeArguments;
-      // for (let [baseName, baseType] of inheritedTypeArguments) {
+      // TODO: for (let [baseName, baseType] of inheritedTypeArguments) {
       for (let _keys = Map_keys(inheritedTypeArguments), i = 0, k = _keys.length; i < k; ++i) {
         let baseName = unchecked(_keys[i]);
         let baseType = assert(inheritedTypeArguments.get(baseName));
@@ -3718,7 +3718,7 @@ export class Class extends TypedElement {
     var current: Class | null;
     var instanceMembers = this.members;
     if (instanceMembers) {
-      // for (let member of instanceMembers.values()) {
+      // TODO: for (let member of instanceMembers.values()) {
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
         if (member.kind == ElementKind.FIELD) {
@@ -3932,7 +3932,7 @@ function copyMembers(src: Element, dest: Element): void {
   if (srcMembers) {
     let destMembers = dest.members;
     if (!destMembers) dest.members = destMembers = new Map();
-    // for (let [memberName, member] of srcMembers) {
+    // TODO: for (let [memberName, member] of srcMembers) {
     for (let _keys = Map_keys(srcMembers), i = 0, k = _keys.length; i < k; ++i) {
       let memberName = unchecked(_keys[i]);
       let member = assert(srcMembers.get(memberName));
