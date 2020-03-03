@@ -1188,14 +1188,7 @@
   global.set $~lib/util/number/_frc_minus
   i32.const -61
   global.set $~lib/util/number/_exp
-  i32.const 340
-  f64.const 347
-  i32.trunc_f64_s
-  i32.const 3
-  i32.shr_s
-  i32.const 3
-  i32.shl
-  i32.sub
+  i32.const -4
   global.set $~lib/util/number/_K
   i32.const 784
   i64.load

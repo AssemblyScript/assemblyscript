@@ -794,11 +794,11 @@ exports.main = function main(argv, options, callback) {
           add("coalesce-locals");
           add("simplify-locals-nostructure");
           add("vacuum");
-
           add("precompute-propagate");
           add("simplify-locals-nostructure");
           add("vacuum");
           add("inlining-optimizing");
+          add("precompute-propagate");
           add("reorder-locals");
         }
         add("optimize-instructions");
