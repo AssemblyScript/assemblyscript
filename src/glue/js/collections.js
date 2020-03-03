@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Collections glue code for JavaScript.
+ * @license Apache-2.0
+ */
+
 global.Map_keys = function(map) {
   return Array.from(map.keys());
 };

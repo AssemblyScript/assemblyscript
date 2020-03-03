@@ -1,7 +1,11 @@
 /**
- * A TypeScript parser for the AssemblyScript subset.
- * @module parser
- *//***/
+ * @fileoverview A TypeScript parser for the AssemblyScript subset.
+ *
+ * Takes the tokens produced by the `Tokenizer` and builds an abstract
+ * syntax tree composed of `Node`s wrapped in a `Source` out of it.
+ *
+ * @license Apache-2.0
+ */
 
 import {
   CommonFlags,

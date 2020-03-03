@@ -1,7 +1,20 @@
 /**
- * AssemblyScript's intermediate representation describing a program's elements.
- * @module program
- *//***/
+ * @fileoverview AssemblyScript's intermediate representation.
+ *
+ * The compiler uses Binaryen IR, which is fairly low level, as its
+ * primary intermediate representation, with the following structures
+ * holding any higher level information that cannot be represented by
+ * Binaryen IR alone, for example higher level types.
+ *
+ * Similar to the AST being composed of `Node`s in `Source`s, the IR is
+ * composed of `Element`s in a `Program`. Each class or function is
+ * represented by a "prototype" holding all the relevant information,
+ * including each's concrete instances. If a class or function is not
+ * generic, there is exactly one instance, otherwise there is one for
+ * each concrete set of type arguments.
+ *
+ * @license Apache-2.0
+ */
 
 import {
   CommonFlags,
@@ -478,6 +491,8 @@ export class Program extends DiagnosticEmitter {
   nextClassId: u32 = 0;
   /** Next signature id. */
   nextSignatureId: i32 = 0;
+  /** An indicator if the program has been initialized. */
+  initialized: bool = false;
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
     /** Compiler options. */
@@ -633,6 +648,10 @@ export class Program extends DiagnosticEmitter {
 
   /** Initializes the program and its elements prior to compilation. */
   initialize(options: Options): void {
+    // Initialize only once
+    if (this.initialized) return;
+
+    this.initialized = true;
     this.options = options;
 
     // register native types

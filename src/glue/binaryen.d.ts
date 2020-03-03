@@ -1,11 +1,12 @@
 /**
- * Portable definitions for Binaryen's C-API. tsc uses the .js file next to it,
- * while asc makes it a Wasm import.
+ * @fileoverview Portable definitions for Binaryen's C-API.
+ * 
+ * tsc uses the .js file next to it, while asc makes it a Wasm import.
  *
  * See: https://github.com/WebAssembly/binaryen/blob/master/src/binaryen-c.h
  *
- * @module glue/binaryen
- *//***/
+ * @license Apache-2.0
+ */
 
 export declare function _malloc(size: usize): usize;
 export declare function _free(ptr: usize): void;

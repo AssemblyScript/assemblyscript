@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Various collections utility.
+ * @license Apache-2.0
+ */
+
 export function makeArray<V>(original: Array<V> | null = null): Array<V> {
   if (original) {
     let len = original.length;
