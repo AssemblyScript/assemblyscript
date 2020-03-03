@@ -25,7 +25,6 @@
  (export "exportstar.renamed_c" (global $export/c))
  (export "exportstar.ns.two" (func $export/ns.one))
  (export "exportstar.default.two" (func $export/ns.one))
- (start $~start)
  (func $export/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
