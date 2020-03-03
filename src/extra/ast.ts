@@ -55,6 +55,7 @@ import {
   ExportDefaultStatement,
   ExpressionStatement,
   ForStatement,
+  ForOfStatement,
   IfStatement,
   ImportStatement,
   InstanceOfExpression,
@@ -249,6 +250,10 @@ export class ASTBuilder {
       }
       case NodeKind.FOR: {
         this.visitForStatement(<ForStatement>node);
+        break;
+      }
+      case NodeKind.FOROF: {
+        this.visitForOfStatement(<ForOfStatement>node);
         break;
       }
       case NodeKind.IF: {
@@ -651,7 +656,7 @@ export class ASTBuilder {
   }
 
   visitFloatLiteralExpression(node: FloatLiteralExpression): void {
-    this.sb.push(node.value.toString(10));
+    this.sb.push(node.value.toString());
   }
 
   visitInstanceOfExpression(node: InstanceOfExpression): void {
@@ -1122,6 +1127,16 @@ export class ASTBuilder {
     } else {
       sb.push(";");
     }
+    sb.push(") ");
+    this.visitNode(node.statement);
+  }
+
+  visitForOfStatement(node: ForOfStatement): void {
+    var sb = this.sb;
+    sb.push("for (");
+    this.visitNode(node.variable);
+    sb.push(" of ");
+    this.visitNode(node.iterable);
     sb.push(") ");
     this.visitNode(node.statement);
   }

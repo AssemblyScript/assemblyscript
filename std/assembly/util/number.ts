@@ -499,7 +499,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     }
   }
 
-  while (1) {
+  while (true) {
     p2    *= 10;
     delta *= 10;
 
@@ -515,8 +515,6 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
       return len;
     }
   }
-
-  return len;
 }
 
 // @ts-ignore: decorator

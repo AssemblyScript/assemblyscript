@@ -63,7 +63,11 @@
     "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
     "prepublishOnly": "node scripts/prepublish",
-    "postpublish": "node scripts/postpublish"
+    "postpublish": "node scripts/postpublish",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+    "asbuild:untouched": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.untouched.wat -b out/assemblyscript.untouched.wasm -d out/assemblyscript.d.ts --validate --debug --measure",
+    "asbuild:optimized": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.optimized.wat -b out/assemblyscript.optimized.wasm -O3 --validate --measure",
+    "astest": "ts-node tests/bootstrap"
   },
   "releaseFiles": [
     "lib/rtrace/index.d.ts",

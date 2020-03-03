@@ -3231,7 +3231,7 @@
   i32.const 31
   i32.add
   i32.const 5
-  i32.shr_s
+  i32.shr_u
   i32.const 2
   i32.shl
   local.set $3
@@ -3263,7 +3263,7 @@
      local.get $4
      local.get $7
      i32.const 6
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -3317,14 +3317,14 @@
      local.get $4
      local.get $5
      i32.const 5
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
      local.get $4
      local.get $5
      i32.const 5
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -3396,7 +3396,7 @@
      local.get $4
      local.get $8
      i32.const 5
-     i32.shr_s
+     i32.shr_u
      i32.const 2
      i32.shl
      i32.add
@@ -3448,14 +3448,14 @@
        local.get $4
        local.get $8
        i32.const 5
-       i32.shr_s
+       i32.shr_u
        i32.const 2
        i32.shl
        i32.add
        local.get $4
        local.get $8
        i32.const 5
-       i32.shr_s
+       i32.shr_u
        i32.const 2
        i32.shl
        i32.add
@@ -35621,7 +35621,7 @@
     br $while-continue|4
    end
   end
-  local.get $15
+  unreachable
  )
  (func $~lib/util/number/prettify (; 537 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)

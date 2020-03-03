@@ -1,7 +1,7 @@
 /** @module util *//***/
 
 /** Tests if the bit at the specified index is set within a 64-bit map. */
-export function bitsetIs(map: I64, index: i32): bool {
+export function bitsetIs(map: i64, index: i32): bool {
   assert(index >= 0 && index < 64);
   return i64_ne(
     i64_and(
@@ -16,7 +16,7 @@ export function bitsetIs(map: I64, index: i32): bool {
 }
 
 /** Sets or unsets the bit at the specified index within a 64-bit map and returns the new map. */
-export function bitsetSet(map: I64, index: i32, isSet: bool): I64 {
+export function bitsetSet(map: i64, index: i32, isSet: bool): i64 {
   assert(index >= 0 && index < 64);
   return isSet
     ? i64_or(
