@@ -38,7 +38,7 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
   // if dst is not aligned to 4 bytes, use alternating shifts to copy 4 bytes each
   // doing shifts if faster when copying enough bytes (here: 32 or more)
   if (n >= 32) {
-    switch (dest & 3) {
+    switch (<u32>dest & 3) {
       // known to be != 0
       case 1: {
         w = load<u32>(src);

@@ -8,3 +8,4 @@ import "../../../std/portable/index";
 import "../binaryen";
 import "./float";
 import "./i64";
+import "./mapset";

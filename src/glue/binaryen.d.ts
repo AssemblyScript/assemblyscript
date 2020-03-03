@@ -14,13 +14,13 @@ export declare function __i32_store16(ptr: usize, value: number): void;
 export declare function __i32_store(ptr: usize, value: number): void;
 export declare function __f32_store(ptr: usize, value: number): void;
 export declare function __f64_store(ptr: usize, value: number): void;
-export declare function __i32_load8_s(ptr: usize): number;
-export declare function __i32_load8_u(ptr: usize): number;
-export declare function __i32_load16_s(ptr: usize): number;
-export declare function __i32_load16_u(ptr: usize): number;
-export declare function __i32_load(ptr: usize): number;
-export declare function __f32_load(ptr: usize): number;
-export declare function __f64_load(ptr: usize): number;
+export declare function __i32_load8_s(ptr: usize): i8;
+export declare function __i32_load8_u(ptr: usize): u8;
+export declare function __i32_load16_s(ptr: usize): i16;
+export declare function __i32_load16_u(ptr: usize): u16;
+export declare function __i32_load(ptr: usize): i32;
+export declare function __f32_load(ptr: usize): f32;
+export declare function __f64_load(ptr: usize): f64;
 
 type BinaryenIndex = u32;
 
@@ -476,7 +476,7 @@ export declare function _BinaryenBinary(module: BinaryenModuleRef, op: BinaryenO
 export declare function _BinaryenSelect(module: BinaryenModuleRef, condition: BinaryenExpressionRef, ifTrue: BinaryenExpressionRef, ifFalse: BinaryenExpressionRef, type: BinaryenType): BinaryenExpressionRef;
 export declare function _BinaryenDrop(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenReturn(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
-export declare function _BinaryenHost(module: BinaryenModuleRef, op: BinaryenOp, name: usize | 0, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenHost(module: BinaryenModuleRef, op: BinaryenOp, name: usize, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
 export declare function _BinaryenNop(module: BinaryenModuleRef): BinaryenExpressionRef;
 export declare function _BinaryenUnreachable(module: BinaryenModuleRef): BinaryenExpressionRef;
 
@@ -725,7 +725,7 @@ export declare function _BinaryenRemoveGlobal(module: BinaryenModuleRef, name: u
 export declare function _BinaryenGlobalGetName(global: BinaryenGlobalRef): usize;
 export declare function _BinaryenGlobalGetType(global: BinaryenGlobalRef): BinaryenType;
 export declare function _BinaryenGlobalIsMutable(global: BinaryenGlobalRef): bool;
-export declare function _BinaryenGlobalGetInit(global: BinaryenGlobalRef): BinaryenExpressionRef;
+export declare function _BinaryenGlobalGetInitExpr(global: BinaryenGlobalRef): BinaryenExpressionRef;
 
 type BinaryenEventRef = usize;
 
@@ -735,9 +735,8 @@ export declare function _BinaryenRemoveEvent(module: BinaryenModuleRef, name: us
 
 export declare function _BinaryenEventGetName(event: BinaryenEventRef): usize;
 export declare function _BinaryenEventGetAttribute(event: BinaryenEventRef): u32;
-export declare function _BinaryenEventGetType(event: BinaryenEventRef): usize;
-export declare function _BinaryenEventGetNumParams(event: BinaryenEventRef): BinaryenIndex;
-export declare function _BinaryenEventGetParam(event: BinaryenEventRef, index: BinaryenIndex): BinaryenType;
+export declare function _BinaryenEventGetParams(event: BinaryenEventRef): BinaryenType;
+export declare function _BinaryenEventGetResults(event: BinaryenEventRef): BinaryenType;
 
 export declare function _BinaryenSetFunctionTable(module: BinaryenModuleRef, initial: BinaryenIndex, maximum: BinaryenIndex, funcs: usize, numFuncs: BinaryenIndex, offset: BinaryenExpressionRef): void;
 

@@ -114,7 +114,7 @@ export class Set<T> {
         );
       }
       // append new entry
-      entry = changetype<SetEntry<T>>(changetype<usize>(this.entries) + this.entriesOffset++ * ENTRY_SIZE<T>());
+      entry = changetype<SetEntry<T>>(changetype<usize>(this.entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<T>());
       entry.key = isManaged<T>()
         ? changetype<T>(__retain(changetype<usize>(key)))
         : key;
