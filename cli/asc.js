@@ -684,9 +684,11 @@ exports.main = function main(argv, options, callback) {
       module.setFlexibleInlineMaxSize(70);
       module.setOneCallerInlineMaxSize(200);
     } else {
-      module.setAlwaysInlineMaxSize(4);     // default:  2
-      module.setFlexibleInlineMaxSize(65);  // default: 20
-      module.setOneCallerInlineMaxSize(80); // default: 15
+      shrinkLevel >= 2
+        ? module.setAlwaysInlineMaxSize(2)
+        : module.setAlwaysInlineMaxSize(4);  // default:  2
+      module.setFlexibleInlineMaxSize(65);   // default: 20
+      module.setOneCallerInlineMaxSize(80);  // default: 15
     }
 
     // Optimize the module if requested
