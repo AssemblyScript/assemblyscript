@@ -570,6 +570,20 @@ exports.main = function main(argv, options, callback) {
   optimizeLevel = Math.min(Math.max(optimizeLevel, 0), 3);
   shrinkLevel = Math.min(Math.max(shrinkLevel, 0), 2);
 
+  try {
+    stats.compileTime += measure(() => {
+      assemblyscript.initializeProgram(program, compilerOptions);
+    });
+  } catch(e) {
+    return callback(e);
+  }
+
+  // Call postInitialize transform hook
+  {
+    let error = applyTransform("postInitialize", program);
+    if (error) return callback(error);
+  }
+
   var module;
   stats.compileCount++;
   try {
