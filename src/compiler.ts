@@ -377,10 +377,8 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   initializeProgram(): void {
-    if (!this.program.initialized) {
-      // initialize lookup maps, built-ins, imports, exports, etc.
-      this.program.initialize(this.options);
-    }
+    // initialize lookup maps, built-ins, imports, exports, etc.
+    this.program.initialize(this.options);
   }
 
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */

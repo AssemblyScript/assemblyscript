@@ -635,6 +635,9 @@ export class Program extends DiagnosticEmitter {
 
   /** Initializes the program and its elements prior to compilation. */
   initialize(options: Options): void {
+    // Initialize only once
+    if (this.initialized) return;
+
     this.initialized = true;
     this.options = options;
 
