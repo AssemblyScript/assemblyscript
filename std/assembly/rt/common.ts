@@ -37,7 +37,7 @@
 }
 
 // @ts-ignore: decorator
-@inline export const BLOCK_OVERHEAD = (offsetof<BLOCK>() + AL_MASK) & ~AL_MASK;
+@inline export const BLOCK_OVERHEAD: usize = (offsetof<BLOCK>() + AL_MASK) & ~AL_MASK;
 
 // @ts-ignore: decorator
 @inline export const BLOCK_MAXSIZE: usize = (1 << 30) - BLOCK_OVERHEAD;

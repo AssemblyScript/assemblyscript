@@ -3,6 +3,7 @@
   "Operation is unsafe.": 101,
   "User-defined: {0}": 102,
   "Feature '{0}' is not enabled.": 103,
+  "Function '{0}' is possibly called virtually, which is not yet supported.": 104,
 
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 200,
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,
@@ -88,6 +89,7 @@
   "Binary digit expected.": 1177,
   "Octal digit expected.": 1178,
   "An implementation cannot be declared in ambient contexts.": 1183,
+  "The variable declaration of a 'for...of' statement cannot have an initializer.": 1190,
   "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": 1198,
   "Unterminated Unicode escape sequence.": 1199,
   "Decorators are not valid here.": 1206,
