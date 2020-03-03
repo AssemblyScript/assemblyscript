@@ -1,4 +1,23 @@
 /**
+ * @license
+ * Copyright 2020 Daniel Wirtz / The AssemblyScript Authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * @fileoverview Compiler frontend for node.js
  *
  * Uses the low-level API exported from src/index.ts so it works with the compiler compiled to
@@ -7,10 +26,6 @@
  *
  * Can also be packaged as a bundle suitable for in-browser use with the standard library injected
  * in the build step. See dist/asc.js for the bundle and webpack.config.js for building details.
- *
- * @license
- * Copyright Daniel Wirtz / The AssemblyScript Authors.
- * SPDX-License-Identifier: Apache-2.0
  */
 
 // Use "." instead of "/" as cwd in browsers
