@@ -801,10 +801,10 @@ exports.main = function main(argv, options, callback) {
           add("inlining-optimizing");
           add("reorder-locals");
         }
-        add("dae-optimizing");
-        add("inlining-optimizing");
         add("optimize-instructions");
         add("simplify-globals-optimizing");
+        add("dae-optimizing");
+        add("inlining-optimizing");
       }
       // remove unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs
