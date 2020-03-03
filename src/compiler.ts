@@ -85,8 +85,7 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName,
-  Namespace
+  mangleInternalName
 } from "./program";
 
 import {
@@ -1312,18 +1311,9 @@ export class Compiler extends DiagnosticEmitter {
       );
 
     // imported function
-    } else {
-      if (!instance.is(CommonFlags.AMBIENT)) {
-        this.error(
-          DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
-          instance.identifierNode.range
-        );
-      }
-
+    } else if (instance.is(CommonFlags.AMBIENT)) {
       instance.set(CommonFlags.MODULE_IMPORT);
       mangleImportName(instance, instance.declaration); // TODO: check for duplicates
-
-      // create the import
       module.addFunctionImport(
         instance.internalName,
         mangleImportName_moduleName,
@@ -1332,6 +1322,23 @@ export class Compiler extends DiagnosticEmitter {
         signature.nativeResults
       );
       funcRef = module.getFunction(instance.internalName);
+
+    // abstract function
+    } else if (instance.is(CommonFlags.ABSTRACT)) {
+      funcRef = module.addFunction(
+        instance.internalName,
+        signature.nativeParams,
+        signature.nativeResults,
+        null,
+        module.unreachable()
+      );
+      this.virtualCalls.add(instance);
+    } else {
+      this.error(
+        DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
+        instance.identifierNode.range
+      );
+      funcRef = 0; // TODO?
     }
 
     instance.finalize(module, funcRef);
