@@ -15771,11 +15771,10 @@
    return
   end
   i32.const 64
-  i64.extend_i32_s
   local.get $1
   i64.clz
-  i64.sub
   i32.wrap_i64
+  i32.sub
   local.set $3
   local.get $3
   i32.const 6

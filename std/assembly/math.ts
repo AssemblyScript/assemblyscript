@@ -3056,7 +3056,7 @@ export function ipow64(x: i64, e: i64): i64 {
     if (e == 1) return x;
     if (e == 2) return x * x;
 
-    let log = <i32>(64 - clz(e));
+    let log = 64 - <i32>clz(e);
     if (log <= 6) {
       // 64 = 2 ^ 6, so need only six cases.
       // But some extra cases needs for properly overflowing
