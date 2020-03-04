@@ -34,19 +34,21 @@ global.i64_mul = function(left, right) {
 };
 
 global.i64_pow = function(left, right) {
-  if (right.isNegative()) return Long.ZERO;
-  var rightLow = right.low;
-  if (!right.high) {
-    if (rightLow == 0) return Long.ONE;
-    if (rightLow == 1) return left;
-    if (rightLow == 2) return left.mul(left);
+  var rightHi = right.high;
+  if (rightHi < 0) return Long.ZERO;
+  var rightLo = right.low;
+  if (!rightHi) {
+    if (rightLo == 0) return Long.ONE;
+    if (rightLo == 1) return left;
+    if (rightLo == 2) return left.mul(left);
   }
   var result = Long.ONE;
-  while (rightLow | right.high) {
-    if (rightLow & 1) result = result.mul(left);
+  while (rightLo | rightHi) {
+    if (rightLo & 1) result = result.mul(left);
     right = right.shru(1);
-    left = left.mul(left);
-    rightLow = right.low;
+    left  = left.mul(left);
+    rightLo = right.low;
+    rightHi = right.high;
   }
   return result;
 };
