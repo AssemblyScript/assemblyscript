@@ -3,9 +3,9 @@ declare module "assemblyscript" {
 }
 declare module "assemblyscript/src/common" {
     /**
-     * Common constants.
-     * @module common
-     */ /***/
+     * @fileoverview Common constants used by various parts of the compiler.
+     * @license Apache-2.0
+     */
     /** Indicates traits of a {@link Node} or {@link Element}. */
     export enum CommonFlags {
         /** No flags set. */
@@ -204,15 +204,16 @@ declare module "assemblyscript/src/common" {
 }
 declare module "assemblyscript/src/diagnosticMessages.generated" {
     /**
-     * Generated from diagnosticsMessages.json. Do not edit.
-     * @module diagnostics
-     */ /***/
+     * @fileoverview Generated from diagnosticsMessages.json. Do not edit.
+     * @license Apache-2.0
+     */
     /** Enum of available diagnostic codes. */
     export enum DiagnosticCode {
         Not_implemented = 100,
         Operation_is_unsafe = 101,
         User_defined_0 = 102,
         Feature_0_is_not_enabled = 103,
+        Function_0_is_possibly_called_virtually_which_is_not_yet_supported = 104,
         Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
         Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
         Type_0_cannot_be_changed_to_type_1 = 202,
@@ -295,6 +296,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Binary_digit_expected = 1177,
         Octal_digit_expected = 1178,
         An_implementation_cannot_be_declared_in_ambient_contexts = 1183,
+        The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer = 1190,
         An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive = 1198,
         Unterminated_Unicode_escape_sequence = 1199,
         Decorators_are_not_valid_here = 1206,
@@ -359,15 +361,58 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
     /** Translates a diagnostic code to its respective string. */
     export function diagnosticCodeToString(code: DiagnosticCode): string;
 }
-declare module "assemblyscript/src/util/bitset" {
-    /** @module util */ /***/
-    /** Tests if the bit at the specified index is set within a 64-bit map. */
-    export function bitsetIs(map: I64, index: number): boolean;
-    /** Sets or unsets the bit at the specified index within a 64-bit map and returns the new map. */
-    export function bitsetSet(map: I64, index: number, isSet: boolean): I64;
+declare module "assemblyscript/src/util/binary" {
+    /**
+     * @fileoverview Various binary reading and writing utility.
+     * @license Apache-2.0
+     */
+    /** Reads an 8-bit integer from the specified buffer. */
+    export function readI8(buffer: Uint8Array, offset: number): number;
+    /** Writes an 8-bit integer to the specified buffer. */
+    export function writeI8(value: number, buffer: Uint8Array, offset: number): void;
+    /** Reads a 16-bit integer from the specified buffer. */
+    export function readI16(buffer: Uint8Array, offset: number): number;
+    /** Writes a 16-bit integer to the specified buffer. */
+    export function writeI16(value: number, buffer: Uint8Array, offset: number): void;
+    /** Reads a 32-bit integer from the specified buffer. */
+    export function readI32(buffer: Uint8Array, offset: number): number;
+    /** Writes a 32-bit integer to the specified buffer. */
+    export function writeI32(value: number, buffer: Uint8Array, offset: number): void;
+    /** Reads a 64-bit integer from the specified buffer. */
+    export function readI64(buffer: Uint8Array, offset: number): i64;
+    /** Writes a 64-bit integer to the specified buffer. */
+    export function writeI64(value: i64, buffer: Uint8Array, offset: number): void;
+    /** Reads a 32-bit float from the specified buffer. */
+    export function readF32(buffer: Uint8Array, offset: number): number;
+    /** Writes a 32-bit float to the specified buffer. */
+    export function writeF32(value: number, buffer: Uint8Array, offset: number): void;
+    /** Reads a 64-bit float from the specified buffer. */
+    export function readF64(buffer: Uint8Array, offset: number): number;
+    /** Writes a 64-bit float to the specified buffer. */
+    export function writeF64(value: number, buffer: Uint8Array, offset: number): void;
 }
-declare module "assemblyscript/src/util/charcode" {
-    /** @module util */ /***/
+declare module "assemblyscript/src/util/collections" {
+    /**
+     * @fileoverview Various collections utility.
+     * @license Apache-2.0
+     */
+    export function makeArray<V>(original?: Array<V> | null): Array<V>;
+    export function makeSet<V>(original?: Set<V> | null): Set<V>;
+    export function makeMap<K, V>(original?: Map<K, V> | null, overrides?: Map<K, V> | null): Map<K, V>;
+}
+declare module "assemblyscript/src/util/math" {
+    /**
+     * @fileoverview Various math utility.
+     * @license Apache-2.0
+     */
+    /** Tests if `x` is a power of two. */
+    export function isPowerOf2(x: number): boolean;
+}
+declare module "assemblyscript/src/util/text" {
+    /**
+     * @fileoverview Various character and text utility.
+     * @license Apache-2.0
+     */
     /** An enum of named character codes. */
     export const enum CharCode {
         NULL = 0,
@@ -508,14 +553,14 @@ declare module "assemblyscript/src/util/charcode" {
     export function isKeywordCharacter(c: number): boolean;
     /** Tests if the specified character code is a valid part of an identifier. */
     export function isIdentifierPart(c: number): boolean;
-}
-declare module "assemblyscript/src/util/collections" {
-    export function makeArray<V>(original?: Array<V> | null): Array<V>;
-    export function makeSet<V>(original?: Set<V> | null): Set<V>;
-    export function makeMap<K, V>(original?: Map<K, V> | null, overrides?: Map<K, V> | null): Map<K, V>;
+    /** Creates an indentation matching the number of specified levels. */
+    export function indent(sb: string[], level: number): void;
 }
 declare module "assemblyscript/src/util/path" {
-    /** @module util */ /***/
+    /**
+     * @fileoverview Various file path utility.
+     * @license Apache-2.0
+     */
     /**
      * Normalizes the specified path, removing interior placeholders.
      * Expects a posix-compatible relative path (not Windows compatible).
@@ -526,60 +571,23 @@ declare module "assemblyscript/src/util/path" {
     /** Obtains the directory portion of a normalized path. */
     export function dirname(normalizedPath: string): string;
 }
-declare module "assemblyscript/src/util/text" {
-    /** @module util */ /***/
-    /** Creates an indentation matching the number of specified levels. */
-    export function indent(sb: string[], level: number): void;
-}
-declare module "assemblyscript/src/util/binary" {
-    /** @module util */ /***/
-    /** Reads an 8-bit integer from the specified buffer. */
-    export function readI8(buffer: Uint8Array, offset: number): number;
-    /** Writes an 8-bit integer to the specified buffer. */
-    export function writeI8(value: number, buffer: Uint8Array, offset: number): void;
-    /** Reads a 16-bit integer from the specified buffer. */
-    export function readI16(buffer: Uint8Array, offset: number): number;
-    /** Writes a 16-bit integer to the specified buffer. */
-    export function writeI16(value: number, buffer: Uint8Array, offset: number): void;
-    /** Reads a 32-bit integer from the specified buffer. */
-    export function readI32(buffer: Uint8Array, offset: number): number;
-    /** Writes a 32-bit integer to the specified buffer. */
-    export function writeI32(value: number, buffer: Uint8Array, offset: number): void;
-    /** Reads a 64-bit integer from the specified buffer. */
-    export function readI64(buffer: Uint8Array, offset: number): I64;
-    /** Writes a 64-bit integer to the specified buffer. */
-    export function writeI64(value: I64, buffer: Uint8Array, offset: number): void;
-    /** Reads a 32-bit float from the specified buffer. */
-    export function readF32(buffer: Uint8Array, offset: number): number;
-    /** Writes a 32-bit float to the specified buffer. */
-    export function writeF32(value: number, buffer: Uint8Array, offset: number): void;
-    /** Reads a 64-bit float from the specified buffer. */
-    export function readF64(buffer: Uint8Array, offset: number): number;
-    /** Writes a 64-bit float to the specified buffer. */
-    export function writeF64(value: number, buffer: Uint8Array, offset: number): void;
-}
 declare module "assemblyscript/src/util/index" {
     /**
-     * Various compiler utilities.
-     * @module util
-     * @preferred
-     */ /***/
-    export * from "assemblyscript/src/util/bitset";
-    export * from "assemblyscript/src/util/charcode";
+     * @fileoverview Various utility.
+     * @license Apache-2.0
+     */
+    export * from "assemblyscript/src/util/binary";
     export * from "assemblyscript/src/util/collections";
+    export * from "assemblyscript/src/util/math";
     export * from "assemblyscript/src/util/path";
     export * from "assemblyscript/src/util/text";
-    export * from "assemblyscript/src/util/binary";
-    /** Tests if `x` is a power of two. */
-    export function isPowerOf2(x: number): boolean;
 }
 declare module "assemblyscript/src/diagnostics" {
     /**
-     * Shared diagnostic handling inherited by the parser and the compiler.
-     * @module diagnostics
-     * @preferred
-     */ /***/
-    import { Range } from "assemblyscript/src/ast";
+     * @fileoverview Shared diagnostic handling.
+     * @license Apache-2.0
+     */
+    import { Range } from "assemblyscript/src/tokenizer";
     import { DiagnosticCode } from "assemblyscript/src/diagnosticMessages.generated";
     export { DiagnosticCode, diagnosticCodeToString } from "assemblyscript/src/diagnosticMessages.generated";
     /** Indicates the category of a {@link DiagnosticMessage}. */
@@ -664,13 +672,17 @@ declare module "assemblyscript/src/diagnostics" {
 }
 declare module "assemblyscript/src/tokenizer" {
     /**
-     * A TypeScript tokenizer modified for AssemblyScript.
+     * @fileoverview A TypeScript tokenizer modified for AssemblyScript.
      *
-     * Skips over trivia and provides a general mark/reset mechanism for the parser to utilize on
-     * ambiguous tokens.
+     * The `Tokenizer` scans over a source file and returns one syntactic token
+     * at a time that the parser will combine to an abstract syntax tree.
      *
-     * @module tokenizer
-     */ /***/
+     * It skips over trivia like comments and whitespace and provides a general
+     * mark/reset mechanism for the parser to utilize on ambiguous tokens, with
+     * one token of lookahead otherwise.
+     *
+     * @license Apache-2.0
+     */
     import { DiagnosticMessage, DiagnosticEmitter } from "assemblyscript/src/diagnostics";
     import { Source, CommentKind } from "assemblyscript/src/ast";
     /** Named token types. */
@@ -848,11 +860,11 @@ declare module "assemblyscript/src/tokenizer" {
         readRegexpPattern(): string;
         readRegexpFlags(): string;
         testInteger(): boolean;
-        readInteger(): I64;
-        readHexInteger(): I64;
-        readDecimalInteger(): I64;
-        readOctalInteger(): I64;
-        readBinaryInteger(): I64;
+        readInteger(): i64;
+        readHexInteger(): i64;
+        readDecimalInteger(): i64;
+        readOctalInteger(): i64;
+        readBinaryInteger(): i64;
         readFloat(): number;
         readDecimalFloat(): number;
         readHexFloat(): number;
@@ -873,12 +885,19 @@ declare module "assemblyscript/src/tokenizer" {
 }
 declare module "assemblyscript/src/ast" {
     /**
-     * Abstract syntax tree representing a source file once parsed.
-     * @module ast
-     */ /***/
+     * @fileoverview Abstract syntax tree representing a source file once parsed.
+     *
+     * Each node in the AST is represented by an instance of a subclass of `Node`,
+     * with its `Node#kind` represented by one of the `NodeKind` constants, which
+     * dependent code typically switches over. The intended way to create a node
+     * is to use the respective `Node.createX` method instead of its constructor.
+     *
+     * Note that the AST does not contain any type information except type names.
+     *
+     * @license Apache-2.0
+     */
     import { CommonFlags } from "assemblyscript/src/common";
     import { Token, Range } from "assemblyscript/src/tokenizer";
-    export { Token, Range };
     /** Indicates the kind of a node. */
     export enum NodeKind {
         SOURCE = 0,
@@ -919,31 +938,32 @@ declare module "assemblyscript/src/ast" {
         EXPORTIMPORT = 35,
         EXPRESSION = 36,
         FOR = 37,
-        IF = 38,
-        IMPORT = 39,
-        RETURN = 40,
-        SWITCH = 41,
-        THROW = 42,
-        TRY = 43,
-        VARIABLE = 44,
-        VOID = 45,
-        WHILE = 46,
-        CLASSDECLARATION = 47,
-        ENUMDECLARATION = 48,
-        ENUMVALUEDECLARATION = 49,
-        FIELDDECLARATION = 50,
-        FUNCTIONDECLARATION = 51,
-        IMPORTDECLARATION = 52,
-        INDEXSIGNATUREDECLARATION = 53,
-        INTERFACEDECLARATION = 54,
-        METHODDECLARATION = 55,
-        NAMESPACEDECLARATION = 56,
-        TYPEDECLARATION = 57,
-        VARIABLEDECLARATION = 58,
-        DECORATOR = 59,
-        EXPORTMEMBER = 60,
-        SWITCHCASE = 61,
-        COMMENT = 62
+        FOROF = 38,
+        IF = 39,
+        IMPORT = 40,
+        RETURN = 41,
+        SWITCH = 42,
+        THROW = 43,
+        TRY = 44,
+        VARIABLE = 45,
+        VOID = 46,
+        WHILE = 47,
+        CLASSDECLARATION = 48,
+        ENUMDECLARATION = 49,
+        ENUMVALUEDECLARATION = 50,
+        FIELDDECLARATION = 51,
+        FUNCTIONDECLARATION = 52,
+        IMPORTDECLARATION = 53,
+        INDEXSIGNATUREDECLARATION = 54,
+        INTERFACEDECLARATION = 55,
+        METHODDECLARATION = 56,
+        NAMESPACEDECLARATION = 57,
+        TYPEDECLARATION = 58,
+        VARIABLEDECLARATION = 59,
+        DECORATOR = 60,
+        EXPORTMEMBER = 61,
+        SWITCHCASE = 62,
+        COMMENT = 63
     }
     /** Checks if a node represents a constant value. */
     export function nodeIsConstantValue(kind: NodeKind): boolean;
@@ -976,7 +996,7 @@ declare module "assemblyscript/src/ast" {
         static createFloatLiteralExpression(value: number, range: Range): FloatLiteralExpression;
         static createFunctionExpression(declaration: FunctionDeclaration): FunctionExpression;
         static createInstanceOfExpression(expression: Expression, isType: TypeNode, range: Range): InstanceOfExpression;
-        static createIntegerLiteralExpression(value: I64, range: Range): IntegerLiteralExpression;
+        static createIntegerLiteralExpression(value: i64, range: Range): IntegerLiteralExpression;
         static createNewExpression(typeName: TypeName, typeArgs: TypeNode[] | null, args: Expression[], range: Range): NewExpression;
         static createNullExpression(range: Range): NullExpression;
         static createObjectLiteralExpression(names: IdentifierExpression[], values: Expression[], range: Range): ObjectLiteralExpression;
@@ -1013,6 +1033,7 @@ declare module "assemblyscript/src/ast" {
         members: DeclarationStatement[], decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): InterfaceDeclaration;
         static createFieldDeclaration(name: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): FieldDeclaration;
         static createForStatement(initializer: Statement | null, condition: Expression | null, incrementor: Expression | null, statement: Statement, range: Range): ForStatement;
+        static createForOfStatement(variable: Statement, iterable: Expression, statement: Statement, range: Range): ForOfStatement;
         static createFunctionDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, signature: FunctionTypeNode, body: Statement | null, decorators: DecoratorNode[] | null, flags: CommonFlags, arrowKind: ArrowKind, range: Range): FunctionDeclaration;
         static createIndexSignatureDeclaration(keyType: NamedTypeNode, valueType: TypeNode, flags: CommonFlags, range: Range): IndexSignatureDeclaration;
         static createMethodDeclaration(name: IdentifierExpression, typeParameters: TypeParameterNode[] | null, signature: FunctionTypeNode, body: Statement | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): MethodDeclaration;
@@ -1036,7 +1057,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a type name. */
     export class TypeName extends Node {
-        kind: NodeKind;
         /** Identifier of this part. */
         identifier: IdentifierExpression;
         /** Next part of the type name or `null` if this is the last part. */
@@ -1044,7 +1064,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a named type. */
     export class NamedTypeNode extends TypeNode {
-        kind: NodeKind;
         /** Type name. */
         name: TypeName;
         /** Type argument references. */
@@ -1053,7 +1072,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a function type. */
     export class FunctionTypeNode extends TypeNode {
-        kind: NodeKind;
         /** Accepted parameters. */
         parameters: ParameterNode[];
         /** Return type. */
@@ -1063,7 +1081,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a type parameter. */
     export class TypeParameterNode extends Node {
-        kind: NodeKind;
         /** Identifier reference. */
         name: IdentifierExpression;
         /** Extended type reference, if any. */
@@ -1082,7 +1099,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a function parameter. */
     export class ParameterNode extends Node {
-        kind: NodeKind;
         /** Parameter kind. */
         parameterKind: ParameterKind;
         /** Parameter name. */
@@ -1124,7 +1140,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a decorator. */
     export class DecoratorNode extends Node {
-        kind: NodeKind;
         /** Built-in kind, if applicable. */
         decoratorKind: DecoratorKind;
         /** Name expression. */
@@ -1143,7 +1158,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a comment. */
     export class CommentNode extends Node {
-        kind: NodeKind;
         /** Comment kind. */
         commentKind: CommentKind;
         /** Comment text. */
@@ -1154,7 +1168,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an identifier expression. */
     export class IdentifierExpression extends Expression {
-        kind: NodeKind;
         /** Textual name. */
         text: string;
         /** Whether quoted or not. */
@@ -1173,13 +1186,11 @@ declare module "assemblyscript/src/ast" {
     export function isNumericLiteral(node: Expression): boolean;
     /** Base class of all literal expressions. */
     export abstract class LiteralExpression extends Expression {
-        kind: NodeKind;
         /** Specific literal kind. */
         literalKind: LiteralKind;
     }
     /** Represents an `[]` literal expression. */
     export class ArrayLiteralExpression extends LiteralExpression {
-        literalKind: LiteralKind;
         /** Nested element expressions. */
         elementExpressions: (Expression | null)[];
     }
@@ -1192,7 +1203,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an assertion expression. */
     export class AssertionExpression extends Expression {
-        kind: NodeKind;
         /** Specific kind of this assertion. */
         assertionKind: AssertionKind;
         /** Expression being asserted. */
@@ -1202,7 +1212,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a binary expression. */
     export class BinaryExpression extends Expression {
-        kind: NodeKind;
         /** Operator token. */
         operator: Token;
         /** Left-hand side expression */
@@ -1212,7 +1221,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a call expression. */
     export class CallExpression extends Expression {
-        kind: NodeKind;
         /** Called expression. Usually an identifier or property access expression. */
         expression: Expression;
         /** Provided type arguments. */
@@ -1226,24 +1234,19 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a class expression using the 'class' keyword. */
     export class ClassExpression extends Expression {
-        kind: NodeKind;
         /** Inline class declaration. */
         declaration: ClassDeclaration;
     }
     /** Represents a comma expression composed of multiple expressions. */
     export class CommaExpression extends Expression {
-        kind: NodeKind;
         /** Sequential expressions. */
         expressions: Expression[];
     }
     /** Represents a `constructor` expression. */
     export class ConstructorExpression extends IdentifierExpression {
-        kind: NodeKind;
-        text: string;
     }
     /** Represents an element access expression, e.g., array access. */
     export class ElementAccessExpression extends Expression {
-        kind: NodeKind;
         /** Expression being accessed. */
         expression: Expression;
         /** Element of the expression being accessed. */
@@ -1251,19 +1254,16 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a float literal expression. */
     export class FloatLiteralExpression extends LiteralExpression {
-        literalKind: LiteralKind;
         /** Float value. */
         value: number;
     }
     /** Represents a function expression using the 'function' keyword. */
     export class FunctionExpression extends Expression {
-        kind: NodeKind;
         /** Inline function declaration. */
         declaration: FunctionDeclaration;
     }
     /** Represents an `instanceof` expression. */
     export class InstanceOfExpression extends Expression {
-        kind: NodeKind;
         /** Expression being asserted. */
         expression: Expression;
         /** Type to test for. */
@@ -1271,13 +1271,11 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an integer literal expression. */
     export class IntegerLiteralExpression extends LiteralExpression {
-        literalKind: LiteralKind;
         /** Integer value. */
-        value: I64;
+        value: i64;
     }
     /** Represents a `new` expression. Like a call but with its own kind. */
     export class NewExpression extends Expression {
-        kind: NodeKind;
         /** Type being constructed. */
         typeName: TypeName;
         /** Provided type arguments. */
@@ -1291,12 +1289,9 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a `null` expression. */
     export class NullExpression extends IdentifierExpression {
-        kind: NodeKind;
-        text: string;
     }
     /** Represents an object literal expression. */
     export class ObjectLiteralExpression extends LiteralExpression {
-        literalKind: LiteralKind;
         /** Field names. */
         names: IdentifierExpression[];
         /** Field values. */
@@ -1304,13 +1299,11 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a parenthesized expression. */
     export class ParenthesizedExpression extends Expression {
-        kind: NodeKind;
         /** Expression in parenthesis. */
         expression: Expression;
     }
     /** Represents a property access expression. */
     export class PropertyAccessExpression extends Expression {
-        kind: NodeKind;
         /** Expression being accessed. */
         expression: Expression;
         /** Property of the expression being accessed. */
@@ -1318,7 +1311,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a regular expression literal expression. */
     export class RegexpLiteralExpression extends LiteralExpression {
-        literalKind: LiteralKind;
         /** Regular expression pattern. */
         pattern: string;
         /** Regular expression flags. */
@@ -1326,7 +1318,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a ternary expression, i.e., short if notation. */
     export class TernaryExpression extends Expression {
-        kind: NodeKind;
         /** Condition expression. */
         condition: Expression;
         /** Expression executed when condition is `true`. */
@@ -1336,29 +1327,20 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a string literal expression. */
     export class StringLiteralExpression extends LiteralExpression {
-        literalKind: LiteralKind;
         /** String value without quotes. */
         value: string;
     }
     /** Represents a `super` expression. */
     export class SuperExpression extends IdentifierExpression {
-        kind: NodeKind;
-        text: string;
     }
     /** Represents a `this` expression. */
     export class ThisExpression extends IdentifierExpression {
-        kind: NodeKind;
-        text: string;
     }
     /** Represents a `true` expression. */
     export class TrueExpression extends IdentifierExpression {
-        kind: NodeKind;
-        text: string;
     }
     /** Represents a `false` expression. */
     export class FalseExpression extends IdentifierExpression {
-        kind: NodeKind;
-        text: string;
     }
     /** Base class of all unary expressions. */
     export abstract class UnaryExpression extends Expression {
@@ -1369,11 +1351,9 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a unary postfix expression, e.g. a postfix increment. */
     export class UnaryPostfixExpression extends UnaryExpression {
-        kind: NodeKind;
     }
     /** Represents a unary prefix expression, e.g. a negation. */
     export class UnaryPrefixExpression extends UnaryExpression {
-        kind: NodeKind;
     }
     /** Base class of all statement nodes. */
     export abstract class Statement extends Node {
@@ -1391,8 +1371,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** A top-level source node. */
     export class Source extends Node {
-        kind: NodeKind;
-        parent: null;
         /** Source kind. */
         sourceKind: SourceKind;
         /** Normalized path with file extension. */
@@ -1433,7 +1411,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an index signature declaration. */
     export class IndexSignatureDeclaration extends DeclarationStatement {
-        kind: NodeKind;
         /** Key type. */
         keyType: NamedTypeNode;
         /** Value type. */
@@ -1448,19 +1425,16 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a block statement. */
     export class BlockStatement extends Statement {
-        kind: NodeKind;
         /** Contained statements. */
         statements: Statement[];
     }
     /** Represents a `break` statement. */
     export class BreakStatement extends Statement {
-        kind: NodeKind;
         /** Target label, if applicable. */
         label: IdentifierExpression | null;
     }
     /** Represents a `class` declaration. */
     export class ClassDeclaration extends DeclarationStatement {
-        kind: NodeKind;
         /** Accepted type parameters. */
         typeParameters: TypeParameterNode[] | null;
         /** Base class type being extended, if any. */
@@ -1473,13 +1447,11 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a `continue` statement. */
     export class ContinueStatement extends Statement {
-        kind: NodeKind;
         /** Target label, if applicable. */
         label: IdentifierExpression | null;
     }
     /** Represents a `do` statement. */
     export class DoStatement extends Statement {
-        kind: NodeKind;
         /** Statement being looped over. */
         statement: Statement;
         /** Condition when to repeat. */
@@ -1487,23 +1459,19 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an empty statement, i.e., a semicolon terminating nothing. */
     export class EmptyStatement extends Statement {
-        kind: NodeKind;
     }
     /** Represents an `enum` declaration. */
     export class EnumDeclaration extends DeclarationStatement {
-        kind: NodeKind;
         /** Enum value declarations. */
         values: EnumValueDeclaration[];
     }
     /** Represents a value of an `enum` declaration. */
     export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
-        kind: NodeKind;
         /** Value expression. */
         value: Expression | null;
     }
     /** Represents an `export import` statement of an interface. */
-    export class ExportImportStatement extends Node {
-        kind: NodeKind;
+    export class ExportImportStatement extends Statement {
         /** Identifier being imported. */
         name: IdentifierExpression;
         /** Identifier being exported. */
@@ -1511,7 +1479,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a member of an `export` statement. */
     export class ExportMember extends Node {
-        kind: NodeKind;
         /** Local identifier. */
         localName: IdentifierExpression;
         /** Exported identifier. */
@@ -1519,7 +1486,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an `export` statement. */
     export class ExportStatement extends Statement {
-        kind: NodeKind;
         /** Array of members if a set of named exports, or `null` if a file export. */
         members: ExportMember[] | null;
         /** Path being exported from, if applicable. */
@@ -1531,34 +1497,36 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an `export default` statement. */
     export class ExportDefaultStatement extends Statement {
-        kind: NodeKind;
         /** Declaration being exported as default. */
         declaration: DeclarationStatement;
     }
     /** Represents an expression that is used as a statement. */
     export class ExpressionStatement extends Statement {
-        kind: NodeKind;
         /** Expression being used as a statement.*/
         expression: Expression;
     }
     /** Represents a field declaration within a `class`. */
     export class FieldDeclaration extends VariableLikeDeclarationStatement {
-        kind: NodeKind;
         /** Parameter index if declared as a constructor parameter, otherwise `-1`. */
         parameterIndex: number;
     }
     /** Represents a `for` statement. */
     export class ForStatement extends Statement {
-        kind: NodeKind;
-        /**
-         * Initializer statement, if present.
-         * Either a {@link VariableStatement} or {@link ExpressionStatement}.
-         */
+        /** Initializer statement, if present. Either a `VariableStatement` or `ExpressionStatement`. */
         initializer: Statement | null;
         /** Condition expression, if present. */
         condition: Expression | null;
         /** Incrementor expression, if present. */
         incrementor: Expression | null;
+        /** Statement being looped over. */
+        statement: Statement;
+    }
+    /** Represents a `for..of` statement. */
+    export class ForOfStatement extends Statement {
+        /** Variable statement. Either a `VariableStatement` or `ExpressionStatement` of `IdentifierExpression`. */
+        variable: Statement;
+        /** Iterable expression being iterated. */
+        iterable: Expression;
         /** Statement being looped over. */
         statement: Statement;
     }
@@ -1573,7 +1541,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a `function` declaration. */
     export class FunctionDeclaration extends DeclarationStatement {
-        kind: NodeKind;
         /** Type parameters, if any. */
         typeParameters: TypeParameterNode[] | null;
         /** Function signature. */
@@ -1588,7 +1555,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an `if` statement. */
     export class IfStatement extends Statement {
-        kind: NodeKind;
         /** Condition. */
         condition: Expression;
         /** Statement executed when condition is `true`. */
@@ -1598,13 +1564,11 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an `import` declaration part of an {@link ImportStatement}. */
     export class ImportDeclaration extends DeclarationStatement {
-        kind: NodeKind;
         /** Identifier being imported. */
         foreignName: IdentifierExpression;
     }
     /** Represents an `import` statement. */
     export class ImportStatement extends Statement {
-        kind: NodeKind;
         /** Array of member declarations or `null` if an asterisk import. */
         declarations: ImportDeclaration[] | null;
         /** Name of the local namespace, if an asterisk import. */
@@ -1616,27 +1580,22 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents an `interfarce` declaration. */
     export class InterfaceDeclaration extends ClassDeclaration {
-        kind: NodeKind;
     }
     /** Represents a method declaration within a `class`. */
     export class MethodDeclaration extends FunctionDeclaration {
-        kind: NodeKind;
     }
     /** Represents a `namespace` declaration. */
     export class NamespaceDeclaration extends DeclarationStatement {
-        kind: NodeKind;
         /** Array of namespace members. */
         members: Statement[];
     }
     /** Represents a `return` statement. */
     export class ReturnStatement extends Statement {
-        kind: NodeKind;
         /** Value expression being returned, if present. */
         value: Expression | null;
     }
     /** Represents a single `case` within a `switch` statement. */
     export class SwitchCase extends Node {
-        kind: NodeKind;
         /** Label expression. `null` indicates the default case. */
         label: Expression | null;
         /** Contained statements. */
@@ -1644,7 +1603,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a `switch` statement. */
     export class SwitchStatement extends Statement {
-        kind: NodeKind;
         /** Condition expression. */
         condition: Expression;
         /** Contained cases. */
@@ -1652,13 +1610,11 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a `throw` statement. */
     export class ThrowStatement extends Statement {
-        kind: NodeKind;
         /** Value expression being thrown. */
         value: Expression;
     }
     /** Represents a `try` statement. */
     export class TryStatement extends Statement {
-        kind: NodeKind;
         /** Contained statements. */
         statements: Statement[];
         /** Exception variable name, if a `catch` clause is present. */
@@ -1670,7 +1626,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a `type` declaration. */
     export class TypeDeclaration extends DeclarationStatement {
-        kind: NodeKind;
         /** Type parameters, if any. */
         typeParameters: TypeParameterNode[] | null;
         /** Type being aliased. */
@@ -1678,11 +1633,9 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a variable declaration part of a {@link VariableStatement}. */
     export class VariableDeclaration extends VariableLikeDeclarationStatement {
-        kind: NodeKind;
     }
     /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
     export class VariableStatement extends Statement {
-        kind: NodeKind;
         /** Array of decorators. */
         decorators: DecoratorNode[] | null;
         /** Array of member declarations. */
@@ -1690,13 +1643,11 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a void statement dropping an expression's value. */
     export class VoidStatement extends Statement {
-        kind: NodeKind;
         /** Expression being dropped. */
         expression: Expression;
     }
     /** Represents a `while` statement. */
     export class WhileStatement extends Statement {
-        kind: NodeKind;
         /** Condition expression. */
         condition: Expression;
         /** Statement being looped over. */
@@ -1711,9 +1662,14 @@ declare module "assemblyscript/src/ast" {
 }
 declare module "assemblyscript/src/module" {
     /**
-     * A thin wrapper around Binaryen's C-API.
-     * @module module
-     */ /***/
+     * @fileoverview A thin wrapper around Binaryen's C-API.
+     *
+     * The AssemblyScript compiler utilizes Binaryen's C-API directly. Even
+     * though it currently imports binaryen.js, none of the JS APIs it
+     * provides are used.
+     *
+     * @license Apache-2.0
+     */
     import { Target } from "assemblyscript/src/common";
     export type ModuleRef = number;
     export type FunctionRef = number;
@@ -2144,8 +2100,8 @@ declare module "assemblyscript/src/module" {
     }
     export class MemorySegment {
         buffer: Uint8Array;
-        offset: I64;
-        static create(buffer: Uint8Array, offset: I64): MemorySegment;
+        offset: i64;
+        static create(buffer: Uint8Array, offset: i64): MemorySegment;
     }
     export class Module {
         ref: ModuleRef;
@@ -2336,9 +2292,8 @@ declare module "assemblyscript/src/module" {
     export function getGlobalInit(global: GlobalRef): ExpressionRef;
     export function getEventName(event: EventRef): string | null;
     export function getEventAttribute(event: EventRef): number;
-    export function getEventType(event: EventRef): string | null;
-    export function getEventParamCount(event: EventRef): Index;
-    export function getEventParam(event: EventRef, index: Index): NativeType;
+    export function getEventParams(event: EventRef): NativeType;
+    export function getEventResults(event: EventRef): NativeType;
     export class Relooper {
         module: Module;
         ref: number;
@@ -2382,9 +2337,9 @@ declare module "assemblyscript/src/module" {
 }
 declare module "assemblyscript/src/types" {
     /**
-     * Mappings from AssemblyScript types to WebAssembly types.
-     * @module types
-     */ /***/
+     * @fileoverview Mappings from AssemblyScript types to WebAssembly types.
+     * @license Apache-2.0
+     */
     import { Class, FunctionTarget, Program } from "assemblyscript/src/program";
     import { NativeType } from "assemblyscript/src/module";
     /** Indicates the kind of a type. */
@@ -2590,9 +2545,21 @@ declare module "assemblyscript/src/types" {
 }
 declare module "assemblyscript/src/flow" {
     /**
-     * A control flow analyzer.
-     * @module flow
-     */ /***/
+     * @fileoverview A concurrent code flow analyzer.
+     *
+     * Flows keep track of compilation state and can be queried for various
+     * conditions, like whether the current branch always terminates, whether
+     * a local is known to be non-null or whether an expression has possibly
+     * overflown its value range.
+     *
+     * To accomplish this, compilation of each function begins with a clean
+     * flow populated with initial local states etc. While compilation
+     * progresses, statements and expressions update flow state while control
+     * constructs fork, potentially add scoped locals and later merge these
+     * forked branches as necessary.
+     *
+     * @license Apache-2.0
+     */
     import { Type } from "assemblyscript/src/types";
     import { Local, Function, Element } from "assemblyscript/src/program";
     import { ExpressionRef } from "assemblyscript/src/module";
@@ -2776,9 +2743,17 @@ declare module "assemblyscript/src/flow" {
 }
 declare module "assemblyscript/src/resolver" {
     /**
-     * Resolve infrastructure to obtain types and elements.
-     * @module resolver
-     */ /***/
+     * @fileoverview Resolve infrastructure to obtain types and elements.
+     *
+     * Similar to the compiler making instructions of expressions, the resolver
+     * obtains metadata of expressions. As such, for each `compileX` method in
+     * the compiler there is one `lookupX` method in the resolver returning the
+     * respective IR element, respectively one `resolveX` method returning the
+     * respective type of an expression. It is also able to make new elements,
+     * like instances of classes given its concrete type arguments.
+     *
+     * @license Apache-2.0
+     */
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
     import { Program, Element, Class, ClassPrototype, Function, FunctionPrototype } from "assemblyscript/src/program";
     import { Flow } from "assemblyscript/src/flow";
@@ -2896,7 +2871,7 @@ declare module "assemblyscript/src/resolver" {
         /** Determines the final type of an integer literal given the specified contextual type. */
         determineIntegerLiteralType(
         /** Integer literal value. */
-        intValue: I64, 
+        intValue: i64, 
         /** Contextual type. */
         ctxType: Type): Type;
         /** Looks up the program element the specified assertion expression refers to. */
@@ -3007,14 +2982,18 @@ declare module "assemblyscript/src/resolver" {
 }
 declare module "assemblyscript/src/parser" {
     /**
-     * A TypeScript parser for the AssemblyScript subset.
-     * @module parser
-     */ /***/
+     * @fileoverview A TypeScript parser for the AssemblyScript subset.
+     *
+     * Takes the tokens produced by the `Tokenizer` and builds an abstract
+     * syntax tree composed of `Node`s wrapped in a `Source` out of it.
+     *
+     * @license Apache-2.0
+     */
     import { CommonFlags } from "assemblyscript/src/common";
     import { Program } from "assemblyscript/src/program";
     import { Tokenizer, CommentHandler } from "assemblyscript/src/tokenizer";
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
-    import { Source, TypeNode, TypeName, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from "assemblyscript/src/ast";
+    import { Source, TypeNode, TypeName, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForOfStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from "assemblyscript/src/ast";
     /** Parser interface. */
     export class Parser extends DiagnosticEmitter {
         /** Program being created. */
@@ -3057,8 +3036,8 @@ declare module "assemblyscript/src/parser" {
         /** Parses a function type, as used in type declarations. */
         tryParseFunctionType(tn: Tokenizer): FunctionTypeNode | null;
         parseDecorator(tn: Tokenizer): DecoratorNode | null;
-        parseVariable(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): VariableStatement | null;
-        parseVariableDeclaration(tn: Tokenizer, parentFlags: CommonFlags, parentDecorators: DecoratorNode[] | null): VariableDeclaration | null;
+        parseVariable(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number, isFor?: boolean): VariableStatement | null;
+        parseVariableDeclaration(tn: Tokenizer, parentFlags: CommonFlags, parentDecorators: DecoratorNode[] | null, isFor?: boolean): VariableDeclaration | null;
         parseEnum(tn: Tokenizer, flags: CommonFlags, decorators: DecoratorNode[] | null, startPos: number): EnumDeclaration | null;
         parseEnumValue(tn: Tokenizer, parentFlags: CommonFlags): EnumValueDeclaration | null;
         parseReturn(tn: Tokenizer): ReturnStatement | null;
@@ -3087,7 +3066,8 @@ declare module "assemblyscript/src/parser" {
         parseContinue(tn: Tokenizer): ContinueStatement | null;
         parseDoStatement(tn: Tokenizer): DoStatement | null;
         parseExpressionStatement(tn: Tokenizer): ExpressionStatement | null;
-        parseForStatement(tn: Tokenizer): ForStatement | null;
+        parseForStatement(tn: Tokenizer): Statement | null;
+        parseForOfStatement(tn: Tokenizer, startPos: number, variable: Statement): ForOfStatement | null;
         parseIfStatement(tn: Tokenizer): IfStatement | null;
         parseSwitchStatement(tn: Tokenizer): SwitchStatement | null;
         parseSwitchCase(tn: Tokenizer): SwitchCase | null;
@@ -3135,14 +3115,28 @@ declare module "assemblyscript/src/parser" {
 }
 declare module "assemblyscript/src/program" {
     /**
-     * AssemblyScript's intermediate representation describing a program's elements.
-     * @module program
-     */ /***/
+     * @fileoverview AssemblyScript's intermediate representation.
+     *
+     * The compiler uses Binaryen IR, which is fairly low level, as its
+     * primary intermediate representation, with the following structures
+     * holding any higher level information that cannot be represented by
+     * Binaryen IR alone, for example higher level types.
+     *
+     * Similar to the AST being composed of `Node`s in `Source`s, the IR is
+     * composed of `Element`s in a `Program`. Each class or function is
+     * represented by a "prototype" holding all the relevant information,
+     * including each's concrete instances. If a class or function is not
+     * generic, there is exactly one instance, otherwise there is one for
+     * each concrete set of type arguments.
+     *
+     * @license Apache-2.0
+     */
     import { CommonFlags } from "assemblyscript/src/common";
     import { Options } from "assemblyscript/src/compiler";
     import { DiagnosticMessage, DiagnosticEmitter } from "assemblyscript/src/diagnostics";
     import { Type, Signature } from "assemblyscript/src/types";
-    import { Token, Source, Range, DecoratorNode, DecoratorKind, TypeParameterNode, TypeNode, NamedTypeNode, FunctionTypeNode, ArrowKind, Expression, IdentifierExpression, Statement, ClassDeclaration, DeclarationStatement, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, InterfaceDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, VariableLikeDeclarationStatement } from "assemblyscript/src/ast";
+    import { Token, Range } from "assemblyscript/src/tokenizer";
+    import { Source, DecoratorNode, DecoratorKind, TypeParameterNode, TypeNode, NamedTypeNode, FunctionTypeNode, ArrowKind, Expression, IdentifierExpression, Statement, ClassDeclaration, DeclarationStatement, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, InterfaceDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, VariableLikeDeclarationStatement } from "assemblyscript/src/ast";
     import { Module, FunctionRef } from "assemblyscript/src/module";
     import { Resolver } from "assemblyscript/src/resolver";
     import { Flow } from "assemblyscript/src/flow";
@@ -3285,6 +3279,8 @@ declare module "assemblyscript/src/program" {
         nextClassId: number;
         /** Next signature id. */
         nextSignatureId: number;
+        /** An indicator if the program has been initialized. */
+        initialized: boolean;
         /** Constructs a new program, optionally inheriting parser diagnostics. */
         constructor(
         /** Compiler options. */
@@ -3346,6 +3342,8 @@ declare module "assemblyscript/src/program" {
         private lookupFunction;
         /** Requires that a global function is present and returns it. */
         private requireFunction;
+        /** Marks all exports of the specified file as module exports. */
+        private markModuleExports;
         /** Marks an element and its children as a module export. */
         private markModuleExport;
         /** Registers a native type with the program. */
@@ -3353,7 +3351,7 @@ declare module "assemblyscript/src/program" {
         /** Registers the backing class of a native type. */
         private registerWrapperClass;
         /** Registers a constant integer value within the global scope. */
-        registerConstantInteger(name: string, type: Type, value: I64): void;
+        registerConstantInteger(name: string, type: Type, value: i64): void;
         /** Registers a constant float value within the global scope. */
         private registerConstantFloat;
         /** Ensures that the given global element exists. Attempts to merge duplicates. */
@@ -3608,6 +3606,8 @@ declare module "assemblyscript/src/program" {
         lookupExport(name: string): DeclaredElement | null;
         /** Creates an imported namespace from this file. */
         asImportedNamespace(name: string, parent: Element, localIdentifier: IdentifierExpression): Namespace;
+        /** Recursively copies the exports of this file to the specified namespace. */
+        private copyExportsToNamespace;
     }
     /** A type definition. */
     export class TypeDefinition extends TypedElement {
@@ -3669,7 +3669,7 @@ declare module "assemblyscript/src/program" {
         /** Constant value kind. */
         constantValueKind: ConstantValueKind;
         /** Constant integer value, if applicable. */
-        constantIntegerValue: I64;
+        constantIntegerValue: i64;
         /** Constant float value, if applicable. */
         constantFloatValue: number;
         /** Constructs a new variable-like element. */
@@ -3687,7 +3687,7 @@ declare module "assemblyscript/src/program" {
         /** Gets the associated initializer node. */
         get initializerNode(): Expression | null;
         /** Applies a constant integer value to this element. */
-        setConstantIntegerValue(value: I64, type: Type): void;
+        setConstantIntegerValue(value: i64, type: Type): void;
         /** Applies a constant float value to this element. */
         setConstantFloatValue(value: number, type: Type): void;
         /** @override */
@@ -3963,6 +3963,8 @@ declare module "assemblyscript/src/program" {
         overloadPrototypes: Map<OperatorKind, FunctionPrototype>;
         /** Already resolved instances. */
         instances: Map<string, Class> | null;
+        /** Classes extending this class. */
+        extendees: Set<ClassPrototype>;
         constructor(
         /** Simple name. */
         name: string, 
@@ -4067,16 +4069,17 @@ declare module "assemblyscript/src/program" {
 }
 declare module "assemblyscript/src/compiler" {
     /**
-     * The AssemblyScript compiler.
-     * @module compiler
-     */ /***/
+     * @fileoverview The AssemblyScript compiler.
+     * @license Apache-2.0
+     */
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
     import { Module, MemorySegment, ExpressionRef, NativeType, GlobalRef } from "assemblyscript/src/module";
     import { Feature, Target } from "assemblyscript/src/common";
     import { Program, ClassPrototype, Class, Element, Enum, Field, Function, Global, Property, VariableLikeElement, File } from "assemblyscript/src/program";
     import { Flow } from "assemblyscript/src/flow";
     import { Resolver } from "assemblyscript/src/resolver";
-    import { Node, Range, Statement, Expression } from "assemblyscript/src/ast";
+    import { Range } from "assemblyscript/src/tokenizer";
+    import { Node, Statement, Expression } from "assemblyscript/src/ast";
     import { Type, Signature } from "assemblyscript/src/types";
     /** Compiler options. */
     export class Options {
@@ -4185,7 +4188,7 @@ declare module "assemblyscript/src/compiler" {
         /** Start function statements. */
         currentBody: ExpressionRef[];
         /** Counting memory offset. */
-        memoryOffset: I64;
+        memoryOffset: i64;
         /** Memory segments being compiled. */
         memorySegments: MemorySegment[];
         /** Map of already compiled static string segments. */
@@ -4204,12 +4207,16 @@ declare module "assemblyscript/src/compiler" {
         lazyLibraryFunctions: Set<Function>;
         /** Pending class-specific instanceof helpers. */
         pendingClassInstanceOf: Set<ClassPrototype>;
+        /** Functions potentially involving a virtual call. */
+        virtualCalls: Set<Function>;
         /** Compiles a {@link Program} to a {@link Module} using the specified options. */
         static compile(program: Program): Module;
         /** Constructs a new compiler for a {@link Program} using the specified options. */
         constructor(program: Program);
+        initializeProgram(): void;
         /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
         compile(): Module;
+        private setupVirtualLookupTables;
         /** Applies the respective module exports for the specified file. */
         private ensureModuleExports;
         /** Applies the respective module export(s) for the specified element. */
@@ -4282,6 +4289,7 @@ declare module "assemblyscript/src/compiler" {
         private compileExpressionStatement;
         private compileForStatement;
         private doCompileForStatement;
+        private compileForOfStatement;
         private compileIfStatement;
         private compileReturnStatement;
         private compileSwitchStatement;
@@ -4515,13 +4523,30 @@ declare module "assemblyscript/src/compiler" {
 }
 declare module "assemblyscript/src/builtins" {
     /**
-     * Built-in elements providing WebAssembly core functionality.
-     * @module builtins
-     */ /***/
+     * @fileoverview Built-in elements providing core WebAssembly functionality.
+     *
+     * Each builtin is linked to its definition in std/assembly/builtins.ts.
+     * When its prototype is called, the compiler recognizes the `@builtin`
+     * decorator, looks up the respective handler in the global builtins map
+     * and executes it, with the handler directly emitting WebAssembly code
+     * according to context.
+     *
+     * Builtins can be categorized into core builtins that typically are generic
+     * and emit code directly and aliases calling core builtins with overridden
+     * contexts. The latter is used by inline assembler aliases of WebAssembly
+     * instructions, like `i64.load8_u` deferring to `<i64>load<u8>`.
+     *
+     * The `contextIsExact` modifier is used to force a specific instruction
+     * family. A `i32.store8` deferring to `<i32>store<i8>` for example is
+     * ambiguous in that the input can still be an i32 or an i64, leading to
+     * either an `i32.store8` or an `i64.store8`, so `i32` is forced there.
+     * This behavior is indicated by `from i32/i64` in the comments below.
+     *
+     * @license Apache-2.0
+     */
     import { Compiler } from "assemblyscript/src/compiler";
     import { Expression, CallExpression } from "assemblyscript/src/ast";
     import { Type } from "assemblyscript/src/types";
-    import { ExpressionRef } from "assemblyscript/src/module";
     import { FunctionPrototype, ClassPrototype } from "assemblyscript/src/program";
     /** Internal names of various compiler built-ins. */
     export namespace BuiltinNames {
@@ -4968,20 +4993,25 @@ declare module "assemblyscript/src/builtins" {
         const Float32Array = "~lib/typedarray/Float32Array";
         const Float64Array = "~lib/typedarray/Float64Array";
     }
-    /** Compiles a call to a built-in function. */
-    export function compileCall(compiler: Compiler, 
-    /** Respective function prototype. */
-    prototype: FunctionPrototype, 
-    /** Pre-resolved type arguments. */
-    typeArguments: Type[] | null, 
-    /** Operand expressions. */
-    operands: Expression[], 
-    /** Contextual type. */
-    contextualType: Type, 
-    /** Respective call expression. */
-    reportNode: CallExpression, 
-    /** Indicates that contextual type is ASM type. */
-    isAsm?: boolean): ExpressionRef;
+    /** Builtin compilation context. */
+    export class BuiltinContext {
+        /** Compiler reference. */
+        compiler: Compiler;
+        /** Prototype being called. */
+        prototype: FunctionPrototype;
+        /** Provided type arguments. */
+        typeArguments: Type[] | null;
+        /** Provided operands. */
+        operands: Expression[];
+        /** Contextual type. */
+        contextualType: Type;
+        /** Respective call expression. */
+        reportNode: CallExpression;
+        /** Whether originating from inline assembly. */
+        contextIsExact: boolean;
+    }
+    /** Global builtins map. */
+    export const builtins: Map<string, (ctx: BuiltinContext) => number>;
     /** Compiles the `visit_globals` function. */
     export function compileVisitGlobals(compiler: Compiler): void;
     /** Compiles the `visit_members` function. */
@@ -4993,9 +5023,13 @@ declare module "assemblyscript/src/builtins" {
 }
 declare module "assemblyscript/src/definitions" {
     /**
-     * Definition builders for WebIDL and TypeScript.
-     * @module definitions
-     */ /***/
+     * @fileoverview Builders for various definitions describing a module.
+     *
+     * - TSDBuilder: Creates a TypeScript definition file (.d.ts)
+     * - IDLBuilder: Creates a WebIDL interface definition (.webidl)
+     *
+     * @license Apache-2.0
+     */
     import { Program, Element, Global, Enum, Field, Function, Class, Namespace, Interface, File } from "assemblyscript/src/program";
     import { Type } from "assemblyscript/src/types";
     /** Walker base class. */
@@ -5068,9 +5102,38 @@ declare module "assemblyscript/src/definitions" {
 }
 declare module "assemblyscript/src/index" {
     /**
-     * Low-level C-like compiler API.
-     * @module index
-     */ /***/
+     * @license
+     * Copyright 2020 Daniel Wirtz / The AssemblyScript Authors.
+     *
+     * Licensed under the Apache License, Version 2.0 (the "License");
+     * you may not use this file except in compliance with the License.
+     * You may obtain a copy of the License at
+     *
+     *     http://www.apache.org/licenses/LICENSE-2.0
+     *
+     * Unless required by applicable law or agreed to in writing, software
+     * distributed under the License is distributed on an "AS IS" BASIS,
+     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     * See the License for the specific language governing permissions and
+     * limitations under the License.
+     *
+     * SPDX-License-Identifier: Apache-2.0
+     */
+    /**
+     * @fileoverview The C-like and re-exported public compiler interface.
+     *
+     * The intended way to consume the compiler sources is to import this
+     * file, which again exports all relevant functions, classes and constants
+     * as a flat namespace.
+     *
+     * Note though that the compiler sources are written in "portable
+     * AssemblyScript" that can be compiled to both JavaScript with tsc and
+     * to WebAssembly with asc, and as such require additional glue code
+     * depending on the target.
+     *
+     * When compiling to JavaScript `glue/js/index.js` must be included.
+     * When compiling to WebAssembly `glue/wasm/index.ts` must be included.
+     */
     import { Target, Feature } from "assemblyscript/src/common";
     import { Options } from "assemblyscript/src/compiler";
     import { DiagnosticMessage, formatDiagnosticMessage } from "assemblyscript/src/diagnostics";
@@ -5156,6 +5219,8 @@ declare module "assemblyscript/src/index" {
     export function nextFile(program: Program): string | null;
     /** Obtains the path of the dependee of a given imported file. */
     export function getDependee(program: Program, file: string): string | null;
+    /** Initializes the program pre-emptively for transform hooks. */
+    export function initializeProgram(program: Program, options: Options): void;
     /** Compiles the parsed sources to a module. */
     export function compile(program: Program): Module;
     /** Builds WebIDL definitions for the specified program. */
@@ -5164,13 +5229,10 @@ declare module "assemblyscript/src/index" {
     export function buildTSD(program: Program): string;
     /** Builds a JSON file of a program's runtime type information. */
     export function buildRTTI(program: Program): string;
-    /** Prefix indicating a library file. */
-    export { LIBRARY_PREFIX } from "assemblyscript/src/common";
     export * from "assemblyscript/src/ast";
     export * from "assemblyscript/src/common";
     export * from "assemblyscript/src/compiler";
     export * from "assemblyscript/src/definitions";
-    export * from "assemblyscript/src/diagnosticMessages.generated";
     export * from "assemblyscript/src/diagnostics";
     export * from "assemblyscript/src/flow";
     export * from "assemblyscript/src/module";
@@ -5179,17 +5241,18 @@ declare module "assemblyscript/src/index" {
     export * from "assemblyscript/src/resolver";
     export * from "assemblyscript/src/tokenizer";
     export * from "assemblyscript/src/types";
-    export * from "assemblyscript/src/util/index";
+    import * as util from "assemblyscript/src/util/index";
+    export { util };
 }
 declare module "assemblyscript/src/extra/ast" {
     /**
-     * Abstract Syntax Tree extras.
+     * @fileoverview Abstract Syntax Tree extras.
      *
-     * Not needed in a standalone compiler but useful for testing the parser.
+     * Provides serialization of the AssemblyScript AST back to it source form.
      *
-     * @module extra/ast
-     */ /***/
-    import { Node, Source, TypeNode, NamedTypeNode, FunctionTypeNode, TypeName, TypeParameterNode, IdentifierExpression, LiteralExpression, FloatLiteralExpression, IntegerLiteralExpression, StringLiteralExpression, RegexpLiteralExpression, ArrayLiteralExpression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, NewExpression, ParenthesizedExpression, PropertyAccessExpression, TernaryExpression, UnaryPostfixExpression, UnaryExpression, UnaryPrefixExpression, ClassExpression, ObjectLiteralExpression, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExportImportStatement, ExportStatement, ExportDefaultStatement, ExpressionStatement, ForStatement, IfStatement, ImportStatement, InstanceOfExpression, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, WhileStatement, ClassDeclaration, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, ImportDeclaration, IndexSignatureDeclaration, InterfaceDeclaration, MethodDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, DecoratorNode, ParameterNode, ExportMember, SwitchCase, DeclarationStatement } from "assemblyscript/src/ast";
+     * @license Apache-2.0
+     */
+    import { Node, Source, TypeNode, NamedTypeNode, FunctionTypeNode, TypeName, TypeParameterNode, IdentifierExpression, LiteralExpression, FloatLiteralExpression, IntegerLiteralExpression, StringLiteralExpression, RegexpLiteralExpression, ArrayLiteralExpression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, NewExpression, ParenthesizedExpression, PropertyAccessExpression, TernaryExpression, UnaryPostfixExpression, UnaryExpression, UnaryPrefixExpression, ClassExpression, ObjectLiteralExpression, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExportImportStatement, ExportStatement, ExportDefaultStatement, ExpressionStatement, ForStatement, ForOfStatement, IfStatement, ImportStatement, InstanceOfExpression, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, WhileStatement, ClassDeclaration, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, ImportDeclaration, IndexSignatureDeclaration, InterfaceDeclaration, MethodDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, DecoratorNode, ParameterNode, ExportMember, SwitchCase, DeclarationStatement } from "assemblyscript/src/ast";
     /** An AST builder. */
     export class ASTBuilder {
         /** Rebuilds the textual source from the specified AST, as far as possible. */
@@ -5244,6 +5307,7 @@ declare module "assemblyscript/src/extra/ast" {
         visitExpressionStatement(node: ExpressionStatement): void;
         visitFieldDeclaration(node: FieldDeclaration): void;
         visitForStatement(node: ForStatement): void;
+        visitForOfStatement(node: ForOfStatement): void;
         visitFunctionDeclaration(node: FunctionDeclaration, isDefault?: boolean): void;
         visitFunctionCommon(node: FunctionDeclaration): void;
         visitIfStatement(node: IfStatement): void;
@@ -5269,49 +5333,62 @@ declare module "assemblyscript/src/extra/ast" {
         finish(): string;
     }
 }
-/** @module glue/js */ /***/
+/**
+ * @fileoverview Collections glue code for TypeScript.
+ * @license Apache-2.0
+ */
+declare function Map_keys<K, V>(map: Map<K, V>): K[];
+declare function Map_values<K, V>(map: Map<K, V>): V[];
+declare function Set_values<V>(set: Set<V>): V[];
+/**
+ * @fileoverview Floating point glue code for TypeScript.
+ * @license Apache-2.0
+ */
 declare function f32_as_i32(value: number): number;
 declare function i32_as_f32(value: number): number;
-declare function f64_as_i64(value: number): I64;
-declare function i64_as_f64(value: I64): number;
-/** @module glue/js */ /***/
-declare type I64 = {
+declare function f64_as_i64(value: number): i64;
+declare function i64_as_f64(value: i64): number;
+/**
+ * @fileoverview 64-bit integer glue code for TypeScript.
+ * @license Apache-2.0
+ */
+declare type i64 = {
     __Long__: true;
 }; // opaque
-declare const i64_zero: I64;
-declare const i64_one: I64;
-declare function i64_new(lo: number, hi?: number): I64;
-declare function i64_low(value: I64): number;
-declare function i64_high(value: I64): number;
-declare function i64_add(left: I64, right: I64): I64;
-declare function i64_sub(left: I64, right: I64): I64;
-declare function i64_mul(left: I64, right: I64): I64;
-declare function i64_div(left: I64, right: I64): I64;
-declare function i64_div_u(left: I64, right: I64): I64;
-declare function i64_rem(left: I64, right: I64): I64;
-declare function i64_rem_u(left: I64, right: I64): I64;
-declare function i64_and(left: I64, right: I64): I64;
-declare function i64_or(left: I64, right: I64): I64;
-declare function i64_xor(left: I64, right: I64): I64;
-declare function i64_shl(left: I64, right: I64): I64;
-declare function i64_shr(left: I64, right: I64): I64;
-declare function i64_shr_u(left: I64, right: I64): I64;
-declare function i64_not(value: I64): I64;
-declare function i64_eq(left: I64, right: I64): boolean;
-declare function i64_ne(left: I64, right: I64): boolean;
-declare function i64_align(value: I64, alignment: number): I64;
-declare function i64_is_i8(value: I64): boolean;
-declare function i64_is_i16(value: I64): boolean;
-declare function i64_is_i32(value: I64): boolean;
-declare function i64_is_u8(value: I64): boolean;
-declare function i64_is_u16(value: I64): boolean;
-declare function i64_is_u32(value: I64): boolean;
-declare function i64_is_bool(value: I64): boolean;
-declare function i64_is_f32(value: I64): boolean;
-declare function i64_is_f64(value: I64): boolean;
-declare function i64_to_f32(value: I64): number;
-declare function i64_to_f64(value: I64): number;
-declare function i64_to_string(value: I64, unsigned?: boolean): string;
+declare const i64_zero: i64;
+declare const i64_one: i64;
+declare function i64_new(lo: number, hi?: number): i64;
+declare function i64_low(value: i64): number;
+declare function i64_high(value: i64): number;
+declare function i64_add(left: i64, right: i64): i64;
+declare function i64_sub(left: i64, right: i64): i64;
+declare function i64_mul(left: i64, right: i64): i64;
+declare function i64_div(left: i64, right: i64): i64;
+declare function i64_div_u(left: i64, right: i64): i64;
+declare function i64_rem(left: i64, right: i64): i64;
+declare function i64_rem_u(left: i64, right: i64): i64;
+declare function i64_and(left: i64, right: i64): i64;
+declare function i64_or(left: i64, right: i64): i64;
+declare function i64_xor(left: i64, right: i64): i64;
+declare function i64_shl(left: i64, right: i64): i64;
+declare function i64_shr(left: i64, right: i64): i64;
+declare function i64_shr_u(left: i64, right: i64): i64;
+declare function i64_not(value: i64): i64;
+declare function i64_eq(left: i64, right: i64): boolean;
+declare function i64_ne(left: i64, right: i64): boolean;
+declare function i64_align(value: i64, alignment: number): i64;
+declare function i64_is_i8(value: i64): boolean;
+declare function i64_is_i16(value: i64): boolean;
+declare function i64_is_i32(value: i64): boolean;
+declare function i64_is_u8(value: i64): boolean;
+declare function i64_is_u16(value: i64): boolean;
+declare function i64_is_u32(value: i64): boolean;
+declare function i64_is_bool(value: i64): boolean;
+declare function i64_is_f32(value: i64): boolean;
+declare function i64_is_f64(value: i64): boolean;
+declare function i64_to_f32(value: i64): number;
+declare function i64_to_f64(value: i64): number;
+declare function i64_to_string(value: i64, unsigned?: boolean): string;
 declare module "assemblyscript/std/assembly/shared/feature" {
     /** Indicates specific features to activate. */
     export const enum Feature {
