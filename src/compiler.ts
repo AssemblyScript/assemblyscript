@@ -4621,10 +4621,21 @@ export class Compiler extends DiagnosticEmitter {
 
         let targetType = leftType;
         let instance: Function | null;
+        let currentTypeKind = this.currentType.kind;
 
-        if ((this.currentType.kind == TypeKind.I32 || this.currentType.kind == TypeKind.U32)) {
-          let type = this.currentType.kind == TypeKind.I32 ? Type.i32 : Type.u32;
-
+        if (
+          currentTypeKind == TypeKind.I8  ||
+          currentTypeKind == TypeKind.U8  ||
+          currentTypeKind == TypeKind.I16 ||
+          currentTypeKind == TypeKind.U16 ||
+          currentTypeKind == TypeKind.I32 ||
+          currentTypeKind == TypeKind.U32 //||
+          // !this.options.isWasm64 && (
+          //   currentTypeKind == TypeKind.ISIZE ||
+          //   currentTypeKind == TypeKind.USIZE
+          // )
+        ) {
+          let type = this.currentType.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32;
           rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
           instance  = this.i32PowInstance;
@@ -4642,10 +4653,15 @@ export class Compiler extends DiagnosticEmitter {
             assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
             this.i32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
           }
-
-        } else if (this.currentType.kind == TypeKind.I64 || this.currentType.kind == TypeKind.U64) {
-
-          let type = this.currentType.kind == TypeKind.I64 ? Type.i64 : Type.u64;
+        } else if (
+          currentTypeKind == TypeKind.I64 ||
+          currentTypeKind == TypeKind.U64 // ||
+          // this.options.isWasm64 && (
+          //   currentTypeKind == TypeKind.ISIZE ||
+          //   currentTypeKind == TypeKind.USIZE
+          // )
+        ) {
+          let type = this.currentType.is(TypeFlags.SIGNED) ? Type.i64 : Type.u64;
 
           rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
@@ -4665,7 +4681,7 @@ export class Compiler extends DiagnosticEmitter {
             this.i64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
           }
           // Mathf.pow if lhs is f32 (result is f32)
-        } else if (this.currentType.kind == TypeKind.F32) {
+        } else if (currentTypeKind == TypeKind.F32) {
           rightExpr = this.compileExpression(right, Type.f32, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
           instance = this.f32PowInstance;
