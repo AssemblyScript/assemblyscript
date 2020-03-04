@@ -3687,6 +3687,8 @@ export class Compiler extends DiagnosticEmitter {
   private f64ModInstance: Function | null = null;
   private f32PowInstance: Function | null = null;
   private f64PowInstance: Function | null = null;
+  private i32PowInstance: Function | null = null;
+  private i64PowInstance: Function | null = null;
 
   private compileBinaryExpression(
     expression: BinaryExpression,
@@ -4620,8 +4622,50 @@ export class Compiler extends DiagnosticEmitter {
         let targetType = leftType;
         let instance: Function | null;
 
-        // Mathf.pow if lhs is f32 (result is f32)
-        if (this.currentType.kind == TypeKind.F32) {
+        if ((this.currentType.kind == TypeKind.I32 || this.currentType.kind == TypeKind.U32)) {
+          let type = this.currentType.kind == TypeKind.I32 ? Type.i32 : Type.u32;
+
+          rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
+          rightType = this.currentType;
+          instance  = this.i32PowInstance;
+
+          if (!instance) {
+            let prototype = this.program.lookupGlobal(CommonNames.ipow64);
+            if (!prototype) {
+              this.error(
+                DiagnosticCode.Cannot_find_name_0,
+                expression.range, "ipow32"
+              );
+              expr = module.unreachable();
+              break;
+            }
+            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+            this.i32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+          }
+
+        } else if (this.currentType.kind == TypeKind.I64 || this.currentType.kind == TypeKind.U64) {
+
+          let type = this.currentType.kind == TypeKind.I64 ? Type.i64 : Type.u64;
+
+          rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
+          rightType = this.currentType;
+          instance  = this.i64PowInstance;
+
+          if (!instance) {
+            let prototype = this.program.lookupGlobal(CommonNames.ipow64);
+            if (!prototype) {
+              this.error(
+                DiagnosticCode.Cannot_find_name_0,
+                expression.range, "ipow64"
+              );
+              expr = module.unreachable();
+              break;
+            }
+            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+            this.i64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+          }
+          // Mathf.pow if lhs is f32 (result is f32)
+        } else if (this.currentType.kind == TypeKind.F32) {
           rightExpr = this.compileExpression(right, Type.f32, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
           instance = this.f32PowInstance;

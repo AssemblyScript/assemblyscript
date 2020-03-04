@@ -3927,40 +3927,9 @@ assert(ipow64(3, 128) == -9204772141784466943); // should overflow
 
 assert(ipow64(57055, 3) + ipow64(339590, 3) == 39347712995520375); // add Buterin's twit example
 
-// ipow32f /////////////////////////////////////////////////////////////////////////////////////
+// integer pow operators
 
-assert(ipow32f(0, 0) == <f32>1.0);
-assert(ipow32f(<f32>NaN, 0) == <f32>1.0);
-assert(isNaN<f32>(ipow32f(<f32>NaN, 1)));
-assert(isNaN<f32>(ipow32f(<f32>NaN, -1)));
-assert(isNaN<f32>(ipow32f(<f32>NaN, 2)));
-assert(ipow32f(<f32>Infinity, 0) == <f32>1.0);
-assert(ipow32f(<f32>Infinity, 1) == <f32>Infinity);
-assert(ipow32f(<f32>-Infinity, 0) == <f32>1.0);
-assert(ipow32f(<f32>-Infinity, 1) == <f32>-Infinity);
-assert(ipow32f(<f32>-Infinity, 2) == <f32>Infinity);
-assert(ipow32f(<f32>1.0, 0) == <f32>1.0);
-assert(ipow32f(f32.MAX_VALUE, 2) == <f32>Infinity);
-assert(ipow32f(f32.MIN_VALUE, 2) == <f32>0.0);
-assert(ipow32f(f32.MAX_VALUE, -1) == <f32>2.938735877055719e-39);
-assert(ipow32f(<f32>10.0, 36) == <f32>1.0000000409184788e+36);
-assert(ipow32f(<f32>10.0,-36) == <f32>9.999999462560281e-37);
-
-// ipow64f /////////////////////////////////////////////////////////////////////////////////////
-
-assert(ipow64f(0, 0) == 1.0);
-assert(ipow64f(NaN, 0) == 1.0);
-assert(isNaN(ipow64f(NaN, 1)));
-assert(isNaN(ipow64f(NaN, -1)));
-assert(isNaN(ipow64f(NaN, 2)));
-assert(ipow64f(Infinity, 0) == 1.0);
-assert(ipow64f(Infinity, 1) == Infinity);
-assert(ipow64f(-Infinity, 0) == 1.0);
-assert(ipow64f(-Infinity, 1) == -Infinity);
-assert(ipow64f(-Infinity, 2) == Infinity);
-assert(ipow64f(1.0, 0) == 1.0);
-assert(ipow64f(f64.MAX_VALUE, 2) == Infinity);
-assert(ipow64f(f64.MIN_VALUE, 2) == 0.0);
-assert(ipow64f(f64.MAX_VALUE, -1) == 5.562684646268003e-309);
-assert(ipow64f(10.0, 127) == 1.0000000000000002e+127);
-assert(ipow64f(10.0,-127) == 9.999999999999998e-128);
+assert(  0  ** 0 ==  1);
+assert(  0  ** 1 ==  0);
+assert(  1  ** 3 ==  1);
+assert((-2) ** 3 == -8);
