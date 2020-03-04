@@ -49,6 +49,21 @@ function i64_mul(left: i64, right: i64): i64 {
 
 // @ts-ignore: decorator
 @global
+function i64_pow(left: i64, right: i64): i64 {
+  if (right <= 0) return i64(right == 0);
+  if (right == 1) return left;
+  if (right == 2) return left * left;
+  var result: i64 = 1;
+  while (right) {
+    if (right & 1) result *= left;
+    right >>>= 1;
+    left *= left;
+  }
+  return result;
+}
+
+// @ts-ignore: decorator
+@global
 function i64_div(left: i64, right: i64): i64 {
   return left / right;
 }

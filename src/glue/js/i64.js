@@ -33,6 +33,24 @@ global.i64_mul = function(left, right) {
   return left.mul(right);
 };
 
+global.i64_pow = function(left, right) {
+  if (right.isNegative()) return Long.ZERO;
+  var rightLow = right.low;
+  if (!right.high) {
+    if (rightLow == 0) return Long.ONE;
+    if (rightLow == 1) return left;
+    if (rightLow == 2) return left.mul(left);
+  }
+  var result = Long.ONE;
+  while (rightLow | right.high) {
+    if (rightLow & 1) result = result.mul(left);
+    right = right.shru(1);
+    left = left.mul(left);
+    rightLow = right.low;
+  }
+  return result;
+};
+
 global.i64_div = function(left, right) {
   return left.div(right);
 };
