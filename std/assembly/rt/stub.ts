@@ -13,7 +13,7 @@ function maybeGrowMemory(newOffset: usize): void {
   var pagesBefore = memory.size();
   var maxOffset = <usize>pagesBefore << 16;
   if (newOffset > maxOffset) {
-    let pagesNeeded = ((newOffset - maxOffset + 0xffff) & ~0xffff) >>> 16;
+    let pagesNeeded = <i32>(((newOffset - maxOffset + 0xffff) & ~0xffff) >>> 16);
     let pagesWanted = max(pagesBefore, pagesNeeded); // double memory
     if (memory.grow(pagesWanted) < 0) {
       if (memory.grow(pagesNeeded) < 0) unreachable(); // out of memory
@@ -33,7 +33,7 @@ export function __alloc(size: usize, id: u32): usize {
   block.mmInfo = actualSize;
   if (DEBUG) block.gcInfo = 1;
   block.rtId = id;
-  block.rtSize = size;
+  block.rtSize = <u32>size;
   return ptr;
 }
 
@@ -60,7 +60,7 @@ export function __realloc(ptr: usize, size: usize): usize {
     offset = ptr + alignedSize;
     block.mmInfo = alignedSize;
   }
-  block.rtSize = size;
+  block.rtSize = <u32>size;
   return ptr;
 }
 

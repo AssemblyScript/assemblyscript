@@ -1,11 +1,12 @@
 /**
- * The AssemblyScript compiler.
- * @module compiler
- *//***/
+ * @fileoverview The AssemblyScript compiler.
+ * @license Apache-2.0
+ */
 
 import {
   BuiltinNames,
-  compileCall as compileBuiltinCall,
+  BuiltinContext,
+  builtins,
   compileVisitGlobals,
   compileVisitMembers,
   compileRTTI,
@@ -28,6 +29,7 @@ import {
   ExpressionId,
   GlobalRef,
   FeatureFlags,
+  Index,
   getExpressionId,
   getExpressionType,
   getConstValueI32,
@@ -101,13 +103,13 @@ import {
 
 import {
   Token,
+  Range,
   operatorTokenToString
 } from "./tokenizer";
 
 import {
   Node,
   NodeKind,
-  Range,
   DecoratorKind,
   AssertionKind,
   SourceKind,
@@ -126,6 +128,7 @@ import {
   ExpressionStatement,
   FieldDeclaration,
   ForStatement,
+  ForOfStatement,
   FunctionDeclaration,
   IfStatement,
   ImportStatement,
@@ -321,7 +324,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Start function statements. */
   currentBody: ExpressionRef[];
   /** Counting memory offset. */
-  memoryOffset: I64;
+  memoryOffset: i64;
   /** Memory segments being compiled. */
   memorySegments: MemorySegment[] = [];
   /** Map of already compiled static string segments. */
@@ -340,6 +343,8 @@ export class Compiler extends DiagnosticEmitter {
   lazyLibraryFunctions: Set<Function> = new Set();
   /** Pending class-specific instanceof helpers. */
   pendingClassInstanceOf: Set<ClassPrototype> = new Set();
+  /** Functions potentially involving a virtual call. */
+  virtualCalls: Set<Function> = new Set();
 
   /** Compiles a {@link Program} to a {@link Module} using the specified options. */
   static compile(program: Program): Module {
@@ -371,14 +376,19 @@ export class Compiler extends DiagnosticEmitter {
     module.setFeatures(featureFlags);
   }
 
+  initializeProgram(): void {
+    // initialize lookup maps, built-ins, imports, exports, etc.
+    this.program.initialize(this.options);
+  }
+
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
   compile(): Module {
     var options = this.options;
     var module = this.module;
     var program = this.program;
 
-    // initialize lookup maps, built-ins, imports, exports, etc.
-    program.initialize(options);
+    // check and perform this program initialization if it hasn't been done
+    this.initializeProgram();
 
     // set up the main start function
     var startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, new Signature(program, [], Type.void));
@@ -398,7 +408,9 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile entry file(s) while traversing reachable elements
     var files = program.filesByName;
-    for (let file of files.values()) {
+    // TODO: for (let file of files.values()) {
+    for (let _values = Map_values(files), i = 0, k = _values.length; i < k; ++i) {
+      let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.compileFile(file);
         this.compileExports(file);
@@ -436,7 +448,9 @@ export class Compiler extends DiagnosticEmitter {
     var cyclicClasses = program.findCyclicClasses();
     if (cyclicClasses.size) {
       if (options.pedantic) {
-        for (let classInstance of cyclicClasses) {
+        // TODO: for (let classInstance of cyclicClasses) {
+        for (let _values = Set_values(cyclicClasses), i = 0, k = _values.length; i < k; ++i) {
+          let classInstance = unchecked(_values[i]);
           this.pedantic(
             DiagnosticCode.Type_0_is_cyclic_Module_will_include_deferred_garbage_collection,
             classInstance.identifierNode.range, classInstance.internalName
@@ -451,7 +465,9 @@ export class Compiler extends DiagnosticEmitter {
     var lazyLibraryFunctions = this.lazyLibraryFunctions;
     do {
       let functionsToCompile = new Array<Function>();
-      for (let instance of lazyLibraryFunctions) {
+      // TODO: for (let instance of lazyLibraryFunctions) {
+      for (let _values = Set_values(lazyLibraryFunctions), i = 0, k = _values.length; i < k; ++i) {
+        let instance = unchecked(_values[i]);
         functionsToCompile.push(instance);
       }
       lazyLibraryFunctions.clear();
@@ -461,9 +477,14 @@ export class Compiler extends DiagnosticEmitter {
     } while (lazyLibraryFunctions.size);
 
     // compile pending class-specific instanceof helpers
-    for (let prototype of this.pendingClassInstanceOf.values()) {
+    // TODO: for (let prototype of this.pendingClassInstanceOf.values()) {
+    for (let _values = Set_values(this.pendingClassInstanceOf), i = 0, k = _values.length; i < k; ++i) {
+      let prototype = unchecked(_values[i]);
       compileClassInstanceOf(this, prototype);
     }
+
+    // set up virtual lookup tables
+    this.setupVirtualLookupTables();
 
     // finalize runtime features
     module.removeGlobal(BuiltinNames.rtti_base);
@@ -537,21 +558,62 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up module exports
-    for (let file of this.program.filesByName.values()) {
+    // TODO: for (let file of this.program.filesByName.values()) {
+    for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
+      let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
     return module;
+  }
+
+  private setupVirtualLookupTables(): void {
+    // TODO: :-)
+    var program = this.program;
+    var virtualCalls = this.virtualCalls;
+
+    // Virtual instance methods in the function table are potentially called virtually
+    var functionTable = this.functionTable;
+    var elementsByName = program.elementsByName;
+    for (let i = 0, k = functionTable.length; i < k; ++i) {
+      let instanceName = unchecked(functionTable[i]);
+      if (elementsByName.has(instanceName)) { // otherwise ~anonymous
+        let instance = assert(elementsByName.get(instanceName));
+        if (instance.is(CommonFlags.INSTANCE | CommonFlags.VIRTUAL)) {
+          assert(instance.kind == ElementKind.FUNCTION);
+          virtualCalls.add(<Function>instance);
+        }
+      }
+    }
+
+    // Inject a virtual lookup table into each function potentially called virtually
+    // TODO: for (let instance of virtualCalls.values()) {
+    for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
+      let instance = unchecked(_values[i]);
+      this.warning(
+        DiagnosticCode.Function_0_is_possibly_called_virtually_which_is_not_yet_supported,
+        instance.identifierNode.range, instance.internalName
+      );
+    }
   }
 
   // === Exports ==================================================================================
 
   /** Applies the respective module exports for the specified file. */
   private ensureModuleExports(file: File): void {
-    var members = file.exports;
-    if (members) for (let [name, member] of members) this.ensureModuleExport(name, member);
+    var exports = file.exports;
+    if (exports) {
+      // TODO: for (let [elementName, element] of exports) {
+      for (let _keys = Map_keys(exports), i = 0, k = _keys.length; i < k; ++i) {
+        let elementName = unchecked(_keys[i]);
+        let element = assert(exports.get(elementName));
+        this.ensureModuleExport(elementName, element);
+      }
+    }
     var exportsStar = file.exportsStar;
     if (exportsStar)  {
-      for (let i = 0, k = exportsStar.length; i < k; ++i) this.ensureModuleExports(exportsStar[i]);
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        this.ensureModuleExports(exportsStar[i]);
+      }
     }
   }
 
@@ -563,7 +625,9 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.FUNCTION_PROTOTYPE: {
         let instances = (<FunctionPrototype>element).instances;
         if (instances) {
-          for (let instance of instances.values()) {
+          // TODO: for (let instance of instances.values()) {
+          for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+            let instance = unchecked(_values[i]);
             let instanceName = name;
             if (instance.is(CommonFlags.GENERIC)) {
               let fullName = instance.internalName;
@@ -577,7 +641,9 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.CLASS_PROTOTYPE: {
         let instances = (<ClassPrototype>element).instances;
         if (instances) {
-          for (let instance of instances.values()) {
+          // TODO: for (let instance of instances.values()) {
+          for (let _values = Map_values(instances), i = 0, k = _values.length; i < k; ++i) {
+            let instance = unchecked(_values[i]);
             let instanceName = name;
             if (instance.is(CommonFlags.GENERIC)) {
               let fullName = instance.internalName;
@@ -610,10 +676,11 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.ENUMVALUE: {
-        if (!(<EnumValue>element).isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
+        let enumValue = <EnumValue>element;
+        if (!enumValue.isImmutable && !this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
           this.error(
             DiagnosticCode.Cannot_export_a_mutable_global,
-            (<EnumValue>element).identifierNode.range
+            enumValue.identifierNode.range
           );
         } else {
           this.module.addGlobalExport(element.internalName, prefix + name);
@@ -662,7 +729,6 @@ export class Compiler extends DiagnosticEmitter {
       // just traverse members below
       case ElementKind.ENUM:
       case ElementKind.NAMESPACE:
-      case ElementKind.FILE:
       case ElementKind.TYPEDEFINITION:
       case ElementKind.INDEXSIGNATURE: break;
 
@@ -676,18 +742,24 @@ export class Compiler extends DiagnosticEmitter {
         ? INSTANCE_DELIMITER
         : STATIC_DELIMITER
       );
-      if (
-        element.kind == ElementKind.NAMESPACE ||
-        element.kind == ElementKind.FILE
-      ) {
-        for (let member of members.values()) {
-          if (!member.is(CommonFlags.EXPORT)) continue;
-          this.ensureModuleExport(member.name, member, subPrefix);
+      if (element.kind == ElementKind.NAMESPACE) {
+        let implicitExport = element.is(CommonFlags.SCOPED);
+        // TODO: for (let [memberName, member] of members) {
+        for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+          let memberName = unchecked(_keys[i]);
+          let member = assert(members.get(memberName));
+          if (implicitExport || member.is(CommonFlags.EXPORT)) {
+            this.ensureModuleExport(memberName, member, subPrefix);
+          }
         }
       } else {
-        for (let member of members.values()) {
-          if (member.is(CommonFlags.PRIVATE)) continue;
-          this.ensureModuleExport(member.name, member, subPrefix);
+        // TODO: for (let [memberName, member] of members) {
+        for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+          let memberName = unchecked(_keys[i]);
+          let member = assert(members.get(memberName));
+          if (!member.is(CommonFlags.PRIVATE)) {
+            this.ensureModuleExport(memberName, member, subPrefix);
+          }
         }
       }
     }
@@ -739,21 +811,34 @@ export class Compiler extends DiagnosticEmitter {
       case ElementKind.TYPEDEFINITION:
       case ElementKind.ENUMVALUE:
       case ElementKind.INDEXSIGNATURE: break;
-      default: assert(false, ElementKind[element.kind]);
+      default: assert(false);
     }
     if (compileMembers) {
       let members = element.members;
-      if (members) for (let element of members.values()) this.compileElement(element);
+      if (members) {
+        // TODO: for (let element of members.values()) {
+        for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+          let element = unchecked(_values[i]);
+          this.compileElement(element);
+        }
+      }
     }
   }
 
   /** Compiles a file's exports. */
   compileExports(file: File): void {
     var exports = file.exports;
-    if (exports) for (let element of exports.values()) this.compileElement(element);
+    if (exports) {
+      // TODO: for (let element of exports.values()) {
+      for (let _values = Map_values(exports), i = 0, k = _values.length; i < k; ++i) {
+        let element = unchecked(_values[i]);
+        this.compileElement(element);
+      }
+    }
     var exportsStar = file.exportsStar;
     if (exportsStar) {
-      for (let exportStar of exportsStar) {
+      for (let i = 0, k = exportsStar.length; i < k; ++i) {
+        let exportStar = unchecked(exportsStar[i]);
         this.compileFile(exportStar);
         this.compileExports(exportStar);
       }
@@ -768,9 +853,9 @@ export class Compiler extends DiagnosticEmitter {
     var filesByName = this.program.filesByName;
     var pathWithIndex: string;
     if (filesByName.has(normalizedPathWithoutExtension)) {
-      file = filesByName.get(normalizedPathWithoutExtension)!;
+      file = assert(filesByName.get(normalizedPathWithoutExtension));
     } else if (filesByName.has(pathWithIndex = normalizedPathWithoutExtension + INDEX_SUFFIX)) {
-      file = filesByName.get(pathWithIndex)!;
+      file = assert(filesByName.get(pathWithIndex));
     } else {
       this.error(
         DiagnosticCode.File_0_not_found,
@@ -955,7 +1040,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!isGlobalMutable(module.getGlobal(fromName))) {
           let elementsByName = this.program.elementsByName;
           if (elementsByName.has(fromName)) {
-            let global = elementsByName.get(fromName)!;
+            let global = assert(elementsByName.get(fromName));
             if (global.is(CommonFlags.AMBIENT)) initializeInStart = false;
           }
         }
@@ -1019,7 +1104,7 @@ export class Compiler extends DiagnosticEmitter {
       if (isDeclaredInline) {
         this.error(
           DiagnosticCode.Decorator_0_is_not_valid_here,
-          assert(findDecorator(DecoratorKind.INLINE, global.decoratorNodes)).range, "inline"
+          findDecorator(DecoratorKind.INLINE, global.decoratorNodes)!.range, "inline"
         );
       }
       module.addGlobal(internalName, nativeType, true, this.makeZero(type));
@@ -1047,8 +1132,11 @@ export class Compiler extends DiagnosticEmitter {
     var previousValueIsMut = false;
     var isInline = element.is(CommonFlags.CONST) || element.hasDecorator(DecoratorFlags.INLINE);
 
-    if (element.members) {
-      for (let member of element.members.values()) {
+    var members = element.members;
+    if (members) {
+      // TODO: for (let member of element.members.values()) {
+      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+        let member = unchecked(_values[i]);
         if (member.kind != ElementKind.ENUMVALUE) continue; // happens if an enum is also a namespace
         let initInStart = false;
         let val = <EnumValue>member;
@@ -1215,27 +1303,22 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFlow = previousFlow;
 
       // create the function
+      let body = module.flatten(stmts, instance.signature.returnType.toNativeType());
+      if (instance.is(CommonFlags.VIRTUAL)) {
+        body = module.block("vtable", [ body ], getExpressionType(body));
+      }
       funcRef = module.addFunction(
         instance.internalName,
         signature.nativeParams,
         signature.nativeResults,
         typesToNativeTypes(instance.additionalLocals),
-        module.flatten(stmts, instance.signature.returnType.toNativeType())
+        body
       );
 
     // imported function
-    } else {
-      if (!instance.is(CommonFlags.AMBIENT)) {
-        this.error(
-          DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
-          instance.identifierNode.range
-        );
-      }
-
+    } else if (instance.is(CommonFlags.AMBIENT)) {
       instance.set(CommonFlags.MODULE_IMPORT);
       mangleImportName(instance, instance.declaration); // TODO: check for duplicates
-
-      // create the import
       module.addFunctionImport(
         instance.internalName,
         mangleImportName_moduleName,
@@ -1244,6 +1327,23 @@ export class Compiler extends DiagnosticEmitter {
         signature.nativeResults
       );
       funcRef = module.getFunction(instance.internalName);
+
+    // abstract function
+    } else if (instance.is(CommonFlags.ABSTRACT)) {
+      funcRef = module.addFunction(
+        instance.internalName,
+        signature.nativeParams,
+        signature.nativeResults,
+        null,
+        module.unreachable()
+      );
+      this.virtualCalls.add(instance);
+    } else {
+      this.error(
+        DiagnosticCode.Function_implementation_is_missing_or_not_immediately_following_the_declaration,
+        instance.identifierNode.range
+      );
+      funcRef = 0; // TODO?
     }
 
     instance.finalize(module, funcRef);
@@ -1306,7 +1406,9 @@ export class Compiler extends DiagnosticEmitter {
     if (instance.is(CommonFlags.CONSTRUCTOR)) {
       let nativeSizeType = this.options.nativeSizeType;
       assert(instance.is(CommonFlags.INSTANCE));
-      let classInstance = assert(instance.parent); assert(classInstance.kind == ElementKind.CLASS);
+      let parent = assert(instance.parent);
+      assert(parent.kind == ElementKind.CLASS);
+      let classInstance = <Class>parent;
 
       if (!flow.is(FlowFlags.TERMINATES)) {
         let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
@@ -1325,12 +1427,12 @@ export class Compiler extends DiagnosticEmitter {
               ),
               module.local_set(thisLocal.index,
                 this.makeRetain(
-                  this.makeAllocation(<Class>classInstance)
+                  this.makeAllocation(classInstance)
                 ),
               )
             )
           );
-          this.makeFieldInitializationInConstructor(<Class>classInstance, stmts);
+          this.makeFieldInitializationInConstructor(classInstance, stmts);
         }
         this.performAutoreleases(flow, stmts); // `this` is excluded anyway
         this.finishAutoreleases(flow, stmts);
@@ -1339,7 +1441,7 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // check that super has been called if this is a derived class
-      if ((<Class>classInstance).base && !flow.is(FlowFlags.CALLS_SUPER)) {
+      if (classInstance.base !== null && !flow.is(FlowFlags.CALLS_SUPER)) {
         this.error(
           DiagnosticCode.Constructors_for_derived_classes_must_contain_a_super_call,
           instance.prototype.declaration.range
@@ -1366,7 +1468,9 @@ export class Compiler extends DiagnosticEmitter {
     var prototype = instance.prototype;
     var staticMembers = (<ClassPrototype>prototype).members;
     if (staticMembers) {
-      for (let element of staticMembers.values()) {
+      // TODO: for (let element of staticMembers.values()) {
+      for (let _values = Map_values(staticMembers), i = 0, k = _values.length; i < k; ++i) {
+        let element = unchecked(_values[i]);
         switch (element.kind) {
           case ElementKind.GLOBAL: {
             this.compileGlobal(<Global>element);
@@ -1401,7 +1505,9 @@ export class Compiler extends DiagnosticEmitter {
     if (ctorInstance) this.compileFunction(ctorInstance);
     var instanceMembers = instance.members;
     if (instanceMembers) {
-      for (let element of instanceMembers.values()) {
+      // TODO: for (let element of instanceMembers.values()) {
+      for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
+        let element = unchecked(_values[i]);
         switch (element.kind) {
           case ElementKind.FUNCTION_PROTOTYPE: {
             if (!element.is(CommonFlags.GENERIC)) {
@@ -1551,7 +1657,7 @@ export class Compiler extends DiagnosticEmitter {
     var stringSegment: MemorySegment;
     var segments = this.stringSegments;
     if (segments.has(stringValue)) {
-      stringSegment = segments.get(stringValue)!; // reuse
+      stringSegment = assert(segments.get(stringValue)); // reuse
     } else {
       let length = stringValue.length;
       let buffer = new Uint8Array(rtHeaderSize + (length << 1));
@@ -1827,6 +1933,10 @@ export class Compiler extends DiagnosticEmitter {
         stmt = this.compileForStatement(<ForStatement>statement);
         break;
       }
+      case NodeKind.FOROF: {
+        stmt = this.compileForOfStatement(<ForOfStatement>statement);
+        break;
+      }
       case NodeKind.IF: {
         stmt = this.compileIfStatement(<IfStatement>statement);
         break;
@@ -1899,7 +2009,7 @@ export class Compiler extends DiagnosticEmitter {
       switch (getExpressionId(stmt)) {
         case ExpressionId.Block: {
           if (!getBlockName(stmt)) {
-            for (let j = 0, k = getBlockChildCount(stmt); j < k; ++j) stmts.push(getBlockChild(stmt, j));
+            for (let j: Index = 0, k = getBlockChildCount(stmt); j < k; ++j) stmts.push(getBlockChild(stmt, j));
             break;
           }
           // fall-through
@@ -1935,10 +2045,11 @@ export class Compiler extends DiagnosticEmitter {
     statement: BreakStatement
   ): ExpressionRef {
     var module = this.module;
-    if (statement.label) {
+    var labelNode = statement.label;
+    if (labelNode) {
       this.error(
         DiagnosticCode.Not_implemented,
-        statement.label.range
+        labelNode.range
       );
       return module.unreachable();
     }
@@ -1990,7 +2101,7 @@ export class Compiler extends DiagnosticEmitter {
     var stmts = new Array<ExpressionRef>();
     this.performAutoreleases(flow, stmts);
     var current: Flow | null = flow.parent;
-    while (current && current.continueLabel === continueLabel) {
+    while (current !== null && current.continueLabel === continueLabel) {
       this.performAutoreleases(current, stmts, /* finalize */ false);
       current = current.parent;
     }
@@ -2078,6 +2189,20 @@ export class Compiler extends DiagnosticEmitter {
         }
         this.performAutoreleases(condFlow, bodyStmts);
         flow.inherit(bodyFlow);
+
+      // Terminate if condition is always true and body never breaks
+      } else if (condKind == ConditionKind.TRUE && !bodyFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
+        if (hasSideEffects(condExpr)) {
+          bodyStmts.push(
+            module.drop(condExpr)
+          );
+        }
+        this.performAutoreleases(condFlow, bodyStmts);
+        bodyStmts.push(
+          module.br(continueLabel)
+        );
+        flow.set(FlowFlags.TERMINATES);
+
       } else {
         let tcond = condFlow.getTempLocal(Type.bool);
         bodyStmts.push(
@@ -2098,7 +2223,7 @@ export class Compiler extends DiagnosticEmitter {
           assert(!flowAfter); // should work on the first attempt
           outerFlow.popBreakLabel();
           this.currentFlow = outerFlow;
-          return this.doCompileWhileStatement(statement, flow);
+          return this.doCompileDoStatement(statement, flow);
         }
       }
     }
@@ -2328,6 +2453,16 @@ export class Compiler extends DiagnosticEmitter {
     return module.flatten(stmts);
   }
 
+  private compileForOfStatement(
+    statement: ForOfStatement
+  ): ExpressionRef {
+    this.error(
+      DiagnosticCode.Not_implemented,
+      statement.range
+    );
+    return this.module.unreachable();
+  }
+
   private compileIfStatement(
     statement: IfStatement
   ): ExpressionRef {
@@ -2398,7 +2533,8 @@ export class Compiler extends DiagnosticEmitter {
     } else {
       thenStmts.push(this.compileStatement(ifTrue));
     }
-    if (thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
+    var thenTerminates = thenFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS);
+    if (thenTerminates) {
       thenStmts.push(module.unreachable());
     } else {
       this.performAutoreleases(thenFlow, thenStmts);
@@ -2417,14 +2553,19 @@ export class Compiler extends DiagnosticEmitter {
       } else {
         elseStmts.push(this.compileStatement(ifFalse));
       }
-      if (elseFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS)) {
+      let elseTerminates = elseFlow.isAny(FlowFlags.TERMINATES | FlowFlags.BREAKS);
+      if (elseTerminates) {
         elseStmts.push(module.unreachable());
       } else {
         this.performAutoreleases(elseFlow, elseStmts);
       }
       elseFlow.freeScopedLocals();
       this.currentFlow = flow;
-      flow.inheritMutual(thenFlow, elseFlow);
+      if (elseTerminates && !thenTerminates) {
+        flow.inherit(thenFlow);
+      } else {
+        flow.inheritMutual(thenFlow, elseFlow);
+      }
       return module.if(condExpr,
         module.flatten(thenStmts),
         module.flatten(elseStmts)
@@ -2481,7 +2622,7 @@ export class Compiler extends DiagnosticEmitter {
     this.performAutoreleases(flow, stmts);
     this.finishAutoreleases(flow, stmts);
 
-    if (returnType != Type.void && stmts.length) {
+    if (returnType != Type.void && stmts.length > 0) {
       let temp = flow.getTempLocal(returnType);
       if (flow.isNonnull(expr, returnType)) flow.setLocalFlag(temp.index, LocalFlags.NONNULL);
       stmts.unshift(
@@ -2493,7 +2634,7 @@ export class Compiler extends DiagnosticEmitter {
     flow.freeScopedLocals();
 
     // If the last statement anyway, make it the block's return value
-    if (isLastInBody && expr && returnType != Type.void) {
+    if (isLastInBody && expr != 0 && returnType != Type.void) {
       if (!stmts.length) return expr;
       stmts.push(expr);
       return module.flatten(stmts, returnType.toNativeType());
@@ -2550,7 +2691,7 @@ export class Compiler extends DiagnosticEmitter {
       let case_ = cases[i];
       let label = case_.label;
       if (label) {
-        breaks[breakIndex++] = module.br("case" + i.toString(10) + "|" + context,
+        breaks[breakIndex++] = module.br("case" + i.toString() + "|" + context,
           module.binary(BinaryOp.EqI32,
             module.local_get(tempLocalIndex, NativeType.I32),
             this.compileExpression(label, Type.u32,
@@ -2567,7 +2708,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // otherwise br to default respectively out of the switch if there is no default case
     breaks[breakIndex] = module.br((defaultIndex >= 0
-        ? "case" + defaultIndex.toString(10)
+        ? "case" + defaultIndex.toString()
         : "break"
       ) + "|" + context);
 
@@ -2587,7 +2728,7 @@ export class Compiler extends DiagnosticEmitter {
       innerFlow.breakLabel = breakLabel;
 
       let isLast = i == numCases - 1;
-      let nextLabel = isLast ? breakLabel : "case" + (i + 1).toString(10) + "|" + context;
+      let nextLabel = isLast ? breakLabel : "case" + (i + 1).toString() + "|" + context;
       let stmts = new Array<ExpressionRef>(1 + numStatements);
       stmts[0] = currentBlock;
       let count = 1;
@@ -2683,23 +2824,25 @@ export class Compiler extends DiagnosticEmitter {
       let initAutoreleaseSkipped = false;
 
       // Resolve type if annotated
-      if (declaration.type) {
+      let typeNode = declaration.type;
+      let initializerNode = declaration.initializer;
+      if (typeNode) {
         type = resolver.resolveType( // reports
-          declaration.type,
+          typeNode,
           flow.actualFunction,
           makeMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
-        if (declaration.initializer) {
-          initExpr = this.compileExpression(declaration.initializer, type, // reports
+        if (initializerNode) {
+          initExpr = this.compileExpression(initializerNode, type, // reports
             Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
           );
           initAutoreleaseSkipped = this.skippedAutoreleases.has(initExpr);
         }
 
       // Otherwise infer type from initializer
-      } else if (declaration.initializer) {
-        initExpr = this.compileExpression(declaration.initializer, Type.auto,
+      } else if (initializerNode) {
+        initExpr = this.compileExpression(initializerNode, Type.auto,
           Constraints.WILL_RETAIN
         ); // reports
         initAutoreleaseSkipped = this.skippedAutoreleases.has(initExpr);
@@ -2767,7 +2910,7 @@ export class Compiler extends DiagnosticEmitter {
             let scopedLocals = flow.scopedLocals;
             if (!scopedLocals) flow.scopedLocals = scopedLocals = new Map();
             else if (scopedLocals.has(name)) {
-              let existing = scopedLocals.get(name)!;
+              let existing = assert(scopedLocals.get(name));
               this.errorRelated(
                 DiagnosticCode.Duplicate_identifier_0,
                 declaration.name.range,
@@ -2967,13 +3110,22 @@ export class Compiler extends DiagnosticEmitter {
       bodyStmts.push(this.compileStatement(body));
     }
 
-    // Check if body terminates
+    // Simplify if body always terminates
     if (bodyFlow.is(FlowFlags.TERMINATES)) {
       bodyStmts.push(
         module.unreachable()
       );
       if (condKind == ConditionKind.TRUE) flow.inherit(bodyFlow);
       else flow.inheritBranch(bodyFlow);
+
+    // Terminate if condition is always true and body never breaks
+    } else if (condKind == ConditionKind.TRUE && !bodyFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
+      this.performAutoreleases(bodyFlow, bodyStmts);
+      bodyStmts.push(
+        module.br(continueLabel)
+      );
+      flow.set(FlowFlags.TERMINATES);
+
     } else {
       let breaks = bodyFlow.is(FlowFlags.BREAKS);
       if (breaks) {
@@ -3092,13 +3244,13 @@ export class Compiler extends DiagnosticEmitter {
       case TypeKind.F64: {
         // monkey-patch for converting built-in floats to f32 implicitly
         if (!(element.hasDecorator(DecoratorFlags.BUILTIN) && contextualType == Type.f32)) {
-          return this.module.f64((<VariableLikeElement>element).constantFloatValue);
+          return this.module.f64(element.constantFloatValue);
         }
         // otherwise fall-through: basically precomputes f32.demote/f64 of NaN / Infinity
         this.currentType = Type.f32;
       }
       case TypeKind.F32: {
-        return this.module.f32((<VariableLikeElement>element).constantFloatValue);
+        return this.module.f32(<f32>element.constantFloatValue);
       }
       default: {
         assert(false);
@@ -3456,6 +3608,14 @@ export class Compiler extends DiagnosticEmitter {
             expr = this.ensureSmallIntegerWrap(expr, fromType); // must clear garbage bits
             wrap = false;
           }
+        // same size
+        } else {
+          if (!explicit && !this.options.isWasm64 && fromType.is(TypeFlags.POINTER) && !toType.is(TypeFlags.POINTER)) {
+            this.warning(
+              DiagnosticCode.Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit,
+              reportNode.range, fromType.toString(), toType.toString()
+            );
+          }
         }
       }
     }
@@ -3571,18 +3731,8 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        if (commonType = Type.commonDenominator(leftType, rightType, true)) {
-          leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
-            false, true, // !
-            left
-          );
-          rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
-            false, true, // !
-            right
-          );
-        } else {
+        commonType = Type.commonDenominator(leftType, rightType, true);
+        if (!commonType) {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
             expression.range, "<", leftType.toString(), rightType.toString()
@@ -3590,6 +3740,16 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = contextualType;
           return module.unreachable();
         }
+        leftExpr = this.convertExpression(leftExpr,
+          leftType, leftType = commonType,
+          false, true, // !
+          left
+        );
+        rightExpr = this.convertExpression(rightExpr,
+          rightType, rightType = commonType,
+          false, true, // !
+          right
+        );
         switch (commonType.kind) {
           case TypeKind.I8:
           case TypeKind.I16:
@@ -3671,17 +3831,20 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        if (commonType = Type.commonDenominator(leftType, rightType, true)) {
+        commonType = Type.commonDenominator(leftType, rightType, true);
+        if (commonType) {
           leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
+            leftType, commonType,
             false, true, // !
             left
           );
+          leftType = commonType;
           rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
+            rightType, commonType,
             false, true, // !
             right
           );
+          rightType = commonType;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -3974,17 +4137,20 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+        commonType = Type.commonDenominator(leftType, rightType, false);
+        if (commonType) {
           leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
+            leftType, commonType,
             false, true, // !
             left
           );
+          leftType = commonType;
           rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
+            rightType, commonType,
             false, true, // !
             right
           );
+          rightType = commonType;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4071,17 +4237,20 @@ export class Compiler extends DiagnosticEmitter {
 
         rightExpr = this.compileExpression(right, leftType);
         rightType = this.currentType;
-        if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+        commonType = Type.commonDenominator(leftType, rightType, false);
+        if (commonType) {
           leftExpr = this.convertExpression(leftExpr,
-            leftType, leftType = commonType,
+            leftType, commonType,
             false, true, // !
             left
           );
+          leftType = commonType;
           rightExpr = this.convertExpression(rightExpr,
-            rightType, rightType = commonType,
+            rightType, commonType,
             false, true, // !
             right
           );
+          rightType = commonType;
         } else {
           this.error(
             DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4268,17 +4437,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, false,
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, false,
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4358,17 +4530,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, false,
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, false,
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4449,7 +4624,8 @@ export class Compiler extends DiagnosticEmitter {
         if (this.currentType.kind == TypeKind.F32) {
           rightExpr = this.compileExpression(right, Type.f32, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
-          if (!(instance = this.f32PowInstance)) {
+          instance = this.f32PowInstance;
+          if (!instance) {
             let namespace = this.program.lookupGlobal(CommonNames.Mathf);
             if (!namespace) {
               this.error(
@@ -4483,7 +4659,8 @@ export class Compiler extends DiagnosticEmitter {
           leftType = this.currentType;
           rightExpr = this.compileExpression(right, Type.f64, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
-          if (!(instance = this.f64PowInstance)) {
+          instance = this.f64PowInstance;
+          if (!instance) {
             let namespace = this.program.lookupGlobal(CommonNames.Math);
             if (!namespace) {
               this.error(
@@ -4506,7 +4683,7 @@ export class Compiler extends DiagnosticEmitter {
             this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
           }
         }
-        if (!(instance && this.compileFunction(instance))) {
+        if (!instance || !this.compileFunction(instance)) {
           expr = module.unreachable();
         } else {
           expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
@@ -4546,17 +4723,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, true, // !
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, true, // !
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4655,17 +4835,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, true, // !
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, true, // !
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -4747,7 +4930,7 @@ export class Compiler extends DiagnosticEmitter {
               assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
               this.f32ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
-            if (!(instance && this.compileFunction(instance))) {
+            if (!instance || !this.compileFunction(instance)) {
               expr = module.unreachable();
             } else {
               expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
@@ -4778,7 +4961,7 @@ export class Compiler extends DiagnosticEmitter {
               assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
               this.f64ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
-            if (!(instance && this.compileFunction(instance))) {
+            if (!instance || !this.compileFunction(instance)) {
               expr = module.unreachable();
             } else {
               expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
@@ -5133,17 +5316,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, false,
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, false,
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -5226,17 +5412,20 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
-          if (commonType = Type.commonDenominator(leftType, rightType, false)) {
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
             leftExpr = this.convertExpression(leftExpr,
-              leftType, leftType = commonType,
+              leftType, commonType,
               false, false,
               left
             );
+            leftType = commonType;
             rightExpr = this.convertExpression(rightExpr,
-              rightType, rightType = commonType,
+              rightType, commonType,
               false, false,
               right
             );
+            rightType = commonType;
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
@@ -5509,7 +5698,8 @@ export class Compiler extends DiagnosticEmitter {
     var resolver = this.resolver;
     var target = resolver.lookupExpression(left, this.currentFlow);
     if (!target) return module.unreachable();
-    var targetType = resolver.getTypeOfElement(target) || Type.void;
+    var targetType = resolver.getTypeOfElement(target);
+    if (!targetType) targetType = Type.void;
     if (!this.currentType.isStrictlyAssignableTo(targetType)) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
@@ -5597,7 +5787,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           return this.module.unreachable();
         }
-        let setterInstance = this.resolver.resolveFunction(setterPrototype, null, makeMap(), ReportMode.REPORT);
+        let setterInstance = this.resolver.resolveFunction(setterPrototype, null, makeMap<string,Type>(), ReportMode.REPORT);
         if (!setterInstance) return this.module.unreachable();
         assert(setterInstance.signature.parameterTypes.length == 1); // parser must guarantee this
         targetType = setterInstance.signature.parameterTypes[0];
@@ -5726,7 +5916,7 @@ export class Compiler extends DiagnosticEmitter {
           (<Field>target).is(CommonFlags.READONLY) &&
           !(
             flow.actualFunction.is(CommonFlags.CONSTRUCTOR) ||
-            initializerNode
+            initializerNode !== null
           )
         ) {
           this.error(
@@ -5751,7 +5941,7 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.unreachable();
         }
-        let setterInstance = this.resolver.resolveFunction(setterPrototype, null, makeMap(), ReportMode.REPORT);
+        let setterInstance = this.resolver.resolveFunction(setterPrototype, null, makeMap<string,Type>(), ReportMode.REPORT);
         if (!setterInstance) return module.unreachable();
         assert(setterInstance.signature.parameterTypes.length == 1);
         let valueType = setterInstance.signature.parameterTypes[0];
@@ -5760,7 +5950,7 @@ export class Compiler extends DiagnosticEmitter {
         if (!tee) return this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression);
         // otherwise call the setter first, then the getter
         let getterPrototype = assert((<PropertyPrototype>target).getterPrototype); // must be present
-        let getterInstance = this.resolver.resolveFunction(getterPrototype, null, makeMap(), ReportMode.REPORT);
+        let getterInstance = this.resolver.resolveFunction(getterPrototype, null, makeMap<string,Type>(), ReportMode.REPORT);
         if (!getterInstance) return module.unreachable();
         let returnType = getterInstance.signature.returnType;
         assert(valueType == returnType);
@@ -5935,8 +6125,8 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes an assignment to a global, possibly retaining and releasing affected references. */
   private makeGlobalAssignment(
-    /** The global to assign to. */
-    global: Global,
+    /** The global variable to assign to. */
+    global: VariableLikeElement,
     /** The value to assign. */
     valueExpr: ExpressionRef,
     /** Whether to tee the value. */
@@ -6097,8 +6287,10 @@ export class Compiler extends DiagnosticEmitter {
         return module.unreachable();
       }
 
-      let classInstance = assert(actualFunction.parent); assert(classInstance.kind == ElementKind.CLASS);
-      let baseClassInstance = assert((<Class>classInstance).base);
+      let parent = assert(actualFunction.parent);
+      assert(parent.kind == ElementKind.CLASS);
+      let classInstance = <Class>parent;
+      let baseClassInstance = assert(classInstance.base);
       let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
       let nativeSizeType = this.options.nativeSizeType;
 
@@ -6115,7 +6307,7 @@ export class Compiler extends DiagnosticEmitter {
           module.local_get(thisLocal.index, nativeSizeType),
           module.local_get(thisLocal.index, nativeSizeType),
           this.makeRetain(
-            this.makeAllocation(<Class>classInstance)
+            this.makeAllocation(classInstance)
           )
         ),
         Constraints.WILL_RETAIN
@@ -6124,7 +6316,7 @@ export class Compiler extends DiagnosticEmitter {
       let stmts: ExpressionRef[] = [
         module.local_set(thisLocal.index, theCall)
       ];
-      this.makeFieldInitializationInConstructor(<Class>classInstance, stmts);
+      this.makeFieldInitializationInConstructor(classInstance, stmts);
 
       // check that super had been called before accessing `this`
       if (flow.isAny(
@@ -6159,7 +6351,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.compileCallExpressionBuiltin(prototype, expression, contextualType);
         }
 
-        let thisExpression = this.resolver.currentThisExpression;
+        let thisExpression = this.resolver.currentThisExpression; // compileCallDirect may reset
         let instance = this.resolver.maybeInferCall(expression, prototype, flow);
         if (!instance) return this.module.unreachable();
         return this.compileCallDirect(
@@ -6175,36 +6367,37 @@ export class Compiler extends DiagnosticEmitter {
 
       // indirect call: index argument with signature (non-generic, can't be inlined)
       case ElementKind.LOCAL: {
-        if (signature = (<Local>target).type.signatureReference) {
+        signature = (<Local>target).type.signatureReference;
+        if (signature) {
           if ((<Local>target).is(CommonFlags.INLINED)) {
             indexArg = module.i32(i64_low((<Local>target).constantIntegerValue));
           } else {
             indexArg = module.local_get((<Local>target).index, NativeType.I32);
           }
           break;
-        } else {
-          this.error(
-            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, (<Local>target).type.toString()
-          );
-          return module.unreachable();
         }
+        this.error(
+          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+          expression.range, (<Local>target).type.toString()
+        );
+        return module.unreachable();
       }
       case ElementKind.GLOBAL: {
-        if (signature = (<Global>target).type.signatureReference) {
+        signature = (<Global>target).type.signatureReference;
+        if (signature) {
           indexArg = module.global_get((<Global>target).internalName, (<Global>target).type.toNativeType());
           break;
-        } else {
-          this.error(
-            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, (<Global>target).type.toString()
-          );
-          return module.unreachable();
         }
+        this.error(
+          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+          expression.range, (<Global>target).type.toString()
+        );
+        return module.unreachable();
       }
       case ElementKind.FIELD: {
         let type = (<Field>target).type;
-        if (signature = type.signatureReference) {
+        signature = type.signatureReference;
+        if (signature) {
           let thisExpression = assert(this.resolver.currentThisExpression);
           let thisExpr = this.compileExpression(thisExpression, this.options.usizeType);
           indexArg = module.load(
@@ -6278,7 +6471,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     return this.compileCallIndirect(
-      signature,
+      assert(signature), // FIXME: asc can't see this yet
       indexArg,
       expression.arguments,
       expression,
@@ -6315,16 +6508,24 @@ export class Compiler extends DiagnosticEmitter {
         expression
       );
     }
-
-    // now compile the builtin, which usually returns a block of code that replaces the call.
-    return compileBuiltinCall(
-      this,
-      prototype,
-      typeArguments,
-      expression.arguments,
-      contextualType,
-      expression
+    var ctx = new BuiltinContext();
+    ctx.compiler = this;
+    ctx.prototype = prototype;
+    ctx.typeArguments = typeArguments;
+    ctx.operands = expression.arguments;
+    ctx.contextualType = contextualType;
+    ctx.reportNode = expression;
+    ctx.contextIsExact = false;
+    var internalName = prototype.internalName;
+    if (builtins.has(internalName)) {
+      let fn = assert(builtins.get(internalName));
+      return fn(ctx);
+    }
+    this.error(
+      DiagnosticCode.Not_implemented,
+      expression.expression.range
     );
+    return this.module.unreachable();
   }
 
   /**
@@ -6489,6 +6690,9 @@ export class Compiler extends DiagnosticEmitter {
     thisArg: ExpressionRef = 0,
     immediatelyDropped: bool = false
   ): ExpressionRef {
+    if (instance.is(CommonFlags.VIRTUAL)) {
+      this.virtualCalls.add(instance);
+    }
     var module = this.module;
     var numArguments = operands ? operands.length : 0;
     var signature = instance.signature;
@@ -6653,9 +6857,9 @@ export class Compiler extends DiagnosticEmitter {
     // create a br_table switching over the number of optional parameters provided
     var numNames = numOptional + 1; // incl. outer block
     var names = new Array<string>(numNames);
-    var ofN = "of" + numOptional.toString(10);
+    var ofN = "of" + numOptional.toString();
     for (let i = 0; i < numNames; ++i) {
-      let label = i.toString(10) + ofN;
+      let label = i.toString() + ofN;
       names[i] = label;
     }
     var body = module.block(names[0], [
@@ -6925,7 +7129,9 @@ export class Compiler extends DiagnosticEmitter {
     var scopedLocals = flow.scopedLocals;
     if (scopedLocals) {
       let module = this.module;
-      for (let local of scopedLocals.values()) {
+      // TODO: for (let local of scopedLocals.values()) {
+      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
+        let local = unchecked(_values[i]);
         if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
           let localIndex = local.index;
           if (flow.isAnyLocalFlag(localIndex, LocalFlags.ANY_RETAINED)) {
@@ -6997,12 +7203,16 @@ export class Compiler extends DiagnosticEmitter {
       while (parent = current.parent) current = parent;
       let scopedLocals = current.scopedLocals;
       if (scopedLocals) {
-        for (let local of scopedLocals.values()) {
+        // TODO: for (let local of scopedLocals.values()) {
+        for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
+          let local = unchecked(_values[i]);
           this.maybeFinishAutorelease(local, flow, stmts);
         }
       }
     } else {
-      for (let local of flow.parentFunction.localsByIndex) {
+      let localsByIndex = flow.parentFunction.localsByIndex;
+      for (let i = 0, k = localsByIndex.length; i < k; ++i) {
+        let local = unchecked(localsByIndex[i]);
         this.maybeFinishAutorelease(local, flow, stmts);
       }
     }
@@ -7040,6 +7250,9 @@ export class Compiler extends DiagnosticEmitter {
     /** Skip the usual autorelease and manage this at the callsite instead. */
     skipAutorelease: bool = false
   ): ExpressionRef {
+    if (instance.is(CommonFlags.VIRTUAL)) {
+      this.virtualCalls.add(instance);
+    }
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
       assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
       let inlineStack = this.inlineStack;
@@ -7109,7 +7322,7 @@ export class Compiler extends DiagnosticEmitter {
             ));
             continue;
           }
-          let resolved = this.resolver.lookupExpression(initializer, instance.flow, parameterTypes[i]);
+          let resolved = this.resolver.lookupExpression(initializer, instance.flow, parameterTypes[i], ReportMode.SWALLOW);
           if (resolved) {
             if (resolved.kind == ElementKind.GLOBAL) {
               let global = <Global>resolved;
@@ -7343,7 +7556,7 @@ export class Compiler extends DiagnosticEmitter {
     var prototype = new FunctionPrototype(
       declaration.name.text.length
         ? declaration.name.text
-        : "anonymous|" + (actualFunction.nextAnonymousId++).toString(10),
+        : "anonymous|" + (actualFunction.nextAnonymousId++).toString(),
       actualFunction,
       declaration,
       DecoratorFlags.NONE
@@ -7471,7 +7684,7 @@ export class Compiler extends DiagnosticEmitter {
     var internalPath = expression.range.source.internalPath;
     var filesByName = this.program.filesByName;
     assert(filesByName.has(internalPath));
-    var enclosingFile = filesByName.get(internalPath)!;
+    var enclosingFile = assert(filesByName.get(internalPath));
     if (!enclosingFile.is(CommonFlags.COMPILED)) {
       this.compileFileByPath(internalPath, expression);
     }
@@ -7610,10 +7823,12 @@ export class Compiler extends DiagnosticEmitter {
     this.maybeCompileEnclosingSource(expression);
 
     // otherwise resolve
+    var currentParent = this.currentParent;
+    if (!currentParent) currentParent = actualFunction;
     var target = this.resolver.lookupIdentifierExpression( // reports
       expression,
       flow,
-      this.currentParent || actualFunction
+      currentParent
     );
     if (!target) {
       // make a guess to avoid assertions in calling code
@@ -7679,7 +7894,7 @@ export class Compiler extends DiagnosticEmitter {
           null,
           makeMap<string,Type>(flow.contextualTypeArguments)
         );
-        if (!(instance && this.compileFunction(instance))) return module.unreachable();
+        if (!instance || !this.compileFunction(instance)) return module.unreachable();
         if (contextualType.is(TypeFlags.HOST | TypeFlags.REFERENCE)) {
           this.currentType = Type.anyref;
           return module.ref_func(instance.internalName);
@@ -8007,7 +8222,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(element.kind == ElementKind.CLASS);
     var arrayInstance = <Class>element;
     var arrayType = arrayInstance.type;
-    var elementType = assert(arrayInstance.getTypeArgumentsTo(program.arrayPrototype))[0];
+    var elementType = arrayInstance.getTypeArgumentsTo(program.arrayPrototype)![0];
     var arrayBufferInstance = assert(program.arrayBufferInstance);
 
     // block those here so compiling expressions doesn't conflict
@@ -8177,7 +8392,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(contextualType.is(TypeFlags.REFERENCE));
     var arrayInstance = assert(contextualType.classReference);
     var arrayType = arrayInstance.type;
-    var elementType = assert(arrayInstance.getTypeArgumentsTo(program.staticArrayPrototype))[0];
+    var elementType = arrayInstance.getTypeArgumentsTo(program.staticArrayPrototype)![0];
 
     // block those here so compiling expressions doesn't conflict
     var tempThis = flow.getTempLocal(this.options.usizeType);
@@ -8695,7 +8910,6 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var ifThen = expression.ifThen;
     var ifElse = expression.ifElse;
-    var outerFlow = this.currentFlow;
 
     var condExpr = this.module.precomputeExpression(
       this.makeIsTrueish(
@@ -8705,27 +8919,25 @@ export class Compiler extends DiagnosticEmitter {
     );
 
     // Try to eliminate unnecesssary branches if the condition is constant
-    // FIXME: skips common denominator, inconsistently picking left type
-    if (
-      getExpressionId(condExpr) == ExpressionId.Const &&
-      getExpressionType(condExpr) == NativeType.I32
-    ) {
-      return getConstValueI32(condExpr)
-        ? this.compileExpression(ifThen, ctxType)
-        : this.compileExpression(ifElse, ctxType);
-    }
+    // FIXME: skips common denominator, inconsistently picking branch type
+    var condKind = evaluateConditionKind(condExpr);
+    if (condKind == ConditionKind.TRUE) return this.compileExpression(ifThen, ctxType);
+    if (condKind == ConditionKind.FALSE) return this.compileExpression(ifElse, ctxType);
 
     var inheritedConstraints = constraints & Constraints.WILL_RETAIN;
 
+    var outerFlow = this.currentFlow;
     var ifThenFlow = outerFlow.fork();
+    ifThenFlow.inheritNonnullIfTrue(condExpr);
     this.currentFlow = ifThenFlow;
     var ifThenExpr = this.compileExpression(ifThen, ctxType, inheritedConstraints);
     var ifThenType = this.currentType;
     var ifThenAutoreleaseSkipped = this.skippedAutoreleases.has(ifThenExpr);
 
     var ifElseFlow = outerFlow.fork();
+    ifElseFlow.inheritNonnullIfFalse(condExpr);
     this.currentFlow = ifElseFlow;
-    var ifElseExpr = this.compileExpression(ifElse, ctxType, inheritedConstraints);
+    var ifElseExpr = this.compileExpression(ifElse, ctxType == Type.auto ? ifThenType : ctxType, inheritedConstraints);
     var ifElseType = this.currentType;
     var ifElseAutoreleaseSkipped = this.skippedAutoreleases.has(ifElseExpr);
 
@@ -9737,11 +9949,13 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var isInline = flow.isInline;
     var thisLocalIndex = isInline
-      ? assert(flow.lookupLocal(CommonNames.this_)).index
+      ? flow.lookupLocal(CommonNames.this_)!.index
       : 0;
     var nativeSizeType = this.options.nativeSizeType;
 
-    for (let member of members.values()) {
+    // TODO: for (let member of members.values()) {
+    for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+      let member = unchecked(_values[i]);
       if (
         member.kind != ElementKind.FIELD || // not a field
         member.parent != classInstance      // inherited field
@@ -9760,7 +9974,7 @@ export class Compiler extends DiagnosticEmitter {
       if (parameterIndex >= 0) {
         initExpr = module.local_get(
           isInline
-            ? assert(flow.lookupLocal(field.name)).index
+            ? flow.lookupLocal(field.name)!.index
             : 1 + parameterIndex, // this is local 0
           nativeFieldType
         );
@@ -9875,7 +10089,7 @@ export class Compiler extends DiagnosticEmitter {
     expr = module.if(
       module.call(instanceofInstance.internalName, [
         module.local_tee(temp.index, expr),
-        module.i32(assert(toType.classReference).id)
+        module.i32(toType.classReference!.id)
       ], NativeType.I32),
       module.local_get(temp.index, type.toNativeType()),
       this.makeAbort(null, reportNode) // TODO: throw
@@ -9904,7 +10118,7 @@ function mangleImportName(
   var program = element.program;
   var decorator = assert(findDecorator(DecoratorKind.EXTERNAL, declaration.decorators));
   var args = decorator.arguments;
-  if (args && args.length) {
+  if (args !== null && args.length > 0) {
     let arg = args[0];
     // if one argument is given, override just the element name
     // if two arguments are given, override both module and element name

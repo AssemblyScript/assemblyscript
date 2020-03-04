@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Terminal colors utility definitions.
+ * @license Apache-2.0
+ */
+
 interface Colors {
   /** Whether terminal colors are supported. */
   supported: boolean;

@@ -2122,7 +2122,7 @@
     br $while-continue|4
    end
   end
-  local.get $15
+  unreachable
  )
  (func $~lib/util/memory/memcpy (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)

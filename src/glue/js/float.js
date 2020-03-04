@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Floating point glue code for JaavaScript.
+ * @license Apache-2.0
+ */
+
 const F64 = new Float64Array(1);
 const F32 = new Float32Array(F64.buffer);
 const I32 = new Int32Array(F64.buffer);

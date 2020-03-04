@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Definitions for asc.
+ * @license Apache-2.0
+ */
+
 import { OptionDescription } from "./util/options";
 export { OptionDescription };
 

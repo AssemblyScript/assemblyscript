@@ -1,7 +1,19 @@
 /**
- * A control flow analyzer.
- * @module flow
- *//***/
+ * @fileoverview A concurrent code flow analyzer.
+ *
+ * Flows keep track of compilation state and can be queried for various
+ * conditions, like whether the current branch always terminates, whether
+ * a local is known to be non-null or whether an expression has possibly
+ * overflown its value range.
+ *
+ * To accomplish this, compilation of each function begins with a clean
+ * flow populated with initial local states etc. While compilation
+ * progresses, statements and expressions update flow state while control
+ * constructs fork, potentially add scoped locals and later merge these
+ * forked branches as necessary.
+ *
+ * @license Apache-2.0
+ */
 
 import {
   Type,
@@ -21,6 +33,8 @@ import {
   NativeType,
   ExpressionId,
   ExpressionRef,
+  BinaryOp,
+  UnaryOp,
 
   getExpressionId,
   getLocalGetIndex,
@@ -28,12 +42,10 @@ import {
   getLocalSetValue,
   getGlobalGetName,
   getBinaryOp,
-  BinaryOp,
   getBinaryLeft,
   getConstValueI32,
   getBinaryRight,
   getUnaryOp,
-  UnaryOp,
   getExpressionType,
   getConstValueI64Low,
   getConstValueF32,
@@ -213,7 +225,7 @@ export class Flow {
   static createInline(parentFunction: Function, inlineFunction: Function): Flow {
     var flow = Flow.create(parentFunction);
     flow.inlineFunction = inlineFunction;
-    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString(10);
+    flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
     flow.returnType = inlineFunction.signature.returnType;
     flow.contextualTypeArguments = inlineFunction.contextualTypeArguments;
     return flow;
@@ -228,7 +240,9 @@ export class Flow {
 
   /** Gets the actual function being compiled, The inlined function when inlining, otherwise the parent function. */
   get actualFunction(): Function {
-    return this.inlineFunction || this.parentFunction;
+    var inlineFunction = this.inlineFunction;
+    if (inlineFunction) return inlineFunction;
+    return this.parentFunction;
   }
 
   /** Tests if this flow has the specified flag or flags. */
@@ -281,7 +295,7 @@ export class Flow {
     }
     var local: Local;
     if (except) {
-      if (temps && temps.length) {
+      if (temps !== null && temps.length > 0) {
         for (let i = 0, k = temps.length; i < k; ++i) {
           if (!except.has(temps[i].index)) {
             local = temps[i];
@@ -297,8 +311,8 @@ export class Flow {
       }
       local = parentFunction.addLocal(type);
     } else {
-      if (temps && temps.length) {
-        local = temps.pop()!;
+      if (temps !== null && temps.length > 0) {
+        local = assert(temps.pop());
         local.type = type;
         local.flags = CommonFlags.NONE;
       } else {
@@ -315,7 +329,7 @@ export class Flow {
     local.set(CommonFlags.SCOPED);
     var scopedLocals = this.scopedLocals;
     if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
-    scopedLocals.set("~auto" + (this.parentFunction.nextAutoreleaseId++), local);
+    scopedLocals.set("~auto" + (this.parentFunction.nextAutoreleaseId++).toString(), local);
     this.setLocalFlag(local.index, LocalFlags.RETAINED);
     return local;
   }
@@ -329,31 +343,45 @@ export class Flow {
     assert(local.type != null); // internal error
     switch (local.type.toNativeType()) {
       case NativeType.I32: {
-        temps = parentFunction.tempI32s || (parentFunction.tempI32s = []);
+        let tempI32s = parentFunction.tempI32s;
+        if (tempI32s) temps = tempI32s;
+        else parentFunction.tempI32s = temps = [];
         break;
       }
       case NativeType.I64: {
-        temps = parentFunction.tempI64s || (parentFunction.tempI64s = []);
+        let tempI64s = parentFunction.tempI64s;
+        if (tempI64s) temps = tempI64s;
+        else parentFunction.tempI64s = temps = [];
         break;
       }
       case NativeType.F32: {
-        temps = parentFunction.tempF32s || (parentFunction.tempF32s = []);
+        let tempF32s = parentFunction.tempF32s;
+        if (tempF32s) temps = tempF32s;
+        else parentFunction.tempF32s = temps = [];
         break;
       }
       case NativeType.F64: {
-        temps = parentFunction.tempF64s || (parentFunction.tempF64s = []);
+        let tempF64s = parentFunction.tempF64s;
+        if (tempF64s) temps = tempF64s;
+        else parentFunction.tempF64s = temps = [];
         break;
       }
       case NativeType.V128: {
-        temps = parentFunction.tempV128s || (parentFunction.tempV128s = []);
+        let tempV128s = parentFunction.tempV128s;
+        if (tempV128s) temps = tempV128s;
+        else parentFunction.tempV128s = temps = [];
         break;
       }
       case NativeType.Anyref: {
-        temps = parentFunction.tempAnyrefs || (parentFunction.tempAnyrefs = []);
+        let tempAnyrefs = parentFunction.tempAnyrefs;
+        if (tempAnyrefs) temps = tempAnyrefs;
+        else parentFunction.tempAnyrefs = temps = [];
         break;
       }
       case NativeType.Exnref: {
-        temps = parentFunction.tempExnrefs || (parentFunction.tempExnrefs = []);
+        let tempExnrefs = parentFunction.tempExnrefs;
+        if (tempExnrefs) temps = tempExnrefs;
+        else parentFunction.tempExnrefs = temps = [];
         break;
       }
       default: throw new Error("concrete type expected");
@@ -365,7 +393,7 @@ export class Flow {
   /** Gets the scoped local of the specified name. */
   getScopedLocal(name: string): Local | null {
     var scopedLocals = this.scopedLocals;
-    if (scopedLocals && scopedLocals.has(name)) return scopedLocals.get(name)!;
+    if (scopedLocals !== null && scopedLocals.has(name)) return assert(scopedLocals.get(name));
     return null;
   }
 
@@ -413,9 +441,12 @@ export class Flow {
 
   /** Tests if this flow has any scoped locals that must be free'd. */
   get hasScopedLocals(): bool {
-    if (this.scopedLocals) {
-      for (let scopedLocal of this.scopedLocals.values()) {
-        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
+    var scopedLocals = this.scopedLocals;
+    if (scopedLocals) {
+      // TODO: for (let local of scopedLocals.values()) {
+      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
+        let local = unchecked(_values[i]);
+        if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
           return true;
         }
       }
@@ -425,10 +456,13 @@ export class Flow {
 
   /** Frees this flow's scoped variables and returns its parent flow. */
   freeScopedLocals(): void {
-    if (this.scopedLocals) {
-      for (let scopedLocal of this.scopedLocals.values()) {
-        if (scopedLocal.is(CommonFlags.SCOPED)) { // otherwise an alias
-          this.freeTempLocal(scopedLocal);
+    var scopedLocals = this.scopedLocals;
+    if (scopedLocals) {
+      // TODO: for (let local of scopedLocals.values()) {
+      for (let _values = Map_values(scopedLocals), i = 0, k = _values.length; i < k; ++i) {
+        let local = unchecked(_values[i]);
+        if (local.is(CommonFlags.SCOPED)) { // otherwise an alias
+          this.freeTempLocal(local);
         }
       }
       this.scopedLocals = null;
@@ -438,10 +472,14 @@ export class Flow {
   /** Looks up the local of the specified name in the current scope. */
   lookupLocal(name: string): Local | null {
     var current: Flow | null = this;
-    var scope: Map<String,Local> | null;
-    do if ((scope = current.scopedLocals) && scope.has(name)) return scope.get(name)!;
-    while (current = current.parent);
-    return this.parentFunction.localsByName.get(name)!;
+    do {
+      let scope = current.scopedLocals;
+      if (scope !== null && scope.has(name)) return assert(scope.get(name));
+      current = current.parent;
+    } while (current);
+    var localsByName = this.parentFunction.localsByName;
+    if (localsByName.has(name)) return assert(localsByName.get(name));
+    return null;
   }
 
   /** Looks up the element with the specified name relative to the scope of this flow. */
@@ -488,7 +526,9 @@ export class Flow {
     var stack = parentFunction.breakStack;
     if (!stack) parentFunction.breakStack = [ id ];
     else stack.push(id);
-    return parentFunction.breakLabel = id.toString(10);
+    var label = id.toString();
+    parentFunction.breakLabel = label;
+    return label;
   }
 
   /** Pops the most recent break label from the stack. */
@@ -498,7 +538,7 @@ export class Flow {
     var length = assert(stack.length);
     stack.pop();
     if (length > 1) {
-      parentFunction.breakLabel = stack[length - 2].toString(10);
+      parentFunction.breakLabel = stack[length - 2].toString();
     } else {
       parentFunction.breakLabel = null;
       parentFunction.breakStack = null;
@@ -927,11 +967,9 @@ export class Flow {
       case ExpressionId.Call: {
         let name = getCallTarget(expr);
         let program = this.parentFunction.program;
-        switch (name) {
-          case program.retainInstance.internalName: {
-            this.inheritNonnullIfTrue(getCallOperand(expr, 0), iff);
-            break;
-          }
+        if (name == program.retainInstance.internalName) {
+          // __retain just passes through the argument
+          this.inheritNonnullIfTrue(getCallOperand(expr, 0), iff);
         }
         break;
       }
@@ -1057,7 +1095,7 @@ export class Flow {
       // overflows if the conversion does (globals are wrapped on set)
       case ExpressionId.GlobalGet: {
         // TODO: this is inefficient because it has to read a string
-        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr)))!);
+        let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
         assert(global.kind == ElementKind.GLOBAL);
         return canConversionOverflow(assert((<Global>global).type), type);
       }
@@ -1212,10 +1250,10 @@ export class Flow {
           default: assert(false);
         }
         switch (type.kind) {
-          case TypeKind.I8: return value < i8.MIN_VALUE || value > i8.MAX_VALUE;
-          case TypeKind.I16: return value < i16.MIN_VALUE || value > i16.MAX_VALUE;
-          case TypeKind.U8: return value < 0 || value > u8.MAX_VALUE;
-          case TypeKind.U16: return value < 0 || value > u16.MAX_VALUE;
+          case TypeKind.I8: return value < <i32>i8.MIN_VALUE || value > <i32>i8.MAX_VALUE;
+          case TypeKind.I16: return value < <i32>i16.MIN_VALUE || value > <i32>i16.MAX_VALUE;
+          case TypeKind.U8: return value < 0 || value > <i32>u8.MAX_VALUE;
+          case TypeKind.U16: return value < 0 || value > <i32>u16.MAX_VALUE;
           case TypeKind.BOOL: return (value & ~1) != 0;
         }
         break;
@@ -1263,7 +1301,7 @@ export class Flow {
         let instancesByName = program.instancesByName;
         let instanceName = assert(getCallTarget(expr));
         if (instancesByName.has(instanceName)) {
-          let instance = instancesByName.get(instanceName)!;
+          let instance = assert(instancesByName.get(instanceName));
           assert(instance.kind == ElementKind.FUNCTION);
           let returnType = (<Function>instance).signature.returnType;
           return !(<Function>instance).flow.is(FlowFlags.RETURNS_WRAPPED)
@@ -1300,7 +1338,7 @@ export class Flow {
     if (this.is(FlowFlags.CONDITIONALLY_BREAKS)) sb.push("CONDITIONALLY_BREAKS");
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
     if (this.is(FlowFlags.CONDITIONALLY_ALLOCATES)) sb.push("CONDITIONALLY_ALLOCATES");
-    return "Flow(" + this.actualFunction + ")[" + levels.toString() + "] " + sb.join(" ");
+    return "Flow(" + this.actualFunction.toString() + ")[" + levels.toString() + "] " + sb.join(" ");
   }
 }
 
@@ -1312,7 +1350,7 @@ function canConversionOverflow(fromType: Type, toType: Type): bool {
 }
 
 /** Finds all indexes of locals used in the specified expression. */
-export function findUsedLocals(expr: ExpressionRef, used: Set<i32> = new Set()): Set<i32> {
+export function findUsedLocals(expr: ExpressionRef, used: Set<i32> = new Set<i32>()): Set<i32> {
   traverse(expr, used, findUsedLocalsVisit);
   return used;
 }

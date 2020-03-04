@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Command line options utility.
+ * @license Apache-2.0
+ */
+
 const colorsUtil = require("./colors");
 
 // type | meaning

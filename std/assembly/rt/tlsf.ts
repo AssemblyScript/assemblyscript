@@ -19,12 +19,12 @@ import { REFCOUNT_MASK } from "./pure";
 // @ts-ignore: decorator
 @inline const SL_BITS: u32 = 4;
 // @ts-ignore: decorator
-@inline const SL_SIZE: usize = 1 << <usize>SL_BITS;
+@inline const SL_SIZE: u32 = 1 << SL_BITS;
 
 // @ts-ignore: decorator
-@inline const SB_BITS: usize = <usize>(SL_BITS + AL_BITS);
+@inline const SB_BITS: u32 = SL_BITS + AL_BITS;
 // @ts-ignore: decorator
-@inline const SB_SIZE: usize = 1 << <usize>SB_BITS;
+@inline const SB_SIZE: u32 = 1 << SB_BITS;
 
 // @ts-ignore: decorator
 @inline const FL_BITS: u32 = 31 - SB_BITS;
@@ -130,15 +130,15 @@ import { REFCOUNT_MASK } from "./pure";
 // Root constants. Where stuff is stored inside of the root structure.
 
 // @ts-ignore: decorator
-@inline const SL_START = sizeof<usize>();
+@inline const SL_START: usize = sizeof<usize>();
 // @ts-ignore: decorator
-@inline const SL_END = SL_START + (FL_BITS << alignof<u32>());
+@inline const SL_END: usize = SL_START + (FL_BITS << alignof<u32>());
 // @ts-ignore: decorator
-@inline const HL_START = (SL_END + AL_MASK) & ~AL_MASK;
+@inline const HL_START: usize = (SL_END + AL_MASK) & ~AL_MASK;
 // @ts-ignore: decorator
-@inline const HL_END = HL_START + FL_BITS * SL_SIZE * sizeof<usize>();
+@inline const HL_END: usize = HL_START + FL_BITS * SL_SIZE * sizeof<usize>();
 // @ts-ignore: decorator
-@inline const ROOT_SIZE = HL_END + sizeof<usize>();
+@inline const ROOT_SIZE: usize = HL_END + sizeof<usize>();
 
 // @ts-ignore: decorator
 @lazy export var ROOT: Root;
@@ -510,7 +510,7 @@ export function allocateBlock(root: Root, size: usize, id: u32): Block {
   if (DEBUG) assert((block.mmInfo & ~TAGS_MASK) >= payloadSize); // must fit
   block.gcInfo = 0; // RC=0
   block.rtId = id;
-  block.rtSize = size;
+  block.rtSize = <u32>size;
   removeBlock(root, <Block>block);
   prepareBlock(root, <Block>block, payloadSize);
   if (isDefined(ASC_RTRACE)) onalloc(<Block>block);
@@ -525,7 +525,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
   // possibly split and update runtime size if it still fits
   if (payloadSize <= (blockInfo & ~TAGS_MASK)) {
     prepareBlock(root, block, payloadSize);
-    block.rtSize = size;
+    block.rtSize = <u32>size;
     return block;
   }
 
@@ -539,7 +539,7 @@ export function reallocateBlock(root: Root, block: Block, size: usize): Block {
       // TODO: this can yield an intermediate block larger than BLOCK_MAXSIZE, which
       // is immediately split though. does this trigger any assertions / issues?
       block.mmInfo = (blockInfo & TAGS_MASK) | mergeSize;
-      block.rtSize = size;
+      block.rtSize = <u32>size;
       prepareBlock(root, block, payloadSize);
       return block;
     }

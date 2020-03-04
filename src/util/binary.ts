@@ -1,4 +1,7 @@
-/** @module util *//***/
+/**
+ * @fileoverview Various binary reading and writing utility.
+ * @license Apache-2.0
+ */
 
 /** Reads an 8-bit integer from the specified buffer. */
 export function readI8(buffer: Uint8Array, offset: i32): i32 {
@@ -39,14 +42,14 @@ export function writeI32(value: i32, buffer: Uint8Array, offset: i32): void {
 }
 
 /** Reads a 64-bit integer from the specified buffer. */
-export function readI64(buffer: Uint8Array, offset: i32): I64 {
+export function readI64(buffer: Uint8Array, offset: i32): i64 {
   var lo = readI32(buffer, offset);
   var hi = readI32(buffer, offset + 4);
   return i64_new(lo, hi);
 }
 
 /** Writes a 64-bit integer to the specified buffer. */
-export function writeI64(value: I64, buffer: Uint8Array, offset: i32): void {
+export function writeI64(value: i64, buffer: Uint8Array, offset: i32): void {
   writeI32(i64_low(value), buffer, offset);
   writeI32(i64_high(value), buffer, offset + 4);
 }

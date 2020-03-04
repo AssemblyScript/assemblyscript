@@ -1,6 +1,24 @@
-"use strict";
 /**
- * Compiler frontend for node.js
+ * @license
+ * Copyright 2020 Daniel Wirtz / The AssemblyScript Authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Compiler frontend for node.js
  *
  * Uses the low-level API exported from src/index.ts so it works with the compiler compiled to
  * JavaScript as well as the compiler compiled to WebAssembly (eventually). Runs the sources
@@ -8,8 +26,6 @@
  *
  * Can also be packaged as a bundle suitable for in-browser use with the standard library injected
  * in the build step. See dist/asc.js for the bundle and webpack.config.js for building details.
- *
- * @module cli/asc
  */
 
 // Use "." instead of "/" as cwd in browsers
@@ -390,7 +406,8 @@ exports.main = function main(argv, options, callback) {
       if ((sourceText = readFile(sourcePath = internalPath + ".ts", baseDir)) == null) {
         if ((sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir)) == null) {
           // portable d.ts: uses the .js file next to it in JS or becomes an import in Wasm
-          sourceText = readFile(sourcePath = internalPath + ".d.ts", baseDir);
+          sourcePath = internalPath + ".ts";
+          sourceText = readFile(internalPath + ".d.ts", baseDir);
         }
       }
 
@@ -478,13 +495,16 @@ exports.main = function main(argv, options, callback) {
     var internalPath;
     while ((internalPath = assemblyscript.nextFile(program)) != null) {
       let file = getFile(internalPath, assemblyscript.getDependee(program, internalPath));
-      if (!file) return callback(Error("Import file '" + internalPath + ".ts' not found."))
+      if (!file) return callback(Error("Import '" + internalPath + "' not found."))
       stats.parseCount++;
       stats.parseTime += measure(() => {
         assemblyscript.parse(program, file.sourceText, file.sourcePath, false);
       });
     }
-    if (checkDiagnostics(program, stderr)) return callback(Error("Parse error"));
+    var numErrors = checkDiagnostics(program, stderr);
+    if (numErrors) {
+      return callback(Error(numErrors + " parse error(s)"));
+    }
   }
 
   // Include runtime template before entry files so its setup runs first
@@ -570,6 +590,20 @@ exports.main = function main(argv, options, callback) {
   optimizeLevel = Math.min(Math.max(optimizeLevel, 0), 3);
   shrinkLevel = Math.min(Math.max(shrinkLevel, 0), 2);
 
+  try {
+    stats.compileTime += measure(() => {
+      assemblyscript.initializeProgram(program, compilerOptions);
+    });
+  } catch(e) {
+    return callback(e);
+  }
+
+  // Call afterInitialize transform hook
+  {
+    let error = applyTransform("afterInitialize", program);
+    if (error) return callback(error);
+  }
+
   var module;
   stats.compileCount++;
   try {
@@ -579,9 +613,10 @@ exports.main = function main(argv, options, callback) {
   } catch (e) {
     return callback(e);
   }
-  if (checkDiagnostics(program, stderr)) {
+  var numErrors = checkDiagnostics(program, stderr);
+  if (numErrors) {
     if (module) module.dispose();
-    return callback(Error("Compile error"));
+    return callback(Error(numErrors + " compile error(s)"));
   }
 
   // Call afterCompile transform hook
@@ -1023,7 +1058,7 @@ exports.main = function main(argv, options, callback) {
 /** Checks diagnostics emitted so far for errors. */
 function checkDiagnostics(program, stderr) {
   var diagnostic;
-  var hasErrors = false;
+  var numErrors = 0;
   while ((diagnostic = assemblyscript.nextDiagnostic(program)) != null) {
     if (stderr) {
       stderr.write(
@@ -1031,9 +1066,9 @@ function checkDiagnostics(program, stderr) {
         EOL + EOL
       );
     }
-    if (assemblyscript.isError(diagnostic)) hasErrors = true;
+    if (assemblyscript.isError(diagnostic)) ++numErrors;
   }
-  return hasErrors;
+  return numErrors;
 }
 
 exports.checkDiagnostics = checkDiagnostics;
