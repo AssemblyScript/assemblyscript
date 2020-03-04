@@ -3004,7 +3004,7 @@ export namespace NativeMathf {
 export function ipow32(x: i32, e: i32): i32 {
   var out = 1;
   if (ASC_SHRINK_LEVEL < 1) {
-    if (e <= 0) return i64(e == 0);
+    if (e <= 0) return i32(e == 0);
     if (e == 1) return x;
     if (e == 2) return x * x;
 

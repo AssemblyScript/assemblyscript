@@ -4630,7 +4630,7 @@ export class Compiler extends DiagnosticEmitter {
           instance  = this.i32PowInstance;
 
           if (!instance) {
-            let prototype = this.program.lookupGlobal(CommonNames.ipow64);
+            let prototype = this.program.lookupGlobal(CommonNames.ipow32);
             if (!prototype) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
