@@ -3941,3 +3941,6 @@ assert((<u64> 2) ** 3 == 8 as u64);
 assert((<u64>0xFFFFFFFF) ** 3 == 12884901887 as u64);
 assert((<u64>0xFFFF) ** 3 == 281462092005375 as u64);
 assert((<u64>0xFFFF) ** 8 == 18430981595272314881 as u64);
+// should be 1473408887, 9161353
+trace('', 2, <f64><u32>(57055 as u64 ** 3 + 339590 as u64 ** 3), <f64><u32>((57055 as u64 ** 3 + 339590 as u64 ** 3) >>> 32));
+// assert(57055 as u64 ** 3 + 339590 as u64 ** 3 == 340126 as u64 ** 3); // Fermat's Last Theorem
