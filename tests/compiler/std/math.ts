@@ -3925,7 +3925,7 @@ assert(ipow64(3,  63) == -3237885987332494933); // should overflow
 assert(ipow64(3,  64) ==  8733086111712066817); // should overflow
 assert(ipow64(3, 128) == -9204772141784466943); // should overflow
 
-assert(ipow64(57055, 3) + ipow64(339590, 3) == 39347712995520375); // add Buterin's twit example
+assert(ipow64(57055, 3) + ipow64(339590, 3) == 39347712995520375);
 
 // integer pow operators
 
@@ -3941,6 +3941,6 @@ assert((<u64> 2) ** 3 == 8 as u64);
 assert((<u64>0xFFFFFFFF) ** 3 == 12884901887 as u64);
 assert((<u64>0xFFFF) ** 3 == 281462092005375 as u64);
 assert((<u64>0xFFFF) ** 8 == 18430981595272314881 as u64);
-// should be 1473408887, 9161353
-trace('', 2, <f64><u32>(57055 as u64 ** 3 + 339590 as u64 ** 3), <f64><u32>((57055 as u64 ** 3 + 339590 as u64 ** 3) >>> 32));
-// assert(57055 as u64 ** 3 + 339590 as u64 ** 3 == 340126 as u64 ** 3); // Fermat's Last Theorem
+// Fermat's Last Theorem
+assert((<u64>57055) ** 3 + (<u64>339590) ** 3 != (<u64>340126) ** 3); // On JS it return false
+assert((<u64>57055) ** 3 + (<u64>339590) ** 3 == 39347712995520375);
