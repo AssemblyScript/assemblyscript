@@ -1,5 +1,6 @@
 (module
  (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $f32_=>_f32 (func (param f32) (result f32)))
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (memory $0 1)
@@ -12,7 +13,39 @@
  (global $binary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/math/NativeMathf.mod (; 0 ;) (param $0 f32) (result f32)
+ (func $~lib/math/ipow32 (; 0 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 1
+  local.set $1
+  i32.const 1
+  local.set $2
+  loop $while-continue|0
+   local.get $1
+   if
+    local.get $0
+    local.get $2
+    i32.mul
+    local.get $2
+    local.get $1
+    i32.const 1
+    i32.and
+    select
+    local.set $2
+    local.get $1
+    i32.const 1
+    i32.shr_u
+    local.set $1
+    local.get $0
+    local.get $0
+    i32.mul
+    local.set $0
+    br $while-continue|0
+   end
+  end
+  local.get $2
+ )
+ (func $~lib/math/NativeMathf.mod (; 1 ;) (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -156,7 +189,7 @@
   local.get $0
   f32.mul
  )
- (func $~lib/math/NativeMath.mod (; 1 ;) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (; 2 ;) (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -307,10 +340,13 @@
   local.get $0
   f64.mul
  )
- (func $start:binary (; 2 ;)
+ (func $start:binary (; 3 ;)
   global.get $binary/i
   i32.const 1
   i32.rem_s
+  drop
+  global.get $binary/i
+  call $~lib/math/ipow32
   drop
   global.get $binary/i
   i32.const 1
@@ -349,8 +385,7 @@
   i32.rem_s
   global.set $binary/i
   global.get $binary/i
-  f64.convert_i32_s
-  i32.trunc_f64_s
+  call $~lib/math/ipow32
   global.set $binary/i
   global.get $binary/i
   i32.const 1
@@ -615,7 +650,7 @@
   call $~lib/math/NativeMath.mod
   global.set $binary/F
  )
- (func $~start (; 3 ;)
+ (func $~start (; 4 ;)
   call $start:binary
  )
 )

@@ -3234,8 +3234,6 @@
   local.set $2
   loop $while-continue|0
    local.get $0
-   i32.const 0
-   i32.gt_s
    if
     local.get $1
     local.get $2
@@ -3248,7 +3246,7 @@
     local.set $2
     local.get $0
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.set $0
     local.get $1
     local.get $1
