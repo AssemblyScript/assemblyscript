@@ -3015,22 +3015,22 @@ export function ipow32(x: i32, e: i32): i32 {
       switch (log) {
         case 5: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 4: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 3: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 2: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 1: {
@@ -3041,9 +3041,9 @@ export function ipow32(x: i32, e: i32): i32 {
     }
   }
 
-  while (e > 0) {
+  while (e) {
     if (e & 1) out *= x;
-    e >>= 1;
+    e >>>= 1;
     x *= x;
   }
   return out;
@@ -3063,27 +3063,27 @@ export function ipow64(x: i64, e: i64): i64 {
       switch (log) {
         case 6: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 5: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 4: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 3: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 2: {
           if (e & 1) out *= x;
-          e >>= 1;
+          e >>>= 1;
           x *= x;
         }
         case 1: {
@@ -3093,10 +3093,9 @@ export function ipow64(x: i64, e: i64): i64 {
       return out;
     }
   }
-
-  while (e > 0) {
+  while (e) {
     if (e & 1) out *= x;
-    e >>= 1;
+    e >>>= 1;
     x *= x;
   }
   return out;

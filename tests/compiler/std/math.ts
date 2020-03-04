@@ -3933,3 +3933,11 @@ assert(  0  ** 0 ==  1);
 assert(  0  ** 1 ==  0);
 assert(  1  ** 3 ==  1);
 assert((-2) ** 3 == -8);
+
+assert((<u64> 0) ** 0 == 1 as u64);
+assert((<u64> 0) ** 1 == 0 as u64);
+assert((<u64> 1) ** 3 == 1 as u64);
+assert((<u64> 2) ** 3 == 8 as u64);
+assert((<u64>0xFFFFFFFF) ** 3 == 12884901887 as u64);
+assert((<u64>0xFFFF) ** 3 == 281462092005375 as u64);
+assert((<u64>0xFFFF) ** 8 == 18430981595272314881 as u64);

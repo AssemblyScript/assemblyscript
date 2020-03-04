@@ -11438,7 +11438,7 @@
   loop $while-continue|0
    local.get $1
    i64.const 0
-   i64.gt_s
+   i64.ne
    if
     local.get $0
     local.get $2
@@ -11453,7 +11453,7 @@
     local.set $2
     local.get $1
     i64.const 1
-    i64.shr_s
+    i64.shr_u
     local.set $1
     local.get $0
     local.get $0
@@ -11476,8 +11476,6 @@
   local.set $2
   loop $while-continue|0
    local.get $0
-   i32.const 0
-   i32.gt_s
    if
     local.get $1
     local.get $2
@@ -11490,7 +11488,7 @@
     local.set $2
     local.get $0
     i32.const 1
-    i32.shr_s
+    i32.shr_u
     local.set $0
     local.get $1
     local.get $1
@@ -46825,6 +46823,97 @@
    i32.const 0
    i32.const 32
    i32.const 3935
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 0
+  i64.const 0
+  call $~lib/math/ipow64
+  i64.const 1
+  i64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3937
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 0
+  i64.const 1
+  call $~lib/math/ipow64
+  i64.eqz
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3938
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 1
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 1
+  i64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3939
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 2
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 8
+  i64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3940
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 4294967295
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 12884901887
+  i64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3941
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 65535
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 281462092005375
+  i64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3942
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 65535
+  i64.const 8
+  call $~lib/math/ipow64
+  i64.const -15762478437236735
+  i64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3943
    i32.const 0
    call $~lib/builtins/abort
    unreachable
