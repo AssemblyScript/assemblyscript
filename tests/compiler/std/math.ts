@@ -3934,13 +3934,13 @@ assert(  0  ** 1 ==  0);
 assert(  1  ** 3 ==  1);
 assert((-2) ** 3 == -8);
 
-assert((<u64> 0) ** 0 == 1 as u64);
-assert((<u64> 0) ** 1 == 0 as u64);
-assert((<u64> 1) ** 3 == 1 as u64);
-assert((<u64> 2) ** 3 == 8 as u64);
-assert((<u64>0xFFFFFFFF) ** 3 == 12884901887 as u64);
-assert((<u64>0xFFFF) ** 3 == 281462092005375 as u64);
-assert((<u64>0xFFFF) ** 8 == 18430981595272314881 as u64);
+assert((<u64>0) ** 0 == 1);
+assert((<u64>0) ** 1 == 0);
+assert((<u64>1) ** 3 == 1);
+assert((<u64>2) ** 3 == 8);
+assert((<u64>0xFFFFFFFF) ** 3 == 12884901887);
+assert((<u64>0xFFFF) ** 3 == 281462092005375);
+assert((<u64>0xFFFF) ** 8 == 18430981595272314881);
 // Fermat's Last Theorem
 assert((<u64>57055) ** 3 + (<u64>339590) ** 3 != (<u64>340126) ** 3); // On JS it return false
 assert((<u64>57055) ** 3 + (<u64>339590) ** 3 == 39347712995520375);
