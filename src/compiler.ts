@@ -4619,6 +4619,37 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.unreachable();
         }
 
+        if (compound) {
+          leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
+          rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
+          rightType = this.currentType;
+        } else {
+          rightExpr = this.compileExpression(right, leftType);
+          rightType = this.currentType;
+          commonType = Type.commonDenominator(leftType, rightType, false);
+          if (commonType) {
+            leftExpr = this.convertExpression(leftExpr,
+              leftType, commonType,
+              false, true, // !
+              left
+            );
+            leftType = commonType;
+            rightExpr = this.convertExpression(rightExpr,
+              rightType, commonType,
+              false, true, // !
+              right
+            );
+            rightType = commonType;
+          } else {
+            this.error(
+              DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
+              expression.range, "%", leftType.toString(), rightType.toString()
+            );
+            this.currentType = contextualType;
+            return module.unreachable();
+          }
+        }
+
         let targetType = leftType;
         let instance: Function | null;
         let currentTypeKind = this.currentType.kind;
@@ -4636,6 +4667,12 @@ export class Compiler extends DiagnosticEmitter {
           // )
         ) {
           let type = this.currentType.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32;
+          leftExpr = this.convertExpression(leftExpr,
+            this.currentType, type,
+            false, false,
+            left
+          );
+          leftType  = this.currentType;
           rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
           instance  = this.i32PowInstance;
@@ -4747,10 +4784,10 @@ export class Compiler extends DiagnosticEmitter {
           expr = module.unreachable();
         } else {
           expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-          if (compound && targetType != this.currentType) {
-            // this yields a proper error if target is i32 for example
-            expr = this.convertExpression(expr, this.currentType, targetType, false, false, expression);
-          }
+          // if (compound && targetType != this.currentType) {
+          //   // this yields a proper error if target is i32 for example
+          //   expr = this.convertExpression(expr, this.currentType, targetType, false, false, expression);
+          // }
         }
         break;
       }
