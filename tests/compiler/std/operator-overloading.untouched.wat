@@ -355,39 +355,39 @@
   i32.const 1
   local.set $2
   local.get $1
-  i32.const 0
-  i32.le_s
+  i32.const 32
+  i32.lt_s
   if
    local.get $1
    i32.const 0
+   i32.le_s
+   if
+    local.get $1
+    i32.const 0
+    i32.eq
+    return
+   end
+   local.get $1
+   i32.const 1
    i32.eq
-   return
-  end
-  local.get $1
-  i32.const 1
-  i32.eq
-  if
-   local.get $0
-   return
-  end
-  local.get $1
-  i32.const 2
-  i32.eq
-  if
-   local.get $0
-   local.get $0
-   i32.mul
-   return
-  end
-  i32.const 32
-  local.get $1
-  i32.clz
-  i32.sub
-  local.set $3
-  local.get $3
-  i32.const 5
-  i32.le_s
-  if
+   if
+    local.get $0
+    return
+   end
+   local.get $1
+   i32.const 2
+   i32.eq
+   if
+    local.get $0
+    local.get $0
+    i32.mul
+    return
+   end
+   i32.const 32
+   local.get $1
+   i32.clz
+   i32.sub
+   local.set $3
    block $break|0
     block $case4|0
      block $case3|0

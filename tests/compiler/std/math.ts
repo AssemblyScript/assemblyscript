@@ -3917,6 +3917,8 @@ assert(ipow64(-2, 1) == -2);
 assert(ipow64(-2, 2) ==  4);
 assert(ipow64(-2, 3) == -8);
 
+assert(ipow64(2,  63) ==  9223372036854775808);
+assert(ipow64(2,  64) ==  0);                   // should overflow
 assert(ipow64(3,  40) ==  12157665459056928801);
 assert(ipow64(3,  41) == -420491770248316829);  // should overflow
 assert(ipow64(3,  42) == -1261475310744950487); // should overflow
