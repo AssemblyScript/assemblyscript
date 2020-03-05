@@ -46918,6 +46918,32 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i64.const 65535
+  i64.const 8
+  call $~lib/math/ipow64
+  i64.const -15762478437236735
+  i64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3944
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i64.const 65535
+  i64.const 8
+  call $~lib/math/ipow64
+  i64.const -15762478437236735
+  i64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3945
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   i64.const 57055
   i64.const 3
   call $~lib/math/ipow64
@@ -46932,7 +46958,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 3945
+   i32.const 3947
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46949,7 +46975,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 3946
+   i32.const 3948
    i32.const 0
    call $~lib/builtins/abort
    unreachable
