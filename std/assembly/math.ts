@@ -3040,7 +3040,6 @@ export function ipow32(x: i32, e: i32): i32 {
       return out;
     }
   }
-
   while (e) {
     if (e & 1) out *= x;
     e >>>= 1;
