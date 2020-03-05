@@ -3936,6 +3936,12 @@ assert(  0  ** 1 ==  0);
 assert(  1  ** 3 ==  1);
 assert((-2) ** 3 == -8);
 
+assert((<i8> 1) ** 3 ==  1);
+assert((<i8>-2) ** 3 == -8);
+assert((<u16>4) ** 7 ==  16384);
+assert((<u16>4) ** 8 ==  65536);
+// assert((<u16>4) ** 9 ==  0); // should overflow
+
 assert((<u64>0) ** 0 == 1);
 assert((<u64>0) ** 1 == 0);
 assert((<u64>1) ** 3 == 1);
