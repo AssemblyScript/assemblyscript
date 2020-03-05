@@ -8,7 +8,8 @@
     "asbuild:asmjs": "asc assembly/index.ts -a build/index.asm.js -O3 --validate --runtime none --noAssert && node scripts/postprocess-asmjs",
     "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized && npm run asbuild:asmjs",
     "tsbuild": "tsc -p assembly -t ES2017 -m commonjs --outDir build",
-    "build": "npm run asbuild && npm run tsbuild",
+    "rsbuild": "cd rust && RUSTFLAGS='-C link-arg=-s' cargo +nightly build --release",
+    "build": "npm run asbuild && npm run tsbuild && npm run rsbuild",
     "server": "http-server . -o -c-1",
     "test": "node --wasm-no-bounds-checks --wasm-no-stack-checks --expose-gc tests"
   },
