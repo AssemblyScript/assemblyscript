@@ -46918,10 +46918,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 65535
-  i64.const 8
+  i64.const 61731
+  i64.const 4
   call $~lib/math/ipow64
-  i64.const -15762478437236735
+  i64.const -3925184889716469295
   i64.ne
   if
    i32.const 0
@@ -46931,10 +46931,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i64.const 65535
-  i64.const 8
+  i64.const 61731
+  i64.const 4
   call $~lib/math/ipow64
-  i64.const -15762478437236735
+  i64.const -3925184889716469295
   i64.ne
   if
    i32.const 0
