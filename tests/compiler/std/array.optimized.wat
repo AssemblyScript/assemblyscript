@@ -1566,7 +1566,7 @@
   local.tee $3
   i32.const 0
   call $~lib/rt/tlsf/__alloc
-  local.tee $1
+  local.tee $2
   i32.const 0
   local.get $3
   call $~lib/memory/memory.fill
@@ -1588,25 +1588,24 @@
   local.get $0
   i32.const 0
   i32.store offset=8
-  local.get $1
-  local.set $2
-  local.get $1
+  local.get $2
+  local.tee $1
   local.get $0
   i32.load
   local.tee $4
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $4
    call $~lib/rt/pure/__release
   end
   local.get $0
-  local.get $2
+  local.get $1
   i32.store
   local.get $0
-  local.get $1
+  local.get $2
   i32.store offset=4
   local.get $0
   local.get $3
@@ -2463,6 +2462,7 @@
  (func $~lib/array/Array<i32>#copyWithin (; 38 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   local.get $3
   local.get $0
   i32.load offset=12
@@ -2471,10 +2471,10 @@
   local.get $4
   i32.lt_s
   select
-  local.set $3
+  local.set $5
   local.get $0
   i32.load offset=4
-  local.tee $5
+  local.tee $3
   local.get $1
   i32.const 0
   i32.lt_s
@@ -2496,17 +2496,42 @@
    i32.lt_s
    select
   end
-  local.tee $1
+  local.tee $6
   i32.const 2
   i32.shl
   i32.add
-  local.get $5
+  local.get $3
   local.get $2
   i32.const 0
   i32.lt_s
   if (result i32)
    local.get $2
    local.get $4
+   i32.add
+   local.tee $1
+   i32.const 0
+   local.get $1
+   i32.const 0
+   i32.gt_s
+   select
+  else
+   local.get $2
+   local.get $4
+   local.get $2
+   local.get $4
+   i32.lt_s
+   select
+  end
+  local.tee $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $5
+  i32.const 0
+  i32.lt_s
+  if (result i32)
+   local.get $4
+   local.get $5
    i32.add
    local.tee $2
    i32.const 0
@@ -2515,47 +2540,22 @@
    i32.gt_s
    select
   else
-   local.get $2
+   local.get $5
    local.get $4
-   local.get $2
-   local.get $4
-   i32.lt_s
-   select
-  end
-  local.tee $2
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $3
-  i32.const 0
-  i32.lt_s
-  if (result i32)
-   local.get $3
-   local.get $4
-   i32.add
-   local.tee $3
-   i32.const 0
-   local.get $3
-   i32.const 0
-   i32.gt_s
-   select
-  else
-   local.get $3
-   local.get $4
-   local.get $3
+   local.get $5
    local.get $4
    i32.lt_s
    select
   end
-  local.get $2
-  i32.sub
-  local.tee $2
-  local.get $4
   local.get $1
   i32.sub
   local.tee $1
-  local.get $2
+  local.get $4
+  local.get $6
+  i32.sub
+  local.tee $2
   local.get $1
+  local.get $2
   i32.lt_s
   select
   i32.const 2
@@ -2667,15 +2667,16 @@
   (local $5 i32)
   (local $6 i32)
   local.get $2
+  local.tee $3
   local.get $0
   i32.load offset=12
-  local.tee $3
+  local.tee $4
   local.get $1
   i32.const 0
   i32.lt_s
   if (result i32)
    local.get $1
-   local.get $3
+   local.get $4
    i32.add
    local.tee $1
    i32.const 0
@@ -2685,17 +2686,17 @@
    select
   else
    local.get $1
-   local.get $3
+   local.get $4
    local.get $1
-   local.get $3
+   local.get $4
    i32.lt_s
    select
   end
   local.tee $1
   i32.sub
-  local.tee $4
+  local.tee $2
+  local.get $3
   local.get $2
-  local.get $4
   i32.lt_s
   select
   local.tee $2
@@ -2710,7 +2711,7 @@
   i32.const 0
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $4
+  local.tee $3
   i32.load offset=4
   local.get $0
   i32.load offset=4
@@ -2724,7 +2725,7 @@
   i32.const 2
   i32.shl
   call $~lib/memory/memory.copy
-  local.get $3
+  local.get $4
   local.get $1
   local.get $2
   i32.add
@@ -2737,7 +2738,7 @@
    i32.const 2
    i32.shl
    i32.add
-   local.get $3
+   local.get $4
    local.get $1
    i32.sub
    i32.const 2
@@ -2745,11 +2746,11 @@
    call $~lib/memory/memory.copy
   end
   local.get $0
-  local.get $3
+  local.get $4
   local.get $2
   i32.sub
   i32.store offset=12
-  local.get $4
+  local.get $3
  )
  (func $~lib/array/Array<std/array/Ref>#splice (; 43 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -7214,7 +7215,7 @@
   local.tee $9
   i32.const 0
   i32.ne
-  local.tee $4
+  local.tee $7
   i64.extend_i32_u
   i64.const 52
   i64.shl
@@ -7228,23 +7229,24 @@
   i64.const 1
   i64.add
   local.tee $3
-  local.get $3
   i64.clz
   i32.wrap_i64
-  local.tee $7
+  local.set $4
+  local.get $3
+  local.get $4
   i64.extend_i32_s
   i64.shl
   global.set $~lib/util/number/_frc_plus
   local.get $9
   i32.const 1
-  local.get $4
+  local.get $7
   select
   i32.const 1075
   i32.sub
   local.tee $9
   i32.const 1
   i32.sub
-  local.get $7
+  local.get $4
   i32.sub
   local.set $4
   local.get $2
@@ -7430,11 +7432,11 @@
   i64.shr_u
   local.tee $5
   i64.mul
+  local.get $6
   local.get $3
   i64.const 4294967295
   i64.and
   local.tee $3
-  local.get $6
   i64.mul
   local.get $2
   i64.const 4294967295

@@ -1451,11 +1451,11 @@
     local.get $2
     if
      local.get $5
+     local.get $4
      local.get $2
      i32.const 1
      i32.shr_u
      local.tee $3
-     local.get $4
      i32.add
      i32.const 1
      i32.shl
@@ -2456,9 +2456,9 @@
          block $~lib/util/string/isFinalSigma|inlined.0 (result i32)
           local.get $0
           local.set $4
-          local.get $6
           i32.const 0
           local.set $10
+          local.get $6
           i32.const 0
           local.get $6
           local.tee $2

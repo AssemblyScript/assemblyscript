@@ -6535,7 +6535,7 @@
   local.tee $9
   i32.const 0
   i32.ne
-  local.tee $4
+  local.tee $7
   i64.extend_i32_u
   i64.const 52
   i64.shl
@@ -6549,23 +6549,24 @@
   i64.const 1
   i64.add
   local.tee $3
-  local.get $3
   i64.clz
   i32.wrap_i64
-  local.tee $7
+  local.set $4
+  local.get $3
+  local.get $4
   i64.extend_i32_s
   i64.shl
   global.set $~lib/util/number/_frc_plus
   local.get $9
   i32.const 1
-  local.get $4
+  local.get $7
   select
   i32.const 1075
   i32.sub
   local.tee $9
   i32.const 1
   i32.sub
-  local.get $7
+  local.get $4
   i32.sub
   local.set $4
   local.get $2
@@ -6751,11 +6752,11 @@
   i64.shr_u
   local.tee $5
   i64.mul
+  local.get $6
   local.get $3
   i64.const 4294967295
   i64.and
   local.tee $3
-  local.get $6
   i64.mul
   local.get $2
   i64.const 4294967295
