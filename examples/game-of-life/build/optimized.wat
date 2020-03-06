@@ -28,14 +28,14 @@
   i32.mul
   global.set $assembly/index/offset
   loop $for-loop|0
-   local.get $3
+   local.get $2
    local.get $1
    i32.lt_s
    if
     i32.const 0
-    local.set $2
+    local.set $3
     loop $for-loop|1
-     local.get $2
+     local.get $3
      local.get $0
      i32.lt_s
      if
@@ -52,9 +52,9 @@
        i32.or
       end
       local.set $4
-      local.get $2
-      global.get $assembly/index/offset
       local.get $3
+      global.get $assembly/index/offset
+      local.get $2
       global.get $assembly/index/width
       i32.mul
       i32.add
@@ -63,17 +63,17 @@
       i32.shl
       local.get $4
       i32.store
-      local.get $2
+      local.get $3
       i32.const 1
       i32.add
-      local.set $2
+      local.set $3
       br $for-loop|1
      end
     end
-    local.get $3
+    local.get $2
     i32.const 1
     i32.add
-    local.set $3
+    local.set $2
     br $for-loop|0
    end
   end
