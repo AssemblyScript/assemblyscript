@@ -824,6 +824,7 @@ exports.main = function main(argv, options, callback) {
           add("dae-optimizing");
           add("directize");
           add("coalesce-locals");
+          add("merge-locals");
           add("simplify-locals-nostructure");
           add("vacuum");
           add("precompute-propagate");

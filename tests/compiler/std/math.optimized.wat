@@ -9002,7 +9002,7 @@
    local.get $0
    return
   end
-  local.get $3
+  local.get $4
   i32.const 31
   i32.shr_u
   local.get $2
