@@ -816,10 +816,9 @@ exports.main = function main(argv, options, callback) {
         // do this after CFG cleanup (originally it was done before)
         // moved from (1)
         add("code-pushing");
-
-        // this quite expensive so do this only for highest opt level
-        add("simplify-globals");
         if (optimizeLevel >= 3) {
+          // this quite expensive so do this only for highest opt level
+          add("simplify-globals");
           // replace indirect calls with direct and inline if possible again.
           add("directize");
           add("dae-optimizing");
@@ -830,7 +829,6 @@ exports.main = function main(argv, options, callback) {
           add("vacuum");
           add("inlining-optimizing");
           add("precompute-propagate");
-          add("reorder-locals");
         }
         add("optimize-instructions");
         add("simplify-globals-optimizing");

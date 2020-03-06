@@ -13,13 +13,13 @@
   (local $2 i32)
   (local $3 i32)
   i32.const -2128831035
-  local.set $1
+  local.set $2
   local.get $0
-  local.tee $2
+  local.tee $1
   if
    i32.const 0
    local.set $0
-   local.get $2
+   local.get $1
    i32.const 16
    i32.sub
    i32.load offset=12
@@ -33,15 +33,15 @@
     local.get $3
     i32.lt_u
     if
-     local.get $1
-     local.get $0
      local.get $2
+     local.get $0
+     local.get $1
      i32.add
      i32.load8_u
      i32.xor
      i32.const 16777619
      i32.mul
-     local.set $1
+     local.set $2
      local.get $0
      i32.const 1
      i32.add

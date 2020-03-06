@@ -586,16 +586,16 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $0
+  local.tee $1
   i32.eqz
   if
    i32.const 1
    memory.size
-   local.tee $0
+   local.tee $1
    i32.gt_s
    if (result i32)
     i32.const 1
-    local.get $0
+    local.get $1
     i32.sub
     memory.grow
     i32.const 0
@@ -607,18 +607,18 @@
     unreachable
    end
    i32.const 224
-   local.tee $0
+   local.tee $1
    i32.const 0
    i32.store
    i32.const 1792
    i32.const 0
    i32.store
    loop $for-loop|0
-    local.get $1
+    local.get $0
     i32.const 23
     i32.lt_u
     if
-     local.get $1
+     local.get $0
      i32.const 2
      i32.shl
      i32.const 224
@@ -633,7 +633,7 @@
       i32.lt_u
       if
        local.get $2
-       local.get $1
+       local.get $0
        i32.const 4
        i32.shl
        i32.add
@@ -650,10 +650,10 @@
        br $for-loop|1
       end
      end
-     local.get $1
+     local.get $0
      i32.const 1
      i32.add
-     local.set $1
+     local.set $0
      br $for-loop|0
     end
    end
@@ -666,7 +666,7 @@
    i32.const 224
    global.set $~lib/rt/tlsf/ROOT
   end
-  local.get $0
+  local.get $1
  )
  (func $~lib/rt/tlsf/searchBlock (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

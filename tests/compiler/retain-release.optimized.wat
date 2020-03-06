@@ -160,6 +160,7 @@
   drop
  )
  (func $retain-release/assignGlobal (; 7 ;)
+  (local $0 i32)
   global.get $retain-release/REF
   global.set $retain-release/glo
  )

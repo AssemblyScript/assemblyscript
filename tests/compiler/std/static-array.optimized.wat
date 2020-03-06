@@ -97,7 +97,7 @@
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
    local.get $2
-   local.set $3
+   local.set $4
    local.get $0
    local.get $1
    i32.eq
@@ -119,32 +119,32 @@
       i32.const 7
       i32.and
       if
-       local.get $3
+       local.get $4
        i32.eqz
        br_if $~lib/util/memory/memmove|inlined.0
-       local.get $3
+       local.get $4
        i32.const 1
        i32.sub
-       local.set $3
+       local.set $4
        local.get $0
        local.tee $2
        i32.const 1
        i32.add
        local.set $0
        local.get $1
-       local.tee $4
+       local.tee $3
        i32.const 1
        i32.add
        local.set $1
        local.get $2
-       local.get $4
+       local.get $3
        i32.load8_u
        i32.store8
        br $while-continue|0
       end
      end
      loop $while-continue|1
-      local.get $3
+      local.get $4
       i32.const 8
       i32.ge_u
       if
@@ -152,10 +152,10 @@
        local.get $1
        i64.load
        i64.store
-       local.get $3
+       local.get $4
        i32.const 8
        i32.sub
-       local.set $3
+       local.set $4
        local.get $0
        i32.const 8
        i32.add
@@ -169,7 +169,7 @@
      end
     end
     loop $while-continue|2
-     local.get $3
+     local.get $4
      if
       local.get $0
       local.tee $2
@@ -177,18 +177,18 @@
       i32.add
       local.set $0
       local.get $1
-      local.tee $4
+      local.tee $3
       i32.const 1
       i32.add
       local.set $1
       local.get $2
-      local.get $4
+      local.get $3
       i32.load8_u
       i32.store8
-      local.get $3
+      local.get $4
       i32.const 1
       i32.sub
-      local.set $3
+      local.set $4
       br $while-continue|2
      end
     end
@@ -203,22 +203,22 @@
     if
      loop $while-continue|3
       local.get $0
-      local.get $3
+      local.get $4
       i32.add
       i32.const 7
       i32.and
       if
-       local.get $3
+       local.get $4
        i32.eqz
        br_if $~lib/util/memory/memmove|inlined.0
-       local.get $3
+       local.get $4
        i32.const 1
        i32.sub
-       local.tee $3
+       local.tee $4
        local.get $0
        i32.add
        local.get $1
-       local.get $3
+       local.get $4
        i32.add
        i32.load8_u
        i32.store8
@@ -226,18 +226,18 @@
       end
      end
      loop $while-continue|4
-      local.get $3
+      local.get $4
       i32.const 8
       i32.ge_u
       if
-       local.get $3
+       local.get $4
        i32.const 8
        i32.sub
-       local.tee $3
+       local.tee $4
        local.get $0
        i32.add
        local.get $1
-       local.get $3
+       local.get $4
        i32.add
        i64.load
        i64.store
@@ -246,16 +246,16 @@
      end
     end
     loop $while-continue|5
-     local.get $3
+     local.get $4
      if
-      local.get $3
+      local.get $4
       i32.const 1
       i32.sub
-      local.tee $3
+      local.tee $4
       local.get $0
       i32.add
       local.get $1
-      local.get $3
+      local.get $4
       i32.add
       i32.load8_u
       i32.store8
@@ -293,7 +293,7 @@
   i32.sub
   local.tee $4
   i32.load
-  local.set $2
+  local.set $3
   local.get $4
   i32.load offset=4
   i32.const 1
@@ -308,7 +308,7 @@
   end
   global.get $~lib/rt/stub/offset
   local.get $0
-  local.get $2
+  local.get $3
   i32.add
   i32.eq
   local.set $5
@@ -317,9 +317,9 @@
   i32.add
   i32.const -16
   i32.and
-  local.set $3
+  local.set $2
   local.get $1
-  local.get $2
+  local.get $3
   i32.gt_u
   if
    local.get $5
@@ -331,23 +331,23 @@
      unreachable
     end
     local.get $0
-    local.get $3
+    local.get $2
     i32.add
     call $~lib/rt/stub/maybeGrowMemory
     local.get $4
-    local.get $3
+    local.get $2
     i32.store
    else
     local.get $4
     i32.load offset=8
     local.set $6
-    local.get $3
     local.get $2
+    local.get $3
     i32.const 1
     i32.shl
-    local.tee $2
-    local.get $3
+    local.tee $3
     local.get $2
+    local.get $3
     i32.gt_u
     select
     local.tee $5
@@ -359,42 +359,42 @@
     global.get $~lib/rt/stub/offset
     i32.const 16
     i32.add
-    local.tee $3
+    local.tee $2
     local.get $5
     i32.const 15
     i32.add
     i32.const -16
     i32.and
-    local.tee $2
+    local.tee $3
     i32.const 16
-    local.get $2
+    local.get $3
     i32.const 16
     i32.gt_u
     select
     local.tee $7
     i32.add
     call $~lib/rt/stub/maybeGrowMemory
-    local.get $3
+    local.get $2
     i32.const 16
     i32.sub
-    local.tee $2
+    local.tee $3
     local.get $7
     i32.store
-    local.get $2
+    local.get $3
     i32.const 1
     i32.store offset=4
-    local.get $2
+    local.get $3
     local.get $6
     i32.store offset=8
-    local.get $2
+    local.get $3
     local.get $5
     i32.store offset=12
-    local.get $3
+    local.get $2
     local.get $0
     local.get $4
     i32.load offset=12
     call $~lib/memory/memory.copy
-    local.get $3
+    local.get $2
     local.tee $0
     i32.const 16
     i32.sub
@@ -404,11 +404,11 @@
    local.get $5
    if
     local.get $0
-    local.get $3
+    local.get $2
     i32.add
     global.set $~lib/rt/stub/offset
     local.get $4
-    local.get $3
+    local.get $2
     i32.store
    end
   end
