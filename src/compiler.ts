@@ -4650,144 +4650,159 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
 
-        let targetType = leftType;
         let instance: Function | null;
-        let currentTypeKind = this.currentType.kind;
+        switch (this.currentType.kind) {
+          case TypeKind.BOOL:
+          case TypeKind.I8:
+          case TypeKind.U8:
+          case TypeKind.I16:
+          case TypeKind.U16:
+          case TypeKind.I32:
+          case TypeKind.U32: {
+            let type = this.currentType.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32;
 
-        if (
-          currentTypeKind == TypeKind.I8  ||
-          currentTypeKind == TypeKind.U8  ||
-          currentTypeKind == TypeKind.I16 ||
-          currentTypeKind == TypeKind.U16 ||
-          currentTypeKind == TypeKind.I32 ||
-          currentTypeKind == TypeKind.U32 //||
-          // !this.options.isWasm64 && (
-          //   currentTypeKind == TypeKind.ISIZE ||
-          //   currentTypeKind == TypeKind.USIZE
-          // )
-        ) {
-          let type = this.currentType.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32;
-          leftExpr = this.convertExpression(leftExpr,
-            this.currentType, type,
-            false, false,
-            left
-          );
-          leftType  = this.currentType;
-          rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
-          instance  = this.i32PowInstance;
+            leftExpr = this.convertExpression(leftExpr,
+              this.currentType, type,
+              false, false,
+              left
+            );
+            leftType  = this.currentType;
+            rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
+            rightType = this.currentType;
+            instance  = this.i32PowInstance;
 
-          if (!instance) {
-            let prototype = this.program.lookupGlobal(CommonNames.ipow32);
-            if (!prototype) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "ipow32"
-              );
-              expr = module.unreachable();
-              break;
+            if (!instance) {
+              let prototype = this.program.lookupGlobal(CommonNames.ipow32);
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "ipow32"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.i32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
-            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            this.i32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+            if (!instance || !this.compileFunction(instance)) {
+              expr = module.unreachable();
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+            }
+            break;
           }
-        } else if (
-          currentTypeKind == TypeKind.I64 ||
-          currentTypeKind == TypeKind.U64 // ||
-          // this.options.isWasm64 && (
-          //   currentTypeKind == TypeKind.ISIZE ||
-          //   currentTypeKind == TypeKind.USIZE
-          // )
-        ) {
-          let type = this.currentType.is(TypeFlags.SIGNED) ? Type.i64 : Type.u64;
+          case TypeKind.I64:
+          case TypeKind.U64: {
+            let type = this.currentType.is(TypeFlags.SIGNED) ? Type.i64 : Type.u64;
 
-          rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
-          instance  = this.i64PowInstance;
+            rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
+            rightType = this.currentType;
+            instance  = this.i64PowInstance;
 
-          if (!instance) {
-            let prototype = this.program.lookupGlobal(CommonNames.ipow64);
-            if (!prototype) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "ipow64"
-              );
-              expr = module.unreachable();
-              break;
+            if (!instance) {
+              let prototype = this.program.lookupGlobal(CommonNames.ipow64);
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "ipow64"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.i64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
-            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            this.i64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+            if (!instance || !this.compileFunction(instance)) {
+              expr = module.unreachable();
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+            }
+            break;
           }
-          // Mathf.pow if lhs is f32 (result is f32)
-        } else if (currentTypeKind == TypeKind.F32) {
-          rightExpr = this.compileExpression(right, Type.f32, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
-          instance = this.f32PowInstance;
-          if (!instance) {
-            let namespace = this.program.lookupGlobal(CommonNames.Mathf);
-            if (!namespace) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "Mathf"
-              );
-              expr = module.unreachable();
-              break;
+          case TypeKind.F32: {
+            // Mathf.pow if lhs is f32 (result is f32)
+            rightExpr = this.compileExpression(right, Type.f32, Constraints.CONV_IMPLICIT);
+            rightType = this.currentType;
+            instance  = this.f32PowInstance;
+            if (!instance) {
+              let namespace = this.program.lookupGlobal(CommonNames.Mathf);
+              if (!namespace) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Mathf"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Mathf.pow"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.f32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
-            let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
-            if (!prototype) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "Mathf.pow"
-              );
+            if (!instance || !this.compileFunction(instance)) {
               expr = module.unreachable();
-              break;
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
             }
-            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            this.f32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+            break;
           }
-
-        // Math.pow otherwise (result is f64)
-        // TODO: should the result be converted back?
-        } else {
-          leftExpr = this.convertExpression(leftExpr,
-            this.currentType, Type.f64,
-            false, false,
-            left
-          );
-          leftType = this.currentType;
-          rightExpr = this.compileExpression(right, Type.f64, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
-          instance = this.f64PowInstance;
-          if (!instance) {
-            let namespace = this.program.lookupGlobal(CommonNames.Math);
-            if (!namespace) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "Math"
-              );
-              expr = module.unreachable();
-              break;
+          // Math.pow otherwise (result is f64)
+          // TODO: should the result be converted back?
+          case TypeKind.F64:
+          // FIXME: workaround
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            // Mathf.pow if lhs is f64 (result is f64)
+            leftExpr = this.convertExpression(leftExpr,
+              this.currentType, Type.f64,
+              false, false,
+              left
+            );
+            leftType = this.currentType;
+            rightExpr = this.compileExpression(right, Type.f64, Constraints.CONV_IMPLICIT);
+            rightType = this.currentType;
+            instance = this.f64PowInstance;
+            if (!instance) {
+              let namespace = this.program.lookupGlobal(CommonNames.Math);
+              if (!namespace) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Math"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, "Math.pow"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
-            let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
-            if (!prototype) {
-              this.error(
-                DiagnosticCode.Cannot_find_name_0,
-                expression.range, "Math.pow"
-              );
+            if (!instance || !this.compileFunction(instance)) {
               expr = module.unreachable();
-              break;
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
             }
-            assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+            break;
           }
-        }
-        if (!instance || !this.compileFunction(instance)) {
-          expr = module.unreachable();
-        } else {
-          expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
-          // if (compound && targetType != this.currentType) {
-          //   // this yields a proper error if target is i32 for example
-          //   expr = this.convertExpression(expr, this.currentType, targetType, false, false, expression);
-          // }
+          default: {
+            assert(false);
+            expr = module.unreachable();
+            break;
+          }
         }
         break;
       }

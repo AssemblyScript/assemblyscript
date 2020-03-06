@@ -55589,11 +55589,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0
-  f64.const 0
-  call $~lib/math/NativeMath.pow
-  f64.const 1
-  f64.eq
+  i32.const 0
+  i32.const 0
+  call $~lib/math/ipow32
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -55603,11 +55603,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 0
-  f64.const 1
-  call $~lib/math/NativeMath.pow
-  f64.const 0
-  f64.eq
+  i32.const 0
+  i32.const 1
+  call $~lib/math/ipow32
+  i32.const 0
+  i32.eq
   i32.eqz
   if
    i32.const 0
