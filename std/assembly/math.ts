@@ -3102,8 +3102,8 @@ export function ipow64(x: i64, e: i64): i64 {
 
 /*
 TODO:
-In compile if onlly exponent is constant we could replace ipow32/ipow64 by shortest addition chains
-which usually faster than exponention by doubling
+In compile time if only exponent is constant we could replace ipow32/ipow64 by shortest addition chains
+which usually faster than exponentiation by squaring
 
 for ipow32 and e < 32:
 
