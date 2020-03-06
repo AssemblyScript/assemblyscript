@@ -821,8 +821,8 @@ exports.main = function main(argv, options, callback) {
         add("simplify-globals");
         if (optimizeLevel >= 3) {
           // replace indirect calls with direct and inline if possible again.
-          add("dae-optimizing");
           add("directize");
+          add("dae-optimizing");
           add("precompute-propagate");
           add("coalesce-locals");
           add("merge-locals");
