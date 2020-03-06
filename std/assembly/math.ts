@@ -3099,3 +3099,53 @@ export function ipow64(x: i64, e: i64): i64 {
   }
   return out;
 }
+
+/*
+TODO:
+In compile if onlly exponent is constant we could replace ipow32/ipow64 by shortest addition chains
+which usually faster than exponention by doubling
+
+for ipow32 and e < 32:
+
+let b: i32, c: i32, d: i32, h: i32, k: i32, g: i32;
+switch (e) {
+  case  1: return x;
+  case  2: return x * x;
+  case  3: return x * x * x;
+  case  4: return (b = x * x) * b;
+  case  5: return (b = x * x) * b * x;
+  case  6: return (b = x * x) * b * b;
+  case  7: return (b = x * x) * b * b * x;
+  case  8: return (d = (b = x * x) * b) * d;
+  case  9: return (c = x * x * x) * c * c;
+  case 10: return (d = (b = x * x) * b) * d * b;
+  case 11: return (d = (b = x * x) * b) * d * b * x;
+  case 12: return (d = (b = x * x) * b) * d * d;
+  case 13: return (d = (b = x * x) * b) * d * d * x;
+  case 14: return (d = (b = x * x) * b) * d * d * b;
+  case 15: return (k = (b = x * x) * b * x) * k * k;
+  case 16: return (h = (d = (b = x * x) * b) * d) * h;
+  case 17: return (h = (d = (b = x * x) * b) * d) * h * x;
+  case 18: return (h = (d = (b = x * x) * b) * d * x) * h;
+  case 19: return (h = (d = (b = x * x) * b) * d * x) * h * x;
+  case 20: return (h = (k = (b = x * x) * b * x) * k) * h;
+  case 21: return (h = (k = (b = x * x) * b * x) * k) * h * x;
+  case 22: return (g = (h = (k = (b = x * x) * b * x) * k) * x) * g;
+  case 23: return (h = (d = (c = (b = x * x) * x) * b) * d) * h * c;
+  case 24: return (h = (d = (c = x * x * x) * c) * d) * h;
+  case 25: return (h = (d = (c = x * x * x) * c) * d) * h * x;
+  case 26: return (g = (h = (d = (c = x * x * x) * c) * d) * x) * g;
+  case 27: return (h = (d = (c = x * x * x) * c) * d) * h * c;
+  case 28: return (h = (d = (c = x * x * x) * c * x) * d) * h;
+  case 29: return (h = (d = (c = x * x * x) * c * x) * d) * h * x;
+  case 30: return (h = (d = (c = x * x * x) * c) * d * c) * h;
+  case 31: return (h = (d = (c = x * x * x) * c) * d * c) * h * x;
+}
+
+for ipow64: TODO
+switch (e) {
+  case 32:
+  ...
+  case 63:
+}
+*/
