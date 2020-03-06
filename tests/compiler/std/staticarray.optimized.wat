@@ -1354,7 +1354,6 @@
  )
  (func $start:std/staticarray (; 21 ;)
   (local $0 i32)
-  (local $1 i32)
   i32.const 32
   i32.const 1
   call $~lib/staticarray/StaticArray<i32>#__get
@@ -1542,20 +1541,18 @@
   i32.store offset=4
   local.get $0
   global.set $std/staticarray/arr4
-  i32.const 0
-  local.set $0
   global.get $std/staticarray/arr3
-  local.tee $1
+  local.tee $0
   if
-   local.get $1
+   local.get $0
    call $~lib/rt/pure/__release
   end
   i32.const 0
   global.set $std/staticarray/arr3
   global.get $std/staticarray/arr4
-  local.tee $1
+  local.tee $0
   if
-   local.get $1
+   local.get $0
    call $~lib/rt/pure/__release
   end
   i32.const 0

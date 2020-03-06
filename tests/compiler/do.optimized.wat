@@ -1340,8 +1340,6 @@
     i32.const 10
     i32.eq
     if
-     i32.const 0
-     local.set $1
      local.get $0
      if
       local.get $0

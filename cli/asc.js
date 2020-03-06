@@ -823,11 +823,9 @@ exports.main = function main(argv, options, callback) {
           // replace indirect calls with direct and inline if possible again.
           add("dae-optimizing");
           add("directize");
+          add("precompute-propagate");
           add("coalesce-locals");
           add("merge-locals");
-          add("simplify-locals-nostructure");
-          add("vacuum");
-          add("precompute-propagate");
           add("simplify-locals-nostructure");
           add("vacuum");
           add("inlining-optimizing");

@@ -1834,8 +1834,6 @@
    local.tee $0
    i32.eqz
    if
-    i32.const 480
-    local.set $1
     local.get $0
     i32.const 480
     i32.ne
@@ -1863,7 +1861,6 @@
     local.get $0
     call $~lib/rt/pure/__release
     i32.const 400
-    local.tee $1
     br $__inlined_func$~lib/string/String#concat
    end
    local.get $1
