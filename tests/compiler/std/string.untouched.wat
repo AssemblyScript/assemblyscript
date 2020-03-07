@@ -5300,6 +5300,10 @@
     local.get $1
     i32.const 0
     i32.eq
+    local.get $0
+    i32.const 1
+    i32.eq
+    i32.or
     return
    end
    local.get $1
