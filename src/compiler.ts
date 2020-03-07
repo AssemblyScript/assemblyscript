@@ -4623,6 +4623,7 @@ export class Compiler extends DiagnosticEmitter {
           leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
           rightType = this.currentType;
+          commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
@@ -4651,7 +4652,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         let instance: Function | null;
-        switch (this.currentType.kind) {
+        switch (commonType.kind) {
           case TypeKind.BOOL: {
             // leftExpr ? 1 : rightExpr == 0
             expr = module.select(
