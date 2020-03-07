@@ -4713,18 +4713,17 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
-            let type = this.options.isWasm64
-              ? (this.currentType.is(TypeFlags.SIGNED) ? Type.i64 : Type.u64)
-              : (this.currentType.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32);
+            let isWasm64 = this.options.isWasm64;
+            let type = isWasm64 ? Type.isize64 : Type.isize32;
             leftExpr = this.convertExpression(leftExpr,
               this.currentType, type,
               false, false,
               left
             );
-            leftType = this.currentType;
+            leftType  = this.currentType;
             rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
             rightType = this.currentType;
-            instance  = this.options.isWasm64 ? this.i64PowInstance : this.i32PowInstance;
+            instance  = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
             if (!instance) {
               let prototype = this.program.lookupGlobal(this.options.isWasm64
                 ? CommonNames.ipow64
@@ -4733,17 +4732,14 @@ export class Compiler extends DiagnosticEmitter {
               if (!prototype) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
-                  expression.range, this.options.isWasm64 ? "ipow64" : "ipow32"
+                  expression.range, isWasm64 ? "ipow64" : "ipow32"
                 );
                 expr = module.unreachable();
                 break;
               }
               assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-              if (this.options.isWasm64) {
-                this.i64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-              } else {
-                this.i32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-              }
+              instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+              isWasm64 ? (this.i64PowInstance = instance) : (this.i32PowInstance = instance);
             }
             if (!instance || !this.compileFunction(instance)) {
               expr = module.unreachable();
