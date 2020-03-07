@@ -4792,7 +4792,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.ISIZE:
           case TypeKind.USIZE:
           case TypeKind.F64: {
-            // FOXME: tmp workaround
+            // FIXME: tmp workaround
             if (this.currentType.kind == TypeKind.ISIZE || this.currentType.kind == TypeKind.USIZE) {
               leftExpr = this.convertExpression(leftExpr,
                 this.currentType, Type.f64,
