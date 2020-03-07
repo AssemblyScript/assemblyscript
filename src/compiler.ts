@@ -4739,7 +4739,11 @@ export class Compiler extends DiagnosticEmitter {
               }
               assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
               instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
-              isWasm64 ? (this.i64PowInstance = instance) : (this.i32PowInstance = instance);
+              if (isWasm64) {
+                this.i64PowInstance = instance;
+              } else {
+                this.i32PowInstance = instance;
+              }
             }
             if (!instance || !this.compileFunction(instance)) {
               expr = module.unreachable();
