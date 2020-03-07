@@ -35,7 +35,11 @@ global.i64_mul = function(left, right) {
 
 global.i64_pow = function(left, right) {
   var rightHi = right.high;
-  if (rightHi < 0) return Long.ZERO;
+  if (rightHi < 0) {
+    return left.eq(Long.ONE)
+      ? Long.ONE
+      : Long.ZERO;
+  }
   var rightLo = right.low;
   if (!rightHi) {
     if (rightLo == 0) return Long.ONE;
