@@ -3927,6 +3927,9 @@ assert(ipow64(3,  63) == -3237885987332494933); // should overflow
 assert(ipow64(3,  64) ==  8733086111712066817); // should overflow
 assert(ipow64(3, 128) == -9204772141784466943); // should overflow
 
+assert(ipow64(1, -1) == 1);
+assert(ipow64(2, -1) == 0);
+
 assert(ipow64(57055, 3) + ipow64(339590, 3) == 39347712995520375);
 
 // integer pow operators
@@ -3936,11 +3939,23 @@ assert(  0  ** 1 ==  0);
 assert(  1  ** 3 ==  1);
 assert((-2) ** 3 == -8);
 
+assert(false ** -2 == 0);
+assert(false ** -1 == 0);
+assert(false **  0 == 1);
+assert(false **  1 == 0);
+assert(false **  2 == 0);
+
+assert(true ** -2 == 1);
+assert(true ** -1 == 1);
+assert(true **  0 == 1);
+assert(true **  1 == 1);
+assert(true **  2 == 1);
+
 assert((<i8> 1) ** 3 ==  1);
 assert((<i8>-2) ** 3 == -8);
 assert((<u16>4) ** 7 ==  16384);
 assert((<u16>4) ** 8 ==  65536);
-// assert((<u16>4) ** 9 ==  0); // should overflow
+// assert((<u16>4) ** 9 ==  0); // should overflow   fail!
 
 assert((<u64>0) ** 0 == 1);
 assert((<u64>0) ** 1 == 0);
