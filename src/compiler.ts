@@ -4652,7 +4652,15 @@ export class Compiler extends DiagnosticEmitter {
 
         let instance: Function | null;
         switch (this.currentType.kind) {
-          case TypeKind.BOOL:
+          case TypeKind.BOOL: {
+            // leftExpr ? 1 : rightExpr == 0
+            expr = module.select(
+              module.i32(1),
+              module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
+              leftExpr
+            );
+            break;
+          }
           case TypeKind.I8:
           case TypeKind.U8:
           case TypeKind.I16:
