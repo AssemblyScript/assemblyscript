@@ -4711,7 +4711,6 @@ export class Compiler extends DiagnosticEmitter {
             }
             break;
           }
-          /*
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
             let type = this.options.isWasm64
@@ -4753,7 +4752,6 @@ export class Compiler extends DiagnosticEmitter {
             }
             break;
           }
-          */
           case TypeKind.F32: {
             instance = this.f32PowInstance;
             if (!instance) {
@@ -4787,23 +4785,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           // Math.pow otherwise (result is f64)
           // TODO: should the result be converted back?
-
-          // FIXME: tmp workaround
-          case TypeKind.ISIZE:
-          case TypeKind.USIZE:
           case TypeKind.F64: {
-            // FIXME: tmp workaround
-            if (this.currentType.kind == TypeKind.ISIZE || this.currentType.kind == TypeKind.USIZE) {
-              leftExpr = this.convertExpression(leftExpr,
-                this.currentType, Type.f64,
-                false, false,
-                left
-              );
-              leftType = this.currentType;
-              rightExpr = this.compileExpression(right, Type.f64, Constraints.CONV_IMPLICIT);
-              rightType = this.currentType;
-            }
-
             instance = this.f64PowInstance;
             if (!instance) {
               let namespace = this.program.lookupGlobal(CommonNames.Math);

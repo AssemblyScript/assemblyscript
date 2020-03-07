@@ -2022,7 +2022,7 @@ export class Resolver extends DiagnosticEmitter {
             if (overload) return overload.signature.returnType;
           }
         }
-        return leftType == Type.f32 ? Type.f32 : Type.f64;
+        return leftType;
       }
 
       // shift: result is LHS (RHS is converted to LHS), preferring overloads

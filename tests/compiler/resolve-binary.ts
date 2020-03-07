@@ -144,7 +144,7 @@ assert(
 assert(
   (2 ** 2).toString()
   ==
-  "4.0" // TBD
+  "4" // TBD
 );
 
 // shift

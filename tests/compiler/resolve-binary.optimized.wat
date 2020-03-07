@@ -1,10 +1,10 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_i64_i32_i64_=>_i32 (func (param i32 i64 i32 i64 i32 i64) (result i32)))
@@ -1470,12 +1470,47 @@
   local.get $0
   call $~lib/rt/stub/__free
  )
- (func $resolve-binary/Bar#constructor (; 17 ;) (result i32)
+ (func $~lib/math/ipow32 (; 17 ;) (result i32)
+  (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  i32.const 2
+  local.set $0
+  i32.const 2
+  local.set $1
+  i32.const 1
+  local.set $2
+  loop $while-continue|0
+   local.get $0
+   if
+    local.get $1
+    local.get $2
+    i32.mul
+    local.get $2
+    local.get $0
+    i32.const 1
+    i32.and
+    select
+    local.set $2
+    local.get $0
+    i32.const 1
+    i32.shr_u
+    local.set $0
+    local.get $1
+    local.get $1
+    i32.mul
+    local.set $1
+    br $while-continue|0
+   end
+  end
+  local.get $2
+ )
+ (func $resolve-binary/Bar#constructor (; 18 ;) (result i32)
   i32.const 0
   i32.const 7
   call $~lib/rt/stub/__alloc
  )
- (func $start:resolve-binary (; 18 ;)
+ (func $start:resolve-binary (; 19 ;)
   i32.const 1
   call $~lib/number/Bool#toString
   i32.const 32
@@ -1867,8 +1902,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/util/number/dtoa
-  i32.const 1472
+  call $~lib/math/ipow32
+  call $~lib/util/number/itoa32
+  i32.const 1504
   call $~lib/string/String.__eq
   i32.eqz
   if
@@ -2186,7 +2222,7 @@
    unreachable
   end
  )
- (func $~start (; 19 ;)
+ (func $~start (; 20 ;)
   call $start:resolve-binary
  )
 )
