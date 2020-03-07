@@ -4714,7 +4714,9 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
             let isWasm64 = this.options.isWasm64;
-            rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
+            if (!compound) {
+              rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
+            }
             instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
             if (!instance) {
               let prototype = this.program.lookupGlobal(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
