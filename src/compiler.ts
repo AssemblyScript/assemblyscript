@@ -4643,7 +4643,7 @@ export class Compiler extends DiagnosticEmitter {
           } else {
             this.error(
               DiagnosticCode.Operator_0_cannot_be_applied_to_types_1_and_2,
-              expression.range, "%", leftType.toString(), rightType.toString()
+              expression.range, "**", leftType.toString(), rightType.toString()
             );
             this.currentType = contextualType;
             return module.unreachable();
@@ -4667,18 +4667,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.I32:
           case TypeKind.U32: {
-            let type = this.currentType.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32;
-
-            leftExpr = this.convertExpression(leftExpr,
-              this.currentType, type,
-              false, false,
-              left
-            );
-            leftType  = this.currentType;
-            rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
-            rightType = this.currentType;
             instance  = this.i32PowInstance;
-
             if (!instance) {
               let prototype = this.program.lookupGlobal(CommonNames.ipow32);
               if (!prototype) {
@@ -4701,12 +4690,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            let type = this.currentType.is(TypeFlags.SIGNED) ? Type.i64 : Type.u64;
-
-            rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
-            rightType = this.currentType;
             instance  = this.i64PowInstance;
-
             if (!instance) {
               let prototype = this.program.lookupGlobal(CommonNames.ipow64);
               if (!prototype) {
@@ -4727,11 +4711,51 @@ export class Compiler extends DiagnosticEmitter {
             }
             break;
           }
-          case TypeKind.F32: {
-            // Mathf.pow if lhs is f32 (result is f32)
-            rightExpr = this.compileExpression(right, Type.f32, Constraints.CONV_IMPLICIT);
+          /*
+          case TypeKind.ISIZE:
+          case TypeKind.USIZE: {
+            let type = this.options.isWasm64
+              ? (this.currentType.is(TypeFlags.SIGNED) ? Type.i64 : Type.u64)
+              : (this.currentType.is(TypeFlags.SIGNED) ? Type.i32 : Type.u32);
+            leftExpr = this.convertExpression(leftExpr,
+              this.currentType, type,
+              false, false,
+              left
+            );
+            leftType = this.currentType;
+            rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
             rightType = this.currentType;
-            instance  = this.f32PowInstance;
+            instance  = this.options.isWasm64 ? this.i64PowInstance : this.i32PowInstance;
+            if (!instance) {
+              let prototype = this.program.lookupGlobal(this.options.isWasm64
+                ? CommonNames.ipow64
+                : CommonNames.ipow32
+              );
+              if (!prototype) {
+                this.error(
+                  DiagnosticCode.Cannot_find_name_0,
+                  expression.range, this.options.isWasm64 ? "ipow64" : "ipow32"
+                );
+                expr = module.unreachable();
+                break;
+              }
+              assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+              if (this.options.isWasm64) {
+                this.i64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+              } else {
+                this.i32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
+              }
+            }
+            if (!instance || !this.compileFunction(instance)) {
+              expr = module.unreachable();
+            } else {
+              expr = this.makeCallDirect(instance, [ leftExpr, rightExpr ], expression);
+            }
+            break;
+          }
+          */
+          case TypeKind.F32: {
+            instance = this.f32PowInstance;
             if (!instance) {
               let namespace = this.program.lookupGlobal(CommonNames.Mathf);
               if (!namespace) {
@@ -4763,19 +4787,23 @@ export class Compiler extends DiagnosticEmitter {
           }
           // Math.pow otherwise (result is f64)
           // TODO: should the result be converted back?
-          case TypeKind.F64:
-          // FIXME: workaround
+
+          // FIXME: tmp workaround
           case TypeKind.ISIZE:
-          case TypeKind.USIZE: {
-            // Mathf.pow if lhs is f64 (result is f64)
-            leftExpr = this.convertExpression(leftExpr,
-              this.currentType, Type.f64,
-              false, false,
-              left
-            );
-            leftType = this.currentType;
-            rightExpr = this.compileExpression(right, Type.f64, Constraints.CONV_IMPLICIT);
-            rightType = this.currentType;
+          case TypeKind.USIZE:
+          case TypeKind.F64: {
+            // FOXME: tmp workaround
+            if (this.currentType.kind == TypeKind.ISIZE || this.currentType.kind == TypeKind.USIZE) {
+              leftExpr = this.convertExpression(leftExpr,
+                this.currentType, Type.f64,
+                false, false,
+                left
+              );
+              leftType = this.currentType;
+              rightExpr = this.compileExpression(right, Type.f64, Constraints.CONV_IMPLICIT);
+              rightType = this.currentType;
+            }
+
             instance = this.f64PowInstance;
             if (!instance) {
               let namespace = this.program.lookupGlobal(CommonNames.Math);
