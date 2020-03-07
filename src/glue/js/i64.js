@@ -34,14 +34,12 @@ global.i64_mul = function(left, right) {
 };
 
 global.i64_pow = function(left, right) {
-  var rightHi = right.high;
-  if (rightHi < 0) {
-    return left.eq(Long.ONE)
-      ? Long.ONE
-      : Long.ZERO;
-  }
   var rightLo = right.low;
-  if (!rightHi) {
+  var rightHi = right.high;
+  if (rightHi <= 0) {
+    if (rightHi < 0) {
+      return left.eq(Long.ONE) ? left : Long.ZERO;
+    }
     if (rightLo == 0) return Long.ONE;
     if (rightLo == 1) return left;
     if (rightLo == 2) return left.mul(left);
