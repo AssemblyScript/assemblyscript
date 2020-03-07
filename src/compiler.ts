@@ -4713,20 +4713,14 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
-            let isWasm64 = this.options.isWasm64;
             leftType  = this.currentType;
-            rightExpr = this.compileExpression(
-              right,
-              isWasm64 ? Type.isize64 : Type.isize32,
-              Constraints.CONV_IMPLICIT
-            );
+            rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
             rightType = this.currentType;
-            instance  = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
+
+            let isWasm64 = this.options.isWasm64;
+            instance = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
             if (!instance) {
-              let prototype = this.program.lookupGlobal(this.options.isWasm64
-                ? CommonNames.ipow64
-                : CommonNames.ipow32
-              );
+              let prototype = this.program.lookupGlobal(isWasm64 ? CommonNames.ipow64 : CommonNames.ipow32);
               if (!prototype) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
