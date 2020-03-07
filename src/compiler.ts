@@ -4622,8 +4622,7 @@ export class Compiler extends DiagnosticEmitter {
         if (compound) {
           leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
-          rightType = this.currentType;
-          commonType = this.currentType;
+          rightType = commonType = this.currentType;
         } else {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
@@ -4668,7 +4667,7 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U16:
           case TypeKind.I32:
           case TypeKind.U32: {
-            instance  = this.i32PowInstance;
+            instance = this.i32PowInstance;
             if (!instance) {
               let prototype = this.program.lookupGlobal(CommonNames.ipow32);
               if (!prototype) {
@@ -4691,7 +4690,7 @@ export class Compiler extends DiagnosticEmitter {
           }
           case TypeKind.I64:
           case TypeKind.U64: {
-            instance  = this.i64PowInstance;
+            instance = this.i64PowInstance;
             if (!instance) {
               let prototype = this.program.lookupGlobal(CommonNames.ipow64);
               if (!prototype) {
