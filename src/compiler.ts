@@ -4714,14 +4714,12 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.ISIZE:
           case TypeKind.USIZE: {
             let isWasm64 = this.options.isWasm64;
-            let type = isWasm64 ? Type.isize64 : Type.isize32;
-            leftExpr = this.convertExpression(leftExpr,
-              this.currentType, type,
-              false, false,
-              left
-            );
             leftType  = this.currentType;
-            rightExpr = this.compileExpression(right, type, Constraints.CONV_IMPLICIT);
+            rightExpr = this.compileExpression(
+              right,
+              isWasm64 ? Type.isize64 : Type.isize32,
+              Constraints.CONV_IMPLICIT
+            );
             rightType = this.currentType;
             instance  = isWasm64 ? this.i64PowInstance : this.i32PowInstance;
             if (!instance) {
