@@ -4619,7 +4619,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.unreachable();
         }
 
-        let isLeftTypeBool = false;
+        let isLeftTypeBool = leftType.kind == TypeKind.BOOL;
         if (compound) {
           leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
@@ -4628,10 +4628,7 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonDenominator(leftType, rightType, false);
-          isLeftTypeBool = leftType.kind == TypeKind.BOOL;
           if (commonType) {
-            isLeftTypeBool = !commonType.is(TypeFlags.FLOAT) &&
-              (isLeftTypeBool || commonType.kind == TypeKind.BOOL);
             leftExpr = this.convertExpression(leftExpr,
               leftType, commonType,
               false, true, // !
@@ -4655,7 +4652,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         // special fast path for booleans
-        if (isLeftTypeBool) {
+        if (isLeftTypeBool || commonType.kind == TypeKind.BOOL && !commonType.is(TypeFlags.FLOAT)) {
           // leftExpr ? 1 : rightExpr == 0
           if (commonType.size === 32) {
             expr = module.select(
