@@ -4652,7 +4652,7 @@ export class Compiler extends DiagnosticEmitter {
         }
 
         // special fast path for booleans
-        if (isLeftTypeBool || commonType.kind == TypeKind.BOOL && !commonType.is(TypeFlags.FLOAT)) {
+        if (isLeftTypeBool && !commonType.is(TypeFlags.FLOAT)) {
           // leftExpr ? 1 : rightExpr == 0
           if (commonType.size === 32) {
             expr = module.select(

@@ -3969,3 +3969,9 @@ assert(0xF123 as u64 ** 4 == 14521559183993082321);
 // Fermat's Last Theorem
 assert((<u64>57055) ** 3 + (<u64>339590) ** 3 != (<u64>340126) ** 3); // On JS it return false
 assert((<u64>57055) ** 3 + (<u64>339590) ** 3 == 39347712995520375);
+
+assert(1 ** 0.5 == 1.0);
+assert(0 ** 0.5 == 0.0);
+assert(0 ** -1.0 == Infinity);
+assert(0.0 ** 0 == 1.0);
+assert(1.0 ** 1 == 1.0);

@@ -47041,6 +47041,71 @@
    call $~lib/builtins/abort
    unreachable
   end
+  f64.const 1
+  f64.const 0.5
+  call $~lib/math/NativeMath.pow
+  f64.const 1
+  f64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3973
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  f64.const 0.5
+  call $~lib/math/NativeMath.pow
+  f64.const 0
+  f64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3974
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  f64.const -1
+  call $~lib/math/NativeMath.pow
+  f64.const inf
+  f64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3975
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 0
+  f64.const 0
+  call $~lib/math/NativeMath.pow
+  f64.const 1
+  f64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3976
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  f64.const 1
+  f64.const 1
+  call $~lib/math/NativeMath.pow
+  f64.const 1
+  f64.ne
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 3977
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
  (func $~start (; 175 ;)
   call $start:std/math
