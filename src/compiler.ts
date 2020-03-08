@@ -4619,6 +4619,7 @@ export class Compiler extends DiagnosticEmitter {
           return this.module.unreachable();
         }
 
+        let isLeftTypeBool = false;
         if (compound) {
           leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
@@ -4627,7 +4628,10 @@ export class Compiler extends DiagnosticEmitter {
           rightExpr = this.compileExpression(right, leftType);
           rightType = this.currentType;
           commonType = Type.commonDenominator(leftType, rightType, false);
+          isLeftTypeBool = leftType.kind == TypeKind.BOOL;
           if (commonType) {
+            isLeftTypeBool = !commonType.is(TypeFlags.FLOAT) &&
+              (isLeftTypeBool || commonType.kind == TypeKind.BOOL);
             leftExpr = this.convertExpression(leftExpr,
               leftType, commonType,
               false, true, // !
@@ -4650,10 +4654,30 @@ export class Compiler extends DiagnosticEmitter {
           }
         }
 
+        // special fast path for booleans
+        if (isLeftTypeBool) {
+          // leftExpr ? 1 : rightExpr == 0
+          if (commonType.size === 32) {
+            expr = module.select(
+              module.i32(1),
+              module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
+              leftExpr
+            );
+            break;
+          }
+          if (commonType.size === 64) {
+            expr = module.select(
+              module.i64(1),
+              module.binary(BinaryOp.EqI64, rightExpr, module.i64(0)),
+              leftExpr
+            );
+            break;
+          }
+        }
+
         let instance: Function | null;
         switch (commonType.kind) {
           case TypeKind.BOOL: {
-            // leftExpr ? 1 : rightExpr == 0
             expr = module.select(
               module.i32(1),
               module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
