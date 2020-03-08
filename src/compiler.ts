@@ -4618,8 +4618,6 @@ export class Compiler extends DiagnosticEmitter {
           );
           return this.module.unreachable();
         }
-
-        let isLeftTypeBool = leftType.kind == TypeKind.BOOL;
         if (compound) {
           leftExpr = this.ensureSmallIntegerWrap(leftExpr, leftType);
           rightExpr = this.compileExpression(right, leftType, Constraints.CONV_IMPLICIT);
@@ -4648,27 +4646,6 @@ export class Compiler extends DiagnosticEmitter {
             );
             this.currentType = contextualType;
             return module.unreachable();
-          }
-        }
-
-        // special fast path for booleans
-        if (isLeftTypeBool && !commonType.is(TypeFlags.FLOAT)) {
-          // leftExpr ? 1 : rightExpr == 0
-          if (commonType.size === 32) {
-            expr = module.select(
-              module.i32(1),
-              module.binary(BinaryOp.EqI32, rightExpr, module.i32(0)),
-              leftExpr
-            );
-            break;
-          }
-          if (commonType.size === 64) {
-            expr = module.select(
-              module.i64(1),
-              module.binary(BinaryOp.EqI64, rightExpr, module.i64(0)),
-              leftExpr
-            );
-            break;
           }
         }
 
