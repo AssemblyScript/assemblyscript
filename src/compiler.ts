@@ -8707,7 +8707,7 @@ export class Compiler extends DiagnosticEmitter {
         CommonNames.constructor,
         new FunctionPrototype(
           CommonNames.constructor,
-          classInstance,
+          classInstance, // bound
           this.program.makeNativeFunctionDeclaration(CommonNames.constructor,
             CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
           )
@@ -8717,7 +8717,7 @@ export class Compiler extends DiagnosticEmitter {
       );
       let members = classInstance.members;
       if (!members) classInstance.members = members = new Map();
-      members.set("constructor", instance);
+      members.set("constructor", instance.prototype);
     }
 
     instance.internalName = classInstance.internalName + INSTANCE_DELIMITER + "constructor";
