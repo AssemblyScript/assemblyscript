@@ -764,35 +764,48 @@ export class Flow {
 
     this.flags = newFlags | (this.flags & FlowFlags.UNCHECKED_CONTEXT);
 
-    var leftLocalFlags = left.localFlags;
-    var numLeftLocalFlags = leftLocalFlags.length;
-    var rightLocalFlags = right.localFlags;
-    var numRightLocalFlags = rightLocalFlags.length;
-    var maxLocalFlags = max(numLeftLocalFlags, numRightLocalFlags);
-    var combinedFlags = new Array<LocalFlags>(maxLocalFlags);
-    for (let i = 0; i < maxLocalFlags; ++i) {
-      let leftFlags = i < numLeftLocalFlags ? leftLocalFlags[i] : 0;
-      let rightFlags = i < numRightLocalFlags ? rightLocalFlags[i] : 0;
-      let newFlags = leftFlags & rightFlags & (
-        LocalFlags.CONSTANT  |
-        LocalFlags.WRAPPED   |
-        LocalFlags.NONNULL   |
-        LocalFlags.INITIALIZED
-      );
-      if (leftFlags & LocalFlags.RETAINED) {
-        if (rightFlags & LocalFlags.RETAINED) {
-          newFlags |= LocalFlags.RETAINED;
-        } else {
-          newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
+    var thisLocalFlags = this.localFlags;
+    if (leftFlags & FlowFlags.TERMINATES) {
+      if (!(rightFlags & FlowFlags.TERMINATES)) {
+        let rightLocalFlags = right.localFlags;
+        for (let i = 0, k = rightLocalFlags.length; i < k; ++i) {
+          thisLocalFlags[i] = rightLocalFlags[i];
         }
-      } else if (rightFlags & LocalFlags.RETAINED) {
-        newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-      } else {
-        newFlags |= (leftFlags | rightFlags) & LocalFlags.CONDITIONALLY_RETAINED;
       }
-      combinedFlags[i] = newFlags;
+    } else if (rightFlags & FlowFlags.TERMINATES) {
+      let leftLocalFlags = left.localFlags;
+      for (let i = 0, k = leftLocalFlags.length; i < k; ++i) {
+        thisLocalFlags[i] = leftLocalFlags[i];
+      }
+    } else {
+      let leftLocalFlags = left.localFlags;
+      let numLeftLocalFlags = leftLocalFlags.length;
+      let rightLocalFlags = right.localFlags;
+      let numRightLocalFlags = rightLocalFlags.length;
+      let maxLocalFlags = max(numLeftLocalFlags, numRightLocalFlags);
+      for (let i = 0; i < maxLocalFlags; ++i) {
+        let leftFlags = i < numLeftLocalFlags ? leftLocalFlags[i] : 0;
+        let rightFlags = i < numRightLocalFlags ? rightLocalFlags[i] : 0;
+        let newFlags = leftFlags & rightFlags & (
+          LocalFlags.CONSTANT  |
+          LocalFlags.WRAPPED   |
+          LocalFlags.NONNULL   |
+          LocalFlags.INITIALIZED
+        );
+        if (leftFlags & LocalFlags.RETAINED) {
+          if (rightFlags & LocalFlags.RETAINED) {
+            newFlags |= LocalFlags.RETAINED;
+          } else {
+            newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
+          }
+        } else if (rightFlags & LocalFlags.RETAINED) {
+          newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
+        } else {
+          newFlags |= (leftFlags | rightFlags) & LocalFlags.CONDITIONALLY_RETAINED;
+        }
+        thisLocalFlags[i] = newFlags;
+      }
     }
-    this.localFlags = combinedFlags;
   }
 
   /** Tests if the specified flows have differing local states. */

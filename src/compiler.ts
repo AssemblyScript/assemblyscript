@@ -2592,9 +2592,6 @@ export class Compiler extends DiagnosticEmitter {
     var flow = this.currentFlow;
     var returnType = flow.returnType;
 
-    // Remember that this flow returns
-    flow.set(FlowFlags.RETURNS | FlowFlags.TERMINATES);
-
     var valueExpression = statement.value;
     if (valueExpression) {
       if (returnType == Type.void) {
@@ -2632,6 +2629,9 @@ export class Compiler extends DiagnosticEmitter {
       flow.freeTempLocal(temp);
     }
     flow.freeScopedLocals();
+
+    // Remember that this flow returns
+    flow.set(FlowFlags.RETURNS | FlowFlags.TERMINATES);
 
     // If the last statement anyway, make it the block's return value
     if (isLastInBody && expr != 0 && returnType != Type.void) {
@@ -5711,7 +5711,7 @@ export class Compiler extends DiagnosticEmitter {
       target,
       expr, // TODO: delay release above if possible?
       this.currentType,
-      left,
+      right,
       resolver.currentThisExpression,
       resolver.currentElementExpression,
       contextualType != Type.void
@@ -5850,12 +5850,13 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile the value and do the assignment
     assert(targetType != Type.void);
-    var valueExpr = this.compileExpression(valueExpression, targetType, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
+    var valueExpr = this.compileExpression(valueExpression, targetType, Constraints.WILL_RETAIN);
+    var valueType = this.currentType;
     return this.makeAssignment(
       target,
-      valueExpr,
-      this.currentType,
-      expression,
+      this.convertExpression(valueExpr, valueType, targetType, false, false, valueExpression),
+      valueType,
+      valueExpression,
       thisExpression,
       elementExpression,
       contextualType != Type.void
