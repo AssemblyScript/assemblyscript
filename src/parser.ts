@@ -1296,7 +1296,6 @@ export class Parser extends DiagnosticEmitter {
         if (!type) return null;
       } else {
         type = Node.createOmittedType(tn.range(tn.pos));
-        type = type!; // FIXME: WHY?
       }
       let initializer: Expression | null = null;
       if (tn.skip(Token.EQUALS)) {
@@ -1423,7 +1422,6 @@ export class Parser extends DiagnosticEmitter {
       returnType = Node.createOmittedType(
         tn.range(tn.pos)
       );
-      returnType = returnType!; // FIXME: WHY?
       if (!isSetter) {
         this.error(
           DiagnosticCode.Type_expected,
@@ -1532,7 +1530,6 @@ export class Parser extends DiagnosticEmitter {
       if (!returnType) return null;
     } else {
       returnType = Node.createOmittedType(tn.range(tn.pos));
-      returnType = returnType!; // FIXME: WHY?
     }
 
     if (arrowKind) {
@@ -2082,7 +2079,6 @@ export class Parser extends DiagnosticEmitter {
         if (!returnType) return null;
       } else {
         returnType = Node.createOmittedType(tn.range(tn.pos));
-        returnType = returnType!; // FIXME: WHY?
         if (!isSetter && name.kind != NodeKind.CONSTRUCTOR) {
           this.error(
             DiagnosticCode.Type_expected,
@@ -3543,7 +3539,6 @@ export class Parser extends DiagnosticEmitter {
           return null;
         }
         inner = Node.createParenthesizedExpression(inner, tn.range(startPos, tn.pos));
-        inner = inner!; // FIXME: WHY?
         return this.maybeParseCallExpression(tn, inner);
       }
       // ArrayLiteralExpression
@@ -3833,7 +3828,6 @@ export class Parser extends DiagnosticEmitter {
             null,
             tn.range(startPos, tn.pos)
           );
-          expr = expr!; // FIXME: WHY?
           expr = this.maybeParseCallExpression(tn, expr);
           break;
         }
@@ -3864,7 +3858,6 @@ export class Parser extends DiagnosticEmitter {
             next,
             tn.range(startPos, tn.pos)
           );
-          expr = expr!; // FIXME: WHY?
           expr = this.maybeParseCallExpression(tn, expr);
           break;
         }
@@ -3932,7 +3925,6 @@ export class Parser extends DiagnosticEmitter {
               <IdentifierExpression>next,
               tn.range(startPos, tn.pos)
             );
-            expr = expr!; // FIXME: WHY?
           } else {
             let next = this.parseExpression(tn, nextPrecedence + 1);
             if (!next) return null;

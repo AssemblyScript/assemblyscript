@@ -1486,13 +1486,14 @@ export class Resolver extends DiagnosticEmitter {
     if (!targetType) return null;
     if (targetType.is(TypeFlags.REFERENCE)) {
       let classReference = targetType.classReference;
-      if (classReference) {
+      while (classReference) {
         let indexSignature = classReference.indexSignature;
         if (indexSignature) {
           this.currentThisExpression = targetExpression;
           this.currentElementExpression = node.elementExpression;
           return indexSignature;
         }
+        classReference = classReference.base;
       }
     }
     if (reportMode == ReportMode.REPORT) {

@@ -56,6 +56,7 @@ export declare function _BinaryenFeatureSignExt(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureExceptionHandling(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureTailCall(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureReferenceTypes(): BinaryenFeatureFlags;
+export declare function _BinaryenFeatureMultivalue(): BinaryenFeatureFlags;
 export declare function _BinaryenFeatureAll(): BinaryenFeatureFlags;
 
 type BinaryenExpressionId = i32;
