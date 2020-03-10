@@ -1534,6 +1534,14 @@ export class Compiler extends DiagnosticEmitter {
   compileField(instance: Field): bool {
     this.compileFieldGetter(instance);
     this.compileFieldSetter(instance);
+    if (!instance.is(CommonFlags.INITIALIZED)) {
+      this.error(
+        DiagnosticCode.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_constructor,
+        instance.declaration.name.range,
+        instance.declaration.name.text
+      );
+    }
+
     return instance.is(CommonFlags.COMPILED);
   }
 
@@ -5925,6 +5933,11 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.unreachable();
         }
+
+        if (flow.actualFunction.is(CommonFlags.CONSTRUCTOR) && !(<Field>target).is(CommonFlags.INITIALIZED)) {
+          (<Field>target).set(CommonFlags.INITIALIZED);
+        }
+
         return this.makeFieldAssignment(<Field>target,
           valueExpr,
           // FIXME: explicit type (currently fails due to missing null checking)
@@ -8799,6 +8812,24 @@ export class Compiler extends DiagnosticEmitter {
     if (getExpressionType(expr) != NativeType.None) { // possibly IMM_DROPPED
       this.currentType = classInstance.type; // important because a super ctor could be called
     }
+
+    let members = classInstance.members;
+    if (members) {
+      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
+        const field = <Field>unchecked(_values[i]);
+        if (
+          field.kind === ElementKind.FIELD &&
+          !field.is(CommonFlags.INITIALIZED)
+        ) {
+          this.error(
+            DiagnosticCode.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_constructor,
+            field.declaration.name.range,
+            field.declaration.name.text
+          );
+        }
+      }
+    }
+
     return expr;
   }
 
@@ -9968,7 +9999,8 @@ export class Compiler extends DiagnosticEmitter {
       let fieldPrototype = field.prototype;
       let initializerNode = fieldPrototype.initializerNode;
       let parameterIndex = fieldPrototype.parameterIndex;
-      let initExpr: ExpressionRef;
+      let initExpr: ExpressionRef | null = null;
+      const isDefiniteAssigment = field.is(CommonFlags.DEFINITE_ASSIGNMENT);
 
       // if declared as a constructor parameter, use its value
       if (parameterIndex >= 0) {
@@ -9988,20 +10020,22 @@ export class Compiler extends DiagnosticEmitter {
         if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
           initExpr = this.makeRetain(initExpr);
         }
-
-      // otherwise initialize with zero
-      } else {
+      } else if (isDefiniteAssigment) {
+        // otherwise initialize with default if marked as definite assigment
         initExpr = this.makeZero(fieldType);
       }
 
-      stmts.push(
-        module.store(fieldType.byteSize,
-          module.local_get(thisLocalIndex, nativeSizeType),
-          initExpr,
-          nativeFieldType,
-          field.memoryOffset
-        )
-      );
+      if (initExpr) {
+        stmts.push(
+          module.store(fieldType.byteSize,
+            module.local_get(thisLocalIndex, nativeSizeType),
+            initExpr,
+            nativeFieldType,
+            field.memoryOffset
+          )
+        );
+        field.set(CommonFlags.INITIALIZED);
+      }
     }
     return stmts;
   }

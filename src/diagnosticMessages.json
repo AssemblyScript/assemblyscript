@@ -138,6 +138,8 @@
   "Expected {0} arguments, but got {1}.": 2554,
   "Expected at least {0} arguments, but got {1}.": 2555,
   "Expected {0} type arguments, but got {1}.": 2558,
+  "Property {0} has no initializer and is not definitely assigned in constructor": 2564,
+
   "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": 2651,
   "Constructor of class '{0}' is private and only accessible within the class declaration.": 2673,
   "Constructor of class '{0}' is protected and only accessible within the class declaration.": 2674,

@@ -76,7 +76,10 @@ export enum CommonFlags {
   // Other
 
   /** Is quoted. */
-  QUOTED = 1 << 28
+  QUOTED = 1 << 28,
+
+  /** Track explicit field init */
+  INITIALIZED =  1<< 29,
 }
 
 /** Path delimiter inserted between file system levels. */

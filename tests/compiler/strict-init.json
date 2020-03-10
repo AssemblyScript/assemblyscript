@@ -1,0 +1,8 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "TS2564: Property b has no initializer and is not definitely assigned in constructor"
+  ]
+}
