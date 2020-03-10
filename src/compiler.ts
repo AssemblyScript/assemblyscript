@@ -373,6 +373,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
     if (options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;
     if (options.hasFeature(Feature.REFERENCE_TYPES)) featureFlags |= FeatureFlags.ReferenceTypes;
+    if (options.hasFeature(Feature.MULTI_VALUE)) featureFlags |= FeatureFlags.MultiValue;
     module.setFeatures(featureFlags);
   }
 

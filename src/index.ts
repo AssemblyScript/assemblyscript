@@ -127,6 +127,8 @@ export const FEATURE_EXCEPTION_HANDLING = Feature.EXCEPTION_HANDLING;
 export const FEATURE_TAIL_CALLS = Feature.TAIL_CALLS;
 /** Reference types. */
 export const FEATURE_REFERENCE_TYPES = Feature.REFERENCE_TYPES;
+/** Multi value types. */
+export const FEATURE_MULTI_VALUE = Feature.MULTI_VALUE;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {
