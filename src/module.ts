@@ -54,7 +54,8 @@ export enum FeatureFlags {
   ExceptionHandling = 64 /* _BinaryenFeatureExceptionHandling */,
   TailCall = 128 /* _BinaryenFeatureTailCall */,
   ReferenceTypes = 256 /* _BinaryenFeatureReferenceTypes */,
-  All = 511 /* _BinaryenFeatureAll */
+  MultiValue = 512 /* _BinaryenFeatureMultivalue */,
+  All = 1023 /* _BinaryenFeatureAll */
 }
 
 export enum ExpressionId {
