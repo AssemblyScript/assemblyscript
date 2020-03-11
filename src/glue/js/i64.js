@@ -5,9 +5,9 @@
 
 const Long = global.Long || require("long");
 
-global.i64_zero = Long.ZERO;
-
-global.i64_one = Long.ONE;
+global.i64_zero    = Long.ZERO;
+global.i64_one     = Long.ONE;
+global.i64_neg_one = Long.fromInt(-1);
 
 global.i64_new = function(lo, hi) {
   return Long.fromBits(lo, hi);
@@ -38,6 +38,9 @@ global.i64_pow = function(left, right) {
   var rightHi = right.high;
   if (rightHi <= 0) {
     if (rightHi < 0) {
+      if (left.eq(global.i64_neg_one)) {
+        return rightLo & 1 ? global.i64_neg_one : Long.ONE;
+      }
       return left.eq(Long.ONE) ? left : Long.ZERO;
     }
     if (rightLo == 0) return Long.ONE;

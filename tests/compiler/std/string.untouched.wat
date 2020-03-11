@@ -5297,6 +5297,18 @@
    i32.const 0
    i32.le_s
    if
+    local.get $0
+    i32.const -1
+    i32.eq
+    if
+     i32.const -1
+     i32.const 1
+     local.get $1
+     i32.const 1
+     i32.and
+     select
+     return
+    end
     local.get $1
     i32.const 0
     i32.eq

@@ -3938,6 +3938,10 @@ assert(  0  ** 0 ==  1);
 assert(  0  ** 1 ==  0);
 assert(  1  ** 3 ==  1);
 assert((-2) ** 3 == -8);
+assert((-1) ** 0 ==  1);
+assert((-1) ** -1 == -1);
+assert((-1) ** -2 ==  1);
+assert((-1) ** -3 == -1);
 
 assert(false ** -2 == 0);
 assert(false ** -1 == 0);
