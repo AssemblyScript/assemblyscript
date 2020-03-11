@@ -111,17 +111,6 @@ export enum NodeKind {
   COMMENT
 }
 
-/** Checks if a node represents a constant value. */
-export function nodeIsConstantValue(kind: NodeKind): bool {
-  switch (kind) {
-    case NodeKind.LITERAL:
-    case NodeKind.NULL:
-    case NodeKind.TRUE:
-    case NodeKind.FALSE: return true;
-  }
-  return false;
-}
-
 /** Base class of all nodes. */
 export abstract class Node {
   /** Node kind indicator. */
@@ -1141,6 +1130,41 @@ export abstract class Node {
     node.statement = statement;
     return node;
   }
+
+  /** Tests if this node is a literal of the specified kind. */
+  isLiteralKind(literalKind: LiteralKind): bool {
+    return this.kind == NodeKind.LITERAL
+        && (<LiteralExpression>changetype<Node>(this)).literalKind == literalKind; // TS
+  }
+
+  /** Tests if this node is a literal of a numeric kind (float or integer). */
+  get isNumericLiteral(): bool {
+    if (this.kind == NodeKind.LITERAL) {
+      switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
+        case LiteralKind.FLOAT:
+        case LiteralKind.INTEGER: return true;
+      }
+    }
+    return false;
+  }
+
+  /** Tests whether this node is guaranteed to compile to a constant value. */
+  get compilesToConst(): bool {
+    switch (this.kind) {
+      case NodeKind.LITERAL: {
+        switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
+          case LiteralKind.FLOAT:
+          case LiteralKind.INTEGER:
+          case LiteralKind.STRING: return true;
+        }
+        break;
+      }
+      case NodeKind.NULL:
+      case NodeKind.TRUE:
+      case NodeKind.FALSE: return true;
+    }
+    return false;
+  }
 }
 
 // types
@@ -1153,28 +1177,29 @@ export abstract class TypeNode extends Node {
 
   /** Tests if this type has a generic component matching one of the given type parameters. */
   hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool {
-    var self = <TypeNode>this; // TS otherwise complains
     if (this.kind == NodeKind.NAMEDTYPE) {
-      if (!(<NamedTypeNode>self).name.next) {
-        let typeArgumentNodes = (<NamedTypeNode>self).typeArguments;
+      let namedTypeNode = <NamedTypeNode>changetype<TypeNode>(this); // TS
+      if (!namedTypeNode.name.next) {
+        let typeArgumentNodes = namedTypeNode.typeArguments;
         if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
           for (let i = 0, k = typeArgumentNodes.length; i < k; ++i) {
             if (typeArgumentNodes[i].hasGenericComponent(typeParameterNodes)) return true;
           }
         } else {
-          let name = (<NamedTypeNode>self).name.identifier.text;
+          let name = namedTypeNode.name.identifier.text;
           for (let i = 0, k = typeParameterNodes.length; i < k; ++i) {
             if (typeParameterNodes[i].name.text == name) return true;
           }
         }
       }
     } else if (this.kind == NodeKind.FUNCTIONTYPE) {
-      let parameterNodes = (<FunctionTypeNode>self).parameters;
+      let functionTypeNode = <FunctionTypeNode>changetype<TypeNode>(this); // TS
+      let parameterNodes = functionTypeNode.parameters;
       for (let i = 0, k = parameterNodes.length; i < k; ++i) {
         if (parameterNodes[i].type.hasGenericComponent(typeParameterNodes)) return true;
       }
-      if ((<FunctionTypeNode>self).returnType.hasGenericComponent(typeParameterNodes)) return true;
-      let explicitThisType = (<FunctionTypeNode>self).explicitThisType;
+      if (functionTypeNode.returnType.hasGenericComponent(typeParameterNodes)) return true;
+      let explicitThisType = functionTypeNode.explicitThisType;
       if (explicitThisType !== null && explicitThisType.hasGenericComponent(typeParameterNodes)) return true;
     } else {
       assert(false);
@@ -1319,25 +1344,26 @@ export namespace DecoratorKind {
           break;
         }
       }
-    } else if (
-      nameNode.kind == NodeKind.PROPERTYACCESS &&
-      (<PropertyAccessExpression>nameNode).expression.kind == NodeKind.IDENTIFIER
-    ) {
-      let nameStr = (<IdentifierExpression>(<PropertyAccessExpression>nameNode).expression).text;
-      assert(nameStr.length);
-      let propStr = (<PropertyAccessExpression>nameNode).property.text;
-      assert(propStr.length);
-      // @operator.binary, @operator.prefix, @operator.postfix
-      if (nameStr == "operator") {
-        switch (propStr.charCodeAt(0)) {
-          case CharCode.b: {
-            if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
-            break;
-          }
-          case CharCode.p: {
-            if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
-            if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
-            break;
+    } else if (nameNode.kind == NodeKind.PROPERTYACCESS) {
+      let propertyAccessNode = <PropertyAccessExpression>nameNode;
+      let expression = propertyAccessNode.expression;
+      if (expression.kind == NodeKind.IDENTIFIER) {
+        let nameStr = (<IdentifierExpression>expression).text;
+        assert(nameStr.length);
+        let propStr = propertyAccessNode.property.text;
+        assert(propStr.length);
+        // @operator.binary, @operator.prefix, @operator.postfix
+        if (nameStr == "operator") {
+          switch (propStr.charCodeAt(0)) {
+            case CharCode.b: {
+              if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
+              break;
+            }
+            case CharCode.p: {
+              if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
+              if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
+              break;
+            }
           }
         }
       }
@@ -1395,17 +1421,6 @@ export enum LiteralKind {
   REGEXP,
   ARRAY,
   OBJECT
-}
-
-/** Checks if the given node represents a numeric (float or integer) literal. */
-export function isNumericLiteral(node: Expression): bool {
-  if (node.kind == NodeKind.LITERAL) {
-    switch ((<LiteralExpression>node).literalKind) {
-      case LiteralKind.FLOAT:
-      case LiteralKind.INTEGER: return true;
-    }
-  }
-  return false;
 }
 
 /** Base class of all literal expressions. */
