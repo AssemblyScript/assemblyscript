@@ -260,6 +260,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Handle type definitions
     if (element.kind == ElementKind.TYPEDEFINITION) {
+      let typeDefinition = <TypeDefinition>element;
 
       // Shortcut already resolved (mostly builtins)
       if (element.is(CommonFlags.RESOLVED)) {
@@ -271,7 +272,7 @@ export class Resolver extends DiagnosticEmitter {
             );
           }
         }
-        let type = (<TypeDefinition>element).type;
+        let type = typeDefinition.type;
         if (node.isNullable) {
           if (!type.is(TypeFlags.REFERENCE)) {
             if (reportMode == ReportMode.REPORT) {
@@ -297,7 +298,7 @@ export class Resolver extends DiagnosticEmitter {
       }
 
       // Resolve normally
-      let typeParameterNodes = (<TypeDefinition>element).typeParameterNodes;
+      let typeParameterNodes = typeDefinition.typeParameterNodes;
       let typeArguments: Type[] | null = null;
       if (typeParameterNodes) {
         typeArguments = this.resolveTypeArguments(
@@ -316,7 +317,7 @@ export class Resolver extends DiagnosticEmitter {
         );
       }
       let type = this.resolveType(
-        (<TypeDefinition>element).typeNode,
+        typeDefinition.typeNode,
         element,
         ctxTypes,
         reportMode
@@ -826,11 +827,12 @@ export class Resolver extends DiagnosticEmitter {
     typeParameterNames: Set<string>
   ): void {
     if (node.kind == NodeKind.NAMEDTYPE) {
-      let typeArgumentNodes = (<NamedTypeNode>node).typeArguments;
+      let namedTypeNode = <NamedTypeNode>node;
+      let typeArgumentNodes = namedTypeNode.typeArguments;
       if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) { // foo<T>(bar: Array<T>)
         let classReference = type.classReference;
         if (classReference) {
-          let classPrototype = this.resolveTypeName((<NamedTypeNode>node).name, ctxFlow.actualFunction);
+          let classPrototype = this.resolveTypeName(namedTypeNode.name, ctxFlow.actualFunction);
           if (!classPrototype || classPrototype.kind != ElementKind.CLASS_PROTOTYPE) return;
           if (classReference.prototype == <ClassPrototype>classPrototype) {
             let typeArguments = classReference.typeArguments;
@@ -843,7 +845,7 @@ export class Resolver extends DiagnosticEmitter {
           }
         }
       } else { // foo<T>(bar: T)
-        let name = (<NamedTypeNode>node).name.identifier.text;
+        let name = namedTypeNode.name.identifier.text;
         if (ctxTypes.has(name)) {
           let currentType = assert(ctxTypes.get(name));
           if (currentType == Type.auto || (typeParameterNames.has(name) && currentType.isAssignableTo(type))) {
@@ -852,18 +854,19 @@ export class Resolver extends DiagnosticEmitter {
         }
       }
     } else if (node.kind == NodeKind.FUNCTIONTYPE) { // foo<T>(bar: (baz: T) => i32))
-      let parameterNodes = (<FunctionTypeNode>node).parameters;
+      let functionTypeNode = <FunctionTypeNode>node;
+      let parameterNodes = functionTypeNode.parameters;
       if (parameterNodes !== null && parameterNodes.length > 0) {
         let signatureReference = type.signatureReference;
         if (signatureReference) {
           let parameterTypes = signatureReference.parameterTypes;
           let thisType = signatureReference.thisType;
-          if (parameterTypes.length == parameterNodes.length && !thisType == !(<FunctionTypeNode>node).explicitThisType) {
+          if (parameterTypes.length == parameterNodes.length && !thisType == !functionTypeNode.explicitThisType) {
             for (let i = 0, k = parameterTypes.length; i < k; ++i) {
               this.propagateInferredGenericTypes(parameterNodes[i].type, parameterTypes[i], ctxFlow, ctxTypes, typeParameterNames);
             }
-            this.propagateInferredGenericTypes((<FunctionTypeNode>node).returnType, signatureReference.returnType, ctxFlow, ctxTypes, typeParameterNames);
-            if (thisType) this.propagateInferredGenericTypes((<FunctionTypeNode>node).explicitThisType!, thisType, ctxFlow, ctxTypes, typeParameterNames);
+            this.propagateInferredGenericTypes(functionTypeNode.returnType, signatureReference.returnType, ctxFlow, ctxTypes, typeParameterNames);
+            if (thisType) this.propagateInferredGenericTypes(functionTypeNode.explicitThisType!, thisType, ctxFlow, ctxTypes, typeParameterNames);
             return;
           }
         }
@@ -887,7 +890,9 @@ export class Resolver extends DiagnosticEmitter {
       }
       return type;
     }
-    if (kind == ElementKind.FUNCTION_TARGET) return (<FunctionTarget>element).type;
+    if (kind == ElementKind.FUNCTION_TARGET) {
+      return (<FunctionTarget>element).type;
+    }
     return null;
   }
 
@@ -1280,7 +1285,9 @@ export class Resolver extends DiagnosticEmitter {
       case ElementKind.ENUMVALUE:
       case ElementKind.LOCAL:
       case ElementKind.FIELD: { // someVar.prop
-        let type = (<VariableLikeElement>target).type; assert(type != Type.void);
+        let variableLikeElement = <VariableLikeElement>target;
+        let type = variableLikeElement.type;
+        assert(type != Type.void);
         let classReference = type.classReference;
         if (!classReference) {
           let wrapperClasses = this.program.wrapperClasses;
@@ -1290,7 +1297,7 @@ export class Resolver extends DiagnosticEmitter {
             if (reportMode == ReportMode.REPORT) {
               this.error(
                 DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                node.property.range, propertyName, (<VariableLikeElement>target).type.toString()
+                node.property.range, propertyName, variableLikeElement.type.toString()
               );
             }
             return null;
@@ -1300,8 +1307,9 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: { // SomeClass.prop
+        let propertyPrototype = <PropertyPrototype>target;
         let getterInstance = this.resolveFunction( // reports
-          assert((<PropertyPrototype>target).getterPrototype), // must have a getter
+          assert(propertyPrototype.getterPrototype), // must have a getter
           null,
           makeMap<string,Type>(),
           reportMode
@@ -1327,7 +1335,8 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY: { // someInstance.prop
-        let getterInstance = assert((<Property>target).getterInstance); // must have a getter
+        let propertyInstance = <Property>target;
+        let getterInstance = assert(propertyInstance.getterInstance); // must have a getter
         let type = getterInstance.signature.returnType;
         let classReference = type.classReference;
         if (!classReference) {
@@ -1348,10 +1357,12 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.INDEXSIGNATURE: { // someInstance[x].prop
-        let elementExpression = assert(this.currentElementExpression);
-        let parent = (<IndexSignature>target).parent;
+        let indexSignature = <IndexSignature>target;
+        let parent = indexSignature.parent;
         assert(parent.kind == ElementKind.CLASS);
-        let indexedGet = (<Class>parent).lookupOverload(OperatorKind.INDEXED_GET);
+        let classInstance = <Class>parent;
+        let elementExpression = assert(this.currentElementExpression);
+        let indexedGet = classInstance.lookupOverload(OperatorKind.INDEXED_GET);
         if (!indexedGet) {
           if (reportMode == ReportMode.REPORT) {
             this.error(
@@ -1407,15 +1418,19 @@ export class Resolver extends DiagnosticEmitter {
           }
           // traverse inherited static members on the base prototype if target is a class prototype
           if (target.kind == ElementKind.CLASS_PROTOTYPE) {
-            if ((<ClassPrototype>target).basePrototype) {
-              target = <ClassPrototype>(<ClassPrototype>target).basePrototype;
+            let classPrototype = <ClassPrototype>target;
+            let basePrototype = classPrototype.basePrototype;
+            if (basePrototype) {
+              target = basePrototype;
             } else {
               break;
             }
           // traverse inherited instance members on the base class if target is a class instance
           } else if (target.kind == ElementKind.CLASS) {
-            if ((<Class>target).base) {
-              target = <Class>(<Class>target).base;
+            let classInstance = <Class>target;
+            let baseInstance = classInstance.base;
+            if (baseInstance) {
+              target = baseInstance;
             } else {
               break;
             }
@@ -1486,13 +1501,14 @@ export class Resolver extends DiagnosticEmitter {
     if (!targetType) return null;
     if (targetType.is(TypeFlags.REFERENCE)) {
       let classReference = targetType.classReference;
-      if (classReference) {
+      while (classReference) {
         let indexSignature = classReference.indexSignature;
         if (indexSignature) {
           this.currentThisExpression = targetExpression;
           this.currentElementExpression = node.elementExpression;
           return indexSignature;
         }
+        classReference = classReference.base;
       }
     }
     if (reportMode == ReportMode.REPORT) {
@@ -1733,7 +1749,7 @@ export class Resolver extends DiagnosticEmitter {
     switch (operator) {
       case Token.MINUS: {
         // implicitly negate if an integer literal to distinguish between i32/u32/i64
-        if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.INTEGER) {
+        if (operand.isLiteralKind(LiteralKind.INTEGER)) {
           return this.determineIntegerLiteralType(i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value), ctxType);
         }
         // fall-through
@@ -2376,18 +2392,21 @@ export class Resolver extends DiagnosticEmitter {
     if (!target) return null;
     switch (target.kind) {
       case ElementKind.FUNCTION_PROTOTYPE: {
+        let functionPrototype = <FunctionPrototype>target;
         // `unchecked` behaves like parenthesized
         if (
-          (<FunctionPrototype>target).internalName == BuiltinNames.unchecked &&
+          functionPrototype.internalName == BuiltinNames.unchecked &&
           node.arguments.length > 0
         ) {
           return this.resolveExpression(node.arguments[0], ctxFlow, ctxType, reportMode);
         }
-        let instance = this.maybeInferCall(node, <FunctionPrototype>target, ctxFlow, reportMode);
+        let instance = this.maybeInferCall(node, functionPrototype, ctxFlow, reportMode);
         if (!instance) return null;
         return instance.signature.returnType;
       }
-      case ElementKind.FUNCTION_TARGET: return (<FunctionTarget>target).signature.returnType;
+      case ElementKind.FUNCTION_TARGET: {
+        return (<FunctionTarget>target).signature.returnType;
+      }
     }
     if (reportMode == ReportMode.REPORT) {
       this.error(
@@ -2790,9 +2809,10 @@ export class Resolver extends DiagnosticEmitter {
       // If this is an instance method, first apply the class's type arguments
       if (prototype.is(CommonFlags.INSTANCE)) {
         assert(actualParent.kind == ElementKind.CLASS);
-        let classTypeArguments = (<Class>actualParent).typeArguments;
+        let classInstance = <Class>actualParent;
+        let classTypeArguments = classInstance.typeArguments;
         if (classTypeArguments) {
-          let typeParameterNodes = assert((<Class>actualParent).prototype.typeParameterNodes);
+          let typeParameterNodes = assert(classInstance.prototype.typeParameterNodes);
           let numClassTypeArguments = classTypeArguments.length;
           assert(numClassTypeArguments == typeParameterNodes.length);
           for (let i = 0; i < numClassTypeArguments; ++i) {
@@ -2958,14 +2978,15 @@ export class Resolver extends DiagnosticEmitter {
         switch (member.kind) {
 
           case ElementKind.FIELD_PROTOTYPE: {
-            let fieldTypeNode = (<FieldPrototype>member).typeNode;
+            let fieldPrototype = <FieldPrototype>member;
+            let fieldTypeNode = fieldPrototype.typeNode;
             let fieldType: Type | null = null;
             // TODO: handle duplicate non-private fields specifically?
             if (!fieldTypeNode) {
               if (base) {
                 let baseMembers = base.members;
-                if (baseMembers !== null && baseMembers.has((<FieldPrototype>member).name)) {
-                  let baseField = assert(baseMembers.get((<FieldPrototype>member).name));
+                if (baseMembers !== null && baseMembers.has(fieldPrototype.name)) {
+                  let baseField = assert(baseMembers.get(fieldPrototype.name));
                   if (!baseField.is(CommonFlags.PRIVATE)) {
                     assert(baseField.kind == ElementKind.FIELD);
                     fieldType = (<Field>baseField).type;
@@ -2976,7 +2997,7 @@ export class Resolver extends DiagnosticEmitter {
                 if (reportMode == ReportMode.REPORT) {
                   this.error(
                     DiagnosticCode.Type_expected,
-                    (<FieldPrototype>member).identifierNode.range.atEnd
+                    fieldPrototype.identifierNode.range.atEnd
                   );
                 }
               }
@@ -2989,13 +3010,13 @@ export class Resolver extends DiagnosticEmitter {
               );
             }
             if (!fieldType) break; // did report above
-            let field = new Field(<FieldPrototype>member, instance, fieldType);
+            let fieldInstance = new Field(fieldPrototype, instance, fieldType);
             assert(isPowerOf2(fieldType.byteSize));
             let mask = fieldType.byteSize - 1;
             if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
-            field.memoryOffset = memoryOffset;
+            fieldInstance.memoryOffset = memoryOffset;
             memoryOffset += fieldType.byteSize;
-            instance.add(member.name, field); // reports
+            instance.add(member.name, fieldInstance); // reports
             break;
           }
           case ElementKind.FUNCTION_PROTOTYPE: {
@@ -3004,8 +3025,9 @@ export class Resolver extends DiagnosticEmitter {
             break;
           }
           case ElementKind.PROPERTY_PROTOTYPE: {
-            let propertyInstance = new Property(<PropertyPrototype>member, instance);
-            let getterPrototype = (<PropertyPrototype>member).getterPrototype;
+            let propertyPrototype = <PropertyPrototype>member;
+            let propertyInstance = new Property(propertyPrototype, instance);
+            let getterPrototype = propertyPrototype.getterPrototype;
             if (getterPrototype) {
               let getterInstance = this.resolveFunction(
                 getterPrototype.toBound(instance),
@@ -3018,7 +3040,7 @@ export class Resolver extends DiagnosticEmitter {
                 propertyInstance.setType(getterInstance.signature.returnType);
               }
             }
-            let setterPrototype = (<PropertyPrototype>member).setterPrototype;
+            let setterPrototype = propertyPrototype.setterPrototype;
             if (setterPrototype) {
               let setterInstance = this.resolveFunction(
                 setterPrototype.toBound(instance),

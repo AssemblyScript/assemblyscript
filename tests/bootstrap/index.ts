@@ -1,12 +1,13 @@
 import * as fs from "fs";
 import * as binaryen from "binaryen";
+import * as util from "util";
 import * as loader from "../../lib/loader";
 import AssemblyScript from "../../out/assemblyscript";
 
 async function test(build: string): Promise<void> {
   await binaryen.ready;
   const assemblyscript = await loader.instantiate<typeof AssemblyScript>(fs.promises.readFile(__dirname + "/../../out/assemblyscript." + build + ".wasm"), { binaryen });
-  console.log(assemblyscript);
+  console.log(util.inspect(assemblyscript, true));
   const optionsPtr = assemblyscript.newOptions();
   const programPtr = assemblyscript.newProgram(optionsPtr);
   const textPtr = assemblyscript.__allocString("export function add(a: i32, b: i32): i32 { return a + b; }\n");

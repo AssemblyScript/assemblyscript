@@ -764,35 +764,48 @@ export class Flow {
 
     this.flags = newFlags | (this.flags & FlowFlags.UNCHECKED_CONTEXT);
 
-    var leftLocalFlags = left.localFlags;
-    var numLeftLocalFlags = leftLocalFlags.length;
-    var rightLocalFlags = right.localFlags;
-    var numRightLocalFlags = rightLocalFlags.length;
-    var maxLocalFlags = max(numLeftLocalFlags, numRightLocalFlags);
-    var combinedFlags = new Array<LocalFlags>(maxLocalFlags);
-    for (let i = 0; i < maxLocalFlags; ++i) {
-      let leftFlags = i < numLeftLocalFlags ? leftLocalFlags[i] : 0;
-      let rightFlags = i < numRightLocalFlags ? rightLocalFlags[i] : 0;
-      let newFlags = leftFlags & rightFlags & (
-        LocalFlags.CONSTANT  |
-        LocalFlags.WRAPPED   |
-        LocalFlags.NONNULL   |
-        LocalFlags.INITIALIZED
-      );
-      if (leftFlags & LocalFlags.RETAINED) {
-        if (rightFlags & LocalFlags.RETAINED) {
-          newFlags |= LocalFlags.RETAINED;
-        } else {
-          newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
+    var thisLocalFlags = this.localFlags;
+    if (leftFlags & FlowFlags.TERMINATES) {
+      if (!(rightFlags & FlowFlags.TERMINATES)) {
+        let rightLocalFlags = right.localFlags;
+        for (let i = 0, k = rightLocalFlags.length; i < k; ++i) {
+          thisLocalFlags[i] = rightLocalFlags[i];
         }
-      } else if (rightFlags & LocalFlags.RETAINED) {
-        newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
-      } else {
-        newFlags |= (leftFlags | rightFlags) & LocalFlags.CONDITIONALLY_RETAINED;
       }
-      combinedFlags[i] = newFlags;
+    } else if (rightFlags & FlowFlags.TERMINATES) {
+      let leftLocalFlags = left.localFlags;
+      for (let i = 0, k = leftLocalFlags.length; i < k; ++i) {
+        thisLocalFlags[i] = leftLocalFlags[i];
+      }
+    } else {
+      let leftLocalFlags = left.localFlags;
+      let numLeftLocalFlags = leftLocalFlags.length;
+      let rightLocalFlags = right.localFlags;
+      let numRightLocalFlags = rightLocalFlags.length;
+      let maxLocalFlags = max(numLeftLocalFlags, numRightLocalFlags);
+      for (let i = 0; i < maxLocalFlags; ++i) {
+        let leftFlags = i < numLeftLocalFlags ? leftLocalFlags[i] : 0;
+        let rightFlags = i < numRightLocalFlags ? rightLocalFlags[i] : 0;
+        let newFlags = leftFlags & rightFlags & (
+          LocalFlags.CONSTANT  |
+          LocalFlags.WRAPPED   |
+          LocalFlags.NONNULL   |
+          LocalFlags.INITIALIZED
+        );
+        if (leftFlags & LocalFlags.RETAINED) {
+          if (rightFlags & LocalFlags.RETAINED) {
+            newFlags |= LocalFlags.RETAINED;
+          } else {
+            newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
+          }
+        } else if (rightFlags & LocalFlags.RETAINED) {
+          newFlags |= LocalFlags.CONDITIONALLY_RETAINED;
+        } else {
+          newFlags |= (leftFlags | rightFlags) & LocalFlags.CONDITIONALLY_RETAINED;
+        }
+        thisLocalFlags[i] = newFlags;
+      }
     }
-    this.localFlags = combinedFlags;
   }
 
   /** Tests if the specified flows have differing local states. */
@@ -1097,7 +1110,7 @@ export class Flow {
         // TODO: this is inefficient because it has to read a string
         let global = assert(this.parentFunction.program.elementsByName.get(assert(getGlobalGetName(expr))));
         assert(global.kind == ElementKind.GLOBAL);
-        return canConversionOverflow(assert((<Global>global).type), type);
+        return canConversionOverflow((<Global>global).type, type);
       }
 
       case ExpressionId.Binary: {
@@ -1303,8 +1316,9 @@ export class Flow {
         if (instancesByName.has(instanceName)) {
           let instance = assert(instancesByName.get(instanceName));
           assert(instance.kind == ElementKind.FUNCTION);
-          let returnType = (<Function>instance).signature.returnType;
-          return !(<Function>instance).flow.is(FlowFlags.RETURNS_WRAPPED)
+          let functionInstance = <Function>instance;
+          let returnType = functionInstance.signature.returnType;
+          return !functionInstance.flow.is(FlowFlags.RETURNS_WRAPPED)
               || canConversionOverflow(returnType, type);
         }
         return false; // assume no overflow for builtins

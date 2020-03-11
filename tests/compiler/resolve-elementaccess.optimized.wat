@@ -1,10 +1,11 @@
 (module
- (type $i32_=>_none (func (param i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $none_=>_none (func))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f32_=>_none (func (param i32 i32 f32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
@@ -31,6 +32,10 @@
  (data (i32.const 1472) "0\00\00\00\01\00\00\00\01\00\00\000\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00e\00l\00e\00m\00e\00n\00t\00a\00c\00c\00e\00s\00s\00.\00t\00s")
  (data (i32.const 1536) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\002\00.\000")
  (data (i32.const 1568) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\001\001\00.\000")
+ (data (i32.const 1600) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
+ (data (i32.const 1632) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
+ (data (i32.const 1664) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
+ (data (i32.const 1696) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $resolve-elementaccess/arr (mut i32) (i32.const 0))
@@ -40,6 +45,7 @@
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
+ (global $resolve-elementaccess/buf (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
@@ -129,56 +135,240 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/memory/memory.fill (; 3 ;) (param $0 i32)
-  (local $1 i32)
-  local.get $0
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 8
-  i32.add
-  local.tee $1
-  i32.const 1
-  i32.sub
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 1
-  i32.add
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 2
-  i32.add
-  i32.const 0
-  i32.store8
-  local.get $1
-  i32.const 2
-  i32.sub
-  i32.const 0
-  i32.store8
-  local.get $1
-  i32.const 3
-  i32.sub
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.const 3
-  i32.add
-  i32.const 0
-  i32.store8
-  local.get $1
-  i32.const 4
-  i32.sub
-  i32.const 0
-  i32.store8
+ (func $~lib/memory/memory.fill (; 3 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  block $~lib/util/memory/memset|inlined.0
+   local.get $1
+   i32.eqz
+   br_if $~lib/util/memory/memset|inlined.0
+   local.get $0
+   i32.const 0
+   i32.store8
+   local.get $0
+   local.get $1
+   i32.add
+   i32.const 1
+   i32.sub
+   i32.const 0
+   i32.store8
+   local.get $1
+   i32.const 2
+   i32.le_u
+   br_if $~lib/util/memory/memset|inlined.0
+   local.get $0
+   i32.const 1
+   i32.add
+   i32.const 0
+   i32.store8
+   local.get $0
+   i32.const 2
+   i32.add
+   i32.const 0
+   i32.store8
+   local.get $0
+   local.get $1
+   i32.add
+   local.tee $2
+   i32.const 2
+   i32.sub
+   i32.const 0
+   i32.store8
+   local.get $2
+   i32.const 3
+   i32.sub
+   i32.const 0
+   i32.store8
+   local.get $1
+   i32.const 6
+   i32.le_u
+   br_if $~lib/util/memory/memset|inlined.0
+   local.get $0
+   i32.const 3
+   i32.add
+   i32.const 0
+   i32.store8
+   local.get $0
+   local.get $1
+   i32.add
+   i32.const 4
+   i32.sub
+   i32.const 0
+   i32.store8
+   local.get $1
+   i32.const 8
+   i32.le_u
+   br_if $~lib/util/memory/memset|inlined.0
+   local.get $1
+   i32.const 0
+   local.get $0
+   i32.sub
+   i32.const 3
+   i32.and
+   local.tee $1
+   i32.sub
+   local.set $2
+   local.get $0
+   local.get $1
+   i32.add
+   local.tee $0
+   i32.const 0
+   i32.store
+   local.get $0
+   local.get $2
+   i32.const -4
+   i32.and
+   local.tee $1
+   i32.add
+   i32.const 4
+   i32.sub
+   i32.const 0
+   i32.store
+   local.get $1
+   i32.const 8
+   i32.le_u
+   br_if $~lib/util/memory/memset|inlined.0
+   local.get $0
+   i32.const 4
+   i32.add
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 8
+   i32.add
+   i32.const 0
+   i32.store
+   local.get $0
+   local.get $1
+   i32.add
+   local.tee $2
+   i32.const 12
+   i32.sub
+   i32.const 0
+   i32.store
+   local.get $2
+   i32.const 8
+   i32.sub
+   i32.const 0
+   i32.store
+   local.get $1
+   i32.const 24
+   i32.le_u
+   br_if $~lib/util/memory/memset|inlined.0
+   local.get $0
+   i32.const 12
+   i32.add
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 16
+   i32.add
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 20
+   i32.add
+   i32.const 0
+   i32.store
+   local.get $0
+   i32.const 24
+   i32.add
+   i32.const 0
+   i32.store
+   local.get $0
+   local.get $1
+   i32.add
+   local.tee $2
+   i32.const 28
+   i32.sub
+   i32.const 0
+   i32.store
+   local.get $2
+   i32.const 24
+   i32.sub
+   i32.const 0
+   i32.store
+   local.get $2
+   i32.const 20
+   i32.sub
+   i32.const 0
+   i32.store
+   local.get $2
+   i32.const 16
+   i32.sub
+   i32.const 0
+   i32.store
+   local.get $0
+   local.get $0
+   i32.const 4
+   i32.and
+   i32.const 24
+   i32.add
+   local.tee $2
+   i32.add
+   local.set $0
+   local.get $1
+   local.get $2
+   i32.sub
+   local.set $1
+   loop $while-continue|0
+    local.get $1
+    i32.const 32
+    i32.ge_u
+    if
+     local.get $0
+     i64.const 0
+     i64.store
+     local.get $0
+     i32.const 8
+     i32.add
+     i64.const 0
+     i64.store
+     local.get $0
+     i32.const 16
+     i32.add
+     i64.const 0
+     i64.store
+     local.get $0
+     i32.const 24
+     i32.add
+     i64.const 0
+     i64.store
+     local.get $1
+     i32.const 32
+     i32.sub
+     local.set $1
+     local.get $0
+     i32.const 32
+     i32.add
+     local.set $0
+     br $while-continue|0
+    end
+   end
+  end
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 4 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  i32.const 8
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  i32.const 2
+  i32.const 1073741808
+  local.get $1
+  i32.shr_u
+  i32.gt_u
+  if
+   i32.const 32
+   i32.const 80
+   i32.const 23
+   i32.const 56
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 2
+  local.get $1
+  i32.shl
+  local.tee $2
   i32.const 0
   call $~lib/rt/stub/__alloc
   local.tee $1
+  local.get $2
   call $~lib/memory/memory.fill
   local.get $0
   i32.eqz
@@ -207,7 +397,7 @@
   local.get $1
   i32.store offset=4
   local.get $0
-  i32.const 8
+  local.get $2
   i32.store offset=8
   local.get $0
  )
@@ -1734,15 +1924,83 @@
   end
   i32.const 0
  )
- (func $start:resolve-elementaccess (; 20 ;)
+ (func $~lib/typedarray/Uint8Array#__set (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.ge_u
+  if
+   i32.const 144
+   i32.const 208
+   i32.const 163
+   i32.const 44
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
+  i32.load offset=4
+  i32.add
+  local.get $2
+  i32.store8
+ )
+ (func $~lib/typedarray/Uint8Array#__get (; 21 ;) (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  local.get $0
+  i32.load offset=8
+  i32.ge_u
+  if
+   i32.const 144
+   i32.const 208
+   i32.const 152
+   i32.const 44
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  local.get $0
+  i32.load offset=4
+  i32.add
+  i32.load8_u
+ )
+ (func $~lib/util/number/utoa32 (; 22 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 1616
+   return
+  end
+  local.get $0
+  call $~lib/util/number/decimalCount32
+  local.tee $1
+  i32.const 1
+  i32.shl
+  i32.const 1
+  call $~lib/rt/stub/__alloc
+  local.tee $2
+  local.get $0
+  local.get $1
+  call $~lib/util/number/utoa_simple<u32>
+  local.get $2
+ )
+ (func $~lib/number/U8#toString (; 23 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 255
+  i32.and
+  call $~lib/util/number/utoa32
+ )
+ (func $start:resolve-elementaccess (; 24 ;)
   (local $0 i32)
-  i32.const 1600
+  i32.const 1728
   global.set $~lib/rt/stub/startOffset
-  i32.const 1600
+  i32.const 1728
   global.set $~lib/rt/stub/offset
   i32.const 12
   i32.const 3
   call $~lib/rt/stub/__alloc
+  i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
   global.set $resolve-elementaccess/arr
   global.get $resolve-elementaccess/arr
@@ -1763,7 +2021,7 @@
   if
    i32.const 0
    i32.const 1488
-   i32.const 4
+   i32.const 5
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -1778,7 +2036,7 @@
   if
    i32.const 0
    i32.const 1488
-   i32.const 9
+   i32.const 10
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -1802,7 +2060,7 @@
   if
    i32.const 0
    i32.const 1488
-   i32.const 14
+   i32.const 15
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -1823,13 +2081,111 @@
   if
    i32.const 0
    i32.const 1488
-   i32.const 20
+   i32.const 21
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  i32.const 7
+  call $~lib/rt/stub/__alloc
+  local.tee $0
+  i32.eqz
+  if
+   i32.const 12
+   i32.const 8
+   call $~lib/rt/stub/__alloc
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  call $~lib/arraybuffer/ArrayBufferView#constructor
+  global.set $resolve-elementaccess/buf
+  global.get $resolve-elementaccess/buf
+  i32.const 0
+  i32.const 1
+  call $~lib/typedarray/Uint8Array#__set
+  global.get $resolve-elementaccess/buf
+  i32.const 1
+  i32.const 2
+  call $~lib/typedarray/Uint8Array#__set
+  global.get $resolve-elementaccess/buf
+  i32.const 0
+  call $~lib/typedarray/Uint8Array#__get
+  call $~lib/number/U8#toString
+  i32.const 1648
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1488
+   i32.const 28
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $resolve-elementaccess/buf
+  i32.const 1
+  call $~lib/typedarray/Uint8Array#__get
+  call $~lib/number/U8#toString
+  i32.const 1680
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1488
+   i32.const 33
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $resolve-elementaccess/buf
+  local.tee $0
+  i32.const 0
+  global.get $resolve-elementaccess/buf
+  i32.const 0
+  call $~lib/typedarray/Uint8Array#__get
+  i32.const 10
+  i32.add
+  call $~lib/typedarray/Uint8Array#__set
+  local.get $0
+  i32.const 0
+  call $~lib/typedarray/Uint8Array#__get
+  call $~lib/number/U8#toString
+  i32.const 1712
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1488
+   i32.const 38
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $resolve-elementaccess/buf
+  i32.const 0
+  global.get $resolve-elementaccess/buf
+  i32.const 0
+  call $~lib/typedarray/Uint8Array#__get
+  i32.const 10
+  i32.add
+  call $~lib/typedarray/Uint8Array#__set
+  global.get $resolve-elementaccess/buf
+  i32.const 0
+  call $~lib/typedarray/Uint8Array#__get
+  i32.const 21
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1488
+   i32.const 44
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~start (; 21 ;)
+ (func $~start (; 25 ;)
   call $start:resolve-elementaccess
  )
 )
