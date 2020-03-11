@@ -16,6 +16,27 @@
  * @license Apache-2.0
  */
 
+// Element                    Base class of all elements
+// ├─DeclaredElement          Base class of elements with a declaration
+// │ ├─TypedElement           Base class of elements resolving to a type
+// │ │ ├─TypeDefinition       Type alias declaration
+// │ │ ├─VariableLikeElement  Base class of all variable-like elements
+// │ │ │ ├─EnumValue          Enum value
+// │ │ │ ├─Global             File global
+// │ │ │ ├─Local              Function local
+// │ │ │ ├─Field              Class field (instance only)
+// │ │ │ └─Property           Class property
+// │ │ ├─IndexSignature       Class index signature
+// │ │ ├─Function             Concrete function instance
+// │ │ └─Class                Concrete class instance
+// │ ├─Namespace              Namespace with static members
+// │ ├─FunctionPrototype      Prototype of concrete function instances
+// │ ├─FieldPrototype         Prototype of concrete field instances
+// │ ├─PropertyPrototype      Prototype of concrete property instances
+// │ └─ClassPrototype         Prototype of concrete classe instances
+// ├─File                     File, analogous to Source in the AST
+// └─FunctionTarget           Indirectly called function helper (typed)
+
 import {
   CommonFlags,
   PATH_DELIMITER,
@@ -3260,15 +3281,22 @@ export class Property extends VariableLikeElement {
   }
 }
 
-/** An resolved index signature. */
-export class IndexSignature extends VariableLikeElement {
+/** A resolved index signature. */
+export class IndexSignature extends TypedElement {
 
   /** Constructs a new index prototype. */
   constructor(
     /** Parent class. */
     parent: Class
   ) {
-    super(ElementKind.INDEXSIGNATURE, parent.internalName + "[]", parent);
+    super(
+      ElementKind.INDEXSIGNATURE,
+      "[]",
+      parent.internalName + "[]",
+      parent.program,
+      parent,
+      parent.program.makeNativeVariableDeclaration("[]") // is fine
+    );
   }
 
   /** Obtains the getter instance. */
