@@ -1,0 +1,7 @@
+{
+  "asc_flags": [
+    "--runtime none",
+    "--explicitStart",
+    "--use abort=~lib/bindings/wasi/abort"
+  ]
+}
