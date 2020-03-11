@@ -39,7 +39,7 @@ global.i64_pow = function(left, right) {
   if (rightHi <= 0) {
     if (rightHi < 0) {
       if (left.eq(global.i64_neg_one)) {
-        return rightLo & 1 ? global.i64_neg_one : Long.ONE;
+        return rightLo & 1 ? left : Long.ONE;
       }
       return left.eq(Long.ONE) ? left : Long.ZERO;
     }

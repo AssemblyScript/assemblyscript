@@ -13,6 +13,10 @@ const i64_one: i64 = 1;
 
 // @ts-ignore: decorator
 @global
+const i64_neg_one: i64 = -1;
+
+// @ts-ignore: decorator
+@global
 function i64_new(lo: i32, hi: i32 = 0): i64 {
   return lo | (hi << 32);
 }
