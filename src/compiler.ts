@@ -373,6 +373,7 @@ export class Compiler extends DiagnosticEmitter {
     if (options.hasFeature(Feature.EXCEPTION_HANDLING)) featureFlags |= FeatureFlags.ExceptionHandling;
     if (options.hasFeature(Feature.TAIL_CALLS)) featureFlags |= FeatureFlags.TailCall;
     if (options.hasFeature(Feature.REFERENCE_TYPES)) featureFlags |= FeatureFlags.ReferenceTypes;
+    if (options.hasFeature(Feature.MULTI_VALUE)) featureFlags |= FeatureFlags.MultiValue;
     module.setFeatures(featureFlags);
   }
 
@@ -655,9 +656,10 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
-        let getter = (<PropertyPrototype>element).getterPrototype;
+        let prototype = <PropertyPrototype>element;
+        let getter = prototype.getterPrototype;
         if (getter) this.ensureModuleExport(GETTER_PREFIX + name, getter, prefix);
-        let setter = (<PropertyPrototype>element).setterPrototype;
+        let setter = prototype.setterPrototype;
         if (setter) this.ensureModuleExport(SETTER_PREFIX + name, setter, prefix);
         break;
       }
@@ -699,28 +701,31 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY: {
-        let getter = (<Property>element).getterInstance;
+        let instance = <Property>element;
+        let getter = instance.getterInstance;
         if (getter) this.ensureModuleExport(GETTER_PREFIX + name, getter, prefix);
-        let setter = (<Property>element).setterInstance;
+        let setter = instance.setterInstance;
         if (setter) this.ensureModuleExport(SETTER_PREFIX + name, setter, prefix);
         break;
       }
       case ElementKind.FIELD: {
+        let instance = <Field>element;
         if (element.is(CommonFlags.COMPILED)) {
           let module = this.module;
-          module.addFunctionExport((<Field>element).internalGetterName, prefix + GETTER_PREFIX + name);
+          module.addFunctionExport(instance.internalGetterName, prefix + GETTER_PREFIX + name);
           if (!element.is(CommonFlags.READONLY)) {
-            module.addFunctionExport((<Field>element).internalSetterName, prefix + SETTER_PREFIX + name);
+            module.addFunctionExport(instance.internalSetterName, prefix + SETTER_PREFIX + name);
           }
         }
         break;
       }
       case ElementKind.CLASS: {
+        let instance = <Class>element;
         // make the class name itself represent its runtime id
-        if (!(<Class>element).type.isUnmanaged) {
+        if (!instance.type.isUnmanaged) {
           let module = this.module;
-          let internalName = (<Class>element).internalName;
-          module.addGlobal(internalName, NativeType.I32, false, module.i32((<Class>element).id));
+          let internalName = instance.internalName;
+          module.addGlobal(internalName, NativeType.I32, false, module.i32(instance.id));
           module.addGlobalExport(internalName, prefix + name);
         }
         break;
@@ -1501,8 +1506,7 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
     }
-    var ctorInstance = instance.constructorInstance;
-    if (ctorInstance) this.compileFunction(ctorInstance);
+    this.ensureConstructor(instance, instance.identifierNode);
     var instanceMembers = instance.members;
     if (instanceMembers) {
       // TODO: for (let element of instanceMembers.values()) {
@@ -8704,7 +8708,7 @@ export class Compiler extends DiagnosticEmitter {
         CommonNames.constructor,
         new FunctionPrototype(
           CommonNames.constructor,
-          classInstance,
+          classInstance, // bound
           this.program.makeNativeFunctionDeclaration(CommonNames.constructor,
             CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
           )
@@ -8712,6 +8716,9 @@ export class Compiler extends DiagnosticEmitter {
         new Signature(this.program, null, classInstance.type, classInstance.type),
         contextualTypeArguments
       );
+      let members = classInstance.members;
+      if (!members) classInstance.members = members = new Map();
+      members.set("constructor", instance.prototype);
     }
 
     instance.internalName = classInstance.internalName + INSTANCE_DELIMITER + "constructor";

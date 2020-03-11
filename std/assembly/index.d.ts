@@ -70,6 +70,8 @@ declare const ASC_FEATURE_EXCEPTION_HANDLING: bool;
 declare const ASC_FEATURE_TAIL_CALLS: bool;
 /** Whether the reference types feature is enabled. */
 declare const ASC_FEATURE_REFERENCE_TYPES: bool;
+/** Whether the multi value types feature is enabled. */
+declare const ASC_FEATURE_MULTI_VALUE: bool;
 
 // Builtins
 
