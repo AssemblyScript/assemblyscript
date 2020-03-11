@@ -147,6 +147,7 @@ declare module "assemblyscript/src/common" {
         const ASC_FEATURE_EXCEPTION_HANDLING = "ASC_FEATURE_EXCEPTION_HANDLING";
         const ASC_FEATURE_TAIL_CALLS = "ASC_FEATURE_TAIL_CALLS";
         const ASC_FEATURE_REFERENCE_TYPES = "ASC_FEATURE_REFERENCE_TYPES";
+        const ASC_FEATURE_MULTI_VALUE = "ASC_FEATURE_MULTI_VALUE";
         const I8 = "I8";
         const I16 = "I16";
         const I32 = "I32";
@@ -1706,7 +1707,8 @@ declare module "assemblyscript/src/module" {
         ExceptionHandling = 64,
         TailCall = 128,
         ReferenceTypes = 256,
-        All = 511
+        MultiValue = 512,
+        All = 1023
     }
     export enum ExpressionId {
         Invalid = 0,
@@ -5183,6 +5185,8 @@ declare module "assemblyscript/src/index" {
     export const FEATURE_TAIL_CALLS: Feature;
     /** Reference types. */
     export const FEATURE_REFERENCE_TYPES: Feature;
+    /** Multi value types. */
+    export const FEATURE_MULTI_VALUE: Feature;
     /** Enables a specific feature. */
     export function enableFeature(options: Options, feature: Feature): void;
     /** Disables a specific feature. */
@@ -5411,7 +5415,9 @@ declare module "assemblyscript/std/assembly/shared/feature" {
         /** Tail call operations. */
         TAIL_CALLS = 128,
         /** Reference types. */
-        REFERENCE_TYPES = 256
+        REFERENCE_TYPES = 256,
+        /** Multi value types. */
+        MULTI_VALUE = 512
     }
     /** Gets the name of the specified feature one would specify on the command line. */
     export function featureToString(feature: Feature): string;
