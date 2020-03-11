@@ -3004,14 +3004,13 @@ export namespace NativeMathf {
 export function ipow32(x: i32, e: i32): i32 {
   var out = 1;
   if (ASC_SHRINK_LEVEL < 1) {
-    if (e < 32) {
-      if (e <= 0) {
-        if (x == -1) return select<i32>(-1, 1, e & 1);
-        return i32(e == 0) | i32(x == 1);
-      }
-      if (e == 1) return x;
-      if (e == 2) return x * x;
-
+    if (e <= 0) {
+      if (x == -1) return select<i32>(-1, 1, e & 1);
+      return i32(e == 0) | i32(x == 1);
+    }
+    else if (e == 1) return x;
+    else if (e == 2) return x * x;
+    else if (e < 32) {
       let log = 32 - clz(e);
       // 32 = 2 ^ 5, so need only five cases.
       // But some extra cases needs for properly overflowing
@@ -3054,14 +3053,13 @@ export function ipow32(x: i32, e: i32): i32 {
 export function ipow64(x: i64, e: i64): i64 {
   var out: i64 = 1;
   if (ASC_SHRINK_LEVEL < 1) {
-    if (e < 64) {
-      if (e <= 0) {
-        if (x == -1) return select<i64>(-1, 1, e & 1);
-        return i64(e == 0) | i64(x == 1);
-      }
-      if (e == 1) return x;
-      if (e == 2) return x * x;
-
+    if (e <= 0) {
+      if (x == -1) return select<i64>(-1, 1, e & 1);
+      return i64(e == 0) | i64(x == 1);
+    }
+    else if (e == 1) return x;
+    else if (e == 2) return x * x;
+    else if (e < 64) {
       let log = 64 - <i32>clz(e);
       // 64 = 2 ^ 6, so need only six cases.
       // But some extra cases needs for properly overflowing
