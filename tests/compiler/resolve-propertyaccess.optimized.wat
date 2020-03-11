@@ -25,44 +25,38 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/util/number/decimalCount32 (; 1 ;) (param $0 i32) (result i32)
-  i32.const 1
-  i32.const 2
   local.get $0
   i32.const 10
-  i32.lt_u
-  select
-  i32.const 3
-  i32.const 4
-  i32.const 5
+  i32.ge_u
+  i32.const 1
+  i32.add
   local.get $0
   i32.const 10000
-  i32.lt_u
-  select
+  i32.ge_u
+  i32.const 3
+  i32.add
   local.get $0
   i32.const 1000
-  i32.lt_u
-  select
+  i32.ge_u
+  i32.add
   local.get $0
   i32.const 100
   i32.lt_u
   select
-  i32.const 6
-  i32.const 7
   local.get $0
   i32.const 1000000
-  i32.lt_u
-  select
-  i32.const 8
-  i32.const 9
-  i32.const 10
+  i32.ge_u
+  i32.const 6
+  i32.add
   local.get $0
   i32.const 1000000000
-  i32.lt_u
-  select
+  i32.ge_u
+  i32.const 8
+  i32.add
   local.get $0
   i32.const 100000000
-  i32.lt_u
-  select
+  i32.ge_u
+  i32.add
   local.get $0
   i32.const 10000000
   i32.lt_u

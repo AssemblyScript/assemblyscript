@@ -8673,7 +8673,6 @@
   local.get $2
  )
  (func $~lib/util/number/decimalCount32 (; 79 ;) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -8683,26 +8682,21 @@
    i32.lt_u
    if
     i32.const 1
-    i32.const 2
     local.get $0
     i32.const 10
-    i32.lt_u
-    select
+    i32.ge_u
+    i32.add
     return
    else
-    i32.const 4
-    i32.const 5
+    i32.const 3
     local.get $0
     i32.const 10000
-    i32.lt_u
-    select
-    local.set $1
-    i32.const 3
-    local.get $1
+    i32.ge_u
+    i32.add
     local.get $0
     i32.const 1000
-    i32.lt_u
-    select
+    i32.ge_u
+    i32.add
     return
    end
    unreachable
@@ -8712,26 +8706,21 @@
    i32.lt_u
    if
     i32.const 6
-    i32.const 7
     local.get $0
     i32.const 1000000
-    i32.lt_u
-    select
+    i32.ge_u
+    i32.add
     return
    else
-    i32.const 9
-    i32.const 10
+    i32.const 8
     local.get $0
     i32.const 1000000000
-    i32.lt_u
-    select
-    local.set $1
-    i32.const 8
-    local.get $1
+    i32.ge_u
+    i32.add
     local.get $0
     i32.const 100000000
-    i32.lt_u
-    select
+    i32.ge_u
+    i32.add
     return
    end
    unreachable
@@ -8967,7 +8956,6 @@
   call $~lib/rt/pure/__retain
  )
  (func $~lib/util/number/decimalCount64 (; 83 ;) (param $0 i64) (result i32)
-  (local $1 i32)
   local.get $0
   i64.const 1000000000000000
   i64.lt_u
@@ -8976,34 +8964,26 @@
    i64.const 1000000000000
    i64.lt_u
    if
-    i32.const 11
-    i32.const 12
+    i32.const 10
     local.get $0
     i64.const 100000000000
-    i64.lt_u
-    select
-    local.set $1
-    i32.const 10
-    local.get $1
+    i64.ge_u
+    i32.add
     local.get $0
     i64.const 10000000000
-    i64.lt_u
-    select
+    i64.ge_u
+    i32.add
     return
    else
-    i32.const 14
-    i32.const 15
+    i32.const 13
     local.get $0
     i64.const 100000000000000
-    i64.lt_u
-    select
-    local.set $1
-    i32.const 13
-    local.get $1
+    i64.ge_u
+    i32.add
     local.get $0
     i64.const 10000000000000
-    i64.lt_u
-    select
+    i64.ge_u
+    i32.add
     return
    end
    unreachable
@@ -9013,26 +8993,21 @@
    i64.lt_u
    if
     i32.const 16
-    i32.const 17
     local.get $0
     i64.const 10000000000000000
-    i64.lt_u
-    select
+    i64.ge_u
+    i32.add
     return
    else
-    i32.const 19
-    i32.const 20
+    i32.const 18
     local.get $0
     i64.const -8446744073709551616
-    i64.lt_u
-    select
-    local.set $1
-    i32.const 18
-    local.get $1
+    i64.ge_u
+    i32.add
     local.get $0
     i64.const 1000000000000000000
-    i64.lt_u
-    select
+    i64.ge_u
+    i32.add
     return
    end
    unreachable

@@ -108,17 +108,15 @@ const FRC_POWERS: StaticArray<u64> = [
 export function decimalCount32(value: u32): u32 {
   if (value < 100000) {
     if (value < 100) {
-      return select<u32>(1, 2, value < 10);
+      return 1 + i32(value >= 10);
     } else {
-      let m = select<u32>(4, 5, value < 10000);
-      return select<u32>(3, m, value < 1000);
+      return 3 + u32(value >= 10000) + u32(value >= 1000);
     }
   } else {
     if (value < 10000000) {
-      return select<u32>(6, 7, value < 1000000);
+      return 6 + u32(value >= 1000000);
     } else {
-      let m = select<u32>(9, 10, value < 1000000000);
-      return select<u32>(8, m, value < 100000000);
+      return 8 + u32(value >= 1000000000) + u32(value >= 100000000);
     }
   }
 }
@@ -128,18 +126,15 @@ export function decimalCount32(value: u32): u32 {
 export function decimalCount64(value: u64): u32 {
   if (value < 1000000000000000) {
     if (value < 1000000000000) {
-      let m = select<u32>(11, 12, value < 100000000000);
-      return select<u32>(10, m, value < 10000000000);
+      return 10 + u32(value >= 100000000000) + u32(value >= 10000000000);
     } else {
-      let m = select<u32>(14, 15, value < 100000000000000);
-      return select<u32>(13, m, value < 10000000000000);
+      return 13 + u32(value >= 100000000000000) + u32(value >= 10000000000000);
     }
   } else {
     if (value < 100000000000000000) {
-      return select<u32>(16, 17, value < 10000000000000000);
+      return 16 + u32(value >= 10000000000000000);
     } else {
-      let m = select<u32>(19, 20, value < 10000000000000000000);
-      return select<u32>(18, m, value < 1000000000000000000);
+      return 18 + u32(value >= 10000000000000000000) + u32(value >= 1000000000000000000);
     }
   }
 }
