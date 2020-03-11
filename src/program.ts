@@ -954,7 +954,7 @@ export class Program extends DiagnosticEmitter {
         if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
           this.error(
             DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
-            extendsNode.range, (<ClassPrototype>baseElement).identifierNode.text
+            extendsNode.range, basePrototype.identifierNode.text
           );
         }
         if (
@@ -1053,8 +1053,8 @@ export class Program extends DiagnosticEmitter {
 
   /** Requires that a global function is present and returns it. */
   private requireFunction(name: string, typeArguments: Type[] | null = null): Function {
-    var prototype = this.require(name, ElementKind.FUNCTION_PROTOTYPE);
-    var resolved = this.resolver.resolveFunction(<FunctionPrototype>prototype, typeArguments);
+    var prototype = <FunctionPrototype>this.require(name, ElementKind.FUNCTION_PROTOTYPE);
+    var resolved = this.resolver.resolveFunction(prototype, typeArguments);
     if (!resolved) throw new Error("invalid " + name);
     return resolved;
   }
@@ -1093,9 +1093,10 @@ export class Program extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
-        let getterPrototype = (<PropertyPrototype>element).getterPrototype;
+        let propertyPrototype = <PropertyPrototype>element;
+        let getterPrototype = propertyPrototype.getterPrototype;
         if (getterPrototype) this.markModuleExport(getterPrototype);
-        let setterPrototype = (<PropertyPrototype>element).setterPrototype;
+        let setterPrototype = propertyPrototype.setterPrototype;
         if (setterPrototype) this.markModuleExport(setterPrototype);
         break;
       }
@@ -1374,10 +1375,11 @@ export class Program extends DiagnosticEmitter {
           break;
         }
         case NodeKind.METHODDECLARATION: {
+          let methodDeclaration = <MethodDeclaration>memberDeclaration;
           if (memberDeclaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
-            this.initializeProperty(<MethodDeclaration>memberDeclaration, element);
+            this.initializeProperty(methodDeclaration, element);
           } else {
-            this.initializeMethod(<MethodDeclaration>memberDeclaration, element);
+            this.initializeMethod(methodDeclaration, element);
           }
           break;
         }
@@ -1919,10 +1921,11 @@ export class Program extends DiagnosticEmitter {
           break;
         }
         case NodeKind.METHODDECLARATION: {
+          let methodDeclaration = <MethodDeclaration>memberDeclaration;
           if (memberDeclaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
-            this.initializeProperty(<MethodDeclaration>memberDeclaration, element);
+            this.initializeProperty(methodDeclaration, element);
           } else {
-            this.initializeMethod(<MethodDeclaration>memberDeclaration, element);
+            this.initializeMethod(methodDeclaration, element);
           }
           break;
         }
@@ -2865,7 +2868,8 @@ export class FunctionPrototype extends DeclaredElement {
     var boundPrototypes = this.boundPrototypes;
     if (!boundPrototypes) this.boundPrototypes = boundPrototypes = new Map();
     else if (boundPrototypes.has(classInstance)) return assert(boundPrototypes.get(classInstance));
-    var declaration = this.declaration; assert(declaration.kind == NodeKind.METHODDECLARATION);
+    var declaration = this.declaration;
+    assert(declaration.kind == NodeKind.METHODDECLARATION);
     var bound = new FunctionPrototype(
       this.name,
       classInstance, // !
@@ -2882,7 +2886,7 @@ export class FunctionPrototype extends DeclaredElement {
   /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Function | null {
     var instances = this.instances;
-    if (instances !== null && instances.has(instanceKey)) return <Function>instances.get(instanceKey);
+    if (instances !== null && instances.has(instanceKey)) return assert(instances.get(instanceKey));
     return null;
   }
 
@@ -3626,10 +3630,11 @@ export class Class extends TypedElement {
 
   /** Writes a field value to a buffer and returns the number of bytes written. */
   writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32): i32 {
-    var field = this.lookupInSelf(name);
-    if (field !== null && field.kind == ElementKind.FIELD) {
-      let offset = baseOffset + (<Field>field).memoryOffset;
-      switch ((<Field>field).type.kind) {
+    var element = this.lookupInSelf(name);
+    if (element !== null && element.kind == ElementKind.FIELD) {
+      let fieldInstance = <Field>element;
+      let offset = baseOffset + fieldInstance.memoryOffset;
+      switch (fieldInstance.type.kind) {
         case TypeKind.I8:
         case TypeKind.U8: {
           writeI8(i32(value), buffer, offset);

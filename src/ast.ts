@@ -1153,28 +1153,29 @@ export abstract class TypeNode extends Node {
 
   /** Tests if this type has a generic component matching one of the given type parameters. */
   hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool {
-    var self = <TypeNode>this; // TS otherwise complains
     if (this.kind == NodeKind.NAMEDTYPE) {
-      if (!(<NamedTypeNode>self).name.next) {
-        let typeArgumentNodes = (<NamedTypeNode>self).typeArguments;
+      let namedTypeNode = <NamedTypeNode>changetype<TypeNode>(this); // TS
+      if (!namedTypeNode.name.next) {
+        let typeArgumentNodes = namedTypeNode.typeArguments;
         if (typeArgumentNodes !== null && typeArgumentNodes.length > 0) {
           for (let i = 0, k = typeArgumentNodes.length; i < k; ++i) {
             if (typeArgumentNodes[i].hasGenericComponent(typeParameterNodes)) return true;
           }
         } else {
-          let name = (<NamedTypeNode>self).name.identifier.text;
+          let name = namedTypeNode.name.identifier.text;
           for (let i = 0, k = typeParameterNodes.length; i < k; ++i) {
             if (typeParameterNodes[i].name.text == name) return true;
           }
         }
       }
     } else if (this.kind == NodeKind.FUNCTIONTYPE) {
-      let parameterNodes = (<FunctionTypeNode>self).parameters;
+      let functionTypeNode = <FunctionTypeNode>changetype<TypeNode>(this); // TS
+      let parameterNodes = functionTypeNode.parameters;
       for (let i = 0, k = parameterNodes.length; i < k; ++i) {
         if (parameterNodes[i].type.hasGenericComponent(typeParameterNodes)) return true;
       }
-      if ((<FunctionTypeNode>self).returnType.hasGenericComponent(typeParameterNodes)) return true;
-      let explicitThisType = (<FunctionTypeNode>self).explicitThisType;
+      if (functionTypeNode.returnType.hasGenericComponent(typeParameterNodes)) return true;
+      let explicitThisType = functionTypeNode.explicitThisType;
       if (explicitThisType !== null && explicitThisType.hasGenericComponent(typeParameterNodes)) return true;
     } else {
       assert(false);
@@ -1319,25 +1320,26 @@ export namespace DecoratorKind {
           break;
         }
       }
-    } else if (
-      nameNode.kind == NodeKind.PROPERTYACCESS &&
-      (<PropertyAccessExpression>nameNode).expression.kind == NodeKind.IDENTIFIER
-    ) {
-      let nameStr = (<IdentifierExpression>(<PropertyAccessExpression>nameNode).expression).text;
-      assert(nameStr.length);
-      let propStr = (<PropertyAccessExpression>nameNode).property.text;
-      assert(propStr.length);
-      // @operator.binary, @operator.prefix, @operator.postfix
-      if (nameStr == "operator") {
-        switch (propStr.charCodeAt(0)) {
-          case CharCode.b: {
-            if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
-            break;
-          }
-          case CharCode.p: {
-            if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
-            if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
-            break;
+    } else if (nameNode.kind == NodeKind.PROPERTYACCESS) {
+      let propertyAccessNode = <PropertyAccessExpression>nameNode;
+      let expression = propertyAccessNode.expression;
+      if (expression.kind == NodeKind.IDENTIFIER) {
+        let nameStr = (<IdentifierExpression>expression).text;
+        assert(nameStr.length);
+        let propStr = propertyAccessNode.property.text;
+        assert(propStr.length);
+        // @operator.binary, @operator.prefix, @operator.postfix
+        if (nameStr == "operator") {
+          switch (propStr.charCodeAt(0)) {
+            case CharCode.b: {
+              if (propStr == "binary") return DecoratorKind.OPERATOR_BINARY;
+              break;
+            }
+            case CharCode.p: {
+              if (propStr == "prefix") return DecoratorKind.OPERATOR_PREFIX;
+              if (propStr == "postfix") return DecoratorKind.OPERATOR_POSTFIX;
+              break;
+            }
           }
         }
       }
