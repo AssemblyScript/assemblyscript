@@ -286,4 +286,4 @@ import * as util from "./util/index";
 export { util };
 
 // TODO: compat with 0.9, remove with 0.10
-export * from "./util";
+export * from "./util/index";
