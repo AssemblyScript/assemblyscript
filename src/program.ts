@@ -68,7 +68,6 @@ import {
 
   Expression,
   IdentifierExpression,
-  LiteralExpression,
   LiteralKind,
   StringLiteralExpression,
 
@@ -1483,10 +1482,7 @@ export class Program extends DiagnosticEmitter {
             let numArgs = args ? args.length : 0;
             if (numArgs == 1) {
               let firstArg = (<Expression[]>decorator.arguments)[0];
-              if (
-                firstArg.kind == NodeKind.LITERAL &&
-                (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
-              ) {
+              if (firstArg.isLiteralKind(LiteralKind.STRING)) {
                 let text = (<StringLiteralExpression>firstArg).value;
                 let kind = OperatorKind.fromDecorator(decorator.decoratorKind, text);
                 if (kind == OperatorKind.INVALID) {

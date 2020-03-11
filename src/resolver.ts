@@ -1749,7 +1749,7 @@ export class Resolver extends DiagnosticEmitter {
     switch (operator) {
       case Token.MINUS: {
         // implicitly negate if an integer literal to distinguish between i32/u32/i64
-        if (operand.kind == NodeKind.LITERAL && (<LiteralExpression>operand).literalKind == LiteralKind.INTEGER) {
+        if (operand.isLiteralKind(LiteralKind.INTEGER)) {
           return this.determineIntegerLiteralType(i64_sub(i64_zero, (<IntegerLiteralExpression>operand).value), ctxType);
         }
         // fall-through

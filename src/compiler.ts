@@ -166,7 +166,6 @@ import {
 
   NamedTypeNode,
 
-  nodeIsConstantValue,
   findDecorator,
   isTypeOmitted
 } from "./ast";
@@ -7339,7 +7338,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = numArguments; i < maxArguments; ++i) {
         let initializer = parameterNodes[i].initializer;
         if (initializer) {
-          if (nodeIsConstantValue(initializer.kind)) {
+          if (initializer.compilesToConst) {
             operands.push(this.compileExpression(
               initializer,
               parameterTypes[i],
@@ -9337,16 +9336,12 @@ export class Compiler extends DiagnosticEmitter {
       }
       case Token.MINUS: {
         let operand = expression.operand;
-        if (operand.kind == NodeKind.LITERAL) {
-          let literal = <LiteralExpression>operand;
-          let literalKind = literal.literalKind;
-          if (literalKind == LiteralKind.INTEGER || literalKind == LiteralKind.FLOAT) {
-            // implicitly negate integer and float literals. also enables proper checking of literal ranges.
-            expr = this.compileLiteralExpression(literal, contextualType, Constraints.NONE, true);
-            // compileExpression normally does this:
-            if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
-            break;
-          }
+        if (operand.isNumericLiteral) {
+          // implicitly negate integer and float literals. also enables proper checking of literal ranges.
+          expr = this.compileLiteralExpression(<LiteralExpression>operand, contextualType, Constraints.NONE, true);
+          // compileExpression normally does this:
+          if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
+          break;
         }
 
         expr = this.compileExpression(
@@ -10148,7 +10143,6 @@ export class Compiler extends DiagnosticEmitter {
 
 const v128_zero = new Uint8Array(16);
 
-
 function mangleImportName(
   element: Element,
   declaration: DeclarationStatement
@@ -10168,11 +10162,11 @@ function mangleImportName(
     let arg = args[0];
     // if one argument is given, override just the element name
     // if two arguments are given, override both module and element name
-    if (arg.kind == NodeKind.LITERAL && (<LiteralExpression>arg).literalKind == LiteralKind.STRING) {
+    if (arg.isLiteralKind(LiteralKind.STRING)) {
       mangleImportName_elementName = (<StringLiteralExpression>arg).value;
       if (args.length >= 2) {
         arg = args[1];
-        if (arg.kind == NodeKind.LITERAL && (<LiteralExpression>arg).literalKind == LiteralKind.STRING) {
+        if (arg.isLiteralKind(LiteralKind.STRING)) {
           mangleImportName_moduleName = mangleImportName_elementName;
           mangleImportName_elementName = (<StringLiteralExpression>arg).value;
           if (args.length > 2) {

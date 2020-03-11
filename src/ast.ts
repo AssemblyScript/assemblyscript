@@ -111,17 +111,6 @@ export enum NodeKind {
   COMMENT
 }
 
-/** Checks if a node represents a constant value. */
-export function nodeIsConstantValue(kind: NodeKind): bool {
-  switch (kind) {
-    case NodeKind.LITERAL:
-    case NodeKind.NULL:
-    case NodeKind.TRUE:
-    case NodeKind.FALSE: return true;
-  }
-  return false;
-}
-
 /** Base class of all nodes. */
 export abstract class Node {
   /** Node kind indicator. */
@@ -1141,6 +1130,41 @@ export abstract class Node {
     node.statement = statement;
     return node;
   }
+
+  /** Tests if this node is a literal of the specified kind. */
+  isLiteralKind(literalKind: LiteralKind): bool {
+    return this.kind == NodeKind.LITERAL
+        && (<LiteralExpression>changetype<Node>(this)).literalKind == literalKind; // TS
+  }
+
+  /** Tests if this node is a literal of a numeric kind (float or integer). */
+  get isNumericLiteral(): bool {
+    if (this.kind == NodeKind.LITERAL) {
+      switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
+        case LiteralKind.FLOAT:
+        case LiteralKind.INTEGER: return true;
+      }
+    }
+    return false;
+  }
+
+  /** Tests whether this node is guaranteed to compile to a constant value. */
+  get compilesToConst(): bool {
+    switch (this.kind) {
+      case NodeKind.LITERAL: {
+        switch ((<LiteralExpression>changetype<Node>(this)).literalKind) { // TS
+          case LiteralKind.FLOAT:
+          case LiteralKind.INTEGER:
+          case LiteralKind.STRING: return true;
+        }
+        break;
+      }
+      case NodeKind.NULL:
+      case NodeKind.TRUE:
+      case NodeKind.FALSE: return true;
+    }
+    return false;
+  }
 }
 
 // types
@@ -1397,17 +1421,6 @@ export enum LiteralKind {
   REGEXP,
   ARRAY,
   OBJECT
-}
-
-/** Checks if the given node represents a numeric (float or integer) literal. */
-export function isNumericLiteral(node: Expression): bool {
-  if (node.kind == NodeKind.LITERAL) {
-    switch ((<LiteralExpression>node).literalKind) {
-      case LiteralKind.FLOAT:
-      case LiteralKind.INTEGER: return true;
-    }
-  }
-  return false;
 }
 
 /** Base class of all literal expressions. */
