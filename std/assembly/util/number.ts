@@ -123,7 +123,7 @@ export function decimalCount32(value: u32): u32 {
 
 // Count number of decimals for u64 values
 // In our case input value always greater than 2^32-1 so we can skip some parts
-export function decimalCount64(value: u64): u32 {
+export function decimalCount64High(value: u64): u32 {
   if (value < 1000000000000000) {
     if (value < 1000000000000) {
       return 10 + u32(value >= 100000000000) + u32(value >= 10000000000);
@@ -270,7 +270,7 @@ export function utoa64(value: u64): String {
     out = __alloc(decimals << 1, idof<String>());
     utoa32_core(out, val32, decimals);
   } else {
-    let decimals = decimalCount64(value);
+    let decimals = decimalCount64High(value);
     out = __alloc(decimals << 1, idof<String>());
     utoa64_core(out, value, decimals);
   }
@@ -290,7 +290,7 @@ export function itoa64(value: i64): String {
     out = __alloc(decimals << 1, idof<String>());
     utoa32_core(out, val32, decimals);
   } else {
-    let decimals = decimalCount64(value) + u32(sign);
+    let decimals = decimalCount64High(value) + u32(sign);
     out = __alloc(decimals << 1, idof<String>());
     utoa64_core(out, value, decimals);
   }
@@ -624,7 +624,7 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
         decimals = decimalCount32(val32) + <u32>sign;
         utoa32_core(buffer, val32, decimals);
       } else {
-        decimals = decimalCount64(value) + <u32>sign;
+        decimals = decimalCount64High(value) + <u32>sign;
         utoa64_core(buffer, value, decimals);
       }
     }
@@ -639,7 +639,7 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
         decimals = decimalCount32(val32);
         utoa32_core(buffer, val32, decimals);
       } else {
-        decimals = decimalCount64(value);
+        decimals = decimalCount64High(value);
         utoa64_core(buffer, value, decimals);
       }
     }

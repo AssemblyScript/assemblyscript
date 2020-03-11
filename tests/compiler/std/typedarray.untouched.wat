@@ -34135,7 +34135,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/util/number/decimalCount64 (; 520 ;) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64High (; 520 ;) (param $0 i64) (result i32)
   local.get $0
   i64.const 1000000000000000
   i64.lt_u
@@ -34375,7 +34375,7 @@
    call $~lib/util/number/utoa32_lut
   else
    local.get $0
-   call $~lib/util/number/decimalCount64
+   call $~lib/util/number/decimalCount64High
    local.get $1
    i32.add
    local.set $4
@@ -34472,7 +34472,7 @@
    call $~lib/util/number/utoa32_lut
   else
    local.get $2
-   call $~lib/util/number/decimalCount64
+   call $~lib/util/number/decimalCount64High
    local.get $4
    i32.add
    local.set $3
@@ -34772,7 +34772,7 @@
    call $~lib/util/number/utoa32_lut
   else
    local.get $0
-   call $~lib/util/number/decimalCount64
+   call $~lib/util/number/decimalCount64High
    local.set $3
    local.get $3
    i32.const 1
@@ -34847,7 +34847,7 @@
    call $~lib/util/number/utoa32_lut
   else
    local.get $2
-   call $~lib/util/number/decimalCount64
+   call $~lib/util/number/decimalCount64High
    local.set $3
    local.get $0
    local.set $6

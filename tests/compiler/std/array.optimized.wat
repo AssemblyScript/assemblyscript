@@ -9041,7 +9041,7 @@
   end
   local.get $2
  )
- (func $~lib/util/number/decimalCount64 (; 177 ;) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64High (; 177 ;) (param $0 i64) (result i32)
   local.get $0
   i64.const 100000000000
   i64.ge_u
@@ -9143,7 +9143,7 @@
    call $~lib/util/number/utoa_simple<u32>
   else
    local.get $0
-   call $~lib/util/number/decimalCount64
+   call $~lib/util/number/decimalCount64High
    local.tee $1
    i32.const 1
    i32.shl
@@ -9191,7 +9191,7 @@
    local.get $0
    local.get $2
    local.get $2
-   call $~lib/util/number/decimalCount64
+   call $~lib/util/number/decimalCount64High
    local.tee $1
    call $~lib/util/number/utoa_simple<u64>
   end
@@ -9346,7 +9346,7 @@
    call $~lib/util/number/utoa_simple<u32>
   else
    local.get $0
-   call $~lib/util/number/decimalCount64
+   call $~lib/util/number/decimalCount64High
    local.get $1
    i32.add
    local.tee $2
@@ -9415,7 +9415,7 @@
    local.get $0
    local.get $2
    local.get $2
-   call $~lib/util/number/decimalCount64
+   call $~lib/util/number/decimalCount64High
    local.get $1
    i32.add
    local.tee $3
