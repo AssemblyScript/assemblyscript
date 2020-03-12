@@ -108,7 +108,7 @@ const FRC_POWERS: StaticArray<u64> = [
 export function decimalCount32(value: u32): u32 {
   if (value < 100000) {
     if (value < 100) {
-      return 1 + i32(value >= 10);
+      return 1 + u32(value >= 10);
     } else {
       return 3 + u32(value >= 10000) + u32(value >= 1000);
     }
@@ -249,10 +249,10 @@ export function utoa32(value: u32): String {
 export function itoa32(value: i32): String {
   if (!value) return "0";
 
-  var sign = value < 0;
+  var sign = value >>> 31;
   if (sign) value = -value;
 
-  var decimals = decimalCount32(value) + u32(sign);
+  var decimals = decimalCount32(value) + sign;
   var out = __alloc(decimals << 1, idof<String>());
 
   utoa32_core(out, value, decimals);
@@ -280,22 +280,21 @@ export function utoa64(value: u64): String {
 export function itoa64(value: i64): String {
   if (!value) return "0";
 
-  var sign = value < 0;
+  var sign = u32(value >>> 63);
   if (sign) value = -value;
 
   var out: usize;
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let val32    = <u32>value;
-    let decimals = decimalCount32(val32) + u32(sign);
+    let decimals = decimalCount32(val32) + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa32_core(out, val32, decimals);
   } else {
-    let decimals = decimalCount64High(value) + u32(sign);
+    let decimals = decimalCount64High(value) + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa64_core(out, value, decimals);
   }
   if (sign) store<u16>(out, CharCode.MINUS);
-
   return changetype<String>(out); // retains
 }
 

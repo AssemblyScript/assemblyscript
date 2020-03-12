@@ -375,8 +375,8 @@
    return
   end
   local.get $0
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.set $1
   local.get $1
   if

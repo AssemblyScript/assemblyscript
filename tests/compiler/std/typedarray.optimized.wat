@@ -21202,8 +21202,8 @@
    return
   end
   local.get $0
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.tee $1
   if
    i32.const 0
@@ -22879,8 +22879,9 @@
    return
   end
   local.get $0
-  i64.const 0
-  i64.lt_s
+  i64.const 63
+  i64.shr_u
+  i32.wrap_i64
   local.tee $1
   if
    i64.const 0
