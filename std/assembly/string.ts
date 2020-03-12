@@ -678,18 +678,17 @@ export namespace String {
 
     export function encode(str: string, nullTerminated: bool = false): ArrayBuffer {
       var buf = __alloc(<usize>byteLength(str, nullTerminated), idof<ArrayBuffer>());
-      encodeUnsafe(str, buf, nullTerminated);
+      encodeUnsafe(changetype<usize>(str), str.length, buf, nullTerminated);
       return changetype<ArrayBuffer>(buf); // retains
     }
 
     // @ts-ignore: decorator
     @unsafe
-    export function encodeUnsafe(str: string, buf: usize, nullTerminated: bool = false): usize {
-      var strOff = changetype<usize>(str);
-      var strEnd = changetype<usize>(str) + <usize>changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
+    export function encodeUnsafe(str: usize, len: i32, buf: usize, nullTerminated: bool = false): usize {
+      var strEnd = str + (<usize>len << 1);
       var bufOff = buf;
-      while (strOff < strEnd) {
-        let c1 = <u32>load<u16>(strOff);
+      while (str < strEnd) {
+        let c1 = <u32>load<u16>(str);
         if (c1 < 128) {
           store<u8>(bufOff, c1);
           bufOff++;
@@ -699,8 +698,8 @@ export namespace String {
           store<u16>(bufOff, b1 << 8 | b0);
           bufOff += 2;
         } else {
-          if ((c1 & 0xFC00) == 0xD800 && strOff + 2 < strEnd) {
-            let c2 = <u32>load<u16>(strOff, 2);
+          if ((c1 & 0xFC00) == 0xD800 && str + 2 < strEnd) {
+            let c2 = <u32>load<u16>(str, 2);
             if ((c2 & 0xFC00) == 0xDC00) {
               c1 = 0x10000 + ((c1 & 0x03FF) << 10) | (c2 & 0x03FF);
               let b0 = c1 >> 18 | 240;
@@ -708,7 +707,7 @@ export namespace String {
               let b2 = c1 >> 6  & 63 | 128;
               let b3 = c1       & 63 | 128;
               store<u32>(bufOff, b3 << 24 | b2 << 16 | b1 << 8 | b0);
-              bufOff += 4; strOff += 4;
+              bufOff += 4; str += 4;
               continue;
             }
           }
@@ -719,7 +718,7 @@ export namespace String {
           store<u8>(bufOff, b2, 2);
           bufOff += 3;
         }
-        strOff += 2;
+        str += 2;
       }
       if (nullTerminated) {
         store<u8>(bufOff++, 0);
@@ -785,14 +784,14 @@ export namespace String {
 
     export function encode(str: string): ArrayBuffer {
       var buf = __alloc(<usize>byteLength(str), idof<ArrayBuffer>());
-      encodeUnsafe(str, buf);
+      encodeUnsafe(changetype<usize>(str), str.length, buf);
       return changetype<ArrayBuffer>(buf); // retains
     }
 
     // @ts-ignore: decorator
     @unsafe
-    export function encodeUnsafe(str: string, buf: usize): usize {
-      var size = <usize>byteLength(str);
+    export function encodeUnsafe(str: usize, len: i32, buf: usize): usize {
+      var size = <usize>len << 1;
       memory.copy(buf, changetype<usize>(str), size);
       return size;
     }

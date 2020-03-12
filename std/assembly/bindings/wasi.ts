@@ -8,7 +8,7 @@ import {
 import {
   MAX_DOUBLE_LENGTH,
   decimalCount32,
-  dtoa
+  dtoa_stream
 } from "util/number";
 
 export * from "./wasi_snapshot_preview1";
@@ -30,11 +30,11 @@ function abort(
   var ptr = bufPtr;
   store<u64>(ptr, 0x203A74726F6261); ptr += 7; // 'abort: '
   if (message !== null) {
-    ptr += String.UTF8.encodeUnsafe(message, ptr);
+    ptr += String.UTF8.encodeUnsafe(changetype<usize>(message), message.length, ptr);
   }
   store<u32>(ptr, 0x206E6920); ptr += 4; // ' in '
   if (fileName !== null) {
-    ptr += String.UTF8.encodeUnsafe(fileName, ptr);
+    ptr += String.UTF8.encodeUnsafe(changetype<usize>(fileName), fileName.length, ptr);
   }
   store<u8>(ptr++, 0x28); // (
   var len = decimalCount32(lineNumber); ptr += len;
@@ -77,23 +77,23 @@ function trace(
   store<u64>(bufPtr, 0x203A6563617274); // 'trace: '
   changetype<iovec>(iovPtr).buf_len = 7;
   fd_write(1, iovPtr, 1, lenPtr);
-  changetype<iovec>(iovPtr).buf_len = String.UTF8.encodeUnsafe(message, bufPtr);
+  changetype<iovec>(iovPtr).buf_len = String.UTF8.encodeUnsafe(changetype<usize>(message), message.length, bufPtr);
   fd_write(1, iovPtr, 1, lenPtr);
   if (n) {
     store<u8>(bufPtr++, 0x20); // space
-    changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a0)), bufPtr);
+    changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a0), bufPtr);
     fd_write(1, iovPtr, 1, lenPtr);
     if (n > 1) {
-      changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a1)), bufPtr);
+      changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a1), bufPtr);
       fd_write(1, iovPtr, 1, lenPtr);
       if (n > 2) {
-        changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a2)), bufPtr);
+        changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a2), bufPtr);
         fd_write(1, iovPtr, 1, lenPtr);
         if (n > 3) {
-          changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a3)), bufPtr);
+          changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a3), bufPtr);
           fd_write(1, iovPtr, 1, lenPtr);
           if (n > 4) {
-            changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a4)), bufPtr);
+            changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a4), bufPtr);
             fd_write(1, iovPtr, 1, lenPtr);
           }
         }

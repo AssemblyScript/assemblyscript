@@ -1460,8 +1460,8 @@ declare namespace String {
     export function byteLength(str: string, nullTerminated?: bool): i32;
     /** Encodes the specified string to UTF-8 bytes, optionally null terminated. */
     export function encode(str: string, nullTerminated?: bool): ArrayBuffer;
-    /** Encodes the specified string to UTF-8 bytes, opionally null terminated. Returns the number of bytes written. */
-    export function encodeUnsafe(str: string, buf: usize, nullTerminated?: bool): usize;
+    /** Encodes the specified raw string to UTF-8 bytes, opionally null terminated. Returns the number of bytes written. */
+    export function encodeUnsafe(str: usize, len: i32, buf: usize, nullTerminated?: bool): usize;
     /** Decodes the specified buffer from UTF-8 bytes to a string, optionally null terminated. */
     export function decode(buf: ArrayBuffer, nullTerminated?: bool): string;
     /** Decodes raw UTF-8 bytes to a string, optionally null terminated. */
@@ -1473,8 +1473,8 @@ declare namespace String {
     export function byteLength(str: string): i32;
     /** Encodes the specified string to UTF-16 bytes. */
     export function encode(str: string): ArrayBuffer;
-    /** Encodes the specified string to UTF-16 bytes. Returns the number of bytes written. */
-    export function encodeUnsafe(str: string, buf: usize): usize;
+    /** Encodes the specified raw string to UTF-16 bytes. Returns the number of bytes written. */
+    export function encodeUnsafe(str: usize, len: i32, buf: usize): usize;
     /** Decodes the specified buffer from UTF-16 bytes to a string. */
     export function decode(buf: ArrayBuffer): string;
     /** Decodes raw UTF-16 bytes to a string. */

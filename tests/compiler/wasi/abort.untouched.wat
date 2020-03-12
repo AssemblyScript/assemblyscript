@@ -1,10 +1,9 @@
 (module
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "proc_exit" (func $~lib/bindings/wasi_snapshot_preview1/proc_exit (param i32)))
  (memory $0 1)
@@ -17,11 +16,15 @@
  (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 3 ;) (param $0 i32)
-  nop
+ (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
  )
- (func $~lib/string/String.UTF8.encodeUnsafe (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
+ (func $~lib/string/String.UTF8.encodeUnsafe (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -32,27 +35,21 @@
   (local $11 i32)
   (local $12 i32)
   local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $0
-  local.set $3
-  local.get $0
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
+  local.get $1
+  i32.const 1
+  i32.shl
   i32.add
   local.set $4
-  local.get $1
+  local.get $2
   local.set $5
   loop $while-continue|0
-   local.get $3
+   local.get $0
    local.get $4
    i32.lt_u
    local.set $6
    local.get $6
    if
-    local.get $3
+    local.get $0
     i32.load16_u
     local.set $7
     local.get $7
@@ -101,7 +98,7 @@
       i32.const 55296
       i32.eq
       if (result i32)
-       local.get $3
+       local.get $0
        i32.const 2
        i32.add
        local.get $4
@@ -110,7 +107,7 @@
        i32.const 0
       end
       if
-       local.get $3
+       local.get $0
        i32.load16_u offset=2
        local.set $9
        local.get $9
@@ -178,10 +175,10 @@
         i32.const 4
         i32.add
         local.set $5
-        local.get $3
+        local.get $0
         i32.const 4
         i32.add
-        local.set $3
+        local.set $0
         br $while-continue|0
        end
       end
@@ -221,14 +218,14 @@
       local.set $5
      end
     end
-    local.get $3
+    local.get $0
     i32.const 2
     i32.add
-    local.set $3
+    local.set $0
     br $while-continue|0
    end
   end
-  local.get $2
+  local.get $3
   if
    local.get $5
    local.tee $6
@@ -240,12 +237,8 @@
    i32.store8
   end
   local.get $5
-  local.get $1
+  local.get $2
   i32.sub
-  local.set $6
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $6
  )
  (func $~lib/util/number/decimalCount32 (; 5 ;) (param $0 i32) (result i32)
   (local $1 i32)
@@ -313,7 +306,10 @@
   end
   unreachable
  )
- (func $~lib/bindings/wasi/abort (; 6 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/rt/stub/__release (; 6 ;) (param $0 i32)
+  nop
+ )
+ (func $~lib/bindings/wasi/abort (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -343,6 +339,8 @@
   if
    local.get $4
    local.get $0
+   local.get $0
+   call $~lib/string/String#get:length
    local.get $4
    i32.const 0
    call $~lib/string/String.UTF8.encodeUnsafe
@@ -362,6 +360,8 @@
   if
    local.get $4
    local.get $1
+   local.get $1
+   call $~lib/string/String#get:length
    local.get $4
    i32.const 0
    call $~lib/string/String.UTF8.encodeUnsafe
@@ -475,7 +475,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $wasi/abort/test (; 7 ;)
+ (func $wasi/abort/test (; 8 ;)
   i32.const 0
   i32.eqz
   if
@@ -487,7 +487,7 @@
    unreachable
   end
  )
- (func $~start (; 8 ;)
+ (func $~start (; 9 ;)
   nop
  )
 )
