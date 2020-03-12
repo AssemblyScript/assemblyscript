@@ -709,6 +709,7 @@ exports.main = function main(argv, options, callback) {
         add("reorder-locals"); // differs
         add("flatten");
         add("local-cse");
+        add("rse");
       }
       if (hasARC) { // differs
         if (optimizeLevel < 3) {
