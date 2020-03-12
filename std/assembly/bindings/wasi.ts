@@ -18,37 +18,34 @@ export function abort(
   lineNumber: u32 = 0,
   columnNumber: u32 = 0
 ): void {
-  // 0: iovec.buf / nwritten
+  // 0: iovec.buf
   // 4: iovec.buf_len
-  // 8: buf...
-  var off = offsetof<iovec>();
-  changetype<iovec>(0).buf = off;
-  store<u64>(off, 0x203A74726F6241); off += 7; // Abort:
-  for (let i = 0, k = message.length; i < k; ++i) {
-    let c = message.charCodeAt(i);
-    store<u8>(off++, c >= 32 && c <= 126 ? <u8>c : 0x3F);
-  }
-  store<u32>(off, 0x206E690A); off += 4; // \nin
-  for (let i = 0, k = fileName.length; i < k; ++i) {
-    let c = fileName.charCodeAt(i);
-    store<u8>(off++, c >= 32 && c <= 126 ? <u8>c : 0x3F);
-  }
-  store<u8>(off++, 0x28); // (
-  var len = decimalCount32(lineNumber); off += len;
+  // 8: nwritten
+  // 12: buf...
+  const iovPtr: usize = 0;
+  const bufPtr: usize = iovPtr + offsetof<iovec>() + sizeof<usize>();
+  changetype<iovec>(iovPtr).buf = bufPtr;
+  var ptr = bufPtr;
+  store<u64>(ptr, 0x203A74726F6241); ptr += 7; // Abort:
+  ptr += String.UTF8.encodeUnsafe(message, ptr);
+  store<u32>(ptr, 0x206E690A); ptr += 4; // \nin
+  ptr += String.UTF8.encodeUnsafe(fileName, ptr);
+  store<u8>(ptr++, 0x28); // (
+  var len = decimalCount32(lineNumber); ptr += len;
   do {
     let t = lineNumber / 10;
-    store<u8>(--off, 0x30 + lineNumber % 10);
+    store<u8>(--ptr, 0x30 + lineNumber % 10);
     lineNumber = t;
-  } while (lineNumber); off += len;
-  store<u8>(off++, 0x3A); // :
-  len = decimalCount32(columnNumber); off += len;
+  } while (lineNumber); ptr += len;
+  store<u8>(ptr++, 0x3A); // :
+  len = decimalCount32(columnNumber); ptr += len;
   do {
     let t = columnNumber / 10;
-    store<u8>(--off, 0x30 + columnNumber % 10);
+    store<u8>(--ptr, 0x30 + columnNumber % 10);
     columnNumber = t;
-  } while (columnNumber); off += len;
-  store<u8>(off++, 0x29); // )
-  changetype<iovec>(0).buf_len = off - 8;
-  fd_write(/* fd */ 2, 0, 1, 0);
+  } while (columnNumber); ptr += len;
+  store<u8>(ptr++, 0x29); // )
+  changetype<iovec>(iovPtr).buf_len = ptr - bufPtr;
+  fd_write(2, iovPtr, 1, offsetof<iovec>());
   proc_exit(255);
 }

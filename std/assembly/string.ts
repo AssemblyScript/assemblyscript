@@ -677,13 +677,18 @@ export namespace String {
     }
 
     export function encode(str: string, nullTerminated: bool = false): ArrayBuffer {
+      var buf = __alloc(<usize>byteLength(str, nullTerminated), idof<ArrayBuffer>());
+      encodeUnsafe(str, buf, nullTerminated);
+      return changetype<ArrayBuffer>(buf); // retains
+    }
+
+    // @ts-ignore: decorator
+    @unsafe
+    export function encodeUnsafe(str: string, buf: usize, nullTerminated: bool = false): usize {
       var strOff = changetype<usize>(str);
       var strEnd = changetype<usize>(str) + <usize>changetype<BLOCK>(changetype<usize>(str) - BLOCK_OVERHEAD).rtSize;
-      var bufLen = <usize>UTF8.byteLength(str, nullTerminated);
-      var buf = __alloc(bufLen, idof<ArrayBuffer>());
-      var bufEnd = buf + bufLen - usize(nullTerminated);
       var bufOff = buf;
-      while (bufOff < bufEnd) {
+      while (strOff < strEnd) {
         let c1 = <u32>load<u16>(strOff);
         if (c1 < 128) {
           store<u8>(bufOff, c1);
@@ -716,11 +721,10 @@ export namespace String {
         }
         strOff += 2;
       }
-      assert(strOff <= strEnd);
       if (nullTerminated) {
-        store<u8>(bufOff, 0);
+        store<u8>(bufOff++, 0);
       }
-      return changetype<ArrayBuffer>(buf); // retains
+      return bufOff - buf;
     }
 
     export function decode(buf: ArrayBuffer, nullTerminated: bool = false): String {
@@ -780,10 +784,17 @@ export namespace String {
     }
 
     export function encode(str: string): ArrayBuffer {
-      var size = UTF16.byteLength(str);
-      var buf = __alloc(size, idof<ArrayBuffer>());
-      memory.copy(buf, changetype<usize>(str), <usize>size);
+      var buf = __alloc(<usize>byteLength(str), idof<ArrayBuffer>());
+      encodeUnsafe(str, buf);
       return changetype<ArrayBuffer>(buf); // retains
+    }
+
+    // @ts-ignore: decorator
+    @unsafe
+    export function encodeUnsafe(str: string, buf: usize): usize {
+      var size = <usize>byteLength(str);
+      memory.copy(buf, changetype<usize>(str), size);
+      return size;
     }
 
     export function decode(buf: ArrayBuffer): String {
