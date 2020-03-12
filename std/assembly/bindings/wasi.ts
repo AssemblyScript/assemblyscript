@@ -12,6 +12,7 @@ export * from "./wasi_snapshot_preview1";
 
 /** A WASI-aware abort implementation. */
 // @ts-ignore: decorator
+@global
 export function abort(
   message: string = "",
   fileName: string = "",

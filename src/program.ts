@@ -991,12 +991,11 @@ export class Program extends DiagnosticEmitter {
             this.registerConstantInteger(alias, Type.i32, i64_new(<i32>parseInt(name, 10)));
           } else {
             let elementsByName = this.elementsByName;
-            let element = elementsByName.get(name);
-            if (element) {
-              if (elementsByName.has(alias)) throw new Error("duplicate global element: " + name);
-              elementsByName.set(alias, element);
+            if (elementsByName.has(name)) {
+              elementsByName.set(alias, assert(elementsByName.get(name)));
+            } else {
+              throw new Error("no such global element: " + name);
             }
-            else throw new Error("no such global element: " + name);
           }
         }
       }
