@@ -775,10 +775,10 @@ exports.main = function main(argv, options, callback) {
       //   add("precompute");
       // }
       add("optimize-instructions");
-      // if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-      //   add("rse");
-      // }
-      // add("vacuum");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("rse");
+      }
+      add("vacuum");
       // PassRunner::addDefaultGlobalOptimizationPostPasses
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("dae-optimizing");

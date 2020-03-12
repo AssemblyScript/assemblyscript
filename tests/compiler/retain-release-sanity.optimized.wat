@@ -2060,28 +2060,26 @@
   local.get $1
   local.get $3
   i32.store
-  local.get $2
-  local.set $4
   local.get $1
   local.tee $3
   local.get $2
-  i32.load
   local.tee $1
+  i32.load
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $1
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $4
+  local.get $1
   local.get $3
   i32.store
   local.get $0
   local.tee $3
-  local.get $4
-  local.tee $1
+  local.get $1
   i32.load
   local.tee $4
   i32.ne

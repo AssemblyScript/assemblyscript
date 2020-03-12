@@ -2977,13 +2977,10 @@
        local.get $3
        local.tee $2
        if
-        block $tablify|0
-         local.get $2
-         i32.const 1
-         i32.sub
-         br_table $case1|1 $case2|1 $case3|1 $tablify|0
-        end
-        br $break|1
+        local.get $2
+        i32.const 1
+        i32.sub
+        br_table $case1|1 $case2|1 $case3|1 $break|1
        end
        local.get $4
        return
@@ -7852,20 +7849,20 @@
      i32.and
      i32.const 1083231232
      i32.ge_s
-     if
-      local.get $5
-      local.get $10
-      i32.const -1064252416
-      i32.sub
-      i32.or
-      local.get $1
-      local.get $0
-      local.get $3
-      f64.sub
-      f64.le
-      i32.or
-      br_if $folding-inner1
-     end
+     i32.const 0
+     local.get $5
+     local.get $10
+     i32.const -1064252416
+     i32.sub
+     i32.or
+     local.get $1
+     local.get $0
+     local.get $3
+     f64.sub
+     f64.le
+     i32.or
+     select
+     br_if $folding-inner1
     end
     local.get $10
     i32.const 2147483647
