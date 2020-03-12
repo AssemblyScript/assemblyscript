@@ -709,6 +709,8 @@ exports.main = function main(argv, options, callback) {
         add("reorder-locals"); // differs
         add("flatten");
         add("local-cse");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
       }
       if (hasARC) { // differs
@@ -745,10 +747,6 @@ exports.main = function main(argv, options, callback) {
       // if (optimizeLevel >= 3 || shrinkLevel >= 2) { // do it later
       //   add("merge-locals");
       // }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("rse");
-        add("vacuum");
-      }
       add("coalesce-locals");
       add("simplify-locals");
       add("vacuum");
