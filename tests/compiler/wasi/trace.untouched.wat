@@ -3499,8 +3499,6 @@
   local.get $8
   i32.gt_s
   select
-  i32.const 1
-  i32.add
   i32.add
   i32.const 0
   call $~lib/rt/stub/__alloc
