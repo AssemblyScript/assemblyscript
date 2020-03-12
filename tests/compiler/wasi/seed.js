@@ -1,5 +1,4 @@
 var memory;
-var failed;
 
 exports.preInstantiate = function(imports, exports) {
   imports["wasi_snapshot_preview1"] = {
@@ -8,24 +7,19 @@ exports.preInstantiate = function(imports, exports) {
       const messagePtr = new Uint32Array(memory.buffer)[ iov >>> 2     ];
       const messageLen = new Uint32Array(memory.buffer)[(iov >>> 2) + 1];
       const message = Array.from(new Uint8Array(memory.buffer, messagePtr, messageLen)).map(c => String.fromCharCode(c)).join("");
-      if (message != "abort: the message in wasi/abort.ts(4:2)\n") failed = "unexpected message: " + message;
+      (fd == 1 ? process.stdout : process.stderr).write(message);
     },
     proc_exit: function(code) {
-      if (code != 255) failed = "unexpected exit code: " + code;
+      console.log("exit: " + code);
+    },
+    random_get: function(buf, len) {
+      new Uint8Array(memory.buffer, buf, len).set(require("crypto").randomBytes(len));
     }
   };
-  if (failed) throw Error(failed);
 };
 
 exports.postInstantiate = function(instance) {
   const exports = instance.exports;
   memory = exports.memory;
-  var thrown = false;
-  try {
-    exports.test();
-  } catch (e) {
-    thrown = true;
-  }
-  if (!thrown) failed = "unexpected missing throw";
-  if (failed) throw Error(failed);
+  console.log("Math.random = " + exports.test());
 }

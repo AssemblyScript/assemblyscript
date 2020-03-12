@@ -118,6 +118,7 @@ import {
 import {
   Parser
 } from "./parser";
+import { BuiltinNames } from "./builtins";
 
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
@@ -980,22 +981,48 @@ export class Program extends DiagnosticEmitter {
     // set up global aliases
     {
       let globalAliases = options.globalAliases;
-      if (globalAliases) {
-        // TODO: for (let [alias, name] of globalAliases) {
-        for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
-          let alias = unchecked(_keys[i]);
-          let name = assert(globalAliases.get(alias));
-          if (!name.length) continue; // explicitly disabled
-          let firstChar = name.charCodeAt(0);
-          if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
-            this.registerConstantInteger(alias, Type.i32, i64_new(<i32>parseInt(name, 10)));
+      if (!globalAliases) globalAliases = new Map();
+      if (!globalAliases.has(CommonNames.abort)) {
+        globalAliases.set(CommonNames.abort,
+          this.elementsByName.has(BuiltinNames.wasiAbort)
+            ? BuiltinNames.wasiAbort
+            : BuiltinNames.abort
+        );
+      }
+      if (!globalAliases.has(CommonNames.trace)) {
+        globalAliases.set(CommonNames.trace,
+          this.elementsByName.has(BuiltinNames.wasiTrace)
+            ? BuiltinNames.wasiTrace
+            : BuiltinNames.trace
+        );
+      }
+      if (!globalAliases.has(CommonNames.seed)) {
+        globalAliases.set(CommonNames.seed,
+          this.elementsByName.has(BuiltinNames.wasiSeed)
+            ? BuiltinNames.wasiSeed
+            : BuiltinNames.seed
+        );
+      }
+      if (!globalAliases.has(CommonNames.Math)) {
+        globalAliases.set(CommonNames.Math, CommonNames.NativeMath);
+      }
+      if (!globalAliases.has(CommonNames.Mathf)) {
+        globalAliases.set(CommonNames.Mathf, CommonNames.NativeMathf);
+      }
+      // TODO: for (let [alias, name] of globalAliases) {
+      for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
+        let alias = unchecked(_keys[i]);
+        let name = assert(globalAliases.get(alias));
+        if (!name.length) continue; // explicitly disabled
+        let firstChar = name.charCodeAt(0);
+        if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
+          this.registerConstantInteger(alias, Type.i32, i64_new(<i32>parseInt(name, 10)));
+        } else {
+          let elementsByName = this.elementsByName;
+          if (elementsByName.has(name)) {
+            elementsByName.set(alias, assert(elementsByName.get(name)));
           } else {
-            let elementsByName = this.elementsByName;
-            if (elementsByName.has(name)) {
-              elementsByName.set(alias, assert(elementsByName.get(name)));
-            } else {
-              throw new Error("no such global element: " + name);
-            }
+            throw new Error("no such global element: " + name);
           }
         }
       }

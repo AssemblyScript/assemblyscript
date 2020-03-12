@@ -310,10 +310,13 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
         env: {
           memory,
           abort: function(msg, file, line, column) {
-            console.log(colorsUtil.red("  abort: " + getString(msg) + " at " + getString(file) + ":" + line + ":" + column));
+            console.log(colorsUtil.red("  abort: " + getString(msg) + " in " + getString(file) + "(" + line + ":" + column + ")"));
           },
           trace: function(msg, n) {
             console.log("  trace: " + getString(msg) + (n ? " " : "") + Array.prototype.slice.call(arguments, 2, 2 + n).join(", "));
+          },
+          seed: function() {
+            return 0xA5534817; // make tests deterministic
           }
         },
         Math,

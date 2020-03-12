@@ -1711,8 +1711,12 @@ declare const Math: IMath<f64>;
 /** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
 declare const Mathf: IMath<f32>;
 
-/** Environmental tracing function for debugging purposes. */
+/** Environmental abort function. */
+declare function abort(msg?: string | null, fileName?: string | null, lineNumber?: i32, columnNumber?: i32): never;
+/** Environmental tracing function. */
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
+/** Environmental seeding function. */
+declare function seed(): f64;
 
 // Decorators
 

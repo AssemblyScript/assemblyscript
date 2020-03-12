@@ -248,12 +248,6 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
   assemblyscript.setPedantic(compilerOptions, args.pedantic);
 
-  // Initialize default aliases
-  assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
-  assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
-  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/builtins/abort");
-  assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/builtins/trace");
-
   // Add or override aliases if specified
   if (args.use) {
     let aliases = args.use;

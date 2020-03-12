@@ -1,36 +1,41 @@
 import {
   proc_exit,
   fd_write,
-  iovec
+  iovec,
+  random_get
 } from "./wasi_snapshot_preview1";
 
 import {
-  decimalCount32
+  MAX_DOUBLE_LENGTH,
+  decimalCount32,
+  dtoa
 } from "util/number";
 
 export * from "./wasi_snapshot_preview1";
 
 /** A WASI-aware abort implementation. */
-// @ts-ignore: decorator
-@global
-export function abort(
-  message: string = "",
-  fileName: string = "",
+function abort(
+  message: string | null = null,
+  fileName: string | null = null,
   lineNumber: u32 = 0,
   columnNumber: u32 = 0
 ): void {
-  // 0: iovec.buf
-  // 4: iovec.buf_len
-  // 8: nwritten
+  // 0: iov.buf
+  // 4: iov.buf_len
+  // 8: len
   // 12: buf...
   const iovPtr: usize = 0;
   const bufPtr: usize = iovPtr + offsetof<iovec>() + sizeof<usize>();
   changetype<iovec>(iovPtr).buf = bufPtr;
   var ptr = bufPtr;
-  store<u64>(ptr, 0x203A74726F6241); ptr += 7; // Abort:
-  ptr += String.UTF8.encodeUnsafe(message, ptr);
-  store<u32>(ptr, 0x206E690A); ptr += 4; // \nin
-  ptr += String.UTF8.encodeUnsafe(fileName, ptr);
+  store<u64>(ptr, 0x203A74726F6261); ptr += 7; // 'abort: '
+  if (message !== null) {
+    ptr += String.UTF8.encodeUnsafe(message, ptr);
+  }
+  store<u32>(ptr, 0x206E6920); ptr += 4; // ' in '
+  if (fileName !== null) {
+    ptr += String.UTF8.encodeUnsafe(fileName, ptr);
+  }
   store<u8>(ptr++, 0x28); // (
   var len = decimalCount32(lineNumber); ptr += len;
   do {
@@ -45,8 +50,71 @@ export function abort(
     store<u8>(--ptr, 0x30 + columnNumber % 10);
     columnNumber = t;
   } while (columnNumber); ptr += len;
-  store<u8>(ptr++, 0x29); // )
+  store<u16>(ptr, 0x0A29); ptr += 2; // )\n
   changetype<iovec>(iovPtr).buf_len = ptr - bufPtr;
   fd_write(2, iovPtr, 1, offsetof<iovec>());
   proc_exit(255);
+}
+
+/** A WASI-aware trace implementation. */
+function trace(
+  message: string,
+  n: i32 = 0,
+  a0: f64 = 0,
+  a1: f64 = 0,
+  a2: f64 = 0,
+  a3: f64 = 0,
+  a4: f64 = 0
+): void {
+  // 0: iov.buf
+  // 4: iov.buf_len
+  // 8: len
+  // 12: buf...
+  var iovPtr = __alloc(offsetof<iovec>() + sizeof<usize>() + 1 + <usize>(max(String.UTF8.byteLength(message), MAX_DOUBLE_LENGTH << 1)), 0);
+  var lenPtr = iovPtr + offsetof<iovec>();
+  var bufPtr = lenPtr + sizeof<usize>();
+  changetype<iovec>(iovPtr).buf = bufPtr;
+  store<u64>(bufPtr, 0x203A6563617274); // 'trace: '
+  changetype<iovec>(iovPtr).buf_len = 7;
+  fd_write(1, iovPtr, 1, lenPtr);
+  changetype<iovec>(iovPtr).buf_len = String.UTF8.encodeUnsafe(message, bufPtr);
+  fd_write(1, iovPtr, 1, lenPtr);
+  if (n) {
+    store<u8>(bufPtr++, 0x20); // space
+    changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a0)), bufPtr);
+    fd_write(1, iovPtr, 1, lenPtr);
+    if (n > 1) {
+      changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a1)), bufPtr);
+      fd_write(1, iovPtr, 1, lenPtr);
+      if (n > 2) {
+        changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a2)), bufPtr);
+        fd_write(1, iovPtr, 1, lenPtr);
+        if (n > 3) {
+          changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a3)), bufPtr);
+          fd_write(1, iovPtr, 1, lenPtr);
+          if (n > 4) {
+            changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(changetype<string>(dtoa(a4)), bufPtr);
+            fd_write(1, iovPtr, 1, lenPtr);
+          }
+        }
+      }
+    }
+    --bufPtr;
+  }
+  store<u8>(bufPtr, 0x0A); // \n
+  changetype<iovec>(iovPtr).buf_len = 1;
+  fd_write(1, iovPtr, 1, lenPtr);
+  __free(iovPtr);
+}
+
+/** A WASI-aware seed implementation. */
+function seed(): f64 {
+  var temp = load<u64>(0);
+  var rand: u64;
+  do {
+    random_get(0, 8); // to be sure
+    rand = load<u64>(0);
+  } while (!rand);
+  store<u64>(0, temp);
+  return reinterpret<f64>(rand);
 }

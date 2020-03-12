@@ -189,6 +189,8 @@ export namespace CommonNames {
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";
   export const Mathf = "Mathf";
+  export const NativeMath = "NativeMath";
+  export const NativeMathf = "NativeMathf";
   export const Int8Array = "Int8Array";
   export const Int16Array = "Int16Array";
   export const Int32Array = "Int32Array";
@@ -203,6 +205,8 @@ export namespace CommonNames {
   export const Error = "Error";
   // runtime
   export const abort = "abort";
+  export const trace = "trace";
+  export const seed = "seed";
   export const pow = "pow";
   export const mod = "mod";
   export const alloc = "__alloc";
