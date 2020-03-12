@@ -966,8 +966,6 @@ declare module "assemblyscript/src/ast" {
         SWITCHCASE = 62,
         COMMENT = 63
     }
-    /** Checks if a node represents a constant value. */
-    export function nodeIsConstantValue(kind: NodeKind): boolean;
     /** Base class of all nodes. */
     export abstract class Node {
         /** Node kind indicator. */
@@ -1049,6 +1047,12 @@ declare module "assemblyscript/src/ast" {
         static createVariableDeclaration(name: IdentifierExpression, type: TypeNode | null, initializer: Expression | null, decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): VariableDeclaration;
         static createVoidStatement(expression: Expression, range: Range): VoidStatement;
         static createWhileStatement(condition: Expression, statement: Statement, range: Range): WhileStatement;
+        /** Tests if this node is a literal of the specified kind. */
+        isLiteralKind(literalKind: LiteralKind): boolean;
+        /** Tests if this node is a literal of a numeric kind (float or integer). */
+        get isNumericLiteral(): boolean;
+        /** Tests whether this node is guaranteed to compile to a constant value. */
+        get compilesToConst(): boolean;
     }
     export abstract class TypeNode extends Node {
         /** Whether nullable or not. */
@@ -1183,8 +1187,6 @@ declare module "assemblyscript/src/ast" {
         ARRAY = 4,
         OBJECT = 5
     }
-    /** Checks if the given node represents a numeric (float or integer) literal. */
-    export function isNumericLiteral(node: Expression): boolean;
     /** Base class of all literal expressions. */
     export abstract class LiteralExpression extends Expression {
         /** Specific literal kind. */
@@ -3941,8 +3943,8 @@ declare module "assemblyscript/src/program" {
         parent: Element);
         lookup(name: string): Element | null;
     }
-    /** An resolved index signature. */
-    export class IndexSignature extends VariableLikeElement {
+    /** A resolved index signature. */
+    export class IndexSignature extends TypedElement {
         /** Constructs a new index prototype. */
         constructor(
         /** Parent class. */
@@ -5087,7 +5089,6 @@ declare module "assemblyscript/src/definitions" {
         static build(program: Program): string;
         private sb;
         private indentLevel;
-        private unknown;
         /** Constructs a new WebIDL builder. */
         constructor(program: Program, includePrivate?: boolean);
         visitGlobal(name: string, element: Global): void;
@@ -5247,6 +5248,7 @@ declare module "assemblyscript/src/index" {
     export * from "assemblyscript/src/types";
     import * as util from "assemblyscript/src/util/index";
     export { util };
+    export * from "assemblyscript/src/util/index";
 }
 declare module "assemblyscript/src/extra/ast" {
     /**
