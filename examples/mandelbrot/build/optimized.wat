@@ -68,14 +68,12 @@
   i32.lt_u
   select
   local.set $0
-  i32.const 0
-  local.set $13
   loop $for-loop|0
-   local.get $13
+   local.get $12
    local.get $1
    i32.lt_u
    if
-    local.get $13
+    local.get $12
     f64.convert_i32_u
     local.get $11
     f64.mul
@@ -86,7 +84,7 @@
     local.tee $5
     local.set $14
     i32.const 0
-    local.set $12
+    local.set $13
     loop $while-continue|1
      local.get $5
      local.get $5
@@ -115,20 +113,20 @@
        local.get $9
        f64.add
        local.set $5
-       local.get $12
+       local.get $13
        local.get $3
        i32.ge_u
        br_if $while-break|1
-       local.get $12
+       local.get $13
        i32.const 1
        i32.add
-       local.set $12
+       local.set $13
        br $while-continue|1
       end
      end
     end
     loop $while-continue|2
-     local.get $12
+     local.get $13
      local.get $0
      i32.lt_u
      if
@@ -150,15 +148,15 @@
       f64.add
       local.set $14
       local.set $5
-      local.get $12
+      local.get $13
       i32.const 1
       i32.add
-      local.set $12
+      local.set $13
       br $while-continue|2
      end
     end
     local.get $2
-    local.get $13
+    local.get $12
     i32.const 1
     i32.shl
     i32.add
@@ -174,7 +172,7 @@
     f64.gt
     if (result i32)
      f64.const 2047
-     local.get $12
+     local.get $13
      i32.const 1
      i32.add
      f64.convert_i32_u
@@ -196,10 +194,10 @@
      i32.const 2047
     end
     i32.store16
-    local.get $13
+    local.get $12
     i32.const 1
     i32.add
-    local.set $13
+    local.set $12
     br $for-loop|0
    end
   end
