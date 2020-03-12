@@ -329,13 +329,17 @@ function testInstantiate(basename, binaryBuffer, name, glue) {
       }
       var instance = new WebAssembly.Instance(new WebAssembly.Module(binaryBuffer), imports);
       Object.setPrototypeOf(exports, instance.exports);
+      if (glue.postInstantiate) {
+        console.log(colorsUtil.white("  [postInstantiate]"));
+        glue.postInstantiate(instance);
+      }
       if (exports._start) {
         console.log(colorsUtil.white("  [start]"));
         exports._start();
       }
-      if (glue.postInstantiate) {
-        console.log(colorsUtil.white("  [postInstantiate]"));
-        glue.postInstantiate(instance);
+      if (glue.postStart) {
+        console.log(colorsUtil.white("  [postStart]"));
+        glue.postStart(instance);
       }
     });
     let leakCount = rtr.check();

@@ -18,5 +18,4 @@ exports.preInstantiate = function(imports, exports) {
 exports.postInstantiate = function(instance) {
   const exports = instance.exports;
   memory = exports.memory;
-  exports.test();
 }

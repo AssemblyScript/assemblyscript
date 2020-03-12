@@ -31,7 +31,6 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (export "test" (func $wasi/trace/test))
  (func $~lib/string/String.UTF8.byteLength (; 2 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
@@ -1953,7 +1952,11 @@
   local.get $7
   call $~lib/rt/stub/__free
  )
- (func $wasi/trace/test (; 17 ;)
+ (func $start:wasi/trace (; 17 ;)
+  i32.const 1168
+  global.set $~lib/rt/stub/startOffset
+  i32.const 1168
+  global.set $~lib/rt/stub/offset
   i32.const 0
   f64.const 0
   f64.const 0
@@ -1984,9 +1987,6 @@
    i32.const 1
    global.set $~started
   end
-  i32.const 1168
-  global.set $~lib/rt/stub/startOffset
-  i32.const 1168
-  global.set $~lib/rt/stub/offset
+  call $start:wasi/trace
  )
 )

@@ -3,7 +3,7 @@ exports.preInstantiate = function(imports, exports) {
     external: new WebAssembly.Global({ value: "i32", mutable: true }, 123)
   };
 };
-exports.postInstantiate = function(instance) {
+exports.postStart = function(instance) {
   // adds 10 to both
   const exports = instance.exports;
   if (exports.external.valueOf() != 133) throw Error("unexpected value");

@@ -36,7 +36,6 @@
  (global $~lib/heap/__heap_base i32 (i32.const 1584))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (export "test" (func $wasi/trace/test))
  (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
   local.get $0
  )
@@ -3682,7 +3681,17 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $wasi/trace/test (; 20 ;)
+ (func $start:wasi/trace (; 20 ;)
+  global.get $~lib/heap/__heap_base
+  i32.const 15
+  i32.add
+  i32.const 15
+  i32.const -1
+  i32.xor
+  i32.and
+  global.set $~lib/rt/stub/startOffset
+  global.get $~lib/rt/stub/startOffset
+  global.set $~lib/rt/stub/offset
   i32.const 32
   i32.const 0
   f64.const 0
@@ -3717,15 +3726,6 @@
    i32.const 1
    global.set $~started
   end
-  global.get $~lib/heap/__heap_base
-  i32.const 15
-  i32.add
-  i32.const 15
-  i32.const -1
-  i32.xor
-  i32.and
-  global.set $~lib/rt/stub/startOffset
-  global.get $~lib/rt/stub/startOffset
-  global.set $~lib/rt/stub/offset
+  call $start:wasi/trace
  )
 )
