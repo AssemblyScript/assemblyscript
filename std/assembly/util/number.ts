@@ -424,10 +424,10 @@ function grisu2(value: f64, buffer: usize, sign: i32): i32 {
 
   // frexp routine
   var uv  = reinterpret<u64>(value);
-  var exp = <i32>((uv & 0x7FF0000000000000) >>> 52);
+  var exp = i32((uv & 0x7FF0000000000000) >>> 52);
   var sid = uv & 0x000FFFFFFFFFFFFF;
   var frc = (u64(exp != 0) << 52) + sid;
-      exp = select<i32>(exp, 1, exp != 0) - (0x3FF + 52);
+      exp = select<i32>(exp, 1, exp) - (0x3FF + 52);
 
   normalizedBoundaries(frc, exp);
   getCachedPower(_exp);
@@ -444,7 +444,7 @@ function grisu2(value: f64, buffer: usize, sign: i32): i32 {
   var w_exp = umul64e(exp, exp_pow);
 
   var wp_frc = umul64f(_frc_plus, frc_pow) - 1;
-  var wp_exp = umul64e(_exp,      exp_pow);
+  var wp_exp = umul64e(_exp, exp_pow);
 
   var wm_frc = umul64f(_frc_minus, frc_pow) + 1;
   var delta  = wp_frc - wm_frc;
@@ -460,7 +460,7 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
   var wp_w_frc = mp_frc - w_frc;
   var wp_w_exp = mp_exp;
 
-  var p1 = <u32>(mp_frc >> one_exp);
+  var p1 = u32(mp_frc >> one_exp);
   var p2 = mp_frc & mask;
 
   var kappa = <i32>decimalCount32(p1);
@@ -592,8 +592,8 @@ export function dtoa_core(buffer: usize, value: f64): i32 {
 
 export function dtoa(value: f64): String {
   if (value == 0) return "0.0";
-  if (!isFinite<f64>(value)) {
-    if (isNaN<f64>(value)) return "NaN";
+  if (!isFinite(value)) {
+    if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
   var buffer = __alloc(MAX_DOUBLE_LENGTH << 1, idof<String>());
@@ -612,18 +612,18 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
   }
   var decimals: u32 = 0;
   if (isSigned<T>()) {
-    let sign = i32(value < 0);
+    let sign = u32(value < 0);
     if (sign) value = changetype<T>(-value);
     if (sizeof<T>() <= 4) {
-      decimals = decimalCount32(value) + <u32>sign;
+      decimals = decimalCount32(value) + sign;
       utoa32_core(buffer, value, decimals);
     } else {
       if (<u64>value <= <u64>u32.MAX_VALUE) {
         let val32 = <u32>value;
-        decimals = decimalCount32(val32) + <u32>sign;
+        decimals = decimalCount32(val32) + sign;
         utoa32_core(buffer, val32, decimals);
       } else {
-        decimals = decimalCount64High(value) + <u32>sign;
+        decimals = decimalCount64High(value) + sign;
         utoa64_core(buffer, value, decimals);
       }
     }
@@ -647,22 +647,22 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
 }
 
 export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
-  buffer += (offset << 1);
+  buffer += offset << 1;
   if (value == 0.0) {
     store<u16>(buffer, CharCode._0);
     store<u16>(buffer, CharCode.DOT, 2);
     store<u16>(buffer, CharCode._0,  4);
     return 3;
   }
-  if (!isFinite<f64>(value)) {
-    if (isNaN<f64>(value)) {
+  if (!isFinite(value)) {
+    if (isNaN(value)) {
       store<u16>(buffer, CharCode.N);
       store<u16>(buffer, CharCode.a, 2);
       store<u16>(buffer, CharCode.N, 4);
       return 3;
     } else {
-      let sign = i32(value < 0);
-      let len  = 8 + sign;
+      let sign = value < 0;
+      let len  = 8 + u32(sign);
       memory.copy(buffer, changetype<usize>(select<String>("-Infinity", "Infinity", sign)), len << 1);
       return len;
     }

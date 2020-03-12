@@ -2767,8 +2767,6 @@
   local.get $7
   i32.const 1
   local.get $7
-  i32.const 0
-  i32.ne
   select
   i32.const 1023
   i32.const 52
