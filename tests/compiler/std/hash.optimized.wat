@@ -15,11 +15,8 @@
   i32.const -2128831035
   local.set $2
   local.get $0
-  local.tee $1
   if
-   i32.const 0
-   local.set $0
-   local.get $1
+   local.get $0
    i32.const 16
    i32.sub
    i32.load offset=12
@@ -29,7 +26,7 @@
    i32.shl
    local.set $3
    loop $for-loop|0
-    local.get $0
+    local.get $1
     local.get $3
     i32.lt_u
     if
@@ -42,10 +39,10 @@
      i32.const 16777619
      i32.mul
      local.set $2
-     local.get $0
+     local.get $1
      i32.const 1
      i32.add
-     local.set $0
+     local.set $1
      br $for-loop|0
     end
    end

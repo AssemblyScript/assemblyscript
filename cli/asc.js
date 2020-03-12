@@ -744,6 +744,10 @@ exports.main = function main(argv, options, callback) {
       // if (optimizeLevel >= 3 || shrinkLevel >= 2) { // do it later
       //   add("merge-locals");
       // }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("rse");
+        add("vacuum");
+      }
       add("coalesce-locals");
       add("simplify-locals");
       add("vacuum");
@@ -771,10 +775,10 @@ exports.main = function main(argv, options, callback) {
       //   add("precompute");
       // }
       add("optimize-instructions");
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        add("rse");
-      }
-      add("vacuum");
+      // if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+      //   add("rse");
+      // }
+      // add("vacuum");
       // PassRunner::addDefaultGlobalOptimizationPostPasses
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("dae-optimizing");

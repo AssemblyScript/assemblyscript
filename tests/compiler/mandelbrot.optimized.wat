@@ -175,11 +175,11 @@
   (local $1 i32)
   (local $2 i64)
   (local $3 f64)
-  (local $4 i32)
+  (local $4 f64)
   (local $5 f64)
   (local $6 f64)
   (local $7 f64)
-  (local $8 f64)
+  (local $8 i32)
   (local $9 f64)
   (local $10 f64)
   local.get $0
@@ -223,7 +223,7 @@
     return
    end
    i32.const -54
-   local.set $4
+   local.set $8
    local.get $0
    f64.const 18014398509481984
    f64.mul
@@ -279,11 +279,11 @@
   local.get $0
   f64.add
   f64.div
-  local.tee $5
-  local.get $5
+  local.tee $4
+  local.get $4
   f64.mul
   local.set $3
-  local.get $4
+  local.get $8
   local.get $1
   i32.const 20
   i32.shr_u
@@ -298,25 +298,25 @@
   f64.mul
   local.get $0
   f64.mul
-  local.tee $6
+  local.tee $5
   f64.sub
   i64.reinterpret_f64
   i64.const -4294967296
   i64.and
   f64.reinterpret_i64
-  local.tee $7
+  local.tee $6
   f64.const 1.4426950407214463
   f64.mul
   local.tee $10
   f64.add
-  local.set $8
+  local.set $7
   local.get $0
-  local.get $7
-  f64.sub
   local.get $6
   f64.sub
   local.get $5
-  local.get $6
+  f64.sub
+  local.get $4
+  local.get $5
   local.get $3
   f64.const 0.6666666666666735
   local.get $3
@@ -351,7 +351,7 @@
   f64.mul
   f64.add
   local.tee $0
-  local.get $7
+  local.get $6
   f64.add
   f64.const 1.6751713164886512e-10
   f64.mul
@@ -360,12 +360,12 @@
   f64.mul
   f64.add
   local.get $9
-  local.get $8
+  local.get $7
   f64.sub
   local.get $10
   f64.add
   f64.add
-  local.get $8
+  local.get $7
   f64.add
  )
  (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
@@ -430,14 +430,12 @@
   i32.lt_u
   select
   local.set $0
-  i32.const 0
-  local.set $13
   loop $for-loop|0
-   local.get $13
+   local.get $12
    local.get $1
    i32.lt_u
    if
-    local.get $13
+    local.get $12
     f64.convert_i32_u
     local.get $11
     f64.mul
@@ -449,7 +447,7 @@
     f64.const 0
     local.set $14
     i32.const 0
-    local.set $12
+    local.set $13
     loop $while-continue|1
      local.get $5
      local.get $5
@@ -478,20 +476,20 @@
        local.get $9
        f64.add
        local.set $5
-       local.get $12
+       local.get $13
        local.get $3
        i32.ge_u
        br_if $while-break|1
-       local.get $12
+       local.get $13
        i32.const 1
        i32.add
-       local.set $12
+       local.set $13
        br $while-continue|1
       end
      end
     end
     loop $while-continue|2
-     local.get $12
+     local.get $13
      local.get $0
      i32.lt_u
      if
@@ -513,15 +511,15 @@
       f64.add
       local.set $14
       local.set $5
-      local.get $12
+      local.get $13
       i32.const 1
       i32.add
-      local.set $12
+      local.set $13
       br $while-continue|2
      end
     end
     local.get $2
-    local.get $13
+    local.get $12
     i32.const 1
     i32.shl
     i32.add
@@ -537,7 +535,7 @@
     f64.gt
     if (result i32)
      f64.const 2047
-     local.get $12
+     local.get $13
      i32.const 1
      i32.add
      f64.convert_i32_u
@@ -559,10 +557,10 @@
      i32.const 2047
     end
     i32.store16
-    local.get $13
+    local.get $12
     i32.const 1
     i32.add
-    local.set $13
+    local.set $12
     br $for-loop|0
    end
   end

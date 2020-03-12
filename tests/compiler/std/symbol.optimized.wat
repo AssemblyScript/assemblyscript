@@ -426,40 +426,37 @@
   (local $2 i32)
   (local $3 i32)
   i32.const -2128831035
-  local.set $2
+  local.set $1
   local.get $0
-  local.tee $1
   if
-   i32.const 0
-   local.set $0
-   local.get $1
+   local.get $0
    call $~lib/string/String#get:length
    i32.const 1
    i32.shl
    local.set $3
    loop $for-loop|0
-    local.get $0
+    local.get $2
     local.get $3
     i32.lt_u
     if
-     local.get $2
-     local.get $0
      local.get $1
+     local.get $0
+     local.get $2
      i32.add
      i32.load8_u
      i32.xor
      i32.const 16777619
      i32.mul
-     local.set $2
-     local.get $0
+     local.set $1
+     local.get $2
      i32.const 1
      i32.add
-     local.set $0
+     local.set $2
      br $for-loop|0
     end
    end
   end
-  local.get $2
+  local.get $1
  )
  (func $~lib/util/string/compareImpl (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
