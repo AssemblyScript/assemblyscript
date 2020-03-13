@@ -10,8 +10,6 @@
  (type $f32_f32_f32_f32_=>_i32 (func (param f32 f32 f32 f32) (result i32)))
  (type $f64_f64_f64_f64_=>_i32 (func (param f64 f64 f64 f64) (result i32)))
  (type $none_=>_none (func))
- (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
- (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i64_=>_none (func (param i64)))
  (type $i64_i64_i64_i64_i64_=>_none (func (param i64 i64 i64 i64 i64)))
@@ -23,9 +21,11 @@
  (type $f64_=>_i32 (func (param f64) (result i32)))
  (type $f64_i32_f64_=>_i32 (func (param f64 i32 f64) (result i32)))
  (type $i64_=>_i64 (func (param i64) (result i64)))
- (type $i64_i32_=>_i64 (func (param i64 i32) (result i64)))
+ (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
+ (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
  (type $f32_f32_f32_=>_f32 (func (param f32 f32 f32) (result f32)))
  (type $none_=>_f64 (func (result f64)))
+ (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (type $f64_f64_i32_=>_f64 (func (param f64 f64 i32) (result f64)))
  (type $f64_f64_f64_=>_f64 (func (param f64 f64 f64) (result f64)))
  (import "Math" "E" (global $~lib/bindings/Math/E f64))
@@ -11292,7 +11292,7 @@
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 161 ;) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 161 ;) (param $0 i64) (param $1 i64) (result i64)
   (local $2 i64)
   i64.const 1
   local.set $2
@@ -11325,68 +11325,14 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 162 ;) (param $0 f32) (param $1 i32) (result f32)
-  (local $2 f32)
-  (local $3 i32)
-  local.get $1
-  i32.const 31
-  i32.shr_s
-  local.tee $3
-  local.get $1
-  local.get $3
-  i32.add
-  i32.xor
-  local.set $1
-  f32.const 1
+ (func $~lib/math/ipow32 (; 162 ;) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  i32.const 1
   local.set $2
   loop $while-continue|0
    local.get $1
    if
     local.get $0
-    f32.const 1
-    local.get $1
-    i32.const 1
-    i32.and
-    select
-    f32.mul
-    local.set $2
-    local.get $1
-    i32.const 1
-    i32.shr_s
-    local.set $1
-    local.get $0
-    local.get $0
-    f32.mul
-    local.set $0
-    br $while-continue|0
-   end
-  end
-  local.get $3
-  if
-   f32.const 1
-   local.get $2
-   f32.div
-   local.set $2
-  end
-  local.get $2
- )
- (func $~lib/math/ipow64f (; 163 ;) (param $0 f64) (param $1 i32) (result f64)
-  (local $2 f64)
-  (local $3 i32)
-  local.get $1
-  i32.const 31
-  i32.shr_s
-  local.tee $3
-  local.get $1
-  local.get $3
-  i32.add
-  i32.xor
-  local.set $1
-  f64.const 1
-  local.set $2
-  loop $while-continue|0
-   local.get $1
-   if
     local.get $2
     i32.mul
     local.get $2
@@ -11408,15 +11354,15 @@
   end
   local.get $2
  )
- (func $start:std/math (; 164 ;)
+ (func $start:std/math (; 163 ;)
   (local $0 f64)
-  (local $1 f32)
-  (local $2 i32)
+  (local $1 i32)
+  (local $2 i64)
   (local $3 i64)
-  (local $4 i64)
+  (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
-  (local $7 f64)
+  (local $6 f64)
+  (local $7 f32)
   (local $8 f32)
   f64.const 2.718281828459045
   global.get $~lib/bindings/Math/E
@@ -36771,28 +36717,28 @@
      unreachable
     end
     global.get $~lib/math/random_state0_64
-    local.set $3
+    local.set $2
     global.get $~lib/math/random_state1_64
-    local.tee $4
+    local.tee $3
     global.set $~lib/math/random_state0_64
-    local.get $4
     local.get $3
-    local.get $3
+    local.get $2
+    local.get $2
     i64.const 23
     i64.shl
     i64.xor
-    local.tee $3
-    local.get $3
+    local.tee $2
+    local.get $2
     i64.const 17
     i64.shr_u
     i64.xor
     i64.xor
-    local.get $4
+    local.get $3
     i64.const 26
     i64.shr_u
     i64.xor
     global.set $~lib/math/random_state1_64
-    local.get $4
+    local.get $3
     i64.const 12
     i64.shr_u
     i64.const 4607182418800017408
@@ -36846,24 +36792,24 @@
      unreachable
     end
     global.get $~lib/math/random_state0_32
-    local.tee $5
+    local.tee $4
     global.get $~lib/math/random_state1_32
     i32.xor
-    local.tee $6
-    local.get $5
+    local.tee $5
+    local.get $4
     i32.const 26
     i32.rotl
     i32.xor
-    local.get $6
+    local.get $5
     i32.const 9
     i32.shl
     i32.xor
     global.set $~lib/math/random_state0_32
-    local.get $6
+    local.get $5
     i32.const 13
     i32.rotl
     global.set $~lib/math/random_state1_32
-    local.get $5
+    local.get $4
     i32.const -1640531525
     i32.mul
     i32.const 5
@@ -36877,11 +36823,11 @@
     f32.reinterpret_i32
     f32.const 1
     f32.sub
-    local.tee $1
+    local.tee $7
     f32.const 1
     f32.lt
     i32.const 0
-    local.get $1
+    local.get $7
     f32.const 0
     f32.ge
     select
@@ -47241,7 +47187,7 @@
    unreachable
   end
  )
- (func $~start (; 165 ;)
+ (func $~start (; 164 ;)
   call $start:std/math
  )
 )
