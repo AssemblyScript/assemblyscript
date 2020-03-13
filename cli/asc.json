@@ -167,7 +167,8 @@
     "TODO_doesNothingYet": [
       " nontrapping-f2i     Non-trapping float to integer ops.",
       " exception-handling  Exception handling.",
-      " tail-calls          Tail call operations."
+      " tail-calls          Tail call operations.",
+      " multi-value         Multi value types."
     ],
     "type": "S"
   },

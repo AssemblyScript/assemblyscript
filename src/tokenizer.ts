@@ -1,11 +1,15 @@
 /**
- * A TypeScript tokenizer modified for AssemblyScript.
+ * @fileoverview A TypeScript tokenizer modified for AssemblyScript.
  *
- * Skips over trivia and provides a general mark/reset mechanism for the parser to utilize on
- * ambiguous tokens.
+ * The `Tokenizer` scans over a source file and returns one syntactic token
+ * at a time that the parser will combine to an abstract syntax tree.
  *
- * @module tokenizer
- *//***/
+ * It skips over trivia like comments and whitespace and provides a general
+ * mark/reset mechanism for the parser to utilize on ambiguous tokens, with
+ * one token of lookahead otherwise.
+ *
+ * @license Apache-2.0
+ */
 
 import {
   DiagnosticCode,
@@ -176,164 +180,124 @@ export function tokenFromKeyword(text: string): Token {
   assert(text.length);
   switch (text.charCodeAt(0)) {
     case CharCode.a: {
-      switch (text) {
-        case "abstract": return Token.ABSTRACT;
-        case "as": return Token.AS;
-        case "async": return Token.ASYNC;
-        case "await": return Token.AWAIT;
-      }
+      if (text == "abstract") return Token.ABSTRACT;
+      if (text == "as") return Token.AS;
+      if (text == "async") return Token.ASYNC;
+      if (text == "await") return Token.AWAIT;
       break;
     }
     case CharCode.b: {
-      switch (text) {
-        case "break": return Token.BREAK;
-      }
+      if (text == "break") return Token.BREAK;
       break;
     }
     case CharCode.c: {
-      switch (text) {
-        case "case": return Token.CASE;
-        case "catch": return Token.CATCH;
-        case "class": return Token.CLASS;
-        case "continue": return Token.CONTINUE;
-        case "const": return Token.CONST;
-        case "constructor": return Token.CONSTRUCTOR;
-      }
+      if (text == "case") return Token.CASE;
+      if (text == "catch") return Token.CATCH;
+      if (text == "class") return Token.CLASS;
+      if (text == "continue") return Token.CONTINUE;
+      if (text == "const") return Token.CONST;
+      if (text == "constructor") return Token.CONSTRUCTOR;
       break;
     }
     case CharCode.d: {
-      switch (text) {
-        case "debugger": return Token.DEBUGGER;
-        case "declare": return Token.DECLARE;
-        case "default": return Token.DEFAULT;
-        case "delete": return Token.DELETE;
-        case "do": return Token.DO;
-      }
+      if (text == "debugger") return Token.DEBUGGER;
+      if (text == "declare") return Token.DECLARE;
+      if (text == "default") return Token.DEFAULT;
+      if (text == "delete") return Token.DELETE;
+      if (text == "do") return Token.DO;
       break;
     }
     case CharCode.e: {
-      switch (text) {
-        case "else": return Token.ELSE;
-        case "enum": return Token.ENUM;
-        case "export": return Token.EXPORT;
-        case "extends": return Token.EXTENDS;
-      }
+      if (text == "else") return Token.ELSE;
+      if (text == "enum") return Token.ENUM;
+      if (text == "export") return Token.EXPORT;
+      if (text == "extends") return Token.EXTENDS;
       break;
     }
     case CharCode.f: {
-      switch (text) {
-        case "false": return Token.FALSE;
-        case "finally": return Token.FINALLY;
-        case "for": return Token.FOR;
-        case "from": return Token.FROM;
-        case "function": return Token.FUNCTION;
-      }
+      if (text == "false") return Token.FALSE;
+      if (text == "finally") return Token.FINALLY;
+      if (text == "for") return Token.FOR;
+      if (text == "from") return Token.FROM;
+      if (text == "function") return Token.FUNCTION;
       break;
     }
     case CharCode.g: {
-      switch (text) {
-        case "get": return Token.GET;
-      }
+      if (text == "get") return Token.GET;
       break;
     }
     case CharCode.i: {
-      switch (text) {
-        case "if": return Token.IF;
-        case "implements": return Token.IMPLEMENTS;
-        case "import": return Token.IMPORT;
-        case "in": return Token.IN;
-        case "instanceof": return Token.INSTANCEOF;
-        case "interface": return Token.INTERFACE;
-        case "is": return Token.IS;
-      }
+      if (text == "if") return Token.IF;
+      if (text == "implements") return Token.IMPLEMENTS;
+      if (text == "import") return Token.IMPORT;
+      if (text == "in") return Token.IN;
+      if (text == "instanceof") return Token.INSTANCEOF;
+      if (text == "interface") return Token.INTERFACE;
+      if (text == "is") return Token.IS;
       break;
     }
     case CharCode.k: {
-      switch (text) {
-        case "keyof": return Token.KEYOF;
-      }
+      if (text == "keyof") return Token.KEYOF;
       break;
     }
     case CharCode.l: {
-      switch (text) {
-        case "let": return Token.LET;
-      }
+      if (text == "let") return Token.LET;
       break;
     }
     case CharCode.m: {
-      switch (text) {
-        case "module": return Token.MODULE;
-      }
+      if (text == "module") return Token.MODULE;
       break;
     }
     case CharCode.n: {
-      switch (text) {
-        case "namespace": return Token.NAMESPACE;
-        case "new": return Token.NEW;
-        case "null": return Token.NULL;
-      }
+      if (text == "namespace") return Token.NAMESPACE;
+      if (text == "new") return Token.NEW;
+      if (text == "null") return Token.NULL;
       break;
     }
     case CharCode.o: {
-      switch (text) {
-        case "of": return Token.OF;
-      }
+      if (text == "of") return Token.OF;
       break;
     }
     case CharCode.p: {
-      switch (text) {
-        case "package": return Token.PACKAGE;
-        case "private": return Token.PRIVATE;
-        case "protected": return Token.PROTECTED;
-        case "public": return Token.PUBLIC;
-      }
+      if (text == "package") return Token.PACKAGE;
+      if (text == "private") return Token.PRIVATE;
+      if (text == "protected") return Token.PROTECTED;
+      if (text == "public") return Token.PUBLIC;
       break;
     }
     case CharCode.r: {
-      switch (text) {
-        case "readonly": return Token.READONLY;
-        case "return": return Token.RETURN;
-      }
+      if (text == "readonly") return Token.READONLY;
+      if (text == "return") return Token.RETURN;
       break;
     }
     case CharCode.s: {
-      switch (text) {
-        case "set": return Token.SET;
-        case "static": return Token.STATIC;
-        case "super": return Token.SUPER;
-        case "switch": return Token.SWITCH;
-      }
+      if (text == "set") return Token.SET;
+      if (text == "static") return Token.STATIC;
+      if (text == "super") return Token.SUPER;
+      if (text == "switch") return Token.SWITCH;
       break;
     }
     case CharCode.t: {
-      switch (text) {
-        case "this": return Token.THIS;
-        case "throw": return Token.THROW;
-        case "true": return Token.TRUE;
-        case "try": return Token.TRY;
-        case "type": return Token.TYPE;
-        case "typeof": return Token.TYPEOF;
-      }
+      if (text == "this") return Token.THIS;
+      if (text == "throw") return Token.THROW;
+      if (text == "true") return Token.TRUE;
+      if (text == "try") return Token.TRY;
+      if (text == "type") return Token.TYPE;
+      if (text == "typeof") return Token.TYPEOF;
       break;
     }
     case CharCode.v: {
-      switch (text) {
-        case "var": return Token.VAR;
-        case "void": return Token.VOID;
-      }
+      if (text == "var") return Token.VAR;
+      if (text == "void") return Token.VOID;
       break;
     }
     case CharCode.w: {
-      switch (text) {
-        case "while": return Token.WHILE;
-        case "with": return Token.WITH;
-      }
+      if (text == "while") return Token.WHILE;
+      if (text == "with") return Token.WITH;
       break;
     }
     case CharCode.y: {
-      switch (text) {
-        case "yield": return Token.YIELD;
-      }
+      if (text == "yield") return Token.YIELD;
       break;
     }
   }
@@ -491,8 +455,6 @@ export class Range {
   debugInfoRef: usize = 0;
 }
 
-declare function parseFloat(str: string): f64;
-
 /** Handler for intercepting comments while tokenizing. */
 export type CommentHandler = (kind: CommentKind, text: string, range: Range) => void;
 
@@ -519,7 +481,8 @@ export class Tokenizer extends DiagnosticEmitter {
     this.source = source;
     this.pos = 0;
     this.end = source.text.length;
-    this.diagnostics = diagnostics || new Array();
+    if (!diagnostics) diagnostics = [];
+    this.diagnostics = diagnostics;
 
     var end = this.end;
     var text = source.text;
@@ -1044,13 +1007,9 @@ export class Tokenizer extends DiagnosticEmitter {
   }
 
   mark(): State {
-    var state: State;
-    if (reusableState) {
-      state = reusableState;
-      reusableState = null;
-    } else {
-      state = new State();
-    }
+    var state = reusableState;
+    if (state) reusableState = null;
+    else state = new State();
     state.pos = this.pos;
     state.token = this.token;
     state.tokenPos = this.tokenPos;
@@ -1272,7 +1231,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return true;
   }
 
-  readInteger(): I64 {
+  readInteger(): i64 {
     var text = this.source.text;
     if (this.pos + 2 < this.end && text.charCodeAt(this.pos) == CharCode._0) {
       switch (text.charCodeAt(this.pos + 1) | 32) {
@@ -1303,7 +1262,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return this.readDecimalInteger();
   }
 
-  readHexInteger(): I64 {
+  readHexInteger(): i64 {
     var text = this.source.text;
     var start = this.pos;
     var value = i64_new(0);
@@ -1360,7 +1319,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return value;
   }
 
-  readDecimalInteger(): I64 {
+  readDecimalInteger(): i64 {
     var text = this.source.text;
     var start = this.pos;
     var end = this.end;
@@ -1405,7 +1364,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return value;
   }
 
-  readOctalInteger(): I64 {
+  readOctalInteger(): i64 {
     var text = this.source.text;
     var start = this.pos;
     var value = i64_new(0);
@@ -1450,7 +1409,7 @@ export class Tokenizer extends DiagnosticEmitter {
     return value;
   }
 
-  readBinaryInteger(): I64 {
+  readBinaryInteger(): i64 {
     var text = this.source.text;
     var start = this.pos;
     var value = i64_new(0);

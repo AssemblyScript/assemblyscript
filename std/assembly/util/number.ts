@@ -2,7 +2,6 @@
 
 import { idof } from "../builtins";
 import { CharCode } from "./string";
-import { ArrayBufferView } from "../arraybuffer";
 
 // @ts-ignore: decorator
 @inline
@@ -10,7 +9,7 @@ export const MAX_DOUBLE_LENGTH = 28;
 
 // @ts-ignore: decorator
 @lazy @inline
-const POWERS10: u32[] = [
+const POWERS10: StaticArray<u32> = [
   1,
   10,
   100,
@@ -39,7 +38,7 @@ const POWERS10: u32[] = [
 */
 // @ts-ignore: decorator
 @lazy @inline
-const DIGITS: u32[] = [
+const DIGITS: StaticArray<u32> = [
   0x00300030, 0x00310030, 0x00320030, 0x00330030, 0x00340030,
   0x00350030, 0x00360030, 0x00370030, 0x00380030, 0x00390030,
   0x00300031, 0x00310031, 0x00320031, 0x00330031, 0x00340031,
@@ -64,7 +63,7 @@ const DIGITS: u32[] = [
 
 // @ts-ignore: decorator
 @lazy @inline
-const EXP_POWERS: i16[] = [
+const EXP_POWERS: StaticArray<i16> = [
   -1220, -1193, -1166, -1140, -1113, -1087, -1060, -1034, -1007,  -980,
    -954,  -927,  -901,  -874,  -847,  -821,  -794,  -768,  -741,  -715,
    -688,  -661,  -635,  -608,  -582,  -555,  -529,  -502,  -475,  -449,
@@ -79,7 +78,7 @@ const EXP_POWERS: i16[] = [
 // 1e-348, 1e-340, ..., 1e340
 // @ts-ignore: decorator
 @lazy @inline
-const FRC_POWERS: u64[] = [
+const FRC_POWERS: StaticArray<u64> = [
   0xFA8FD5A0081C0288, 0xBAAEE17FA23EBF76, 0x8B16FB203055AC76, 0xCF42894A5DCE35EA,
   0x9A6BB0AA55653B2D, 0xE61ACF033D1A45DF, 0xAB70FE17C79AC6CA, 0xFF77B1FCBEBCDC4F,
   0xBE5691EF416BD60C, 0x8DD01FAD907FFC3C, 0xD3515C2831559A83, 0x9D71AC8FADA6C9B5,
@@ -109,44 +108,38 @@ const FRC_POWERS: u64[] = [
 export function decimalCount32(value: u32): u32 {
   if (value < 100000) {
     if (value < 100) {
-      return select<u32>(1, 2, value < 10);
+      return 1 + u32(value >= 10);
     } else {
-      let m = select<u32>(4, 5, value < 10000);
-      return select<u32>(3, m, value < 1000);
+      return 3 + u32(value >= 10000) + u32(value >= 1000);
     }
   } else {
     if (value < 10000000) {
-      return select<u32>(6, 7, value < 1000000);
+      return 6 + u32(value >= 1000000);
     } else {
-      let m = select<u32>(9, 10, value < 1000000000);
-      return select<u32>(8, m, value < 100000000);
+      return 8 + u32(value >= 1000000000) + u32(value >= 100000000);
     }
   }
 }
 
 // Count number of decimals for u64 values
 // In our case input value always greater than 2^32-1 so we can skip some parts
-export function decimalCount64(value: u64): u32 {
+export function decimalCount64High(value: u64): u32 {
   if (value < 1000000000000000) {
     if (value < 1000000000000) {
-      let m = select<u32>(11, 12, value < 100000000000);
-      return select<u32>(10, m, value < 10000000000);
+      return 10 + u32(value >= 100000000000) + u32(value >= 10000000000);
     } else {
-      let m = select<u32>(14, 15, value < 100000000000000);
-      return select<u32>(13, m, value < 10000000000000);
+      return 13 + u32(value >= 100000000000000) + u32(value >= 10000000000000);
     }
   } else {
     if (value < 100000000000000000) {
-      return select<u32>(16, 17, value < 10000000000000000);
+      return 16 + u32(value >= 10000000000000000);
     } else {
-      let m = select<u32>(19, 20, value < 10000000000000000000);
-      return select<u32>(18, m, value < 1000000000000000000);
+      return 18 + u32(value >= 10000000000000000000) + u32(value >= 1000000000000000000);
     }
   }
 }
 
 function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
-  var lut = changetype<ArrayBufferView>(DIGITS).dataStart;
   while (num >= 10000) {
     // in most VMs i32/u32 div and modulo by constant can be shared and simplificate
     let t = num / 10000;
@@ -156,8 +149,8 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     let d1 = r / 100;
     let d2 = r % 100;
 
-    let digits1 = <u64>load<u32>(lut + (<usize>d1 << alignof<u32>()));
-    let digits2 = <u64>load<u32>(lut + (<usize>d2 << alignof<u32>()));
+    let digits1 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>d1 << alignof<u32>()));
+    let digits2 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>d2 << alignof<u32>()));
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
@@ -168,13 +161,13 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
     let d1 = num % 100;
     num = t;
     offset -= 2;
-    let digits = load<u32>(lut + (<usize>d1 << alignof<u32>()));
+    let digits = load<u32>(changetype<usize>(DIGITS) + (<usize>d1 << alignof<u32>()));
     store<u32>(buffer + (offset << 1), digits);
   }
 
   if (num >= 10) {
     offset -= 2;
-    let digits = load<u32>(lut + (<usize>num << alignof<u32>()));
+    let digits = load<u32>(changetype<usize>(DIGITS) + (<usize>num << alignof<u32>()));
     store<u32>(buffer + (offset << 1), digits);
   } else {
     offset -= 1;
@@ -184,7 +177,6 @@ function utoa32_lut(buffer: usize, num: u32, offset: usize): void {
 }
 
 function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
-  var lut = changetype<ArrayBufferView>(DIGITS).dataStart;
   while (num >= 100000000) {
     let t = num / 100000000;
     let r = <usize>(num - t * 100000000);
@@ -198,14 +190,14 @@ function utoa64_lut(buffer: usize, num: u64, offset: usize): void {
     let c1 = c / 100;
     let c2 = c % 100;
 
-    let digits1 = <u64>load<u32>(lut + (<usize>c1 << alignof<u32>()));
-    let digits2 = <u64>load<u32>(lut + (<usize>c2 << alignof<u32>()));
+    let digits1 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>c1 << alignof<u32>()));
+    let digits2 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>c2 << alignof<u32>()));
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
 
-    digits1 = <u64>load<u32>(lut + (<usize>b1 << alignof<u32>()));
-    digits2 = <u64>load<u32>(lut + (<usize>b2 << alignof<u32>()));
+    digits1 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>b1 << alignof<u32>()));
+    digits2 = <u64>load<u32>(changetype<usize>(DIGITS) + (<usize>b2 << alignof<u32>()));
 
     offset -= 4;
     store<u64>(buffer + (offset << 1), digits1 | (digits2 << 32));
@@ -257,10 +249,10 @@ export function utoa32(value: u32): String {
 export function itoa32(value: i32): String {
   if (!value) return "0";
 
-  var sign = value < 0;
+  var sign = value >>> 31;
   if (sign) value = -value;
 
-  var decimals = decimalCount32(value) + u32(sign);
+  var decimals = decimalCount32(value) + sign;
   var out = __alloc(decimals << 1, idof<String>());
 
   utoa32_core(out, value, decimals);
@@ -278,7 +270,7 @@ export function utoa64(value: u64): String {
     out = __alloc(decimals << 1, idof<String>());
     utoa32_core(out, val32, decimals);
   } else {
-    let decimals = decimalCount64(value);
+    let decimals = decimalCount64High(value);
     out = __alloc(decimals << 1, idof<String>());
     utoa64_core(out, value, decimals);
   }
@@ -288,22 +280,21 @@ export function utoa64(value: u64): String {
 export function itoa64(value: i64): String {
   if (!value) return "0";
 
-  var sign = value < 0;
+  var sign = u32(value >>> 63);
   if (sign) value = -value;
 
   var out: usize;
   if (<u64>value <= <u64>u32.MAX_VALUE) {
     let val32    = <u32>value;
-    let decimals = decimalCount32(val32) + u32(sign);
+    let decimals = decimalCount32(val32) + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa32_core(out, val32, decimals);
   } else {
-    let decimals = decimalCount64(value) + u32(sign);
+    let decimals = decimalCount64High(value) + sign;
     out = __alloc(decimals << 1, idof<String>());
     utoa64_core(out, value, decimals);
   }
   if (sign) store<u16>(out, CharCode.MINUS);
-
   return changetype<String>(out); // retains
 }
 
@@ -423,8 +414,8 @@ function getCachedPower(minExp: i32): void {
 
   var index = (k >> 3) + 1;
   _K = 348 - (index << 3);	// decimal exponent no need lookup table
-  _frc_pow = unchecked(FRC_POWERS[index]);
-  _exp_pow = unchecked(<i32>EXP_POWERS[index]);
+  _frc_pow = load<u64>(changetype<usize>(FRC_POWERS) + (<usize>index << alignof<u64>()));
+  _exp_pow = load<i16>(changetype<usize>(EXP_POWERS) + (<usize>index << alignof<i16>()));
 }
 
 // @ts-ignore: decorator
@@ -433,10 +424,10 @@ function grisu2(value: f64, buffer: usize, sign: i32): i32 {
 
   // frexp routine
   var uv  = reinterpret<u64>(value);
-  var exp = <i32>((uv & 0x7FF0000000000000) >>> 52);
+  var exp = i32((uv & 0x7FF0000000000000) >>> 52);
   var sid = uv & 0x000FFFFFFFFFFFFF;
   var frc = (u64(exp != 0) << 52) + sid;
-      exp = select<i32>(exp, 1, exp != 0) - (0x3FF + 52);
+      exp = select<i32>(exp, 1, exp) - (0x3FF + 52);
 
   normalizedBoundaries(frc, exp);
   getCachedPower(_exp);
@@ -453,7 +444,7 @@ function grisu2(value: f64, buffer: usize, sign: i32): i32 {
   var w_exp = umul64e(exp, exp_pow);
 
   var wp_frc = umul64f(_frc_plus, frc_pow) - 1;
-  var wp_exp = umul64e(_exp,      exp_pow);
+  var wp_exp = umul64e(_exp, exp_pow);
 
   var wm_frc = umul64f(_frc_minus, frc_pow) + 1;
   var delta  = wp_frc - wm_frc;
@@ -469,13 +460,11 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
   var wp_w_frc = mp_frc - w_frc;
   var wp_w_exp = mp_exp;
 
-  var p1 = <u32>(mp_frc >> one_exp);
+  var p1 = u32(mp_frc >> one_exp);
   var p2 = mp_frc & mask;
 
   var kappa = <i32>decimalCount32(p1);
   var len = sign;
-
-  var lut = changetype<ArrayBufferView>(POWERS10).dataStart;
 
   while (kappa > 0) {
     let d: u32;
@@ -499,12 +488,12 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     let tmp = ((<u64>p1) << one_exp) + p2;
     if (tmp <= delta) {
       _K += kappa;
-      grisuRound(buffer, len, delta, tmp, <u64>load<u32>(lut + (<usize>kappa << alignof<u32>())) << one_exp, wp_w_frc);
+      grisuRound(buffer, len, delta, tmp, <u64>load<u32>(changetype<usize>(POWERS10) + (<usize>kappa << alignof<u32>())) << one_exp, wp_w_frc);
       return len;
     }
   }
 
-  while (1) {
+  while (true) {
     p2    *= 10;
     delta *= 10;
 
@@ -515,13 +504,11 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
     --kappa;
     if (p2 < delta) {
       _K += kappa;
-      wp_w_frc *= <u64>load<u32>(lut + (<usize>-kappa << alignof<u32>()));
+      wp_w_frc *= <u64>load<u32>(changetype<usize>(POWERS10) + (<usize>-kappa << alignof<u32>()));
       grisuRound(buffer, len, delta, p2, one_frc, wp_w_frc);
       return len;
     }
   }
-
-  return len;
 }
 
 // @ts-ignore: decorator
@@ -605,8 +592,8 @@ export function dtoa_core(buffer: usize, value: f64): i32 {
 
 export function dtoa(value: f64): String {
   if (value == 0) return "0.0";
-  if (!isFinite<f64>(value)) {
-    if (isNaN<f64>(value)) return "NaN";
+  if (!isFinite(value)) {
+    if (isNaN(value)) return "NaN";
     return select<String>("-Infinity", "Infinity", value < 0);
   }
   var buffer = __alloc(MAX_DOUBLE_LENGTH << 1, idof<String>());
@@ -618,66 +605,75 @@ export function dtoa(value: f64): String {
 }
 
 export function itoa_stream<T extends number>(buffer: usize, offset: usize, value: T): u32 {
-  buffer += (offset << 1);
-  if (!value) {
-    store<u16>(buffer, CharCode._0);
-    return 1;
-  }
-  var decimals: u32 = 0;
+  buffer += offset << 1;
+  var sign: u32 = 0;
   if (isSigned<T>()) {
-    let sign = i32(value < 0);
-    if (sign) value = changetype<T>(-value);
-    if (sizeof<T>() <= 4) {
-      decimals = decimalCount32(value) + <u32>sign;
-      utoa32_core(buffer, value, decimals);
-    } else {
-      if (<u64>value <= <u64>u32.MAX_VALUE) {
-        let val32 = <u32>value;
-        decimals = decimalCount32(val32) + <u32>sign;
-        utoa32_core(buffer, val32, decimals);
+    sign = u32(value < 0);
+    if (sign) {
+      value = changetype<T>(-value);
+      store<u16>(buffer, CharCode.MINUS);
+    }
+  }
+  if (ASC_SHRINK_LEVEL <= 1) {
+    if (isSigned<T>()) {
+      if (sizeof<T>() <= 4) {
+        if (<u32>value < 10) {
+          store<u16>(buffer + (sign << 1), value | CharCode._0);
+          return 1 + sign;
+        }
       } else {
-        decimals = decimalCount64(value) + <u32>sign;
-        utoa64_core(buffer, value, decimals);
+        if (<u64>value < 10) {
+          store<u16>(buffer + (sign << 1), value | CharCode._0);
+          return 1 + sign;
+        }
+      }
+    } else {
+      if (value < 10) {
+        store<u16>(buffer, value | CharCode._0);
+        return 1;
       }
     }
-    if (sign) store<u16>(buffer, CharCode.MINUS);
+  }
+  var decimals = sign;
+  if (sizeof<T>() <= 4) {
+    decimals += decimalCount32(value);
+    utoa32_core(buffer, value, decimals);
   } else {
-    if (sizeof<T>() <= 4) {
-      decimals = decimalCount32(value);
-      utoa32_core(buffer, value, decimals);
+    if (<u64>value <= <u64>u32.MAX_VALUE) {
+      let val32 = <u32>value;
+      decimals += decimalCount32(val32);
+      utoa32_core(buffer, val32, decimals);
     } else {
-      if (<u64>value <= <u64>u32.MAX_VALUE) {
-        let val32 = <u32>value;
-        decimals = decimalCount32(val32);
-        utoa32_core(buffer, val32, decimals);
-      } else {
-        decimals = decimalCount64(value);
-        utoa64_core(buffer, value, decimals);
-      }
+      decimals += decimalCount64High(value);
+      utoa64_core(buffer, value, decimals);
     }
   }
   return decimals;
 }
 
 export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
-  buffer += (offset << 1);
-  if (value == 0.0) {
+  buffer += offset << 1;
+  if (value == 0) {
     store<u16>(buffer, CharCode._0);
     store<u16>(buffer, CharCode.DOT, 2);
     store<u16>(buffer, CharCode._0,  4);
     return 3;
   }
-  if (!isFinite<f64>(value)) {
-    if (isNaN<f64>(value)) {
+  if (!isFinite(value)) {
+    if (isNaN(value)) {
       store<u16>(buffer, CharCode.N);
       store<u16>(buffer, CharCode.a, 2);
       store<u16>(buffer, CharCode.N, 4);
       return 3;
     } else {
-      let sign = i32(value < 0);
-      let len  = 8 + sign;
-      memory.copy(buffer, changetype<usize>(select<String>("-Infinity", "Infinity", sign)), len << 1);
-      return len;
+      let sign = value < 0;
+      if (sign) {
+        store<u16>(buffer, CharCode.MINUS); // -
+        buffer += 2;
+      }
+      store<u64>(buffer, 0x690066006E0049, 0); // ifnI
+      store<u64>(buffer, 0x7900740069006E, 8); // ytin
+      return 8 + u32(sign);
     }
   }
   return dtoa_core(buffer, value);

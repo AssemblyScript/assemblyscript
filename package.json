@@ -8,7 +8,7 @@
     "assemblyscript",
     "wasm"
   ],
-  "version": "0.9.2",
+  "version": "0.9.4",
   "author": "Daniel Wirtz <dcode+assemblyscript@dcode.io>",
   "contributors": [],
   "license": "Apache-2.0",
@@ -21,13 +21,13 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "90.0.0-nightly.20200214",
+    "binaryen": "91.0.0-nightly.20200310",
     "long": "^4.0.0",
     "source-map-support": "^0.5.16",
     "ts-node": "^6.2.0"
   },
   "devDependencies": {
-    "@types/node": "^13.7.1",
+    "@types/node": "^13.9.0",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.2",
     "glob": "^7.1.6",
@@ -36,8 +36,8 @@
     "ts-loader": "^6.2.1",
     "ts-node": "^6.2.0",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.5",
-    "webpack": "^4.41.6",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11"
   },
   "main": "index.js",
@@ -63,7 +63,11 @@
     "all": "npm run check && npm run make",
     "docs": "typedoc --tsconfig tsconfig-docs.json --mode modules --name \"AssemblyScript Compiler API\" --out ./docs/api --ignoreCompilerErrors --excludeNotExported --excludePrivate --excludeExternals --exclude **/std/** --includeDeclarations --readme src/README.md",
     "prepublishOnly": "node scripts/prepublish",
-    "postpublish": "node scripts/postpublish"
+    "postpublish": "node scripts/postpublish",
+    "asbuild": "npm run asbuild:untouched && npm run asbuild:optimized",
+    "asbuild:untouched": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.untouched.wat -b out/assemblyscript.untouched.wasm -d out/assemblyscript.d.ts --validate --debug --measure",
+    "asbuild:optimized": "node bin/asc src/glue/wasm/index.ts src/index.ts -t out/assemblyscript.optimized.wat -b out/assemblyscript.optimized.wasm -O3 --validate --measure",
+    "astest": "ts-node tests/bootstrap"
   },
   "releaseFiles": [
     "lib/rtrace/index.d.ts",

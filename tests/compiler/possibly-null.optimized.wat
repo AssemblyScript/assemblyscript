@@ -49,10 +49,10 @@
    local.get $0
    if
     local.get $1
-    if
-     local.get $1
-     local.set $0
-    end
+    local.get $0
+    local.get $1
+    select
+    local.set $0
     br $while-continue|0
    end
   end

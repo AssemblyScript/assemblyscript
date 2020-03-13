@@ -7,6 +7,7 @@
  (type $i32_i32_=>_f32 (func (param i32 i32) (result f32)))
  (type $i32_i32_=>_f64 (func (param i32 i32) (result f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -141,10 +142,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~lib/util/memory/memcpy (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1168,7 +1166,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1388,7 +1386,25 @@
    end
   end
  )
- (func $~lib/rt/__allocArray (; 6 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/rt/__allocBuffer (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  (local $3 i32)
+  local.get $0
+  local.get $1
+  call $~lib/rt/stub/__alloc
+  local.set $3
+  local.get $2
+  if
+   local.get $3
+   local.get $2
+   local.get $0
+   call $~lib/memory/memory.copy
+  end
+  local.get $3
+ )
+ (func $~lib/rt/stub/__retain (; 6 ;) (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $~lib/rt/__allocArray (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1402,7 +1418,8 @@
   local.set $5
   local.get $5
   i32.const 0
-  call $~lib/rt/stub/__alloc
+  local.get $3
+  call $~lib/rt/__allocBuffer
   local.set $6
   local.get $4
   local.get $6
@@ -1417,16 +1434,9 @@
   local.get $4
   local.get $0
   i32.store offset=12
-  local.get $3
-  if
-   local.get $6
-   local.get $3
-   local.get $5
-   call $~lib/memory/memory.copy
-  end
   local.get $4
  )
- (func $~lib/array/Array<i32>#__unchecked_get (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__unchecked_get (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1435,7 +1445,7 @@
   i32.add
   i32.load
  )
- (func $~lib/array/Array<i32>#__get (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1455,10 +1465,10 @@
   local.set $2
   local.get $2
  )
- (func $~lib/rt/stub/__release (; 9 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 10 ;) (param $0 i32)
   nop
  )
- (func $~lib/array/Array<f64>#__unchecked_get (; 10 ;) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__unchecked_get (; 11 ;) (param $0 i32) (param $1 i32) (result f64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1467,7 +1477,7 @@
   i32.add
   f64.load
  )
- (func $~lib/array/Array<f64>#__get (; 11 ;) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (; 12 ;) (param $0 i32) (param $1 i32) (result f64)
   (local $2 f64)
   local.get $1
   local.get $0
@@ -1487,7 +1497,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/array/Array<u32>#__unchecked_get (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#__unchecked_get (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1496,7 +1506,7 @@
   i32.add
   i32.load
  )
- (func $~lib/array/Array<u32>#__get (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#__get (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1516,7 +1526,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/array/Array<f32>#__unchecked_get (; 14 ;) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__unchecked_get (; 15 ;) (param $0 i32) (param $1 i32) (result f32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1525,7 +1535,7 @@
   i32.add
   f32.load
  )
- (func $~lib/array/Array<f32>#__get (; 15 ;) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (; 16 ;) (param $0 i32) (param $1 i32) (result f32)
   (local $2 f32)
   local.get $1
   local.get $0
@@ -1545,7 +1555,7 @@
   local.set $2
   local.get $2
  )
- (func $infer-array/Ref#constructor (; 16 ;) (param $0 i32) (result i32)
+ (func $infer-array/Ref#constructor (; 17 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1557,7 +1567,7 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<infer-array/Ref | null>#__unchecked_get (; 17 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<infer-array/Ref | null>#__unchecked_get (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1567,7 +1577,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<infer-array/Ref | null>#__get (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<infer-array/Ref | null>#__get (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1587,7 +1597,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/array/Array<~lib/string/String | null>#__unchecked_get (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String | null>#__unchecked_get (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1597,7 +1607,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<~lib/string/String | null>#__get (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String | null>#__get (; 21 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1617,7 +1627,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/array/Array<usize>#__unchecked_get (; 21 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<usize>#__unchecked_get (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1626,7 +1636,7 @@
   i32.add
   i32.load
  )
- (func $~lib/array/Array<usize>#__get (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<usize>#__get (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1646,7 +1656,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_get (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_get (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1656,7 +1666,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__get (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__get (; 25 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -1688,13 +1698,12 @@
   end
   local.get $2
  )
- (func $start:infer-array (; 25 ;)
+ (func $start:infer-array (; 26 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 f32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -1929,8 +1938,6 @@
   i32.const 576
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
-  local.tee $3
-  call $~lib/rt/stub/__retain
   i32.store
   local.get $4
   i32.const 1
@@ -1939,21 +1946,15 @@
   i32.const 608
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
-  local.tee $5
-  call $~lib/rt/stub/__retain
   i32.store offset=4
   local.get $1
   local.set $4
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $5
-  call $~lib/rt/stub/__release
   local.get $4
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $~start (; 26 ;)
+ (func $~start (; 27 ;)
   call $start:infer-array
  )
 )
