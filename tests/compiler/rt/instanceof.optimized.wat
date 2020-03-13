@@ -1,9 +1,7 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -20,20 +18,28 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
+ (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  local.get $0
+  (local $3 i32)
+  (local $4 i32)
+  global.get $~lib/rt/stub/offset
+  i32.const 16
+  i32.add
+  local.tee $3
+  i32.const 16
+  i32.add
+  local.tee $1
   memory.size
-  local.tee $2
+  local.tee $4
   i32.const 16
   i32.shl
-  local.tee $1
+  local.tee $2
   i32.gt_u
   if
-   local.get $2
-   local.get $0
+   local.get $4
    local.get $1
+   local.get $2
    i32.sub
    i32.const 65535
    i32.add
@@ -41,16 +47,16 @@
    i32.and
    i32.const 16
    i32.shr_u
-   local.tee $1
+   local.tee $2
+   local.get $4
    local.get $2
-   local.get $1
    i32.gt_s
    select
    memory.grow
    i32.const 0
    i32.lt_s
    if
-    local.get $1
+    local.get $2
     memory.grow
     i32.const 0
     i32.lt_s
@@ -59,20 +65,9 @@
     end
    end
   end
-  local.get $0
+  local.get $1
   global.set $~lib/rt/stub/offset
- )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  global.get $~lib/rt/stub/offset
-  i32.const 16
-  i32.add
-  local.tee $2
-  i32.const 16
-  i32.add
-  call $~lib/rt/stub/maybeGrowMemory
-  local.get $2
+  local.get $3
   i32.const 16
   i32.sub
   local.tee $1
@@ -87,9 +82,9 @@
   local.get $1
   i32.const 0
   i32.store offset=12
-  local.get $2
+  local.get $3
  )
- (func $rt/instanceof/Animal#constructor (; 3 ;) (param $0 i32) (result i32)
+ (func $rt/instanceof/Animal#constructor (; 2 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -99,7 +94,7 @@
   end
   local.get $0
  )
- (func $rt/instanceof/Cat#constructor (; 4 ;) (param $0 i32) (result i32)
+ (func $rt/instanceof/Cat#constructor (; 3 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -110,12 +105,7 @@
   local.get $0
   call $rt/instanceof/Animal#constructor
  )
- (func $rt/instanceof/BlackCat#constructor (; 5 ;) (result i32)
-  i32.const 5
-  call $~lib/rt/stub/__alloc
-  call $rt/instanceof/Cat#constructor
- )
- (func $~lib/rt/__instanceof (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/__instanceof (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -145,7 +135,7 @@
   end
   i32.const 0
  )
- (func $start:rt/instanceof (; 7 ;)
+ (func $start:rt/instanceof (; 5 ;)
   (local $0 i32)
   i32.const 128
   global.set $~lib/rt/stub/startOffset
@@ -157,7 +147,9 @@
   i32.const 0
   call $rt/instanceof/Cat#constructor
   global.set $rt/instanceof/cat
-  call $rt/instanceof/BlackCat#constructor
+  i32.const 5
+  call $~lib/rt/stub/__alloc
+  call $rt/instanceof/Cat#constructor
   global.set $rt/instanceof/blackcat
   global.get $rt/instanceof/animal
   local.tee $0
@@ -270,7 +262,9 @@
   i32.const 0
   call $rt/instanceof/Cat#constructor
   global.set $rt/instanceof/nullableCat
-  call $rt/instanceof/BlackCat#constructor
+  i32.const 5
+  call $~lib/rt/stub/__alloc
+  call $rt/instanceof/Cat#constructor
   global.set $rt/instanceof/nullableBlackcat
   global.get $rt/instanceof/nullableAnimal
   i32.eqz
@@ -408,7 +402,7 @@
    unreachable
   end
  )
- (func $~start (; 8 ;)
+ (func $~start (; 6 ;)
   global.get $~started
   if
    return

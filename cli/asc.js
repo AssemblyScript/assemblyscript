@@ -678,6 +678,20 @@ exports.main = function main(argv, options, callback) {
     const passes = [];
     function add(pass) { passes.push(pass); }
 
+    if (optimizeLevel >= 2 && shrinkLevel === 0) {
+      // tweak inlining options when speed more preferable than size
+      module.setAlwaysInlineMaxSize(12);
+      module.setFlexibleInlineMaxSize(70);
+      module.setOneCallerInlineMaxSize(200);
+    } else {
+      // tweak inlining options when size matters
+      optimizeLevel === 0 && shrinkLevel >= 0
+        ? module.setAlwaysInlineMaxSize(2)
+        : module.setAlwaysInlineMaxSize(4);  // default:  2
+      module.setFlexibleInlineMaxSize(65);   // default: 20
+      module.setOneCallerInlineMaxSize(80);  // default: 15
+    }
+
     // Optimize the module if requested
     if (optimizeLevel > 0 || shrinkLevel > 0) {
       // Binaryen's default passes with Post-AssemblyScript passes added.
@@ -691,8 +705,14 @@ exports.main = function main(argv, options, callback) {
         add("ssa-nomerge");
       }
       if (optimizeLevel >= 3) {
+        add("simplify-locals-nostructure"); // differs
+        add("vacuum"); // differs
+        add("reorder-locals"); // differs
         add("flatten");
         add("local-cse");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("rse");
       }
       if (hasARC) { // differs
         if (optimizeLevel < 3) {
@@ -703,11 +723,12 @@ exports.main = function main(argv, options, callback) {
       add("dce");
       add("remove-unused-brs");
       add("remove-unused-names");
-      add("optimize-instructions");
+      // add("optimize-instructions"); // differs move 2 lines above
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
         add("simplify-globals-optimizing"); // differs
       }
+      add("optimize-instructions"); // differs
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
       } else {
@@ -717,19 +738,25 @@ exports.main = function main(argv, options, callback) {
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
       // }
+      if (optimizeLevel >= 3 && shrinkLevel <= 1) { // differs
+        add("licm");
+      }
       add("simplify-locals-nostructure");
       add("vacuum");
       add("reorder-locals");
       add("remove-unused-brs");
-      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
-        add("merge-locals");
-      }
+      // if (optimizeLevel >= 3 || shrinkLevel >= 2) { // do it later
+      //   add("merge-locals");
+      // }
       add("coalesce-locals");
       add("simplify-locals");
       add("vacuum");
       add("reorder-locals");
       add("coalesce-locals");
       add("reorder-locals");
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs
+        add("merge-locals");
+      }
       add("vacuum");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         add("code-folding");
@@ -789,29 +816,26 @@ exports.main = function main(argv, options, callback) {
         add("remove-unused-brs");
         add("vacuum");
 
-        // replace indirect calls with direct and inline if possible again.
-        add("directize");
-        add("inlining-optimizing");
         // move some code after early return which potentially could reduce computations
         // do this after CFG cleanup (originally it was done before)
         // moved from (1)
         add("code-pushing");
-
-        // this quite expensive so do this only for highest opt level
-        add("simplify-globals-optimizing");
         if (optimizeLevel >= 3) {
-          add("simplify-locals-nostructure");
-          add("vacuum");
-
+          // this quite expensive so do this only for highest opt level
+          add("simplify-globals");
+          // replace indirect calls with direct and inline if possible again.
+          add("directize");
+          add("dae-optimizing");
           add("precompute-propagate");
+          add("coalesce-locals");
+          add("merge-locals");
           add("simplify-locals-nostructure");
           add("vacuum");
-
-          add("reorder-locals");
-        } else {
-          add("simplify-globals-optimizing");
+          add("inlining-optimizing");
+          add("precompute-propagate");
         }
         add("optimize-instructions");
+        add("simplify-globals-optimizing");
       }
       // remove unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs
