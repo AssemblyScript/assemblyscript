@@ -35,13 +35,10 @@ import {
 } from "./diagnostics";
 
 import {
-  NodeKind,
   Expression,
   LiteralKind,
-  LiteralExpression,
   StringLiteralExpression,
-  CallExpression,
-  isNumericLiteral
+  CallExpression
 } from "./ast";
 
 import {
@@ -898,17 +895,15 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   if (operands.length) {
-    if (
-      operands[0].kind != NodeKind.LITERAL ||
-      (<LiteralExpression>operands[0]).literalKind != LiteralKind.STRING
-    ) {
+    let firstOperand = operands[0];
+    if (!firstOperand.isLiteralKind(LiteralKind.STRING)) {
       compiler.error(
         DiagnosticCode.String_literal_expected,
         operands[0].range
       );
       return module.unreachable();
     }
-    let fieldName = (<StringLiteralExpression>operands[0]).value;
+    let fieldName = (<StringLiteralExpression>firstOperand).value;
     let classMembers = classType.members;
     if (classMembers !== null && classMembers.has(fieldName)) {
       let member = assert(classMembers.get(fieldName));
@@ -918,7 +913,7 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     }
     compiler.error(
       DiagnosticCode.Type_0_has_no_property_1,
-      operands[0].range, classType.internalName, fieldName
+      firstOperand.range, classType.internalName, fieldName
     );
     return module.unreachable();
   }
@@ -1355,7 +1350,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (!type.is(TypeFlags.REFERENCE)) {
     let arg1: ExpressionRef;
-    if (!typeArguments && isNumericLiteral(left)) { // prefer right type
+    if (!typeArguments && left.isNumericLiteral) { // prefer right type
       arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
       if (compiler.currentType != type) {
         arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
@@ -1434,7 +1429,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (!type.is(TypeFlags.REFERENCE)) {
     let arg1: ExpressionRef;
-    if (!typeArguments && isNumericLiteral(left)) { // prefer right type
+    if (!typeArguments && left.isNumericLiteral) { // prefer right type
       arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
       if (compiler.currentType != type) {
         arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
