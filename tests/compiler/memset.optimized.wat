@@ -72,17 +72,13 @@
    i32.const 8
    i32.le_u
    br_if $folding-inner0
-   local.get $2
+   local.get $0
    i32.const 0
    local.get $0
    i32.sub
    i32.const 3
    i32.and
-   local.tee $2
-   i32.sub
-   local.set $3
-   local.get $0
-   local.get $2
+   local.tee $3
    i32.add
    local.tee $0
    local.get $1
@@ -93,7 +89,9 @@
    local.tee $1
    i32.store
    local.get $0
+   local.get $2
    local.get $3
+   i32.sub
    i32.const -4
    i32.and
    local.tee $2

@@ -23,37 +23,33 @@ function asmFunc(global, env, buffer) {
  var assembly_index_system = 0;
  var $lib_rt_stub_startOffset = 0;
  var $lib_rt_stub_offset = 0;
- function $lib_rt_stub_maybeGrowMemory($0) {
-  var $1 = 0, $2 = 0;
-  $2 = __wasm_memory_size();
-  $1 = $2 << 16 | 0;
-  if ($0 >>> 0 > $1 >>> 0) {
-   $1 = ((($0 - $1 | 0) + 65535 | 0) & -65536 | 0) >>> 16 | 0;
-   if ((__wasm_memory_grow((($2 | 0) > ($1 | 0) ? $2 : $1) | 0) | 0) < (0 | 0)) {
-    if ((__wasm_memory_grow($1 | 0) | 0) < (0 | 0)) {
-     abort()
-    }
-   }
-  }
-  $lib_rt_stub_offset = $0;
- }
- 
  function $lib_rt_stub___alloc($0, $1) {
-  var $2 = 0, $3 = 0, $4 = 0;
+  var $2 = 0, $3 = 0, $4 = 0, $5 = 0, $6 = 0;
   if ($0 >>> 0 > 1073741808 >>> 0) {
    abort()
   }
   $2 = ($0 + 15 | 0) & -16 | 0;
-  $3 = $2 >>> 0 > 16 >>> 0;
-  $4 = $lib_rt_stub_offset + 16 | 0;
-  $3 = $3 ? $2 : 16;
-  $lib_rt_stub_maybeGrowMemory($4 + $3 | 0);
-  $2 = $4 - 16 | 0;
-  HEAP32[$2 >> 2] = $3;
+  $4 = $2 >>> 0 > 16 >>> 0;
+  $5 = $lib_rt_stub_offset + 16 | 0;
+  $6 = $4 ? $2 : 16;
+  $2 = $5 + $6 | 0;
+  $4 = __wasm_memory_size();
+  $3 = $4 << 16 | 0;
+  if ($2 >>> 0 > $3 >>> 0) {
+   $3 = ((($2 - $3 | 0) + 65535 | 0) & -65536 | 0) >>> 16 | 0;
+   if ((__wasm_memory_grow((($4 | 0) > ($3 | 0) ? $4 : $3) | 0) | 0) < (0 | 0)) {
+    if ((__wasm_memory_grow($3 | 0) | 0) < (0 | 0)) {
+     abort()
+    }
+   }
+  }
+  $lib_rt_stub_offset = $2;
+  $2 = $5 - 16 | 0;
+  HEAP32[$2 >> 2] = $6;
   HEAP32[($2 + 4 | 0) >> 2] = 1;
   HEAP32[($2 + 8 | 0) >> 2] = $1;
   HEAP32[($2 + 12 | 0) >> 2] = $0;
-  return $4;
+  return $5;
  }
  
  function assembly_index_NBodySystem_constructor($0) {

@@ -1400,8 +1400,8 @@ declare class Array<T> {
   toString(): string;
 }
 
-/** Class representing a static (not resizable) sequence of values of type `T`. */
-declare abstract class StaticArray<T> {
+/** Class representing a static (not resizable) sequence of values of type `T`. This class is @sealed. */
+declare class StaticArray<T> {
   [key: number]: T;
   static fromArray<T>(source: Array<T>): StaticArray<T>;
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T>;
