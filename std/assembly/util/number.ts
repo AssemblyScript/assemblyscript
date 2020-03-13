@@ -606,9 +606,11 @@ export function dtoa(value: f64): String {
 
 export function itoa_stream<T extends number>(buffer: usize, offset: usize, value: T): u32 {
   buffer += (offset << 1);
-  if (!value) {
-    store<u16>(buffer, CharCode._0);
-    return 1;
+  if (ASC_SHRINK_LEVEL <= 1) {
+    if (<u64>value < 10) {
+      store<u16>(buffer, value | CharCode._0);
+      return 1;
+    }
   }
   var decimals: u32 = 0;
   if (isSigned<T>()) {
@@ -648,7 +650,7 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
 
 export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
   buffer += offset << 1;
-  if (value == 0.0) {
+  if (value == 0) {
     store<u16>(buffer, CharCode._0);
     store<u16>(buffer, CharCode.DOT, 2);
     store<u16>(buffer, CharCode._0,  4);
