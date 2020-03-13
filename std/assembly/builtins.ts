@@ -1939,3 +1939,7 @@ declare function trace(
   a3?: f64,
   a4?: f64
 ): void;
+
+// @ts-ignore: decorator
+@external("env", "seed")
+declare function seed(): f64;

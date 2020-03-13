@@ -119,6 +119,10 @@ export namespace BuiltinNames {
   export const setArgumentsLength = "~setArgumentsLength";
 
   // std/builtins.ts
+  export const abort = "~lib/builtins/abort";
+  export const trace = "~lib/builtins/trace";
+  export const seed = "~lib/builtins/seed";
+
   export const isInteger = "~lib/builtins/isInteger";
   export const isFloat = "~lib/builtins/isFloat";
   export const isBoolean = "~lib/builtins/isBoolean";
@@ -583,6 +587,11 @@ export namespace BuiltinNames {
   export const Uint64Array = "~lib/typedarray/Uint64Array";
   export const Float32Array = "~lib/typedarray/Float32Array";
   export const Float64Array = "~lib/typedarray/Float64Array";
+
+  // std/bindings/wasi.ts
+  export const wasiAbort = "~lib/wasi/index/abort";
+  export const wasiTrace = "~lib/wasi/index/trace";
+  export const wasiSeed = "~lib/wasi/index/seed";
 }
 
 /** Builtin compilation context. */

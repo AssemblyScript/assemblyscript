@@ -426,7 +426,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
-    var explicitStart = options.explicitStart;
+    var explicitStart = program.isWasi || options.explicitStart;
     if (!startIsEmpty || explicitStart) {
       let signature = startFunctionInstance.signature;
       if (!startIsEmpty && explicitStart) {
@@ -8832,7 +8832,7 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var ctor = this.ensureConstructor(classInstance, reportNode);
-    if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
+    if (classInstance.type.isUnmanaged || ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect( // no need for another autoreleased local
       ctor,
       argumentExpressions,

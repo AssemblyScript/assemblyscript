@@ -27668,2783 +27668,2783 @@
                block $folding-inner3
                 block $folding-inner2
                  block $folding-inner1
-                  local.get $1
-                  i32.const 255
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner1
-                  local.get $29
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#reduce<u8>
-                  i32.const 255
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner1
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 4
-                  call $~lib/typedarray/Uint8Array#reduce<u8>
-                  i32.const 255
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner1
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#constructor
-                  local.tee $29
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $29
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $29
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#__set
-                  i32.const 0
-                  local.set $0
-                  i32.const 0
-                  local.set $1
-                  local.get $29
-                  i32.load offset=4
-                  local.set $28
-                  local.get $29
-                  i32.load offset=8
-                  i32.const 1
-                  i32.shr_u
-                  local.set $27
-                  loop $for-loop|00
-                   local.get $0
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 4
-                    global.set $~argumentsLength
-                    local.get $1
-                    local.get $28
-                    local.get $0
-                    i32.const 1
-                    i32.shl
-                    i32.add
-                    i32.load16_s
-                    i32.add
-                    local.set $1
-                    local.get $0
-                    i32.const 1
-                    i32.add
-                    local.set $0
-                    br $for-loop|00
-                   end
-                  end
-                  local.get $1
-                  i32.const 65535
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner1
-                  local.get $29
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#constructor
-                  local.tee $29
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $29
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $29
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#__set
-                  i32.const 0
-                  local.set $0
-                  i32.const 0
-                  local.set $1
-                  local.get $29
-                  i32.load offset=4
-                  local.set $28
-                  local.get $29
-                  i32.load offset=8
-                  i32.const 1
-                  i32.shr_u
-                  local.set $27
-                  loop $for-loop|01
-                   local.get $0
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 4
-                    global.set $~argumentsLength
-                    local.get $1
-                    local.get $28
-                    local.get $0
-                    i32.const 1
-                    i32.shl
-                    i32.add
-                    i32.load16_u
-                    i32.add
-                    local.set $1
-                    local.get $0
-                    i32.const 1
-                    i32.add
-                    local.set $0
-                    br $for-loop|01
-                   end
-                  end
-                  local.get $1
-                  i32.const 65535
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner1
-                  local.get $29
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 7
-                  call $~lib/typedarray/Int32Array#reduce<i32>
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner1
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 8
-                  call $~lib/typedarray/Int32Array#reduce<i32>
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner1
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 1
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 2
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 3
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 9
-                  call $~lib/typedarray/Int64Array#reduce<i64>
-                  i64.const 6
-                  i64.ne
-                  br_if $folding-inner1
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 1
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 2
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 3
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 10
-                  call $~lib/typedarray/Int64Array#reduce<i64>
-                  i64.const 6
-                  i64.ne
-                  br_if $folding-inner1
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float32Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  f32.const 1
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $0
-                  i32.const 1
-                  f32.const 2
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $0
-                  i32.const 2
-                  f32.const 3
-                  call $~lib/typedarray/Float32Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=4
-                  local.set $29
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 2
-                  i32.shr_u
-                  local.set $28
-                  loop $for-loop|02
-                   local.get $1
-                   local.get $28
-                   i32.lt_s
-                   if
-                    i32.const 4
-                    global.set $~argumentsLength
-                    local.get $21
-                    local.get $29
-                    local.get $1
-                    i32.const 2
-                    i32.shl
-                    i32.add
-                    f32.load
-                    f32.add
-                    local.set $21
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|02
-                   end
-                  end
-                  local.get $21
-                  f32.const 6
-                  f32.ne
-                  br_if $folding-inner1
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float64Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  f64.const 1
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $0
-                  i32.const 1
-                  f64.const 2
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $0
-                  i32.const 2
-                  f64.const 3
-                  call $~lib/typedarray/Float64Array#__set
-                  i32.const 0
-                  local.set $1
-                  f64.const 0
-                  local.set $22
-                  local.get $0
-                  i32.load offset=4
-                  local.set $29
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 3
-                  i32.shr_u
-                  local.set $28
-                  loop $for-loop|03
-                   local.get $1
-                   local.get $28
-                   i32.lt_s
-                   if
-                    i32.const 4
-                    global.set $~argumentsLength
-                    local.get $22
-                    local.get $29
-                    local.get $1
-                    i32.const 3
-                    i32.shl
-                    i32.add
-                    f64.load
-                    f64.add
-                    local.set $22
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|03
-                   end
-                  end
-                  local.get $22
-                  f64.const 6
-                  f64.ne
-                  br_if $folding-inner1
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int8Array#constructor
-                  local.tee $29
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $29
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $29
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int8Array#__set
-                  i32.const 0
-                  local.set $0
-                  local.get $29
-                  i32.load offset=4
-                  local.set $28
-                  local.get $29
-                  i32.load offset=8
-                  i32.const 1
-                  i32.sub
-                  local.set $1
-                  loop $for-loop|04
-                   local.get $1
-                   i32.const 0
-                   i32.ge_s
-                   if
-                    i32.const 4
-                    global.set $~argumentsLength
-                    local.get $0
-                    local.get $1
-                    local.get $28
-                    i32.add
-                    i32.load8_s
-                    i32.add
-                    local.set $0
-                    local.get $1
-                    i32.const 1
-                    i32.sub
-                    local.set $1
-                    br $for-loop|04
-                   end
-                  end
-                  local.get $0
-                  i32.const 255
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner2
-                  local.get $29
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 14
-                  call $~lib/typedarray/Uint8Array#reduceRight<u8>
-                  i32.const 255
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner2
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 15
-                  call $~lib/typedarray/Uint8Array#reduceRight<u8>
-                  i32.const 255
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner2
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#constructor
-                  local.tee $29
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $29
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $29
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#__set
-                  i32.const 0
-                  local.set $0
-                  local.get $29
-                  i32.load offset=4
-                  local.set $28
-                  local.get $29
-                  i32.load offset=8
-                  i32.const 1
-                  i32.shr_u
-                  i32.const 1
-                  i32.sub
-                  local.set $1
-                  loop $for-loop|05
-                   local.get $1
-                   i32.const 0
-                   i32.ge_s
-                   if
-                    i32.const 4
-                    global.set $~argumentsLength
-                    local.get $0
-                    local.get $28
-                    local.get $1
-                    i32.const 1
-                    i32.shl
-                    i32.add
-                    i32.load16_s
-                    i32.add
-                    local.set $0
-                    local.get $1
-                    i32.const 1
-                    i32.sub
-                    local.set $1
-                    br $for-loop|05
-                   end
-                  end
-                  local.get $0
-                  i32.const 65535
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner2
-                  local.get $29
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#constructor
-                  local.tee $29
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $29
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $29
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#__set
-                  i32.const 0
-                  local.set $0
-                  local.get $29
-                  i32.load offset=4
-                  local.set $28
-                  local.get $29
-                  i32.load offset=8
-                  i32.const 1
-                  i32.shr_u
-                  i32.const 1
-                  i32.sub
-                  local.set $1
-                  loop $for-loop|06
-                   local.get $1
-                   i32.const 0
-                   i32.ge_s
-                   if
-                    i32.const 4
-                    global.set $~argumentsLength
-                    local.get $0
-                    local.get $28
-                    local.get $1
-                    i32.const 1
-                    i32.shl
-                    i32.add
-                    i32.load16_u
-                    i32.add
-                    local.set $0
-                    local.get $1
-                    i32.const 1
-                    i32.sub
-                    local.set $1
-                    br $for-loop|06
-                   end
-                  end
-                  local.get $0
-                  i32.const 65535
-                  i32.and
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner2
-                  local.get $29
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 18
-                  call $~lib/typedarray/Int32Array#reduceRight<i32>
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner2
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 19
-                  call $~lib/typedarray/Int32Array#reduceRight<i32>
-                  i32.const 6
-                  i32.ne
-                  br_if $folding-inner2
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 1
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 2
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 3
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 20
-                  call $~lib/typedarray/Int64Array#reduceRight<i64>
-                  i64.const 6
-                  i64.ne
-                  br_if $folding-inner2
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 1
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 2
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 3
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 21
-                  call $~lib/typedarray/Int64Array#reduceRight<i64>
-                  i64.const 6
-                  i64.ne
-                  br_if $folding-inner2
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  f32.const 1
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 1
-                  f32.const 2
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 2
-                  f32.const 3
-                  call $~lib/typedarray/Float32Array#__set
-                  f32.const 0
-                  local.set $21
-                  local.get $1
-                  i32.load offset=4
-                  local.set $29
-                  local.get $1
-                  i32.load offset=8
-                  i32.const 2
-                  i32.shr_u
-                  i32.const 1
-                  i32.sub
-                  local.set $0
-                  loop $for-loop|07
-                   local.get $0
-                   i32.const 0
-                   i32.ge_s
-                   if
-                    i32.const 4
-                    global.set $~argumentsLength
-                    local.get $21
-                    local.get $29
-                    local.get $0
-                    i32.const 2
-                    i32.shl
-                    i32.add
-                    f32.load
-                    f32.add
-                    local.set $21
-                    local.get $0
-                    i32.const 1
-                    i32.sub
-                    local.set $0
-                    br $for-loop|07
-                   end
-                  end
-                  local.get $21
-                  f32.const 6
-                  f32.ne
-                  br_if $folding-inner2
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  f64.const 1
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 1
-                  f64.const 2
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 2
-                  f64.const 3
-                  call $~lib/typedarray/Float64Array#__set
-                  f64.const 0
-                  local.set $22
-                  local.get $1
-                  i32.load offset=4
-                  local.set $29
-                  local.get $1
-                  i32.load offset=8
-                  i32.const 3
-                  i32.shr_u
-                  i32.const 1
-                  i32.sub
-                  local.set $0
-                  loop $for-loop|08
-                   local.get $0
-                   i32.const 0
-                   i32.ge_s
-                   if
-                    i32.const 4
-                    global.set $~argumentsLength
-                    local.get $22
-                    local.get $29
-                    local.get $0
-                    i32.const 3
-                    i32.shl
-                    i32.add
-                    f64.load
-                    f64.add
-                    local.set $22
-                    local.get $0
-                    i32.const 1
-                    i32.sub
-                    local.set $0
-                    br $for-loop|08
-                   end
-                  end
-                  local.get $22
-                  f64.const 6
-                  f64.ne
-                  br_if $folding-inner2
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int8Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $0
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $0
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int8Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  local.set $28
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 3
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $28
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $27
-                  loop $for-loop|09
-                   local.get $1
-                   local.get $28
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $1
-                    local.get $27
-                    i32.add
-                    local.get $1
-                    local.get $25
-                    i32.add
-                    i32.load8_s
-                    local.tee $26
-                    local.get $26
-                    i32.mul
-                    i32.store8
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|09
-                   end
-                  end
-                  local.get $29
-                  local.get $27
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $27
-                  i32.store offset=4
-                  local.get $29
-                  local.get $28
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Int8Array#__get
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Int8Array#__get
-                  i32.const 4
-                  i32.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Int8Array#__get
-                  i32.const 9
-                  i32.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $0
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $0
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  local.set $28
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 4
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $28
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $27
-                  loop $for-loop|010
-                   local.get $1
-                   local.get $28
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $1
-                    local.get $27
-                    i32.add
-                    local.get $1
-                    local.get $25
-                    i32.add
-                    i32.load8_u
-                    local.tee $26
-                    local.get $26
-                    i32.mul
-                    i32.store8
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|010
-                   end
-                  end
-                  local.get $29
-                  local.get $27
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $27
-                  i32.store offset=4
-                  local.get $29
-                  local.get $28
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Uint8Array#__get
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Uint8Array#__get
-                  i32.const 4
-                  i32.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8Array#__get
-                  i32.const 9
-                  i32.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#constructor
-                  local.tee $0
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $0
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $0
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  local.set $28
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 5
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $28
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $27
-                  loop $for-loop|011
-                   local.get $1
-                   local.get $28
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $1
-                    local.get $27
-                    i32.add
-                    local.get $1
-                    local.get $25
-                    i32.add
-                    i32.load8_u
-                    local.tee $26
-                    local.get $26
-                    i32.mul
-                    i32.store8
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|011
-                   end
-                  end
-                  local.get $29
-                  local.get $27
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $27
-                  i32.store offset=4
-                  local.get $29
-                  local.get $28
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Uint8ClampedArray#__get
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Uint8ClampedArray#__get
-                  i32.const 4
-                  i32.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8ClampedArray#__get
-                  i32.const 9
-                  i32.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $0
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $0
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 1
-                  i32.shr_u
-                  local.set $27
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 6
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $27
-                  i32.const 1
-                  i32.shl
-                  local.tee $26
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $28
-                  loop $for-loop|012
-                   local.get $1
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $25
-                    local.get $1
-                    i32.const 1
-                    i32.shl
-                    local.tee $24
-                    i32.add
-                    i32.load16_s
-                    local.tee $23
-                    local.get $23
-                    i32.mul
-                    local.set $23
-                    local.get $24
-                    local.get $28
-                    i32.add
-                    local.get $23
-                    i32.store16
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|012
-                   end
-                  end
-                  local.get $29
-                  local.get $28
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $28
-                  i32.store offset=4
-                  local.get $29
-                  local.get $26
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Int16Array#__get
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Int16Array#__get
-                  i32.const 4
-                  i32.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Int16Array#__get
-                  i32.const 9
-                  i32.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $0
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $0
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 1
-                  i32.shr_u
-                  local.set $27
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 7
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $27
-                  i32.const 1
-                  i32.shl
-                  local.tee $26
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $28
-                  loop $for-loop|013
-                   local.get $1
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $25
-                    local.get $1
-                    i32.const 1
-                    i32.shl
-                    local.tee $24
-                    i32.add
-                    i32.load16_u
-                    local.tee $23
-                    local.get $23
-                    i32.mul
-                    local.set $23
-                    local.get $24
-                    local.get $28
-                    i32.add
-                    local.get $23
-                    i32.store16
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|013
-                   end
-                  end
-                  local.get $29
-                  local.get $28
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $28
-                  i32.store offset=4
-                  local.get $29
-                  local.get $26
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Uint16Array#__get
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Uint16Array#__get
-                  i32.const 4
-                  i32.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Uint16Array#__get
-                  i32.const 9
-                  i32.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $0
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $0
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 2
-                  i32.shr_u
-                  local.set $27
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 8
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $27
-                  i32.const 2
-                  i32.shl
-                  local.tee $26
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $28
-                  loop $for-loop|014
-                   local.get $1
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $25
-                    local.get $1
-                    i32.const 2
-                    i32.shl
-                    local.tee $24
-                    i32.add
-                    i32.load
-                    local.tee $23
-                    local.get $23
-                    i32.mul
-                    local.set $23
-                    local.get $24
-                    local.get $28
-                    i32.add
-                    local.get $23
-                    i32.store
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|014
-                   end
-                  end
-                  local.get $29
-                  local.get $28
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $28
-                  i32.store offset=4
-                  local.get $29
-                  local.get $26
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Int32Array#__get
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Int32Array#__get
-                  i32.const 4
-                  i32.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Int32Array#__get
-                  i32.const 9
-                  i32.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $0
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $0
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 2
-                  i32.shr_u
-                  local.set $27
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 9
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $27
-                  i32.const 2
-                  i32.shl
-                  local.tee $26
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $28
-                  loop $for-loop|015
-                   local.get $1
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $25
-                    local.get $1
-                    i32.const 2
-                    i32.shl
-                    local.tee $24
-                    i32.add
-                    i32.load
-                    local.tee $23
-                    local.get $23
-                    i32.mul
-                    local.set $23
-                    local.get $24
-                    local.get $28
-                    i32.add
-                    local.get $23
-                    i32.store
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|015
-                   end
-                  end
-                  local.get $29
-                  local.get $28
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $28
-                  i32.store offset=4
-                  local.get $29
-                  local.get $26
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Uint32Array#__get
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Uint32Array#__get
-                  i32.const 4
-                  i32.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Uint32Array#__get
-                  i32.const 9
-                  i32.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int64Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  i64.const 1
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $0
-                  i32.const 1
-                  i64.const 2
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $0
-                  i32.const 2
-                  i64.const 3
-                  call $~lib/typedarray/Int64Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 3
-                  i32.shr_u
-                  local.set $27
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 10
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $27
-                  i32.const 3
-                  i32.shl
-                  local.tee $26
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $28
-                  loop $for-loop|016
-                   local.get $1
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $25
-                    local.get $1
-                    i32.const 3
-                    i32.shl
-                    local.tee $24
-                    i32.add
-                    i64.load
-                    local.tee $20
-                    local.get $20
-                    i64.mul
-                    local.set $20
-                    local.get $24
-                    local.get $28
-                    i32.add
-                    local.get $20
-                    i64.store
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|016
-                   end
-                  end
-                  local.get $29
-                  local.get $28
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $28
-                  i32.store offset=4
-                  local.get $29
-                  local.get $26
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Int64Array#__get
-                  i64.const 1
-                  i64.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Int64Array#__get
-                  i64.const 4
-                  i64.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Int64Array#__get
-                  i64.const 9
-                  i64.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint64Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  i64.const 1
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $0
-                  i32.const 1
-                  i64.const 2
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $0
-                  i32.const 2
-                  i64.const 3
-                  call $~lib/typedarray/Uint64Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 3
-                  i32.shr_u
-                  local.set $27
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 11
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $27
-                  i32.const 3
-                  i32.shl
-                  local.tee $26
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $28
-                  loop $for-loop|017
-                   local.get $1
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $25
-                    local.get $1
-                    i32.const 3
-                    i32.shl
-                    local.tee $24
-                    i32.add
-                    i64.load
-                    local.tee $20
-                    local.get $20
-                    i64.mul
-                    local.set $20
-                    local.get $24
-                    local.get $28
-                    i32.add
-                    local.get $20
-                    i64.store
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|017
-                   end
-                  end
-                  local.get $29
-                  local.get $28
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $28
-                  i32.store offset=4
-                  local.get $29
-                  local.get $26
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Uint64Array#__get
-                  i64.const 1
-                  i64.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Uint64Array#__get
-                  i64.const 4
-                  i64.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Uint64Array#__get
-                  i64.const 9
-                  i64.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float32Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  f32.const 1
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $0
-                  i32.const 1
-                  f32.const 2
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $0
-                  i32.const 2
-                  f32.const 3
-                  call $~lib/typedarray/Float32Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 2
-                  i32.shr_u
-                  local.set $27
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 12
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $27
-                  i32.const 2
-                  i32.shl
-                  local.tee $26
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $28
-                  loop $for-loop|018
-                   local.get $1
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $25
-                    local.get $1
-                    i32.const 2
-                    i32.shl
-                    local.tee $24
-                    i32.add
-                    f32.load
-                    local.tee $21
-                    local.get $21
-                    f32.mul
-                    local.set $21
-                    local.get $24
-                    local.get $28
-                    i32.add
-                    local.get $21
-                    f32.store
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|018
-                   end
-                  end
-                  local.get $29
-                  local.get $28
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $28
-                  i32.store offset=4
-                  local.get $29
-                  local.get $26
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Float32Array#__get
-                  f32.const 1
-                  f32.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Float32Array#__get
-                  f32.const 4
-                  f32.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Float32Array#__get
-                  f32.const 9
-                  f32.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float64Array#constructor
-                  local.tee $0
-                  i32.const 0
-                  f64.const 1
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $0
-                  i32.const 1
-                  f64.const 2
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $0
-                  i32.const 2
-                  f64.const 3
-                  call $~lib/typedarray/Float64Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=8
-                  i32.const 3
-                  i32.shr_u
-                  local.set $27
-                  local.get $0
-                  i32.load offset=4
-                  local.set $25
-                  i32.const 12
-                  i32.const 13
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $29
-                  local.get $27
-                  i32.const 3
-                  i32.shl
-                  local.tee $26
-                  i32.const 0
-                  call $~lib/rt/tlsf/__alloc
-                  local.set $28
-                  loop $for-loop|019
-                   local.get $1
-                   local.get $27
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $25
-                    local.get $1
-                    i32.const 3
-                    i32.shl
-                    local.tee $24
-                    i32.add
-                    f64.load
-                    local.tee $22
-                    local.get $22
-                    f64.mul
-                    local.set $22
-                    local.get $24
-                    local.get $28
-                    i32.add
-                    local.get $22
-                    f64.store
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|019
-                   end
-                  end
-                  local.get $29
-                  local.get $28
-                  call $~lib/rt/pure/__retain
-                  i32.store
-                  local.get $29
-                  local.get $28
-                  i32.store offset=4
-                  local.get $29
-                  local.get $26
-                  i32.store offset=8
-                  local.get $29
-                  call $~lib/rt/pure/__retain
-                  local.tee $1
-                  i32.const 0
-                  call $~lib/typedarray/Float64Array#__get
-                  f64.const 1
-                  f64.ne
-                  br_if $folding-inner3
-                  local.get $1
-                  i32.const 1
-                  call $~lib/typedarray/Float64Array#__get
-                  f64.const 4
-                  f64.ne
-                  br_if $folding-inner4
-                  local.get $1
-                  i32.const 2
-                  call $~lib/typedarray/Float64Array#__get
-                  f64.const 9
-                  f64.ne
-                  br_if $folding-inner5
-                  local.get $0
-                  call $~lib/rt/pure/__release
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Uint8ClampedArray,u8>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>
-                  call $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>
-                  i32.const 3
-                  call $~lib/typedarray/Int8Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $1
-                  i32.const 46
-                  call $~lib/typedarray/Int8Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 47
-                  call $~lib/typedarray/Int8Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 48
-                  call $~lib/typedarray/Uint8Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 49
-                  call $~lib/typedarray/Uint8Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 50
-                  call $~lib/typedarray/Uint8Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 51
-                  call $~lib/typedarray/Uint8Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $1
-                  i32.const 52
-                  call $~lib/typedarray/Int16Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 53
-                  call $~lib/typedarray/Int16Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $1
-                  i32.const 54
-                  call $~lib/typedarray/Uint16Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 55
-                  call $~lib/typedarray/Uint16Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 56
-                  call $~lib/typedarray/Int32Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 57
-                  call $~lib/typedarray/Int32Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 58
-                  call $~lib/typedarray/Int32Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 59
-                  call $~lib/typedarray/Int32Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 2
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 4
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 6
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 60
-                  call $~lib/typedarray/Int64Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 61
-                  call $~lib/typedarray/Int64Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 2
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 4
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 6
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 62
-                  call $~lib/typedarray/Int64Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 63
-                  call $~lib/typedarray/Int64Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  f32.const 2
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 1
-                  f32.const 4
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 2
-                  f32.const 6
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 64
-                  call $~lib/typedarray/Float32Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 65
-                  call $~lib/typedarray/Float32Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  f64.const 2
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 1
-                  f64.const 4
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 2
-                  f64.const 6
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 66
-                  call $~lib/typedarray/Float64Array#some
-                  i32.eqz
-                  br_if $folding-inner6
-                  local.get $1
-                  i32.const 67
-                  call $~lib/typedarray/Float64Array#some
-                  br_if $folding-inner7
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int8Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $1
-                  i32.const 68
-                  call $~lib/typedarray/Int8Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 69
-                  call $~lib/typedarray/Int8Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 70
-                  call $~lib/typedarray/Uint8Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 71
-                  call $~lib/typedarray/Uint8Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 72
-                  call $~lib/typedarray/Uint8Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 73
-                  call $~lib/typedarray/Uint8Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $1
-                  i32.const 74
-                  call $~lib/typedarray/Int16Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 75
-                  call $~lib/typedarray/Int16Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $1
-                  i32.const 76
-                  call $~lib/typedarray/Uint16Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 77
-                  call $~lib/typedarray/Uint16Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 78
-                  call $~lib/typedarray/Int32Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 79
-                  call $~lib/typedarray/Int32Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 1
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 2
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 80
-                  call $~lib/typedarray/Int32Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 81
-                  call $~lib/typedarray/Int32Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 1
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 2
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 3
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 82
-                  call $~lib/typedarray/Int64Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 83
-                  call $~lib/typedarray/Int64Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 1
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 2
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 3
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 84
-                  call $~lib/typedarray/Int64Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 85
-                  call $~lib/typedarray/Int64Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  f32.const 1
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 1
-                  f32.const 2
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 2
-                  f32.const 3
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 86
-                  call $~lib/typedarray/Float32Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 87
-                  call $~lib/typedarray/Float32Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  f64.const 1
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 1
-                  f64.const 2
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 2
-                  f64.const 3
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 88
-                  call $~lib/typedarray/Float64Array#findIndex
-                  i32.const 1
-                  i32.ne
-                  br_if $folding-inner8
-                  local.get $1
-                  i32.const 89
-                  call $~lib/typedarray/Float64Array#findIndex
-                  i32.const -1
-                  i32.ne
-                  br_if $folding-inner9
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int8Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $1
-                  i32.const 90
-                  call $~lib/typedarray/Int8Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 91
-                  call $~lib/typedarray/Int8Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Uint8Array#__set
-                  local.get $1
-                  i32.const 92
-                  call $~lib/typedarray/Uint8Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 93
-                  call $~lib/typedarray/Uint8Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint8ClampedArray#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Uint8ClampedArray#__set
-                  local.get $1
-                  i32.const 94
-                  call $~lib/typedarray/Uint8Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 95
-                  call $~lib/typedarray/Uint8Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int16Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Int16Array#__set
-                  local.get $1
-                  i32.const 96
-                  call $~lib/typedarray/Int16Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 97
-                  call $~lib/typedarray/Int16Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint16Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Uint16Array#__set
-                  local.get $1
-                  i32.const 98
-                  call $~lib/typedarray/Uint16Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 99
-                  call $~lib/typedarray/Uint16Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Int32Array#__set
-                  local.get $1
-                  i32.const 100
-                  call $~lib/typedarray/Int32Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 101
-                  call $~lib/typedarray/Int32Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i32.const 2
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 1
-                  i32.const 4
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 2
-                  i32.const 6
-                  call $~lib/typedarray/Uint32Array#__set
-                  local.get $1
-                  i32.const 102
-                  call $~lib/typedarray/Int32Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 103
-                  call $~lib/typedarray/Int32Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Int64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 2
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 4
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 6
-                  call $~lib/typedarray/Int64Array#__set
-                  local.get $1
-                  i32.const 104
-                  call $~lib/typedarray/Int64Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 105
-                  call $~lib/typedarray/Int64Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Uint64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  i64.const 2
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 1
-                  i64.const 4
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 2
-                  i64.const 6
-                  call $~lib/typedarray/Uint64Array#__set
-                  local.get $1
-                  i32.const 106
-                  call $~lib/typedarray/Int64Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 107
-                  call $~lib/typedarray/Int64Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float32Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  f32.const 2
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 1
-                  f32.const 4
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 2
-                  f32.const 6
-                  call $~lib/typedarray/Float32Array#__set
-                  local.get $1
-                  i32.const 108
-                  call $~lib/typedarray/Float32Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 109
-                  call $~lib/typedarray/Float32Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 3
-                  call $~lib/typedarray/Float64Array#constructor
-                  local.tee $1
-                  i32.const 0
-                  f64.const 2
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 1
-                  f64.const 4
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 2
-                  f64.const 6
-                  call $~lib/typedarray/Float64Array#__set
-                  local.get $1
-                  i32.const 110
-                  call $~lib/typedarray/Float64Array#every
-                  i32.eqz
-                  br_if $folding-inner10
-                  local.get $1
-                  i32.const 111
-                  call $~lib/typedarray/Float64Array#every
-                  br_if $folding-inner11
-                  local.get $1
-                  call $~lib/rt/pure/__release
-                  i32.const 0
-                  global.set $std/typedarray/forEachCallCount
-                  i32.const 3
-                  call $~lib/typedarray/Int8Array#constructor
-                  local.tee $0
-                  global.set $std/typedarray/forEachSelf
-                  local.get $0
-                  i32.const 0
-                  i32.const 2704
-                  i32.const 0
-                  call $~lib/array/Array<i32>#__get
-                  i32.const 24
-                  i32.shl
-                  i32.const 24
-                  i32.shr_s
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $0
-                  i32.const 1
-                  i32.const 2704
-                  i32.const 1
-                  call $~lib/array/Array<i32>#__get
-                  i32.const 24
-                  i32.shl
-                  i32.const 24
-                  i32.shr_s
-                  call $~lib/typedarray/Int8Array#__set
-                  local.get $0
-                  i32.const 2
-                  i32.const 2704
-                  i32.const 2
-                  call $~lib/array/Array<i32>#__get
-                  i32.const 24
-                  i32.shl
-                  i32.const 24
-                  i32.shr_s
-                  call $~lib/typedarray/Int8Array#__set
-                  i32.const 0
-                  local.set $1
-                  local.get $0
-                  i32.load offset=4
-                  local.set $29
-                  local.get $0
-                  i32.load offset=8
-                  local.set $28
-                  loop $for-loop|020
-                   local.get $1
-                   local.get $28
-                   i32.lt_s
-                   if
-                    i32.const 3
-                    global.set $~argumentsLength
-                    local.get $1
-                    local.get $29
-                    i32.add
-                    i32.load8_s
-                    local.get $1
-                    local.get $0
-                    call $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0
-                    local.get $1
-                    i32.const 1
-                    i32.add
-                    local.set $1
-                    br $for-loop|020
-                   end
-                  end
                   block $folding-inner0
+                   local.get $1
+                   i32.const 255
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner0
+                   local.get $29
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#reduce<u8>
+                   i32.const 255
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner0
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 4
+                   call $~lib/typedarray/Uint8Array#reduce<u8>
+                   i32.const 255
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner0
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#constructor
+                   local.tee $29
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $29
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $29
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#__set
+                   i32.const 0
+                   local.set $0
+                   i32.const 0
+                   local.set $1
+                   local.get $29
+                   i32.load offset=4
+                   local.set $28
+                   local.get $29
+                   i32.load offset=8
+                   i32.const 1
+                   i32.shr_u
+                   local.set $27
+                   loop $for-loop|00
+                    local.get $0
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 4
+                     global.set $~argumentsLength
+                     local.get $1
+                     local.get $28
+                     local.get $0
+                     i32.const 1
+                     i32.shl
+                     i32.add
+                     i32.load16_s
+                     i32.add
+                     local.set $1
+                     local.get $0
+                     i32.const 1
+                     i32.add
+                     local.set $0
+                     br $for-loop|00
+                    end
+                   end
+                   local.get $1
+                   i32.const 65535
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner0
+                   local.get $29
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#constructor
+                   local.tee $29
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $29
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $29
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#__set
+                   i32.const 0
+                   local.set $0
+                   i32.const 0
+                   local.set $1
+                   local.get $29
+                   i32.load offset=4
+                   local.set $28
+                   local.get $29
+                   i32.load offset=8
+                   i32.const 1
+                   i32.shr_u
+                   local.set $27
+                   loop $for-loop|01
+                    local.get $0
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 4
+                     global.set $~argumentsLength
+                     local.get $1
+                     local.get $28
+                     local.get $0
+                     i32.const 1
+                     i32.shl
+                     i32.add
+                     i32.load16_u
+                     i32.add
+                     local.set $1
+                     local.get $0
+                     i32.const 1
+                     i32.add
+                     local.set $0
+                     br $for-loop|01
+                    end
+                   end
+                   local.get $1
+                   i32.const 65535
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner0
+                   local.get $29
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 7
+                   call $~lib/typedarray/Int32Array#reduce<i32>
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner0
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 8
+                   call $~lib/typedarray/Int32Array#reduce<i32>
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner0
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 1
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 2
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 3
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 9
+                   call $~lib/typedarray/Int64Array#reduce<i64>
+                   i64.const 6
+                   i64.ne
+                   br_if $folding-inner0
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 1
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 2
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 3
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 10
+                   call $~lib/typedarray/Int64Array#reduce<i64>
+                   i64.const 6
+                   i64.ne
+                   br_if $folding-inner0
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float32Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   f32.const 1
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $0
+                   i32.const 1
+                   f32.const 2
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $0
+                   i32.const 2
+                   f32.const 3
+                   call $~lib/typedarray/Float32Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=4
+                   local.set $29
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 2
+                   i32.shr_u
+                   local.set $28
+                   loop $for-loop|02
+                    local.get $1
+                    local.get $28
+                    i32.lt_s
+                    if
+                     i32.const 4
+                     global.set $~argumentsLength
+                     local.get $21
+                     local.get $29
+                     local.get $1
+                     i32.const 2
+                     i32.shl
+                     i32.add
+                     f32.load
+                     f32.add
+                     local.set $21
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|02
+                    end
+                   end
+                   local.get $21
+                   f32.const 6
+                   f32.ne
+                   br_if $folding-inner0
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float64Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   f64.const 1
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $0
+                   i32.const 1
+                   f64.const 2
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $0
+                   i32.const 2
+                   f64.const 3
+                   call $~lib/typedarray/Float64Array#__set
+                   i32.const 0
+                   local.set $1
+                   f64.const 0
+                   local.set $22
+                   local.get $0
+                   i32.load offset=4
+                   local.set $29
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 3
+                   i32.shr_u
+                   local.set $28
+                   loop $for-loop|03
+                    local.get $1
+                    local.get $28
+                    i32.lt_s
+                    if
+                     i32.const 4
+                     global.set $~argumentsLength
+                     local.get $22
+                     local.get $29
+                     local.get $1
+                     i32.const 3
+                     i32.shl
+                     i32.add
+                     f64.load
+                     f64.add
+                     local.set $22
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|03
+                    end
+                   end
+                   local.get $22
+                   f64.const 6
+                   f64.ne
+                   br_if $folding-inner0
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int8Array#constructor
+                   local.tee $29
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $29
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $29
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int8Array#__set
+                   i32.const 0
+                   local.set $0
+                   local.get $29
+                   i32.load offset=4
+                   local.set $28
+                   local.get $29
+                   i32.load offset=8
+                   i32.const 1
+                   i32.sub
+                   local.set $1
+                   loop $for-loop|04
+                    local.get $1
+                    i32.const 0
+                    i32.ge_s
+                    if
+                     i32.const 4
+                     global.set $~argumentsLength
+                     local.get $0
+                     local.get $1
+                     local.get $28
+                     i32.add
+                     i32.load8_s
+                     i32.add
+                     local.set $0
+                     local.get $1
+                     i32.const 1
+                     i32.sub
+                     local.set $1
+                     br $for-loop|04
+                    end
+                   end
+                   local.get $0
+                   i32.const 255
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner1
+                   local.get $29
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 14
+                   call $~lib/typedarray/Uint8Array#reduceRight<u8>
+                   i32.const 255
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner1
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 15
+                   call $~lib/typedarray/Uint8Array#reduceRight<u8>
+                   i32.const 255
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner1
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#constructor
+                   local.tee $29
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $29
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $29
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#__set
+                   i32.const 0
+                   local.set $0
+                   local.get $29
+                   i32.load offset=4
+                   local.set $28
+                   local.get $29
+                   i32.load offset=8
+                   i32.const 1
+                   i32.shr_u
+                   i32.const 1
+                   i32.sub
+                   local.set $1
+                   loop $for-loop|05
+                    local.get $1
+                    i32.const 0
+                    i32.ge_s
+                    if
+                     i32.const 4
+                     global.set $~argumentsLength
+                     local.get $0
+                     local.get $28
+                     local.get $1
+                     i32.const 1
+                     i32.shl
+                     i32.add
+                     i32.load16_s
+                     i32.add
+                     local.set $0
+                     local.get $1
+                     i32.const 1
+                     i32.sub
+                     local.set $1
+                     br $for-loop|05
+                    end
+                   end
+                   local.get $0
+                   i32.const 65535
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner1
+                   local.get $29
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#constructor
+                   local.tee $29
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $29
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $29
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#__set
+                   i32.const 0
+                   local.set $0
+                   local.get $29
+                   i32.load offset=4
+                   local.set $28
+                   local.get $29
+                   i32.load offset=8
+                   i32.const 1
+                   i32.shr_u
+                   i32.const 1
+                   i32.sub
+                   local.set $1
+                   loop $for-loop|06
+                    local.get $1
+                    i32.const 0
+                    i32.ge_s
+                    if
+                     i32.const 4
+                     global.set $~argumentsLength
+                     local.get $0
+                     local.get $28
+                     local.get $1
+                     i32.const 1
+                     i32.shl
+                     i32.add
+                     i32.load16_u
+                     i32.add
+                     local.set $0
+                     local.get $1
+                     i32.const 1
+                     i32.sub
+                     local.set $1
+                     br $for-loop|06
+                    end
+                   end
+                   local.get $0
+                   i32.const 65535
+                   i32.and
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner1
+                   local.get $29
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 18
+                   call $~lib/typedarray/Int32Array#reduceRight<i32>
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner1
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 19
+                   call $~lib/typedarray/Int32Array#reduceRight<i32>
+                   i32.const 6
+                   i32.ne
+                   br_if $folding-inner1
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 1
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 2
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 3
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 20
+                   call $~lib/typedarray/Int64Array#reduceRight<i64>
+                   i64.const 6
+                   i64.ne
+                   br_if $folding-inner1
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 1
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 2
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 3
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 21
+                   call $~lib/typedarray/Int64Array#reduceRight<i64>
+                   i64.const 6
+                   i64.ne
+                   br_if $folding-inner1
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   f32.const 1
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 1
+                   f32.const 2
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 2
+                   f32.const 3
+                   call $~lib/typedarray/Float32Array#__set
+                   f32.const 0
+                   local.set $21
+                   local.get $1
+                   i32.load offset=4
+                   local.set $29
+                   local.get $1
+                   i32.load offset=8
+                   i32.const 2
+                   i32.shr_u
+                   i32.const 1
+                   i32.sub
+                   local.set $0
+                   loop $for-loop|07
+                    local.get $0
+                    i32.const 0
+                    i32.ge_s
+                    if
+                     i32.const 4
+                     global.set $~argumentsLength
+                     local.get $21
+                     local.get $29
+                     local.get $0
+                     i32.const 2
+                     i32.shl
+                     i32.add
+                     f32.load
+                     f32.add
+                     local.set $21
+                     local.get $0
+                     i32.const 1
+                     i32.sub
+                     local.set $0
+                     br $for-loop|07
+                    end
+                   end
+                   local.get $21
+                   f32.const 6
+                   f32.ne
+                   br_if $folding-inner1
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   f64.const 1
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 1
+                   f64.const 2
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 2
+                   f64.const 3
+                   call $~lib/typedarray/Float64Array#__set
+                   f64.const 0
+                   local.set $22
+                   local.get $1
+                   i32.load offset=4
+                   local.set $29
+                   local.get $1
+                   i32.load offset=8
+                   i32.const 3
+                   i32.shr_u
+                   i32.const 1
+                   i32.sub
+                   local.set $0
+                   loop $for-loop|08
+                    local.get $0
+                    i32.const 0
+                    i32.ge_s
+                    if
+                     i32.const 4
+                     global.set $~argumentsLength
+                     local.get $22
+                     local.get $29
+                     local.get $0
+                     i32.const 3
+                     i32.shl
+                     i32.add
+                     f64.load
+                     f64.add
+                     local.set $22
+                     local.get $0
+                     i32.const 1
+                     i32.sub
+                     local.set $0
+                     br $for-loop|08
+                    end
+                   end
+                   local.get $22
+                   f64.const 6
+                   f64.ne
+                   br_if $folding-inner1
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int8Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $0
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $0
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int8Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   local.set $28
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 3
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $28
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $27
+                   loop $for-loop|09
+                    local.get $1
+                    local.get $28
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $1
+                     local.get $27
+                     i32.add
+                     local.get $1
+                     local.get $25
+                     i32.add
+                     i32.load8_s
+                     local.tee $26
+                     local.get $26
+                     i32.mul
+                     i32.store8
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|09
+                    end
+                   end
+                   local.get $29
+                   local.get $27
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $27
+                   i32.store offset=4
+                   local.get $29
+                   local.get $28
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Int8Array#__get
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Int8Array#__get
+                   i32.const 4
+                   i32.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Int8Array#__get
+                   i32.const 9
+                   i32.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $0
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $0
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   local.set $28
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 4
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $28
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $27
+                   loop $for-loop|010
+                    local.get $1
+                    local.get $28
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $1
+                     local.get $27
+                     i32.add
+                     local.get $1
+                     local.get $25
+                     i32.add
+                     i32.load8_u
+                     local.tee $26
+                     local.get $26
+                     i32.mul
+                     i32.store8
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|010
+                    end
+                   end
+                   local.get $29
+                   local.get $27
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $27
+                   i32.store offset=4
+                   local.get $29
+                   local.get $28
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Uint8Array#__get
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Uint8Array#__get
+                   i32.const 4
+                   i32.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8Array#__get
+                   i32.const 9
+                   i32.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#constructor
+                   local.tee $0
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $0
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $0
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   local.set $28
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 5
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $28
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $27
+                   loop $for-loop|011
+                    local.get $1
+                    local.get $28
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $1
+                     local.get $27
+                     i32.add
+                     local.get $1
+                     local.get $25
+                     i32.add
+                     i32.load8_u
+                     local.tee $26
+                     local.get $26
+                     i32.mul
+                     i32.store8
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|011
+                    end
+                   end
+                   local.get $29
+                   local.get $27
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $27
+                   i32.store offset=4
+                   local.get $29
+                   local.get $28
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Uint8ClampedArray#__get
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Uint8ClampedArray#__get
+                   i32.const 4
+                   i32.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8ClampedArray#__get
+                   i32.const 9
+                   i32.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $0
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $0
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 1
+                   i32.shr_u
+                   local.set $27
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 6
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $27
+                   i32.const 1
+                   i32.shl
+                   local.tee $26
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $28
+                   loop $for-loop|012
+                    local.get $1
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $25
+                     local.get $1
+                     i32.const 1
+                     i32.shl
+                     local.tee $24
+                     i32.add
+                     i32.load16_s
+                     local.tee $23
+                     local.get $23
+                     i32.mul
+                     local.set $23
+                     local.get $24
+                     local.get $28
+                     i32.add
+                     local.get $23
+                     i32.store16
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|012
+                    end
+                   end
+                   local.get $29
+                   local.get $28
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $28
+                   i32.store offset=4
+                   local.get $29
+                   local.get $26
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Int16Array#__get
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Int16Array#__get
+                   i32.const 4
+                   i32.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Int16Array#__get
+                   i32.const 9
+                   i32.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $0
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $0
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 1
+                   i32.shr_u
+                   local.set $27
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 7
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $27
+                   i32.const 1
+                   i32.shl
+                   local.tee $26
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $28
+                   loop $for-loop|013
+                    local.get $1
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $25
+                     local.get $1
+                     i32.const 1
+                     i32.shl
+                     local.tee $24
+                     i32.add
+                     i32.load16_u
+                     local.tee $23
+                     local.get $23
+                     i32.mul
+                     local.set $23
+                     local.get $24
+                     local.get $28
+                     i32.add
+                     local.get $23
+                     i32.store16
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|013
+                    end
+                   end
+                   local.get $29
+                   local.get $28
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $28
+                   i32.store offset=4
+                   local.get $29
+                   local.get $26
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Uint16Array#__get
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Uint16Array#__get
+                   i32.const 4
+                   i32.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Uint16Array#__get
+                   i32.const 9
+                   i32.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $0
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $0
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 2
+                   i32.shr_u
+                   local.set $27
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 8
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $27
+                   i32.const 2
+                   i32.shl
+                   local.tee $26
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $28
+                   loop $for-loop|014
+                    local.get $1
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $25
+                     local.get $1
+                     i32.const 2
+                     i32.shl
+                     local.tee $24
+                     i32.add
+                     i32.load
+                     local.tee $23
+                     local.get $23
+                     i32.mul
+                     local.set $23
+                     local.get $24
+                     local.get $28
+                     i32.add
+                     local.get $23
+                     i32.store
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|014
+                    end
+                   end
+                   local.get $29
+                   local.get $28
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $28
+                   i32.store offset=4
+                   local.get $29
+                   local.get $26
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Int32Array#__get
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Int32Array#__get
+                   i32.const 4
+                   i32.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Int32Array#__get
+                   i32.const 9
+                   i32.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $0
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $0
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 2
+                   i32.shr_u
+                   local.set $27
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 9
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $27
+                   i32.const 2
+                   i32.shl
+                   local.tee $26
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $28
+                   loop $for-loop|015
+                    local.get $1
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $25
+                     local.get $1
+                     i32.const 2
+                     i32.shl
+                     local.tee $24
+                     i32.add
+                     i32.load
+                     local.tee $23
+                     local.get $23
+                     i32.mul
+                     local.set $23
+                     local.get $24
+                     local.get $28
+                     i32.add
+                     local.get $23
+                     i32.store
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|015
+                    end
+                   end
+                   local.get $29
+                   local.get $28
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $28
+                   i32.store offset=4
+                   local.get $29
+                   local.get $26
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Uint32Array#__get
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Uint32Array#__get
+                   i32.const 4
+                   i32.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Uint32Array#__get
+                   i32.const 9
+                   i32.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int64Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   i64.const 1
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $0
+                   i32.const 1
+                   i64.const 2
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $0
+                   i32.const 2
+                   i64.const 3
+                   call $~lib/typedarray/Int64Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 3
+                   i32.shr_u
+                   local.set $27
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 10
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $27
+                   i32.const 3
+                   i32.shl
+                   local.tee $26
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $28
+                   loop $for-loop|016
+                    local.get $1
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $25
+                     local.get $1
+                     i32.const 3
+                     i32.shl
+                     local.tee $24
+                     i32.add
+                     i64.load
+                     local.tee $20
+                     local.get $20
+                     i64.mul
+                     local.set $20
+                     local.get $24
+                     local.get $28
+                     i32.add
+                     local.get $20
+                     i64.store
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|016
+                    end
+                   end
+                   local.get $29
+                   local.get $28
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $28
+                   i32.store offset=4
+                   local.get $29
+                   local.get $26
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Int64Array#__get
+                   i64.const 1
+                   i64.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Int64Array#__get
+                   i64.const 4
+                   i64.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Int64Array#__get
+                   i64.const 9
+                   i64.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint64Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   i64.const 1
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $0
+                   i32.const 1
+                   i64.const 2
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $0
+                   i32.const 2
+                   i64.const 3
+                   call $~lib/typedarray/Uint64Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 3
+                   i32.shr_u
+                   local.set $27
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 11
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $27
+                   i32.const 3
+                   i32.shl
+                   local.tee $26
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $28
+                   loop $for-loop|017
+                    local.get $1
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $25
+                     local.get $1
+                     i32.const 3
+                     i32.shl
+                     local.tee $24
+                     i32.add
+                     i64.load
+                     local.tee $20
+                     local.get $20
+                     i64.mul
+                     local.set $20
+                     local.get $24
+                     local.get $28
+                     i32.add
+                     local.get $20
+                     i64.store
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|017
+                    end
+                   end
+                   local.get $29
+                   local.get $28
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $28
+                   i32.store offset=4
+                   local.get $29
+                   local.get $26
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Uint64Array#__get
+                   i64.const 1
+                   i64.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Uint64Array#__get
+                   i64.const 4
+                   i64.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Uint64Array#__get
+                   i64.const 9
+                   i64.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float32Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   f32.const 1
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $0
+                   i32.const 1
+                   f32.const 2
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $0
+                   i32.const 2
+                   f32.const 3
+                   call $~lib/typedarray/Float32Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 2
+                   i32.shr_u
+                   local.set $27
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 12
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $27
+                   i32.const 2
+                   i32.shl
+                   local.tee $26
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $28
+                   loop $for-loop|018
+                    local.get $1
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $25
+                     local.get $1
+                     i32.const 2
+                     i32.shl
+                     local.tee $24
+                     i32.add
+                     f32.load
+                     local.tee $21
+                     local.get $21
+                     f32.mul
+                     local.set $21
+                     local.get $24
+                     local.get $28
+                     i32.add
+                     local.get $21
+                     f32.store
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|018
+                    end
+                   end
+                   local.get $29
+                   local.get $28
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $28
+                   i32.store offset=4
+                   local.get $29
+                   local.get $26
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Float32Array#__get
+                   f32.const 1
+                   f32.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Float32Array#__get
+                   f32.const 4
+                   f32.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Float32Array#__get
+                   f32.const 9
+                   f32.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float64Array#constructor
+                   local.tee $0
+                   i32.const 0
+                   f64.const 1
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $0
+                   i32.const 1
+                   f64.const 2
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $0
+                   i32.const 2
+                   f64.const 3
+                   call $~lib/typedarray/Float64Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=8
+                   i32.const 3
+                   i32.shr_u
+                   local.set $27
+                   local.get $0
+                   i32.load offset=4
+                   local.set $25
+                   i32.const 12
+                   i32.const 13
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $29
+                   local.get $27
+                   i32.const 3
+                   i32.shl
+                   local.tee $26
+                   i32.const 0
+                   call $~lib/rt/tlsf/__alloc
+                   local.set $28
+                   loop $for-loop|019
+                    local.get $1
+                    local.get $27
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $25
+                     local.get $1
+                     i32.const 3
+                     i32.shl
+                     local.tee $24
+                     i32.add
+                     f64.load
+                     local.tee $22
+                     local.get $22
+                     f64.mul
+                     local.set $22
+                     local.get $24
+                     local.get $28
+                     i32.add
+                     local.get $22
+                     f64.store
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|019
+                    end
+                   end
+                   local.get $29
+                   local.get $28
+                   call $~lib/rt/pure/__retain
+                   i32.store
+                   local.get $29
+                   local.get $28
+                   i32.store offset=4
+                   local.get $29
+                   local.get $26
+                   i32.store offset=8
+                   local.get $29
+                   call $~lib/rt/pure/__retain
+                   local.tee $1
+                   i32.const 0
+                   call $~lib/typedarray/Float64Array#__get
+                   f64.const 1
+                   f64.ne
+                   br_if $folding-inner2
+                   local.get $1
+                   i32.const 1
+                   call $~lib/typedarray/Float64Array#__get
+                   f64.const 4
+                   f64.ne
+                   br_if $folding-inner3
+                   local.get $1
+                   i32.const 2
+                   call $~lib/typedarray/Float64Array#__get
+                   f64.const 9
+                   f64.ne
+                   br_if $folding-inner4
+                   local.get $0
+                   call $~lib/rt/pure/__release
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Int8Array,i8>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Uint8Array,u8>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Uint8ClampedArray,u8>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Int16Array,i16>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Uint16Array,u16>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Int32Array,i32>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Uint32Array,u32>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Int64Array,i64>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Uint64Array,u64>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Float32Array,f32>
+                   call $std/typedarray/testArrayFilter<~lib/typedarray/Float64Array,f64>
+                   i32.const 3
+                   call $~lib/typedarray/Int8Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $1
+                   i32.const 46
+                   call $~lib/typedarray/Int8Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 47
+                   call $~lib/typedarray/Int8Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 48
+                   call $~lib/typedarray/Uint8Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 49
+                   call $~lib/typedarray/Uint8Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 50
+                   call $~lib/typedarray/Uint8Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 51
+                   call $~lib/typedarray/Uint8Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $1
+                   i32.const 52
+                   call $~lib/typedarray/Int16Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 53
+                   call $~lib/typedarray/Int16Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $1
+                   i32.const 54
+                   call $~lib/typedarray/Uint16Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 55
+                   call $~lib/typedarray/Uint16Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 56
+                   call $~lib/typedarray/Int32Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 57
+                   call $~lib/typedarray/Int32Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 58
+                   call $~lib/typedarray/Int32Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 59
+                   call $~lib/typedarray/Int32Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 2
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 4
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 6
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 60
+                   call $~lib/typedarray/Int64Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 61
+                   call $~lib/typedarray/Int64Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 2
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 4
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 6
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 62
+                   call $~lib/typedarray/Int64Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 63
+                   call $~lib/typedarray/Int64Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   f32.const 2
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 1
+                   f32.const 4
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 2
+                   f32.const 6
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 64
+                   call $~lib/typedarray/Float32Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 65
+                   call $~lib/typedarray/Float32Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   f64.const 2
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 1
+                   f64.const 4
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 2
+                   f64.const 6
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 66
+                   call $~lib/typedarray/Float64Array#some
+                   i32.eqz
+                   br_if $folding-inner5
+                   local.get $1
+                   i32.const 67
+                   call $~lib/typedarray/Float64Array#some
+                   br_if $folding-inner6
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int8Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $1
+                   i32.const 68
+                   call $~lib/typedarray/Int8Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 69
+                   call $~lib/typedarray/Int8Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 70
+                   call $~lib/typedarray/Uint8Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 71
+                   call $~lib/typedarray/Uint8Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 72
+                   call $~lib/typedarray/Uint8Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 73
+                   call $~lib/typedarray/Uint8Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $1
+                   i32.const 74
+                   call $~lib/typedarray/Int16Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 75
+                   call $~lib/typedarray/Int16Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $1
+                   i32.const 76
+                   call $~lib/typedarray/Uint16Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 77
+                   call $~lib/typedarray/Uint16Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 78
+                   call $~lib/typedarray/Int32Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 79
+                   call $~lib/typedarray/Int32Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 1
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 2
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 80
+                   call $~lib/typedarray/Int32Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 81
+                   call $~lib/typedarray/Int32Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 1
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 2
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 3
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 82
+                   call $~lib/typedarray/Int64Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 83
+                   call $~lib/typedarray/Int64Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 1
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 2
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 3
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 84
+                   call $~lib/typedarray/Int64Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 85
+                   call $~lib/typedarray/Int64Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   f32.const 1
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 1
+                   f32.const 2
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 2
+                   f32.const 3
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 86
+                   call $~lib/typedarray/Float32Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 87
+                   call $~lib/typedarray/Float32Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   f64.const 1
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 1
+                   f64.const 2
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 2
+                   f64.const 3
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 88
+                   call $~lib/typedarray/Float64Array#findIndex
+                   i32.const 1
+                   i32.ne
+                   br_if $folding-inner7
+                   local.get $1
+                   i32.const 89
+                   call $~lib/typedarray/Float64Array#findIndex
+                   i32.const -1
+                   i32.ne
+                   br_if $folding-inner8
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int8Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $1
+                   i32.const 90
+                   call $~lib/typedarray/Int8Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 91
+                   call $~lib/typedarray/Int8Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Uint8Array#__set
+                   local.get $1
+                   i32.const 92
+                   call $~lib/typedarray/Uint8Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 93
+                   call $~lib/typedarray/Uint8Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint8ClampedArray#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Uint8ClampedArray#__set
+                   local.get $1
+                   i32.const 94
+                   call $~lib/typedarray/Uint8Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 95
+                   call $~lib/typedarray/Uint8Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int16Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Int16Array#__set
+                   local.get $1
+                   i32.const 96
+                   call $~lib/typedarray/Int16Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 97
+                   call $~lib/typedarray/Int16Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint16Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Uint16Array#__set
+                   local.get $1
+                   i32.const 98
+                   call $~lib/typedarray/Uint16Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 99
+                   call $~lib/typedarray/Uint16Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Int32Array#__set
+                   local.get $1
+                   i32.const 100
+                   call $~lib/typedarray/Int32Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 101
+                   call $~lib/typedarray/Int32Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i32.const 2
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 1
+                   i32.const 4
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 2
+                   i32.const 6
+                   call $~lib/typedarray/Uint32Array#__set
+                   local.get $1
+                   i32.const 102
+                   call $~lib/typedarray/Int32Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 103
+                   call $~lib/typedarray/Int32Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Int64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 2
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 4
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 6
+                   call $~lib/typedarray/Int64Array#__set
+                   local.get $1
+                   i32.const 104
+                   call $~lib/typedarray/Int64Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 105
+                   call $~lib/typedarray/Int64Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Uint64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   i64.const 2
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 1
+                   i64.const 4
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 2
+                   i64.const 6
+                   call $~lib/typedarray/Uint64Array#__set
+                   local.get $1
+                   i32.const 106
+                   call $~lib/typedarray/Int64Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 107
+                   call $~lib/typedarray/Int64Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float32Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   f32.const 2
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 1
+                   f32.const 4
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 2
+                   f32.const 6
+                   call $~lib/typedarray/Float32Array#__set
+                   local.get $1
+                   i32.const 108
+                   call $~lib/typedarray/Float32Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 109
+                   call $~lib/typedarray/Float32Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 3
+                   call $~lib/typedarray/Float64Array#constructor
+                   local.tee $1
+                   i32.const 0
+                   f64.const 2
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 1
+                   f64.const 4
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 2
+                   f64.const 6
+                   call $~lib/typedarray/Float64Array#__set
+                   local.get $1
+                   i32.const 110
+                   call $~lib/typedarray/Float64Array#every
+                   i32.eqz
+                   br_if $folding-inner9
+                   local.get $1
+                   i32.const 111
+                   call $~lib/typedarray/Float64Array#every
+                   br_if $folding-inner10
+                   local.get $1
+                   call $~lib/rt/pure/__release
+                   i32.const 0
+                   global.set $std/typedarray/forEachCallCount
+                   i32.const 3
+                   call $~lib/typedarray/Int8Array#constructor
+                   local.tee $0
+                   global.set $std/typedarray/forEachSelf
+                   local.get $0
+                   i32.const 0
+                   i32.const 2704
+                   i32.const 0
+                   call $~lib/array/Array<i32>#__get
+                   i32.const 24
+                   i32.shl
+                   i32.const 24
+                   i32.shr_s
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $0
+                   i32.const 1
+                   i32.const 2704
+                   i32.const 1
+                   call $~lib/array/Array<i32>#__get
+                   i32.const 24
+                   i32.shl
+                   i32.const 24
+                   i32.shr_s
+                   call $~lib/typedarray/Int8Array#__set
+                   local.get $0
+                   i32.const 2
+                   i32.const 2704
+                   i32.const 2
+                   call $~lib/array/Array<i32>#__get
+                   i32.const 24
+                   i32.shl
+                   i32.const 24
+                   i32.shr_s
+                   call $~lib/typedarray/Int8Array#__set
+                   i32.const 0
+                   local.set $1
+                   local.get $0
+                   i32.load offset=4
+                   local.set $29
+                   local.get $0
+                   i32.load offset=8
+                   local.set $28
+                   loop $for-loop|020
+                    local.get $1
+                    local.get $28
+                    i32.lt_s
+                    if
+                     i32.const 3
+                     global.set $~argumentsLength
+                     local.get $1
+                     local.get $29
+                     i32.add
+                     i32.load8_s
+                     local.get $1
+                     local.get $0
+                     call $std/typedarray/testArrayForEach<~lib/typedarray/Int8Array,i8>~anonymous|0
+                     local.get $1
+                     i32.const 1
+                     i32.add
+                     local.set $1
+                     br $for-loop|020
+                    end
+                   end
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $0
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30483,7 +30483,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $1
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30522,7 +30522,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $1
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30597,7 +30597,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $0
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30666,7 +30666,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $0
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30699,7 +30699,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $1
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30732,7 +30732,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $1
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30768,7 +30768,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $1
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30804,7 +30804,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $1
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30870,7 +30870,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $0
                    call $~lib/rt/pure/__release
                    i32.const 0
@@ -30936,7 +30936,7 @@
                    global.get $std/typedarray/forEachCallCount
                    i32.const 3
                    i32.ne
-                   br_if $folding-inner0
+                   br_if $folding-inner11
                    local.get $0
                    call $~lib/rt/pure/__release
                    call $std/typedarray/testArrayReverse<~lib/typedarray/Int8Array,i8>
@@ -31968,84 +31968,84 @@
                   end
                   i32.const 0
                   i32.const 1312
-                  i32.const 495
+                  i32.const 323
                   i32.const 2
                   call $~lib/builtins/abort
                   unreachable
                  end
                  i32.const 0
                  i32.const 1312
-                 i32.const 323
+                 i32.const 344
                  i32.const 2
                  call $~lib/builtins/abort
                  unreachable
                 end
                 i32.const 0
                 i32.const 1312
-                i32.const 344
+                i32.const 365
                 i32.const 2
                 call $~lib/builtins/abort
                 unreachable
                end
                i32.const 0
                i32.const 1312
-               i32.const 365
+               i32.const 366
                i32.const 2
                call $~lib/builtins/abort
                unreachable
               end
               i32.const 0
               i32.const 1312
-              i32.const 366
+              i32.const 367
               i32.const 2
               call $~lib/builtins/abort
               unreachable
              end
              i32.const 0
              i32.const 1312
-             i32.const 367
+             i32.const 415
              i32.const 2
              call $~lib/builtins/abort
              unreachable
             end
             i32.const 0
             i32.const 1312
-            i32.const 415
+            i32.const 417
             i32.const 2
             call $~lib/builtins/abort
             unreachable
            end
            i32.const 0
            i32.const 1312
-           i32.const 417
+           i32.const 438
            i32.const 2
            call $~lib/builtins/abort
            unreachable
           end
           i32.const 0
           i32.const 1312
-          i32.const 438
+          i32.const 440
           i32.const 2
           call $~lib/builtins/abort
           unreachable
          end
          i32.const 0
          i32.const 1312
-         i32.const 440
+         i32.const 461
          i32.const 2
          call $~lib/builtins/abort
          unreachable
         end
         i32.const 0
         i32.const 1312
-        i32.const 461
+        i32.const 463
         i32.const 2
         call $~lib/builtins/abort
         unreachable
        end
        i32.const 0
        i32.const 1312
-       i32.const 463
+       i32.const 495
        i32.const 2
        call $~lib/builtins/abort
        unreachable
