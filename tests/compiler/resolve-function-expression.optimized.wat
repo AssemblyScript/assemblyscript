@@ -20,8 +20,59 @@
   local.get $0
   global.set $~argumentsLength
  )
- (func $~lib/util/number/itoa32 (; 2 ;) (result i32)
-  (local $0 i32)
+ (func $start:resolve-function-expression~anonymous|1 (; 3 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 41
+  i32.add
+ )
+ (func $start:resolve-function-expression~anonymous|2 (; 4 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 42
+  i32.add
+ )
+ (func $~lib/util/number/decimalCount32 (; 5 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 10
+  i32.ge_u
+  i32.const 1
+  i32.add
+  local.get $0
+  i32.const 10000
+  i32.ge_u
+  i32.const 3
+  i32.add
+  local.get $0
+  i32.const 1000
+  i32.ge_u
+  i32.add
+  local.get $0
+  i32.const 100
+  i32.lt_u
+  select
+  local.get $0
+  i32.const 1000000
+  i32.ge_u
+  i32.const 6
+  i32.add
+  local.get $0
+  i32.const 1000000000
+  i32.ge_u
+  i32.const 8
+  i32.add
+  local.get $0
+  i32.const 100000000
+  i32.ge_u
+  i32.add
+  local.get $0
+  i32.const 10000000
+  i32.lt_u
+  select
+  local.get $0
+  i32.const 100000
+  i32.lt_u
+  select
+ )
+ (func $~lib/rt/stub/maybeGrowMemory (; 6 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -119,6 +170,43 @@
   local.get $4
  )
  (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 112
+   return
+  end
+  local.get $0
+  i32.const 31
+  i32.shr_u
+  local.tee $1
+  if
+   i32.const 0
+   local.get $0
+   i32.sub
+   local.set $0
+  end
+  local.get $0
+  call $~lib/util/number/decimalCount32
+  local.get $1
+  i32.add
+  local.tee $3
+  i32.const 1
+  i32.shl
+  call $~lib/rt/stub/__alloc
+  local.tee $2
+  local.get $0
+  local.get $3
+  call $~lib/util/number/utoa_simple<u32>
+  local.get $1
+  if
+   local.get $2
+   i32.const 45
+   i32.store16
+  end
+  local.get $2
+ )
+ (func $~lib/string/String#get:length (; 10 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub

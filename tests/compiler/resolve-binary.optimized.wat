@@ -172,45 +172,39 @@
   end
   i32.const 0
  )
- (func $~lib/util/number/decimalCount32 (; 4 ;) (param $0 i32) (result i32)
-  i32.const 1
-  i32.const 2
+ (func $~lib/util/number/decimalCount32 (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 10
-  i32.lt_u
-  select
-  i32.const 3
-  i32.const 4
-  i32.const 5
+  i32.ge_u
+  i32.const 1
+  i32.add
   local.get $0
   i32.const 10000
-  i32.lt_u
-  select
+  i32.ge_u
+  i32.const 3
+  i32.add
   local.get $0
   i32.const 1000
-  i32.lt_u
-  select
+  i32.ge_u
+  i32.add
   local.get $0
   i32.const 100
   i32.lt_u
   select
-  i32.const 6
-  i32.const 7
   local.get $0
   i32.const 1000000
-  i32.lt_u
-  select
-  i32.const 8
-  i32.const 9
-  i32.const 10
+  i32.ge_u
+  i32.const 6
+  i32.add
   local.get $0
   i32.const 1000000000
-  i32.lt_u
-  select
+  i32.ge_u
+  i32.const 8
+  i32.add
   local.get $0
   i32.const 100000000
-  i32.lt_u
-  select
+  i32.ge_u
+  i32.add
   local.get $0
   i32.const 10000000
   i32.lt_u
@@ -336,8 +330,16 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  if (result i32)
-   local.get $0
+  i32.eqz
+  if
+   i32.const 192
+   return
+  end
+  local.get $0
+  i32.const 31
+  i32.shr_u
+  local.tee $1
+  if
    i32.const 0
    i32.lt_s
    local.tee $1
