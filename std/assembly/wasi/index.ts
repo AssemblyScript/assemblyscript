@@ -26,7 +26,8 @@ function abort(
   // 8: len
   // 12: buf...
   const iovPtr: usize = 0;
-  const bufPtr: usize = iovPtr + offsetof<iovec>() + sizeof<usize>();
+  const lenPtr: usize = iovPtr + offsetof<iovec>();
+  const bufPtr: usize = lenPtr + sizeof<usize>();
   changetype<iovec>(iovPtr).buf = bufPtr;
   var ptr = bufPtr;
   store<u64>(ptr, 0x203A74726F6261); ptr += 7; // 'abort: '
@@ -53,7 +54,7 @@ function abort(
   } while (columnNumber); ptr += len;
   store<u16>(ptr, 0x0A29); ptr += 2; // )\n
   changetype<iovec>(iovPtr).buf_len = ptr - bufPtr;
-  fd_write(2, iovPtr, 1, offsetof<iovec>());
+  fd_write(2, iovPtr, 1, lenPtr);
   proc_exit(255);
 }
 
@@ -76,25 +77,25 @@ function trace(
   changetype<iovec>(iovPtr).buf = bufPtr;
   store<u64>(bufPtr, 0x203A6563617274); // 'trace: '
   changetype<iovec>(iovPtr).buf_len = 7;
-  fd_write(1, iovPtr, 1, lenPtr);
+  fd_write(2, iovPtr, 1, lenPtr);
   changetype<iovec>(iovPtr).buf_len = String.UTF8.encodeUnsafe(changetype<usize>(message), message.length, bufPtr);
-  fd_write(1, iovPtr, 1, lenPtr);
+  fd_write(2, iovPtr, 1, lenPtr);
   if (n) {
     store<u8>(bufPtr++, 0x20); // space
     changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a0), bufPtr);
-    fd_write(1, iovPtr, 1, lenPtr);
+    fd_write(2, iovPtr, 1, lenPtr);
     if (n > 1) {
       changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a1), bufPtr);
-      fd_write(1, iovPtr, 1, lenPtr);
+      fd_write(2, iovPtr, 1, lenPtr);
       if (n > 2) {
         changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a2), bufPtr);
-        fd_write(1, iovPtr, 1, lenPtr);
+        fd_write(2, iovPtr, 1, lenPtr);
         if (n > 3) {
           changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a3), bufPtr);
-          fd_write(1, iovPtr, 1, lenPtr);
+          fd_write(2, iovPtr, 1, lenPtr);
           if (n > 4) {
             changetype<iovec>(iovPtr).buf_len = 1 + String.UTF8.encodeUnsafe(bufPtr, dtoa_stream(bufPtr, 0, a4), bufPtr);
-            fd_write(1, iovPtr, 1, lenPtr);
+            fd_write(2, iovPtr, 1, lenPtr);
           }
         }
       }
@@ -103,7 +104,7 @@ function trace(
   }
   store<u8>(bufPtr, 0x0A); // \n
   changetype<iovec>(iovPtr).buf_len = 1;
-  fd_write(1, iovPtr, 1, lenPtr);
+  fd_write(2, iovPtr, 1, lenPtr);
   __free(iovPtr);
 }
 

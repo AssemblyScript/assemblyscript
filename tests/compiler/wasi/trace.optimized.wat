@@ -1743,7 +1743,7 @@
   local.get $6
   i32.const 7
   i32.store offset=4
-  i32.const 1
+  i32.const 2
   local.get $6
   i32.const 1
   local.get $8
@@ -1756,7 +1756,7 @@
   local.get $7
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.store offset=4
-  i32.const 1
+  i32.const 2
   local.get $6
   i32.const 1
   local.get $8
@@ -1780,7 +1780,7 @@
    i32.const 1
    i32.add
    i32.store offset=4
-   i32.const 1
+   i32.const 2
    local.get $6
    i32.const 1
    local.get $8
@@ -1800,7 +1800,7 @@
     i32.const 1
     i32.add
     i32.store offset=4
-    i32.const 1
+    i32.const 2
     local.get $6
     i32.const 1
     local.get $8
@@ -1820,7 +1820,7 @@
      i32.const 1
      i32.add
      i32.store offset=4
-     i32.const 1
+     i32.const 2
      local.get $6
      i32.const 1
      local.get $8
@@ -1840,7 +1840,7 @@
       i32.const 1
       i32.add
       i32.store offset=4
-      i32.const 1
+      i32.const 2
       local.get $6
       i32.const 1
       local.get $8
@@ -1860,7 +1860,7 @@
        i32.const 1
        i32.add
        i32.store offset=4
-       i32.const 1
+       i32.const 2
        local.get $6
        i32.const 1
        local.get $8
@@ -1881,7 +1881,7 @@
   local.get $6
   i32.const 1
   i32.store offset=4
-  i32.const 1
+  i32.const 2
   local.get $6
   i32.const 1
   local.get $8
