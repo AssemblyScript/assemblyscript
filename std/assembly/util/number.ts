@@ -661,14 +661,14 @@ export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
       store<u16>(buffer, CharCode.N, 4);
       return 3;
     } else {
-      let sign = u32(value < 0);
+      let sign = value < 0;
       if (sign) {
         store<u16>(buffer, CharCode.MINUS); // -
         buffer += 2;
       }
       store<u64>(buffer, 0x690066006E0049, 0); // ifnI
       store<u64>(buffer, 0x7900740069006E, 8); // ytin
-      return 8 + sign;
+      return 8 + u32(sign);
     }
   }
   return dtoa_core(buffer, value);
