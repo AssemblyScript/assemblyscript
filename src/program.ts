@@ -517,6 +517,12 @@ export class Program extends DiagnosticEmitter {
   nextSignatureId: i32 = 0;
   /** An indicator if the program has been initialized. */
   initialized: bool = false;
+
+  /** Tests whether this is a WASI program. */
+  get isWasi(): bool {
+    return this.elementsByName.has(CommonNames.ASC_WASI);
+  }
+
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
     /** Compiler options. */
@@ -1005,23 +1011,24 @@ export class Program extends DiagnosticEmitter {
     {
       let globalAliases = options.globalAliases;
       if (!globalAliases) globalAliases = new Map();
+      let isWasi = this.isWasi;
       if (!globalAliases.has(CommonNames.abort)) {
         globalAliases.set(CommonNames.abort,
-          this.elementsByName.has(BuiltinNames.wasiAbort)
+          isWasi
             ? BuiltinNames.wasiAbort
             : BuiltinNames.abort
         );
       }
       if (!globalAliases.has(CommonNames.trace)) {
         globalAliases.set(CommonNames.trace,
-          this.elementsByName.has(BuiltinNames.wasiTrace)
+          isWasi
             ? BuiltinNames.wasiTrace
             : BuiltinNames.trace
         );
       }
       if (!globalAliases.has(CommonNames.seed)) {
         globalAliases.set(CommonNames.seed,
-          this.elementsByName.has(BuiltinNames.wasiSeed)
+          isWasi
             ? BuiltinNames.wasiSeed
             : BuiltinNames.seed
         );

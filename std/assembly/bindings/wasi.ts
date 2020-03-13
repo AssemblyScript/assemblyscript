@@ -13,6 +13,10 @@ import {
 
 export * from "./wasi_snapshot_preview1";
 
+// @ts-ignore: decorator
+@global @inline
+const ASC_WASI = true;
+
 /** A WASI-aware abort implementation. */
 function abort(
   message: string | null = null,

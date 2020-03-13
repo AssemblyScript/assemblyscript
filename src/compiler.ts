@@ -419,7 +419,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
-    var explicitStart = options.explicitStart;
+    var explicitStart = program.isWasi || options.explicitStart;
     if (!startIsEmpty || explicitStart) {
       let signature = startFunctionInstance.signature;
       if (!startIsEmpty && explicitStart) {
