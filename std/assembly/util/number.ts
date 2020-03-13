@@ -605,53 +605,40 @@ export function dtoa(value: f64): String {
 }
 
 export function itoa_stream<T extends number>(buffer: usize, offset: usize, value: T): u32 {
-  buffer += (offset << 1);
-  if (ASC_SHRINK_LEVEL <= 1) {
-    if (sizeof<T>() <= 4) {
-      if (<u32>value < 10) {
-        store<u16>(buffer, value | CharCode._0);
-        return 1;
-      }
-    } else {
-      if (<u64>value < 10) {
-        store<u16>(buffer, value | CharCode._0);
-        return 1;
-      }
-    }
-  }
-  var decimals: u32 = 0;
+  buffer += offset << 1;
+  var sign: u32 = 0;
   if (isSigned<T>()) {
-    let sign = u32(value < 0);
+    sign = u32(value < 0);
     if (sign) {
       value = changetype<T>(-value);
       store<u16>(buffer, CharCode.MINUS);
     }
+  }
+  if (ASC_SHRINK_LEVEL <= 1) {
     if (sizeof<T>() <= 4) {
-      decimals = decimalCount32(value) + sign;
-      utoa32_core(buffer, value, decimals);
+      if (<u32>value < 10) {
+        store<u16>(buffer + (sign << 1), value | CharCode._0);
+        return 1 + sign;
+      }
     } else {
-      if (<u64>value <= <u64>u32.MAX_VALUE) {
-        let val32 = <u32>value;
-        decimals = decimalCount32(val32) + sign;
-        utoa32_core(buffer, val32, decimals);
-      } else {
-        decimals = decimalCount64High(value) + sign;
-        utoa64_core(buffer, value, decimals);
+      if (<u64>value < 10) {
+        store<u16>(buffer + (sign << 1), value | CharCode._0);
+        return 1 + sign;
       }
     }
+  }
+  var decimals = sign;
+  if (sizeof<T>() <= 4) {
+    decimals += decimalCount32(value);
+    utoa32_core(buffer, value, decimals);
   } else {
-    if (sizeof<T>() <= 4) {
-      decimals = decimalCount32(value);
-      utoa32_core(buffer, value, decimals);
+    if (<u64>value <= <u64>u32.MAX_VALUE) {
+      let val32 = <u32>value;
+      decimals += decimalCount32(val32);
+      utoa32_core(buffer, val32, decimals);
     } else {
-      if (<u64>value <= <u64>u32.MAX_VALUE) {
-        let val32 = <u32>value;
-        decimals = decimalCount32(val32);
-        utoa32_core(buffer, val32, decimals);
-      } else {
-        decimals = decimalCount64High(value);
-        utoa64_core(buffer, value, decimals);
-      }
+      decimals += decimalCount64High(value);
+      utoa64_core(buffer, value, decimals);
     }
   }
   return decimals;

@@ -6921,19 +6921,6 @@
   i32.add
   local.set $0
   local.get $2
-  i32.const 10
-  i32.lt_u
-  if
-   local.get $0
-   local.get $2
-   i32.const 48
-   i32.or
-   i32.store16
-   i32.const 1
-   return
-  end
-  local.get $0
-  local.get $2
   i32.const 0
   i32.lt_s
   local.tee $1
@@ -6946,6 +6933,25 @@
    i32.sub
    local.set $2
   end
+  local.get $2
+  i32.const 10
+  i32.lt_u
+  if
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.shl
+   i32.add
+   local.get $2
+   i32.const 48
+   i32.or
+   i32.store16
+   local.get $1
+   i32.const 1
+   i32.add
+   return
+  end
+  local.get $0
   local.get $2
   local.get $2
   call $~lib/util/number/decimalCount32
@@ -8764,26 +8770,6 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  i32.const 10
-  i32.lt_u
-  if
-   local.get $0
-   local.get $2
-   i32.const 24
-   i32.shl
-   i32.const 24
-   i32.shr_s
-   i32.const 48
-   i32.or
-   i32.store16
-   i32.const 1
-   return
-  end
-  local.get $2
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
   i32.const 0
   i32.lt_s
   local.tee $1
@@ -8795,6 +8781,32 @@
    local.get $2
    i32.sub
    local.set $2
+  end
+  local.get $2
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  i32.const 10
+  i32.lt_u
+  if
+   local.get $0
+   local.get $1
+   i32.const 1
+   i32.shl
+   i32.add
+   local.get $2
+   i32.const 24
+   i32.shl
+   i32.const 24
+   i32.shr_s
+   i32.const 48
+   i32.or
+   i32.store16
+   local.get $1
+   i32.const 1
+   i32.add
+   return
   end
   local.get $2
   i32.const 24
@@ -9395,31 +9407,37 @@
   i32.const 1
   i32.shl
   i32.add
-  local.set $0
-  local.get $2
-  i64.const 10
-  i64.lt_u
-  if
-   local.get $0
-   local.get $2
-   i64.const 48
-   i64.or
-   i64.store16
-   i32.const 1
-   return
-  end
+  local.set $1
   local.get $2
   i64.const 0
   i64.lt_s
-  local.tee $1
+  local.tee $0
   if
-   local.get $0
+   local.get $1
    i32.const 45
    i32.store16
    i64.const 0
    local.get $2
    i64.sub
    local.set $2
+  end
+  local.get $2
+  i64.const 10
+  i64.lt_u
+  if
+   local.get $1
+   local.get $0
+   i32.const 1
+   i32.shl
+   i32.add
+   local.get $2
+   i64.const 48
+   i64.or
+   i64.store16
+   local.get $0
+   i32.const 1
+   i32.add
+   return
   end
   local.get $2
   i64.const 4294967295
@@ -9429,24 +9447,24 @@
    i32.wrap_i64
    local.tee $3
    call $~lib/util/number/decimalCount32
-   local.get $1
-   i32.add
-   local.set $1
    local.get $0
-   local.get $3
+   i32.add
+   local.set $0
    local.get $1
+   local.get $3
+   local.get $0
    call $~lib/util/number/utoa_simple<u32>
   else
-   local.get $0
+   local.get $1
    local.get $2
    local.get $2
    call $~lib/util/number/decimalCount64High
-   local.get $1
+   local.get $0
    i32.add
-   local.tee $1
+   local.tee $0
    call $~lib/util/number/utoa_simple<u64>
   end
-  local.get $1
+  local.get $0
  )
  (func $~lib/util/string/joinIntegerArray<i64> (; 184 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
