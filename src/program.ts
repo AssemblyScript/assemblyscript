@@ -118,7 +118,10 @@ import {
 import {
   Parser
 } from "./parser";
-import { BuiltinNames } from "./builtins";
+
+import {
+  BuiltinNames
+} from "./builtins";
 
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
