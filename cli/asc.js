@@ -678,12 +678,13 @@ exports.main = function main(argv, options, callback) {
     const passes = [];
     function add(pass) { passes.push(pass); }
 
-    // enchance options for inline passes
     if (optimizeLevel >= 2 && shrinkLevel === 0) {
+      // tweak inlining options when speed more preferable than size
       module.setAlwaysInlineMaxSize(12);
       module.setFlexibleInlineMaxSize(70);
       module.setOneCallerInlineMaxSize(200);
     } else {
+      // tweak inlining options when size matters
       optimizeLevel === 0 && shrinkLevel >= 0
         ? module.setAlwaysInlineMaxSize(2)
         : module.setAlwaysInlineMaxSize(4);  // default:  2

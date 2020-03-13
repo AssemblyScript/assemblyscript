@@ -276,28 +276,6 @@
   end
  )
  (func $~lib/util/number/decimalCount32 (; 3 ;) (param $0 i32) (result i32)
-  i32.const 1
-  i32.store offset=12
-  local.get $0
- )
- (func $~lib/array/Array<u64>#__get (; 5 ;) (param $0 i32) (result i64)
-  i32.const 0
-  local.get $0
-  i32.load offset=12
-  i32.ge_u
-  if
-   i32.const 64
-   i32.const 128
-   i32.const 93
-   i32.const 41
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  i32.load offset=4
-  i64.load
- )
- (func $~lib/util/number/decimalCount32 (; 6 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
@@ -345,62 +323,7 @@
    local.get $1
    i32.const 10
    i32.rem_u
-   i32.const 48
-   i32.add
-   i32.store16
-   local.tee $1
-   br_if $do-continue|0
-  end
- )
- (func $~lib/util/number/decimalCount64High (; 8 ;) (param $0 i64) (result i32)
-  local.get $0
-  i64.const 100000000000
-  i64.ge_u
-  i32.const 10
-  i32.add
-  local.get $0
-  i64.const 10000000000
-  i64.ge_u
-  i32.add
-  local.get $0
-  i64.const 100000000000000
-  i64.ge_u
-  i32.const 13
-  i32.add
-  local.get $0
-  i64.const 10000000000000
-  i64.ge_u
-  i32.add
-  local.get $0
-  i64.const 1000000000000
-  i64.lt_u
-  select
-  local.get $0
-  i64.const 10000000000000000
-  i64.ge_u
-  i32.const 16
-  i32.add
-  local.get $0
-  i64.const -8446744073709551616
-  i64.ge_u
-  i32.const 18
-  i32.add
-  local.get $0
-  i64.const 1000000000000000000
-  i64.ge_u
-  i32.add
-  local.get $0
-  i64.const 100000000000000000
-  i64.lt_u
-  select
-  local.get $0
-  i64.const 1000000000000000
-  i64.lt_u
-  select
- )
- (func $~lib/util/number/utoa_simple<u64> (; 9 ;) (param $0 i32) (param $1 i64) (param $2 i32)
-  (local $3 i64)
-  loop $do-continue|0
+   local.set $3
    local.get $1
    i32.const 10
    i32.div_u
@@ -450,11 +373,50 @@
    local.get $2
    call $~lib/util/number/utoa_simple<u32>
   else
-   i32.const 10
-   i32.const 11
-   i32.const 12
    local.get $0
-   call $~lib/util/number/decimalCount64High
+   i64.const 100000000000
+   i64.ge_u
+   i32.const 10
+   i32.add
+   local.get $0
+   i64.const 10000000000
+   i64.ge_u
+   i32.add
+   local.get $0
+   i64.const 100000000000000
+   i64.ge_u
+   i32.const 13
+   i32.add
+   local.get $0
+   i64.const 10000000000000
+   i64.ge_u
+   i32.add
+   local.get $0
+   i64.const 1000000000000
+   i64.lt_u
+   select
+   local.get $0
+   i64.const 10000000000000000
+   i64.ge_u
+   i32.const 16
+   i32.add
+   local.get $0
+   i64.const -8446744073709551616
+   i64.ge_u
+   i32.const 18
+   i32.add
+   local.get $0
+   i64.const 1000000000000000000
+   i64.ge_u
+   i32.add
+   local.get $0
+   i64.const 100000000000000000
+   i64.lt_u
+   select
+   local.get $0
+   i64.const 1000000000000000
+   i64.lt_u
+   select
    local.tee $1
    i32.const 1
    i32.shl

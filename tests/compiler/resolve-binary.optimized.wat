@@ -172,7 +172,7 @@
   end
   i32.const 0
  )
- (func $~lib/util/number/decimalCount32 (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 4 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
@@ -330,18 +330,10 @@
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i32.eqz
-  if
-   i32.const 192
-   return
-  end
-  local.get $0
-  i32.const 31
-  i32.shr_u
-  local.tee $1
-  if
-   i32.const 0
-   i32.lt_s
+  if (result i32)
+   local.get $0
+   i32.const 31
+   i32.shr_u
    local.tee $1
    if
     i32.const 0

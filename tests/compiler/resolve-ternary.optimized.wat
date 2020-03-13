@@ -1117,7 +1117,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/util/number/decimalCount32 (; 14 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 11 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
