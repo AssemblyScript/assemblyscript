@@ -607,9 +607,16 @@ export function dtoa(value: f64): String {
 export function itoa_stream<T extends number>(buffer: usize, offset: usize, value: T): u32 {
   buffer += (offset << 1);
   if (ASC_SHRINK_LEVEL <= 1) {
-    if (<u64>value < 10) {
-      store<u16>(buffer, value | CharCode._0);
-      return 1;
+    if (sizeof<T>() <= 4) {
+      if (<u32>value < 10) {
+        store<u16>(buffer, value | CharCode._0);
+        return 1;
+      }
+    } else {
+      if (<u64>value < 10) {
+        store<u16>(buffer, value | CharCode._0);
+        return 1;
+      }
     }
   }
   var decimals: u32 = 0;

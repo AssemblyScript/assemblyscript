@@ -6921,9 +6921,8 @@
   i32.add
   local.set $0
   local.get $2
-  i64.extend_i32_s
-  i64.const 10
-  i64.lt_u
+  i32.const 10
+  i32.lt_u
   if
    local.get $0
    local.get $2
@@ -7105,9 +7104,8 @@
   i32.add
   local.set $0
   local.get $2
-  i64.extend_i32_u
-  i64.const 10
-  i64.lt_u
+  i32.const 10
+  i32.lt_u
   if
    local.get $0
    local.get $2
@@ -8770,9 +8768,8 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  i64.extend_i32_s
-  i64.const 10
-  i64.lt_u
+  i32.const 10
+  i32.lt_u
   if
    local.get $0
    local.get $2
@@ -8935,9 +8932,8 @@
   local.get $2
   i32.const 65535
   i32.and
-  i64.extend_i32_u
-  i64.const 10
-  i64.lt_u
+  i32.const 10
+  i32.lt_u
   if
    local.get $0
    local.get $2
@@ -9749,9 +9745,8 @@
   local.get $2
   i32.const 255
   i32.and
-  i64.extend_i32_u
-  i64.const 10
-  i64.lt_u
+  i32.const 10
+  i32.lt_u
   if
    local.get $0
    local.get $2
