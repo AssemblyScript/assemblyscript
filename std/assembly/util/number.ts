@@ -661,10 +661,14 @@ export function dtoa_stream(buffer: usize, offset: usize, value: f64): u32 {
       store<u16>(buffer, CharCode.N, 4);
       return 3;
     } else {
-      let sign = value < 0;
-      let len  = 8 + u32(sign);
-      memory.copy(buffer, changetype<usize>(select<String>("-Infinity", "Infinity", sign)), len << 1);
-      return len;
+      let sign = u32(value < 0);
+      if (sign) {
+        store<u16>(buffer, CharCode.MINUS); // -
+        buffer += 2;
+      }
+      store<u64>(buffer, 0x690066006E0049, 0); // ifnI
+      store<u64>(buffer, 0x7900740069006E, 8); // ytin
+      return 8 + sign;
     }
   }
   return dtoa_core(buffer, value);

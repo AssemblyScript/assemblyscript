@@ -36405,7 +36405,6 @@
  )
  (func $~lib/util/number/dtoa_stream (; 540 ;) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -36455,20 +36454,25 @@
     f64.const 0
     f64.lt
     local.set $3
+    local.get $3
+    if
+     local.get $0
+     i32.const 45
+     i32.store16
+     local.get $0
+     i32.const 2
+     i32.add
+     local.set $0
+    end
+    local.get $0
+    i64.const 29555310648492105
+    i64.store
+    local.get $0
+    i64.const 34058970405077102
+    i64.store offset=8
     i32.const 8
     local.get $3
     i32.add
-    local.set $4
-    local.get $0
-    i32.const 2528
-    i32.const 2576
-    local.get $3
-    select
-    local.get $4
-    i32.const 1
-    i32.shl
-    call $~lib/memory/memory.copy
-    local.get $4
     return
    end
    unreachable

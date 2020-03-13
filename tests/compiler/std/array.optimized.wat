@@ -8228,7 +8228,6 @@
   call $~lib/rt/tlsf/__free
  )
  (func $~lib/util/number/dtoa_stream (; 166 ;) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
-  (local $3 i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -8276,20 +8275,25 @@
     local.get $2
     f64.const 0
     f64.lt
-    local.tee $3
+    local.tee $1
+    if
+     local.get $0
+     i32.const 45
+     i32.store16
+     local.get $0
+     i32.const 2
+     i32.add
+     local.set $0
+    end
+    local.get $0
+    i64.const 29555310648492105
+    i64.store
+    local.get $0
+    i64.const 34058970405077102
+    i64.store offset=8
+    local.get $1
     i32.const 8
     i32.add
-    local.set $1
-    local.get $0
-    i32.const 5888
-    i32.const 5936
-    local.get $3
-    select
-    local.get $1
-    i32.const 1
-    i32.shl
-    call $~lib/memory/memory.copy
-    local.get $1
     return
    end
    unreachable
