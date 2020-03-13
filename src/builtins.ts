@@ -589,9 +589,9 @@ export namespace BuiltinNames {
   export const Float64Array = "~lib/typedarray/Float64Array";
 
   // std/bindings/wasi.ts
-  export const wasiAbort = "~lib/bindings/wasi/abort";
-  export const wasiTrace = "~lib/bindings/wasi/trace";
-  export const wasiSeed = "~lib/bindings/wasi/seed";
+  export const wasiAbort = "~lib/wasi/index/abort";
+  export const wasiTrace = "~lib/wasi/index/trace";
+  export const wasiSeed = "~lib/wasi/index/seed";
 }
 
 /** Builtin compilation context. */

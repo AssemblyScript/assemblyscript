@@ -234,7 +234,7 @@
   i32.lt_u
   select
  )
- (func $~lib/bindings/wasi/abort (; 5 ;)
+ (func $~lib/wasi/index/abort (; 5 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -350,7 +350,7 @@
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
  )
  (func $wasi/abort/test (; 6 ;)
-  call $~lib/bindings/wasi/abort
+  call $~lib/wasi/index/abort
   unreachable
  )
  (func $~start (; 7 ;)

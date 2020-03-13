@@ -22,7 +22,7 @@
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "test" (func $wasi/seed/test))
- (func $~lib/bindings/wasi/seed (; 3 ;) (result f64)
+ (func $~lib/wasi/index/seed (; 3 ;) (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i32)
@@ -400,7 +400,7 @@
  (func $~lib/rt/stub/__release (; 10 ;) (param $0 i32)
   nop
  )
- (func $~lib/bindings/wasi/abort (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/wasi/index/abort (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -614,7 +614,7 @@
    i32.const 32
    i32.const 1406
    i32.const 4
-   call $~lib/bindings/wasi/abort
+   call $~lib/wasi/index/abort
    unreachable
   end
  )
@@ -625,7 +625,7 @@
   global.get $~lib/math/random_seeded
   i32.eqz
   if
-   call $~lib/bindings/wasi/seed
+   call $~lib/wasi/index/seed
    i64.reinterpret_f64
    call $~lib/math/NativeMath.seedRandom
   end

@@ -289,7 +289,7 @@
   i32.lt_u
   select
  )
- (func $~lib/bindings/wasi/abort (; 7 ;)
+ (func $~lib/wasi/index/abort (; 7 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -455,7 +455,7 @@
    select
    i32.eqz
    if
-    call $~lib/bindings/wasi/abort
+    call $~lib/wasi/index/abort
     unreachable
    end
   end

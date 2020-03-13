@@ -298,7 +298,7 @@
  (func $~lib/rt/stub/__release (; 6 ;) (param $0 i32)
   nop
  )
- (func $~lib/bindings/wasi/abort (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/wasi/index/abort (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -472,7 +472,7 @@
    i32.const 80
    i32.const 4
    i32.const 2
-   call $~lib/bindings/wasi/abort
+   call $~lib/wasi/index/abort
    unreachable
   end
  )

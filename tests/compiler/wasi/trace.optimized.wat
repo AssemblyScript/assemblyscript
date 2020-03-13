@@ -1614,7 +1614,7 @@
   local.get $1
   call $~lib/util/number/dtoa_core
  )
- (func $~lib/bindings/wasi/abort (; 13 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/wasi/index/abort (; 13 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1713,7 +1713,7 @@
   i32.const 255
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
  )
- (func $~lib/bindings/wasi/trace (; 14 ;) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64)
+ (func $~lib/wasi/index/trace (; 14 ;) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
@@ -1898,7 +1898,7 @@
   if
    i32.const 70
    i32.const 2
-   call $~lib/bindings/wasi/abort
+   call $~lib/wasi/index/abort
    unreachable
   end
   local.get $6
@@ -1911,7 +1911,7 @@
   if
    i32.const 72
    i32.const 13
-   call $~lib/bindings/wasi/abort
+   call $~lib/wasi/index/abort
    unreachable
   end
   global.get $~lib/rt/stub/offset
@@ -1943,20 +1943,20 @@
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/bindings/wasi/trace
+  call $~lib/wasi/index/trace
   i32.const 1
   f64.const 1.5
   f64.const 0
   f64.const 0
   f64.const 0
   f64.const 0
-  call $~lib/bindings/wasi/trace
+  call $~lib/wasi/index/trace
   i32.const 5
   f64.const -2.00001
   f64.const 3
   f64.const nan:0x8000000000000
   f64.const inf
   f64.const -inf
-  call $~lib/bindings/wasi/trace
+  call $~lib/wasi/index/trace
  )
 )

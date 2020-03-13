@@ -8825,7 +8825,7 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var ctor = this.ensureConstructor(classInstance, reportNode);
-    if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
+    if (classInstance.type.isUnmanaged || ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect( // no need for another autoreleased local
       ctor,
       argumentExpressions,

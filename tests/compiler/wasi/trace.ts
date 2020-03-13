@@ -1,4 +1,4 @@
-import "bindings/wasi";
+import "wasi";
 
 trace("the message");
 trace("the message", 1, 1.5);
