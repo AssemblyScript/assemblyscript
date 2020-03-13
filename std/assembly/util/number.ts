@@ -615,15 +615,22 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
     }
   }
   if (ASC_SHRINK_LEVEL <= 1) {
-    if (sizeof<T>() <= 4) {
-      if (<u32>value < 10) {
-        store<u16>(buffer + (sign << 1), value | CharCode._0);
-        return 1 + sign;
+    if (isSigned<T>()) {
+      if (sizeof<T>() <= 4) {
+        if (<u32>value < 10) {
+          store<u16>(buffer + (sign << 1), value | CharCode._0);
+          return 1 + sign;
+        }
+      } else {
+        if (<u64>value < 10) {
+          store<u16>(buffer + (sign << 1), value | CharCode._0);
+          return 1 + sign;
+        }
       }
     } else {
-      if (<u64>value < 10) {
-        store<u16>(buffer + (sign << 1), value | CharCode._0);
-        return 1 + sign;
+      if (value < 10) {
+        store<u16>(buffer, value | CharCode._0);
+        return 1;
       }
     }
   }

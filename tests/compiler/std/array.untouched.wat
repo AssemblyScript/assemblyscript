@@ -12754,17 +12754,11 @@
   i32.lt_u
   if
    local.get $0
-   local.get $3
-   i32.const 1
-   i32.shl
-   i32.add
    local.get $2
    i32.const 48
    i32.or
    i32.store16
    i32.const 1
-   local.get $3
-   i32.add
    return
   end
   local.get $3
@@ -15524,10 +15518,6 @@
   i32.lt_u
   if
    local.get $0
-   local.get $3
-   i32.const 1
-   i32.shl
-   i32.add
    local.get $2
    i32.const 65535
    i32.and
@@ -15535,8 +15525,6 @@
    i32.or
    i32.store16
    i32.const 1
-   local.get $3
-   i32.add
    return
   end
   local.get $3
@@ -16007,17 +15995,11 @@
   i64.lt_u
   if
    local.get $0
-   local.get $3
-   i32.const 1
-   i32.shl
-   i32.add
    local.get $2
    i64.const 48
    i64.or
    i64.store16
    i32.const 1
-   local.get $3
-   i32.add
    return
   end
   local.get $3
@@ -16862,10 +16844,6 @@
   i32.lt_u
   if
    local.get $0
-   local.get $3
-   i32.const 1
-   i32.shl
-   i32.add
    local.get $2
    i32.const 255
    i32.and
@@ -16873,8 +16851,6 @@
    i32.or
    i32.store16
    i32.const 1
-   local.get $3
-   i32.add
    return
   end
   local.get $3
