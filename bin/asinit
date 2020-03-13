@@ -159,10 +159,9 @@ function ensureAssemblyDirectory() {
 
 function ensureTsconfigJson() {
   console.log("- Making sure that 'assembly/tsconfig.json' is set up...");
-  const base = tsconfigBase.replace(/\\/g, "/");
   if (!fs.existsSync(tsconfigFile)) {
     fs.writeFileSync(tsconfigFile, JSON.stringify({
-      "extends": base,
+      "extends": "assemblyscript/std/assembly.json",
       "include": [
         "./**/*.ts"
       ]
