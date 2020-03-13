@@ -9,10 +9,10 @@
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01")
- (data (i32.const 48) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 112) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 160) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
+ (data (i32.const 1024) "\08\00\00\00\01\00\00\00\00\00\00\00\08\00\00\00\01")
+ (data (i32.const 1056) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
+ (data (i32.const 1120) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 1168) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -109,17 +109,17 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 32
+  i32.const 1040
   local.set $1
   i32.const 8
   local.set $4
   block $~lib/util/memory/memmove|inlined.0
    local.get $0
-   i32.const 32
+   i32.const 1040
    i32.eq
    br_if $~lib/util/memory/memmove|inlined.0
    local.get $0
-   i32.const 32
+   i32.const 1040
    i32.lt_u
    if
     local.get $0
@@ -228,7 +228,7 @@
        local.tee $4
        i32.add
        local.get $4
-       i32.const 32
+       i32.const 1040
        i32.add
        i32.load8_u
        i32.store8
@@ -247,7 +247,7 @@
        local.tee $4
        i32.add
        local.get $4
-       i32.const 32
+       i32.const 1040
        i32.add
        i64.load
        i64.store
@@ -265,7 +265,7 @@
       local.tee $4
       i32.add
       local.get $4
-      i32.const 32
+      i32.const 1040
       i32.add
       i32.load8_u
       i32.store8
@@ -352,7 +352,7 @@
   local.get $0
   i64.eqz
   if
-   i32.const 176
+   i32.const 1184
    return
   end
   local.get $0
@@ -483,8 +483,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 64
-   i32.const 128
+   i32.const 1072
+   i32.const 1136
    i32.const 93
    i32.const 41
    call $~lib/builtins/abort
@@ -540,15 +540,15 @@
    local.get $2
    call $~lib/util/number/utoa_simple<u32>
   else
-   i32.const 176
+   i32.const 1184
    local.set $0
   end
   local.get $0
  )
  (func $~start (; 10 ;)
-  i32.const 192
+  i32.const 1200
   global.set $~lib/rt/stub/startOffset
-  i32.const 192
+  i32.const 1200
   global.set $~lib/rt/stub/offset
  )
 )
