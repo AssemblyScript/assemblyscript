@@ -70,6 +70,8 @@ declare const ASC_FEATURE_EXCEPTION_HANDLING: bool;
 declare const ASC_FEATURE_TAIL_CALLS: bool;
 /** Whether the reference types feature is enabled. */
 declare const ASC_FEATURE_REFERENCE_TYPES: bool;
+/** Whether the multi value types feature is enabled. */
+declare const ASC_FEATURE_MULTI_VALUE: bool;
 
 // Builtins
 
@@ -171,7 +173,7 @@ declare function isManaged<T>(value?: any): bool;
 /** Tests if the specified type is void. Compiles to a constant. */
 declare function isVoid<T>(): bool;
 /** Traps if the specified value is not true-ish, otherwise returns the (non-nullable) value. */
-declare function assert<T>(isTrueish: T, message?: string): T & object; // any better way to model `: T != null`?
+declare function assert<T>(isTrueish: T, message?: string): T & (object | string | number); // any better way to model `: T != null`?
 /** Parses an integer string to a 64-bit float. */
 declare function parseInt(str: string, radix?: i32): f64;
 /** Parses a string to a 64-bit float. */
@@ -1398,11 +1400,21 @@ declare class Array<T> {
   toString(): string;
 }
 
-/** Class representing a fixed sequence of values of type `T`. */
-declare class FixedArray<T> {
+/** Class representing a static (not resizable) sequence of values of type `T`. This class is @sealed. */
+declare class StaticArray<T> {
   [key: number]: T;
+  static fromArray<T>(source: Array<T>): StaticArray<T>;
+  static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T>;
+  static slice<T>(source: StaticArray<T>, start?: i32, end?: i32): StaticArray<T>;
   readonly length: i32;
-  constructor(capacity?: i32);
+  constructor(length?: i32);
+  includes(searchElement: T, fromIndex?: i32): bool;
+  indexOf(searchElement: T, fromIndex?: i32): i32;
+  lastIndexOf(searchElement: T, fromIndex?: i32): i32;
+  concat(items: Array<T>): Array<T>;
+  slice(from: i32, to?: i32): Array<T>;
+  join(separator?: string): string;
+  toString(): string;
 }
 
 /** Class representing a sequence of characters. */
@@ -1535,7 +1547,7 @@ interface RegExp {}
 declare class Map<K,V> {
   readonly size: i32;
   has(key: K): bool;
-  set(key: K, value: V): void;
+  set(key: K, value: V): this;
   get(key: K): V;
   delete(key: K): bool;
   clear(): void;
@@ -1547,7 +1559,7 @@ declare class Map<K,V> {
 declare class Set<K> {
   readonly size: i32;
   has(value: K): bool;
-  add(value: K): void;
+  add(value: K): this;
   delete(value: K): bool;
   clear(): void;
   values(): K[]; // preliminary

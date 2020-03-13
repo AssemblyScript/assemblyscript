@@ -24,7 +24,13 @@
  (func $features/reference-types/someFunc (; 5 ;)
   nop
  )
- (func $start:features/reference-types (; 6 ;)
+ (func $features/reference-types/internal (; 6 ;) (param $0 anyref) (result anyref)
+  local.get $0
+  call $features/reference-types/external
+  call $features/reference-types/external
+  call $features/reference-types/external
+ )
+ (func $~start (; 7 ;)
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -62,14 +68,5 @@
   global.set $features/reference-types/nullGlobalInit
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal
- )
- (func $features/reference-types/internal (; 7 ;) (param $0 anyref) (result anyref)
-  local.get $0
-  call $features/reference-types/external
-  call $features/reference-types/external
-  call $features/reference-types/external
- )
- (func $~start (; 8 ;)
-  call $start:features/reference-types
  )
 )

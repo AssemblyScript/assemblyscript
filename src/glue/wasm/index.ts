@@ -1,9 +1,8 @@
 /**
- * WebAssembly glue code.
- * @module glue/wasm
- * @preferred
- *//***/
+ * @fileoverview WebAssembly glue code.
+ * @license Apache-2.0
+ */
 
-import "../binaryen.d";
 import "./i64";
 import "./float";
+import "./collections";

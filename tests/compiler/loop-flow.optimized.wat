@@ -24,10 +24,13 @@
   i32.const 1
  )
  (func $loop-flow/whileAny (; 2 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 1
+  i32.eq
+  local.set $1
   loop $while-continue|0 (result i32)
-   local.get $0
-   i32.const 1
-   i32.eq
+   local.get $1
    if (result i32)
     i32.const 1
    else
@@ -45,10 +48,13 @@
   end
  )
  (func $loop-flow/forAny (; 3 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 1
+  i32.eq
+  local.set $1
   loop $for-loop|0 (result i32)
-   local.get $0
-   i32.const 1
-   i32.eq
+   local.get $1
    if (result i32)
     i32.const 1
    else
@@ -68,10 +74,13 @@
   end
  )
  (func $loop-flow/doAny (; 4 ;) (param $0 i32) (result i32)
+  (local $1 i32)
+  local.get $0
+  i32.const 1
+  i32.eq
+  local.set $1
   loop $do-continue|0 (result i32)
-   local.get $0
-   i32.const 1
-   i32.eq
+   local.get $1
    if (result i32)
     i32.const 1
    else
@@ -88,7 +97,37 @@
    end
   end
  )
- (func $start:loop-flow (; 5 ;)
+ (func $loop-flow/whileThrow (; 5 ;) (result i32)
+  i32.const 1088
+  i32.const 1040
+  i32.const 11
+  i32.const 4
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $loop-flow/whileContinue (; 6 ;) (result i32)
+  loop $while-continue|0
+   br $while-continue|0
+  end
+  unreachable
+ )
+ (func $loop-flow/forThrow (; 7 ;) (result i32)
+  i32.const 1088
+  i32.const 1040
+  i32.const 41
+  i32.const 4
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $loop-flow/doThrow (; 8 ;) (result i32)
+  i32.const 1088
+  i32.const 1040
+  i32.const 71
+  i32.const 4
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $~start (; 9 ;)
   i32.const 1
   call $loop-flow/whileAny
   i32.const 1
@@ -125,38 +164,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $loop-flow/whileThrow (; 6 ;) (result i32)
-  i32.const 1088
-  i32.const 1040
-  i32.const 11
-  i32.const 4
-  call $~lib/builtins/abort
-  unreachable
- )
- (func $loop-flow/whileContinue (; 7 ;) (result i32)
-  loop $while-continue|0
-   br $while-continue|0
-  end
-  unreachable
- )
- (func $loop-flow/forThrow (; 8 ;) (result i32)
-  i32.const 1088
-  i32.const 1040
-  i32.const 41
-  i32.const 4
-  call $~lib/builtins/abort
-  unreachable
- )
- (func $loop-flow/doThrow (; 9 ;) (result i32)
-  i32.const 1088
-  i32.const 1040
-  i32.const 71
-  i32.const 4
-  call $~lib/builtins/abort
-  unreachable
- )
- (func $~start (; 10 ;)
-  call $start:loop-flow
  )
 )

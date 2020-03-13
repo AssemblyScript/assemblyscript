@@ -1,15 +1,15 @@
 /// <reference path="./rt/index.d.ts" />
 
 import { BLOCK, BLOCK_OVERHEAD, BLOCK_MAXSIZE } from "./rt/common";
-import { compareImpl, strtol, strtod, isSpace, isAscii, toLower8, toUpper8 } from "./util/string";
-import { specialsUpper, casemap, bsearch } from "./util/casemap";
+import { compareImpl, strtol, strtod, isSpace, isAscii, isFinalSigma, toLower8, toUpper8 } from "./util/string";
+import { SPECIALS_UPPER, casemap, bsearch } from "./util/casemap";
 import { E_INVALIDLENGTH } from "./util/error";
-import { ArrayBufferView } from "./arraybuffer";
 import { idof } from "./builtins";
+import { Array } from "./array";
 
 @sealed export abstract class String {
 
-  @lazy static readonly MAX_LENGTH: i32 = BLOCK_MAXSIZE >>> alignof<u16>();
+  @lazy static readonly MAX_LENGTH: i32 = <i32>(BLOCK_MAXSIZE >>> alignof<u16>());
 
   static fromCharCode(unit: i32, surr: i32 = -1): String {
     var hasSur = surr > 0;
@@ -17,6 +17,16 @@ import { idof } from "./builtins";
     store<u16>(out, <u16>unit);
     if (hasSur) store<u16>(out, <u16>surr, 2);
     return changetype<String>(out); // retains
+  }
+
+  static fromCharCodes(units: Array<i32>): String {
+    var length = units.length;
+    var out = __alloc(<usize>length << 1, idof<String>());
+    var ptr = units.dataStart;
+    for (let i = 0; i < length; ++i) {
+      store<u16>(out + (<usize>i << 1), load<i32>(ptr + (<usize>i << 2)));
+    }
+    return changetype<String>(out);
   }
 
   static fromCodePoint(code: i32): String {
@@ -55,7 +65,7 @@ import { idof } from "./builtins";
     if (<u32>pos >= <u32>len) return -1; // (undefined)
     var first = <i32>load<u16>(changetype<usize>(this) + (<usize>pos << 1));
     if ((first & 0xFC00) != 0xD800 || pos + 1 == len) return first;
-    var second = <i32>load<u16>(changetype<usize>(this) + ((<usize>pos + 1) << 1));
+    var second = <i32>load<u16>(changetype<usize>(this) + (<usize>pos << 1), 2);
     if ((second & 0xFC00) != 0xDC00) return first;
     return (first - 0xD800 << 10) + (second - 0xDC00) + 0x10000;
   }
@@ -447,13 +457,13 @@ import { idof } from "./builtins";
     if (!limit) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>())); // retains
     if (separator === null) return [this];
     var length: isize = this.length;
-    var sepLen: isize = separator.length;
+    var sepLen = separator.length;
     if (limit < 0) limit = i32.MAX_VALUE;
     if (!sepLen) {
       if (!length) return changetype<Array<String>>(__allocArray(0, alignof<String>(), idof<Array<String>>()));  // retains
       // split by chars
       length = min<isize>(length, <isize>limit);
-      let result = changetype<Array<String>>(__allocArray(length, alignof<String>(), idof<Array<String>>())); // retains
+      let result = changetype<Array<String>>(__allocArray(<i32>length, alignof<String>(), idof<Array<String>>())); // retains
       // @ts-ignore: cast
       let resultStart = result.dataStart as usize;
       for (let i: isize = 0; i < length; ++i) {
@@ -527,6 +537,13 @@ import { idof } from "./builtins";
           // 0x0130 -> [0x0069, 0x0307]
           store<u32>(codes + (j << 1), (0x0307 << 16) | 0x0069);
           ++j;
+        } else if (c == 0x03A3) { // 'Σ'
+          // Σ maps to σ but except at the end of a word where it maps to ς
+          let sigma = 0x03C3; // σ
+          if (len > 1 && isFinalSigma(changetype<usize>(this), i, len)) {
+            sigma = 0x03C2; // ς
+          }
+          store<u16>(codes + (j << 1), sigma);
         } else if (c - 0x24B6 <= 0x24CF - 0x24B6) {
           // Range 0x24B6 <= c <= 0x24CF not covered by casemap and require special early handling
           store<u16>(codes + (j << 1), c + 26);
@@ -553,9 +570,8 @@ import { idof } from "./builtins";
     var len = <usize>this.length;
     if (!len) return this;
     var codes = __alloc(len * 3 * 2, idof<String>());
-    // @ts-ignore: cast
-    var specialsUpperPtr = specialsUpper.dataStart as usize;
-    var specialsUpperLen = specialsUpper.length;
+    var specialsPtr = changetype<usize>(SPECIALS_UPPER);
+    var specialsLen = SPECIALS_UPPER.length;
     var j: usize = 0;
     for (let i: usize = 0; i < len; ++i, ++j) {
       let c = <u32>load<u16>(changetype<usize>(this) + (i << 1));
@@ -581,15 +597,15 @@ import { idof } from "./builtins";
           // monkey patch
           store<u16>(codes + (j << 1), c - 26);
         } else {
-          let index = -1;
+          let index: usize = -1;
           // Fast range check. See first and last rows in specialsUpper table
           if (c - 0x00DF <= 0xFB17 - 0x00DF) {
-            index = <usize>bsearch(c, specialsUpperPtr, specialsUpperLen);
+            index = <usize>bsearch(c, specialsPtr, specialsLen);
           }
           if (~index) {
             // load next 3 code points from row with `index` offset for specialsUpper table
-            let ab = load<u32>(specialsUpperPtr + (index << 1), 2);
-            let cc = load<u16>(specialsUpperPtr + (index << 1), 6);
+            let ab = load<u32>(specialsPtr + (index << 1), 2);
+            let cc = load<u16>(specialsPtr + (index << 1), 6);
             store<u32>(codes + (j << 1), ab, 0);
             store<u16>(codes + (j << 1), cc, 4);
             j += 1 + usize(cc != 0);

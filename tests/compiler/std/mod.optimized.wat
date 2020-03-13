@@ -2,7 +2,6 @@
  (type $none_=>_none (func))
  (type $f64_f64_=>_f64 (func (param f64 f64) (result f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f32_f32_f32_=>_i32 (func (param f32 f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
  (type $f64_f64_f64_=>_i32 (func (param f64 f64 f64) (result i32)))
@@ -452,41 +451,37 @@
   local.get $0
   f32.mul
  )
- (func $std/mod/check<f32> (; 6 ;) (param $0 f32) (param $1 f32) (result i32)
-  local.get $1
-  local.get $1
-  f32.ne
-  if
+ (func $std/mod/test_fmodf (; 6 ;) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+  block $__inlined_func$std/mod/check<f32> (result i32)
    local.get $0
+   local.get $1
+   call $~lib/math/NativeMathf.mod
+   local.tee $0
    local.get $0
    f32.ne
-   return
-  end
-  local.get $1
-  f32.const 0
-  f32.eq
-  if
+   local.get $2
+   local.get $2
+   f32.ne
+   br_if $__inlined_func$std/mod/check<f32>
+   drop
    f32.const 1
-   local.get $1
+   local.get $2
    f32.div
    f32.const 1
    local.get $0
    f32.div
    f32.eq
-   return
+   local.get $2
+   f32.const 0
+   f32.eq
+   br_if $__inlined_func$std/mod/check<f32>
+   drop
+   local.get $0
+   local.get $2
+   f32.eq
   end
-  local.get $0
-  local.get $1
-  f32.eq
  )
- (func $std/mod/test_fmodf (; 7 ;) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
-  local.get $0
-  local.get $1
-  call $~lib/math/NativeMathf.mod
-  local.get $2
-  call $std/mod/check<f32>
- )
- (func $start:std/mod (; 8 ;)
+ (func $start:std/mod (; 7 ;)
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2243,7 +2238,7 @@
    unreachable
   end
  )
- (func $~start (; 9 ;)
+ (func $~start (; 8 ;)
   call $start:std/mod
  )
 )

@@ -67,12 +67,17 @@
   end
   local.get $0
  )
- (func $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get (; 4 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testArr (; 4 ;) (param $0 i32) (result i32)
   local.get $0
-  i32.load offset=4
-  i32.load
- )
- (func $~lib/array/Array<assert-nonnull/Foo>#__get (; 5 ;) (param $0 i32) (result i32)
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1040
+   i32.const 19
+   i32.const 9
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
   local.get $0
   i32.load offset=12
@@ -86,7 +91,8 @@
    unreachable
   end
   local.get $0
-  call $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get
+  i32.load offset=4
+  i32.load
   local.tee $0
   i32.eqz
   if
@@ -99,21 +105,7 @@
   end
   local.get $0
  )
- (func $assert-nonnull/testArr (; 6 ;) (param $0 i32) (result i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 19
-   i32.const 9
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $0
-  call $~lib/array/Array<assert-nonnull/Foo>#__get
- )
- (func $~lib/array/Array<assert-nonnull/Foo | null>#__get (; 7 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo | null>#__get (; 5 ;) (param $0 i32) (result i32)
   i32.const 0
   local.get $0
   i32.load offset=12
@@ -127,9 +119,10 @@
    unreachable
   end
   local.get $0
-  call $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get
+  i32.load offset=4
+  i32.load
  )
- (func $assert-nonnull/testElem (; 8 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testElem (; 6 ;) (param $0 i32) (result i32)
   local.get $0
   call $~lib/array/Array<assert-nonnull/Foo | null>#__get
   local.tee $0
@@ -144,7 +137,7 @@
   end
   local.get $0
  )
- (func $assert-nonnull/testAll (; 9 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testAll (; 7 ;) (param $0 i32) (result i32)
   (local $1 i32)
   block $folding-inner0
    local.get $0
@@ -170,7 +163,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $assert-nonnull/testAll2 (; 10 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testAll2 (; 8 ;) (param $0 i32) (result i32)
   (local $1 i32)
   block $folding-inner0
    local.get $0
@@ -196,17 +189,17 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~setArgumentsLength (; 11 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 9 ;) (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $assert-nonnull/testFn (; 12 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testFn (; 10 ;) (param $0 i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
   local.get $0
   call_indirect (type $none_=>_i32)
  )
- (func $assert-nonnull/testFn2 (; 13 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testFn2 (; 11 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -222,7 +215,7 @@
   local.get $0
   call_indirect (type $none_=>_i32)
  )
- (func $assert-nonnull/testRet (; 14 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testRet (; 12 ;) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 0
   global.set $~argumentsLength
@@ -240,14 +233,14 @@
    unreachable
   end
  )
- (func $assert-nonnull/testObjFn (; 15 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testObjFn (; 13 ;) (param $0 i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
   local.get $0
   i32.load offset=4
   call_indirect (type $none_=>_i32)
  )
- (func $assert-nonnull/testObjRet (; 16 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testObjRet (; 14 ;) (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 0
   global.set $~argumentsLength

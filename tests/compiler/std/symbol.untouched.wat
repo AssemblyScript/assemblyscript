@@ -1,11 +1,11 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -502,15 +502,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 48
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -574,15 +574,15 @@
   i32.sub
   i32.store offset=4
   local.get $0
-  local.tee $1
+  local.tee $2
   i32.const 0
   i32.const 48
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
-  local.get $1
+  local.set $1
+  local.get $2
   i32.load offset=8
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
   i32.const 4
@@ -1124,41 +1124,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $13
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/stub/__retain
-   local.set $11
-   local.get $13
-   call $~lib/rt/stub/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $12
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $12
    call $~lib/rt/stub/__retain
    local.set $12
-   local.get $11
+   local.get $9
    call $~lib/rt/stub/__release
   end
   local.get $12
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $13
+  local.get $5
+  local.tee $9
+  local.get $13
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/stub/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/stub/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -1172,7 +1172,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $~lib/map/Map<~lib/string/String,usize>#set (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#set (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1283,8 +1283,12 @@
    local.get $3
    call $~lib/rt/stub/__release
   end
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $4
   local.get $1
   call $~lib/rt/stub/__release
+  local.get $4
  )
  (func $~lib/util/hash/hash32 (; 21 ;) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1485,41 +1489,41 @@
    end
   end
   local.get $0
-  local.tee $9
+  local.tee $11
   local.get $3
-  local.tee $11
-  local.get $9
-  i32.load
-  local.tee $13
-  i32.ne
-  if
-   local.get $11
-   call $~lib/rt/stub/__retain
-   local.set $11
-   local.get $13
-   call $~lib/rt/stub/__release
-  end
-  local.get $11
-  i32.store
-  local.get $0
-  local.get $1
-  i32.store offset=4
-  local.get $0
-  local.tee $9
-  local.get $5
   local.tee $12
-  local.get $9
-  i32.load offset=8
-  local.tee $11
+  local.get $11
+  i32.load
+  local.tee $9
   i32.ne
   if
    local.get $12
    call $~lib/rt/stub/__retain
    local.set $12
-   local.get $11
+   local.get $9
    call $~lib/rt/stub/__release
   end
   local.get $12
+  i32.store
+  local.get $0
+  local.get $1
+  i32.store offset=4
+  local.get $0
+  local.tee $13
+  local.get $5
+  local.tee $9
+  local.get $13
+  i32.load offset=8
+  local.tee $11
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/stub/__retain
+   local.set $9
+   local.get $11
+   call $~lib/rt/stub/__release
+  end
+  local.get $9
   i32.store offset=8
   local.get $0
   local.get $4
@@ -1533,7 +1537,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $~lib/map/Map<usize,~lib/string/String>#set (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#set (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1650,8 +1654,12 @@
    local.get $3
    call $~lib/rt/stub/__release
   end
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $6
   local.get $2
   call $~lib/rt/stub/__release
+  local.get $6
  )
  (func $~lib/symbol/_Symbol.for (; 25 ;) (param $0 i32) (result i32)
   (local $1 i32)
@@ -1707,10 +1715,12 @@
   local.get $0
   local.get $2
   call $~lib/map/Map<~lib/string/String,usize>#set
+  call $~lib/rt/stub/__release
   global.get $~lib/symbol/idToString
   local.get $2
   local.get $0
   call $~lib/map/Map<usize,~lib/string/String>#set
+  call $~lib/rt/stub/__release
   local.get $2
   local.set $1
   local.get $0

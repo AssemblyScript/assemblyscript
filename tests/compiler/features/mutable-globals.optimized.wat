@@ -11,7 +11,14 @@
  (export "memory" (memory $0))
  (export "external" (global $features/mutable-globals/external))
  (export "internal" (global $features/mutable-globals/internal))
- (func $start:features/mutable-globals (; 1 ;)
+ (func $~start (; 1 ;)
+  global.get $~started
+  if
+   return
+  else
+   i32.const 1
+   global.set $~started
+  end
   global.get $features/mutable-globals/external
   i32.const 123
   i32.ne
@@ -64,15 +71,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start (; 2 ;)
-  global.get $~started
-  if
-   return
-  else
-   i32.const 1
-   global.set $~started
-  end
-  call $start:features/mutable-globals
  )
 )

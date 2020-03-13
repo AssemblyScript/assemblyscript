@@ -2,8 +2,15 @@ const fs   = require("fs");
 const path = require("path");
 
 const compiled = new WebAssembly.Module(
-  fs.readFileSync(path.resolve(__dirname, "..", "build", "rust.optimized.wasm"))
-);
+  fs.readFileSync(path.resolve(
+    __dirname,
+    "..",
+    "build",
+    "wasm32-unknown-unknown",
+    "release",
+    "rust_nbody.wasm"
+  )
+));
 
 const imports = {
   env: {
