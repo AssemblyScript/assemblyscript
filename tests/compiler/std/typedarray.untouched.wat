@@ -32000,6 +32000,9 @@
    local.get $2
    i32.sub
    local.set $2
+   local.get $0
+   i32.const 45
+   i32.store16
   end
   local.get $2
   i32.const 24
@@ -32024,12 +32027,6 @@
   local.get $6
   local.get $5
   call $~lib/util/number/utoa32_lut
-  local.get $4
-  if
-   local.get $0
-   i32.const 45
-   i32.store16
-  end
   local.get $3
  )
  (func $~lib/string/String#substring (; 479 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -33036,6 +33033,9 @@
    local.get $2
    i32.sub
    local.set $2
+   local.get $0
+   i32.const 45
+   i32.store16
   end
   local.get $2
   i32.const 16
@@ -33060,12 +33060,6 @@
   local.get $6
   local.get $5
   call $~lib/util/number/utoa32_lut
-  local.get $4
-  if
-   local.get $0
-   i32.const 45
-   i32.store16
-  end
   local.get $3
  )
  (func $~lib/util/string/joinIntegerArray<i16> (; 498 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -33630,6 +33624,9 @@
    local.get $2
    i32.sub
    local.set $2
+   local.get $0
+   i32.const 45
+   i32.store16
   end
   local.get $2
   call $~lib/util/number/decimalCount32
@@ -33646,12 +33643,6 @@
   local.get $6
   local.get $5
   call $~lib/util/number/utoa32_lut
-  local.get $4
-  if
-   local.get $0
-   i32.const 45
-   i32.store16
-  end
   local.get $3
  )
  (func $~lib/util/string/joinIntegerArray<i32> (; 510 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -34479,6 +34470,9 @@
    local.get $2
    i64.sub
    local.set $2
+   local.get $0
+   i32.const 45
+   i32.store16
   end
   local.get $2
   i64.const 4294967295
@@ -34518,12 +34512,6 @@
    local.get $9
    local.get $6
    call $~lib/util/number/utoa64_lut
-  end
-  local.get $4
-  if
-   local.get $0
-   i32.const 45
-   i32.store16
   end
   local.get $3
  )

@@ -622,7 +622,10 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
   var decimals: u32 = 0;
   if (isSigned<T>()) {
     let sign = u32(value < 0);
-    if (sign) value = changetype<T>(-value);
+    if (sign) {
+      value = changetype<T>(-value);
+      store<u16>(buffer, CharCode.MINUS);
+    }
     if (sizeof<T>() <= 4) {
       decimals = decimalCount32(value) + sign;
       utoa32_core(buffer, value, decimals);
@@ -636,7 +639,6 @@ export function itoa_stream<T extends number>(buffer: usize, offset: usize, valu
         utoa64_core(buffer, value, decimals);
       }
     }
-    if (sign) store<u16>(buffer, CharCode.MINUS);
   } else {
     if (sizeof<T>() <= 4) {
       decimals = decimalCount32(value);

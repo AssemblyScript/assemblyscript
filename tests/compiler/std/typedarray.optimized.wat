@@ -21242,7 +21242,6 @@
   i32.shr_u
  )
  (func $~lib/util/number/itoa_stream<i8> (; 357 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -21278,6 +21277,9 @@
   i32.lt_s
   local.tee $1
   if
+   local.get $0
+   i32.const 45
+   i32.store16
    i32.const 0
    local.get $2
    i32.sub
@@ -21288,22 +21290,16 @@
   i32.shl
   i32.const 24
   i32.shr_s
-  local.tee $3
+  local.tee $2
   call $~lib/util/number/decimalCount32
   local.get $1
   i32.add
-  local.set $2
+  local.set $1
   local.get $0
-  local.get $3
   local.get $2
+  local.get $1
   call $~lib/util/number/utoa_simple<u32>
   local.get $1
-  if
-   local.get $0
-   i32.const 45
-   i32.store16
-  end
-  local.get $2
  )
  (func $~lib/string/String#substring (; 358 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -21954,7 +21950,6 @@
   call $~lib/rt/pure/__release
  )
  (func $~lib/util/number/itoa_stream<i16> (; 370 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -21990,6 +21985,9 @@
   i32.lt_s
   local.tee $1
   if
+   local.get $0
+   i32.const 45
+   i32.store16
    i32.const 0
    local.get $2
    i32.sub
@@ -22000,22 +21998,16 @@
   i32.shl
   i32.const 16
   i32.shr_s
-  local.tee $3
+  local.tee $2
   call $~lib/util/number/decimalCount32
   local.get $1
   i32.add
-  local.set $2
+  local.set $1
   local.get $0
-  local.get $3
   local.get $2
+  local.get $1
   call $~lib/util/number/utoa_simple<u32>
   local.get $1
-  if
-   local.get $0
-   i32.const 45
-   i32.store16
-  end
-  local.get $2
  )
  (func $~lib/util/string/joinIntegerArray<i16> (; 371 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -22429,6 +22421,9 @@
   i32.lt_s
   local.tee $1
   if
+   local.get $0
+   i32.const 45
+   i32.store16
    i32.const 0
    local.get $2
    i32.sub
@@ -22439,15 +22434,9 @@
   call $~lib/util/number/decimalCount32
   local.get $1
   i32.add
-  local.tee $2
+  local.tee $0
   call $~lib/util/number/utoa_simple<u32>
-  local.get $1
-  if
-   local.get $0
-   i32.const 45
-   i32.store16
-  end
-  local.get $2
+  local.get $0
  )
  (func $~lib/util/string/joinIntegerArray<i32> (; 379 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -22968,7 +22957,6 @@
  )
  (func $~lib/util/number/itoa_stream<i64> (; 389 ;) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -22992,6 +22980,9 @@
   i64.lt_s
   local.tee $1
   if
+   local.get $0
+   i32.const 45
+   i32.store16
    i64.const 0
    local.get $2
    i64.sub
@@ -23003,14 +22994,14 @@
   if
    local.get $2
    i32.wrap_i64
-   local.tee $4
+   local.tee $3
    call $~lib/util/number/decimalCount32
    local.get $1
    i32.add
-   local.set $3
+   local.set $1
    local.get $0
-   local.get $4
    local.get $3
+   local.get $1
    call $~lib/util/number/utoa_simple<u32>
   else
    local.get $0
@@ -23019,16 +23010,10 @@
    call $~lib/util/number/decimalCount64High
    local.get $1
    i32.add
-   local.tee $3
+   local.tee $1
    call $~lib/util/number/utoa_simple<u64>
   end
   local.get $1
-  if
-   local.get $0
-   i32.const 45
-   i32.store16
-  end
-  local.get $3
  )
  (func $~lib/util/string/joinIntegerArray<i64> (; 390 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
