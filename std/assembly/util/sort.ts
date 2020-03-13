@@ -86,7 +86,7 @@ function weakHeapSort<T>(
 ): void {
   const shift32 = alignof<u32>();
 
-  var bitsetSize = (length + 31) >> 5 << shift32;
+  var bitsetSize = (<usize>length + 31) >> 5 << shift32;
   var bitset = __alloc(bitsetSize, 0); // indexed in 32-bit chunks below
   memory.fill(bitset, 0, bitsetSize);
 
@@ -94,15 +94,15 @@ function weakHeapSort<T>(
 
   for (let i = length - 1; i > 0; i--) {
     let j = i;
-    while ((j & 1) == (load<u32>(bitset + (j >> 6 << shift32)) >> (j >> 1 & 31) & 1)) j >>= 1;
+    while ((j & 1) == (load<u32>(bitset + (<usize>j >> 6 << shift32)) >> (j >> 1 & 31) & 1)) j >>= 1;
 
     let p = j >> 1;
     let a: T = load<T>(dataStart + (<usize>p << alignof<T>())); // a = arr[p]
     let b: T = load<T>(dataStart + (<usize>i << alignof<T>())); // b = arr[i]
     if (comparator(a, b) < 0) {
       store<u32>(
-        bitset + (i >> 5 << shift32),
-        load<u32>(bitset + (i >> 5 << shift32)) ^ (1 << (i & 31))
+        bitset + (<usize>i >> 5 << shift32),
+        load<u32>(bitset + (<usize>i >> 5 << shift32)) ^ (1 << (i & 31))
       );
       store<T>(dataStart + (<usize>i << alignof<T>()), a); // arr[i] = a
       store<T>(dataStart + (<usize>p << alignof<T>()), b); // arr[p] = b
@@ -115,7 +115,7 @@ function weakHeapSort<T>(
     store<T>(dataStart + (<usize>i << alignof<T>()), a); // arr[i] = a
 
     let x = 1, y: i32;
-    while ((y = (x << 1) + ((load<u32>(bitset + (x >> 5 << shift32)) >> (x & 31)) & 1)) < i) x = y;
+    while ((y = (x << 1) + ((load<u32>(bitset + (<usize>x >> 5 << shift32)) >> (x & 31)) & 1)) < i) x = y;
 
     while (x > 0) {
       a = load<T>(dataStart); // a = arr[0]
@@ -123,8 +123,8 @@ function weakHeapSort<T>(
 
       if (comparator(a, b) < 0) {
         store<u32>(
-          bitset + (x >> 5 << shift32),
-          load<u32>(bitset + (x >> 5 << shift32)) ^ (1 << (x & 31))
+          bitset + (<usize>x >> 5 << shift32),
+          load<u32>(bitset + (<usize>x >> 5 << shift32)) ^ (1 << (x & 31))
         );
         store<T>(dataStart + (<usize>x << alignof<T>()), a); // arr[x] = a
         store<T>(dataStart, b); // arr[0] = b

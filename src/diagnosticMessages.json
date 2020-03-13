@@ -3,7 +3,8 @@
   "Operation is unsafe.": 101,
   "User-defined: {0}": 102,
   "Feature '{0}' is not enabled.": 103,
-  "Low memory limit exceeded by static data: {0} > {1}": 104,
+  "Function '{0}' is possibly called virtually, which is not yet supported.": 104,
+  "Low memory limit exceeded by static data: {0} > {1}": 105,
 
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 200,
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,
@@ -31,6 +32,7 @@
   "'{0}' must be a power of two.": 223,
   "'{0}' is not a valid operator.": 224,
   "Expression cannot be represented by a type.": 225,
+  "Expression resolves to unusual type '{0}'.": 226,
 
   "Type '{0}' is cyclic. Module will include deferred garbage collection.": 900,
   "Importing the table disables some indirect call optimizations.": 901,
@@ -61,6 +63,7 @@
   "An accessor cannot have type parameters.": 1094,
   "A 'set' accessor cannot have a return type annotation.": 1095,
   "Type parameter list cannot be empty.": 1098,
+  "Type argument list cannot be empty.": 1099,
   "A 'continue' statement can only be used within an enclosing iteration statement.": 1104,
   "A 'break' statement can only be used within an enclosing iteration or switch statement.": 1105,
   "A 'return' statement can only be used within a function body.": 1108,
@@ -87,6 +90,7 @@
   "Binary digit expected.": 1177,
   "Octal digit expected.": 1178,
   "An implementation cannot be declared in ambient contexts.": 1183,
+  "The variable declaration of a 'for...of' statement cannot have an initializer.": 1190,
   "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.": 1198,
   "Unterminated Unicode escape sequence.": 1199,
   "Decorators are not valid here.": 1206,

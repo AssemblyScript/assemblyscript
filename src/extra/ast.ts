@@ -1,10 +1,10 @@
 /**
- * Abstract Syntax Tree extras.
+ * @fileoverview Abstract Syntax Tree extras.
  *
- * Not needed in a standalone compiler but useful for testing the parser.
+ * Provides serialization of the AssemblyScript AST back to it source form.
  *
- * @module extra/ast
- *//***/
+ * @license Apache-2.0
+ */
 
 import {
   Node,
@@ -55,6 +55,7 @@ import {
   ExportDefaultStatement,
   ExpressionStatement,
   ForStatement,
+  ForOfStatement,
   IfStatement,
   ImportStatement,
   InstanceOfExpression,
@@ -249,6 +250,10 @@ export class ASTBuilder {
       }
       case NodeKind.FOR: {
         this.visitForStatement(<ForStatement>node);
+        break;
+      }
+      case NodeKind.FOROF: {
+        this.visitForOfStatement(<ForOfStatement>node);
         break;
       }
       case NodeKind.IF: {
@@ -466,10 +471,12 @@ export class ASTBuilder {
     var elements = node.elementExpressions;
     var numElements = elements.length;
     if (numElements) {
-      if (elements[0]) this.visitNode(<Expression>elements[0]);
+      let element = elements[0];
+      if (element) this.visitNode(element);
       for (let i = 1; i < numElements; ++i) {
+        element = elements[i];
         sb.push(", ");
-        if (elements[i]) this.visitNode(<Expression>elements[i]);
+        if (element) this.visitNode(element);
       }
     }
     sb.push("]");
@@ -527,6 +534,11 @@ export class ASTBuilder {
       case AssertionKind.NONNULL: {
         this.visitNode(node.expression);
         sb.push("!");
+        break;
+      }
+      case AssertionKind.CONST: {
+        this.visitNode(node.expression);
+        sb.push(" as const");
         break;
       }
       default: assert(false);
@@ -646,7 +658,7 @@ export class ASTBuilder {
   }
 
   visitFloatLiteralExpression(node: FloatLiteralExpression): void {
-    this.sb.push(node.value.toString(10));
+    this.sb.push(node.value.toString());
   }
 
   visitInstanceOfExpression(node: InstanceOfExpression): void {
@@ -1117,6 +1129,16 @@ export class ASTBuilder {
     } else {
       sb.push(";");
     }
+    sb.push(") ");
+    this.visitNode(node.statement);
+  }
+
+  visitForOfStatement(node: ForOfStatement): void {
+    var sb = this.sb;
+    sb.push("for (");
+    this.visitNode(node.variable);
+    sb.push(" of ");
+    this.visitNode(node.iterable);
     sb.push(") ");
     this.visitNode(node.statement);
   }

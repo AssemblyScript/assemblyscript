@@ -1,8 +1,11 @@
-/** @module util *//***/
+/**
+ * @fileoverview Various file path utility.
+ * @license Apache-2.0
+ */
 
 import {
   CharCode
-} from "./charcode";
+} from "./text";
 
 import {
   PATH_DELIMITER

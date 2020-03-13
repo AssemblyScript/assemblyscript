@@ -10,7 +10,7 @@ let argv = [
 ];
 
 asc.main(argv, error => {
-  if (/Import file .*lib\/a.ts.* not found/g.test(error.message)) {
+  if (/Import .*lib\/a.* not found/g.test(error.message)) {
     process.exit(0);
   }
   console.error("Failed!\n" + error);

@@ -1,11 +1,14 @@
 /**
- * Shared diagnostic handling inherited by the parser and the compiler.
- * @module diagnostics
- * @preferred
- *//***/
+ * @fileoverview Shared diagnostic handling.
+ * @license Apache-2.0
+ */
 
 import {
   Range
+} from "./tokenizer";
+
+import {
+  Source
 } from "./ast";
 
 import {
@@ -103,9 +106,9 @@ export class DiagnosticMessage {
     arg2: string | null = null
   ): DiagnosticMessage {
     var message = diagnosticCodeToString(code);
-    if (arg0 != null) message = message.replace("{0}", arg0);
-    if (arg1 != null) message = message.replace("{1}", arg1);
-    if (arg2 != null) message = message.replace("{2}", arg2);
+    if (arg0 !== null) message = message.replace("{0}", arg0);
+    if (arg1 !== null) message = message.replace("{1}", arg1);
+    if (arg2 !== null) message = message.replace("{2}", arg2);
     return new DiagnosticMessage(code, category, message);
   }
 
@@ -123,25 +126,26 @@ export class DiagnosticMessage {
 
   /** Converts this message to a string. */
   toString(): string {
-    if (this.range) {
+    var range = this.range;
+    if (range) {
       return (
         diagnosticCategoryToString(this.category) +
         " " +
-        this.code.toString(10) +
+        this.code.toString() +
         ": \"" +
         this.message +
         "\" in " +
-        this.range.source.normalizedPath +
+        range.source.normalizedPath +
         ":" +
-        this.range.line.toString(10) +
+        range.line.toString() +
         ":" +
-        this.range.column.toString(10)
+        range.column.toString()
       );
     }
     return (
       diagnosticCategoryToString(this.category) +
       " " +
-      this.code.toString(10) +
+      this.code.toString() +
       ": " +
       this.message
     );
@@ -161,15 +165,15 @@ export function formatDiagnosticMessage(
   sb.push(diagnosticCategoryToString(message.category));
   if (useColors) sb.push(COLOR_RESET);
   sb.push(message.code < 1000 ? " AS" : " TS");
-  sb.push(message.code.toString(10));
+  sb.push(message.code.toString());
   sb.push(": ");
   sb.push(message.message);
 
   // include range information if available
-  if (message.range) {
+  var range = message.range;
+  if (range) {
 
     // include context information if requested
-    let range = message.range;
     if (showContext) {
       sb.push("\n");
       sb.push(formatDiagnosticContext(range, useColors));
@@ -178,9 +182,9 @@ export function formatDiagnosticMessage(
     sb.push(" in ");
     sb.push(range.source.normalizedPath);
     sb.push("(");
-    sb.push(range.line.toString(10));
+    sb.push(range.line.toString());
     sb.push(",");
-    sb.push(range.column.toString(10));
+    sb.push(range.column.toString());
     sb.push(")");
 
     let relatedRange = message.relatedRange;
@@ -193,9 +197,9 @@ export function formatDiagnosticMessage(
       sb.push(" in ");
       sb.push(relatedRange.source.normalizedPath);
       sb.push("(");
-      sb.push(relatedRange.line.toString(10));
+      sb.push(relatedRange.line.toString());
       sb.push(",");
-      sb.push(relatedRange.column.toString(10));
+      sb.push(relatedRange.column.toString());
       sb.push(")");
     }
   }
@@ -241,7 +245,7 @@ export abstract class DiagnosticEmitter {
   /** Diagnostic messages emitted so far. */
   diagnostics: DiagnosticMessage[];
   /** Diagnostic messages already seen, by range. */
-  private seen: Map<Range,Set<DiagnosticCode>> = new Map();
+  private seen: Map<Source,Map<i32,i32[]>> = new Map();
 
   /** Initializes this diagnostic emitter. */
   protected constructor(diagnostics: DiagnosticMessage[] | null = null) {
@@ -260,17 +264,23 @@ export abstract class DiagnosticEmitter {
   ): void {
     // It is possible that the same diagnostic is emitted twice, for example
     // when compiling generics with different types or when recompiling a loop
-    // because our initial assumptions didn't hold. Deduplicate these.
+    // because our initial assumptions didn't hold. It is even possible to get
+    // multiple instances of the same range during parsing. Deduplicate these.
     if (range) {
       let seen = this.seen;
-      if (seen.has(range)) {
-        let codes = seen.get(range)!;
-        if (codes.has(code)) return;
-        codes.add(code);
+      if (seen.has(range.source)) {
+        let seenInSource = assert(seen.get(range.source));
+        if (seenInSource.has(range.start)) {
+          let seenCodesAtPos = assert(seenInSource.get(range.start));
+          if (seenCodesAtPos.includes(code)) return;
+          seenCodesAtPos.push(code);
+        } else {
+          seenInSource.set(range.start, [ code ]);
+        }
       } else {
-        let codes = new Set<DiagnosticCode>();
-        codes.add(code);
-        seen.set(range, codes);
+        let seenInSource = new Map<i32,i32[]>();
+        seenInSource.set(range.start, [ code ]);
+        seen.set(range.source, seenInSource);
       }
     }
     var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);

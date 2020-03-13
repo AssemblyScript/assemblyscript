@@ -1,3 +1,8 @@
+/**
+ * @fileoverview UTF8 utility.
+ * @license Apache-2.0
+ */
+
 // @protobufjs/utf8
 
 /**

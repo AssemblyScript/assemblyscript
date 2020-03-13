@@ -113,7 +113,7 @@ export class Map<K,V> {
   }
 
   @operator("[]=")
-  set(key: K, value: V): void {
+  set(key: K, value: V): this {
     var hashCode = HASH<K>(key);
     var entry = this.find(key, hashCode); // unmanaged!
     if (entry) {
@@ -137,7 +137,7 @@ export class Map<K,V> {
       }
       // append new entry
       let entries = this.entries;
-      entry = changetype<MapEntry<K,V>>(changetype<usize>(entries) + this.entriesOffset++ * ENTRY_SIZE<K,V>());
+      entry = changetype<MapEntry<K,V>>(changetype<usize>(entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<K,V>());
       // link with the map
       entry.key = isManaged<K>()
         ? changetype<K>(__retain(changetype<usize>(key)))
@@ -151,6 +151,7 @@ export class Map<K,V> {
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
     }
+    return this;
   }
 
   delete(key: K): bool {

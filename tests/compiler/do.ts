@@ -60,6 +60,15 @@ ran = false;
 testAlwaysTrue();
 assert(ran);
 
+function testAlwaysTrueNeverBreaks(): i32 {
+  var i = 0;
+  do {
+    if (++i == 10) return i;
+  } while (true);
+  // no return required
+}
+assert(testAlwaysTrueNeverBreaks() == 10);
+
 function testAlwaysFalse(): void {
   var i = 0;
   do {

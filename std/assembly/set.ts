@@ -101,7 +101,7 @@ export class Set<T> {
     return this.find(key, HASH<T>(key)) !== null;
   }
 
-  add(key: T): void {
+  add(key: T): this {
     var hashCode = HASH<T>(key);
     var entry = this.find(key, hashCode); // unmanaged!
     if (!entry) {
@@ -114,7 +114,7 @@ export class Set<T> {
         );
       }
       // append new entry
-      entry = changetype<SetEntry<T>>(changetype<usize>(this.entries) + this.entriesOffset++ * ENTRY_SIZE<T>());
+      entry = changetype<SetEntry<T>>(changetype<usize>(this.entries) + <usize>(this.entriesOffset++) * ENTRY_SIZE<T>());
       entry.key = isManaged<T>()
         ? changetype<T>(__retain(changetype<usize>(key)))
         : key;
@@ -124,6 +124,7 @@ export class Set<T> {
       entry.taggedNext = load<usize>(bucketPtrBase);
       store<usize>(bucketPtrBase, changetype<usize>(entry));
     }
+    return this;
   }
 
   @operator("[]=")

@@ -23,55 +23,51 @@ function asmFunc(global, env, buffer) {
  var assembly_index_system = 0;
  var $lib_rt_stub_startOffset = 0;
  var $lib_rt_stub_offset = 0;
- function $lib_rt_stub_maybeGrowMemory($0) {
-  var $1 = 0, $2 = 0;
-  $2 = __wasm_memory_size();
-  $1 = $2 << 16 | 0;
-  if ($0 >>> 0 > $1 >>> 0) {
-   $1 = ((($0 - $1 | 0) + 65535 | 0) & -65536 | 0) >>> 16 | 0;
-   if ((__wasm_memory_grow((($2 | 0) > ($1 | 0) ? $2 : $1) | 0) | 0) < (0 | 0)) {
-    if ((__wasm_memory_grow($1 | 0) | 0) < (0 | 0)) {
-     abort()
-    }
-   }
-  }
-  $lib_rt_stub_offset = $0;
- }
- 
  function $lib_rt_stub___alloc($0, $1) {
-  var $2 = 0, $3 = 0, $4 = 0;
+  var $2 = 0, $3 = 0, $4 = 0, $5 = 0, $6 = 0;
   if ($0 >>> 0 > 1073741808 >>> 0) {
    abort()
   }
   $2 = ($0 + 15 | 0) & -16 | 0;
-  $3 = $2 >>> 0 > 16 >>> 0;
-  $4 = $lib_rt_stub_offset + 16 | 0;
-  $3 = $3 ? $2 : 16;
-  $lib_rt_stub_maybeGrowMemory($4 + $3 | 0);
-  $2 = $4 - 16 | 0;
-  HEAP32[$2 >> 2] = $3;
+  $4 = $2 >>> 0 > 16 >>> 0;
+  $5 = $lib_rt_stub_offset + 16 | 0;
+  $6 = $4 ? $2 : 16;
+  $2 = $5 + $6 | 0;
+  $4 = __wasm_memory_size();
+  $3 = $4 << 16 | 0;
+  if ($2 >>> 0 > $3 >>> 0) {
+   $3 = ((($2 - $3 | 0) + 65535 | 0) & -65536 | 0) >>> 16 | 0;
+   if ((__wasm_memory_grow((($4 | 0) > ($3 | 0) ? $4 : $3) | 0) | 0) < (0 | 0)) {
+    if ((__wasm_memory_grow($3 | 0) | 0) < (0 | 0)) {
+     abort()
+    }
+   }
+  }
+  $lib_rt_stub_offset = $2;
+  $2 = $5 - 16 | 0;
+  HEAP32[$2 >> 2] = $6;
   HEAP32[($2 + 4 | 0) >> 2] = 1;
   HEAP32[($2 + 8 | 0) >> 2] = $1;
   HEAP32[($2 + 12 | 0) >> 2] = $0;
-  return $4;
+  return $5;
  }
  
  function assembly_index_NBodySystem_constructor($0) {
   var $1 = 0, $2 = 0, $3 = 0.0, $4 = 0.0, $5 = 0.0, $6 = 0.0, $7 = 0;
-  $7 = HEAP32[($0 + 12 | 0) >> 2];
-  loop_0 : while (1) {
+  $7 = HEAP32[(($0 - 16 | 0) + 12 | 0) >> 2] >>> 2 | 0;
+  for_loop_0 : while (1) {
    if (($1 | 0) < ($7 | 0)) {
-    $2 = HEAP32[(HEAP32[($0 + 4 | 0) >> 2] + ($1 << 2 | 0) | 0) >> 2];
+    $2 = HEAP32[(($1 << 2 | 0) + $0 | 0) >> 2];
     $3 = HEAPF64[($2 + 48 | 0) >> 3];
     $4 = $4 + HEAPF64[($2 + 24 | 0) >> 3] * $3;
     $5 = $5 + HEAPF64[($2 + 32 | 0) >> 3] * $3;
     $6 = $6 + HEAPF64[($2 + 40 | 0) >> 3] * $3;
     $1 = $1 + 1 | 0;
-    continue loop_0;
+    continue for_loop_0;
    }
-   break loop_0;
+   break for_loop_0;
   };
-  $1 = HEAP32[HEAP32[($0 + 4 | 0) >> 2] >> 2];
+  $1 = HEAP32[$0 >> 2];
   HEAPF64[($1 + 24 | 0) >> 3] = -$4 / 39.47841760435743;
   HEAPF64[($1 + 32 | 0) >> 3] = -$5 / 39.47841760435743;
   HEAPF64[($1 + 40 | 0) >> 3] = -$6 / 39.47841760435743;
@@ -93,36 +89,24 @@ function asmFunc(global, env, buffer) {
   return $7;
  }
  
- function $lib_rt___allocArray() {
-  var $0 = 0, $1 = 0;
-  $0 = $lib_rt_stub___alloc(16, 5);
-  $1 = $lib_rt_stub___alloc(20, 0);
-  HEAP32[$0 >> 2] = $1;
-  HEAP32[($0 + 4 | 0) >> 2] = $1;
-  HEAP32[($0 + 8 | 0) >> 2] = 20;
-  HEAP32[($0 + 12 | 0) >> 2] = 5;
-  return $0;
- }
- 
  function assembly_index_init() {
-  var $0 = 0, $1 = 0, wasm2js_i32$0 = 0, wasm2js_i32$1 = 0;
-  $1 = $lib_rt___allocArray();
-  $0 = HEAP32[($1 + 4 | 0) >> 2];
+  var $0 = 0, wasm2js_i32$0 = 0, wasm2js_i32$1 = 0;
+  $0 = $lib_rt_stub___alloc(20, 5);
   (wasm2js_i32$0 = $0, wasm2js_i32$1 = assembly_index_Body_constructor(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 39.47841760435743)), HEAP32[wasm2js_i32$0 >> 2] = wasm2js_i32$1;
   (wasm2js_i32$0 = $0, wasm2js_i32$1 = assembly_index_Body_constructor(4.841431442464721, -1.1603200440274284, -.10362204447112311, .606326392995832, 2.81198684491626, -.02521836165988763, .03769367487038949)), HEAP32[(wasm2js_i32$0 + 4 | 0) >> 2] = wasm2js_i32$1;
   (wasm2js_i32$0 = $0, wasm2js_i32$1 = assembly_index_Body_constructor(8.34336671824458, 4.124798564124305, -.4035234171143214, -1.0107743461787924, 1.8256623712304119, .008415761376584154, .011286326131968767)), HEAP32[(wasm2js_i32$0 + 8 | 0) >> 2] = wasm2js_i32$1;
   (wasm2js_i32$0 = $0, wasm2js_i32$1 = assembly_index_Body_constructor(12.894369562139131, -15.111151401698631, -.22330757889265573, 1.0827910064415354, .8687130181696082, -.010832637401363636, 1.7237240570597112e-03)), HEAP32[(wasm2js_i32$0 + 12 | 0) >> 2] = wasm2js_i32$1;
   (wasm2js_i32$0 = $0, wasm2js_i32$1 = assembly_index_Body_constructor(15.379697114850917, -25.919314609987964, .17925877295037118, .979090732243898, .5946989986476762, -.034755955504078104, 2.0336868699246304e-03)), HEAP32[(wasm2js_i32$0 + 16 | 0) >> 2] = wasm2js_i32$1;
-  assembly_index_system = assembly_index_NBodySystem_constructor($1);
+  assembly_index_system = assembly_index_NBodySystem_constructor($0);
  }
  
  function assembly_index_NBodySystem_advance($0) {
   var $1 = 0, $2 = 0.0, $3 = 0.0, $4 = 0, $5 = 0.0, $6 = 0.0, $7 = 0.0, $8 = 0, $9 = 0.0, $10 = 0.0, $11 = 0.0, $12 = 0, $13 = 0, $14 = 0.0, $15 = 0.0, $16 = 0.0, $17 = 0.0;
   $12 = HEAP32[$0 >> 2];
-  $13 = HEAP32[($12 + 12 | 0) >> 2];
-  loop_0 : while (1) {
+  $13 = HEAP32[(($12 - 16 | 0) + 12 | 0) >> 2] >>> 2 | 0;
+  for_loop_0 : while (1) {
    if ($4 >>> 0 < $13 >>> 0) {
-    $0 = HEAP32[(HEAP32[($12 + 4 | 0) >> 2] + ($4 << 2 | 0) | 0) >> 2];
+    $0 = HEAP32[(($4 << 2 | 0) + $12 | 0) >> 2];
     $14 = HEAPF64[$0 >> 3];
     $15 = HEAPF64[($0 + 8 | 0) >> 3];
     $16 = HEAPF64[($0 + 16 | 0) >> 3];
@@ -131,9 +115,9 @@ function asmFunc(global, env, buffer) {
     $7 = HEAPF64[($0 + 40 | 0) >> 3];
     $17 = HEAPF64[($0 + 48 | 0) >> 3];
     $8 = $4 + 1 | 0;
-    loop_1 : while (1) {
+    for_loop_1 : while (1) {
      if ($8 >>> 0 < $13 >>> 0) {
-      $1 = HEAP32[(HEAP32[($12 + 4 | 0) >> 2] + ($8 << 2 | 0) | 0) >> 2];
+      $1 = HEAP32[(($8 << 2 | 0) + $12 | 0) >> 2];
       $2 = $14 - HEAPF64[$1 >> 3];
       $9 = $15 - HEAPF64[($1 + 8 | 0) >> 3];
       $10 = $16 - HEAPF64[($1 + 16 | 0) >> 3];
@@ -150,9 +134,9 @@ function asmFunc(global, env, buffer) {
       HEAPF64[($1 + 32 | 0) >> 3] = HEAPF64[($1 + 32 | 0) >> 3] + $9 * $2;
       HEAPF64[($1 + 40 | 0) >> 3] = HEAPF64[($1 + 40 | 0) >> 3] + $10 * $2;
       $8 = $8 + 1 | 0;
-      continue loop_1;
+      continue for_loop_1;
      }
-     break loop_1;
+     break for_loop_1;
     };
     HEAPF64[($0 + 24 | 0) >> 3] = $5;
     HEAPF64[($0 + 32 | 0) >> 3] = $6;
@@ -161,19 +145,19 @@ function asmFunc(global, env, buffer) {
     HEAPF64[($0 + 8 | 0) >> 3] = HEAPF64[($0 + 8 | 0) >> 3] + .01 * $6;
     HEAPF64[($0 + 16 | 0) >> 3] = HEAPF64[($0 + 16 | 0) >> 3] + .01 * $7;
     $4 = $4 + 1 | 0;
-    continue loop_0;
+    continue for_loop_0;
    }
-   break loop_0;
+   break for_loop_0;
   };
  }
  
  function assembly_index_NBodySystem_energy($0) {
   var $1 = 0.0, $2 = 0.0, $3 = 0, $4 = 0, $5 = 0, $6 = 0.0, $7 = 0, $8 = 0.0, $9 = 0.0, $10 = 0.0, $11 = 0.0;
   $5 = HEAP32[$0 >> 2];
-  $7 = HEAP32[($5 + 12 | 0) >> 2];
-  loop_0 : while (1) {
+  $7 = HEAP32[(($5 - 16 | 0) + 12 | 0) >> 2] >>> 2 | 0;
+  for_loop_0 : while (1) {
    if ($3 >>> 0 < $7 >>> 0) {
-    $0 = HEAP32[(HEAP32[($5 + 4 | 0) >> 2] + ($3 << 2 | 0) | 0) >> 2];
+    $0 = HEAP32[(($3 << 2 | 0) + $5 | 0) >> 2];
     $9 = HEAPF64[$0 >> 3];
     $10 = HEAPF64[($0 + 8 | 0) >> 3];
     $11 = HEAPF64[($0 + 16 | 0) >> 3];
@@ -186,9 +170,9 @@ function asmFunc(global, env, buffer) {
     $1 = HEAPF64[($0 + 40 | 0) >> 3];
     $1 = $6 + .5 * $8 * ($2 + $1 * $1);
     $0 = $3 + 1 | 0;
-    loop_1 : while (1) {
+    for_loop_1 : while (1) {
      if ($0 >>> 0 < $7 >>> 0) {
-      $4 = HEAP32[(HEAP32[($5 + 4 | 0) >> 2] + ($0 << 2 | 0) | 0) >> 2];
+      $4 = HEAP32[(($0 << 2 | 0) + $5 | 0) >> 2];
       $6 = $1;
       $1 = $9 - HEAPF64[$4 >> 3];
       $2 = $1 * $1;
@@ -197,14 +181,14 @@ function asmFunc(global, env, buffer) {
       $1 = $11 - HEAPF64[($4 + 16 | 0) >> 3];
       $1 = $6 - $8 * HEAPF64[($4 + 48 | 0) >> 3] / Math_sqrt($2 + $1 * $1);
       $0 = $0 + 1 | 0;
-      continue loop_1;
+      continue for_loop_1;
      }
-     break loop_1;
+     break for_loop_1;
     };
     $3 = $3 + 1 | 0;
-    continue loop_0;
+    continue for_loop_0;
    }
-   break loop_0;
+   break for_loop_0;
   };
   return $1;
  }
@@ -217,13 +201,13 @@ function asmFunc(global, env, buffer) {
  function assembly_index_bench($0) {
   $0 = $0 | 0;
   var $1 = 0;
-  loop_0 : while (1) {
+  for_loop_0 : while (1) {
    if ($1 >>> 0 < $0 >>> 0) {
     assembly_index_NBodySystem_advance(assembly_index_system);
     $1 = $1 + 1 | 0;
-    continue loop_0;
+    continue for_loop_0;
    }
-   break loop_0;
+   break for_loop_0;
   };
  }
  
@@ -231,15 +215,15 @@ function asmFunc(global, env, buffer) {
   $0 = $0 | 0;
   var $1 = 0;
   $1 = HEAP32[assembly_index_system >> 2];
-  if ($0 >>> 0 < HEAP32[($1 + 12 | 0) >> 2] >>> 0) {
-   $0 = HEAP32[(HEAP32[($1 + 4 | 0) >> 2] + ($0 << 2 | 0) | 0) >> 2]
+  if ($0 >>> 0 < (HEAP32[(($1 - 16 | 0) + 12 | 0) >> 2] >>> 2 | 0) >>> 0) {
+   $0 = HEAP32[(($0 << 2 | 0) + $1 | 0) >> 2]
   } else {
    $0 = 0
   }
   return $0 | 0;
  }
  
- function start() {
+ function $start() {
   $lib_rt_stub_startOffset = 16;
   $lib_rt_stub_offset = 16;
  }

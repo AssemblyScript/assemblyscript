@@ -1,3 +1,8 @@
+/**
+ * @fileoverview File finding utility.
+ * @license Apache-2.0
+ */
+
 const fs = require("fs");
 const path = require("path");
 
@@ -16,4 +21,4 @@ function findFiles(dirname, filter) {
 exports.files = findFiles;
 
 exports.TS = /\.ts$/;
-exports.TS_EXCEPT_DTS = /[^\.][^\d]\.ts$/;
+exports.TS_EXCEPT_DTS = /(?:(?!\.d).{2}|^.{0,1})\.ts$/;

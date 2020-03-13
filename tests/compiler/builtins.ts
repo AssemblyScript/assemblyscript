@@ -24,20 +24,20 @@ assert(isInteger(<i32>1));
 assert(!isInteger(<f32>1));
 assert(isFloat(<f32>1));
 assert(!isFloat(<i32>1));
-assert(isReference(changetype<string>(null)));
-assert(!isReference(changetype<usize>(null)));
+assert(isReference(changetype<string>(0)));
+assert(!isReference(changetype<usize>(0)));
 assert(isString(""));
 assert(isString("abc"));
 assert(!isString(1));
-assert(isArray(changetype<i32[]>(null)));
-assert(isArrayLike(changetype<i32[]>(null)));
-assert(isArrayLike(changetype<string>(null)));
-assert(isArrayLike(changetype<Uint8Array>(null)));
-assert(!isArray(changetype<usize>(null)));
-assert(isFunction(changetype<() => void>(null)));
-assert(!isFunction(changetype<u32>(null)));
-assert(isNullable(changetype<C | null>(null)));
-assert(!isNullable(changetype<C>(null)));
+assert(isArray(changetype<i32[]>(0)));
+assert(isArrayLike(changetype<i32[]>(0)));
+assert(isArrayLike(changetype<string>(0)));
+assert(isArrayLike(changetype<Uint8Array>(0)));
+assert(!isArray(changetype<usize>(0)));
+assert(isFunction(changetype<() => void>(0)));
+assert(!isFunction(changetype<u32>(0)));
+assert(isNullable(changetype<C | null>(0)));
+assert(!isNullable(changetype<C>(0)));
 
 // evaluation
 
