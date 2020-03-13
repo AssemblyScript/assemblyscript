@@ -46,7 +46,7 @@
  (func $start:function-expression~anonymous|5 (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $start:function-expression (; 9 ;)
+ (func $~start (; 9 ;)
   i32.const 1
   global.set $~argumentsLength
   i32.const 1
@@ -93,25 +93,9 @@
   end
   i32.const 2
   global.set $~argumentsLength
-  i32.const 1
-  i32.const 2
-  call $start:function-expression~anonymous|3
-  i32.const 3
-  i32.ne
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 34
-   i32.const 0
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 2
   global.set $~argumentsLength
   i32.const 2
   global.set $~argumentsLength
- )
- (func $~start (; 10 ;)
-  call $start:function-expression
  )
 )

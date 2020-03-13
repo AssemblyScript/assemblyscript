@@ -28,29 +28,35 @@
   local.get $0
   global.set $~argumentsLength
  )
- (func $~lib/array/Array<f32>#reduce<bool> (; 2 ;)
+ (func $infer-generic/test1 (; 2 ;) (param $0 f32) (result f32)
+  local.get $0
+ )
+ (func $infer-generic/test2 (; 3 ;) (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $~start (; 4 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 124
   i32.load
-  local.set $1
+  local.set $2
   loop $for-loop|0
    local.get $0
-   local.get $1
+   local.get $2
    i32.const 124
    i32.load
-   local.tee $2
-   local.get $1
+   local.tee $3
    local.get $2
+   local.get $3
    i32.lt_s
    select
    i32.lt_s
    if
     i32.const 4
     global.set $~argumentsLength
-    local.get $3
+    local.get $1
     i32.const 116
     i32.load
     local.get $0
@@ -61,7 +67,7 @@
     local.get $0
     i32.const 112
     call $start:infer-generic~anonymous|0
-    local.set $3
+    local.set $1
     local.get $0
     i32.const 1
     i32.add
@@ -69,14 +75,5 @@
     br $for-loop|0
    end
   end
- )
- (func $infer-generic/test1 (; 3 ;) (param $0 f32) (result f32)
-  local.get $0
- )
- (func $infer-generic/test2 (; 4 ;) (param $0 i32) (result i32)
-  local.get $0
- )
- (func $~start (; 5 ;)
-  call $~lib/array/Array<f32>#reduce<bool>
  )
 )
