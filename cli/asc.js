@@ -684,7 +684,7 @@ exports.main = function main(argv, options, callback) {
       module.setFlexibleInlineMaxSize(70);
       module.setOneCallerInlineMaxSize(200);
     } else {
-      shrinkLevel >= 2
+      optimizeLevel === 0 && shrinkLevel >= 0
         ? module.setAlwaysInlineMaxSize(2)
         : module.setAlwaysInlineMaxSize(4);  // default:  2
       module.setFlexibleInlineMaxSize(65);   // default: 20
