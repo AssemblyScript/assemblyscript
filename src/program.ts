@@ -3751,25 +3751,37 @@ export class Class extends TypedElement {
   getArrayValueType(): Type {
     var current: Class = this;
     var program = this.program;
+    var arrayPrototype = program.arrayPrototype;
+    if (this.extends(arrayPrototype)) {
+      return this.getTypeArgumentsTo(arrayPrototype)![0];
+    }
     var abvInstance = program.arrayBufferViewInstance;
     while (current.base !== abvInstance) {
       current = assert(current.base);
     }
     var prototype = current.prototype;
-    if (prototype == program.arrayPrototype) {
-      return this.getTypeArgumentsTo(program.arrayPrototype)![0];
+    switch (prototype.name.charCodeAt(0)) {
+      case CharCode.F: {
+        if (prototype == program.f32ArrayPrototype) return Type.f32;
+        if (prototype == program.f64ArrayPrototype) return Type.f64;
+        break;
+      }
+      case CharCode.I: {
+        if (prototype == program.i8ArrayPrototype) return Type.i8;
+        if (prototype == program.i16ArrayPrototype) return Type.i16;
+        if (prototype == program.i32ArrayPrototype) return Type.i32;
+        if (prototype == program.i64ArrayPrototype) return Type.i64;
+        break;
+      }
+      case CharCode.U: {
+        if (prototype == program.u8ArrayPrototype) return Type.u8;
+        if (prototype == program.u8ClampedArrayPrototype) return Type.u8;
+        if (prototype == program.u16ArrayPrototype) return Type.u16;
+        if (prototype == program.u32ArrayPrototype) return Type.u32;
+        if (prototype == program.u64ArrayPrototype) return Type.u64;
+        break;
+      }
     }
-    if (prototype == program.i8ArrayPrototype) return Type.i8;
-    if (prototype == program.i16ArrayPrototype) return Type.i16;
-    if (prototype == program.i32ArrayPrototype) return Type.i32;
-    if (prototype == program.i64ArrayPrototype) return Type.i64;
-    if (prototype == program.u8ArrayPrototype) return Type.u8;
-    if (prototype == program.u8ClampedArrayPrototype) return Type.u8;
-    if (prototype == program.u16ArrayPrototype) return Type.u16;
-    if (prototype == program.u32ArrayPrototype) return Type.u32;
-    if (prototype == program.u64ArrayPrototype) return Type.u64;
-    if (prototype == program.f32ArrayPrototype) return Type.f32;
-    if (prototype == program.f64ArrayPrototype) return Type.f64;
     assert(false);
     return Type.void;
   }

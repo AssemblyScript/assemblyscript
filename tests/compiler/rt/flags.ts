@@ -29,19 +29,19 @@ class Ref {}
 const VALUE_ALIGN_REF = sizeof<usize>() == 4 ? TypeinfoFlags.VALUE_ALIGN_2 : TypeinfoFlags.VALUE_ALIGN_3;
 const KEY_ALIGN_REF = sizeof<usize>() == 4 ? TypeinfoFlags.KEY_ALIGN_2 : TypeinfoFlags.KEY_ALIGN_3;
 
-test<Array<i8>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
-test<Array<u8>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0);
-test<Array<i16>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_1 | TypeinfoFlags.VALUE_SIGNED);
-test<Array<u16>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_1);
-test<Array<i32>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED);
-test<Array<u32>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2);
-test<Array<i64>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3 | TypeinfoFlags.VALUE_SIGNED);
-test<Array<u64>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3);
-test<Array<f32>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED | TypeinfoFlags.VALUE_FLOAT);
-test<Array<f64>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3 | TypeinfoFlags.VALUE_SIGNED | TypeinfoFlags.VALUE_FLOAT);
-test<Array<v128>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_4);
-test<Array<Ref>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_MANAGED);
-test<Array<Ref | null>>(TypeinfoFlags.ARRAYBUFFERVIEW | TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED);
+test<Array<i8>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
+test<Array<u8>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0);
+test<Array<i16>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_1 | TypeinfoFlags.VALUE_SIGNED);
+test<Array<u16>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_1);
+test<Array<i32>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED);
+test<Array<u32>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2);
+test<Array<i64>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3 | TypeinfoFlags.VALUE_SIGNED);
+test<Array<u64>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3);
+test<Array<f32>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_2 | TypeinfoFlags.VALUE_SIGNED | TypeinfoFlags.VALUE_FLOAT);
+test<Array<f64>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_3 | TypeinfoFlags.VALUE_SIGNED | TypeinfoFlags.VALUE_FLOAT);
+test<Array<v128>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_4);
+test<Array<Ref>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_MANAGED);
+test<Array<Ref | null>>(TypeinfoFlags.ARRAY | TypeinfoFlags.ACYCLIC | VALUE_ALIGN_REF | TypeinfoFlags.VALUE_NULLABLE | TypeinfoFlags.VALUE_MANAGED);
 
 test<Set<i8>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0 | TypeinfoFlags.VALUE_SIGNED);
 test<Set<u8>>(TypeinfoFlags.SET | TypeinfoFlags.ACYCLIC | TypeinfoFlags.VALUE_ALIGN_0);
