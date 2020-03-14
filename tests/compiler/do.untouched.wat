@@ -2,8 +2,8 @@
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
@@ -21,6 +21,7 @@
  (table $0 1 funcref)
  (global $do/ran (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~started (mut i32) (i32.const 0))
@@ -247,7 +248,26 @@
   i32.const 1
   global.set $do/ran
  )
- (func $do/testAlwaysFalse (; 9 ;)
+ (func $do/testAlwaysTrueNeverBreaks (; 9 ;) (result i32)
+  (local $0 i32)
+  i32.const 0
+  local.set $0
+  loop $do-continue|0
+   local.get $0
+   i32.const 1
+   i32.add
+   local.tee $0
+   i32.const 10
+   i32.eq
+   if
+    local.get $0
+    return
+   end
+   br $do-continue|0
+  end
+  unreachable
+ )
+ (func $do/testAlwaysFalse (; 10 ;)
   (local $0 i32)
   i32.const 0
   local.set $0
@@ -264,7 +284,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 68
+   i32.const 77
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -272,7 +292,7 @@
   i32.const 1
   global.set $do/ran
  )
- (func $do/testAlwaysBreaks (; 10 ;)
+ (func $do/testAlwaysBreaks (; 11 ;)
   (local $0 i32)
   i32.const 0
   local.set $0
@@ -293,7 +313,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 81
+   i32.const 90
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -301,7 +321,7 @@
   i32.const 1
   global.set $do/ran
  )
- (func $do/testAlwaysReturns (; 11 ;)
+ (func $do/testAlwaysReturns (; 12 ;)
   (local $0 i32)
   i32.const 0
   local.set $0
@@ -316,7 +336,7 @@
   end
   unreachable
  )
- (func $do/testContinue (; 12 ;)
+ (func $do/testContinue (; 13 ;)
   (local $0 i32)
   i32.const 0
   local.set $0
@@ -342,7 +362,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 107
+   i32.const 116
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -350,7 +370,7 @@
   i32.const 1
   global.set $do/ran
  )
- (func $do/testNestedContinue (; 13 ;)
+ (func $do/testNestedContinue (; 14 ;)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -396,7 +416,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 125
+   i32.const 134
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -408,7 +428,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 126
+   i32.const 135
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -416,7 +436,7 @@
   i32.const 1
   global.set $do/ran
  )
- (func $~lib/rt/tlsf/removeBlock (; 14 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (; 15 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -626,7 +646,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 15 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (; 16 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -976,7 +996,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1124,7 +1144,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 17 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (; 18 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1145,7 +1165,9 @@
    global.get $~lib/heap/__heap_base
    i32.const 15
    i32.add
-   i32.const -16
+   i32.const 15
+   i32.const -1
+   i32.xor
    i32.and
    local.set $1
    memory.size
@@ -1254,7 +1276,6 @@
      br $for-loop|0
     end
    end
-   local.get $0
    local.get $1
    i32.const 1572
    i32.add
@@ -1264,6 +1285,9 @@
    i32.const -1
    i32.xor
    i32.and
+   local.set $5
+   local.get $0
+   local.get $5
    memory.size
    i32.const 16
    i32.shl
@@ -1274,7 +1298,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 18 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (; 19 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1283,7 +1307,7 @@
   if
    i32.const 112
    i32.const 64
-   i32.const 457
+   i32.const 461
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1303,7 +1327,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1486,7 +1510,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/tlsf/growMemory (; 20 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (; 21 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1570,7 +1594,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (; 22 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1665,7 +1689,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 22 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (; 23 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1674,7 +1698,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 490
+   i32.const 501
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1715,7 +1739,7 @@
      if
       i32.const 0
       i32.const 64
-      i32.const 502
+      i32.const 513
       i32.const 19
       call $~lib/builtins/abort
       unreachable
@@ -1734,7 +1758,7 @@
     if
      i32.const 0
      i32.const 64
-     i32.const 507
+     i32.const 518
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1751,7 +1775,7 @@
   if
    i32.const 0
    i32.const 64
-   i32.const 510
+   i32.const 521
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1776,7 +1800,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $4
  )
- (func $~lib/rt/tlsf/__alloc (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1784,7 +1808,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/increment (; 24 ;) (param $0 i32)
+ (func $~lib/rt/pure/increment (; 25 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1829,7 +1853,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 25 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (; 26 ;) (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -1841,7 +1865,7 @@
   end
   local.get $0
  )
- (func $do/Ref#constructor (; 26 ;) (param $0 i32) (result i32)
+ (func $do/Ref#constructor (; 27 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1853,7 +1877,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/pure/__release (; 27 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (; 28 ;) (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -1864,7 +1888,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $do/testRef (; 28 ;)
+ (func $do/testRef (; 29 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1917,7 +1941,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 141
+   i32.const 150
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1928,7 +1952,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 142
+   i32.const 151
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -1938,11 +1962,11 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $do/getRef (; 29 ;) (result i32)
+ (func $do/getRef (; 30 ;) (result i32)
   i32.const 0
   call $do/Ref#constructor
  )
- (func $do/testRefAutorelease (; 30 ;)
+ (func $do/testRefAutorelease (; 31 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1993,7 +2017,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 161
+   i32.const 170
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2004,7 +2028,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 162
+   i32.const 171
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -2014,7 +2038,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $start:do (; 31 ;)
+ (func $start:do (; 32 ;)
   i32.const 0
   global.set $do/ran
   call $do/testSimple
@@ -2067,6 +2091,18 @@
    call $~lib/builtins/abort
    unreachable
   end
+  call $do/testAlwaysTrueNeverBreaks
+  i32.const 10
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 70
+   i32.const 0
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
   global.set $do/ran
   call $do/testAlwaysFalse
@@ -2075,7 +2111,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 73
+   i32.const 82
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -2088,7 +2124,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 86
+   i32.const 95
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -2101,7 +2137,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 99
+   i32.const 108
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -2114,7 +2150,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 112
+   i32.const 121
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -2127,7 +2163,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 131
+   i32.const 140
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -2140,7 +2176,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 147
+   i32.const 156
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -2153,13 +2189,13 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 167
+   i32.const 176
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~start (; 32 ;)
+ (func $~start (; 33 ;)
   global.get $~started
   if
    return
@@ -2169,10 +2205,10 @@
   end
   call $start:do
  )
- (func $~lib/rt/pure/__collect (; 33 ;)
+ (func $~lib/rt/pure/__collect (; 34 ;)
   return
  )
- (func $~lib/rt/tlsf/freeBlock (; 34 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (; 35 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -2188,7 +2224,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/pure/decrement (; 35 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 36 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2265,7 +2301,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 36 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 37 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -2289,7 +2325,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 37 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 38 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4

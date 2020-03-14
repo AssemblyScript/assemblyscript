@@ -1,7 +1,7 @@
 /**
- * Definitions for custom compiler transforms that can be applied with the `--transform` option.
- * @module cli/transform
- *//***/
+ * @fileoverview Compiler transform interface definitions.
+ * @license Apache-2.0
+ */
 
 import { Program, Parser, Module } from "..";
 import { OutputStream } from "./asc";
@@ -34,6 +34,9 @@ export abstract class Transform {
 
   /** Called when parsing is complete, before a program is instantiated from the AST. */
   afterParse?(parser: Parser): void;
+
+  /** Called after the program is instantiated. */
+  afterInitialize?(program: Program): void;
 
   /** Called when compilation is complete, before the module is being validated. */
   afterCompile?(module: Module): void;

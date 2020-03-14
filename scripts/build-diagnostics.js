@@ -2,13 +2,16 @@ var fs = require("fs");
 
 var messages = require(__dirname + "/../src/diagnosticMessages.json");
 
-var sb = [
-  "/**\n",
-  " * Generated from diagnosticsMessages.json. Do not edit.\n",
-  " * @module diagnostics\n",
-  " *//***/\n\n",
-  "/* tslint:disable:max-line-length */\n\n"
-];
+var header = `/**
+ * @fileoverview Generated from diagnosticsMessages.json. Do not edit.
+ * @license Apache-2.0
+ */
+
+/* tslint:disable:max-line-length */
+
+`.replace(/\r\n/g, "\n");
+
+var sb = [ header ];
 
 function makeKey(text) {
   return text.replace(/[^\w]+/g, "_").replace(/_+$/, "");

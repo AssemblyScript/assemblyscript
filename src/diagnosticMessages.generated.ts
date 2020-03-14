@@ -1,7 +1,7 @@
 /**
- * Generated from diagnosticsMessages.json. Do not edit.
- * @module diagnostics
- *//***/
+ * @fileoverview Generated from diagnosticsMessages.json. Do not edit.
+ * @license Apache-2.0
+ */
 
 /* tslint:disable:max-line-length */
 
@@ -11,6 +11,8 @@ export enum DiagnosticCode {
   Operation_is_unsafe = 101,
   User_defined_0 = 102,
   Feature_0_is_not_enabled = 103,
+  Function_0_is_possibly_called_virtually_which_is_not_yet_supported = 104,
+  Low_memory_limit_exceeded_by_static_data_0_1 = 105,
   Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
@@ -93,6 +95,7 @@ export enum DiagnosticCode {
   Binary_digit_expected = 1177,
   Octal_digit_expected = 1178,
   An_implementation_cannot_be_declared_in_ambient_contexts = 1183,
+  The_variable_declaration_of_a_for_of_statement_cannot_have_an_initializer = 1190,
   An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive = 1198,
   Unterminated_Unicode_escape_sequence = 1199,
   Decorators_are_not_valid_here = 1206,
@@ -162,6 +165,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 101: return "Operation is unsafe.";
     case 102: return "User-defined: {0}";
     case 103: return "Feature '{0}' is not enabled.";
+    case 104: return "Function '{0}' is possibly called virtually, which is not yet supported.";
+    case 105: return "Low memory limit exceeded by static data: {0} > {1}";
     case 200: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";
@@ -244,6 +249,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 1177: return "Binary digit expected.";
     case 1178: return "Octal digit expected.";
     case 1183: return "An implementation cannot be declared in ambient contexts.";
+    case 1190: return "The variable declaration of a 'for...of' statement cannot have an initializer.";
     case 1198: return "An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.";
     case 1199: return "Unterminated Unicode escape sequence.";
     case 1206: return "Decorators are not valid here.";

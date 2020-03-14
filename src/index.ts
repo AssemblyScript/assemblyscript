@@ -1,7 +1,37 @@
 /**
- * Low-level C-like compiler API.
- * @module index
- *//***/
+ * @license
+ * Copyright 2020 Daniel Wirtz / The AssemblyScript Authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The C-like and re-exported public compiler interface.
+ *
+ * The intended way to consume the compiler sources is to import this
+ * file, which again exports all relevant functions, classes and constants
+ * as a flat namespace.
+ *
+ * Note though that the compiler sources are written in "portable
+ * AssemblyScript" that can be compiled to both JavaScript with tsc and
+ * to WebAssembly with asc, and as such require additional glue code
+ * depending on the target.
+ *
+ * When compiling to JavaScript `glue/js/index.js` must be included.
+ * When compiling to WebAssembly `glue/wasm/index.ts` must be included.
+ */
 
 import { Target, Feature } from "./common";
 import { Compiler, Options } from "./compiler";
@@ -79,6 +109,11 @@ export function setNoUnsafe(options: Options, noUnsafe: bool): void {
   options.noUnsafe = noUnsafe;
 }
 
+/** Sets the `lowMemoryLimit` option. */
+export function setLowMemoryLimit(options: Options, lowMemoryLimit: i32): void {
+  options.lowMemoryLimit = lowMemoryLimit;
+}
+
 /** Sign extension operations. */
 export const FEATURE_SIGN_EXTENSION = Feature.SIGN_EXTENSION;
 /** Mutable global imports and exports. */
@@ -97,6 +132,8 @@ export const FEATURE_EXCEPTION_HANDLING = Feature.EXCEPTION_HANDLING;
 export const FEATURE_TAIL_CALLS = Feature.TAIL_CALLS;
 /** Reference types. */
 export const FEATURE_REFERENCE_TYPES = Feature.REFERENCE_TYPES;
+/** Multi value types. */
+export const FEATURE_MULTI_VALUE = Feature.MULTI_VALUE;
 
 /** Enables a specific feature. */
 export function enableFeature(options: Options, feature: Feature): void {
@@ -184,6 +221,11 @@ export function getDependee(program: Program, file: string): string | null {
 
 // Compiler
 
+/** Initializes the program pre-emptively for transform hooks. */
+export function initializeProgram(program: Program, options: Options): void {
+  program.initialize(options);
+}
+
 /** Compiles the parsed sources to a module. */
 export function compile(program: Program): Module {
   program.parser.finish();
@@ -204,20 +246,26 @@ export function buildTSD(program: Program): string {
 export function buildRTTI(program: Program): string {
   var sb = new Array<string>();
   sb.push("{\n  \"names\": [\n");
-  for (let cls of program.managedClasses.values()) {
+  // TODO: for (let cls of program.managedClasses.values()) {
+  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
+    let cls = unchecked(_values[i]);
     sb.push("    \"");
     sb.push(cls.internalName);
     sb.push("\",\n");
   }
   sb.push("  ],\n  \"base\": [\n");
-  for (let cls of program.managedClasses.values()) {
+  // TODO: for (let cls of program.managedClasses.values()) {
+  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
+    let cls = unchecked(_values[i]);
     let base = cls.base;
     sb.push("    ");
     sb.push(base ? base.id.toString() : "0");
     sb.push(",\n");
   }
   sb.push("  ],\n  \"flags\": [\n");
-  for (let cls of program.managedClasses.values()) {
+  // TODO: for (let cls of program.managedClasses.values()) {
+  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
+    let cls = unchecked(_values[i]);
     sb.push("    ");
     sb.push(cls.rttiFlags.toString());
     sb.push(",\n");
@@ -226,15 +274,11 @@ export function buildRTTI(program: Program): string {
   return sb.join("");
 }
 
-/** Prefix indicating a library file. */
-export { LIBRARY_PREFIX } from "./common";
-
 // Full API
 export * from "./ast";
 export * from "./common";
 export * from "./compiler";
 export * from "./definitions";
-export * from "./diagnosticMessages.generated";
 export * from "./diagnostics";
 export * from "./flow";
 export * from "./module";
@@ -243,4 +287,8 @@ export * from "./program";
 export * from "./resolver";
 export * from "./tokenizer";
 export * from "./types";
+import * as util from "./util/index";
+export { util };
+
+// TODO: compat with 0.9, remove with 0.10
 export * from "./util/index";

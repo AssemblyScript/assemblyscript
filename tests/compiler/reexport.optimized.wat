@@ -17,7 +17,14 @@
  (export "renamed_add" (func $export/add))
  (export "rerenamed_sub" (func $export/mul))
  (export "renamed_ns.two" (func $export/ns.one))
- (start $~start)
+ (export "exportstar.add" (func $export/add))
+ (export "exportstar.sub" (func $export/sub))
+ (export "exportstar.renamed_mul" (func $export/mul))
+ (export "exportstar.a" (global $export/a))
+ (export "exportstar.b" (global $export/b))
+ (export "exportstar.renamed_c" (global $export/c))
+ (export "exportstar.ns.two" (func $export/ns.one))
+ (export "exportstar.default.two" (func $export/ns.one))
  (func $export/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
@@ -35,15 +42,5 @@
  )
  (func $export/ns.one (; 3 ;)
   nop
- )
- (func $~start (; 4 ;)
-  i32.const 1
-  i32.const 2
-  call $export/add
-  i32.const 3
-  i32.const 4
-  call $export/mul
-  i32.add
-  drop
  )
 )

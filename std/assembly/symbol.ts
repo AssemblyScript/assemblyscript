@@ -88,7 +88,7 @@ var nextId: usize = 12; // Symbol.unscopables + 1
   toString(): string {
     var id = changetype<usize>(this);
     var str = "";
-    switch (id) {
+    switch (<u32>id) {
       case 1:  { str = "hasInstance"; break; }
       case 2:  { str = "isConcatSpreadable"; break; }
       case 3:  { str = "isRegExp"; break; }

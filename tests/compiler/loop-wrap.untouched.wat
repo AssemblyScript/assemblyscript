@@ -37,8 +37,16 @@
   (local $1 i32)
   i32.const 0
   local.set $0
-  block $while-break|1
-   loop $while-continue|1
+  block $do-break|1
+   loop $do-continue|1
+    local.get $0
+    i32.const 255
+    i32.and
+    i32.const 10
+    i32.eq
+    if
+     br $do-break|1
+    end
     local.get $0
     i32.const 1
     i32.add
@@ -47,17 +55,7 @@
     i32.and
     local.set $1
     local.get $1
-    if
-     local.get $0
-     i32.const 255
-     i32.and
-     i32.const 10
-     i32.eq
-     if
-      br $while-break|1
-     end
-     br $while-continue|1
-    end
+    br_if $do-continue|1
    end
   end
  )

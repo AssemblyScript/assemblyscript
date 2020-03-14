@@ -122,7 +122,7 @@
   if
    i32.const 96
    i32.const 160
-   i32.const 96
+   i32.const 107
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -138,7 +138,7 @@
    call $~lib/rt/stub/__release
    i32.const 208
    i32.const 160
-   i32.const 100
+   i32.const 111
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -188,7 +188,7 @@
   if
    i32.const 96
    i32.const 160
-   i32.const 96
+   i32.const 107
    i32.const 41
    call $~lib/builtins/abort
    unreachable

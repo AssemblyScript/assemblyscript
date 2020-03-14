@@ -1,3 +1,8 @@
+/**
+ * @fileoverview 64-bit integer glue code for JavaScript.
+ * @license Apache-2.0
+ */
+
 const Long = global.Long || require("long");
 
 global.i64_zero = Long.ZERO;
@@ -80,6 +85,10 @@ global.i64_ne = function(left, right) {
   return left.ne(right);
 };
 
+global.i64_gt = function(left, right) {
+  return left.gt(right);
+};
+
 global.i64_align = function(value, alignment) {
   assert(alignment && (alignment & (alignment - 1)) == 0);
   var mask = Long.fromInt(alignment - 1);
@@ -140,5 +149,5 @@ global.i64_to_f64 = function(value) {
 };
 
 global.i64_to_string = function(value, unsigned) {
-  return (unsigned ? value.toUnsigned() : value).toString(10);
+  return (unsigned ? value.toUnsigned() : value).toString();
 };
