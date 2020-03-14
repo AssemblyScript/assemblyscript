@@ -3185,9 +3185,15 @@
     i32.load offset=12
     i32.ge_u
     if
+<<<<<<< HEAD
      i32.const 368
      i32.const 528
      i32.const 93
+=======
+     i32.const 1376
+     i32.const 1536
+     i32.const 104
+>>>>>>> master
      i32.const 41
      call $~lib/builtins/abort
      unreachable
@@ -3383,9 +3389,15 @@
   i32.load offset=12
   i32.ge_u
   if
+<<<<<<< HEAD
    i32.const 368
    i32.const 528
    i32.const 93
+=======
+   i32.const 1376
+   i32.const 1536
+   i32.const 104
+>>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -32123,21 +32135,32 @@
   i32.eq
   if
    block $__inlined_func$~lib/rt/__visit_members
-    block $block$4$break
+    block $folding-inner0
      block $switch$1$default
-      local.get $0
-      i32.const 16
-      i32.add
-      local.tee $1
-      i32.const 8
-      i32.sub
+      block $switch$1$case$4
+       local.get $0
+       i32.const 16
+       i32.add
+       local.tee $1
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $folding-inner0 $folding-inner0 $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $switch$1$default
+      end
+      local.get $1
       i32.load
-      br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
+      local.tee $1
+      if
+       local.get $1
+       call $~lib/rt/pure/__visit
+      end
+      br $__inlined_func$~lib/rt/__visit_members
      end
      unreachable
     end
     local.get $1
     i32.load
+<<<<<<< HEAD
     local.tee $1
     if
      local.get $1
@@ -32150,6 +32173,9 @@
       call $~lib/rt/pure/decrement
      end
     end
+=======
+    call $~lib/rt/pure/__visit
+>>>>>>> master
    end
    local.get $2
    i32.const -2147483648
@@ -32187,5 +32213,17 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~lib/rt/pure/__visit (; 343 ;) (param $0 i32)
+  local.get $0
+  i32.const 8396
+  i32.lt_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 16
+  i32.sub
+  call $~lib/rt/pure/decrement
  )
 )

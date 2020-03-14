@@ -5444,9 +5444,15 @@
   i32.load offset=12
   i32.ge_u
   if
+<<<<<<< HEAD
    i32.const 12208
    i32.const 12160
    i32.const 93
+=======
+   i32.const 13216
+   i32.const 13168
+   i32.const 104
+>>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -5464,9 +5470,15 @@
   if
    local.get $0
    call $~lib/rt/pure/__release
+<<<<<<< HEAD
    i32.const 12272
    i32.const 12160
    i32.const 97
+=======
+   i32.const 13280
+   i32.const 13168
+   i32.const 108
+>>>>>>> master
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -14289,57 +14301,67 @@
   i32.eq
   if
    block $__inlined_func$~lib/rt/__visit_members
-    block $block$4$break
-     block $switch$1$default
+    block $switch$1$default
+     block $switch$1$case$7
       block $switch$1$case$6
-       local.get $0
-       i32.const 16
-       i32.add
-       local.tee $2
-       i32.const 8
-       i32.sub
+       block $switch$1$case$4
+        local.get $0
+        i32.const 16
+        i32.add
+        local.tee $1
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$case$6 $switch$1$case$7 $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$default
+       end
+       local.get $1
        i32.load
-       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $block$4$break $__inlined_func$~lib/rt/__visit_members $switch$1$case$6 $block$4$break $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$default
+       local.tee $1
+       if
+        local.get $1
+        call $~lib/rt/pure/__visit
+       end
+       br $__inlined_func$~lib/rt/__visit_members
       end
-      local.get $2
+      local.get $1
       i32.load offset=4
-      local.tee $1
-      local.get $2
+      local.tee $2
+      local.get $1
       i32.load offset=12
       i32.const 2
       i32.shl
       i32.add
       local.set $4
       loop $while-continue|0
-       local.get $1
+       local.get $2
        local.get $4
        i32.lt_u
        if
-        local.get $1
+        local.get $2
         i32.load
         local.tee $5
         if
          local.get $5
          call $~lib/rt/pure/__visit
         end
-        local.get $1
+        local.get $2
         i32.const 4
         i32.add
-        local.set $1
+        local.set $2
         br $while-continue|0
        end
       end
-      br $block$4$break
+      local.get $1
+      i32.load
+      call $~lib/rt/pure/__visit
+      br $__inlined_func$~lib/rt/__visit_members
      end
-     unreachable
-    end
-    local.get $2
-    i32.load
-    local.tee $1
-    if
      local.get $1
+     i32.load
      call $~lib/rt/pure/__visit
+     br $__inlined_func$~lib/rt/__visit_members
     end
+    unreachable
    end
    local.get $3
    i32.const -2147483648

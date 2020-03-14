@@ -3,8 +3,13 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 1)
+<<<<<<< HEAD
  (data (i32.const 16) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
  (data (i32.const 64) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
+=======
+ (data (i32.const 1024) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
+ (data (i32.const 1072) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+>>>>>>> master
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -123,23 +128,14 @@
   i32.const 4
   i32.const 4
   call $~lib/rt/stub/__alloc
-  i32.const 16
-  i32.const 5
-  call $~lib/rt/stub/__alloc
-  local.set $0
   i32.const 0
   i32.const 0
   call $~lib/rt/stub/__alloc
   local.set $1
-  local.get $0
-  i32.eqz
-  if
-   i32.const 12
-   i32.const 2
-   call $~lib/rt/stub/__alloc
-   local.set $0
-  end
-  local.get $0
+  i32.const 16
+  i32.const 5
+  call $~lib/rt/stub/__alloc
+  local.tee $0
   i32.const 0
   i32.store
   local.get $0
@@ -148,6 +144,9 @@
   local.get $0
   i32.const 0
   i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
   local.get $0
   i32.load
   drop
@@ -164,15 +163,18 @@
   i32.const 0
   i32.store offset=12
   local.get $0
-  i32.const 0
-  i32.store offset=12
-  local.get $0
   i32.store
  )
  (func $~start (; 3 ;)
+<<<<<<< HEAD
   i32.const 128
   global.set $~lib/rt/stub/startOffset
   i32.const 128
+=======
+  i32.const 1120
+  global.set $~lib/rt/stub/startOffset
+  i32.const 1120
+>>>>>>> master
   global.set $~lib/rt/stub/offset
  )
 )
