@@ -10,9 +10,7 @@
  (type $f32_f32_f32_f32_=>_i32 (func (param f32 f32 f32 f32) (result i32)))
  (type $f64_f64_f64_f64_=>_i32 (func (param f64 f64 f64 f64) (result i32)))
  (type $none_=>_none (func))
- (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
  (type $none_=>_f64 (func (result f64)))
- (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i64_=>_none (func (param i64)))
  (type $i64_i64_i64_i64_i64_=>_none (func (param i64 i64 i64 i64 i64)))
@@ -27,6 +25,7 @@
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
  (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
  (type $f32_f32_f32_=>_f32 (func (param f32 f32 f32) (result f32)))
+ (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (type $f64_f64_i32_=>_f64 (func (param f64 f64 i32) (result f64)))
  (type $f64_f64_f64_=>_f64 (func (param f64 f64 f64) (result f64)))
  (import "Math" "E" (global $~lib/bindings/Math/E f64))
@@ -11293,7 +11292,7 @@
   i32.clz
   f64.convert_i32_s
  )
- (func $~lib/math/ipow64 (; 162 ;) (param $0 i64) (param $1 i32) (result i64)
+ (func $~lib/math/ipow64 (; 162 ;) (param $0 i64) (param $1 i64) (result i64)
   (local $2 i64)
   i64.const 1
   local.set $2
@@ -11326,68 +11325,14 @@
   end
   local.get $2
  )
- (func $~lib/math/ipow32f (; 163 ;) (param $0 f32) (param $1 i32) (result f32)
-  (local $2 f32)
-  (local $3 i32)
-  local.get $1
-  i32.const 31
-  i32.shr_s
-  local.tee $3
-  local.get $1
-  local.get $3
-  i32.add
-  i32.xor
-  local.set $1
-  f32.const 1
+ (func $~lib/math/ipow32 (; 163 ;) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  i32.const 1
   local.set $2
   loop $while-continue|0
    local.get $1
    if
     local.get $0
-    f32.const 1
-    local.get $1
-    i32.const 1
-    i32.and
-    select
-    f32.mul
-    local.set $2
-    local.get $1
-    i32.const 1
-    i32.shr_s
-    local.set $1
-    local.get $0
-    local.get $0
-    f32.mul
-    local.set $0
-    br $while-continue|0
-   end
-  end
-  local.get $3
-  if
-   f32.const 1
-   local.get $2
-   f32.div
-   local.set $2
-  end
-  local.get $2
- )
- (func $~lib/math/ipow64f (; 164 ;) (param $0 f64) (param $1 i32) (result f64)
-  (local $2 f64)
-  (local $3 i32)
-  local.get $1
-  i32.const 31
-  i32.shr_s
-  local.tee $3
-  local.get $1
-  local.get $3
-  i32.add
-  i32.xor
-  local.set $1
-  f64.const 1
-  local.set $2
-  loop $while-continue|0
-   local.get $1
-   if
     local.get $2
     i32.mul
     local.get $2
@@ -11409,7 +11354,7 @@
   end
   local.get $2
  )
- (func $start:std/math (; 165 ;)
+ (func $start:std/math (; 164 ;)
   (local $0 f64)
   (local $1 i32)
   (local $2 i64)
@@ -46662,7 +46607,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 3920
    i32.const 0
    call $~lib/builtins/abort
@@ -46675,7 +46620,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 3921
    i32.const 0
    call $~lib/builtins/abort
@@ -46689,7 +46634,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3920
+   i32.const 3922
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46702,7 +46647,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3921
+   i32.const 3923
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46715,7 +46660,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3922
+   i32.const 3924
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46728,7 +46673,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3923
+   i32.const 3925
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46741,7 +46686,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3924
+   i32.const 3926
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46754,7 +46699,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3925
+   i32.const 3927
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46767,7 +46712,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3926
+   i32.const 3928
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46779,7 +46724,7 @@
   i64.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 3930
    i32.const 0
    call $~lib/builtins/abort
@@ -46792,7 +46737,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 3931
    i32.const 0
    call $~lib/builtins/abort
@@ -46810,7 +46755,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3928
+   i32.const 3933
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46823,7 +46768,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3932
+   i32.const 3939
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46836,7 +46781,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3933
+   i32.const 3940
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46849,7 +46794,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3934
+   i32.const 3941
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46862,7 +46807,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3935
+   i32.const 3942
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46875,7 +46820,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3936
+   i32.const 3943
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46888,7 +46833,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3937
+   i32.const 3944
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46899,7 +46844,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3938
+   i32.const 3946
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46910,7 +46855,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3939
+   i32.const 3947
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46921,7 +46866,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3940
+   i32.const 3950
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46934,7 +46879,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3941
+   i32.const 3952
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46947,7 +46892,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3942
+   i32.const 3953
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46960,7 +46905,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3943
+   i32.const 3956
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46973,7 +46918,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3944
+   i32.const 3958
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46986,7 +46931,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3945
+   i32.const 3959
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -46999,7 +46944,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3946
+   i32.const 3960
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47012,7 +46957,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3947
+   i32.const 3961
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47025,7 +46970,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3951
+   i32.const 3964
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47038,7 +46983,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3952
+   i32.const 3965
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47051,7 +46996,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3953
+   i32.const 3966
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47064,7 +47009,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3954
+   i32.const 3967
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47077,7 +47022,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3955
+   i32.const 3968
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47090,7 +47035,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3956
+   i32.const 3969
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47103,7 +47048,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3957
+   i32.const 3970
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47116,7 +47061,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3958
+   i32.const 3971
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47129,7 +47074,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3959
+   i32.const 3972
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47148,7 +47093,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3960
+   i32.const 3974
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47165,7 +47110,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3961
+   i32.const 3975
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47178,7 +47123,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3962
+   i32.const 3977
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47191,7 +47136,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3963
+   i32.const 3978
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47204,7 +47149,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3964
+   i32.const 3979
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47217,7 +47162,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3965
+   i32.const 3980
    i32.const 0
    call $~lib/builtins/abort
    unreachable
@@ -47230,13 +47175,13 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 3966
+   i32.const 3981
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~start (; 166 ;)
+ (func $~start (; 165 ;)
   call $start:std/math
  )
 )

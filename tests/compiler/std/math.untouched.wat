@@ -10,12 +10,6 @@
  (type $none_=>_f64 (func (result f64)))
  (type $none_=>_none (func))
  (type $f64_=>_i32 (func (param f64) (result i32)))
-<<<<<<< HEAD
- (type $none_=>_f64 (func (result f64)))
-=======
- (type $f32_i32_=>_f32 (func (param f32 i32) (result f32)))
- (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
->>>>>>> master
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i64_=>_none (func (param i64)))
  (type $f64_=>_none (func (param f64)))
@@ -15738,11 +15732,7 @@
   i32.clz
   f64.convert_i32_s
  )
-<<<<<<< HEAD
- (func $~lib/math/ipow64 (; 174 ;) (param $0 i64) (param $1 i64) (result i64)
-=======
- (func $~lib/math/ipow64 (; 175 ;) (param $0 i64) (param $1 i32) (result i64)
->>>>>>> master
+ (func $~lib/math/ipow64 (; 175 ;) (param $0 i64) (param $1 i64) (result i64)
   (local $2 i64)
   (local $3 i32)
   (local $4 i32)
@@ -15987,11 +15977,7 @@
   end
   local.get $2
  )
-<<<<<<< HEAD
- (func $~lib/math/ipow32 (; 175 ;) (param $0 i32) (param $1 i32) (result i32)
-=======
- (func $~lib/math/ipow32f (; 176 ;) (param $0 f32) (param $1 i32) (result f32)
->>>>>>> master
+ (func $~lib/math/ipow32 (; 176 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -16022,29 +16008,6 @@
    i32.or
    return
   else
-<<<<<<< HEAD
-=======
-   local.get $3
-  end
- )
- (func $~lib/math/ipow64f (; 177 ;) (param $0 f64) (param $1 i32) (result f64)
-  (local $2 i32)
-  (local $3 f64)
-  (local $4 i32)
-  local.get $1
-  i32.const 31
-  i32.shr_s
-  local.set $2
-  local.get $1
-  local.get $2
-  i32.add
-  local.get $2
-  i32.xor
-  local.set $1
-  f64.const 1
-  local.set $3
-  loop $while-continue|0
->>>>>>> master
    local.get $1
    i32.const 1
    i32.eq
@@ -16215,11 +16178,7 @@
   end
   local.get $2
  )
-<<<<<<< HEAD
- (func $start:std/math (; 176 ;)
-=======
- (func $start:std/math (; 178 ;)
->>>>>>> master
+ (func $start:std/math (; 177 ;)
   (local $0 f64)
   (local $1 i32)
   (local $2 i32)
@@ -56155,11 +56114,7 @@
    unreachable
   end
  )
-<<<<<<< HEAD
- (func $~start (; 177 ;)
-=======
- (func $~start (; 179 ;)
->>>>>>> master
+ (func $~start (; 178 ;)
   call $start:std/math
  )
 )
