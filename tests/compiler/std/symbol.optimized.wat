@@ -1506,9 +1506,6 @@
   call $~lib/symbol/_Symbol.keyFor
   global.set $std/symbol/key2
   global.get $std/symbol/key1
-  i32.const 0
-  call $~lib/string/String.__eq
-  i32.eqz
   if
    i32.const 0
    i32.const 1072
@@ -1518,9 +1515,6 @@
    unreachable
   end
   global.get $std/symbol/key2
-  i32.const 0
-  call $~lib/string/String.__eq
-  i32.eqz
   if
    i32.const 0
    i32.const 1072

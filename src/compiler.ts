@@ -4147,7 +4147,7 @@ export class Compiler extends DiagnosticEmitter {
         leftType = this.currentType;
 
         // check operator overload
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
+        if (this.currentType.is(TypeFlags.REFERENCE) && left.kind != NodeKind.NULL && right.kind != NodeKind.NULL) {
           let classReference = leftType.classReference;
           if (classReference) {
             let overload = classReference.lookupOverload(OperatorKind.EQ);
@@ -4247,7 +4247,7 @@ export class Compiler extends DiagnosticEmitter {
         leftType = this.currentType;
 
          // check operator overload
-        if (this.currentType.is(TypeFlags.REFERENCE)) {
+        if (this.currentType.is(TypeFlags.REFERENCE) && left.kind != NodeKind.NULL && right.kind != NodeKind.NULL) {
           let classReference = leftType.classReference;
           if (classReference) {
             let overload = classReference.lookupOverload(OperatorKind.NE);

@@ -1,14 +1,13 @@
 (module
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_f64_f64_f64_f64_f64_=>_none (func (param i32 i32 f64 f64 f64 f64 f64)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
- (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i32_i32_f64_=>_i32 (func (param i32 i32 f64) (result i32)))
  (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
@@ -3246,219 +3245,7 @@
   local.get $2
   call $~lib/util/number/dtoa_core
  )
- (func $~lib/util/string/compareImpl (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $2
-  call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $0
-  local.get $1
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $5
-  local.get $2
-  local.get $3
-  i32.const 1
-  i32.shl
-  i32.add
-  local.set $6
-  local.get $4
-  i32.const 4
-  i32.ge_u
-  if (result i32)
-   local.get $5
-   i32.const 7
-   i32.and
-   local.get $6
-   i32.const 7
-   i32.and
-   i32.or
-   i32.eqz
-  else
-   i32.const 0
-  end
-  if
-   block $do-break|0
-    loop $do-continue|0
-     local.get $5
-     i64.load
-     local.get $6
-     i64.load
-     i64.ne
-     if
-      br $do-break|0
-     end
-     local.get $5
-     i32.const 8
-     i32.add
-     local.set $5
-     local.get $6
-     i32.const 8
-     i32.add
-     local.set $6
-     local.get $4
-     i32.const 4
-     i32.sub
-     local.set $4
-     local.get $4
-     i32.const 4
-     i32.ge_u
-     local.set $7
-     local.get $7
-     br_if $do-continue|0
-    end
-   end
-  end
-  loop $while-continue|1
-   local.get $4
-   local.tee $7
-   i32.const 1
-   i32.sub
-   local.set $4
-   local.get $7
-   local.set $7
-   local.get $7
-   if
-    local.get $5
-    i32.load16_u
-    local.set $8
-    local.get $6
-    i32.load16_u
-    local.set $9
-    local.get $8
-    local.get $9
-    i32.ne
-    if
-     local.get $8
-     local.get $9
-     i32.sub
-     local.set $10
-     local.get $0
-     call $~lib/rt/stub/__release
-     local.get $2
-     call $~lib/rt/stub/__release
-     local.get $10
-     return
-    end
-    local.get $5
-    i32.const 2
-    i32.add
-    local.set $5
-    local.get $6
-    i32.const 2
-    i32.add
-    local.set $6
-    br $while-continue|1
-   end
-  end
-  i32.const 0
-  local.set $7
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $7
- )
- (func $~lib/string/String.__eq (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $0
-  local.get $1
-  i32.eq
-  if
-   i32.const 1
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.eqz
-  end
-  if
-   i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
-  local.get $1
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
-  i32.const 0
-  local.get $1
-  i32.const 0
-  local.get $3
-  call $~lib/util/string/compareImpl
-  i32.eqz
-  local.set $2
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
- )
- (func $~lib/string/String.__ne (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
-  local.get $1
-  call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $0
-  local.get $1
-  call $~lib/string/String.__eq
-  i32.eqz
-  local.set $2
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
- )
- (func $~lib/wasi/index/abort (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/wasi/index/abort (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3484,7 +3271,7 @@
   local.set $4
   local.get $0
   i32.const 0
-  call $~lib/string/String.__ne
+  i32.ne
   if
    local.get $4
    local.get $0
@@ -3505,7 +3292,7 @@
   local.set $4
   local.get $1
   i32.const 0
-  call $~lib/string/String.__ne
+  i32.ne
   if
    local.get $4
    local.get $1
@@ -3624,7 +3411,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $~lib/rt/stub/__free (; 21 ;) (param $0 i32)
+ (func $~lib/rt/stub/__free (; 18 ;) (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 0
@@ -3674,7 +3461,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~lib/wasi/index/trace (; 22 ;) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64)
+ (func $~lib/wasi/index/trace (; 19 ;) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64)
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
@@ -3883,7 +3670,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $start:wasi/trace (; 23 ;)
+ (func $start:wasi/trace (; 20 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -3920,7 +3707,7 @@
   f64.neg
   call $~lib/wasi/index/trace
  )
- (func $~start (; 24 ;)
+ (func $~start (; 21 ;)
   global.get $~started
   if
    return

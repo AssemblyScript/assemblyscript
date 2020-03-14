@@ -1614,14 +1614,7 @@
   local.get $1
   call $~lib/util/number/dtoa_core
  )
- (func $~lib/string/String.__ne (; 13 ;) (param $0 i32) (result i32)
-  i32.const 0
-  i32.const 1
-  local.get $0
-  select
-  i32.eqz
- )
- (func $~lib/wasi/index/abort (; 14 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/wasi/index/abort (; 13 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1632,39 +1625,16 @@
   i64.const 9071471065260641
   i64.store
   i32.const 19
-  local.set $3
-  i32.const 0
-  call $~lib/string/String.__ne
-  if
-   i32.const 0
-   i32.const 0
-   call $~lib/string/String#get:length
-   i32.const 19
-   call $~lib/string/String.UTF8.encodeUnsafe
-   i32.const 19
-   i32.add
-   local.set $3
-  end
-  local.get $3
   i32.const 544106784
   i32.store
-  local.get $3
-  i32.const 4
-  i32.add
-  local.set $3
   i32.const 2064
-  call $~lib/string/String.__ne
-  if
-   i32.const 2064
-   i32.const 2064
-   call $~lib/string/String#get:length
-   local.get $3
-   call $~lib/string/String.UTF8.encodeUnsafe
-   local.get $3
-   i32.add
-   local.set $3
-  end
-  local.get $3
+  i32.const 2064
+  call $~lib/string/String#get:length
+  i32.const 23
+  call $~lib/string/String.UTF8.encodeUnsafe
+  i32.const 23
+  i32.add
+  local.tee $3
   i32.const 40
   i32.store8
   local.get $0
@@ -1743,7 +1713,7 @@
   i32.const 255
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
  )
- (func $~lib/wasi/index/trace (; 15 ;) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64)
+ (func $~lib/wasi/index/trace (; 14 ;) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
@@ -1955,7 +1925,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~start (; 16 ;)
+ (func $~start (; 15 ;)
   global.get $~started
   if
    return

@@ -3308,7 +3308,7 @@
   global.set $std/symbol/key2
   global.get $std/symbol/key1
   i32.const 0
-  call $~lib/string/String.__eq
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -3320,7 +3320,7 @@
   end
   global.get $std/symbol/key2
   i32.const 0
-  call $~lib/string/String.__eq
+  i32.eq
   i32.eqz
   if
    i32.const 0

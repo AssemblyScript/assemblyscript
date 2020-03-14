@@ -20,14 +20,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String.__ne (; 3 ;) (param $0 i32) (result i32)
-  i32.const 0
-  i32.const 1
-  local.get $0
-  select
-  i32.eqz
- )
- (func $~lib/string/String.UTF8.encodeUnsafe (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String.UTF8.encodeUnsafe (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -199,7 +192,7 @@
   local.get $2
   i32.sub
  )
- (func $~lib/util/number/decimalCount32 (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 4 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
@@ -241,7 +234,7 @@
   i32.lt_u
   select
  )
- (func $~lib/wasi/index/abort (; 6 ;)
+ (func $~lib/wasi/index/abort (; 5 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -257,40 +250,27 @@
   i32.const 12
   i64.const 9071471065260641
   i64.store
-  i32.const 19
-  local.set $3
   i32.const 1040
-  call $~lib/string/String.__ne
-  if
-   i32.const 1040
-   i32.const 1040
-   call $~lib/string/String#get:length
-   i32.const 19
-   call $~lib/string/String.UTF8.encodeUnsafe
-   i32.const 19
-   i32.add
-   local.set $3
-  end
-  local.get $3
+  i32.const 1040
+  call $~lib/string/String#get:length
+  i32.const 19
+  call $~lib/string/String.UTF8.encodeUnsafe
+  i32.const 19
+  i32.add
+  local.tee $3
   i32.const 544106784
   i32.store
   local.get $3
   i32.const 4
   i32.add
-  local.set $3
+  local.tee $3
   i32.const 1088
-  call $~lib/string/String.__ne
-  if
-   i32.const 1088
-   i32.const 1088
-   call $~lib/string/String#get:length
-   local.get $3
-   call $~lib/string/String.UTF8.encodeUnsafe
-   local.get $3
-   i32.add
-   local.set $3
-  end
+  i32.const 1088
+  call $~lib/string/String#get:length
   local.get $3
+  call $~lib/string/String.UTF8.encodeUnsafe
+  i32.add
+  local.tee $3
   i32.const 40
   i32.store8
   i32.const 4
@@ -369,11 +349,11 @@
   i32.const 255
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
  )
- (func $wasi/abort/test (; 7 ;)
+ (func $wasi/abort/test (; 6 ;)
   call $~lib/wasi/index/abort
   unreachable
  )
- (func $~start (; 8 ;)
+ (func $~start (; 7 ;)
   nop
  )
 )
