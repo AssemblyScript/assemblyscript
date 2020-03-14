@@ -154,6 +154,7 @@ export namespace CommonNames {
   export const ASC_TABLE_BASE = "ASC_TABLE_BASE";
   export const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
   export const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
+  export const ASC_WASI = "ASC_WASI";
   export const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
   export const ASC_FEATURE_MUTABLE_GLOBALS = "ASC_FEATURE_MUTABLE_GLOBALS";
   export const ASC_FEATURE_NONTRAPPING_F2I = "ASC_FEATURE_NONTRAPPING_F2I";
@@ -189,6 +190,8 @@ export namespace CommonNames {
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";
   export const Mathf = "Mathf";
+  export const NativeMath = "NativeMath";
+  export const NativeMathf = "NativeMathf";
   export const Int8Array = "Int8Array";
   export const Int16Array = "Int16Array";
   export const Int32Array = "Int32Array";
@@ -203,6 +206,8 @@ export namespace CommonNames {
   export const Error = "Error";
   // runtime
   export const abort = "abort";
+  export const trace = "trace";
+  export const seed = "seed";
   export const pow = "pow";
   export const ipow32 = "ipow32";
   export const ipow64 = "ipow64";

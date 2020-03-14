@@ -13,7 +13,7 @@
  (import "Reflect" "get" (func $~lib/bindings/Reflect/get (param anyref anyref) (result anyref)))
  (import "reference-types" "external" (func $features/reference-types/external (param anyref) (result anyref)))
  (memory $0 1)
- (data (i32.const 16) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s")
+ (data (i32.const 1024) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s")
  (global $features/reference-types/nullGlobal (mut anyref) (ref.null))
  (global $features/reference-types/nullGlobalInit (mut anyref) (ref.null))
  (global $features/reference-types/funcGlobal (mut anyref) (ref.null))
@@ -24,14 +24,20 @@
  (func $features/reference-types/someFunc (; 5 ;)
   nop
  )
- (func $start:features/reference-types (; 6 ;)
+ (func $features/reference-types/internal (; 6 ;) (param $0 anyref) (result anyref)
+  local.get $0
+  call $features/reference-types/external
+  call $features/reference-types/external
+  call $features/reference-types/external
+ )
+ (func $~start (; 7 ;)
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 19
    i32.const 0
    call $~lib/builtins/abort
@@ -50,7 +56,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 32
    i32.const 0
    call $~lib/builtins/abort
@@ -62,14 +68,5 @@
   global.set $features/reference-types/nullGlobalInit
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal
- )
- (func $features/reference-types/internal (; 7 ;) (param $0 anyref) (result anyref)
-  local.get $0
-  call $features/reference-types/external
-  call $features/reference-types/external
-  call $features/reference-types/external
- )
- (func $~start (; 8 ;)
-  call $start:features/reference-types
  )
 )

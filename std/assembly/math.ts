@@ -1410,7 +1410,7 @@ export namespace NativeMath {
   }
 
   export function random(): f64 { // see: v8/src/base/utils/random-number-generator.cc
-    if (!random_seeded) throw new Error("PRNG must be seeded.");
+    if (!random_seeded) seedRandom(reinterpret<i64>(seed()));
     var s1 = random_state0_64;
     var s0 = random_state1_64;
     random_state0_64 = s0;
@@ -2603,7 +2603,7 @@ export namespace NativeMathf {
 
   // Using xoroshiro64starstar from http://xoshiro.di.unimi.it/xoroshiro64starstar.c
   export function random(): f32 {
-    if (!random_seeded) throw new Error("PRNG must be seeded.");
+    if (!random_seeded) seedRandom(reinterpret<i64>(seed()));
 
     var s0 = random_state0_32;
     var s1 = random_state1_32;
