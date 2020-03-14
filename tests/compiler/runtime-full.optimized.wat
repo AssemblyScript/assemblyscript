@@ -876,13 +876,8 @@
   global.get $~lib/rt/tlsf/collectLock
   if
    i32.const 0
-<<<<<<< HEAD
    i32.const 32
-   i32.const 490
-=======
-   i32.const 1040
    i32.const 501
->>>>>>> master
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -891,15 +886,9 @@
   i32.const 1073741808
   i32.ge_u
   if
-<<<<<<< HEAD
    i32.const 80
    i32.const 32
-   i32.const 457
-=======
-   i32.const 1088
-   i32.const 1040
    i32.const 461
->>>>>>> master
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -998,13 +987,8 @@
     i32.eqz
     if
      i32.const 0
-<<<<<<< HEAD
      i32.const 32
-     i32.const 502
-=======
-     i32.const 1040
      i32.const 513
->>>>>>> master
      i32.const 19
      call $~lib/builtins/abort
      unreachable
@@ -1019,13 +1003,8 @@
   i32.lt_u
   if
    i32.const 0
-<<<<<<< HEAD
    i32.const 32
-   i32.const 510
-=======
-   i32.const 1040
    i32.const 521
->>>>>>> master
    i32.const 13
    call $~lib/builtins/abort
    unreachable
