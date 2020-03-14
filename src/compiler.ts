@@ -355,13 +355,20 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     var options = program.options;
-    this.memoryOffset = i64_new(
-      // leave space for `null`. also functions as a sentinel for erroneous stores at offset 0.
-      // note that Binaryen's asm.js output utilizes the first 8 bytes for reinterpretations (#1547)
-      max(options.memoryBase, 8)
-    );
     var module = Module.create();
     this.module = module;
+    if (options.memoryBase) {
+      this.memoryOffset = i64_new(options.memoryBase);
+      module.setLowMemoryUnused(false);
+    } else {
+      if (options.optimizeLevelHint >= 2) {
+        this.memoryOffset = i64_new(1024);
+        module.setLowMemoryUnused(true);
+      } else {
+        this.memoryOffset = i64_new(8);
+        module.setLowMemoryUnused(false);
+      }
+    }
     var featureFlags: FeatureFlags = 0;
     if (options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
     if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
@@ -419,7 +426,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
-    var explicitStart = options.explicitStart;
+    var explicitStart = program.isWasi || options.explicitStart;
     if (!startIsEmpty || explicitStart) {
       let signature = startFunctionInstance.signature;
       if (!startIsEmpty && explicitStart) {
@@ -8825,7 +8832,7 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var ctor = this.ensureConstructor(classInstance, reportNode);
-    if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
+    if (classInstance.type.isUnmanaged || ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect( // no need for another autoreleased local
       ctor,
       argumentExpressions,

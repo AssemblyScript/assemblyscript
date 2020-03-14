@@ -7,17 +7,17 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "declare" "my.externalFunction" (func $declare/my.externalFunction))
  (memory $0 1)
- (data (i32.const 16) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
+ (data (i32.const 1024) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00d\00e\00c\00l\00a\00r\00e\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
- (func $start:declare (; 3 ;)
+ (func $~start (; 3 ;)
   call $declare/externalFunction
   global.get $declare/externalConstant
   i32.const 1
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 5
    i32.const 0
    call $~lib/builtins/abort
@@ -29,14 +29,11 @@
   i32.ne
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 13
    i32.const 0
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start (; 4 ;)
-  call $start:declare
  )
 )
