@@ -29,25 +29,14 @@
  (import "rtrace" "onfree" (func $~lib/rt/rtrace/onfree (param i32)))
  (import "rtrace" "ondecrement" (func $~lib/rt/rtrace/ondecrement (param i32)))
  (memory $0 1)
-<<<<<<< HEAD
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 64) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 128) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
  (data (i32.const 176) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
  (data (i32.const 224) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
  (data (i32.const 288) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
- (data (i32.const 336) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
- (data (i32.const 400) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
-=======
- (data (i32.const 1024) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
- (data (i32.const 1072) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
- (data (i32.const 1136) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
- (data (i32.const 1184) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
- (data (i32.const 1232) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00b\00u\00f\00f\00e\00r\00.\00t\00s")
- (data (i32.const 1296) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00t\00d\00/\00s\00e\00t\00.\00t\00s")
- (data (i32.const 1344) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (data (i32.const 1392) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
->>>>>>> master
+ (data (i32.const 336) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
+ (data (i32.const 384) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (export "memory" (memory $0))
@@ -1074,11 +1063,7 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-<<<<<<< HEAD
-  i32.const 444
-=======
-  i32.const 1444
->>>>>>> master
+  i32.const 436
   i32.gt_u
   if
    local.get $0
@@ -1307,11 +1292,7 @@
  )
  (func $~lib/rt/pure/__release (; 18 ;) (param $0 i32)
   local.get $0
-<<<<<<< HEAD
-  i32.const 444
-=======
-  i32.const 1444
->>>>>>> master
+  i32.const 436
   i32.gt_u
   if
    local.get $0
@@ -1662,78 +1643,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
-<<<<<<< HEAD
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 26 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  (local $3 i32)
-  (local $4 i32)
-  local.get $1
-  i32.const 1073741808
-  local.get $2
-  i32.shr_u
-  i32.gt_u
-  if
-   i32.const 192
-   i32.const 240
-   i32.const 23
-   i32.const 56
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  local.get $2
-  i32.shl
-  local.tee $3
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.tee $2
-  local.get $3
-  call $~lib/memory/memory.fill
-  local.get $0
-  i32.eqz
-  if
-   i32.const 12
-   i32.const 2
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   local.set $0
-  end
-  local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
-  local.get $2
-  local.tee $1
-  local.get $0
-  i32.load
-  local.tee $4
-  i32.ne
-  if
-   local.get $1
-   call $~lib/rt/pure/__retain
-   local.set $1
-   local.get $4
-   call $~lib/rt/pure/__release
-  end
-  local.get $0
-  local.get $1
-  i32.store
-  local.get $0
-  local.get $2
-  i32.store offset=4
-  local.get $0
-  local.get $3
-  i32.store offset=8
-  local.get $0
- )
- (func $~lib/memory/memory.copy (; 27 ;) (param $0 i32) (param $1 i32) (param $2 i32)
-=======
  (func $~lib/memory/memory.copy (; 26 ;) (param $0 i32) (param $1 i32) (param $2 i32)
->>>>>>> master
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -2010,11 +1920,7 @@
   local.get $2
   call $~lib/memory/memory.copy
   local.get $1
-<<<<<<< HEAD
-  i32.const 444
-=======
-  i32.const 1444
->>>>>>> master
+  i32.const 436
   i32.ge_u
   if
    local.get $1
@@ -2045,13 +1951,8 @@
    i32.shr_u
    i32.gt_u
    if
-<<<<<<< HEAD
     i32.const 192
-    i32.const 416
-=======
-    i32.const 1200
-    i32.const 1360
->>>>>>> master
+    i32.const 352
     i32.const 14
     i32.const 47
     call $~lib/builtins/abort
@@ -2143,15 +2044,9 @@
    i32.const 0
    i32.lt_s
    if
-<<<<<<< HEAD
+    i32.const 400
     i32.const 352
-    i32.const 416
-    i32.const 109
-=======
-    i32.const 1408
-    i32.const 1360
     i32.const 120
->>>>>>> master
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -2193,8 +2088,8 @@
   i32.const 1073741808
   i32.gt_u
   if
-   i32.const 1200
-   i32.const 1360
+   i32.const 192
+   i32.const 352
    i32.const 57
    i32.const 59
    call $~lib/builtins/abort
@@ -2290,15 +2185,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
+   i32.const 400
    i32.const 352
-   i32.const 416
-   i32.const 93
-=======
-   i32.const 1408
-   i32.const 1360
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -2963,8 +2852,8 @@
   i32.const 1073741808
   i32.gt_u
   if
-   i32.const 1200
-   i32.const 1360
+   i32.const 192
+   i32.const 352
    i32.const 57
    i32.const 59
    call $~lib/builtins/abort
@@ -3060,15 +2949,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
+   i32.const 400
    i32.const 352
-   i32.const 416
-   i32.const 93
-=======
-   i32.const 1408
-   i32.const 1360
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -3777,15 +3660,9 @@
    i32.const 0
    i32.lt_s
    if
-<<<<<<< HEAD
+    i32.const 400
     i32.const 352
-    i32.const 416
-    i32.const 109
-=======
-    i32.const 1408
-    i32.const 1360
     i32.const 120
->>>>>>> master
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -3831,8 +3708,8 @@
   i32.const 536870904
   i32.gt_u
   if
-   i32.const 1200
-   i32.const 1360
+   i32.const 192
+   i32.const 352
    i32.const 57
    i32.const 59
    call $~lib/builtins/abort
@@ -3931,15 +3808,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
+   i32.const 400
    i32.const 352
-   i32.const 416
-   i32.const 93
-=======
-   i32.const 1408
-   i32.const 1360
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -4608,8 +4479,8 @@
   i32.const 536870904
   i32.gt_u
   if
-   i32.const 1200
-   i32.const 1360
+   i32.const 192
+   i32.const 352
    i32.const 57
    i32.const 59
    call $~lib/builtins/abort
@@ -4708,15 +4579,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
+   i32.const 400
    i32.const 352
-   i32.const 416
-   i32.const 93
-=======
-   i32.const 1408
-   i32.const 1360
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -5433,15 +5298,9 @@
    i32.const 0
    i32.lt_s
    if
-<<<<<<< HEAD
+    i32.const 400
     i32.const 352
-    i32.const 416
-    i32.const 109
-=======
-    i32.const 1408
-    i32.const 1360
     i32.const 120
->>>>>>> master
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -5487,17 +5346,10 @@
   i32.const 268435452
   i32.gt_u
   if
-<<<<<<< HEAD
+   i32.const 192
    i32.const 352
-   i32.const 416
-   i32.const 93
-   i32.const 41
-=======
-   i32.const 1200
-   i32.const 1360
    i32.const 57
    i32.const 59
->>>>>>> master
    call $~lib/builtins/abort
    unreachable
   end
@@ -5594,8 +5446,8 @@
   i32.load offset=12
   i32.ge_u
   if
-   i32.const 1408
-   i32.const 1360
+   i32.const 400
+   i32.const 352
    i32.const 104
    i32.const 41
    call $~lib/builtins/abort
@@ -6018,8 +5870,8 @@
   i32.const 268435452
   i32.gt_u
   if
-   i32.const 1200
-   i32.const 1360
+   i32.const 192
+   i32.const 352
    i32.const 57
    i32.const 59
    call $~lib/builtins/abort
@@ -6815,15 +6667,9 @@
    i32.const 0
    i32.lt_s
    if
-<<<<<<< HEAD
+    i32.const 400
     i32.const 352
-    i32.const 416
-    i32.const 109
-=======
-    i32.const 1408
-    i32.const 1360
     i32.const 120
->>>>>>> master
     i32.const 21
     call $~lib/builtins/abort
     unreachable
@@ -6869,8 +6715,8 @@
   i32.const 134217726
   i32.gt_u
   if
-   i32.const 1200
-   i32.const 1360
+   i32.const 192
+   i32.const 352
    i32.const 57
    i32.const 59
    call $~lib/builtins/abort
@@ -6969,15 +6815,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
+   i32.const 400
    i32.const 352
-   i32.const 416
-   i32.const 93
-=======
-   i32.const 1408
-   i32.const 1360
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -7401,8 +7241,8 @@
   i32.const 134217726
   i32.gt_u
   if
-   i32.const 1200
-   i32.const 1360
+   i32.const 192
+   i32.const 352
    i32.const 57
    i32.const 59
    call $~lib/builtins/abort
@@ -8114,8 +7954,8 @@
   i32.const 268435452
   i32.gt_u
   if
-   i32.const 1200
-   i32.const 1360
+   i32.const 192
+   i32.const 352
    i32.const 57
    i32.const 59
    call $~lib/builtins/abort
@@ -8205,15 +8045,9 @@
       i32.const 0
       i32.lt_s
       if
-<<<<<<< HEAD
+       i32.const 400
        i32.const 352
-       i32.const 416
-       i32.const 109
-=======
-       i32.const 1408
-       i32.const 1360
        i32.const 120
->>>>>>> master
        i32.const 21
        call $~lib/builtins/abort
        unreachable
@@ -8253,15 +8087,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
+   i32.const 400
    i32.const 352
-   i32.const 416
-   i32.const 93
-=======
-   i32.const 1408
-   i32.const 1360
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -8954,8 +8782,8 @@
   i32.const 134217726
   i32.gt_u
   if
-   i32.const 1200
-   i32.const 1360
+   i32.const 192
+   i32.const 352
    i32.const 57
    i32.const 59
    call $~lib/builtins/abort
@@ -9045,15 +8873,9 @@
       i32.const 0
       i32.lt_s
       if
-<<<<<<< HEAD
+       i32.const 400
        i32.const 352
-       i32.const 416
-       i32.const 109
-=======
-       i32.const 1408
-       i32.const 1360
        i32.const 120
->>>>>>> master
        i32.const 21
        call $~lib/builtins/abort
        unreachable
@@ -9093,15 +8915,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
+   i32.const 400
    i32.const 352
-   i32.const 416
-   i32.const 93
-=======
-   i32.const 1408
-   i32.const 1360
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -9592,11 +9408,7 @@
  )
  (func $~lib/rt/pure/__visit (; 111 ;) (param $0 i32)
   local.get $0
-<<<<<<< HEAD
-  i32.const 444
-=======
-  i32.const 1444
->>>>>>> master
+  i32.const 436
   i32.lt_u
   if
    return

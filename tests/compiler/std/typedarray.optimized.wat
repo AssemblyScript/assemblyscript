@@ -3185,15 +3185,9 @@
     i32.load offset=12
     i32.ge_u
     if
-<<<<<<< HEAD
      i32.const 368
      i32.const 528
-     i32.const 93
-=======
-     i32.const 1376
-     i32.const 1536
      i32.const 104
->>>>>>> master
      i32.const 41
      call $~lib/builtins/abort
      unreachable
@@ -3389,15 +3383,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
    i32.const 368
    i32.const 528
-   i32.const 93
-=======
-   i32.const 1376
-   i32.const 1536
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -32160,22 +32148,7 @@
     end
     local.get $1
     i32.load
-<<<<<<< HEAD
-    local.tee $1
-    if
-     local.get $1
-     i32.const 7388
-     i32.ge_u
-     if
-      local.get $1
-      i32.const 16
-      i32.sub
-      call $~lib/rt/pure/decrement
-     end
-    end
-=======
     call $~lib/rt/pure/__visit
->>>>>>> master
    end
    local.get $2
    i32.const -2147483648
@@ -32216,7 +32189,7 @@
  )
  (func $~lib/rt/pure/__visit (; 343 ;) (param $0 i32)
   local.get $0
-  i32.const 8396
+  i32.const 7388
   i32.lt_u
   if
    return

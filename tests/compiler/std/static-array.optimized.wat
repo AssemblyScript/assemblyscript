@@ -35,15 +35,9 @@
   i32.load
   i32.ge_u
   if
-<<<<<<< HEAD
    i32.const 352
    i32.const 416
-   i32.const 93
-=======
-   i32.const 1360
-   i32.const 1424
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -643,15 +637,9 @@
   i32.load
   i32.ge_u
   if
-<<<<<<< HEAD
    i32.const 352
    i32.const 416
-   i32.const 93
-=======
-   i32.const 1360
-   i32.const 1424
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -670,15 +658,9 @@
   i32.load
   i32.ge_u
   if
-<<<<<<< HEAD
    i32.const 352
    i32.const 416
-   i32.const 93
-=======
-   i32.const 1360
-   i32.const 1424
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -697,15 +679,9 @@
   i32.load
   i32.ge_u
   if
-<<<<<<< HEAD
    i32.const 352
    i32.const 416
-   i32.const 93
-=======
-   i32.const 1360
-   i32.const 1424
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable

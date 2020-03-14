@@ -1976,20 +1976,9 @@
       br $__inlined_func$~lib/rt/__visit_members
      end
      local.get $1
-<<<<<<< HEAD
-     i32.const 432
-     i32.ge_u
-     if
-      local.get $1
-      i32.const 16
-      i32.sub
-      call $~lib/rt/pure/decrement
-     end
-=======
      i32.load
      call $~lib/rt/pure/__visit
      br $__inlined_func$~lib/rt/__visit_members
->>>>>>> master
     end
     unreachable
    end
@@ -2040,7 +2029,7 @@
  )
  (func $~lib/rt/pure/__visit (; 24 ;) (param $0 i32)
   local.get $0
-  i32.const 1440
+  i32.const 432
   i32.lt_u
   if
    return

@@ -499,15 +499,9 @@
    i32.store offset=4
    return
   end
-<<<<<<< HEAD
   i32.const 64
   i32.const 128
-  i32.const 93
-=======
-  i32.const 1072
-  i32.const 1136
   i32.const 104
->>>>>>> master
   i32.const 41
   call $~lib/builtins/abort
   unreachable

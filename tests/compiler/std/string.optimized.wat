@@ -5444,15 +5444,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
    i32.const 12208
    i32.const 12160
-   i32.const 93
-=======
-   i32.const 13216
-   i32.const 13168
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -5470,15 +5464,9 @@
   if
    local.get $0
    call $~lib/rt/pure/__release
-<<<<<<< HEAD
    i32.const 12272
    i32.const 12160
-   i32.const 97
-=======
-   i32.const 13280
-   i32.const 13168
    i32.const 108
->>>>>>> master
    i32.const 39
    call $~lib/builtins/abort
    unreachable

@@ -22,15 +22,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
    i32.const 32
    i32.const 96
-   i32.const 93
-=======
-   i32.const 1040
-   i32.const 1104
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -45,15 +39,9 @@
   local.tee $0
   i32.eqz
   if
-<<<<<<< HEAD
    i32.const 144
    i32.const 96
-   i32.const 97
-=======
-   i32.const 1152
-   i32.const 1104
    i32.const 108
->>>>>>> master
    i32.const 39
    call $~lib/builtins/abort
    unreachable
@@ -69,15 +57,9 @@
   i32.load offset=12
   i32.ge_u
   if
-<<<<<<< HEAD
    i32.const 32
    i32.const 96
-   i32.const 93
-=======
-   i32.const 1040
-   i32.const 1104
    i32.const 104
->>>>>>> master
    i32.const 41
    call $~lib/builtins/abort
    unreachable
