@@ -70,6 +70,8 @@ declare const ASC_FEATURE_EXCEPTION_HANDLING: bool;
 declare const ASC_FEATURE_TAIL_CALLS: bool;
 /** Whether the reference types feature is enabled. */
 declare const ASC_FEATURE_REFERENCE_TYPES: bool;
+/** Whether the multi value types feature is enabled. */
+declare const ASC_FEATURE_MULTI_VALUE: bool;
 
 // Builtins
 
@@ -1398,8 +1400,8 @@ declare class Array<T> {
   toString(): string;
 }
 
-/** Class representing a static (not resizable) sequence of values of type `T`. */
-declare abstract class StaticArray<T> {
+/** Class representing a static (not resizable) sequence of values of type `T`. This class is @sealed. */
+declare class StaticArray<T> {
   [key: number]: T;
   static fromArray<T>(source: Array<T>): StaticArray<T>;
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T>;
@@ -1458,6 +1460,8 @@ declare namespace String {
     export function byteLength(str: string, nullTerminated?: bool): i32;
     /** Encodes the specified string to UTF-8 bytes, optionally null terminated. */
     export function encode(str: string, nullTerminated?: bool): ArrayBuffer;
+    /** Encodes the specified raw string to UTF-8 bytes, opionally null terminated. Returns the number of bytes written. */
+    export function encodeUnsafe(str: usize, len: i32, buf: usize, nullTerminated?: bool): usize;
     /** Decodes the specified buffer from UTF-8 bytes to a string, optionally null terminated. */
     export function decode(buf: ArrayBuffer, nullTerminated?: bool): string;
     /** Decodes raw UTF-8 bytes to a string, optionally null terminated. */
@@ -1469,6 +1473,8 @@ declare namespace String {
     export function byteLength(str: string): i32;
     /** Encodes the specified string to UTF-16 bytes. */
     export function encode(str: string): ArrayBuffer;
+    /** Encodes the specified raw string to UTF-16 bytes. Returns the number of bytes written. */
+    export function encodeUnsafe(str: usize, len: i32, buf: usize): usize;
     /** Decodes the specified buffer from UTF-16 bytes to a string. */
     export function decode(buf: ArrayBuffer): string;
     /** Decodes raw UTF-16 bytes to a string. */
@@ -1705,8 +1711,12 @@ declare const Math: IMath<f64>;
 /** Alias of {@link NativeMathf} or {@link JSMath} respectively. Defaults to `NativeMathf`. */
 declare const Mathf: IMath<f32>;
 
-/** Environmental tracing function for debugging purposes. */
+/** Environmental abort function. */
+declare function abort(msg?: string | null, fileName?: string | null, lineNumber?: i32, columnNumber?: i32): never;
+/** Environmental tracing function. */
 declare function trace(msg: string, n?: i32, a0?: f64, a1?: f64, a2?: f64, a3?: f64, a4?: f64): void;
+/** Environmental seeding function. */
+declare function seed(): f64;
 
 // Decorators
 

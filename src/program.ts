@@ -1,7 +1,41 @@
 /**
- * AssemblyScript's intermediate representation describing a program's elements.
- * @module program
- *//***/
+ * @fileoverview AssemblyScript's intermediate representation.
+ *
+ * The compiler uses Binaryen IR, which is fairly low level, as its
+ * primary intermediate representation, with the following structures
+ * holding any higher level information that cannot be represented by
+ * Binaryen IR alone, for example higher level types.
+ *
+ * Similar to the AST being composed of `Node`s in `Source`s, the IR is
+ * composed of `Element`s in a `Program`. Each class or function is
+ * represented by a "prototype" holding all the relevant information,
+ * including each's concrete instances. If a class or function is not
+ * generic, there is exactly one instance, otherwise there is one for
+ * each concrete set of type arguments.
+ *
+ * @license Apache-2.0
+ */
+
+// Element                    Base class of all elements
+// ├─DeclaredElement          Base class of elements with a declaration
+// │ ├─TypedElement           Base class of elements resolving to a type
+// │ │ ├─TypeDefinition       Type alias declaration
+// │ │ ├─VariableLikeElement  Base class of all variable-like elements
+// │ │ │ ├─EnumValue          Enum value
+// │ │ │ ├─Global             File global
+// │ │ │ ├─Local              Function local
+// │ │ │ ├─Field              Class field (instance only)
+// │ │ │ └─Property           Class property
+// │ │ ├─IndexSignature       Class index signature
+// │ │ ├─Function             Concrete function instance
+// │ │ └─Class                Concrete class instance
+// │ ├─Namespace              Namespace with static members
+// │ ├─FunctionPrototype      Prototype of concrete function instances
+// │ ├─FieldPrototype         Prototype of concrete field instances
+// │ ├─PropertyPrototype      Prototype of concrete property instances
+// │ └─ClassPrototype         Prototype of concrete classe instances
+// ├─File                     File, analogous to Source in the AST
+// └─FunctionTarget           Indirectly called function helper (typed)
 
 import {
   CommonFlags,
@@ -55,7 +89,6 @@ import {
 
   Expression,
   IdentifierExpression,
-  LiteralExpression,
   LiteralKind,
   StringLiteralExpression,
 
@@ -105,6 +138,10 @@ import {
 import {
   Parser
 } from "./parser";
+
+import {
+  BuiltinNames
+} from "./builtins";
 
 /** Represents a yet unresolved `import`. */
 class QueuedImport {
@@ -478,6 +515,14 @@ export class Program extends DiagnosticEmitter {
   nextClassId: u32 = 0;
   /** Next signature id. */
   nextSignatureId: i32 = 0;
+  /** An indicator if the program has been initialized. */
+  initialized: bool = false;
+
+  /** Tests whether this is a WASI program. */
+  get isWasi(): bool {
+    return this.elementsByName.has(CommonNames.ASC_WASI);
+  }
+
   /** Constructs a new program, optionally inheriting parser diagnostics. */
   constructor(
     /** Compiler options. */
@@ -633,6 +678,10 @@ export class Program extends DiagnosticEmitter {
 
   /** Initializes the program and its elements prior to compilation. */
   initialize(options: Options): void {
+    // Initialize only once
+    if (this.initialized) return;
+
+    this.initialized = true;
     this.options = options;
 
     // register native types
@@ -712,6 +761,8 @@ export class Program extends DiagnosticEmitter {
       i64_new(options.hasFeature(Feature.TAIL_CALLS) ? 1 : 0, 0));
     this.registerConstantInteger(CommonNames.ASC_FEATURE_REFERENCE_TYPES, Type.bool,
       i64_new(options.hasFeature(Feature.REFERENCE_TYPES) ? 1 : 0, 0));
+    this.registerConstantInteger(CommonNames.ASC_FEATURE_MULTI_VALUE, Type.bool,
+      i64_new(options.hasFeature(Feature.MULTI_VALUE) ? 1 : 0, 0));
 
     // remember deferred elements
     var queuedImports = new Array<QueuedImport>();
@@ -935,7 +986,7 @@ export class Program extends DiagnosticEmitter {
         if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
           this.error(
             DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
-            extendsNode.range, (<ClassPrototype>baseElement).identifierNode.text
+            extendsNode.range, basePrototype.identifierNode.text
           );
         }
         if (
@@ -959,23 +1010,49 @@ export class Program extends DiagnosticEmitter {
     // set up global aliases
     {
       let globalAliases = options.globalAliases;
-      if (globalAliases) {
-        // TODO: for (let [alias, name] of globalAliases) {
-        for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
-          let alias = unchecked(_keys[i]);
-          let name = assert(globalAliases.get(alias));
-          if (!name.length) continue; // explicitly disabled
-          let firstChar = name.charCodeAt(0);
-          if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
-            this.registerConstantInteger(alias, Type.i32, i64_new(<i32>parseInt(name, 10)));
+      if (!globalAliases) globalAliases = new Map();
+      let isWasi = this.isWasi;
+      if (!globalAliases.has(CommonNames.abort)) {
+        globalAliases.set(CommonNames.abort,
+          isWasi
+            ? BuiltinNames.wasiAbort
+            : BuiltinNames.abort
+        );
+      }
+      if (!globalAliases.has(CommonNames.trace)) {
+        globalAliases.set(CommonNames.trace,
+          isWasi
+            ? BuiltinNames.wasiTrace
+            : BuiltinNames.trace
+        );
+      }
+      if (!globalAliases.has(CommonNames.seed)) {
+        globalAliases.set(CommonNames.seed,
+          isWasi
+            ? BuiltinNames.wasiSeed
+            : BuiltinNames.seed
+        );
+      }
+      if (!globalAliases.has(CommonNames.Math)) {
+        globalAliases.set(CommonNames.Math, CommonNames.NativeMath);
+      }
+      if (!globalAliases.has(CommonNames.Mathf)) {
+        globalAliases.set(CommonNames.Mathf, CommonNames.NativeMathf);
+      }
+      // TODO: for (let [alias, name] of globalAliases) {
+      for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
+        let alias = unchecked(_keys[i]);
+        let name = assert(globalAliases.get(alias));
+        if (!name.length) continue; // explicitly disabled
+        let firstChar = name.charCodeAt(0);
+        if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
+          this.registerConstantInteger(alias, Type.i32, i64_new(<i32>parseInt(name, 10)));
+        } else {
+          let elementsByName = this.elementsByName;
+          if (elementsByName.has(name)) {
+            elementsByName.set(alias, assert(elementsByName.get(name)));
           } else {
-            let elementsByName = this.elementsByName;
-            let element = elementsByName.get(name);
-            if (element) {
-              if (elementsByName.has(alias)) throw new Error("duplicate global element: " + name);
-              elementsByName.set(alias, element);
-            }
-            else throw new Error("no such global element: " + name);
+            throw new Error("no such global element: " + name);
           }
         }
       }
@@ -1034,8 +1111,8 @@ export class Program extends DiagnosticEmitter {
 
   /** Requires that a global function is present and returns it. */
   private requireFunction(name: string, typeArguments: Type[] | null = null): Function {
-    var prototype = this.require(name, ElementKind.FUNCTION_PROTOTYPE);
-    var resolved = this.resolver.resolveFunction(<FunctionPrototype>prototype, typeArguments);
+    var prototype = <FunctionPrototype>this.require(name, ElementKind.FUNCTION_PROTOTYPE);
+    var resolved = this.resolver.resolveFunction(prototype, typeArguments);
     if (!resolved) throw new Error("invalid " + name);
     return resolved;
   }
@@ -1074,9 +1151,10 @@ export class Program extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
-        let getterPrototype = (<PropertyPrototype>element).getterPrototype;
+        let propertyPrototype = <PropertyPrototype>element;
+        let getterPrototype = propertyPrototype.getterPrototype;
         if (getterPrototype) this.markModuleExport(getterPrototype);
-        let setterPrototype = (<PropertyPrototype>element).setterPrototype;
+        let setterPrototype = propertyPrototype.setterPrototype;
         if (setterPrototype) this.markModuleExport(setterPrototype);
         break;
       }
@@ -1355,10 +1433,11 @@ export class Program extends DiagnosticEmitter {
           break;
         }
         case NodeKind.METHODDECLARATION: {
+          let methodDeclaration = <MethodDeclaration>memberDeclaration;
           if (memberDeclaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
-            this.initializeProperty(<MethodDeclaration>memberDeclaration, element);
+            this.initializeProperty(methodDeclaration, element);
           } else {
-            this.initializeMethod(<MethodDeclaration>memberDeclaration, element);
+            this.initializeMethod(methodDeclaration, element);
           }
           break;
         }
@@ -1462,10 +1541,7 @@ export class Program extends DiagnosticEmitter {
             let numArgs = args ? args.length : 0;
             if (numArgs == 1) {
               let firstArg = (<Expression[]>decorator.arguments)[0];
-              if (
-                firstArg.kind == NodeKind.LITERAL &&
-                (<LiteralExpression>firstArg).literalKind == LiteralKind.STRING
-              ) {
+              if (firstArg.isLiteralKind(LiteralKind.STRING)) {
                 let text = (<StringLiteralExpression>firstArg).value;
                 let kind = OperatorKind.fromDecorator(decorator.decoratorKind, text);
                 if (kind == OperatorKind.INVALID) {
@@ -1900,10 +1976,11 @@ export class Program extends DiagnosticEmitter {
           break;
         }
         case NodeKind.METHODDECLARATION: {
+          let methodDeclaration = <MethodDeclaration>memberDeclaration;
           if (memberDeclaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
-            this.initializeProperty(<MethodDeclaration>memberDeclaration, element);
+            this.initializeProperty(methodDeclaration, element);
           } else {
-            this.initializeMethod(<MethodDeclaration>memberDeclaration, element);
+            this.initializeMethod(methodDeclaration, element);
           }
           break;
         }
@@ -2846,7 +2923,8 @@ export class FunctionPrototype extends DeclaredElement {
     var boundPrototypes = this.boundPrototypes;
     if (!boundPrototypes) this.boundPrototypes = boundPrototypes = new Map();
     else if (boundPrototypes.has(classInstance)) return assert(boundPrototypes.get(classInstance));
-    var declaration = this.declaration; assert(declaration.kind == NodeKind.METHODDECLARATION);
+    var declaration = this.declaration;
+    assert(declaration.kind == NodeKind.METHODDECLARATION);
     var bound = new FunctionPrototype(
       this.name,
       classInstance, // !
@@ -2863,7 +2941,7 @@ export class FunctionPrototype extends DeclaredElement {
   /** Gets the resolved instance for the specified instance key, if already resolved. */
   getResolvedInstance(instanceKey: string): Function | null {
     var instances = this.instances;
-    if (instances !== null && instances.has(instanceKey)) return <Function>instances.get(instanceKey);
+    if (instances !== null && instances.has(instanceKey)) return assert(instances.get(instanceKey));
     return null;
   }
 
@@ -3241,15 +3319,22 @@ export class Property extends VariableLikeElement {
   }
 }
 
-/** An resolved index signature. */
-export class IndexSignature extends VariableLikeElement {
+/** A resolved index signature. */
+export class IndexSignature extends TypedElement {
 
   /** Constructs a new index prototype. */
   constructor(
     /** Parent class. */
     parent: Class
   ) {
-    super(ElementKind.INDEXSIGNATURE, parent.internalName + "[]", parent);
+    super(
+      ElementKind.INDEXSIGNATURE,
+      "[]",
+      parent.internalName + "[]",
+      parent.program,
+      parent,
+      parent.program.makeNativeVariableDeclaration("[]") // is fine
+    );
   }
 
   /** Obtains the getter instance. */
@@ -3607,10 +3692,11 @@ export class Class extends TypedElement {
 
   /** Writes a field value to a buffer and returns the number of bytes written. */
   writeField<T>(name: string, value: T, buffer: Uint8Array, baseOffset: i32): i32 {
-    var field = this.lookupInSelf(name);
-    if (field !== null && field.kind == ElementKind.FIELD) {
-      let offset = baseOffset + (<Field>field).memoryOffset;
-      switch ((<Field>field).type.kind) {
+    var element = this.lookupInSelf(name);
+    if (element !== null && element.kind == ElementKind.FIELD) {
+      let fieldInstance = <Field>element;
+      let offset = baseOffset + fieldInstance.memoryOffset;
+      switch (fieldInstance.type.kind) {
         case TypeKind.I8:
         case TypeKind.U8: {
           writeI8(i32(value), buffer, offset);

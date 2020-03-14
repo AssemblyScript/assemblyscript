@@ -9,6 +9,8 @@ type ptr<T> = usize; // all pointers are usize'd
 type struct<T> = T;  // structs are references already in AS
 
 /** Read command-line argument data. */
+// @ts-ignore: decorator
+@unsafe
 export declare function args_get(
   /** Input: Pointer to a buffer to write the argument pointers. */
   argv: ptr<ptr<char>>,
@@ -17,6 +19,8 @@ export declare function args_get(
 ): errno;
 
 /** Return command-line argument data sizes. */
+// @ts-ignore: decorator
+@unsafe
 export declare function args_sizes_get(
   /** Output: Number of arguments. */
   argc: ptr<usize>,
@@ -25,6 +29,8 @@ export declare function args_sizes_get(
 ): errno;
 
 /** Return the resolution of a clock. */
+// @ts-ignore: decorator
+@unsafe
 export declare function clock_res_get(
   /** Input: The clock for which to return the resolution. */
   clock: clockid,
@@ -33,6 +39,8 @@ export declare function clock_res_get(
 ): errno;
 
 /** Return the time value of a clock. */
+// @ts-ignore: decorator
+@unsafe
 export declare function clock_time_get(
   /** Input: Cock for which to return the time. */
   clock: clockid,
@@ -43,6 +51,8 @@ export declare function clock_time_get(
 ): errno;
 
 /** Read environment variable data. */
+// @ts-ignore: decorator
+@unsafe
 export declare function environ_get(
   /** Input: Pointer to a buffer to write the environment variable pointers. */
   environ: ptr<usize>,
@@ -51,6 +61,8 @@ export declare function environ_get(
 ): errno;
 
 /** Return command-line argument data sizes. */
+// @ts-ignore: decorator
+@unsafe
 export declare function environ_sizes_get(
   /** Output: The number of environment variables. */
   environ_count: ptr<usize>,
@@ -59,6 +71,8 @@ export declare function environ_sizes_get(
 ): errno;
 
 /** Provide file advisory information on a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_advise(
   /** Input: The file descriptor for the file for which to provide file advisory information. */
   fd: fd,
@@ -71,6 +85,8 @@ export declare function fd_advise(
 ): errno;
 
 /** Provide file advisory information on a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_allocate(
   /** Input: The file descriptor for the file in which to allocate space. */
   fd: fd,
@@ -81,18 +97,24 @@ export declare function fd_allocate(
 ): errno;
 
 /** Close a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_close(
   /** Input: The file descriptor to close. */
   fd: fd
 ): errno;
 
 /** Synchronize the data of a file to disk. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_datasync(
   /** Input: The file descriptor of the file to synchronize to disk. */
   fd: fd
 ): errno;
 
 /** Get the attributes of a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_fdstat_get(
   /** Input: The file descriptor to inspect. */
   fd: fd,
@@ -101,6 +123,8 @@ export declare function fd_fdstat_get(
 ): errno;
 
 /** Adjust the flags associated with a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_fdstat_set_flags(
   /** Input: The file descriptor to operate on. */
   fd: fd,
@@ -109,6 +133,8 @@ export declare function fd_fdstat_set_flags(
 ): errno;
 
 /** Adjust the rights associated with a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_fdstat_set_rights(
   /** Input: The file descriptor to operate on. */
   fd: fd,
@@ -119,6 +145,8 @@ export declare function fd_fdstat_set_rights(
 ): errno;
 
 /** Return the attributes of an open file. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_filestat_get(
   /** Input: The file descriptor to inspect. */
   fd: fd,
@@ -127,6 +155,8 @@ export declare function fd_filestat_get(
 ): errno;
 
 /** Adjust the size of an open file. If this increases the file's size, the extra bytes are filled with zeros. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_filestat_set_size(
   /** Input: A file descriptor for the file to adjust. */
   fd: fd,
@@ -135,6 +165,8 @@ export declare function fd_filestat_set_size(
 ): errno;
 
 /** Adjust the timestamps of an open file or directory. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_filestat_set_times(
   /** Input: The file descriptor to operate on. */
   fd: fd,
@@ -147,6 +179,8 @@ export declare function fd_filestat_set_times(
 ): errno;
 
 /** Read from a file descriptor, without using and updating the file descriptor's offset. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_pread(
   /** Input: The file descriptor from which to read data. */
   fd: fd,
@@ -161,6 +195,8 @@ export declare function fd_pread(
 ): errno;
 
 /** Return a description of the given preopened file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_prestat_get(
   /** Input: The file descriptor about which to retrieve information. */
   fd: fd,
@@ -169,6 +205,8 @@ export declare function fd_prestat_get(
 ): errno;
 
 /** Return a description of the given preopened file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_prestat_dir_name(
   /** Input: The file descriptor about which to retrieve information. */
   fd: fd,
@@ -179,6 +217,8 @@ export declare function fd_prestat_dir_name(
 ): errno;
 
 /** Write to a file descriptor, without using and updating the file descriptor's offset. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_pwrite(
   /** Input: The file descriptor to which to write data. */
   fd: fd,
@@ -193,6 +233,8 @@ export declare function fd_pwrite(
 ): errno;
 
 /** Read from a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_read(
   /** Input: The file descriptor from which to read data. */
   fd: fd,
@@ -205,6 +247,8 @@ export declare function fd_read(
 ): errno;
 
 /** Read directory entries from a directory. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_readdir(
   /** Input: Directory from which to read the directory entries. */
   fd: fd,
@@ -219,6 +263,8 @@ export declare function fd_readdir(
 ): errno;
 
 /** Atomically replace a file descriptor by renumbering another file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_renumber(
   /** Input: The file descriptor to renumber. */
   from: fd,
@@ -227,6 +273,8 @@ export declare function fd_renumber(
 ): errno;
 
 /** Move the offset of a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_seek(
   /** Input: The file descriptor to operate on. */
   fd: fd,
@@ -239,12 +287,16 @@ export declare function fd_seek(
 ): errno;
 
 /** Synchronize the data and metadata of a file to disk. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_sync(
   /** Input: The file descriptor of the file containing the data and metadata to synchronize to disk. */
   fd: fd
 ): errno;
 
 /** Return the current offset of a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_tell(
   /** Input: The file descriptor to inspect. */
   fd: fd,
@@ -253,6 +305,8 @@ export declare function fd_tell(
 ): errno;
 
 /** Write to a file descriptor. */
+// @ts-ignore: decorator
+@unsafe
 export declare function fd_write(
   /** Input: The file descriptor to which to write data. */
   fd: fd,
@@ -265,6 +319,8 @@ export declare function fd_write(
 ): errno;
 
 /* Create a directory. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_create_directory(
   /** Input: The working directory at which the resolution of the path starts. */
   fd: fd,
@@ -275,6 +331,8 @@ export declare function path_create_directory(
 ): errno;
 
 /** Return the attributes of a file or directory. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_filestat_get(
   /** Input: The working directory at which the resolution of the path starts. */
   fd: fd,
@@ -289,6 +347,8 @@ export declare function path_filestat_get(
 ): errno;
 
 /** Adjust the timestamps of a file or directory. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_filestat_set_times(
   /** Input: The working directory at which the resolution of the path starts. */
   fd: fd,
@@ -307,6 +367,8 @@ export declare function path_filestat_set_times(
 ): errno;
 
 /** Create a hard link. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_link(
   /** Input: The working directory at which the resolution of the old path starts. */
   old_fd: fd,
@@ -325,6 +387,8 @@ export declare function path_link(
 ): errno;
 
 /** Open a file or directory. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_open(
   /** Input: The working directory at which the resolution of the path starts. */
   dirfd: fd,
@@ -347,6 +411,8 @@ export declare function path_open(
 ): errno;
 
 /** Read the contents of a symbolic link. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_readlink(
   /** Input: The working directory at which the resolution of the path starts. */
   fd: fd,
@@ -363,6 +429,8 @@ export declare function path_readlink(
 ): errno;
 
 /** Remove a directory. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_remove_directory(
   /** Input: The working directory at which the resolution of the path starts. */
   fd: fd,
@@ -373,6 +441,8 @@ export declare function path_remove_directory(
 ): errno;
 
 /** Rename a file or directory. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_rename(
   /** Input: The working directory at which the resolution of the old path starts. */
   old_fd: fd,
@@ -389,6 +459,8 @@ export declare function path_rename(
 ): errno;
 
 /** Create a symbolic link. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_symlink(
   /** Input: The contents of the symbolic link. */
   old_path: ptr<char>,
@@ -403,6 +475,8 @@ export declare function path_symlink(
 ): errno;
 
 /** Unlink a file. */
+// @ts-ignore: decorator
+@unsafe
 export declare function path_unlink_file(
   /** Input: The working directory at which the resolution of the path starts. */
   fd: fd,
@@ -413,6 +487,8 @@ export declare function path_unlink_file(
 ): errno;
 
 /** Concurrently poll for the occurrence of a set of events. */
+// @ts-ignore: decorator
+@unsafe
 export declare function poll_oneoff(
   /** Input: The events to which to subscribe. */
   in_: ptr<struct<subscription>>,
@@ -425,18 +501,24 @@ export declare function poll_oneoff(
 ): errno;
 
 /** Terminate the process normally. An exit code of 0 indicates successful termination of the program. The meanings of other values is dependent on the environment. */
+// @ts-ignore: decorator
+@unsafe
 export declare function proc_exit(
   /** Input: The exit code returned by the process. */
   rval: u32
 ): void;
 
 /** Send a signal to the process of the calling thread. */
+// @ts-ignore: decorator
+@unsafe
 export declare function proc_raise(
   /** Input: The signal condition to trigger. */
   sig: signal
 ): errno;
 
 /** Write high-quality random data into a buffer. */
+// @ts-ignore: decorator
+@unsafe
 export declare function random_get(
   /** Input: The buffer to fill with random data. */
   buf: usize,
@@ -445,9 +527,13 @@ export declare function random_get(
 ): errno;
 
 /** Temporarily yield execution of the calling thread. */
+// @ts-ignore: decorator
+@unsafe
 export declare function sched_yield(): errno;
 
 /** Receive a message from a socket. */
+// @ts-ignore: decorator
+@unsafe
 export declare function sock_recv(
   /** Input: The socket on which to receive data. */
   sock: fd,
@@ -464,6 +550,8 @@ export declare function sock_recv(
 ): errno;
 
 /** Send a message on a socket. */
+// @ts-ignore: decorator
+@unsafe
 export declare function sock_send(
   /** Input: The socket on which to send data. */
   sock: fd,
@@ -478,6 +566,8 @@ export declare function sock_send(
 ): errno;
 
 /** Shut down socket send and receive channels. */
+// @ts-ignore: decorator
+@unsafe
 export declare function sock_shutdown(
   /** Input: The socket on which to shutdown channels. */
   sock: fd,

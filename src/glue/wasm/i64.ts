@@ -1,4 +1,7 @@
-/** @module glue/wasm *//***/
+/**
+ * @fileoverview 64-bit integer glue code for WebAssembly.
+ * @license Apache-2.0
+ */
 
 // @ts-ignore: decorator
 @global

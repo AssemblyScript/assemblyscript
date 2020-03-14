@@ -1,17 +1,10 @@
 /**
- * Various compiler utilities.
- * @module util
- * @preferred
- *//***/
+ * @fileoverview Various utility.
+ * @license Apache-2.0
+ */
 
-export * from "./bitset";
-export * from "./charcode";
+export * from "./binary";
 export * from "./collections";
+export * from "./math";
 export * from "./path";
 export * from "./text";
-export * from "./binary";
-
-/** Tests if `x` is a power of two. */
-export function isPowerOf2(x: i32): bool {
-  return x != 0 && (x & (x - 1)) == 0;
-}

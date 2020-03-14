@@ -1,6 +1,24 @@
-"use strict";
 /**
- * Compiler frontend for node.js
+ * @license
+ * Copyright 2020 Daniel Wirtz / The AssemblyScript Authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Compiler frontend for node.js
  *
  * Uses the low-level API exported from src/index.ts so it works with the compiler compiled to
  * JavaScript as well as the compiler compiled to WebAssembly (eventually). Runs the sources
@@ -8,8 +26,6 @@
  *
  * Can also be packaged as a bundle suitable for in-browser use with the standard library injected
  * in the build step. See dist/asc.js for the bundle and webpack.config.js for building details.
- *
- * @module cli/asc
  */
 
 // Use "." instead of "/" as cwd in browsers
@@ -231,12 +247,6 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
   assemblyscript.setPedantic(compilerOptions, args.pedantic);
-
-  // Initialize default aliases
-  assemblyscript.setGlobalAlias(compilerOptions, "Math", "NativeMath");
-  assemblyscript.setGlobalAlias(compilerOptions, "Mathf", "NativeMathf");
-  assemblyscript.setGlobalAlias(compilerOptions, "abort", "~lib/builtins/abort");
-  assemblyscript.setGlobalAlias(compilerOptions, "trace", "~lib/builtins/trace");
 
   // Add or override aliases if specified
   if (args.use) {
@@ -574,6 +584,20 @@ exports.main = function main(argv, options, callback) {
   optimizeLevel = Math.min(Math.max(optimizeLevel, 0), 3);
   shrinkLevel = Math.min(Math.max(shrinkLevel, 0), 2);
 
+  try {
+    stats.compileTime += measure(() => {
+      assemblyscript.initializeProgram(program, compilerOptions);
+    });
+  } catch(e) {
+    return callback(e);
+  }
+
+  // Call afterInitialize transform hook
+  {
+    let error = applyTransform("afterInitialize", program);
+    if (error) return callback(error);
+  }
+
   var module;
   stats.compileCount++;
   try {
@@ -648,6 +672,20 @@ exports.main = function main(argv, options, callback) {
     const passes = [];
     function add(pass) { passes.push(pass); }
 
+    if (optimizeLevel >= 2 && shrinkLevel === 0) {
+      // tweak inlining options when speed more preferable than size
+      module.setAlwaysInlineMaxSize(12);
+      module.setFlexibleInlineMaxSize(70);
+      module.setOneCallerInlineMaxSize(200);
+    } else {
+      // tweak inlining options when size matters
+      optimizeLevel === 0 && shrinkLevel >= 0
+        ? module.setAlwaysInlineMaxSize(2)
+        : module.setAlwaysInlineMaxSize(4);  // default:  2
+      module.setFlexibleInlineMaxSize(65);   // default: 20
+      module.setOneCallerInlineMaxSize(80);  // default: 15
+    }
+
     // Optimize the module if requested
     if (optimizeLevel > 0 || shrinkLevel > 0) {
       // Binaryen's default passes with Post-AssemblyScript passes added.
@@ -661,8 +699,14 @@ exports.main = function main(argv, options, callback) {
         add("ssa-nomerge");
       }
       if (optimizeLevel >= 3) {
+        add("simplify-locals-nostructure"); // differs
+        add("vacuum"); // differs
+        add("reorder-locals"); // differs
         add("flatten");
         add("local-cse");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("rse");
       }
       if (hasARC) { // differs
         if (optimizeLevel < 3) {
@@ -673,11 +717,12 @@ exports.main = function main(argv, options, callback) {
       add("dce");
       add("remove-unused-brs");
       add("remove-unused-names");
-      add("optimize-instructions");
+      // add("optimize-instructions"); // differs move 2 lines above
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
         add("simplify-globals-optimizing"); // differs
       }
+      add("optimize-instructions"); // differs
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
       } else {
@@ -687,19 +732,25 @@ exports.main = function main(argv, options, callback) {
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
       // }
+      if (optimizeLevel >= 3 && shrinkLevel <= 1) { // differs
+        add("licm");
+      }
       add("simplify-locals-nostructure");
       add("vacuum");
       add("reorder-locals");
       add("remove-unused-brs");
-      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
-        add("merge-locals");
-      }
+      // if (optimizeLevel >= 3 || shrinkLevel >= 2) { // do it later
+      //   add("merge-locals");
+      // }
       add("coalesce-locals");
       add("simplify-locals");
       add("vacuum");
       add("reorder-locals");
       add("coalesce-locals");
       add("reorder-locals");
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs
+        add("merge-locals");
+      }
       add("vacuum");
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         add("code-folding");
@@ -759,29 +810,26 @@ exports.main = function main(argv, options, callback) {
         add("remove-unused-brs");
         add("vacuum");
 
-        // replace indirect calls with direct and inline if possible again.
-        add("directize");
-        add("inlining-optimizing");
         // move some code after early return which potentially could reduce computations
         // do this after CFG cleanup (originally it was done before)
         // moved from (1)
         add("code-pushing");
-
-        // this quite expensive so do this only for highest opt level
-        add("simplify-globals-optimizing");
         if (optimizeLevel >= 3) {
-          add("simplify-locals-nostructure");
-          add("vacuum");
-
+          // this quite expensive so do this only for highest opt level
+          add("simplify-globals");
+          // replace indirect calls with direct and inline if possible again.
+          add("directize");
+          add("dae-optimizing");
           add("precompute-propagate");
+          add("coalesce-locals");
+          add("merge-locals");
           add("simplify-locals-nostructure");
           add("vacuum");
-
-          add("reorder-locals");
-        } else {
-          add("simplify-globals-optimizing");
+          add("inlining-optimizing");
+          add("precompute-propagate");
         }
         add("optimize-instructions");
+        add("simplify-globals-optimizing");
       }
       // remove unused elements of table and pack / reduce memory
       add("duplicate-function-elimination"); // differs

@@ -1,7 +1,7 @@
 /**
- * Common constants.
- * @module common
- *//***/
+ * @fileoverview Common constants used by various parts of the compiler.
+ * @license Apache-2.0
+ */
 
 /** Indicates traits of a {@link Node} or {@link Element}. */
 export enum CommonFlags {
@@ -154,6 +154,7 @@ export namespace CommonNames {
   export const ASC_TABLE_BASE = "ASC_TABLE_BASE";
   export const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
   export const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
+  export const ASC_WASI = "ASC_WASI";
   export const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
   export const ASC_FEATURE_MUTABLE_GLOBALS = "ASC_FEATURE_MUTABLE_GLOBALS";
   export const ASC_FEATURE_NONTRAPPING_F2I = "ASC_FEATURE_NONTRAPPING_F2I";
@@ -163,6 +164,7 @@ export namespace CommonNames {
   export const ASC_FEATURE_EXCEPTION_HANDLING = "ASC_FEATURE_EXCEPTION_HANDLING";
   export const ASC_FEATURE_TAIL_CALLS = "ASC_FEATURE_TAIL_CALLS";
   export const ASC_FEATURE_REFERENCE_TYPES = "ASC_FEATURE_REFERENCE_TYPES";
+  export const ASC_FEATURE_MULTI_VALUE = "ASC_FEATURE_MULTI_VALUE";
   // classes
   export const I8 = "I8";
   export const I16 = "I16";
@@ -188,6 +190,8 @@ export namespace CommonNames {
   export const ArrayBuffer = "ArrayBuffer";
   export const Math = "Math";
   export const Mathf = "Mathf";
+  export const NativeMath = "NativeMath";
+  export const NativeMathf = "NativeMathf";
   export const Int8Array = "Int8Array";
   export const Int16Array = "Int16Array";
   export const Int32Array = "Int32Array";
@@ -202,6 +206,8 @@ export namespace CommonNames {
   export const Error = "Error";
   // runtime
   export const abort = "abort";
+  export const trace = "trace";
+  export const seed = "seed";
   export const pow = "pow";
   export const mod = "mod";
   export const alloc = "__alloc";

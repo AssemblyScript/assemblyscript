@@ -1,9 +1,29 @@
 /**
- * Built-in elements providing WebAssembly core functionality.
- * @module builtins
- *//***/
+ * @fileoverview Built-in elements providing core WebAssembly functionality.
+ *
+ * Each builtin is linked to its definition in std/assembly/builtins.ts.
+ * When its prototype is called, the compiler recognizes the `@builtin`
+ * decorator, looks up the respective handler in the global builtins map
+ * and executes it, with the handler directly emitting WebAssembly code
+ * according to context.
+ *
+ * Builtins can be categorized into core builtins that typically are generic
+ * and emit code directly and aliases calling core builtins with overridden
+ * contexts. The latter is used by inline assembler aliases of WebAssembly
+ * instructions, like `i64.load8_u` deferring to `<i64>load<u8>`.
+ *
+ * The `contextIsExact` modifier is used to force a specific instruction
+ * family. A `i32.store8` deferring to `<i32>store<i8>` for example is
+ * ambiguous in that the input can still be an i32 or an i64, leading to
+ * either an `i32.store8` or an `i64.store8`, so `i32` is forced there.
+ * This behavior is indicated by `from i32/i64` in the comments below.
+ *
+ * @license Apache-2.0
+ */
 
- import {
+// TODO: Add builtins for `i32.add` etc. that do not have a core builtin.
+
+import {
   Compiler,
   Constraints,
   RuntimeFeatures
@@ -15,13 +35,10 @@ import {
 } from "./diagnostics";
 
 import {
-  NodeKind,
   Expression,
   LiteralKind,
-  LiteralExpression,
   StringLiteralExpression,
-  CallExpression,
-  isNumericLiteral
+  CallExpression
 } from "./ast";
 
 import {
@@ -102,6 +119,10 @@ export namespace BuiltinNames {
   export const setArgumentsLength = "~setArgumentsLength";
 
   // std/builtins.ts
+  export const abort = "~lib/builtins/abort";
+  export const trace = "~lib/builtins/trace";
+  export const seed = "~lib/builtins/seed";
+
   export const isInteger = "~lib/builtins/isInteger";
   export const isFloat = "~lib/builtins/isFloat";
   export const isBoolean = "~lib/builtins/isBoolean";
@@ -566,6 +587,11 @@ export namespace BuiltinNames {
   export const Uint64Array = "~lib/typedarray/Uint64Array";
   export const Float32Array = "~lib/typedarray/Float32Array";
   export const Float64Array = "~lib/typedarray/Float64Array";
+
+  // std/bindings/wasi.ts
+  export const wasiAbort = "~lib/wasi/index/abort";
+  export const wasiTrace = "~lib/wasi/index/trace";
+  export const wasiSeed = "~lib/wasi/index/seed";
 }
 
 /** Builtin compilation context. */
@@ -586,7 +612,7 @@ export class BuiltinContext {
   contextIsExact: bool;
 }
 
-/** Registered builtins. */
+/** Global builtins map. */
 export const builtins = new Map<string,(ctx: BuiltinContext) => ExpressionRef>();
 
 // === Static type evaluation =================================================================
@@ -869,17 +895,15 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     return module.unreachable();
   }
   if (operands.length) {
-    if (
-      operands[0].kind != NodeKind.LITERAL ||
-      (<LiteralExpression>operands[0]).literalKind != LiteralKind.STRING
-    ) {
+    let firstOperand = operands[0];
+    if (!firstOperand.isLiteralKind(LiteralKind.STRING)) {
       compiler.error(
         DiagnosticCode.String_literal_expected,
         operands[0].range
       );
       return module.unreachable();
     }
-    let fieldName = (<StringLiteralExpression>operands[0]).value;
+    let fieldName = (<StringLiteralExpression>firstOperand).value;
     let classMembers = classType.members;
     if (classMembers !== null && classMembers.has(fieldName)) {
       let member = assert(classMembers.get(fieldName));
@@ -889,7 +913,7 @@ function builtin_offsetof(ctx: BuiltinContext): ExpressionRef {
     }
     compiler.error(
       DiagnosticCode.Type_0_has_no_property_1,
-      operands[0].range, classType.internalName, fieldName
+      firstOperand.range, classType.internalName, fieldName
     );
     return module.unreachable();
   }
@@ -1326,7 +1350,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (!type.is(TypeFlags.REFERENCE)) {
     let arg1: ExpressionRef;
-    if (!typeArguments && isNumericLiteral(left)) { // prefer right type
+    if (!typeArguments && left.isNumericLiteral) { // prefer right type
       arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
       if (compiler.currentType != type) {
         arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);
@@ -1405,7 +1429,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   if (!type.is(TypeFlags.REFERENCE)) {
     let arg1: ExpressionRef;
-    if (!typeArguments && isNumericLiteral(left)) { // prefer right type
+    if (!typeArguments && left.isNumericLiteral) { // prefer right type
       arg1 = compiler.compileExpression(operands[1], type, Constraints.MUST_WRAP);
       if (compiler.currentType != type) {
         arg0 = compiler.compileExpression(left, type = compiler.currentType, Constraints.CONV_IMPLICIT | Constraints.MUST_WRAP);

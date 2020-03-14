@@ -1,7 +1,7 @@
 /**
- * Mappings from AssemblyScript types to WebAssembly types.
- * @module types
- *//***/
+ * @fileoverview Mappings from AssemblyScript types to WebAssembly types.
+ * @license Apache-2.0
+ */
 
 import {
   Class,
@@ -97,8 +97,6 @@ export const enum TypeFlags {
   /** Is a host type. */
   HOST = 1 << 11
 }
-
-const v128_zero = new Uint8Array(16);
 
 /** Represents a resolved type. */
 export class Type {

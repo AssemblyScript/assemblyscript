@@ -1,10 +1,10 @@
 /**
- * Abstract Syntax Tree extras.
+ * @fileoverview Abstract Syntax Tree extras.
  *
- * Not needed in a standalone compiler but useful for testing the parser.
+ * Provides serialization of the AssemblyScript AST back to it source form.
  *
- * @module extra/ast
- *//***/
+ * @license Apache-2.0
+ */
 
 import {
   Node,
@@ -471,10 +471,12 @@ export class ASTBuilder {
     var elements = node.elementExpressions;
     var numElements = elements.length;
     if (numElements) {
-      if (elements[0]) this.visitNode(<Expression>elements[0]);
+      let element = elements[0];
+      if (element) this.visitNode(element);
       for (let i = 1; i < numElements; ++i) {
+        element = elements[i];
         sb.push(", ");
-        if (elements[i]) this.visitNode(<Expression>elements[i]);
+        if (element) this.visitNode(element);
       }
     }
     sb.push("]");

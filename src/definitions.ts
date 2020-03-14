@@ -1,9 +1,13 @@
 /**
- * Definition builders for WebIDL and TypeScript.
- * @module definitions
- *//***/
+ * @fileoverview Builders for various definitions describing a module.
+ *
+ * - TSDBuilder: Creates a TypeScript definition file (.d.ts)
+ * - IDLBuilder: Creates a WebIDL interface definition (.webidl)
+ *
+ * @license Apache-2.0
+ */
 
- import {
+import {
   CommonFlags
 } from "./common";
 
@@ -89,8 +93,8 @@ export abstract class ExportsWalker {
   visitElement(name: string, element: Element): void {
     if (element.is(CommonFlags.PRIVATE) && !this.includePrivate) return;
     var seen = this.seen;
-    if (seen.has(element) && !element.is(CommonFlags.INSTANCE)) {
-      this.visitAlias(name, element, <string>seen.get(element));
+    if (!element.is(CommonFlags.INSTANCE) && seen.has(element)) {
+      this.visitAlias(name, element, assert(seen.get(element)));
       return;
     }
     seen.set(element, name);
@@ -113,7 +117,8 @@ export abstract class ExportsWalker {
         break;
       }
       case ElementKind.FIELD: {
-        if ((<Field>element).is(CommonFlags.COMPILED)) this.visitField(name, <Field>element);
+        let fieldInstance = <Field>element;
+        if (fieldInstance.is(CommonFlags.COMPILED)) this.visitField(name, fieldInstance);
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
@@ -121,11 +126,11 @@ export abstract class ExportsWalker {
         break;
       }
       case ElementKind.PROPERTY: {
-        let prop = <Property>element;
-        let getter = prop.getterInstance;
-        if (getter) this.visitFunction(name, getter);
-        let setter = prop.setterInstance;
-        if (setter) this.visitFunction(name, setter);
+        let propertyInstance = <Property>element;
+        let getterInstance = propertyInstance.getterInstance;
+        if (getterInstance) this.visitFunction(name, getterInstance);
+        let setterInstance = propertyInstance.setterInstance;
+        if (setterInstance) this.visitFunction(name, setterInstance);
         break;
       }
       case ElementKind.NAMESPACE: {
@@ -163,7 +168,7 @@ export abstract class ExportsWalker {
     // var instances = element.instances;
     // if (instances) {
     //   for (let instance of instances.values()) {
-    //     if (instance.is(CommonFlags.COMPILED)) this.visitProperty(<Property>instance);
+    //     if (instance.is(CommonFlags.COMPILED)) this.visitProperty(instance);
     //   }
     // }
     assert(false);
@@ -234,8 +239,8 @@ export class IDLBuilder extends ExportsWalker {
         let memberName = unchecked(_keys[i]);
         let member = assert(members.get(memberName));
         if (member.kind == ElementKind.ENUMVALUE) {
-          let value = <EnumValue>member;
-          let isConst = value.is(CommonFlags.INLINED);
+          let enumValue = <EnumValue>member;
+          let isConst = enumValue.is(CommonFlags.INLINED);
           indent(sb, this.indentLevel);
           if (isConst) sb.push("const ");
           else sb.push("readonly ");
@@ -243,8 +248,8 @@ export class IDLBuilder extends ExportsWalker {
           sb.push(memberName);
           if (isConst) {
             sb.push(" = ");
-            assert(value.constantValueKind == ConstantValueKind.INTEGER);
-            sb.push(i64_low(value.constantIntegerValue).toString());
+            assert(enumValue.constantValueKind == ConstantValueKind.INTEGER);
+            sb.push(i64_low(enumValue.constantIntegerValue).toString());
           }
           sb.push(";\n");
         }
@@ -381,7 +386,6 @@ export class TSDBuilder extends ExportsWalker {
 
   private sb: string[] = [];
   private indentLevel: i32 = 0;
-  private unknown: Set<string> = new Set();
 
   /** Constructs a new WebIDL builder. */
   constructor(program: Program, includePrivate: bool = false) {
@@ -423,13 +427,13 @@ export class TSDBuilder extends ExportsWalker {
         let memberName = unchecked(_keys[i]);
         let member = assert(members.get(memberName));
         if (member.kind == ElementKind.ENUMVALUE) {
-          let value = <EnumValue>member;
+          let enumValue = <EnumValue>member;
           indent(sb, this.indentLevel);
           sb.push(memberName);
           if (member.is(CommonFlags.INLINED)) {
             sb.push(" = ");
-            assert(value.constantValueKind == ConstantValueKind.INTEGER);
-            sb.push(i64_low(value.constantIntegerValue).toString());
+            assert(enumValue.constantValueKind == ConstantValueKind.INTEGER);
+            sb.push(i64_low(enumValue.constantIntegerValue).toString());
           }
           sb.push(",\n");
           --remainingMembers;

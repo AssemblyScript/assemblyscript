@@ -2,13 +2,13 @@ const fs   = require("fs");
 const path = require("path");
 
 const compiled = new WebAssembly.Module(
-  fs.readFileSync(path.resolve(__dirname, "..", "build", "optimized.wasm"))
+  fs.readFileSync(path.resolve(__dirname, "..", "build", "as_nbody.wasm"))
 );
 
 const imports = {
   env: {
     memory: new WebAssembly.Memory({ initial: 10 }),
-    abort: (filename, line, column) => {
+    abort: (_, line, column) => {
       throw Error("abort called at " + line + ":" + column);
     }
   }

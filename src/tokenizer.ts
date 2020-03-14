@@ -1,11 +1,15 @@
 /**
- * A TypeScript tokenizer modified for AssemblyScript.
+ * @fileoverview A TypeScript tokenizer modified for AssemblyScript.
  *
- * Skips over trivia and provides a general mark/reset mechanism for the parser to utilize on
- * ambiguous tokens.
+ * The `Tokenizer` scans over a source file and returns one syntactic token
+ * at a time that the parser will combine to an abstract syntax tree.
  *
- * @module tokenizer
- *//***/
+ * It skips over trivia like comments and whitespace and provides a general
+ * mark/reset mechanism for the parser to utilize on ambiguous tokens, with
+ * one token of lookahead otherwise.
+ *
+ * @license Apache-2.0
+ */
 
 import {
   DiagnosticCode,

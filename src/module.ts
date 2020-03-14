@@ -1,7 +1,12 @@
 /**
- * A thin wrapper around Binaryen's C-API.
- * @module module
- *//***/
+ * @fileoverview A thin wrapper around Binaryen's C-API.
+ *
+ * The AssemblyScript compiler utilizes Binaryen's C-API directly. Even
+ * though it currently imports binaryen.js, none of the JS APIs it
+ * provides are used.
+ *
+ * @license Apache-2.0
+ */
 
 import { Target } from "./common";
 import * as binaryen from "./glue/binaryen";
@@ -49,7 +54,8 @@ export enum FeatureFlags {
   ExceptionHandling = 64 /* _BinaryenFeatureExceptionHandling */,
   TailCall = 128 /* _BinaryenFeatureTailCall */,
   ReferenceTypes = 256 /* _BinaryenFeatureReferenceTypes */,
-  All = 511 /* _BinaryenFeatureAll */
+  MultiValue = 512 /* _BinaryenFeatureMultivalue */,
+  All = 1023 /* _BinaryenFeatureAll */
 }
 
 export enum ExpressionId {

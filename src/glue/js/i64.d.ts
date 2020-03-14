@@ -1,4 +1,7 @@
-/** @module glue/js *//***/
+/**
+ * @fileoverview 64-bit integer glue code for TypeScript.
+ * @license Apache-2.0
+ */
 
 declare type i64 = { __Long__: true }; // opaque
 

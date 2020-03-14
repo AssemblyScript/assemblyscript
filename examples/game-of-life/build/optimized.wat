@@ -89,54 +89,57 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
   global.get $assembly/index/height
-  local.tee $8
-  i32.const 1
-  i32.sub
-  local.set $6
-  global.get $assembly/index/width
   local.tee $9
   i32.const 1
   i32.sub
-  local.set $7
+  local.set $4
+  global.get $assembly/index/width
+  local.tee $10
+  i32.const 1
+  i32.sub
+  local.set $5
   loop $for-loop|0
-   local.get $1
-   local.get $8
+   local.get $2
+   local.get $9
    i32.lt_s
    if
-    local.get $1
+    local.get $2
     i32.const 1
     i32.sub
-    local.get $6
-    local.get $1
+    local.get $4
+    local.get $2
     select
-    local.set $4
+    local.set $6
     i32.const 0
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.get $1
-    local.get $6
+    local.get $2
+    local.get $4
     i32.eq
     select
-    local.set $5
+    local.set $11
     i32.const 0
     local.set $0
     loop $for-loop|1
      local.get $0
-     local.get $9
+     local.get $10
      i32.lt_s
      if
+      local.get $6
+      global.get $assembly/index/width
+      i32.mul
+      local.tee $3
       local.get $0
       i32.const 1
       i32.sub
-      local.get $7
+      local.get $5
       local.get $0
       select
-      local.tee $3
-      local.get $4
-      global.get $assembly/index/width
-      i32.mul
+      local.tee $7
       i32.add
       i32.const 2
       i32.shl
@@ -144,9 +147,10 @@
       i32.const 1
       i32.and
       local.get $0
-      local.get $4
+      local.get $6
       global.get $assembly/index/width
       i32.mul
+      local.tee $1
       i32.add
       i32.const 2
       i32.shl
@@ -159,13 +163,24 @@
       i32.const 1
       i32.add
       local.get $0
-      local.get $7
+      local.get $5
       i32.eq
       select
-      local.tee $2
-      local.get $4
+      local.tee $3
+      local.get $1
+      i32.add
+      i32.const 2
+      i32.shl
+      i32.load
+      i32.const 1
+      i32.and
+      i32.add
+      local.get $7
+      local.get $2
       global.get $assembly/index/width
+      local.tee $1
       i32.mul
+      local.tee $8
       i32.add
       i32.const 2
       i32.shl
@@ -174,9 +189,7 @@
       i32.and
       i32.add
       local.get $3
-      local.get $1
-      global.get $assembly/index/width
-      i32.mul
+      local.get $8
       i32.add
       i32.const 2
       i32.shl
@@ -184,10 +197,11 @@
       i32.const 1
       i32.and
       i32.add
-      local.get $2
+      local.get $7
       local.get $1
-      global.get $assembly/index/width
+      local.get $11
       i32.mul
+      local.tee $1
       i32.add
       i32.const 2
       i32.shl
@@ -195,10 +209,17 @@
       i32.const 1
       i32.and
       i32.add
+      local.get $0
+      local.get $1
+      i32.add
+      i32.const 2
+      i32.shl
+      i32.load
+      i32.const 1
+      i32.and
+      i32.add
+      local.get $1
       local.get $3
-      local.get $5
-      global.get $assembly/index/width
-      i32.mul
       i32.add
       i32.const 2
       i32.shl
@@ -206,33 +227,9 @@
       i32.const 1
       i32.and
       i32.add
+      local.set $1
       local.get $0
-      local.get $5
-      global.get $assembly/index/width
-      i32.mul
-      i32.add
-      i32.const 2
-      i32.shl
-      i32.load
-      i32.const 1
-      i32.and
-      i32.add
-      local.get $2
-      local.get $5
-      global.get $assembly/index/width
-      i32.mul
-      i32.add
-      i32.const 2
-      i32.shl
-      i32.load
-      i32.const 1
-      i32.and
-      i32.add
-      local.set $2
-      local.get $0
-      local.get $1
-      global.get $assembly/index/width
-      i32.mul
+      local.get $8
       i32.add
       i32.const 2
       i32.shl
@@ -241,7 +238,7 @@
       i32.const 1
       i32.and
       if
-       local.get $2
+       local.get $1
        i32.const 14
        i32.and
        i32.const 2
@@ -249,7 +246,7 @@
        if
         local.get $0
         global.get $assembly/index/offset
-        local.get $1
+        local.get $2
         global.get $assembly/index/width
         i32.mul
         i32.add
@@ -264,9 +261,9 @@
         i32.shr_u
         global.get $assembly/config/BIT_ROT
         i32.sub
-        local.tee $2
+        local.tee $1
         i32.const 0
-        local.get $2
+        local.get $1
         i32.const 0
         i32.gt_s
         select
@@ -277,7 +274,7 @@
        else
         local.get $0
         global.get $assembly/index/offset
-        local.get $1
+        local.get $2
         global.get $assembly/index/width
         i32.mul
         i32.add
@@ -290,13 +287,13 @@
         i32.store
        end
       else
-       local.get $2
+       local.get $1
        i32.const 3
        i32.eq
        if
         local.get $0
         global.get $assembly/index/offset
-        local.get $1
+        local.get $2
         global.get $assembly/index/width
         i32.mul
         i32.add
@@ -310,7 +307,7 @@
        else
         local.get $0
         global.get $assembly/index/offset
-        local.get $1
+        local.get $2
         global.get $assembly/index/width
         i32.mul
         i32.add
@@ -325,9 +322,9 @@
         i32.shr_u
         global.get $assembly/config/BIT_ROT
         i32.sub
-        local.tee $2
+        local.tee $1
         i32.const 0
-        local.get $2
+        local.get $1
         i32.const 0
         i32.gt_s
         select
@@ -344,10 +341,10 @@
       br $for-loop|1
      end
     end
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $for-loop|0
    end
   end
