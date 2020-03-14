@@ -551,13 +551,13 @@ export function isCaseIgnorable(c: u32): bool {
 
 // @ts-ignore: decorator
 @inline
-export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
+export function isFinalSigma(buffer: usize, index: isize, len: isize): bool {
   const lookaheadLimit = 30; // max lookahead limit
   var found = false;
   var pos = index;
   var minPos = max(0, pos - lookaheadLimit);
   while (pos > minPos) {
-    let c = codePointBefore(buffer, pos);
+    let c = codePointBefore(buffer, <i32>pos);
     if (!isCaseIgnorable(c)) {
       if (isCased(c)) {
         found = true;
@@ -565,7 +565,7 @@ export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
         return false;
       }
     }
-    pos -= i32(c >= 0x10000) + 1;
+    pos -= isize(c >= 0x10000) + 1;
   }
   if (!found) return false;
   pos = index + 1;
@@ -581,7 +581,7 @@ export function isFinalSigma(buffer: usize, index: i32, len: i32): bool {
     if (!isCaseIgnorable(c)) {
       return !isCased(c);
     }
-    pos += i32(c >= 0x10000) + 1;
+    pos += isize(c >= 0x10000) + 1;
   }
   return true;
 }
