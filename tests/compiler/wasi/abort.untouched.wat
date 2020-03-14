@@ -471,7 +471,7 @@
    i32.const 32
    i32.const 80
    i32.const 4
-   i32.const 2
+   i32.const 3
    call $~lib/wasi/index/abort
    unreachable
   end

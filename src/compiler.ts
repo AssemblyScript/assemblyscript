@@ -10091,13 +10091,15 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var filenameArg = this.ensureStaticString(codeLocation.range.source.normalizedPath);
+    var range = codeLocation.range;
+    var source = range.source;
     return module.block(null, [
       module.call(
         abortInstance.internalName, [
           messageArg,
           filenameArg,
-          module.i32(codeLocation.range.line),
-          module.i32(codeLocation.range.column)
+          module.i32(source.lineAt(range.start)),
+          module.i32(source.columnAt())
         ],
         NativeType.None
       ),

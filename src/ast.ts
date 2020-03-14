@@ -1718,6 +1718,45 @@ export class Source extends Node {
     var kind = this.sourceKind;
     return kind == SourceKind.LIBRARY || kind == SourceKind.LIBRARY_ENTRY;
   }
+
+  /** Cached line starts. */
+  private lineCache: i32[] | null = null;
+
+  /** Rememberd column number. */
+  private lineColumn: i32 = 0;
+
+  /** Determines the line number at the specified position. */
+  lineAt(pos: i32): i32 {
+    assert(pos >= 0 && pos < 0x7fffffff);
+    var lineCache = this.lineCache;
+    if (!lineCache) {
+      this.lineCache = lineCache = [0];
+      let text = this.text;
+      for (let i = 0, k = text.length; i < k;) {
+        if (text.charCodeAt(i++) == CharCode.LINEFEED) lineCache.push(i);
+      }
+      lineCache.push(0x7fffffff);
+    }
+    var l = 0;
+    var r = lineCache.length - 1;
+    while (l < r) {
+      let m = l + i32((r - l) / 2);
+      let s = lineCache[m];
+      if (pos < s) r = m;
+      else if (pos < lineCache[m + 1]) {
+        this.lineColumn = pos - s + 1;
+        return m + 1;
+      }
+      else l = m + 1;
+    }
+    assert(false);
+    return 0;
+  }
+
+  /** Gets the column number at the last position queried with `lineAt`. */
+  columnAt(): i32 {
+    return this.lineColumn;
+  }
 }
 
 /** Base class of all declaration statements. */

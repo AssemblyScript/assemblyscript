@@ -402,10 +402,7 @@ export class Range {
   source: Source;
   start: i32;
   end: i32;
-
-  // TODO: set these while tokenizing
-  // line: i32;
-  // column: i32;
+  debugInfoRef: usize = 0;
 
   constructor(source: Source, start: i32, end: i32) {
     this.source = source;
@@ -429,30 +426,9 @@ export class Range {
     return new Range(this.source, this.end, this.end);
   }
 
-  get line(): i32 {
-    var text = this.source.text;
-    var line = 1;
-    for (let pos = this.start; pos >= 0; --pos) {
-      if (text.charCodeAt(pos) == CharCode.LINEFEED) line++;
-    }
-    return line;
-  }
-
-  get column(): i32 {
-    var text = this.source.text;
-    var column = 0;
-    for (let pos = this.start - 1; pos >= 0; --pos) {
-      if (text.charCodeAt(pos) == CharCode.LINEFEED) break;
-      ++column;
-    }
-    return column;
-  }
-
   toString(): string {
     return this.source.text.substring(this.start, this.end);
   }
-
-  debugInfoRef: usize = 0;
 }
 
 /** Handler for intercepting comments while tokenizing. */

@@ -128,6 +128,7 @@ export class DiagnosticMessage {
   toString(): string {
     var range = this.range;
     if (range) {
+      let source = range.source;
       return (
         diagnosticCategoryToString(this.category) +
         " " +
@@ -135,11 +136,11 @@ export class DiagnosticMessage {
         ": \"" +
         this.message +
         "\" in " +
-        range.source.normalizedPath +
+        source.normalizedPath +
         ":" +
-        range.line.toString() +
+        source.lineAt(range.start).toString() +
         ":" +
-        range.column.toString()
+        source.columnAt().toString()
       );
     }
     return (
@@ -172,6 +173,7 @@ export function formatDiagnosticMessage(
   // include range information if available
   var range = message.range;
   if (range) {
+    let source = range.source;
 
     // include context information if requested
     if (showContext) {
@@ -180,26 +182,27 @@ export function formatDiagnosticMessage(
     }
     sb.push("\n");
     sb.push(" in ");
-    sb.push(range.source.normalizedPath);
+    sb.push(source.normalizedPath);
     sb.push("(");
-    sb.push(range.line.toString());
+    sb.push(source.lineAt(range.start).toString());
     sb.push(",");
-    sb.push(range.column.toString());
+    sb.push(source.columnAt().toString());
     sb.push(")");
 
     let relatedRange = message.relatedRange;
     if (relatedRange) {
+      let relatedSource = relatedRange.source;
       if (showContext) {
         sb.push("\n");
         sb.push(formatDiagnosticContext(relatedRange, useColors));
       }
       sb.push("\n");
       sb.push(" in ");
-      sb.push(relatedRange.source.normalizedPath);
+      sb.push(relatedSource.normalizedPath);
       sb.push("(");
-      sb.push(relatedRange.line.toString());
+      sb.push(relatedSource.lineAt(relatedRange.start).toString());
       sb.push(",");
-      sb.push(relatedRange.column.toString());
+      sb.push(relatedSource.columnAt().toString());
       sb.push(")");
     }
   }
