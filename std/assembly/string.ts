@@ -22,7 +22,7 @@ import { Array } from "./array";
   static fromCharCodes(units: Array<i32>): String {
     var length = units.length;
     var out = __alloc(<usize>length << 1, idof<String>());
-    var ptr = units.dataStart;
+    var ptr = load<usize>(changetype<usize>(units), offsetof<Array<i32>>("dataStart"));
     for (let i = 0; i < length; ++i) {
       store<u16>(out + (<usize>i << 1), load<i32>(ptr + (<usize>i << 2)));
     }

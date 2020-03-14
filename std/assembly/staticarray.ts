@@ -19,22 +19,22 @@ export class StaticArray<T> {
   static fromArray<T>(source: Array<T>): StaticArray<T> {
     var length = source.length;
     var outSize = <usize>length << alignof<T>();
-    var out = __alloc(outSize, idof<StaticArray<T>>());
+    var outPtr = __alloc(outSize, idof<StaticArray<T>>());
+    var srcPtr = load<usize>(changetype<usize>(source), offsetof<Array<T>>("dataStart"));
     if (isManaged<T>()) {
-      let sourcePtr = source.dataStart;
       for (let i = 0; i < length; ++i) {
         let off = <usize>i << alignof<T>();
-        store<usize>(out + off, __retain(load<usize>(sourcePtr + off)));
+        store<usize>(outPtr + off, __retain(load<usize>(srcPtr + off)));
       }
     } else {
-      memory.copy(out, source.dataStart, outSize);
+      memory.copy(outPtr, srcPtr, outSize);
     }
-    return changetype<StaticArray<T>>(out);
+    return changetype<StaticArray<T>>(outPtr);
   }
 
   static concat<T>(source: StaticArray<T>, other: StaticArray<T>): StaticArray<T> {
     var sourceLen = source.length;
-    var otherLen = select(0, other.length, other === null);
+    var otherLen = select(0, other.length, changetype<usize>(other) == 0);
     var outLen = sourceLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
     var out = changetype<StaticArray<T>>(__alloc(<usize>outLen << alignof<T>(), idof<StaticArray<T>>())); // retains
@@ -166,28 +166,28 @@ export class StaticArray<T> {
 
   concat(other: Array<T>): Array<T> {
     var thisLen = this.length;
-    var otherLen = select(0, other.length, other === null);
+    var otherLen = select(0, other.length, changetype<usize>(other) == 0);
     var outLen = thisLen + otherLen;
     if (<u32>outLen > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new Error(E_INVALIDLENGTH);
     var out = changetype<Array<T>>(__allocArray(outLen, alignof<T>(), idof<Array<T>>())); // retains
-    var outStart = out.dataStart;
+    var outPtr = load<usize>(changetype<usize>(out), offsetof<Array<T>>("dataStart"));
+    var otherPtr = load<usize>(changetype<usize>(other), offsetof<Array<T>>("dataStart"));
     var thisSize = <usize>thisLen << alignof<T>();
     if (isManaged<T>()) {
       let thisStart = changetype<usize>(this);
       for (let offset: usize = 0; offset < thisSize; offset += sizeof<T>()) {
         let ref = load<usize>(thisStart + offset);
-        store<usize>(outStart + offset, __retain(ref));
+        store<usize>(outPtr + offset, __retain(ref));
       }
-      outStart += thisSize;
-      let otherStart = other.dataStart;
+      outPtr += thisSize;
       let otherSize = <usize>otherLen << alignof<T>();
       for (let offset: usize = 0; offset < otherSize; offset += sizeof<T>()) {
-        let ref = load<usize>(otherStart + offset);
-        store<usize>(outStart + offset, __retain(ref));
+        let ref = load<usize>(otherPtr + offset);
+        store<usize>(outPtr + offset, __retain(ref));
       }
     } else {
-      memory.copy(outStart, changetype<usize>(this), thisSize);
-      memory.copy(outStart + thisSize, other.dataStart, <usize>otherLen << alignof<T>());
+      memory.copy(outPtr, changetype<usize>(this), thisSize);
+      memory.copy(outPtr + thisSize, otherPtr, <usize>otherLen << alignof<T>());
     }
     return out;
   }
@@ -198,18 +198,18 @@ export class StaticArray<T> {
     end   = end   < 0 ? max(end   + length, 0) : min(end  , length);
     length = max(end - start, 0);
     var slice = changetype<Array<T>>(__allocArray(length, alignof<T>(), idof<Array<T>>())); // retains
-    var sliceBase = slice.dataStart;
-    var thisBase = changetype<usize>(this) + (<usize>start << alignof<T>());
+    var slicePtr = load<usize>(changetype<usize>(slice), offsetof<Array<T>>("dataStart"));
+    var thisPtr = changetype<usize>(this) + (<usize>start << alignof<T>());
     if (isManaged<T>()) {
       let off = <usize>0;
       let end = <usize>length << alignof<usize>();
       while (off < end) {
-        let ref = load<usize>(thisBase + off);
-        store<usize>(sliceBase + off, __retain(ref));
+        let ref = load<usize>(thisPtr + off);
+        store<usize>(slicePtr + off, __retain(ref));
         off += sizeof<usize>();
       }
     } else {
-      memory.copy(sliceBase, thisBase, length << alignof<T>());
+      memory.copy(slicePtr, thisPtr, length << alignof<T>());
     }
     return slice;
   }
