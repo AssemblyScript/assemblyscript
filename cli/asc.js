@@ -60,6 +60,7 @@ try { // `asc` on the command line
     require("ts-node").register({
       project: path.join(__dirname, "..", "src", "tsconfig.json"),
       skipIgnore: true,
+      transpileOnly: true,
       compilerOptions: { target: "ES2016" }
     });
     require("../src/glue/js");
