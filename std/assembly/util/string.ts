@@ -557,7 +557,7 @@ export function isFinalSigma(buffer: usize, index: isize, len: isize): bool {
   var pos = index;
   var minPos = max(0, pos - lookaheadLimit);
   while (pos > minPos) {
-    let c = codePointBefore(buffer, <i32>pos);
+    let c = codePointBefore(buffer, pos);
     if (!isCaseIgnorable(c)) {
       if (isCased(c)) {
         found = true;
@@ -571,9 +571,9 @@ export function isFinalSigma(buffer: usize, index: isize, len: isize): bool {
   pos = index + 1;
   var maxPos = min(pos + lookaheadLimit, len);
   while (pos < maxPos) {
-    let c = <u32>load<u16>(buffer + (<usize>pos << 1));
+    let c = <u32>load<u16>(buffer + (pos << 1));
     if (u32((c & 0xFC00) == 0xD800) & u32(pos + 1 != len)) {
-      let c1 = <u32>load<u16>(buffer + (<usize>pos << 1), 2);
+      let c1 = <u32>load<u16>(buffer + (pos << 1), 2);
       if ((c1 & 0xFC00) == 0xDC00) {
         c = (c - 0xD800 << 10) + (c1 - 0xDC00) + 0x10000;
       }
@@ -588,11 +588,11 @@ export function isFinalSigma(buffer: usize, index: isize, len: isize): bool {
 
 // @ts-ignore: decorator
 @inline
-function codePointBefore(buffer: usize, index: i32): i32 {
+function codePointBefore(buffer: usize, index: isize): i32 {
   if (index <= 0) return -1;
-  var c = <u32>load<u16>(buffer + (<usize>index - 1 << 1));
+  var c = <u32>load<u16>(buffer + (index - 1 << 1));
   if (u32((c & 0xFC00) == 0xDC00) & u32(index - 2 >= 0)) {
-    let c1 = <u32>load<u16>(buffer + (<usize>index - 2 << 1));
+    let c1 = <u32>load<u16>(buffer + (index - 2 << 1));
     if ((c1 & 0xFC00) == 0xD800) {
       return ((c1 & 0x3FF) << 10) + (c & 0x3FF) + 0x10000;
     }
