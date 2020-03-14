@@ -247,6 +247,7 @@ exports.main = function main(argv, options, callback) {
   assemblyscript.setSourceMap(compilerOptions, args.sourceMap != null);
   assemblyscript.setNoUnsafe(compilerOptions, args.noUnsafe);
   assemblyscript.setPedantic(compilerOptions, args.pedantic);
+  assemblyscript.setLowMemoryLimit(compilerOptions, args.lowMemoryLimit >>> 0);
 
   // Add or override aliases if specified
   if (args.use) {

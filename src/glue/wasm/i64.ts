@@ -127,6 +127,12 @@ function i64_ne(left: i64, right: i64): bool {
 
 // @ts-ignore: decorator
 @global
+function i64_gt(left: i64, right: i64): bool {
+  return left > right;
+}
+
+// @ts-ignore: decorator
+@global
 function i64_align(value: i64, alignment: i64): i64 {
   var mask: i64 = alignment - 1;
   assert(alignment && (alignment & mask) == 0);

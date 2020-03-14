@@ -16,6 +16,7 @@
  (data (i32.const 176) "\04\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/rt/__rtti_base i32 (i32.const 176))
@@ -756,7 +757,9 @@
    global.get $~lib/heap/__heap_base
    i32.const 15
    i32.add
-   i32.const -16
+   i32.const 15
+   i32.const -1
+   i32.xor
    i32.and
    local.set $1
    memory.size
@@ -865,7 +868,6 @@
      br $for-loop|0
     end
    end
-   local.get $0
    local.get $1
    i32.const 1572
    i32.add
@@ -875,6 +877,9 @@
    i32.const -1
    i32.xor
    i32.and
+   local.set $5
+   local.get $0
+   local.get $5
    memory.size
    i32.const 16
    i32.shl
@@ -894,7 +899,7 @@
   if
    i32.const 80
    i32.const 32
-   i32.const 457
+   i32.const 461
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1285,7 +1290,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 490
+   i32.const 501
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1326,7 +1331,7 @@
      if
       i32.const 0
       i32.const 32
-      i32.const 502
+      i32.const 513
       i32.const 19
       call $~lib/builtins/abort
       unreachable
@@ -1345,7 +1350,7 @@
     if
      i32.const 0
      i32.const 32
-     i32.const 507
+     i32.const 518
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1362,7 +1367,7 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 510
+   i32.const 521
    i32.const 13
    call $~lib/builtins/abort
    unreachable
