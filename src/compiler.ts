@@ -361,7 +361,10 @@ export class Compiler extends DiagnosticEmitter {
       this.memoryOffset = i64_new(options.memoryBase);
       module.setLowMemoryUnused(false);
     } else {
-      if (options.optimizeLevelHint >= 2) {
+      if (options.shrinkLevelHint >= 2 || (
+        options.shrinkLevelHint == 0 &&
+        options.optimizeLevelHint >= 3
+      )) {
         this.memoryOffset = i64_new(1024);
         module.setLowMemoryUnused(true);
       } else {

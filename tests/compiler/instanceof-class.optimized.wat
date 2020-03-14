@@ -5,8 +5,8 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00-\00c\00l\00a\00s\00s\00.\00t\00s")
- (data (i32.const 1088) "\07\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\04\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\05")
+ (data (i32.const 16) "&\00\00\00\01\00\00\00\01\00\00\00&\00\00\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00-\00c\00l\00a\00s\00s\00.\00t\00s")
+ (data (i32.const 80) "\07\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\04\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\05")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $instanceof-class/a (mut i32) (i32.const 0))
@@ -81,9 +81,9 @@
  )
  (func $~start (; 2 ;)
   (local $0 i32)
-  i32.const 1152
+  i32.const 144
   global.set $~lib/rt/stub/startOffset
-  i32.const 1152
+  i32.const 144
   global.set $~lib/rt/stub/offset
   i32.const 3
   call $~lib/rt/stub/__alloc
@@ -131,7 +131,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 1040
+   i32.const 32
    i32.const 17
    i32.const 0
    call $~lib/builtins/abort
@@ -144,7 +144,7 @@
   i32.sub
   i32.load offset=8
   local.tee $0
-  i32.const 1088
+  i32.const 80
   i32.load
   i32.le_u
   if
@@ -159,7 +159,7 @@
     local.get $0
     i32.const 3
     i32.shl
-    i32.const 1092
+    i32.const 84
     i32.add
     i32.load offset=4
     local.tee $0

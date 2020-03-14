@@ -83,9 +83,9 @@
   i32.const 42
  )
  (func $~start (; 2 ;)
-  i32.const 1024
+  i32.const 16
   global.set $~lib/rt/stub/startOffset
-  i32.const 1024
+  i32.const 16
   global.set $~lib/rt/stub/offset
  )
 )

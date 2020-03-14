@@ -4,10 +4,10 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 1)
- (data (i32.const 1024) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
+ (data (i32.const 16) "\03\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10")
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/rt/__rtti_base i32 (i32.const 1024))
+ (global $~lib/rt/__rtti_base i32 (i32.const 16))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/stub/__alloc))
  (export "__retain" (func $~lib/rt/stub/__retain))
@@ -114,9 +114,9 @@
   global.set $~lib/rt/stub/offset
  )
  (func $~start (; 5 ;)
-  i32.const 1056
+  i32.const 48
   global.set $~lib/rt/stub/startOffset
-  i32.const 1056
+  i32.const 48
   global.set $~lib/rt/stub/offset
  )
 )

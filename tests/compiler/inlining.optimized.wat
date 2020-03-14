@@ -6,7 +6,7 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 1024) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
+ (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s")
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -142,7 +142,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 32
    i32.const 95
    i32.const 2
    call $~lib/builtins/abort
@@ -154,7 +154,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 32
    i32.const 96
    i32.const 2
    call $~lib/builtins/abort
@@ -166,7 +166,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 32
    i32.const 97
    i32.const 2
    call $~lib/builtins/abort
@@ -178,7 +178,7 @@
   i32.ne
   if
    i32.const 0
-   i32.const 1040
+   i32.const 32
    i32.const 98
    i32.const 2
    call $~lib/builtins/abort
@@ -188,9 +188,9 @@
  (func $~start (; 5 ;)
   i32.const 1
   global.set $~argumentsLength
-  i32.const 1072
+  i32.const 64
   global.set $~lib/rt/stub/startOffset
-  i32.const 1072
+  i32.const 64
   global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )

@@ -139,9 +139,9 @@
   nop
  )
  (func $~start (; 7 ;)
-  i32.const 1024
+  i32.const 16
   global.set $~lib/rt/stub/startOffset
-  i32.const 1024
+  i32.const 16
   global.set $~lib/rt/stub/offset
  )
  (func $exports/subOpt|trampoline (; 8 ;) (param $0 i32) (param $1 i32) (result i32)

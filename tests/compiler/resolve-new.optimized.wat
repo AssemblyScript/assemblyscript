@@ -74,9 +74,9 @@
   local.get $2
  )
  (func $~start (; 1 ;)
-  i32.const 1024
+  i32.const 16
   global.set $~lib/rt/stub/startOffset
-  i32.const 1024
+  i32.const 16
   global.set $~lib/rt/stub/offset
   call $resolve-new/Foo#constructor
   global.set $resolve-new/foo

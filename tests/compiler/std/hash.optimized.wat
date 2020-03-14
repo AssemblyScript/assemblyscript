@@ -2,10 +2,10 @@
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (memory $0 1)
- (data (i32.const 1028) "\01\00\00\00\01")
- (data (i32.const 1040) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
- (data (i32.const 1072) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b")
- (data (i32.const 1104) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
+ (data (i32.const 20) "\01\00\00\00\01")
+ (data (i32.const 32) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00a")
+ (data (i32.const 64) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00a\00b")
+ (data (i32.const 96) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/util/hash/hashStr (; 0 ;) (param $0 i32)
@@ -51,13 +51,13 @@
  (func $~start (; 1 ;)
   i32.const 0
   call $~lib/util/hash/hashStr
-  i32.const 1040
+  i32.const 32
   call $~lib/util/hash/hashStr
-  i32.const 1056
+  i32.const 48
   call $~lib/util/hash/hashStr
-  i32.const 1088
+  i32.const 80
   call $~lib/util/hash/hashStr
-  i32.const 1120
+  i32.const 112
   call $~lib/util/hash/hashStr
  )
 )
