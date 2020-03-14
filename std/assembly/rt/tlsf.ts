@@ -481,7 +481,7 @@ export function maybeInitialize(): Root {
     }
     let memStart = (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK;
     if (ASC_LOW_MEMORY_LIMIT) {
-      const memEnd = (<usize>ASC_LOW_MEMORY_LIMIT + AL_MASK) & ~AL_MASK;
+      const memEnd = <usize>ASC_LOW_MEMORY_LIMIT & ~AL_MASK;
       if (memStart <= memEnd) addMemory(root, memStart, memEnd);
       else unreachable(); // low memory limit already exceeded
     } else {
