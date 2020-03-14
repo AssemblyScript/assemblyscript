@@ -138,6 +138,7 @@ declare module "assemblyscript/src/common" {
         const ASC_TABLE_BASE = "ASC_TABLE_BASE";
         const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
         const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
+        const ASC_WASI = "ASC_WASI";
         const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
         const ASC_FEATURE_MUTABLE_GLOBALS = "ASC_FEATURE_MUTABLE_GLOBALS";
         const ASC_FEATURE_NONTRAPPING_F2I = "ASC_FEATURE_NONTRAPPING_F2I";
@@ -172,6 +173,8 @@ declare module "assemblyscript/src/common" {
         const ArrayBuffer = "ArrayBuffer";
         const Math = "Math";
         const Mathf = "Mathf";
+        const NativeMath = "NativeMath";
+        const NativeMathf = "NativeMathf";
         const Int8Array = "Int8Array";
         const Int16Array = "Int16Array";
         const Int32Array = "Int32Array";
@@ -185,6 +188,8 @@ declare module "assemblyscript/src/common" {
         const Float64Array = "Float64Array";
         const Error = "Error";
         const abort = "abort";
+        const trace = "trace";
+        const seed = "seed";
         const pow = "pow";
         const mod = "mod";
         const alloc = "__alloc";
@@ -3285,6 +3290,8 @@ declare module "assemblyscript/src/program" {
         nextSignatureId: number;
         /** An indicator if the program has been initialized. */
         initialized: boolean;
+        /** Tests whether this is a WASI program. */
+        get isWasi(): boolean;
         /** Constructs a new program, optionally inheriting parser diagnostics. */
         constructor(
         /** Compiler options. */
@@ -4558,6 +4565,9 @@ declare module "assemblyscript/src/builtins" {
         const started = "~started";
         const argumentsLength = "~argumentsLength";
         const setArgumentsLength = "~setArgumentsLength";
+        const abort = "~lib/builtins/abort";
+        const trace = "~lib/builtins/trace";
+        const seed = "~lib/builtins/seed";
         const isInteger = "~lib/builtins/isInteger";
         const isFloat = "~lib/builtins/isFloat";
         const isBoolean = "~lib/builtins/isBoolean";
@@ -4996,6 +5006,9 @@ declare module "assemblyscript/src/builtins" {
         const Uint64Array = "~lib/typedarray/Uint64Array";
         const Float32Array = "~lib/typedarray/Float32Array";
         const Float64Array = "~lib/typedarray/Float64Array";
+        const wasiAbort = "~lib/wasi/index/abort";
+        const wasiTrace = "~lib/wasi/index/trace";
+        const wasiSeed = "~lib/wasi/index/seed";
     }
     /** Builtin compilation context. */
     export class BuiltinContext {
