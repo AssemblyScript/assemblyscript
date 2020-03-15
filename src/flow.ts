@@ -169,6 +169,12 @@ export enum LocalFlags {
                | CONDITIONALLY_RETAINED
 }
 
+/** Flags indicating the current state of an instance field. */
+export enum FieldFlags {
+  NONE = 0,
+  INITIALIZED = 1 << 0,
+}
+
 /** Condition kinds. */
 export const enum ConditionKind {
   /** Outcome of the condition is unknown */
@@ -200,6 +206,8 @@ export class Flow {
   scopedLocals: Map<string,Local> | null = null;
   /** Local flags. */
   localFlags: LocalFlags[];
+  /** Field flags. */
+  fieldFlags: Map<string, FieldFlags>;
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null;
   /** The label we break to when encountering a return statement, when inlining. */
@@ -216,6 +224,7 @@ export class Flow {
     flow.returnType = parentFunction.signature.returnType;
     flow.contextualTypeArguments = parentFunction.contextualTypeArguments;
     flow.localFlags = [];
+    flow.fieldFlags = new Map();
     flow.inlineFunction = null;
     flow.inlineReturnLabel = null;
     return flow;
@@ -276,6 +285,7 @@ export class Flow {
     branch.localFlags = this.localFlags.slice();
     branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
+    branch.fieldFlags = new Map(this.fieldFlags);
     return branch;
   }
 
@@ -517,6 +527,20 @@ export class Flow {
     var localFlags = this.localFlags;
     var flags = index < localFlags.length ? unchecked(localFlags[index]) : 0;
     localFlags[index] = flags & ~flag;
+  }
+
+  setFieldFlag(name: string, flag: FieldFlags): void {
+    let fieldFlags = this.fieldFlags;
+    const flags = fieldFlags.get(name) || 0;
+    fieldFlags.set(name, flags | flag);
+  }
+
+  isFieldFlag(name: string, flag: FieldFlags): bool {
+    const flags = this.fieldFlags.get(name);
+    if (flags) {
+      return (flags & flag) == flag;
+    }
+    return false;
   }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
@@ -804,6 +828,20 @@ export class Flow {
           newFlags |= (leftFlags | rightFlags) & LocalFlags.CONDITIONALLY_RETAINED;
         }
         thisLocalFlags[i] = newFlags;
+      }
+    }
+
+    // Only the most right flow will have an effect
+    // on the resulting flow.
+    const rightFieldFlags = right.fieldFlags;
+    const rightKeys = Map_keys(rightFieldFlags);
+
+    for (let _values = Map_values(rightFieldFlags), i = 0, k = _values.length; i < k; ++i) {
+      const rightValue = unchecked(_values[i]);
+      const currentKey = unchecked(rightKeys[i]);
+
+      if (rightValue & FieldFlags.INITIALIZED) {
+        this.setFieldFlag(currentKey, FieldFlags.INITIALIZED);
       }
     }
   }

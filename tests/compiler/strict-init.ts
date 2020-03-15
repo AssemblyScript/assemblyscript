@@ -1,7 +1,6 @@
 // OK - Field with explicit initializer
 export class WithInitializer {
   public a: i32 = 1;
-  constructor() {}
 }
 
 // ERR - Field b not initialized
@@ -24,8 +23,37 @@ export class ExplicitConstructorInit {
   }
 }
 
-export class SupressExplicitInit {
-  p!: f64;
+export class NonDefiniteIf {
+  p: f64;
+  constructor(a: i32) {
+    if ((a % 2) == 0) {
+      this.p = 1.0;
+    } else if ((a * 2) == 10) {
+      this.p = 0.0;
+    }
+  }
+}
+
+export class DefiniteIf {
+  definite: i32;
+
+  constructor(a: i32) {
+    if ((a % 2) == 0) {
+      this.definite = 1;
+    } else if ((a * 2) == 10) {
+      this.definite = 0;
+    } else if ((a / 2) == 1) {
+      this.definite = 8;
+    } else {
+      this.definite = 0;
+    }
+  }
+}
+
+
+class Inlined {
+  inlinedProp: i32;
   constructor() {}
 }
 
+new Inlined();

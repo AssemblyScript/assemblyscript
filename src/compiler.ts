@@ -90,6 +90,7 @@ import {
 
 import {
   FlowFlags,
+  FieldFlags,
   Flow,
   LocalFlags,
   ConditionKind,
@@ -1509,6 +1510,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     this.ensureConstructor(instance, instance.identifierNode);
+    this.checkFieldInitialization(instance);
     var instanceMembers = instance.members;
     if (instanceMembers) {
       // TODO: for (let element of instanceMembers.values()) {
@@ -1536,18 +1538,30 @@ export class Compiler extends DiagnosticEmitter {
     return true;
   }
 
+  checkFieldInitialization(instance: Class): void {
+    const flow = instance.constructorInstance!.flow;
+    const instanceMembers = instance.members;
+    if (instanceMembers) {
+      for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
+        const element = unchecked(_values[i]);
+        if (element.kind == ElementKind.FIELD) {
+          const field = <Field>element;
+          if (!flow.isFieldFlag(field.internalName, FieldFlags.INITIALIZED)) {
+            this.error(
+              DiagnosticCode.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_constructor,
+              field.declaration.name.range,
+              field.declaration.name.text
+            );
+          }
+        }
+      }
+    }
+  }
+
   /** Compiles an instance field to a getter and a setter. */
   compileField(instance: Field): bool {
     this.compileFieldGetter(instance);
     this.compileFieldSetter(instance);
-    if (!instance.is(CommonFlags.INITIALIZED)) {
-      this.error(
-        DiagnosticCode.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_constructor,
-        instance.declaration.name.range,
-        instance.declaration.name.text
-      );
-    }
-
     return instance.is(CommonFlags.COMPILED);
   }
 
@@ -5945,8 +5959,8 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
 
-        if (flow.actualFunction.is(CommonFlags.CONSTRUCTOR) && !fieldInstance.is(CommonFlags.INITIALIZED)) {
-          fieldInstance.set(CommonFlags.INITIALIZED);
+        if (flow.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+          flow.setFieldFlag(fieldInstance.internalName, FieldFlags.INITIALIZED);
         }
 
         return this.makeFieldAssignment(fieldInstance,
@@ -8838,6 +8852,7 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var ctor = this.ensureConstructor(classInstance, reportNode);
+    this.checkFieldInitialization(classInstance);
     if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect( // no need for another autoreleased local
       ctor,
@@ -8848,23 +8863,6 @@ export class Compiler extends DiagnosticEmitter {
     );
     if (getExpressionType(expr) != NativeType.None) { // possibly IMM_DROPPED
       this.currentType = classInstance.type; // important because a super ctor could be called
-    }
-
-    let members = classInstance.members;
-    if (members) {
-      for (let _values = Map_values(members), i = 0, k = _values.length; i < k; ++i) {
-        const field = <Field>unchecked(_values[i]);
-        if (
-          field.kind === ElementKind.FIELD &&
-          !field.is(CommonFlags.INITIALIZED)
-        ) {
-          this.error(
-            DiagnosticCode.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_constructor,
-            field.declaration.name.range,
-            field.declaration.name.text
-          );
-        }
-      }
     }
 
     return expr;
@@ -10075,7 +10073,9 @@ export class Compiler extends DiagnosticEmitter {
             field.memoryOffset
           )
         );
-        field.set(CommonFlags.INITIALIZED);
+        flow.setFieldFlag(field.internalName, FieldFlags.INITIALIZED)
+      } else {
+        flow.setFieldFlag(field.internalName, FieldFlags.NONE);
       }
     }
     return stmts;
