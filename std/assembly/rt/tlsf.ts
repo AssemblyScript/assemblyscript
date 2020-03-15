@@ -433,6 +433,10 @@ function addMemory(root: Root, start: usize, end: usize): bool {
 
 /** Grows memory to fit at least another block of the specified size. */
 function growMemory(root: Root, size: usize): void {
+  if (ASC_LOW_MEMORY_LIMIT) {
+    unreachable();
+    return;
+  }
   // Here, both rounding performed in searchBlock ...
   const halfMaxSize = BLOCK_MAXSIZE >> 1;
   if (size < halfMaxSize) { // don't round last fl
@@ -462,7 +466,7 @@ function prepareSize(size: usize): usize {
 export function maybeInitialize(): Root {
   var root = ROOT;
   if (!root) {
-    const rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
+    let rootOffset = (__heap_base + AL_MASK) & ~AL_MASK;
     let pagesBefore = memory.size();
     let pagesNeeded = <i32>((((rootOffset + ROOT_SIZE) + 0xffff) & ~0xffff) >>> 16);
     if (pagesNeeded > pagesBefore && memory.grow(pagesNeeded - pagesBefore) < 0) unreachable();
@@ -475,7 +479,14 @@ export function maybeInitialize(): Root {
         SETHEAD(root, fl, sl, null);
       }
     }
-    addMemory(root, (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK, memory.size() << 16);
+    let memStart = (rootOffset + ROOT_SIZE + AL_MASK) & ~AL_MASK;
+    if (ASC_LOW_MEMORY_LIMIT) {
+      const memEnd = <usize>ASC_LOW_MEMORY_LIMIT & ~AL_MASK;
+      if (memStart <= memEnd) addMemory(root, memStart, memEnd);
+      else unreachable(); // low memory limit already exceeded
+    } else {
+      addMemory(root, memStart, memory.size() << 16);
+    }
     ROOT = root;
   }
   return root;

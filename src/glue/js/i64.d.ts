@@ -30,6 +30,7 @@ declare function i64_not(value: i64): i64;
 
 declare function i64_eq(left: i64, right: i64): bool;
 declare function i64_ne(left: i64, right: i64): bool;
+declare function i64_gt(left: i64, right: i64): bool;
 
 declare function i64_align(value: i64, alignment: i32): i64;
 

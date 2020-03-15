@@ -882,7 +882,7 @@
   if
    i32.const 0
    i32.const 1152
-   i32.const 490
+   i32.const 501
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -893,7 +893,7 @@
   if
    i32.const 1200
    i32.const 1152
-   i32.const 457
+   i32.const 461
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -993,7 +993,7 @@
     if
      i32.const 0
      i32.const 1152
-     i32.const 502
+     i32.const 513
      i32.const 19
      call $~lib/builtins/abort
      unreachable
@@ -1009,7 +1009,7 @@
   if
    i32.const 0
    i32.const 1152
-   i32.const 510
+   i32.const 521
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1954,33 +1954,33 @@
   i32.eq
   if
    block $__inlined_func$~lib/rt/__visit_members
-    block $block$4$break
-     block $switch$1$default
-      local.get $0
-      i32.const 16
-      i32.add
-      local.tee $1
-      i32.const 8
-      i32.sub
-      i32.load
-      br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $block$4$break $switch$1$default
-     end
-     unreachable
-    end
-    local.get $1
-    i32.load
-    local.tee $1
-    if
-     local.get $1
-     i32.const 1440
-     i32.ge_u
-     if
+    block $switch$1$default
+     block $switch$1$case$5
+      block $switch$1$case$4
+       local.get $0
+       i32.const 16
+       i32.add
+       local.tee $1
+       i32.const 8
+       i32.sub
+       i32.load
+       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$case$5 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$default
+      end
       local.get $1
-      i32.const 16
-      i32.sub
-      call $~lib/rt/pure/decrement
+      i32.load
+      local.tee $1
+      if
+       local.get $1
+       call $~lib/rt/pure/__visit
+      end
+      br $__inlined_func$~lib/rt/__visit_members
      end
+     local.get $1
+     i32.load
+     call $~lib/rt/pure/__visit
+     br $__inlined_func$~lib/rt/__visit_members
     end
+    unreachable
    end
    local.get $2
    i32.const -2147483648
@@ -2026,5 +2026,17 @@
    i32.or
    i32.store offset=4
   end
+ )
+ (func $~lib/rt/pure/__visit (; 24 ;) (param $0 i32)
+  local.get $0
+  i32.const 1440
+  i32.lt_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 16
+  i32.sub
+  call $~lib/rt/pure/decrement
  )
 )

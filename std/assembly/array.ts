@@ -2,13 +2,13 @@
 
 import { BLOCK_MAXSIZE } from "./rt/common";
 import { COMPARATOR, SORT } from "./util/sort";
-import { ArrayBufferView } from "./arraybuffer";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 import { idof, isArray as builtin_isArray } from "./builtins";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_EMPTYARRAY, E_HOLEYARRAY } from "./util/error";
 
 /** Ensures that the given array has _at least_ the specified backing size. */
 function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
+  // depends on the fact that Arrays mimic ArrayBufferView
   var oldCapacity = changetype<ArrayBufferView>(array).byteLength;
   if (minSize > <usize>oldCapacity >>> alignLog2) {
     if (minSize > BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
@@ -24,12 +24,17 @@ function ensureSize(array: usize, minSize: usize, alignLog2: u32): void {
   }
 }
 
-export class Array<T> extends ArrayBufferView {
+export class Array<T> {
   [key: number]: T;
 
-  // Implementing ArrayBufferView isn't strictly necessary here but is done to allow glue code
+  // Mimicking ArrayBufferView isn't strictly necessary here but is done to allow glue code
   // to work with typed and normal arrays interchangeably. Technically, normal arrays do not need
-  // `dataStart` (equals `data`) and `dataLength` (equals computed `data.byteLength`).
+  // `dataStart` (equals `buffer`) and `byteLength` (equals computed `buffer.byteLength`), but the
+  // block is 16 bytes anyway so it's fine to have a couple extra fields in there.
+
+  private buffer: ArrayBuffer;
+  private dataStart: usize;
+  private byteLength: i32;
 
   // Also note that Array<T> with non-nullable T must guard against uninitialized null values
   // whenever an element is accessed. Otherwise, the compiler wouldn't be able to guarantee
@@ -49,7 +54,13 @@ export class Array<T> extends ArrayBufferView {
   }
 
   constructor(length: i32 = 0) {
-    super(length, alignof<T>());
+    if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignof<T>()) throw new RangeError(E_INVALIDLENGTH);
+    var bufferSize = <usize>length << alignof<T>();
+    var buffer = __alloc(bufferSize, idof<ArrayBuffer>());
+    memory.fill(buffer, 0, bufferSize);
+    this.buffer = changetype<ArrayBuffer>(buffer); // retains
+    this.dataStart = buffer;
+    this.byteLength = <i32>bufferSize;
     this.length_ = length;
   }
 
@@ -498,6 +509,6 @@ export class Array<T> extends ArrayBufferView {
         cur += sizeof<usize>();
       }
     }
-    // automatically visits ArrayBufferView (.buffer) next
+    __visit(changetype<usize>(this.buffer), cookie);
   }
 }
