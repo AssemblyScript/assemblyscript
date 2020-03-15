@@ -222,21 +222,19 @@
    i32.const 0
    i32.const 1040
    i32.const 72
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
-  i32.const 15
-  i32.add
-  i32.load8_u
+  i32.load8_u offset=15
   i32.const 1
   i32.ne
   if
    i32.const 0
    i32.const 1040
    i32.const 73
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -254,49 +252,43 @@
    i32.const 0
    i32.const 1040
    i32.const 77
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
-  i32.const 1
-  i32.add
-  i32.load8_u
+  i32.load8_u offset=1
   i32.const 2
   i32.ne
   if
    i32.const 0
    i32.const 1040
    i32.const 78
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
-  i32.const 14
-  i32.add
-  i32.load8_u
+  i32.load8_u offset=14
   i32.const 2
   i32.ne
   if
    i32.const 0
    i32.const 1040
    i32.const 79
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
   global.get $memset/dest
-  i32.const 15
-  i32.add
-  i32.load8_u
+  i32.load8_u offset=15
   i32.const 1
   i32.ne
   if
    i32.const 0
    i32.const 1040
    i32.const 80
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end

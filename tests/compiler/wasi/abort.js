@@ -8,7 +8,7 @@ exports.preInstantiate = function(imports, exports) {
       const messagePtr = new Uint32Array(memory.buffer)[ iov >>> 2     ];
       const messageLen = new Uint32Array(memory.buffer)[(iov >>> 2) + 1];
       const message = Array.from(new Uint8Array(memory.buffer, messagePtr, messageLen)).map(c => String.fromCharCode(c)).join("");
-      if (message != "abort: the message in wasi/abort.ts(4:2)\n") failed = "unexpected message: " + message;
+      if (message != "abort: the message in wasi/abort.ts(4:3)\n") failed = "unexpected message: " + message;
     },
     proc_exit: function(code) {
       if (code != 255) failed = "unexpected exit code: " + code;
