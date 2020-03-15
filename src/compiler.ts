@@ -219,6 +219,8 @@ export class Options {
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
   pedantic: bool = false;
+  /** Indicates a very low (<64k) memory limit. */
+  lowMemoryLimit: i32 = 0;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -361,7 +363,7 @@ export class Compiler extends DiagnosticEmitter {
       this.memoryOffset = i64_new(options.memoryBase);
       module.setLowMemoryUnused(false);
     } else {
-      if (options.optimizeLevelHint >= 2) {
+      if (options.optimizeLevelHint >= 2 && !options.lowMemoryLimit) {
         this.memoryOffset = i64_new(1024);
         module.setLowMemoryUnused(true);
       } else {
@@ -502,6 +504,16 @@ export class Compiler extends DiagnosticEmitter {
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
+    var lowMemoryLimit32 = this.options.lowMemoryLimit;
+    if (lowMemoryLimit32) {
+      let lowMemoryLimit = i64_new(lowMemoryLimit32 & ~15);
+      if (i64_gt(memoryOffset, lowMemoryLimit)) {
+        this.error(
+          DiagnosticCode.Low_memory_limit_exceeded_by_static_data_0_1,
+          null, i64_to_string(memoryOffset), i64_to_string(lowMemoryLimit)
+        );
+      }
+    }
     this.memoryOffset = memoryOffset;
     module.removeGlobal(BuiltinNames.heap_base);
     if (this.runtimeFeatures & RuntimeFeatures.HEAP) {
@@ -526,7 +538,7 @@ export class Compiler extends DiagnosticEmitter {
     var isSharedMemory = options.hasFeature(Feature.THREADS) && options.sharedMemory > 0;
     module.setMemory(
       this.options.memoryBase /* is specified */ || this.memorySegments.length
-        ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
+        ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16)))
         : 0,
       isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
       this.memorySegments,

@@ -43,7 +43,7 @@
   if
    i32.const 1168
    i32.const 1232
-   i32.const 93
+   i32.const 104
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -62,7 +62,7 @@
   if
    i32.const 1168
    i32.const 1232
-   i32.const 93
+   i32.const 104
    i32.const 41
    call $~lib/builtins/abort
    unreachable
@@ -929,7 +929,7 @@
   if
    i32.const 0
    i32.const 1392
-   i32.const 490
+   i32.const 501
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -940,7 +940,7 @@
   if
    i32.const 1440
    i32.const 1392
-   i32.const 457
+   i32.const 461
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1040,7 +1040,7 @@
     if
      i32.const 0
      i32.const 1392
-     i32.const 502
+     i32.const 513
      i32.const 19
      call $~lib/builtins/abort
      unreachable
@@ -1056,7 +1056,7 @@
   if
    i32.const 0
    i32.const 1392
-   i32.const 510
+   i32.const 521
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1572,36 +1572,49 @@
   i32.eq
   if
    block $__inlined_func$~lib/rt/__visit_members
-    block $block$4$break
-     block $switch$1$default
-      block $switch$1$case$10
-       block $switch$1$case$8
-        local.get $0
-        i32.const 16
-        i32.add
-        local.tee $1
-        i32.const 8
-        i32.sub
+    block $switch$1$default
+     block $switch$1$case$10
+      block $switch$1$case$8
+       block $switch$1$case$6
+        block $switch$1$case$5
+         block $switch$1$case$4
+          local.get $0
+          i32.const 16
+          i32.add
+          local.tee $1
+          i32.const 8
+          i32.sub
+          i32.load
+          br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$case$5 $switch$1$case$6 $__inlined_func$~lib/rt/__visit_members $switch$1$case$8 $__inlined_func$~lib/rt/__visit_members $switch$1$case$10 $switch$1$default
+         end
+         local.get $1
+         i32.load
+         local.tee $1
+         if
+          local.get $1
+          call $~lib/rt/pure/__visit
+         end
+         br $__inlined_func$~lib/rt/__visit_members
+        end
+        local.get $1
         i32.load
-        br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $block$4$break $block$4$break $block$4$break $__inlined_func$~lib/rt/__visit_members $switch$1$case$8 $__inlined_func$~lib/rt/__visit_members $switch$1$case$10 $switch$1$default
+        call $~lib/rt/pure/__visit
+        br $__inlined_func$~lib/rt/__visit_members
        end
        local.get $1
-       call $~lib/array/Array<std/array-literal/Ref>#__visit_impl
-       br $block$4$break
+       i32.load
+       call $~lib/rt/pure/__visit
+       br $__inlined_func$~lib/rt/__visit_members
       end
       local.get $1
       call $~lib/array/Array<std/array-literal/Ref>#__visit_impl
-      br $block$4$break
+      br $__inlined_func$~lib/rt/__visit_members
      end
-     unreachable
-    end
-    local.get $1
-    i32.load
-    local.tee $1
-    if
      local.get $1
-     call $~lib/rt/pure/__visit
+     call $~lib/array/Array<std/array-literal/Ref>#__visit_impl
+     br $__inlined_func$~lib/rt/__visit_members
     end
+    unreachable
    end
    local.get $2
    i32.const -2147483648
@@ -1663,6 +1676,7 @@
  (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (; 22 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $0
   i32.load offset=4
   local.tee $1
@@ -1671,17 +1685,17 @@
   i32.const 2
   i32.shl
   i32.add
-  local.set $0
+  local.set $2
   loop $while-continue|0
    local.get $1
-   local.get $0
+   local.get $2
    i32.lt_u
    if
     local.get $1
     i32.load
-    local.tee $2
+    local.tee $3
     if
-     local.get $2
+     local.get $3
      call $~lib/rt/pure/__visit
     end
     local.get $1
@@ -1691,5 +1705,8 @@
     br $while-continue|0
    end
   end
+  local.get $0
+  i32.load
+  call $~lib/rt/pure/__visit
  )
 )

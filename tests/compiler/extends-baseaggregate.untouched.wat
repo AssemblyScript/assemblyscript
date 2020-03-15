@@ -21,11 +21,12 @@
  (data (i32.const 320) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 368) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00")
  (data (i32.const 432) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00~\00l\00i\00b\00/\00r\00t\00.\00t\00s\00")
- (data (i32.const 480) "\t\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\93 \00\00\02\00\00\00\93 \00\00\02\00\00\00")
+ (data (i32.const 480) "\t\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\10\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\04\00\00\00\92 \00\00\00\00\00\00\92 \00\00\00\00\00\00")
  (table $0 1 funcref)
  (global $extends-baseaggregate/poolB i32 (i32.const 48))
  (global $extends-baseaggregate/poolA i32 (i32.const 96))
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
@@ -765,7 +766,9 @@
    global.get $~lib/heap/__heap_base
    i32.const 15
    i32.add
-   i32.const -16
+   i32.const 15
+   i32.const -1
+   i32.xor
    i32.and
    local.set $1
    memory.size
@@ -874,7 +877,6 @@
      br $for-loop|0
     end
    end
-   local.get $0
    local.get $1
    i32.const 1572
    i32.add
@@ -884,6 +886,9 @@
    i32.const -1
    i32.xor
    i32.and
+   local.set $5
+   local.get $0
+   local.get $5
    memory.size
    i32.const 16
    i32.shl
@@ -903,7 +908,7 @@
   if
    i32.const 176
    i32.const 128
-   i32.const 457
+   i32.const 461
    i32.const 29
    call $~lib/builtins/abort
    unreachable
@@ -1294,7 +1299,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 490
+   i32.const 501
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1335,7 +1340,7 @@
      if
       i32.const 0
       i32.const 128
-      i32.const 502
+      i32.const 513
       i32.const 19
       call $~lib/builtins/abort
       unreachable
@@ -1354,7 +1359,7 @@
     if
      i32.const 0
      i32.const 128
-     i32.const 507
+     i32.const 518
      i32.const 17
      call $~lib/builtins/abort
      unreachable
@@ -1371,7 +1376,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 510
+   i32.const 521
    i32.const 13
    call $~lib/builtins/abort
    unreachable
@@ -1532,7 +1537,7 @@
   if
    i32.const 0
    i32.const 128
-   i32.const 570
+   i32.const 581
    i32.const 2
    call $~lib/builtins/abort
    unreachable
@@ -3886,6 +3891,10 @@
     br $while-continue|0
    end
   end
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl (; 39 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -3925,28 +3934,29 @@
     br $while-continue|0
    end
   end
+  local.get $0
+  i32.load
+  local.get $1
+  call $~lib/rt/pure/__visit
  )
  (func $~lib/rt/__visit_members (; 40 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
-  block $block$4$break
-   block $switch$1$default
-    block $switch$1$case$10
-     block $switch$1$case$9
-      block $switch$1$case$6
-       block $switch$1$case$4
-        block $switch$1$case$2
-         local.get $0
-         i32.const 8
-         i32.sub
-         i32.load
-         br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$6 $switch$1$case$4 $switch$1$case$6 $switch$1$case$9 $switch$1$case$10 $switch$1$default
-        end
-        return
+  block $switch$1$default
+   block $switch$1$case$10
+    block $switch$1$case$9
+     block $switch$1$case$6
+      block $switch$1$case$4
+       block $switch$1$case$2
+        local.get $0
+        i32.const 8
+        i32.sub
+        i32.load
+        br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$4 $switch$1$case$6 $switch$1$case$4 $switch$1$case$6 $switch$1$case$9 $switch$1$case$10 $switch$1$default
        end
-       br $block$4$break
+       return
       end
       local.get $0
-      i32.load offset=16
+      i32.load
       local.tee $2
       if
        local.get $2
@@ -3956,25 +3966,25 @@
       return
      end
      local.get $0
-     local.get $1
-     call $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl
-     br $block$4$break
+     i32.load offset=16
+     local.tee $2
+     if
+      local.get $2
+      local.get $1
+      call $~lib/rt/pure/__visit
+     end
+     return
     end
     local.get $0
     local.get $1
-    call $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl
-    br $block$4$break
+    call $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl
+    return
    end
-   unreachable
-  end
-  local.get $0
-  i32.load
-  local.tee $2
-  if
-   local.get $2
+   local.get $0
    local.get $1
-   call $~lib/rt/pure/__visit
+   call $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl
+   return
   end
-  return
+  unreachable
  )
 )

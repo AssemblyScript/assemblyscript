@@ -27,7 +27,7 @@
     "ts-node": "^6.2.0"
   },
   "devDependencies": {
-    "@types/node": "^13.9.0",
+    "@types/node": "^13.9.1",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.2",
     "glob": "^7.1.6",
