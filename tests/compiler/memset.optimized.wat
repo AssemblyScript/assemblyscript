@@ -227,9 +227,7 @@
    unreachable
   end
   global.get $memset/dest
-  i32.const 15
-  i32.add
-  i32.load8_u
+  i32.load8_u offset=15
   i32.const 1
   i32.ne
   if
@@ -259,9 +257,7 @@
    unreachable
   end
   global.get $memset/dest
-  i32.const 1
-  i32.add
-  i32.load8_u
+  i32.load8_u offset=1
   i32.const 2
   i32.ne
   if
@@ -273,9 +269,7 @@
    unreachable
   end
   global.get $memset/dest
-  i32.const 14
-  i32.add
-  i32.load8_u
+  i32.load8_u offset=14
   i32.const 2
   i32.ne
   if
@@ -287,9 +281,7 @@
    unreachable
   end
   global.get $memset/dest
-  i32.const 15
-  i32.add
-  i32.load8_u
+  i32.load8_u offset=15
   i32.const 1
   i32.ne
   if
