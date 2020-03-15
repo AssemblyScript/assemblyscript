@@ -1732,15 +1732,17 @@ export class Source extends Node {
     if (!lineCache) {
       this.lineCache = lineCache = [0];
       let text = this.text;
-      for (let i = 0, k = text.length; i < k;) {
-        if (text.charCodeAt(i++) == CharCode.LINEFEED) lineCache.push(i);
+      let off = 0;
+      let end = text.length;
+      while (off < end) {
+        if (text.charCodeAt(off++) == CharCode.LINEFEED) lineCache.push(off);
       }
       lineCache.push(0x7fffffff);
     }
     var l = 0;
     var r = lineCache.length - 1;
     while (l < r) {
-      let m = l + i32((r - l) / 2);
+      let m = l + ((r - l) >> 1);
       let s = unchecked(lineCache[m]);
       if (pos < s) r = m;
       else if (pos < unchecked(lineCache[m + 1])) {
