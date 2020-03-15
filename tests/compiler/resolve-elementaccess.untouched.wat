@@ -3557,66 +3557,35 @@
   call $~lib/rt/stub/__retain
   local.set $1
   local.get $0
-  local.get $1
-  i32.eq
-  if
-   i32.const 1
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.eqz
-  end
-  if
-   i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
-   local.set $2
+   local.set $3
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $3
    return
   end
   local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $2
+  local.set $3
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $3
  )
  (func $~lib/typedarray/Uint8Array#constructor (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -3741,6 +3710,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -3768,8 +3738,33 @@
   call $~lib/typedarray/Float32Array#__get
   call $~lib/number/F32#toString
   local.tee $0
+  call $~lib/rt/stub/__retain
+  local.set $2
   i32.const 1872
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $2
+  i32.eqz
+  local.get $1
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $2
+   local.get $1
+   i32.eq
+  else
+   local.get $2
+   local.get $1
+   call $~lib/string/String.__eq
+  end
+  local.set $3
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
+  call $~lib/rt/stub/__release
+  local.get $3
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3783,9 +3778,34 @@
   i32.const 1
   call $~lib/typedarray/Float32Array#__get
   call $~lib/number/F32#toString
-  local.tee $1
+  local.tee $2
+  call $~lib/rt/stub/__retain
+  local.set $1
   i32.const 1968
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $3
+  local.get $1
+  i32.eqz
+  local.get $3
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $1
+   local.get $3
+   i32.eq
+  else
+   local.get $1
+   local.get $3
+   call $~lib/string/String.__eq
+  end
+  local.set $4
+  local.get $3
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $4
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3796,7 +3816,7 @@
    unreachable
   end
   global.get $resolve-elementaccess/arr
-  local.tee $2
+  local.tee $1
   i32.const 0
   local.tee $3
   global.get $resolve-elementaccess/arr
@@ -3805,13 +3825,38 @@
   f32.const 10
   f32.add
   call $~lib/typedarray/Float32Array#__set
-  local.get $2
+  local.get $1
   local.get $3
   call $~lib/typedarray/Float32Array#__get
   call $~lib/number/F32#toString
-  local.tee $2
+  local.tee $1
+  call $~lib/rt/stub/__retain
+  local.set $1
   i32.const 2000
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $4
+  local.get $1
+  i32.eqz
+  local.get $4
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $1
+   local.get $4
+   i32.eq
+  else
+   local.get $1
+   local.get $4
+   call $~lib/string/String.__eq
+  end
+  local.set $3
+  local.get $4
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $3
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3859,9 +3904,34 @@
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  local.tee $3
+  local.tee $1
+  call $~lib/rt/stub/__retain
+  local.set $4
   i32.const 2064
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $3
+  local.get $4
+  i32.eqz
+  local.get $3
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $4
+   local.get $3
+   i32.eq
+  else
+   local.get $4
+   local.get $3
+   call $~lib/string/String.__eq
+  end
+  local.set $5
+  local.get $3
+  call $~lib/rt/stub/__release
+  local.get $4
+  call $~lib/rt/stub/__release
+  local.get $5
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3875,9 +3945,34 @@
   i32.const 1
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  local.tee $2
+  local.tee $4
+  call $~lib/rt/stub/__retain
+  local.set $3
   i32.const 2096
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $5
+  local.get $3
+  i32.eqz
+  local.get $5
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $3
+   local.get $5
+   i32.eq
+  else
+   local.get $3
+   local.get $5
+   call $~lib/string/String.__eq
+  end
+  local.set $6
+  local.get $5
+  call $~lib/rt/stub/__release
+  local.get $3
+  call $~lib/rt/stub/__release
+  local.get $6
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3888,7 +3983,7 @@
    unreachable
   end
   global.get $resolve-elementaccess/buf
-  local.tee $4
+  local.tee $3
   i32.const 0
   local.tee $5
   global.get $resolve-elementaccess/buf
@@ -3897,13 +3992,38 @@
   i32.const 10
   i32.add
   call $~lib/typedarray/Uint8Array#__set
-  local.get $4
+  local.get $3
   local.get $5
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  local.tee $4
+  local.tee $3
+  call $~lib/rt/stub/__retain
+  local.set $3
   i32.const 2128
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $6
+  local.get $3
+  i32.eqz
+  local.get $6
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $3
+   local.get $6
+   i32.eq
+  else
+   local.get $3
+   local.get $6
+   call $~lib/string/String.__eq
+  end
+  local.set $5
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $3
+  call $~lib/rt/stub/__release
+  local.get $5
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0

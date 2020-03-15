@@ -4146,7 +4146,7 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
-        // check operator overload
+        // check operator overload (cannot overload explicit null comparison)
         if (this.currentType.is(TypeFlags.REFERENCE) && left.kind != NodeKind.NULL && right.kind != NodeKind.NULL) {
           let classReference = leftType.classReference;
           if (classReference) {
@@ -4246,7 +4246,7 @@ export class Compiler extends DiagnosticEmitter {
         leftExpr = this.compileExpression(left, contextualType);
         leftType = this.currentType;
 
-         // check operator overload
+        // check operator overload (cannot overload explicit null comparison)
         if (this.currentType.is(TypeFlags.REFERENCE) && left.kind != NodeKind.NULL && right.kind != NodeKind.NULL) {
           let classReference = leftType.classReference;
           if (classReference) {

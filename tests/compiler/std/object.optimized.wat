@@ -150,35 +150,32 @@
  )
  (func $~lib/object/Object.is<~lib/string/String> (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
-  block $__inlined_func$~lib/string/String.__eq (result i32)
-   i32.const 1
+  local.get $0
+  i32.eqz
+  local.get $1
+  i32.eqz
+  i32.or
+  if (result i32)
    local.get $0
    local.get $1
    i32.eq
-   br_if $__inlined_func$~lib/string/String.__eq
-   drop
-   block $folding-inner0
-    local.get $1
-    i32.eqz
-    i32.const 1
-    local.get $0
-    select
-    br_if $folding-inner0
+  else
+   block $__inlined_func$~lib/string/String.__eq (result i32)
+    i32.const 0
     local.get $0
     call $~lib/string/String#get:length
     local.tee $2
     local.get $1
     call $~lib/string/String#get:length
     i32.ne
-    br_if $folding-inner0
+    br_if $__inlined_func$~lib/string/String.__eq
+    drop
     local.get $0
     local.get $1
     local.get $2
     call $~lib/util/string/compareImpl
     i32.eqz
-    br $__inlined_func$~lib/string/String.__eq
    end
-   i32.const 0
   end
  )
  (func $start:std/object (; 7 ;)
@@ -563,6 +560,8 @@
   i32.const 1088
   i32.const 1088
   call $~lib/object/Object.is<~lib/string/String>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.ne
   if
@@ -598,6 +597,8 @@
   i32.const 0
   i32.const 0
   call $~lib/object/Object.is<~lib/string/String>
+  i32.const 0
+  i32.ne
   i32.const 1
   i32.ne
   if

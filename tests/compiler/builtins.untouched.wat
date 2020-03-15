@@ -99,16 +99,16 @@
  (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 4 ;) (param $0 i32)
-  nop
- )
- (func $~lib/string/String#get:length (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 4 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=12
   i32.const 1
   i32.shr_u
+ )
+ (func $~lib/rt/stub/__release (; 5 ;) (param $0 i32)
+  nop
  )
  (func $~lib/util/string/compareImpl (; 6 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
@@ -242,66 +242,35 @@
   call $~lib/rt/stub/__retain
   local.set $1
   local.get $0
-  local.get $1
-  i32.eq
-  if
-   i32.const 1
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.eqz
-  end
-  if
-   i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
-   local.set $2
+   local.set $3
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $3
    return
   end
   local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $2
+  local.set $3
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $3
  )
  (func $start:builtins~anonymous|0 (; 8 ;)
   nop
@@ -1627,8 +1596,33 @@
    unreachable
   end
   i32.const 208
+  call $~lib/rt/stub/__retain
+  local.set $1
   i32.const 208
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $1
+  i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $1
+   local.get $0
+   i32.eq
+  else
+   local.get $1
+   local.get $0
+   call $~lib/string/String.__eq
+  end
+  local.set $8
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $8
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1639,8 +1633,33 @@
    unreachable
   end
   i32.const 208
+  call $~lib/rt/stub/__retain
+  local.set $7
   i32.const 208
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $6
+  local.get $7
+  i32.eqz
+  local.get $6
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $7
+   local.get $6
+   i32.eq
+  else
+   local.get $7
+   local.get $6
+   call $~lib/string/String.__eq
+  end
+  local.set $1
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $7
+  call $~lib/rt/stub/__release
+  local.get $1
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1651,8 +1670,33 @@
    unreachable
   end
   i32.const 240
+  call $~lib/rt/stub/__retain
+  local.set $0
   i32.const 240
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $8
+  local.get $0
+  i32.eqz
+  local.get $8
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $0
+   local.get $8
+   i32.eq
+  else
+   local.get $0
+   local.get $8
+   call $~lib/string/String.__eq
+  end
+  local.set $7
+  local.get $8
+  call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $7
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1663,8 +1707,33 @@
    unreachable
   end
   i32.const 272
+  call $~lib/rt/stub/__retain
+  local.set $6
   i32.const 272
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $6
+  i32.eqz
+  local.get $1
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $6
+   local.get $1
+   i32.eq
+  else
+   local.get $6
+   local.get $1
+   call $~lib/string/String.__eq
+  end
+  local.set $0
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $0
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1675,8 +1744,33 @@
    unreachable
   end
   i32.const 304
+  call $~lib/rt/stub/__retain
+  local.set $8
   i32.const 304
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $7
+  local.get $8
+  i32.eqz
+  local.get $7
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $8
+   local.get $7
+   i32.eq
+  else
+   local.get $8
+   local.get $7
+   call $~lib/string/String.__eq
+  end
+  local.set $6
+  local.get $7
+  call $~lib/rt/stub/__release
+  local.get $8
+  call $~lib/rt/stub/__release
+  local.get $6
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1687,8 +1781,33 @@
    unreachable
   end
   i32.const 336
+  call $~lib/rt/stub/__retain
+  local.set $1
   i32.const 336
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $1
+  i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $1
+   local.get $0
+   i32.eq
+  else
+   local.get $1
+   local.get $0
+   call $~lib/string/String.__eq
+  end
+  local.set $8
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $8
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1699,8 +1818,33 @@
    unreachable
   end
   i32.const 368
+  call $~lib/rt/stub/__retain
+  local.set $7
   i32.const 368
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $6
+  local.get $7
+  i32.eqz
+  local.get $6
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $7
+   local.get $6
+   i32.eq
+  else
+   local.get $7
+   local.get $6
+   call $~lib/string/String.__eq
+  end
+  local.set $1
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $7
+  call $~lib/rt/stub/__release
+  local.get $1
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1711,8 +1855,33 @@
    unreachable
   end
   i32.const 400
+  call $~lib/rt/stub/__retain
+  local.set $0
   i32.const 400
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $8
+  local.get $0
+  i32.eqz
+  local.get $8
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $0
+   local.get $8
+   i32.eq
+  else
+   local.get $0
+   local.get $8
+   call $~lib/string/String.__eq
+  end
+  local.set $7
+  local.get $8
+  call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $7
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1723,8 +1892,33 @@
    unreachable
   end
   i32.const 432
+  call $~lib/rt/stub/__retain
+  local.set $6
   i32.const 432
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $6
+  i32.eqz
+  local.get $1
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $6
+   local.get $1
+   i32.eq
+  else
+   local.get $6
+   local.get $1
+   call $~lib/string/String.__eq
+  end
+  local.set $0
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $0
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1735,8 +1929,33 @@
    unreachable
   end
   i32.const 464
+  call $~lib/rt/stub/__retain
+  local.set $8
   i32.const 464
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $7
+  local.get $8
+  i32.eqz
+  local.get $7
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $8
+   local.get $7
+   i32.eq
+  else
+   local.get $8
+   local.get $7
+   call $~lib/string/String.__eq
+  end
+  local.set $6
+  local.get $7
+  call $~lib/rt/stub/__release
+  local.get $8
+  call $~lib/rt/stub/__release
+  local.get $6
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1747,8 +1966,33 @@
    unreachable
   end
   i32.const 496
+  call $~lib/rt/stub/__retain
+  local.set $1
   i32.const 496
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $1
+  i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $1
+   local.get $0
+   i32.eq
+  else
+   local.get $1
+   local.get $0
+   call $~lib/string/String.__eq
+  end
+  local.set $8
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $8
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1759,8 +2003,33 @@
    unreachable
   end
   i32.const 528
+  call $~lib/rt/stub/__retain
+  local.set $7
   i32.const 528
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $6
+  local.get $7
+  i32.eqz
+  local.get $6
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $7
+   local.get $6
+   i32.eq
+  else
+   local.get $7
+   local.get $6
+   call $~lib/string/String.__eq
+  end
+  local.set $1
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $7
+  call $~lib/rt/stub/__release
+  local.get $1
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1771,8 +2040,33 @@
    unreachable
   end
   i32.const 560
+  call $~lib/rt/stub/__retain
+  local.set $0
   i32.const 560
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $8
+  local.get $0
+  i32.eqz
+  local.get $8
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $0
+   local.get $8
+   i32.eq
+  else
+   local.get $0
+   local.get $8
+   call $~lib/string/String.__eq
+  end
+  local.set $7
+  local.get $8
+  call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $7
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1783,8 +2077,33 @@
    unreachable
   end
   i32.const 592
+  call $~lib/rt/stub/__retain
+  local.set $6
   i32.const 592
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $6
+  i32.eqz
+  local.get $1
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $6
+   local.get $1
+   i32.eq
+  else
+   local.get $6
+   local.get $1
+   call $~lib/string/String.__eq
+  end
+  local.set $0
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $0
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1795,8 +2114,33 @@
    unreachable
   end
   i32.const 624
+  call $~lib/rt/stub/__retain
+  local.set $8
   i32.const 624
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $7
+  local.get $8
+  i32.eqz
+  local.get $7
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $8
+   local.get $7
+   i32.eq
+  else
+   local.get $8
+   local.get $7
+   call $~lib/string/String.__eq
+  end
+  local.set $6
+  local.get $7
+  call $~lib/rt/stub/__release
+  local.get $8
+  call $~lib/rt/stub/__release
+  local.get $6
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1807,8 +2151,33 @@
    unreachable
   end
   i32.const 656
+  call $~lib/rt/stub/__retain
+  local.set $1
   i32.const 656
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $1
+  i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $1
+   local.get $0
+   i32.eq
+  else
+   local.get $1
+   local.get $0
+   call $~lib/string/String.__eq
+  end
+  local.set $8
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $8
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1819,8 +2188,33 @@
    unreachable
   end
   i32.const 688
+  call $~lib/rt/stub/__retain
+  local.set $7
   i32.const 688
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $6
+  local.get $7
+  i32.eqz
+  local.get $6
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $7
+   local.get $6
+   i32.eq
+  else
+   local.get $7
+   local.get $6
+   call $~lib/string/String.__eq
+  end
+  local.set $1
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $7
+  call $~lib/rt/stub/__release
+  local.get $1
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1831,8 +2225,33 @@
    unreachable
   end
   i32.const 720
+  call $~lib/rt/stub/__retain
+  local.set $0
   i32.const 720
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $8
+  local.get $0
+  i32.eqz
+  local.get $8
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $0
+   local.get $8
+   i32.eq
+  else
+   local.get $0
+   local.get $8
+   call $~lib/string/String.__eq
+  end
+  local.set $7
+  local.get $8
+  call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $7
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1843,8 +2262,33 @@
    unreachable
   end
   i32.const 272
+  call $~lib/rt/stub/__retain
+  local.set $6
   i32.const 272
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $6
+  i32.eqz
+  local.get $1
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $6
+   local.get $1
+   i32.eq
+  else
+   local.get $6
+   local.get $1
+   call $~lib/string/String.__eq
+  end
+  local.set $0
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $6
+  call $~lib/rt/stub/__release
+  local.get $0
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -1855,8 +2299,33 @@
    unreachable
   end
   i32.const 208
+  call $~lib/rt/stub/__retain
+  local.set $8
   i32.const 208
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $7
+  local.get $8
+  i32.eqz
+  local.get $7
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $8
+   local.get $7
+   i32.eq
+  else
+   local.get $8
+   local.get $7
+   call $~lib/string/String.__eq
+  end
+  local.set $6
+  local.get $7
+  call $~lib/rt/stub/__release
+  local.get $8
+  call $~lib/rt/stub/__release
+  local.get $6
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0

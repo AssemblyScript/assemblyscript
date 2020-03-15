@@ -409,16 +409,16 @@
   local.get $0
   call $~lib/util/number/itoa<i32>
  )
- (func $~lib/rt/stub/__release (; 13 ;) (param $0 i32)
-  nop
- )
- (func $~lib/string/String#get:length (; 14 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 13 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
   i32.load offset=12
   i32.const 1
   i32.shr_u
+ )
+ (func $~lib/rt/stub/__release (; 14 ;) (param $0 i32)
+  nop
  )
  (func $~lib/util/string/compareImpl (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
@@ -552,69 +552,41 @@
   call $~lib/rt/stub/__retain
   local.set $1
   local.get $0
-  local.get $1
-  i32.eq
-  if
-   i32.const 1
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.eqz
-  end
-  if
-   i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
-   local.set $2
+   local.set $3
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $3
    return
   end
   local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $2
+  local.set $3
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $3
  )
  (func $start:resolve-function-expression (; 17 ;)
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   i32.const 1
   global.set $~argumentsLength
   i32.const 2
@@ -664,8 +636,33 @@
   call_indirect (type $i32_=>_i32)
   call $~lib/number/I32#toString
   local.tee $0
+  call $~lib/rt/stub/__retain
+  local.set $2
   i32.const 560
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $2
+  i32.eqz
+  local.get $1
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $2
+   local.get $1
+   i32.eq
+  else
+   local.get $2
+   local.get $1
+   call $~lib/string/String.__eq
+  end
+  local.set $3
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
+  call $~lib/rt/stub/__release
+  local.get $3
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0

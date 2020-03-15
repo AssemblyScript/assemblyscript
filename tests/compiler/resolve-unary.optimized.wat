@@ -304,34 +304,20 @@
  (func $~lib/string/String.__eq (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
+  call $~lib/string/String#get:length
+  local.tee $2
   local.get $1
-  i32.eq
+  call $~lib/string/String#get:length
+  i32.ne
   if
-   i32.const 1
+   i32.const 0
    return
   end
-  block $folding-inner0
-   local.get $1
-   i32.eqz
-   i32.const 1
-   local.get $0
-   select
-   br_if $folding-inner0
-   local.get $0
-   call $~lib/string/String#get:length
-   local.tee $2
-   local.get $1
-   call $~lib/string/String#get:length
-   i32.ne
-   br_if $folding-inner0
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/util/string/compareImpl
-   i32.eqz
-   return
-  end
-  i32.const 0
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/util/string/compareImpl
+  i32.eqz
  )
  (func $start:resolve-unary (; 6 ;)
   (local $0 i32)
@@ -341,8 +327,16 @@
   global.set $~lib/rt/stub/offset
   i32.const -1
   call $~lib/util/number/itoa32
-  i32.const 1072
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1072
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1072
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -354,8 +348,16 @@
   end
   i32.const 1
   call $~lib/util/number/itoa32
-  i32.const 1152
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1152
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -371,8 +373,16 @@
   global.set $resolve-unary/a
   global.get $resolve-unary/a
   call $~lib/util/number/itoa32
-  i32.const 1184
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1184
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1184
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -388,8 +398,16 @@
   global.set $resolve-unary/a
   global.get $resolve-unary/a
   call $~lib/util/number/itoa32
-  i32.const 1152
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1152
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -403,8 +421,16 @@
   i32.const 1216
   global.get $resolve-unary/a
   select
-  i32.const 1248
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1248
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1248
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -418,8 +444,16 @@
   i32.const 1248
   global.get $resolve-unary/a
   select
-  i32.const 1216
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1216
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1216
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -433,8 +467,16 @@
   i32.const -1
   i32.xor
   call $~lib/util/number/itoa32
-  i32.const 1280
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1280
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1280
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -451,8 +493,16 @@
   global.set $resolve-unary/b
   local.get $0
   call $~lib/util/number/itoa32
-  i32.const 1152
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1152
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1152
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -469,8 +519,16 @@
   global.set $resolve-unary/b
   local.get $0
   call $~lib/util/number/itoa32
-  i32.const 1184
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1184
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1184
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0

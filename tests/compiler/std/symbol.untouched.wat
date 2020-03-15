@@ -760,71 +760,42 @@
   call $~lib/rt/stub/__retain
   local.set $1
   local.get $0
-  local.get $1
-  i32.eq
-  if
-   i32.const 1
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
-  i32.eqz
-  if (result i32)
-   i32.const 1
-  else
-   local.get $1
-   i32.eqz
-  end
-  if
-   i32.const 0
-   local.set $2
-   local.get $0
-   call $~lib/rt/stub/__release
-   local.get $1
-   call $~lib/rt/stub/__release
-   local.get $2
-   return
-  end
-  local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $2
+  local.get $2
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
-   local.set $2
+   local.set $3
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $3
    return
   end
   local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $2
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $2
+  local.set $3
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $3
  )
  (func $~lib/map/Map<~lib/string/String,usize>#find (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
@@ -852,17 +823,40 @@
     if (result i32)
      local.get $3
      i32.load
+     call $~lib/rt/stub/__retain
+     local.set $6
      local.get $1
-     call $~lib/string/String.__eq
+     call $~lib/rt/stub/__retain
+     local.set $5
+     local.get $6
+     i32.eqz
+     local.get $5
+     i32.eqz
+     i32.or
+     if (result i32)
+      local.get $6
+      local.get $5
+      i32.eq
+     else
+      local.get $6
+      local.get $5
+      call $~lib/string/String.__eq
+     end
+     local.set $7
+     local.get $5
+     call $~lib/rt/stub/__release
+     local.get $6
+     call $~lib/rt/stub/__release
+     local.get $7
     else
      i32.const 0
     end
     if
      local.get $3
-     local.set $5
+     local.set $6
      local.get $1
      call $~lib/rt/stub/__release
-     local.get $5
+     local.get $6
      return
     end
     local.get $3
@@ -3254,6 +3248,9 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   i32.const 32
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
@@ -3361,8 +3358,33 @@
   call $~lib/rt/stub/__retain
   global.set $std/symbol/key4
   global.get $std/symbol/key3
+  call $~lib/rt/stub/__retain
+  local.set $1
   i32.const 32
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $1
+  i32.eqz
+  local.get $0
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $1
+   local.get $0
+   i32.eq
+  else
+   local.get $1
+   local.get $0
+   call $~lib/string/String.__eq
+  end
+  local.set $2
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3373,8 +3395,33 @@
    unreachable
   end
   global.get $std/symbol/key3
+  call $~lib/rt/stub/__retain
+  local.set $0
   global.get $std/symbol/key4
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $2
+  local.get $0
+  i32.eqz
+  local.get $2
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $0
+   local.get $2
+   i32.eq
+  else
+   local.get $0
+   local.get $2
+   call $~lib/string/String.__eq
+  end
+  local.set $1
+  local.get $2
+  call $~lib/rt/stub/__release
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $1
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3388,8 +3435,33 @@
   call $~lib/symbol/Symbol
   call $~lib/symbol/_Symbol#toString
   local.tee $0
+  call $~lib/rt/stub/__retain
+  local.set $2
   i32.const 896
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $2
+  i32.eqz
+  local.get $1
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $2
+   local.get $1
+   i32.eq
+  else
+   local.get $2
+   local.get $1
+   call $~lib/string/String.__eq
+  end
+  local.set $3
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
+  call $~lib/rt/stub/__release
+  local.get $3
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3401,9 +3473,34 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol#toString
-  local.tee $1
+  local.tee $2
+  call $~lib/rt/stub/__retain
+  local.set $1
   i32.const 928
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $3
+  local.get $1
+  i32.eqz
+  local.get $3
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $1
+   local.get $3
+   i32.eq
+  else
+   local.get $1
+   local.get $3
+   call $~lib/string/String.__eq
+  end
+  local.set $4
+  local.get $3
+  call $~lib/rt/stub/__release
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $4
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3419,9 +3516,34 @@
   global.set $std/symbol/isConcatSpreadable
   global.get $std/symbol/hasInstance
   call $~lib/symbol/_Symbol#toString
-  local.tee $2
+  local.tee $1
+  call $~lib/rt/stub/__retain
+  local.set $3
   i32.const 976
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $4
+  local.get $3
+  i32.eqz
+  local.get $4
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $3
+   local.get $4
+   i32.eq
+  else
+   local.get $3
+   local.get $4
+   call $~lib/string/String.__eq
+  end
+  local.set $5
+  local.get $4
+  call $~lib/rt/stub/__release
+  local.get $3
+  call $~lib/rt/stub/__release
+  local.get $5
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0
@@ -3434,8 +3556,33 @@
   global.get $std/symbol/isConcatSpreadable
   call $~lib/symbol/_Symbol#toString
   local.tee $3
+  call $~lib/rt/stub/__retain
+  local.set $4
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/rt/stub/__retain
+  local.set $5
+  local.get $4
+  i32.eqz
+  local.get $5
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $4
+   local.get $5
+   i32.eq
+  else
+   local.get $4
+   local.get $5
+   call $~lib/string/String.__eq
+  end
+  local.set $6
+  local.get $5
+  call $~lib/rt/stub/__release
+  local.get $4
+  call $~lib/rt/stub/__release
+  local.get $6
+  i32.const 0
+  i32.ne
   i32.eqz
   if
    i32.const 0

@@ -486,34 +486,20 @@
  (func $~lib/string/String.__eq (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
+  call $~lib/string/String#get:length
+  local.tee $2
   local.get $1
-  i32.eq
+  call $~lib/string/String#get:length
+  i32.ne
   if
-   i32.const 1
+   i32.const 0
    return
   end
-  block $folding-inner0
-   local.get $1
-   i32.eqz
-   i32.const 1
-   local.get $0
-   select
-   br_if $folding-inner0
-   local.get $0
-   call $~lib/string/String#get:length
-   local.tee $2
-   local.get $1
-   call $~lib/string/String#get:length
-   i32.ne
-   br_if $folding-inner0
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/util/string/compareImpl
-   i32.eqz
-   return
-  end
-  i32.const 0
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/util/string/compareImpl
+  i32.eqz
  )
  (func $~lib/map/Map<~lib/string/String,usize>#find (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -526,31 +512,39 @@
   i32.shl
   i32.add
   i32.load
-  local.set $0
+  local.set $1
   loop $while-continue|0
-   local.get $0
+   local.get $1
    if
-    local.get $0
+    local.get $1
     i32.load offset=8
     i32.const 1
     i32.and
     if (result i32)
      i32.const 0
     else
-     local.get $0
+     local.get $1
      i32.load
-     i32.const 1040
-     call $~lib/string/String.__eq
+     local.tee $0
+     if (result i32)
+      local.get $0
+      i32.const 1040
+      call $~lib/string/String.__eq
+     else
+      local.get $0
+      i32.const 1040
+      i32.eq
+     end
     end
     if
-     local.get $0
+     local.get $1
      return
     end
-    local.get $0
+    local.get $1
     i32.load offset=8
     i32.const -2
     i32.and
-    local.set $0
+    local.set $1
     br $while-continue|0
    end
   end
@@ -1465,6 +1459,7 @@
  )
  (func $start:std/symbol (; 24 ;)
   (local $0 i32)
+  (local $1 i32)
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
   call $~lib/symbol/Symbol
@@ -1552,8 +1547,16 @@
   local.get $0
   global.set $std/symbol/key4
   global.get $std/symbol/key3
-  i32.const 1040
-  call $~lib/string/String.__eq
+  local.tee $0
+  if (result i32)
+   local.get $0
+   i32.const 1040
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1040
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -1564,8 +1567,21 @@
    unreachable
   end
   global.get $std/symbol/key3
+  local.tee $0
+  i32.eqz
   global.get $std/symbol/key4
-  call $~lib/string/String.__eq
+  local.tee $1
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $0
+   local.get $1
+   i32.eq
+  else
+   local.get $0
+   local.get $1
+   call $~lib/string/String.__eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -1577,8 +1593,18 @@
   end
   call $~lib/symbol/Symbol
   call $~lib/symbol/_Symbol#toString
-  i32.const 1904
-  call $~lib/string/String.__eq
+  local.tee $1
+  local.set $0
+  local.get $1
+  if (result i32)
+   local.get $0
+   i32.const 1904
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1904
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -1590,8 +1616,18 @@
   end
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol#toString
-  i32.const 1936
-  call $~lib/string/String.__eq
+  local.tee $1
+  local.set $0
+  local.get $1
+  if (result i32)
+   local.get $0
+   i32.const 1936
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1936
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -1607,8 +1643,18 @@
   global.set $std/symbol/isConcatSpreadable
   i32.const 1
   call $~lib/symbol/_Symbol#toString
-  i32.const 1984
-  call $~lib/string/String.__eq
+  local.tee $1
+  local.set $0
+  local.get $1
+  if (result i32)
+   local.get $0
+   i32.const 1984
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 1984
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0
@@ -1620,8 +1666,18 @@
   end
   global.get $std/symbol/isConcatSpreadable
   call $~lib/symbol/_Symbol#toString
-  i32.const 2048
-  call $~lib/string/String.__eq
+  local.tee $1
+  local.set $0
+  local.get $1
+  if (result i32)
+   local.get $0
+   i32.const 2048
+   call $~lib/string/String.__eq
+  else
+   local.get $0
+   i32.const 2048
+   i32.eq
+  end
   i32.eqz
   if
    i32.const 0

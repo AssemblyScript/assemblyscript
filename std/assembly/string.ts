@@ -94,26 +94,31 @@ import { Array } from "./array";
     return !compareImpl(this, searchStart, search, 0, searchLength);
   }
 
-  @operator("==") private static __eq(left: String | null, right: String | null): bool {
-    if (changetype<usize>(left) == changetype<usize>(right)) return true;
-    if (!changetype<usize>(left) || !changetype<usize>(right)) return false;
-    var leftLength = changetype<String>(left).length;
-    if (leftLength != changetype<String>(right).length) return false;
-    // @ts-ignore: string <-> String
+  @operator("==") @inline
+  private static __eqi(left: String | null, right: String | null): bool {
+    return i32(!changetype<usize>(left)) | i32(!changetype<usize>(right)) // one or both null
+      ? changetype<usize>(left) == changetype<usize>(right)
+      : String.__eq(changetype<string>(left), changetype<string>(right));
+  }
+
+  private static __eq(left: string, right: string): bool {
+    var leftLength = left.length;
+    if (leftLength != right.length) return false;
     return !compareImpl(left, 0, right, 0, leftLength);
   }
 
-  @operator.prefix("!")
+  @operator.prefix("!") @inline
   private static __not(str: String | null): bool {
-    return !changetype<usize>(str) || !changetype<String>(str).length;
+    return !changetype<usize>(str) ? true : !changetype<String>(str).length;
   }
 
-  @operator("!=")
+  @operator("!=") @inline
   private static __ne(left: String | null, right: String | null): bool {
-    return !this.__eq(left, right);
+    return !String.__eqi(left, right);
   }
 
-  @operator(">") private static __gt(left: String | null, right: String | null): bool {
+  @operator(">")
+  private static __gt(left: String | null, right: String | null): bool {
     if (
        changetype<usize>(left) == changetype<usize>(right) ||
       !changetype<usize>(left) ||
@@ -127,11 +132,13 @@ import { Array } from "./array";
     return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) > 0;
   }
 
-  @operator(">=") private static __gte(left: String | null, right: String | null): bool {
-    return !this.__lt(left, right);
+  @operator(">=")
+  private static __gte(left: String | null, right: String | null): bool {
+    return !String.__lt(left, right);
   }
 
-  @operator("<") private static __lt(left: String | null, right: String | null): bool {
+  @operator("<")
+  private static __lt(left: String | null, right: String | null): bool {
     if (
        changetype<usize>(left) == changetype<usize>(right) ||
       !changetype<usize>(left) ||
@@ -144,8 +151,9 @@ import { Array } from "./array";
     return compareImpl(changetype<string>(left), 0, changetype<string>(right), 0, min(leftLength, rightLength)) < 0;
   }
 
-  @operator("<=") private static __lte(left: String | null, right: String | null): bool {
-    return !this.__gt(left, right);
+  @operator("<=")
+  private static __lte(left: String | null, right: String | null): bool {
+    return !String.__gt(left, right);
   }
 
   includes(search: String, start: i32 = 0): bool {
