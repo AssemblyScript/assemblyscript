@@ -138,6 +138,7 @@ declare module "assemblyscript/src/common" {
         const ASC_TABLE_BASE = "ASC_TABLE_BASE";
         const ASC_OPTIMIZE_LEVEL = "ASC_OPTIMIZE_LEVEL";
         const ASC_SHRINK_LEVEL = "ASC_SHRINK_LEVEL";
+        const ASC_LOW_MEMORY_LIMIT = "ASC_LOW_MEMORY_LIMIT";
         const ASC_WASI = "ASC_WASI";
         const ASC_FEATURE_SIGN_EXTENSION = "ASC_FEATURE_SIGN_EXTENSION";
         const ASC_FEATURE_MUTABLE_GLOBALS = "ASC_FEATURE_MUTABLE_GLOBALS";
@@ -220,6 +221,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         User_defined_0 = 102,
         Feature_0_is_not_enabled = 103,
         Function_0_is_possibly_called_virtually_which_is_not_yet_supported = 104,
+        Low_memory_limit_exceeded_by_static_data_0_1 = 105,
         Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
         Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
         Type_0_cannot_be_changed_to_type_1 = 202,
@@ -4122,6 +4124,8 @@ declare module "assemblyscript/src/compiler" {
         noUnsafe: boolean;
         /** If true, enables pedantic diagnostics. */
         pedantic: boolean;
+        /** Indicates a very low (<64k) memory limit. */
+        lowMemoryLimit: number;
         /** Hinted optimize level. Not applied by the compiler itself. */
         optimizeLevelHint: number;
         /** Hinted shrink level. Not applied by the compiler itself. */
@@ -5181,6 +5185,8 @@ declare module "assemblyscript/src/index" {
     export function setExplicitStart(options: Options, explicitStart: boolean): void;
     /** Sets the `noUnsafe` option. */
     export function setNoUnsafe(options: Options, noUnsafe: boolean): void;
+    /** Sets the `lowMemoryLimit` option. */
+    export function setLowMemoryLimit(options: Options, lowMemoryLimit: number): void;
     /** Sign extension operations. */
     export const FEATURE_SIGN_EXTENSION: Feature;
     /** Mutable global imports and exports. */
@@ -5395,6 +5401,7 @@ declare function i64_shr_u(left: i64, right: i64): i64;
 declare function i64_not(value: i64): i64;
 declare function i64_eq(left: i64, right: i64): boolean;
 declare function i64_ne(left: i64, right: i64): boolean;
+declare function i64_gt(left: i64, right: i64): boolean;
 declare function i64_align(value: i64, alignment: number): i64;
 declare function i64_is_i8(value: i64): boolean;
 declare function i64_is_i16(value: i64): boolean;
