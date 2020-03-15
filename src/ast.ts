@@ -1741,16 +1741,15 @@ export class Source extends Node {
     var r = lineCache.length - 1;
     while (l < r) {
       let m = l + i32((r - l) / 2);
-      let s = lineCache[m];
+      let s = unchecked(lineCache[m]);
       if (pos < s) r = m;
-      else if (pos < lineCache[m + 1]) {
+      else if (pos < unchecked(lineCache[m + 1])) {
         this.lineColumn = pos - s + 1;
         return m + 1;
       }
       else l = m + 1;
     }
-    assert(false);
-    return 0;
+    return assert(0);
   }
 
   /** Gets the column number at the last position queried with `lineAt`. */
