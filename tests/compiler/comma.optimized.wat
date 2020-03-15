@@ -25,7 +25,7 @@
    i32.const 0
    i32.const 1040
    i32.const 4
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -34,7 +34,7 @@
    i32.const 0
    i32.const 1040
    i32.const 5
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -51,7 +51,7 @@
    i32.const 0
    i32.const 1040
    i32.const 8
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -62,7 +62,7 @@
    i32.const 0
    i32.const 1040
    i32.const 9
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -87,7 +87,7 @@
    i32.const 0
    i32.const 1040
    i32.const 18
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -98,7 +98,7 @@
    i32.const 0
    i32.const 1040
    i32.const 19
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -125,7 +125,7 @@
    i32.const 0
    i32.const 1040
    i32.const 22
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
