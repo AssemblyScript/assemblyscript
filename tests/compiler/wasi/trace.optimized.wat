@@ -1897,7 +1897,7 @@
   i32.eqz
   if
    i32.const 70
-   i32.const 2
+   i32.const 3
    call $~lib/wasi/index/abort
    unreachable
   end
@@ -1910,7 +1910,7 @@
   i32.ne
   if
    i32.const 72
-   i32.const 13
+   i32.const 14
    call $~lib/wasi/index/abort
    unreachable
   end

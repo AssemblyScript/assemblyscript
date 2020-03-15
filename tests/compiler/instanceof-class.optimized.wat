@@ -133,7 +133,7 @@
    i32.const 0
    i32.const 1040
    i32.const 17
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
