@@ -7,9 +7,9 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
- (data (i32.const 16) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
- (data (i32.const 96) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
- (data (i32.const 128) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
+ (data (i32.const 1024) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
+ (data (i32.const 1104) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
+ (data (i32.const 1136) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
@@ -130,7 +130,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 144
+  i32.const 1152
   local.set $3
   local.get $0
   i32.const 7
@@ -208,9 +208,9 @@
   global.set $~argumentsLength
   i32.const 1
   global.set $~argumentsLength
-  i32.const 160
+  i32.const 1168
   global.set $~lib/rt/stub/startOffset
-  i32.const 160
+  i32.const 1168
   global.set $~lib/rt/stub/offset
   i32.const 1
   global.set $~argumentsLength
@@ -218,7 +218,7 @@
    i32.const 1
    call $~lib/util/number/itoa32
    local.tee $0
-   i32.const 144
+   i32.const 1152
    i32.eq
    br_if $__inlined_func$~lib/string/String.__eq
    drop
@@ -231,7 +231,7 @@
     local.get $0
     call $~lib/string/String#get:length
     local.tee $1
-    i32.const 144
+    i32.const 1152
     call $~lib/string/String#get:length
     i32.ne
     br_if $folding-inner0
@@ -246,7 +246,7 @@
   i32.eqz
   if
    i32.const 0
-   i32.const 32
+   i32.const 1040
    i32.const 11
    i32.const 0
    call $~lib/builtins/abort
