@@ -2254,7 +2254,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 28 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#_eq (; 28 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/string/String#get:length
@@ -2885,12 +2885,12 @@
   i32.add
  )
  (func $start:std/string-casemapping (; 33 ;)
-  (local $0 i32)
+  (local $0 i64)
   (local $1 i64)
   (local $2 i64)
-  (local $3 i64)
-  (local $4 i32)
-  (local $5 i64)
+  (local $3 i32)
+  (local $4 i64)
+  (local $5 i32)
   (local $6 i32)
   (local $7 i64)
   (local $8 i32)
@@ -2983,16 +2983,8 @@
   i32.const 1040
   call $~lib/string/String#toUpperCase
   local.tee $9
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1040
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1040
-   i32.eq
-  end
+  i32.const 1040
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3005,16 +2997,8 @@
   i32.const 1040
   call $~lib/string/String#toLowerCase
   local.tee $10
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1040
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1040
-   i32.eq
-  end
+  i32.const 1040
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3027,16 +3011,8 @@
   i32.const 11344
   call $~lib/string/String#toUpperCase
   local.tee $11
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 11392
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 11392
-   i32.eq
-  end
+  i32.const 11392
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3049,16 +3025,8 @@
   i32.const 11440
   call $~lib/string/String#toLowerCase
   local.tee $12
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 11488
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 11488
-   i32.eq
-  end
+  i32.const 11488
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3071,16 +3039,8 @@
   i32.const 11536
   call $~lib/string/String#toUpperCase
   local.tee $13
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 11632
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 11632
-   i32.eq
-  end
+  i32.const 11632
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3093,16 +3053,8 @@
   i32.const 11632
   call $~lib/string/String#toLowerCase
   local.tee $14
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 11728
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 11728
-   i32.eq
-  end
+  i32.const 11728
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3115,16 +3067,8 @@
   i32.const 11824
   call $~lib/string/String#toUpperCase
   local.tee $15
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 11888
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 11888
-   i32.eq
-  end
+  i32.const 11888
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3137,16 +3081,8 @@
   i32.const 11888
   call $~lib/string/String#toLowerCase
   local.tee $16
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 11952
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 11952
-   i32.eq
-  end
+  i32.const 11952
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3159,16 +3095,8 @@
   i32.const 12016
   call $~lib/string/String#toUpperCase
   local.tee $17
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 12112
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 12112
-   i32.eq
-  end
+  i32.const 12112
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3181,16 +3109,8 @@
   i32.const 12112
   call $~lib/string/String#toLowerCase
   local.tee $18
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 12208
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 12208
-   i32.eq
-  end
+  i32.const 12208
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3203,16 +3123,8 @@
   i32.const 12304
   call $~lib/string/String#toUpperCase
   local.tee $19
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 12400
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 12400
-   i32.eq
-  end
+  i32.const 12400
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3225,16 +3137,8 @@
   i32.const 12400
   call $~lib/string/String#toLowerCase
   local.tee $20
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 12496
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 12496
-   i32.eq
-  end
+  i32.const 12496
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3247,16 +3151,8 @@
   i32.const 12592
   call $~lib/string/String#toUpperCase
   local.tee $21
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 12656
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 12656
-   i32.eq
-  end
+  i32.const 12656
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3269,16 +3165,8 @@
   i32.const 12720
   call $~lib/string/String#toUpperCase
   local.tee $22
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 12784
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 12784
-   i32.eq
-  end
+  i32.const 12784
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3291,16 +3179,8 @@
   i32.const 12864
   call $~lib/string/String#toUpperCase
   local.tee $23
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 12928
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 12928
-   i32.eq
-  end
+  i32.const 12928
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3313,16 +3193,8 @@
   i32.const 12992
   call $~lib/string/String#toUpperCase
   local.tee $24
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 13072
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 13072
-   i32.eq
-  end
+  i32.const 13072
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3335,16 +3207,8 @@
   i32.const 13152
   call $~lib/string/String#toUpperCase
   local.tee $25
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 13216
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 13216
-   i32.eq
-  end
+  i32.const 13216
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3357,16 +3221,8 @@
   i32.const 13280
   call $~lib/string/String#toUpperCase
   local.tee $26
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 13344
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 13344
-   i32.eq
-  end
+  i32.const 13344
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3379,16 +3235,8 @@
   i32.const 13408
   call $~lib/string/String#toUpperCase
   local.tee $27
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 13488
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 13488
-   i32.eq
-  end
+  i32.const 13488
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3401,16 +3249,8 @@
   i32.const 13568
   call $~lib/string/String#toUpperCase
   local.tee $28
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 13648
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 13648
-   i32.eq
-  end
+  i32.const 13648
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3423,16 +3263,8 @@
   i32.const 13728
   call $~lib/string/String#toUpperCase
   local.tee $29
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 13872
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 13872
-   i32.eq
-  end
+  i32.const 13872
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3445,16 +3277,8 @@
   i32.const 13728
   call $~lib/string/String#toLowerCase
   local.tee $30
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 14016
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 14016
-   i32.eq
-  end
+  i32.const 14016
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3467,16 +3291,8 @@
   i32.const 14160
   call $~lib/string/String#toUpperCase
   local.tee $31
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 14192
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 14192
-   i32.eq
-  end
+  i32.const 14192
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3489,16 +3305,8 @@
   i32.const 14224
   call $~lib/string/String#toLowerCase
   local.tee $32
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 14256
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 14256
-   i32.eq
-  end
+  i32.const 14256
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3511,16 +3319,8 @@
   i32.const 14288
   call $~lib/string/String#toUpperCase
   local.tee $33
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 14480
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 14480
-   i32.eq
-  end
+  i32.const 14480
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3535,16 +3335,8 @@
   local.tee $34
   call $~lib/string/String#toLowerCase
   local.tee $35
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 14688
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 14688
-   i32.eq
-  end
+  i32.const 14688
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3559,16 +3351,8 @@
   local.tee $36
   call $~lib/string/String#toLowerCase
   local.tee $37
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 14752
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 14752
-   i32.eq
-  end
+  i32.const 14752
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3583,16 +3367,8 @@
   local.tee $38
   call $~lib/string/String#toLowerCase
   local.tee $39
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 14784
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 14784
-   i32.eq
-  end
+  i32.const 14784
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3607,16 +3383,8 @@
   local.tee $40
   call $~lib/string/String#toLowerCase
   local.tee $41
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15040
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15040
-   i32.eq
-  end
+  i32.const 15040
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3631,16 +3399,8 @@
   local.tee $42
   call $~lib/string/String#toUpperCase
   local.tee $43
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15040
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15040
-   i32.eq
-  end
+  i32.const 15040
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3653,16 +3413,8 @@
   i32.const 15072
   call $~lib/string/String#toLowerCase
   local.tee $44
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15104
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15104
-   i32.eq
-  end
+  i32.const 15104
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3675,16 +3427,8 @@
   i32.const 15136
   call $~lib/string/String#toLowerCase
   local.tee $45
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15168
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15168
-   i32.eq
-  end
+  i32.const 15168
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3697,16 +3441,8 @@
   i32.const 15200
   call $~lib/string/String#toLowerCase
   local.tee $46
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15232
-   i32.eq
-  end
+  i32.const 15232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3719,16 +3455,8 @@
   i32.const 15264
   call $~lib/string/String#toLowerCase
   local.tee $47
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15296
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15296
-   i32.eq
-  end
+  i32.const 15296
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3741,16 +3469,8 @@
   i32.const 15328
   call $~lib/string/String#toLowerCase
   local.tee $48
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15360
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15360
-   i32.eq
-  end
+  i32.const 15360
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3763,16 +3483,8 @@
   i32.const 15392
   call $~lib/string/String#toLowerCase
   local.tee $49
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15424
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15424
-   i32.eq
-  end
+  i32.const 15424
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3785,16 +3497,8 @@
   i32.const 15456
   call $~lib/string/String#toLowerCase
   local.tee $50
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15488
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15488
-   i32.eq
-  end
+  i32.const 15488
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3807,16 +3511,8 @@
   i32.const 15520
   call $~lib/string/String#toLowerCase
   local.tee $51
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15552
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15552
-   i32.eq
-  end
+  i32.const 15552
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3829,16 +3525,8 @@
   i32.const 15584
   call $~lib/string/String#toLowerCase
   local.tee $52
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15616
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15616
-   i32.eq
-  end
+  i32.const 15616
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3851,16 +3539,8 @@
   i32.const 15648
   call $~lib/string/String#toLowerCase
   local.tee $53
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15680
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15680
-   i32.eq
-  end
+  i32.const 15680
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3873,16 +3553,8 @@
   i32.const 15712
   call $~lib/string/String#toLowerCase
   local.tee $54
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15744
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15744
-   i32.eq
-  end
+  i32.const 15744
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3895,16 +3567,8 @@
   i32.const 15776
   call $~lib/string/String#toLowerCase
   local.tee $55
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15808
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15808
-   i32.eq
-  end
+  i32.const 15808
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3917,16 +3581,8 @@
   i32.const 15840
   call $~lib/string/String#toLowerCase
   local.tee $56
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15872
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15872
-   i32.eq
-  end
+  i32.const 15872
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3939,16 +3595,8 @@
   i32.const 15904
   call $~lib/string/String#toLowerCase
   local.tee $57
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15936
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15936
-   i32.eq
-  end
+  i32.const 15936
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3961,16 +3609,8 @@
   i32.const 15968
   call $~lib/string/String#toLowerCase
   local.tee $58
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16000
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16000
-   i32.eq
-  end
+  i32.const 16000
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3983,16 +3623,8 @@
   i32.const 16032
   call $~lib/string/String#toLowerCase
   local.tee $59
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16064
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16064
-   i32.eq
-  end
+  i32.const 16064
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4005,16 +3637,8 @@
   i32.const 16096
   call $~lib/string/String#toLowerCase
   local.tee $60
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16128
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16128
-   i32.eq
-  end
+  i32.const 16128
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4027,16 +3651,8 @@
   i32.const 16160
   call $~lib/string/String#toLowerCase
   local.tee $61
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16192
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16192
-   i32.eq
-  end
+  i32.const 16192
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4049,16 +3665,8 @@
   i32.const 16224
   call $~lib/string/String#toLowerCase
   local.tee $62
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16256
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16256
-   i32.eq
-  end
+  i32.const 16256
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4071,16 +3679,8 @@
   i32.const 16288
   call $~lib/string/String#toLowerCase
   local.tee $63
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16320
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16320
-   i32.eq
-  end
+  i32.const 16320
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4093,16 +3693,8 @@
   i32.const 16352
   call $~lib/string/String#toLowerCase
   local.tee $64
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16384
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16384
-   i32.eq
-  end
+  i32.const 16384
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4115,16 +3707,8 @@
   i32.const 16416
   call $~lib/string/String#toLowerCase
   local.tee $65
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16448
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16448
-   i32.eq
-  end
+  i32.const 16448
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4137,16 +3721,8 @@
   i32.const 16480
   call $~lib/string/String#toLowerCase
   local.tee $66
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16512
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16512
-   i32.eq
-  end
+  i32.const 16512
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4159,16 +3735,8 @@
   i32.const 16544
   call $~lib/string/String#toLowerCase
   local.tee $67
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16576
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16576
-   i32.eq
-  end
+  i32.const 16576
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4181,16 +3749,8 @@
   i32.const 16608
   call $~lib/string/String#toLowerCase
   local.tee $68
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16640
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16640
-   i32.eq
-  end
+  i32.const 16640
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4203,16 +3763,8 @@
   i32.const 16672
   call $~lib/string/String#toLowerCase
   local.tee $69
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15744
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 15744
-   i32.eq
-  end
+  i32.const 15744
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4225,16 +3777,8 @@
   i32.const 16704
   call $~lib/string/String#toLowerCase
   local.tee $70
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16736
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16736
-   i32.eq
-  end
+  i32.const 16736
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4247,16 +3791,8 @@
   i32.const 16768
   call $~lib/string/String#toLowerCase
   local.tee $71
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16800
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16800
-   i32.eq
-  end
+  i32.const 16800
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4269,16 +3805,8 @@
   i32.const 16832
   call $~lib/string/String#toLowerCase
   local.tee $72
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16864
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16864
-   i32.eq
-  end
+  i32.const 16864
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4291,16 +3819,8 @@
   i32.const 16896
   call $~lib/string/String#toLowerCase
   local.tee $73
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16928
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16928
-   i32.eq
-  end
+  i32.const 16928
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4313,16 +3833,8 @@
   i32.const 16960
   call $~lib/string/String#toLowerCase
   local.tee $74
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 16992
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 16992
-   i32.eq
-  end
+  i32.const 16992
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4335,16 +3847,8 @@
   i32.const 17024
   call $~lib/string/String#toLowerCase
   local.tee $75
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17056
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17056
-   i32.eq
-  end
+  i32.const 17056
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4357,16 +3861,8 @@
   i32.const 17088
   call $~lib/string/String#toLowerCase
   local.tee $76
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17120
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17120
-   i32.eq
-  end
+  i32.const 17120
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4379,16 +3875,8 @@
   i32.const 17152
   call $~lib/string/String#toLowerCase
   local.tee $77
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17184
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17184
-   i32.eq
-  end
+  i32.const 17184
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4401,16 +3889,8 @@
   i32.const 17216
   call $~lib/string/String#toLowerCase
   local.tee $78
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17248
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17248
-   i32.eq
-  end
+  i32.const 17248
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4423,16 +3903,8 @@
   i32.const 17280
   call $~lib/string/String#toLowerCase
   local.tee $79
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17312
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17312
-   i32.eq
-  end
+  i32.const 17312
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4445,16 +3917,8 @@
   i32.const 17344
   call $~lib/string/String#toLowerCase
   local.tee $80
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17376
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17376
-   i32.eq
-  end
+  i32.const 17376
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4467,16 +3931,8 @@
   i32.const 17408
   call $~lib/string/String#toLowerCase
   local.tee $81
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17440
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17440
-   i32.eq
-  end
+  i32.const 17440
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4489,16 +3945,8 @@
   i32.const 17472
   call $~lib/string/String#toUpperCase
   local.tee $82
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17504
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17504
-   i32.eq
-  end
+  i32.const 17504
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4511,16 +3959,8 @@
   i32.const 14720
   call $~lib/string/String#toUpperCase
   local.tee $83
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17536
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17536
-   i32.eq
-  end
+  i32.const 17536
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4533,16 +3973,8 @@
   i32.const 17568
   call $~lib/string/String#toUpperCase
   local.tee $84
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17600
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17600
-   i32.eq
-  end
+  i32.const 17600
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4555,16 +3987,8 @@
   i32.const 17632
   call $~lib/string/String#toUpperCase
   local.tee $85
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17664
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17664
-   i32.eq
-  end
+  i32.const 17664
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4577,16 +4001,8 @@
   i32.const 17696
   call $~lib/string/String#toUpperCase
   local.tee $86
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17728
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17728
-   i32.eq
-  end
+  i32.const 17728
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4599,16 +4015,8 @@
   i32.const 17760
   call $~lib/string/String#toUpperCase
   local.tee $87
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17792
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17792
-   i32.eq
-  end
+  i32.const 17792
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4621,16 +4029,8 @@
   i32.const 17824
   call $~lib/string/String#toUpperCase
   local.tee $88
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17792
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17792
-   i32.eq
-  end
+  i32.const 17792
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4643,16 +4043,8 @@
   i32.const 17856
   call $~lib/string/String#toUpperCase
   local.tee $89
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17888
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17888
-   i32.eq
-  end
+  i32.const 17888
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4665,16 +4057,8 @@
   i32.const 17920
   call $~lib/string/String#toUpperCase
   local.tee $90
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 17952
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 17952
-   i32.eq
-  end
+  i32.const 17952
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4687,16 +4071,8 @@
   i32.const 17984
   call $~lib/string/String#toUpperCase
   local.tee $91
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 18016
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 18016
-   i32.eq
-  end
+  i32.const 18016
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4709,16 +4085,8 @@
   i32.const 18048
   call $~lib/string/String#toUpperCase
   local.tee $92
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 18080
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 18080
-   i32.eq
-  end
+  i32.const 18080
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4731,16 +4099,8 @@
   i32.const 18112
   call $~lib/string/String#toUpperCase
   local.tee $93
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 18144
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 18144
-   i32.eq
-  end
+  i32.const 18144
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4753,16 +4113,8 @@
   i32.const 18176
   call $~lib/string/String#toUpperCase
   local.tee $94
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 18208
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 18208
-   i32.eq
-  end
+  i32.const 18208
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4773,24 +4125,59 @@
    unreachable
   end
   loop $for-loop|0
-   local.get $4
+   local.get $3
    i32.const 1114111
    i32.le_s
    if
-    local.get $4
+    local.get $3
     call $~lib/string/String.fromCodePoint
     local.tee $8
     call $~lib/string/String#toLowerCase
-    local.set $0
+    local.set $5
     local.get $8
     call $~lib/string/String#toUpperCase
     local.set $6
-    local.get $0
+    local.get $5
     i32.const 0
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
-    local.set $5
-    local.get $0
+    local.set $4
+    local.get $5
+    i32.const 1
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $0
+    i64.const 0
+    i64.ge_u
+    if
+     local.get $4
+     local.get $0
+     i64.const 16
+     i64.shl
+     i64.add
+     local.set $4
+    end
+    local.get $5
+    i32.const 2
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.tee $0
+    i64.const 0
+    i64.ge_u
+    if
+     local.get $4
+     local.get $0
+     i64.const 32
+     i64.shl
+     i64.add
+     local.set $4
+    end
+    local.get $6
+    i32.const 0
+    call $~lib/string/String#codePointAt
+    i64.extend_i32_s
+    local.set $0
+    local.get $6
     i32.const 1
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
@@ -4798,14 +4185,14 @@
     i64.const 0
     i64.ge_u
     if
-     local.get $5
+     local.get $0
      local.get $1
      i64.const 16
      i64.shl
      i64.add
-     local.set $5
+     local.set $0
     end
-    local.get $0
+    local.get $6
     i32.const 2
     call $~lib/string/String#codePointAt
     i64.extend_i32_s
@@ -4813,21 +4200,21 @@
     i64.const 0
     i64.ge_u
     if
-     local.get $5
+     local.get $0
      local.get $1
      i64.const 32
      i64.shl
      i64.add
-     local.set $5
+     local.set $0
     end
-    local.get $6
+    local.get $3
     i32.const 0
-    call $~lib/string/String#codePointAt
+    call $std/string-casemapping/toLowerCaseFromIndex
     i64.extend_i32_s
     local.set $1
-    local.get $6
+    local.get $3
     i32.const 1
-    call $~lib/string/String#codePointAt
+    call $std/string-casemapping/toLowerCaseFromIndex
     i64.extend_i32_s
     local.tee $2
     i64.const 0
@@ -4840,9 +4227,9 @@
      i64.add
      local.set $1
     end
-    local.get $6
+    local.get $3
     i32.const 2
-    call $~lib/string/String#codePointAt
+    call $std/string-casemapping/toLowerCaseFromIndex
     i64.extend_i32_s
     local.tee $2
     i64.const 0
@@ -4855,47 +4242,12 @@
      i64.add
      local.set $1
     end
-    local.get $4
+    local.get $3
     i32.const 0
-    call $std/string-casemapping/toLowerCaseFromIndex
+    call $std/string-casemapping/toUpperCaseFromIndex
     i64.extend_i32_s
     local.set $2
-    local.get $4
-    i32.const 1
-    call $std/string-casemapping/toLowerCaseFromIndex
-    i64.extend_i32_s
-    local.tee $3
-    i64.const 0
-    i64.ge_u
-    if
-     local.get $2
-     local.get $3
-     i64.const 16
-     i64.shl
-     i64.add
-     local.set $2
-    end
-    local.get $4
-    i32.const 2
-    call $std/string-casemapping/toLowerCaseFromIndex
-    i64.extend_i32_s
-    local.tee $3
-    i64.const 0
-    i64.ge_u
-    if
-     local.get $2
-     local.get $3
-     i64.const 32
-     i64.shl
-     i64.add
-     local.set $2
-    end
-    local.get $4
-    i32.const 0
-    call $std/string-casemapping/toUpperCaseFromIndex
-    i64.extend_i32_s
-    local.set $3
-    local.get $4
+    local.get $3
     i32.const 1
     call $std/string-casemapping/toUpperCaseFromIndex
     i64.extend_i32_s
@@ -4903,14 +4255,14 @@
     i64.const 0
     i64.ge_u
     if
-     local.get $3
+     local.get $2
      local.get $7
      i64.const 16
      i64.shl
      i64.add
-     local.set $3
+     local.set $2
     end
-    local.get $4
+    local.get $3
     i32.const 2
     call $std/string-casemapping/toUpperCaseFromIndex
     i64.extend_i32_s
@@ -4918,22 +4270,38 @@
     i64.const 0
     i64.ge_u
     if
-     local.get $3
+     local.get $2
      local.get $7
      i64.const 32
      i64.shl
      i64.add
-     local.set $3
+     local.set $2
     end
-    local.get $2
-    local.get $5
+    local.get $1
+    local.get $4
     i64.ne
     if
      i32.const 18240
      i32.const 3
-     local.get $4
+     local.get $3
      f64.convert_i32_s
-     local.get $5
+     local.get $4
+     f64.convert_i64_u
+     local.get $1
+     f64.convert_i64_u
+     f64.const 0
+     f64.const 0
+     call $~lib/builtins/trace
+    end
+    local.get $0
+    local.get $2
+    i64.ne
+    if
+     i32.const 18320
+     i32.const 3
+     local.get $3
+     f64.convert_i32_s
+     local.get $0
      f64.convert_i64_u
      local.get $2
      f64.convert_i64_u
@@ -4942,23 +4310,7 @@
      call $~lib/builtins/trace
     end
     local.get $1
-    local.get $3
-    i64.ne
-    if
-     i32.const 18320
-     i32.const 3
-     local.get $4
-     f64.convert_i32_s
-     local.get $1
-     f64.convert_i64_u
-     local.get $3
-     f64.convert_i64_u
-     f64.const 0
-     f64.const 0
-     call $~lib/builtins/trace
-    end
-    local.get $2
-    local.get $5
+    local.get $4
     i64.ne
     if
      i32.const 0
@@ -4968,8 +4320,8 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
-    local.get $3
+    local.get $0
+    local.get $2
     i64.ne
     if
      i32.const 0
@@ -4981,22 +4333,22 @@
     end
     local.get $8
     call $~lib/rt/pure/__release
-    local.get $0
+    local.get $5
     call $~lib/rt/pure/__release
     local.get $6
     call $~lib/rt/pure/__release
-    local.get $4
+    local.get $3
     i32.const 1
     i32.add
-    local.set $4
+    local.set $3
     br $for-loop|0
    end
   end
   local.get $9
   call $~lib/rt/pure/__release
-  local.get $11
-  call $~lib/rt/pure/__release
   local.get $10
+  call $~lib/rt/pure/__release
+  local.get $11
   call $~lib/rt/pure/__release
   local.get $12
   call $~lib/rt/pure/__release
@@ -5046,25 +4398,25 @@
   call $~lib/rt/pure/__release
   local.get $35
   call $~lib/rt/pure/__release
-  local.get $37
-  call $~lib/rt/pure/__release
   local.get $36
   call $~lib/rt/pure/__release
-  local.get $39
+  local.get $37
   call $~lib/rt/pure/__release
   local.get $38
   call $~lib/rt/pure/__release
-  local.get $41
+  local.get $39
   call $~lib/rt/pure/__release
   local.get $40
   call $~lib/rt/pure/__release
-  local.get $43
+  local.get $41
   call $~lib/rt/pure/__release
   local.get $42
   call $~lib/rt/pure/__release
-  local.get $45
+  local.get $43
   call $~lib/rt/pure/__release
   local.get $44
+  call $~lib/rt/pure/__release
+  local.get $45
   call $~lib/rt/pure/__release
   local.get $46
   call $~lib/rt/pure/__release

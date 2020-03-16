@@ -122,7 +122,7 @@ import { REFCOUNT_MASK } from "./pure";
 // │                             tail                              │ ◄────┘
 // └───────────────────────────────────────────────────────────────┘   SIZE   ┘
 // S: Small blocks map
-@unmanaged class Root {
+@unmanaged export class Root {
   /** First level bitmap. */
   flMap: usize;
 }
@@ -141,7 +141,7 @@ import { REFCOUNT_MASK } from "./pure";
 @inline const ROOT_SIZE: usize = HL_END + sizeof<usize>();
 
 // @ts-ignore: decorator
-@lazy export var ROOT: Root;
+@lazy export var ROOT: Root | null;
 
 /** Gets the second level map of the specified first level. */
 // @ts-ignore: decorator

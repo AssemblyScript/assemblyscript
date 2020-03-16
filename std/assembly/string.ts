@@ -48,7 +48,7 @@ import { Array } from "./array";
     return changetype<BLOCK>(changetype<usize>(this) - BLOCK_OVERHEAD).rtSize >> 1;
   }
 
-  @operator("[]") charAt(pos: i32): String {
+  charAt(pos: i32): String {
     if (<u32>pos >= <u32>this.length) return changetype<String>("");
     var out = __alloc(2, idof<String>());
     store<u16>(out, load<u16>(changetype<usize>(this) + (<usize>pos << 1)));
@@ -70,10 +70,6 @@ import { Array } from "./array";
     return (first - 0xD800 << 10) + (second - 0xDC00) + 0x10000;
   }
 
-  @operator("+") private static __concat(left: String, right: String): String {
-    return select<String>(left, changetype<String>("null"), changetype<usize>(left) != 0).concat(right);
-  }
-
   concat(other: String): String {
     var thisSize: isize = this.length << 1;
     var otherSize: isize = other.length << 1;
@@ -92,68 +88,6 @@ import { Array } from "./array";
     if (searchStart < 0) return false;
     // @ts-ignore: string <-> String
     return !compareImpl(this, searchStart, search, 0, searchLength);
-  }
-
-  @operator("==") @inline
-  private static __eqi(left: String | null, right: String | null): bool {
-    return i32(!changetype<usize>(left)) | i32(!changetype<usize>(right)) // one or both null
-      ? changetype<usize>(left) == changetype<usize>(right)
-      : String.__eq(changetype<string>(left), changetype<string>(right));
-  }
-
-  private static __eq(left: string, right: string): bool {
-    var leftLength = left.length;
-    if (leftLength != right.length) return false;
-    return !compareImpl(left, 0, right, 0, leftLength);
-  }
-
-  @operator.prefix("!") @inline
-  private static __not(str: String | null): bool {
-    return !changetype<usize>(str) ? true : !changetype<String>(str).length;
-  }
-
-  @operator("!=") @inline
-  private static __ne(left: String | null, right: String | null): bool {
-    return !String.__eqi(left, right);
-  }
-
-  @operator(">")
-  private static __gt(left: String | null, right: String | null): bool {
-    if (
-       changetype<usize>(left) == changetype<usize>(right) ||
-      !changetype<usize>(left) ||
-      !changetype<usize>(right)
-    ) return false;
-    var leftLength  = changetype<String>(left).length;
-    if (!leftLength) return false;
-    var rightLength = changetype<String>(right).length;
-    if (!rightLength) return true;
-    // @ts-ignore: string <-> String
-    return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) > 0;
-  }
-
-  @operator(">=")
-  private static __gte(left: String | null, right: String | null): bool {
-    return !String.__lt(left, right);
-  }
-
-  @operator("<")
-  private static __lt(left: String | null, right: String | null): bool {
-    if (
-       changetype<usize>(left) == changetype<usize>(right) ||
-      !changetype<usize>(left) ||
-      !changetype<usize>(right)
-    ) return false;
-    var rightLength = changetype<String>(right).length;
-    if (!rightLength) return false;
-    var leftLength  = changetype<String>(left).length;
-    if (!leftLength) return true;
-    return compareImpl(changetype<string>(left), 0, changetype<string>(right), 0, min(leftLength, rightLength)) < 0;
-  }
-
-  @operator("<=")
-  private static __lte(left: String | null, right: String | null): bool {
-    return !String.__gt(left, right);
   }
 
   includes(search: String, start: i32 = 0): bool {
@@ -643,6 +577,71 @@ import { Array } from "./array";
 
   toString(): String {
     return this;
+  }
+
+  @operator("==")
+  private _eq(other: string): bool {
+    var thisLength = this.length;
+    if (thisLength != other.length) return false;
+    return !compareImpl(changetype<string>(this), 0, other, 0, thisLength);
+  }
+
+  @operator("!=")
+  private _ne(other: string): bool {
+    return !this._eq(other);
+  }
+
+  @operator(">")
+  private static _gt(left: String | null, right: String | null): bool {
+    if (
+       changetype<usize>(left) == changetype<usize>(right) ||
+      !changetype<usize>(left) ||
+      !changetype<usize>(right)
+    ) return false;
+    var leftLength  = changetype<String>(left).length;
+    if (!leftLength) return false;
+    var rightLength = changetype<String>(right).length;
+    if (!rightLength) return true;
+    // @ts-ignore: string <-> String
+    return compareImpl(left, 0, right, 0, min(leftLength, rightLength)) > 0;
+  }
+
+  @operator(">=")
+  private static _ge(left: String | null, right: String | null): bool {
+    return !String.__lt(left, right);
+  }
+
+  @operator("<")
+  private static __lt(left: String | null, right: String | null): bool {
+    if (
+       changetype<usize>(left) == changetype<usize>(right) ||
+      !changetype<usize>(left) ||
+      !changetype<usize>(right)
+    ) return false;
+    var rightLength = changetype<String>(right).length;
+    if (!rightLength) return false;
+    var leftLength  = changetype<String>(left).length;
+    if (!leftLength) return true;
+    return compareImpl(changetype<string>(left), 0, changetype<string>(right), 0, min(leftLength, rightLength)) < 0;
+  }
+
+  @operator("<=")
+  private static __le(left: String | null, right: String | null): bool {
+    return !String._gt(left, right);
+  }
+
+  @operator("+") private static _add(left: String, right: String): String {
+    return select<String>(left, changetype<String>("null"), changetype<usize>(left) != 0).concat(right);
+  }
+
+  @operator("[]")
+  private _get(index: i32): String {
+    return this.charAt(index);
+  }
+
+  @operator.prefix("!")
+  private _not(): bool {
+    return !this.length;
   }
 }
 

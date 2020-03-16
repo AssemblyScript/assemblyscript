@@ -140,7 +140,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#_eq (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/string/String#get:length
@@ -1415,10 +1415,9 @@
   end
  )
  (func $start:resolve-binary (; 14 ;)
-  (local $0 i32)
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1430,7 +1429,7 @@
   end
   i32.const 1072
   i32.const 1072
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1442,7 +1441,7 @@
   end
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1454,7 +1453,7 @@
   end
   i32.const 1072
   i32.const 1072
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1466,7 +1465,7 @@
   end
   i32.const 1072
   i32.const 1072
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1478,7 +1477,7 @@
   end
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1492,18 +1491,10 @@
   i32.const 1072
   i32.const 1168
   i32.const 1168
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   select
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1040
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1040
-   i32.eq
-  end
+  i32.const 1040
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1517,18 +1508,10 @@
   i32.const 1040
   i32.const 1168
   i32.const 1168
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   select
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1072
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1072
-   i32.eq
-  end
+  i32.const 1072
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1546,16 +1529,8 @@
   global.set $resolve-binary/a
   i32.const 1
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1571,16 +1546,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1596,16 +1563,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1621,16 +1580,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1645,16 +1596,8 @@
   f64.const 4
   global.set $resolve-binary/f
   call $~lib/util/number/dtoa
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 2480
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2480
-   i32.eq
-  end
+  i32.const 2480
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1670,16 +1613,8 @@
   global.set $resolve-binary/a
   i32.const 2
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1695,16 +1630,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1720,16 +1647,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 2512
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2512
-   i32.eq
-  end
+  i32.const 2512
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1745,16 +1664,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1770,16 +1681,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1795,16 +1698,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1820,16 +1715,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 2544
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2544
-   i32.eq
-  end
+  i32.const 2544
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1845,16 +1732,8 @@
   global.set $resolve-binary/a
   global.get $resolve-binary/a
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1866,16 +1745,8 @@
   end
   i32.const 3
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 2544
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2544
-   i32.eq
-  end
+  i32.const 2544
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1887,16 +1758,8 @@
   end
   i32.const -1
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 2576
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2576
-   i32.eq
-  end
+  i32.const 2576
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1908,16 +1771,8 @@
   end
   i32.const 2
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1929,16 +1784,8 @@
   end
   i32.const 2
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1950,16 +1797,8 @@
   end
   i32.const 1
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1970,16 +1809,8 @@
    unreachable
   end
   call $~lib/util/number/dtoa
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 2480
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2480
-   i32.eq
-  end
+  i32.const 2480
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1991,16 +1822,8 @@
   end
   i32.const 4
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 2512
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2512
-   i32.eq
-  end
+  i32.const 2512
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2012,16 +1835,8 @@
   end
   i32.const 1
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2033,16 +1848,8 @@
   end
   i32.const 3
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 2544
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2544
-   i32.eq
-  end
+  i32.const 2544
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2054,16 +1861,8 @@
   end
   i32.const 1
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2075,16 +1874,8 @@
   end
   i32.const 3
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 2544
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2544
-   i32.eq
-  end
+  i32.const 2544
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2096,16 +1887,8 @@
   end
   i32.const 2
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2117,16 +1900,8 @@
   end
   i32.const 2
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2138,16 +1913,8 @@
   end
   i32.const 0
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1200
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1200
-   i32.eq
-  end
+  i32.const 1200
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2159,16 +1926,8 @@
   end
   i32.const 1
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2180,16 +1939,8 @@
   end
   i32.const 2
   call $~lib/number/I32#toString
-  local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 1264
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1264
-   i32.eq
-  end
+  i32.const 1264
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2205,7 +1956,7 @@
   global.set $resolve-binary/foo
   i32.const 2608
   i32.const 2608
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2217,7 +1968,7 @@
   end
   i32.const 2640
   i32.const 2640
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2229,7 +1980,7 @@
   end
   i32.const 2672
   i32.const 2672
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2241,7 +1992,7 @@
   end
   i32.const 2704
   i32.const 2704
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2253,7 +2004,7 @@
   end
   i32.const 2736
   i32.const 2736
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2265,7 +2016,7 @@
   end
   i32.const 2768
   i32.const 2768
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2277,7 +2028,7 @@
   end
   i32.const 2800
   i32.const 2800
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2289,7 +2040,7 @@
   end
   i32.const 2832
   i32.const 2832
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2301,7 +2052,7 @@
   end
   i32.const 2864
   i32.const 2864
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2313,7 +2064,7 @@
   end
   i32.const 2896
   i32.const 2896
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2325,7 +2076,7 @@
   end
   i32.const 2928
   i32.const 2928
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2337,7 +2088,7 @@
   end
   i32.const 2960
   i32.const 2960
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0

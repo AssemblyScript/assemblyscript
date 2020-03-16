@@ -15,7 +15,6 @@
  (memory $0 1)
  (data (i32.const 1024) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00r\00e\00f\00e\00r\00e\00n\00c\00e\00-\00t\00y\00p\00e\00s\00.\00t\00s")
  (global $features/reference-types/nullGlobal (mut anyref) (ref.null))
- (global $features/reference-types/nullGlobalInit (mut anyref) (ref.null))
  (global $features/reference-types/funcGlobal (mut anyref) (ref.null))
  (export "memory" (memory $0))
  (export "external" (func $features/reference-types/external))
@@ -51,21 +50,10 @@
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/get
   call $~lib/bindings/console/log
-  global.get $features/reference-types/nullGlobal
-  ref.is_null
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 32
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   ref.null
   global.set $features/reference-types/nullGlobal
   ref.null
-  global.set $features/reference-types/nullGlobalInit
+  global.set $features/reference-types/nullGlobal
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal
  )

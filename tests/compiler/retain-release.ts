@@ -105,7 +105,7 @@ export function newRef(): void {
   // __release(TEMP)
 }
 
-var glo: Ref;
+var glo: Ref | null;
 
 export function assignGlobal(): void {
 

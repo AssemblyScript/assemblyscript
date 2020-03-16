@@ -104,7 +104,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#_eq (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/string/String#get:length
@@ -127,7 +127,7 @@
   (local $1 i32)
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -139,7 +139,7 @@
   end
   i32.const 1120
   i32.const 1120
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -151,7 +151,7 @@
   end
   i32.const 1120
   i32.const 1120
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -163,7 +163,7 @@
   end
   i32.const 1120
   i32.const 1120
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -175,7 +175,7 @@
   end
   i32.const 1152
   i32.const 1152
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -187,7 +187,7 @@
   end
   i32.const 1152
   i32.const 1152
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -199,7 +199,7 @@
   end
   i32.const 1184
   i32.const 1184
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -211,7 +211,7 @@
   end
   i32.const 1120
   i32.const 1120
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -223,7 +223,7 @@
   end
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -235,7 +235,7 @@
   end
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -247,7 +247,7 @@
   end
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -259,7 +259,7 @@
   end
   i32.const 1248
   i32.const 1248
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -271,7 +271,7 @@
   end
   i32.const 1184
   i32.const 1184
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -283,7 +283,7 @@
   end
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -295,7 +295,7 @@
   end
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -307,7 +307,7 @@
   end
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -319,7 +319,7 @@
   end
   i32.const 1040
   i32.const 1040
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -331,7 +331,7 @@
   end
   i32.const 1248
   i32.const 1248
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -343,7 +343,7 @@
   end
   i32.const 1152
   i32.const 1152
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -409,7 +409,7 @@
   global.set $typeof/c
   i32.const 1120
   i32.const 1120
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -421,7 +421,7 @@
   end
   i32.const 1152
   i32.const 1152
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -433,7 +433,7 @@
   end
   i32.const 1280
   i32.const 1280
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -445,7 +445,7 @@
   end
   i32.const 1280
   i32.const 1280
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -457,7 +457,7 @@
   end
   i32.const 1280
   i32.const 1280
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0

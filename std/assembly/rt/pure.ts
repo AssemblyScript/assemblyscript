@@ -1,5 +1,5 @@
 import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
-import { Block, freeBlock, ROOT } from "rt/tlsf";
+import { Block, freeBlock, Root, ROOT } from "rt/tlsf";
 import { TypeinfoFlags } from "shared/typeinfo";
 import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 
@@ -124,10 +124,10 @@ function decrement(s: Block): void {
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_DECREMENT);
     if (isDefined(__GC_ALL_ACYCLIC)) {
       if (DEBUG) assert(!(info & BUFFERED_MASK));
-      freeBlock(ROOT, s);
+      freeBlock(changetype<Root>(ROOT), s);
     } else {
       if (!(info & BUFFERED_MASK)) {
-        freeBlock(ROOT, s);
+        freeBlock(changetype<Root>(ROOT), s);
       } else {
         s.gcInfo = BUFFERED_MASK | COLOR_BLACK | 0;
       }
@@ -205,7 +205,7 @@ export function __collect(): void {
       cur += sizeof<usize>();
     } else {
       if ((info & COLOR_MASK) == COLOR_BLACK && !(info & REFCOUNT_MASK)) {
-        freeBlock(ROOT, s);
+        freeBlock(changetype<Root>(ROOT), s);
       } else {
         s.gcInfo = info & ~BUFFERED_MASK;
       }
@@ -261,7 +261,7 @@ function collectWhite(s: Block): void {
   if ((info & COLOR_MASK) == COLOR_WHITE && !(info & BUFFERED_MASK)) {
     s.gcInfo = (info & ~COLOR_MASK) | COLOR_BLACK;
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_COLLECTWHITE);
-    freeBlock(ROOT, s);
+    freeBlock(changetype<Root>(ROOT), s);
   }
 }
 

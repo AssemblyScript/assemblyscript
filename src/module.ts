@@ -779,7 +779,7 @@ export class Module {
   ): ExpressionRef {
     if (type == NativeType.Auto) {
       type = binaryen._BinaryenExpressionGetType(ifTrue);
-      assert(type == binaryen._BinaryenExpressionGetType(ifFalse));
+      // assert(type == binaryen._BinaryenExpressionGetType(ifFalse));
     }
     return binaryen._BinaryenSelect(this.ref, condition, ifTrue, ifFalse, type);
   }

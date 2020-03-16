@@ -317,7 +317,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#_eq (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/string/String#get:length
@@ -1449,25 +1449,14 @@
  )
  (func $start:number (; 17 ;)
   (local $0 i32)
-  (local $1 i32)
   i32.const 2544
   global.set $~lib/rt/stub/startOffset
   i32.const 2544
   global.set $~lib/rt/stub/offset
   global.get $number/a
   call $~lib/number/I32#toString
-  local.tee $1
-  local.set $0
-  local.get $1
-  if (result i32)
-   local.get $0
-   i32.const 1072
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1072
-   i32.eq
-  end
+  i32.const 1072
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1478,18 +1467,8 @@
    unreachable
   end
   call $~lib/util/number/dtoa
-  local.tee $1
-  local.set $0
-  local.get $1
-  if (result i32)
-   local.get $0
-   i32.const 2336
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2336
-   i32.eq
-  end
+  i32.const 2336
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1501,18 +1480,8 @@
   end
   i32.const 3
   call $~lib/number/I32#toString
-  local.tee $1
-  local.set $0
-  local.get $1
-  if (result i32)
-   local.get $0
-   i32.const 2368
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2368
-   i32.eq
-  end
+  i32.const 2368
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1524,18 +1493,8 @@
   end
   i32.const -5
   call $~lib/number/I32#toString
-  local.tee $1
-  local.set $0
-  local.get $1
-  if (result i32)
-   local.get $0
-   i32.const 2400
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2400
-   i32.eq
-  end
+  i32.const 2400
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1547,18 +1506,8 @@
   end
   i32.const 4
   call $~lib/number/I32#toString
-  local.tee $1
-  local.set $0
-  local.get $1
-  if (result i32)
-   local.get $0
-   i32.const 2432
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2432
-   i32.eq
-  end
+  i32.const 2432
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1574,18 +1523,8 @@
   global.set $number/a
   global.get $number/a
   call $~lib/number/I32#toString
-  local.tee $1
-  local.set $0
-  local.get $1
-  if (result i32)
-   local.get $0
-   i32.const 2464
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2464
-   i32.eq
-  end
+  i32.const 2464
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1601,18 +1540,8 @@
   global.set $number/a
   global.get $number/a
   call $~lib/number/I32#toString
-  local.tee $1
-  local.set $0
-  local.get $1
-  if (result i32)
-   local.get $0
-   i32.const 1072
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1072
-   i32.eq
-  end
+  i32.const 1072
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1624,7 +1553,7 @@
   end
   i32.const 2496
   i32.const 2496
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1636,7 +1565,7 @@
   end
   i32.const 2528
   i32.const 2528
-  call $~lib/string/String.__eq
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1653,18 +1582,8 @@
   global.set $number/a
   local.get $0
   call $~lib/number/I32#toString
-  local.tee $1
-  local.set $0
-  local.get $1
-  if (result i32)
-   local.get $0
-   i32.const 1072
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1072
-   i32.eq
-  end
+  i32.const 1072
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -1681,18 +1600,8 @@
   global.set $number/a
   local.get $0
   call $~lib/number/I32#toString
-  local.tee $1
-  local.set $0
-  local.get $1
-  if (result i32)
-   local.get $0
-   i32.const 2464
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2464
-   i32.eq
-  end
+  i32.const 2464
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0

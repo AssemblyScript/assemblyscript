@@ -3547,12 +3547,9 @@
   call $~lib/rt/stub/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#_eq (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $0
-  call $~lib/rt/stub/__retain
-  local.set $0
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
@@ -3566,8 +3563,6 @@
   if
    i32.const 0
    local.set $3
-   local.get $0
-   call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
    local.get $3
@@ -3581,8 +3576,6 @@
   call $~lib/util/string/compareImpl
   i32.eqz
   local.set $3
-  local.get $0
-  call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
   local.get $3
@@ -3710,7 +3703,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -3738,33 +3730,8 @@
   call $~lib/typedarray/Float32Array#__get
   call $~lib/number/F32#toString
   local.tee $0
-  call $~lib/rt/stub/__retain
-  local.set $2
   i32.const 1872
-  call $~lib/rt/stub/__retain
-  local.set $1
-  local.get $2
-  i32.eqz
-  local.get $1
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $2
-   local.get $1
-   i32.eq
-  else
-   local.get $2
-   local.get $1
-   call $~lib/string/String.__eq
-  end
-  local.set $3
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $2
-  call $~lib/rt/stub/__release
-  local.get $3
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3778,34 +3745,9 @@
   i32.const 1
   call $~lib/typedarray/Float32Array#__get
   call $~lib/number/F32#toString
-  local.tee $2
-  call $~lib/rt/stub/__retain
-  local.set $1
+  local.tee $1
   i32.const 1968
-  call $~lib/rt/stub/__retain
-  local.set $3
-  local.get $1
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $1
-   local.get $3
-   i32.eq
-  else
-   local.get $1
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $4
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $4
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3816,7 +3758,7 @@
    unreachable
   end
   global.get $resolve-elementaccess/arr
-  local.tee $1
+  local.tee $2
   i32.const 0
   local.tee $3
   global.get $resolve-elementaccess/arr
@@ -3825,38 +3767,13 @@
   f32.const 10
   f32.add
   call $~lib/typedarray/Float32Array#__set
-  local.get $1
+  local.get $2
   local.get $3
   call $~lib/typedarray/Float32Array#__get
   call $~lib/number/F32#toString
-  local.tee $1
-  call $~lib/rt/stub/__retain
-  local.set $1
+  local.tee $2
   i32.const 2000
-  call $~lib/rt/stub/__retain
-  local.set $4
-  local.get $1
-  i32.eqz
-  local.get $4
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $1
-   local.get $4
-   i32.eq
-  else
-   local.get $1
-   local.get $4
-   call $~lib/string/String.__eq
-  end
-  local.set $3
-  local.get $4
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
-  local.get $3
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3904,34 +3821,9 @@
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  local.tee $1
-  call $~lib/rt/stub/__retain
-  local.set $4
+  local.tee $3
   i32.const 2064
-  call $~lib/rt/stub/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $4
-  call $~lib/rt/stub/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3945,34 +3837,9 @@
   i32.const 1
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  local.tee $4
-  call $~lib/rt/stub/__retain
-  local.set $3
+  local.tee $2
   i32.const 2096
-  call $~lib/rt/stub/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/stub/__release
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3983,7 +3850,7 @@
    unreachable
   end
   global.get $resolve-elementaccess/buf
-  local.tee $3
+  local.tee $4
   i32.const 0
   local.tee $5
   global.get $resolve-elementaccess/buf
@@ -3992,38 +3859,13 @@
   i32.const 10
   i32.add
   call $~lib/typedarray/Uint8Array#__set
-  local.get $3
+  local.get $4
   local.get $5
   call $~lib/typedarray/Uint8Array#__get
   call $~lib/number/U8#toString
-  local.tee $3
-  call $~lib/rt/stub/__retain
-  local.set $3
+  local.tee $4
   i32.const 2128
-  call $~lib/rt/stub/__retain
-  local.set $6
-  local.get $3
-  i32.eqz
-  local.get $6
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $6
-   i32.eq
-  else
-   local.get $3
-   local.get $6
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $6
-  call $~lib/rt/stub/__release
-  local.get $3
-  call $~lib/rt/stub/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0

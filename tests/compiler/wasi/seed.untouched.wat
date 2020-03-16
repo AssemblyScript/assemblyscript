@@ -1,12 +1,13 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_f64 (func (result f64)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i64_=>_none (func (param i64)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (type $i64_=>_i64 (func (param i64) (result i64)))
  (import "wasi_snapshot_preview1" "random_get" (func $~lib/bindings/wasi_snapshot_preview1/random_get (param i32 i32) (result i32)))
  (import "wasi_snapshot_preview1" "fd_write" (func $~lib/bindings/wasi_snapshot_preview1/fd_write (param i32 i32 i32 i32) (result i32)))
@@ -19,6 +20,7 @@
  (global $~lib/math/random_state1_64 (mut i64) (i64.const 0))
  (global $~lib/math/random_state0_32 (mut i32) (i32.const 0))
  (global $~lib/math/random_state1_32 (mut i32) (i32.const 0))
+ (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "test" (func $wasi/seed/test))
@@ -126,7 +128,179 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String.UTF8.encodeUnsafe (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/rt/stub/__release (; 8 ;) (param $0 i32)
+  nop
+ )
+ (func $~lib/util/string/compareImpl (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  local.get $0
+  call $~lib/rt/stub/__retain
+  local.set $0
+  local.get $2
+  call $~lib/rt/stub/__retain
+  local.set $2
+  local.get $0
+  local.get $1
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $5
+  local.get $2
+  local.get $3
+  i32.const 1
+  i32.shl
+  i32.add
+  local.set $6
+  local.get $4
+  i32.const 4
+  i32.ge_u
+  if (result i32)
+   local.get $5
+   i32.const 7
+   i32.and
+   local.get $6
+   i32.const 7
+   i32.and
+   i32.or
+   i32.eqz
+  else
+   i32.const 0
+  end
+  if
+   block $do-break|0
+    loop $do-continue|0
+     local.get $5
+     i64.load
+     local.get $6
+     i64.load
+     i64.ne
+     if
+      br $do-break|0
+     end
+     local.get $5
+     i32.const 8
+     i32.add
+     local.set $5
+     local.get $6
+     i32.const 8
+     i32.add
+     local.set $6
+     local.get $4
+     i32.const 4
+     i32.sub
+     local.set $4
+     local.get $4
+     i32.const 4
+     i32.ge_u
+     local.set $7
+     local.get $7
+     br_if $do-continue|0
+    end
+   end
+  end
+  loop $while-continue|1
+   local.get $4
+   local.tee $7
+   i32.const 1
+   i32.sub
+   local.set $4
+   local.get $7
+   local.set $7
+   local.get $7
+   if
+    local.get $5
+    i32.load16_u
+    local.set $8
+    local.get $6
+    i32.load16_u
+    local.set $9
+    local.get $8
+    local.get $9
+    i32.ne
+    if
+     local.get $8
+     local.get $9
+     i32.sub
+     local.set $10
+     local.get $0
+     call $~lib/rt/stub/__release
+     local.get $2
+     call $~lib/rt/stub/__release
+     local.get $10
+     return
+    end
+    local.get $5
+    i32.const 2
+    i32.add
+    local.set $5
+    local.get $6
+    i32.const 2
+    i32.add
+    local.set $6
+    br $while-continue|1
+   end
+  end
+  i32.const 0
+  local.set $7
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $2
+  call $~lib/rt/stub/__release
+  local.get $7
+ )
+ (func $~lib/string/String#_eq (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  (local $3 i32)
+  local.get $1
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $0
+  call $~lib/string/String#get:length
+  local.set $2
+  local.get $2
+  local.get $1
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   local.set $3
+   local.get $1
+   call $~lib/rt/stub/__release
+   local.get $3
+   return
+  end
+  local.get $0
+  i32.const 0
+  local.get $1
+  i32.const 0
+  local.get $2
+  call $~lib/util/string/compareImpl
+  i32.eqz
+  local.set $3
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $3
+ )
+ (func $~lib/string/String#_ne (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
+  (local $2 i32)
+  local.get $1
+  call $~lib/rt/stub/__retain
+  local.set $1
+  local.get $0
+  local.get $1
+  call $~lib/string/String#_eq
+  i32.eqz
+  local.set $2
+  local.get $1
+  call $~lib/rt/stub/__release
+  local.get $2
+ )
+ (func $~lib/string/String.UTF8.encodeUnsafe (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -342,7 +516,7 @@
   local.get $2
   i32.sub
  )
- (func $~lib/util/number/decimalCount32 (; 9 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 13 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -397,10 +571,7 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/__release (; 10 ;) (param $0 i32)
-  nop
- )
- (func $~lib/wasi/index/abort (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/wasi/index/abort (; 14 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -425,8 +596,21 @@
   i32.add
   local.set $4
   local.get $0
+  local.tee $5
+  i32.eqz
   i32.const 0
-  i32.ne
+  local.tee $6
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $5
+   local.get $6
+   i32.ne
+  else
+   local.get $5
+   local.get $6
+   call $~lib/string/String#_ne
+  end
   if
    local.get $4
    local.get $0
@@ -446,8 +630,21 @@
   i32.add
   local.set $4
   local.get $1
+  local.tee $5
+  i32.eqz
   i32.const 0
-  i32.ne
+  local.tee $6
+  i32.eqz
+  i32.or
+  if (result i32)
+   local.get $5
+   local.get $6
+   i32.ne
+  else
+   local.get $5
+   local.get $6
+   call $~lib/string/String#_ne
+  end
   if
    local.get $4
    local.get $1
@@ -469,9 +666,9 @@
   i32.store8
   local.get $2
   call $~lib/util/number/decimalCount32
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.add
   local.set $4
   loop $do-continue|0
@@ -492,34 +689,34 @@
    local.get $5
    local.set $2
    local.get $2
-   local.set $7
-   local.get $7
+   local.set $6
+   local.get $6
    br_if $do-continue|0
   end
   local.get $4
-  local.get $6
+  local.get $7
   i32.add
   local.set $4
   local.get $4
-  local.tee $7
+  local.tee $6
   i32.const 1
   i32.add
   local.set $4
-  local.get $7
+  local.get $6
   i32.const 58
   i32.store8
   local.get $3
   call $~lib/util/number/decimalCount32
-  local.set $6
+  local.set $7
   local.get $4
-  local.get $6
+  local.get $7
   i32.add
   local.set $4
   loop $do-continue|1
    local.get $3
    i32.const 10
    i32.div_u
-   local.set $7
+   local.set $6
    local.get $4
    i32.const 1
    i32.sub
@@ -530,7 +727,7 @@
    i32.rem_u
    i32.add
    i32.store8
-   local.get $7
+   local.get $6
    local.set $3
    local.get $3
    local.set $8
@@ -538,7 +735,7 @@
    br_if $do-continue|1
   end
   local.get $4
-  local.get $6
+  local.get $7
   i32.add
   local.set $4
   local.get $4
@@ -566,7 +763,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $~lib/math/NativeMath.seedRandom (; 12 ;) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (; 15 ;) (param $0 i64)
   i32.const 1
   global.set $~lib/math/random_seeded
   local.get $0
@@ -618,7 +815,7 @@
    unreachable
   end
  )
- (func $~lib/math/NativeMath.random (; 13 ;) (result f64)
+ (func $~lib/math/NativeMath.random (; 16 ;) (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i64)
@@ -670,10 +867,10 @@
   f64.const 1
   f64.sub
  )
- (func $wasi/seed/test (; 14 ;) (result f64)
+ (func $wasi/seed/test (; 17 ;) (result f64)
   call $~lib/math/NativeMath.random
  )
- (func $~start (; 15 ;)
+ (func $~start (; 18 ;)
   nop
  )
 )

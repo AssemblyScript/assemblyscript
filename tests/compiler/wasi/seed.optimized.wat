@@ -72,7 +72,15 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/string/String.UTF8.encodeUnsafe (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 5 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.const 1
+  i32.shr_u
+ )
+ (func $~lib/string/String.UTF8.encodeUnsafe (; 6 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -247,7 +255,7 @@
   i32.const 23
   i32.sub
  )
- (func $~lib/util/number/decimalCount32 (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 7 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
@@ -289,7 +297,7 @@
   i32.lt_u
   select
  )
- (func $~lib/wasi/index/abort (; 7 ;)
+ (func $~lib/wasi/index/abort (; 8 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -308,20 +316,18 @@
   i32.const 19
   i32.const 544106784
   i32.store
-  i32.const 1036
-  i32.load
-  i32.const 1
-  i32.shr_u
+  i32.const 1040
+  call $~lib/string/String#get:length
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.const 23
   i32.add
-  local.tee $2
+  local.tee $3
   i32.const 40
   i32.store8
   i32.const 1406
   call $~lib/util/number/decimalCount32
   local.tee $4
-  local.get $2
+  local.get $3
   i32.const 1
   i32.add
   i32.add
@@ -394,7 +400,7 @@
   i32.const 255
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
  )
- (func $~lib/math/NativeMath.random (; 8 ;) (result f64)
+ (func $~lib/math/NativeMath.random (; 9 ;) (result f64)
   (local $0 i64)
   (local $1 i64)
   global.get $~lib/math/random_seeded
@@ -490,10 +496,10 @@
   f64.const 1
   f64.sub
  )
- (func $wasi/seed/test (; 9 ;) (result f64)
+ (func $wasi/seed/test (; 10 ;) (result f64)
   call $~lib/math/NativeMath.random
  )
- (func $~start (; 10 ;)
+ (func $~start (; 11 ;)
   nop
  )
 )

@@ -3581,7 +3581,7 @@
   call $~lib/rt/pure/__release
   local.get $5
  )
- (func $~lib/string/String.__concat (; 35 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String._add (; 35 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -3710,13 +3710,13 @@
   local.set $0
   local.get $0
   i32.const 384
-  call $~lib/string/String.__concat
+  call $~lib/string/String._add
   local.tee $1
   call $~lib/rt/pure/__retain
   local.set $2
   local.get $2
   i32.const 448
-  call $~lib/string/String.__concat
+  call $~lib/string/String._add
   local.tee $3
   drop
   local.get $0

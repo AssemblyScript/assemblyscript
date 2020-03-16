@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
@@ -148,8 +148,25 @@
   end
   i32.const 0
  )
- (func $~lib/object/Object.is<~lib/string/String> (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#_eq (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  local.get $0
+  call $~lib/string/String#get:length
+  local.tee $2
+  local.get $1
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/util/string/compareImpl
+  i32.eqz
+ )
+ (func $~lib/object/Object.is<~lib/string/String | null> (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   local.get $1
@@ -160,25 +177,12 @@
    local.get $1
    i32.eq
   else
-   block $__inlined_func$~lib/string/String.__eq (result i32)
-    i32.const 0
-    local.get $0
-    call $~lib/string/String#get:length
-    local.tee $2
-    local.get $1
-    call $~lib/string/String#get:length
-    i32.ne
-    br_if $__inlined_func$~lib/string/String.__eq
-    drop
-    local.get $0
-    local.get $1
-    local.get $2
-    call $~lib/util/string/compareImpl
-    i32.eqz
-   end
+   local.get $0
+   local.get $1
+   call $~lib/string/String#_eq
   end
  )
- (func $start:std/object (; 7 ;)
+ (func $start:std/object (; 8 ;)
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -559,9 +563,7 @@
   end
   i32.const 1088
   i32.const 1088
-  call $~lib/object/Object.is<~lib/string/String>
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.const 1
   i32.ne
   if
@@ -574,7 +576,7 @@
   end
   i32.const 1088
   i32.const 1120
-  call $~lib/object/Object.is<~lib/string/String>
+  call $~lib/string/String#_eq
   if
    i32.const 0
    i32.const 1040
@@ -585,7 +587,7 @@
   end
   i32.const 1088
   i32.const 1152
-  call $~lib/object/Object.is<~lib/string/String>
+  call $~lib/string/String#_eq
   if
    i32.const 0
    i32.const 1040
@@ -596,9 +598,7 @@
   end
   i32.const 0
   i32.const 0
-  call $~lib/object/Object.is<~lib/string/String>
-  i32.const 0
-  i32.ne
+  call $~lib/object/Object.is<~lib/string/String | null>
   i32.const 1
   i32.ne
   if
@@ -611,7 +611,7 @@
   end
   i32.const 1184
   i32.const 0
-  call $~lib/object/Object.is<~lib/string/String>
+  call $~lib/object/Object.is<~lib/string/String | null>
   if
    i32.const 0
    i32.const 1040
@@ -622,7 +622,7 @@
   end
   i32.const 0
   i32.const 1184
-  call $~lib/object/Object.is<~lib/string/String>
+  call $~lib/object/Object.is<~lib/string/String | null>
   if
    i32.const 0
    i32.const 1040
@@ -632,7 +632,7 @@
    unreachable
   end
  )
- (func $~start (; 8 ;)
+ (func $~start (; 9 ;)
   call $start:std/object
  )
 )

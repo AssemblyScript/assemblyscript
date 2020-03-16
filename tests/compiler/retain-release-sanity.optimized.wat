@@ -1696,7 +1696,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String.__concat (; 25 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String._add (; 25 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1973,10 +1973,10 @@
   call $~lib/rt/pure/__release
   i32.const 1360
   i32.const 1392
-  call $~lib/string/String.__concat
+  call $~lib/string/String._add
   local.tee $3
   i32.const 1456
-  call $~lib/string/String.__concat
+  call $~lib/string/String._add
   local.get $3
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release

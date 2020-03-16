@@ -1270,7 +1270,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#_eq (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/string/String#get:length
@@ -2327,17 +2327,8 @@
   local.get $1
   call $~lib/rt/pure/__retain
   local.tee $3
-  local.set $0
-  local.get $3
-  if (result i32)
-   local.get $0
-   i32.const 1232
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 1232
-   i32.eq
-  end
+  i32.const 1232
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2351,32 +2342,32 @@
    i32.const 56
    i32.const 1
    call $~lib/rt/tlsf/__alloc
-   local.tee $1
-   call $~lib/util/number/dtoa_core
    local.tee $0
+   call $~lib/util/number/dtoa_core
+   local.tee $1
    i32.const 28
    i32.eq
    if
-    local.get $1
+    local.get $0
     call $~lib/rt/pure/__retain
-    local.set $0
+    local.set $1
     br $__inlined_func$~lib/util/number/dtoa
    end
-   local.get $1
    local.get $0
-   call $~lib/string/String#substring
-   local.set $0
-   call $~lib/rt/tlsf/maybeInitialize
    local.get $1
+   call $~lib/string/String#substring
+   local.set $1
+   call $~lib/rt/tlsf/maybeInitialize
+   local.get $0
    i32.const 16
    i32.sub
    local.set $2
-   local.get $1
+   local.get $0
    i32.const 15
    i32.and
    i32.eqz
    i32.const 0
-   local.get $1
+   local.get $0
    select
    if (result i32)
     local.get $2
@@ -2408,16 +2399,9 @@
    local.get $2
    call $~lib/rt/tlsf/freeBlock
   end
-  local.get $0
-  if (result i32)
-   local.get $0
-   i32.const 2464
-   call $~lib/string/String.__eq
-  else
-   local.get $0
-   i32.const 2464
-   i32.eq
-  end
+  local.get $1
+  i32.const 2464
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -2435,7 +2419,7 @@
   global.set $~argumentsLength
   local.get $3
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $1
   call $~lib/rt/pure/__release
  )
  (func $~start (; 24 ;)

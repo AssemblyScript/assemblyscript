@@ -2,11 +2,11 @@ import { Map } from "./map";
 
 // @ts-ignore: decorator
 @lazy
-var stringToId: Map<string, usize>;
+var stringToId: Map<string, usize> | null;
 
 // @ts-ignore: decorator
 @lazy
-var idToString: Map<usize, string>;
+var idToString: Map<usize, string> | null;
 
 // @ts-ignore: decorator
 @lazy
@@ -67,21 +67,23 @@ var nextId: usize = 12; // Symbol.unscopables + 1
   static readonly unscopables: symbol = changetype<symbol>(11);
 
   static for(key: string): symbol {
-    if (!stringToId) {
-      stringToId = new Map();
+    var stoi = stringToId;
+    if (!stoi) {
+      stringToId = stoi = new Map();
       idToString = new Map();
     }
-    else if (stringToId.has(key)) return changetype<symbol>(stringToId.get(key));
+    else if (stoi.has(key)) return changetype<symbol>(stoi.get(key));
     var id = nextId++;
     if (!id) unreachable(); // out of ids
-    stringToId.set(key, id);
-    idToString.set(id, key);
+    stoi.set(key, id);
+    changetype<Map<usize,string>>(idToString).set(id, key);
     return changetype<symbol>(id);
   }
 
   static keyFor(sym: symbol): string | null {
-    return idToString != null && idToString.has(changetype<usize>(sym))
-      ? idToString.get(changetype<usize>(sym))
+    var itos = idToString;
+    return itos != null && itos.has(changetype<usize>(sym))
+      ? itos.get(changetype<usize>(sym))
       : null;
   }
 

@@ -214,28 +214,21 @@
   global.set $~lib/rt/stub/offset
   i32.const 1
   global.set $~argumentsLength
-  call $~lib/util/number/itoa32
-  local.tee $0
-  if (result i32)
-   block $__inlined_func$~lib/string/String.__eq (result i32)
-    i32.const 0
-    local.get $0
-    call $~lib/string/String#get:length
-    local.tee $1
-    i32.const 1152
-    call $~lib/string/String#get:length
-    i32.ne
-    br_if $__inlined_func$~lib/string/String.__eq
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/util/string/compareImpl
-    i32.eqz
-   end
-  else
-   local.get $0
+  block $__inlined_func$~lib/string/String#_eq (result i32)
+   i32.const 0
+   call $~lib/util/number/itoa32
+   local.tee $0
+   call $~lib/string/String#get:length
+   local.tee $1
    i32.const 1152
-   i32.eq
+   call $~lib/string/String#get:length
+   i32.ne
+   br_if $__inlined_func$~lib/string/String#_eq
+   drop
+   local.get $0
+   local.get $1
+   call $~lib/util/string/compareImpl
+   i32.eqz
   end
   i32.eqz
   if

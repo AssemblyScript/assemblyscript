@@ -1,8 +1,8 @@
 class A {}
 class B extends A {}
 
-var a: A;
-var b: B;
+var a: A = new A();
+var b: B = new B();
 var i: i32;
 var I: i64;
 var f: f32;

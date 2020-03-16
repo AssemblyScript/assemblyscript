@@ -32375,12 +32375,9 @@
   call $~lib/rt/pure/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 483 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#_eq (; 483 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
   local.set $1
@@ -32394,8 +32391,6 @@
   if
    i32.const 0
    local.set $3
-   local.get $0
-   call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    local.get $3
@@ -32409,8 +32404,6 @@
   call $~lib/util/string/compareImpl
   i32.eqz
   local.set $3
-  local.get $0
-  call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
   local.get $3
@@ -32425,9 +32418,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Int8Array#constructor
@@ -32458,33 +32448,8 @@
   i32.const 2384
   call $~lib/typedarray/Int8Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -32496,34 +32461,9 @@
   end
   local.get $1
   call $~lib/typedarray/Int8Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -32535,7 +32475,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -32805,9 +32745,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Uint8Array#constructor
@@ -32838,33 +32775,8 @@
   i32.const 2384
   call $~lib/typedarray/Uint8Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -32876,34 +32788,9 @@
   end
   local.get $1
   call $~lib/typedarray/Uint8Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -32915,7 +32802,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -32948,9 +32835,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Uint8ClampedArray#constructor
@@ -32981,33 +32865,8 @@
   i32.const 2384
   call $~lib/typedarray/Uint8ClampedArray#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -33019,34 +32878,9 @@
   end
   local.get $1
   call $~lib/typedarray/Uint8ClampedArray#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -33058,7 +32892,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -33328,9 +33162,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Int16Array#constructor
@@ -33361,33 +33192,8 @@
   i32.const 2384
   call $~lib/typedarray/Int16Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -33399,34 +33205,9 @@
   end
   local.get $1
   call $~lib/typedarray/Int16Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -33438,7 +33219,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -33674,9 +33455,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Uint16Array#constructor
@@ -33707,33 +33485,8 @@
   i32.const 2384
   call $~lib/typedarray/Uint16Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -33745,34 +33498,9 @@
   end
   local.get $1
   call $~lib/typedarray/Uint16Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -33784,7 +33512,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -34030,9 +33758,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Int32Array#constructor
@@ -34063,33 +33788,8 @@
   i32.const 2384
   call $~lib/typedarray/Int32Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -34101,34 +33801,9 @@
   end
   local.get $1
   call $~lib/typedarray/Int32Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -34140,7 +33815,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -34366,9 +34041,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Uint32Array#constructor
@@ -34399,33 +34071,8 @@
   i32.const 2384
   call $~lib/typedarray/Uint32Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -34437,34 +34084,9 @@
   end
   local.get $1
   call $~lib/typedarray/Uint32Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -34476,7 +34098,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -35019,9 +34641,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Int64Array#constructor
@@ -35052,33 +34671,8 @@
   i32.const 2384
   call $~lib/typedarray/Int64Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -35090,34 +34684,9 @@
   end
   local.get $1
   call $~lib/typedarray/Int64Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -35129,7 +34698,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -35447,9 +35016,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Uint64Array#constructor
@@ -35480,33 +35046,8 @@
   i32.const 2384
   call $~lib/typedarray/Uint64Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -35518,34 +35059,9 @@
   end
   local.get $1
   call $~lib/typedarray/Uint64Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 2416
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -35557,7 +35073,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -37121,9 +36637,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Float32Array#constructor
@@ -37154,33 +36667,8 @@
   i32.const 2384
   call $~lib/typedarray/Float32Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 3584
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -37192,34 +36680,9 @@
   end
   local.get $1
   call $~lib/typedarray/Float32Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 3584
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -37231,7 +36694,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release
@@ -37407,9 +36870,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   i32.const 0
   i32.const 5
   call $~lib/typedarray/Float64Array#constructor
@@ -37440,33 +36900,8 @@
   i32.const 2384
   call $~lib/typedarray/Float64Array#join
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   i32.const 3584
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -37478,34 +36913,9 @@
   end
   local.get $1
   call $~lib/typedarray/Float64Array#toString
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
+  local.tee $3
   i32.const 3584
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -37517,7 +36927,7 @@
   end
   local.get $2
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $3
   call $~lib/rt/pure/__release
   local.get $0
   call $~lib/rt/pure/__release

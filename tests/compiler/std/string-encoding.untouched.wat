@@ -3140,12 +3140,9 @@
   call $~lib/rt/pure/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 31 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#_eq (; 31 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $0
-  call $~lib/rt/pure/__retain
-  local.set $0
   local.get $1
   call $~lib/rt/pure/__retain
   local.set $1
@@ -3159,8 +3156,6 @@
   if
    i32.const 0
    local.set $3
-   local.get $0
-   call $~lib/rt/pure/__release
    local.get $1
    call $~lib/rt/pure/__release
    local.get $3
@@ -3174,8 +3169,6 @@
   call $~lib/util/string/compareImpl
   i32.eqz
   local.set $3
-  local.get $0
-  call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
   local.get $3
@@ -3183,42 +3176,14 @@
  (func $std/string-encoding/testUTF16Decode (; 32 ;)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
   global.get $std/string-encoding/str
   call $~lib/string/String.UTF16.encode
   local.set $0
   local.get $0
   call $~lib/string/String.UTF16.decode
   local.tee $1
-  call $~lib/rt/pure/__retain
-  local.set $3
   global.get $std/string-encoding/str
-  call $~lib/rt/pure/__retain
-  local.set $2
-  local.get $3
-  i32.eqz
-  local.get $2
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $2
-   i32.eq
-  else
-   local.get $3
-   local.get $2
-   call $~lib/string/String.__eq
-  end
-  local.set $4
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3244,9 +3209,6 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
-  (local $10 i32)
-  (local $11 i32)
-  (local $12 i32)
   global.get $std/string-encoding/str
   call $~lib/string/String.UTF16.encode
   local.set $0
@@ -3259,33 +3221,8 @@
   i32.const 0
   call $~lib/string/String.UTF16.decodeUnsafe
   local.tee $3
-  call $~lib/rt/pure/__retain
-  local.set $5
   i32.const 288
-  call $~lib/rt/pure/__retain
-  local.set $4
-  local.get $5
-  i32.eqz
-  local.get $4
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $5
-   local.get $4
-   i32.eq
-  else
-   local.get $5
-   local.get $4
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3298,34 +3235,9 @@
   local.get $2
   local.get $1
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $5
-  call $~lib/rt/pure/__retain
-  local.set $4
+  local.tee $4
   global.get $std/string-encoding/str
-  call $~lib/rt/pure/__retain
-  local.set $6
-  local.get $4
-  i32.eqz
-  local.get $6
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $6
-   i32.eq
-  else
-   local.get $4
-   local.get $6
-   call $~lib/string/String.__eq
-  end
-  local.set $7
-  local.get $6
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3338,34 +3250,9 @@
   local.get $2
   i32.const 4
   call $~lib/string/String.UTF16.decodeUnsafe
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $6
+  local.tee $5
   i32.const 304
-  call $~lib/rt/pure/__retain
-  local.set $7
-  local.get $6
-  i32.eqz
-  local.get $7
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $6
-   local.get $7
-   i32.eq
-  else
-   local.get $6
-   local.get $7
-   call $~lib/string/String.__eq
-  end
-  local.set $8
-  local.get $7
-  call $~lib/rt/pure/__release
-  local.get $6
-  call $~lib/rt/pure/__release
-  local.get $8
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3381,33 +3268,8 @@
   i32.const 2
   call $~lib/string/String.UTF16.decodeUnsafe
   local.tee $6
-  call $~lib/rt/pure/__retain
-  local.set $7
   i32.const 336
-  call $~lib/rt/pure/__retain
-  local.set $8
-  local.get $7
-  i32.eqz
-  local.get $8
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $7
-   local.get $8
-   i32.eq
-  else
-   local.get $7
-   local.get $8
-   call $~lib/string/String.__eq
-  end
-  local.set $9
-  local.get $8
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
-  local.get $9
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3423,33 +3285,8 @@
   i32.const 4
   call $~lib/string/String.UTF16.decodeUnsafe
   local.tee $7
-  call $~lib/rt/pure/__retain
-  local.set $8
   i32.const 368
-  call $~lib/rt/pure/__retain
-  local.set $9
-  local.get $8
-  i32.eqz
-  local.get $9
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $8
-   local.get $9
-   i32.eq
-  else
-   local.get $8
-   local.get $9
-   call $~lib/string/String.__eq
-  end
-  local.set $10
-  local.get $9
-  call $~lib/rt/pure/__release
-  local.get $8
-  call $~lib/rt/pure/__release
-  local.get $10
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3465,33 +3302,8 @@
   i32.const 4
   call $~lib/string/String.UTF16.decodeUnsafe
   local.tee $8
-  call $~lib/rt/pure/__retain
-  local.set $9
   i32.const 400
-  call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $9
-  i32.eqz
-  local.get $10
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $9
-   local.get $10
-   i32.eq
-  else
-   local.get $9
-   local.get $10
-   call $~lib/string/String.__eq
-  end
-  local.set $11
-  local.get $10
-  call $~lib/rt/pure/__release
-  local.get $9
-  call $~lib/rt/pure/__release
-  local.get $11
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3507,33 +3319,8 @@
   i32.const 0
   call $~lib/string/String.UTF16.decodeUnsafe
   local.tee $9
-  call $~lib/rt/pure/__retain
-  local.set $10
   i32.const 288
-  call $~lib/rt/pure/__retain
-  local.set $11
-  local.get $10
-  i32.eqz
-  local.get $11
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $10
-   local.get $11
-   i32.eq
-  else
-   local.get $10
-   local.get $11
-   call $~lib/string/String.__eq
-  end
-  local.set $12
-  local.get $11
-  call $~lib/rt/pure/__release
-  local.get $10
-  call $~lib/rt/pure/__release
-  local.get $12
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -3545,9 +3332,9 @@
   end
   local.get $3
   call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
   local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
   call $~lib/rt/pure/__release
   local.get $6
   call $~lib/rt/pure/__release
@@ -4480,7 +4267,7 @@
   if
    i32.const 0
    i32.const 432
-   i32.const 750
+   i32.const 749
    i32.const 7
    call $~lib/builtins/abort
    unreachable
@@ -4690,9 +4477,6 @@
  (func $std/string-encoding/testUTF8Decode (; 46 ;)
   (local $0 i32)
   (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
   global.get $std/string-encoding/str
   i32.const 0
   call $~lib/string/String.UTF8.encode
@@ -4701,33 +4485,8 @@
   i32.const 0
   call $~lib/string/String.UTF8.decode
   local.tee $1
-  call $~lib/rt/pure/__retain
-  local.set $3
   global.get $std/string-encoding/str
-  call $~lib/rt/pure/__retain
-  local.set $2
-  local.get $3
-  i32.eqz
-  local.get $2
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $2
-   i32.eq
-  else
-   local.get $3
-   local.get $2
-   call $~lib/string/String.__eq
-  end
-  local.set $4
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4751,9 +4510,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  (local $8 i32)
-  (local $9 i32)
-  (local $10 i32)
   global.get $std/string-encoding/str
   i32.const 1
   call $~lib/string/String.UTF8.encode
@@ -4762,33 +4518,8 @@
   i32.const 1
   call $~lib/string/String.UTF8.decode
   local.tee $1
-  call $~lib/rt/pure/__retain
-  local.set $3
   global.get $std/string-encoding/str
-  call $~lib/rt/pure/__retain
-  local.set $2
-  local.get $3
-  i32.eqz
-  local.get $2
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $2
-   i32.eq
-  else
-   local.get $3
-   local.get $2
-   call $~lib/string/String.__eq
-  end
-  local.set $4
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4799,8 +4530,8 @@
    unreachable
   end
   i32.const 480
-  local.set $5
-  local.get $5
+  local.set $2
+  local.get $2
   i32.const 1
   call $~lib/string/String.UTF8.byteLength
   i32.const 4
@@ -4814,11 +4545,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $2
   i32.const 1
   call $~lib/string/String.UTF8.encode
-  local.set $6
-  local.get $6
+  local.set $3
+  local.get $3
   call $~lib/arraybuffer/ArrayBuffer#get:byteLength
   i32.const 4
   i32.eq
@@ -4832,8 +4563,8 @@
    unreachable
   end
   i32.const 512
-  local.set $7
-  local.get $7
+  local.set $4
+  local.get $4
   i32.const 1
   call $~lib/string/String.UTF8.byteLength
   i32.const 4
@@ -4847,37 +4578,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $6
+  local.get $3
   i32.const 1
   call $~lib/string/String.UTF8.decode
-  local.tee $3
-  call $~lib/rt/pure/__retain
-  local.set $2
-  local.get $7
-  call $~lib/rt/pure/__retain
-  local.set $4
-  local.get $2
-  i32.eqz
+  local.tee $5
   local.get $4
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $2
-   local.get $4
-   i32.eq
-  else
-   local.get $2
-   local.get $4
-   call $~lib/string/String.__eq
-  end
-  local.set $8
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $8
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4887,41 +4593,16 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $5
+  local.get $2
   i32.const 0
   call $~lib/string/String.UTF8.encode
-  local.set $9
-  local.get $9
+  local.set $6
+  local.get $6
   i32.const 1
   call $~lib/string/String.UTF8.decode
-  local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
-  local.get $7
-  call $~lib/rt/pure/__retain
-  local.set $8
+  local.tee $7
   local.get $4
-  i32.eqz
-  local.get $8
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $8
-   i32.eq
-  else
-   local.get $4
-   local.get $8
-   call $~lib/string/String.__eq
-  end
-  local.set $10
-  local.get $8
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $10
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -4933,19 +4614,19 @@
   end
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $2
-  call $~lib/rt/pure/__release
-  local.get $0
-  call $~lib/rt/pure/__release
   local.get $5
-  call $~lib/rt/pure/__release
-  local.get $6
   call $~lib/rt/pure/__release
   local.get $7
   call $~lib/rt/pure/__release
-  local.get $9
+  local.get $0
+  call $~lib/rt/pure/__release
+  local.get $2
+  call $~lib/rt/pure/__release
+  local.get $3
+  call $~lib/rt/pure/__release
+  local.get $4
+  call $~lib/rt/pure/__release
+  local.get $6
   call $~lib/rt/pure/__release
  )
  (func $std/string-encoding/testUTF8DecodeUnsafe (; 48 ;)
@@ -4961,9 +4642,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
-  (local $13 i32)
-  (local $14 i32)
   global.get $std/string-encoding/str
   i32.const 1
   call $~lib/string/String.UTF8.encode
@@ -4979,33 +4657,8 @@
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
   local.tee $3
-  call $~lib/rt/pure/__retain
-  local.set $5
   i32.const 288
-  call $~lib/rt/pure/__retain
-  local.set $4
-  local.get $5
-  i32.eqz
-  local.get $4
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $5
-   local.get $4
-   i32.eq
-  else
-   local.get $5
-   local.get $4
-   call $~lib/string/String.__eq
-  end
-  local.set $6
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $6
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5019,34 +4672,9 @@
   local.get $1
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $5
-  call $~lib/rt/pure/__retain
-  local.set $4
+  local.tee $4
   global.get $std/string-encoding/str
-  call $~lib/rt/pure/__retain
-  local.set $6
-  local.get $4
-  i32.eqz
-  local.get $6
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $6
-   i32.eq
-  else
-   local.get $4
-   local.get $6
-   call $~lib/string/String.__eq
-  end
-  local.set $7
-  local.get $6
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $7
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5060,34 +4688,9 @@
   i32.const 4
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
-  local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $6
+  local.tee $5
   i32.const 304
-  call $~lib/rt/pure/__retain
-  local.set $7
-  local.get $6
-  i32.eqz
-  local.get $7
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $6
-   local.get $7
-   i32.eq
-  else
-   local.get $6
-   local.get $7
-   call $~lib/string/String.__eq
-  end
-  local.set $8
-  local.get $7
-  call $~lib/rt/pure/__release
-  local.get $6
-  call $~lib/rt/pure/__release
-  local.get $8
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5104,33 +4707,8 @@
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
   local.tee $6
-  call $~lib/rt/pure/__retain
-  local.set $7
   i32.const 368
-  call $~lib/rt/pure/__retain
-  local.set $8
-  local.get $7
-  i32.eqz
-  local.get $8
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $7
-   local.get $8
-   i32.eq
-  else
-   local.get $7
-   local.get $8
-   call $~lib/string/String.__eq
-  end
-  local.set $9
-  local.get $8
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
-  local.get $9
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5147,33 +4725,8 @@
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
   local.tee $7
-  call $~lib/rt/pure/__retain
-  local.set $8
   i32.const 400
-  call $~lib/rt/pure/__retain
-  local.set $9
-  local.get $8
-  i32.eqz
-  local.get $9
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $8
-   local.get $9
-   i32.eq
-  else
-   local.get $8
-   local.get $9
-   call $~lib/string/String.__eq
-  end
-  local.set $10
-  local.get $9
-  call $~lib/rt/pure/__release
-  local.get $8
-  call $~lib/rt/pure/__release
-  local.get $10
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5190,33 +4743,8 @@
   i32.const 0
   call $~lib/string/String.UTF8.decodeUnsafe
   local.tee $8
-  call $~lib/rt/pure/__retain
-  local.set $9
   i32.const 288
-  call $~lib/rt/pure/__retain
-  local.set $10
-  local.get $9
-  i32.eqz
-  local.get $10
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $9
-   local.get $10
-   i32.eq
-  else
-   local.get $9
-   local.get $10
-   call $~lib/string/String.__eq
-  end
-  local.set $11
-  local.get $10
-  call $~lib/rt/pure/__release
-  local.get $9
-  call $~lib/rt/pure/__release
-  local.get $11
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5233,33 +4761,8 @@
   i32.const 1
   call $~lib/string/String.UTF8.decodeUnsafe
   local.tee $9
-  call $~lib/rt/pure/__retain
-  local.set $10
   i32.const 544
-  call $~lib/rt/pure/__retain
-  local.set $11
-  local.get $10
-  i32.eqz
-  local.get $11
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $10
-   local.get $11
-   i32.eq
-  else
-   local.get $10
-   local.get $11
-   call $~lib/string/String.__eq
-  end
-  local.set $12
-  local.get $11
-  call $~lib/rt/pure/__release
-  local.get $10
-  call $~lib/rt/pure/__release
-  local.get $12
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5276,33 +4779,8 @@
   i32.const 1
   call $~lib/string/String.UTF8.decodeUnsafe
   local.tee $10
-  call $~lib/rt/pure/__retain
-  local.set $11
   i32.const 400
-  call $~lib/rt/pure/__retain
-  local.set $12
-  local.get $11
-  i32.eqz
-  local.get $12
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $11
-   local.get $12
-   i32.eq
-  else
-   local.get $11
-   local.get $12
-   call $~lib/string/String.__eq
-  end
-  local.set $13
-  local.get $12
-  call $~lib/rt/pure/__release
-  local.get $11
-  call $~lib/rt/pure/__release
-  local.get $13
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5319,33 +4797,8 @@
   i32.const 1
   call $~lib/string/String.UTF8.decodeUnsafe
   local.tee $11
-  call $~lib/rt/pure/__retain
-  local.set $12
   i32.const 288
-  call $~lib/rt/pure/__retain
-  local.set $13
-  local.get $12
-  i32.eqz
-  local.get $13
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $12
-   local.get $13
-   i32.eq
-  else
-   local.get $12
-   local.get $13
-   call $~lib/string/String.__eq
-  end
-  local.set $14
-  local.get $13
-  call $~lib/rt/pure/__release
-  local.get $12
-  call $~lib/rt/pure/__release
-  local.get $14
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5357,9 +4810,9 @@
   end
   local.get $3
   call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
   local.get $4
+  call $~lib/rt/pure/__release
+  local.get $5
   call $~lib/rt/pure/__release
   local.get $6
   call $~lib/rt/pure/__release
@@ -5381,9 +4834,6 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
-  (local $7 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -5395,33 +4845,8 @@
   i32.const 0
   call $~lib/string/String.UTF8.decode
   local.tee $2
-  call $~lib/rt/pure/__retain
-  local.set $4
   local.get $0
-  call $~lib/rt/pure/__retain
-  local.set $3
-  local.get $4
-  i32.eqz
-  local.get $3
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $4
-   local.get $3
-   i32.eq
-  else
-   local.get $4
-   local.get $3
-   call $~lib/string/String.__eq
-  end
-  local.set $5
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5433,37 +4858,12 @@
   end
   local.get $0
   call $~lib/string/String.UTF16.encode
-  local.set $6
-  local.get $6
+  local.set $3
+  local.get $3
   call $~lib/string/String.UTF16.decode
   local.tee $4
-  call $~lib/rt/pure/__retain
-  local.set $3
   local.get $0
-  call $~lib/rt/pure/__retain
-  local.set $5
-  local.get $3
-  i32.eqz
-  local.get $5
-  i32.eqz
-  i32.or
-  if (result i32)
-   local.get $3
-   local.get $5
-   i32.eq
-  else
-   local.get $3
-   local.get $5
-   call $~lib/string/String.__eq
-  end
-  local.set $7
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $7
-  i32.const 0
-  i32.ne
+  call $~lib/string/String#_eq
   i32.eqz
   if
    i32.const 0
@@ -5481,7 +4881,7 @@
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $6
+  local.get $3
   call $~lib/rt/pure/__release
  )
  (func $start:std/string-encoding (; 50 ;)

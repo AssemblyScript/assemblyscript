@@ -28,12 +28,10 @@ console.log(Reflect.get(someObject, someKey));
 
 // can represent and recognize 'null'
 
-var nullGlobal: anyref;
+var nullGlobal: anyref = null;
 assert(!nullGlobal);
 nullGlobal = null;
 assert(!nullGlobal);
-var nullGlobalInit: anyref = null;
-assert(!nullGlobalInit);
 {
   let nullLocal: anyref;
   assert(!nullLocal);

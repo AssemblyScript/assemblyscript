@@ -206,29 +206,22 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  i32.load offset=4
-  local.tee $0
-  if (result i32)
-   block $__inlined_func$~lib/string/String.__eq (result i32)
-    i32.const 0
-    local.get $0
-    call $~lib/string/String#get:length
-    local.tee $1
-    i32.const 1040
-    call $~lib/string/String#get:length
-    i32.ne
-    br_if $__inlined_func$~lib/string/String.__eq
-    drop
-    local.get $0
-    local.get $1
-    call $~lib/util/string/compareImpl
-    i32.eqz
-   end
-  else
+  block $__inlined_func$~lib/string/String#_eq (result i32)
+   i32.const 0
    local.get $0
+   i32.load offset=4
+   local.tee $1
+   call $~lib/string/String#get:length
+   local.tee $0
    i32.const 1040
-   i32.eq
+   call $~lib/string/String#get:length
+   i32.ne
+   br_if $__inlined_func$~lib/string/String#_eq
+   drop
+   local.get $1
+   local.get $0
+   call $~lib/util/string/compareImpl
+   i32.eqz
   end
   i32.eqz
   if
