@@ -3106,13 +3106,14 @@ export class Function extends TypedElement {
     if (this.program.options.sourceMap) {
       let debugLocations = this.debugLocations;
       for (let i = 0, k = debugLocations.length; i < k; ++i) {
-        let debugLocation = debugLocations[i];
+        let range = debugLocations[i];
+        let source = range.source;
         module.setDebugLocation(
           ref,
-          debugLocation.debugInfoRef,
-          debugLocation.source.debugInfoIndex,
-          debugLocation.line,
-          debugLocation.column
+          range.debugInfoRef,
+          source.debugInfoIndex,
+          source.lineAt(range.start),
+          source.columnAt()
         );
       }
     }

@@ -729,6 +729,13 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
+      if (module.getLowMemoryUnused()) {
+        if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+          add("optimize-added-constants-propagate");
+        } else {
+          add("optimize-added-constants");
+        }
+      }
       // this will be done later (1)
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
