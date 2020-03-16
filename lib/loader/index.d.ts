@@ -1,6 +1,6 @@
 /// <reference lib="esnext.bigint" />
 
-interface ResultObject {
+export interface ResultObject {
   module: WebAssembly.Module;
   instance: WebAssembly.Instance;
 }
@@ -8,18 +8,18 @@ interface ResultObject {
 type ImportValue = Function | WebAssembly.Global | WebAssembly.Memory | WebAssembly.Table | number;
 
 /** WebAssembly imports with two levels of nesting. */
-interface Imports extends Record<string, Record<string, ImportValue>> {
+export interface Imports extends Record<string, Record<string, ImportValue>> {
   env?: {
     memory?: WebAssembly.Memory,
     table?: WebAssembly.Table,
-    seed?: Function,
+    seed?: () => number,
     abort?(msg: number, file: number, line: number, column: number): void,
     trace?(msg: number, numArgs?: number, ...args: number[]): void
   };
 }
 
 /** Utility mixed in by the loader. */
-interface ASUtil {
+export interface ASUtil {
   memory?: WebAssembly.Memory;
   table?: WebAssembly.Table;
 
