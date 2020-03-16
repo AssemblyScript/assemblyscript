@@ -23,6 +23,17 @@ export class ExplicitConstructorInit {
   }
 }
 
+export class EmptyIfBlock {
+  field: i32;
+
+  constructor(x: i32) {
+    if ((x + 5) == 6) {
+    } else {
+      this.field = 7;
+    }
+  }
+}
+
 export class NonDefiniteIf {
   p: f64;
   constructor(a: i32) {
