@@ -171,8 +171,8 @@ export enum LocalFlags {
 
 /** Flags indicating the current state of an instance field. */
 export enum FieldFlags {
-  NONE = 0,
-  INITIALIZED = 1 << 0,
+  NONE = 1,
+  INITIALIZED = 1 << 1,
 }
 
 /** Condition kinds. */
@@ -207,7 +207,7 @@ export class Flow {
   /** Local flags. */
   localFlags: LocalFlags[];
   /** Field flags. */
-  fieldFlags: Map<string, FieldFlags>;
+  fieldFlags: Map<string, FieldFlags> | null = null;
   /** Function being inlined, when inlining. */
   inlineFunction: Function | null;
   /** The label we break to when encountering a return statement, when inlining. */
@@ -224,7 +224,9 @@ export class Flow {
     flow.returnType = parentFunction.signature.returnType;
     flow.contextualTypeArguments = parentFunction.contextualTypeArguments;
     flow.localFlags = [];
-    flow.fieldFlags = new Map();
+    if (parentFunction.is(CommonFlags.CONSTRUCTOR)) {
+      flow.fieldFlags = new Map();
+    }
     flow.inlineFunction = null;
     flow.inlineReturnLabel = null;
     return flow;
@@ -285,7 +287,9 @@ export class Flow {
     branch.localFlags = this.localFlags.slice();
     branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
-    branch.fieldFlags = new Map(this.fieldFlags);
+    if (branch.parentFunction.is(CommonFlags.CONSTRUCTOR)) {
+      branch.fieldFlags = new Map(this.fieldFlags!);
+    }
     return branch;
   }
 
@@ -531,13 +535,17 @@ export class Flow {
 
   setFieldFlag(name: string, flag: FieldFlags): void {
     let fieldFlags = this.fieldFlags;
-    const flags = fieldFlags.get(name) || 0;
-    fieldFlags.set(name, flags | flag);
+    if (fieldFlags) {
+      const flags = fieldFlags.has(name) ? assert(fieldFlags.get(name)) : FieldFlags.NONE;
+      fieldFlags.set(name, flags | flag);
+    }
   }
 
   isFieldFlag(name: string, flag: FieldFlags): bool {
-    const flags = this.fieldFlags.get(name);
-    if (flags) {
+    const fieldFlags = this.fieldFlags;
+
+    if (fieldFlags && fieldFlags.has(name)) {
+      const flags = assert(fieldFlags.get(name));
       return (flags & flag) == flag;
     }
     return false;
@@ -831,17 +839,22 @@ export class Flow {
       }
     }
 
-    // Only the most right flow will have an effect
-    // on the resulting flow.
-    const rightFieldFlags = right.fieldFlags;
-    const rightKeys = Map_keys(rightFieldFlags);
 
-    for (let _values = Map_values(rightFieldFlags), i = 0, k = _values.length; i < k; ++i) {
-      const rightValue = unchecked(_values[i]);
-      const currentKey = unchecked(rightKeys[i]);
+    if (left.fieldFlags && right.fieldFlags && right.fieldFlags.size > 0) {
+      const rightFieldFlags = right.fieldFlags;
+      const rightKeys = Map_keys(rightFieldFlags);
+      const rightValues = Map_values(rightFieldFlags);
 
-      if (rightValue & FieldFlags.INITIALIZED) {
-        this.setFieldFlag(currentKey, FieldFlags.INITIALIZED);
+      const leftFieldFlags = left.fieldFlags;
+
+      for (let i = 0, k = rightValues.length; i < k; ++i) {
+        const rightValue = unchecked(rightValues[i]);
+        const rightKey = unchecked(rightKeys[i]);
+        const leftValue = leftFieldFlags.has(rightKey) ? assert(leftFieldFlags.get(rightKey)) : FieldFlags.NONE;
+
+        if ((rightValue & FieldFlags.INITIALIZED) && (leftValue & FieldFlags.INITIALIZED)) {
+          this.setFieldFlag(rightKey, FieldFlags.INITIALIZED);
+        }
       }
     }
   }

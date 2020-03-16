@@ -23,13 +23,24 @@ export class ExplicitConstructorInit {
   }
 }
 
-export class EmptyIfBlock {
-  field: i32;
+export class EmptyLeftBlock {
+  fieldLeft: i32;
 
   constructor(x: i32) {
     if ((x + 5) == 6) {
     } else {
-      this.field = 7;
+      this.fieldLeft = 7;
+    }
+  }
+}
+
+export class EmptyRightBlock {
+  fieldRight: i32;
+
+  constructor(x: i32) {
+    if ((x + 5) == 6) {
+      this.fieldRight = 7;
+    } else {
     }
   }
 }
