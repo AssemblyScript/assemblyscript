@@ -829,14 +829,12 @@ declare module "assemblyscript/src/tokenizer" {
         source: Source;
         start: number;
         end: number;
+        debugInfoRef: number;
         constructor(source: Source, start: number, end: number);
         static join(a: Range, b: Range): Range;
         get atStart(): Range;
         get atEnd(): Range;
-        get line(): number;
-        get column(): number;
         toString(): string;
-        debugInfoRef: number;
     }
     /** Handler for intercepting comments while tokenizing. */
     export type CommentHandler = (kind: CommentKind, text: string, range: Range) => void;
@@ -1403,6 +1401,14 @@ declare module "assemblyscript/src/ast" {
         get isNative(): boolean;
         /** Checks if this source is part of the (standard) library. */
         get isLibrary(): boolean;
+        /** Cached line starts. */
+        private lineCache;
+        /** Rememberd column number. */
+        private lineColumn;
+        /** Determines the line number at the specified position. */
+        lineAt(pos: number): number;
+        /** Gets the column number at the last position queried with `lineAt`. */
+        columnAt(): number;
     }
     /** Base class of all declaration statements. */
     export abstract class DeclarationStatement extends Statement {
