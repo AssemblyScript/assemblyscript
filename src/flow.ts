@@ -224,11 +224,12 @@ export class Flow {
     flow.returnType = parentFunction.signature.returnType;
     flow.contextualTypeArguments = parentFunction.contextualTypeArguments;
     flow.localFlags = [];
-    if (parentFunction.is(CommonFlags.CONSTRUCTOR)) {
-      flow.fieldFlags = new Map();
-    }
     flow.inlineFunction = null;
     flow.inlineReturnLabel = null;
+
+    if (flow.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+      flow.fieldFlags = new Map();
+    }
     return flow;
   }
 
@@ -287,9 +288,11 @@ export class Flow {
     branch.localFlags = this.localFlags.slice();
     branch.inlineFunction = this.inlineFunction;
     branch.inlineReturnLabel = this.inlineReturnLabel;
-    if (branch.parentFunction.is(CommonFlags.CONSTRUCTOR)) {
-      branch.fieldFlags = new Map(this.fieldFlags!);
+
+    if (branch.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+      branch.fieldFlags = new Map();
     }
+
     return branch;
   }
 
@@ -544,12 +547,12 @@ export class Flow {
   isFieldFlag(name: string, flag: FieldFlags): bool {
     const fieldFlags = this.fieldFlags;
 
-    if (fieldFlags && fieldFlags.has(name)) {
-      const flags = assert(fieldFlags.get(name));
-      return (flags & flag) == flag;
+    if ((fieldFlags !== null)  && fieldFlags.has(name)) {
+        const flags = assert(fieldFlags.get(name));
+        return (flags & flag) == flag;
+      }
+      return false;
     }
-    return false;
-  }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
   pushBreakLabel(): string {
@@ -840,20 +843,25 @@ export class Flow {
     }
 
 
-    if (left.fieldFlags && right.fieldFlags && right.fieldFlags.size > 0) {
+    if ((left.fieldFlags !== null) &&
+      (right.fieldFlags !== null) &&
+      right.fieldFlags.size > 0
+    ) {
       const rightFieldFlags = right.fieldFlags;
-      const rightKeys = Map_keys(rightFieldFlags);
-      const rightValues = Map_values(rightFieldFlags);
+      const rightKeys = Map_keys(rightFieldFlags!);
+      const rightValues = Map_values(rightFieldFlags!);
 
       const leftFieldFlags = left.fieldFlags;
 
       for (let i = 0, k = rightValues.length; i < k; ++i) {
         const rightValue = unchecked(rightValues[i]);
         const rightKey = unchecked(rightKeys[i]);
-        const leftValue = leftFieldFlags.has(rightKey) ? assert(leftFieldFlags.get(rightKey)) : FieldFlags.NONE;
+        const leftValue = leftFieldFlags!.has(rightKey) ? assert(leftFieldFlags!.get(rightKey)) : FieldFlags.NONE;
 
-        if ((rightValue & FieldFlags.INITIALIZED) && (leftValue & FieldFlags.INITIALIZED)) {
-          this.setFieldFlag(rightKey, FieldFlags.INITIALIZED);
+        if (rightValue & FieldFlags.INITIALIZED) {
+          if (leftValue & FieldFlags.INITIALIZED) {
+            this.setFieldFlag(rightKey, FieldFlags.INITIALIZED);
+          }
         }
       }
     }
