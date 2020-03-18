@@ -1,6 +1,7 @@
 // OK - Field with explicit initializer
 export class WithInitializer {
   public a: i32 = 1;
+  some: string | null = null;
 }
 
 // ERR - Field b not initialized
@@ -23,6 +24,7 @@ export class ExplicitConstructorInit {
   }
 }
 
+// ERR - Left block empty
 export class EmptyLeftBlock {
   fieldLeft: i32;
 
@@ -34,6 +36,7 @@ export class EmptyLeftBlock {
   }
 }
 
+// ERR - Right block empty
 export class EmptyRightBlock {
   fieldRight: i32;
 
@@ -45,6 +48,7 @@ export class EmptyRightBlock {
   }
 }
 
+// ERR - Indefinite
 export class NonDefiniteIf {
   p: f64;
   constructor(a: i32) {
@@ -56,6 +60,7 @@ export class NonDefiniteIf {
   }
 }
 
+// OK - All branches covered
 export class DefiniteIf {
   definite: i32;
 
@@ -73,9 +78,29 @@ export class DefiniteIf {
 }
 
 
-class Inlined {
-  inlinedProp: i32;
-  constructor() {}
+// ERR
+export class Inlined {
+  inlinedProp: string | null;
 }
 
 new Inlined();
+
+// OK - inherited fields
+class ElementKind {}
+
+export abstract class Y {
+  inherited: string | null = "the inherited string";
+}
+
+export abstract class X extends Y {
+  ax: string[] | null;
+  protected constructor(public kind: ElementKind, other: ElementKind | null) {
+    super();
+
+    if (other) {
+      this.ax = ["string"];
+    } else {
+      this.ax = ["string", "string"];
+    }
+  }
+}

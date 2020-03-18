@@ -1544,7 +1544,7 @@ export class Compiler extends DiagnosticEmitter {
     if (instanceMembers) {
       for (let _values = Map_values(instanceMembers), i = 0, k = _values.length; i < k; ++i) {
         const element = unchecked(_values[i]);
-        if (element.kind == ElementKind.FIELD) {
+        if (element.kind == ElementKind.FIELD && element.parent == instance) {
           const field = <Field>element;
           if (!flow.isFieldFlag(field.internalName, FieldFlags.INITIALIZED)) {
             this.error(
@@ -10038,7 +10038,7 @@ export class Compiler extends DiagnosticEmitter {
       let fieldPrototype = field.prototype;
       let initializerNode = fieldPrototype.initializerNode;
       let parameterIndex = fieldPrototype.parameterIndex;
-      let initExpr: ExpressionRef | null = null;
+      let initExpr: ExpressionRef = -1;
       const isDefiniteAssigment = field.is(CommonFlags.DEFINITE_ASSIGNMENT);
 
       // if declared as a constructor parameter, use its value
@@ -10064,7 +10064,7 @@ export class Compiler extends DiagnosticEmitter {
         initExpr = this.makeZero(fieldType);
       }
 
-      if (initExpr) {
+      if (initExpr >= 0) {
         stmts.push(
           module.store(fieldType.byteSize,
             module.local_get(thisLocalIndex, nativeSizeType),
