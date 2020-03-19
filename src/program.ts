@@ -1045,6 +1045,7 @@ export class Program extends DiagnosticEmitter {
       for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
         let alias = unchecked(_keys[i]);
         let name = changetype<string>(globalAliases.get(alias))!
+        assert(name != null);
         if (!name.length) continue; // explicitly disabled
         let firstChar = name.charCodeAt(0);
         if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
