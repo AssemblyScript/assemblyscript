@@ -4218,9 +4218,15 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.V128: {
-            expr = module.unary(UnaryOp.AllTrueI8x16,
-              module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
-            );
+            let features = module.getFeatures();
+            if (features & FeatureFlags.SIMD128) {
+              expr = module.unary(UnaryOp.AllTrueI8x16,
+                module.binary(BinaryOp.EqI8x16, leftExpr, rightExpr)
+              );
+            } else {
+              this.error(DiagnosticCode.Feature_0_is_not_enabled, expression.range, "SIMD");
+              expr = module.unreachable();
+            }
             break;
           }
           case TypeKind.ANYREF: {
@@ -4318,10 +4324,16 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case TypeKind.V128: {
-            expr = module.unary(UnaryOp.AnyTrueI8x16,
-              module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
-            );
-            break;
+            let features = module.getFeatures();
+            if (features & FeatureFlags.SIMD128) {
+              expr = module.unary(UnaryOp.AnyTrueI8x16,
+                module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
+              );
+              break;
+            } else {
+              this.error(DiagnosticCode.Feature_0_is_not_enabled, expression.range, "SIMD");
+              expr = module.unreachable();
+            }
           }
           case TypeKind.ANYREF: {
             // TODO: !ref.eq
