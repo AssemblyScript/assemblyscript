@@ -4329,11 +4329,11 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.unary(UnaryOp.AnyTrueI8x16,
                 module.binary(BinaryOp.NeI8x16, leftExpr, rightExpr)
               );
-              break;
             } else {
               this.error(DiagnosticCode.Feature_0_is_not_enabled, expression.range, "SIMD");
               expr = module.unreachable();
             }
+            break;
           }
           case TypeKind.ANYREF: {
             // TODO: !ref.eq
