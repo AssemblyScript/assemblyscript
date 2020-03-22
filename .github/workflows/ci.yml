@@ -42,7 +42,7 @@ jobs:
         node_version: ["lts/*", "node"]
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: ${{ matrix.node_version }}
     - name: Install dependencies
@@ -84,7 +84,7 @@ jobs:
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
         # FIXME: newer node-v8 builds are currently broken
@@ -104,7 +104,7 @@ jobs:
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: node
     - name: Install dependencies
@@ -129,7 +129,7 @@ jobs:
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: node
     - name: Install dependencies
@@ -147,7 +147,7 @@ jobs:
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: node
     - name: Install dependencies
