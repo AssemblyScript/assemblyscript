@@ -7,6 +7,8 @@
     "TS2564: Property b has no initializer and is not definitely assigned in constructor",
     "TS2564: Property fieldLeft has no initializer and is not definitely assigned in constructor",
     "TS2564: Property fieldRight has no initializer and is not definitely assigned in constructor",
-    "TS2564: Property p has no initializer and is not definitely assigned in constructor"
+    "TS2564: Property p has no initializer and is not definitely assigned in constructor",
+    "TS2564: Property switchNotInitInDefault has no initializer and is not definitely assigned in constructor",
+    "TS2564: Property switchNoDefault has no initializer and is not definitely assigned in constructor"
   ]
 }

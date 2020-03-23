@@ -104,3 +104,80 @@ export abstract class X extends Y {
     }
   }
 }
+
+// OK
+export class SwitchFallback {
+  switchFallback: i32;
+  constructor(some: i32) {
+    switch (some) {
+      case 1:
+      case 2:
+      case 3:
+      default:
+        this.switchFallback = 6;
+        break;
+    }
+  }
+}
+
+// ERR
+export class SwitchWithNonInitInDefault {
+  switchNotInitInDefault: i32;
+
+  constructor(some: i32) {
+    switch (some) {
+      case 0:
+      case 1:
+        this.switchNotInitInDefault = 1;
+        break;
+      case 3:
+        this.switchNotInitInDefault = 5;
+      default:
+        const x = 6;
+        break;
+    }
+  }
+}
+
+// OK
+export class SwitchDefinitelyInit {
+  switchDefinitelyInit: i32;
+  constructor(some: i32) {
+    switch(some) {
+      case 0:
+        this.switchDefinitelyInit = 0;
+        break;
+      case 1:
+        this.switchDefinitelyInit = 1;
+        break;
+      case 3:
+        this.switchDefinitelyInit = 5;
+      default:
+        this.switchDefinitelyInit = 10;
+        break;
+    }
+  }
+}
+
+// ERR
+export class SwitchNoDefault {
+  switchNoDefault: i32;
+
+  constructor(some: i32) {
+    switch(some) {
+      case 1:
+        this.switchNoDefault = 4;
+    }
+  }
+}
+
+export class SwitchOnlyDefault {
+  switchOnlyDefault: i32;
+
+  constructor(some: i32) {
+    switch (some) {
+      default:
+        this.switchOnlyDefault = 0;
+    }
+  }
+}

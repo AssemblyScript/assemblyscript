@@ -2673,12 +2673,16 @@ export class Compiler extends DiagnosticEmitter {
       // stmts.push(module.createUnreachable());
       return module.flatten(stmts);
     }
-
     // Otherwise emit a normal return
     if (!stmts.length) return module.return(expr);
     stmts.push(module.return(expr));
     return module.flatten(stmts);
   }
+
+  // For strict field init:
+  // Need to sequentially check for each of the branches
+  // if no default assume not init
+  // if default try and check all statements
 
   private compileSwitchStatement(
     statement: SwitchStatement
@@ -2742,6 +2746,9 @@ export class Compiler extends DiagnosticEmitter {
     var currentBlock = module.block("case0|" + context, breaks, NativeType.None);
     var commonCategorical = FlowFlags.ANY_CATEGORICAL;
     var commonConditional = 0;
+    // Track qualifying flows for field flag analysis
+    // A qualifying flow is a breaking flow or the last flow
+    var flows: Flow[] = [];
     for (let i = 0; i < numCases; ++i) {
       let case_ = cases[i];
       let statements = case_.statements;
@@ -2775,6 +2782,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       commonConditional |= innerFlow.flags & FlowFlags.ANY_CONDITIONAL;
 
+      if (innerFlow.isAny(FlowFlags.BREAKS | FlowFlags.RETURNS) || isLast) {
+        flows.push(innerFlow);
+      }
+
       // Switch back to the parent flow
       if (!terminates) this.performAutoreleases(innerFlow, stmts);
       innerFlow.unset(
@@ -2788,7 +2799,28 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.popBreakLabel();
 
     // If the switch has a default (guaranteed to handle any value), propagate common flags
-    if (defaultIndex >= 0) outerFlow.flags |= commonCategorical & ~FlowFlags.BREAKS;
+    if (defaultIndex >= 0){
+      outerFlow.flags |= commonCategorical & ~FlowFlags.BREAKS;
+
+      // If the switch:
+      // - has a default label
+      // - is located in the constructor
+      // - and has one or more qualifying flows
+      // analyze field flags
+      if (flows.length > 0 && this.currentFlow.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
+        if (flows.length == 1) {
+          this.currentFlow.inheritFieldFlags(flows[0]);
+        } else {
+          for(let i = 0; i < flows.length; ++i) {
+            if (i < (flows.length - 1)) {
+              const left = flows[i];
+              const right = flows[i + 1];
+              this.currentFlow.mergeFieldFlags(left, right);
+            }
+          }
+        }
+      }
+    }
     outerFlow.flags |= commonConditional & ~FlowFlags.CONDITIONALLY_BREAKS;
     // TODO: what about local states?
     return currentBlock;

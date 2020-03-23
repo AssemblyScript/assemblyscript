@@ -842,9 +842,12 @@ export class Flow {
       }
     }
 
+    this.mergeFieldFlags(left, right);
+  }
 
-    if ((left.fieldFlags !== null) &&
-      (right.fieldFlags !== null) &&
+  mergeFieldFlags(left: Flow, right: Flow): void {
+    if (left.fieldFlags !== null &&
+      right.fieldFlags !== null &&
       right.fieldFlags.size > 0
     ) {
       const rightFieldFlags = right.fieldFlags;
@@ -862,6 +865,26 @@ export class Flow {
           if (leftValue & FieldFlags.INITIALIZED) {
             this.setFieldFlag(rightKey, FieldFlags.INITIALIZED);
           }
+        }
+      }
+    }
+  }
+
+  inheritFieldFlags(other: Flow): void {
+    if (
+      this.fieldFlags !== null &&
+      other.fieldFlags !== null
+    ) {
+      const otherFieldFlags = other.fieldFlags;
+      const otherKeys = Map_keys(otherFieldFlags!);
+      const otherValues = Map_values(otherFieldFlags!);
+      const currentFieldFlags = this.fieldFlags;
+
+      for (let i = 0, k = otherValues.length; i < k; ++i) {
+        const key = otherKeys[i];
+        const otherValue = otherValues[i];
+        if (otherValue & FieldFlags.INITIALIZED) {
+          currentFieldFlags.set(key, FieldFlags.INITIALIZED)
         }
       }
     }
