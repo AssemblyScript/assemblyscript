@@ -7941,6 +7941,16 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
         let functionPrototype = <FunctionPrototype>target;
+        let typeParameterNodes = functionPrototype.typeParameterNodes;
+
+        if(typeParameterNodes !== null && typeParameterNodes.length != 0) {
+          this.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            expression.range, typeParameterNodes.length.toString(), "0"
+          );
+          return module.unreachable();
+        }
+
         let functionInstance = this.resolver.resolveFunction(
           functionPrototype,
           null,
