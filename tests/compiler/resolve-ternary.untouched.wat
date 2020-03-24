@@ -35,6 +35,7 @@
  (table $0 5 funcref)
  (elem (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
+ (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
  (global $resolve-ternary/b (mut i32) (i32.const 1))
@@ -80,7 +81,7 @@
    i32.const 0
    i32.const 32
    i32.const 277
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -105,7 +106,7 @@
    i32.const 0
    i32.const 32
    i32.const 279
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -157,7 +158,7 @@
    i32.const 0
    i32.const 32
    i32.const 292
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -287,7 +288,7 @@
    i32.const 0
    i32.const 32
    i32.const 205
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -302,7 +303,7 @@
    i32.const 0
    i32.const 32
    i32.const 207
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -395,7 +396,7 @@
     i32.const 0
     i32.const 32
     i32.const 228
-    i32.const 15
+    i32.const 16
     call $~lib/builtins/abort
     unreachable
    end
@@ -458,7 +459,7 @@
    i32.const 0
    i32.const 32
    i32.const 243
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -474,7 +475,7 @@
    i32.const 0
    i32.const 32
    i32.const 244
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -531,7 +532,7 @@
    i32.const 0
    i32.const 32
    i32.const 260
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -650,7 +651,7 @@
    i32.const 0
    i32.const 32
    i32.const 386
-   i32.const 4
+   i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
@@ -673,7 +674,7 @@
     i32.const 0
     i32.const 32
     i32.const 396
-    i32.const 15
+    i32.const 16
     call $~lib/builtins/abort
     unreachable
    end
@@ -704,7 +705,7 @@
     i32.const 0
     i32.const 32
     i32.const 408
-    i32.const 4
+    i32.const 5
     call $~lib/builtins/abort
     unreachable
    end
@@ -787,7 +788,9 @@
    global.get $~lib/heap/__heap_base
    i32.const 15
    i32.add
-   i32.const -16
+   i32.const 15
+   i32.const -1
+   i32.xor
    i32.and
    local.set $1
    memory.size
@@ -896,7 +899,6 @@
      br $for-loop|0
     end
    end
-   local.get $0
    local.get $1
    i32.const 1572
    i32.add
@@ -906,6 +908,9 @@
    i32.const -1
    i32.xor
    i32.and
+   local.set $5
+   local.get $0
+   local.get $5
    memory.size
    i32.const 16
    i32.shl
@@ -925,8 +930,8 @@
   if
    i32.const 80
    i32.const 32
-   i32.const 457
-   i32.const 29
+   i32.const 461
+   i32.const 30
    call $~lib/builtins/abort
    unreachable
   end
@@ -1020,7 +1025,7 @@
    i32.const 0
    i32.const 32
    i32.const 338
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -1083,7 +1088,7 @@
      i32.const 0
      i32.const 32
      i32.const 351
-     i32.const 17
+     i32.const 18
      call $~lib/builtins/abort
      unreachable
     end
@@ -1228,7 +1233,7 @@
    i32.const 0
    i32.const 32
    i32.const 365
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -1316,8 +1321,8 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 490
-   i32.const 13
+   i32.const 501
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -1357,8 +1362,8 @@
      if
       i32.const 0
       i32.const 32
-      i32.const 502
-      i32.const 19
+      i32.const 513
+      i32.const 20
       call $~lib/builtins/abort
       unreachable
      end
@@ -1376,8 +1381,8 @@
     if
      i32.const 0
      i32.const 32
-     i32.const 507
-     i32.const 17
+     i32.const 518
+     i32.const 18
      call $~lib/builtins/abort
      unreachable
     end
@@ -1393,8 +1398,8 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 510
-   i32.const 13
+   i32.const 521
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -1443,7 +1448,7 @@
    i32.const 0
    i32.const 144
    i32.const 109
-   i32.const 2
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
@@ -1462,7 +1467,7 @@
    i32.const 0
    i32.const 144
    i32.const 112
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -1491,7 +1496,6 @@
   end
  )
  (func $~lib/util/number/decimalCount32 (; 14 ;) (param $0 i32) (result i32)
-  (local $1 i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -1501,26 +1505,21 @@
    i32.lt_u
    if
     i32.const 1
-    i32.const 2
     local.get $0
     i32.const 10
-    i32.lt_u
-    select
+    i32.ge_u
+    i32.add
     return
    else
-    i32.const 4
-    i32.const 5
+    i32.const 3
     local.get $0
     i32.const 10000
-    i32.lt_u
-    select
-    local.set $1
-    i32.const 3
-    local.get $1
+    i32.ge_u
+    i32.add
     local.get $0
     i32.const 1000
-    i32.lt_u
-    select
+    i32.ge_u
+    i32.add
     return
    end
    unreachable
@@ -1530,26 +1529,21 @@
    i32.lt_u
    if
     i32.const 6
-    i32.const 7
     local.get $0
     i32.const 1000000
-    i32.lt_u
-    select
+    i32.ge_u
+    i32.add
     return
    else
-    i32.const 9
-    i32.const 10
+    i32.const 8
     local.get $0
     i32.const 1000000000
-    i32.lt_u
-    select
-    local.set $1
-    i32.const 8
-    local.get $1
+    i32.ge_u
+    i32.add
     local.get $0
     i32.const 100000000
-    i32.lt_u
-    select
+    i32.ge_u
+    i32.add
     return
    end
    unreachable
@@ -1710,8 +1704,8 @@
    return
   end
   local.get $0
-  i32.const 0
-  i32.lt_s
+  i32.const 31
+  i32.shr_u
   local.set $1
   local.get $1
   if
@@ -4099,8 +4093,6 @@
   local.get $7
   i32.const 1
   local.get $7
-  i32.const 0
-  i32.ne
   select
   i32.const 1023
   i32.const 52
@@ -4600,8 +4592,8 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 570
-   i32.const 2
+   i32.const 581
+   i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
@@ -4734,7 +4726,7 @@
    i32.const 0
    i32.const 672
    i32.const 5
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -4754,7 +4746,7 @@
    i32.const 0
    i32.const 672
    i32.const 13
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -4775,7 +4767,7 @@
    i32.const 0
    i32.const 672
    i32.const 24
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -4796,7 +4788,7 @@
    i32.const 0
    i32.const 672
    i32.const 35
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -4817,7 +4809,7 @@
    i32.const 0
    i32.const 672
    i32.const 43
-   i32.const 0
+   i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
@@ -4852,7 +4844,7 @@
    i32.const 0
    i32.const 144
    i32.const 122
-   i32.const 13
+   i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
@@ -4874,7 +4866,7 @@
     i32.const 0
     i32.const 144
     i32.const 126
-    i32.const 17
+    i32.const 18
     call $~lib/builtins/abort
     unreachable
    end
@@ -4890,7 +4882,7 @@
     i32.const 0
     i32.const 144
     i32.const 136
-    i32.const 15
+    i32.const 16
     call $~lib/builtins/abort
     unreachable
    end
@@ -4922,7 +4914,7 @@
    i32.const 0
    i32.const 144
    i32.const 69
-   i32.const 15
+   i32.const 16
    call $~lib/builtins/abort
    unreachable
   end

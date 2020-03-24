@@ -932,7 +932,8 @@ export class Parser extends DiagnosticEmitter {
     if ((flags & CommonFlags.DEFINITE_ASSIGNMENT) != 0 && initializer !== null) {
       this.error(
         DiagnosticCode.A_definite_assignment_assertion_is_not_permitted_in_this_context,
-        range);
+        range
+      );
     }
     return Node.createVariableDeclaration(
       identifier,
@@ -1775,11 +1776,11 @@ export class Parser extends DiagnosticEmitter {
     //   ('get' | 'set')?
     //   Identifier ...
 
-    var startPos = tn.pos;
     var isInterface = parent.kind == NodeKind.INTERFACEDECLARATION;
-
+    var startPos = 0;
     var decorators: DecoratorNode[] | null = null;
     if (tn.skip(Token.AT)) {
+      startPos = tn.tokenPos;
       do {
         let decorator = this.parseDecorator(tn);
         if (!decorator) break;
@@ -1812,6 +1813,7 @@ export class Parser extends DiagnosticEmitter {
       flags |= CommonFlags.PUBLIC;
       accessStart = tn.tokenPos;
       accessEnd = tn.pos;
+      if (!startPos) startPos = accessStart;
     } else if (tn.skip(Token.PRIVATE)) {
       if (isInterface) {
         this.error(
@@ -1822,6 +1824,7 @@ export class Parser extends DiagnosticEmitter {
       flags |= CommonFlags.PRIVATE;
       accessStart = tn.tokenPos;
       accessEnd = tn.pos;
+      if (!startPos) startPos = accessStart;
     } else if (tn.skip(Token.PROTECTED)) {
       if (isInterface) {
         this.error(
@@ -1832,6 +1835,7 @@ export class Parser extends DiagnosticEmitter {
       flags |= CommonFlags.PROTECTED;
       accessStart = tn.tokenPos;
       accessEnd = tn.pos;
+      if (!startPos) startPos = accessStart;
     }
 
     var staticStart = 0;
@@ -1848,6 +1852,7 @@ export class Parser extends DiagnosticEmitter {
       flags |= CommonFlags.STATIC;
       staticStart = tn.tokenPos;
       staticEnd = tn.pos;
+      if (!startPos) startPos = staticStart;
     } else {
       flags |= CommonFlags.INSTANCE;
       if (tn.skip(Token.ABSTRACT)) {
@@ -1860,6 +1865,7 @@ export class Parser extends DiagnosticEmitter {
         flags |= CommonFlags.ABSTRACT;
         abstractStart = tn.tokenPos;
         abstractEnd = tn.pos;
+        if (!startPos) startPos = abstractStart;
       }
       if (parent.flags & CommonFlags.GENERIC) flags |= CommonFlags.GENERIC_CONTEXT;
     }
@@ -1874,6 +1880,7 @@ export class Parser extends DiagnosticEmitter {
         flags |= CommonFlags.READONLY;
         readonlyStart = tn.tokenPos;
         readonlyEnd = tn.pos;
+        if (!startPos) startPos = readonlyStart;
       } else { // identifier
         tn.reset(state);
       }
@@ -1893,8 +1900,9 @@ export class Parser extends DiagnosticEmitter {
         if (tn.peek(true, IdentifierHandling.PREFER) == Token.IDENTIFIER && !tn.nextTokenOnNewLine) {
           flags |= CommonFlags.GET;
           isGetter = true;
-          setStart = tn.tokenPos;
-          setEnd = tn.pos;
+          getStart = tn.tokenPos;
+          getEnd = tn.pos;
+          if (!startPos) startPos = getStart;
           if (flags & CommonFlags.READONLY) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
@@ -1910,6 +1918,7 @@ export class Parser extends DiagnosticEmitter {
           isSetter = true;
           setStart = tn.tokenPos;
           setEnd = tn.pos;
+          if (!startPos) startPos = setStart;
           if (flags & CommonFlags.READONLY) {
             this.error(
               DiagnosticCode._0_modifier_cannot_be_used_here,
@@ -1922,6 +1931,7 @@ export class Parser extends DiagnosticEmitter {
       } else if (tn.skip(Token.CONSTRUCTOR)) {
         flags |= CommonFlags.CONSTRUCTOR;
         isConstructor = true;
+        if (!startPos) startPos = tn.tokenPos;
         if (flags & CommonFlags.STATIC) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
@@ -1948,6 +1958,7 @@ export class Parser extends DiagnosticEmitter {
       name = Node.createConstructorExpression(tn.range());
     } else {
       if (!(isGetter || isSetter) && tn.skip(Token.OPENBRACKET)) {
+        if (!startPos) startPos = tn.tokenPos;
         // TODO: also handle symbols, which might have some of these modifiers
         if (flags & CommonFlags.PUBLIC) {
           this.error(
@@ -1997,6 +2008,7 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
+      if (!startPos) startPos = tn.tokenPos;
       name = Node.createIdentifierExpression(tn.readIdentifier(), tn.range());
     }
     var typeParameters: TypeParameterNode[] | null = null;

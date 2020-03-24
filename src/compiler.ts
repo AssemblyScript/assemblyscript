@@ -220,6 +220,8 @@ export class Options {
   noUnsafe: bool = false;
   /** If true, enables pedantic diagnostics. */
   pedantic: bool = false;
+  /** Indicates a very low (<64k) memory limit. */
+  lowMemoryLimit: i32 = 0;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -356,13 +358,20 @@ export class Compiler extends DiagnosticEmitter {
     super(program.diagnostics);
     this.program = program;
     var options = program.options;
-    this.memoryOffset = i64_new(
-      // leave space for `null`. also functions as a sentinel for erroneous stores at offset 0.
-      // note that Binaryen's asm.js output utilizes the first 8 bytes for reinterpretations (#1547)
-      max(options.memoryBase, 8)
-    );
     var module = Module.create();
     this.module = module;
+    if (options.memoryBase) {
+      this.memoryOffset = i64_new(options.memoryBase);
+      module.setLowMemoryUnused(false);
+    } else {
+      if (!options.lowMemoryLimit && options.optimizeLevelHint >= 2) {
+        this.memoryOffset = i64_new(1024);
+        module.setLowMemoryUnused(true);
+      } else {
+        this.memoryOffset = i64_new(8);
+        module.setLowMemoryUnused(false);
+      }
+    }
     var featureFlags: FeatureFlags = 0;
     if (options.hasFeature(Feature.SIGN_EXTENSION)) featureFlags |= FeatureFlags.SignExt;
     if (options.hasFeature(Feature.MUTABLE_GLOBALS)) featureFlags |= FeatureFlags.MutableGloabls;
@@ -420,7 +429,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // compile the start function if not empty or if explicitly requested
     var startIsEmpty = !startFunctionBody.length;
-    var explicitStart = options.explicitStart;
+    var explicitStart = program.isWasi || options.explicitStart;
     if (!startIsEmpty || explicitStart) {
       let signature = startFunctionInstance.signature;
       if (!startIsEmpty && explicitStart) {
@@ -496,6 +505,16 @@ export class Compiler extends DiagnosticEmitter {
     // update the heap base pointer
     var memoryOffset = this.memoryOffset;
     memoryOffset = i64_align(memoryOffset, options.usizeType.byteSize);
+    var lowMemoryLimit32 = this.options.lowMemoryLimit;
+    if (lowMemoryLimit32) {
+      let lowMemoryLimit = i64_new(lowMemoryLimit32 & ~15);
+      if (i64_gt(memoryOffset, lowMemoryLimit)) {
+        this.error(
+          DiagnosticCode.Low_memory_limit_exceeded_by_static_data_0_1,
+          null, i64_to_string(memoryOffset), i64_to_string(lowMemoryLimit)
+        );
+      }
+    }
     this.memoryOffset = memoryOffset;
     module.removeGlobal(BuiltinNames.heap_base);
     if (this.runtimeFeatures & RuntimeFeatures.HEAP) {
@@ -520,7 +539,7 @@ export class Compiler extends DiagnosticEmitter {
     var isSharedMemory = options.hasFeature(Feature.THREADS) && options.sharedMemory > 0;
     module.setMemory(
       this.options.memoryBase /* is specified */ || this.memorySegments.length
-        ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16, 0)))
+        ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16)))
         : 0,
       isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
       this.memorySegments,
@@ -2673,16 +2692,12 @@ export class Compiler extends DiagnosticEmitter {
       // stmts.push(module.createUnreachable());
       return module.flatten(stmts);
     }
+
     // Otherwise emit a normal return
     if (!stmts.length) return module.return(expr);
     stmts.push(module.return(expr));
     return module.flatten(stmts);
   }
-
-  // For strict field init:
-  // Need to sequentially check for each of the branches
-  // if no default assume not init
-  // if default try and check all statements
 
   private compileSwitchStatement(
     statement: SwitchStatement
@@ -8884,8 +8899,8 @@ export class Compiler extends DiagnosticEmitter {
     reportNode: Node
   ): ExpressionRef {
     var ctor = this.ensureConstructor(classInstance, reportNode);
+    if (classInstance.type.isUnmanaged || ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     this.checkFieldInitialization(classInstance);
-    if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
     var expr = this.compileCallDirect( // no need for another autoreleased local
       ctor,
       argumentExpressions,
@@ -8896,7 +8911,6 @@ export class Compiler extends DiagnosticEmitter {
     if (getExpressionType(expr) != NativeType.None) { // possibly IMM_DROPPED
       this.currentType = classInstance.type; // important because a super ctor could be called
     }
-
     return expr;
   }
 
@@ -10138,13 +10152,15 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     var filenameArg = this.ensureStaticString(codeLocation.range.source.normalizedPath);
+    var range = codeLocation.range;
+    var source = range.source;
     return module.block(null, [
       module.call(
         abortInstance.internalName, [
           messageArg,
           filenameArg,
-          module.i32(codeLocation.range.line),
-          module.i32(codeLocation.range.column)
+          module.i32(source.lineAt(range.start)),
+          module.i32(source.columnAt())
         ],
         NativeType.None
       ),

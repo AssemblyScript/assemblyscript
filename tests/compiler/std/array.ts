@@ -1,5 +1,11 @@
 import { Array } from "array";
+import { ArrayBufferView } from "arraybuffer";
 import { COMPARATOR } from "util/sort";
+
+// Array<T> has the same layout as ArrayBufferView
+assert(offsetof<ArrayBufferView>("buffer") == offsetof<i32[]>("buffer"));
+assert(offsetof<ArrayBufferView>("dataStart") == offsetof<i32[]>("dataStart"));
+assert(offsetof<ArrayBufferView>("byteLength") == offsetof<i32[]>("byteLength"));
 
 // Obtains the internal capacity of an array from its backing buffer.
 function internalCapacity<T>(array: Array<T>): i32 {

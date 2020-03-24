@@ -1,17 +1,25 @@
 /// <reference lib="esnext.bigint" />
 
+export interface ResultObject {
+  module: WebAssembly.Module;
+  instance: WebAssembly.Instance;
+}
+
+type ImportValue = Function | WebAssembly.Global | WebAssembly.Memory | WebAssembly.Table | number;
+
 /** WebAssembly imports with two levels of nesting. */
-interface ImportsObject extends Record<string, any> {
+export interface Imports extends Record<string, Record<string, ImportValue>> {
   env?: {
     memory?: WebAssembly.Memory,
     table?: WebAssembly.Table,
+    seed?: () => number,
     abort?(msg: number, file: number, line: number, column: number): void,
     trace?(msg: number, numArgs?: number, ...args: number[]): void
   };
 }
 
 /** Utility mixed in by the loader. */
-interface ASUtil {
+export interface ASUtil {
   memory?: WebAssembly.Memory;
   table?: WebAssembly.Table;
 
@@ -92,13 +100,22 @@ interface ASUtil {
 }
 
 /** Asynchronously instantiates an AssemblyScript module from anything that can be instantiated. */
-export declare function instantiate<T extends {}>(source: WebAssembly.Module | BufferSource | Response | PromiseLike<WebAssembly.Module | BufferSource | Response>, imports?: ImportsObject): Promise<ASUtil & T>;
+export declare function instantiate<T extends {}>(
+  source: WebAssembly.Module | BufferSource | Response | PromiseLike<WebAssembly.Module | BufferSource | Response>,
+  imports?: Imports
+): Promise<ResultObject & { exports: ASUtil & T }>;
 
 /** Synchronously instantiates an AssemblyScript module from a WebAssembly.Module or binary buffer. */
-export declare function instantiateSync<T extends {}>(source: WebAssembly.Module | BufferSource, imports?: ImportsObject): ASUtil & T;
+export declare function instantiateSync<T extends {}>(
+  source: WebAssembly.Module | BufferSource,
+  imports?: Imports
+): ResultObject & { exports: ASUtil & T };
 
 /** Asynchronously instantiates an AssemblyScript module from a response, i.e. as obtained by `fetch`. */
-export declare function instantiateStreaming<T extends {}>(source: Response | PromiseLike<Response>, imports?: ImportsObject): Promise<ASUtil & T>;
+export declare function instantiateStreaming<T extends {}>(
+  source: Response | PromiseLike<Response>,
+  imports?: Imports
+): Promise<ResultObject & { exports: ASUtil & T }>;
 
 /** Demangles an AssemblyScript module's exports to a friendly object structure. */
-export declare function demangle<T extends {}>(exports: {}, baseModule?: {}): T;
+export declare function demangle<T extends {}>(exports: {}, extendedExports?: {}): T;
