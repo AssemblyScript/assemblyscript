@@ -7943,7 +7943,7 @@ export class Compiler extends DiagnosticEmitter {
         let functionPrototype = <FunctionPrototype>target;
         let typeParameterNodes = functionPrototype.typeParameterNodes;
 
-        if(typeParameterNodes !== null && typeParameterNodes.length != 0) {
+        if (typeParameterNodes !== null && typeParameterNodes.length != 0) {
           this.error(
             DiagnosticCode.Expected_0_arguments_but_got_1,
             expression.range, typeParameterNodes.length.toString(), "0"
