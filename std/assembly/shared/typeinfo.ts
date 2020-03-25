@@ -70,5 +70,7 @@ export const enum TypeinfoFlags {
   /** Key type is nullable. */
   KEY_NULLABLE = 1 << 21,
   /** Key type is managed. */
-  KEY_MANAGED = 1 << 22
+  KEY_MANAGED = 1 << 22,
+  /** Type is a StaticArray. */
+  STATICARRAY = 1 << 23
 }
