@@ -3755,8 +3755,12 @@ export class Class extends TypedElement {
     var current: Class = this;
     var program = this.program;
     var arrayPrototype = program.arrayPrototype;
+    var staticArrayPrototype = program.staticArrayPrototype;
     if (this.extends(arrayPrototype)) {
       return this.getTypeArgumentsTo(arrayPrototype)![0];
+    }
+    if (this.extends(staticArrayPrototype)) {
+      return this.getTypeArgumentsTo(staticArrayPrototype)![0];
     }
     var abvInstance = program.arrayBufferViewInstance;
     while (current.base !== abvInstance) {
