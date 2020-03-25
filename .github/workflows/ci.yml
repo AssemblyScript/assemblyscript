@@ -11,6 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1.0.0
     - name: "Check that author is present in the NOTICE file"
+      if: github.event_name == 'pull_request'
       run: |
         AUTHOR=$(git log -1 --format="%aE")
         if [ -z "$AUTHOR" ]; then
@@ -23,7 +24,7 @@ jobs:
         else
           printf "\nOK: Author is present in the NOTICE file.\n";
         fi
-    - name: "If a PR, check that distribution files are unmodified"
+    - name: "Check that distribution files are unmodified"
       if: github.event_name == 'pull_request'
       run: |
         if git --no-pager diff --name-only $(git rev-parse origin/${{ github.base_ref }})...${{ github.sha }} | grep -q "^dist/"; then
