@@ -8,6 +8,7 @@ jobs:
   check:
     name: "Check preconditions"
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
     steps:
     - uses: actions/checkout@v1.0.0
     - name: "Check that author is present in the NOTICE file"
@@ -23,8 +24,7 @@ jobs:
         else
           printf "\nOK: Author is present in the NOTICE file.\n";
         fi
-    - name: "If a PR, check that distribution files are unmodified"
-      if: github.event_name == 'pull_request'
+    - name: "Check that distribution files are unmodified"
       run: |
         if git --no-pager diff --name-only $(git rev-parse origin/${{ github.base_ref }})...${{ github.sha }} | grep -q "^dist/"; then
           printf "\nThe pull request modifies distribution files, but it shouldn't.\n" &&
