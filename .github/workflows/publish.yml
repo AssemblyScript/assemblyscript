@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v1
       with:
         ref: release
-    - uses: dcodeIO/setup-node-nvm@v1.0.0
+    - uses: dcodeIO/setup-node-nvm@master
       with:
         node-version: node
     - name: Merge master
