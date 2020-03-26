@@ -89,6 +89,8 @@ export interface ASUtil {
   __getInt8StaticArrayView(ptr: number): Int8Array;
   /** Gets a live view on a StaticArray<u8>'s values in the module's memory. */
   __getUint8StaticArrayView(ptr: number): Uint8Array;
+  /** Gets a live view on a StaticArray<u8>'s values in the module's memory. */
+  __getUint8ClampedStaticArrayView(ptr: number): Uint8Array;
   /** Gets a live view on a StaticArray<i16>'s values in the module's memory. */
   __getInt16StaticArrayView(ptr: number): Int16Array;
   /** Gets a live view on a StaticArray<u16>'s values in the module's memory. */
@@ -110,6 +112,8 @@ export interface ASUtil {
   __getInt8StaticArray(ptr: number): Int8Array;
   /** Copies an StaticArray<u8>'s values from the module's memory. */
   __getUint8StaticArray(ptr: number): Uint8Array;
+  /** Copies an StaticArray<u8>'s values from the module's memory. */
+  __getUint8ClampedStaticArray(ptr: number): Uint8Array;
   /** Copies an StaticArray<i16>'s values from the module's memory. */
   __getInt16StaticArray(ptr: number): Int16Array;
   /** Copies an StaticArray<u16>'s values from the module's memory. */
