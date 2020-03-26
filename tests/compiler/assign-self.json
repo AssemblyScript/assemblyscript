@@ -1,0 +1,11 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "TS2304: Cannot find name 'a'.",
+    "TS2304: Cannot find name 'b'.",
+    "TS2304: Cannot find name 'c'.",
+    "EOF"
+  ]
+}

@@ -5791,8 +5791,17 @@ export class Compiler extends DiagnosticEmitter {
     var targetType: Type;
     switch (target.kind) {
       case ElementKind.GLOBAL: {
+        let global = <Global>target;
         // not yet compiled if a static field compiled as a global
-        if (!this.compileGlobal(<Global>target)) return this.module.unreachable(); // reports
+        if (!this.compileGlobal(global)) return this.module.unreachable(); // reports
+        if (!global.is(CommonFlags.RESOLVED)) {
+          // used inside of its own initializer, calling compileGlobal in compileGlobal
+          this.error(
+            DiagnosticCode.Cannot_find_name_0,
+            expression.range, global.name
+          );
+          return this.module.unreachable();
+        }
         // fall-through
       }
       case ElementKind.LOCAL:
@@ -5875,9 +5884,9 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // compile the value and do the assignment
-    assert(targetType != Type.void);
     var valueExpr = this.compileExpression(valueExpression, targetType, Constraints.WILL_RETAIN);
     var valueType = this.currentType;
+    if (targetType == Type.auto) targetType = valueType;
     return this.makeAssignment(
       target,
       this.convertExpression(valueExpr, valueType, targetType, false, false, valueExpression),
