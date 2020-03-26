@@ -1,5 +1,6 @@
 {
   "asc_flags": [
-    "--runtime half"
+    "--runtime half",
+    "--use ASC_RTRACE=1"
   ]
 }
