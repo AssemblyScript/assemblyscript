@@ -12,7 +12,7 @@ export type Imports = {
   env?: {
     memory?: WebAssembly.Memory;
     table?: WebAssembly.Table;
-    seed?: () => number;
+    seed?(): number;
     abort?(msg: number, file: number, line: number, column: number): void;
     trace?(msg: number, numArgs?: number, ...args: number[]): void;
   } & Record<string, ImportValue>;
