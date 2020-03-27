@@ -86,50 +86,50 @@ export interface ASUtil {
   __getFloat64ArrayView(ptr: number): Float64Array;
 
   /** Gets a live view on a StaticArray<i8>'s values in the module's memory. */
-  __getInt8StaticArrayView(ptr: number): Int8Array;
+  __getStaticInt8ArrayView(ptr: number): Int8Array;
   /** Gets a live view on a StaticArray<u8>'s values in the module's memory. */
-  __getUint8StaticArrayView(ptr: number): Uint8Array;
+  __getStaticUint8ArrayView(ptr: number): Uint8Array;
   /** Gets a live view on a StaticArray<u8>'s values in the module's memory. */
-  __getUint8ClampedStaticArrayView(ptr: number): Uint8Array;
+  __getStaticUint8ClampedArrayView(ptr: number): Uint8Array;
   /** Gets a live view on a StaticArray<i16>'s values in the module's memory. */
-  __getInt16StaticArrayView(ptr: number): Int16Array;
+  __getStaticInt16ArrayView(ptr: number): Int16Array;
   /** Gets a live view on a StaticArray<u16>'s values in the module's memory. */
-  __getUint16StaticArrayView(ptr: number): Uint16Array;
+  __getStaticUint16ArrayView(ptr: number): Uint16Array;
   /** Gets a live view on a StaticArray<i32>'s values in the module's memory. */
-  __getInt32StaticArrayView(ptr: number): Int32Array;
+  __getStaticInt32ArrayView(ptr: number): Int32Array;
   /** Gets a live view on a StaticArray<u32>'s values in the module's memory. */
-  __getUint32StaticArrayView(ptr: number): Uint32Array;
+  __getStaticUint32ArrayView(ptr: number): Uint32Array;
   /** Gets a live view on a StaticArray<i64>'s values in the module's memory. */
-  __getInt64StaticArrayView?(ptr: number): BigInt64Array;
+  __getStaticInt64ArrayView?(ptr: number): BigInt64Array;
   /** Gets a live view on a StaticArray<u64>'s values in the module's memory. */
-  __getUint64StaticArrayView?(ptr: number): BigUint64Array;
+  __getStaticUint64ArrayView?(ptr: number): BigUint64Array;
   /** Gets a live view on a StaticArray<f32>'s values in the module's memory. */
-  __getFloat32StaticArrayView(ptr: number): Float32Array;
+  __getStaticFloat32ArrayView(ptr: number): Float32Array;
   /** Gets a live view on a StaticArray<f64>'s values in the module's memory. */
-  __getFloat64StaticArrayView(ptr: number): Float64Array;
+  __getStaticFloat64ArrayView(ptr: number): Float64Array;
 
   /** Copies a StaticArray<i8>'s values from the module's memory. */
-  __getInt8StaticArray(ptr: number): Int8Array;
+  __getStaticInt8Array(ptr: number): Int8Array;
   /** Copies a StaticArray<u8>'s values from the module's memory. */
-  __getUint8StaticArray(ptr: number): Uint8Array;
+  __getStaticUint8Array(ptr: number): Uint8Array;
   /** Copies a StaticArray<u8>'s values from the module's memory. */
-  __getUint8ClampedStaticArray(ptr: number): Uint8Array;
+  __getStaticUint8ClampedArray(ptr: number): Uint8Array;
   /** Copies a StaticArray<i16>'s values from the module's memory. */
-  __getInt16StaticArray(ptr: number): Int16Array;
+  __getStaticInt16Array(ptr: number): Int16Array;
   /** Copies a StaticArray<u16>'s values from the module's memory. */
-  __getUint16StaticArray(ptr: number): Uint16Array;
+  __getStaticUint16Array(ptr: number): Uint16Array;
   /** Copies a StaticArray<i32>'s values from the module's memory. */
-  __getInt32StaticArray(ptr: number): Int32Array;
+  __getStaticInt32Array(ptr: number): Int32Array;
   /** Copies a StaticArray<u32>'s values from the module's memory. */
-  __getUint32StaticArray(ptr: number): Uint32Array;
+  __getStaticUint32Array(ptr: number): Uint32Array;
   /** Copies a StaticArray<i64>'s values from the module's memory. */
-  __getInt64StaticArray?(ptr: number): BigInt64Array;
+  __getStaticInt64Array?(ptr: number): BigInt64Array;
   /** Copies a StaticArray<u64>'s values from the module's memory. */
-  __getUint64StaticArray?(ptr: number): BigUint64Array;
+  __getStaticUint64Array?(ptr: number): BigUint64Array;
   /** Copies a StaticArray<f32>'s values from the module's memory. */
-  __getFloat32StaticArray(ptr: number): Float32Array;
+  __getStaticFloat32Array(ptr: number): Float32Array;
   /** Copies a StaticArray<f64>'s values from the module's memory. */
-  __getFloat64StaticArray(ptr: number): Float64Array;
+  __getStaticFloat64Array(ptr: number): Float64Array;
 
   /** Retains a reference to a managed object externally, making sure that it doesn't become collected prematurely. Returns the pointer. */
   __retain(ptr: number): number;
