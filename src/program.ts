@@ -3758,6 +3758,10 @@ export class Class extends TypedElement {
     if (this.extends(arrayPrototype)) {
       return this.getTypeArgumentsTo(arrayPrototype)![0];
     }
+    var staticArrayPrototype = program.staticArrayPrototype;
+    if (this.extends(staticArrayPrototype)) {
+      return this.getTypeArgumentsTo(staticArrayPrototype)![0];
+    }
     var abvInstance = program.arrayBufferViewInstance;
     while (current.base !== abvInstance) {
       current = assert(current.base);
