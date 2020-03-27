@@ -1,0 +1,32 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "AS103: Feature 'simd' is not enabled.",
+    "var a: v128;",
+    "AS103: Feature 'simd' is not enabled.",
+    "var b = v128.",
+    "AS103: Feature 'simd' is not enabled.",
+    "var c: Array<v128>;",
+    "AS103: Feature 'simd' is not enabled.",
+    "var a: v128;",
+    "AS103: Feature 'simd' is not enabled.",
+    "var b = v128.",
+    "AS103: Feature 'simd' is not enabled.",
+    "let a: v128;",
+    "AS103: Feature 'simd' is not enabled.",
+    "let b = v128.",
+    "AS103: Feature 'simd' is not enabled.",
+    "a: v128",
+    "AS103: Feature 'simd' is not enabled.",
+    "): v128",
+    "AS103: Feature 'simd' is not enabled.",
+    "a: v128;",
+    "AS103: Feature 'simd' is not enabled.",
+    "b: Array<v128>;",
+    "AS103: Feature 'simd' is not enabled.",
+    "get c(): v128",
+    "EOF"
+  ]
+}
