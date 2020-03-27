@@ -1,3 +1,4 @@
+/// <reference path="../../../../std/assembly/index.d.ts" />
 export { memory };
 
 export const COLOR: string = "red";
@@ -45,6 +46,12 @@ export function sum(arr: Int32Array): i32 {
   return v;
 }
 
+export function sumStatic(arr: StaticArray<i32>): i32 {
+  var v = 0;
+  for (let i = 0, k = arr.length; i < k; ++i) v += arr[i];
+  return v;
+}
+
 export function changeLength(arr: Array<i32>, length: i32): void {
   arr.length = length;
 }
@@ -70,11 +77,24 @@ export const INT32ARRAY_ID = idof<Int32Array>();
 export const UINT32ARRAY_ID = idof<Uint32Array>();
 export const FLOAT32ARRAY_ID = idof<Float32Array>();
 export const ARRAYI32_ID = idof<Array<i32>>();
+export const UINT8STATICARRAY_ID = idof<StaticArray<u8>>();
+export const INT16STATICARRAY_ID = idof<StaticArray<i16>>();
+export const INT32STATICARRAY_ID = idof<StaticArray<i32>>();
+export const UINT32STATICARRAY_ID = idof<StaticArray<u32>>();
+export const FLOAT32STATICARRAY_ID = idof<StaticArray<f32>>();
 
 export function newFloat32Array(size: i32): Float32Array {
   return new Float32Array(size);
 }
 
+export function newFloat32StaticArray(size: i32): StaticArray<f32> {
+  return new StaticArray<f32>(size);
+}
+
 export function modifyFloat32Array(array: Float32Array, index: i32, value: f32): void {
+  array[index] = value;
+}
+
+export function modifyFloat32StaticArray(array: StaticArray<f32>, index: i32, value: f32): void {
   array[index] = value;
 }
