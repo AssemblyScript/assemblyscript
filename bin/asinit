@@ -37,7 +37,7 @@ function printHelp() {
   process.exit(0);
 }
 
-const projectDir = path.resolve(cliOptions.arguments[2]);
+const projectDir = path.resolve(cliOptions.arguments[0]);
 const compilerDir = path.join(__dirname, "..");
 const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
