@@ -2636,28 +2636,30 @@ export namespace NativeMathf {
       return powf_lut(x, y);
     } else {
       let sign: u32 = 0;
+      let iy = reinterpret<i32>(y);
+      let ix = reinterpret<i32>(x);
       if (y == 0) return 1;
       if (isNaN(x) || isNaN(y)) {
         return NaN;
       }
-      if (Mathf.signbit(x) && nearest(y) == y) {
+      if ((ix >>> 31) && nearest(y) == y) {
         x = -x;
+        ix &= 0x7FFFFFFF;
         sign = u32(nearest(y / 2) != y / 2) << 31;
       }
-      let z: f32;
-      if (x == 1) {
-        z = abs(y) == Infinity ? NaN : 1;
+      let m: u32;
+      if (ix == 0x3F800000) { // x == 1
+        m = (iy & 0x7FFFFFFF) == 0x7F800000 ? 0x7FC00000 : 0x3F800000;
       } else if (x == 0) {
-        z = Mathf.signbit(y) ? Infinity : 0;
-      } else if (abs(x) == Infinity) {
-        z = Mathf.signbit(y) ? 0 : Infinity;
-      } else if (Mathf.signbit(x)) {
+        m = iy >>> 31 ? 0x7F800000 : 0;
+      } else if ((ix & 0x7FFFFFFF) == 0x7F800000) {
+        m = iy >>> 31 ? 0 : 0x7F800000;
+      } else if (ix >>> 31) {
         return NaN;
       } else {
-        z = <f32>exp2f(<f64>y * log2f(x));
+        m = reinterpret<u32>(<f32>exp2f(<f64>y * log2f(x)));
       }
-      let magnitude = reinterpret<u32>(z);
-      return reinterpret<f32>(magnitude | sign);
+      return reinterpret<f32>(m | sign);
     }
   }
 
