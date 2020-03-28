@@ -2617,7 +2617,7 @@ export namespace NativeMathf {
     return builtin_min<f32>(value1, value2);
   }
 
-  export function pow(x: f32, y: f32): f32 { // see: musl/src/math/powf.c and SUN COPYRIGHT NOTICE above
+  export function pow(x: f32, y: f32): f32 {
     // TODO: remove this fast pathes after introduced own mid-end IR with "stdlib call simplify" transforms
     if (builtin_abs<f32>(y) <= 2) {
       if (y == 2.0) return x * x;
@@ -2633,8 +2633,10 @@ export namespace NativeMathf {
       if (y == 0.0) return 1.0;
     }
     if (ASC_SHRINK_LEVEL < 1) {
+      // see: musl/src/math/powf.c and SUN COPYRIGHT NOTICE above
       return powf_lut(x, y);
     } else {
+      // based on: metallic/src/math/float/powf.c
       let sign: u32 = 0;
       let iy = reinterpret<i32>(y);
       let ix = reinterpret<i32>(x);
