@@ -1902,10 +1902,6 @@ function log2f(x: f64): f64 {
 // @ts-ignore: decorator
 @inline
 function exp2f(x: f64): f64 {
-  if (x < -1022) return 0;
-  if (x >= 1024) return x * Infinity;
-  var n = nearest(x);
-  x -= n;
   const
     c0 = 6.931471880289532425e-1,
     c1 = 2.402265108421173406e-1,
@@ -1913,6 +1909,12 @@ function exp2f(x: f64): f64 {
     c3 = 9.618030771171497658e-3,
     c4 = 1.339086685300950937e-3,
     c5 = 1.546973499989028719e-4;
+
+  if (x < -1022) return 0;
+  if (x >= 1024) return Infinity;
+
+  var n = nearest(x);
+  x -= n;
   var xx = x * x;
   var y = 1 + x * (c0 + c1 * x + (c2 + c3 * x) * xx + (c4 + c5 * x) * (xx * xx));
   return reinterpret<f64>(reinterpret<i64>(y) + (<i64>n << 52));
@@ -2650,7 +2652,7 @@ export namespace NativeMathf {
       } else if (abs(x) == Infinity) {
         z = Mathf.signbit(y) ? 0 : Infinity;
       } else if (Mathf.signbit(x)) {
-        z = NaN;
+        return NaN;
       } else {
         z = <f32>exp2f(<f64>y * log2f(x));
       }

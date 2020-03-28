@@ -8226,6 +8226,7 @@
      i32.and
      if (result f32)
       f32.const nan:0x400000
+      return
      else
       local.get $0
       f64.promote_f32
@@ -8287,9 +8288,7 @@
        f64.const 1024
        f64.ge
        if
-        local.get $2
         f64.const inf
-        f64.mul
         local.set $4
         br $~lib/math/exp2f|inlined.0
        end
