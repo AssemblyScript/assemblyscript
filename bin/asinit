@@ -37,7 +37,7 @@ function printHelp() {
   process.exit(0);
 }
 
-const projectDir = path.resolve(cliOptions.trailing[0]);
+const projectDir = path.resolve(cliOptions.arguments[2]);
 const compilerDir = path.join(__dirname, "..");
 const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
@@ -153,7 +153,7 @@ function createProject(answer) {
   rl.close();
 }
 
-if (cliOptions.yes) {
+if (cliOptions.options.yes) {
   createProject("y");
 } else {
   rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", createProject);
