@@ -8162,8 +8162,8 @@
    i32.and
    local.set $3
    local.get $1
-   f32.const 2
-   f32.div
+   f32.const 0.5
+   f32.mul
    local.tee $8
    f32.nearest
    local.get $8

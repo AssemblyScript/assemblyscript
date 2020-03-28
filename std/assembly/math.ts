@@ -2645,7 +2645,7 @@ export namespace NativeMathf {
       if ((ix >>> 31) && nearest(y) == y) {
         x = -x;
         ix &= 0x7FFFFFFF;
-        sign = u32(nearest(y / 2) != y / 2) << 31;
+        sign = u32(nearest(y * 0.5) != y * 0.5) << 31;
       }
       let m: u32;
       if (ix == 0x3F800000) { // x == 1
