@@ -25,7 +25,7 @@ const asinitOptions = {
 
 const cliOptions = options.parse(process.argv, asinitOptions);
 
-if (cliOptions.help) printHelp();
+if (cliOptions.options.help) printHelp();
 
 function printHelp() {
   console.log([
@@ -88,11 +88,6 @@ console.log([
   ""
 ].join("\n"));
 
-const rl = require("readline").createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
 function createProject(answer) {
   if (!/^y?$/i.test(answer)) {
     process.exit(1);
@@ -150,13 +145,19 @@ function createProject(answer) {
     "",
     "Have a nice day!"
   ].join("\n"));
-  rl.close();
 }
 
 if (cliOptions.options.yes) {
   createProject("y");
 } else {
-  rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", createProject);
+  const rl = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", result => {
+    createProject(result);
+    rl.close();
+  });
 }
 
 function ensureProjectDirectory() {
