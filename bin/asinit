@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const colors = require("../cli/util/colors");
 const version = require("../package.json").version;
-const  options = require("../cli/util/options");
+const options = require("../cli/util/options");
 
 const asinitOptions = {
   "help": {
@@ -37,7 +37,7 @@ function printHelp() {
   process.exit(0);
 }
 
-const projectDir = path.resolve(process.argv[2]);
+const projectDir = path.resolve(cliOptions.trailing[0]);
 const compilerDir = path.join(__dirname, "..");
 const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
