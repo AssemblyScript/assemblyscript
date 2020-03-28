@@ -1,4 +1,3 @@
-/// <reference path="../../../../std/assembly/index.d.ts" />
 export { memory };
 
 export const COLOR: string = "red";
