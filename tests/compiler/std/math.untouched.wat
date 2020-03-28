@@ -11110,6 +11110,7 @@
    local.get $17
    f32.demote_f64
   end
+  return
  )
  (func $std/math/test_powf (; 135 ;) (param $0 f32) (param $1 f32) (param $2 f32) (param $3 f32) (param $4 i32) (result i32)
   local.get $0
