@@ -6,8 +6,26 @@ const fs = require("fs");
 const path = require("path");
 const colors = require("../cli/util/colors");
 const version = require("../package.json").version;
+const  options = require("../cli/util/options");
 
-if (process.argv.length != 3 || process.argv[2] == "--help" || process.argv[2] == "-h") printHelp();
+const asinitOptions = {
+  "help": {
+    "category": "General",
+    "description": "Prints a help message.",
+    "type": "b",
+    "alias": "h"
+  },
+  "yes": {
+    "category": "General",
+    "description": "Skips asking the user if they want to setup an AssemblyScript project.",
+    "type": "b",
+    "alias": "y"
+  }
+};
+
+const parsed = options.parse(process.argv, asinitOptions);
+
+if (parsed.help) printHelp();
 
 function printHelp() {
   console.log([
@@ -18,11 +36,6 @@ function printHelp() {
   ].join("\n"));
   process.exit(0);
 }
-
-const rl = require("readline").createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
 
 const projectDir = path.resolve(process.argv[2]);
 const compilerDir = path.join(__dirname, "..");
@@ -75,7 +88,12 @@ console.log([
   ""
 ].join("\n"));
 
-rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", answer => {
+const rl = require("readline").createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+function createProject(answer) {
   if (!/^y?$/i.test(answer)) {
     process.exit(1);
     return;
@@ -133,7 +151,13 @@ rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", answer => {
     "Have a nice day!"
   ].join("\n"));
   rl.close();
-});
+}
+
+if (parsed.yes) {
+  createProject("y");
+} else {
+  rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", createProject);
+}
 
 function ensureProjectDirectory() {
   console.log("- Making sure that the project directory exists...");
