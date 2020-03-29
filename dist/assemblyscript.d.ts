@@ -4098,7 +4098,7 @@ declare module "assemblyscript/src/compiler" {
     import { Flow } from "assemblyscript/src/flow";
     import { Resolver } from "assemblyscript/src/resolver";
     import { Range } from "assemblyscript/src/tokenizer";
-    import { Node, Statement, Expression } from "assemblyscript/src/ast";
+    import { Node, FunctionTypeNode, Statement, Expression } from "assemblyscript/src/ast";
     import { Type, Signature } from "assemblyscript/src/types";
     /** Compiler options. */
     export class Options {
@@ -4500,6 +4500,12 @@ declare module "assemblyscript/src/compiler" {
         ensureSmallIntegerWrap(expr: ExpressionRef, type: Type): ExpressionRef;
         /** Adds the debug location of the specified expression at the specified range to the source map. */
         addDebugLocation(expr: ExpressionRef, range: Range): void;
+        /** Checks whether a particular feature is enabled. */
+        checkFeatureEnabled(feature: Feature, reportNode: Node): boolean;
+        /** Checks whether a particular type is supported. */
+        checkTypeSupported(type: Type, reportNode: Node): boolean;
+        /** Checks whether a particular function signature is supported. */
+        checkSignatureSupported(signature: Signature, reportNode: FunctionTypeNode): boolean;
         /** Makes a constant zero of the specified type. */
         makeZero(type: Type): ExpressionRef;
         /** Makes a constant one of the specified type. */
@@ -5477,47 +5483,49 @@ declare module "assemblyscript/std/assembly/shared/typeinfo" {
         ARRAYBUFFERVIEW = 1,
         /** Type is an `Array`. */
         ARRAY = 2,
+        /** Type is a `StaticArray`. */
+        STATICARRAY = 4,
         /** Type is a `Set`. */
-        SET = 4,
+        SET = 8,
         /** Type is a `Map`. */
-        MAP = 8,
+        MAP = 16,
         /** Type is inherently acyclic. */
-        ACYCLIC = 16,
+        ACYCLIC = 32,
         /** Value alignment of 1 byte. */
-        VALUE_ALIGN_0 = 32,
+        VALUE_ALIGN_0 = 64,
         /** Value alignment of 2 bytes. */
-        VALUE_ALIGN_1 = 64,
+        VALUE_ALIGN_1 = 128,
         /** Value alignment of 4 bytes. */
-        VALUE_ALIGN_2 = 128,
+        VALUE_ALIGN_2 = 256,
         /** Value alignment of 8 bytes. */
-        VALUE_ALIGN_3 = 256,
+        VALUE_ALIGN_3 = 512,
         /** Value alignment of 16 bytes. */
-        VALUE_ALIGN_4 = 512,
+        VALUE_ALIGN_4 = 1024,
         /** Value is a signed type. */
-        VALUE_SIGNED = 1024,
+        VALUE_SIGNED = 2048,
         /** Value is a float type. */
-        VALUE_FLOAT = 2048,
+        VALUE_FLOAT = 4096,
         /** Value type is nullable. */
-        VALUE_NULLABLE = 4096,
+        VALUE_NULLABLE = 8192,
         /** Value type is managed. */
-        VALUE_MANAGED = 8192,
+        VALUE_MANAGED = 16384,
         /** Key alignment of 1 byte. */
-        KEY_ALIGN_0 = 16384,
+        KEY_ALIGN_0 = 32768,
         /** Key alignment of 2 bytes. */
-        KEY_ALIGN_1 = 32768,
+        KEY_ALIGN_1 = 65536,
         /** Key alignment of 4 bytes. */
-        KEY_ALIGN_2 = 65536,
+        KEY_ALIGN_2 = 131072,
         /** Key alignment of 8 bytes. */
-        KEY_ALIGN_3 = 131072,
+        KEY_ALIGN_3 = 262144,
         /** Key alignment of 16 bytes. */
-        KEY_ALIGN_4 = 262144,
+        KEY_ALIGN_4 = 524288,
         /** Key is a signed type. */
-        KEY_SIGNED = 524288,
+        KEY_SIGNED = 1048576,
         /** Key is a float type. */
-        KEY_FLOAT = 1048576,
+        KEY_FLOAT = 2097152,
         /** Key type is nullable. */
-        KEY_NULLABLE = 2097152,
+        KEY_NULLABLE = 4194304,
         /** Key type is managed. */
-        KEY_MANAGED = 4194304
+        KEY_MANAGED = 8388608
     }
 }
