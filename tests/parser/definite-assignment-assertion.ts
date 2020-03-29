@@ -1,9 +1,9 @@
 class C {
   x!: i32;
-  x!: i32 = 0; // invalid
-  static x!: i32; // invlaid
+  y!: i32 = 0; // invalid
+  static z!: i32; // invlaid
 }
 function f(): void {
   let x!: i32;
-  let x!: i32 = 0; // invalid
+  let y!: i32 = 0; // invalid
 }

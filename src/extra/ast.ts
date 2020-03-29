@@ -86,7 +86,8 @@ import {
   SwitchCase,
   DeclarationStatement,
 
-  isTypeOmitted
+  isTypeOmitted,
+  ScopeAnalyzer
 } from "../ast";
 
 import {
@@ -102,18 +103,27 @@ import {
   CommonFlags
 } from "../common";
 
+import {
+  DiagnosticMessage,
+  DiagnosticEmitter
+} from "../diagnostics";
+
 /** An AST builder. */
-export class ASTBuilder {
+export class ASTBuilder extends DiagnosticEmitter {
 
   /** Rebuilds the textual source from the specified AST, as far as possible. */
-  static build(node: Node): string {
-    var builder = new ASTBuilder();
+  static build(node: Node, diagnostics: DiagnosticMessage[]): string {
+    var builder = new ASTBuilder(diagnostics);
     builder.visitNode(node);
     return builder.finish();
   }
 
   private sb: string[] = [];
   private indentLevel: i32 = 0;
+
+  constructor(diagnostics: DiagnosticMessage[]) {
+    super(diagnostics);
+  }
 
   visitNode(node: Node): void {
     switch (node.kind) {
@@ -851,7 +861,9 @@ export class ASTBuilder {
     var statements = node.statements;
     var numStatements = statements.length;
     if (numStatements) {
-      sb.push("{\n");
+      sb.push("{");
+      this.serializeScope(node._scope);
+      sb.push("\n");
       let indentLevel = ++this.indentLevel;
       for (let i = 0; i < numStatements; ++i) {
         indent(sb, indentLevel);
@@ -860,7 +872,9 @@ export class ASTBuilder {
       indent(sb, --this.indentLevel);
       sb.push("}");
     } else {
-      sb.push("{}");
+      sb.push("{");
+      this.serializeScope(node._scope);
+      sb.push("}");
     }
   }
 
@@ -1130,6 +1144,9 @@ export class ASTBuilder {
       sb.push(";");
     }
     sb.push(") ");
+    if (this.serializeScope(node._scope)) {
+      sb.push(" ");
+    }
     this.visitNode(node.statement);
   }
 
@@ -1140,6 +1157,9 @@ export class ASTBuilder {
     sb.push(" of ");
     this.visitNode(node.iterable);
     sb.push(") ");
+    if (this.serializeScope(node._scope)) {
+      sb.push(" ");
+    }
     this.visitNode(node.statement);
   }
 
@@ -1206,6 +1226,7 @@ export class ASTBuilder {
       }
     }
     var body = node.body;
+    if (body != null) ScopeAnalyzer.analyze(node, this.diagnostics);
     var returnType = signature.returnType;
     if (node.arrowKind) {
       if (body) {
@@ -1220,6 +1241,9 @@ export class ASTBuilder {
           }
         }
         sb.push(" => ");
+        if (this.serializeScope(node._scope)) {
+          sb.push(" ");
+        }
         this.visitNode(body);
       } else {
         assert(!isTypeOmitted(returnType));
@@ -1238,6 +1262,9 @@ export class ASTBuilder {
       }
       if (body) {
         sb.push(" ");
+        if (this.serializeScope(node._scope)) {
+          sb.push(" ");
+        }
         this.visitNode(body);
       }
     }
@@ -1439,15 +1466,18 @@ export class ASTBuilder {
     var sb = this.sb;
     sb.push("switch (");
     this.visitNode(node.condition);
-    sb.push(") {\n");
+    sb.push(") ");
+    if (this.serializeScope(node._scope)) {
+      sb.push(" ");
+    }
+    sb.push("{\n");
     var indentLevel = ++this.indentLevel;
     var cases = node.cases;
     for (let i = 0, k = cases.length; i < k; ++i) {
       indent(sb, indentLevel);
       this.visitSwitchCase(cases[i]);
-      sb.push("\n");
     }
-    --this.indentLevel;
+    indent(sb, --this.indentLevel);
     sb.push("}");
   }
 
@@ -1488,7 +1518,7 @@ export class ASTBuilder {
         this.visitNodeAndTerminate(finallyStatements[i]);
       }
     }
-    indent(sb, indentLevel - 1);
+    indent(sb, --this.indentLevel);
     sb.push("}");
   }
 
@@ -1647,6 +1677,14 @@ export class ASTBuilder {
     if (node.is(CommonFlags.READONLY)) {
       sb.push("readonly ");
     }
+  }
+
+  serializeScope(scope: Map<string,DeclarationStatement | null>): bool {
+    if (scope != null && scope.size > 0) {
+      this.sb.push("/* {" + Map_keys(scope).join(",") + "} */");
+      return true;
+    }
+    return false;
   }
 
   finish(): string {

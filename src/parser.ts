@@ -1439,7 +1439,7 @@ export class Parser extends DiagnosticEmitter {
       tn.range(signatureStart, tn.pos)
     );
 
-    var body: Statement | null = null;
+    var body: BlockStatement | null = null;
     if (tn.skip(Token.OPENBRACE)) {
       if (flags & CommonFlags.AMBIENT) {
         this.error(
@@ -1448,7 +1448,7 @@ export class Parser extends DiagnosticEmitter {
         ); // recoverable
       }
 
-      body = this.parseBlockStatement(tn, false);
+      body = this.parseBlockStatement(tn, /* topLevel */ false);
       if (!body) return null;
     } else if (!(flags & CommonFlags.AMBIENT)) {
       this.error(
@@ -1554,7 +1554,7 @@ export class Parser extends DiagnosticEmitter {
     var body: Statement | null = null;
     if (arrowKind) {
       if (tn.skip(Token.OPENBRACE)) {
-        body = this.parseBlockStatement(tn, false);
+        body = this.parseBlockStatement(tn, /* topLevel */ false);
       } else {
         let bodyExpression = this.parseExpression(tn, Precedence.COMMA + 1);
         if (bodyExpression) body = Node.createExpressionStatement(bodyExpression);
@@ -1567,7 +1567,7 @@ export class Parser extends DiagnosticEmitter {
         );
         return null;
       }
-      body = this.parseBlockStatement(tn, false);
+      body = this.parseBlockStatement(tn, /* topLevel */ false);
     }
     if (!body) return null;
 

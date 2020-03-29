@@ -32,6 +32,12 @@ import {
   CharCode
 } from "./util";
 
+import {
+  DiagnosticEmitter,
+  DiagnosticMessage,
+  DiagnosticCode
+} from "./diagnostics";
+
 /** Indicates the kind of a node. */
 export enum NodeKind {
 
@@ -1797,6 +1803,8 @@ export abstract class VariableLikeDeclarationStatement extends DeclarationStatem
 export class BlockStatement extends Statement {
   /** Contained statements. */
   statements: Statement[];
+  /** Scoped names. */
+  _scope: Map<string,DeclarationStatement | null>;
 }
 
 /** Represents a `break` statement. */
@@ -1908,6 +1916,8 @@ export class ForStatement extends Statement {
   incrementor: Expression | null;
   /** Statement being looped over. */
   statement: Statement;
+  /** Scoped names. */
+  _scope: Map<string,DeclarationStatement | null>;
 }
 
 /** Represents a `for..of` statement. */
@@ -1918,6 +1928,8 @@ export class ForOfStatement extends Statement {
   iterable: Expression;
   /** Statement being looped over. */
   statement: Statement;
+  /** Scoped names. */
+  _scope: Map<string,DeclarationStatement | null>;
 }
 
 /** Indicates the kind of an array function. */
@@ -1940,6 +1952,8 @@ export class FunctionDeclaration extends DeclarationStatement {
   body: Statement | null;
   /** Arrow function kind, if applicable. */
   arrowKind: ArrowKind;
+  /** Scoped names. */
+  _scope: Map<string,DeclarationStatement | null>;
 
   get isGeneric(): bool {
     var typeParameters = this.typeParameters;
@@ -1948,7 +1962,7 @@ export class FunctionDeclaration extends DeclarationStatement {
 
   /** Clones this function declaration. */
   clone(): FunctionDeclaration {
-    return Node.createFunctionDeclaration(
+    var clonedDeclaration = Node.createFunctionDeclaration(
       this.name,
       this.typeParameters,
       this.signature,
@@ -1958,6 +1972,8 @@ export class FunctionDeclaration extends DeclarationStatement {
       this.arrowKind,
       this.range
     );
+    clonedDeclaration._scope = this._scope;
+    return clonedDeclaration;
   }
 }
 
@@ -2001,6 +2017,8 @@ export class MethodDeclaration extends FunctionDeclaration {
 export class NamespaceDeclaration extends DeclarationStatement {
   /** Array of namespace members. */
   members: Statement[];
+  /** Scoped names. */
+  _scope: Map<string,DeclarationStatement | null>;
 }
 
 /** Represents a `return` statement. */
@@ -2023,6 +2041,8 @@ export class SwitchStatement extends Statement {
   condition: Expression;
   /** Contained cases. */
   cases: SwitchCase[];
+  /** Scoped names. */
+  _scope: Map<string,DeclarationStatement | null>;
 }
 
 /** Represents a `throw` statement. */
@@ -2041,6 +2061,10 @@ export class TryStatement extends Statement {
   catchStatements: Statement[] | null;
   /** Statements being executed afterwards, if a `finally` clause is present. */
   finallyStatements: Statement[] | null;
+  /** Scoped names in catch clause. */
+  _catchScope: Map<string,DeclarationStatement | null> | null;
+  /** Scoped names in finally clause. */
+  _finallyScope: Map<string,DeclarationStatement | null> | null;
 }
 
 /** Represents a `type` declaration. */
@@ -2101,4 +2125,210 @@ export function isTypeOmitted(type: TypeNode): bool {
     return !(name.next !== null || name.identifier.text.length > 0);
   }
   return false;
+}
+
+/** Analyzes function body scopes. */
+export class ScopeAnalyzer extends DiagnosticEmitter {
+
+  /** Function being evaluated. */
+  declaration: FunctionDeclaration;
+  /** Function scope. */
+  functionScope: Map<string,DeclarationStatement | null> = new Map();
+  /** Block scope stack. */
+  blockScopes: Map<string,DeclarationStatement | null>[] = [];
+
+  /** Evaluates the specified function. */
+  static analyze(declaration: FunctionDeclaration, diagnostics: DiagnosticMessage[]): void {
+    var instance = new ScopeAnalyzer(declaration, diagnostics);
+    var body = declaration.body;
+    if (body) instance.visit(body);
+    declaration._scope = instance.functionScope;
+  }
+
+  constructor(declaration: FunctionDeclaration, diagnostics: DiagnosticMessage[]) {
+    super(diagnostics);
+    this.declaration = declaration;
+    var parameters = declaration.signature.parameters;
+    var functionScope = this.functionScope;
+    for (let i = 0, k = parameters.length; i < k; ++i) {
+      functionScope.set(parameters[i].name.text, null);
+    }
+  }
+
+  visit(node: Node): void {
+    switch (node.kind) {
+      case NodeKind.BLOCK: {
+        let blockStatement = <BlockStatement>node;
+        let scope = new Map<string,DeclarationStatement | null>();
+        let blockScopes = this.blockScopes;
+        blockScopes.push(scope);
+        let statements = blockStatement.statements;
+        for (let i = 0, k = statements.length; i < k; ++i) {
+          this.visit(statements[i]);
+        }
+        blockScopes.pop();
+        blockStatement._scope = scope;
+        break;
+      }
+      case NodeKind.BREAK: break;
+      case NodeKind.CONTINUE: break;
+      case NodeKind.DO: {
+        this.visit((<DoStatement>node).statement);
+        break;
+      }
+      case NodeKind.EMPTY: break;
+      case NodeKind.EXPRESSION: {
+        let expression = (<ExpressionStatement>node).expression;
+        if (expression.kind == NodeKind.FUNCTION) {
+          this.visit((<FunctionExpression>expression).declaration);
+        }
+        break;
+      }
+      case NodeKind.FOR: {
+        let forStatement = <ForStatement>node;
+        let scope = new Map<string,DeclarationStatement | null>();
+        let blockScopes = this.blockScopes;
+        blockScopes.push(scope);
+        let initializer = forStatement.initializer;
+        if (initializer) this.visit(initializer);
+        this.visit(forStatement.statement);
+        blockScopes.pop();
+        forStatement._scope = scope;
+        break;
+      }
+      case NodeKind.FOROF: {
+        let forOfStatement = <ForOfStatement>node;
+        let scope = new Map<string,DeclarationStatement | null>();
+        let blockScopes = this.blockScopes;
+        blockScopes.push(scope);
+        let variable = forOfStatement.variable;
+        if (variable) this.visit(variable);
+        this.visit(forOfStatement.statement);
+        blockScopes.pop();
+        forOfStatement._scope = scope;
+        break;
+      }
+      case NodeKind.IF: {
+        let ifStatement = <IfStatement>node;
+        this.visit(ifStatement.ifTrue);
+        let ifFalse = ifStatement.ifFalse;
+        if (ifFalse) this.visit(ifFalse);
+        break;
+      }
+      case NodeKind.RETURN: break;
+      case NodeKind.SWITCH: {
+        let switchStatement = <SwitchStatement>node;
+        let scope = new Map<string,DeclarationStatement | null>();
+        let blockScopes = this.blockScopes;
+        blockScopes.push(scope);
+        let cases = switchStatement.cases;
+        for (let i = 0, k = cases.length; i < k; ++i) {
+          this.visit(cases[i]);
+        }
+        blockScopes.pop();
+        switchStatement._scope = scope;
+        break;
+      }
+      case NodeKind.THROW: break;
+      case NodeKind.TRY: {
+        let tryStatement = <TryStatement>node;
+        let statements = tryStatement.statements;
+        for (let i = 0, k = statements.length; i < k; ++i) {
+          this.visit(statements[i]);
+        }
+        let catchStatements = tryStatement.catchStatements;
+        if (catchStatements) {
+          let scope = new Map<string,DeclarationStatement | null>();
+          let catchVariable = tryStatement.catchVariable;
+          if (catchVariable) {
+            scope.set(catchVariable.text, null);
+          }
+          let blockScopes = this.blockScopes;
+          blockScopes.push(scope);
+          for (let i = 0, k = catchStatements.length; i < k; ++i) {
+            this.visit(catchStatements[i]);
+          }
+          blockScopes.pop();
+          tryStatement._catchScope = scope;
+        }
+        let finallyStatements = tryStatement.finallyStatements;
+        if (finallyStatements) {
+          let scope = new Map<string,DeclarationStatement | null>();
+          let blockScopes = this.blockScopes;
+          blockScopes.push(scope);
+          for (let i = 0, k = finallyStatements.length; i < k; ++i) {
+            this.visit(finallyStatements[i]);
+          }
+          blockScopes.pop();
+          tryStatement._finallyScope = scope;
+        }
+        break;
+      }
+      case NodeKind.VARIABLE: {
+        let declarations = (<VariableStatement>node).declarations;
+        for (let i = 0, k = declarations.length; i < k; ++i) {
+          this.visit(declarations[i]);
+        }
+        break;
+      }
+      case NodeKind.VOID: break;
+      case NodeKind.WHILE: {
+        this.visit((<WhileStatement>node).statement);
+        break;
+      }
+      case NodeKind.FUNCTIONDECLARATION: {
+        let declaration = <FunctionDeclaration>node;
+        // We are only interested in the name here, not the contents
+        let name = declaration.name;
+        if (name.text.length) {
+          let functionScope = this.functionScope;
+          if (functionScope.has(name.text)) {
+            this.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              name.range, name.text
+            );
+          } else {
+            functionScope.set(name.text, declaration);
+          }
+        }
+        break;
+      }
+      case NodeKind.VARIABLEDECLARATION: {
+        let declaration = <VariableDeclaration>node;
+        let name = declaration.name;
+        let isVar = !(declaration.flags & (CommonFlags.LET | CommonFlags.CONST));
+        if (isVar) {
+          let functionScope = this.functionScope;
+          if (functionScope.has(name.text)) {
+            this.error(
+              DiagnosticCode.Duplicate_identifier_0,
+              name.range, name.text
+            );
+          } else {
+            functionScope.set(name.text, declaration);
+          }
+        } else {
+          let blockScopes = this.blockScopes;
+          let blockScope = blockScopes[assert(blockScopes.length) - 1];
+          if (blockScope.has(name.text)) {
+            this.error(
+              DiagnosticCode.Cannot_redeclare_block_scoped_variable_0,
+              name.range, name.text
+            );
+          } else {
+            blockScope.set(name.text, declaration);
+          }
+        }
+        break;
+      }
+      case NodeKind.SWITCHCASE: {
+        let statements = (<SwitchCase>node).statements;
+        for (let i = 0, k = statements.length; i < k; ++i) {
+          this.visit(statements[i]);
+        }
+        break;
+      }
+      default: assert(false);
+    }
+  }
 }

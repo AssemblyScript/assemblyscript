@@ -67,7 +67,7 @@ tests.forEach(filename => {
   var parser = program.parser;
   var sourceText = fs.readFileSync(basedir + "/" + filename, { encoding: "utf8" }).replace(/\r?\n/g, "\n");
   parser.parseFile(sourceText, filename, true);
-  var serializedSourceText = ASTBuilder.build(program.sources[0]);
+  var serializedSourceText = ASTBuilder.build(program.sources[0], program.diagnostics);
   var actual = serializedSourceText + parser.diagnostics.map(diagnostic => "// " + diagnostic +"\n").join("");
   var fixture = filename + ".fixture.ts";
 
