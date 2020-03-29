@@ -144,9 +144,6 @@
   i32.const 8
   i32.store
   i32.const 1088
-  i64.const 0
-  i64.store
-  i32.const 1088
   local.get $2
   i64.store
   i32.const 1088

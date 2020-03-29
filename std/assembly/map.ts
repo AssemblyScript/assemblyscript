@@ -64,14 +64,14 @@ function ENTRY_SIZE<K,V>(): usize {
 export class Map<K,V> {
 
   // buckets holding references to the respective first entry within
-  private buckets: ArrayBuffer; // usize[bucketsMask + 1]
-  private bucketsMask: u32;
+  private buckets!: ArrayBuffer; // usize[bucketsMask + 1]
+  private bucketsMask!: u32;
 
   // entries in insertion order
-  private entries: ArrayBuffer; // MapEntry<K,V>[entriesCapacity]
-  private entriesCapacity: i32;
-  private entriesOffset: i32;
-  private entriesCount: i32;
+  private entries!: ArrayBuffer; // MapEntry<K,V>[entriesCapacity]
+  private entriesCapacity!: i32;
+  private entriesOffset!: i32;
+  private entriesCount!: i32;
 
   get size(): i32 { return this.entriesCount; }
 

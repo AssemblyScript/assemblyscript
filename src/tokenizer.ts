@@ -1567,11 +1567,11 @@ export class Tokenizer extends DiagnosticEmitter {
 /** Tokenizer state as returned by {@link Tokenizer#mark} and consumed by {@link Tokenizer#reset}. */
 export class State {
   /** Current position. */
-  pos: i32;
+  pos!: i32;
   /** Current token. */
-  token: Token;
+  token!: Token;
   /** Current token's position. */
-  tokenPos: i32;
+  tokenPos!: i32;
 }
 
 // Reusable state object to reduce allocations

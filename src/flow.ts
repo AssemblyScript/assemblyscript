@@ -189,43 +189,36 @@ export const enum ConditionKind {
 export class Flow {
 
   /** Parent flow. */
-  parent: Flow | null;
+  parent: Flow | null = null;
   /** Flow flags indicating specific conditions. */
-  flags: FlowFlags;
+  flags: FlowFlags = FlowFlags.NONE;
   /** Function this flow belongs to. */
-  parentFunction: Function;
+  parentFunction!: Function;
   /** The label we break to when encountering a continue statement. */
-  continueLabel: string | null;
+  continueLabel: string | null = null;
   /** The label we break to when encountering a break statement. */
-  breakLabel: string | null;
+  breakLabel: string | null = null;
   /** The current return type. */
-  returnType: Type;
+  returnType!: Type;
   /** The current contextual type arguments. */
-  contextualTypeArguments: Map<string,Type> | null;
+  contextualTypeArguments: Map<string,Type> | null = null;
   /** Scoped local variables. */
   scopedLocals: Map<string,Local> | null = null;
   /** Local flags. */
-  localFlags: LocalFlags[];
+  localFlags: LocalFlags[] = [];
   /** Field flags. */
   fieldFlags: Map<string, FieldFlags> | null = null;
   /** Function being inlined, when inlining. */
-  inlineFunction: Function | null;
+  inlineFunction: Function | null = null;
   /** The label we break to when encountering a return statement, when inlining. */
-  inlineReturnLabel: string | null;
+  inlineReturnLabel: string | null = null;
 
   /** Creates the parent flow of the specified function. */
   static create(parentFunction: Function): Flow {
     var flow = new Flow();
-    flow.parent = null;
-    flow.flags = FlowFlags.NONE;
     flow.parentFunction = parentFunction;
-    flow.continueLabel = null;
-    flow.breakLabel = null;
     flow.returnType = parentFunction.signature.returnType;
     flow.contextualTypeArguments = parentFunction.contextualTypeArguments;
-    flow.localFlags = [];
-    flow.inlineFunction = null;
-    flow.inlineReturnLabel = null;
 
     if (flow.actualFunction.is(CommonFlags.CONSTRUCTOR)) {
       flow.fieldFlags = new Map();
@@ -240,6 +233,7 @@ export class Flow {
     flow.inlineReturnLabel = inlineFunction.internalName + "|inlined." + (inlineFunction.nextInlineId++).toString();
     flow.returnType = inlineFunction.signature.returnType;
     flow.contextualTypeArguments = inlineFunction.contextualTypeArguments;
+    flow.fieldFlags = inlineFunction.flow.fieldFlags;
     return flow;
   }
 
@@ -536,14 +530,16 @@ export class Flow {
     localFlags[index] = flags & ~flag;
   }
 
+  /** Associates the given flag with the given field name */
   setFieldFlag(name: string, flag: FieldFlags): void {
-    let fieldFlags = this.fieldFlags;
+    var fieldFlags = this.fieldFlags;
     if (fieldFlags) {
       const flags = fieldFlags.has(name) ? assert(fieldFlags.get(name)) : FieldFlags.NONE;
       fieldFlags.set(name, flags | flag);
     }
   }
 
+  /** Tests if the given field name and flag exist */
   isFieldFlag(name: string, flag: FieldFlags): bool {
     const fieldFlags = this.fieldFlags;
 
@@ -845,6 +841,11 @@ export class Flow {
     this.mergeFieldFlags(left, right);
   }
 
+  /**
+   * Merges the fields flags of the given flows
+   * into the current flow. Flags will only be merged
+   * if both flows definitely define the flags.
+   */
   mergeFieldFlags(left: Flow, right: Flow): void {
     if (left.fieldFlags !== null &&
       right.fieldFlags !== null &&
@@ -870,6 +871,7 @@ export class Flow {
     }
   }
 
+  /** Inherits the fields flags of the given flow into the current flow */
   inheritFieldFlags(other: Flow): void {
     if (
       this.fieldFlags !== null &&
@@ -884,7 +886,7 @@ export class Flow {
         const key = otherKeys[i];
         const otherValue = otherValues[i];
         if (otherValue & FieldFlags.INITIALIZED) {
-          currentFieldFlags.set(key, FieldFlags.INITIALIZED)
+          currentFieldFlags.set(key, FieldFlags.INITIALIZED);
         }
       }
     }

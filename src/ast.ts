@@ -114,9 +114,9 @@ export enum NodeKind {
 /** Base class of all nodes. */
 export abstract class Node {
   /** Node kind indicator. */
-  kind: NodeKind;
+  kind!: NodeKind;
   /** Source range. */
-  range: Range;
+  range!: Range;
 
   // types
 
@@ -1173,7 +1173,7 @@ export abstract class TypeNode extends Node {
   // kind varies
 
   /** Whether nullable or not. */
-  isNullable: bool;
+  isNullable!: bool;
 
   /** Tests if this type has a generic component matching one of the given type parameters. */
   hasGenericComponent(typeParameterNodes: TypeParameterNode[]): bool {
@@ -1211,17 +1211,17 @@ export abstract class TypeNode extends Node {
 /** Represents a type name. */
 export class TypeName extends Node {
   /** Identifier of this part. */
-  identifier: IdentifierExpression;
+  identifier!: IdentifierExpression;
   /** Next part of the type name or `null` if this is the last part. */
-  next: TypeName | null;
+  next: TypeName | null = null;
 }
 
 /** Represents a named type. */
 export class NamedTypeNode extends TypeNode {
   /** Type name. */
-  name: TypeName;
+  name!: TypeName;
   /** Type argument references. */
-  typeArguments: TypeNode[] | null;
+  typeArguments: TypeNode[] | null = null;
 
   get hasTypeArguments(): bool {
     var typeArguments = this.typeArguments;
@@ -1232,21 +1232,21 @@ export class NamedTypeNode extends TypeNode {
 /** Represents a function type. */
 export class FunctionTypeNode extends TypeNode {
   /** Accepted parameters. */
-  parameters: ParameterNode[];
+  parameters!: ParameterNode[];
   /** Return type. */
-  returnType: TypeNode;
+  returnType!: TypeNode;
   /** Explicitly provided this type, if any. */
-  explicitThisType: NamedTypeNode | null; // can't be a function
+  explicitThisType: NamedTypeNode | null = null; // can't be a function
 }
 
 /** Represents a type parameter. */
 export class TypeParameterNode extends Node {
   /** Identifier reference. */
-  name: IdentifierExpression;
+  name!: IdentifierExpression;
   /** Extended type reference, if any. */
-  extendsType: NamedTypeNode | null; // can't be a function
+  extendsType: NamedTypeNode | null = null; // can't be a function
   /** Default type if omitted, if any. */
-  defaultType: NamedTypeNode | null; // can't be a function
+  defaultType: NamedTypeNode | null = null; // can't be a function
 }
 
 /** Represents the kind of a parameter. */
@@ -1262,13 +1262,13 @@ export enum ParameterKind {
 /** Represents a function parameter. */
 export class ParameterNode extends Node {
   /** Parameter kind. */
-  parameterKind: ParameterKind;
+  parameterKind!: ParameterKind;
   /** Parameter name. */
-  name: IdentifierExpression;
+  name!: IdentifierExpression;
   /** Parameter type. */
-  type: TypeNode;
+  type!: TypeNode;
   /** Initializer expression, if present. */
-  initializer: Expression | null;
+  initializer: Expression | null = null;
   /** Implicit field declaration, if applicable. */
   implicitFieldDeclaration: FieldDeclaration | null = null;
   /** Common flags indicating specific traits. */
@@ -1375,11 +1375,11 @@ export namespace DecoratorKind {
 /** Represents a decorator. */
 export class DecoratorNode extends Node {
   /** Built-in kind, if applicable. */
-  decoratorKind: DecoratorKind;
+  decoratorKind!: DecoratorKind;
   /** Name expression. */
-  name: Expression;
+  name!: Expression;
   /** Argument expressions. */
-  arguments: Expression[] | null;
+  arguments: Expression[] | null = null;
 }
 
 /** Comment kinds. */
@@ -1395,9 +1395,9 @@ export enum CommentKind {
 /** Represents a comment. */
 export class CommentNode extends Node {
   /** Comment kind. */
-  commentKind: CommentKind;
+  commentKind!: CommentKind;
   /** Comment text. */
-  text: string;
+  text!: string;
 }
 
 // expressions
@@ -1408,9 +1408,9 @@ export abstract class Expression extends Node { }
 /** Represents an identifier expression. */
 export class IdentifierExpression extends Expression {
   /** Textual name. */
-  text: string;
+  text!: string;
   /** Whether quoted or not. */
-  isQuoted: bool;
+  isQuoted!: bool;
 }
 
 /** Indicates the kind of a literal. */
@@ -1426,13 +1426,13 @@ export enum LiteralKind {
 /** Base class of all literal expressions. */
 export abstract class LiteralExpression extends Expression {
   /** Specific literal kind. */
-  literalKind: LiteralKind;
+  literalKind!: LiteralKind;
 }
 
 /** Represents an `[]` literal expression. */
 export class ArrayLiteralExpression extends LiteralExpression {
   /** Nested element expressions. */
-  elementExpressions: (Expression | null)[];
+  elementExpressions!: (Expression | null)[];
 }
 
 /** Indicates the kind of an assertion. */
@@ -1446,31 +1446,31 @@ export enum AssertionKind {
 /** Represents an assertion expression. */
 export class AssertionExpression extends Expression {
   /** Specific kind of this assertion. */
-  assertionKind: AssertionKind;
+  assertionKind!: AssertionKind;
   /** Expression being asserted. */
-  expression: Expression;
+  expression!: Expression;
   /** Target type. */
-  toType: TypeNode | null;
+  toType: TypeNode | null = null;
 }
 
 /** Represents a binary expression. */
 export class BinaryExpression extends Expression {
   /** Operator token. */
-  operator: Token;
+  operator!: Token;
   /** Left-hand side expression */
-  left: Expression;
+  left!: Expression;
   /** Right-hand side expression. */
-  right: Expression;
+  right!: Expression;
 }
 
 /** Represents a call expression. */
 export class CallExpression extends Expression {
   /** Called expression. Usually an identifier or property access expression. */
-  expression: Expression;
+  expression!: Expression;
   /** Provided type arguments. */
-  typeArguments: TypeNode[] | null;
+  typeArguments: TypeNode[] | null = null;
   /** Provided arguments. */
-  arguments: Expression[];
+  arguments!: Expression[];
 
   /** Gets the type arguments range for reporting. */
   get typeArgumentsRange(): Range {
@@ -1498,13 +1498,13 @@ export class CallExpression extends Expression {
 /** Represents a class expression using the 'class' keyword. */
 export class ClassExpression extends Expression {
   /** Inline class declaration. */
-  declaration: ClassDeclaration;
+  declaration!: ClassDeclaration;
 }
 
 /** Represents a comma expression composed of multiple expressions. */
 export class CommaExpression extends Expression {
   /** Sequential expressions. */
-  expressions: Expression[];
+  expressions!: Expression[];
 }
 
 /** Represents a `constructor` expression. */
@@ -1514,45 +1514,45 @@ export class ConstructorExpression extends IdentifierExpression {
 /** Represents an element access expression, e.g., array access. */
 export class ElementAccessExpression extends Expression {
   /** Expression being accessed. */
-  expression: Expression;
+  expression!: Expression;
   /** Element of the expression being accessed. */
-  elementExpression: Expression;
+  elementExpression!: Expression;
 }
 
 /** Represents a float literal expression. */
 export class FloatLiteralExpression extends LiteralExpression {
   /** Float value. */
-  value: f64;
+  value!: f64;
 }
 
 /** Represents a function expression using the 'function' keyword. */
 export class FunctionExpression extends Expression {
   /** Inline function declaration. */
-  declaration: FunctionDeclaration;
+  declaration!: FunctionDeclaration;
 }
 
 /** Represents an `instanceof` expression. */
 export class InstanceOfExpression extends Expression {
   /** Expression being asserted. */
-  expression: Expression;
+  expression!: Expression;
   /** Type to test for. */
-  isType: TypeNode;
+  isType!: TypeNode;
 }
 
 /** Represents an integer literal expression. */
 export class IntegerLiteralExpression extends LiteralExpression {
   /** Integer value. */
-  value: i64;
+  value!: i64;
 }
 
 /** Represents a `new` expression. Like a call but with its own kind. */
 export class NewExpression extends Expression {
   /** Type being constructed. */
-  typeName: TypeName;
+  typeName!: TypeName;
   /** Provided type arguments. */
-  typeArguments: TypeNode[] | null;
+  typeArguments: TypeNode[] | null = null;
   /** Provided arguments. */
-  arguments: Expression[];
+  arguments!: Expression[];
 
   /** Gets the type arguments range for reporting. */
   get typeArgumentsRange(): Range {
@@ -1582,47 +1582,47 @@ export class NullExpression extends IdentifierExpression {
 /** Represents an object literal expression. */
 export class ObjectLiteralExpression extends LiteralExpression {
   /** Field names. */
-  names: IdentifierExpression[];
+  names!: IdentifierExpression[];
   /** Field values. */
-  values: Expression[];
+  values!: Expression[];
 }
 
 /** Represents a parenthesized expression. */
 export class ParenthesizedExpression extends Expression {
   /** Expression in parenthesis. */
-  expression: Expression;
+  expression!: Expression;
 }
 
 /** Represents a property access expression. */
 export class PropertyAccessExpression extends Expression {
   /** Expression being accessed. */
-  expression: Expression;
+  expression!: Expression;
   /** Property of the expression being accessed. */
-  property: IdentifierExpression;
+  property!: IdentifierExpression;
 }
 
 /** Represents a regular expression literal expression. */
 export class RegexpLiteralExpression extends LiteralExpression {
   /** Regular expression pattern. */
-  pattern: string;
+  pattern!: string;
   /** Regular expression flags. */
-  patternFlags: string;
+  patternFlags!: string;
 }
 
 /** Represents a ternary expression, i.e., short if notation. */
 export class TernaryExpression extends Expression {
   /** Condition expression. */
-  condition: Expression;
+  condition!: Expression;
   /** Expression executed when condition is `true`. */
-  ifThen: Expression;
+  ifThen!: Expression;
   /** Expression executed when condition is `false`. */
-  ifElse: Expression;
+  ifElse!: Expression;
 }
 
 /** Represents a string literal expression. */
 export class StringLiteralExpression extends LiteralExpression {
   /** String value without quotes. */
-  value: string;
+  value!: string;
 }
 
 /** Represents a `super` expression. */
@@ -1644,9 +1644,9 @@ export class FalseExpression extends IdentifierExpression {
 /** Base class of all unary expressions. */
 export abstract class UnaryExpression extends Expression {
   /** Operator token. */
-  operator: Token;
+  operator!: Token;
   /** Operand expression. */
-  operand: Expression;
+  operand!: Expression;
 }
 
 /** Represents a unary postfix expression, e.g. a postfix increment. */
@@ -1763,7 +1763,7 @@ export class Source extends Node {
 /** Base class of all declaration statements. */
 export abstract class DeclarationStatement extends Statement {
   /** Simple name being declared. */
-  name: IdentifierExpression;
+  name!: IdentifierExpression;
   /** Array of decorators. */
   decorators: DecoratorNode[] | null = null;
   /** Common flags indicating specific traits. */
@@ -1780,41 +1780,41 @@ export abstract class DeclarationStatement extends Statement {
 /** Represents an index signature declaration. */
 export class IndexSignatureDeclaration extends DeclarationStatement {
   /** Key type. */
-  keyType: NamedTypeNode;
+  keyType!: NamedTypeNode;
   /** Value type. */
-  valueType: TypeNode;
+  valueType!: TypeNode;
 }
 
 /** Base class of all variable-like declaration statements. */
 export abstract class VariableLikeDeclarationStatement extends DeclarationStatement {
   /** Variable type. */
-  type: TypeNode | null;
+  type: TypeNode | null = null;
   /** Variable initializer. */
-  initializer: Expression | null;
+  initializer: Expression | null = null;
 }
 
 /** Represents a block statement. */
 export class BlockStatement extends Statement {
   /** Contained statements. */
-  statements: Statement[];
+  statements!: Statement[];
 }
 
 /** Represents a `break` statement. */
 export class BreakStatement extends Statement {
   /** Target label, if applicable. */
-  label: IdentifierExpression | null;
+  label: IdentifierExpression | null = null;
 }
 
 /** Represents a `class` declaration. */
 export class ClassDeclaration extends DeclarationStatement {
   /** Accepted type parameters. */
-  typeParameters: TypeParameterNode[] | null;
+  typeParameters: TypeParameterNode[] | null = null;
   /** Base class type being extended, if any. */
-  extendsType: NamedTypeNode | null; // can't be a function
+  extendsType: NamedTypeNode | null = null; // can't be a function
   /** Interface types being implemented, if any. */
-  implementsTypes: NamedTypeNode[] | null; // can't be functions
+  implementsTypes: NamedTypeNode[] | null = null; // can't be functions
   /** Class member declarations. */
-  members: DeclarationStatement[];
+  members!: DeclarationStatement[];
 
   get isGeneric(): bool {
     var typeParameters = this.typeParameters;
@@ -1825,15 +1825,15 @@ export class ClassDeclaration extends DeclarationStatement {
 /** Represents a `continue` statement. */
 export class ContinueStatement extends Statement {
   /** Target label, if applicable. */
-  label: IdentifierExpression | null;
+  label: IdentifierExpression | null = null;
 }
 
 /** Represents a `do` statement. */
 export class DoStatement extends Statement {
   /** Statement being looped over. */
-  statement: Statement;
+  statement!: Statement;
   /** Condition when to repeat. */
-  condition: Expression;
+  condition!: Expression;
 }
 
 /** Represents an empty statement, i.e., a semicolon terminating nothing. */
@@ -1843,53 +1843,53 @@ export class EmptyStatement extends Statement {
 /** Represents an `enum` declaration. */
 export class EnumDeclaration extends DeclarationStatement {
   /** Enum value declarations. */
-  values: EnumValueDeclaration[];
+  values!: EnumValueDeclaration[];
 }
 
 /** Represents a value of an `enum` declaration. */
 export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
   /** Value expression. */
-  value: Expression | null;
+  value: Expression | null = null;
 }
 
 /** Represents an `export import` statement of an interface. */
 export class ExportImportStatement extends Statement {
   /** Identifier being imported. */
-  name: IdentifierExpression;
+  name!: IdentifierExpression;
   /** Identifier being exported. */
-  externalName: IdentifierExpression;
+  externalName!: IdentifierExpression;
 }
 
 /** Represents a member of an `export` statement. */
 export class ExportMember extends Node {
   /** Local identifier. */
-  localName: IdentifierExpression;
+  localName!: IdentifierExpression;
   /** Exported identifier. */
-  exportedName: IdentifierExpression;
+  exportedName!: IdentifierExpression;
 }
 
 /** Represents an `export` statement. */
 export class ExportStatement extends Statement {
   /** Array of members if a set of named exports, or `null` if a file export. */
-  members: ExportMember[] | null;
+  members: ExportMember[] | null = null;
   /** Path being exported from, if applicable. */
-  path: StringLiteralExpression | null;
+  path: StringLiteralExpression | null = null;
   /** Internal path being referenced, if `path` is set. */
-  internalPath: string | null;
+  internalPath: string | null = null;
   /** Whether this is a declared export. */
-  isDeclare: bool;
+  isDeclare!: bool;
 }
 
 /** Represents an `export default` statement. */
 export class ExportDefaultStatement extends Statement {
   /** Declaration being exported as default. */
-  declaration: DeclarationStatement;
+  declaration!: DeclarationStatement;
 }
 
 /** Represents an expression that is used as a statement. */
 export class ExpressionStatement extends Statement {
   /** Expression being used as a statement.*/
-  expression: Expression;
+  expression!: Expression;
 }
 
 /** Represents a field declaration within a `class`. */
@@ -1901,23 +1901,23 @@ export class FieldDeclaration extends VariableLikeDeclarationStatement {
 /** Represents a `for` statement. */
 export class ForStatement extends Statement {
   /** Initializer statement, if present. Either a `VariableStatement` or `ExpressionStatement`. */
-  initializer: Statement | null;
+  initializer: Statement | null = null;
   /** Condition expression, if present. */
-  condition: Expression | null;
+  condition: Expression | null = null;
   /** Incrementor expression, if present. */
-  incrementor: Expression | null;
+  incrementor: Expression | null = null;
   /** Statement being looped over. */
-  statement: Statement;
+  statement!: Statement;
 }
 
 /** Represents a `for..of` statement. */
 export class ForOfStatement extends Statement {
   /** Variable statement. Either a `VariableStatement` or `ExpressionStatement` of `IdentifierExpression`. */
-  variable: Statement;
+  variable!: Statement;
   /** Iterable expression being iterated. */
-  iterable: Expression;
+  iterable!: Expression;
   /** Statement being looped over. */
-  statement: Statement;
+  statement!: Statement;
 }
 
 /** Indicates the kind of an array function. */
@@ -1933,13 +1933,13 @@ export const enum ArrowKind {
 /** Represents a `function` declaration. */
 export class FunctionDeclaration extends DeclarationStatement {
   /** Type parameters, if any. */
-  typeParameters: TypeParameterNode[] | null;
+  typeParameters: TypeParameterNode[] | null = null;
   /** Function signature. */
-  signature: FunctionTypeNode;
+  signature!: FunctionTypeNode;
   /** Body statement. Usually a block. */
-  body: Statement | null;
+  body: Statement | null = null;
   /** Arrow function kind, if applicable. */
-  arrowKind: ArrowKind;
+  arrowKind!: ArrowKind;
 
   get isGeneric(): bool {
     var typeParameters = this.typeParameters;
@@ -1964,29 +1964,29 @@ export class FunctionDeclaration extends DeclarationStatement {
 /** Represents an `if` statement. */
 export class IfStatement extends Statement {
   /** Condition. */
-  condition: Expression;
+  condition!: Expression;
   /** Statement executed when condition is `true`. */
-  ifTrue: Statement;
+  ifTrue!: Statement;
   /** Statement executed when condition is `false`. */
-  ifFalse: Statement | null;
+  ifFalse: Statement | null = null;
 }
 
 /** Represents an `import` declaration part of an {@link ImportStatement}. */
 export class ImportDeclaration extends DeclarationStatement {
   /** Identifier being imported. */
-  foreignName: IdentifierExpression;
+  foreignName!: IdentifierExpression;
 }
 
 /** Represents an `import` statement. */
 export class ImportStatement extends Statement {
   /** Array of member declarations or `null` if an asterisk import. */
-  declarations: ImportDeclaration[] | null;
+  declarations: ImportDeclaration[] | null = null;
   /** Name of the local namespace, if an asterisk import. */
-  namespaceName: IdentifierExpression | null;
+  namespaceName: IdentifierExpression | null = null;
   /** Path being imported from. */
-  path: StringLiteralExpression;
+  path!: StringLiteralExpression;
   /** Internal path being referenced. */
-  internalPath: string;
+  internalPath!: string;
 }
 
 /** Represents an `interfarce` declaration. */
@@ -2000,55 +2000,55 @@ export class MethodDeclaration extends FunctionDeclaration {
 /** Represents a `namespace` declaration. */
 export class NamespaceDeclaration extends DeclarationStatement {
   /** Array of namespace members. */
-  members: Statement[];
+  members!: Statement[];
 }
 
 /** Represents a `return` statement. */
 export class ReturnStatement extends Statement {
   /** Value expression being returned, if present. */
-  value: Expression | null;
+  value: Expression | null = null;
 }
 
 /** Represents a single `case` within a `switch` statement. */
 export class SwitchCase extends Node {
   /** Label expression. `null` indicates the default case. */
-  label: Expression | null;
+  label: Expression | null = null;
   /** Contained statements. */
-  statements: Statement[];
+  statements!: Statement[];
 }
 
 /** Represents a `switch` statement. */
 export class SwitchStatement extends Statement {
   /** Condition expression. */
-  condition: Expression;
+  condition!: Expression;
   /** Contained cases. */
-  cases: SwitchCase[];
+  cases!: SwitchCase[];
 }
 
 /** Represents a `throw` statement. */
 export class ThrowStatement extends Statement {
   /** Value expression being thrown. */
-  value: Expression;
+  value!: Expression;
 }
 
 /** Represents a `try` statement. */
 export class TryStatement extends Statement {
   /** Contained statements. */
-  statements: Statement[];
+  statements!: Statement[];
   /** Exception variable name, if a `catch` clause is present. */
-  catchVariable: IdentifierExpression | null;
+  catchVariable: IdentifierExpression | null = null;
   /** Statements being executed on catch, if a `catch` clause is present. */
-  catchStatements: Statement[] | null;
+  catchStatements: Statement[] | null = null;
   /** Statements being executed afterwards, if a `finally` clause is present. */
-  finallyStatements: Statement[] | null;
+  finallyStatements: Statement[] | null = null;
 }
 
 /** Represents a `type` declaration. */
 export class TypeDeclaration extends DeclarationStatement {
   /** Type parameters, if any. */
-  typeParameters: TypeParameterNode[] | null;
+  typeParameters: TypeParameterNode[] | null = null;
   /** Type being aliased. */
-  type: TypeNode;
+  type!: TypeNode;
 }
 
 /** Represents a variable declaration part of a {@link VariableStatement}. */
@@ -2058,23 +2058,23 @@ export class VariableDeclaration extends VariableLikeDeclarationStatement {
 /** Represents a variable statement wrapping {@link VariableDeclaration}s. */
 export class VariableStatement extends Statement {
   /** Array of decorators. */
-  decorators: DecoratorNode[] | null;
+  decorators: DecoratorNode[] | null = null;
   /** Array of member declarations. */
-  declarations: VariableDeclaration[];
+  declarations!: VariableDeclaration[];
 }
 
 /** Represents a void statement dropping an expression's value. */
 export class VoidStatement extends Statement {
   /** Expression being dropped. */
-  expression: Expression;
+  expression!: Expression;
 }
 
 /** Represents a `while` statement. */
 export class WhileStatement extends Statement {
   /** Condition expression. */
-  condition: Expression;
+  condition!: Expression;
   /** Statement being looped over. */
-  statement: Statement;
+  statement!: Statement;
 }
 
 /** Finds the first decorator matching the specified kind. */

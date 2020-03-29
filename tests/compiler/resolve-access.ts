@@ -4,7 +4,7 @@ export function arrayAccess(): string {
 }
 
 class Container {
-  foo: u64;
+  foo!: u64;
 
   toU32(): u32 {
     return this.foo as u32;

@@ -468,8 +468,8 @@ export enum SIMDLoadOp {
 
 export class MemorySegment {
 
-  buffer: Uint8Array;
-  offset: i64;
+  buffer!: Uint8Array;
+  offset!: i64;
 
   static create(buffer: Uint8Array, offset: i64): MemorySegment {
     var segment = new MemorySegment();
@@ -481,9 +481,9 @@ export class MemorySegment {
 
 export class Module {
 
-  ref: ModuleRef;
+  ref!: ModuleRef;
 
-  private lit: usize;
+  private lit!: usize;
 
   static create(): Module {
     var module = new Module();
@@ -1896,8 +1896,8 @@ export function getEventResults(event: EventRef): NativeType {
 
 export class Relooper {
 
-  module: Module;
-  ref: RelooperRef;
+  module!: Module;
+  ref!: RelooperRef;
 
   static create(module: Module): Relooper {
     var relooper = new Relooper();
@@ -2141,9 +2141,9 @@ export function readString(ptr: usize): string | null {
 /** Result structure of {@link Module#toBinary}. */
 export class BinaryModule {
   /** WebAssembly binary. */
-  output: Uint8Array;
+  output!: Uint8Array;
   /** Source map, if generated. */
-  sourceMap: string | null;
+  sourceMap: string | null = null;
 }
 
 /** Tests if an expression needs an explicit 'unreachable' when it is the terminating statement. */

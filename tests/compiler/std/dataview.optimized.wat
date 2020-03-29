@@ -1,8 +1,8 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
@@ -1112,84 +1112,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 15 ;) (param $0 i32) (result i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  i32.const 8
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.tee $2
-  i32.const 0
-  i32.store8
-  local.get $2
-  i32.const 4
-  i32.add
-  local.tee $1
-  i32.const 0
-  i32.store8 offset=3
-  local.get $2
-  i32.const 0
-  i32.store8 offset=1
-  local.get $2
-  i32.const 0
-  i32.store8 offset=2
-  local.get $1
-  i32.const 0
-  i32.store8 offset=2
-  local.get $1
-  i32.const 0
-  i32.store8 offset=1
-  local.get $2
-  i32.const 0
-  i32.store8 offset=3
-  local.get $1
-  i32.const 0
-  i32.store8
-  local.get $0
-  i32.eqz
-  if
-   i32.const 12
-   i32.const 2
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   local.set $0
-  end
-  local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
-  local.get $2
-  local.set $1
-  local.get $2
-  local.get $0
-  i32.load
-  local.tee $3
-  i32.ne
-  if
-   local.get $1
-   call $~lib/rt/pure/__retain
-   local.set $1
-   local.get $3
-   call $~lib/rt/pure/__release
-  end
-  local.get $0
-  local.get $1
-  i32.store
-  local.get $0
-  local.get $2
-  i32.store offset=4
-  local.get $0
-  i32.const 8
-  i32.store offset=8
-  local.get $0
- )
- (func $~lib/typedarray/Uint8Array#__set (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8Array#__set (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1209,7 +1132,7 @@
   local.get $2
   i32.store8
  )
- (func $~lib/dataview/DataView#constructor (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1233,23 +1156,14 @@
    call $~lib/builtins/abort
    unreachable
   end
+  local.get $0
+  local.set $3
+  local.get $0
   i32.const 12
   i32.const 4
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $4
-  i32.const 0
-  i32.store
-  local.get $4
-  i32.const 0
-  i32.store offset=4
-  local.get $4
-  i32.const 0
-  i32.store offset=8
-  local.get $0
-  local.set $3
-  local.get $0
-  local.get $4
   i32.load
   local.tee $5
   i32.ne
@@ -1273,14 +1187,14 @@
   i32.store offset=8
   local.get $4
  )
- (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 18 ;) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#get:byteOffset (; 17 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load
   i32.sub
  )
- (func $~lib/polyfills/bswap<u32> (; 19 ;) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u32> (; 18 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const -16711936
   i32.and
@@ -1293,7 +1207,7 @@
   i32.rotr
   i32.or
  )
- (func $~lib/dataview/DataView#getFloat32 (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
+ (func $~lib/dataview/DataView#getFloat32 (; 19 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result f32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1329,7 +1243,7 @@
    f32.reinterpret_i32
   end
  )
- (func $~lib/polyfills/bswap<u64> (; 21 ;) (param $0 i64) (result i64)
+ (func $~lib/polyfills/bswap<u64> (; 20 ;) (param $0 i64) (result i64)
   local.get $0
   i64.const 8
   i64.shr_u
@@ -1355,7 +1269,7 @@
   i64.const 32
   i64.rotr
  )
- (func $~lib/dataview/DataView#getFloat64 (; 22 ;) (param $0 i32) (param $1 i32) (result f64)
+ (func $~lib/dataview/DataView#getFloat64 (; 21 ;) (param $0 i32) (param $1 i32) (result f64)
   i32.const 8
   local.get $0
   i32.load offset=8
@@ -1381,7 +1295,7 @@
    f64.reinterpret_i64
   end
  )
- (func $~lib/dataview/DataView#getInt8 (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt8 (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1400,7 +1314,7 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/polyfills/bswap<i16> (; 24 ;) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<i16> (; 23 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.shl
@@ -1413,7 +1327,7 @@
   i32.shl
   i32.or
  )
- (func $~lib/dataview/DataView#getInt16 (; 25 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt16 (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1447,7 +1361,7 @@
   end
   local.get $0
  )
- (func $~lib/dataview/DataView#getInt32 (; 26 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getInt32 (; 25 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1481,7 +1395,7 @@
   end
   local.get $0
  )
- (func $~lib/dataview/DataView#getInt64 (; 27 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/dataview/DataView#getInt64 (; 26 ;) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   i32.const 8
   local.get $0
@@ -1507,7 +1421,7 @@
    call $~lib/polyfills/bswap<u64>
   end
  )
- (func $~lib/dataview/DataView#getUint8 (; 28 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint8 (; 27 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1526,7 +1440,7 @@
   i32.add
   i32.load8_u
  )
- (func $~lib/polyfills/bswap<u16> (; 29 ;) (param $0 i32) (result i32)
+ (func $~lib/polyfills/bswap<u16> (; 28 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 8
   i32.shl
@@ -1537,7 +1451,7 @@
   i32.shr_u
   i32.or
  )
- (func $~lib/dataview/DataView#getUint16 (; 30 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint16 (; 29 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1571,7 +1485,7 @@
   end
   local.get $0
  )
- (func $~lib/dataview/DataView#getUint32 (; 31 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/dataview/DataView#getUint32 (; 30 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   i32.const 31
   i32.shr_u
@@ -1605,7 +1519,7 @@
   end
   local.get $0
  )
- (func $~lib/dataview/DataView#getUint64 (; 32 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/dataview/DataView#getUint64 (; 31 ;) (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   i32.const 8
   local.get $0
@@ -1631,7 +1545,7 @@
    call $~lib/polyfills/bswap<u64>
   end
  )
- (func $~lib/dataview/DataView#setFloat32 (; 33 ;) (param $0 i32) (param $1 f32) (param $2 i32)
+ (func $~lib/dataview/DataView#setFloat32 (; 32 ;) (param $0 i32) (param $1 f32) (param $2 i32)
   i32.const 4
   local.get $0
   i32.load offset=8
@@ -1659,7 +1573,7 @@
    i32.store
   end
  )
- (func $~lib/dataview/DataView#setFloat64 (; 34 ;) (param $0 i32) (param $1 f64) (param $2 i32)
+ (func $~lib/dataview/DataView#setFloat64 (; 33 ;) (param $0 i32) (param $1 f64) (param $2 i32)
   i32.const 8
   local.get $0
   i32.load offset=8
@@ -1687,7 +1601,7 @@
    i64.store
   end
  )
- (func $~lib/dataview/DataView#setInt16 (; 35 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt16 (; 34 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 2
   local.get $0
   i32.load offset=8
@@ -1711,7 +1625,7 @@
   end
   i32.store16
  )
- (func $~lib/dataview/DataView#setInt32 (; 36 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt32 (; 35 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 4
   local.get $0
   i32.load offset=8
@@ -1735,7 +1649,7 @@
   end
   i32.store
  )
- (func $~lib/dataview/DataView#setInt64 (; 37 ;) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/dataview/DataView#setInt64 (; 36 ;) (param $0 i32) (param $1 i64) (param $2 i32)
   i32.const 8
   local.get $0
   i32.load offset=8
@@ -1759,7 +1673,7 @@
   end
   i64.store
  )
- (func $~lib/dataview/DataView#setUint16 (; 38 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint16 (; 37 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 2
   local.get $0
   i32.load offset=8
@@ -1783,7 +1697,7 @@
   end
   i32.store16
  )
- (func $~lib/dataview/DataView#setUint32 (; 39 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint32 (; 38 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 4
   local.get $0
   i32.load offset=8
@@ -1807,7 +1721,7 @@
   end
   i32.store
  )
- (func $~lib/dataview/DataView#setUint64 (; 40 ;) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/dataview/DataView#setUint64 (; 39 ;) (param $0 i32) (param $1 i64) (param $2 i32)
   i32.const 8
   local.get $0
   i32.load offset=8
@@ -1831,59 +1745,121 @@
   end
   i64.store
  )
- (func $~setArgumentsLength (; 41 ;) (param $0 i32)
+ (func $~setArgumentsLength (; 40 ;) (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $start:std/dataview (; 42 ;)
+ (func $start:std/dataview (; 41 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   i32.const 12
   i32.const 3
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
-  call $~lib/arraybuffer/ArrayBufferView#constructor
+  local.set $3
+  i32.const 8
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 0
+  i32.store8
+  local.get $0
+  i32.const 4
+  i32.add
   local.tee $1
+  i32.const 0
+  i32.store8 offset=3
+  local.get $0
+  i32.const 0
+  i32.store8 offset=1
+  local.get $0
+  i32.const 0
+  i32.store8 offset=2
+  local.get $1
+  i32.const 0
+  i32.store8 offset=2
+  local.get $1
+  i32.const 0
+  i32.store8 offset=1
+  local.get $0
+  i32.const 0
+  i32.store8 offset=3
+  local.get $1
+  i32.const 0
+  i32.store8
+  local.get $3
+  i32.eqz
+  if
+   i32.const 12
+   i32.const 2
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $3
+  end
+  local.get $0
+  local.tee $1
+  local.get $3
+  i32.load
+  local.tee $2
+  i32.ne
+  if
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $1
+   local.get $2
+   call $~lib/rt/pure/__release
+  end
+  local.get $3
+  local.get $1
+  i32.store
+  local.get $3
+  local.get $0
+  i32.store offset=4
+  local.get $3
+  i32.const 8
+  i32.store offset=8
+  local.get $3
   i32.const 0
   i32.const 246
   call $~lib/typedarray/Uint8Array#__set
-  local.get $1
+  local.get $3
   i32.const 1
   i32.const 224
   call $~lib/typedarray/Uint8Array#__set
-  local.get $1
+  local.get $3
   i32.const 2
   i32.const 88
   call $~lib/typedarray/Uint8Array#__set
-  local.get $1
+  local.get $3
   i32.const 3
   i32.const 159
   call $~lib/typedarray/Uint8Array#__set
-  local.get $1
+  local.get $3
   i32.const 4
   i32.const 130
   call $~lib/typedarray/Uint8Array#__set
-  local.get $1
+  local.get $3
   i32.const 5
   i32.const 101
   call $~lib/typedarray/Uint8Array#__set
-  local.get $1
+  local.get $3
   i32.const 6
   i32.const 67
   call $~lib/typedarray/Uint8Array#__set
-  local.get $1
+  local.get $3
   i32.const 7
   i32.const 95
   call $~lib/typedarray/Uint8Array#__set
-  local.get $1
+  local.get $3
   i32.load
-  local.get $1
+  local.get $3
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
-  local.get $1
+  local.get $3
   i32.load offset=8
   call $~lib/dataview/DataView#constructor
-  local.tee $0
+  local.tee $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getFloat32
@@ -1897,7 +1873,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getFloat32
@@ -1911,7 +1887,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getFloat32
@@ -1925,7 +1901,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getFloat32
@@ -1939,7 +1915,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getFloat32
@@ -1953,7 +1929,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getFloat32
@@ -1967,7 +1943,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getFloat32
@@ -1981,7 +1957,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getFloat32
@@ -1995,7 +1971,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getFloat32
@@ -2009,7 +1985,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getFloat32
@@ -2023,7 +1999,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/dataview/DataView#getFloat64
   f64.const 7936550095674706383278551e126
@@ -2036,7 +2012,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getFloat64
   f64.const -411777475818852546741639e241
@@ -2049,7 +2025,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getInt8
   i32.const -10
@@ -2062,7 +2038,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/dataview/DataView#getInt8
   i32.const -32
@@ -2075,7 +2051,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   call $~lib/dataview/DataView#getInt8
   i32.const 88
@@ -2088,7 +2064,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   call $~lib/dataview/DataView#getInt8
   i32.const -97
@@ -2101,7 +2077,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   call $~lib/dataview/DataView#getInt8
   i32.const -126
@@ -2114,7 +2090,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 5
   call $~lib/dataview/DataView#getInt8
   i32.const 101
@@ -2127,7 +2103,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 6
   call $~lib/dataview/DataView#getInt8
   i32.const 67
@@ -2140,7 +2116,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 7
   call $~lib/dataview/DataView#getInt8
   i32.const 95
@@ -2153,7 +2129,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt16
@@ -2169,7 +2145,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getInt16
@@ -2185,7 +2161,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getInt16
@@ -2201,7 +2177,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getInt16
@@ -2217,7 +2193,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getInt16
@@ -2233,7 +2209,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 5
   i32.const 1
   call $~lib/dataview/DataView#getInt16
@@ -2249,7 +2225,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 6
   i32.const 1
   call $~lib/dataview/DataView#getInt16
@@ -2265,7 +2241,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt16
@@ -2281,7 +2257,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getInt16
@@ -2297,7 +2273,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getInt16
@@ -2313,7 +2289,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getInt16
@@ -2329,7 +2305,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getInt16
@@ -2345,7 +2321,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 5
   i32.const 0
   call $~lib/dataview/DataView#getInt16
@@ -2361,7 +2337,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 6
   i32.const 0
   call $~lib/dataview/DataView#getInt16
@@ -2377,7 +2353,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt32
@@ -2391,7 +2367,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getInt32
@@ -2405,7 +2381,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getInt32
@@ -2419,7 +2395,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getInt32
@@ -2433,7 +2409,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getInt32
@@ -2447,7 +2423,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt32
@@ -2461,7 +2437,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getInt32
@@ -2475,7 +2451,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getInt32
@@ -2489,7 +2465,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getInt32
@@ -2503,7 +2479,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getInt32
@@ -2517,7 +2493,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/dataview/DataView#getInt64
   i64.const 6864441868736323830
@@ -2530,7 +2506,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getInt64
   i64.const -657428103485373601
@@ -2543,7 +2519,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getUint8
   i32.const 246
@@ -2556,7 +2532,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/dataview/DataView#getUint8
   i32.const 224
@@ -2569,7 +2545,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   call $~lib/dataview/DataView#getUint8
   i32.const 88
@@ -2582,7 +2558,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   call $~lib/dataview/DataView#getUint8
   i32.const 159
@@ -2595,7 +2571,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   call $~lib/dataview/DataView#getUint8
   i32.const 130
@@ -2608,7 +2584,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 5
   call $~lib/dataview/DataView#getUint8
   i32.const 101
@@ -2621,7 +2597,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 6
   call $~lib/dataview/DataView#getUint8
   i32.const 67
@@ -2634,7 +2610,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 7
   call $~lib/dataview/DataView#getUint8
   i32.const 95
@@ -2647,7 +2623,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getUint16
@@ -2663,7 +2639,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getUint16
@@ -2679,7 +2655,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getUint16
@@ -2695,7 +2671,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getUint16
@@ -2711,7 +2687,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getUint16
@@ -2727,7 +2703,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 5
   i32.const 1
   call $~lib/dataview/DataView#getUint16
@@ -2743,7 +2719,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 6
   i32.const 1
   call $~lib/dataview/DataView#getUint16
@@ -2759,7 +2735,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getUint16
@@ -2775,7 +2751,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getUint16
@@ -2791,7 +2767,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getUint16
@@ -2807,7 +2783,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getUint16
@@ -2823,7 +2799,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getUint16
@@ -2839,7 +2815,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 5
   i32.const 0
   call $~lib/dataview/DataView#getUint16
@@ -2855,7 +2831,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 6
   i32.const 0
   call $~lib/dataview/DataView#getUint16
@@ -2871,7 +2847,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getUint32
@@ -2885,7 +2861,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 1
   call $~lib/dataview/DataView#getUint32
@@ -2899,7 +2875,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 1
   call $~lib/dataview/DataView#getUint32
@@ -2913,7 +2889,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 1
   call $~lib/dataview/DataView#getUint32
@@ -2927,7 +2903,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 1
   call $~lib/dataview/DataView#getUint32
@@ -2941,7 +2917,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getUint32
@@ -2955,7 +2931,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   i32.const 0
   call $~lib/dataview/DataView#getUint32
@@ -2969,7 +2945,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 2
   i32.const 0
   call $~lib/dataview/DataView#getUint32
@@ -2983,7 +2959,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 3
   i32.const 0
   call $~lib/dataview/DataView#getUint32
@@ -2997,7 +2973,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 4
   i32.const 0
   call $~lib/dataview/DataView#getUint32
@@ -3011,7 +2987,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/dataview/DataView#getUint64
   i64.const 6864441868736323830
@@ -3024,7 +3000,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getUint64
   i64.const -657428103485373601
@@ -3037,11 +3013,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   f32.const 1.5976661625240943e-18
   i32.const 1
   call $~lib/dataview/DataView#setFloat32
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getFloat32
@@ -3055,11 +3031,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   f32.const 1976281973381696323584
   i32.const 0
   call $~lib/dataview/DataView#setFloat32
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getFloat32
@@ -3073,11 +3049,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   f64.const -1094252199637739024055454e124
   i32.const 1
   call $~lib/dataview/DataView#setFloat64
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/dataview/DataView#getFloat64
   f64.const -1094252199637739024055454e124
@@ -3090,11 +3066,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   f64.const 6.022586634778589e-103
   i32.const 0
   call $~lib/dataview/DataView#setFloat64
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getFloat64
   f64.const 6.022586634778589e-103
@@ -3108,7 +3084,7 @@
    unreachable
   end
   i32.const 0
-  local.get $0
+  local.get $1
   i32.load offset=8
   i32.ge_u
   if
@@ -3119,11 +3095,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.load offset=4
   i32.const 108
   i32.store8
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getInt8
   i32.const 108
@@ -3136,11 +3112,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const -13360
   i32.const 1
   call $~lib/dataview/DataView#setInt16
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt16
@@ -3156,11 +3132,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 14689
   i32.const 0
   call $~lib/dataview/DataView#setInt16
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt16
@@ -3176,11 +3152,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 1204680201
   i32.const 1
   call $~lib/dataview/DataView#setInt32
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getInt32
@@ -3194,11 +3170,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 660673230
   i32.const 0
   call $~lib/dataview/DataView#setInt32
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getInt32
@@ -3212,11 +3188,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i64.const -3290739641816099749
   i32.const 1
   call $~lib/dataview/DataView#setInt64
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/dataview/DataView#getInt64
   i64.const -3290739641816099749
@@ -3229,11 +3205,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i64.const 8178932412950708047
   i32.const 0
   call $~lib/dataview/DataView#setInt64
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getInt64
   i64.const 8178932412950708047
@@ -3247,7 +3223,7 @@
    unreachable
   end
   i32.const 0
-  local.get $0
+  local.get $1
   i32.load offset=8
   i32.ge_u
   if
@@ -3258,11 +3234,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.load offset=4
   i32.const 238
   i32.store8
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getUint8
   i32.const 238
@@ -3275,11 +3251,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 58856
   i32.const 1
   call $~lib/dataview/DataView#setUint16
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getUint16
@@ -3295,11 +3271,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const 60400
   i32.const 0
   call $~lib/dataview/DataView#setUint16
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getUint16
@@ -3315,11 +3291,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const -846805744
   i32.const 1
   call $~lib/dataview/DataView#setUint32
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 1
   call $~lib/dataview/DataView#getUint32
@@ -3333,11 +3309,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i32.const -1510791631
   i32.const 0
   call $~lib/dataview/DataView#setUint32
-  local.get $0
+  local.get $1
   i32.const 0
   i32.const 0
   call $~lib/dataview/DataView#getUint32
@@ -3351,11 +3327,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i64.const 2334704782995986958
   i32.const 1
   call $~lib/dataview/DataView#setUint64
-  local.get $0
+  local.get $1
   i32.const 1
   call $~lib/dataview/DataView#getUint64
   i64.const 2334704782995986958
@@ -3368,11 +3344,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $1
   i64.const -7123186897289856329
   i32.const 0
   call $~lib/dataview/DataView#setUint64
-  local.get $0
+  local.get $1
   i32.const 0
   call $~lib/dataview/DataView#getUint64
   i64.const -7123186897289856329
@@ -3387,19 +3363,21 @@
   end
   i32.const 1
   global.set $~argumentsLength
-  local.get $1
+  local.get $3
   i32.load
-  local.tee $2
-  i32.const 0
-  local.get $2
+  local.tee $0
   i32.const 16
   i32.sub
   i32.load offset=12
-  call $~lib/dataview/DataView#constructor
   local.set $2
   local.get $0
-  call $~lib/rt/pure/__release
+  i32.const 0
   local.get $2
+  call $~lib/dataview/DataView#constructor
+  local.set $0
+  local.get $1
+  call $~lib/rt/pure/__release
+  local.get $0
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
   if
    i32.const 0
@@ -3409,7 +3387,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $0
   i32.load offset=8
   i32.const 8
   i32.ne
@@ -3421,15 +3399,15 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $3
   call $~lib/rt/pure/__release
-  local.get $2
+  local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~start (; 43 ;)
+ (func $~start (; 42 ;)
   call $start:std/dataview
  )
- (func $~lib/rt/pure/decrement (; 44 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 43 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

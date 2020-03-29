@@ -597,19 +597,19 @@ export namespace BuiltinNames {
 /** Builtin compilation context. */
 export class BuiltinContext {
   /** Compiler reference. */
-  compiler: Compiler;
+  compiler!: Compiler;
   /** Prototype being called. */
-  prototype: FunctionPrototype;
+  prototype!: FunctionPrototype;
   /** Provided type arguments. */
-  typeArguments: Type[] | null;
+  typeArguments: Type[] | null = null;
   /** Provided operands. */
-  operands: Expression[];
+  operands!: Expression[];
   /** Contextual type. */
-  contextualType: Type;
+  contextualType!: Type;
   /** Respective call expression. */
-  reportNode: CallExpression;
+  reportNode!: CallExpression;
   /** Whether originating from inline assembly. */
-  contextIsExact: bool;
+  contextIsExact!: bool;
 }
 
 /** Global builtins map. */

@@ -6,6 +6,7 @@
     "noImplicitThis": true,
     "noEmitOnError": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": true,
     "experimentalDecorators": true
   }
 }

@@ -131,18 +131,6 @@
   i32.const 5
   call $~lib/rt/stub/__alloc
   local.tee $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
-  local.get $0
-  i32.const 0
-  i32.store offset=12
-  local.get $0
   i32.load
   drop
   local.get $0

@@ -16,9 +16,9 @@
 @unmanaged
 export class Typeinfo {
   /** Flags describing the shape of this class type. */
-  flags: TypeinfoFlags;
+  flags!: TypeinfoFlags;
   /** Base class id or `0` if none. */
-  base: u32;
+  base!: u32;
 }
 
 /** Runtime type information flags. */

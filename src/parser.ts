@@ -106,7 +106,7 @@ export class Parser extends DiagnosticEmitter {
   /** Optional handler to intercept comments while tokenizing. */
   onComment: CommentHandler | null = null;
   /** Current file being parsed. */
-  currentSource: Source;
+  currentSource!: Source;
   /** Dependency map **/
   dependees: Map<string, Source> = new Map();
 

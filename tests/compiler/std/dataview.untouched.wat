@@ -1730,15 +1730,6 @@
    local.set $0
   end
   local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
-  local.get $0
   local.tee $4
   local.get $3
   local.tee $5
@@ -1842,15 +1833,6 @@
    call $~lib/rt/pure/__retain
    local.set $0
   end
-  local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
   local.get $0
   local.tee $4
   local.get $1

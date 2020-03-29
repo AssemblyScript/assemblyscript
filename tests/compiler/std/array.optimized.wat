@@ -8,9 +8,9 @@
  (type $i32_=>_none (func (param i32)))
  (type $f32_f32_=>_i32 (func (param f32 f32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
- (type $none_=>_i32 (func (result i32)))
  (type $none_=>_f64 (func (result f64)))
  (type $none_=>_none (func))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i64_=>_i32 (func (param i32 i32 i64) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i64_i32_=>_none (func (param i32 i64 i32)))
@@ -1516,26 +1516,14 @@
   i32.const 0
   local.get $4
   call $~lib/memory/memory.fill
+  local.get $1
+  local.set $2
+  local.get $1
   i32.const 16
   i32.const 3
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
-  i32.const 0
-  i32.store
-  local.get $3
-  i32.const 0
-  i32.store offset=4
-  local.get $3
-  i32.const 0
-  i32.store offset=8
-  local.get $3
-  i32.const 0
-  i32.store offset=12
-  local.get $1
-  local.set $2
-  local.get $1
-  local.get $3
   i32.load
   local.tee $5
   i32.ne
@@ -5297,90 +5285,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $std/array/createReverseOrderedNestedArray (; 114 ;) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  i32.const 8
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.tee $0
-  i32.const 0
-  i32.const 8
-  call $~lib/memory/memory.fill
-  i32.const 16
-  i32.const 12
-  call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
-  local.tee $2
-  i32.const 0
-  i32.store
-  local.get $2
-  i32.const 0
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  i32.store offset=8
-  local.get $2
-  i32.const 0
-  i32.store offset=12
-  local.get $0
-  local.set $1
-  local.get $0
-  local.get $2
-  i32.load
-  local.tee $4
-  i32.ne
-  if
-   local.get $1
-   call $~lib/rt/pure/__retain
-   local.set $1
-   local.get $4
-   call $~lib/rt/pure/__release
-  end
-  local.get $2
-  local.get $1
-  i32.store
-  local.get $2
-  local.get $0
-  i32.store offset=4
-  local.get $2
-  i32.const 8
-  i32.store offset=8
-  local.get $2
-  i32.const 2
-  i32.store offset=12
-  loop $for-loop|0
-   local.get $3
-   i32.const 2
-   i32.lt_s
-   if
-    i32.const 1
-    call $~lib/array/Array<i32>#constructor
-    local.tee $0
-    i32.const 0
-    i32.const 1
-    local.get $3
-    i32.sub
-    call $~lib/array/Array<i32>#__set
-    local.get $2
-    local.get $3
-    local.get $0
-    call $~lib/array/Array<~lib/array/Array<i32>>#__set
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $3
-    i32.const 1
-    i32.add
-    local.set $3
-    br $for-loop|0
-   end
-  end
-  local.get $2
- )
- (func $start:std/array~anonymous|47 (; 115 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:std/array~anonymous|47 (; 114 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 0
   call $~lib/array/Array<u32>#__get
@@ -5389,7 +5294,7 @@
   call $~lib/array/Array<u32>#__get
   i32.sub
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#sort (; 116 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#sort (; 115 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5443,7 +5348,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $std/array/assertSorted<~lib/array/Array<i32>> (; 117 ;) (param $0 i32) (param $1 i32)
+ (func $std/array/assertSorted<~lib/array/Array<i32>> (; 116 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5513,98 +5418,14 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $std/array/createReverseOrderedElementsArray (; 118 ;) (result i32)
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  i32.const 2048
-  i32.const 0
-  call $~lib/rt/tlsf/__alloc
-  local.tee $0
-  i32.const 0
-  i32.const 2048
-  call $~lib/memory/memory.fill
-  i32.const 16
-  i32.const 14
-  call $~lib/rt/tlsf/__alloc
-  call $~lib/rt/pure/__retain
-  local.tee $2
-  i32.const 0
-  i32.store
-  local.get $2
-  i32.const 0
-  i32.store offset=4
-  local.get $2
-  i32.const 0
-  i32.store offset=8
-  local.get $2
-  i32.const 0
-  i32.store offset=12
-  local.get $0
-  local.set $1
-  local.get $0
-  local.get $2
-  i32.load
-  local.tee $4
-  i32.ne
-  if
-   local.get $1
-   call $~lib/rt/pure/__retain
-   local.set $1
-   local.get $4
-   call $~lib/rt/pure/__release
-  end
-  local.get $2
-  local.get $1
-  i32.store
-  local.get $2
-  local.get $0
-  i32.store offset=4
-  local.get $2
-  i32.const 2048
-  i32.store offset=8
-  local.get $2
-  i32.const 512
-  i32.store offset=12
-  loop $for-loop|0
-   local.get $3
-   i32.const 512
-   i32.lt_s
-   if
-    i32.const 4
-    i32.const 13
-    call $~lib/rt/tlsf/__alloc
-    call $~lib/rt/pure/__retain
-    local.tee $0
-    i32.const 511
-    local.get $3
-    i32.sub
-    i32.store
-    local.get $2
-    local.get $3
-    local.get $0
-    call $~lib/array/Array<~lib/array/Array<i32>>#__set
-    local.get $0
-    call $~lib/rt/pure/__release
-    local.get $3
-    i32.const 1
-    i32.add
-    local.set $3
-    br $for-loop|0
-   end
-  end
-  local.get $2
- )
- (func $start:std/array~anonymous|48 (; 119 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:std/array~anonymous|48 (; 117 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
   i32.load
   i32.sub
  )
- (func $~lib/string/String#get:length (; 120 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (; 118 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -5612,7 +5433,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 121 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (; 119 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -5688,7 +5509,7 @@
   end
   i32.const 0
  )
- (func $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 (; 122 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 (; 120 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 1
@@ -5742,7 +5563,7 @@
   select
   call $~lib/util/string/compareImpl
  )
- (func $std/array/assertSorted<~lib/string/String | null>|trampoline (; 123 ;) (param $0 i32)
+ (func $std/array/assertSorted<~lib/string/String | null>|trampoline (; 121 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5826,7 +5647,7 @@
   local.get $5
   call $~lib/rt/pure/__release
  )
- (func $~lib/string/String.__eq (; 124 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (; 122 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -5860,7 +5681,7 @@
   call $~lib/util/string/compareImpl
   i32.eqz
  )
- (func $~lib/string/String.__concat (; 125 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (; 123 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5923,7 +5744,7 @@
    local.get $1
   end
  )
- (func $std/array/createRandomStringArray (; 126 ;) (result i32)
+ (func $std/array/createRandomStringArray (; 124 ;) (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -5939,25 +5760,13 @@
   i32.const 0
   i32.const 1600
   call $~lib/memory/memory.fill
+  local.get $0
+  local.tee $1
   i32.const 16
   i32.const 16
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $7
-  i32.const 0
-  i32.store
-  local.get $7
-  i32.const 0
-  i32.store offset=4
-  local.get $7
-  i32.const 0
-  i32.store offset=8
-  local.get $7
-  i32.const 0
-  i32.store offset=12
-  local.get $0
-  local.tee $1
-  local.get $7
   i32.load
   local.tee $6
   i32.ne
@@ -6069,7 +5878,7 @@
   end
   local.get $7
  )
- (func $~lib/string/String#substring (; 127 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (; 125 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6143,7 +5952,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/string/joinBooleanArray (; 128 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinBooleanArray (; 126 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6281,7 +6090,7 @@
   end
   local.get $1
  )
- (func $~lib/util/number/decimalCount32 (; 129 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (; 127 ;) (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
@@ -6323,7 +6132,7 @@
   i32.lt_u
   select
  )
- (func $~lib/util/number/utoa_simple<u32> (; 130 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u32> (; 128 ;) (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -6350,7 +6159,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/itoa32 (; 131 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (; 129 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6392,7 +6201,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/itoa_stream<i32> (; 132 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<i32> (; 130 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -6440,7 +6249,7 @@
   call $~lib/util/number/utoa_simple<u32>
   local.get $0
  )
- (func $~lib/util/string/joinIntegerArray<i32> (; 133 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<i32> (; 131 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6545,7 +6354,7 @@
   end
   local.get $1
  )
- (func $~lib/array/Array<i32>#join (; 134 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#join (; 132 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
@@ -6553,7 +6362,7 @@
   local.get $1
   call $~lib/util/string/joinIntegerArray<i32>
  )
- (func $~lib/util/number/utoa32 (; 135 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (; 133 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -6576,7 +6385,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/number/itoa_stream<u32> (; 136 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<u32> (; 134 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -6603,7 +6412,7 @@
   call $~lib/util/number/utoa_simple<u32>
   local.get $0
  )
- (func $~lib/util/string/joinIntegerArray<u32> (; 137 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<u32> (; 135 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6708,7 +6517,7 @@
   end
   local.get $1
  )
- (func $~lib/array/Array<u32>#join (; 138 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u32>#join (; 136 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
@@ -6716,7 +6525,7 @@
   local.get $1
   call $~lib/util/string/joinIntegerArray<u32>
  )
- (func $~lib/util/number/genDigits (; 139 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (; 137 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -7107,7 +6916,7 @@
    local.get $6
   end
  )
- (func $~lib/util/number/prettify (; 140 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (; 138 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -7352,7 +7161,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 141 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (; 139 ;) (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -7644,7 +7453,7 @@
   local.get $7
   i32.add
  )
- (func $~lib/util/number/dtoa_stream (; 142 ;) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
+ (func $~lib/util/number/dtoa_stream (; 140 ;) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -7719,7 +7528,7 @@
   local.get $2
   call $~lib/util/number/dtoa_core
  )
- (func $~lib/util/string/joinFloatArray<f64> (; 143 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinFloatArray<f64> (; 141 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 f64)
   (local $4 i32)
@@ -7882,7 +7691,7 @@
   end
   local.get $1
  )
- (func $~lib/util/string/joinReferenceArray<~lib/string/String | null> (; 144 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/joinReferenceArray<~lib/string/String | null> (; 142 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8048,7 +7857,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/array/Array<~lib/string/String | null>#join (; 145 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String | null>#join (; 143 ;) (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
@@ -8056,7 +7865,7 @@
   local.get $1
   call $~lib/util/string/joinReferenceArray<~lib/string/String | null>
  )
- (func $~lib/util/string/joinReferenceArray<std/array/Ref | null> (; 146 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinReferenceArray<std/array/Ref | null> (; 144 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8209,14 +8018,14 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/array/Array<std/array/Ref | null>#join (; 147 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<std/array/Ref | null>#join (; 145 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load offset=12
   call $~lib/util/string/joinReferenceArray<std/array/Ref | null>
  )
- (func $~lib/util/number/itoa_stream<i8> (; 148 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<i8> (; 146 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -8282,7 +8091,7 @@
   call $~lib/util/number/utoa_simple<u32>
   local.get $1
  )
- (func $~lib/util/string/joinIntegerArray<i8> (; 149 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<i8> (; 147 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8383,7 +8192,7 @@
   end
   local.get $1
  )
- (func $~lib/util/number/itoa_stream<u16> (; 150 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<u16> (; 148 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -8418,7 +8227,7 @@
   call $~lib/util/number/utoa_simple<u32>
   local.get $1
  )
- (func $~lib/util/string/joinIntegerArray<u16> (; 151 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<u16> (; 149 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8523,7 +8332,7 @@
   end
   local.get $1
  )
- (func $~lib/util/number/decimalCount64High (; 152 ;) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64High (; 150 ;) (param $0 i64) (result i32)
   local.get $0
   i64.const 100000000000
   i64.ge_u
@@ -8569,7 +8378,7 @@
   i64.lt_u
   select
  )
- (func $~lib/util/number/utoa_simple<u64> (; 153 ;) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u64> (; 151 ;) (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -8599,7 +8408,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/itoa_stream<u64> (; 154 ;) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/util/number/itoa_stream<u64> (; 152 ;) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -8642,7 +8451,7 @@
   end
   local.get $1
  )
- (func $~lib/util/string/joinIntegerArray<u64> (; 155 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<u64> (; 153 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i64)
@@ -8785,7 +8594,7 @@
   end
   local.get $1
  )
- (func $~lib/util/number/itoa_stream<i64> (; 156 ;) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
+ (func $~lib/util/number/itoa_stream<i64> (; 154 ;) (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -8851,7 +8660,7 @@
   end
   local.get $0
  )
- (func $~lib/util/string/joinIntegerArray<i64> (; 157 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<i64> (; 155 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i64)
   (local $4 i32)
@@ -9015,7 +8824,7 @@
   end
   local.get $1
  )
- (func $~lib/util/string/joinReferenceArray<~lib/array/Array<i32>> (; 158 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinReferenceArray<~lib/array/Array<i32>> (; 156 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9183,7 +8992,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/util/number/itoa_stream<u8> (; 159 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/itoa_stream<u8> (; 157 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -9218,7 +9027,7 @@
   call $~lib/util/number/utoa_simple<u32>
   local.get $1
  )
- (func $~lib/util/string/joinIntegerArray<u8> (; 160 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinIntegerArray<u8> (; 158 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9319,14 +9128,14 @@
   end
   local.get $1
  )
- (func $~lib/array/Array<u8>#toString (; 161 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<u8>#toString (; 159 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load offset=12
   call $~lib/util/string/joinIntegerArray<u8>
  )
- (func $~lib/util/string/joinReferenceArray<~lib/array/Array<u8>> (; 162 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinReferenceArray<~lib/array/Array<u8>> (; 160 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9491,7 +9300,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/util/string/joinReferenceArray<~lib/array/Array<u32>> (; 163 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinReferenceArray<~lib/array/Array<u32>> (; 161 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9659,14 +9468,14 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $~lib/array/Array<~lib/array/Array<u32>>#toString (; 164 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<u32>>#toString (; 162 ;) (param $0 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $0
   i32.load offset=12
   call $~lib/util/string/joinReferenceArray<~lib/array/Array<u32>>
  )
- (func $~lib/util/string/joinReferenceArray<~lib/array/Array<~lib/array/Array<u32>>> (; 165 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/joinReferenceArray<~lib/array/Array<~lib/array/Array<u32>>> (; 163 ;) (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9831,7 +9640,7 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $start:std/array (; 166 ;)
+ (func $start:std/array (; 164 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -9917,26 +9726,17 @@
    call $~lib/rt/pure/__retain
    local.set $58
   end
-  local.get $58
-  i32.const 0
-  i32.store
-  local.get $58
-  i32.const 0
-  i32.store offset=4
-  local.get $58
-  i32.const 0
-  i32.store offset=8
   local.get $0
   local.tee $1
   local.get $58
   i32.load
-  local.tee $55
+  local.tee $56
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    local.set $1
-   local.get $55
+   local.get $56
    call $~lib/rt/pure/__release
   end
   local.get $58
@@ -10052,7 +9852,7 @@
   i32.const 1632
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $55
+  local.tee $56
   call $std/array/isArraysEqual<u8>
   i32.eqz
   if
@@ -10076,7 +9876,7 @@
   i32.const 1664
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $56
+  local.tee $53
   call $std/array/isArraysEqual<u8>
   i32.eqz
   if
@@ -10095,9 +9895,9 @@
   call $~lib/rt/pure/__release
   local.get $57
   call $~lib/rt/pure/__release
-  local.get $55
-  call $~lib/rt/pure/__release
   local.get $56
+  call $~lib/rt/pure/__release
+  local.get $53
   call $~lib/rt/pure/__release
   i32.const 5
   i32.const 2
@@ -10193,7 +9993,7 @@
   i32.const 1888
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $55
+  local.tee $56
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10218,7 +10018,7 @@
   i32.const 1936
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $56
+  local.tee $53
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10238,9 +10038,9 @@
   call $~lib/rt/pure/__release
   local.get $57
   call $~lib/rt/pure/__release
-  local.get $55
-  call $~lib/rt/pure/__release
   local.get $56
+  call $~lib/rt/pure/__release
+  local.get $53
   call $~lib/rt/pure/__release
   global.get $std/array/arr
   i32.load offset=12
@@ -10607,7 +10407,7 @@
   i32.const 2032
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $55
+  local.tee $56
   call $~lib/array/Array<i32>#concat
   call $~lib/rt/pure/__release
   global.get $std/array/arr
@@ -10837,7 +10637,7 @@
   call $~lib/rt/pure/__release
   local.get $57
   call $~lib/rt/pure/__release
-  local.get $55
+  local.get $56
   call $~lib/rt/pure/__release
   local.get $58
   call $~lib/rt/pure/__release
@@ -10885,14 +10685,14 @@
   i32.const 3
   i32.const 2147483647
   call $~lib/array/Array<i32>#copyWithin
-  local.tee $55
+  local.tee $56
   i32.const 5
   i32.const 2
   i32.const 3
   i32.const 2208
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $56
+  local.tee $53
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -10924,7 +10724,7 @@
   i32.const 2304
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $53
+  local.tee $54
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -11232,13 +11032,13 @@
   call $~lib/rt/pure/__release
   local.get $57
   call $~lib/rt/pure/__release
-  local.get $55
-  call $~lib/rt/pure/__release
   local.get $56
+  call $~lib/rt/pure/__release
+  local.get $53
   call $~lib/rt/pure/__release
   local.get $42
   call $~lib/rt/pure/__release
-  local.get $53
+  local.get $54
   call $~lib/rt/pure/__release
   local.get $52
   call $~lib/rt/pure/__release
@@ -11475,10 +11275,10 @@
   local.tee $58
   i32.const 2
   i32.shl
-  local.tee $55
+  local.tee $56
   call $~lib/memory/memory.copy
   local.get $1
-  local.get $55
+  local.get $56
   i32.add
   i32.const 0
   i32.store
@@ -11928,7 +11728,7 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $0
-  local.set $55
+  local.set $56
   i32.const 0
   local.set $1
   block $__inlined_func$~lib/array/Array<f32>#indexOf
@@ -11947,7 +11747,7 @@
     local.set $1
     br $__inlined_func$~lib/array/Array<f32>#indexOf
    end
-   local.get $55
+   local.get $56
    i32.load offset=4
    local.set $57
    loop $while-continue|022
@@ -11992,7 +11792,7 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.tee $58
-  local.set $56
+  local.set $53
   i32.const 0
   local.set $1
   block $__inlined_func$~lib/array/Array<f64>#indexOf
@@ -12011,15 +11811,15 @@
     local.set $1
     br $__inlined_func$~lib/array/Array<f64>#indexOf
    end
-   local.get $56
+   local.get $53
    i32.load offset=4
-   local.set $55
+   local.set $56
    loop $while-continue|023
     local.get $1
     local.get $57
     i32.lt_s
     if
-     local.get $55
+     local.get $56
      local.get $1
      i32.const 3
      i32.shl
@@ -12213,14 +12013,14 @@
    drop
    local.get $0
    i32.load offset=4
-   local.set $56
+   local.set $53
    loop $while-continue|024
     local.get $58
     local.get $57
     i32.lt_s
     if
      i32.const 1
-     local.get $56
+     local.get $53
      local.get $58
      i32.const 2
      i32.shl
@@ -12268,10 +12068,10 @@
    call $~lib/rt/pure/__retain
    local.tee $57
    i32.load offset=12
-   local.tee $55
+   local.tee $56
    if (result i32)
     i32.const 0
-    local.get $55
+    local.get $56
     i32.ge_s
    else
     i32.const 1
@@ -12283,7 +12083,7 @@
    local.set $42
    loop $while-continue|025
     local.get $58
-    local.get $55
+    local.get $56
     i32.lt_s
     if
      i32.const 1
@@ -12392,14 +12192,14 @@
   i32.const 0
   i32.const 2147483647
   call $~lib/array/Array<i32>#splice
-  local.tee $56
+  local.tee $57
   i32.const 5
   i32.const 2
   i32.const 3
   i32.const 3392
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $53
+  local.tee $54
   i32.const 0
   call $std/array/isArraysEqual<u32>
   i32.eqz
@@ -13091,10 +12891,10 @@
   i32.const 4912
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $57
+  local.tee $0
   i32.const 1
   call $~lib/array/Array<std/array/Ref>#splice
-  local.tee $55
+  local.tee $53
   i32.load offset=12
   if
    i32.const 0
@@ -13104,7 +12904,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $57
+  local.get $0
   i32.load offset=12
   if
    i32.const 0
@@ -13120,7 +12920,7 @@
   i32.const 0
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $0
+  local.tee $56
   i32.load offset=4
   local.tee $1
   i32.const 1
@@ -13142,13 +12942,13 @@
   i32.const 5
   call $std/array/Ref#constructor
   i32.store offset=16
-  local.get $57
-  call $~lib/rt/pure/__release
   local.get $0
+  call $~lib/rt/pure/__release
+  local.get $56
   i32.const 2
   call $~lib/array/Array<std/array/Ref>#splice
   local.set $42
-  local.get $55
+  local.get $53
   call $~lib/rt/pure/__release
   local.get $42
   i32.load offset=12
@@ -13192,7 +12992,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $56
   i32.load offset=12
   i32.const 3
   i32.ne
@@ -13204,7 +13004,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $56
   i32.const 0
   call $~lib/array/Array<std/array/Ref>#__get
   local.tee $6
@@ -13219,7 +13019,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $56
   i32.const 1
   call $~lib/array/Array<std/array/Ref>#__get
   local.tee $5
@@ -13234,7 +13034,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $56
   i32.const 2
   call $~lib/array/Array<std/array/Ref>#__get
   local.tee $4
@@ -13255,7 +13055,7 @@
   i32.const 0
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $55
+  local.tee $53
   i32.load offset=4
   local.tee $1
   i32.const 1
@@ -13268,7 +13068,7 @@
   i32.const 2
   call $std/array/Ref#constructor
   i32.store offset=8
-  local.get $55
+  local.get $53
   call $~lib/array/Array<std/array/Ref | null>#splice
   local.tee $31
   i32.load offset=12
@@ -13307,7 +13107,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $55
+  local.get $53
   i32.load offset=12
   i32.const 2
   i32.ne
@@ -13319,7 +13119,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $55
+  local.get $53
   i32.const 0
   call $~lib/array/Array<std/array/Ref | null>#__get
   local.tee $3
@@ -13331,11 +13131,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $55
+  local.get $53
   i32.const 1
   call $~lib/array/Array<std/array/Ref | null>#__get
-  local.tee $57
-  local.get $57
+  local.tee $0
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -13358,9 +13158,9 @@
   end
   local.get $58
   call $~lib/rt/pure/__release
-  local.get $56
+  local.get $57
   call $~lib/rt/pure/__release
-  local.get $53
+  local.get $54
   call $~lib/rt/pure/__release
   local.get $52
   call $~lib/rt/pure/__release
@@ -13456,7 +13256,7 @@
   call $~lib/rt/pure/__release
   local.get $3
   call $~lib/rt/pure/__release
-  local.get $57
+  local.get $0
   call $~lib/rt/pure/__release
   global.get $std/array/arr
   i32.const 0
@@ -13930,17 +13730,17 @@
    unreachable
   end
   loop $for-loop|0
-   local.get $54
+   local.get $55
    i32.const 100
    i32.lt_s
    if
     global.get $std/array/arr
     call $~lib/array/Array<i32>#pop
     drop
-    local.get $54
+    local.get $55
     i32.const 1
     i32.add
-    local.set $54
+    local.set $55
     br $for-loop|0
    end
   end
@@ -13959,9 +13759,9 @@
   i32.const 0
   local.set $58
   global.get $std/array/arr
-  local.tee $57
+  local.tee $0
   i32.load offset=12
-  local.tee $56
+  local.tee $57
   i32.const 2
   i32.const 9
   i32.const 0
@@ -13969,15 +13769,15 @@
   call $~lib/rt/pure/__retain
   local.tee $1
   i32.load offset=4
-  local.set $54
+  local.set $55
   loop $for-loop|043
    local.get $58
-   local.get $56
    local.get $57
+   local.get $0
    i32.load offset=12
-   local.tee $53
-   local.get $56
-   local.get $53
+   local.tee $54
+   local.get $57
+   local.get $54
    i32.lt_s
    select
    i32.lt_s
@@ -13987,15 +13787,15 @@
     local.get $58
     i32.const 2
     i32.shl
-    local.tee $53
-    local.get $57
+    local.tee $54
+    local.get $0
     i32.load offset=4
     i32.add
     i32.load
     f32.convert_i32_s
     local.set $41
-    local.get $53
     local.get $54
+    local.get $55
     i32.add
     local.get $41
     f32.store
@@ -14552,10 +14352,10 @@
   i32.const 5280
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.set $58
+  local.set $0
   i32.const 0
   global.set $~argumentsLength
-  local.get $58
+  local.get $0
   call $~lib/array/Array<f32>#sort|trampoline
   call $~lib/rt/pure/__release
   block $__inlined_func$std/array/isArraysEqual<f32> (result i32)
@@ -14565,37 +14365,37 @@
    i32.const 5328
    call $~lib/rt/__allocArray
    call $~lib/rt/pure/__retain
-   local.set $56
+   local.set $57
    i32.const 0
    local.set $1
    i32.const 0
-   local.get $58
+   local.get $0
    i32.load offset=12
-   local.tee $54
-   local.get $56
+   local.tee $55
+   local.get $57
    i32.load offset=12
    i32.ne
    br_if $__inlined_func$std/array/isArraysEqual<f32>
    drop
    i32.const 1
-   local.get $56
-   local.get $58
+   local.get $0
+   local.get $57
    i32.eq
    br_if $__inlined_func$std/array/isArraysEqual<f32>
    drop
    loop $for-loop|00
     local.get $1
-    local.get $54
+    local.get $55
     i32.lt_s
     if
-     local.get $58
+     local.get $0
      local.get $1
      call $~lib/array/Array<f32>#__get
      local.tee $41
      local.get $41
      f32.ne
      if (result i32)
-      local.get $56
+      local.get $57
       local.get $1
       call $~lib/array/Array<f32>#__get
       local.tee $41
@@ -14607,10 +14407,10 @@
      i32.eqz
      if
       i32.const 0
-      local.get $58
+      local.get $0
       local.get $1
       call $~lib/array/Array<f32>#__get
-      local.get $56
+      local.get $57
       local.get $1
       call $~lib/array/Array<f32>#__get
       f32.ne
@@ -14641,10 +14441,10 @@
   i32.const 5376
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.set $57
+  local.set $58
   i32.const 0
   global.set $~argumentsLength
-  local.get $57
+  local.get $58
   call $~lib/array/Array<f64>#sort|trampoline
   call $~lib/rt/pure/__release
   block $__inlined_func$std/array/isArraysEqual<f64> (result i32)
@@ -14654,21 +14454,21 @@
    i32.const 5456
    call $~lib/rt/__allocArray
    call $~lib/rt/pure/__retain
-   local.set $54
+   local.set $55
    i32.const 0
    local.set $1
    i32.const 0
-   local.get $57
+   local.get $58
    i32.load offset=12
    local.tee $52
-   local.get $54
+   local.get $55
    i32.load offset=12
    i32.ne
    br_if $__inlined_func$std/array/isArraysEqual<f64>
    drop
    i32.const 1
-   local.get $54
-   local.get $57
+   local.get $55
+   local.get $58
    i32.eq
    br_if $__inlined_func$std/array/isArraysEqual<f64>
    drop
@@ -14677,14 +14477,14 @@
     local.get $52
     i32.lt_s
     if
-     local.get $57
+     local.get $58
      local.get $1
      call $~lib/array/Array<f64>#__get
      local.tee $36
      local.get $36
      f64.ne
      if (result i32)
-      local.get $54
+      local.get $55
       local.get $1
       call $~lib/array/Array<f64>#__get
       local.tee $36
@@ -14696,10 +14496,10 @@
      i32.eqz
      if
       i32.const 0
-      local.get $57
+      local.get $58
       local.get $1
       call $~lib/array/Array<f64>#__get
-      local.get $54
+      local.get $55
       local.get $1
       call $~lib/array/Array<f64>#__get
       f64.ne
@@ -14730,14 +14530,14 @@
   i32.const 5536
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.set $53
+  local.set $54
   i32.const 0
   global.set $~argumentsLength
-  local.get $53
+  local.get $54
   i32.const 46
   call $~lib/array/Array<i32>#sort
   call $~lib/rt/pure/__release
-  local.get $53
+  local.get $54
   i32.const 5
   i32.const 2
   i32.const 3
@@ -14968,15 +14768,15 @@
   local.get $47
   i32.const 48
   call $std/array/assertSorted<i32>
-  local.get $58
-  call $~lib/rt/pure/__release
-  local.get $56
+  local.get $0
   call $~lib/rt/pure/__release
   local.get $57
   call $~lib/rt/pure/__release
-  local.get $54
+  local.get $58
   call $~lib/rt/pure/__release
-  local.get $53
+  local.get $55
+  call $~lib/rt/pure/__release
+  local.get $54
   call $~lib/rt/pure/__release
   local.get $40
   call $~lib/rt/pure/__release
@@ -15013,34 +14813,161 @@
   local.set $1
   i32.const 257
   call $std/array/createRandomOrderedArray
-  local.set $58
+  local.set $0
   local.get $1
   i32.const 49
   call $std/array/assertSorted<i32>
   local.get $1
   i32.const 50
   call $std/array/assertSorted<i32>
-  local.get $58
+  local.get $0
   i32.const 51
   call $std/array/assertSorted<i32>
-  local.get $58
+  local.get $0
   i32.const 52
   call $std/array/assertSorted<i32>
   local.get $1
   call $~lib/rt/pure/__release
-  local.get $58
+  local.get $0
   call $~lib/rt/pure/__release
-  call $std/array/createReverseOrderedNestedArray
+  i32.const 0
+  local.set $58
+  i32.const 8
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 0
+  i32.const 8
+  call $~lib/memory/memory.fill
+  local.get $0
   local.tee $1
+  i32.const 16
+  i32.const 12
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $57
+  i32.load
+  local.tee $55
+  i32.ne
+  if
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $1
+   local.get $55
+   call $~lib/rt/pure/__release
+  end
+  local.get $57
+  local.get $1
+  i32.store
+  local.get $57
+  local.get $0
+  i32.store offset=4
+  local.get $57
+  i32.const 8
+  i32.store offset=8
+  local.get $57
+  i32.const 2
+  i32.store offset=12
+  loop $for-loop|02
+   local.get $58
+   i32.const 2
+   i32.lt_s
+   if
+    i32.const 1
+    call $~lib/array/Array<i32>#constructor
+    local.tee $1
+    i32.const 0
+    i32.const 1
+    local.get $58
+    i32.sub
+    call $~lib/array/Array<i32>#__set
+    local.get $57
+    local.get $58
+    local.get $1
+    call $~lib/array/Array<~lib/array/Array<i32>>#__set
+    local.get $1
+    call $~lib/rt/pure/__release
+    local.get $58
+    i32.const 1
+    i32.add
+    local.set $58
+    br $for-loop|02
+   end
+  end
+  local.get $57
   i32.const 53
   call $std/array/assertSorted<~lib/array/Array<i32>>
-  local.get $1
+  local.get $57
   call $~lib/rt/pure/__release
-  call $std/array/createReverseOrderedElementsArray
+  i32.const 0
+  local.set $58
+  i32.const 2048
+  i32.const 0
+  call $~lib/rt/tlsf/__alloc
+  local.tee $0
+  i32.const 0
+  i32.const 2048
+  call $~lib/memory/memory.fill
+  local.get $0
   local.tee $1
+  i32.const 16
+  i32.const 14
+  call $~lib/rt/tlsf/__alloc
+  call $~lib/rt/pure/__retain
+  local.tee $57
+  i32.load
+  local.tee $55
+  i32.ne
+  if
+   local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $1
+   local.get $55
+   call $~lib/rt/pure/__release
+  end
+  local.get $57
+  local.get $1
+  i32.store
+  local.get $57
+  local.get $0
+  i32.store offset=4
+  local.get $57
+  i32.const 2048
+  i32.store offset=8
+  local.get $57
+  i32.const 512
+  i32.store offset=12
+  loop $for-loop|03
+   local.get $58
+   i32.const 512
+   i32.lt_s
+   if
+    i32.const 4
+    i32.const 13
+    call $~lib/rt/tlsf/__alloc
+    call $~lib/rt/pure/__retain
+    local.tee $1
+    i32.const 511
+    local.get $58
+    i32.sub
+    i32.store
+    local.get $57
+    local.get $58
+    local.get $1
+    call $~lib/array/Array<~lib/array/Array<i32>>#__set
+    local.get $1
+    call $~lib/rt/pure/__release
+    local.get $58
+    i32.const 1
+    i32.add
+    local.set $58
+    br $for-loop|03
+   end
+  end
+  local.get $57
   i32.const 54
   call $std/array/assertSorted<~lib/array/Array<i32>>
-  local.get $1
+  local.get $57
   call $~lib/rt/pure/__release
   i32.const 7
   i32.const 2
@@ -15048,68 +14975,68 @@
   i32.const 6080
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.set $58
+  local.set $0
   i32.const 7
   i32.const 2
   i32.const 15
   i32.const 6128
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.set $57
+  local.set $58
   i32.const 1
   global.set $~argumentsLength
-  local.get $58
+  local.get $0
   call $std/array/assertSorted<~lib/string/String | null>|trampoline
   block $__inlined_func$std/array/isArraysEqual<~lib/string/String | null> (result i32)
    i32.const 0
    local.set $1
    i32.const 0
-   local.get $58
+   local.get $0
    i32.load offset=12
-   local.tee $53
-   local.get $57
+   local.tee $54
+   local.get $58
    i32.load offset=12
    i32.ne
    br_if $__inlined_func$std/array/isArraysEqual<~lib/string/String | null>
    drop
    i32.const 1
-   local.get $57
+   local.get $0
    local.get $58
    i32.eq
    br_if $__inlined_func$std/array/isArraysEqual<~lib/string/String | null>
    drop
-   loop $for-loop|02
+   loop $for-loop|04
     local.get $1
-    local.get $53
+    local.get $54
     i32.lt_s
     if
+     local.get $0
+     local.get $1
+     call $~lib/array/Array<std/array/Ref | null>#__get
+     local.tee $57
      local.get $58
      local.get $1
      call $~lib/array/Array<std/array/Ref | null>#__get
-     local.tee $56
-     local.get $57
-     local.get $1
-     call $~lib/array/Array<std/array/Ref | null>#__get
-     local.tee $54
+     local.tee $55
      call $~lib/string/String.__eq
      i32.eqz
      if
-      local.get $56
+      local.get $57
       call $~lib/rt/pure/__release
-      local.get $54
+      local.get $55
       call $~lib/rt/pure/__release
       i32.const 0
       br $__inlined_func$std/array/isArraysEqual<~lib/string/String | null>
      end
-     local.get $56
+     local.get $57
      call $~lib/rt/pure/__release
-     local.get $54
+     local.get $55
      call $~lib/rt/pure/__release
      local.get $1
      i32.const 1
      i32.add
      local.set $1
-     br $for-loop|02
+     br $for-loop|04
     end
    end
    i32.const 1
@@ -15130,9 +15057,9 @@
   local.get $1
   i32.const 56
   call $std/array/assertSorted<~lib/array/Array<i32>>
-  local.get $58
+  local.get $0
   call $~lib/rt/pure/__release
-  local.get $57
+  local.get $58
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
@@ -15147,8 +15074,8 @@
   local.get $1
   i32.load offset=12
   call $~lib/util/string/joinBooleanArray
-  local.tee $58
-  local.get $58
+  local.tee $0
+  local.get $0
   i32.const 6336
   call $~lib/string/String.__eq
   i32.eqz
@@ -15166,7 +15093,7 @@
   i32.const 6384
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $53
+  local.tee $54
   i32.const 6064
   call $~lib/array/Array<i32>#join
   local.tee $52
@@ -15229,14 +15156,14 @@
   i32.const 6672
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $58
+  local.tee $0
   i32.load offset=4
-  local.get $58
+  local.get $0
   i32.load offset=12
   call $~lib/util/string/joinFloatArray<f64>
-  local.tee $57
+  local.tee $58
   local.set $46
-  local.get $57
+  local.get $58
   i32.const 7888
   call $~lib/string/String.__eq
   i32.eqz
@@ -15275,20 +15202,20 @@
   i32.const 0
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $57
+  local.tee $58
   i32.load offset=4
-  local.tee $56
+  local.tee $57
   i32.const 0
   call $std/array/Ref#constructor
   i32.store
-  local.get $56
+  local.get $57
   i32.const 0
   i32.store offset=4
-  local.get $56
+  local.get $57
   i32.const 0
   call $std/array/Ref#constructor
   i32.store offset=8
-  local.get $57
+  local.get $58
   call $~lib/array/Array<std/array/Ref | null>#join
   local.tee $43
   i32.const 8096
@@ -15308,7 +15235,7 @@
   i32.const 0
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $56
+  local.tee $57
   i32.load offset=4
   local.tee $47
   i32.const 0
@@ -15318,7 +15245,7 @@
   i32.const 0
   call $std/array/Ref#constructor
   i32.store offset=4
-  local.get $56
+  local.get $57
   call $~lib/array/Array<std/array/Ref | null>#join
   local.tee $47
   i32.const 8176
@@ -15335,7 +15262,7 @@
   local.get $1
   call $~lib/rt/pure/__release
   call $~lib/rt/pure/__release
-  local.get $53
+  local.get $54
   call $~lib/rt/pure/__release
   local.get $52
   call $~lib/rt/pure/__release
@@ -15347,7 +15274,7 @@
   call $~lib/rt/pure/__release
   local.get $48
   call $~lib/rt/pure/__release
-  local.get $58
+  local.get $0
   call $~lib/rt/pure/__release
   local.get $46
   call $~lib/rt/pure/__release
@@ -15355,11 +15282,11 @@
   call $~lib/rt/pure/__release
   local.get $44
   call $~lib/rt/pure/__release
-  local.get $57
+  local.get $58
   call $~lib/rt/pure/__release
   local.get $43
   call $~lib/rt/pure/__release
-  local.get $56
+  local.get $57
   call $~lib/rt/pure/__release
   local.get $47
   call $~lib/rt/pure/__release
@@ -15369,21 +15296,21 @@
   i32.const 8256
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.set $56
+  local.set $57
   i32.const 1
   i32.const 2
   i32.const 3
   i32.const 8272
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.set $54
+  local.set $55
   i32.const 2
   i32.const 2
   i32.const 3
   i32.const 8304
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.set $53
+  local.set $54
   i32.const 4
   i32.const 2
   i32.const 3
@@ -15391,7 +15318,7 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $52
-  local.get $56
+  local.get $57
   i32.const 6304
   call $~lib/array/Array<i32>#join
   local.tee $1
@@ -15407,7 +15334,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $54
+  local.get $55
   i32.const 6304
   call $~lib/array/Array<i32>#join
   local.tee $1
@@ -15424,7 +15351,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $53
+  local.get $54
   i32.const 6304
   call $~lib/array/Array<i32>#join
   local.tee $1
@@ -15612,7 +15539,7 @@
   call $~lib/rt/pure/__retain
   local.tee $1
   i32.load offset=4
-  local.tee $58
+  local.tee $0
   i32.const 2
   i32.const 2
   i32.const 3
@@ -15620,7 +15547,7 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   i32.store
-  local.get $58
+  local.get $0
   i32.const 2
   i32.const 2
   i32.const 3
@@ -15633,9 +15560,9 @@
   local.get $1
   i32.load offset=12
   call $~lib/util/string/joinReferenceArray<~lib/array/Array<i32>>
-  local.tee $58
+  local.tee $0
   local.set $29
-  local.get $58
+  local.get $0
   i32.const 9136
   call $~lib/string/String.__eq
   i32.eqz
@@ -15653,9 +15580,9 @@
   i32.const 0
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $58
+  local.tee $0
   i32.load offset=4
-  local.tee $57
+  local.tee $58
   i32.const 2
   i32.const 0
   i32.const 6
@@ -15663,7 +15590,7 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   i32.store
-  local.get $57
+  local.get $58
   i32.const 2
   i32.const 0
   i32.const 6
@@ -15671,14 +15598,14 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   i32.store offset=4
-  local.get $58
+  local.get $0
   i32.load offset=4
-  local.get $58
+  local.get $0
   i32.load offset=12
   call $~lib/util/string/joinReferenceArray<~lib/array/Array<u8>>
-  local.tee $57
+  local.tee $58
   local.set $28
-  local.get $57
+  local.get $58
   i32.const 9136
   call $~lib/string/String.__eq
   i32.eqz
@@ -15696,7 +15623,7 @@
   i32.const 0
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  local.tee $57
+  local.tee $58
   i32.load offset=4
   i32.const 1
   i32.const 2
@@ -15715,9 +15642,9 @@
   i32.store
   local.get $32
   i32.store
-  local.get $57
+  local.get $58
   i32.load offset=4
-  local.get $57
+  local.get $58
   i32.load offset=12
   call $~lib/util/string/joinReferenceArray<~lib/array/Array<~lib/array/Array<u32>>>
   local.tee $33
@@ -15734,11 +15661,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $56
+  local.get $57
+  call $~lib/rt/pure/__release
+  local.get $55
   call $~lib/rt/pure/__release
   local.get $54
-  call $~lib/rt/pure/__release
-  local.get $53
   call $~lib/rt/pure/__release
   local.get $52
   call $~lib/rt/pure/__release
@@ -15781,22 +15708,22 @@
   call $~lib/rt/pure/__release
   global.get $std/array/arr
   call $~lib/rt/pure/__release
-  local.get $0
+  local.get $56
   call $~lib/rt/pure/__release
   local.get $42
   call $~lib/rt/pure/__release
-  local.get $55
+  local.get $53
   call $~lib/rt/pure/__release
   local.get $31
   call $~lib/rt/pure/__release
   local.get $1
   call $~lib/rt/pure/__release
+  local.get $0
+  call $~lib/rt/pure/__release
   local.get $58
   call $~lib/rt/pure/__release
-  local.get $57
-  call $~lib/rt/pure/__release
  )
- (func $~start (; 167 ;)
+ (func $~start (; 165 ;)
   global.get $~started
   if
    return
@@ -15806,7 +15733,7 @@
   end
   call $start:std/array
  )
- (func $~lib/rt/pure/decrement (; 168 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 166 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -15935,7 +15862,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 169 ;) (param $0 i32)
+ (func $~lib/rt/pure/__visit (; 167 ;) (param $0 i32)
   local.get $0
   i32.const 9236
   i32.lt_u

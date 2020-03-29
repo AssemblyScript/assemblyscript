@@ -318,13 +318,13 @@ export class Compiler extends DiagnosticEmitter {
   module: Module;
 
   /** Current control flow. */
-  currentFlow: Flow;
+  currentFlow!: Flow;
   /** Current parent element if not a function, i.e. an enum or namespace. */
   currentParent: Element | null = null;
   /** Current type in compilation. */
   currentType: Type = Type.void;
   /** Start function statements. */
-  currentBody: ExpressionRef[];
+  currentBody!: ExpressionRef[];
   /** Counting memory offset. */
   memoryOffset: i64;
   /** Memory segments being compiled. */
@@ -2814,7 +2814,7 @@ export class Compiler extends DiagnosticEmitter {
     outerFlow.popBreakLabel();
 
     // If the switch has a default (guaranteed to handle any value), propagate common flags
-    if (defaultIndex >= 0){
+    if (defaultIndex >= 0) {
       outerFlow.flags |= commonCategorical & ~FlowFlags.BREAKS;
 
       // If the switch:
@@ -2826,7 +2826,7 @@ export class Compiler extends DiagnosticEmitter {
         if (flows.length == 1) {
           this.currentFlow.inheritFieldFlags(flows[0]);
         } else {
-          for(let i = 0; i < flows.length; ++i) {
+          for (let i = 0; i < flows.length; ++i) {
             if (i < (flows.length - 1)) {
               const left = flows[i];
               const right = flows[i + 1];
@@ -8900,7 +8900,6 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     var ctor = this.ensureConstructor(classInstance, reportNode);
     if (classInstance.type.isUnmanaged || ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(reportNode);
-    this.checkFieldInitialization(classInstance);
     var expr = this.compileCallDirect( // no need for another autoreleased local
       ctor,
       argumentExpressions,
@@ -8911,6 +8910,8 @@ export class Compiler extends DiagnosticEmitter {
     if (getExpressionType(expr) != NativeType.None) { // possibly IMM_DROPPED
       this.currentType = classInstance.type; // important because a super ctor could be called
     }
+
+    this.checkFieldInitialization(classInstance);
     return expr;
   }
 
@@ -10119,7 +10120,7 @@ export class Compiler extends DiagnosticEmitter {
             field.memoryOffset
           )
         );
-        flow.setFieldFlag(field.internalName, FieldFlags.INITIALIZED)
+        flow.setFieldFlag(field.internalName, FieldFlags.INITIALIZED);
       } else {
         flow.setFieldFlag(field.internalName, FieldFlags.NONE);
       }

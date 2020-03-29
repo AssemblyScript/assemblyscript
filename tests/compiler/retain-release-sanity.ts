@@ -21,10 +21,10 @@
 }
 
 class A {
-  b: B;
+  b!: B;
 }
 class B {
-  a: A;
+  a!: A;
 }
 
 {

@@ -15,7 +15,7 @@ var emptyCtorWithFieldInit = new EmptyCtorWithFieldInit();
 
 // trailing conditional allocate with field initialized to zero
 class EmptyCtorWithFieldNoInit {
-  a: i32;
+  a!: i32;
   constructor() {}
 }
 
@@ -36,7 +36,7 @@ var justFieldInit = new JustFieldInit();
 
 // direct allocate with field initialized to zero
 class JustFieldNoInit {
-  a: i32;
+  a!: i32;
 }
 
 var justFieldNoInit = new JustFieldNoInit();

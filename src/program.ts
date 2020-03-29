@@ -448,68 +448,68 @@ export class Program extends DiagnosticEmitter {
   // standard references
 
   /** ArrayBufferView reference. */
-  arrayBufferViewInstance: Class;
+  arrayBufferViewInstance!: Class;
   /** ArrayBuffer instance reference. */
-  arrayBufferInstance: Class;
+  arrayBufferInstance!: Class;
   /** Array prototype reference. */
-  arrayPrototype: ClassPrototype;
+  arrayPrototype!: ClassPrototype;
   /** Static array prototype reference. */
-  staticArrayPrototype: ClassPrototype;
+  staticArrayPrototype!: ClassPrototype;
   /** Set prototype reference. */
-  setPrototype: ClassPrototype;
+  setPrototype!: ClassPrototype;
   /** Map prototype reference. */
-  mapPrototype: ClassPrototype;
+  mapPrototype!: ClassPrototype;
   /** Int8Array prototype. */
-  i8ArrayPrototype: ClassPrototype;
+  i8ArrayPrototype!: ClassPrototype;
   /** Int16Array prototype. */
-  i16ArrayPrototype: ClassPrototype;
+  i16ArrayPrototype!: ClassPrototype;
   /** Int32Array prototype. */
-  i32ArrayPrototype: ClassPrototype;
+  i32ArrayPrototype!: ClassPrototype;
   /** Int64Array prototype. */
-  i64ArrayPrototype: ClassPrototype;
+  i64ArrayPrototype!: ClassPrototype;
   /** Uint8Array prototype. */
-  u8ArrayPrototype: ClassPrototype;
+  u8ArrayPrototype!: ClassPrototype;
   /** Uint8ClampedArray prototype. */
-  u8ClampedArrayPrototype: ClassPrototype;
+  u8ClampedArrayPrototype!: ClassPrototype;
   /** Uint16Array prototype. */
-  u16ArrayPrototype: ClassPrototype;
+  u16ArrayPrototype!: ClassPrototype;
   /** Uint32Array prototype. */
-  u32ArrayPrototype: ClassPrototype;
+  u32ArrayPrototype!: ClassPrototype;
   /** Uint64Array prototype. */
-  u64ArrayPrototype: ClassPrototype;
+  u64ArrayPrototype!: ClassPrototype;
   /** Float32Array prototype. */
-  f32ArrayPrototype: ClassPrototype;
+  f32ArrayPrototype!: ClassPrototype;
   /** Float64Array prototype. */
-  f64ArrayPrototype: ClassPrototype;
+  f64ArrayPrototype!: ClassPrototype;
   /** String instance reference. */
-  stringInstance: Class;
+  stringInstance!: Class;
   /** Abort function reference, if not explicitly disabled. */
-  abortInstance: Function | null;
+  abortInstance: Function | null = null;
 
   // runtime references
 
   /** RT `__alloc(size: usize, id: u32): usize` */
-  allocInstance: Function;
+  allocInstance!: Function;
   /** RT `__realloc(ptr: usize, newSize: usize): usize` */
-  reallocInstance: Function;
+  reallocInstance!: Function;
   /** RT `__free(ptr: usize): void` */
-  freeInstance: Function;
+  freeInstance!: Function;
   /** RT `__retain(ptr: usize): usize` */
-  retainInstance: Function;
+  retainInstance!: Function;
   /** RT `__release(ptr: usize): void` */
-  releaseInstance: Function;
+  releaseInstance!: Function;
   /** RT `__collect(): void` */
-  collectInstance: Function;
+  collectInstance!: Function;
   /** RT `__visit(ptr: usize, cookie: u32): void` */
-  visitInstance: Function;
+  visitInstance!: Function;
   /** RT `__typeinfo(id: u32): RTTIFlags` */
-  typeinfoInstance: Function;
+  typeinfoInstance!: Function;
   /** RT `__instanceof(ptr: usize, superId: u32): bool` */
-  instanceofInstance: Function;
+  instanceofInstance!: Function;
   /** RT `__allocBuffer(size: usize, id: u32, data: usize = 0): usize` */
-  allocBufferInstance: Function;
+  allocBufferInstance!: Function;
   /** RT `__allocArray(length: i32, alignLog2: usize, id: u32, data: usize = 0): usize` */
-  allocArrayInstance: Function;
+  allocArrayInstance!: Function;
 
   /** Next class id. */
   nextClassId: u32 = 0;
@@ -2695,9 +2695,9 @@ export abstract class VariableLikeElement extends TypedElement {
   /** Constant value kind. */
   constantValueKind: ConstantValueKind = ConstantValueKind.NONE;
   /** Constant integer value, if applicable. */
-  constantIntegerValue: i64;
+  constantIntegerValue!: i64;
   /** Constant float value, if applicable. */
-  constantFloatValue: f64;
+  constantFloatValue!: f64;
 
   /** Constructs a new variable-like element. */
   protected constructor(

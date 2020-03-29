@@ -115,7 +115,7 @@ export function assignGlobal(): void {
   glo = /* __retainRelease( */ REF /* , glo) */;
 }
 
-class Target { fld: Ref; }
+class Target { fld!: Ref; }
 
 var TARGET = new Target();
 
