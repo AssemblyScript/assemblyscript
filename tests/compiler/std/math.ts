@@ -2913,7 +2913,6 @@ assert(test_powf(                        -0.0,        Infinity,             0.0,
 assert(test_powf(                         0.0, reinterpret<f32>(0x00000001),0.0, 0.0, 0));
 assert(test_powf(                        -0.0, reinterpret<f32>(0x00000001),0.0, 0.0, 0));
 
-
 assert(test_powf(             0.0, reinterpret<f32>(0xFF7FFFFF),       Infinity, 0.0, DIVBYZERO));
 assert(test_powf(             0.0, reinterpret<f32>(0x80000001),       Infinity, 0.0, DIVBYZERO));
 assert(test_powf(            -0.0, reinterpret<f32>(0xFF7FFFFF),       Infinity, 0.0, DIVBYZERO));
