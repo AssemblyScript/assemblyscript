@@ -60,7 +60,8 @@ import {
   CommonNames,
   INDEX_SUFFIX,
   Feature,
-  Target
+  Target,
+  featureToString
 } from "./common";
 
 import {
@@ -114,6 +115,7 @@ import {
   DecoratorKind,
   AssertionKind,
   SourceKind,
+  FunctionTypeNode,
 
   Statement,
   BlockStatement,
@@ -962,6 +964,7 @@ export class Compiler extends DiagnosticEmitter {
           return false;
         }
         global.setType(resolvedType);
+        this.checkTypeSupported(global.type, typeNode);
 
       // Otherwise infer type from initializer
       } else if (initializerNode) {
@@ -1269,6 +1272,9 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var signature = instance.signature;
     var bodyNode = instance.prototype.bodyNode;
+    var declarationNode = instance.declaration;
+    assert(declarationNode.kind == NodeKind.FUNCTIONDECLARATION || declarationNode.kind == NodeKind.METHODDECLARATION);
+    this.checkSignatureSupported(instance.signature, (<FunctionDeclaration>declarationNode).signature);
 
     var funcRef: FunctionRef;
 
@@ -1344,7 +1350,7 @@ export class Compiler extends DiagnosticEmitter {
     // imported function
     } else if (instance.is(CommonFlags.AMBIENT)) {
       instance.set(CommonFlags.MODULE_IMPORT);
-      mangleImportName(instance, instance.declaration); // TODO: check for duplicates
+      mangleImportName(instance, declarationNode); // TODO: check for duplicates
       module.addFunctionImport(
         instance.internalName,
         mangleImportName_moduleName,
@@ -1598,7 +1604,12 @@ export class Compiler extends DiagnosticEmitter {
     );
     if (type.isManaged) valueExpr = this.makeRetain(valueExpr);
     instance.getterRef = module.addFunction(instance.internalGetterName, nativeThisType, nativeValueType, null, valueExpr);
-    if (instance.setterRef) instance.set(CommonFlags.COMPILED);
+    if (instance.setterRef) {
+      instance.set(CommonFlags.COMPILED);
+    } else {
+      let typeNode = instance.typeNode;
+      if (typeNode) this.checkTypeSupported(instance.type, typeNode);
+    }
     return true;
   }
 
@@ -1646,7 +1657,12 @@ export class Compiler extends DiagnosticEmitter {
         nativeValueType, instance.memoryOffset
       )
     );
-    if (instance.getterRef) instance.set(CommonFlags.COMPILED);
+    if (instance.getterRef) {
+      instance.set(CommonFlags.COMPILED);
+    } else {
+      let typeNode = instance.typeNode;
+      if (typeNode) this.checkTypeSupported(instance.type, typeNode);
+    }
     return true;
   }
 
@@ -2906,6 +2922,8 @@ export class Compiler extends DiagnosticEmitter {
           makeMap(flow.contextualTypeArguments)
         );
         if (!type) continue;
+        this.checkTypeSupported(type, typeNode);
+
         if (initializerNode) {
           initExpr = this.compileExpression(initializerNode, type, // reports
             Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
@@ -6283,6 +6301,12 @@ export class Compiler extends DiagnosticEmitter {
     var thisType = (<Class>field.parent).type;
     var nativeThisType = thisType.toNativeType();
 
+    if (!field.is(CommonFlags.COMPILED)) {
+      field.set(CommonFlags.COMPILED);
+      let typeNode = field.typeNode;
+      if (typeNode) this.checkTypeSupported(field.type, typeNode);
+    }
+
     if (fieldType.isManaged && thisType.isManaged) {
       let tempThis = flow.getTempLocal(thisType, findUsedLocals(valueExpr));
       // set before and read after valueExpr executes below ^
@@ -7996,6 +8020,16 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
         let functionPrototype = <FunctionPrototype>target;
+        let typeParameterNodes = functionPrototype.typeParameterNodes;
+
+        if (typeParameterNodes !== null && typeParameterNodes.length != 0) {
+          this.error(
+            DiagnosticCode.Expected_0_arguments_but_got_1,
+            expression.range, typeParameterNodes.length.toString(), "0"
+          );
+          return module.unreachable();
+        }
+
         let functionInstance = this.resolver.resolveFunction(
           functionPrototype,
           null,
@@ -8863,7 +8897,6 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0; i < numParameters; ++i) {
         operands[i + 1] = module.local_get(i + 1, parameterTypes[i].toNativeType());
       }
-      // TODO: base constructor might be inlined, but makeCallDirect can't do this
       stmts.push(
         module.local_set(0,
           this.makeCallDirect(assert(baseClass.constructorInstance), operands, reportNode, false, true)
@@ -8973,6 +9006,11 @@ export class Compiler extends DiagnosticEmitter {
               thisExpression.range
             );
           }
+        }
+        if (!fieldInstance.is(CommonFlags.COMPILED)) {
+          fieldInstance.set(CommonFlags.COMPILED);
+          let typeNode = fieldInstance.typeNode;
+          if (typeNode) this.checkTypeSupported(fieldInstance.type, typeNode);
         }
         this.currentType = fieldType;
         return module.load(
@@ -9896,6 +9934,62 @@ export class Compiler extends DiagnosticEmitter {
     parentFunction.debugLocations.push(range);
   }
 
+  /** Checks whether a particular feature is enabled. */
+  checkFeatureEnabled(feature: Feature, reportNode: Node): bool {
+    if (!this.options.hasFeature(feature)) {
+      this.error(
+        DiagnosticCode.Feature_0_is_not_enabled,
+        reportNode.range, featureToString(feature)
+      );
+      return false;
+    }
+    return true;
+  }
+
+  /** Checks whether a particular type is supported. */
+  checkTypeSupported(type: Type, reportNode: Node): bool {
+    switch (type.kind) {
+      case TypeKind.V128: return this.checkFeatureEnabled(Feature.SIMD, reportNode);
+      case TypeKind.ANYREF: return this.checkFeatureEnabled(Feature.REFERENCE_TYPES, reportNode);
+    }
+    if (type.is(TypeFlags.REFERENCE)) {
+      let classReference = type.classReference;
+      while (classReference) {
+        let typeArguments = classReference.typeArguments;
+        if (typeArguments) {
+          for (let i = 0, k = typeArguments.length; i < k; ++i) {
+            if (!this.checkTypeSupported(typeArguments[i], reportNode)) {
+              return false;
+            }
+          }
+        }
+        classReference = classReference.base;
+      }
+    }
+    return true;
+  }
+
+  /** Checks whether a particular function signature is supported. */
+  checkSignatureSupported(signature: Signature, reportNode: FunctionTypeNode): bool {
+    var supported = true;
+    var explicitThisType = reportNode.explicitThisType;
+    if (explicitThisType) {
+      if (!this.checkTypeSupported(assert(signature.thisType), explicitThisType)) {
+        supported = false;
+      }
+    }
+    var parameterTypes = signature.parameterTypes;
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      if (!this.checkTypeSupported(parameterTypes[i], reportNode.parameters[i])) {
+        supported = false;
+      }
+    }
+    if (!this.checkTypeSupported(signature.returnType, reportNode.returnType)) {
+      supported = false;
+    }
+    return supported;
+  }
+
   // === Specialized code generation ==============================================================
 
   /** Makes a constant zero of the specified type. */
@@ -10085,6 +10179,8 @@ export class Compiler extends DiagnosticEmitter {
       let fieldPrototype = field.prototype;
       let initializerNode = fieldPrototype.initializerNode;
       let parameterIndex = fieldPrototype.parameterIndex;
+      let typeNode = field.typeNode;
+      if (typeNode) this.checkTypeSupported(fieldType, typeNode);
       let initExpr: ExpressionRef = -1;
       const isDefiniteAssigment = field.is(CommonFlags.DEFINITE_ASSIGNMENT);
 
