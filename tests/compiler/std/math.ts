@@ -2788,15 +2788,15 @@ assert(test_powf(      1.0,      -0.0,       1.0, 0.0, 0));
 assert(test_powf(     -1.0,      -0.0,       1.0, 0.0, 0));
 assert(test_powf(     -0.5,      -0.0,       1.0, 0.0, 0));
 assert(test_powf(     -1.0,       NaN,       NaN, 0.0, 0));
-assert(test_powf(     -1.0,  Infinity,       NaN, 0.0, 0));  // C: 1.0, JS: NaN
+assert(test_powf(     -1.0,  Infinity,       NaN, 0.0, 0)); // C: 1.0, JS: NaN
 assert(test_powf(     -1.0, -Infinity,       NaN, 0.0, 0)); // C: 1.0, JS: NaN
 assert(test_powf(     -1.0,       2.0,       1.0, 0.0, 0));
 assert(test_powf(     -1.0,      -1.0,      -1.0, 0.0, 0));
 assert(test_powf(     -1.0,      -2.0,       1.0, 0.0, 0));
 assert(test_powf(     -1.0,      -3.0,      -1.0, 0.0, 0));
 assert(test_powf(     -1.0,       0.5,       NaN, 0.0, INVALID));
-assert(test_powf(      1.0,       NaN,       NaN, 0.0, 0));        // C: 1.0, JS: NaN
-assert(test_powf(      1.0,  Infinity,       NaN, 0.0, 0));   // C: 1.0, JS: NaN
+assert(test_powf(      1.0,       NaN,       NaN, 0.0, 0));  // C: 1.0, JS: NaN
+assert(test_powf(      1.0,  Infinity,       NaN, 0.0, 0));  // C: 1.0, JS: NaN
 assert(test_powf(      1.0, -Infinity,       NaN, 0.0, 0));  // C: 1.0, JS: NaN
 assert(test_powf(      1.0,       3.0,       1.0, 0.0, 0));
 assert(test_powf(      1.0,       0.5,       1.0, 0.0, 0));
