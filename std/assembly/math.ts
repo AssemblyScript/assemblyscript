@@ -1884,11 +1884,11 @@ function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
 @inline
 function log2f(x: f64): f64 {
   const
-    log2e = 1.44269504088896340736,
-    c0 = 0.9999999993072205474,
-    c1 = 0.3333340818599626478,
-    c2 = 0.1998737838945025914,
-    c3 = 0.1496325726858180278;
+    log2e = reinterpret<f64>(0x3FF71547652B82FE), // 1.44269504088896340736
+    c0 = reinterpret<f64>(0x3FEFFFFFFFA0C8FD), // 0.9999999993072205474
+    c1 = reinterpret<f64>(0x3FD55558790EC439), // 0.3333340818599626478
+    c2 = reinterpret<f64>(0x3FC99576D293CBE7), // 0.1998737838945025914
+    c3 = reinterpret<f64>(0x3FC32728FF0D0C16); // 0.1496325726858180278
 
   var i = reinterpret<i64>(x);
   var exponent = (i - 0x3FE6A09E667F3BCD) >> 52;
@@ -1903,12 +1903,12 @@ function log2f(x: f64): f64 {
 @inline
 function exp2f(x: f64): f64 {
   const
-    c0 = 6.931471880289532425e-1,
-    c1 = 2.402265108421173406e-1,
-    c2 = 5.550357105498874537e-2,
-    c3 = 9.618030771171497658e-3,
-    c4 = 1.339086685300950937e-3,
-    c5 = 1.546973499989028719e-4;
+    c0 = reinterpret<f64>(0x3FE62E4302FCC24A), // 6.931471880289532425e-1
+    c1 = reinterpret<f64>(0x3FCEBFBE07D97B91), // 2.402265108421173406e-1
+    c2 = reinterpret<f64>(0x3FAC6AF6CCFC1A65), // 5.550357105498874537e-2
+    c3 = reinterpret<f64>(0x3F83B29E3CE9AEF6), // 9.618030771171497658e-3
+    c4 = reinterpret<f64>(0x3F55F0896145A89F), // 1.339086685300950937e-3
+    c5 = reinterpret<f64>(0x3F2446C81E384864); // 1.546973499989028719e-4
 
   if (x < -1022) return 0;
   if (x >= 1024) return Infinity;
