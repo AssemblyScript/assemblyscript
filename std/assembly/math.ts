@@ -2642,22 +2642,22 @@ export namespace NativeMathf {
         return NaN;
       }
       let sign: u32 = 0;
-      let iy = reinterpret<i32>(y);
-      let ix = reinterpret<i32>(x);
-      let sx = ix >>> 31;
-      ix &= 0x7FFFFFFF;
+      let uy = reinterpret<u32>(y);
+      let ux = reinterpret<u32>(x);
+      let sx = ux >> 31;
+      ux &= 0x7FFFFFFF;
       if (sx && nearest(y) == y) {
         x = -x;
         sx = 0;
         sign = u32(nearest(y * 0.5) != y * 0.5) << 31;
       }
       let m: u32;
-      if (ix == 0x3F800000) { // x == 1
-        m = (iy & 0x7FFFFFFF) == 0x7F800000 ? 0x7FC00000 : 0x3F800000;
-      } else if (ix == 0) {
-        m = iy >>> 31 ? 0x7F800000 : 0;
-      } else if (ix == 0x7F800000) {
-        m = iy >>> 31 ? 0 : 0x7F800000;
+      if (ux == 0x3F800000) { // x == 1
+        m = (uy & 0x7FFFFFFF) == 0x7F800000 ? 0x7FC00000 : 0x3F800000;
+      } else if (ux == 0) {
+        m = uy >> 31 ? 0x7F800000 : 0;
+      } else if (ux == 0x7F800000) {
+        m = uy >> 31 ? 0 : 0x7F800000;
       } else if (sx) {
         return NaN;
       } else {
