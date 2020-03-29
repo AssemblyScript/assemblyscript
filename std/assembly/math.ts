@@ -2638,7 +2638,8 @@ export namespace NativeMathf {
     } else {
       // based on: metallic/src/math/float/powf.c
       if (y == 0) return 1;
-      if (isNaN(x) || isNaN(y)) {
+      // @ts-ignore: cast
+      if (isNaN(x) | isNaN(y)) {
         return NaN;
       }
       let sign: u32 = 0;

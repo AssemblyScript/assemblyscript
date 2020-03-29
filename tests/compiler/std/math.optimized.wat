@@ -8133,14 +8133,13 @@
    f32.const 1
    return
   end
-  i32.const 1
-  local.get $1
-  local.get $1
-  f32.ne
   local.get $0
   local.get $0
   f32.ne
-  select
+  local.get $1
+  local.get $1
+  f32.ne
+  i32.or
   if
    f32.const nan:0x400000
    return
