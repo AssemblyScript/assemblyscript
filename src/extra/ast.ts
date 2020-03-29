@@ -1679,9 +1679,9 @@ export class ASTBuilder extends DiagnosticEmitter {
     }
   }
 
-  serializeScope(scope: Map<string,DeclarationStatement | null>): bool {
-    if (scope != null && scope.size > 0) {
-      this.sb.push("/* {" + Map_keys(scope).join(",") + "} */");
+  serializeScope(scope: string[] | null): bool {
+    if (scope != null && scope.length > 0) {
+      this.sb.push("/* {" + scope.join(",") + "} */");
       return true;
     }
     return false;

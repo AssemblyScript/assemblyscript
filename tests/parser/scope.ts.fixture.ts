@@ -36,4 +36,36 @@ function foo(a: i32): void /* {a,b,d,f,g,j,l,m,p,r,t,v} */ {/* {c} */
     var w = 0;
     let x = 0;
   };
+  var a = 1;
+  let a = 1;
+  {
+    var a = 1;
+  }
+  var b = 1;
+  let b = 1;
+  {
+    var b = 1;
+  }
+  var c = 1;
+  let c = 1;
+  {
+    var c = 1;
+  }
+  var v = 1;
+  let v = 1;
+  {
+    var v = 1;
+  }
 }
+// ERROR 2300: "Duplicate identifier 'a'." in scope.ts:38:7
+// ERROR 2300: "Duplicate identifier 'a'." in scope.ts:39:7
+// ERROR 2300: "Duplicate identifier 'a'." in scope.ts:41:9
+// ERROR 2300: "Duplicate identifier 'b'." in scope.ts:43:7
+// ERROR 2300: "Duplicate identifier 'b'." in scope.ts:44:7
+// ERROR 2300: "Duplicate identifier 'b'." in scope.ts:46:9
+// ERROR 2300: "Duplicate identifier 'c'." in scope.ts:48:7
+// ERROR 2300: "Duplicate identifier 'c'." in scope.ts:49:7
+// ERROR 2300: "Duplicate identifier 'c'." in scope.ts:51:9
+// ERROR 2300: "Duplicate identifier 'v'." in scope.ts:53:7
+// ERROR 2300: "Duplicate identifier 'v'." in scope.ts:54:7
+// ERROR 2300: "Duplicate identifier 'v'." in scope.ts:56:9

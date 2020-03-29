@@ -130,7 +130,6 @@ export enum DiagnosticCode {
   Duplicate_function_implementation = 2393,
   Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
   A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
-  Cannot_redeclare_block_scoped_variable_0 = 2451,
   The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
   Type_0_has_no_property_1 = 2460,
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
@@ -285,7 +284,6 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2393: return "Duplicate function implementation.";
     case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
     case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
-    case 2451: return "Cannot redeclare block-scoped variable '{0}'.";
     case 2453: return "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.";
     case 2460: return "Type '{0}' has no property '{1}'.";
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";

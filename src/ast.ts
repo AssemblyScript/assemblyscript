@@ -1804,7 +1804,7 @@ export class BlockStatement extends Statement {
   /** Contained statements. */
   statements: Statement[];
   /** Scoped names. */
-  _scope: Map<string,DeclarationStatement | null>;
+  _scope: string[];
 }
 
 /** Represents a `break` statement. */
@@ -1917,7 +1917,7 @@ export class ForStatement extends Statement {
   /** Statement being looped over. */
   statement: Statement;
   /** Scoped names. */
-  _scope: Map<string,DeclarationStatement | null>;
+  _scope: string[];
 }
 
 /** Represents a `for..of` statement. */
@@ -1929,7 +1929,7 @@ export class ForOfStatement extends Statement {
   /** Statement being looped over. */
   statement: Statement;
   /** Scoped names. */
-  _scope: Map<string,DeclarationStatement | null>;
+  _scope: string[];
 }
 
 /** Indicates the kind of an array function. */
@@ -1953,7 +1953,7 @@ export class FunctionDeclaration extends DeclarationStatement {
   /** Arrow function kind, if applicable. */
   arrowKind: ArrowKind;
   /** Scoped names. */
-  _scope: Map<string,DeclarationStatement | null>;
+  _scope: string[];
 
   get isGeneric(): bool {
     var typeParameters = this.typeParameters;
@@ -2018,7 +2018,7 @@ export class NamespaceDeclaration extends DeclarationStatement {
   /** Array of namespace members. */
   members: Statement[];
   /** Scoped names. */
-  _scope: Map<string,DeclarationStatement | null>;
+  _scope: string[];
 }
 
 /** Represents a `return` statement. */
@@ -2042,7 +2042,7 @@ export class SwitchStatement extends Statement {
   /** Contained cases. */
   cases: SwitchCase[];
   /** Scoped names. */
-  _scope: Map<string,DeclarationStatement | null>;
+  _scope: string[];
 }
 
 /** Represents a `throw` statement. */
@@ -2062,9 +2062,9 @@ export class TryStatement extends Statement {
   /** Statements being executed afterwards, if a `finally` clause is present. */
   finallyStatements: Statement[] | null;
   /** Scoped names in catch clause. */
-  _catchScope: Map<string,DeclarationStatement | null> | null;
+  _catchScope: string[];
   /** Scoped names in finally clause. */
-  _finallyScope: Map<string,DeclarationStatement | null> | null;
+  _finallyScope: string[];
 }
 
 /** Represents a `type` declaration. */
@@ -2133,16 +2133,17 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
   /** Function being evaluated. */
   declaration: FunctionDeclaration;
   /** Function scope. */
-  functionScope: Map<string,DeclarationStatement | null> = new Map();
+  functionScope: Map<string,Node> = new Map();
   /** Block scope stack. */
-  blockScopes: Map<string,DeclarationStatement | null>[] = [];
+  blockScopes: Map<string,Node>[] = [];
 
   /** Evaluates the specified function. */
   static analyze(declaration: FunctionDeclaration, diagnostics: DiagnosticMessage[]): void {
     var instance = new ScopeAnalyzer(declaration, diagnostics);
     var body = declaration.body;
     if (body) instance.visit(body);
-    declaration._scope = instance.functionScope;
+    declaration._scope = Map_keys(instance.functionScope);
+    assert(instance.blockScopes.length == 0);
   }
 
   constructor(declaration: FunctionDeclaration, diagnostics: DiagnosticMessage[]) {
@@ -2151,7 +2152,8 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
     var parameters = declaration.signature.parameters;
     var functionScope = this.functionScope;
     for (let i = 0, k = parameters.length; i < k; ++i) {
-      functionScope.set(parameters[i].name.text, null);
+      let identifier = parameters[i].name;
+      functionScope.set(identifier.text, identifier);
     }
   }
 
@@ -2159,7 +2161,7 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
     switch (node.kind) {
       case NodeKind.BLOCK: {
         let blockStatement = <BlockStatement>node;
-        let scope = new Map<string,DeclarationStatement | null>();
+        let scope = new Map<string,Node>();
         let blockScopes = this.blockScopes;
         blockScopes.push(scope);
         let statements = blockStatement.statements;
@@ -2167,7 +2169,7 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
           this.visit(statements[i]);
         }
         blockScopes.pop();
-        blockStatement._scope = scope;
+        blockStatement._scope = Map_keys(scope);
         break;
       }
       case NodeKind.BREAK: break;
@@ -2186,26 +2188,26 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
       }
       case NodeKind.FOR: {
         let forStatement = <ForStatement>node;
-        let scope = new Map<string,DeclarationStatement | null>();
+        let scope = new Map<string,Node>();
         let blockScopes = this.blockScopes;
         blockScopes.push(scope);
         let initializer = forStatement.initializer;
         if (initializer) this.visit(initializer);
         this.visit(forStatement.statement);
         blockScopes.pop();
-        forStatement._scope = scope;
+        forStatement._scope = Map_keys(scope);
         break;
       }
       case NodeKind.FOROF: {
         let forOfStatement = <ForOfStatement>node;
-        let scope = new Map<string,DeclarationStatement | null>();
+        let scope = new Map<string,Node>();
         let blockScopes = this.blockScopes;
         blockScopes.push(scope);
         let variable = forOfStatement.variable;
         if (variable) this.visit(variable);
         this.visit(forOfStatement.statement);
         blockScopes.pop();
-        forOfStatement._scope = scope;
+        forOfStatement._scope = Map_keys(scope);
         break;
       }
       case NodeKind.IF: {
@@ -2218,7 +2220,7 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
       case NodeKind.RETURN: break;
       case NodeKind.SWITCH: {
         let switchStatement = <SwitchStatement>node;
-        let scope = new Map<string,DeclarationStatement | null>();
+        let scope = new Map<string,Node>();
         let blockScopes = this.blockScopes;
         blockScopes.push(scope);
         let cases = switchStatement.cases;
@@ -2226,7 +2228,7 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
           this.visit(cases[i]);
         }
         blockScopes.pop();
-        switchStatement._scope = scope;
+        switchStatement._scope = Map_keys(scope);
         break;
       }
       case NodeKind.THROW: break;
@@ -2238,10 +2240,10 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
         }
         let catchStatements = tryStatement.catchStatements;
         if (catchStatements) {
-          let scope = new Map<string,DeclarationStatement | null>();
+          let scope = new Map<string,Node>();
           let catchVariable = tryStatement.catchVariable;
           if (catchVariable) {
-            scope.set(catchVariable.text, null);
+            scope.set(catchVariable.text, catchVariable);
           }
           let blockScopes = this.blockScopes;
           blockScopes.push(scope);
@@ -2249,18 +2251,18 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
             this.visit(catchStatements[i]);
           }
           blockScopes.pop();
-          tryStatement._catchScope = scope;
+          tryStatement._catchScope = Map_keys(scope);
         }
         let finallyStatements = tryStatement.finallyStatements;
         if (finallyStatements) {
-          let scope = new Map<string,DeclarationStatement | null>();
+          let scope = new Map<string,Node>();
           let blockScopes = this.blockScopes;
           blockScopes.push(scope);
           for (let i = 0, k = finallyStatements.length; i < k; ++i) {
             this.visit(finallyStatements[i]);
           }
           blockScopes.pop();
-          tryStatement._finallyScope = scope;
+          tryStatement._finallyScope = Map_keys(scope);
         }
         break;
       }
@@ -2279,46 +2281,13 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
       case NodeKind.FUNCTIONDECLARATION: {
         let declaration = <FunctionDeclaration>node;
         // We are only interested in the name here, not the contents
-        let name = declaration.name;
-        if (name.text.length) {
-          let functionScope = this.functionScope;
-          if (functionScope.has(name.text)) {
-            this.error(
-              DiagnosticCode.Duplicate_identifier_0,
-              name.range, name.text
-            );
-          } else {
-            functionScope.set(name.text, declaration);
-          }
-        }
+        let identifier = declaration.name;
+        if (identifier.text.length) this.check(identifier, true);
         break;
       }
       case NodeKind.VARIABLEDECLARATION: {
         let declaration = <VariableDeclaration>node;
-        let name = declaration.name;
-        let isVar = !(declaration.flags & (CommonFlags.LET | CommonFlags.CONST));
-        if (isVar) {
-          let functionScope = this.functionScope;
-          if (functionScope.has(name.text)) {
-            this.error(
-              DiagnosticCode.Duplicate_identifier_0,
-              name.range, name.text
-            );
-          } else {
-            functionScope.set(name.text, declaration);
-          }
-        } else {
-          let blockScopes = this.blockScopes;
-          let blockScope = blockScopes[assert(blockScopes.length) - 1];
-          if (blockScope.has(name.text)) {
-            this.error(
-              DiagnosticCode.Cannot_redeclare_block_scoped_variable_0,
-              name.range, name.text
-            );
-          } else {
-            blockScope.set(name.text, declaration);
-          }
-        }
+        this.check(declaration.name, !(declaration.flags & (CommonFlags.LET | CommonFlags.CONST)));
         break;
       }
       case NodeKind.SWITCHCASE: {
@@ -2329,6 +2298,46 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
         break;
       }
       default: assert(false);
+    }
+  }
+
+  check(identifier: IdentifierExpression, isVar: bool): void {
+    var name = identifier.text;
+    var blockScopes = this.blockScopes;
+    var blockDepth = assert(blockScopes.length);
+    var blockScope = blockScopes[blockDepth - 1];
+    if (blockScope.has(name)) {
+      let existing = assert(blockScope.get(name));
+      this.errorRelated(
+        DiagnosticCode.Duplicate_identifier_0,
+        identifier.range, existing.range, name
+      );
+    } else if (isVar || blockDepth == 1) {
+      let functionScope = this.functionScope;
+      if (functionScope.has(name)) {
+        let existing = assert(functionScope.get(name));
+        this.errorRelated(
+          DiagnosticCode.Duplicate_identifier_0,
+          identifier.range, existing.range, name
+        );
+      } else {
+        if (isVar) {
+          let firstScope = blockScopes[0];
+          if (firstScope.has(name)) {
+            let existing = assert(firstScope.get(name));
+            this.errorRelated(
+              DiagnosticCode.Duplicate_identifier_0,
+              identifier.range, existing.range, name
+            );
+          } else {
+            functionScope.set(identifier.text, identifier);
+          }
+        } else {
+          blockScope.set(identifier.text, identifier);
+        }
+      }
+    } else {
+      blockScope.set(identifier.text, identifier);
     }
   }
 }

@@ -33,4 +33,26 @@ function foo(a: i32): void {
     var w = 0;
     let x = 0;
   }
+
+  // Errors
+  var a = 1;
+  let a = 1;
+  {
+    var a = 1;
+  }
+  var b = 1;
+  let b = 1;
+  {
+    var b = 1;
+  }
+  var c = 1;
+  let c = 1;
+  {
+    var c = 1;
+  }
+  var v = 1;
+  let v = 1;
+  {
+    var v = 1;
+  }
 }
