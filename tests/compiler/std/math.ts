@@ -2973,24 +2973,22 @@ assert(test_powf(reinterpret<f32>(0x7E800000),      -1.0, reinterpret<f32>(0x008
 assert(test_powf(reinterpret<f32>(0x7F7FFFFF),  Infinity,                     Infinity, 0.0, 0));
 assert(test_powf(reinterpret<f32>(0x7F7FFFFF), -Infinity,                          0.0, 0.0, 0));
 
-/*
-assert(test_powf(        0x1p+127,            -2.0,             0.0,       -0x1p-105, INEXACT | UNDERFLOW));
-assert(test_powf(        0x1p+127,       -0x1.8p+1,             0.0,            -0.0, INEXACT | UNDERFLOW));
-assert(test_powf(        0x1p+127,      -0x1.fep+7,             0.0,            -0.0, INEXACT | UNDERFLOW));
-assert(test_powf(        0x1p+127,          -256.0,             0.0,            -0.0, INEXACT | UNDERFLOW));
-assert(test_powf(        0x1p+127,      -0x1.01p+8,             0.0,            -0.0, INEXACT | UNDERFLOW));
-assert(test_powf(        0x1p+127,      -0x1.04p+8,             0.0,            -0.0, INEXACT | UNDERFLOW));
-assert(test_powf(        0x1p+127,      -0x1.05p+8,             0.0,            -0.0, INEXACT | UNDERFLOW));
-assert(test_powf(        0x1p+127,   -0x1.fffcp+14,             0.0,            -0.0, INEXACT | UNDERFLOW));
-assert(test_powf(        0x1p+127,        -32768.0,             0.0,            -0.0, INEXACT | UNDERFLOW));
-assert(test_powf(  0x1.fffffp+127,            -1.0, 0x1.000008p-128, -0x1.000008p-21, INEXACT | UNDERFLOW));
-assert(test_powf(  0x1.fffffp+127,            -2.0,             0.0, -0x1.00001p-107, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F000000),                         -2.0,                          0.0, reinterpret<f32>(0x8B000000), INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F000000), reinterpret<f32>(0xC0400000),                          0.0,                         -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F000000), reinterpret<f32>(0xC37F0000),                          0.0,                         -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F000000),                       -256.0,                          0.0,                         -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F000000), reinterpret<f32>(0xC3808000),                          0.0,                         -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F000000), reinterpret<f32>(0xC3820000),                          0.0,                         -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F000000), reinterpret<f32>(0xC3828000),                          0.0,                         -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F000000), reinterpret<f32>(0xC6FFFE00),                          0.0,                         -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F000000),                     -32768.0,                          0.0,                         -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F7FFFF8),                         -1.0, reinterpret<f32>(0x00200001), reinterpret<f32>(0xB5000004), INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0x7F7FFFF8),                         -2.0,                          0.0, reinterpret<f32>(0x8A000008), INEXACT | UNDERFLOW));
 
-assert(test_powf(       -0x1p+127,   -0x1.fffcp+14,            -0.0,             0.0, INEXACT | UNDERFLOW));
-assert(test_powf(       -0x1p+127,        -32768.0,             0.0,            -0.0, INEXACT | UNDERFLOW));
-assert(test_powf( -0x1.fffffp+127,            -1.0,-0x1.000008p-128,  0x1.000008p-21, INEXACT | UNDERFLOW));
-assert(test_powf( -0x1.fffffp+127,            -2.0,             0.0, -0x1.00001p-107, INEXACT | UNDERFLOW));
-*/
+assert(test_powf(reinterpret<f32>(0xFF000000), reinterpret<f32>(0xC6FFFE00),                         -0.0,                          0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0xFF000000),                     -32768.0,                          0.0,                         -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0xFF7FFFF8),                         -1.0, reinterpret<f32>(0x80200001), reinterpret<f32>(0x35000004), INEXACT | UNDERFLOW));
+assert(test_powf(reinterpret<f32>(0xFF7FFFF8),                         -2.0,                          0.0, reinterpret<f32>(0x8A000008), INEXACT | UNDERFLOW));
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.random
