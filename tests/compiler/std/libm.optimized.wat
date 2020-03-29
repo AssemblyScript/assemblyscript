@@ -7846,11 +7846,13 @@
   if (result i32)
    i32.const 2143289344
    i32.const 1065353216
+   local.get $4
    local.get $6
    i32.const 2147483647
    i32.and
    i32.const 2139095040
    i32.eq
+   i32.or
    select
   else
    local.get $7
@@ -7868,8 +7870,7 @@
     else
      local.get $4
      if (result i32)
-      f32.const nan:0x400000
-      return
+      i32.const 2143289344
      else
       local.get $0
       f64.promote_f32

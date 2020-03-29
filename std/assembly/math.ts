@@ -2654,14 +2654,13 @@ export namespace NativeMathf {
       }
       let m: u32;
       if (ux == 0x3F800000) { // x == 1
-        if (sx) return NaN;
-        m = (uy & 0x7FFFFFFF) == 0x7F800000 ? 0x7FC00000 : 0x3F800000;
+        m = sx | u32((uy & 0x7FFFFFFF) == 0x7F800000) ? 0x7FC00000 : 0x3F800000;
       } else if (ux == 0) {
         m = uy >> 31 ? 0x7F800000 : 0;
       } else if (ux == 0x7F800000) {
         m = uy >> 31 ? 0 : 0x7F800000;
       } else if (sx) {
-        return NaN;
+        m = 0x7FC00000;
       } else {
         m = reinterpret<u32>(<f32>exp2f(<f64>y * log2f(x)));
       }
