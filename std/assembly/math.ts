@@ -2633,30 +2633,32 @@ export namespace NativeMathf {
       if (y == 0.0) return 1.0;
     }
     if (ASC_SHRINK_LEVEL < 1) {
-      // see: musl/src/math/powf.c and SUN COPYRIGHT NOTICE above
+      // see: musl/src/math/powf.c
       return powf_lut(x, y);
     } else {
       // based on: metallic/src/math/float/powf.c
-      let sign: u32 = 0;
-      let iy = reinterpret<i32>(y);
-      let ix = reinterpret<i32>(x);
       if (y == 0) return 1;
       if (isNaN(x) || isNaN(y)) {
         return NaN;
       }
-      if ((ix >>> 31) && nearest(y) == y) {
+      let sign: u32 = 0;
+      let iy = reinterpret<i32>(y);
+      let ix = reinterpret<i32>(x);
+      let sx = ix >>> 31;
+      ix &= 0x7FFFFFFF;
+      if (sx && nearest(y) == y) {
         x = -x;
-        ix &= 0x7FFFFFFF;
+        sx = 0;
         sign = u32(nearest(y * 0.5) != y * 0.5) << 31;
       }
       let m: u32;
       if (ix == 0x3F800000) { // x == 1
         m = (iy & 0x7FFFFFFF) == 0x7F800000 ? 0x7FC00000 : 0x3F800000;
-      } else if (x == 0) {
+      } else if (ix == 0) {
         m = iy >>> 31 ? 0x7F800000 : 0;
-      } else if ((ix & 0x7FFFFFFF) == 0x7F800000) {
+      } else if (ix == 0x7F800000) {
         m = iy >>> 31 ? 0 : 0x7F800000;
-      } else if (ix >>> 31) {
+      } else if (sx) {
         return NaN;
       } else {
         m = reinterpret<u32>(<f32>exp2f(<f64>y * log2f(x)));

@@ -8065,14 +8065,15 @@
  )
  (func $~lib/math/NativeMathf.pow (; 124 ;) (param $0 f32) (param $1 f32) (result f32)
   (local $2 f64)
-  (local $3 i32)
-  (local $4 f64)
+  (local $3 f64)
+  (local $4 i32)
   (local $5 f64)
   (local $6 i32)
-  (local $7 i64)
-  (local $8 f32)
-  (local $9 i32)
-  (local $10 i64)
+  (local $7 i32)
+  (local $8 i64)
+  (local $9 f32)
+  (local $10 i32)
+  (local $11 i64)
   local.get $1
   f32.abs
   f32.const 2
@@ -8125,9 +8126,6 @@
     return
    end
   end
-  local.get $0
-  i32.reinterpret_f32
-  local.set $3
   local.get $1
   f32.const 0
   f32.eq
@@ -8147,30 +8145,37 @@
    f32.const nan:0x400000
    return
   end
-  local.get $1
-  f32.nearest
-  local.get $1
-  f32.eq
-  i32.const 0
-  local.get $3
+  local.get $0
+  i32.reinterpret_f32
+  local.tee $4
+  i32.const 2147483647
+  i32.and
+  local.set $7
+  local.get $4
   i32.const 31
   i32.shr_u
-  select
+  local.tee $4
+  if (result i32)
+   local.get $1
+   f32.nearest
+   local.get $1
+   f32.eq
+  else
+   i32.const 0
+  end
   if
-   local.get $3
-   i32.const 2147483647
-   i32.and
-   local.set $3
+   i32.const 0
+   local.set $4
    local.get $1
    f32.const 0.5
    f32.mul
-   local.tee $8
+   local.tee $9
    f32.nearest
-   local.get $8
+   local.get $9
    f32.ne
    i32.const 31
    i32.shl
-   local.set $9
+   local.set $10
    local.get $0
    f32.neg
    local.set $0
@@ -8178,7 +8183,7 @@
   local.get $1
   i32.reinterpret_f32
   local.set $6
-  local.get $3
+  local.get $7
   i32.const 1065353216
   i32.eq
   if (result i32)
@@ -8191,20 +8196,9 @@
    i32.eq
    select
   else
-   local.get $0
-   f32.const 0
-   f32.eq
+   local.get $7
    if (result i32)
-    i32.const 2139095040
-    i32.const 0
-    local.get $6
-    i32.const 31
-    i32.shr_u
-    select
-   else
-    local.get $3
-    i32.const 2147483647
-    i32.and
+    local.get $7
     i32.const 2139095040
     i32.eq
     if (result i32)
@@ -8215,9 +8209,7 @@
      i32.shr_u
      select
     else
-     local.get $3
-     i32.const 31
-     i32.shr_u
+     local.get $4
      if (result i32)
       f32.const nan:0x400000
       return
@@ -8225,14 +8217,14 @@
       local.get $0
       f64.promote_f32
       i64.reinterpret_f64
-      local.tee $10
+      local.tee $11
       i64.const 4604544271217802189
       i64.sub
       i64.const 52
       i64.shr_s
-      local.set $7
-      local.get $10
-      local.get $7
+      local.set $8
+      local.get $11
+      local.get $8
       i64.const 52
       i64.shl
       i64.sub
@@ -8244,15 +8236,15 @@
       f64.const 1
       f64.add
       f64.div
-      local.tee $4
-      local.get $4
+      local.tee $3
+      local.get $3
       f64.mul
       local.set $2
       block $~lib/math/exp2f|inlined.0
        local.get $1
        f64.promote_f32
        f64.const 2.8853900817779268
-       local.get $4
+       local.get $3
        f64.const 0.9999999993072205
        f64.const 0.33333408185996266
        local.get $2
@@ -8270,7 +8262,7 @@
        f64.add
        f64.mul
        f64.mul
-       local.get $7
+       local.get $8
        f64.convert_i64_s
        f64.add
        f64.mul
@@ -8294,7 +8286,7 @@
        local.tee $2
        local.get $2
        f64.mul
-       local.set $4
+       local.set $3
        f64.const 1
        local.get $2
        f64.const 0.6931471880289533
@@ -8307,7 +8299,7 @@
        local.get $2
        f64.mul
        f64.add
-       local.get $4
+       local.get $3
        f64.mul
        f64.add
        f64.const 0.001339086685300951
@@ -8315,8 +8307,8 @@
        local.get $2
        f64.mul
        f64.add
-       local.get $4
-       local.get $4
+       local.get $3
+       local.get $3
        f64.mul
        f64.mul
        f64.add
@@ -8336,9 +8328,16 @@
       i32.reinterpret_f32
      end
     end
+   else
+    i32.const 2139095040
+    i32.const 0
+    local.get $6
+    i32.const 31
+    i32.shr_u
+    select
    end
   end
-  local.get $9
+  local.get $10
   i32.or
   f32.reinterpret_i32
  )
