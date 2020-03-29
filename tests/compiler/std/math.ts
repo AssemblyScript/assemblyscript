@@ -2735,110 +2735,264 @@ function test_powf(left: f32, right: f32, expected: f32, error: f32, flags: i32)
 }
 
 // sanity
-assert(test_powf(-8.066848755, 4.535662651, NaN, 0.0, INVALID));
-assert(test_powf(4.345239639, -8.887990952, 0.000002134714123, 0.1436440796, INEXACT));
-assert(test_powf(-8.381433487, -2.763607264, NaN, 0.0, INVALID));
-assert(test_powf(-6.531673431, 4.5675354, NaN, 0.0, INVALID));
-assert(test_powf(9.267057419, 4.811392307, 44909.33203, -0.05356409028, INEXACT));
-assert(test_powf(-6.450045586, 0.6620717645, NaN, 0.0, INVALID));
-assert(test_powf(7.858890057, 0.05215452611, 1.113517761, 0.1912208945, INEXACT));
-assert(test_powf(-0.792054534, 7.676402569, NaN, 0.0, INVALID));
-assert(test_powf(0.6157026887, 2.011902571, 0.3769077659, 0.3371490538, INEXACT));
-assert(test_powf(-0.5587586761, 0.03223983198, NaN, 0.0, INVALID));
+assert(test_powf(-8.0668487550, 4.535662651,                 NaN,            0.0, INVALID));
+assert(test_powf( 4.3452396390,-8.887990952,   0.000002134714123,   0.1436440796, INEXACT));
+assert(test_powf(-8.3814334870,-2.763607264,                 NaN,            0.0, INVALID));
+assert(test_powf(-6.5316734310, 4.5675354,                   NaN,            0.0, INVALID));
+assert(test_powf( 9.2670574190, 4.811392307,         44909.33203, -0.05356409028, INEXACT));
+assert(test_powf(-6.4500455860, 0.6620717645,                NaN,            0.0, INVALID));
+assert(test_powf( 7.8588900570, 0.05215452611,       1.113517761,   0.1912208945, INEXACT));
+assert(test_powf(-0.7920545340, 7.676402569,                 NaN,            0.0, INVALID));
+assert(test_powf( 0.6157026887, 2.011902571,        0.3769077659,   0.3371490538, INEXACT));
+assert(test_powf(-0.5587586761, 0.03223983198,               NaN,            0.0, INVALID));
 
 // special
-assert(test_powf(0.0, NaN, NaN, 0.0, 0));
-assert(test_powf(0.0, Infinity, 0.0, 0.0, 0));
-assert(test_powf(0.0, 3.0, 0.0, 0.0, 0));
-assert(test_powf(0.0, 2.0, 0.0, 0.0, 0));
-assert(test_powf(0.0, 1.0, 0.0, 0.0, 0));
-assert(test_powf(0.0, 0.5, 0.0, 0.0, 0));
-assert(test_powf(0.0, 0.0, 1.0, 0.0, 0));
-assert(test_powf(0.0, -0.0, 1.0, 0.0, 0));
-assert(test_powf(0.0, -0.5, Infinity, 0.0, DIVBYZERO));
-assert(test_powf(0.0, -1.0, Infinity, 0.0, DIVBYZERO));
-assert(test_powf(0.0, -2.0, Infinity, 0.0, DIVBYZERO));
-assert(test_powf(0.0, -3.0, Infinity, 0.0, DIVBYZERO));
-assert(test_powf(0.0, -4.0, Infinity, 0.0, DIVBYZERO));
-assert(test_powf(0.0, -Infinity, Infinity, 0.0, 0));
-assert(test_powf(-0.0, NaN, NaN, 0.0, 0));
-assert(test_powf(-0.0, Infinity, 0.0, 0.0, 0));
-assert(test_powf(-0.0, 3.0, -0.0, 0.0, 0));
-assert(test_powf(-0.0, 2.0, 0.0, 0.0, 0));
-assert(test_powf(-0.0, 1.0, -0.0, 0.0, 0));
-assert(test_powf(-0.0, 0.5, 0.0, 0.0, 0));
-assert(test_powf(-0.0, 0.0, 1.0, 0.0, 0));
-assert(test_powf(-0.0, -0.0, 1.0, 0.0, 0));
-assert(test_powf(-0.0, -0.5, Infinity, 0.0, DIVBYZERO));
-assert(test_powf(-0.0, -1.0, -Infinity, 0.0, DIVBYZERO));
-assert(test_powf(-0.0, -2.0, Infinity, 0.0, DIVBYZERO));
-assert(test_powf(-0.0, -3.0, -Infinity, 0.0, DIVBYZERO));
-assert(test_powf(-0.0, -4.0, Infinity, 0.0, DIVBYZERO));
-assert(test_powf(-0.0, -Infinity, Infinity, 0.0, 0));
-assert(test_powf(NaN, 0.0, 1.0, 0.0, 0));
-assert(test_powf(Infinity, 0.0, 1.0, 0.0, 0));
-assert(test_powf(-Infinity, 0.0, 1.0, 0.0, 0));
-assert(test_powf(1.0, 0.0, 1.0, 0.0, 0));
-assert(test_powf(-1.0, 0.0, 1.0, 0.0, 0));
-assert(test_powf(-0.5, 0.0, 1.0, 0.0, 0));
-assert(test_powf(NaN, -0.0, 1.0, 0.0, 0));
-assert(test_powf(Infinity, -0.0, 1.0, 0.0, 0));
-assert(test_powf(-Infinity, -0.0, 1.0, 0.0, 0));
-assert(test_powf(1.0, -0.0, 1.0, 0.0, 0));
-assert(test_powf(-1.0, -0.0, 1.0, 0.0, 0));
-assert(test_powf(-0.5, -0.0, 1.0, 0.0, 0));
-assert(test_powf(-1.0, NaN, NaN, 0.0, 0));
-assert(test_powf(-1.0, Infinity, NaN, 0.0, 0));  // C: 1.0, JS: NaN
-assert(test_powf(-1.0, -Infinity, NaN, 0.0, 0)); // C: 1.0, JS: NaN
-assert(test_powf(-1.0, 2.0, 1.0, 0.0, 0));
-assert(test_powf(-1.0, -1.0, -1.0, 0.0, 0));
-assert(test_powf(-1.0, -2.0, 1.0, 0.0, 0));
-assert(test_powf(-1.0, -3.0, -1.0, 0.0, 0));
-assert(test_powf(-1.0, 0.5, NaN, 0.0, INVALID));
-assert(test_powf(1.0, NaN, NaN, 0.0, 0));        // C: 1.0, JS: NaN
-assert(test_powf(1.0, Infinity, NaN, 0.0, 0));   // C: 1.0, JS: NaN
-assert(test_powf(1.0, -Infinity, NaN, 0.0, 0));  // C: 1.0, JS: NaN
-assert(test_powf(1.0, 3.0, 1.0, 0.0, 0));
-assert(test_powf(1.0, 0.5, 1.0, 0.0, 0));
-assert(test_powf(1.0, -0.5, 1.0, 0.0, 0));
-assert(test_powf(1.0, -3.0, 1.0, 0.0, 0));
-assert(test_powf(-0.5, 0.5, NaN, 0.0, INVALID));
-assert(test_powf(-0.5, 1.5, NaN, 0.0, INVALID));
-assert(test_powf(-0.5, 2.0, 0.25, 0.0, 0));
-assert(test_powf(-0.5, 3.0, -0.125, 0.0, 0));
-assert(test_powf(-0.5, Infinity, 0.0, 0.0, 0));
-assert(test_powf(-0.5, -Infinity, Infinity, 0.0, 0));
-assert(test_powf(-0.5, NaN, NaN, 0.0, 0));
-assert(test_powf(0.5, Infinity, 0.0, 0.0, 0));
-assert(test_powf(0.5, -Infinity, Infinity, 0.0, 0));
-assert(test_powf(0.5, NaN, NaN, 0.0, 0));
-assert(test_powf(1.5, Infinity, Infinity, 0.0, 0));
-assert(test_powf(1.5, -Infinity, 0.0, 0.0, 0));
-assert(test_powf(1.5, NaN, NaN, 0.0, 0));
-assert(test_powf(Infinity, NaN, NaN, 0.0, 0));
-assert(test_powf(Infinity, Infinity, Infinity, 0.0, 0));
-assert(test_powf(Infinity, -Infinity, 0.0, 0.0, 0));
-assert(test_powf(Infinity, 3.0, Infinity, 0.0, 0));
-assert(test_powf(Infinity, 2.0, Infinity, 0.0, 0));
-assert(test_powf(Infinity, 1.0, Infinity, 0.0, 0));
-assert(test_powf(Infinity, 0.5, Infinity, 0.0, 0));
-assert(test_powf(Infinity, -0.5, 0.0, 0.0, 0));
-assert(test_powf(Infinity, -1.0, 0.0, 0.0, 0));
-assert(test_powf(Infinity, -2.0, 0.0, 0.0, 0));
-assert(test_powf(-Infinity, NaN, NaN, 0.0, 0));
-assert(test_powf(-Infinity, Infinity, Infinity, 0.0, 0));
-assert(test_powf(-Infinity, -Infinity, 0.0, 0.0, 0));
-assert(test_powf(-Infinity, 3.0, -Infinity, 0.0, 0));
-assert(test_powf(-Infinity, 2.0, Infinity, 0.0, 0));
-assert(test_powf(-Infinity, 1.0, -Infinity, 0.0, 0));
-assert(test_powf(-Infinity, 0.5, Infinity, 0.0, 0));
-assert(test_powf(-Infinity, -0.5, 0.0, 0.0, 0));
-assert(test_powf(-Infinity, -1.0, -0.0, 0.0, 0));
-assert(test_powf(-Infinity, -2.0, 0.0, 0.0, 0));
-assert(test_powf(NaN, 1.0, NaN, 0.0, 0));
-assert(test_powf(NaN, -1.0, NaN, 0.0, 0));
-assert(test_powf(-2.0, 1.0, -2.0, 0.0, 0));
-assert(test_powf(-2.0, -1.0, -0.5, 0.0, 0));
+assert(test_powf(      0.0,       NaN,       NaN, 0.0, 0));
+assert(test_powf(      0.0,  Infinity,       0.0, 0.0, 0));
+assert(test_powf(      0.0,       3.0,       0.0, 0.0, 0));
+assert(test_powf(      0.0,       2.0,       0.0, 0.0, 0));
+assert(test_powf(      0.0,       1.0,       0.0, 0.0, 0));
+assert(test_powf(      0.0,       0.5,       0.0, 0.0, 0));
+assert(test_powf(      0.0,       0.0,       1.0, 0.0, 0));
+assert(test_powf(      0.0,      -0.0,       1.0, 0.0, 0));
+assert(test_powf(      0.0,      -0.5,  Infinity, 0.0, DIVBYZERO));
+assert(test_powf(      0.0,      -1.0,  Infinity, 0.0, DIVBYZERO));
+assert(test_powf(      0.0,      -2.0,  Infinity, 0.0, DIVBYZERO));
+assert(test_powf(      0.0,      -3.0,  Infinity, 0.0, DIVBYZERO));
+assert(test_powf(      0.0,      -4.0,  Infinity, 0.0, DIVBYZERO));
+assert(test_powf(      0.0, -Infinity,  Infinity, 0.0, 0));
+assert(test_powf(     -0.0,       NaN,       NaN, 0.0, 0));
+assert(test_powf(     -0.0,  Infinity,       0.0, 0.0, 0));
+assert(test_powf(     -0.0,       3.0,      -0.0, 0.0, 0));
+assert(test_powf(     -0.0,       2.0,       0.0, 0.0, 0));
+assert(test_powf(     -0.0,       1.0,      -0.0, 0.0, 0));
+assert(test_powf(     -0.0,       0.5,       0.0, 0.0, 0));
+assert(test_powf(     -0.0,       0.0,       1.0, 0.0, 0));
+assert(test_powf(     -0.0,      -0.0,       1.0, 0.0, 0));
+assert(test_powf(     -0.0,      -0.5,  Infinity, 0.0, DIVBYZERO));
+assert(test_powf(     -0.0,      -1.0, -Infinity, 0.0, DIVBYZERO));
+assert(test_powf(     -0.0,      -2.0,  Infinity, 0.0, DIVBYZERO));
+assert(test_powf(     -0.0,      -3.0, -Infinity, 0.0, DIVBYZERO));
+assert(test_powf(     -0.0,      -4.0,  Infinity, 0.0, DIVBYZERO));
+assert(test_powf(     -0.0, -Infinity,  Infinity, 0.0, 0));
+assert(test_powf(      NaN,       0.0,       1.0, 0.0, 0));
+assert(test_powf( Infinity,       0.0,       1.0, 0.0, 0));
+assert(test_powf(-Infinity,       0.0,       1.0, 0.0, 0));
+assert(test_powf(      1.0,       0.0,       1.0, 0.0, 0));
+assert(test_powf(     -1.0,       0.0,       1.0, 0.0, 0));
+assert(test_powf(     -0.5,       0.0,       1.0, 0.0, 0));
+assert(test_powf(      NaN,      -0.0,       1.0, 0.0, 0));
+assert(test_powf( Infinity,      -0.0,       1.0, 0.0, 0));
+assert(test_powf(-Infinity,      -0.0,       1.0, 0.0, 0));
+assert(test_powf(      1.0,      -0.0,       1.0, 0.0, 0));
+assert(test_powf(     -1.0,      -0.0,       1.0, 0.0, 0));
+assert(test_powf(     -0.5,      -0.0,       1.0, 0.0, 0));
+assert(test_powf(     -1.0,       NaN,       NaN, 0.0, 0));
+assert(test_powf(     -1.0,  Infinity,       NaN, 0.0, 0));  // C: 1.0, JS: NaN
+assert(test_powf(     -1.0, -Infinity,       NaN, 0.0, 0)); // C: 1.0, JS: NaN
+assert(test_powf(     -1.0,       2.0,       1.0, 0.0, 0));
+assert(test_powf(     -1.0,      -1.0,      -1.0, 0.0, 0));
+assert(test_powf(     -1.0,      -2.0,       1.0, 0.0, 0));
+assert(test_powf(     -1.0,      -3.0,      -1.0, 0.0, 0));
+assert(test_powf(     -1.0,       0.5,       NaN, 0.0, INVALID));
+assert(test_powf(      1.0,       NaN,       NaN, 0.0, 0));        // C: 1.0, JS: NaN
+assert(test_powf(      1.0,  Infinity,       NaN, 0.0, 0));   // C: 1.0, JS: NaN
+assert(test_powf(      1.0, -Infinity,       NaN, 0.0, 0));  // C: 1.0, JS: NaN
+assert(test_powf(      1.0,       3.0,       1.0, 0.0, 0));
+assert(test_powf(      1.0,       0.5,       1.0, 0.0, 0));
+assert(test_powf(      1.0,      -0.5,       1.0, 0.0, 0));
+assert(test_powf(      1.0,      -3.0,       1.0, 0.0, 0));
+assert(test_powf(     -0.5,       0.5,       NaN, 0.0, INVALID));
+assert(test_powf(     -0.5,       1.5,       NaN, 0.0, INVALID));
+assert(test_powf(     -0.5,       2.0,      0.25, 0.0, 0));
+assert(test_powf(     -0.5,       3.0,    -0.125, 0.0, 0));
+assert(test_powf(     -0.5,  Infinity,       0.0, 0.0, 0));
+assert(test_powf(     -0.5, -Infinity,  Infinity, 0.0, 0));
+assert(test_powf(     -0.5,       NaN,       NaN, 0.0, 0));
+assert(test_powf(      0.5,  Infinity,       0.0, 0.0, 0));
+assert(test_powf(      0.5, -Infinity,  Infinity, 0.0, 0));
+assert(test_powf(      0.5,       NaN,       NaN, 0.0, 0));
+assert(test_powf(      1.5,  Infinity,  Infinity, 0.0, 0));
+assert(test_powf(      1.5, -Infinity,       0.0, 0.0, 0));
+assert(test_powf(      1.5,       NaN,       NaN, 0.0, 0));
+assert(test_powf( Infinity,       NaN,       NaN, 0.0, 0));
+assert(test_powf( Infinity,  Infinity,  Infinity, 0.0, 0));
+assert(test_powf( Infinity, -Infinity,       0.0, 0.0, 0));
+assert(test_powf( Infinity,       3.0,  Infinity, 0.0, 0));
+assert(test_powf( Infinity,       2.0,  Infinity, 0.0, 0));
+assert(test_powf( Infinity,       1.0,  Infinity, 0.0, 0));
+assert(test_powf( Infinity,       0.5,  Infinity, 0.0, 0));
+assert(test_powf( Infinity,      -0.5,       0.0, 0.0, 0));
+assert(test_powf( Infinity,      -1.0,       0.0, 0.0, 0));
+assert(test_powf( Infinity,      -2.0,       0.0, 0.0, 0));
+assert(test_powf(-Infinity,       NaN,       NaN, 0.0, 0));
+assert(test_powf(-Infinity,  Infinity,  Infinity, 0.0, 0));
+assert(test_powf(-Infinity, -Infinity,       0.0, 0.0, 0));
+assert(test_powf(-Infinity,       3.0, -Infinity, 0.0, 0));
+assert(test_powf(-Infinity,       2.0,  Infinity, 0.0, 0));
+assert(test_powf(-Infinity,       1.0, -Infinity, 0.0, 0));
+assert(test_powf(-Infinity,       0.5,  Infinity, 0.0, 0));
+assert(test_powf(-Infinity,      -0.5,       0.0, 0.0, 0));
+assert(test_powf(-Infinity,      -1.0,      -0.0, 0.0, 0));
+assert(test_powf(-Infinity,      -2.0,       0.0, 0.0, 0));
+assert(test_powf(      NaN,       1.0,       NaN, 0.0, 0));
+assert(test_powf(      NaN,      -1.0,       NaN, 0.0, 0));
+assert(test_powf(     -2.0,       1.0,      -2.0, 0.0, 0));
+assert(test_powf(     -2.0,      -1.0,      -0.5, 0.0, 0));
+
+// some ucb
+assert(test_powf(                         0.0,             1.0,                          0.0, 0.0, 0));
+assert(test_powf(                        -0.0,             1.0,                         -0.0, 0.0, 0));
+assert(test_powf(reinterpret<f32>(0x00800000),             1.0, reinterpret<f32>(0x00800000), 0.0, 0));
+assert(test_powf(reinterpret<f32>(0x80800000),             1.0, reinterpret<f32>(0x80800000), 0.0, 0));
+assert(test_powf(reinterpret<f32>(0x7F7FFFFF),             1.0, reinterpret<f32>(0x7F7FFFFF), 0.0, 0));
+assert(test_powf(reinterpret<f32>(0xFF7FFFFF),             1.0, reinterpret<f32>(0xFF7FFFFF), 0.0, 0));
+
+assert(test_powf(                         0.0, reinterpret<f32>(0x7F7FFFFF),              0.0, 0.0, 0));
+assert(test_powf(                         0.0, reinterpret<f32>(0x00800000),              0.0, 0.0, 0));
+assert(test_powf(                        -0.0, reinterpret<f32>(0x7F7FFFFF),              0.0, 0.0, 0));
+assert(test_powf(                        -0.0, reinterpret<f32>(0x41880000),             -0.0, 0.0, 0));
+assert(test_powf(                        -0.0,                          2.0,              0.0, 0.0, 0));
+assert(test_powf(                        -0.0, reinterpret<f32>(0x00800000),              0.0, 0.0, 0));
+
+assert(test_powf(reinterpret<f32>(0xBF8CCCCD), reinterpret<f32>(0x42CA0000), reinterpret<f32>(0xC66CDAD4), reinterpret<f32>(0xBE8F4B96), INEXACT));
+
+assert(test_powf(reinterpret<f32>(0x41980000), reinterpret<f32>(0x40A00000), reinterpret<f32>(0x4A17210C), 0.0, 0));
+assert(test_powf(reinterpret<f32>(0xC1980000), reinterpret<f32>(0x40A00000), reinterpret<f32>(0xCA17210C), 0.0, 0));
+assert(test_powf(reinterpret<f32>(0xC3410000), reinterpret<f32>(0x40400000), reinterpret<f32>(0xCADB6482), 0.0, 0));
+assert(test_powf(reinterpret<f32>(0xC4962000), reinterpret<f32>(0x40000000), reinterpret<f32>(0x49B01308), 0.0, 0));
+
+assert(test_powf(reinterpret<f32>(0x40EA036E), reinterpret<f32>(0x4188FA68), reinterpret<f32>(0x580DE25B), reinterpret<f32>(0xBE198D91), INEXACT));
+assert(test_powf(reinterpret<f32>(0x41966F98), reinterpret<f32>(0x405492A0), reinterpret<f32>(0x468568B4), reinterpret<f32>(0x3E9BCD25), INEXACT));
+assert(test_powf(reinterpret<f32>(0x40E94F9F), reinterpret<f32>(0x4119B699), reinterpret<f32>(0x4D397562), reinterpret<f32>(0xBDDBB5A6), INEXACT));
+assert(test_powf(reinterpret<f32>(0x417C8877), reinterpret<f32>(0x41946832), reinterpret<f32>(0x6464E6C5), reinterpret<f32>(0x3DBC02F2), INEXACT));
+assert(test_powf(reinterpret<f32>(0x41051BE1), reinterpret<f32>(0x3ED6EA42), reinterpret<f32>(0x401BBCB2), reinterpret<f32>(0x3C1E499E), INEXACT));
+assert(test_powf(reinterpret<f32>(0x40BA9990), reinterpret<f32>(0x41276511), reinterpret<f32>(0x4CC3DDA4), reinterpret<f32>(0xBABA9E01), INEXACT));
+assert(test_powf(reinterpret<f32>(0x401A9C08), reinterpret<f32>(0x4188F979), reinterpret<f32>(0x4A5CE681), reinterpret<f32>(0x3E97A6B3), INEXACT));
+assert(test_powf(reinterpret<f32>(0x3D1CF8A7), reinterpret<f32>(0x3C38642F), reinterpret<f32>(0x3F76C5E6), reinterpret<f32>(0xBEF7DBB5), INEXACT));
+assert(test_powf(reinterpret<f32>(0x40AE4811), reinterpret<f32>(0x417D0909), reinterpret<f32>(0x52CBD7DB), reinterpret<f32>(0xBECE5DCB), INEXACT));
+assert(test_powf(reinterpret<f32>(0x414DECA7), reinterpret<f32>(0x416EFF5C), reinterpret<f32>(0x5B054ECC), reinterpret<f32>(0x3DD5EB58), INEXACT));
+
+assert(test_powf(                         NaN, 0.0,             1.0,             0.0, 0));
+assert(test_powf(                         NaN, 0.0,             1.0,             0.0, 0));
+assert(test_powf(                    Infinity, 0.0,             1.0,             0.0, 0));
+assert(test_powf(                   -Infinity, 0.0,             1.0,             0.0, 0));
+assert(test_powf(reinterpret<f32>(0x00000001), 0.0,             1.0,             0.0, 0));
+assert(test_powf(reinterpret<f32>(0x80000001), 0.0,             1.0,             0.0, 0));
+
+assert(test_powf(             NaN,             1.0,             NaN,             0.0, 0));
+assert(test_powf(             NaN,             1.0,             NaN,             0.0, 0));
+assert(test_powf(        Infinity,             1.0,        Infinity,             0.0, 0));
+assert(test_powf(       -Infinity,             1.0,       -Infinity,             0.0, 0));
+
+assert(test_powf(             NaN,             NaN,             NaN,             0.0, 0));
+assert(test_powf(        Infinity,             NaN,             NaN,             0.0, 0));
+assert(test_powf(       -Infinity,             NaN,             NaN,             0.0, 0));
+assert(test_powf(             1.0,             NaN,             NaN,             0.0, 0)); // C: 1.0, JS: NaN
+assert(test_powf(            -1.0,             NaN,             NaN,             0.0, 0));
+assert(test_powf(            -0.0,             NaN,             NaN,             0.0, 0));
+assert(test_powf(             0.0,             NaN,             NaN,             0.0, 0));
+
+assert(test_powf(reinterpret<f32>(0x3F800001),        Infinity,        Infinity, 0.0, 0));
+assert(test_powf(                    Infinity,        Infinity,        Infinity, 0.0, 0));
+assert(test_powf(reinterpret<f32>(0xBF800001),        Infinity,        Infinity, 0.0, 0));
+assert(test_powf(                   -Infinity,        Infinity,        Infinity, 0.0, 0));
+
+assert(test_powf(reinterpret<f32>(0x3F800001),       -Infinity,             0.0, 0.0, 0));
+assert(test_powf(                    Infinity,       -Infinity,             0.0, 0.0, 0));
+assert(test_powf(reinterpret<f32>(0xBF800001),       -Infinity,             0.0, 0.0, 0));
+assert(test_powf(                   -Infinity,       -Infinity,             0.0, 0.0, 0));
+
+assert(test_powf(reinterpret<f32>(0x3F7FFFFF),        Infinity,             0.0, 0.0, 0));
+assert(test_powf(reinterpret<f32>(0x00000001),        Infinity,             0.0, 0.0, 0));
+assert(test_powf(                         0.0,        Infinity,             0.0, 0.0, 0));
+assert(test_powf(reinterpret<f32>(0xBF7FFFFF),        Infinity,             0.0, 0.0, 0));
+assert(test_powf(reinterpret<f32>(0x80000001),        Infinity,             0.0, 0.0, 0));
+assert(test_powf(                        -0.0,        Infinity,             0.0, 0.0, 0));
+
+assert(test_powf(                         0.0, reinterpret<f32>(0x00000001),0.0, 0.0, 0));
+assert(test_powf(                        -0.0, reinterpret<f32>(0x00000001),0.0, 0.0, 0));
+
+
+assert(test_powf(             0.0, reinterpret<f32>(0xFF7FFFFF),       Infinity, 0.0, DIVBYZERO));
+assert(test_powf(             0.0, reinterpret<f32>(0x80000001),       Infinity, 0.0, DIVBYZERO));
+assert(test_powf(            -0.0, reinterpret<f32>(0xFF7FFFFF),       Infinity, 0.0, DIVBYZERO));
+assert(test_powf(            -0.0,                         -2.0,       Infinity, 0.0, DIVBYZERO));
+assert(test_powf(            -0.0, reinterpret<f32>(0x80000001),       Infinity, 0.0, DIVBYZERO));
+assert(test_powf(            -0.0,                         -1.0,      -Infinity, 0.0, DIVBYZERO));
+assert(test_powf(            -0.0, reinterpret<f32>(0xC1880000),      -Infinity, 0.0, DIVBYZERO));
+
+assert(test_powf(        Infinity, reinterpret<f32>(0x00000001),       Infinity, 0.0, 0));
+assert(test_powf(        Infinity, reinterpret<f32>(0x80000001),            0.0, 0.0, 0));
+
+assert(test_powf(       -Infinity, reinterpret<f32>(0x7F7FFFFF),       Infinity, 0.0, 0));
+assert(test_powf(       -Infinity, reinterpret<f32>(0x00000001),       Infinity, 0.0, 0));
+assert(test_powf(       -Infinity, reinterpret<f32>(0xFF7FFFFF),            0.0, 0.0, 0));
+assert(test_powf(       -Infinity, reinterpret<f32>(0x80000001),            0.0, 0.0, 0));
+assert(test_powf(       -Infinity, reinterpret<f32>(0x40A00000),      -Infinity, 0.0, 0));
+assert(test_powf(       -Infinity, reinterpret<f32>(0xC0A00000),           -0.0, 0.0, 0));
+assert(test_powf(       -Infinity, reinterpret<f32>(0x40C00000),       Infinity, 0.0, 0));
+assert(test_powf(       -Infinity, reinterpret<f32>(0xC0C00000),            0.0, 0.0, 0));
+
+trace(">>>", 1, Mathf.pow(-1.0, reinterpret<f32>(0x3F800001)));
+
+assert(test_powf(                   -Infinity, reinterpret<f32>(0x40000001), Infinity, 0.0, 0));
+assert(test_powf(                        -1.0, reinterpret<f32>(0x3F800001),      NaN, 0.0, INVALID));
+assert(test_powf(reinterpret<f32>(0x80000001), reinterpret<f32>(0xBFFFFFFF),      NaN, 0.0, INVALID));
+
+assert(test_powf(reinterpret<f32>(0xC1200000), reinterpret<f32>(0x439A8000),-Infinity, 0.0, INEXACT | OVERFLOW));
+assert(test_powf(                   -Infinity,                          0.5, Infinity, 0.0, 0));
+
+/*
+assert(test_powf(        0x1p-148,             0.5,         0x1p-74,             0.0, 0));
+assert(test_powf(        0x1p-146,             0.5,         0x1p-73,             0.0, 0));
+assert(test_powf(        0x1p-128,             0.5,         0x1p-64,             0.0, 0));
+assert(test_powf(        0x1p-127,            -1.0,        0x1p+127,             0.0, 0));
+assert(test_powf(        0x1p-126,             0.5,         0x1p-63,             0.0, 0));
+assert(test_powf(        0x1p-126,            -1.0,        0x1p+126,             0.0, 0));
+assert(test_powf(        0x1p-125,            -1.0,        0x1p+125,             0.0, 0));
+assert(test_powf(        0x1p-124,             0.5,         0x1p-62,             0.0, 0));
+assert(test_powf(        0x1p-124,            -1.0,        0x1p+124,             0.0, 0));
+assert(test_powf(         0x1p-74,             2.0,        0x1p-148,             0.0, 0));
+assert(test_powf(         0x1p-62,             0.5,         0x1p-31,             0.0, 0));
+assert(test_powf(         0x1p-32,             2.0,         0x1p-64,             0.0, 0));
+assert(test_powf(         0x1p-31,             2.0,         0x1p-62,             0.0, 0));
+assert(test_powf(         0x1p-23,            -1.0,         0x1p+23,             0.0, 0));
+assert(test_powf(       0x1.2p-15,             0.5,        0x1.8p-8,             0.0, 0));
+assert(test_powf(         0x1p-14,             0.5,          0x1p-7,             0.0, 0));
+assert(test_powf(          0x1p-8,             0.5,          0.0625,             0.0, 0));
+assert(test_powf(        0x1.2p-5,             0.5,        0x1.8p-3,             0.0, 0));
+assert(test_powf(          0.0625,             0.5,            0.25,             0.0, 0));
+assert(test_powf(            0.25,             2.0,          0.0625,             0.0, 0));
+
+assert(test_powf(        0x1p+124,             0.5,         0x1p+62,             0.0, 0));
+assert(test_powf(        0x1p+124,            -1.0,        0x1p-124,             0.0, 0));
+assert(test_powf(        0x1p+125,        Infinity,        Infinity,             0.0, 0));
+assert(test_powf(        0x1p+125,            -1.0,        0x1p-125,             0.0, 0));
+assert(test_powf(        0x1p+125,       -Infinity,             0.0,             0.0, 0));
+assert(test_powf(        0x1p+126,             0.5,         0x1p+63,             0.0, 0));
+assert(test_powf(        0x1p+126,            -1.0,        0x1p-126,             0.0, 0));
+assert(test_powf(        0x1p+127,            -1.0,        0x1p-127,             0.0, 0));
+assert(test_powf( 0x1.fffffep+127,        Infinity,        Infinity,             0.0, 0));
+assert(test_powf( 0x1.fffffep+127,       -Infinity,             0.0,             0.0, 0));
+
+assert(test_powf(        0x1p+127,            -2.0,             0.0,       -0x1p-105, INEXACT | UNDERFLOW));
+assert(test_powf(        0x1p+127,       -0x1.8p+1,             0.0,            -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(        0x1p+127,      -0x1.fep+7,             0.0,            -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(        0x1p+127,          -256.0,             0.0,            -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(        0x1p+127,      -0x1.01p+8,             0.0,            -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(        0x1p+127,      -0x1.04p+8,             0.0,            -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(        0x1p+127,      -0x1.05p+8,             0.0,            -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(        0x1p+127,   -0x1.fffcp+14,             0.0,            -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(        0x1p+127,        -32768.0,             0.0,            -0.0, INEXACT | UNDERFLOW));
+assert(test_powf(  0x1.fffffp+127,            -1.0, 0x1.000008p-128, -0x1.000008p-21, INEXACT | UNDERFLOW));
+assert(test_powf(  0x1.fffffp+127,            -2.0,             0.0, -0x1.00001p-107, INEXACT | UNDERFLOW));
+
+assert(test_powf(       -0x1p+127,   -0x1.fffcp+14,            -0.0,             0.0, INEXACT | UNDERFLOW));
+assert(test_powf(       -0x1p+127,        -32768.0,             0.0,            -0.0, INEXACT | UNDERFLOW));
+assert(test_powf( -0x1.fffffp+127,            -1.0,-0x1.000008p-128,  0x1.000008p-21, INEXACT | UNDERFLOW));
+assert(test_powf( -0x1.fffffp+127,            -2.0,             0.0, -0x1.00001p-107, INEXACT | UNDERFLOW));
+*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Math.random
