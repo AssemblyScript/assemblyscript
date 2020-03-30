@@ -2841,19 +2841,19 @@ assert(test_powf(     -2.0,       1.0,      -2.0, 0.0, 0));
 assert(test_powf(     -2.0,      -1.0,      -0.5, 0.0, 0));
 
 // some ucb
-assert(test_powf(                         0.0,             1.0,                          0.0, 0.0, 0));
-assert(test_powf(                        -0.0,             1.0,                         -0.0, 0.0, 0));
-assert(test_powf(reinterpret<f32>(0x00800000),             1.0, reinterpret<f32>(0x00800000), 0.0, 0));
-assert(test_powf(reinterpret<f32>(0x80800000),             1.0, reinterpret<f32>(0x80800000), 0.0, 0));
-assert(test_powf(reinterpret<f32>(0x7F7FFFFF),             1.0, reinterpret<f32>(0x7F7FFFFF), 0.0, 0));
-assert(test_powf(reinterpret<f32>(0xFF7FFFFF),             1.0, reinterpret<f32>(0xFF7FFFFF), 0.0, 0));
+assert(test_powf(                         0.0, 1.0,                          0.0, 0.0, 0));
+assert(test_powf(                        -0.0, 1.0,                         -0.0, 0.0, 0));
+assert(test_powf(reinterpret<f32>(0x00800000), 1.0, reinterpret<f32>(0x00800000), 0.0, 0));
+assert(test_powf(reinterpret<f32>(0x80800000), 1.0, reinterpret<f32>(0x80800000), 0.0, 0));
+assert(test_powf(reinterpret<f32>(0x7F7FFFFF), 1.0, reinterpret<f32>(0x7F7FFFFF), 0.0, 0));
+assert(test_powf(reinterpret<f32>(0xFF7FFFFF), 1.0, reinterpret<f32>(0xFF7FFFFF), 0.0, 0));
 
-assert(test_powf(                         0.0, reinterpret<f32>(0x7F7FFFFF),              0.0, 0.0, 0));
-assert(test_powf(                         0.0, reinterpret<f32>(0x00800000),              0.0, 0.0, 0));
-assert(test_powf(                        -0.0, reinterpret<f32>(0x7F7FFFFF),              0.0, 0.0, 0));
-assert(test_powf(                        -0.0, reinterpret<f32>(0x41880000),             -0.0, 0.0, 0));
-assert(test_powf(                        -0.0,                          2.0,              0.0, 0.0, 0));
-assert(test_powf(                        -0.0, reinterpret<f32>(0x00800000),              0.0, 0.0, 0));
+assert(test_powf(                         0.0, reinterpret<f32>(0x7F7FFFFF), 0.0, 0.0, 0));
+assert(test_powf(                         0.0, reinterpret<f32>(0x00800000), 0.0, 0.0, 0));
+assert(test_powf(                        -0.0, reinterpret<f32>(0x7F7FFFFF), 0.0, 0.0, 0));
+assert(test_powf(                        -0.0, reinterpret<f32>(0x41880000),-0.0, 0.0, 0));
+assert(test_powf(                        -0.0,                          2.0, 0.0, 0.0, 0));
+assert(test_powf(                        -0.0, reinterpret<f32>(0x00800000), 0.0, 0.0, 0));
 
 assert(test_powf(reinterpret<f32>(0xBF8CCCCD), reinterpret<f32>(0x42CA0000), reinterpret<f32>(0xC66CDAD4), reinterpret<f32>(0xBE8F4B96), INEXACT));
 
