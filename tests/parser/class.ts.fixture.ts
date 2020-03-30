@@ -3,7 +3,7 @@ export class Valid<T> {
   instanceFunction(): void {}
   static staticFunction(): void {}
   get instanceGetter(): i32 {}
-  static set staticSetter(v: i32) /* {v} */ {}
+  static set staticSetter(v: i32) /* {v} */ {/* {v} */}
   instanceField: i32;
   static staticField: i32;
   static void: i32;
@@ -12,7 +12,7 @@ export class Valid<T> {
 export class Invalid<T> {
   constructor<T>() {}
   instanceFunction() {}
-  get instanceGetter<T>(a: i32) /* {a} */ {}
+  get instanceGetter<T>(a: i32) /* {a} */ {/* {a} */}
   set instanceSetter<T>() {}
 }
 // ERROR 1092: "Type parameters cannot appear on a constructor declaration." in class.ts:15:14

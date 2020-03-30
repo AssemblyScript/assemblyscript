@@ -2157,19 +2157,40 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
     }
   }
 
+  pushScope(scope: Map<string,Node> = new Map()): void {
+    this.blockScopes.push(scope);
+  }
+
+  popScope(): string[] {
+    var names = new Set<string>();
+    var functionScope = this.functionScope;
+    // TODO: for(let key of functionScope.keys()) {
+    for (let _keys = Map_keys(functionScope), i = 0, k = _keys.length; i < k; ++i) {
+      names.add(_keys[i]);
+    }
+    var blockScopes = this.blockScopes;
+    var blockDepth = assert(blockScopes.length);
+    for (let i = 0; i < blockDepth; ++i) {
+      let blockScope = blockScopes[i];
+      // TODO: for (let key of blockScope.keys()) {
+      for (let _keys = Map_keys(blockScope), j = 0, k = _keys.length; j < k; ++j) {
+        names.add(_keys[j]);
+      }
+    }
+    blockScopes.pop();
+    return Set_values(names);
+  }
+
   visit(node: Node): void {
     switch (node.kind) {
       case NodeKind.BLOCK: {
         let blockStatement = <BlockStatement>node;
-        let scope = new Map<string,Node>();
-        let blockScopes = this.blockScopes;
-        blockScopes.push(scope);
+        this.pushScope();
         let statements = blockStatement.statements;
         for (let i = 0, k = statements.length; i < k; ++i) {
           this.visit(statements[i]);
         }
-        blockScopes.pop();
-        blockStatement._scope = Map_keys(scope);
+        blockStatement._scope = this.popScope();
         break;
       }
       case NodeKind.BREAK: break;
@@ -2188,26 +2209,20 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
       }
       case NodeKind.FOR: {
         let forStatement = <ForStatement>node;
-        let scope = new Map<string,Node>();
-        let blockScopes = this.blockScopes;
-        blockScopes.push(scope);
+        this.pushScope();
         let initializer = forStatement.initializer;
         if (initializer) this.visit(initializer);
         this.visit(forStatement.statement);
-        blockScopes.pop();
-        forStatement._scope = Map_keys(scope);
+        forStatement._scope = this.popScope();
         break;
       }
       case NodeKind.FOROF: {
         let forOfStatement = <ForOfStatement>node;
-        let scope = new Map<string,Node>();
-        let blockScopes = this.blockScopes;
-        blockScopes.push(scope);
+        this.pushScope();
         let variable = forOfStatement.variable;
         if (variable) this.visit(variable);
         this.visit(forOfStatement.statement);
-        blockScopes.pop();
-        forOfStatement._scope = Map_keys(scope);
+        forOfStatement._scope = this.popScope();
         break;
       }
       case NodeKind.IF: {
@@ -2220,15 +2235,12 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
       case NodeKind.RETURN: break;
       case NodeKind.SWITCH: {
         let switchStatement = <SwitchStatement>node;
-        let scope = new Map<string,Node>();
-        let blockScopes = this.blockScopes;
-        blockScopes.push(scope);
+        this.pushScope();
         let cases = switchStatement.cases;
         for (let i = 0, k = cases.length; i < k; ++i) {
           this.visit(cases[i]);
         }
-        blockScopes.pop();
-        switchStatement._scope = Map_keys(scope);
+        switchStatement._scope = this.popScope();
         break;
       }
       case NodeKind.THROW: break;
@@ -2241,28 +2253,23 @@ export class ScopeAnalyzer extends DiagnosticEmitter {
         let catchStatements = tryStatement.catchStatements;
         if (catchStatements) {
           let scope = new Map<string,Node>();
+          this.pushScope(scope);
           let catchVariable = tryStatement.catchVariable;
           if (catchVariable) {
             scope.set(catchVariable.text, catchVariable);
           }
-          let blockScopes = this.blockScopes;
-          blockScopes.push(scope);
           for (let i = 0, k = catchStatements.length; i < k; ++i) {
             this.visit(catchStatements[i]);
           }
-          blockScopes.pop();
-          tryStatement._catchScope = Map_keys(scope);
+          tryStatement._catchScope = this.popScope();
         }
         let finallyStatements = tryStatement.finallyStatements;
         if (finallyStatements) {
-          let scope = new Map<string,Node>();
-          let blockScopes = this.blockScopes;
-          blockScopes.push(scope);
+          this.pushScope();
           for (let i = 0, k = finallyStatements.length; i < k; ++i) {
             this.visit(finallyStatements[i]);
           }
-          blockScopes.pop();
-          tryStatement._finallyScope = Map_keys(scope);
+          tryStatement._finallyScope = this.popScope();
         }
         break;
       }

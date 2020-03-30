@@ -1,7 +1,7 @@
-function alsoIdentifier(readonly: i32): void /* {readonly} */ {}
+function alsoIdentifier(readonly: i32): void /* {readonly} */ {/* {readonly} */}
 class AClass {
-  constructor(readonly: i32) /* {readonly} */ {}
-  constructor(readonly readonly: i32) /* {readonly} */ {}
+  constructor(readonly: i32) /* {readonly} */ {/* {readonly} */}
+  constructor(readonly readonly: i32) /* {readonly} */ {/* {readonly} */}
 }
 type type = i32;
 var type: i32;
