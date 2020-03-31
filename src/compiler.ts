@@ -908,7 +908,7 @@ export class Compiler extends DiagnosticEmitter {
     var flow = startFunction.flow;
     this.currentFlow = flow;
     for (let statements = file.source.statements, i = 0, k = statements.length; i < k; ++i) {
-      this.compileTopLevelStatement(statements[i], startFunctionBody);
+      if(!this.compileTopLevelStatement(statements[i], startFunctionBody)) return;
     }
     this.finishAutoreleases(flow, startFunctionBody);
     // no need to insert unreachable since last statement should have done that
@@ -1835,7 +1835,7 @@ export class Compiler extends DiagnosticEmitter {
   // === Statements ===============================================================================
 
   /** Compiles a top level statement (incl. function declarations etc.) to the specified body. */
-  compileTopLevelStatement(statement: Statement, body: ExpressionRef[]): void {
+  compileTopLevelStatement(statement: Statement, body: ExpressionRef[]): bool {
     switch (statement.kind) {
       case NodeKind.CLASSDECLARATION: {
         let memberStatements = (<ClassDeclaration>statement).members;
@@ -1861,7 +1861,7 @@ export class Compiler extends DiagnosticEmitter {
           this.currentParent = element;
           let memberStatements = declaration.members;
           for (let i = 0, k = memberStatements.length; i < k; ++i) {
-            this.compileTopLevelStatement(memberStatements[i], body);
+            if(!this.compileTopLevelStatement(memberStatements[i], body)) return false;
           }
           this.currentParent = previousParent;
         }
@@ -1876,7 +1876,9 @@ export class Compiler extends DiagnosticEmitter {
             if (
               !element.is(CommonFlags.AMBIENT) && // delay imports
               !element.hasDecorator(DecoratorFlags.LAZY)
-            ) this.compileGlobal(<Global>element);
+            ) {
+              if(!this.compileGlobal(<Global>element)) return false;
+            }
           }
         }
         break;
@@ -1884,7 +1886,7 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.FIELDDECLARATION: {
         let element = this.program.getElementByDeclaration(<FieldDeclaration>statement);
         if (element !== null && element.kind == ElementKind.GLOBAL) { // static
-          if (!element.hasDecorator(DecoratorFlags.LAZY)) this.compileGlobal(<Global>element);
+          if (!element.hasDecorator(DecoratorFlags.LAZY)) return this.compileGlobal(<Global>element);
         }
         break;
       }
@@ -1897,7 +1899,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case NodeKind.EXPORTDEFAULT: {
-        this.compileTopLevelStatement((<ExportDefaultStatement>statement).declaration, body);
+        return this.compileTopLevelStatement((<ExportDefaultStatement>statement).declaration, body);
         break;
       }
       case NodeKind.IMPORT: {
@@ -1916,6 +1918,8 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
     }
+
+    return true;
   }
 
   /** Compiles a statement. */
