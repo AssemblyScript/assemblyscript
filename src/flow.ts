@@ -847,9 +847,12 @@ export class Flow {
    * if both flows definitely define the flags.
    */
   mergeFieldFlags(left: Flow, right: Flow): void {
-    if (left.fieldFlags !== null &&
-      right.fieldFlags !== null &&
-      right.fieldFlags.size > 0
+    const leftFieldFlags = left.fieldFlags;
+    const rightFieldFlags = right.fieldFlags;
+    if (
+      leftFieldFlags !== null &&
+      rightFieldFlags !== null &&
+      rightFieldFlags.size > 0
     ) {
       const rightFieldFlags = right.fieldFlags;
       const rightKeys = Map_keys(rightFieldFlags!);
