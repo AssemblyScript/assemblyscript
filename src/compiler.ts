@@ -10181,8 +10181,9 @@ export class Compiler extends DiagnosticEmitter {
       let parameterIndex = fieldPrototype.parameterIndex;
       let typeNode = field.typeNode;
       if (typeNode) this.checkTypeSupported(fieldType, typeNode);
-      let initExpr: ExpressionRef = -1;
+      let initExpr: ExpressionRef = 0;
       const isDefiniteAssigment = field.is(CommonFlags.DEFINITE_ASSIGNMENT);
+      let definitelyInitialized = false;
 
       // if declared as a constructor parameter, use its value
       if (parameterIndex >= 0) {
@@ -10193,6 +10194,7 @@ export class Compiler extends DiagnosticEmitter {
           nativeFieldType
         );
         if (fieldType.isManaged) initExpr = this.makeRetain(initExpr);
+        definitelyInitialized = true;
 
       // fall back to use initializer if present
       } else if (initializerNode) {
@@ -10202,20 +10204,25 @@ export class Compiler extends DiagnosticEmitter {
         if (fieldType.isManaged && !this.skippedAutoreleases.has(initExpr)) {
           initExpr = this.makeRetain(initExpr);
         }
-      } else if (isDefiniteAssigment) {
+        definitelyInitialized = true;
+      } else {
         // otherwise initialize with default if marked as definite assigment
+        if (isDefiniteAssigment) {
+          definitelyInitialized = true;
+        }
         initExpr = this.makeZero(fieldType);
       }
 
-      if (initExpr >= 0) {
-        stmts.push(
-          module.store(fieldType.byteSize,
-            module.local_get(thisLocalIndex, nativeSizeType),
-            initExpr,
-            nativeFieldType,
-            field.memoryOffset
-          )
-        );
+      stmts.push(
+        module.store(fieldType.byteSize,
+          module.local_get(thisLocalIndex, nativeSizeType),
+          initExpr,
+          nativeFieldType,
+          field.memoryOffset
+        )
+      );
+
+      if (definitelyInitialized) {
         flow.setFieldFlag(field.internalName, FieldFlags.INITIALIZED);
       } else {
         flow.setFieldFlag(field.internalName, FieldFlags.NONE);

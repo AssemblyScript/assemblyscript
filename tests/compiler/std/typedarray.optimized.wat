@@ -1479,12 +1479,12 @@
   local.get $1
   local.get $2
   i32.shl
-  local.tee $4
+  local.tee $3
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   i32.const 0
-  local.get $4
+  local.get $3
   call $~lib/memory/memory.fill
   local.get $0
   i32.eqz
@@ -1495,30 +1495,38 @@
    call $~lib/rt/pure/__retain
    local.set $0
   end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
   local.get $2
   local.tee $1
   local.get $0
   i32.load
-  local.tee $3
+  local.tee $4
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    local.set $1
-   local.get $3
+   local.get $4
    call $~lib/rt/pure/__release
   end
   local.get $0
-  local.tee $3
   local.get $1
   i32.store
-  local.get $3
+  local.get $0
   local.get $2
   i32.store offset=4
+  local.get $0
   local.get $3
-  local.get $4
   i32.store offset=8
-  local.get $3
+  local.get $0
  )
  (func $~lib/typedarray/Int8Array#constructor (; 20 ;) (param $0 i32) (result i32)
   i32.const 12

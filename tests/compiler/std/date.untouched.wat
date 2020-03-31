@@ -143,6 +143,9 @@
    local.set $0
   end
   local.get $0
+  i64.const 0
+  i64.store
+  local.get $0
   local.get $1
   i64.store
   local.get $0

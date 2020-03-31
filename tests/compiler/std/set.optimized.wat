@@ -2084,7 +2084,7 @@
   local.get $0
   i32.load offset=16
   local.tee $7
-  local.tee $0
+  local.tee $4
   i32.const 1073741808
   i32.gt_u
   if
@@ -2095,22 +2095,32 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $4
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   local.tee $1
-  local.get $0
+  local.get $4
   call $~lib/memory/memory.fill
-  local.get $0
-  local.set $3
-  local.get $1
-  local.set $2
-  local.get $1
   i32.const 16
   i32.const 4
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.set $2
+  local.get $1
+  local.get $0
   i32.load
   local.tee $8
   i32.ne
@@ -2128,10 +2138,10 @@
   local.get $1
   i32.store offset=4
   local.get $0
-  local.get $3
+  local.get $4
   i32.store offset=8
   local.get $0
-  local.get $3
+  local.get $4
   i32.store offset=12
   loop $for-loop|0
    local.get $5
@@ -2149,11 +2159,11 @@
     i32.and
     i32.eqz
     if
-     local.get $4
+     local.get $3
      local.tee $1
      i32.const 1
      i32.add
-     local.set $4
+     local.set $3
      local.get $0
      local.get $1
      local.get $2
@@ -2838,7 +2848,7 @@
   local.get $0
   i32.load offset=16
   local.tee $7
-  local.tee $0
+  local.tee $4
   i32.const 1073741808
   i32.gt_u
   if
@@ -2849,22 +2859,32 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
+  local.get $4
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   local.tee $1
-  local.get $0
+  local.get $4
   call $~lib/memory/memory.fill
-  local.get $0
-  local.set $3
-  local.get $1
-  local.set $2
-  local.get $1
   i32.const 16
   i32.const 6
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.set $2
+  local.get $1
+  local.get $0
   i32.load
   local.tee $8
   i32.ne
@@ -2882,10 +2902,10 @@
   local.get $1
   i32.store offset=4
   local.get $0
-  local.get $3
+  local.get $4
   i32.store offset=8
   local.get $0
-  local.get $3
+  local.get $4
   i32.store offset=12
   loop $for-loop|0
    local.get $5
@@ -2903,11 +2923,11 @@
     i32.and
     i32.eqz
     if
-     local.get $4
+     local.get $3
      local.tee $1
      i32.const 1
      i32.add
-     local.set $4
+     local.set $3
      local.get $0
      local.get $1
      local.get $2
@@ -3704,14 +3724,26 @@
   local.tee $1
   local.get $7
   call $~lib/memory/memory.fill
-  local.get $1
-  local.set $2
-  local.get $1
   i32.const 16
   i32.const 8
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.set $2
+  local.get $1
+  local.get $0
   i32.load
   local.tee $9
   i32.ne
@@ -4463,14 +4495,26 @@
   local.tee $1
   local.get $7
   call $~lib/memory/memory.fill
-  local.get $1
-  local.set $2
-  local.get $1
   i32.const 16
   i32.const 10
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.set $2
+  local.get $1
+  local.get $0
   i32.load
   local.tee $9
   i32.ne
@@ -5318,14 +5362,26 @@
   local.tee $1
   local.get $7
   call $~lib/memory/memory.fill
-  local.get $1
-  local.set $2
-  local.get $1
   i32.const 16
   i32.const 12
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.set $2
+  local.get $1
+  local.get $0
   i32.load
   local.tee $9
   i32.ne
@@ -5830,14 +5886,26 @@
   local.tee $1
   local.get $7
   call $~lib/memory/memory.fill
-  local.get $1
-  local.set $2
-  local.get $1
   i32.const 16
   i32.const 14
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.set $2
+  local.get $1
+  local.get $0
   i32.load
   local.tee $9
   i32.ne
@@ -6663,14 +6731,26 @@
   local.tee $1
   local.get $7
   call $~lib/memory/memory.fill
-  local.get $1
-  local.set $2
-  local.get $1
   i32.const 16
   i32.const 16
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.set $2
+  local.get $1
+  local.get $0
   i32.load
   local.tee $9
   i32.ne
@@ -7177,14 +7257,26 @@
   local.tee $1
   local.get $7
   call $~lib/memory/memory.fill
-  local.get $1
-  local.set $2
-  local.get $1
   i32.const 16
   i32.const 18
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $1
+  local.set $2
+  local.get $1
+  local.get $0
   i32.load
   local.tee $9
   i32.ne
@@ -7878,14 +7970,26 @@
   local.tee $0
   local.get $7
   call $~lib/memory/memory.fill
-  local.get $0
-  local.set $1
-  local.get $0
   i32.const 16
   i32.const 20
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  i32.const 0
+  i32.store
+  local.get $3
+  i32.const 0
+  i32.store offset=4
+  local.get $3
+  i32.const 0
+  i32.store offset=8
+  local.get $3
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.set $1
+  local.get $0
+  local.get $3
   i32.load
   local.tee $9
   i32.ne
@@ -8694,14 +8798,26 @@
   local.tee $0
   local.get $7
   call $~lib/memory/memory.fill
-  local.get $0
-  local.set $1
-  local.get $0
   i32.const 16
   i32.const 22
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   local.tee $3
+  i32.const 0
+  i32.store
+  local.get $3
+  i32.const 0
+  i32.store offset=4
+  local.get $3
+  i32.const 0
+  i32.store offset=8
+  local.get $3
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.set $1
+  local.get $0
+  local.get $3
   i32.load
   local.tee $9
   i32.ne
