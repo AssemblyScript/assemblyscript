@@ -543,12 +543,12 @@ export class Flow {
   isFieldFlag(name: string, flag: FieldFlags): bool {
     const fieldFlags = this.fieldFlags;
 
-    if ((fieldFlags !== null)  && fieldFlags.has(name)) {
-        const flags = assert(fieldFlags.get(name));
-        return (flags & flag) == flag;
-      }
-      return false;
+    if (fieldFlags !== null && fieldFlags.has(name)) {
+      const flags = assert(fieldFlags.get(name));
+      return (flags & flag) == flag;
     }
+    return false;
+  }
 
   /** Pushes a new break label to the stack, for example when entering a loop that one can `break` from. */
   pushBreakLabel(): string {
