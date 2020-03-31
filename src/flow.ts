@@ -854,11 +854,8 @@ export class Flow {
       rightFieldFlags !== null &&
       rightFieldFlags.size > 0
     ) {
-      const rightFieldFlags = right.fieldFlags;
       const rightKeys = Map_keys(rightFieldFlags!);
       const rightValues = Map_values(rightFieldFlags!);
-
-      const leftFieldFlags = left.fieldFlags;
 
       for (let i = 0, k = rightValues.length; i < k; ++i) {
         const rightValue = unchecked(rightValues[i]);
@@ -876,14 +873,14 @@ export class Flow {
 
   /** Inherits the fields flags of the given flow into the current flow */
   inheritFieldFlags(other: Flow): void {
+    const currentFieldFlags = this.fieldFlags;
+    const otherFieldFlags = other.fieldFlags; 
     if (
-      this.fieldFlags !== null &&
-      other.fieldFlags !== null
+      currentFieldFlags !== null &&
+      otherFieldFlags !== null
     ) {
-      const otherFieldFlags = other.fieldFlags;
       const otherKeys = Map_keys(otherFieldFlags!);
       const otherValues = Map_values(otherFieldFlags!);
-      const currentFieldFlags = this.fieldFlags;
 
       for (let i = 0, k = otherValues.length; i < k; ++i) {
         const key = otherKeys[i];
