@@ -17,7 +17,7 @@ const asinitOptions = {
   },
   "yes": {
     "category": "General",
-    "description": "Skips asking the user if they want to setup an AssemblyScript project.",
+    "description": "Answers all questions with their default option for non-interactive usage.",
     "type": "b",
     "alias": "y"
   }
