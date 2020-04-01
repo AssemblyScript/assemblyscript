@@ -6652,13 +6652,20 @@ export class Compiler extends DiagnosticEmitter {
   }
 
   /** Checks that an unsafe expression is allowed. */
-  private checkUnsafe(reportNode: Node): void {
+  private checkUnsafe(reportNode: Node, relatedReportNode: Node | null = null): void {
     // Library files may always use unsafe features
     if (this.options.noUnsafe && !reportNode.range.source.isLibrary) {
-      this.error(
-        DiagnosticCode.Operation_is_unsafe,
-        reportNode.range
-      );
+      if (relatedReportNode) {
+        this.errorRelated(
+          DiagnosticCode.Operation_is_unsafe,
+          reportNode.range, relatedReportNode.range
+        );
+      } else {
+        this.error(
+          DiagnosticCode.Operation_is_unsafe,
+          reportNode.range
+        );
+      }
     }
   }
 
@@ -8664,6 +8671,11 @@ export class Compiler extends DiagnosticEmitter {
       if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
     }
 
+    var isManaged = classReference.type.isManaged;
+    if (!isManaged) {
+      this.checkUnsafe(expression, findDecorator(DecoratorKind.UNMANAGED, classReference.decoratorNodes));
+    }
+
     // check and compile field values
     var names = expression.names;
     var numNames = names.length;
@@ -8672,7 +8684,9 @@ export class Compiler extends DiagnosticEmitter {
     var hasErrors = false;
     var exprs = new Array<ExpressionRef>(numNames + 2);
     var flow = this.currentFlow;
-    var tempLocal = flow.getAutoreleaseLocal(classReference.type);
+    var tempLocal = isManaged
+      ? flow.getAutoreleaseLocal(classReference.type)
+      : flow.getTempLocal(classReference.type);
     assert(numNames == values.length);
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
@@ -8700,14 +8714,15 @@ export class Compiler extends DiagnosticEmitter {
     // allocate a new instance first and assign 'this' to the temp. local
     exprs[0] = module.local_set(
       tempLocal.index,
-      this.makeRetain(
-        this.makeAllocation(classReference)
-      )
+      isManaged
+        ? this.makeRetain(this.makeAllocation(classReference))
+        : this.makeAllocation(classReference)
     );
 
     // once all field values have been set, return 'this'
     exprs[exprs.length - 1] = module.local_get(tempLocal.index, this.options.nativeSizeType);
 
+    if (!isManaged) flow.freeTempLocal(tempLocal);
     this.currentType = classReference.type;
     return module.flatten(exprs, this.options.nativeSizeType);
   }
