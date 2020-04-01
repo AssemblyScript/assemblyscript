@@ -7915,7 +7915,9 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         let globalType = global.type;
-        assert(globalType != Type.void);
+        if(globalType == Type.void) {
+          return module.unreachable();
+        }
         if (global.is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(global, contextualType, constraints);
         }
