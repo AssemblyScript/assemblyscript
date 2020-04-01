@@ -25,7 +25,7 @@ const asinitOptions = {
 
 const cliOptions = options.parse(process.argv.slice(2), asinitOptions);
 
-if (cliOptions.options.help) printHelp();
+if (cliOptions.options.help || cliOptions.arguments.length === 0) printHelp();
 
 function printHelp() {
   console.log([
@@ -37,7 +37,7 @@ function printHelp() {
   process.exit(0);
 }
 
-const projectDir = path.resolve(cliOptions.arguments[0] || ".");
+const projectDir = path.resolve(cliOptions.arguments[0]);
 const compilerDir = path.join(__dirname, "..");
 const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
