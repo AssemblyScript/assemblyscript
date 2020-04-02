@@ -228,14 +228,10 @@
  (data (i32.const 9072) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00s\00e\00v\00e\00n\00")
  (data (i32.const 9104) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\80#\00\00")
  (data (i32.const 9136) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00`\"\00\00\a0\"\00\00\00\00\00\00\c0\"\00\00\00#\00\00 #\00\00@#\00\00\80#\00\00")
- (data (i32.const 9184) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9200) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 9184) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00h\00e\00r\00e\00")
  (data (i32.const 9216) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
  (data (i32.const 9232) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9248) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9264) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9280) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
- (data (i32.const 9296) "\00\00\00\00\01\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 9248) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00h\00e\00r\00e\00 \004\00")
  (table $0 57 funcref)
  (elem (i32.const 1) $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|4 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|18 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|30 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|34 $start:std/array~anonymous|35 $start:std/array~anonymous|36 $start:std/array~anonymous|37 $start:std/array~anonymous|38 $start:std/array~anonymous|39 $start:std/array~anonymous|40 $start:std/array~anonymous|41 $start:std/array~anonymous|42 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|1 $start:std/array~anonymous|43 $start:std/array~anonymous|44 $start:std/array~anonymous|45 $start:std/array~anonymous|46 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -263,7 +259,7 @@
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
  (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~started (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 9312))
+ (global $~lib/heap/__heap_base i32 (i32.const 9276))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
@@ -17976,7 +17972,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
   local.get $0
   i32.load offset=12
   local.set $1
@@ -18070,15 +18065,13 @@
      if
       br $for-continue|1
      end
-     local.get $10
-     i32.const 1
-     i32.add
-     local.set $10
      local.get $6
      i32.load offset=8
      local.set $11
      local.get $8
      local.get $10
+     i32.const 1
+     i32.add
      i32.const 2
      i32.shl
      i32.add
@@ -18086,14 +18079,10 @@
      i32.load offset=4
      local.get $11
      call $~lib/memory/memory.copy
+     local.get $10
      local.get $11
      i32.const 2
      i32.shr_s
-     local.set $12
-     local.get $10
-     local.get $12
-     i32.const 1
-     i32.sub
      i32.add
      local.set $10
     end
@@ -18123,7 +18112,6 @@
   (local $9 i32)
   (local $10 i32)
   (local $11 i32)
-  (local $12 i32)
   local.get $0
   i32.load offset=12
   local.set $1
@@ -18217,15 +18205,13 @@
      if
       br $for-continue|1
      end
-     local.get $10
-     i32.const 1
-     i32.add
-     local.set $10
      local.get $6
      i32.load offset=8
      local.set $11
      local.get $8
      local.get $10
+     i32.const 1
+     i32.add
      i32.const 2
      i32.shl
      i32.add
@@ -18233,14 +18219,10 @@
      i32.load offset=4
      local.get $11
      call $~lib/memory/memory.copy
+     local.get $10
      local.get $11
      i32.const 2
      i32.shr_s
-     local.set $12
-     local.get $10
-     local.get $12
-     i32.const 1
-     i32.sub
      i32.add
      local.set $10
     end
@@ -24183,6 +24165,19 @@
   local.get $59
   call $~lib/array/Array<~lib/array/Array<i32>>#flat
   local.set $60
+  local.get $60
+  call $~lib/array/Array<i32>#get:length
+  i32.const 10
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 288
+   i32.const 1047
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
   local.set $26
   loop $for-loop|1
@@ -24202,7 +24197,7 @@
      local.get $26
      call $~lib/number/I32#toString
      i32.const 288
-     i32.const 1048
+     i32.const 1049
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -24213,19 +24208,6 @@
     local.set $26
     br $for-loop|1
    end
-  end
-  local.get $60
-  call $~lib/array/Array<i32>#get:length
-  i32.const 10
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 288
-   i32.const 1050
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
   end
   i32.const 4
   i32.const 2
@@ -24281,6 +24263,19 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $63
+  local.get $62
+  call $~lib/array/Array<~lib/string/String | null>#get:length
+  i32.const 8
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 288
+   i32.const 1055
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
   local.set $26
   loop $for-loop|2
@@ -24302,9 +24297,9 @@
     call $~lib/string/String.__eq
     i32.eqz
     if
-     i32.const 0
+     i32.const 9200
      i32.const 288
-     i32.const 1056
+     i32.const 1057
      i32.const 5
      call $~lib/builtins/abort
      unreachable
@@ -24320,20 +24315,7 @@
     br $for-loop|2
    end
   end
-  local.get $62
-  call $~lib/array/Array<~lib/string/String | null>#get:length
-  i32.const 8
-  i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 288
-   i32.const 1058
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 8
+  i32.const 2
   i32.const 2
   i32.const 12
   i32.const 0
@@ -24347,7 +24329,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 9200
+  i32.const 9232
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   i32.store
@@ -24355,58 +24337,10 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 9216
-  call $~lib/rt/__allocArray
-  call $~lib/rt/pure/__retain
-  i32.store offset=4
-  local.get $28
-  i32.const 0
-  i32.const 2
-  i32.const 3
-  i32.const 9232
-  call $~lib/rt/__allocArray
-  call $~lib/rt/pure/__retain
-  i32.store offset=8
-  local.get $28
-  i32.const 0
-  i32.const 2
-  i32.const 3
   i32.const 9248
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
-  i32.store offset=12
-  local.get $28
-  i32.const 0
-  i32.const 2
-  i32.const 3
-  i32.const 9264
-  call $~lib/rt/__allocArray
-  call $~lib/rt/pure/__retain
-  i32.store offset=16
-  local.get $28
-  i32.const 0
-  i32.const 2
-  i32.const 3
-  i32.const 9280
-  call $~lib/rt/__allocArray
-  call $~lib/rt/pure/__retain
-  i32.store offset=20
-  local.get $28
-  i32.const 0
-  i32.const 2
-  i32.const 3
-  i32.const 9296
-  call $~lib/rt/__allocArray
-  call $~lib/rt/pure/__retain
-  i32.store offset=24
-  local.get $28
-  i32.const 0
-  i32.const 2
-  i32.const 3
-  i32.const 9312
-  call $~lib/rt/__allocArray
-  call $~lib/rt/pure/__retain
-  i32.store offset=28
+  i32.store offset=4
   local.get $26
   local.set $28
   local.get $28
@@ -24417,7 +24351,7 @@
   i32.eq
   i32.eqz
   if
-   i32.const 0
+   i32.const 9264
    i32.const 288
    i32.const 1061
    i32.const 3

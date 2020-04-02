@@ -1044,19 +1044,19 @@ __release(changetype<usize>(arr));
 {
   var flatTarget: i32[][] = [[0], [1, 2, 3], [4, 5, 6], [7, 8, 9]];
   var result = flatTarget.flat();
+  assert(result.length == 10);
   for (let i = 0; i < 10; i++) {
     assert(result[i] == i, (i).toString());
   }
-  assert(result.length == 10);
 
   var flatStringTarget: Array<Array<string | null>> = [["one"], ["two", null, "three"], ["four", "five", "six"], ["seven"]];
   var stringResult = flatStringTarget.flat();
   var expected = ["one", "two", null, "three", "four", "five", "six", "seven"];
-  for (let i = 0; i < expected.length; i++) {
-    assert(stringResult[i] == expected[i]);
-  }
   assert(stringResult.length == 8);
+  for (let i = 0; i < expected.length; i++) {
+    assert(stringResult[i] == expected[i], "here");
+  }
 
-  let testArray: i32[][] = [[], [], [], [], [], [], [], []];
-  assert(testArray.flat().length == 0);
+  let testArray: i32[][] = [[], []];
+  assert(testArray.flat().length == 0, "here 4");
 }

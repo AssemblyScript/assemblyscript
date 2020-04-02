@@ -517,32 +517,28 @@ export class Array<T> {
     store<i32>(result, size, offsetof<T>("length_"));
 
     // byteLength, dataStart, and buffer are all readonly
-    store<i32>(changetype<usize>(result), byteLength, offsetof<T>("byteLength"));
-    store<usize>(changetype<usize>(result), dataStart, offsetof<T>("dataStart"));
-    store<usize>(changetype<usize>(result), __retain(dataStart), offsetof<T>("buffer"));
+    store<i32>(result, byteLength, offsetof<T>("byteLength"));
+    store<usize>(result, dataStart, offsetof<T>("dataStart"));
+    store<usize>(result, __retain(dataStart), offsetof<T>("buffer"));
 
     // set the elements
     var resultIndex = -1;
     for (let i = 0; i < length; i++) { // for each child
-      let child = load<usize>(selfDataStart + (i << alignof<T>()));
+      let child = load<usize>(selfDataStart + (<usize>i << alignof<T>()));
 
       // ignore null arrays
       if (child == 0) continue;
 
-      // move to the next array index
-      resultIndex++;
-
       // copy the underlying buffer data to the result buffer
       let childDataLength = load<i32>(child, offsetof<T>("byteLength"));
       memory.copy(
-        dataStart + (<usize>resultIndex << usize(alignof<valueof<T>>())),
+        dataStart + (<usize>(resultIndex + 1) << usize(alignof<valueof<T>>())),
         load<usize>(child, offsetof<T>("dataStart")),
         <usize>childDataLength,
       );
 
       // advance the result length
-      let childLength = childDataLength >> <i32>alignof<valueof<T>>();
-      resultIndex += childLength - 1;
+      resultIndex += childDataLength >> <i32>alignof<valueof<T>>();
     }
 
     // if the `valueof<T>` type is managed, we must call __retain() on each reference
