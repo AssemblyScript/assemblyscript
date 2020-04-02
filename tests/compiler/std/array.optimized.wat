@@ -230,10 +230,8 @@
  (data (i32.const 9664) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00s\00e\00v\00e\00n")
  (data (i32.const 9696) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\d0%")
  (data (i32.const 9728) " \00\00\00\01\00\00\00\00\00\00\00 \00\00\00\b0$\00\00\f0$\00\00\00\00\00\00\10%\00\00P%\00\00p%\00\00\90%\00\00\d0%")
- (data (i32.const 9776) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00h\00e\00r\00e")
- (data (i32.const 9812) "\01")
- (data (i32.const 9828) "\01")
- (data (i32.const 9840) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00h\00e\00r\00e\00 \004")
+ (data (i32.const 9780) "\01")
+ (data (i32.const 9796) "\01")
  (table $0 57 funcref)
  (elem (i32.const 1) $start:std/array~anonymous|0 $start:std/array~anonymous|1 $start:std/array~anonymous|2 $start:std/array~anonymous|3 $start:std/array~anonymous|2 $start:std/array~anonymous|5 $start:std/array~anonymous|6 $start:std/array~anonymous|7 $start:std/array~anonymous|8 $start:std/array~anonymous|9 $start:std/array~anonymous|10 $start:std/array~anonymous|11 $start:std/array~anonymous|12 $start:std/array~anonymous|13 $start:std/array~anonymous|14 $start:std/array~anonymous|15 $start:std/array~anonymous|16 $start:std/array~anonymous|17 $start:std/array~anonymous|16 $start:std/array~anonymous|19 $start:std/array~anonymous|20 $start:std/array~anonymous|21 $start:std/array~anonymous|22 $start:std/array~anonymous|23 $start:std/array~anonymous|24 $start:std/array~anonymous|25 $start:std/array~anonymous|26 $start:std/array~anonymous|27 $start:std/array~anonymous|28 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $start:std/array~anonymous|29 $start:std/array~anonymous|29 $start:std/array~anonymous|31 $start:std/array~anonymous|32 $start:std/array~anonymous|33 $start:std/array~anonymous|29 $start:std/array~anonymous|35 $~lib/util/sort/COMPARATOR<f32>~anonymous|0 $~lib/util/sort/COMPARATOR<f64>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<u32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $~lib/util/sort/COMPARATOR<i32>~anonymous|0 $start:std/array~anonymous|44 $start:std/array~anonymous|47 $start:std/array~anonymous|48 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
@@ -836,11 +834,11 @@
    if
     unreachable
    end
-   i32.const 9872
+   i32.const 9808
    local.tee $0
    i32.const 0
    i32.store
-   i32.const 11440
+   i32.const 11376
    i32.const 0
    i32.store
    loop $for-loop|0
@@ -851,7 +849,7 @@
      local.get $1
      i32.const 2
      i32.shl
-     i32.const 9872
+     i32.const 9808
      i32.add
      i32.const 0
      i32.store offset=4
@@ -869,7 +867,7 @@
        i32.add
        i32.const 2
        i32.shl
-       i32.const 9872
+       i32.const 9808
        i32.add
        i32.const 0
        i32.store offset=96
@@ -887,13 +885,13 @@
      br $for-loop|0
     end
    end
-   i32.const 9872
-   i32.const 11456
+   i32.const 9808
+   i32.const 11392
    memory.size
    i32.const 16
    i32.shl
    call $~lib/rt/tlsf/addMemory
-   i32.const 9872
+   i32.const 9808
    global.set $~lib/rt/tlsf/ROOT
   end
   local.get $0
@@ -1451,7 +1449,7 @@
   (local $1 i32)
   (local $2 i32)
   local.get $0
-  i32.const 9868
+  i32.const 9808
   i32.gt_u
   if
    local.get $0
@@ -1500,7 +1498,7 @@
  )
  (func $~lib/rt/pure/__release (; 19 ;) (param $0 i32)
   local.get $0
-  i32.const 9868
+  i32.const 9808
   i32.gt_u
   if
    local.get $0
@@ -2232,7 +2230,7 @@
   local.get $2
   call $~lib/memory/memory.copy
   local.get $1
-  i32.const 9868
+  i32.const 9808
   i32.ge_u
   if
    local.get $1
@@ -16191,7 +16189,7 @@
     call $~lib/string/String.__eq
     i32.eqz
     if
-     i32.const 9792
+     i32.const 0
      i32.const 1296
      i32.const 1057
      i32.const 5
@@ -16221,7 +16219,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 9824
+  i32.const 9792
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   i32.store
@@ -16229,7 +16227,7 @@
   i32.const 0
   i32.const 2
   i32.const 3
-  i32.const 9840
+  i32.const 9808
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   i32.store offset=4
@@ -16238,7 +16236,7 @@
   local.tee $53
   i32.load offset=12
   if
-   i32.const 9856
+   i32.const 0
    i32.const 1296
    i32.const 1061
    i32.const 3
@@ -16415,7 +16413,7 @@
  )
  (func $~lib/rt/pure/__visit (; 171 ;) (param $0 i32)
   local.get $0
-  i32.const 9868
+  i32.const 9808
   i32.lt_u
   if
    return

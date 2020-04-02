@@ -1054,9 +1054,9 @@ __release(changetype<usize>(arr));
   var expected = ["one", "two", null, "three", "four", "five", "six", "seven"];
   assert(stringResult.length == 8);
   for (let i = 0; i < expected.length; i++) {
-    assert(stringResult[i] == expected[i], "here");
+    assert(stringResult[i] == expected[i]);
   }
 
   let testArray: i32[][] = [[], []];
-  assert(testArray.flat().length == 0, "here 4");
+  assert(testArray.flat().length == 0);
 }
