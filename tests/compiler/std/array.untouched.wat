@@ -18040,7 +18040,7 @@
   local.get $8
   call $~lib/rt/pure/__retain
   i32.store
-  i32.const -1
+  i32.const 0
   local.set $10
   i32.const 0
   local.set $4
@@ -18070,10 +18070,6 @@
      local.set $11
      local.get $8
      local.get $10
-     i32.const 1
-     i32.add
-     i32.const 2
-     i32.shl
      i32.add
      local.get $6
      i32.load offset=4
@@ -18081,8 +18077,6 @@
      call $~lib/memory/memory.copy
      local.get $10
      local.get $11
-     i32.const 2
-     i32.shr_s
      i32.add
      local.set $10
     end
@@ -18176,7 +18170,7 @@
   local.get $8
   call $~lib/rt/pure/__retain
   i32.store
-  i32.const -1
+  i32.const 0
   local.set $10
   i32.const 0
   local.set $4
@@ -18206,10 +18200,6 @@
      local.set $11
      local.get $8
      local.get $10
-     i32.const 1
-     i32.add
-     i32.const 2
-     i32.shl
      i32.add
      local.get $6
      i32.load offset=4
@@ -18217,8 +18207,6 @@
      call $~lib/memory/memory.copy
      local.get $10
      local.get $11
-     i32.const 2
-     i32.shr_s
      i32.add
      local.set $10
     end

@@ -522,7 +522,7 @@ export class Array<T> {
     store<usize>(result, __retain(dataStart), offsetof<T>("buffer"));
 
     // set the elements
-    var resultIndex = -1;
+    var resultOffset: usize = 0;
     for (let i = 0; i < length; i++) { // for each child
       let child = load<usize>(selfDataStart + (<usize>i << alignof<T>()));
 
@@ -532,13 +532,13 @@ export class Array<T> {
       // copy the underlying buffer data to the result buffer
       let childDataLength = load<i32>(child, offsetof<T>("byteLength"));
       memory.copy(
-        dataStart + (<usize>(resultIndex + 1) << usize(alignof<valueof<T>>())),
+        dataStart + resultOffset,
         load<usize>(child, offsetof<T>("dataStart")),
-        <usize>childDataLength,
+        <usize>childDataLength
       );
 
       // advance the result length
-      resultIndex += childDataLength >> <i32>alignof<valueof<T>>();
+      resultOffset += childDataLength;
     }
 
     // if the `valueof<T>` type is managed, we must call __retain() on each reference
