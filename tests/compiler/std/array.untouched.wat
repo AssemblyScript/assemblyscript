@@ -18096,11 +18096,7 @@
   local.get $9
   call $~lib/rt/pure/__retain
  )
- (func $~lib/number/I32#toString (; 310 ;) (param $0 i32) (result i32)
-  local.get $0
-  call $~lib/util/number/itoa<i32>
- )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String | null>>#flat (; 311 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String | null>>#flat (; 310 ;) (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -18260,7 +18256,7 @@
   local.get $9
   call $~lib/rt/pure/__retain
  )
- (func $start:std/array (; 312 ;)
+ (func $start:std/array (; 311 ;)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -24194,8 +24190,7 @@
     i32.eq
     i32.eqz
     if
-     local.get $26
-     call $~lib/number/I32#toString
+     i32.const 0
      i32.const 288
      i32.const 1049
      i32.const 5
@@ -24387,7 +24382,7 @@
   local.get $63
   call $~lib/rt/pure/__release
  )
- (func $~start (; 313 ;)
+ (func $~start (; 312 ;)
   global.get $~started
   if
    return
@@ -24397,10 +24392,10 @@
   end
   call $start:std/array
  )
- (func $~lib/rt/pure/__collect (; 314 ;)
+ (func $~lib/rt/pure/__collect (; 313 ;)
   return
  )
- (func $~lib/rt/pure/decrement (; 315 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (; 314 ;) (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -24477,7 +24472,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 316 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (; 315 ;) (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -24501,25 +24496,25 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/array/Array<i32>#__visit_impl (; 317 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#__visit_impl (; 316 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u8>#__visit_impl (; 318 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u8>#__visit_impl (; 317 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u32>#__visit_impl (; 319 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u32>#__visit_impl (; 318 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<std/array/Ref>#__visit_impl (; 320 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<std/array/Ref>#__visit_impl (; 319 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24562,19 +24557,19 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<f32>#__visit_impl (; 321 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f32>#__visit_impl (; 320 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<f64>#__visit_impl (; 322 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<f64>#__visit_impl (; 321 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<std/array/Ref | null>#__visit_impl (; 323 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<std/array/Ref | null>#__visit_impl (; 322 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24617,7 +24612,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__visit_impl (; 324 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__visit_impl (; 323 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24660,7 +24655,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<std/array/Proxy<i32>>#__visit_impl (; 325 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<std/array/Proxy<i32>>#__visit_impl (; 324 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24703,7 +24698,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<~lib/string/String | null>#__visit_impl (; 326 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String | null>#__visit_impl (; 325 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24746,7 +24741,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 327 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/string/String>#__visit_impl (; 326 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24789,46 +24784,46 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<bool>#__visit_impl (; 328 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<bool>#__visit_impl (; 327 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/staticarray/StaticArray<u32>#__visit_impl (; 329 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u32>#__visit_impl (; 328 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/staticarray/StaticArray<u64>#__visit_impl (; 330 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<u64>#__visit_impl (; 329 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/staticarray/StaticArray<i16>#__visit_impl (; 331 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<i16>#__visit_impl (; 330 ;) (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/array/Array<i8>#__visit_impl (; 332 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i8>#__visit_impl (; 331 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u16>#__visit_impl (; 333 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u16>#__visit_impl (; 332 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<u64>#__visit_impl (; 334 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<u64>#__visit_impl (; 333 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<i64>#__visit_impl (; 335 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i64>#__visit_impl (; 334 ;) (param $0 i32) (param $1 i32)
   local.get $0
   i32.load
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<u8>>#__visit_impl (; 336 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<u8>>#__visit_impl (; 335 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24871,7 +24866,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<u32>>#__visit_impl (; 337 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<u32>>#__visit_impl (; 336 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24914,7 +24909,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#__visit_impl (; 338 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/array/Array<u32>>>#__visit_impl (; 337 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -24957,7 +24952,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String | null>>#__visit_impl (; 339 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String | null>>#__visit_impl (; 338 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -25000,7 +24995,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/rt/__visit_members (; 340 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (; 339 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$30

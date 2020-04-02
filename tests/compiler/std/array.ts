@@ -1046,7 +1046,7 @@ __release(changetype<usize>(arr));
   var result = flatTarget.flat();
   assert(result.length == 10);
   for (let i = 0; i < 10; i++) {
-    assert(result[i] == i, (i).toString());
+    assert(result[i] == i);
   }
 
   var flatStringTarget: Array<Array<string | null>> = [["one"], ["two", null, "three"], ["four", "five", "six"], ["seven"]];
