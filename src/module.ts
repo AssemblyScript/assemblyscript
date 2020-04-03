@@ -1848,14 +1848,13 @@ export function getFunctionResults(func: FunctionRef): NativeType {
   return binaryen._BinaryenFunctionGetResults(func);
 }
 
-export function getFunctionVars(func: FunctionRef): NativeType {
-  // TODO: unify this on Binaryen's side?
+export function getFunctionVars(func: FunctionRef): NativeType[] {
   var count = binaryen._BinaryenFunctionGetNumVars(func);
   var types = new Array<NativeType>(count);
   for (let i: Index = 0; i < count; ++i) {
     types[i] = binaryen._BinaryenFunctionGetVar(func, i);
   }
-  return createType(types);
+  return types;
 }
 
 // globals

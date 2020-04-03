@@ -1,12 +1,24 @@
+var itWorks = false;
+
 class Foo {
-  baz(): void {}
+  a<T>(a: T): void { // called
+    assert(false);
+  }
 }
+
 class Bar extends Foo {
-  baz(): void {}
+  a<T>(a: T): void { // what becomes called
+    itWorks = true;
+  }
 }
-export function test(foo: Foo): void {
-  foo.baz();
+
+class Baz extends Bar {
+  a<T>(a: T): void { // not virtual
+    assert(false);
+  }
 }
-// FIXME: this results in a call to Foo.baz instead of Bar.baz above.
-// ultimately, overloaded functions should implicitly become virtual.
-test(changetype<Bar>(0));
+
+new Baz();
+var foo: Foo = new Bar();
+foo.a<i32>(1);
+assert(itWorks);

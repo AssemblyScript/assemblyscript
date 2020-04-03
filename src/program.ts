@@ -664,6 +664,7 @@ export class Program extends DiagnosticEmitter {
         this.makeNativeFunctionDeclaration(name, flags),
         decoratorFlags
       ),
+      null,
       signature
     );
   }
@@ -1009,6 +1010,13 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
+    // check for virtual overloads in derived classes
+    for (let i = 0, k = queuedExtends.length; i < k; ++i) {
+      let thisPrototype = queuedExtends[i];
+      this.markVirtuals(thisPrototype, assert(thisPrototype.basePrototype));
+    }
+    // TODO: interfaces via queuedImplements
+
     // set up global aliases
     {
       let globalAliases = options.globalAliases;
@@ -1085,6 +1093,51 @@ export class Program extends DiagnosticEmitter {
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.markModuleExports(file);
       }
+    }
+  }
+
+  /** Marks virtual members in a base class overloaded in this class. */
+  private markVirtuals(thisPrototype: ClassPrototype, basePrototype: ClassPrototype): void {
+    // TODO: make this work with interfaaces as well
+    var thisInstanceMembers = thisPrototype.instanceMembers;
+    if (thisInstanceMembers) {
+      do {
+        let baseInstanceMembers = basePrototype.instanceMembers;
+        if (baseInstanceMembers) {
+          for (let _values = Map_values(thisInstanceMembers), j = 0, l = _values.length; j < l; ++j) {
+            let thisMember = _values[j];
+            if (!thisMember.is(CommonFlags.CONSTRUCTOR) && baseInstanceMembers.has(thisMember.name)) {
+              let baseMember = assert(baseInstanceMembers.get(thisMember.name));
+              if (
+                thisMember.kind == ElementKind.FUNCTION_PROTOTYPE &&
+                baseMember.kind == ElementKind.FUNCTION_PROTOTYPE
+              ) {
+                baseMember.set(CommonFlags.VIRTUAL);
+                let baseMethod = <FunctionPrototype>baseMember;
+                let overloads = baseMethod.overloads;
+                if (!overloads) baseMethod.overloads = overloads = new Set();
+                overloads.add(<FunctionPrototype>thisMember);
+                let baseMethodInstances = baseMethod.instances;
+                if (baseMethodInstances) {
+                  for (let _values = Map_values(baseMethodInstances), a = 0, b = _values.length; a < b; ++a) {
+                    let baseMethodInstance = _values[a];
+                    baseMethodInstance.set(CommonFlags.VIRTUAL);
+                  }
+                }
+              } else {
+                this.errorRelated(
+                  DiagnosticCode.Duplicate_identifier_0,
+                  (<DeclaredElement>thisMember).identifierNode.range,
+                  (<DeclaredElement>baseMember).identifierNode.range
+                );
+              }
+            }
+          }
+        }
+        let nextPrototype = basePrototype.basePrototype;
+        if (!nextPrototype) break;
+        basePrototype = nextPrototype;
+      } while (true);
     }
   }
 
@@ -2865,6 +2918,8 @@ export class FunctionPrototype extends DeclaredElement {
   operatorKind: OperatorKind = OperatorKind.INVALID;
   /** Already resolved instances. */
   instances: Map<string,Function> | null = null;
+  /** Methods overloading this one, if any. These are unbound. */
+  overloads: Set<FunctionPrototype> | null = null;
 
   /** Clones of this prototype that are bounds to specific classes. */
   private boundPrototypes: Map<Class,FunctionPrototype> | null = null;
@@ -2935,6 +2990,7 @@ export class FunctionPrototype extends DeclaredElement {
     );
     bound.flags = this.flags;
     bound.operatorKind = this.operatorKind;
+    bound.overloads = this.overloads;
     // NOTE: this.instances holds instances per bound class / unbound
     boundPrototypes.set(classInstance, bound);
     return bound;
@@ -2974,6 +3030,8 @@ export class Function extends TypedElement {
   localsByIndex: Local[] = [];
   /** List of additional non-parameter locals. */
   additionalLocals: Type[] = [];
+  /** Concrete type arguments. */
+  typeArguments: Type[] | null;
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> | null;
   /** Default control flow. */
@@ -3000,6 +3058,8 @@ export class Function extends TypedElement {
     nameInclTypeParameters: string,
     /** Respective function prototype. */
     prototype: FunctionPrototype,
+    /** Concrete type arguments. */
+    typeArguments: Type[] | null,
     /** Concrete signature. */
     signature: Signature, // pre-resolved
     /** Contextual type arguments inherited from its parent class, if any. */
@@ -3014,6 +3074,7 @@ export class Function extends TypedElement {
       prototype.declaration
     );
     this.prototype = prototype;
+    this.typeArguments = typeArguments;
     this.signature = signature;
     this.flags = prototype.flags | CommonFlags.RESOLVED;
     this.decoratorFlags = prototype.decoratorFlags;
@@ -3597,30 +3658,6 @@ export class Class extends TypedElement {
   setBase(base: Class): void {
     assert(!this.base);
     this.base = base;
-
-    // Remember extendees and mark overloaded methods virtual
-    var basePrototype: ClassPrototype  = base.prototype;
-    var thisPrototype = this.prototype;
-    assert(basePrototype != thisPrototype);
-    basePrototype.extendees.add(thisPrototype);
-    var thisInstanceMembers = thisPrototype.instanceMembers;
-    if (thisInstanceMembers) {
-      do {
-        let baseInstanceMembers = basePrototype.instanceMembers;
-        if (baseInstanceMembers) {
-          for (let _keys = Map_keys(baseInstanceMembers), i = 0, k = _keys.length; i < k; ++i) {
-            let memberName = _keys[i];
-            let member = assert(baseInstanceMembers.get(memberName));
-            if (thisInstanceMembers.has(memberName)) {
-              member.set(CommonFlags.VIRTUAL);
-            }
-          }
-        }
-        let nextPrototype = basePrototype.basePrototype;
-        if (!nextPrototype) break;
-        basePrototype = nextPrototype;
-      } while (true);
-    }
 
     // Inherit contextual type arguments from base class
     var inheritedTypeArguments = base.contextualTypeArguments;

@@ -47,8 +47,12 @@ import {
   getLocalSetValue,
   getGlobalGetName,
   isGlobalMutable,
-  createType,
-  hasSideEffects
+  hasSideEffects,
+  getFunctionBody,
+  getFunctionParams,
+  getFunctionResults,
+  getFunctionVars,
+  createType
 } from "./module";
 
 import {
@@ -331,7 +335,7 @@ export class Compiler extends DiagnosticEmitter {
   /** Map of already compiled static string segments. */
   stringSegments: Map<string,MemorySegment> = new Map();
   /** Function table being compiled. First elem is blank. */
-  functionTable: string[] = [];
+  functionTable: Function[] = [];
   /** Arguments length helper global. */
   builtinArgumentsLength: GlobalRef = 0;
   /** Requires runtime features. */
@@ -493,7 +497,19 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up virtual lookup tables
-    this.setupVirtualLookupTables();
+    var functionTable = this.functionTable;
+    for (let i = 0, k = functionTable.length; i < k; ++i) {
+      let instance = functionTable[i];
+      if (instance.is(CommonFlags.VIRTUAL)) {
+        assert(instance.is(CommonFlags.INSTANCE));
+        this.makeVirtual(instance);
+      }
+    }
+    var virtualCalls = this.virtualCalls;
+    for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
+      let instance = unchecked(_values[i]);
+      this.makeVirtual(instance);
+    }
 
     // finalize runtime features
     module.removeGlobal(BuiltinNames.rtti_base);
@@ -551,10 +567,13 @@ export class Compiler extends DiagnosticEmitter {
     if (options.importMemory) module.addMemoryImport("0", "env", "memory", isSharedMemory);
 
     // set up function table (first elem is blank)
-    var functionTable = this.functionTable;
     var tableBase = this.options.tableBase;
     if (!tableBase) tableBase = 1; // leave first elem blank
-    module.setFunctionTable(tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTable, module.i32(tableBase));
+    var functionTableNames = new Array<string>(functionTable.length);
+    for (let i = 0, k = functionTable.length; i < k; ++i) {
+      functionTableNames[i] = functionTable[i].internalName;
+    }
+    module.setFunctionTable(tableBase + functionTable.length, Module.UNLIMITED_TABLE, functionTableNames, module.i32(tableBase));
 
     // import and/or export table if requested (default table is named '0' by Binaryen)
     if (options.importTable) {
@@ -585,34 +604,114 @@ export class Compiler extends DiagnosticEmitter {
     return module;
   }
 
-  private setupVirtualLookupTables(): void {
-    // TODO: :-)
-    var program = this.program;
-    var virtualCalls = this.virtualCalls;
+  /** Makes a normally compiled function virtual by injecting a vtable. */
+  private makeVirtual(instance: Function): void {
+    // Check if this function has already been processed
+    var ref = instance.ref;
+    var body = getFunctionBody(ref);
+    if (getExpressionId(body) == ExpressionId.Block && getBlockName(body) == "vt") return;
 
-    // Virtual instance methods in the function table are potentially called virtually
-    var functionTable = this.functionTable;
-    var elementsByName = program.elementsByName;
-    for (let i = 0, k = functionTable.length; i < k; ++i) {
-      let instanceName = unchecked(functionTable[i]);
-      if (elementsByName.has(instanceName)) { // otherwise ~anonymous
-        let instance = assert(elementsByName.get(instanceName));
-        if (instance.is(CommonFlags.INSTANCE | CommonFlags.VIRTUAL)) {
-          assert(instance.kind == ElementKind.FUNCTION);
-          virtualCalls.add(<Function>instance);
+    // Wouldn't be here if there wasn't at least one overload
+    var overloadPrototypes = assert(instance.prototype.overloads);
+    assert(overloadPrototypes.size);
+
+    var module = this.module;
+    var usizeType = this.options.usizeType;
+    var usizeSize = usizeType.byteSize;
+    var isWasm64 = usizeSize == 8;
+    var nativeSizeType = usizeType.toNativeType();
+
+    // Add an additional temporary local holding this's class id
+    var vars = getFunctionVars(ref);
+    var tempIndex = 1 + instance.signature.parameterTypes.length + vars.length;
+    vars.push(NativeType.I32);
+
+    // Check that this's class id is what we expect if we don't call an overload
+    if (!this.options.noAssert) {
+      let parent = instance.parent;
+      let actualParent = parent.kind == ElementKind.PROPERTY
+        ? parent.parent
+        : parent;
+      assert(actualParent.kind == ElementKind.CLASS);
+      body = module.if(
+        module.binary(BinaryOp.EqI32,
+          module.local_get(tempIndex, NativeType.I32),
+          module.i32((<Class>actualParent).id)
+        ),
+        body,
+        module.unreachable() // TODO: abort?
+      );
+    }
+
+    // A method's `overloads` property contains its unbound overload prototypes
+    // so we first have to find the concrete classes it became bound to, obtain
+    // their bound prototypes and make sure these are resolved and compiled as
+    // we are going to call them conditionally based on this's class id.
+    for (let _values = Set_values(overloadPrototypes), i = 0, k = _values.length; i < k; ++i) {
+      let unboundOverloadPrototype = _values[i];
+      assert(!unboundOverloadPrototype.isBound);
+      let unboundOverloadParent = unboundOverloadPrototype.parent;
+      assert(unboundOverloadParent.kind == ElementKind.CLASS_PROTOTYPE);
+
+      let classInstances = (<ClassPrototype>unboundOverloadParent).instances;
+      if (classInstances) {
+        for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
+          let classInstance = _values[j];
+          let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
+          assert(boundPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          let overloadInstance = this.resolver.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+          if (!overloadInstance || !this.compileFunction(overloadInstance)) continue;
+          let parameterTypes = overloadInstance.signature.parameterTypes;
+          let numParameters = parameterTypes.length;
+          let paramExprs = new Array<ExpressionRef>(1 + numParameters);
+          paramExprs[0] = module.local_get(0, nativeSizeType); // this
+          for (let n = 0; n < numParameters; ++n) {
+            paramExprs[1 + n] = module.local_get(1 + n, parameterTypes[n].toNativeType());
+          }
+
+          // TODO: verify signature and use trampoline if overload has additional
+          // optional parameters.
+
+          // TODO: split this into two functions, one with the actual code and one
+          // with the vtable since calling the super function must circumvent the
+          // vtable. Perhaps, if we know we are inserting a vtable, we'd generate
+          // a stub for the vtable function using the function's original name,
+          // and generate the code function right away as |virtual?
+
+          body = module.if(
+            module.binary(BinaryOp.EqI32,
+              module.local_get(tempIndex, NativeType.I32),
+              module.i32(classInstance.id)
+            ),
+            module.call(overloadInstance.internalName, paramExprs, overloadInstance.signature.returnType.toNativeType()),
+            body
+          );
         }
       }
     }
 
-    // Inject a virtual lookup table into each function potentially called virtually
-    // TODO: for (let instance of virtualCalls.values()) {
-    for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
-      let instance = unchecked(_values[i]);
-      this.warning(
-        DiagnosticCode.Function_0_is_possibly_called_virtually_which_is_not_yet_supported,
-        instance.identifierNode.range, instance.internalName
-      );
-    }
+    // Finally replace the function and mark it with a vtable block
+    body = module.block("vt", [
+      module.local_set(tempIndex, // BLOCK(this)#id @ this - 8
+        module.load(4, false,
+          module.binary(
+            isWasm64
+              ? BinaryOp.SubI64
+              : BinaryOp.SubI32,
+            module.local_get(0, nativeSizeType),
+            isWasm64
+              ? module.i64(8)
+              : module.i32(8)
+          ),
+          NativeType.I32
+        )
+      ),
+      body
+    ], getExpressionType(body));
+    var prevParams = getFunctionParams(ref);
+    var prevResults = getFunctionResults(ref);
+    module.removeFunction(instance.internalName);
+    module.addFunction(instance.internalName, prevParams, prevResults, vars, body);
   }
 
   // === Exports ==================================================================================
@@ -1328,16 +1427,12 @@ export class Compiler extends DiagnosticEmitter {
       this.currentFlow = previousFlow;
 
       // create the function
-      let body = module.flatten(stmts, instance.signature.returnType.toNativeType());
-      if (instance.is(CommonFlags.VIRTUAL)) {
-        body = module.block("vtable", [ body ], getExpressionType(body));
-      }
       funcRef = module.addFunction(
         instance.internalName,
         signature.nativeParams,
         signature.nativeResults,
         typesToNativeTypes(instance.additionalLocals),
-        body
+        module.flatten(stmts, instance.signature.returnType.toNativeType())
       );
 
     // imported function
@@ -1827,7 +1922,7 @@ export class Compiler extends DiagnosticEmitter {
       // insert the trampoline if the function has optional parameters
       instance = this.ensureTrampoline(instance);
     }
-    functionTable.push(instance.internalName);
+    functionTable.push(instance);
     instance.functionTableIndex = index;
     return index;
   }
@@ -6886,6 +6981,7 @@ export class Compiler extends DiagnosticEmitter {
     trampoline = new Function(
       original.name + "|trampoline",
       original.prototype,
+      original.typeArguments,
       trampolineSignature,
       original.contextualTypeArguments
     );
@@ -7703,6 +7799,7 @@ export class Compiler extends DiagnosticEmitter {
       instance = new Function(
         prototype.name,
         prototype,
+        null,
         signature,
         contextualTypeArguments
       );
@@ -8756,6 +8853,7 @@ export class Compiler extends DiagnosticEmitter {
           // declaration is important, i.e. to access optional parameter initializers
           (<FunctionDeclaration>baseCtor.declaration).clone()
         ),
+        null,
         baseCtor.signature,
         contextualTypeArguments
       );
@@ -8771,6 +8869,7 @@ export class Compiler extends DiagnosticEmitter {
             CommonFlags.INSTANCE | CommonFlags.CONSTRUCTOR
           )
         ),
+        null,
         new Signature(this.program, null, classInstance.type, classInstance.type),
         contextualTypeArguments
       );

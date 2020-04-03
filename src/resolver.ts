@@ -2776,6 +2776,7 @@ export class Resolver extends DiagnosticEmitter {
     var instance = new Function(
       nameInclTypeParameters,
       prototype,
+      typeArguments,
       signature,
       ctxTypes
     );
