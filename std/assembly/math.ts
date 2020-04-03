@@ -1880,7 +1880,7 @@ function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
   return <f32>(odd ? -1 / r : r);
 }
 
-// See: metallic/src/math/float/log2f.c
+// See: jdh8/metallic/src/math/float/log2f.c
 // @ts-ignore: decorator
 @inline
 function log2f(x: f64): f64 {
@@ -1900,7 +1900,7 @@ function log2f(x: f64): f64 {
   return (2 * log2e) * y + <f64>exponent;
 }
 
-// See: metallic/src/math/float/exp2f.c
+// See: jdh8/metallic/src/math/float/exp2f.h
 // @ts-ignore: decorator
 @inline
 function exp2f(x: f64): f64 {
@@ -2638,7 +2638,7 @@ export namespace NativeMathf {
       // see: musl/src/math/powf.c
       return powf_lut(x, y);
     } else {
-      // based on: metallic/src/math/float/powf.c
+      // based on:  jdh8/metallic/src/math/float/powf.c
       if (y == 0) return 1;
       // @ts-ignore: cast
       if (isNaN(x) | isNaN(y)) {
