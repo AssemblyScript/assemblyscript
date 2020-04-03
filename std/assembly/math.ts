@@ -1880,6 +1880,7 @@ function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
   return <f32>(odd ? -1 / r : r);
 }
 
+// See: metallic/src/math/float/log2f.c
 // @ts-ignore: decorator
 @inline
 function log2f(x: f64): f64 {
@@ -1899,6 +1900,7 @@ function log2f(x: f64): f64 {
   return (2 * log2e) * y + <f64>exponent;
 }
 
+// See: metallic/src/math/float/exp2f.c
 // @ts-ignore: decorator
 @inline
 function exp2f(x: f64): f64 {
