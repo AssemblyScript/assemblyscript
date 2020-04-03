@@ -1880,7 +1880,7 @@ function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
   return <f32>(odd ? -1 / r : r);
 }
 
-// See: jdh8/metallic/src/math/float/log2f.c
+// See: jdh8/metallic/src/math/float/log2f.c and jdh8/metallic/src/math/float/kernel/atanhf.h
 // @ts-ignore: decorator
 @inline
 function log2f(x: f64): f64 {
@@ -1900,7 +1900,7 @@ function log2f(x: f64): f64 {
   return (2 * log2e) * y + <f64>exponent;
 }
 
-// See: jdh8/metallic/src/math/float/exp2f.h
+// See: jdh8/metallic/src/math/float/exp2f.h and jdh8/metallic/blob/master/src/math/float/kernel/exp2f.h
 // @ts-ignore: decorator
 @inline
 function exp2f(x: f64): f64 {
