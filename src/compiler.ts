@@ -747,7 +747,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Last case (self) is calling the original function
     var numParameters = parameterTypes.length;
-    var paramExprs = new Array<NativeType>(numParameters);
+    var paramExprs = new Array<ExpressionRef>(numParameters);
     paramExprs[0] = module.local_get(0, nativeSizeType); // this
     for (let i = 0, k = parameterTypes.length; i < k; ++i) {
       paramExprs[1 + i] = module.local_get(1 + i, parameterTypes[i].toNativeType());
