@@ -1106,7 +1106,10 @@ export class Program extends DiagnosticEmitter {
         if (baseInstanceMembers) {
           for (let _values = Map_values(thisInstanceMembers), j = 0, l = _values.length; j < l; ++j) {
             let thisMember = _values[j];
-            if (!thisMember.is(CommonFlags.CONSTRUCTOR) && baseInstanceMembers.has(thisMember.name)) {
+            if (
+              !thisMember.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.PRIVATE) &&
+              baseInstanceMembers.has(thisMember.name)
+            ) {
               let baseMember = assert(baseInstanceMembers.get(thisMember.name));
               if (
                 thisMember.kind == ElementKind.FUNCTION_PROTOTYPE &&
@@ -3040,6 +3043,8 @@ export class Function extends TypedElement {
   debugLocations: Range[] = [];
   /** Function reference, if compiled. */
   ref: FunctionRef = 0;
+  /** Function reference of the virtual stub, if compiled. */
+  virtualRef: FunctionRef = 0;
   /** Function table index, if any. */
   functionTableIndex: i32 = -1;
   /** Trampoline function for calling with omitted arguments. */

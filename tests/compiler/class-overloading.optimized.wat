@@ -107,40 +107,44 @@
   i32.const 0
   call $class-overloading/Bar#constructor
   global.set $class-overloading/foo
-  global.get $class-overloading/foo
-  i32.const 8
-  i32.sub
-  i32.load
-  local.tee $0
-  i32.const 3
-  i32.eq
-  if
+  block $__inlined_func$class-overloading/Foo#a<i32>|virtual
+   block $self
+    block $id3
+     global.get $class-overloading/foo
+     i32.const 8
+     i32.sub
+     i32.load
+     local.tee $0
+     i32.const 4
+     i32.ne
+     if
+      local.get $0
+      i32.const 3
+      i32.eq
+      br_if $id3
+      local.get $0
+      i32.const 5
+      i32.eq
+      br_if $self
+      unreachable
+     end
+     i32.const 1
+     global.set $class-overloading/itWorks
+     br $__inlined_func$class-overloading/Foo#a<i32>|virtual
+    end
+    i32.const 0
+    i32.const 1040
+    i32.const 17
+    i32.const 5
+    call $~lib/builtins/abort
+    unreachable
+   end
    i32.const 0
    i32.const 1040
-   i32.const 17
+   i32.const 5
    i32.const 5
    call $~lib/builtins/abort
    unreachable
-  else
-   local.get $0
-   i32.const 4
-   i32.eq
-   if
-    i32.const 1
-    global.set $class-overloading/itWorks
-   else
-    local.get $0
-    i32.const 5
-    i32.eq
-    if
-     i32.const 0
-     i32.const 1040
-     i32.const 5
-     i32.const 5
-     call $~lib/builtins/abort
-    end
-    unreachable
-   end
   end
   global.get $class-overloading/itWorks
   i32.eqz

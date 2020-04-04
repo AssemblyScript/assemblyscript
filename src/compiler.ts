@@ -48,10 +48,8 @@ import {
   getGlobalGetName,
   isGlobalMutable,
   hasSideEffects,
-  getFunctionBody,
   getFunctionParams,
   getFunctionResults,
-  getFunctionVars,
   createType
 } from "./module";
 
@@ -606,42 +604,40 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Makes a normally compiled function virtual by injecting a vtable. */
   private makeVirtual(instance: Function): void {
-    // Check if this function has already been processed
-    var ref = instance.ref;
-    var body = getFunctionBody(ref);
-    if (getExpressionId(body) == ExpressionId.Block && getBlockName(body) == "vt") return;
+    if (instance.virtualRef) return;
+
+    // (block $self
+    //  (block $id1
+    //   (block $id2
+    //    temp = thisId
+    //    br_if $virt2 (temp == id2Id)
+    //    br_if $virt1 (temp == id1Id)
+    //    br_if $self (temp == selfId)
+    //    unreachable
+    //   )
+    //   call(id2)
+    //   return
+    //  )
+    //  call(id1)
+    //  return
+    // )
+    // call(self)
 
     // Wouldn't be here if there wasn't at least one overload
     var overloadPrototypes = assert(instance.prototype.overloads);
-    assert(overloadPrototypes.size);
 
     var module = this.module;
     var usizeType = this.options.usizeType;
-    var usizeSize = usizeType.byteSize;
-    var isWasm64 = usizeSize == 8;
     var nativeSizeType = usizeType.toNativeType();
+    var isWasm64 = nativeSizeType == NativeType.I64;
+    var parameterTypes = instance.signature.parameterTypes;
+    var returnType = instance.signature.returnType;
+    var tempIndex = 1 + parameterTypes.length; // incl. `this`
 
-    // Add an additional temporary local holding this's class id
-    var vars = getFunctionVars(ref);
-    var tempIndex = 1 + instance.signature.parameterTypes.length + vars.length;
-    vars.push(NativeType.I32);
-
-    // Check that this's class id is what we expect if we don't call an overload
-    if (!this.options.noAssert) {
-      let parent = instance.parent;
-      let actualParent = parent.kind == ElementKind.PROPERTY
-        ? parent.parent
-        : parent;
-      assert(actualParent.kind == ElementKind.CLASS);
-      body = module.if(
-        module.binary(BinaryOp.EqI32,
-          module.local_get(tempIndex, NativeType.I32),
-          module.i32((<Class>actualParent).id)
-        ),
-        body,
-        module.unreachable() // TODO: abort?
-      );
-    }
+    // Determine virtual names and make the block contents
+    var ids = new Array<i32>();
+    var names = new Array<string>();
+    var blocks = new Array<ExpressionRef[]>();
 
     // A method's `overloads` property contains its unbound overload prototypes
     // so we first have to find the concrete classes it became bound to, obtain
@@ -652,7 +648,6 @@ export class Compiler extends DiagnosticEmitter {
       assert(!unboundOverloadPrototype.isBound);
       let unboundOverloadParent = unboundOverloadPrototype.parent;
       assert(unboundOverloadParent.kind == ElementKind.CLASS_PROTOTYPE);
-
       let classInstances = (<ClassPrototype>unboundOverloadParent).instances;
       if (classInstances) {
         for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
@@ -661,37 +656,58 @@ export class Compiler extends DiagnosticEmitter {
           assert(boundPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
           let overloadInstance = this.resolver.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
           if (!overloadInstance || !this.compileFunction(overloadInstance)) continue;
-          let parameterTypes = overloadInstance.signature.parameterTypes;
-          let numParameters = parameterTypes.length;
-          let paramExprs = new Array<ExpressionRef>(1 + numParameters);
-          paramExprs[0] = module.local_get(0, nativeSizeType); // this
-          for (let n = 0; n < numParameters; ++n) {
-            paramExprs[1 + n] = module.local_get(1 + n, parameterTypes[n].toNativeType());
+          let stmts = new Array<ExpressionRef>();
+          let overloadType = overloadInstance.type;
+          let originalType = instance.type;
+          if (!overloadType.isAssignableTo(originalType)) {
+            this.error(
+              DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+              overloadInstance.identifierNode.range, overloadType.toString(), originalType.toString()
+            );
+            stmts.push(
+              module.unreachable()
+            );
+          } else {
+            // TODO: use trampoline if overload has additional optional parameters.
+            // Probably even better: Inline the trampoline into the varargs function
+            // in any case and set numArgs here, so we don't end up with four funcs.
+            let parameterTypes = overloadInstance.signature.parameterTypes;
+            let numParameters = parameterTypes.length;
+            let paramExprs = new Array<ExpressionRef>(1 + numParameters);
+            paramExprs[0] = module.local_get(0, nativeSizeType); // this
+            for (let n = 0; n < numParameters; ++n) {
+              paramExprs[1 + n] = module.local_get(1 + n, parameterTypes[n].toNativeType());
+            }
+            let theCall = module.call(overloadInstance.internalName, paramExprs, overloadInstance.signature.returnType.toNativeType());
+            if (returnType != Type.void) {
+              stmts.push(module.return(theCall));
+            } else {
+              stmts.push(theCall);
+              stmts.push(module.return());
+            }
           }
-
-          // TODO: verify signature and use trampoline if overload has additional
-          // optional parameters.
-
-          // TODO: split this into two functions, one with the actual code and one
-          // with the vtable since calling the super function must circumvent the
-          // vtable. Perhaps, if we know we are inserting a vtable, we'd generate
-          // a stub for the vtable function using the function's original name,
-          // and generate the code function right away as |virtual?
-
-          body = module.if(
-            module.binary(BinaryOp.EqI32,
-              module.local_get(tempIndex, NativeType.I32),
-              module.i32(classInstance.id)
-            ),
-            module.call(overloadInstance.internalName, paramExprs, overloadInstance.signature.returnType.toNativeType()),
-            body
-          );
+          let overloadClassId = classInstance.id;
+          ids.push(overloadClassId);
+          names.push("id" + classInstance.id.toString());
+          blocks.push(stmts);
         }
       }
     }
 
-    // Finally replace the function and mark it with a vtable block
-    body = module.block("vt", [
+    // Determine this's class
+    var parent = instance.parent;
+    var actualParent = parent.kind == ElementKind.PROPERTY
+      ? parent.parent
+      : parent;
+    assert(actualParent.kind == ElementKind.CLASS);
+    var thisClass = <Class>actualParent;
+    ids.push(thisClass.id);
+    names.push("self");
+
+    // Make the inner-most block, storing this's rtId to a temporary local,
+    // and wrap it with all the other blocks
+    var stmts = new Array<ExpressionRef>();
+    stmts.push(
       module.local_set(tempIndex, // BLOCK(this)#id @ this - 8
         module.load(4, false,
           module.binary(
@@ -705,13 +721,48 @@ export class Compiler extends DiagnosticEmitter {
           ),
           NativeType.I32
         )
-      ),
-      body
-    ], getExpressionType(body));
-    var prevParams = getFunctionParams(ref);
-    var prevResults = getFunctionResults(ref);
-    module.removeFunction(instance.internalName);
-    module.addFunction(instance.internalName, prevParams, prevResults, vars, body);
+      )
+    );
+    for (let i = 0, k = names.length; i < k; ++i) {
+      stmts.push(
+        module.br(names[i],
+          module.binary(BinaryOp.EqI32,
+            module.local_get(tempIndex, NativeType.I32),
+            module.i32(ids[i])
+          )
+        )
+      );
+    }
+    stmts.push(module.unreachable()); // trap if no id matches
+    stmts[0] = module.block(names[0], stmts);
+    stmts.length = 1;
+    for (let i = 0, k = blocks.length; i < k; ++i) {
+      let block = blocks[i];
+      for (let j = 0, l = block.length; j < l; ++j) {
+        stmts.push(block[j]);
+      }
+      stmts[0] = module.block(names[1 + i], stmts);
+      stmts.length = 1;
+    }
+
+    // Last case (self) is calling the original function
+    var numParameters = parameterTypes.length;
+    var paramExprs = new Array<NativeType>(numParameters);
+    paramExprs[0] = module.local_get(0, nativeSizeType); // this
+    for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+      paramExprs[1 + i] = module.local_get(1 + i, parameterTypes[i].toNativeType());
+    }
+    stmts.push(
+      module.call(instance.internalName, paramExprs, instance.signature.returnType.toNativeType())
+    );
+
+    // Make the virtual wrapper
+    var originalRef = instance.ref;
+    instance.virtualRef = module.addFunction(
+      instance.internalName + "|virtual",
+      getFunctionParams(originalRef), getFunctionResults(originalRef), [ NativeType.I32 ],
+      module.flatten(stmts, returnType.toNativeType())
+    );
   }
 
   // === Exports ==================================================================================
@@ -7515,10 +7566,14 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    // Call the virtual stub with the vtable if the function has overloads
+    var calledName = instance.internalName;
+    if (instance.is(CommonFlags.VIRTUAL)) calledName += "|virtual";
+
     // If the return value is of a reference type it has not yet been released but is in flight
     // which is equivalent to a skipped autorelease. Hence, insert either a release if it is
     // dropped anyway, preserve the skipped autorelease if explicitly requested or autorelease now.
-    var expr = module.call(instance.internalName, operands, returnType.toNativeType());
+    var expr = module.call(calledName, operands, returnType.toNativeType());
     this.currentType = returnType;
     if (returnType.isManaged) {
       if (immediatelyDropped) {
