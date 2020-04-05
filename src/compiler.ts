@@ -682,32 +682,38 @@ export class Compiler extends DiagnosticEmitter {
           let calledName = needsTrampoline
             ? this.ensureTrampoline(overloadInstance).internalName
             : overloadInstance.internalName;
-          let theCall = module.call(calledName, paramExprs, overloadSignature.returnType.toNativeType());
+          let nativeReturnType = overloadSignature.returnType.toNativeType();
           let stmts = new Array<ExpressionRef>();
           if (needsTrampoline) {
             this.ensureBuiltinArgumentsLength();
             stmts.push(module.global_set(BuiltinNames.argumentsLength, module.i32(numParameters)));
           }
-          stmts.push(theCall);
-          let block = relooper.addBlock(module.flatten(stmts, NativeType.None));
-          relooper.addBranch(entry, block,
-            module.binary(BinaryOp.EqI32,
-              module.local_get(tempIndex, NativeType.I32),
-              module.i32(classInstance.id)
-            )
+          stmts.push(
+            module.call(calledName, paramExprs, nativeReturnType)
           );
-          // Do the same for each extendee inheriting this overload, i.e. each
-          // extendee before there's another actual overload.
+          // Include each extendee inheriting this overload, i.e. each extendee
+          // before there's another actual overload.
+          let cond = module.binary(BinaryOp.EqI32,
+            module.local_get(tempIndex, NativeType.I32),
+            module.i32(classInstance.id)
+          );
           let extendees = classInstance.getAllExtendees(instance.prototype.name);
           for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
             let extendee = _values[a];
-            relooper.addBranch(entry, block,
+            cond = module.binary(BinaryOp.OrI32,
+              cond,
               module.binary(BinaryOp.EqI32,
                 module.local_get(tempIndex, NativeType.I32),
                 module.i32(extendee.id)
               )
             );
           }
+          relooper.addBranch(entry,
+            relooper.addBlock(
+              module.flatten(stmts, nativeReturnType)
+            ),
+            cond
+          );
         }
       }
     }
@@ -722,15 +728,17 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         paramExprs[1 + i] = module.local_get(1 + i, parameterTypes[i].toNativeType());
       }
-      relooper.addBranch(entry,
-        relooper.addBlock(
-          module.call(instance.internalName, paramExprs, instance.signature.returnType.toNativeType())
-        )
+      let block = relooper.addBlock(
+        module.call(instance.internalName, paramExprs, instance.signature.returnType.toNativeType())
       );
+      relooper.addBranch(entry, block);
 
     // Otherwise trap
     } else {
-      relooper.addBranch(entry, relooper.addBlock(module.unreachable()));
+      let block = relooper.addBlock(
+        module.unreachable()
+      );
+      relooper.addBranch(entry, block);
     }
 
     // Make the virtual wrapper

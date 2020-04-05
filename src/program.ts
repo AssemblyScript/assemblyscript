@@ -3932,16 +3932,12 @@ export class Class extends TypedElement {
   getAllExtendees(exceptIfMember: string | null = null, out: Set<Class> = new Set()): Set<Class> {
     for (let _values = Set_values(this.extendees), i = 0, k = _values.length; i < k; ++i) {
       let extendee = _values[i];
-      if (!exceptIfMember) {
-        out.add(extendee);
-        extendee.getAllExtendees(null, out);
-      } else {
+      if (exceptIfMember) {
         let instanceMembers = extendee.prototype.instanceMembers;
-        if (!instanceMembers || !instanceMembers.has(exceptIfMember)) {
-          out.add(extendee);
-          extendee.getAllExtendees(exceptIfMember, out);
-        }
+        if (instanceMembers !== null && instanceMembers.has(exceptIfMember)) continue;
       }
+      out.add(extendee);
+      extendee.getAllExtendees(exceptIfMember, out);
     }
     return out;
   }
