@@ -1880,23 +1880,23 @@ function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
   return <f32>(odd ? -1 / r : r);
 }
 
-// See: jdh8/metallic/src/math/float/log2f.c and jdh8/metallic/src/math/float/kernel/atanhf.h
+// See: jdh8/metallic/src/math/float/log2f.c and jdh8/metallic/src/math/float/kernel/atanh.h
 // @ts-ignore: decorator
 @inline
 function log2f(x: f64): f64 {
   const
     log2e = reinterpret<f64>(0x3FF71547652B82FE), // 1.44269504088896340736
-    c0 = reinterpret<f64>(0x3FEFFFFFFFA0C8FD),    // 0.9999999993072205474
-    c1 = reinterpret<f64>(0x3FD55558790EC439),    // 0.3333340818599626478
-    c2 = reinterpret<f64>(0x3FC99576D293CBE7),    // 0.1998737838945025914
-    c3 = reinterpret<f64>(0x3FC32728FF0D0C16);    // 0.1496325726858180278
+    c0 = reinterpret<f64>(0x3FD555554FD9CAEF),    // 0.33333332822728226129
+    c1 = reinterpret<f64>(0x3FC999A7A8AF4132),    // 0.20000167595436263505
+    c2 = reinterpret<f64>(0x3FC2438D79437030),    // 0.14268654271188685375
+    c3 = reinterpret<f64>(0x3FBE2F663B001C97);    // 0.11791075649681414150
 
   var i = reinterpret<i64>(x);
   var exponent = (i - 0x3FE6A09E667F3BCD) >> 52;
   x = reinterpret<f64>(i - (exponent << 52));
   x = (x - 1) / (x + 1);
   var xx = x * x;
-  var y = x * (c0 + c1 * xx + (c2 + c3 * xx) * (xx * xx));
+  var y = x + x * xx * (c0 + c1 * xx + (c2 + c3 * xx) * (xx * xx));
   return (2 * log2e) * y + <f64>exponent;
 }
 

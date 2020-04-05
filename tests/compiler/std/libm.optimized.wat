@@ -7903,13 +7903,16 @@
        f64.promote_f32
        f64.const 2.8853900817779268
        local.get $3
-       f64.const 0.9999999993072205
-       f64.const 0.33333408185996266
+       local.get $3
+       local.get $2
+       f64.mul
+       f64.const 0.3333333282272823
+       f64.const 0.20000167595436263
        local.get $2
        f64.mul
        f64.add
-       f64.const 0.19987378389450258
-       f64.const 0.14963257268581803
+       f64.const 0.14268654271188685
+       f64.const 0.11791075649681414
        local.get $2
        f64.mul
        f64.add
@@ -7919,6 +7922,7 @@
        f64.mul
        f64.add
        f64.mul
+       f64.add
        f64.mul
        local.get $8
        f64.convert_i64_s
