@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -9,6 +9,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $class-overloading/foo (mut i32) (i32.const 0))
+ (global $class-overloading/afoo (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (result i32)
@@ -87,14 +88,29 @@
   end
   local.get $0
   i32.eqz
-  if (result i32)
+  if
    i32.const 5
    call $~lib/rt/stub/__alloc
-  else
-   local.get $0
+   local.set $0
   end
+  local.get $0
+  i32.eqz
+  if
+   i32.const 6
+   call $~lib/rt/stub/__alloc
+   local.set $0
+  end
+  local.get $0
  )
- (func $~start (; 3 ;)
+ (func $class-overloading/Foo#a<i32> (; 3 ;)
+  i32.const 0
+  i32.const 1040
+  i32.const 9
+  i32.const 5
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $start:class-overloading (; 4 ;)
   (local $0 i32)
   i32.const 1088
   global.set $~lib/rt/stub/startOffset
@@ -132,18 +148,54 @@
      global.set $class-overloading/itWorks
      br $__inlined_func$class-overloading/Foo#a<i32>|virtual
     end
-    i32.const 0
-    i32.const 1040
-    i32.const 17
-    i32.const 5
-    call $~lib/builtins/abort
-    unreachable
+    call $class-overloading/Baz#a<i32>
+    br $__inlined_func$class-overloading/Foo#a<i32>|virtual
    end
+   call $class-overloading/Foo#a<i32>
+  end
+  global.get $class-overloading/itWorks
+  i32.eqz
+  if
    i32.const 0
    i32.const 1040
-   i32.const 5
-   i32.const 5
+   i32.const 28
+   i32.const 1
    call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $class-overloading/Bar#constructor
+  global.set $class-overloading/afoo
+  block $__inlined_func$class-overloading/AbstractFoo#a<i32>|virtual
+   block $self0
+    block $id31
+     block $id4
+      global.get $class-overloading/afoo
+      i32.const 8
+      i32.sub
+      i32.load
+      local.tee $0
+      i32.const 5
+      i32.ne
+      if
+       block $tablify|0
+        local.get $0
+        i32.const 3
+        i32.sub
+        br_table $id31 $id4 $tablify|0 $self0 $tablify|0
+       end
+       unreachable
+      end
+      call $class-overloading/Foo#a<i32>
+      br $__inlined_func$class-overloading/AbstractFoo#a<i32>|virtual
+     end
+     i32.const 1
+     global.set $class-overloading/itWorks
+     br $__inlined_func$class-overloading/AbstractFoo#a<i32>|virtual
+    end
+    call $class-overloading/Baz#a<i32>
+    br $__inlined_func$class-overloading/AbstractFoo#a<i32>|virtual
+   end
    unreachable
   end
   global.get $class-overloading/itWorks
@@ -151,10 +203,21 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 24
+   i32.const 32
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
+ )
+ (func $~start (; 5 ;)
+  call $start:class-overloading
+ )
+ (func $class-overloading/Baz#a<i32> (; 6 ;)
+  i32.const 0
+  i32.const 1040
+  i32.const 21
+  i32.const 5
+  call $~lib/builtins/abort
+  unreachable
  )
 )

@@ -13,6 +13,7 @@
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $class-overloading/foo (mut i32) (i32.const 0))
+ (global $class-overloading/afoo (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 72))
  (export "memory" (memory $0))
  (start $~start)
@@ -126,7 +127,19 @@
  (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
   local.get $0
  )
- (func $class-overloading/Foo#constructor (; 4 ;) (param $0 i32) (result i32)
+ (func $class-overloading/AbstractFoo#constructor (; 4 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 6
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $class-overloading/Foo#constructor (; 5 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -137,8 +150,11 @@
    local.set $0
   end
   local.get $0
+  call $class-overloading/AbstractFoo#constructor
+  local.set $0
+  local.get $0
  )
- (func $class-overloading/Bar#constructor (; 5 ;) (param $0 i32) (result i32)
+ (func $class-overloading/Bar#constructor (; 6 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -153,7 +169,7 @@
   local.set $0
   local.get $0
  )
- (func $class-overloading/Baz#constructor (; 6 ;) (param $0 i32) (result i32)
+ (func $class-overloading/Baz#constructor (; 7 ;) (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -168,22 +184,25 @@
   local.set $0
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 7 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (; 8 ;) (param $0 i32)
   nop
  )
- (func $class-overloading/Foo#a<i32> (; 8 ;) (param $0 i32) (param $1 i32)
+ (func $class-overloading/Foo#a<i32> (; 9 ;) (param $0 i32) (param $1 i32)
   i32.const 0
   i32.eqz
   if
    i32.const 0
    i32.const 32
-   i32.const 5
+   i32.const 9
    i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $start:class-overloading (; 9 ;)
+ (func $class-overloading/AbstractFoo#a<i32> (; 10 ;) (param $0 i32) (param $1 i32)
+  unreachable
+ )
+ (func $start:class-overloading (; 11 ;)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -208,32 +227,48 @@
   if
    i32.const 0
    i32.const 32
-   i32.const 24
+   i32.const 28
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $class-overloading/Bar#constructor
+  global.set $class-overloading/afoo
+  global.get $class-overloading/afoo
+  i32.const 1
+  call $class-overloading/AbstractFoo#a<i32>|virtual
+  global.get $class-overloading/itWorks
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 32
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $~start (; 10 ;)
+ (func $~start (; 12 ;)
   call $start:class-overloading
  )
- (func $class-overloading/Bar#a<i32> (; 11 ;) (param $0 i32) (param $1 i32)
+ (func $class-overloading/Bar#a<i32> (; 13 ;) (param $0 i32) (param $1 i32)
   i32.const 1
   global.set $class-overloading/itWorks
  )
- (func $class-overloading/Baz#a<i32> (; 12 ;) (param $0 i32) (param $1 i32)
+ (func $class-overloading/Baz#a<i32> (; 14 ;) (param $0 i32) (param $1 i32)
   i32.const 0
   i32.eqz
   if
    i32.const 0
    i32.const 32
-   i32.const 17
+   i32.const 21
    i32.const 5
    call $~lib/builtins/abort
    unreachable
   end
  )
- (func $class-overloading/Foo#a<i32>|virtual (; 13 ;) (param $0 i32) (param $1 i32)
+ (func $class-overloading/Foo#a<i32>|virtual (; 15 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $self
    block $id3
@@ -270,5 +305,53 @@
   local.get $0
   local.get $1
   call $class-overloading/Foo#a<i32>
+ )
+ (func $class-overloading/AbstractFoo#a<i32>|virtual (; 16 ;) (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  block $self
+   block $id3
+    block $id4
+     block $id5
+      local.get $0
+      i32.const 8
+      i32.sub
+      i32.load
+      local.set $2
+      local.get $2
+      i32.const 5
+      i32.eq
+      br_if $id5
+      local.get $2
+      i32.const 4
+      i32.eq
+      br_if $id4
+      local.get $2
+      i32.const 3
+      i32.eq
+      br_if $id3
+      local.get $2
+      i32.const 6
+      i32.eq
+      br_if $self
+      unreachable
+     end
+     local.get $0
+     local.get $1
+     call $class-overloading/Foo#a<i32>
+     return
+    end
+    local.get $0
+    local.get $1
+    call $class-overloading/Bar#a<i32>
+    return
+   end
+   local.get $0
+   local.get $1
+   call $class-overloading/Baz#a<i32>
+   return
+  end
+  local.get $0
+  local.get $1
+  call $class-overloading/AbstractFoo#a<i32>
  )
 )
