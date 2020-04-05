@@ -3582,6 +3582,8 @@ export class Class extends TypedElement {
   rttiFlags: u32 = 0;
   /** Wrapped type, if a wrapper for a basic type. */
   wrappedType: Type | null = null;
+  /** Classes directly extending this class. */
+  extendees: Set<Class> = new Set();
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {
@@ -3663,6 +3665,7 @@ export class Class extends TypedElement {
   setBase(base: Class): void {
     assert(!this.base);
     this.base = base;
+    base.extendees.add(this);
 
     // Inherit contextual type arguments from base class
     var inheritedTypeArguments = base.contextualTypeArguments;
@@ -3923,6 +3926,24 @@ export class Class extends TypedElement {
       ) return true;
     }
     return false;
+  }
+
+  /** Gets all extendees of this class (that do not have the specified instance member). */
+  getAllExtendees(exceptIfMember: string | null = null, out: Set<Class> = new Set()): Set<Class> {
+    for (let _values = Set_values(this.extendees), i = 0, k = _values.length; i < k; ++i) {
+      let extendee = _values[i];
+      if (!exceptIfMember) {
+        out.add(extendee);
+        extendee.getAllExtendees(null, out);
+      } else {
+        let instanceMembers = extendee.prototype.instanceMembers;
+        if (!instanceMembers || !instanceMembers.has(exceptIfMember)) {
+          out.add(extendee);
+          extendee.getAllExtendees(exceptIfMember, out);
+        }
+      }
+    }
+    return out;
   }
 }
 

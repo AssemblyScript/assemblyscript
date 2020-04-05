@@ -8,6 +8,7 @@
  (global $class-overloading/itWorks (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
+ (global $class-overloading/baz (mut i32) (i32.const 0))
  (global $class-overloading/foo (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
@@ -103,55 +104,44 @@
   i32.const 3
   call $~lib/rt/stub/__alloc
   call $class-overloading/Bar#constructor
-  drop
+  global.set $class-overloading/baz
+  i32.const 1
+  global.set $class-overloading/itWorks
   i32.const 0
   call $class-overloading/Bar#constructor
   global.set $class-overloading/foo
-  block $__inlined_func$class-overloading/Foo#a<i32>|virtual
-   block $self
-    block $id3
-     global.get $class-overloading/foo
-     i32.const 8
-     i32.sub
-     i32.load
-     local.tee $0
-     i32.const 4
-     i32.ne
-     if
-      local.get $0
-      i32.const 3
-      i32.eq
-      br_if $id3
-      local.get $0
-      i32.const 5
-      i32.eq
-      br_if $self
-      unreachable
-     end
-     i32.const 1
-     global.set $class-overloading/itWorks
-     br $__inlined_func$class-overloading/Foo#a<i32>|virtual
-    end
+  global.get $class-overloading/foo
+  i32.const 8
+  i32.sub
+  i32.load
+  local.tee $0
+  i32.const 4
+  i32.eq
+  if
+   i32.const 1
+   global.set $class-overloading/itWorks
+  else
+   local.get $0
+   i32.const 3
+   i32.eq
+   if
+    i32.const 1
+    global.set $class-overloading/itWorks
+   else
     i32.const 0
     i32.const 1040
-    i32.const 17
+    i32.const 5
     i32.const 5
     call $~lib/builtins/abort
     unreachable
    end
-   i32.const 0
-   i32.const 1040
-   i32.const 5
-   i32.const 5
-   call $~lib/builtins/abort
-   unreachable
   end
   global.get $class-overloading/itWorks
   i32.eqz
   if
    i32.const 0
    i32.const 1040
-   i32.const 24
+   i32.const 26
    i32.const 1
    call $~lib/builtins/abort
    unreachable

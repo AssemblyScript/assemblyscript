@@ -615,6 +615,7 @@ export class Signature {
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
   isAssignableTo(target: Signature): bool {
+    // TODO: allow additional optional parameters
     return this.equals(target);
   }
 

@@ -21,7 +21,7 @@ async function test(build: string): Promise<void> {
     console.log("nextFile: " + asc.__getString(nextFilePtr));
     nextFilePtr = asc.nextFile(programPtr);
   }
-  // assemblyscript.compile(programPtr);
+  // asc.compile(programPtr);
   // ^ abort: missing ArrayBuffer at src/program.ts:1015:18
   console.log("So far, so good.");
 }

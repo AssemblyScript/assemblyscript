@@ -1165,6 +1165,16 @@ export abstract class Node {
     }
     return false;
   }
+
+  /** Checks if this is a call calling a method on super. */
+  get isCallOnSuper(): bool {
+    if (this.kind != NodeKind.CALL) return false;
+    var expression = changetype<CallExpression>(this).expression;
+    if (expression.kind != NodeKind.PROPERTYACCESS) return false;
+    var target = (<PropertyAccessExpression>expression).expression;
+    if (target.kind == NodeKind.SUPER) return true;
+    return false;
+  }
 }
 
 // types
