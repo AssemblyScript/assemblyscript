@@ -80,7 +80,9 @@ async function test(build: string): Promise<void> {
     asc.initializeProgram(programPtr, optionsPtr);
     console.log("\nCompiling program ...");
     const modulePtr = asc.compile(programPtr);
-    console.log(binaryen.wrapModule(modulePtr).emitText());
+    const moduleRef = new Uint32Array(asc.memory.buffer, modulePtr)[0];
+    console.log(binaryen.wrapModule(moduleRef).emitText());
+    // Wow!
   } catch (e) {
     console.log("\nTODO: " + e.stack);
   }
