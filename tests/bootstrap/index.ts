@@ -6,6 +6,8 @@ import * as loader from "../../lib/loader";
 import * as find from "../../cli/util/find";
 import AssemblyScript from "../../out/assemblyscript";
 
+Error.stackTraceLimit = Infinity;
+
 // Load stdlib
 const libDir = path.join(__dirname, "..", "..", "std", "assembly");
 const libraryFiles = {};
