@@ -42,6 +42,14 @@ async function test(build: string): Promise<void> {
     asc.parse(programPtr, textPtr, pathPtr, false);
   });
 
+  console.log("\nParsing runtime ...");
+  {
+    const textPtr = allocString(libraryFiles["rt/index-stub"]);
+    const pathPtr = allocString("~lib/rt/index-stub");
+    console.log("  " + asc.__getString(pathPtr));
+    asc.parse(programPtr, textPtr, pathPtr, true);
+  }
+
   console.log("\nParsing backlog ...");
   var nextFilePtr = asc.nextFile(programPtr);
   while (nextFilePtr) {
@@ -72,7 +80,7 @@ async function test(build: string): Promise<void> {
     const modulePtr = asc.compile(programPtr);
     console.log(binaryen.wrapModule(modulePtr).emitText());
   } catch (e) {
-    console.log("\nTODO: " + e.message);
+    console.log("\nTODO: " + e.stack);
   }
 
   cachedStrings.forEach(asc.__release);
