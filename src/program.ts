@@ -726,8 +726,12 @@ export class Program extends DiagnosticEmitter {
       this.makeNativeTypeDeclaration(CommonNames.returnof, CommonFlags.EXPORT | CommonFlags.GENERIC),
       DecoratorFlags.BUILTIN
     ));
-    if (options.hasFeature(Feature.SIMD)) this.registerNativeType(CommonNames.v128, Type.v128);
-    if (options.hasFeature(Feature.REFERENCE_TYPES)) this.registerNativeType(CommonNames.anyref, Type.anyref);
+
+    // The following types might not be enabled by compiler options, so the
+    // compiler needs to check this condition whenever such a value is created
+    // respectively stored or loaded.
+    this.registerNativeType(CommonNames.v128, Type.v128);
+    this.registerNativeType(CommonNames.anyref, Type.anyref);
 
     // register compiler hints
     this.registerConstantInteger(CommonNames.ASC_TARGET, Type.i32,
@@ -1052,7 +1056,8 @@ export class Program extends DiagnosticEmitter {
       // TODO: for (let [alias, name] of globalAliases) {
       for (let _keys = Map_keys(globalAliases), i = 0, k = _keys.length; i < k; ++i) {
         let alias = unchecked(_keys[i]);
-        let name = assert(globalAliases.get(alias));
+        let name = changetype<string>(globalAliases.get(alias));
+        assert(name != null);
         if (!name.length) continue; // explicitly disabled
         let firstChar = name.charCodeAt(0);
         if (firstChar >= CharCode._0 && firstChar <= CharCode._9) {
@@ -3802,6 +3807,10 @@ export class Class extends TypedElement {
     var arrayPrototype = program.arrayPrototype;
     if (this.extends(arrayPrototype)) {
       return this.getTypeArgumentsTo(arrayPrototype)![0];
+    }
+    var staticArrayPrototype = program.staticArrayPrototype;
+    if (this.extends(staticArrayPrototype)) {
+      return this.getTypeArgumentsTo(staticArrayPrototype)![0];
     }
     var abvInstance = program.arrayBufferViewInstance;
     while (current.base !== abvInstance) {

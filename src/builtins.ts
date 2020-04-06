@@ -7901,6 +7901,7 @@ export function compileRTTI(compiler: Compiler): void {
   var arrayPrototype = program.arrayPrototype;
   var setPrototype = program.setPrototype;
   var mapPrototype = program.mapPrototype;
+  var staticArrayPrototype = program.staticArrayPrototype;
   var lastId = 0;
   // TODO: for (let [instanceId, instance] of managedClasses) {
   for (let _keys = Map_keys(managedClasses), i = 0, k = _keys.length; i < k; ++i) {
@@ -7928,6 +7929,10 @@ export function compileRTTI(compiler: Compiler): void {
       flags |= TypeinfoFlags.MAP;
       flags |= TypeinfoFlags.KEY_ALIGN_0 * typeToRuntimeFlags(typeArguments[0]);
       flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(typeArguments[1]);
+    } else if (instance.extends(staticArrayPrototype)) {
+      let valueType = instance.getArrayValueType();
+      flags |= TypeinfoFlags.STATICARRAY;
+      flags |= TypeinfoFlags.VALUE_ALIGN_0 * typeToRuntimeFlags(valueType);
     }
     writeI32(flags, data, off); off += 4;
     instance.rttiFlags = flags;
