@@ -10885,9 +10885,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
   i32.const 1
   global.set $~argumentsLength
-  i32.const 0
   i32.const 0
   call $~lib/string/String.fromCharCode|trampoline
   local.tee $0
@@ -10902,9 +10902,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 54
   i32.const 1
   global.set $~argumentsLength
-  i32.const 54
   i32.const 0
   call $~lib/string/String.fromCharCode|trampoline
   local.tee $1
@@ -10919,9 +10919,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 65590
   i32.const 1
   global.set $~argumentsLength
-  i32.const 65590
   i32.const 0
   call $~lib/string/String.fromCharCode|trampoline
   local.tee $2

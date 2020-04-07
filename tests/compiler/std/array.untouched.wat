@@ -5575,8 +5575,6 @@
    local.set $4
    local.get $4
    if
-    i32.const 3
-    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $2
@@ -5586,6 +5584,8 @@
     i32.load
     local.get $2
     local.get $0
+    i32.const 3
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_=>_i32)
     if
@@ -5711,8 +5711,6 @@
    local.set $4
    local.get $4
    if
-    i32.const 3
-    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $2
@@ -5722,6 +5720,8 @@
     i32.load
     local.get $2
     local.get $0
+    i32.const 3
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_=>_i32)
     i32.eqz
@@ -5835,8 +5835,6 @@
    local.set $4
    local.get $4
    if
-    i32.const 3
-    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $2
@@ -5846,6 +5844,8 @@
     i32.load
     local.get $2
     local.get $0
+    i32.const 3
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_=>_i32)
     if
@@ -5956,8 +5956,6 @@
    local.set $4
    local.get $4
    if
-    i32.const 3
-    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $2
@@ -5967,6 +5965,8 @@
     i32.load
     local.get $2
     local.get $0
+    i32.const 3
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_=>_none)
     local.get $2
@@ -6180,8 +6180,6 @@
    local.set $6
    local.get $6
    if
-    i32.const 3
-    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $5
@@ -6191,6 +6189,8 @@
     i32.load
     local.get $5
     local.get $0
+    i32.const 3
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_=>_f32)
     local.set $8
@@ -6299,8 +6299,6 @@
    local.set $6
    local.get $6
    if
-    i32.const 3
-    global.set $~argumentsLength
     local.get $0
     i32.load offset=4
     local.get $5
@@ -6310,6 +6308,8 @@
     i32.load
     local.get $5
     local.get $0
+    i32.const 3
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_=>_i32)
     local.set $7
@@ -6416,11 +6416,11 @@
     i32.add
     i32.load
     local.set $6
-    i32.const 3
-    global.set $~argumentsLength
     local.get $6
     local.get $3
     local.get $0
+    i32.const 3
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_=>_i32)
     if
@@ -6537,8 +6537,6 @@
    local.set $6
    local.get $6
    if
-    i32.const 4
-    global.set $~argumentsLength
     local.get $3
     local.get $0
     i32.load offset=4
@@ -6549,6 +6547,8 @@
     i32.load
     local.get $4
     local.get $0
+    i32.const 4
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_i32_=>_i32)
     local.set $3
@@ -6620,8 +6620,6 @@
    local.set $6
    local.get $6
    if
-    i32.const 4
-    global.set $~argumentsLength
     local.get $3
     local.get $0
     i32.load offset=4
@@ -6632,6 +6630,8 @@
     i32.load
     local.get $4
     local.get $0
+    i32.const 4
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_i32_=>_i32)
     local.set $3
@@ -6739,8 +6739,6 @@
    local.set $5
    local.get $5
    if
-    i32.const 4
-    global.set $~argumentsLength
     local.get $3
     local.get $0
     i32.load offset=4
@@ -6751,6 +6749,8 @@
     i32.load
     local.get $4
     local.get $0
+    i32.const 4
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_i32_=>_i32)
     local.set $3
@@ -6812,8 +6812,6 @@
    local.set $5
    local.get $5
    if
-    i32.const 4
-    global.set $~argumentsLength
     local.get $3
     local.get $0
     i32.load offset=4
@@ -6824,6 +6822,8 @@
     i32.load
     local.get $4
     local.get $0
+    i32.const 4
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_i32_i32_=>_i32)
     local.set $3
@@ -7059,10 +7059,10 @@
        i32.add
        f32.load
        local.set $8
-       i32.const 2
-       global.set $~argumentsLength
        local.get $5
        local.get $8
+       i32.const 2
+       global.set $~argumentsLength
        local.get $2
        call_indirect (type $f32_f32_=>_i32)
        i32.const 0
@@ -7201,10 +7201,10 @@
     i32.add
     f32.load
     local.set $10
-    i32.const 2
-    global.set $~argumentsLength
     local.get $9
     local.get $10
+    i32.const 2
+    global.set $~argumentsLength
     local.get $2
     call_indirect (type $f32_f32_=>_i32)
     i32.const 0
@@ -7332,10 +7332,10 @@
       i32.add
       f32.load
       local.set $9
-      i32.const 2
-      global.set $~argumentsLength
       local.get $10
       local.get $9
+      i32.const 2
+      global.set $~argumentsLength
       local.get $2
       call_indirect (type $f32_f32_=>_i32)
       i32.const 0
@@ -7433,10 +7433,10 @@
    local.get $3
    f32.load
    local.set $5
-   i32.const 2
-   global.set $~argumentsLength
    local.get $4
    local.get $5
+   i32.const 2
+   global.set $~argumentsLength
    local.get $1
    call_indirect (type $f32_f32_=>_i32)
    i32.const 0
@@ -7678,10 +7678,10 @@
        i32.add
        f64.load
        local.set $8
-       i32.const 2
-       global.set $~argumentsLength
        local.get $5
        local.get $8
+       i32.const 2
+       global.set $~argumentsLength
        local.get $2
        call_indirect (type $f64_f64_=>_i32)
        i32.const 0
@@ -7814,10 +7814,10 @@
     i32.add
     f64.load
     local.set $10
-    i32.const 2
-    global.set $~argumentsLength
     local.get $9
     local.get $10
+    i32.const 2
+    global.set $~argumentsLength
     local.get $2
     call_indirect (type $f64_f64_=>_i32)
     i32.const 0
@@ -7945,10 +7945,10 @@
       i32.add
       f64.load
       local.set $9
-      i32.const 2
-      global.set $~argumentsLength
       local.get $10
       local.get $9
+      i32.const 2
+      global.set $~argumentsLength
       local.get $2
       call_indirect (type $f64_f64_=>_i32)
       i32.const 0
@@ -8046,10 +8046,10 @@
    local.get $3
    f64.load
    local.set $5
-   i32.const 2
-   global.set $~argumentsLength
    local.get $4
    local.get $5
+   i32.const 2
+   global.set $~argumentsLength
    local.get $1
    call_indirect (type $f64_f64_=>_i32)
    i32.const 0
@@ -8324,10 +8324,10 @@
        i32.add
        i32.load
        local.set $8
-       i32.const 2
-       global.set $~argumentsLength
        local.get $5
        local.get $8
+       i32.const 2
+       global.set $~argumentsLength
        local.get $2
        call_indirect (type $i32_i32_=>_i32)
        i32.const 0
@@ -8460,10 +8460,10 @@
     i32.add
     i32.load
     local.set $10
-    i32.const 2
-    global.set $~argumentsLength
     local.get $9
     local.get $10
+    i32.const 2
+    global.set $~argumentsLength
     local.get $2
     call_indirect (type $i32_i32_=>_i32)
     i32.const 0
@@ -8591,10 +8591,10 @@
       i32.add
       i32.load
       local.set $11
-      i32.const 2
-      global.set $~argumentsLength
       local.get $10
       local.get $11
+      i32.const 2
+      global.set $~argumentsLength
       local.get $2
       call_indirect (type $i32_i32_=>_i32)
       i32.const 0
@@ -8690,10 +8690,10 @@
    local.get $3
    i32.load
    local.set $5
-   i32.const 2
-   global.set $~argumentsLength
    local.get $4
    local.get $5
+   i32.const 2
+   global.set $~argumentsLength
    local.get $1
    call_indirect (type $i32_i32_=>_i32)
    i32.const 0
@@ -8800,10 +8800,10 @@
        i32.add
        i32.load
        local.set $8
-       i32.const 2
-       global.set $~argumentsLength
        local.get $5
        local.get $8
+       i32.const 2
+       global.set $~argumentsLength
        local.get $2
        call_indirect (type $i32_i32_=>_i32)
        i32.const 0
@@ -8936,10 +8936,10 @@
     i32.add
     i32.load
     local.set $10
-    i32.const 2
-    global.set $~argumentsLength
     local.get $9
     local.get $10
+    i32.const 2
+    global.set $~argumentsLength
     local.get $2
     call_indirect (type $i32_i32_=>_i32)
     i32.const 0
@@ -9067,10 +9067,10 @@
       i32.add
       i32.load
       local.set $11
-      i32.const 2
-      global.set $~argumentsLength
       local.get $10
       local.get $11
+      i32.const 2
+      global.set $~argumentsLength
       local.get $2
       call_indirect (type $i32_i32_=>_i32)
       i32.const 0
@@ -9166,10 +9166,10 @@
    local.get $3
    i32.load
    local.set $5
-   i32.const 2
-   global.set $~argumentsLength
    local.get $4
    local.get $5
+   i32.const 2
+   global.set $~argumentsLength
    local.get $1
    call_indirect (type $i32_i32_=>_i32)
    i32.const 0
@@ -9382,8 +9382,6 @@
    local.set $4
    local.get $4
    if
-    i32.const 2
-    global.set $~argumentsLength
     local.get $0
     local.get $2
     i32.const 1
@@ -9392,6 +9390,8 @@
     local.get $0
     local.get $2
     call $~lib/array/Array<i32>#__get
+    i32.const 2
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_=>_i32)
     i32.const 0
@@ -9736,10 +9736,10 @@
        i32.load
        call $~lib/rt/pure/__retain
        local.set $8
-       i32.const 2
-       global.set $~argumentsLength
        local.get $5
        local.get $8
+       i32.const 2
+       global.set $~argumentsLength
        local.get $2
        call_indirect (type $i32_i32_=>_i32)
        i32.const 0
@@ -9821,10 +9821,10 @@
    i32.load
    call $~lib/rt/pure/__retain
    local.set $5
-   i32.const 2
-   global.set $~argumentsLength
    local.get $4
    local.get $5
+   i32.const 2
+   global.set $~argumentsLength
    local.get $1
    call_indirect (type $i32_i32_=>_i32)
    i32.const 0
@@ -9928,8 +9928,6 @@
    local.set $4
    local.get $4
    if
-    i32.const 2
-    global.set $~argumentsLength
     local.get $0
     local.get $2
     i32.const 1
@@ -9940,6 +9938,8 @@
     local.get $2
     call $~lib/array/Array<~lib/array/Array<i32>>#__get
     local.tee $6
+    i32.const 2
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_=>_i32)
     i32.const 0
@@ -10267,10 +10267,10 @@
        i32.load
        call $~lib/rt/pure/__retain
        local.set $8
-       i32.const 2
-       global.set $~argumentsLength
        local.get $5
        local.get $8
+       i32.const 2
+       global.set $~argumentsLength
        local.get $2
        call_indirect (type $i32_i32_=>_i32)
        i32.const 0
@@ -10352,10 +10352,10 @@
    i32.load
    call $~lib/rt/pure/__retain
    local.set $5
-   i32.const 2
-   global.set $~argumentsLength
    local.get $4
    local.get $5
+   i32.const 2
+   global.set $~argumentsLength
    local.get $1
    call_indirect (type $i32_i32_=>_i32)
    i32.const 0
@@ -10459,8 +10459,6 @@
    local.set $4
    local.get $4
    if
-    i32.const 2
-    global.set $~argumentsLength
     local.get $0
     local.get $2
     i32.const 1
@@ -10471,6 +10469,8 @@
     local.get $2
     call $~lib/array/Array<std/array/Proxy<i32>>#__get
     local.tee $6
+    i32.const 2
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_=>_i32)
     i32.const 0
@@ -10574,10 +10574,10 @@
        i32.load
        call $~lib/rt/pure/__retain
        local.set $8
-       i32.const 2
-       global.set $~argumentsLength
        local.get $5
        local.get $8
+       i32.const 2
+       global.set $~argumentsLength
        local.get $2
        call_indirect (type $i32_i32_=>_i32)
        i32.const 0
@@ -10659,10 +10659,10 @@
    i32.load
    call $~lib/rt/pure/__retain
    local.set $5
-   i32.const 2
-   global.set $~argumentsLength
    local.get $4
    local.get $5
+   i32.const 2
+   global.set $~argumentsLength
    local.get $1
    call_indirect (type $i32_i32_=>_i32)
    i32.const 0
@@ -10754,8 +10754,6 @@
    local.set $4
    local.get $4
    if
-    i32.const 2
-    global.set $~argumentsLength
     local.get $0
     local.get $2
     i32.const 1
@@ -10766,6 +10764,8 @@
     local.get $2
     call $~lib/array/Array<~lib/string/String | null>#__get
     local.tee $6
+    i32.const 2
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_=>_i32)
     i32.const 0
@@ -11688,10 +11688,10 @@
        i32.load
        call $~lib/rt/pure/__retain
        local.set $8
-       i32.const 2
-       global.set $~argumentsLength
        local.get $5
        local.get $8
+       i32.const 2
+       global.set $~argumentsLength
        local.get $2
        call_indirect (type $i32_i32_=>_i32)
        i32.const 0
@@ -11773,10 +11773,10 @@
    i32.load
    call $~lib/rt/pure/__retain
    local.set $5
-   i32.const 2
-   global.set $~argumentsLength
    local.get $4
    local.get $5
+   i32.const 2
+   global.set $~argumentsLength
    local.get $1
    call_indirect (type $i32_i32_=>_i32)
    i32.const 0
@@ -11880,8 +11880,6 @@
    local.set $4
    local.get $4
    if
-    i32.const 2
-    global.set $~argumentsLength
     local.get $0
     local.get $2
     i32.const 1
@@ -11892,6 +11890,8 @@
     local.get $2
     call $~lib/array/Array<~lib/string/String>#__get
     local.tee $6
+    i32.const 2
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_i32_=>_i32)
     i32.const 0
@@ -22757,9 +22757,9 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $50
+  local.get $50
   i32.const 0
   global.set $~argumentsLength
-  local.get $50
   i32.const 0
   call $~lib/array/Array<f32>#sort|trampoline
   call $~lib/rt/pure/__release
@@ -22789,9 +22789,9 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $49
+  local.get $49
   i32.const 0
   global.set $~argumentsLength
-  local.get $49
   i32.const 0
   call $~lib/array/Array<f64>#sort|trampoline
   call $~lib/rt/pure/__release
@@ -22821,9 +22821,9 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $47
+  local.get $47
   i32.const 0
   global.set $~argumentsLength
-  local.get $47
   i32.const 0
   call $~lib/array/Array<i32>#sort|trampoline
   call $~lib/rt/pure/__release
@@ -22853,9 +22853,9 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $41
+  local.get $41
   i32.const 0
   global.set $~argumentsLength
-  local.get $41
   i32.const 0
   call $~lib/array/Array<u32>#sort|trampoline
   call $~lib/rt/pure/__release
@@ -23141,9 +23141,9 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/pure/__retain
   local.set $34
+  local.get $31
   i32.const 1
   global.set $~argumentsLength
-  local.get $31
   i32.const 0
   call $std/array/assertSorted<~lib/string/String | null>|trampoline
   local.get $31
@@ -23162,9 +23162,9 @@
   i32.const 400
   call $std/array/createRandomStringArray
   local.set $29
+  local.get $29
   i32.const 1
   global.set $~argumentsLength
-  local.get $29
   i32.const 0
   call $std/array/assertSorted<~lib/string/String>|trampoline
   local.get $31

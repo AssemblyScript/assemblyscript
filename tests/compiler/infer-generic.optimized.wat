@@ -39,6 +39,7 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 f32)
   i32.const 1132
   i32.load
   local.set $2
@@ -54,9 +55,6 @@
    select
    i32.lt_s
    if
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $1
     i32.const 1124
     i32.load
     local.get $0
@@ -64,6 +62,11 @@
     i32.shl
     i32.add
     f32.load
+    local.set $4
+    i32.const 4
+    global.set $~argumentsLength
+    local.get $1
+    local.get $4
     local.get $0
     i32.const 1120
     call $start:infer-generic~anonymous|0

@@ -1397,8 +1397,7 @@ function builtin_max(ctx: BuiltinContext): ExpressionRef {
         module.binary(op,
           module.local_get(temp1.index, nativeType),
           module.local_get(temp2.index, nativeType)
-        ),
-        nativeType
+        )
       );
       flow.freeTempLocal(temp2);
       flow.freeTempLocal(temp1);
@@ -1477,8 +1476,7 @@ function builtin_min(ctx: BuiltinContext): ExpressionRef {
         module.binary(op,
           module.local_get(temp1.index, nativeType),
           module.local_get(temp2.index, nativeType)
-        ),
-        nativeType
+        )
       );
       flow.freeTempLocal(temp2);
       flow.freeTempLocal(temp1);
@@ -2455,7 +2453,7 @@ function builtin_select(ctx: BuiltinContext): ExpressionRef {
     compiler.currentType // ^
   );
   compiler.currentType = type;
-  return module.select(arg0, arg1, arg2, type.toNativeType());
+  return module.select(arg0, arg1, arg2);
 }
 builtins.set(BuiltinNames.select, builtin_select);
 

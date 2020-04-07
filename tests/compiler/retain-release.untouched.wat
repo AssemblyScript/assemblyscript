@@ -778,9 +778,9 @@
   global.set $~argumentsLength
  )
  (func $retain-release/provideRefIndirect (; 43 ;) (param $0 i32)
+  global.get $retain-release/REF
   i32.const 1
   global.set $~argumentsLength
-  global.get $retain-release/REF
   local.get $0
   call_indirect (type $i32_=>_none)
  )

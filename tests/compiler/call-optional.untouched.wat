@@ -48,10 +48,10 @@
   global.set $~argumentsLength
  )
  (func $start:call-optional (; 4 ;)
-  i32.const 1
-  global.set $~argumentsLength
   i32.const 3
   i32.const 0
+  i32.const 1
+  global.set $~argumentsLength
   i32.const 0
   call $call-optional/opt|trampoline
   i32.const 0
@@ -65,10 +65,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 3
   i32.const 4
+  i32.const 2
+  global.set $~argumentsLength
   i32.const 0
   call $call-optional/opt|trampoline
   i32.const 5
@@ -97,11 +97,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  global.set $~argumentsLength
   i32.const 3
   i32.const 0
   i32.const 0
+  i32.const 1
+  global.set $~argumentsLength
   global.get $call-optional/optIndirect
   call_indirect (type $i32_i32_i32_=>_i32)
   i32.const 0
@@ -115,11 +115,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 3
   i32.const 4
   i32.const 0
+  i32.const 2
+  global.set $~argumentsLength
   global.get $call-optional/optIndirect
   call_indirect (type $i32_i32_i32_=>_i32)
   i32.const 5
@@ -134,10 +134,10 @@
    unreachable
   end
   i32.const 3
-  global.set $~argumentsLength
-  i32.const 3
   i32.const 4
   i32.const 5
+  i32.const 3
+  global.set $~argumentsLength
   global.get $call-optional/optIndirect
   call_indirect (type $i32_i32_i32_=>_i32)
   i32.const 12

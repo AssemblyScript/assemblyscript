@@ -51,7 +51,9 @@ import {
   getFunctionParams,
   getFunctionResults,
   createType,
-  Relooper
+  Relooper,
+  getSideEffects,
+  SideEffects
 } from "./module";
 
 import {
@@ -688,6 +690,7 @@ export class Compiler extends DiagnosticEmitter {
           let stmts = new Array<ExpressionRef>();
           if (needsTrampoline) {
             this.ensureBuiltinArgumentsLength();
+            // Safe to prepend since paramExprs are local.get's
             stmts.push(module.global_set(BuiltinNames.argumentsLength, module.i32(numParameters)));
           }
           stmts.push(
@@ -7492,11 +7495,13 @@ export class Compiler extends DiagnosticEmitter {
         );
       }
     }
+    var module = this.module;
     var numOperands = operands ? operands.length : 0;
     var numArguments = numOperands;
     var minArguments = instance.signature.requiredParameters;
     var minOperands = minArguments;
-    var maxArguments = instance.signature.parameterTypes.length;
+    var parameterTypes = instance.signature.parameterTypes;
+    var maxArguments = parameterTypes.length;
     var maxOperands = maxArguments;
     if (instance.is(CommonFlags.INSTANCE)) {
       ++minOperands;
@@ -7505,10 +7510,8 @@ export class Compiler extends DiagnosticEmitter {
     }
     assert(numOperands >= minOperands);
 
-    var module = this.module;
     if (!this.compileFunction(instance)) return module.unreachable();
     var returnType = instance.signature.returnType;
-    var isCallImport = instance.is(CommonFlags.MODULE_IMPORT);
 
     // fill up omitted arguments with their initializers, if constant, otherwise with zeroes.
     if (numOperands < maxOperands) {
@@ -7516,7 +7519,6 @@ export class Compiler extends DiagnosticEmitter {
         operands = new Array(maxOperands);
         operands.length = 0;
       }
-      let parameterTypes = instance.signature.parameterTypes;
       let parameterNodes = instance.prototype.functionTypeNode.parameters;
       assert(parameterNodes.length == parameterTypes.length);
       let allOptionalsAreConstant = true;
@@ -7557,12 +7559,21 @@ export class Compiler extends DiagnosticEmitter {
         allOptionalsAreConstant = false;
       }
       if (!allOptionalsAreConstant) {
-        if (!isCallImport) {
+        if (!instance.is(CommonFlags.MODULE_IMPORT)) {
           let original = instance;
           instance = this.ensureTrampoline(instance);
           if (!this.compileFunction(instance)) return module.unreachable();
           instance.flow.flags = original.flow.flags;
           let nativeReturnType = returnType.toNativeType();
+          // We know the last operand is optional and omitted, so inject setting
+          // ~argumentsLength into that operand, which is always safe.
+          let lastOperand = operands[maxOperands - 1];
+          assert(!(getSideEffects(lastOperand) & SideEffects.WritesGlobal));
+          let lastOperandType = parameterTypes[maxArguments - 1];
+          operands[maxOperands - 1] = module.block(null, [
+            module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
+            lastOperand
+          ], lastOperandType.toNativeType());
           let expr = module.call(instance.internalName, operands, nativeReturnType);
           this.currentType = returnType;
           if (returnType.isManaged) {
@@ -7576,10 +7587,7 @@ export class Compiler extends DiagnosticEmitter {
             }
           }
           this.ensureBuiltinArgumentsLength();
-          return module.block(null, [
-            module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
-            expr
-          ], this.currentType.toNativeType());
+          return expr;
         }
       }
     }
@@ -7651,11 +7659,14 @@ export class Compiler extends DiagnosticEmitter {
     operands: ExpressionRef[] | null = null,
     immediatelyDropped: bool = false
   ): ExpressionRef {
+    var module = this.module;
     var numOperands = operands ? operands.length : 0;
     var numArguments = numOperands;
     var minArguments = signature.requiredParameters;
     var minOperands = minArguments;
-    var maxArguments = signature.parameterTypes.length;
+    var parameterTypes = signature.parameterTypes;
+    var returnType = signature.returnType;
+    var maxArguments = parameterTypes.length;
     var maxOperands = maxArguments;
     if (signature.thisType) {
       ++minOperands;
@@ -7663,8 +7674,6 @@ export class Compiler extends DiagnosticEmitter {
       --numArguments;
     }
     assert(numOperands >= minOperands);
-
-    var module = this.module;
 
     // fill up omitted arguments with zeroes
     if (numOperands < maxOperands) {
@@ -7678,21 +7687,35 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    var returnType = signature.returnType;
+    if (this.options.isWasm64) {
+      indexArg = module.unary(UnaryOp.WrapI64, indexArg);
+    }
+
+    // We might be calling a trampoline here, even if all operands have been
+    // provided, so we must set ~argumentsLength in any case. Inject setting it
+    // into the index argument, which becomes executed last after any operands.
     this.ensureBuiltinArgumentsLength();
-    var expr = module.block(null, [
-      module.global_set(BuiltinNames.argumentsLength, // might be calling a trampoline
-        module.i32(numArguments)
-      ),
-      module.call_indirect(
-        this.options.isWasm64
-          ? module.unary(UnaryOp.WrapI64, indexArg)
-          : indexArg,
-        operands,
-        signature.nativeParams,
-        signature.nativeResults
-      )
-    ], returnType.toNativeType());
+    if (getSideEffects(indexArg) & SideEffects.WritesGlobal) {
+      let flow = this.currentFlow;
+      let temp = flow.getTempLocal(Type.i32, findUsedLocals(indexArg));
+      indexArg = module.block(null, [
+        module.local_set(temp.index, indexArg),
+        module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
+        module.local_get(temp.index, NativeType.I32)
+      ], NativeType.I32);
+      flow.freeTempLocal(temp);
+    } else { // simplify
+      indexArg = module.block(null, [
+        module.global_set(BuiltinNames.argumentsLength, module.i32(numArguments)),
+        indexArg
+      ], NativeType.I32);
+    }
+    var expr = module.call_indirect(
+      indexArg,
+      operands,
+      signature.nativeParams,
+      signature.nativeResults
+    );
     this.currentType = returnType;
     if (returnType.isManaged) {
       if (immediatelyDropped) {

@@ -3777,12 +3777,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  global.set $~argumentsLength
   i32.const 0
   local.get $2
   i32.load
   i32.const 0
+  i32.const 1
+  global.set $~argumentsLength
   i32.const 0
   call $~lib/dataview/DataView#constructor|trampoline
   local.tee $5

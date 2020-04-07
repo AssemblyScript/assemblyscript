@@ -3385,11 +3385,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  global.set $~argumentsLength
   local.get $1
   i32.load
-  local.tee $2
+  local.set $2
+  i32.const 1
+  global.set $~argumentsLength
+  local.get $2
   i32.const 0
   local.get $2
   i32.const 16

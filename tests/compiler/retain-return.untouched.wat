@@ -1556,15 +1556,15 @@
   global.get $retain-return/returnNewFnExpr
   call_indirect (type $none_=>_i32)
   call $~lib/rt/pure/__release
+  global.get $retain-return/ref
   i32.const 1
   global.set $~argumentsLength
-  global.get $retain-return/ref
   global.get $retain-return/returnLocalFnExpr
   call_indirect (type $i32_=>_i32)
   call $~lib/rt/pure/__release
+  global.get $retain-return/ref
   i32.const 1
   global.set $~argumentsLength
-  global.get $retain-return/ref
   global.get $retain-return/returnLocalFnExpr
   call_indirect (type $i32_=>_i32)
   call $~lib/rt/pure/__release

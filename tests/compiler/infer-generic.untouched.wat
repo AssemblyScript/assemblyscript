@@ -84,8 +84,6 @@
    local.set $6
    local.get $6
    if
-    i32.const 4
-    global.set $~argumentsLength
     local.get $3
     local.get $0
     i32.load offset=4
@@ -96,6 +94,8 @@
     f32.load
     local.get $4
     local.get $0
+    i32.const 4
+    global.set $~argumentsLength
     local.get $1
     call_indirect (type $i32_f32_i32_i32_=>_i32)
     local.set $3

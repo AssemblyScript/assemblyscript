@@ -1905,10 +1905,10 @@
   i32.const 2
   call $~lib/arraybuffer/ArrayBufferView#constructor
   local.set $3
-  i32.const 1
-  global.set $~argumentsLength
   local.get $4
   i32.load
+  i32.const 1
+  global.set $~argumentsLength
   call $~lib/dataview/DataView#constructor|trampoline
   local.set $2
   local.get $5
