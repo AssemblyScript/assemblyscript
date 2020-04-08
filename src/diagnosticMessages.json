@@ -126,6 +126,7 @@
   "Multiple constructor implementations are not allowed.": 2392,
   "Duplicate function implementation.": 2393,
   "Individual declarations in merged declaration '{0}' must be all exported or all local.": 2395,
+  "A class can only implement an interface.": 2422,
   "A namespace declaration cannot be located prior to a class or function with which it is merged.": 2434,
   "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.": 2453,
   "Type '{0}' has no property '{1}'.": 2460,

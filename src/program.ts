@@ -981,7 +981,7 @@ export class Program extends DiagnosticEmitter {
     this.f32ArrayPrototype = <ClassPrototype>this.require(CommonNames.Float32Array, ElementKind.CLASS_PROTOTYPE);
     this.f64ArrayPrototype = <ClassPrototype>this.require(CommonNames.Float64Array, ElementKind.CLASS_PROTOTYPE);
 
-    // resolve base prototypes of derived classes
+    // resolve base prototypes of extended classes
     var resolver = this.resolver;
     for (let i = 0, k = queuedExtends.length; i < k; ++i) {
       let thisPrototype = queuedExtends[i];
@@ -1014,12 +1014,42 @@ export class Program extends DiagnosticEmitter {
       }
     }
 
-    // check for virtual overloads in derived classes
+    // resolve interface prototypes of implemented interfaces
+    for (let i = 0, k = queuedImplements.length; i < k; ++i) {
+      let thisPrototype = queuedImplements[i];
+      let implementsNodes = assert(thisPrototype.implementsNodes); // must be present if in queuedImplements
+      for (let j = 0, l = implementsNodes.length; j < l; ++j) {
+        let implementsNode = implementsNodes[j];
+        let interfaceElement = resolver.resolveTypeName(implementsNode.name, thisPrototype.parent);
+        if (!interfaceElement) continue;
+        if (interfaceElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
+          let interfacePrototype = <InterfacePrototype>interfaceElement;
+          let interfacePrototypes = thisPrototype.interfacePrototypes;
+          if (!interfacePrototypes) thisPrototype.interfacePrototypes = interfacePrototypes = new Array();
+          interfacePrototypes.push(interfacePrototype);
+        } else {
+          this.error(
+            DiagnosticCode.A_class_can_only_implement_an_interface,
+            implementsNode.range
+          );
+        }
+      }
+    }
+
+    // check for virtual overloads in extended classes and implemented interfaces
     for (let i = 0, k = queuedExtends.length; i < k; ++i) {
       let thisPrototype = queuedExtends[i];
       this.markVirtuals(thisPrototype, assert(thisPrototype.basePrototype));
     }
-    // TODO: interfaces via queuedImplements
+    for (let i = 0, k = queuedImplements.length; i < k; ++i) {
+      let thisPrototype = queuedImplements[i];
+      let interfacePrototypes = thisPrototype.interfacePrototypes;
+      if (interfacePrototypes) {
+        for (let j = 0, l = interfacePrototypes.length; j < l; ++j) {
+          this.markVirtuals(thisPrototype, interfacePrototypes[j]);
+        }
+      }
+    }
 
     // set up global aliases
     {
@@ -3433,7 +3463,9 @@ export class ClassPrototype extends DeclaredElement {
   /** Instance member prototypes. */
   instanceMembers: Map<string,Element> | null = null;
   /** Base class prototype, if applicable. */
-  basePrototype: ClassPrototype | null = null; // set in Program#initialize
+  basePrototype: ClassPrototype | null = null;
+  /** Interface prototypes, if applicable. */
+  interfacePrototypes: InterfacePrototype[] | null = null;
   /** Constructor prototype. */
   constructorPrototype: FunctionPrototype | null = null;
   /** Operator overload prototypes. */
