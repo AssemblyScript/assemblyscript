@@ -8788,7 +8788,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // contextual type must be a class
     var classReference = contextualType.classReference;
-    if (!classReference || classReference.is(CommonFlags.ABSTRACT)) {
+    if (!classReference || classReference.is(CommonFlags.ABSTRACT) || classReference.kind == ElementKind.INTERFACE) {
+      // TODO: interfaces don't have own storage. hidden class maybe?
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         expression.range, "<object>", contextualType.toString()
