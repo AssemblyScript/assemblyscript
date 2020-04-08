@@ -1482,8 +1482,8 @@ export class Compiler extends DiagnosticEmitter {
       );
       funcRef = module.getFunction(instance.internalName);
 
-    // abstract function
-    } else if (instance.is(CommonFlags.ABSTRACT)) {
+    // abstract or interface function
+    } else if (instance.is(CommonFlags.ABSTRACT) || instance.parent.kind == ElementKind.INTERFACE) {
       funcRef = module.addFunction(
         instance.internalName,
         signature.nativeParams,

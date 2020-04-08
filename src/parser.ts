@@ -2126,6 +2126,11 @@ export class Parser extends DiagnosticEmitter {
             DiagnosticCode.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract,
             tn.range(), name.text
           ); // recoverable
+        } else if (isInterface) {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ";"
+          ); // recoverable
         }
         body = this.parseBlockStatement(tn, false);
         if (!body) return null;

@@ -13,11 +13,13 @@
  (data (i32.const 1104) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00c\00l\00a\00s\00s\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
  (data (i32.const 1168) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00C")
  (data (i32.const 1200) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00F")
+ (data (i32.const 1232) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00I\00B")
  (global $class-overloading/which (mut i32) (i32.const 1040))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $class-overloading/a (mut i32) (i32.const 0))
  (global $class-overloading/c (mut i32) (i32.const 0))
+ (global $class-overloading/ia (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (result i32)
@@ -260,9 +262,9 @@
   call $class-overloading/D#constructor
  )
  (func $start:class-overloading (; 9 ;)
-  i32.const 1232
+  i32.const 1264
   global.set $~lib/rt/stub/startOffset
-  i32.const 1232
+  i32.const 1264
   global.set $~lib/rt/stub/offset
   i32.const 0
   call $class-overloading/B#constructor
@@ -346,6 +348,35 @@
    i32.const 0
    i32.const 1120
    i32.const 60
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 10
+  call $~lib/rt/stub/__alloc
+  global.set $class-overloading/ia
+  block $__inlined_func$class-overloading/IA#foo|virtual
+   global.get $class-overloading/ia
+   i32.const 8
+   i32.sub
+   i32.load
+   i32.const 10
+   i32.eq
+   if
+    i32.const 1248
+    global.set $class-overloading/which
+    br $__inlined_func$class-overloading/IA#foo|virtual
+   end
+   unreachable
+  end
+  global.get $class-overloading/which
+  i32.const 1248
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1120
+   i32.const 74
    i32.const 1
    call $~lib/builtins/abort
    unreachable

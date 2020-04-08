@@ -1,8 +1,8 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
@@ -14,6 +14,7 @@
  (data (i32.const 96) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00c\00l\00a\00s\00s\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s\00")
  (data (i32.const 160) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00C\00")
  (data (i32.const 192) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00F\00")
+ (data (i32.const 224) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00I\00B\00")
  (table $0 1 funcref)
  (global $class-overloading/which (mut i32) (i32.const 32))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -21,7 +22,8 @@
  (global $class-overloading/a (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $class-overloading/c (mut i32) (i32.const 0))
- (global $~lib/heap/__heap_base i32 (i32.const 212))
+ (global $class-overloading/ia (mut i32) (i32.const 0))
+ (global $~lib/heap/__heap_base i32 (i32.const 244))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
@@ -469,7 +471,22 @@
   local.set $0
   local.get $0
  )
- (func $start:class-overloading (; 17 ;)
+ (func $class-overloading/IB#constructor (; 17 ;) (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 10
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  local.get $0
+ )
+ (func $class-overloading/IA#foo (; 18 ;) (param $0 i32)
+  unreachable
+ )
+ (func $start:class-overloading (; 19 ;)
   (local $0 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
@@ -583,11 +600,28 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  call $class-overloading/IB#constructor
+  global.set $class-overloading/ia
+  global.get $class-overloading/ia
+  call $class-overloading/IA#foo|virtual
+  global.get $class-overloading/which
+  i32.const 240
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 112
+   i32.const 74
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
  )
- (func $~start (; 18 ;)
+ (func $~start (; 20 ;)
   call $start:class-overloading
  )
- (func $class-overloading/F#a<i32> (; 19 ;) (param $0 i32) (param $1 i32)
+ (func $class-overloading/F#a<i32> (; 21 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   i32.const 208
   local.set $2
@@ -596,7 +630,7 @@
   local.get $2
   global.set $class-overloading/which
  )
- (func $class-overloading/A#a<i32>|virtual (; 20 ;) (param $0 i32) (param $1 i32)
+ (func $class-overloading/A#a<i32>|virtual (; 22 ;) (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $default
    block $case2
@@ -647,5 +681,35 @@
   local.get $0
   local.get $1
   call $class-overloading/A#a<i32>
+ )
+ (func $class-overloading/IB#foo (; 23 ;) (param $0 i32)
+  (local $1 i32)
+  i32.const 240
+  local.set $1
+  global.get $class-overloading/which
+  call $~lib/rt/stub/__release
+  local.get $1
+  global.set $class-overloading/which
+ )
+ (func $class-overloading/IA#foo|virtual (; 24 ;) (param $0 i32)
+  (local $1 i32)
+  block $default
+   block $case0
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    local.set $1
+    local.get $1
+    i32.const 10
+    i32.eq
+    br_if $case0
+    br $default
+   end
+   local.get $0
+   call $class-overloading/IB#foo
+   return
+  end
+  unreachable
  )
 )

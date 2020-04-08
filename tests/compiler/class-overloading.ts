@@ -58,3 +58,17 @@ class F extends E {
 a = new F();
 a.a<i32>(1);
 assert(which == "F");
+
+interface IA {
+  foo(): void;
+}
+
+class IB implements IA {
+  foo(): void {
+    which = "IB";
+  }
+}
+
+var ia: IA = new IB();
+ia.foo();
+assert(which == "IB");

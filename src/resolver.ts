@@ -23,6 +23,7 @@ import {
   Element,
   Class,
   ClassPrototype,
+  Interface,
   Function,
   FunctionPrototype,
   VariableLikeElement,
@@ -35,7 +36,8 @@ import {
   TypedElement,
   FunctionTarget,
   IndexSignature,
-  isTypedElement
+  isTypedElement,
+  InterfacePrototype
 } from "./program";
 
 import {
@@ -243,8 +245,11 @@ export class Resolver extends DiagnosticEmitter {
         return Type.i32;
       }
 
-      // Handle classes
-      if (element.kind == ElementKind.CLASS_PROTOTYPE) {
+      // Handle classes and interfaces
+      if (
+        element.kind == ElementKind.CLASS_PROTOTYPE ||
+        element.kind == ElementKind.INTERFACE_PROTOTYPE
+      ) {
         let instance = this.resolveClassInclTypeArguments(
           <ClassPrototype>element,
           typeArgumentNodes,
@@ -1408,7 +1413,9 @@ export class Resolver extends DiagnosticEmitter {
     // Look up the member within
     switch (target.kind) {
       case ElementKind.CLASS_PROTOTYPE:
-      case ElementKind.CLASS: {
+      case ElementKind.INTERFACE_PROTOTYPE:
+      case ElementKind.CLASS:
+      case ElementKind.INTERFACE: {
         do {
           let members = target.members;
           if (members !== null && members.has(propertyName)) {
@@ -1417,7 +1424,10 @@ export class Resolver extends DiagnosticEmitter {
             return assert(members.get(propertyName)); // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE...
           }
           // traverse inherited static members on the base prototype if target is a class prototype
-          if (target.kind == ElementKind.CLASS_PROTOTYPE) {
+          if (
+            target.kind == ElementKind.CLASS_PROTOTYPE ||
+            target.kind == ElementKind.INTERFACE_PROTOTYPE
+          ) {
             let classPrototype = <ClassPrototype>target;
             let basePrototype = classPrototype.basePrototype;
             if (basePrototype) {
@@ -1426,7 +1436,10 @@ export class Resolver extends DiagnosticEmitter {
               break;
             }
           // traverse inherited instance members on the base class if target is a class instance
-          } else if (target.kind == ElementKind.CLASS) {
+          } else if (
+            target.kind == ElementKind.CLASS ||
+            target.kind == ElementKind.INTERFACE
+          ) {
             let classInstance = <Class>target;
             let baseInstance = classInstance.base;
             if (baseInstance) {
@@ -2646,7 +2659,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Instance method prototypes are pre-bound to their concrete class as their parent
     if (prototype.is(CommonFlags.INSTANCE)) {
-      assert(actualParent.kind == ElementKind.CLASS);
+      assert(actualParent.kind == ElementKind.CLASS || actualParent.kind == ElementKind.INTERFACE);
       classInstance = <Class>actualParent;
 
       // check if this exact concrete class and function combination is known already
@@ -2881,7 +2894,11 @@ export class Resolver extends DiagnosticEmitter {
     // Otherwise create
     var nameInclTypeParamters = prototype.name;
     if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
-    instance = new Class(nameInclTypeParamters, prototype, typeArguments);
+    if (prototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
+      instance = new Interface(nameInclTypeParamters, <InterfacePrototype>prototype, typeArguments);
+    } else {
+      instance = new Class(nameInclTypeParamters, prototype, typeArguments);
+    }
     prototype.setResolvedInstance(instanceKey, instance);
     var pendingClasses = this.resolveClassPending;
     pendingClasses.push(instance);
@@ -2934,6 +2951,43 @@ export class Resolver extends DiagnosticEmitter {
       // This is guaranteed to never happen at the entry of the recursion, i.e.
       // where `resolveClass` is called from other code.
       if (pendingClasses.includes(base)) return instance;
+    }
+
+    // Resolve interfaces if applicable
+    var interfacePrototypes = prototype.interfacePrototypes;
+    if (interfacePrototypes) {
+      let anyPending = false;
+      for (let i = 0, k = interfacePrototypes.length; i < k; ++i) {
+        let interfacePrototype = interfacePrototypes[i];
+        let current: ClassPrototype | null = interfacePrototype;
+        do {
+          if (current == prototype) {
+            this.error(
+              DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
+              prototype.identifierNode.range,
+              prototype.internalName
+            );
+            return null;
+          }
+          current = current.basePrototype;
+        } while (current);
+        let implementsNode = assert(prototype.implementsNodes![i]);
+        let iface = this.resolveClassInclTypeArguments(
+          interfacePrototype,
+          implementsNode.typeArguments,
+          prototype.parent,
+          makeMap(ctxTypes),
+          implementsNode,
+          reportMode
+        );
+        if (!iface) return null;
+        assert(iface.kind == ElementKind.INTERFACE);
+        instance.addInterface(<Interface>iface);
+        if (pendingClasses.includes(iface)) anyPending = true;
+      }
+
+      // Like above, if any implemented interface is still pending, yield
+      if (anyPending) return instance;
     }
 
     // We only get here if the base class has been fully resolved already.

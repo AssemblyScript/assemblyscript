@@ -108,6 +108,7 @@ export enum DiagnosticCode {
   Duplicate_identifier_0 = 2300,
   Cannot_find_name_0 = 2304,
   Module_0_has_no_exported_member_1 = 2305,
+  An_interface_can_only_extend_an_interface = 2312,
   Generic_type_0_requires_1_type_argument_s = 2314,
   Type_0_is_not_generic = 2315,
   Type_0_is_not_assignable_to_type_1 = 2322,
@@ -264,6 +265,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2300: return "Duplicate identifier '{0}'.";
     case 2304: return "Cannot find name '{0}'.";
     case 2305: return "Module '{0}' has no exported member '{1}'.";
+    case 2312: return "An interface can only extend an interface.";
     case 2314: return "Generic type '{0}' requires {1} type argument(s).";
     case 2315: return "Type '{0}' is not generic.";
     case 2322: return "Type '{0}' is not assignable to type '{1}'.";

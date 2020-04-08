@@ -104,6 +104,7 @@
   "Duplicate identifier '{0}'.": 2300,
   "Cannot find name '{0}'.": 2304,
   "Module '{0}' has no exported member '{1}'.": 2305,
+  "An interface can only extend an interface.": 2312,
   "Generic type '{0}' requires {1} type argument(s).": 2314,
   "Type '{0}' is not generic.": 2315,
   "Type '{0}' is not assignable to type '{1}'.": 2322,
