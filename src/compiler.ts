@@ -51,9 +51,9 @@ import {
   getFunctionParams,
   getFunctionResults,
   createType,
-  Relooper,
   getSideEffects,
-  SideEffects
+  SideEffects,
+  SwitchBuilder
 } from "./module";
 
 import {
@@ -618,27 +618,23 @@ export class Compiler extends DiagnosticEmitter {
     var usizeType = this.options.usizeType;
     var nativeSizeType = usizeType.toNativeType();
     var parameterTypes = instance.signature.parameterTypes;
+    var returnType = instance.signature.returnType;
     var numParameters = parameterTypes.length;
     var tempIndex = 1 + parameterTypes.length; // incl. `this`
 
-    // Use a relooper to map this's class id to the matching overload. Note
-    // that we do not emit a switch here since ids may be distant, and we
-    // instead rely on the optimizer to figure this out based on opt levels.
-    var relooper = Relooper.create(this.module);
-    var entry = relooper.addBlock(
-      module.local_set(tempIndex,
-        module.load(4, false,
-          module.binary(
-            nativeSizeType == NativeType.I64
-              ? BinaryOp.SubI64
-              : BinaryOp.SubI32,
-            module.local_get(0, nativeSizeType),
-            nativeSizeType == NativeType.I64
-              ? module.i64(8) // rtId offset = -8
-              : module.i32(8)
-          ),
-          NativeType.I32
-        )
+    // Switch over this's rtId and map it to the respective overload
+    var builder = new SwitchBuilder(this.module,
+      module.load(4, false,
+        module.binary(
+          nativeSizeType == NativeType.I64
+            ? BinaryOp.SubI64
+            : BinaryOp.SubI32,
+          module.local_get(0, nativeSizeType),
+          nativeSizeType == NativeType.I64
+            ? module.i64(8) // rtId offset = -8
+            : module.i32(8)
+        ),
+        NativeType.I32
       )
     );
 
@@ -693,32 +689,27 @@ export class Compiler extends DiagnosticEmitter {
             // Safe to prepend since paramExprs are local.get's
             stmts.push(module.global_set(BuiltinNames.argumentsLength, module.i32(numParameters)));
           }
-          stmts.push(
-            module.call(calledName, paramExprs, nativeReturnType)
-          );
-          // Include each extendee inheriting this overload, i.e. each extendee
-          // before there's another actual overload.
-          let cond = module.binary(BinaryOp.EqI32,
-            module.local_get(tempIndex, NativeType.I32),
-            module.i32(classInstance.id)
-          );
-          let extendees = classInstance.getAllExtendees(instance.prototype.name);
-          for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
-            let extendee = _values[a];
-            cond = module.binary(BinaryOp.OrI32,
-              cond,
-              module.binary(BinaryOp.EqI32,
-                module.local_get(tempIndex, NativeType.I32),
-                module.i32(extendee.id)
+          if (returnType == Type.void) {
+            stmts.push(
+              module.call(calledName, paramExprs, nativeReturnType)
+            );
+            stmts.push(
+              module.return()
+            );
+          } else {
+            stmts.push(
+              module.return(
+                module.call(calledName, paramExprs, nativeReturnType)
               )
             );
           }
-          relooper.addBranch(entry,
-            relooper.addBlock(
-              module.flatten(stmts, nativeReturnType)
-            ),
-            cond
-          );
+          builder.addCase(classInstance.id, stmts);
+          // Also alias each extendee inheriting this exact overload
+          let extendees = classInstance.getAllExtendees(instance.prototype.name);
+          for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
+            let extendee = _values[a];
+            builder.addCase(extendee.id, stmts);
+          }
         }
       }
     }
@@ -727,23 +718,18 @@ export class Compiler extends DiagnosticEmitter {
     // abstract or part of an interface. Note that doing so will not catch an
     // invalid id, but can reduce code size significantly since we also don't
     // have to add branches for extendees inheriting the original function.
+    var body: ExpressionRef;
     if (instance.prototype.bodyNode) {
       let paramExprs = new Array<ExpressionRef>(numParameters);
       paramExprs[0] = module.local_get(0, nativeSizeType); // this
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         paramExprs[1 + i] = module.local_get(1 + i, parameterTypes[i].toNativeType());
       }
-      let block = relooper.addBlock(
-        module.call(instance.internalName, paramExprs, instance.signature.returnType.toNativeType())
-      );
-      relooper.addBranch(entry, block);
+      body = module.call(instance.internalName, paramExprs, instance.signature.returnType.toNativeType());
 
     // Otherwise trap
     } else {
-      let block = relooper.addBlock(
-        module.unreachable()
-      );
-      relooper.addBranch(entry, block);
+      body = module.unreachable();
     }
 
     // Make the virtual wrapper
@@ -751,7 +737,10 @@ export class Compiler extends DiagnosticEmitter {
     instance.virtualRef = module.addFunction(
       instance.internalName + "|virtual",
       getFunctionParams(originalRef), getFunctionResults(originalRef), [ NativeType.I32 ],
-      relooper.renderAndDispose(entry, tempIndex)
+      module.block(null, [
+        builder.render(tempIndex),
+        body
+      ], returnType.toNativeType())
     );
   }
 
