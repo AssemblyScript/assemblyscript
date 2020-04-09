@@ -35,7 +35,7 @@ jobs:
           printf "\nOK: Distributions files have not been modified.\n";
         fi
   test:
-    name: "Test compiler on node: ${{ matrix.node_version }}"
+    name: "Test compiler (Linux, node ${{ matrix.node_version }})"
     runs-on: ubuntu-latest
     needs: check
     strategy:
@@ -43,9 +43,8 @@ jobs:
         node_version: ["lts/*", "node"]
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-version: ${{ matrix.node_version }}
+    - name: Install node
+      run: nvm install ${{ matrix.node_version }}
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
@@ -57,17 +56,16 @@ jobs:
     - name: Test distribution
       run: npm test
   test-windows:
-    name: "Test compiler on Windows with node: node"
+    name: "Test compiler (Windows)"
     runs-on: windows-latest
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - name: Install node via nvm-windows
+    - name: Install node
       run: |
         Invoke-WebRequest -Uri https://github.com/coreybutler/nvm-windows/releases/download/1.1.7/nvm-noinstall.zip -OutFile nvm.zip
         Expand-Archive nvm.zip -DestinationPath nvm
         nvm/nvm install node
-        nvm/nvm use node
         npm -g install npm@latest
     - name: Install dependencies
       run: npm ci --no-audit
@@ -79,17 +77,32 @@ jobs:
       run: npm run build
     - name: Test distribution
       run: npm test
+  test-macos:
+    name: "Test compiler (MacOS)"
+    runs-on: macos-latest
+    needs: check
+    steps:
+    - uses: actions/checkout@v1.0.0
+    - name: Install node
+      run: nvm install node
+    - name: Install dependencies
+      run: npm ci --no-audit
+    - name: Clean distribution files
+      run: npm run clean
+    - name: Test sources
+      run: npm test
+    - name: Build distribution files
+      run: npm run build
+    - name: Test distribution
+      run: npm test
   test-canary:
-    name: "Test features on node: v8-canary"
+    name: "Test features"
     runs-on: ubuntu-latest
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-mirror: https://nodejs.org/download/v8-canary/
-        # FIXME: newer node-v8 builds are currently broken
-        node-version: "14.0.0-v8-canary201911242015a12d82"
+    - name: Install node
+      run: NVM_NODEJS_ORG_MIRROR=https://nodejs.org/download/v8-canary/ nvm install node
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
@@ -100,14 +113,13 @@ jobs:
       run: |
         npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads
   test-runtime:
-    name: "Test runtimes on node: node"
+    name: "Test runtimes"
     runs-on: ubuntu-latest
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-version: node
+    - name: Install node
+      run: nvm install node
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
@@ -125,14 +137,13 @@ jobs:
         cd ..
         npm test rt-stub
   test-loader:
-    name: "Test loader on node: node"
+    name: "Test loader"
     runs-on: ubuntu-latest
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-version: node
+    - name: Install node
+      run: nvm install node
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
@@ -143,14 +154,13 @@ jobs:
         npm run asbuild
         npm run test
   test-bootstrap:
-    name: "Test self-compilation on node: node"
+    name: "Test self-compilation"
     runs-on: ubuntu-latest
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - uses: dcodeIO/setup-node-nvm@master
-      with:
-        node-version: node
+    - name: Install node
+      run: nvm install node
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
