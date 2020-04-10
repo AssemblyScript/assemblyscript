@@ -4,7 +4,8 @@ on:
   - cron: '0 0 * * *'
 jobs:
   publish:
-    name: "Publish packages"
+    name: "Packages"
+    if: github.repository == 'AssemblyScript/assemblyscript'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1

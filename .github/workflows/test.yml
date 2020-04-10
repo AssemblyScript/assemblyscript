@@ -1,4 +1,4 @@
-name: CI
+name: Test
 on:
   push:
     branches:
@@ -6,7 +6,7 @@ on:
   pull_request:
 jobs:
   check:
-    name: "Check preconditions"
+    name: "Check"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1.0.0
@@ -35,7 +35,7 @@ jobs:
           printf "\nOK: Distributions files have not been modified.\n";
         fi
   test:
-    name: "Test compiler on node: ${{ matrix.node_version }}"
+    name: "Compiler (node ${{ matrix.node_version }})"
     runs-on: ubuntu-latest
     needs: check
     strategy:
@@ -57,7 +57,7 @@ jobs:
     - name: Test distribution
       run: npm test
   test-windows:
-    name: "Test compiler on Windows with node: node"
+    name: "Compiler (Windows)"
     runs-on: windows-latest
     needs: check
     steps:
@@ -75,8 +75,8 @@ jobs:
       run: npm run build
     - name: Test distribution
       run: npm test
-  test-canary:
-    name: "Test features on node: v8-canary"
+  test-features:
+    name: "Features"
     runs-on: ubuntu-latest
     needs: check
     steps:
@@ -95,8 +95,8 @@ jobs:
         ASC_FEATURES: mutable-globals,threads,reference-types,bigint-integration
       run: |
         npm run test:compiler rt/flags features/js-bigint-integration features/reference-types features/threads
-  test-runtime:
-    name: "Test runtimes on node: node"
+  test-runtimes:
+    name: "Runtimes"
     runs-on: ubuntu-latest
     needs: check
     steps:
@@ -121,7 +121,7 @@ jobs:
         cd ..
         npm test rt-stub
   test-loader:
-    name: "Test loader on node: node"
+    name: "Loader"
     runs-on: ubuntu-latest
     needs: check
     steps:
@@ -139,7 +139,7 @@ jobs:
         npm run asbuild
         npm run test
   test-bootstrap:
-    name: "Test self-compilation on node: node"
+    name: "Bootstrap"
     runs-on: ubuntu-latest
     needs: check
     steps:
