@@ -12,7 +12,7 @@ jobs:
         ref: release
     - uses: dcodeIO/setup-node-nvm@master
       with:
-        node-version: node
+        node-version: current
     - name: Merge master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

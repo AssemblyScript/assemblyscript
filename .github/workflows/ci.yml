@@ -40,7 +40,7 @@ jobs:
     needs: check
     strategy:
       matrix:
-        node_version: ["lts/*", "node"]
+        node_version: ["lts_latest", "current"]
     steps:
     - uses: actions/checkout@v1.0.0
     - uses: dcodeIO/setup-node-nvm@master
@@ -88,8 +88,7 @@ jobs:
     - uses: dcodeIO/setup-node-nvm@master
       with:
         node-mirror: https://nodejs.org/download/v8-canary/
-        # FIXME: newer node-v8 builds are currently broken
-        node-version: "14.0.0-v8-canary201911242015a12d82"
+        node-version: latest
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
@@ -107,7 +106,7 @@ jobs:
     - uses: actions/checkout@v1.0.0
     - uses: dcodeIO/setup-node-nvm@master
       with:
-        node-version: node
+        node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
@@ -132,7 +131,7 @@ jobs:
     - uses: actions/checkout@v1.0.0
     - uses: dcodeIO/setup-node-nvm@master
       with:
-        node-version: node
+        node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
@@ -150,7 +149,7 @@ jobs:
     - uses: actions/checkout@v1.0.0
     - uses: dcodeIO/setup-node-nvm@master
       with:
-        node-version: node
+        node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
