@@ -62,13 +62,9 @@ jobs:
     needs: check
     steps:
     - uses: actions/checkout@v1.0.0
-    - name: Install node via nvm-windows
-      run: |
-        Invoke-WebRequest -Uri https://github.com/coreybutler/nvm-windows/releases/download/1.1.7/nvm-noinstall.zip -OutFile nvm.zip
-        Expand-Archive nvm.zip -DestinationPath nvm
-        nvm/nvm install node
-        nvm/nvm use node
-        npm -g install npm@latest
+    - uses: dcodeIO/setup-node-nvm@master
+      with:
+        node-version: current
     - name: Install dependencies
       run: npm ci --no-audit
     - name: Clean distribution files
