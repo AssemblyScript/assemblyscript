@@ -1041,7 +1041,7 @@ exports.main = function main(argv, options, callback) {
     try {
       stats.writeCount++;
       stats.writeTime += measure(() => {
-        const dirPath = path.join(baseDir, path.dirname(filename));
+        const dirPath = path.resolve(baseDir, path.dirname(filename));
         if (!fs.existsSync(dirPath)) mkdirp(dirPath);
         if (typeof contents === "string") {
           fs.writeFileSync(path.join(baseDir, filename), contents, { encoding: "utf8" } );
