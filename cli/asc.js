@@ -1042,11 +1042,13 @@ exports.main = function main(argv, options, callback) {
       stats.writeCount++;
       stats.writeTime += measure(() => {
         const dirPath = path.resolve(baseDir, path.dirname(filename));
+        filename = path.basename(filename);
+        const outputFilePath = path.join(dirPath, filename);
         if (!fs.existsSync(dirPath)) mkdirp(dirPath);
         if (typeof contents === "string") {
-          fs.writeFileSync(path.join(baseDir, filename), contents, { encoding: "utf8" } );
+          fs.writeFileSync(outputFilePath, contents, { encoding: "utf8" } );
         } else {
-          fs.writeFileSync(path.join(baseDir, filename), contents);
+          fs.writeFileSync(outputFilePath, contents);
         }
       });
       return true;
