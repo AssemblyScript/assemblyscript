@@ -28,7 +28,8 @@ import {
 
 import {
   DiagnosticCode,
-  DiagnosticEmitter
+  DiagnosticEmitter,
+  DiagnosticMessage
 } from "./diagnostics";
 
 import {
@@ -95,8 +96,6 @@ import {
 /** Parser interface. */
 export class Parser extends DiagnosticEmitter {
 
-  /** Program being created. */
-  program: Program;
   /** Source file names to be requested next. */
   backlog: string[] = new Array();
   /** Source file names already seen, that is processed or backlogged. */
@@ -111,9 +110,12 @@ export class Parser extends DiagnosticEmitter {
   dependees: Map<string, Source> = new Map();
 
   /** Constructs a new parser. */
-  constructor(program: Program) {
-    super(program.diagnostics);
-    this.program = program;
+  constructor(
+    public diagnostics: DiagnosticMessage[] = [],
+    public sources: Source[] = []
+  ) {
+    super(diagnostics);
+
   }
 
   /** Parses a file and adds its definitions to the program. */
@@ -145,12 +147,12 @@ export class Parser extends DiagnosticEmitter {
             : SourceKind.LIBRARY
           : SourceKind.USER
     );
-    var program = this.program;
-    program.sources.push(source);
+
+    this.sources.push(source);
     this.currentSource = source;
 
     // tokenize and parse
-    var tn = new Tokenizer(source, program.diagnostics);
+    var tn = new Tokenizer(source, this.diagnostics);
     tn.onComment = this.onComment;
     var statements = source.statements;
     while (!tn.skip(Token.ENDOFFILE)) {

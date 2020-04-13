@@ -537,7 +537,7 @@ export class Program extends DiagnosticEmitter {
     var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
-    this.parser = new Parser(this);
+    this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);
   }
 
