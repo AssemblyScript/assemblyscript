@@ -6,8 +6,26 @@ const fs = require("fs");
 const path = require("path");
 const colors = require("../cli/util/colors");
 const version = require("../package.json").version;
+const options = require("../cli/util/options");
 
-if (process.argv.length != 3 || process.argv[2] == "--help" || process.argv[2] == "-h") printHelp();
+const asinitOptions = {
+  "help": {
+    "category": "General",
+    "description": "Prints a help message.",
+    "type": "b",
+    "alias": "h"
+  },
+  "yes": {
+    "category": "General",
+    "description": "Answers all questions with their default option for non-interactive usage.",
+    "type": "b",
+    "alias": "y"
+  }
+};
+
+const cliOptions = options.parse(process.argv.slice(2), asinitOptions);
+
+if (cliOptions.options.help || cliOptions.arguments.length === 0) printHelp();
 
 function printHelp() {
   console.log([
@@ -19,12 +37,7 @@ function printHelp() {
   process.exit(0);
 }
 
-const rl = require("readline").createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-const projectDir = path.resolve(process.argv[2]);
+const projectDir = path.resolve(cliOptions.arguments[0]);
 const compilerDir = path.join(__dirname, "..");
 const compilerVersion = require(path.join(compilerDir, "package.json")).version;
 const assemblyDir = path.join(projectDir, "assembly");
@@ -75,7 +88,7 @@ console.log([
   ""
 ].join("\n"));
 
-rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", answer => {
+function createProject(answer) {
   if (!/^y?$/i.test(answer)) {
     process.exit(1);
     return;
@@ -132,8 +145,20 @@ rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", answer => {
     "",
     "Have a nice day!"
   ].join("\n"));
-  rl.close();
-});
+}
+
+if (cliOptions.options.yes) {
+  createProject("y");
+} else {
+  const rl = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  rl.question(colors.white("Do you want to proceed?") + " [Y/n] ", result => {
+    rl.close();
+    createProject(result);
+  });
+}
 
 function ensureProjectDirectory() {
   console.log("- Making sure that the project directory exists...");
