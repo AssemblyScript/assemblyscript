@@ -10646,6 +10646,7 @@
    local.get $17
    f32.demote_f64
   end
+  return
  )
  (func $../../lib/libm/assembly/libmf/pow (; 107 ;) (param $0 f32) (param $1 f32) (result f32)
   local.get $0

@@ -72,7 +72,7 @@ function parse(argv, config) {
             case "s": options[key] = option.default || ""; break;
             case "I":
             case "F":
-            case "S": options[key] = options.default || []; break;
+            case "S": options[key] = option.default || []; break;
             default: unknown.push(arg);
           }
         }
