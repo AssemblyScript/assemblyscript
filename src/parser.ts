@@ -113,7 +113,7 @@ export class Parser extends DiagnosticEmitter {
     sources: Source[] | null = null
   ) {
     super(diagnostics);
-    this.sources = sources == null ? new Array<Source>() : sources;
+    this.sources = sources ? sources : new Array<Source>();
   }
 
   /** Parses a file and adds its definitions to the program. */
