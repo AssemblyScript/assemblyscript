@@ -2,7 +2,7 @@
  * @fileoverview Recursive mkdir.
  * @license
  * Copyright 2010 James Halliday (mail@substack.net)
- * 
+ *
  * This project is free software released under the MIT/X11 license:
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -11,7 +11,7 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
@@ -24,9 +24,8 @@
  * THE SOFTWARE.
  */
 
-var path = require("path");
-var fs = require("fs");
-var _0777 = parseInt("0777", 8);
+const path = require("path");
+const fs = require("fs");
 
 module.exports = function mkdirp(p, opts, made) {
   if (!opts || typeof opts !== "object") {
@@ -34,7 +33,7 @@ module.exports = function mkdirp(p, opts, made) {
   }
   var mode = opts.mode;
   if (mode === undefined) {
-    mode = _0777 & (~process.umask());
+    mode = 0o777 & (~process.umask());
   }
   if (!made) made = null;
   p = path.resolve(p);

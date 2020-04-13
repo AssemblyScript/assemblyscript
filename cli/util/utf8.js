@@ -20,7 +20,7 @@ var utf8 = exports;
 utf8.length = function utf8_length(string) {
     var len = 0,
         c = 0;
-    for (var i = 0; i < string.length; ++i) {
+    for (var i = 0, l = string.length; i < l; ++i) {
         c = string.charCodeAt(i);
         if (c < 128)
             len += 1;
