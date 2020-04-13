@@ -2789,7 +2789,7 @@ export class EnumValue extends VariableLikeElement {
 
   /** Gets the associated value node. */
   get valueNode(): Expression | null {
-    return (<EnumValueDeclaration>this.declaration).value;
+    return (<EnumValueDeclaration>this.declaration).initializer;
   }
 
   /* @override */

@@ -685,7 +685,7 @@ export abstract class Node {
 
   static createEnumValueDeclaration(
     name: IdentifierExpression,
-    value: Expression | null,
+    initializer: Expression | null,
     flags: CommonFlags,
     range: Range
   ): EnumValueDeclaration {
@@ -694,7 +694,7 @@ export abstract class Node {
     node.range = range;
     node.flags = flags;
     node.name = name;
-    node.value = value;
+    node.initializer = initializer;
     return node;
   }
 
@@ -1848,8 +1848,6 @@ export class EnumDeclaration extends DeclarationStatement {
 
 /** Represents a value of an `enum` declaration. */
 export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
-  /** Value expression. */
-  value: Expression | null;
 }
 
 /** Represents an `export import` statement of an interface. */
