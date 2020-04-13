@@ -14,10 +14,6 @@ import {
 } from "./common";
 
 import {
-  Program
-} from "./program";
-
-import {
   Tokenizer,
   Token,
   Range,
@@ -108,14 +104,16 @@ export class Parser extends DiagnosticEmitter {
   currentSource: Source;
   /** Dependency map **/
   dependees: Map<string, Source> = new Map();
+  /** An array of parsed sources. */
+  sources: Source[];
 
   /** Constructs a new parser. */
   constructor(
-    public diagnostics: DiagnosticMessage[] = [],
-    public sources: Source[] = []
+    diagnostics: DiagnosticMessage[] | null = null,
+    sources: Source[] | null = null
   ) {
     super(diagnostics);
-
+    this.sources = sources == null ? new Array<Source>() : sources;
   }
 
   /** Parses a file and adds its definitions to the program. */
