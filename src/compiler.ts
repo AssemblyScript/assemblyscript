@@ -646,14 +646,34 @@ export class Compiler extends DiagnosticEmitter {
       let unboundOverloadPrototype = _values[i];
       assert(!unboundOverloadPrototype.isBound);
       let unboundOverloadParent = unboundOverloadPrototype.parent;
-      assert(unboundOverloadParent.kind == ElementKind.CLASS_PROTOTYPE);
-      let classInstances = (<ClassPrototype>unboundOverloadParent).instances;
+      let isProperty = unboundOverloadParent.kind == ElementKind.PROPERTY_PROTOTYPE;
+      let classInstances: Map<string,Class> | null;
+      if (isProperty) {
+        let propertyParent = (<PropertyPrototype>unboundOverloadParent).parent;
+        assert(propertyParent.kind == ElementKind.CLASS_PROTOTYPE);
+        classInstances = (<ClassPrototype>propertyParent).instances;
+      } else {
+        assert(unboundOverloadParent.kind == ElementKind.CLASS_PROTOTYPE);
+        classInstances = (<ClassPrototype>unboundOverloadParent).instances;
+      }
       if (classInstances) {
         for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
           let classInstance = _values[j];
-          let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
-          assert(boundPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-          let overloadInstance = this.resolver.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+          let overloadInstance: Function | null;
+          if (isProperty) {
+            let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
+            assert(boundProperty.kind == ElementKind.PROPERTY);
+            if (instance.is(CommonFlags.GET)) {
+              overloadInstance = (<Property>boundProperty).getterInstance;
+            } else {
+              assert(instance.is(CommonFlags.SET));
+              overloadInstance = (<Property>boundProperty).setterInstance;
+            }
+          } else {
+            let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
+            assert(boundPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+            overloadInstance = this.resolver.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+          }
           if (!overloadInstance || !this.compileFunction(overloadInstance)) continue;
           let overloadType = overloadInstance.type;
           let originalType = instance.type;
@@ -1453,10 +1473,15 @@ export class Compiler extends DiagnosticEmitter {
         }
       }
 
-      this.compileFunctionBody(instance, stmts);
-      if (!flow.is(FlowFlags.TERMINATES)) {
-        this.performAutoreleases(flow, stmts);
-        this.finishAutoreleases(flow, stmts);
+      let body: ExpressionRef;
+      if (this.compileFunctionBody(instance, stmts)) {
+        if (!flow.is(FlowFlags.TERMINATES)) {
+          this.performAutoreleases(flow, stmts);
+          this.finishAutoreleases(flow, stmts);
+        }
+        body = module.flatten(stmts, instance.signature.returnType.toNativeType());
+      } else {
+        body = module.unreachable();
       }
       this.currentFlow = previousFlow;
 
@@ -1509,8 +1534,8 @@ export class Compiler extends DiagnosticEmitter {
     /** Function to compile. */
     instance: Function,
     /** Target array of statements also being returned. Creates a new array if omitted. */
-    stmts: ExpressionRef[] | null = null
-  ): ExpressionRef[] {
+    stmts: ExpressionRef[]
+  ): bool {
     var module = this.module;
     var bodyNode = assert(instance.prototype.bodyNode);
     var returnType = instance.signature.returnType;
@@ -1607,9 +1632,10 @@ export class Compiler extends DiagnosticEmitter {
         DiagnosticCode.A_function_whose_declared_type_is_not_void_must_return_a_value,
         instance.prototype.functionTypeNode.returnType.range
       );
+      return false; // not recoverable
     }
 
-    return stmts;
+    return true;
   }
 
   // === Classes ==================================================================================
@@ -6133,9 +6159,9 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.PROPERTY: { // instance property
         let propertyInstance = <Property>target;
-        assert(propertyInstance.parent.kind == ElementKind.CLASS);
-        let classInstance = <Class>propertyInstance.parent;
-        assert(classInstance.kind == ElementKind.CLASS);
+        let propertyInstanceParent = propertyInstance.parent;
+        assert(propertyInstanceParent.kind == ElementKind.CLASS || propertyInstanceParent.kind == ElementKind.INTERFACE);
+        let classInstance = <Class>propertyInstanceParent;
         let setterInstance = propertyInstance.setterInstance;
         if (!setterInstance) {
           this.error(

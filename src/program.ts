@@ -1171,8 +1171,15 @@ export class Program extends DiagnosticEmitter {
                 thisMember.kind == ElementKind.FUNCTION_PROTOTYPE &&
                 baseMember.kind == ElementKind.FUNCTION_PROTOTYPE
               ) {
-                baseMember.set(CommonFlags.VIRTUAL);
+                let thisMethod = <FunctionPrototype>thisMember;
                 let baseMethod = <FunctionPrototype>baseMember;
+                if (!thisMethod.visibilityEquals(baseMethod)) {
+                  this.errorRelated(
+                    DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+                    thisMethod.identifierNode.range, baseMethod.identifierNode.range
+                  );
+                }
+                baseMember.set(CommonFlags.VIRTUAL);
                 let overloads = baseMethod.overloads;
                 if (!overloads) baseMethod.overloads = overloads = new Set();
                 overloads.add(<FunctionPrototype>thisMember);
@@ -1183,11 +1190,58 @@ export class Program extends DiagnosticEmitter {
                     baseMethodInstance.set(CommonFlags.VIRTUAL);
                   }
                 }
+              } else if (
+                thisMember.kind == ElementKind.PROPERTY_PROTOTYPE &&
+                baseMember.kind == ElementKind.PROPERTY_PROTOTYPE
+              ) {
+                let thisProperty = <PropertyPrototype>thisMember;
+                let baseProperty = <PropertyPrototype>baseMember;
+                if (!thisProperty.visibilityEquals(baseProperty)) {
+                  this.errorRelated(
+                    DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+                    thisProperty.identifierNode.range, baseProperty.identifierNode.range
+                  );
+                }
+                baseProperty.set(CommonFlags.VIRTUAL);
+                let baseGetter = baseProperty.getterPrototype;
+                if (baseGetter) {
+                  baseGetter.set(CommonFlags.VIRTUAL);
+                  let thisGetter = thisProperty.getterPrototype;
+                  if (thisGetter) {
+                    let overloads = baseGetter.overloads;
+                    if (!overloads) baseGetter.overloads = overloads = new Set();
+                    overloads.add(thisGetter);
+                  }
+                  let baseGetterInstances = baseGetter.instances;
+                  if (baseGetterInstances) {
+                    for (let _values = Map_values(baseGetterInstances), a = 0, b = _values.length; a < b; ++a) {
+                      let baseGetterInstance = _values[a];
+                      baseGetterInstance.set(CommonFlags.VIRTUAL);
+                    }
+                  }
+                }
+                let baseSetter = baseProperty.setterPrototype;
+                if (baseSetter !== null && thisProperty.setterPrototype !== null) {
+                  baseSetter.set(CommonFlags.VIRTUAL);
+                  let thisSetter = thisProperty.setterPrototype;
+                  if (thisSetter) {
+                    let overloads = baseSetter.overloads;
+                    if (!overloads) baseSetter.overloads = overloads = new Set();
+                    overloads.add(thisSetter);
+                  }
+                  let baseSetterInstances = baseSetter.instances;
+                  if (baseSetterInstances) {
+                    for (let _values = Map_values(baseSetterInstances), a = 0, b = _values.length; a < b; ++a) {
+                      let baseSetterInstance = _values[a];
+                      baseSetterInstance.set(CommonFlags.VIRTUAL);
+                    }
+                  }
+                }
               } else {
                 this.errorRelated(
                   DiagnosticCode.Duplicate_identifier_0,
-                  (<DeclaredElement>thisMember).identifierNode.range,
-                  (<DeclaredElement>baseMember).identifierNode.range
+                  thisMember.identifierNode.range,
+                  baseMember.identifierNode.range
                 );
               }
             }
@@ -2509,6 +2563,23 @@ export abstract class Element {
     return true;
   }
 
+  /** Checks if this element is public, explicitly or implicitly. */
+  get isPublic(): bool {
+    return !this.isAny(CommonFlags.PRIVATE | CommonFlags.PROTECTED);
+  }
+
+  /** Checks if this element is implicitly public, i.e. not explicitly declared to be. */
+  get isImplicitlyPublic(): bool {
+    return this.isPublic && !this.is(CommonFlags.PUBLIC);
+  }
+
+  /** Checks if the visibility of this element equals the specified. */
+  visibilityEquals(other: Element): bool {
+    if (this.isPublic == other.isPublic) return true;
+    const vis = CommonFlags.PRIVATE | CommonFlags.PROTECTED;
+    return (this.flags & vis) == (other.flags & vis);
+  }
+
   /** Returns a string representation of this element. */
   toString(): string {
     return this.internalName + ", kind=" + this.kind.toString();
@@ -2563,9 +2634,30 @@ export abstract class DeclaredElement extends Element {
     return this.declaration.name;
   }
 
+  /** Gets the signature node, if applicable, otherwise the identifier node. */
+  get signatureOrIdentifierNode(): Node {
+    var declaration = this.declaration;
+    if (declaration.kind == NodeKind.FUNCTIONDECLARATION || declaration.kind == NodeKind.METHODDECLARATION) {
+      return (<FunctionDeclaration>declaration).signature;
+    }
+    return declaration.name;
+  }
+
   /** Gets the assiciated decorator nodes. */
   get decoratorNodes(): DecoratorNode[] | null {
     return this.declaration.decorators;
+  }
+
+  /** Checks if this element is a compatible override of the specified. */
+  isCompatibleOverride(base: DeclaredElement): bool {
+    var self: DeclaredElement = this; // TS
+    if (self.kind != base.kind) return false;
+    switch (self.kind) {
+      case ElementKind.FUNCTION: {
+        return (<Function>self).signature.equals((<Function>base).signature);
+      }
+    }
+    return false;
   }
 }
 
@@ -3483,11 +3575,13 @@ export class Property extends VariableLikeElement {
       ElementKind.PROPERTY,
       prototype.name,
       parent,
-      prototype.program.makeNativeVariableDeclaration(
-        prototype.name,
+      Node.createVariableDeclaration(
+        prototype.identifierNode,
+        null, null, null,
         prototype.is(CommonFlags.INSTANCE)
           ? CommonFlags.INSTANCE
-          : CommonFlags.NONE
+          : CommonFlags.NONE,
+        prototype.identifierNode.range
       )
     );
     this.prototype = prototype;
@@ -3540,7 +3634,7 @@ export class IndexSignature extends TypedElement {
 export class ClassPrototype extends DeclaredElement {
 
   /** Instance member prototypes. */
-  instanceMembers: Map<string,Element> | null = null;
+  instanceMembers: Map<string,DeclaredElement> | null = null;
   /** Base class prototype, if applicable. */
   basePrototype: ClassPrototype | null = null;
   /** Interface prototypes, if applicable. */

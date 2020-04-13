@@ -41,6 +41,7 @@ export enum DiagnosticCode {
   Expression_cannot_be_represented_by_a_type = 225,
   Expression_resolves_to_unusual_type_0 = 226,
   Function_0_is_virtual_and_will_not_be_inlined = 227,
+  Property_0_only_has_a_setter_and_is_missing_a_getter = 228,
   Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -125,11 +126,14 @@ export enum DiagnosticCode {
   Operator_0_cannot_be_applied_to_types_1_and_2 = 2365,
   A_super_call_must_be_the_first_statement_in_the_constructor = 2376,
   Constructors_for_derived_classes_must_contain_a_super_call = 2377,
+  Getter_and_setter_accessors_do_not_agree_in_visibility = 2379,
   _get_and_set_accessor_must_have_the_same_type = 2380,
+  Overload_signatures_must_all_be_public_private_or_protected = 2385,
   Constructor_implementation_is_missing = 2390,
   Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
   Multiple_constructor_implementations_are_not_allowed = 2392,
   Duplicate_function_implementation = 2393,
+  This_overload_signature_is_not_compatible_with_its_implementation_signature = 2394,
   Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
   A_class_can_only_implement_an_interface = 2422,
   A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
@@ -139,6 +143,7 @@ export enum DiagnosticCode {
   In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
   _0_is_referenced_directly_or_indirectly_in_its_own_base_expression = 2506,
+  Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_2 = 2515,
   Object_is_possibly_null = 2531,
   Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
   The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
@@ -198,6 +203,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 225: return "Expression cannot be represented by a type.";
     case 226: return "Expression resolves to unusual type '{0}'.";
     case 227: return "Function '{0}' is virtual and will not be inlined.";
+    case 228: return "Property '{0}' only has a setter and is missing a getter.";
     case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";
@@ -282,11 +288,14 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2365: return "Operator '{0}' cannot be applied to types '{1}' and '{2}'.";
     case 2376: return "A 'super' call must be the first statement in the constructor.";
     case 2377: return "Constructors for derived classes must contain a 'super' call.";
+    case 2379: return "Getter and setter accessors do not agree in visibility.";
     case 2380: return "'get' and 'set' accessor must have the same type.";
+    case 2385: return "Overload signatures must all be public, private or protected.";
     case 2390: return "Constructor implementation is missing.";
     case 2391: return "Function implementation is missing or not immediately following the declaration.";
     case 2392: return "Multiple constructor implementations are not allowed.";
     case 2393: return "Duplicate function implementation.";
+    case 2394: return "This overload signature is not compatible with its implementation signature.";
     case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
     case 2422: return "A class can only implement an interface.";
     case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
@@ -296,6 +305,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2474: return "In 'const' enum declarations member initializer must be constant expression.";
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
     case 2506: return "'{0}' is referenced directly or indirectly in its own base expression.";
+    case 2515: return "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from '{2}'.";
     case 2531: return "Object is possibly 'null'.";
     case 2540: return "Cannot assign to '{0}' because it is a constant or a read-only property.";
     case 2541: return "The target of an assignment must be a variable or a property access.";

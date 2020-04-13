@@ -37,7 +37,8 @@ import {
   FunctionTarget,
   IndexSignature,
   isTypedElement,
-  InterfacePrototype
+  InterfacePrototype,
+  DeclaredElement
 } from "./program";
 
 import {
@@ -3005,19 +3006,64 @@ export class Resolver extends DiagnosticEmitter {
     var instanceMembers = instance.members;
     if (!instanceMembers) instance.members = instanceMembers = new Map();
 
+    var pending = this.resolveClassPending;
+    var unimplemented = new Map<string,DeclaredElement>();
+
+    // Alias interface members
+    var interfaces = instance.interfaces;
+    if (interfaces) {
+      for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
+        let iface = _values[i];
+        assert(!pending.includes(iface));
+        let ifaceMembers = iface.members;
+        if (ifaceMembers) {
+          for (let _keys = Map_keys(ifaceMembers), i = 0, k = _keys.length; i < k; ++i) {
+            let memberName = unchecked(_keys[i]);
+            let member = assert(ifaceMembers.get(memberName));
+            if (instanceMembers.has(memberName)) {
+              let existing = assert(instanceMembers.get(memberName));
+              if (!member.isCompatibleOverride(existing)) {
+                this.errorRelated(
+                  DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
+                  member.signatureOrIdentifierNode.range, existing.signatureOrIdentifierNode.range
+                );
+                continue;
+              }
+            }
+            instanceMembers.set(memberName, member);
+            unimplemented.set(memberName, member);
+          }
+        }
+      }
+    }
+
     // Alias base members
-    var pendingClasses = this.resolveClassPending;
     var memoryOffset: u32 = 0;
     var base = instance.base;
     if (base) {
-      assert(!pendingClasses.includes(base));
+      assert(!pending.includes(base));
       let baseMembers = base.members;
       if (baseMembers) {
         // TODO: for (let [baseMemberName, baseMember] of baseMembers) {
         for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
-          let baseMemberName = unchecked(_keys[i]);
-          let baseMember = assert(baseMembers.get(baseMemberName));
-          instanceMembers.set(baseMemberName, baseMember);
+          let memberName = unchecked(_keys[i]);
+          let member = assert(baseMembers.get(memberName));
+          if (instanceMembers.has(memberName)) {
+            let existing = assert(instanceMembers.get(memberName));
+            if (!member.isCompatibleOverride(existing)) {
+              this.errorRelated(
+                DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
+                member.signatureOrIdentifierNode.range, existing.signatureOrIdentifierNode.range
+              );
+              continue;
+            }
+          }
+          instanceMembers.set(memberName, member);
+          if (member.is(CommonFlags.ABSTRACT)) {
+            unimplemented.set(memberName, member);
+          } else {
+            unimplemented.delete(memberName);
+          }
         }
       }
       memoryOffset = base.nextMemoryOffset;
@@ -3026,10 +3072,12 @@ export class Resolver extends DiagnosticEmitter {
     // Resolve instance members
     var prototype = instance.prototype;
     var instanceMemberPrototypes = prototype.instanceMembers;
+    var properties = new Array<Property>();
     if (instanceMemberPrototypes) {
       // TODO: for (let member of instanceMemberPrototypes.values()) {
       for (let _values = Map_values(instanceMemberPrototypes), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
+        let memberName = member.name;
         switch (member.kind) {
 
           case ElementKind.FIELD_PROTOTYPE: {
@@ -3071,7 +3119,7 @@ export class Resolver extends DiagnosticEmitter {
             if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
             fieldInstance.memoryOffset = memoryOffset;
             memoryOffset += fieldType.byteSize;
-            instance.add(member.name, fieldInstance); // reports
+            instance.add(memberName, fieldInstance); // reports
             break;
           }
           case ElementKind.FUNCTION_PROTOTYPE: {
@@ -3082,6 +3130,7 @@ export class Resolver extends DiagnosticEmitter {
           case ElementKind.PROPERTY_PROTOTYPE: {
             let propertyPrototype = <PropertyPrototype>member;
             let propertyInstance = new Property(propertyPrototype, instance);
+            properties.push(propertyInstance);
             let getterPrototype = propertyPrototype.getterPrototype;
             if (getterPrototype) {
               let getterInstance = this.resolveFunction(
@@ -3116,24 +3165,63 @@ export class Resolver extends DiagnosticEmitter {
           }
           default: assert(false);
         }
+        if (!member.is(CommonFlags.ABSTRACT)) {
+          unimplemented.delete(memberName);
+        }
       }
     }
 
-    // Finalize memory offset
-    instance.nextMemoryOffset = memoryOffset;
-
-    // Link _own_ constructor if present
-    {
-      let ctorPrototype = instance.lookupInSelf(CommonNames.constructor);
-      if (ctorPrototype !== null && ctorPrototype.parent === instance) {
-        assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-        let ctorInstance = this.resolveFunction(
-          <FunctionPrototype>ctorPrototype,
-          null,
-          assert(instance.contextualTypeArguments),
-          reportMode
+    // Check that property getters and setters match
+    for (let i = 0, k = properties.length; i < k; ++i) {
+      let property = properties[i];
+      let propertyGetter = property.getterInstance;
+      if (!propertyGetter) {
+        this.error(
+          DiagnosticCode.Property_0_only_has_a_setter_and_is_missing_a_getter,
+          property.identifierNode.range, property.name
         );
-        if (ctorInstance) instance.constructorInstance = <Function>ctorInstance;
+      } else {
+        let propertySetter = property.setterInstance;
+        if (propertySetter !== null && !propertyGetter.visibilityEquals(propertySetter)) {
+          this.errorRelated(
+            DiagnosticCode.Getter_and_setter_accessors_do_not_agree_in_visibility,
+            propertyGetter.identifierNode.range, propertySetter.identifierNode.range
+          );
+        }
+      }
+    }
+
+    if (instance.kind != ElementKind.INTERFACE) {
+
+      // Check that all required members are implemented
+      if (!instance.is(CommonFlags.ABSTRACT) && unimplemented.size > 0) {
+        for (let _keys = Map_keys(unimplemented), i = 0, k = _keys.length; i < k; ++i) {
+          let memberName = _keys[i];
+          let member = assert(unimplemented.get(memberName));
+          this.errorRelated(
+            DiagnosticCode.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_2,
+            instance.identifierNode.range, member.identifierNode.range,
+            instance.internalName, memberName, member.parent.internalName
+          );
+        }
+      }
+
+      // Finalize memory offset
+      instance.nextMemoryOffset = memoryOffset;
+
+      // Link _own_ constructor if present
+      {
+        let ctorPrototype = instance.lookupInSelf(CommonNames.constructor);
+        if (ctorPrototype !== null && ctorPrototype.parent === instance) {
+          assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          let ctorInstance = this.resolveFunction(
+            <FunctionPrototype>ctorPrototype,
+            null,
+            assert(instance.contextualTypeArguments),
+            reportMode
+          );
+          if (ctorInstance) instance.constructorInstance = <Function>ctorInstance;
+        }
       }
     }
 
@@ -3205,18 +3293,18 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Remove this class from pending
-    var pendingIndex = pendingClasses.indexOf(instance);
+    var pendingIndex = pending.indexOf(instance);
     assert(~pendingIndex); // must be pending
-    pendingClasses.splice(pendingIndex, 1);
+    pending.splice(pendingIndex, 1);
 
     // Finish derived classes that we postponed in `resolveClass` due to the
     // base class still being pending, again triggering `finishResolveClass`
     // of any classes derived from those classes, ultimately leading to all
     // pending classes being resolved.
     var derivedPendingClasses = new Array<Class>();
-    for (let i = 0, k = pendingClasses.length; i < k; ++i) {
-      let pending = pendingClasses[i];
-      if (instance == pending.base) derivedPendingClasses.push(pending);
+    for (let i = 0, k = pending.length; i < k; ++i) {
+      let other = pending[i];
+      if (instance == other.base) derivedPendingClasses.push(other);
     }
     for (let i = 0, k = derivedPendingClasses.length; i < k; ++i) {
       this.finishResolveClass(derivedPendingClasses[i], reportMode);
