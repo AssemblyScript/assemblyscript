@@ -493,6 +493,64 @@ export class Array<T> {
     return <string>unreachable();
   }
 
+  flat(): T {
+    if (!isArray<T>()) {
+      ERROR("Cannot call flat() on Array<T> where T is not an Array.");
+    }
+    // Get the length and data start values
+    var length = this.length_;
+    var selfDataStart = this.dataStart;
+
+    // calculate the end size with an initial pass
+    var size = 0;
+    for (let i = 0; i < length; i++) {
+      let child = load<usize>(selfDataStart + (i << alignof<T>()));
+      size += child == 0 ? 0 : load<i32>(child, offsetof<T>("length_"));
+    }
+
+    // calculate the byteLength of the resulting backing ArrayBuffer
+    var byteLength = <usize>size << usize(alignof<valueof<T>>());
+    var dataStart = __alloc(byteLength, idof<ArrayBuffer>());
+
+    // create the return value and initialize it
+    var result = __alloc(offsetof<T>(), idof<T>());
+    store<i32>(result, size, offsetof<T>("length_"));
+
+    // byteLength, dataStart, and buffer are all readonly
+    store<i32>(result, byteLength, offsetof<T>("byteLength"));
+    store<usize>(result, dataStart, offsetof<T>("dataStart"));
+    store<usize>(result, __retain(dataStart), offsetof<T>("buffer"));
+
+    // set the elements
+    var resultOffset: usize = 0;
+    for (let i = 0; i < length; i++) { // for each child
+      let child = load<usize>(selfDataStart + (<usize>i << alignof<T>()));
+
+      // ignore null arrays
+      if (child == 0) continue;
+
+      // copy the underlying buffer data to the result buffer
+      let childDataLength = load<i32>(child, offsetof<T>("byteLength"));
+      memory.copy(
+        dataStart + resultOffset,
+        load<usize>(child, offsetof<T>("dataStart")),
+        <usize>childDataLength
+      );
+
+      // advance the result length
+      resultOffset += childDataLength;
+    }
+
+    // if the `valueof<T>` type is managed, we must call __retain() on each reference
+    if (isManaged<valueof<T>>()) {
+      for (let i = 0; i < size; i++) {
+        __retain(load<usize>(dataStart + (<usize>i << usize(alignof<valueof<T>>()))));
+      }
+    }
+
+    return changetype<T>(result);
+  }
+
   toString(): string {
     return this.join();
   }
