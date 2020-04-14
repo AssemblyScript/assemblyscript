@@ -1023,7 +1023,7 @@ declare module "assemblyscript/src/ast" {
         static createDoStatement(statement: Statement, condition: Expression, range: Range): DoStatement;
         static createEmptyStatement(range: Range): EmptyStatement;
         static createEnumDeclaration(name: IdentifierExpression, members: EnumValueDeclaration[], decorators: DecoratorNode[] | null, flags: CommonFlags, range: Range): EnumDeclaration;
-        static createEnumValueDeclaration(name: IdentifierExpression, value: Expression | null, flags: CommonFlags, range: Range): EnumValueDeclaration;
+        static createEnumValueDeclaration(name: IdentifierExpression, initializer: Expression | null, flags: CommonFlags, range: Range): EnumValueDeclaration;
         static createExportStatement(members: ExportMember[] | null, path: StringLiteralExpression | null, isDeclare: boolean, range: Range): ExportStatement;
         static createExportDefaultStatement(declaration: DeclarationStatement, range: Range): ExportDefaultStatement;
         static createExportImportStatement(name: IdentifierExpression, externalName: IdentifierExpression, range: Range): ExportImportStatement;
@@ -1483,8 +1483,6 @@ declare module "assemblyscript/src/ast" {
     }
     /** Represents a value of an `enum` declaration. */
     export class EnumValueDeclaration extends VariableLikeDeclarationStatement {
-        /** Value expression. */
-        value: Expression | null;
     }
     /** Represents an `export import` statement of an interface. */
     export class ExportImportStatement extends Statement {
@@ -3007,14 +3005,11 @@ declare module "assemblyscript/src/parser" {
      * @license Apache-2.0
      */
     import { CommonFlags } from "assemblyscript/src/common";
-    import { Program } from "assemblyscript/src/program";
     import { Tokenizer, CommentHandler } from "assemblyscript/src/tokenizer";
-    import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
+    import { DiagnosticEmitter, DiagnosticMessage } from "assemblyscript/src/diagnostics";
     import { Source, TypeNode, TypeName, FunctionTypeNode, Expression, ClassExpression, FunctionExpression, Statement, BlockStatement, BreakStatement, ClassDeclaration, ContinueStatement, DeclarationStatement, DecoratorNode, DoStatement, EnumDeclaration, EnumValueDeclaration, ExportImportStatement, ExportMember, ExportStatement, ExpressionStatement, ForOfStatement, FunctionDeclaration, IfStatement, ImportDeclaration, ImportStatement, IndexSignatureDeclaration, NamespaceDeclaration, ParameterNode, ReturnStatement, SwitchCase, SwitchStatement, ThrowStatement, TryStatement, TypeDeclaration, TypeParameterNode, VariableStatement, VariableDeclaration, VoidStatement, WhileStatement } from "assemblyscript/src/ast";
     /** Parser interface. */
     export class Parser extends DiagnosticEmitter {
-        /** Program being created. */
-        program: Program;
         /** Source file names to be requested next. */
         backlog: string[];
         /** Source file names already seen, that is processed or backlogged. */
@@ -3027,8 +3022,10 @@ declare module "assemblyscript/src/parser" {
         currentSource: Source;
         /** Dependency map **/
         dependees: Map<string, Source>;
+        /** An array of parsed sources. */
+        sources: Source[];
         /** Constructs a new parser. */
-        constructor(program: Program);
+        constructor(diagnostics?: DiagnosticMessage[] | null, sources?: Source[] | null);
         /** Parses a file and adds its definitions to the program. */
         parseFile(
         /** Source text of the file. */
