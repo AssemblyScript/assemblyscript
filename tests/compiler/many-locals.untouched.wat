@@ -10,7 +10,7 @@
  (export "testI32" (func $many-locals/testI32))
  (export "testI8" (func $many-locals/testI8))
  (start $~start)
- (func $many-locals/testI32 (; 1 ;) (param $0 i32) (result i32)
+ (func $many-locals/testI32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -397,7 +397,7 @@
   local.set $128
   local.get $128
  )
- (func $many-locals/testI8 (; 2 ;) (param $0 i32) (result i32)
+ (func $many-locals/testI8 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -788,7 +788,7 @@
   i32.const 24
   i32.shr_s
  )
- (func $start:many-locals (; 3 ;)
+ (func $start:many-locals
   i32.const 42
   call $many-locals/testI32
   i32.const 42
@@ -816,7 +816,7 @@
    unreachable
   end
  )
- (func $~start (; 4 ;)
+ (func $~start
   call $start:many-locals
  )
 )

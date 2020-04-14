@@ -8,7 +8,7 @@ const srcfile = path.join(__dirname, "..", "src", "module.ts");
 var src = fs.readFileSync(srcfile, "utf8");
 
 binaryen.ready.then(() => {
-  src = src.replace(/enum (\w+) \{([^}]*)\}/g, function($0) {
+  src = src.replace(/(?:enum|namespace) (\w+) \{([^}]*)\}/g, function($0) {
     return $0.replace(/(\w+)[ ]+=[ ]+([^,;\n]+)/g, function($0, key, val) {
       var match = val.match(/\b(_Binaryen\w+)\b/);
       if (match) {

@@ -7,7 +7,7 @@
  (data (i32.const 1024) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00s\00w\00i\00t\00c\00h\00.\00t\00s")
  (export "memory" (memory $0))
  (start $~start)
- (func $switch/doSwitch (; 1 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitch (param $0 i32) (result i32)
   block $case4|0
    block $case2|0
     local.get $0
@@ -35,7 +35,7 @@
   end
   i32.const 23
  )
- (func $switch/doSwitchDefaultOmitted (; 2 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitchDefaultOmitted (param $0 i32) (result i32)
   block $break|0
    block $case2|0
     local.get $0
@@ -60,7 +60,7 @@
   end
   i32.const 0
  )
- (func $switch/doSwitchBreakCase (; 3 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitchBreakCase (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.ne
@@ -70,7 +70,7 @@
   end
   i32.const 1
  )
- (func $switch/doSwitchBreakDefault (; 4 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitchBreakDefault (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.eq
@@ -80,7 +80,7 @@
   end
   i32.const 2
  )
- (func $start:switch (; 5 ;)
+ (func $start:switch
   i32.const 0
   call $switch/doSwitch
   if
@@ -394,7 +394,7 @@
    unreachable
   end
  )
- (func $~start (; 6 ;)
+ (func $~start
   call $start:switch
  )
 )

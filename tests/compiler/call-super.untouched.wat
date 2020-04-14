@@ -13,7 +13,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 60))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -67,7 +67,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -120,10 +120,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $call-super/A#constructor (; 4 ;) (param $0 i32) (result i32)
+ (func $call-super/A#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -151,7 +151,7 @@
   end
   local.get $0
  )
- (func $call-super/B#constructor (; 5 ;) (param $0 i32) (result i32)
+ (func $call-super/B#constructor (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -194,10 +194,10 @@
   end
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 6 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $call-super/test1 (; 7 ;)
+ (func $call-super/test1
   (local $0 i32)
   i32.const 0
   call $call-super/B#constructor
@@ -231,7 +231,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $call-super/C#constructor (; 8 ;) (param $0 i32) (result i32)
+ (func $call-super/C#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -246,7 +246,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/D#constructor (; 9 ;) (param $0 i32) (result i32)
+ (func $call-super/D#constructor (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    local.get $0
@@ -289,7 +289,7 @@
   end
   local.get $0
  )
- (func $call-super/test2 (; 10 ;)
+ (func $call-super/test2
   (local $0 i32)
   i32.const 0
   call $call-super/D#constructor
@@ -323,7 +323,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $call-super/E#constructor (; 11 ;) (param $0 i32) (result i32)
+ (func $call-super/E#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -351,7 +351,7 @@
   end
   local.get $0
  )
- (func $call-super/F#constructor (; 12 ;) (param $0 i32) (result i32)
+ (func $call-super/F#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -369,7 +369,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test3 (; 13 ;)
+ (func $call-super/test3
   (local $0 i32)
   i32.const 0
   call $call-super/F#constructor
@@ -403,7 +403,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $call-super/G#constructor (; 14 ;) (param $0 i32) (result i32)
+ (func $call-super/G#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -418,7 +418,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/H#constructor (; 15 ;) (param $0 i32) (result i32)
+ (func $call-super/H#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -436,7 +436,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test4 (; 16 ;)
+ (func $call-super/test4
   (local $0 i32)
   i32.const 0
   call $call-super/H#constructor
@@ -470,7 +470,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $call-super/I#constructor (; 17 ;) (param $0 i32) (result i32)
+ (func $call-super/I#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -485,7 +485,7 @@
   i32.store
   local.get $0
  )
- (func $call-super/J#constructor (; 18 ;) (param $0 i32) (result i32)
+ (func $call-super/J#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -503,7 +503,7 @@
   i32.store offset=4
   local.get $0
  )
- (func $call-super/test5 (; 19 ;)
+ (func $call-super/test5
   (local $0 i32)
   i32.const 0
   call $call-super/J#constructor
@@ -537,7 +537,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $start:call-super (; 20 ;)
+ (func $start:call-super
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -554,7 +554,7 @@
   call $call-super/test4
   call $call-super/test5
  )
- (func $~start (; 21 ;)
+ (func $~start
   call $start:call-super
  )
 )

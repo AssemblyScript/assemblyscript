@@ -11,7 +11,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (export "memory" (memory $0))
  (export "computeLine" (func $../../examples/mandelbrot/assembly/index/computeLine))
- (func $~lib/math/NativeMath.log (; 0 ;) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i64)
   (local $3 f64)
@@ -329,7 +329,7 @@
   end
   return
  )
- (func $~lib/math/NativeMath.log2 (; 1 ;) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.log2 (param $0 f64) (result f64)
   (local $1 f64)
   (local $2 i64)
   (local $3 f64)
@@ -672,7 +672,7 @@
   end
   return
  )
- (func $../../examples/mandelbrot/assembly/index/computeLine (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $../../examples/mandelbrot/assembly/index/computeLine (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 f64)
   (local $5 f64)
   (local $6 i32)

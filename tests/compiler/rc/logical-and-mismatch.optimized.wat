@@ -20,7 +20,7 @@
  (global $rc/logical-and-mismatch/gloRef (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -182,7 +182,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -461,7 +461,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -575,7 +575,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 8 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -662,7 +662,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/searchBlock (; 9 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   nop
@@ -720,7 +720,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 10 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -892,7 +892,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $1
  )
- (func $~lib/rt/pure/__retain (; 11 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -943,14 +943,14 @@
   end
   local.get $0
  )
- (func $rc/logical-and-mismatch/Ref#constructor (; 12 ;) (result i32)
+ (func $rc/logical-and-mismatch/Ref#constructor (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/pure/__release (; 13 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1184
   i32.gt_u
@@ -961,7 +961,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~start (; 14 ;)
+ (func $~start
   (local $0 i32)
   call $rc/logical-and-mismatch/Ref#constructor
   global.set $rc/logical-and-mismatch/gloRef
@@ -998,7 +998,7 @@
   global.get $rc/logical-and-mismatch/gloRef
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/decrement (; 15 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

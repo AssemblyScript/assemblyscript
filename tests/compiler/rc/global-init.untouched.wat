@@ -20,10 +20,10 @@
  (global $~lib/heap/__heap_base i32 (i32.const 128))
  (export "memory" (memory $0))
  (start $~start)
- (func $rc/global-init/getRef (; 4 ;) (result i32)
+ (func $rc/global-init/getRef (result i32)
   i32.const 32
  )
- (func $~lib/rt/pure/increment (; 5 ;) (param $0 i32)
+ (func $~lib/rt/pure/increment (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -68,7 +68,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -80,7 +80,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/pure/__release (; 7 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -91,7 +91,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $start:rc/global-init (; 8 ;)
+ (func $start:rc/global-init
   (local $0 i32)
   (local $1 i32)
   call $rc/global-init/getRef
@@ -127,10 +127,10 @@
   local.get $1
   global.set $rc/global-init/b
  )
- (func $~start (; 9 ;)
+ (func $~start
   call $start:rc/global-init
  )
- (func $~lib/rt/tlsf/removeBlock (; 10 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -340,7 +340,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 11 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -690,7 +690,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/freeBlock (; 12 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -706,7 +706,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/pure/decrement (; 13 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -783,7 +783,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 14 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -807,7 +807,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 15 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4

@@ -4,7 +4,7 @@
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (export "testInherit" (func $continue/testInherit))
- (func $continue/testInherit (; 0 ;) (param $0 i32)
+ (func $continue/testInherit (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 0

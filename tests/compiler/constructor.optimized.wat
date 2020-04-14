@@ -2,21 +2,10 @@
  (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (memory $0 0)
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $constructor/emptyCtor (mut i32) (i32.const 0))
- (global $constructor/emptyCtorWithFieldInit (mut i32) (i32.const 0))
- (global $constructor/emptyCtorWithFieldNoInit (mut i32) (i32.const 0))
- (global $constructor/none (mut i32) (i32.const 0))
- (global $constructor/justFieldInit (mut i32) (i32.const 0))
- (global $constructor/justFieldNoInit (mut i32) (i32.const 0))
- (global $constructor/ctorReturns (mut i32) (i32.const 0))
- (global $constructor/ctorConditionallyReturns (mut i32) (i32.const 0))
- (global $constructor/ctorAllocates (mut i32) (i32.const 0))
- (global $constructor/ctorConditionallyAllocates (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -100,72 +89,50 @@
   i32.store offset=12
   local.get $4
  )
- (func $~start (; 1 ;)
-  (local $0 i32)
-  i32.const 1024
-  global.set $~lib/rt/stub/startOffset
+ (func $~start
   i32.const 1024
   global.set $~lib/rt/stub/offset
   i32.const 0
   i32.const 3
   call $~lib/rt/stub/__alloc
-  global.set $constructor/emptyCtor
+  drop
   i32.const 4
   i32.const 4
   call $~lib/rt/stub/__alloc
-  local.tee $0
   i32.const 1
   i32.store
-  local.get $0
-  global.set $constructor/emptyCtorWithFieldInit
   i32.const 4
   i32.const 5
   call $~lib/rt/stub/__alloc
-  local.tee $0
   i32.const 0
   i32.store
-  local.get $0
-  global.set $constructor/emptyCtorWithFieldNoInit
   i32.const 0
   i32.const 6
   call $~lib/rt/stub/__alloc
-  global.set $constructor/none
+  drop
   i32.const 4
   i32.const 7
   call $~lib/rt/stub/__alloc
-  local.tee $0
   i32.const 1
   i32.store
-  local.get $0
-  global.set $constructor/justFieldInit
   i32.const 4
   i32.const 8
   call $~lib/rt/stub/__alloc
-  local.tee $0
   i32.const 0
   i32.store
-  local.get $0
-  global.set $constructor/justFieldNoInit
-  i32.const 0
-  global.set $constructor/ctorReturns
-  i32.const 0
-  global.set $constructor/ctorConditionallyReturns
   i32.const 0
   i32.const 11
   call $~lib/rt/stub/__alloc
-  global.set $constructor/ctorAllocates
+  drop
   i32.const 0
   i32.const 12
   call $~lib/rt/stub/__alloc
-  local.tee $0
   i32.eqz
   if
    i32.const 0
    i32.const 12
    call $~lib/rt/stub/__alloc
-   local.set $0
+   drop
   end
-  local.get $0
-  global.set $constructor/ctorConditionallyAllocates
  )
 )

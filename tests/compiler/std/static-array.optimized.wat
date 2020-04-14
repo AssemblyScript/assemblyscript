@@ -25,11 +25,10 @@
  (data (i32.const 1408) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 1456) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
  (data (i32.const 1504) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/array/Array<i32>#__get (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (param $0 i32) (result i32)
   local.get $0
   i32.const 1084
   i32.load
@@ -50,7 +49,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -92,7 +91,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/memory/memory.copy (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -265,7 +264,7 @@
    end
   end
  )
- (func $~lib/rt/stub/__realloc (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__realloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -417,7 +416,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $~lib/memory/memory.fill (; 5 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -575,7 +574,7 @@
    end
   end
  )
- (func $~lib/array/ensureSize (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/ensureSize (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -631,7 +630,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i64>#__get (; 7 ;) (param $0 i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (param $0 i32) (result i64)
   local.get $0
   i32.const 1148
   i32.load
@@ -652,7 +651,7 @@
   i32.add
   i64.load
  )
- (func $~lib/array/Array<f32>#__get (; 8 ;) (param $0 i32) (result f32)
+ (func $~lib/array/Array<f32>#__get (param $0 i32) (result f32)
   local.get $0
   i32.const 1212
   i32.load
@@ -673,7 +672,7 @@
   i32.add
   f32.load
  )
- (func $~lib/array/Array<f64>#__get (; 9 ;) (param $0 i32) (result f64)
+ (func $~lib/array/Array<f64>#__get (param $0 i32) (result f64)
   local.get $0
   i32.const 1276
   i32.load
@@ -694,7 +693,7 @@
   i32.add
   f64.load
  )
- (func $start:std/static-array (; 10 ;)
+ (func $start:std/static-array
   i32.const 1084
   i32.load
   i32.const 2
@@ -731,8 +730,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1552
-  global.set $~lib/rt/stub/startOffset
   i32.const 1552
   global.set $~lib/rt/stub/offset
   i32.const 0
@@ -956,7 +953,7 @@
    unreachable
   end
  )
- (func $~start (; 11 ;)
+ (func $~start
   call $start:std/static-array
  )
 )

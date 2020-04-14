@@ -23,7 +23,7 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -185,7 +185,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -464,7 +464,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -578,7 +578,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 8 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -665,7 +665,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/searchBlock (; 9 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   nop
@@ -723,7 +723,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -894,14 +894,14 @@
   call $~lib/rt/rtrace/onalloc
   local.get $2
  )
- (func $~lib/rt/tlsf/__alloc (; 11 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $0 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/__retain (; 12 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -952,7 +952,7 @@
   end
   local.get $0
  )
- (func $managed-cast/Cat#constructor (; 13 ;) (result i32)
+ (func $managed-cast/Cat#constructor (result i32)
   (local $0 i32)
   i32.const 3
   call $~lib/rt/tlsf/__alloc
@@ -967,7 +967,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/pure/__release (; 14 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1276
   i32.gt_u
@@ -978,7 +978,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/rt/__instanceof (; 15 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/__instanceof (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -1008,7 +1008,7 @@
   end
   i32.const 0
  )
- (func $~start (; 16 ;)
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1113,7 +1113,7 @@
   local.get $7
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/decrement (; 17 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

@@ -1,15 +1,11 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (memory $0 0)
- (global $new/ref (mut i32) (i32.const 0))
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $new/gen (mut i32) (i32.const 0))
- (global $new/ref2 (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 0 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -17,18 +13,18 @@
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $3
+  local.tee $4
   i32.const 16
   i32.add
   local.tee $1
   memory.size
-  local.tee $4
+  local.tee $3
   i32.const 16
   i32.shl
   local.tee $2
   i32.gt_u
   if
-   local.get $4
+   local.get $3
    local.get $1
    local.get $2
    i32.sub
@@ -39,7 +35,7 @@
    i32.const 16
    i32.shr_u
    local.tee $2
-   local.get $4
+   local.get $3
    local.get $2
    i32.gt_s
    select
@@ -58,7 +54,7 @@
   end
   local.get $1
   global.set $~lib/rt/stub/offset
-  local.get $3
+  local.get $4
   i32.const 16
   i32.sub
   local.tee $1
@@ -73,36 +69,25 @@
   local.get $1
   i32.const 0
   i32.store offset=12
-  local.get $3
  )
- (func $~start (; 1 ;)
-  i32.const 1024
-  global.set $~lib/rt/stub/startOffset
+ (func $~start
   i32.const 1024
   global.set $~lib/rt/stub/offset
   i32.const 3
   call $~lib/rt/stub/__alloc
-  global.set $new/ref
   i32.const 3
   call $~lib/rt/stub/__alloc
-  global.set $new/ref
   i32.const 3
   call $~lib/rt/stub/__alloc
-  global.set $new/ref
   i32.const 4
   call $~lib/rt/stub/__alloc
-  global.set $new/gen
   i32.const 4
   call $~lib/rt/stub/__alloc
-  global.set $new/gen
   i32.const 5
   call $~lib/rt/stub/__alloc
-  global.set $new/ref2
   i32.const 5
   call $~lib/rt/stub/__alloc
-  global.set $new/ref2
   i32.const 5
   call $~lib/rt/stub/__alloc
-  global.set $new/ref2
  )
 )

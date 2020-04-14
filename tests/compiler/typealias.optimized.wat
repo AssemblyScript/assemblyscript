@@ -3,7 +3,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (export "alias" (func $typealias/alias))
- (func $typealias/alias (; 0 ;) (param $0 i32) (result i32)
+ (func $typealias/alias (param $0 i32) (result i32)
   local.get $0
  )
 )

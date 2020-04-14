@@ -3,7 +3,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (export "testInherit" (func $continue/testInherit))
- (func $continue/testInherit (; 0 ;) (param $0 i32)
+ (func $continue/testInherit (param $0 i32)
   (local $1 i32)
   loop $for-loop|0
    local.get $1

@@ -7,11 +7,10 @@
  (memory $0 1)
  (data (i32.const 1024) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00h\00e\00l\00l\00o\00 \00w\00o\00r\00l\00d")
  (data (i32.const 1072) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -95,7 +94,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/string/String#get:length (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -103,7 +102,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -178,11 +177,9 @@
   end
   i32.const 0
  )
- (func $start:std/object-literal (; 4 ;)
+ (func $start:std/object-literal
   (local $0 i32)
   (local $1 i32)
-  i32.const 1136
-  global.set $~lib/rt/stub/startOffset
   i32.const 1136
   global.set $~lib/rt/stub/offset
   i32.const 8
@@ -282,7 +279,7 @@
    unreachable
   end
  )
- (func $~start (; 5 ;)
+ (func $~start
   call $start:std/object-literal
  )
 )

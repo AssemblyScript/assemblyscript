@@ -22,14 +22,14 @@
  (export "test" (func $class/test))
  (export "testGenericInitializer" (func $class/testGenericInitializer))
  (start $~start)
- (func $class/Animal.add (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $class/Animal.add (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
   global.get $class/Animal.ONE
   i32.add
  )
- (func $class/Animal.sub<f32> (; 2 ;) (param $0 f32) (param $1 f32) (result f32)
+ (func $class/Animal.sub<f32> (param $0 f32) (param $1 f32) (result f32)
   local.get $0
   local.get $1
   f32.sub
@@ -37,7 +37,7 @@
   f32.convert_i32_s
   f32.add
  )
- (func $start:class (; 3 ;)
+ (func $start:class
   global.get $class/Animal.ONE
   drop
   i32.const 1
@@ -49,17 +49,17 @@
   call $class/Animal.sub<f32>
   drop
  )
- (func $~lib/rt/stub/__retain (; 4 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $class/Animal<f64>#instanceAdd (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $class/Animal<f64>#instanceAdd (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $1
   local.get $2
   i32.add
   global.get $class/Animal.ONE
   i32.add
  )
- (func $class/Animal<f64>#instanceSub<f32> (; 6 ;) (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
+ (func $class/Animal<f64>#instanceSub<f32> (param $0 i32) (param $1 f32) (param $2 f32) (result f32)
   local.get $1
   local.get $2
   f32.sub
@@ -67,10 +67,10 @@
   f32.convert_i32_s
   f32.add
  )
- (func $~lib/rt/stub/__release (; 7 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $class/test (; 8 ;) (param $0 i32) (result i32)
+ (func $class/test (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -124,7 +124,7 @@
   call $~lib/rt/stub/__release
   local.get $3
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 9 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -178,7 +178,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -231,7 +231,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/memory/memory.fill (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -440,7 +440,7 @@
    end
   end
  )
- (func $~lib/array/Array<i32>#constructor (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -518,7 +518,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $class/GenericInitializer<i32>#constructor (; 13 ;) (param $0 i32) (result i32)
+ (func $class/GenericInitializer<i32>#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -535,12 +535,12 @@
   i32.store
   local.get $0
  )
- (func $class/testGenericInitializer (; 14 ;)
+ (func $class/testGenericInitializer
   i32.const 0
   call $class/GenericInitializer<i32>#constructor
   call $~lib/rt/stub/__release
  )
- (func $~start (; 15 ;)
+ (func $~start
   call $start:class
   global.get $~lib/heap/__heap_base
   i32.const 15

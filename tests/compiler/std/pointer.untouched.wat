@@ -17,13 +17,13 @@
  (global $std/pointer/buf (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__retain (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 2 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/memory/memory.fill (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -232,7 +232,7 @@
    end
   end
  )
- (func $~lib/util/memory/memcpy (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1256,7 +1256,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1476,7 +1476,7 @@
    end
   end
  )
- (func $start:std/pointer (; 6 ;)
+ (func $start:std/pointer
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2142,7 +2142,7 @@
   local.get $5
   call $~lib/rt/stub/__release
  )
- (func $~start (; 7 ;)
+ (func $~start
   call $start:std/pointer
  )
 )

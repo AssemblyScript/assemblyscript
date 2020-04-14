@@ -10,14 +10,11 @@
  (data (i32.const 1024) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00e\00r\00r\00o\00r")
  (data (i32.const 1056) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00r\00e\00t\00a\00i\00n\00-\00r\00e\00l\00e\00a\00s\00e\00.\00t\00s")
  (table $0 1 funcref)
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $retain-release/REF (mut i32) (i32.const 0))
- (global $retain-release/glo (mut i32) (i32.const 0))
  (global $retain-release/TARGET (mut i32) (i32.const 0))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
+ (export "__setArgumentsLength" (func $retain-release/takeRef))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
@@ -29,7 +26,7 @@
  (export "takeReturnRef" (func $retain-release/takeReturnRef))
  (export "provideReceiveRef" (func $retain-release/receiveRef))
  (export "newRef" (func $retain-release/newRef))
- (export "assignGlobal" (func $retain-release/assignGlobal))
+ (export "assignGlobal" (func $retain-release/receiveRef))
  (export "assignField" (func $retain-release/assignField))
  (export "scopeBlock" (func $retain-release/receiveRef))
  (export "scopeBlockToUninitialized" (func $retain-release/receiveRef))
@@ -57,7 +54,7 @@
  (export "provideRefIndirect" (func $retain-release/provideRefIndirect))
  (export "receiveRefIndirect" (func $retain-release/receiveRefIndirect))
  (export "receiveRefIndirectDrop" (func $retain-release/receiveRefIndirect))
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -141,30 +138,25 @@
   i32.store offset=12
   local.get $4
  )
- (func $retain-release/returnRef (; 2 ;) (result i32)
+ (func $retain-release/returnRef (result i32)
   global.get $retain-release/REF
  )
- (func $retain-release/receiveRef (; 3 ;)
+ (func $retain-release/receiveRef
   nop
  )
- (func $retain-release/takeRef (; 4 ;) (param $0 i32)
+ (func $retain-release/takeRef (param $0 i32)
   nop
  )
- (func $retain-release/takeReturnRef (; 5 ;) (param $0 i32) (result i32)
+ (func $retain-release/takeReturnRef (param $0 i32) (result i32)
   local.get $0
  )
- (func $retain-release/newRef (; 6 ;)
+ (func $retain-release/newRef
   i32.const 0
   i32.const 3
   call $~lib/rt/stub/__alloc
   drop
  )
- (func $retain-release/assignGlobal (; 7 ;)
-  (local $0 i32)
-  global.get $retain-release/REF
-  global.set $retain-release/glo
- )
- (func $retain-release/assignField (; 8 ;)
+ (func $retain-release/assignField
   (local $0 i32)
   (local $1 i32)
   global.get $retain-release/REF
@@ -178,7 +170,7 @@
   local.get $0
   i32.store
  )
- (func $retain-release/scopeForComplex (; 9 ;) (param $0 i32)
+ (func $retain-release/scopeForComplex (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   loop $for-loop|0
@@ -204,7 +196,7 @@
    end
   end
  )
- (func $retain-release/scopeThrow (; 10 ;) (param $0 i32)
+ (func $retain-release/scopeThrow (param $0 i32)
   local.get $0
   if
    i32.const 1040
@@ -215,31 +207,23 @@
    unreachable
   end
  )
- (func $retain-release/scopeUnreachable (; 11 ;) (param $0 i32)
+ (func $retain-release/scopeUnreachable (param $0 i32)
   local.get $0
   if
    unreachable
   end
  )
- (func $~setArgumentsLength (; 12 ;) (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
- )
- (func $retain-release/provideRefIndirect (; 13 ;) (param $0 i32)
-  i32.const 1
-  global.set $~argumentsLength
+ (func $retain-release/provideRefIndirect (param $0 i32)
   global.get $retain-release/REF
   local.get $0
   call_indirect (type $i32_=>_none)
  )
- (func $retain-release/receiveRefIndirect (; 14 ;) (param $0 i32)
-  i32.const 0
-  global.set $~argumentsLength
+ (func $retain-release/receiveRefIndirect (param $0 i32)
   local.get $0
   call_indirect (type $none_=>_i32)
   drop
  )
- (func $~start (; 15 ;)
+ (func $~start
   (local $0 i32)
   global.get $~started
   if
@@ -248,8 +232,6 @@
    i32.const 1
    global.set $~started
   end
-  i32.const 1120
-  global.set $~lib/rt/stub/startOffset
   i32.const 1120
   global.set $~lib/rt/stub/offset
   i32.const 0

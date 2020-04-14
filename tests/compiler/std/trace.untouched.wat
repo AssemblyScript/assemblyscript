@@ -15,7 +15,7 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $start:std/trace (; 1 ;)
+ (func $start:std/trace
   i32.const 32
   i32.const 0
   f64.const 0
@@ -81,7 +81,7 @@
   f64.const 5.5
   call $~lib/builtins/trace
  )
- (func $~start (; 2 ;)
+ (func $~start
   global.get $~started
   if
    return

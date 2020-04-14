@@ -9,12 +9,10 @@
  (memory $0 1)
  (data (i32.const 1024) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00s\00t\00d\00/\00d\00a\00t\00e\00.\00t\00s")
  (global $std/date/creationTime (mut i64) (i64.const 0))
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
- (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/date/date (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:std/date (; 3 ;)
+ (func $start:std/date
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -89,10 +87,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1072
-  global.set $~lib/rt/stub/startOffset
-  i32.const 1072
-  global.set $~lib/rt/stub/offset
   global.get $std/date/creationTime
   local.set $2
   i32.const 1104
@@ -129,8 +123,6 @@
     end
    end
   end
-  i32.const 1104
-  global.set $~lib/rt/stub/offset
   i32.const 1072
   i32.const 16
   i32.store
@@ -183,7 +175,7 @@
    unreachable
   end
  )
- (func $~start (; 4 ;)
+ (func $~start
   call $start:std/date
  )
 )

@@ -17,7 +17,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 140))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -71,7 +71,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -124,10 +124,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $instanceof-class/Parent<i32>#constructor (; 4 ;) (param $0 i32) (result i32)
+ (func $instanceof-class/Parent<i32>#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -139,7 +139,7 @@
   end
   local.get $0
  )
- (func $instanceof-class/Child<i32>#constructor (; 5 ;) (param $0 i32) (result i32)
+ (func $instanceof-class/Child<i32>#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -154,7 +154,7 @@
   local.set $0
   local.get $0
  )
- (func $instanceof-class/Parent<f32>#constructor (; 6 ;) (param $0 i32) (result i32)
+ (func $instanceof-class/Parent<f32>#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -166,7 +166,7 @@
   end
   local.get $0
  )
- (func $instanceof-class/Child<f32>#constructor (; 7 ;) (param $0 i32) (result i32)
+ (func $instanceof-class/Child<f32>#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -181,7 +181,7 @@
   local.set $0
   local.get $0
  )
- (func $start:instanceof-class (; 8 ;)
+ (func $start:instanceof-class
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -210,10 +210,10 @@
    unreachable
   end
  )
- (func $~start (; 9 ;)
+ (func $~start
   call $start:instanceof-class
  )
- (func $~lib/rt/__instanceof (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -253,7 +253,7 @@
   end
   i32.const 0
  )
- (func $instanceof-class/Child~instanceof (; 11 ;) (param $0 i32) (result i32)
+ (func $instanceof-class/Child~instanceof (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if

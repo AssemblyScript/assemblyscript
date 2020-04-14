@@ -1,22 +1,10 @@
 (module
  (type $none_=>_none (func))
  (memory $0 0)
- (global $infer-type/ri (mut i32) (i32.const 0))
- (global $infer-type/rI (mut i64) (i64.const 0))
- (global $infer-type/rf (mut f32) (f32.const 0))
- (global $infer-type/rF (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~start (; 0 ;)
+ (func $~start
   (local $0 i32)
-  i32.const 0
-  global.set $infer-type/ri
-  i64.const 0
-  global.set $infer-type/rI
-  f32.const 0
-  global.set $infer-type/rf
-  f64.const 0
-  global.set $infer-type/rF
   loop $for-loop|0
    local.get $0
    i32.const 10

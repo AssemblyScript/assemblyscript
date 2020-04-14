@@ -18,7 +18,6 @@
  (data (i32.const 1792) "\ae\00\00\00\01\00\00\00\04\00\00\00\ae\00\00\00<\fbW\fbr\fb\8c\fb\a7\fb\c1\fb\dc\fb\f6\fb\11\fc,\fcF\fca\fc{\fc\96\fc\b1\fc\cb\fc\e6\fc\00\fd\1b\fd5\fdP\fdk\fd\85\fd\a0\fd\ba\fd\d5\fd\ef\fd\n\fe%\fe?\feZ\fet\fe\8f\fe\a9\fe\c4\fe\df\fe\f9\fe\14\ff.\ffI\ffc\ff~\ff\99\ff\b3\ff\ce\ff\e8\ff\03\00\1e\008\00S\00m\00\88\00\a2\00\bd\00\d8\00\f2\00\0d\01\'\01B\01\\\01w\01\92\01\ac\01\c7\01\e1\01\fc\01\16\021\02L\02f\02\81\02\9b\02\b6\02\d0\02\eb\02\06\03 \03;\03U\03p\03\8b\03\a5\03\c0\03\da\03\f5\03\0f\04*\04")
  (data (i32.const 1984) "(\00\00\00\01\00\00\00\05\00\00\00(\00\00\00\01\00\00\00\n\00\00\00d\00\00\00\e8\03\00\00\10\'\00\00\a0\86\01\00@B\0f\00\80\96\98\00\00\e1\f5\05\00\ca\9a;")
  (data (i32.const 2048) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
  (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
@@ -29,7 +28,7 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/string/String.UTF8.byteLength (; 2 ;) (result i32)
+ (func $~lib/string/String.UTF8.byteLength (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -110,7 +109,7 @@
   end
   local.get $1
  )
- (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -194,7 +193,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/string/String#get:length (; 4 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -202,7 +201,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String.UTF8.encodeUnsafe (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -374,7 +373,7 @@
   local.get $2
   i32.sub
  )
- (func $~lib/util/number/decimalCount32 (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
@@ -416,7 +415,7 @@
   i32.lt_u
   select
  )
- (func $~lib/util/number/genDigits (; 7 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -807,7 +806,7 @@
    local.get $6
   end
  )
- (func $~lib/memory/memory.copy (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -980,7 +979,7 @@
    end
   end
  )
- (func $~lib/util/number/utoa_simple<u32> (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -1007,7 +1006,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/prettify (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -1252,7 +1251,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 11 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -1544,7 +1543,7 @@
   local.get $7
   i32.add
  )
- (func $~lib/util/number/dtoa_stream (; 12 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_stream (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   local.get $1
   f64.const 0
@@ -1614,7 +1613,7 @@
   local.get $1
   call $~lib/util/number/dtoa_core
  )
- (func $~lib/wasi/index/abort (; 13 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1713,7 +1712,7 @@
   i32.const 255
   call $~lib/bindings/wasi_snapshot_preview1/proc_exit
  )
- (func $~lib/wasi/index/trace (; 14 ;) (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64)
+ (func $~lib/wasi/index/trace (param $0 i32) (param $1 f64) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
@@ -1925,7 +1924,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~start (; 15 ;)
+ (func $~start
   global.get $~started
   if
    return
@@ -1933,8 +1932,6 @@
    i32.const 1
    global.set $~started
   end
-  i32.const 2096
-  global.set $~lib/rt/stub/startOffset
   i32.const 2096
   global.set $~lib/rt/stub/offset
   i32.const 0

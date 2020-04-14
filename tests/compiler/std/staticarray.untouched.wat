@@ -37,7 +37,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 464))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/staticarray/StaticArray<i32>#get:length (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -45,7 +45,7 @@
   i32.const 2
   i32.shr_u
  )
- (func $~lib/staticarray/StaticArray<i32>#__unchecked_get (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -53,7 +53,7 @@
   i32.add
   i32.load
  )
- (func $~lib/staticarray/StaticArray<i32>#__get (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -73,7 +73,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/staticarray/StaticArray<i32>#__unchecked_set (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<i32>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -82,7 +82,7 @@
   local.get $2
   i32.store
  )
- (func $~lib/staticarray/StaticArray<i32>#__set (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<i32>#__set (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   call $~lib/staticarray/StaticArray<i32>#get:length
@@ -100,7 +100,7 @@
   local.get $2
   call $~lib/staticarray/StaticArray<i32>#__unchecked_set
  )
- (func $~lib/rt/tlsf/removeBlock (; 10 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -310,7 +310,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 11 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -660,7 +660,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -808,7 +808,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 13 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -962,7 +962,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 14 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -991,7 +991,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1174,7 +1174,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/tlsf/growMemory (; 16 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1258,7 +1258,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1353,7 +1353,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1464,7 +1464,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $4
  )
- (func $~lib/rt/tlsf/__alloc (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1472,7 +1472,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/util/memory/memcpy (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2496,7 +2496,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2716,7 +2716,7 @@
    end
   end
  )
- (func $~lib/rt/__allocBuffer (; 22 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/__allocBuffer (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -2731,7 +2731,7 @@
   end
   local.get $3
  )
- (func $~lib/rt/pure/increment (; 23 ;) (param $0 i32)
+ (func $~lib/rt/pure/increment (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -2776,7 +2776,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 24 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -2788,7 +2788,7 @@
   end
   local.get $0
  )
- (func $std/staticarray/test (; 25 ;) (result i32)
+ (func $std/staticarray/test (result i32)
   (local $0 i32)
   i32.const 12
   i32.const 3
@@ -2796,7 +2796,7 @@
   call $~lib/rt/__allocBuffer
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/pure/__release (; 26 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -2807,7 +2807,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $std/staticarray/Ref#constructor (; 27 ;) (param $0 i32) (result i32)
+ (func $std/staticarray/Ref#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -2819,7 +2819,7 @@
   end
   local.get $0
  )
- (func $start:std/staticarray (; 28 ;)
+ (func $start:std/staticarray
   (local $0 i32)
   (local $1 i32)
   i32.const 32
@@ -3052,7 +3052,7 @@
   local.get $1
   global.set $std/staticarray/arr4
  )
- (func $~start (; 29 ;)
+ (func $~start
   global.get $~started
   if
    return
@@ -3062,10 +3062,10 @@
   end
   call $start:std/staticarray
  )
- (func $~lib/rt/pure/__collect (; 30 ;)
+ (func $~lib/rt/pure/__collect
   return
  )
- (func $~lib/rt/tlsf/freeBlock (; 31 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -3081,7 +3081,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/pure/decrement (; 32 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3158,7 +3158,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 33 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -3182,10 +3182,10 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/staticarray/StaticArray<i32>#__visit_impl (; 34 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<i32>#__visit_impl (param $0 i32) (param $1 i32)
   nop
  )
- (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit_impl (; 35 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/staticarray/StaticArray<std/staticarray/Ref>#__visit_impl (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3223,7 +3223,7 @@
    end
   end
  )
- (func $~lib/rt/__visit_members (; 36 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$7
