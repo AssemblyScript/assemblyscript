@@ -1000,9 +1000,9 @@ export class ASTBuilder {
 
   visitEnumValueDeclaration(node: EnumValueDeclaration): void {
     this.visitIdentifierExpression(node.name);
-    if (node.value) {
+    if (node.initializer) {
       this.sb.push(" = ");
-      this.visitNode(node.value);
+      this.visitNode(node.initializer);
     }
   }
 

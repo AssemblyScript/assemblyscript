@@ -1399,6 +1399,8 @@ declare class Array<T> {
   sort(comparator?: (a: T, b: T) => i32): this;
   join(separator?: string): string;
   reverse(): T[];
+  /** Flattens an array of arrays. If any null entries exist in the array, they are ignored, unlike JavaScript's version of Array#flat(). */
+  flat(): valueof<T>[];
   toString(): string;
 }
 

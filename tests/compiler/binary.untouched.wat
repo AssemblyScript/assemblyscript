@@ -1809,6 +1809,7 @@
    local.get $17
    f32.demote_f64
   end
+  return
  )
  (func $~lib/math/NativeMath.mod (; 3 ;) (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)

@@ -537,7 +537,7 @@ export class Program extends DiagnosticEmitter {
     var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;
     this.filesByName.set(nativeFile.internalName, nativeFile);
-    this.parser = new Parser(this);
+    this.parser = new Parser(this.diagnostics, this.sources);
     this.resolver = new Resolver(this);
   }
 
@@ -2789,7 +2789,7 @@ export class EnumValue extends VariableLikeElement {
 
   /** Gets the associated value node. */
   get valueNode(): Expression | null {
-    return (<EnumValueDeclaration>this.declaration).value;
+    return (<EnumValueDeclaration>this.declaration).initializer;
   }
 
   /* @override */
