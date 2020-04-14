@@ -28,6 +28,7 @@ export type Index = u32;
 // that this essentially fixes the compiler to specific versions of Binaryen
 // sometimes, because these constants can differ between Binaryen versions.
 
+export type NativeType = usize;
 export namespace NativeType {
   export const None: NativeType = 0 /* _BinaryenTypeNone */;
   export const Unreachable: NativeType = 1 /* _BinaryenTypeUnreachable */;
@@ -42,7 +43,6 @@ export namespace NativeType {
   export const Exnref: NativeType = 10 /* _BinaryenTypeExnref */;
   export const Auto: NativeType = -1 /* _BinaryenTypeAuto */;
 }
-export type NativeType = binaryen.BinaryenType;
 
 export enum FeatureFlags {
   MVP = 0 /* _BinaryenFeatureMVP */,
@@ -1064,7 +1064,7 @@ export class Module {
     body: ExpressionRef
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
-    var cArr = allocI32Array(varTypes);
+    var cArr = allocPtrArray(varTypes);
     var ret = binaryen._BinaryenAddFunction(this.ref, cStr, params, results, cArr, varTypes ? varTypes.length : 0, body);
     binaryen._free(cArr);
     return ret;
@@ -1087,7 +1087,7 @@ export class Module {
   addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
     var tempName = this.allocStringCached("");
-    var cArr = allocI32Array(paramTypes);
+    var cArr = allocPtrArray(paramTypes);
     var ret = binaryen._BinaryenAddFunction(this.ref,
       tempName,
       createType(paramTypes),
@@ -1631,7 +1631,7 @@ export function createType(types: NativeType[] | null): NativeType {
     case 0: return NativeType.None;
     case 1: return types[0];
   }
-  var cArr = allocI32Array(types);
+  var cArr = allocPtrArray(types);
   var ret = binaryen._BinaryenTypeCreate(cArr, types.length);
   binaryen._free(cArr);
   return ret;
