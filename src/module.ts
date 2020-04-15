@@ -1002,6 +1002,19 @@ export class Module {
     return binaryen._BinaryenRefFunc(this.ref, cStr);
   }
 
+  // tuples (pseudo instructions)
+
+  tuple_make(operands: ExpressionRef[]): ExpressionRef {
+    var cArr = allocPtrArray(operands);
+    var ret = binaryen._BinaryenTupleMake(this.ref, cArr, operands.length);
+    binaryen._free(cArr);
+    return ret;
+  }
+
+  tuple_extract(tuple: ExpressionRef, index: Index): ExpressionRef {
+    return binaryen._BinaryenTupleExtract(this.ref, tuple, index);
+  }
+
   // globals
 
   addGlobal(
@@ -2384,6 +2397,15 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
     }
     case ExpressionId.BrOnExn: {
       visit(binaryen._BinaryenBrOnExnGetExnref(expr), data);
+      break;
+    }
+    case ExpressionId.TupleMake: {
+      for (let i: Index = 0, n = binaryen._BinaryenTupleMakeGetNumOperands(expr); i < n; ++i) {
+        visit(binaryen._BinaryenTupleMakeGetOperand(expr, i), data);
+      }
+      break;
+    }
+    case ExpressionId.TupleExtract: {
       break;
     }
     default: assert(false);
