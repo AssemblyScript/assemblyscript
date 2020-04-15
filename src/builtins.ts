@@ -2607,8 +2607,8 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
 
   // if the assertion can be proven statically, omit it
   if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
-    switch (getExpressionType(arg0)) {
-      case NativeType.I32: {
+    switch (<u32>getExpressionType(arg0)) {
+      case <u32>NativeType.I32: {
         if (getConstValueI32(arg0) != 0) {
           if (contextualType == Type.void) {
             compiler.currentType = Type.void;
@@ -2618,7 +2618,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         }
         break;
       }
-      case NativeType.I64: {
+      case <u32>NativeType.I64: {
         if (getConstValueI64Low(arg0) != 0 || getConstValueI64High(arg0) != 0) {
           if (contextualType == Type.void) {
             compiler.currentType = Type.void;
@@ -2628,7 +2628,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         }
         break;
       }
-      case NativeType.F32: {
+      case <u32>NativeType.F32: {
         if (getConstValueF32(arg0) != 0) {
           if (contextualType == Type.void) {
             compiler.currentType = Type.void;
@@ -2638,7 +2638,7 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
         }
         break;
       }
-      case NativeType.F64: {
+      case <u32>NativeType.F64: {
         if (getConstValueF64(arg0) != 0) {
           if (contextualType == Type.void) {
             compiler.currentType = Type.void;

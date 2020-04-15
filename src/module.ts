@@ -1518,28 +1518,28 @@ export class Module {
 
     switch (binaryen._BinaryenExpressionGetId(expr)) {
       case ExpressionId.Const: {
-        switch (binaryen._BinaryenExpressionGetType(expr)) {
-          case NativeType.I32: {
+        switch (<u32>binaryen._BinaryenExpressionGetType(expr)) {
+          case <u32>NativeType.I32: {
             return this.i32(binaryen._BinaryenConstGetValueI32(expr));
           }
-          case NativeType.I64: {
+          case <u32>NativeType.I64: {
             return this.i64(
               binaryen._BinaryenConstGetValueI64Low(expr),
               binaryen._BinaryenConstGetValueI64High(expr)
             );
           }
-          case NativeType.F32: {
+          case <u32>NativeType.F32: {
             return this.f32(binaryen._BinaryenConstGetValueF32(expr));
           }
-          case NativeType.F64: {
+          case <u32>NativeType.F64: {
             return this.f64(binaryen._BinaryenConstGetValueF64(expr));
           }
-          case NativeType.V128: {
+          case <u32>NativeType.V128: {
             // TODO
             return 0;
           }
           // Not possible to clone an anyref as it is opaque
-          case NativeType.Anyref: {
+          case <u32>NativeType.Anyref: {
             return 0;
           }
           default: {
@@ -1849,7 +1849,7 @@ export function getFunctionName(func: FunctionRef): string | null {
   return readString(binaryen._BinaryenFunctionGetName(func));
 }
 
-export function getFunctionParams(func: FunctionRef): Index {
+export function getFunctionParams(func: FunctionRef): NativeType {
   return binaryen._BinaryenFunctionGetParams(func);
 }
 
