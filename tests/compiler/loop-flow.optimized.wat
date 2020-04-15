@@ -20,10 +20,10 @@
  (export "doThrow" (func $loop-flow/doThrow))
  (export "doAny" (func $loop-flow/doAny))
  (start $~start)
- (func $loop-flow/whileReturn (; 1 ;) (result i32)
+ (func $loop-flow/whileReturn (result i32)
   i32.const 1
  )
- (func $loop-flow/whileAny (; 2 ;) (param $0 i32) (result i32)
+ (func $loop-flow/whileAny (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1
@@ -47,7 +47,7 @@
    end
   end
  )
- (func $loop-flow/forAny (; 3 ;) (param $0 i32) (result i32)
+ (func $loop-flow/forAny (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1
@@ -73,7 +73,7 @@
    end
   end
  )
- (func $loop-flow/doAny (; 4 ;) (param $0 i32) (result i32)
+ (func $loop-flow/doAny (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1
@@ -97,7 +97,7 @@
    end
   end
  )
- (func $loop-flow/whileThrow (; 5 ;) (result i32)
+ (func $loop-flow/whileThrow (result i32)
   i32.const 1088
   i32.const 1040
   i32.const 11
@@ -105,13 +105,13 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $loop-flow/whileContinue (; 6 ;) (result i32)
+ (func $loop-flow/whileContinue (result i32)
   loop $while-continue|0
    br $while-continue|0
   end
   unreachable
  )
- (func $loop-flow/forThrow (; 7 ;) (result i32)
+ (func $loop-flow/forThrow (result i32)
   i32.const 1088
   i32.const 1040
   i32.const 41
@@ -119,7 +119,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $loop-flow/doThrow (; 8 ;) (result i32)
+ (func $loop-flow/doThrow (result i32)
   i32.const 1088
   i32.const 1040
   i32.const 71
@@ -127,7 +127,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~start (; 9 ;)
+ (func $~start
   i32.const 1
   call $loop-flow/whileAny
   i32.const 1

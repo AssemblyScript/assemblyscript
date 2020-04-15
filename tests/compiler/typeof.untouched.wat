@@ -33,13 +33,13 @@
  (global $~lib/heap/__heap_base i32 (i32.const 292))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/stub/__retain (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 2 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -47,7 +47,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -169,7 +169,7 @@
   call $~lib/rt/stub/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -242,10 +242,10 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:typeof~anonymous|0 (; 6 ;)
+ (func $start:typeof~anonymous|0
   nop
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 7 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -299,7 +299,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -352,7 +352,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $typeof/SomeClass#constructor (; 9 ;) (param $0 i32) (result i32)
+ (func $typeof/SomeClass#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -364,7 +364,7 @@
   end
   local.get $0
  )
- (func $start:typeof (; 10 ;)
+ (func $start:typeof
   i32.const 64
   i32.const 64
   call $~lib/string/String.__eq
@@ -655,7 +655,7 @@
    unreachable
   end
  )
- (func $~start (; 11 ;)
+ (func $~start
   global.get $~started
   if
    return

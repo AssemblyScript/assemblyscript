@@ -5,13 +5,13 @@
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (export "test" (func $class-extends/test))
- (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 1 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $class-extends/test (; 2 ;) (param $0 i32)
+ (func $class-extends/test (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0

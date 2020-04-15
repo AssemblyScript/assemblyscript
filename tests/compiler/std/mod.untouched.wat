@@ -16,7 +16,7 @@
  (export "memory" (memory $0))
  (export "mod" (func $std/mod/mod))
  (start $~start)
- (func $~lib/math/NativeMath.mod (; 2 ;) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (param $0 f64) (param $1 f64) (result f64)
   (local $2 i64)
   (local $3 i64)
   (local $4 i64)
@@ -270,7 +270,7 @@
   local.get $2
   f64.reinterpret_i64
  )
- (func $std/mod/check<f64> (; 3 ;) (param $0 f64) (param $1 f64) (result i32)
+ (func $std/mod/check<f64> (param $0 f64) (param $1 f64) (result i32)
   local.get $1
   local.get $1
   f64.ne
@@ -298,7 +298,7 @@
   local.get $1
   f64.eq
  )
- (func $std/mod/test_fmod (; 4 ;) (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
+ (func $std/mod/test_fmod (param $0 f64) (param $1 f64) (param $2 f64) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMath.mod
@@ -320,7 +320,7 @@
    i32.const 0
   end
  )
- (func $~lib/math/NativeMathf.mod (; 5 ;) (param $0 f32) (param $1 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (param $0 f32) (param $1 f32) (result f32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -568,7 +568,7 @@
   local.get $2
   f32.reinterpret_i32
  )
- (func $std/mod/check<f32> (; 6 ;) (param $0 f32) (param $1 f32) (result i32)
+ (func $std/mod/check<f32> (param $0 f32) (param $1 f32) (result i32)
   local.get $1
   local.get $1
   f32.ne
@@ -596,14 +596,14 @@
   local.get $1
   f32.eq
  )
- (func $std/mod/test_fmodf (; 7 ;) (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
+ (func $std/mod/test_fmodf (param $0 f32) (param $1 f32) (param $2 f32) (result i32)
   local.get $0
   local.get $1
   call $~lib/math/NativeMathf.mod
   local.get $2
   call $std/mod/check<f32>
  )
- (func $start:std/mod (; 8 ;)
+ (func $start:std/mod
   f64.const 3
   f64.const 2
   f64.const 1
@@ -2360,7 +2360,7 @@
    unreachable
   end
  )
- (func $~start (; 9 ;)
+ (func $~start
   call $start:std/mod
  )
 )

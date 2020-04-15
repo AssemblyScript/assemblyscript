@@ -18,11 +18,10 @@
  (data (i32.const 1360) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005")
  (data (i32.const 1392) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\005\005")
  (data (i32.const 1424) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -106,7 +105,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/util/number/itoa32 (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -209,7 +208,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -217,7 +216,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -293,7 +292,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -325,10 +324,8 @@
   end
   i32.const 0
  )
- (func $start:resolve-propertyaccess (; 6 ;)
+ (func $start:resolve-propertyaccess
   (local $0 i32)
-  i32.const 1456
-  global.set $~lib/rt/stub/startOffset
   i32.const 1456
   global.set $~lib/rt/stub/offset
   i32.const 1
@@ -469,7 +466,7 @@
    unreachable
   end
  )
- (func $~start (; 7 ;)
+ (func $~start
   call $start:resolve-propertyaccess
  )
 )

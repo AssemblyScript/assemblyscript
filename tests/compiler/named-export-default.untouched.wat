@@ -4,7 +4,7 @@
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (export "default" (func $named-export-default/get3))
- (func $named-export-default/get3 (; 0 ;) (result i32)
+ (func $named-export-default/get3 (result i32)
   i32.const 3
  )
 )

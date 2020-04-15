@@ -12,7 +12,7 @@
  (global $logical/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $logical/testShortcutAnd (; 1 ;) (param $0 i64) (param $1 i32) (result i32)
+ (func $logical/testShortcutAnd (param $0 i64) (param $1 i32) (result i32)
   local.get $0
   i64.const 0
   i64.ne
@@ -25,7 +25,7 @@
    i32.const 0
   end
  )
- (func $logical/testShortcutOr (; 2 ;) (param $0 i64) (param $1 i32) (result i32)
+ (func $logical/testShortcutOr (param $0 i64) (param $1 i32) (result i32)
   local.get $0
   i64.const 0
   i64.ne
@@ -38,7 +38,7 @@
    i64.ne
   end
  )
- (func $start:logical (; 3 ;)
+ (func $start:logical
   (local $0 f64)
   (local $1 f32)
   i32.const 0
@@ -542,7 +542,7 @@
    unreachable
   end
  )
- (func $~start (; 4 ;)
+ (func $~start
   call $start:logical
  )
 )

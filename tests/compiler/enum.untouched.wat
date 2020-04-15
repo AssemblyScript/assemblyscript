@@ -64,10 +64,10 @@
  (export "SelfReferenceConst.ZERO" (global $enum/SelfReferenceConst.ZERO))
  (export "SelfReferenceConst.ONE" (global $enum/SelfReferenceConst.ONE))
  (start $~start)
- (func $enum/getZero (; 0 ;) (result i32)
+ (func $enum/getZero (result i32)
   i32.const 0
  )
- (func $start:enum (; 1 ;)
+ (func $start:enum
   call $enum/getZero
   global.set $enum/NonConstant.ZERO
   call $enum/getZero
@@ -79,7 +79,7 @@
   global.get $enum/NonConstant.ONE
   drop
  )
- (func $~start (; 2 ;)
+ (func $~start
   call $start:enum
  )
 )

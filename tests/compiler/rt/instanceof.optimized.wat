@@ -7,7 +7,6 @@
  (memory $0 1)
  (data (i32.const 1024) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00r\00t\00/\00i\00n\00s\00t\00a\00n\00c\00e\00o\00f\00.\00t\00s")
  (data (i32.const 1072) "\06\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\03\00\00\00 \00\00\00\04")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $rt/instanceof/animal (mut i32) (i32.const 0))
  (global $rt/instanceof/cat (mut i32) (i32.const 0))
@@ -18,7 +17,7 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -84,7 +83,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $rt/instanceof/Animal#constructor (; 2 ;) (param $0 i32) (result i32)
+ (func $rt/instanceof/Animal#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -94,7 +93,7 @@
   end
   local.get $0
  )
- (func $rt/instanceof/Cat#constructor (; 3 ;) (param $0 i32) (result i32)
+ (func $rt/instanceof/Cat#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -105,7 +104,7 @@
   local.get $0
   call $rt/instanceof/Animal#constructor
  )
- (func $~lib/rt/__instanceof (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -135,10 +134,8 @@
   end
   i32.const 0
  )
- (func $start:rt/instanceof (; 5 ;)
+ (func $start:rt/instanceof
   (local $0 i32)
-  i32.const 1136
-  global.set $~lib/rt/stub/startOffset
   i32.const 1136
   global.set $~lib/rt/stub/offset
   i32.const 0
@@ -402,7 +399,7 @@
    unreachable
   end
  )
- (func $~start (; 6 ;)
+ (func $~start
   global.get $~started
   if
    return

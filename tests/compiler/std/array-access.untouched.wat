@@ -20,10 +20,10 @@
  (export "stringArrayMethodCall" (func $std/array-access/stringArrayMethodCall))
  (export "stringArrayArrayPropertyAccess" (func $std/array-access/stringArrayArrayPropertyAccess))
  (export "stringArrayArrayMethodCall" (func $std/array-access/stringArrayArrayMethodCall))
- (func $~lib/rt/stub/__retain (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_get (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -33,10 +33,10 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/rt/stub/__release (; 3 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__get (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -68,7 +68,7 @@
   end
   local.get $2
  )
- (func $~lib/array/Array<i32>#__unchecked_get (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -77,7 +77,7 @@
   i32.add
   i32.load
  )
- (func $~lib/array/Array<i32>#__get (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -97,7 +97,7 @@
   local.set $2
   local.get $2
  )
- (func $std/array-access/i32ArrayArrayElementAccess (; 7 ;) (param $0 i32) (result i32)
+ (func $std/array-access/i32ArrayArrayElementAccess (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -116,7 +116,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/array/Array<~lib/string/String>#__unchecked_get (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -126,7 +126,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<~lib/string/String>#__get (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -158,7 +158,7 @@
   end
   local.get $2
  )
- (func $~lib/string/String#get:length (; 10 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -166,7 +166,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $std/array-access/stringArrayPropertyAccess (; 11 ;) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayPropertyAccess (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -184,7 +184,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/util/string/compareImpl (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -306,7 +306,7 @@
   call $~lib/rt/stub/__release
   local.get $7
  )
- (func $~lib/string/String#startsWith (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#startsWith (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -381,7 +381,7 @@
   call $~lib/rt/stub/__release
   local.get $3
  )
- (func $std/array-access/stringArrayMethodCall (; 14 ;) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayMethodCall (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -401,7 +401,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__unchecked_get (; 15 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -411,7 +411,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -443,7 +443,7 @@
   end
   local.get $2
  )
- (func $std/array-access/stringArrayArrayPropertyAccess (; 17 ;) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayPropertyAccess (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -467,7 +467,7 @@
   call $~lib/rt/stub/__release
   local.get $3
  )
- (func $std/array-access/stringArrayArrayMethodCall (; 18 ;) (param $0 i32) (result i32)
+ (func $std/array-access/stringArrayArrayMethodCall (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)

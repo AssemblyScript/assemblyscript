@@ -77,7 +77,7 @@
  (export "memory" (memory $0))
  (export "test" (func $builtins/test))
  (start $~start)
- (func $~lib/atomics/Atomics.isLockFree (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/atomics/Atomics.isLockFree (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.eq
@@ -96,13 +96,13 @@
    i32.eq
   end
  )
- (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 4 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/string/String#get:length (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -110,7 +110,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 6 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -232,7 +232,7 @@
   call $~lib/rt/stub/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -305,13 +305,13 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:builtins~anonymous|0 (; 8 ;)
+ (func $start:builtins~anonymous|0
   nop
  )
- (func $start:builtins~anonymous|1 (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $start:builtins~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   nop
  )
- (func $start:builtins (; 10 ;)
+ (func $start:builtins
   (local $0 i32)
   (local $1 i32)
   (local $2 i64)
@@ -1869,10 +1869,10 @@
    unreachable
   end
  )
- (func $builtins/test (; 11 ;)
+ (func $builtins/test
   nop
  )
- (func $~start (; 12 ;)
+ (func $~start
   call $start:builtins
  )
 )

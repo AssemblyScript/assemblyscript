@@ -29,7 +29,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 268))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -239,7 +239,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -589,7 +589,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -737,7 +737,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 8 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -891,7 +891,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 9 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -920,7 +920,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1103,7 +1103,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/tlsf/growMemory (; 11 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1187,7 +1187,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1282,7 +1282,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1393,7 +1393,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $4
  )
- (func $~lib/rt/tlsf/__alloc (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1401,7 +1401,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/increment (; 15 ;) (param $0 i32)
+ (func $~lib/rt/pure/increment (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1446,7 +1446,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 16 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -1458,7 +1458,7 @@
   end
   local.get $0
  )
- (func $managed-cast/Animal#constructor (; 17 ;) (param $0 i32) (result i32)
+ (func $managed-cast/Animal#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1470,7 +1470,7 @@
   end
   local.get $0
  )
- (func $managed-cast/Cat#constructor (; 18 ;) (param $0 i32) (result i32)
+ (func $managed-cast/Cat#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1485,10 +1485,10 @@
   local.set $0
   local.get $0
  )
- (func $managed-cast/Animal#tame (; 19 ;) (param $0 i32)
+ (func $managed-cast/Animal#tame (param $0 i32)
   nop
  )
- (func $~lib/rt/pure/__release (; 20 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -1499,7 +1499,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $managed-cast/testDowncast (; 21 ;) (param $0 i32)
+ (func $managed-cast/testDowncast (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -1508,7 +1508,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $managed-cast/testDowncastFromNullable (; 22 ;) (param $0 i32)
+ (func $managed-cast/testDowncastFromNullable (param $0 i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1529,7 +1529,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $managed-cast/testDowncastToNullable (; 23 ;) (param $0 i32)
+ (func $managed-cast/testDowncastToNullable (param $0 i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1547,7 +1547,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $managed-cast/testDowncastFromToNullable (; 24 ;) (param $0 i32)
+ (func $managed-cast/testDowncastFromToNullable (param $0 i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1565,7 +1565,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/__instanceof (; 25 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1605,10 +1605,10 @@
   end
   i32.const 0
  )
- (func $managed-cast/Cat#meow (; 26 ;) (param $0 i32)
+ (func $managed-cast/Cat#meow (param $0 i32)
   nop
  )
- (func $managed-cast/testUpcast (; 27 ;) (param $0 i32)
+ (func $managed-cast/testUpcast (param $0 i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1631,7 +1631,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $managed-cast/testUpcastFromNullable (; 28 ;) (param $0 i32)
+ (func $managed-cast/testUpcastFromNullable (param $0 i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1665,7 +1665,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $managed-cast/testUpcastToNullable (; 29 ;) (param $0 i32)
+ (func $managed-cast/testUpcastToNullable (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1697,7 +1697,7 @@
   local.get $2
   call $~lib/rt/pure/__release
  )
- (func $managed-cast/testUpcastFromToNullable (; 30 ;) (param $0 i32)
+ (func $managed-cast/testUpcastFromToNullable (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1729,7 +1729,7 @@
   local.get $2
   call $~lib/rt/pure/__release
  )
- (func $start:managed-cast (; 31 ;)
+ (func $start:managed-cast
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1787,7 +1787,7 @@
   local.get $7
   call $~lib/rt/pure/__release
  )
- (func $~start (; 32 ;)
+ (func $~start
   global.get $~started
   if
    return
@@ -1797,10 +1797,10 @@
   end
   call $start:managed-cast
  )
- (func $~lib/rt/pure/__collect (; 33 ;)
+ (func $~lib/rt/pure/__collect
   return
  )
- (func $~lib/rt/tlsf/freeBlock (; 34 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -1816,7 +1816,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/pure/decrement (; 35 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1893,7 +1893,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 36 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -1917,7 +1917,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 37 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4

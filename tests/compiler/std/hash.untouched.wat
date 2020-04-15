@@ -11,10 +11,10 @@
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/string/String#get:length (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -22,10 +22,10 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/rt/stub/__release (; 2 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/util/hash/hashStr (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hashStr (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -76,10 +76,10 @@
   call $~lib/rt/stub/__release
   local.get $3
  )
- (func $std/hash/check (; 4 ;) (param $0 i32) (result i32)
+ (func $std/hash/check (param $0 i32) (result i32)
   i32.const 1
  )
- (func $~lib/util/hash/hash32 (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
   (local $1 i32)
   i32.const -2128831035
   local.set $1
@@ -121,7 +121,7 @@
   local.set $1
   local.get $1
  )
- (func $~lib/util/hash/hash64 (; 6 ;) (param $0 i64) (result i32)
+ (func $~lib/util/hash/hash64 (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -209,7 +209,7 @@
   local.set $3
   local.get $3
  )
- (func $start:std/hash (; 7 ;)
+ (func $start:std/hash
   (local $0 i32)
   (local $1 i32)
   (local $2 f32)
@@ -401,7 +401,7 @@
   call $std/hash/check
   drop
  )
- (func $~start (; 8 ;)
+ (func $~start
   call $start:std/hash
  )
 )

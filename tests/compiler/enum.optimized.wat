@@ -1,5 +1,4 @@
 (module
- (type $none_=>_none (func))
  (memory $0 0)
  (global $enum/Implicit.ZERO i32 (i32.const 0))
  (global $enum/Implicit.ONE i32 (i32.const 1))
@@ -25,8 +24,6 @@
  (global $enum/MixedConst.ONE i32 (i32.const 1))
  (global $enum/MixedConst.THREE i32 (i32.const 3))
  (global $enum/MixedConst.FOUR i32 (i32.const 4))
- (global $enum/NonConstant.ZERO (mut i32) (i32.const 0))
- (global $enum/NonConstant.ONE (mut i32) (i32.const 0))
  (global $enum/SelfReference.ZERO i32 (i32.const 0))
  (global $enum/SelfReference.ONE i32 (i32.const 1))
  (global $enum/SelfReferenceConst.ZERO i32 (i32.const 0))
@@ -60,11 +57,4 @@
  (export "SelfReference.ONE" (global $enum/SelfReference.ONE))
  (export "SelfReferenceConst.ZERO" (global $enum/SelfReferenceConst.ZERO))
  (export "SelfReferenceConst.ONE" (global $enum/SelfReferenceConst.ONE))
- (start $~start)
- (func $~start (; 0 ;)
-  i32.const 0
-  global.set $enum/NonConstant.ZERO
-  i32.const 1
-  global.set $enum/NonConstant.ONE
- )
 )

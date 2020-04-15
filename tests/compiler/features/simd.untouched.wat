@@ -19,7 +19,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 112))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -73,7 +73,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -126,7 +126,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__free (; 3 ;) (param $0 i32)
+ (func $~lib/rt/stub/__free (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 0
@@ -176,7 +176,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $features/simd/test_v128 (; 4 ;)
+ (func $features/simd/test_v128
   (local $0 i32)
   i32.const 64
   i32.const 0
@@ -189,7 +189,7 @@
   local.get $0
   call $~lib/rt/stub/__free
  )
- (func $features/simd/test_i8x16 (; 5 ;)
+ (func $features/simd/test_i8x16
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -570,7 +570,7 @@
    unreachable
   end
  )
- (func $features/simd/test_i16x8 (; 6 ;)
+ (func $features/simd/test_i16x8
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -951,7 +951,7 @@
    unreachable
   end
  )
- (func $features/simd/test_i32x4 (; 7 ;)
+ (func $features/simd/test_i32x4
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1309,7 +1309,7 @@
    unreachable
   end
  )
- (func $features/simd/test_i64x2 (; 8 ;)
+ (func $features/simd/test_i64x2
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1461,7 +1461,7 @@
    unreachable
   end
  )
- (func $features/simd/test_f32x4 (; 9 ;)
+ (func $features/simd/test_f32x4
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -1839,7 +1839,7 @@
    unreachable
   end
  )
- (func $features/simd/test_f64x2 (; 10 ;)
+ (func $features/simd/test_f64x2
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -2217,7 +2217,7 @@
    unreachable
   end
  )
- (func $features/simd/test_v8x16 (; 11 ;)
+ (func $features/simd/test_v8x16
   (local $0 v128)
   (local $1 v128)
   (local $2 v128)
@@ -2262,16 +2262,16 @@
    unreachable
   end
  )
- (func $features/simd/test_v16x8 (; 12 ;)
+ (func $features/simd/test_v16x8
   nop
  )
- (func $features/simd/test_v32x4 (; 13 ;)
+ (func $features/simd/test_v32x4
   nop
  )
- (func $features/simd/test_v64x2 (; 14 ;)
+ (func $features/simd/test_v64x2
   nop
  )
- (func $start:features/simd (; 15 ;)
+ (func $start:features/simd
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -2294,7 +2294,7 @@
   call $features/simd/test_v32x4
   call $features/simd/test_v64x2
  )
- (func $~start (; 16 ;)
+ (func $~start
   call $start:features/simd
  )
 )

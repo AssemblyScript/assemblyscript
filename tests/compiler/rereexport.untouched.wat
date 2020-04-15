@@ -12,17 +12,17 @@
  (export "renamed_b" (global $export/b))
  (export "renamed_renamed_b" (global $export/b))
  (start $~start)
- (func $export/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/add (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $export/mul (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/mul (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.mul
  )
- (func $start:reexport (; 2 ;)
+ (func $start:reexport
   i32.const 1
   i32.const 2
   call $export/add
@@ -32,10 +32,10 @@
   i32.add
   drop
  )
- (func $start:rereexport (; 3 ;)
+ (func $start:rereexport
   call $start:reexport
  )
- (func $~start (; 4 ;)
+ (func $~start
   call $start:rereexport
  )
 )
