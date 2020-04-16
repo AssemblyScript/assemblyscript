@@ -10,7 +10,7 @@
  (global $binary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/math/NativeMathf.mod (param $0 f32) (result f32)
+ (func $~lib/math/ipow32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 1
@@ -42,7 +42,7 @@
   end
   local.get $2
  )
- (func $~lib/math/NativeMathf.mod (; 1 ;) (param $0 f32) (result f32)
+ (func $~lib/math/NativeMathf.mod (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
