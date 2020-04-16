@@ -8688,6 +8688,12 @@ export class Compiler extends DiagnosticEmitter {
       ? flow.getAutoreleaseLocal(classReference.type)
       : flow.getTempLocal(classReference.type);
     assert(numNames == values.length);
+    if (names.length == 0) {
+      console.log('expression names', names);
+      console.log('class members', members);
+    }
+
+    // Currently iterates through the passed names, should instead iterate through the members
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
       if (!member || member.kind != ElementKind.FIELD) {
