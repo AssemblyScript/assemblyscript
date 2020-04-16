@@ -700,11 +700,12 @@ exports.main = function main(argv, options, callback) {
         add("ssa-nomerge");
       }
       if (optimizeLevel >= 3) {
+        add("flatten"); // differs
         add("simplify-locals-nostructure"); // differs
         add("vacuum"); // differs
-        add("reorder-locals"); // differs
         add("flatten");
         add("local-cse");
+        add("reorder-locals"); // differs
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");

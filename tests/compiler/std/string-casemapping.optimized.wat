@@ -1454,11 +1454,11 @@
     local.get $2
     if
      local.get $5
-     local.get $4
      local.get $2
      i32.const 1
      i32.shr_u
      local.tee $3
+     local.get $4
      i32.add
      i32.const 1
      i32.shl

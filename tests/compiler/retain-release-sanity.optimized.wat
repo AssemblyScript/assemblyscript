@@ -2079,7 +2079,7 @@
   local.get $0
   local.get $3
   i32.store
-  local.get $0
+  local.get $1
   local.get $2
   local.tee $3
   i32.load
