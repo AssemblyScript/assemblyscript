@@ -701,7 +701,7 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 3) {
         add("flatten"); // differs
-        add("simplify-locals-nostructure"); // differs
+        add("simplify-locals-notee-nostructure"); // differs
         add("vacuum"); // differs
         add("flatten");
         add("local-cse");
