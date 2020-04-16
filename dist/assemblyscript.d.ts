@@ -1695,19 +1695,20 @@ declare module "assemblyscript/src/module" {
     export type RelooperRef = number;
     export type RelooperBlockRef = number;
     export type Index = number;
-    export enum NativeType {
-        None = 0,
-        Unreachable = 1,
-        I32 = 2,
-        I64 = 3,
-        F32 = 4,
-        F64 = 5,
-        V128 = 6,
-        Funcref = 7,
-        Anyref = 8,
-        Nullref = 9,
-        Exnref = 10,
-        Auto = -1
+    export type NativeType = number;
+    export namespace NativeType {
+        const None: NativeType;
+        const Unreachable: NativeType;
+        const I32: NativeType;
+        const I64: NativeType;
+        const F32: NativeType;
+        const F64: NativeType;
+        const V128: NativeType;
+        const Funcref: NativeType;
+        const Anyref: NativeType;
+        const Nullref: NativeType;
+        const Exnref: NativeType;
+        const Auto: NativeType;
     }
     export enum FeatureFlags {
         MVP = 0,
@@ -1770,7 +1771,9 @@ declare module "assemblyscript/src/module" {
         Try = 43,
         Throw = 44,
         Rethrow = 45,
-        BrOnExn = 46
+        BrOnExn = 46,
+        TupleMake = 47,
+        TupleExtract = 48
     }
     export enum UnaryOp {
         ClzI32 = 0,
@@ -1840,40 +1843,46 @@ declare module "assemblyscript/src/module" {
         SplatF32x4 = 64,
         SplatF64x2 = 65,
         NotV128 = 66,
-        NegI8x16 = 67,
-        AnyTrueI8x16 = 68,
-        AllTrueI8x16 = 69,
-        NegI16x8 = 70,
-        AnyTrueI16x8 = 71,
-        AllTrueI16x8 = 72,
-        NegI32x4 = 73,
-        AnyTrueI32x4 = 74,
-        AllTrueI32x4 = 75,
-        NegI64x2 = 76,
-        AnyTrueI64x2 = 77,
-        AllTrueI64x2 = 78,
-        AbsF32x4 = 79,
-        NegF32x4 = 80,
-        SqrtF32x4 = 81,
-        AbsF64x2 = 82,
-        NegF64x2 = 83,
-        SqrtF64x2 = 84,
-        TruncSatF32x4ToI32x4 = 85,
-        TruncSatF32x4ToU32x4 = 86,
-        TruncSatF64x2ToI64x2 = 87,
-        TruncSatF64x2ToU64x2 = 88,
-        ConvertI32x4ToF32x4 = 89,
-        ConvertU32x4ToF32x4 = 90,
-        ConvertI64x2ToF64x2 = 91,
-        ConvertU64x2ToF64x2 = 92,
-        WidenLowI8x16ToI16x8 = 93,
-        WidenHighI8x16ToI16x8 = 94,
-        WidenLowU8x16ToU16x8 = 95,
-        WidenHighU8x16ToU16x8 = 96,
-        WidenLowI16x8ToI32x4 = 97,
-        WidenHighI16x8ToI32x4 = 98,
-        WidenLowU16x8ToU32x4 = 99,
-        WidenHighU16x8ToU32x4 = 100
+        AbsI8x16 = 67,
+        NegI8x16 = 68,
+        AnyTrueI8x16 = 69,
+        AllTrueI8x16 = 70,
+        BitmaskI8x16 = 71,
+        AbsI16x8 = 72,
+        NegI16x8 = 73,
+        AnyTrueI16x8 = 74,
+        AllTrueI16x8 = 75,
+        BitmaskI16x8 = 76,
+        AbsI32x4 = 77,
+        NegI32x4 = 78,
+        AnyTrueI32x4 = 79,
+        AllTrueI32x4 = 80,
+        BitmaskI32x4 = 81,
+        NegI64x2 = 82,
+        AnyTrueI64x2 = 83,
+        AllTrueI64x2 = 84,
+        AbsF32x4 = 85,
+        NegF32x4 = 86,
+        SqrtF32x4 = 87,
+        AbsF64x2 = 88,
+        NegF64x2 = 89,
+        SqrtF64x2 = 90,
+        TruncSatF32x4ToI32x4 = 91,
+        TruncSatF32x4ToU32x4 = 92,
+        TruncSatF64x2ToI64x2 = 93,
+        TruncSatF64x2ToU64x2 = 94,
+        ConvertI32x4ToF32x4 = 95,
+        ConvertU32x4ToF32x4 = 96,
+        ConvertI64x2ToF64x2 = 97,
+        ConvertU64x2ToF64x2 = 98,
+        WidenLowI8x16ToI16x8 = 99,
+        WidenHighI8x16ToI16x8 = 100,
+        WidenLowU8x16ToU16x8 = 101,
+        WidenHighU8x16ToU16x8 = 102,
+        WidenLowI16x8ToI32x4 = 103,
+        WidenHighI16x8ToI32x4 = 104,
+        WidenLowU16x8ToU32x4 = 105,
+        WidenHighU16x8ToU32x4 = 106
     }
     export enum BinaryOp {
         AddI32 = 0,
@@ -2179,6 +2188,8 @@ declare module "assemblyscript/src/module" {
         simd_load(op: SIMDLoadOp, ptr: ExpressionRef, offset: number, align: number): ExpressionRef;
         ref_is_null(expr: ExpressionRef): ExpressionRef;
         ref_func(name: string): ExpressionRef;
+        tuple_make(operands: ExpressionRef[]): ExpressionRef;
+        tuple_extract(tuple: ExpressionRef, index: Index): ExpressionRef;
         addGlobal(name: string, type: NativeType, mutable: boolean, initializer: ExpressionRef): GlobalRef;
         getGlobal(name: string): GlobalRef;
         removeGlobal(name: string): void;
@@ -2298,7 +2309,7 @@ declare module "assemblyscript/src/module" {
     export function getHostName(expr: ExpressionRef): string | null;
     export function getFunctionBody(func: FunctionRef): ExpressionRef;
     export function getFunctionName(func: FunctionRef): string | null;
-    export function getFunctionParams(func: FunctionRef): Index;
+    export function getFunctionParams(func: FunctionRef): NativeType;
     export function getFunctionResults(func: FunctionRef): NativeType;
     export function getFunctionVars(func: FunctionRef): NativeType;
     export function getGlobalName(global: GlobalRef): string | null;
@@ -4796,6 +4807,7 @@ declare module "assemblyscript/src/builtins" {
         const v128_bitselect = "~lib/builtins/v128.bitselect";
         const v128_any_true = "~lib/builtins/v128.any_true";
         const v128_all_true = "~lib/builtins/v128.all_true";
+        const v128_bitmask = "~lib/builtins/v128.bitmask";
         const v128_min = "~lib/builtins/v128.min";
         const v128_max = "~lib/builtins/v128.max";
         const v128_dot = "~lib/builtins/v128.dot";
@@ -4833,6 +4845,7 @@ declare module "assemblyscript/src/builtins" {
         const i8x16_max_s = "~lib/builtins/i8x16.max_s";
         const i8x16_max_u = "~lib/builtins/i8x16.max_u";
         const i8x16_avgr_u = "~lib/builtins/i8x16.avgr_u";
+        const i8x16_abs = "~lib/builtins/i8x16.abs";
         const i8x16_neg = "~lib/builtins/i8x16.neg";
         const i8x16_add_saturate_s = "~lib/builtins/i8x16.add_saturate_s";
         const i8x16_add_saturate_u = "~lib/builtins/i8x16.add_saturate_u";
@@ -4843,6 +4856,7 @@ declare module "assemblyscript/src/builtins" {
         const i8x16_shr_u = "~lib/builtins/i8x16.shr_u";
         const i8x16_any_true = "~lib/builtins/i8x16.any_true";
         const i8x16_all_true = "~lib/builtins/i8x16.all_true";
+        const i8x16_bitmask = "~lib/builtins/i8x16.bitmask";
         const i8x16_eq = "~lib/builtins/i8x16.eq";
         const i8x16_ne = "~lib/builtins/i8x16.ne";
         const i8x16_lt_s = "~lib/builtins/i8x16.lt_s";
@@ -4867,6 +4881,7 @@ declare module "assemblyscript/src/builtins" {
         const i16x8_max_s = "~lib/builtins/i16x8.max_s";
         const i16x8_max_u = "~lib/builtins/i16x8.max_u";
         const i16x8_avgr_u = "~lib/builtins/i16x8.avgr_u";
+        const i16x8_abs = "~lib/builtins/i16x8.abs";
         const i16x8_neg = "~lib/builtins/i16x8.neg";
         const i16x8_add_saturate_s = "~lib/builtins/i16x8.add_saturate_s";
         const i16x8_add_saturate_u = "~lib/builtins/i16x8.add_saturate_u";
@@ -4877,6 +4892,7 @@ declare module "assemblyscript/src/builtins" {
         const i16x8_shr_u = "~lib/builtins/i16x8.shr_u";
         const i16x8_any_true = "~lib/builtins/i16x8.any_true";
         const i16x8_all_true = "~lib/builtins/i16x8.all_true";
+        const i16x8_bitmask = "~lib/builtins/i16x8.bitmask";
         const i16x8_eq = "~lib/builtins/i16x8.eq";
         const i16x8_ne = "~lib/builtins/i16x8.ne";
         const i16x8_lt_s = "~lib/builtins/i16x8.lt_s";
@@ -4906,12 +4922,14 @@ declare module "assemblyscript/src/builtins" {
         const i32x4_max_s = "~lib/builtins/i32x4.max_s";
         const i32x4_max_u = "~lib/builtins/i32x4.max_u";
         const i32x4_dot_i16x8_s = "~lib/builtins/i32x4.dot_i16x8_s";
+        const i32x4_abs = "~lib/builtins/i32x4.abs";
         const i32x4_neg = "~lib/builtins/i32x4.neg";
         const i32x4_shl = "~lib/builtins/i32x4.shl";
         const i32x4_shr_s = "~lib/builtins/i32x4.shr_s";
         const i32x4_shr_u = "~lib/builtins/i32x4.shr_u";
         const i32x4_any_true = "~lib/builtins/i32x4.any_true";
         const i32x4_all_true = "~lib/builtins/i32x4.all_true";
+        const i32x4_bitmask = "~lib/builtins/i32x4.bitmask";
         const i32x4_eq = "~lib/builtins/i32x4.eq";
         const i32x4_ne = "~lib/builtins/i32x4.ne";
         const i32x4_lt_s = "~lib/builtins/i32x4.lt_s";

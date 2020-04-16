@@ -1,4 +1,4 @@
-const BINARYEN_VERSION = "91.0.0-nightly.20200310";
+const BINARYEN_VERSION = "91.0.0-nightly.20200414";
 const LONG_VERSION = "4.0.0";
 const ASSEMBLYSCRIPT_VERSION = "0.9.4";
 
