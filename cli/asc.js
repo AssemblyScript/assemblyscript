@@ -795,6 +795,7 @@ exports.main = function main(argv, options, callback) {
         add("simplify-globals-optimizing");
       } else {
         add("simplify-globals");
+        add("vacuum");
       }
       // moved from (2)
       // it works better after globals optimizations like simplify-globals, inlining-optimizing and etc
@@ -825,7 +826,9 @@ exports.main = function main(argv, options, callback) {
         if (optimizeLevel >= 3) {
           // this quite expensive so do this only for highest opt level
           add("simplify-globals");
+          add("vacuum");
           // replace indirect calls with direct and inline if possible again.
+          add("inlining-optimizing");
           add("directize");
           add("dae-optimizing");
           add("precompute-propagate");
