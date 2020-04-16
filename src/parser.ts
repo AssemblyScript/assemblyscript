@@ -14,10 +14,6 @@ import {
 } from "./common";
 
 import {
-  Program
-} from "./program";
-
-import {
   Tokenizer,
   Token,
   Range,
@@ -28,7 +24,8 @@ import {
 
 import {
   DiagnosticCode,
-  DiagnosticEmitter
+  DiagnosticEmitter,
+  DiagnosticMessage
 } from "./diagnostics";
 
 import {
@@ -95,8 +92,6 @@ import {
 /** Parser interface. */
 export class Parser extends DiagnosticEmitter {
 
-  /** Program being created. */
-  program: Program;
   /** Source file names to be requested next. */
   backlog: string[] = new Array();
   /** Source file names already seen, that is processed or backlogged. */
@@ -109,11 +104,16 @@ export class Parser extends DiagnosticEmitter {
   currentSource: Source;
   /** Dependency map **/
   dependees: Map<string, Source> = new Map();
+  /** An array of parsed sources. */
+  sources: Source[];
 
   /** Constructs a new parser. */
-  constructor(program: Program) {
-    super(program.diagnostics);
-    this.program = program;
+  constructor(
+    diagnostics: DiagnosticMessage[] | null = null,
+    sources: Source[] | null = null
+  ) {
+    super(diagnostics);
+    this.sources = sources ? sources : new Array<Source>();
   }
 
   /** Parses a file and adds its definitions to the program. */
@@ -145,12 +145,12 @@ export class Parser extends DiagnosticEmitter {
             : SourceKind.LIBRARY
           : SourceKind.USER
     );
-    var program = this.program;
-    program.sources.push(source);
+
+    this.sources.push(source);
     this.currentSource = source;
 
     // tokenize and parse
-    var tn = new Tokenizer(source, program.diagnostics);
+    var tn = new Tokenizer(source, this.diagnostics);
     tn.onComment = this.onComment;
     var statements = source.statements;
     while (!tn.skip(Token.ENDOFFILE)) {

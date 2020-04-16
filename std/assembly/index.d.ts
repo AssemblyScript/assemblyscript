@@ -591,6 +591,8 @@ declare namespace v128 {
   export function any_true<T>(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all lanes are considered `true`. */
   export function all_true<T>(a: v128): bool;
+  /** Extracts the high bit of each lane and produces a scalar mask with all bits concatenated. */
+  export function bitmask<T>(a: v128): i32;
   /** Computes the minimum of each lane. */
   export function min<T>(a: v128, b: v128): v128;
   /** Computes the maximum of each lane. */
@@ -657,6 +659,8 @@ declare namespace i8x16 {
   export function max_u(a: v128, b: v128): v128;
   /** Computes the unsigned average of each 8-bit integer lane. */
   export function avgr_u(a: v128, b: v128): v128;
+  /** Compules the absolute value of each 8-bit integer lane. */
+  export function abs(a: v128): v128;
   /** Negates each 8-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 8-bit integer lane using signed saturation. */
@@ -677,6 +681,8 @@ declare namespace i8x16 {
   export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 8-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
+  /** Extracts the high bit of each 8-bit integer lane and produces a scalar mask with all bits concatenated. */
+  export function bitmask(a: v128): i32;
   /** Computes which 8-bit integer lanes are equal. */
   export function eq(a: v128, b: v128): v128;
   /** Computes which 8-bit integer lanes are not equal. */
@@ -729,6 +735,8 @@ declare namespace i16x8 {
   export function max_u(a: v128, b: v128): v128;
   /** Computes the unsigned average of each 16-bit integer lane. */
   export function avgr_u(a: v128, b: v128): v128;
+  /** Compules the absolute value of each 16-bit integer lane. */
+  export function abs(a: v128): v128;
   /** Negates each 16-bit integer lane. */
   export function neg(a: v128): v128;
   /** Adds each 16-bit integer lane using signed saturation. */
@@ -749,6 +757,8 @@ declare namespace i16x8 {
   export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 16-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
+  /** Extracts the high bit of each 16-bit integer lane and produces a scalar mask with all bits concatenated. */
+  export function bitmask(a: v128): i32;
   /** Computes which 16-bit integer lanes are equal. */
   export function eq(a: v128, b: v128): v128;
   /** Computes which 16-bit integer lanes are not equal. */
@@ -811,6 +821,8 @@ declare namespace i32x4 {
   export function max_u(a: v128, b: v128): v128;
   /** Computes the dot product of two 16-bit integer lanes each, yielding 32-bit integer lanes. */
   export function dot_i16x8_s(a: v128, b: v128): v128;
+  /** Compules the absolute value of each 32-bit integer lane. */
+  export function abs(a: v128): v128;
   /** Negates each 32-bit integer lane. */
   export function neg(a: v128): v128;
   /** Performs a bitwise left shift on each 32-bit integer lane by a scalar. */
@@ -823,6 +835,8 @@ declare namespace i32x4 {
   export function any_true(a: v128): bool;
   /** Reduces a vector to a scalar indicating whether all 32-bit integer lanes are considered `true`. */
   export function all_true(a: v128): bool;
+  /** Extracts the high bit of each 32-bit integer lane and produces a scalar mask with all bits concatenated. */
+  export function bitmask(a: v128): i32;
   /** Computes which 32-bit integer lanes are equal. */
   export function eq(a: v128, b: v128): v128;
   /** Computes which 32-bit integer lanes are not equal. */

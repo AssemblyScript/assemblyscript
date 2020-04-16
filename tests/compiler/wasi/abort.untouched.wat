@@ -13,10 +13,10 @@
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "test" (func $wasi/abort/test))
- (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -24,7 +24,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String.UTF8.encodeUnsafe (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -240,7 +240,7 @@
   local.get $2
   i32.sub
  )
- (func $~lib/util/number/decimalCount32 (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -295,10 +295,10 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/__release (; 6 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/wasi/index/abort (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -464,7 +464,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $wasi/abort/test (; 8 ;)
+ (func $wasi/abort/test
   i32.const 0
   i32.eqz
   if
@@ -476,7 +476,7 @@
    unreachable
   end
  )
- (func $~start (; 9 ;)
+ (func $~start
   nop
  )
 )

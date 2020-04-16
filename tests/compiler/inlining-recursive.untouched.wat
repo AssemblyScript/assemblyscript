@@ -6,13 +6,13 @@
  (export "foo" (func $inlining-recursive/foo))
  (export "bar" (func $inlining-recursive/bar))
  (export "baz" (func $inlining-recursive/baz))
- (func $inlining-recursive/foo (; 0 ;)
+ (func $inlining-recursive/foo
   call $inlining-recursive/foo
  )
- (func $inlining-recursive/baz (; 1 ;)
+ (func $inlining-recursive/baz
   call $inlining-recursive/bar
  )
- (func $inlining-recursive/bar (; 2 ;)
+ (func $inlining-recursive/bar
   call $inlining-recursive/baz
  )
 )

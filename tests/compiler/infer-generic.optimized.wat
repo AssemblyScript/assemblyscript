@@ -8,7 +8,6 @@
  (data (i32.const 1024) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00i\00n\00f\00e\00r\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s")
  (data (i32.const 1072) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
  (data (i32.const 1104) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00@\04\00\00@\04\00\00\0c\00\00\00\03")
- (global $~argumentsLength (mut i32) (i32.const 0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
@@ -16,7 +15,7 @@
  (export "test3" (func $infer-generic/test2))
  (export "test4" (func $infer-generic/test2))
  (start $~start)
- (func $start:infer-generic~anonymous|0 (; 0 ;) (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
+ (func $start:infer-generic~anonymous|0 (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
   local.get $1
   f32.const 0
   f32.ne
@@ -24,22 +23,20 @@
   local.get $0
   select
  )
- (func $~setArgumentsLength (; 1 ;) (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
+ (func $~setArgumentsLength (param $0 i32)
+  nop
  )
- (func $infer-generic/test1 (; 2 ;) (param $0 f32) (result f32)
-  local.get $0
- )
- (func $infer-generic/test2 (; 3 ;) (param $0 i32) (result i32)
+ (func $infer-generic/test1 (param $0 f32) (result f32)
   local.get $0
  )
- (func $~start (; 4 ;)
+ (func $infer-generic/test2 (param $0 i32) (result i32)
+  local.get $0
+ )
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 f32)
   i32.const 1132
   i32.load
   local.set $2
@@ -55,6 +52,7 @@
    select
    i32.lt_s
    if
+    local.get $1
     i32.const 1124
     i32.load
     local.get $0
@@ -62,11 +60,6 @@
     i32.shl
     i32.add
     f32.load
-    local.set $4
-    i32.const 4
-    global.set $~argumentsLength
-    local.get $1
-    local.get $4
     local.get $0
     i32.const 1120
     call $start:infer-generic~anonymous|0

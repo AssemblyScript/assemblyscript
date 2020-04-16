@@ -8,28 +8,28 @@
  (global $export/c i32 (i32.const 3))
  (export "memory" (memory $0))
  (start $~start)
- (func $export/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/add (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $export/sub (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/sub (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $export/mul (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $export/mul (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.mul
  )
- (func $export/ns.two (; 3 ;)
+ (func $export/ns.two
   nop
  )
- (func $export-default/theDefault (; 4 ;)
+ (func $export-default/theDefault
   nop
  )
- (func $start:import (; 5 ;)
+ (func $start:import
   global.get $export/a
   global.get $export/b
   call $export/add
@@ -59,7 +59,7 @@
   call $export/ns.two
   call $export-default/theDefault
  )
- (func $~start (; 6 ;)
+ (func $~start
   call $start:import
  )
 )

@@ -5,7 +5,6 @@
  (type $i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32 i32 i32)))
  (memory $0 0)
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $resolve-nested/Outer.InnerClass i32 (i32.const 4))
  (global $resolve-nested/Outer.Inner.EvenInnerClass i32 (i32.const 5))
@@ -18,7 +17,7 @@
  (export "Outer.inner" (func $resolve-nested/Outer.inner))
  (export "outer" (func $resolve-nested/outer))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 0 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -84,7 +83,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $resolve-nested/Outer.InnerClass#constructor (; 1 ;) (param $0 i32) (result i32)
+ (func $resolve-nested/Outer.InnerClass#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -94,7 +93,7 @@
   end
   local.get $0
  )
- (func $resolve-nested/Outer.Inner.EvenInnerClass#constructor (; 2 ;) (param $0 i32) (result i32)
+ (func $resolve-nested/Outer.Inner.EvenInnerClass#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -104,18 +103,16 @@
   end
   local.get $0
  )
- (func $resolve-nested/Outer.Inner.evenInner (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
+ (func $resolve-nested/Outer.Inner.evenInner (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   nop
  )
- (func $resolve-nested/Outer.inner (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
+ (func $resolve-nested/Outer.inner (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32)
   nop
  )
- (func $resolve-nested/outer (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $resolve-nested/outer (param $0 i32) (param $1 i32) (param $2 i32)
   nop
  )
- (func $~start (; 6 ;)
-  i32.const 1024
-  global.set $~lib/rt/stub/startOffset
+ (func $~start
   i32.const 1024
   global.set $~lib/rt/stub/offset
  )

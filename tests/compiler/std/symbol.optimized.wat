@@ -39,7 +39,6 @@
  (global $std/symbol/sym1 (mut i32) (i32.const 0))
  (global $std/symbol/sym2 (mut i32) (i32.const 0))
  (global $~lib/symbol/stringToId (mut i32) (i32.const 0))
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/symbol/idToString (mut i32) (i32.const 0))
  (global $std/symbol/sym3 (mut i32) (i32.const 0))
@@ -48,11 +47,10 @@
  (global $std/symbol/key2 (mut i32) (i32.const 0))
  (global $std/symbol/key3 (mut i32) (i32.const 0))
  (global $std/symbol/key4 (mut i32) (i32.const 0))
- (global $std/symbol/hasInstance (mut i32) (i32.const 0))
  (global $std/symbol/isConcatSpreadable (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/symbol/Symbol (; 1 ;) (result i32)
+ (func $~lib/symbol/Symbol (result i32)
   (local $0 i32)
   global.get $~lib/symbol/nextId
   local.tee $0
@@ -66,7 +64,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -150,7 +148,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/memory/memory.fill (; 3 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -308,7 +306,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 4 ;) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741808
@@ -329,7 +327,7 @@
   call $~lib/memory/memory.fill
   local.get $1
  )
- (func $~lib/map/Map<~lib/string/String,usize>#clear (; 5 ;) (param $0 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#clear (param $0 i32)
   (local $1 i32)
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -362,7 +360,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/string/String#get:length (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -370,7 +368,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/hash/hashStr (; 7 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hashStr (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -407,7 +405,7 @@
   end
   local.get $1
  )
- (func $~lib/util/string/compareImpl (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -483,7 +481,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -515,7 +513,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<~lib/string/String,usize>#find (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#find (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
@@ -556,7 +554,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<~lib/string/String,usize>#rehash (; 11 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -666,7 +664,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<~lib/string/String,usize>#set (; 12 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<~lib/string/String,usize>#set (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -753,7 +751,7 @@
    i32.store
   end
  )
- (func $~lib/util/hash/hash32 (; 13 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
@@ -784,7 +782,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<usize,~lib/string/String>#find (; 14 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -825,7 +823,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<usize,~lib/string/String>#rehash (; 15 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -935,7 +933,7 @@
   i32.load offset=20
   i32.store offset=16
  )
- (func $~lib/map/Map<usize,~lib/string/String>#set (; 16 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#set (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1029,7 +1027,7 @@
    i32.store
   end
  )
- (func $~lib/symbol/_Symbol.for (; 17 ;) (result i32)
+ (func $~lib/symbol/_Symbol.for (result i32)
   (local $0 i32)
   global.get $~lib/symbol/stringToId
   if
@@ -1126,7 +1124,7 @@
   call $~lib/map/Map<usize,~lib/string/String>#set
   local.get $0
  )
- (func $~lib/map/Map<usize,~lib/string/String>#has (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1135,7 +1133,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<usize,~lib/string/String>#get (; 19 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<usize,~lib/string/String>#get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1154,7 +1152,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/symbol/_Symbol.keyFor (; 20 ;) (param $0 i32) (result i32)
+ (func $~lib/symbol/_Symbol.keyFor (param $0 i32) (result i32)
   global.get $~lib/symbol/idToString
   if (result i32)
    global.get $~lib/symbol/idToString
@@ -1171,7 +1169,7 @@
    i32.const 0
   end
  )
- (func $~lib/memory/memory.copy (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -1344,7 +1342,7 @@
    end
   end
  )
- (func $~lib/string/String.__concat (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1391,7 +1389,7 @@
   end
   local.get $0
  )
- (func $~lib/symbol/_Symbol#toString (; 23 ;) (param $0 i32) (result i32)
+ (func $~lib/symbol/_Symbol#toString (param $0 i32) (result i32)
   i32.const 1808
   block $break|0 (result i32)
    block $case11|0
@@ -1467,7 +1465,7 @@
   i32.const 1872
   call $~lib/string/String.__concat
  )
- (func $start:std/symbol (; 24 ;)
+ (func $start:std/symbol
   (local $0 i32)
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
@@ -1484,8 +1482,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2112
-  global.set $~lib/rt/stub/startOffset
   i32.const 2112
   global.set $~lib/rt/stub/offset
   call $~lib/symbol/_Symbol.for
@@ -1605,8 +1601,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  global.set $std/symbol/hasInstance
   i32.const 2
   global.set $std/symbol/isConcatSpreadable
   i32.const 1
@@ -1636,7 +1630,7 @@
    unreachable
   end
  )
- (func $~start (; 25 ;)
+ (func $~start
   call $start:std/symbol
  )
 )

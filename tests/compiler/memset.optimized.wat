@@ -8,7 +8,7 @@
  (global $memset/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $memset/memset (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $memset/memset (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   block $folding-inner0
@@ -207,7 +207,7 @@
    end
   end
  )
- (func $start:memset (; 2 ;)
+ (func $start:memset
   i32.const 1060
   global.set $memset/dest
   i32.const 1060
@@ -293,7 +293,7 @@
    unreachable
   end
  )
- (func $~start (; 3 ;)
+ (func $~start
   call $start:memset
  )
 )

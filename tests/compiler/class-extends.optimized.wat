@@ -3,7 +3,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (export "test" (func $class-extends/test))
- (func $class-extends/test (; 0 ;) (param $0 i32)
+ (func $class-extends/test (param $0 i32)
   local.get $0
   i32.load
   drop

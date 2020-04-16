@@ -22,26 +22,26 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:resolve-function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
+ (func $start:resolve-function-expression~anonymous|0 (param $0 i32) (result i32)
   local.get $0
   i32.const 40
   i32.add
  )
- (func $~setArgumentsLength (; 2 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $start:resolve-function-expression~anonymous|1 (; 3 ;) (param $0 i32) (result i32)
+ (func $start:resolve-function-expression~anonymous|1 (param $0 i32) (result i32)
   local.get $0
   i32.const 41
   i32.add
  )
- (func $start:resolve-function-expression~anonymous|2 (; 4 ;) (param $0 i32) (result i32)
+ (func $start:resolve-function-expression~anonymous|2 (param $0 i32) (result i32)
   local.get $0
   i32.const 42
   i32.add
  )
- (func $~lib/util/number/decimalCount32 (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -96,7 +96,7 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 6 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -150,7 +150,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -203,7 +203,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/util/number/utoa32_lut (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -343,10 +343,10 @@
    i32.store16
   end
  )
- (func $~lib/rt/stub/__retain (; 9 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/util/number/itoa32 (; 10 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -400,19 +400,19 @@
   local.get $3
   call $~lib/rt/stub/__retain
  )
- (func $~lib/util/number/itoa<i32> (; 11 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<i32> (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa32
   return
  )
- (func $~lib/number/I32#toString (; 12 ;) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa<i32>
  )
- (func $~lib/rt/stub/__release (; 13 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/string/String#get:length (; 14 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -420,7 +420,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -542,7 +542,7 @@
   call $~lib/rt/stub/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -615,7 +615,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:resolve-function-expression (; 17 ;)
+ (func $start:resolve-function-expression
   (local $0 i32)
   i32.const 2
   i32.const 1
@@ -680,7 +680,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $~start (; 18 ;)
+ (func $~start
   call $start:resolve-function-expression
  )
 )

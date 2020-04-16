@@ -12,7 +12,7 @@
  (export "memory" (memory $0))
  (export "external" (global $features/mutable-globals/external))
  (export "internal" (global $features/mutable-globals/internal))
- (func $start:features/mutable-globals (; 1 ;)
+ (func $start:features/mutable-globals
   global.get $features/mutable-globals/external
   i32.const 123
   i32.eq
@@ -70,7 +70,7 @@
    unreachable
   end
  )
- (func $~start (; 2 ;)
+ (func $~start
   global.get $~started
   if
    return

@@ -10,7 +10,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 52))
  (export "memory" (memory $0))
  (start $~start)
- (func $memset/memset (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memset/memset (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -273,7 +273,7 @@
   end
   local.get $3
  )
- (func $start:memset (; 2 ;)
+ (func $start:memset
   global.get $~lib/heap/__heap_base
   global.set $memset/dest
   global.get $memset/dest
@@ -375,7 +375,7 @@
    unreachable
   end
  )
- (func $~start (; 3 ;)
+ (func $~start
   call $start:memset
  )
 )

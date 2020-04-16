@@ -7,7 +7,7 @@
  (export "testAlwaysWrapped" (func $loop-wrap/testAlwaysWrapped))
  (export "testFirstWrapped" (func $loop-wrap/testFirstWrapped))
  (export "testSubsequentWrapped" (func $loop-wrap/testSubsequentWrapped))
- (func $loop-wrap/testAlwaysWrapped (; 0 ;)
+ (func $loop-wrap/testAlwaysWrapped
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -32,7 +32,7 @@
    end
   end
  )
- (func $loop-wrap/testFirstWrapped (; 1 ;)
+ (func $loop-wrap/testFirstWrapped
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -59,7 +59,7 @@
    end
   end
  )
- (func $loop-wrap/testSubsequentWrapped (; 2 ;) (param $0 i32)
+ (func $loop-wrap/testSubsequentWrapped (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

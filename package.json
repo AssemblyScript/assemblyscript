@@ -21,23 +21,23 @@
     "url": "https://github.com/AssemblyScript/assemblyscript/issues"
   },
   "dependencies": {
-    "binaryen": "91.0.0-nightly.20200310",
+    "binaryen": "91.0.0-nightly.20200414",
     "long": "^4.0.0",
     "source-map-support": "^0.5.16",
     "ts-node": "^6.2.0"
   },
   "devDependencies": {
-    "@types/node": "^13.9.1",
+    "@types/node": "^13.11.1",
     "browser-process-hrtime": "^1.0.0",
     "diff": "^4.0.2",
     "glob": "^7.1.6",
     "physical-cpu-count": "^2.0.0",
     "source-map-support": "^0.5.16",
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^6.2.2",
     "ts-node": "^6.2.0",
     "tslint": "^5.20.1",
     "typescript": "^3.8.3",
-    "webpack": "^4.42.0",
+    "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   },
   "main": "index.js",

@@ -15,7 +15,7 @@
  (export "Child#get:child" (func $extends-recursive/Parent#get:child))
  (export "Child#set:child" (func $extends-recursive/Parent#set:child))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -69,7 +69,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -122,10 +122,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $extends-recursive/Parent#constructor (; 3 ;) (param $0 i32) (result i32)
+ (func $extends-recursive/Parent#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -141,7 +141,7 @@
   i32.store
   local.get $0
  )
- (func $extends-recursive/Child#constructor (; 4 ;) (param $0 i32) (result i32)
+ (func $extends-recursive/Child#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -156,15 +156,15 @@
   local.set $0
   local.get $0
  )
- (func $extends-recursive/Parent#get:child (; 5 ;) (param $0 i32) (result i32)
+ (func $extends-recursive/Parent#get:child (param $0 i32) (result i32)
   local.get $0
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/rt/stub/__release (; 6 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $extends-recursive/Parent#set:child (; 7 ;) (param $0 i32) (param $1 i32)
+ (func $extends-recursive/Parent#set:child (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -182,7 +182,7 @@
   local.get $1
   i32.store
  )
- (func $~start (; 8 ;)
+ (func $~start
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add

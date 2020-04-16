@@ -13,7 +13,7 @@
  (global $std/pointer/buf (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/memory/memory.copy (; 1 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -187,7 +187,7 @@
    end
   end
  )
- (func $start:std/pointer (; 2 ;)
+ (func $start:std/pointer
   (local $0 i32)
   (local $1 i32)
   i32.const 8
@@ -566,7 +566,7 @@
    unreachable
   end
  )
- (func $~start (; 3 ;)
+ (func $~start
   call $start:std/pointer
  )
 )

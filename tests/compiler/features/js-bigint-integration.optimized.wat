@@ -13,10 +13,10 @@
  (export "memory" (memory $0))
  (export "internalValue" (global $features/js-bigint-integration/internalValue))
  (export "getInternalValue" (func $features/js-bigint-integration/getInternalValue))
- (func $features/js-bigint-integration/getInternalValue (; 2 ;) (result i64)
+ (func $features/js-bigint-integration/getInternalValue (result i64)
   i64.const 9007199254740991
  )
- (func $~start (; 3 ;)
+ (func $~start
   global.get $~started
   if
    return

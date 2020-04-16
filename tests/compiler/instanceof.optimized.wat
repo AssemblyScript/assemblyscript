@@ -7,7 +7,7 @@
  (global $instanceof/an (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~start (; 1 ;)
+ (func $~start
   global.get $instanceof/an
   if
    i32.const 0

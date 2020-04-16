@@ -1,13 +1,10 @@
 (module
  (type $none_=>_none (func))
- (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $resolve-new/foo (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $resolve-new/Foo#constructor (; 0 ;) (result i32)
+ (func $resolve-new/Foo#constructor
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -15,18 +12,18 @@
   global.get $~lib/rt/stub/offset
   i32.const 16
   i32.add
-  local.tee $2
+  local.tee $3
   i32.const 16
   i32.add
   local.tee $0
   memory.size
-  local.tee $3
+  local.tee $2
   i32.const 16
   i32.shl
   local.tee $1
   i32.gt_u
   if
-   local.get $3
+   local.get $2
    local.get $0
    local.get $1
    i32.sub
@@ -37,7 +34,7 @@
    i32.const 16
    i32.shr_u
    local.tee $1
-   local.get $3
+   local.get $2
    local.get $1
    i32.gt_s
    select
@@ -56,7 +53,7 @@
   end
   local.get $0
   global.set $~lib/rt/stub/offset
-  local.get $2
+  local.get $3
   i32.const 16
   i32.sub
   local.tee $0
@@ -71,16 +68,11 @@
   local.get $0
   i32.const 0
   i32.store offset=12
-  local.get $2
  )
- (func $~start (; 1 ;)
-  i32.const 1024
-  global.set $~lib/rt/stub/startOffset
+ (func $~start
   i32.const 1024
   global.set $~lib/rt/stub/offset
   call $resolve-new/Foo#constructor
-  global.set $resolve-new/foo
   call $resolve-new/Foo#constructor
-  drop
  )
 )

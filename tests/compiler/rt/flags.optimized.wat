@@ -14,7 +14,7 @@
  (data (i32.const 1708) "\10A\12\00\00\00\00\00 \00\00\00\00\00\00\00 ")
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/__typeinfo (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/__typeinfo (param $0 i32) (result i32)
   local.get $0
   i32.const 1184
   i32.load
@@ -34,7 +34,7 @@
   i32.add
   i32.load
  )
- (func $start:rt/flags (; 2 ;)
+ (func $start:rt/flags
   block $folding-inner0
    i32.const 3
    call $~lib/rt/__typeinfo
@@ -328,7 +328,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~start (; 3 ;)
+ (func $~start
   call $start:rt/flags
  )
 )

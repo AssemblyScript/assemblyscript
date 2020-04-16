@@ -13,19 +13,19 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $call-inferred/foo<i32> (; 1 ;) (param $0 i32) (result i32)
+ (func $call-inferred/foo<i32> (param $0 i32) (result i32)
   local.get $0
  )
- (func $call-inferred/foo<f64> (; 2 ;) (param $0 f64) (result f64)
+ (func $call-inferred/foo<f64> (param $0 f64) (result f64)
   local.get $0
  )
- (func $call-inferred/foo<f32> (; 3 ;) (param $0 f32) (result f32)
+ (func $call-inferred/foo<f32> (param $0 f32) (result f32)
   local.get $0
  )
- (func $call-inferred/bar<f32> (; 4 ;) (param $0 f32) (result f32)
+ (func $call-inferred/bar<f32> (param $0 f32) (result f32)
   local.get $0
  )
- (func $call-inferred/bar<f32>|trampoline (; 5 ;) (param $0 f32) (result f32)
+ (func $call-inferred/bar<f32>|trampoline (param $0 f32) (result f32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -40,11 +40,11 @@
   local.get $0
   call $call-inferred/bar<f32>
  )
- (func $~setArgumentsLength (; 6 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $start:call-inferred (; 7 ;)
+ (func $start:call-inferred
   i32.const 42
   call $call-inferred/foo<i32>
   i32.const 42
@@ -100,7 +100,7 @@
    unreachable
   end
  )
- (func $~start (; 8 ;)
+ (func $~start
   call $start:call-inferred
  )
 )

@@ -15,15 +15,13 @@
  (data (i32.const 1200) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00F")
  (data (i32.const 1232) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00I\00B")
  (global $class-overloading/which (mut i32) (i32.const 1040))
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $class-overloading/a (mut i32) (i32.const 0))
- (global $class-overloading/c (mut i32) (i32.const 0))
  (global $class-overloading/ia (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -89,7 +87,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $class-overloading/B#constructor (; 2 ;) (param $0 i32) (result i32)
+ (func $class-overloading/B#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -106,7 +104,7 @@
    local.get $0
   end
  )
- (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -114,7 +112,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -190,7 +188,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -222,7 +220,7 @@
   end
   i32.const 0
  )
- (func $class-overloading/C#a<i32> (; 6 ;)
+ (func $class-overloading/C#a<i32>
   i32.const 1088
   global.set $class-overloading/which
   i32.const 1088
@@ -240,7 +238,7 @@
   i32.const 1184
   global.set $class-overloading/which
  )
- (func $class-overloading/D#constructor (; 7 ;) (param $0 i32) (result i32)
+ (func $class-overloading/D#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -251,7 +249,7 @@
   local.get $0
   call $class-overloading/B#constructor
  )
- (func $class-overloading/E#constructor (; 8 ;) (param $0 i32) (result i32)
+ (func $class-overloading/E#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -262,9 +260,7 @@
   local.get $0
   call $class-overloading/D#constructor
  )
- (func $start:class-overloading (; 9 ;)
-  i32.const 1264
-  global.set $~lib/rt/stub/startOffset
+ (func $start:class-overloading
   i32.const 1264
   global.set $~lib/rt/stub/offset
   i32.const 0
@@ -335,7 +331,7 @@
   i32.const 5
   call $~lib/rt/stub/__alloc
   call $class-overloading/B#constructor
-  global.set $class-overloading/c
+  drop
   i32.const 1040
   global.set $class-overloading/which
   call $class-overloading/C#a<i32>
@@ -595,7 +591,7 @@
    unreachable
   end
  )
- (func $~start (; 10 ;)
+ (func $~start
   global.get $~started
   if
    return
@@ -605,7 +601,7 @@
   end
   call $start:class-overloading
  )
- (func $class-overloading/A#a<i32>|virtual (; 11 ;) (param $0 i32)
+ (func $class-overloading/A#a<i32>|virtual (param $0 i32)
   block $default
    block $case2
     block $case1
@@ -644,7 +640,7 @@
   i32.const 1056
   global.set $class-overloading/which
  )
- (func $class-overloading/A#b|virtual (; 12 ;) (param $0 i32)
+ (func $class-overloading/A#b|virtual (param $0 i32)
   block $default
    block $case2
     block $case1
@@ -684,7 +680,7 @@
   i32.const 1056
   global.set $class-overloading/which
  )
- (func $class-overloading/A#get:c|virtual (; 13 ;) (param $0 i32)
+ (func $class-overloading/A#get:c|virtual (param $0 i32)
   block $default
    block $case2
     block $case1

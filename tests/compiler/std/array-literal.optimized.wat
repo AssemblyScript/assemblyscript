@@ -35,7 +35,7 @@
  (global $std/array-literal/dynamicArrayRefWithCtor (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/array/Array<i8>#__get (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -54,7 +54,7 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/array/Array<i32>#__get (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -75,7 +75,7 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/removeBlock (; 7 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -237,7 +237,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 8 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -516,7 +516,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -630,7 +630,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 10 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -717,7 +717,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/searchBlock (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 256
@@ -846,7 +846,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/prepareBlock (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -921,7 +921,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1081,7 +1081,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1089,7 +1089,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/__retain (; 15 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1140,7 +1140,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/__allocArray (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/__allocArray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   i32.const 16
   local.get $2
@@ -1166,7 +1166,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/pure/__release (; 17 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1536
   i32.gt_u
@@ -1177,7 +1177,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $start:std/array-literal (; 18 ;)
+ (func $start:std/array-literal
   (local $0 i32)
   (local $1 i32)
   i32.const 1084
@@ -1541,10 +1541,10 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~start (; 19 ;)
+ (func $~start
   call $start:std/array-literal
  )
- (func $~lib/rt/pure/decrement (; 20 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1661,7 +1661,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 21 ;) (param $0 i32)
+ (func $~lib/rt/pure/__visit (param $0 i32)
   local.get $0
   i32.const 1536
   i32.lt_u
@@ -1673,7 +1673,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (; 22 ;) (param $0 i32)
+ (func $~lib/array/Array<std/array-literal/Ref>#__visit_impl (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)

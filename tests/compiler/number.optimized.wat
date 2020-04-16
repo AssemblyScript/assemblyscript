@@ -31,17 +31,13 @@
  (data (i32.const 2480) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00r\00u\00e")
  (data (i32.const 2512) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00f\00a\00l\00s\00e")
  (global $number/a (mut i32) (i32.const 1))
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
- (global $~lib/util/number/_frc_minus (mut i64) (i64.const 0))
- (global $~lib/util/number/_exp (mut i32) (i32.const 0))
  (global $~lib/util/number/_K (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/util/number/decimalCount32 (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
@@ -83,7 +79,7 @@
   i32.lt_u
   select
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -167,7 +163,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/util/number/utoa_simple<u32> (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -194,7 +190,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/number/I32#toString (; 4 ;) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -233,7 +229,7 @@
    i32.const 1040
   end
  )
- (func $~lib/string/String#get:length (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -241,7 +237,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 6 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -317,7 +313,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -349,7 +345,7 @@
   end
   i32.const 0
  )
- (func $~lib/util/number/genDigits (; 8 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
+ (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
   (local $6 i32)
   (local $7 i64)
   (local $8 i32)
@@ -737,7 +733,7 @@
   i32.store16
   local.get $8
  )
- (func $~lib/memory/memory.copy (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -910,7 +906,7 @@
    end
   end
  )
- (func $~lib/util/number/prettify (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -1155,17 +1151,11 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 11 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/dtoa_core (param $0 i32) (result i32)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
   (local $4 f64)
-  i64.const -9223372036854774784
-  global.set $~lib/util/number/_frc_plus
-  i64.const 9223372036854775296
-  global.set $~lib/util/number/_frc_minus
-  i32.const -62
-  global.set $~lib/util/number/_exp
   i32.const -4
   global.set $~lib/util/number/_K
   i32.const 1648
@@ -1279,7 +1269,7 @@
   global.get $~lib/util/number/_K
   call $~lib/util/number/prettify
  )
- (func $~lib/util/number/dtoa (; 12 ;) (result i32)
+ (func $~lib/util/number/dtoa (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1409,7 +1399,7 @@
   end
   local.get $0
  )
- (func $~lib/number/F32.isSafeInteger (; 13 ;) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isSafeInteger (param $0 f32) (result i32)
   local.get $0
   f32.trunc
   local.get $0
@@ -1421,7 +1411,7 @@
   f32.le
   select
  )
- (func $~lib/number/F32.isInteger (; 14 ;) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isInteger (param $0 f32) (result i32)
   (local $1 i32)
   local.get $0
   f32.trunc
@@ -1435,7 +1425,7 @@
   f32.eq
   select
  )
- (func $~lib/number/F64.isSafeInteger (; 15 ;) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isSafeInteger (param $0 f64) (result i32)
   local.get $0
   f64.trunc
   local.get $0
@@ -1447,7 +1437,7 @@
   f64.le
   select
  )
- (func $~lib/number/F64.isInteger (; 16 ;) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isInteger (param $0 f64) (result i32)
   (local $1 i32)
   local.get $0
   f64.trunc
@@ -1461,10 +1451,8 @@
   f64.eq
   select
  )
- (func $start:number (; 17 ;)
+ (func $start:number
   (local $0 i32)
-  i32.const 2544
-  global.set $~lib/rt/stub/startOffset
   i32.const 2544
   global.set $~lib/rt/stub/offset
   global.get $number/a
@@ -2066,7 +2054,7 @@
    unreachable
   end
  )
- (func $~start (; 18 ;)
+ (func $~start
   call $start:number
  )
 )

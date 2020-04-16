@@ -11,13 +11,13 @@
  (global $namespace/Outer.Inner.anEnum.TWO i32 (i32.const 2))
  (export "memory" (memory $0))
  (start $~start)
- (func $namespace/Outer.Inner.aFunc (; 0 ;) (result i32)
+ (func $namespace/Outer.Inner.aFunc (result i32)
   global.get $namespace/Outer.Inner.aVar
  )
- (func $namespace/Joined.anotherFunc (; 1 ;) (result i32)
+ (func $namespace/Joined.anotherFunc (result i32)
   i32.const 3
  )
- (func $start:namespace (; 2 ;)
+ (func $start:namespace
   global.get $namespace/Outer.Inner.aVar
   global.set $namespace/Outer.Inner.anotherVar
   global.get $namespace/Outer.outerVar
@@ -33,7 +33,7 @@
   call $namespace/Joined.anotherFunc
   drop
  )
- (func $~start (; 3 ;)
+ (func $~start
   call $start:namespace
  )
 )

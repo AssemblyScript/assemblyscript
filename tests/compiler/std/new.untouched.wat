@@ -13,7 +13,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -67,7 +67,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -120,10 +120,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $std/new/AClass#constructor (; 3 ;) (param $0 i32) (param $1 f32) (result i32)
+ (func $std/new/AClass#constructor (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   local.get $0
   i32.eqz
@@ -150,7 +150,7 @@
   f32.store offset=4
   local.get $0
  )
- (func $start:std/new (; 4 ;)
+ (func $start:std/new
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -166,7 +166,7 @@
   call $std/new/AClass#constructor
   global.set $std/new/aClass
  )
- (func $~start (; 5 ;)
+ (func $~start
   call $start:std/new
  )
 )

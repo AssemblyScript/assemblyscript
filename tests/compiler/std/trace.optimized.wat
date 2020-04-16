@@ -14,7 +14,7 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~start (; 1 ;)
+ (func $~start
   global.get $~started
   if
    return

@@ -283,14 +283,14 @@ export class Flow {
   getTempLocal(type: Type, except: Set<i32> | null = null): Local {
     var parentFunction = this.parentFunction;
     var temps: Local[] | null;
-    switch (type.toNativeType()) {
-      case NativeType.I32: { temps = parentFunction.tempI32s; break; }
-      case NativeType.I64: { temps = parentFunction.tempI64s; break; }
-      case NativeType.F32: { temps = parentFunction.tempF32s; break; }
-      case NativeType.F64: { temps = parentFunction.tempF64s; break; }
-      case NativeType.V128: { temps = parentFunction.tempV128s; break; }
-      case NativeType.Anyref: { temps = parentFunction.tempAnyrefs; break; }
-      case NativeType.Exnref: { temps = parentFunction.tempExnrefs; break; }
+    switch (<u32>type.toNativeType()) {
+      case <u32>NativeType.I32: { temps = parentFunction.tempI32s; break; }
+      case <u32>NativeType.I64: { temps = parentFunction.tempI64s; break; }
+      case <u32>NativeType.F32: { temps = parentFunction.tempF32s; break; }
+      case <u32>NativeType.F64: { temps = parentFunction.tempF64s; break; }
+      case <u32>NativeType.V128: { temps = parentFunction.tempV128s; break; }
+      case <u32>NativeType.Anyref: { temps = parentFunction.tempAnyrefs; break; }
+      case <u32>NativeType.Exnref: { temps = parentFunction.tempExnrefs; break; }
       default: throw new Error("concrete type expected");
     }
     var local: Local;
@@ -341,44 +341,44 @@ export class Flow {
     var parentFunction = this.parentFunction;
     var temps: Local[];
     assert(local.type != null); // internal error
-    switch (local.type.toNativeType()) {
-      case NativeType.I32: {
+    switch (<u32>local.type.toNativeType()) {
+      case <u32>NativeType.I32: {
         let tempI32s = parentFunction.tempI32s;
         if (tempI32s) temps = tempI32s;
         else parentFunction.tempI32s = temps = [];
         break;
       }
-      case NativeType.I64: {
+      case <u32>NativeType.I64: {
         let tempI64s = parentFunction.tempI64s;
         if (tempI64s) temps = tempI64s;
         else parentFunction.tempI64s = temps = [];
         break;
       }
-      case NativeType.F32: {
+      case <u32>NativeType.F32: {
         let tempF32s = parentFunction.tempF32s;
         if (tempF32s) temps = tempF32s;
         else parentFunction.tempF32s = temps = [];
         break;
       }
-      case NativeType.F64: {
+      case <u32>NativeType.F64: {
         let tempF64s = parentFunction.tempF64s;
         if (tempF64s) temps = tempF64s;
         else parentFunction.tempF64s = temps = [];
         break;
       }
-      case NativeType.V128: {
+      case <u32>NativeType.V128: {
         let tempV128s = parentFunction.tempV128s;
         if (tempV128s) temps = tempV128s;
         else parentFunction.tempV128s = temps = [];
         break;
       }
-      case NativeType.Anyref: {
+      case <u32>NativeType.Anyref: {
         let tempAnyrefs = parentFunction.tempAnyrefs;
         if (tempAnyrefs) temps = tempAnyrefs;
         else parentFunction.tempAnyrefs = temps = [];
         break;
       }
-      case NativeType.Exnref: {
+      case <u32>NativeType.Exnref: {
         let tempExnrefs = parentFunction.tempExnrefs;
         if (tempExnrefs) temps = tempExnrefs;
         else parentFunction.tempExnrefs = temps = [];
@@ -1255,11 +1255,11 @@ export class Flow {
       // overflows if the value cannot be represented in the target type
       case ExpressionId.Const: {
         let value: i32 = 0;
-        switch (getExpressionType(expr)) {
-          case NativeType.I32: { value = getConstValueI32(expr); break; }
-          case NativeType.I64: { value = getConstValueI64Low(expr); break; } // discards upper bits
-          case NativeType.F32: { value = i32(getConstValueF32(expr)); break; }
-          case NativeType.F64: { value = i32(getConstValueF64(expr)); break; }
+        switch (<u32>getExpressionType(expr)) {
+          case <u32>NativeType.I32: { value = getConstValueI32(expr); break; }
+          case <u32>NativeType.I64: { value = getConstValueI64Low(expr); break; } // discards upper bits
+          case <u32>NativeType.F32: { value = i32(getConstValueF32(expr)); break; }
+          case <u32>NativeType.F64: { value = i32(getConstValueF64(expr)); break; }
           default: assert(false);
         }
         switch (type.kind) {

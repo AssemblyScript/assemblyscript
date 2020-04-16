@@ -18,28 +18,28 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:function-expression~anonymous|0 (; 1 ;) (param $0 i32) (result i32)
+ (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
   local.get $0
  )
- (func $~setArgumentsLength (; 2 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $start:function-expression~anonymous|1 (; 3 ;) (param $0 i32) (result i32)
+ (func $start:function-expression~anonymous|1 (param $0 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~someName (; 4 ;)
+ (func $start:function-expression~someName
   nop
  )
- (func $start:function-expression~anonymous|2 (; 5 ;) (result i32)
+ (func $start:function-expression~anonymous|2 (result i32)
   i32.const 1
  )
- (func $start:function-expression~anonymous|3 (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|3 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $function-expression/testOmitted (; 7 ;) (param $0 i32) (result i32)
+ (func $function-expression/testOmitted (param $0 i32) (result i32)
   i32.const 1
   i32.const 2
   i32.const 2
@@ -47,36 +47,36 @@
   local.get $0
   call_indirect (type $i32_i32_=>_i32)
  )
- (func $start:function-expression~anonymous|4 (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|4 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
- (func $start:function-expression~anonymous|5 (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $start:function-expression~anonymous|5 (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $function-expression/testOmittedReturn1~anonymous|0 (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-expression/testOmittedReturn1~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $function-expression/testOmittedReturn1 (; 11 ;) (result i32)
+ (func $function-expression/testOmittedReturn1 (result i32)
   i32.const 8
  )
- (func $function-expression/testOmittedReturn2~anonymous|0 (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-expression/testOmittedReturn2~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
  )
- (func $function-expression/testOmittedReturn2 (; 13 ;) (result i32)
+ (func $function-expression/testOmittedReturn2 (result i32)
   i32.const 9
  )
- (func $function-expression/testOmittedReturn3~anonymous|0 (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-expression/testOmittedReturn3~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   i32.const 42
  )
- (func $function-expression/testOmittedReturn3 (; 15 ;) (result i32)
+ (func $function-expression/testOmittedReturn3 (result i32)
   i32.const 10
  )
- (func $function-expression/testNullable~anonymous|0 (; 16 ;) (result i32)
+ (func $function-expression/testNullable~anonymous|0 (result i32)
   i32.const 1
  )
- (func $function-expression/testNullable (; 17 ;) (param $0 i32) (result i32)
+ (func $function-expression/testNullable (param $0 i32) (result i32)
   local.get $0
   if
    i32.const 11
@@ -87,7 +87,7 @@
   end
   unreachable
  )
- (func $start:function-expression (; 18 ;)
+ (func $start:function-expression
   i32.const 1
   i32.const 1
   global.set $~argumentsLength
@@ -243,7 +243,7 @@
    unreachable
   end
  )
- (func $~start (; 19 ;)
+ (func $~start
   call $start:function-expression
  )
 )

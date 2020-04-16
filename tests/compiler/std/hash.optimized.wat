@@ -8,7 +8,7 @@
  (data (i32.const 1104) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00a\00b\00c")
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/util/hash/hashStr (; 0 ;) (param $0 i32)
+ (func $~lib/util/hash/hashStr (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -48,7 +48,7 @@
    end
   end
  )
- (func $~start (; 1 ;)
+ (func $~start
   i32.const 0
   call $~lib/util/hash/hashStr
   i32.const 1040

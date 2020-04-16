@@ -26,13 +26,13 @@
  (export "testRet" (func $assert-nonnull/testRet))
  (export "testObjFn" (func $assert-nonnull/testObjFn))
  (export "testObjRet" (func $assert-nonnull/testObjRet))
- (func $~lib/rt/stub/__retain (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 2 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $assert-nonnull/testVar (; 3 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testVar (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -55,7 +55,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $assert-nonnull/testObj (; 4 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testObj (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -79,7 +79,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $assert-nonnull/testProp (; 5 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testProp (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -103,7 +103,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -113,7 +113,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<assert-nonnull/Foo>#__get (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -145,7 +145,7 @@
   end
   local.get $2
  )
- (func $assert-nonnull/testArr (; 8 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testArr (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -169,7 +169,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~lib/array/Array<assert-nonnull/Foo | null>#__unchecked_get (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo | null>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -179,7 +179,7 @@
   i32.load
   call $~lib/rt/stub/__retain
  )
- (func $~lib/array/Array<assert-nonnull/Foo | null>#__get (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo | null>#__get (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   local.get $0
@@ -199,7 +199,7 @@
   local.set $2
   local.get $2
  )
- (func $assert-nonnull/testElem (; 11 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testElem (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -224,7 +224,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $assert-nonnull/testAll (; 12 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testAll (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -276,7 +276,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $assert-nonnull/testAll2 (; 13 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testAll2 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -328,11 +328,11 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~setArgumentsLength (; 14 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $assert-nonnull/testFn (; 15 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testFn (param $0 i32) (result i32)
   (local $1 i32)
   i32.const 0
   global.set $~argumentsLength
@@ -340,7 +340,7 @@
   call_indirect (type $none_=>_i32)
   local.tee $1
  )
- (func $assert-nonnull/testFn2 (; 16 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testFn2 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -362,7 +362,7 @@
   call_indirect (type $none_=>_i32)
   local.tee $1
  )
- (func $assert-nonnull/testRet (; 17 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testRet (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   i32.const 0
@@ -387,7 +387,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $assert-nonnull/testObjFn (; 18 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testObjFn (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -404,7 +404,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $assert-nonnull/testObjRet (; 19 ;) (param $0 i32) (result i32)
+ (func $assert-nonnull/testObjRet (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

@@ -29,7 +29,7 @@
  (export "fieldAccess" (func $resolve-access/fieldAccess))
  (export "propertyAccess" (func $resolve-access/propertyAccess))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -83,7 +83,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -136,7 +136,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/util/memory/memcpy (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1160,7 +1160,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1380,7 +1380,7 @@
    end
   end
  )
- (func $~lib/rt/__allocBuffer (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/__allocBuffer (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -1395,10 +1395,10 @@
   end
   local.get $3
  )
- (func $~lib/rt/stub/__retain (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/__allocArray (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/rt/__allocArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -1430,7 +1430,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/array/Array<u64>#__unchecked_get (; 8 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<u64>#__unchecked_get (param $0 i32) (param $1 i32) (result i64)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1439,7 +1439,7 @@
   i32.add
   i64.load
  )
- (func $~lib/array/Array<u64>#__get (; 9 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<u64>#__get (param $0 i32) (param $1 i32) (result i64)
   (local $2 i64)
   local.get $1
   local.get $0
@@ -1459,7 +1459,7 @@
   local.set $2
   local.get $2
  )
- (func $~lib/util/number/decimalCount32 (; 10 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -1514,7 +1514,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/utoa32_lut (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1654,7 +1654,7 @@
    i32.store16
   end
  )
- (func $~lib/util/number/decimalCount64High (; 12 ;) (param $0 i64) (result i32)
+ (func $~lib/util/number/decimalCount64High (param $0 i64) (result i32)
   local.get $0
   i64.const 1000000000000000
   i64.lt_u
@@ -1713,7 +1713,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/utoa64_lut (; 13 ;) (param $0 i32) (param $1 i64) (param $2 i32)
+ (func $~lib/util/number/utoa64_lut (param $0 i32) (param $1 i64) (param $2 i32)
   (local $3 i32)
   (local $4 i64)
   (local $5 i32)
@@ -1836,7 +1836,7 @@
   local.get $2
   call $~lib/util/number/utoa32_lut
  )
- (func $~lib/util/number/utoa64 (; 14 ;) (param $0 i64) (result i32)
+ (func $~lib/util/number/utoa64 (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1902,19 +1902,19 @@
   local.get $1
   call $~lib/rt/stub/__retain
  )
- (func $~lib/util/number/itoa<u64> (; 15 ;) (param $0 i64) (result i32)
+ (func $~lib/util/number/itoa<u64> (param $0 i64) (result i32)
   local.get $0
   call $~lib/util/number/utoa64
   return
  )
- (func $~lib/number/U64#toString (; 16 ;) (param $0 i64) (result i32)
+ (func $~lib/number/U64#toString (param $0 i64) (result i32)
   local.get $0
   call $~lib/util/number/itoa<u64>
  )
- (func $~lib/rt/stub/__release (; 17 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $resolve-access/arrayAccess (; 18 ;) (result i32)
+ (func $resolve-access/arrayAccess (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 1
@@ -1933,7 +1933,7 @@
   call $~lib/rt/stub/__release
   local.get $0
  )
- (func $resolve-access/Container#constructor (; 19 ;) (param $0 i32) (result i32)
+ (func $resolve-access/Container#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1948,7 +1948,7 @@
   i64.store
   local.get $0
  )
- (func $resolve-access/fieldAccess (; 20 ;) (result i32)
+ (func $resolve-access/fieldAccess (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -1965,12 +1965,12 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $resolve-access/Container#toU32 (; 21 ;) (param $0 i32) (result i32)
+ (func $resolve-access/Container#toU32 (param $0 i32) (result i32)
   local.get $0
   i64.load
   i32.wrap_i64
  )
- (func $~lib/util/number/utoa32 (; 22 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/utoa32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2004,16 +2004,16 @@
   local.get $2
   call $~lib/rt/stub/__retain
  )
- (func $~lib/util/number/itoa<u32> (; 23 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<u32> (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/utoa32
   return
  )
- (func $~lib/number/U32#toString (; 24 ;) (param $0 i32) (result i32)
+ (func $~lib/number/U32#toString (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa<u32>
  )
- (func $resolve-access/propertyAccess (; 25 ;) (result i32)
+ (func $resolve-access/propertyAccess (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -2030,7 +2030,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~start (; 26 ;)
+ (func $~start
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add

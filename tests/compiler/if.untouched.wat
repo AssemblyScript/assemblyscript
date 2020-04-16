@@ -13,7 +13,7 @@
  (export "ifThenElseBlock" (func $if/ifThenElseBlock))
  (export "ifAlwaysReturns" (func $if/ifAlwaysReturns))
  (start $~start)
- (func $if/ifThenElse (; 1 ;) (param $0 i32) (result i32)
+ (func $if/ifThenElse (param $0 i32) (result i32)
   local.get $0
   if
    i32.const 1
@@ -24,7 +24,7 @@
   end
   unreachable
  )
- (func $if/ifThen (; 2 ;) (param $0 i32) (result i32)
+ (func $if/ifThen (param $0 i32) (result i32)
   local.get $0
   if
    i32.const 1
@@ -32,7 +32,7 @@
   end
   i32.const 0
  )
- (func $if/ifThenElseBlock (; 3 ;) (param $0 i32) (result i32)
+ (func $if/ifThenElseBlock (param $0 i32) (result i32)
   local.get $0
   if
    i32.const 1
@@ -43,7 +43,7 @@
   end
   unreachable
  )
- (func $start:if (; 4 ;)
+ (func $start:if
   i32.const 0
   call $if/ifThenElse
   i32.const 0
@@ -123,7 +123,7 @@
    unreachable
   end
  )
- (func $if/ifAlwaysReturns (; 5 ;) (param $0 i32) (result i32)
+ (func $if/ifAlwaysReturns (param $0 i32) (result i32)
   local.get $0
   if
    i32.const 1
@@ -138,7 +138,7 @@
   end
   unreachable
  )
- (func $~start (; 6 ;)
+ (func $~start
   call $start:if
  )
 )

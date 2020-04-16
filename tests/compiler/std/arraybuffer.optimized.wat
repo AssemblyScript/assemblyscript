@@ -28,7 +28,7 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/tlsf/removeBlock (; 5 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -190,7 +190,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -469,7 +469,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -583,7 +583,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 8 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -670,7 +670,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/searchBlock (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 256
@@ -799,7 +799,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/prepareBlock (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -874,7 +874,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1034,7 +1034,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1042,7 +1042,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/memory/memory.fill (; 13 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -1200,7 +1200,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__retain (; 14 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1251,7 +1251,7 @@
   end
   local.get $0
  )
- (func $~lib/memory/memory.copy (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -1424,7 +1424,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#slice (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#slice (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $0
   i32.const 16
@@ -1494,7 +1494,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/pure/__release (; 17 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1440
   i32.gt_u
@@ -1505,7 +1505,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1574,7 +1574,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor|trampoline (; 19 ;) (param $0 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor|trampoline (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1652,11 +1652,11 @@
   i32.store offset=8
   local.get $3
  )
- (func $~setArgumentsLength (; 20 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $start:std/arraybuffer (; 21 ;)
+ (func $start:std/arraybuffer
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1923,10 +1923,10 @@
   local.get $2
   call $~lib/rt/pure/__release
  )
- (func $~start (; 22 ;)
+ (func $~start
   call $start:std/arraybuffer
  )
- (func $~lib/rt/pure/decrement (; 23 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2027,7 +2027,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 24 ;) (param $0 i32)
+ (func $~lib/rt/pure/__visit (param $0 i32)
   local.get $0
   i32.const 1440
   i32.lt_u

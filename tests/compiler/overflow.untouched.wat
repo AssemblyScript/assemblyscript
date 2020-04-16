@@ -7,7 +7,7 @@
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
- (func $start:overflow (; 1 ;)
+ (func $start:overflow
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -728,7 +728,7 @@
    unreachable
   end
  )
- (func $~start (; 2 ;)
+ (func $~start
   call $start:overflow
  )
 )
