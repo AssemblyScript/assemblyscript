@@ -33,6 +33,7 @@
   "'{0}' is not a valid operator.": 224,
   "Expression cannot be represented by a type.": 225,
   "Expression resolves to unusual type '{0}'.": 226,
+  "Object literals must have all class member fields explicitly defined": 227,
 
   "Type '{0}' is cyclic. Module will include deferred garbage collection.": 900,
   "Importing the table disables some indirect call optimizations.": 901,

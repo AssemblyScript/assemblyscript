@@ -8688,14 +8688,19 @@ export class Compiler extends DiagnosticEmitter {
       ? flow.getAutoreleaseLocal(classReference.type)
       : flow.getTempLocal(classReference.type);
     assert(numNames == values.length);
-    if (names.length == 0) {
-      console.log('expression names', names);
-      console.log('class members', members);
+
+    // Assume all class fields will be omitted, and add them to our omitted list
+    var omittedClassFieldMembers = new Map();
+    if (members) {
+      for (let memberKey of members.keys()) {
+        let member = members.get(memberKey);
+        if (member && member.kind == ElementKind.FIELD) {
+          omittedClassFieldMembers.set(member.name, '');
+        }
+      }
     }
 
-    // torch2424: Currently iterates through the passed names, should instead iterate through the members
-    
-
+    // Iterate through the members definted in our expression
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
       if (!member || member.kind != ElementKind.FIELD) {
@@ -8715,7 +8720,34 @@ export class Compiler extends DiagnosticEmitter {
         fieldType.toNativeType(),
         fieldInstance.memoryOffset
       );
+
+      // This member is no longer omitted, so delete from our omitted fields
+      omittedClassFieldMembers.delete(member.name);
     }
+
+    // TODO: Iterate through the remaining omittedClassFieldMembers.
+    if (members) {
+      for(let omittedClassFieldMemberKey of omittedClassFieldMembers.keys()) {
+        let member = <Field>members.get(omittedClassFieldMemberKey);
+        
+        if(member) {
+          // TODO: Check if it is a number type, set it to zero
+
+          // TODO: Check if it is a boolean, default to false
+
+          // TODO: Check if it can be null, 
+        }
+
+        // Otherwise, error
+        // torch2424
+        this.error(
+          DiagnosticCode.Object_literals_must_have_all_class_member_fields_explicitly_defined,
+          expression.range, classReference.toString()
+        );
+        return module.unreachable();
+      }
+    }
+
     this.currentType = classReference.type.nonNullableType;
     if (hasErrors) return module.unreachable();
 
