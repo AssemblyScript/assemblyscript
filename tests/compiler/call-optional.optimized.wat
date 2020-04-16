@@ -10,14 +10,14 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $call-optional/opt (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $call-optional/opt (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $2
   local.get $0
   local.get $1
   i32.add
   i32.add
  )
- (func $call-optional/opt|trampoline (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $call-optional/opt|trampoline (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -40,11 +40,11 @@
   local.get $2
   call $call-optional/opt
  )
- (func $~setArgumentsLength (; 3 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $start:call-optional (; 4 ;)
+ (func $start:call-optional
   i32.const 1
   global.set $~argumentsLength
   i32.const 3
@@ -136,7 +136,7 @@
    unreachable
   end
  )
- (func $~start (; 5 ;)
+ (func $~start
   call $start:call-optional
  )
 )

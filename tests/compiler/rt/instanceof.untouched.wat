@@ -25,7 +25,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 116))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -79,7 +79,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -132,10 +132,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $rt/instanceof/Animal#constructor (; 4 ;) (param $0 i32) (result i32)
+ (func $rt/instanceof/Animal#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -147,7 +147,7 @@
   end
   local.get $0
  )
- (func $rt/instanceof/Cat#constructor (; 5 ;) (param $0 i32) (result i32)
+ (func $rt/instanceof/Cat#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -162,7 +162,7 @@
   local.set $0
   local.get $0
  )
- (func $rt/instanceof/BlackCat#constructor (; 6 ;) (param $0 i32) (result i32)
+ (func $rt/instanceof/BlackCat#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -177,7 +177,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/rt/__instanceof (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -217,7 +217,7 @@
   end
   i32.const 0
  )
- (func $start:rt/instanceof (; 8 ;)
+ (func $start:rt/instanceof
   (local $0 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
@@ -677,7 +677,7 @@
    unreachable
   end
  )
- (func $~start (; 9 ;)
+ (func $~start
   global.get $~started
   if
    return

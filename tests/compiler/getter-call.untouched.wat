@@ -15,7 +15,7 @@
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 0 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -69,7 +69,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -122,10 +122,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $getter-call/C#constructor (; 3 ;) (param $0 i32) (result i32)
+ (func $getter-call/C#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -137,20 +137,20 @@
   end
   local.get $0
  )
- (func $getter-call/C#get:x~anonymous|0 (; 4 ;) (result i32)
+ (func $getter-call/C#get:x~anonymous|0 (result i32)
   i32.const 42
  )
- (func $getter-call/C#get:x (; 5 ;) (param $0 i32) (result i32)
+ (func $getter-call/C#get:x (param $0 i32) (result i32)
   i32.const 1
  )
- (func $~setArgumentsLength (; 6 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $~lib/rt/stub/__release (; 7 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $getter-call/test (; 8 ;) (result i32)
+ (func $getter-call/test (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -166,7 +166,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~start (; 9 ;)
+ (func $~start
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add

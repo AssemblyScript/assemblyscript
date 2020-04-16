@@ -13,20 +13,20 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $class-static-function/Example.staticFunc (; 1 ;) (result i32)
+ (func $class-static-function/Example.staticFunc (result i32)
   i32.const 42
  )
- (func $~setArgumentsLength (; 2 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $class-static-function/call (; 3 ;) (param $0 i32) (result i32)
+ (func $class-static-function/call (param $0 i32) (result i32)
   i32.const 0
   global.set $~argumentsLength
   local.get $0
   call_indirect (type $none_=>_i32)
  )
- (func $start:class-static-function (; 4 ;)
+ (func $start:class-static-function
   i32.const 1
   call $class-static-function/call
   i32.const 42
@@ -41,7 +41,7 @@
    unreachable
   end
  )
- (func $~start (; 5 ;)
+ (func $~start
   call $start:class-static-function
  )
 )

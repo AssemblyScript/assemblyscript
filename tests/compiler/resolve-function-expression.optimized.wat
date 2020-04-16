@@ -10,17 +10,14 @@
  (data (i32.const 1024) "<\00\00\00\01\00\00\00\01\00\00\00<\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00f\00u\00n\00c\00t\00i\00o\00n\00-\00e\00x\00p\00r\00e\00s\00s\00i\00o\00n\00.\00t\00s")
  (data (i32.const 1104) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
  (data (i32.const 1136) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\004\002")
- (global $~argumentsLength (mut i32) (i32.const 0))
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $~setArgumentsLength (; 1 ;) (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
+ (func $~setArgumentsLength (param $0 i32)
+  nop
  )
- (func $~lib/util/number/itoa32 (; 2 ;) (result i32)
+ (func $~lib/util/number/itoa32 (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -118,7 +115,7 @@
   end
   local.get $4
  )
- (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -126,7 +123,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -201,19 +198,11 @@
   end
   i32.const 0
  )
- (func $~start (; 5 ;)
+ (func $~start
   (local $0 i32)
   (local $1 i32)
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 1168
-  global.set $~lib/rt/stub/startOffset
   i32.const 1168
   global.set $~lib/rt/stub/offset
-  i32.const 1
-  global.set $~argumentsLength
   block $__inlined_func$~lib/string/String.__eq (result i32)
    i32.const 1
    call $~lib/util/number/itoa32

@@ -22,7 +22,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 56))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/maybeGrowMemory (; 3 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -76,7 +76,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -129,10 +129,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/date/Date#constructor (; 6 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/date/Date#constructor (param $0 i32) (param $1 i64) (result i32)
   local.get $0
   i32.eqz
   if
@@ -150,17 +150,17 @@
   i64.store
   local.get $0
  )
- (func $~lib/date/Date#getTime (; 7 ;) (param $0 i32) (result i64)
+ (func $~lib/date/Date#getTime (param $0 i32) (result i64)
   local.get $0
   i64.load
  )
- (func $~lib/date/Date#setTime (; 8 ;) (param $0 i32) (param $1 i64) (result i64)
+ (func $~lib/date/Date#setTime (param $0 i32) (param $1 i64) (result i64)
   local.get $0
   local.get $1
   i64.store
   local.get $1
  )
- (func $start:std/date (; 9 ;)
+ (func $start:std/date
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -337,7 +337,7 @@
    unreachable
   end
  )
- (func $~start (; 10 ;)
+ (func $~start
   call $start:std/date
  )
 )

@@ -19,25 +19,25 @@
  (export "memory" (memory $0))
  (export "test" (func $inlining/test))
  (start $~start)
- (func $inlining/test (; 1 ;) (result i32)
+ (func $inlining/test (result i32)
   global.get $inlining/constantGlobal
   i32.const 2
   i32.add
  )
- (func $inlining/func_fe~anonymous|0 (; 2 ;) (param $0 i32) (result i32)
+ (func $inlining/func_fe~anonymous|0 (param $0 i32) (result i32)
   local.get $0
  )
- (func $~setArgumentsLength (; 3 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $~lib/rt/stub/__retain (; 4 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 5 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $inlining/test_funcs (; 6 ;)
+ (func $inlining/test_funcs
   (local $0 f32)
   (local $1 f64)
   (local $2 i32)
@@ -280,7 +280,7 @@
   local.get $7
   call $~lib/rt/stub/__release
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 7 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -334,7 +334,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -387,7 +387,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $inlining/test_ctor (; 9 ;)
+ (func $inlining/test_ctor
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -495,7 +495,7 @@
   local.get $4
   call $~lib/rt/stub/__release
  )
- (func $start:inlining (; 10 ;)
+ (func $start:inlining
   call $inlining/test
   i32.const 3
   i32.eq
@@ -521,7 +521,7 @@
   global.set $~lib/rt/stub/offset
   call $inlining/test_ctor
  )
- (func $~start (; 11 ;)
+ (func $~start
   call $start:inlining
  )
 )

@@ -18,35 +18,35 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $function-types/makeAdder<i32>~anonymous|0 (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-types/makeAdder<i32>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $function-types/makeAdder<i32> (; 2 ;) (result i32)
+ (func $function-types/makeAdder<i32> (result i32)
   i32.const 1
  )
- (func $~setArgumentsLength (; 3 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $function-types/makeAdder<i64>~anonymous|0 (; 4 ;) (param $0 i64) (param $1 i64) (result i64)
+ (func $function-types/makeAdder<i64>~anonymous|0 (param $0 i64) (param $1 i64) (result i64)
   local.get $0
   local.get $1
   i64.add
  )
- (func $function-types/makeAdder<i64> (; 5 ;) (result i32)
+ (func $function-types/makeAdder<i64> (result i32)
   i32.const 2
  )
- (func $function-types/makeAdder<f64>~anonymous|0 (; 6 ;) (param $0 f64) (param $1 f64) (result f64)
+ (func $function-types/makeAdder<f64>~anonymous|0 (param $0 f64) (param $1 f64) (result f64)
   local.get $0
   local.get $1
   f64.add
  )
- (func $function-types/makeAdder<f64> (; 7 ;) (result i32)
+ (func $function-types/makeAdder<f64> (result i32)
   i32.const 3
  )
- (func $function-types/doAddWithFn<i32> (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/doAddWithFn<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   i32.const 2
   global.set $~argumentsLength
   local.get $0
@@ -54,7 +54,7 @@
   local.get $2
   call_indirect (type $i32_i32_=>_i32)
  )
- (func $function-types/doAdd<i32> (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-types/doAdd<i32> (param $0 i32) (param $1 i32) (result i32)
   i32.const 2
   global.set $~argumentsLength
   local.get $0
@@ -62,12 +62,12 @@
   call $function-types/makeAdder<i32>
   call_indirect (type $i32_i32_=>_i32)
  )
- (func $function-types/addI32 (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $function-types/addI32 (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $function-types/makeAndAdd<i32> (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/makeAndAdd<i32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   i32.const 2
   global.set $~argumentsLength
   local.get $0
@@ -75,7 +75,7 @@
   local.get $2
   call_indirect (type $i32_i32_=>_i32)
  )
- (func $function-types/makeAndAdd<i32>|trampoline (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/makeAndAdd<i32>|trampoline (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -94,7 +94,7 @@
   local.get $2
   call $function-types/makeAndAdd<i32>
  )
- (func $start:function-types (; 13 ;)
+ (func $start:function-types
   call $function-types/makeAdder<i32>
   global.set $function-types/i32Adder
   i32.const 2
@@ -227,7 +227,7 @@
    unreachable
   end
  )
- (func $~start (; 14 ;)
+ (func $~start
   call $start:function-types
  )
 )

@@ -22,7 +22,7 @@
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "test" (func $wasi/seed/test))
- (func $~lib/wasi/index/seed (; 3 ;) (result f64)
+ (func $~lib/wasi/index/seed (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i32)
@@ -51,7 +51,7 @@
   local.get $1
   f64.reinterpret_i64
  )
- (func $~lib/math/murmurHash3 (; 4 ;) (param $0 i64) (result i64)
+ (func $~lib/math/murmurHash3 (param $0 i64) (result i64)
   local.get $0
   local.get $0
   i64.const 33
@@ -80,7 +80,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/math/splitMix32 (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/math/splitMix32 (param $0 i32) (result i32)
   local.get $0
   i32.const 1831565813
   i32.add
@@ -115,10 +115,10 @@
   i32.shr_u
   i32.xor
  )
- (func $~lib/rt/stub/__retain (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/string/String#get:length (; 7 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -126,7 +126,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String.UTF8.encodeUnsafe (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -342,7 +342,7 @@
   local.get $2
   i32.sub
  )
- (func $~lib/util/number/decimalCount32 (; 9 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -397,10 +397,10 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/__release (; 10 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/wasi/index/abort (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -566,7 +566,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $~lib/math/NativeMath.seedRandom (; 12 ;) (param $0 i64)
+ (func $~lib/math/NativeMath.seedRandom (param $0 i64)
   i32.const 1
   global.set $~lib/math/random_seeded
   local.get $0
@@ -618,7 +618,7 @@
    unreachable
   end
  )
- (func $~lib/math/NativeMath.random (; 13 ;) (result f64)
+ (func $~lib/math/NativeMath.random (result f64)
   (local $0 i64)
   (local $1 i64)
   (local $2 i64)
@@ -670,10 +670,10 @@
   f64.const 1
   f64.sub
  )
- (func $wasi/seed/test (; 14 ;) (result f64)
+ (func $wasi/seed/test (result f64)
   call $~lib/math/NativeMath.random
  )
- (func $~start (; 15 ;)
+ (func $~start
   nop
  )
 )

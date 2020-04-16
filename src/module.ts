@@ -28,19 +28,20 @@ export type Index = u32;
 // that this essentially fixes the compiler to specific versions of Binaryen
 // sometimes, because these constants can differ between Binaryen versions.
 
-export enum NativeType {
-  None = 0 /* _BinaryenTypeNone */,
-  Unreachable = 1 /* _BinaryenTypeUnreachable */,
-  I32 = 2 /* _BinaryenTypeInt32 */,
-  I64 = 3 /* _BinaryenTypeInt64 */,
-  F32 = 4 /* _BinaryenTypeFloat32 */,
-  F64 = 5 /* _BinaryenTypeFloat64 */,
-  V128 = 6 /* _BinaryenTypeVec128 */,
-  Funcref = 7 /* _BinaryenTypeFuncref */,
-  Anyref = 8 /* _BinaryenTypeAnyref */,
-  Nullref = 9 /* _BinaryenTypeNullref */,
-  Exnref = 10 /* _BinaryenTypeExnref */,
-  Auto = -1 /* _BinaryenTypeAuto */
+export type NativeType = usize;
+export namespace NativeType {
+  export const None: NativeType = 0 /* _BinaryenTypeNone */;
+  export const Unreachable: NativeType = 1 /* _BinaryenTypeUnreachable */;
+  export const I32: NativeType = 2 /* _BinaryenTypeInt32 */;
+  export const I64: NativeType = 3 /* _BinaryenTypeInt64 */;
+  export const F32: NativeType = 4 /* _BinaryenTypeFloat32 */;
+  export const F64: NativeType = 5 /* _BinaryenTypeFloat64 */;
+  export const V128: NativeType = 6 /* _BinaryenTypeVec128 */;
+  export const Funcref: NativeType = 7 /* _BinaryenTypeFuncref */;
+  export const Anyref: NativeType = 8 /* _BinaryenTypeAnyref */;
+  export const Nullref: NativeType = 9 /* _BinaryenTypeNullref */;
+  export const Exnref: NativeType = 10 /* _BinaryenTypeExnref */;
+  export const Auto: NativeType = -1 /* _BinaryenTypeAuto */;
 }
 
 export enum FeatureFlags {
@@ -105,7 +106,9 @@ export enum ExpressionId {
   Try = 43 /* _BinaryenTryId */,
   Throw = 44 /* _BinaryenThrowId */,
   Rethrow = 45 /* _BinaryenRethrowId */,
-  BrOnExn = 46 /* _BinaryenBrOnExnId */
+  BrOnExn = 46 /* _BinaryenBrOnExnId */,
+  TupleMake = 47 /* _BinaryenTupleMakeId */,
+  TupleExtract = 48 /* _BinaryenTupleExtractId */
 }
 
 export enum UnaryOp {
@@ -182,40 +185,46 @@ export enum UnaryOp {
   SplatF32x4 = 64 /* _BinaryenSplatVecF32x4 */,
   SplatF64x2 = 65 /* _BinaryenSplatVecF64x2 */,
   NotV128 = 66 /* _BinaryenNotVec128 */,
-  NegI8x16 = 67 /* _BinaryenNegVecI8x16 */,
-  AnyTrueI8x16 = 68 /* _BinaryenAnyTrueVecI8x16 */,
-  AllTrueI8x16 = 69 /* _BinaryenAllTrueVecI8x16 */,
-  NegI16x8 = 70 /* _BinaryenNegVecI16x8 */,
-  AnyTrueI16x8 = 71 /* _BinaryenAnyTrueVecI16x8 */,
-  AllTrueI16x8 = 72 /* _BinaryenAllTrueVecI16x8 */,
-  NegI32x4 = 73 /* _BinaryenNegVecI32x4 */,
-  AnyTrueI32x4 = 74 /* _BinaryenAnyTrueVecI32x4 */,
-  AllTrueI32x4 = 75 /* _BinaryenAllTrueVecI32x4 */,
-  NegI64x2 = 76 /* _BinaryenNegVecI64x2 */,
-  AnyTrueI64x2 = 77 /* _BinaryenAnyTrueVecI64x2 */,
-  AllTrueI64x2 = 78 /* _BinaryenAllTrueVecI64x2 */,
-  AbsF32x4 = 79 /* _BinaryenAbsVecF32x4 */,
-  NegF32x4 = 80 /* _BinaryenNegVecF32x4 */,
-  SqrtF32x4 = 81 /* _BinaryenSqrtVecF32x4 */,
-  AbsF64x2 = 82 /* _BinaryenAbsVecF64x2 */,
-  NegF64x2 = 83 /* _BinaryenNegVecF64x2 */,
-  SqrtF64x2 = 84 /* _BinaryenSqrtVecF64x2 */,
-  TruncSatF32x4ToI32x4 = 85 /* _BinaryenTruncSatSVecF32x4ToVecI32x4 */,
-  TruncSatF32x4ToU32x4 = 86 /* _BinaryenTruncSatUVecF32x4ToVecI32x4 */,
-  TruncSatF64x2ToI64x2 = 87 /* _BinaryenTruncSatSVecF64x2ToVecI64x2 */,
-  TruncSatF64x2ToU64x2 = 88 /* _BinaryenTruncSatUVecF64x2ToVecI64x2 */,
-  ConvertI32x4ToF32x4 = 89 /* _BinaryenConvertSVecI32x4ToVecF32x4 */,
-  ConvertU32x4ToF32x4 = 90 /* _BinaryenConvertUVecI32x4ToVecF32x4 */,
-  ConvertI64x2ToF64x2 = 91 /* _BinaryenConvertSVecI64x2ToVecF64x2 */,
-  ConvertU64x2ToF64x2 = 92 /* _BinaryenConvertUVecI64x2ToVecF64x2 */,
-  WidenLowI8x16ToI16x8 = 93 /* _BinaryenWidenLowSVecI8x16ToVecI16x8 */,
-  WidenHighI8x16ToI16x8 = 94 /* _BinaryenWidenHighSVecI8x16ToVecI16x8 */,
-  WidenLowU8x16ToU16x8 = 95 /* _BinaryenWidenLowUVecI8x16ToVecI16x8 */,
-  WidenHighU8x16ToU16x8 = 96 /* _BinaryenWidenHighUVecI8x16ToVecI16x8 */,
-  WidenLowI16x8ToI32x4 = 97 /* _BinaryenWidenLowSVecI16x8ToVecI32x4 */,
-  WidenHighI16x8ToI32x4 = 98 /* _BinaryenWidenHighSVecI16x8ToVecI32x4 */,
-  WidenLowU16x8ToU32x4 = 99 /* _BinaryenWidenLowUVecI16x8ToVecI32x4 */,
-  WidenHighU16x8ToU32x4 = 100 /* _BinaryenWidenHighUVecI16x8ToVecI32x4 */
+  AbsI8x16 = 67 /* __BinaryenAbsVecI8x16 */,
+  NegI8x16 = 68 /* _BinaryenNegVecI8x16 */,
+  AnyTrueI8x16 = 69 /* _BinaryenAnyTrueVecI8x16 */,
+  AllTrueI8x16 = 70 /* _BinaryenAllTrueVecI8x16 */,
+  BitmaskI8x16 = 71 /* __BinaryenBitmaskVecI8x16 */,
+  AbsI16x8 = 72 /* __BinaryenAbsVecI16x8 */,
+  NegI16x8 = 73 /* _BinaryenNegVecI16x8 */,
+  AnyTrueI16x8 = 74 /* _BinaryenAnyTrueVecI16x8 */,
+  AllTrueI16x8 = 75 /* _BinaryenAllTrueVecI16x8 */,
+  BitmaskI16x8 = 76 /* _BinaryenBitmaskVecI16x8 */,
+  AbsI32x4 = 77 /* _BinaryenAbsVecI32x4 */,
+  NegI32x4 = 78 /* _BinaryenNegVecI32x4 */,
+  AnyTrueI32x4 = 79 /* _BinaryenAnyTrueVecI32x4 */,
+  AllTrueI32x4 = 80 /* _BinaryenAllTrueVecI32x4 */,
+  BitmaskI32x4 = 81 /* _BinaryenBitmaskVecI32x4 */,
+  NegI64x2 = 82 /* _BinaryenNegVecI64x2 */,
+  AnyTrueI64x2 = 83 /* _BinaryenAnyTrueVecI64x2 */,
+  AllTrueI64x2 = 84 /* _BinaryenAllTrueVecI64x2 */,
+  AbsF32x4 = 85 /* _BinaryenAbsVecF32x4 */,
+  NegF32x4 = 86 /* _BinaryenNegVecF32x4 */,
+  SqrtF32x4 = 87 /* _BinaryenSqrtVecF32x4 */,
+  AbsF64x2 = 88 /* _BinaryenAbsVecF64x2 */,
+  NegF64x2 = 89 /* _BinaryenNegVecF64x2 */,
+  SqrtF64x2 = 90 /* _BinaryenSqrtVecF64x2 */,
+  TruncSatF32x4ToI32x4 = 91 /* _BinaryenTruncSatSVecF32x4ToVecI32x4 */,
+  TruncSatF32x4ToU32x4 = 92 /* _BinaryenTruncSatUVecF32x4ToVecI32x4 */,
+  TruncSatF64x2ToI64x2 = 93 /* _BinaryenTruncSatSVecF64x2ToVecI64x2 */,
+  TruncSatF64x2ToU64x2 = 94 /* _BinaryenTruncSatUVecF64x2ToVecI64x2 */,
+  ConvertI32x4ToF32x4 = 95 /* _BinaryenConvertSVecI32x4ToVecF32x4 */,
+  ConvertU32x4ToF32x4 = 96 /* _BinaryenConvertUVecI32x4ToVecF32x4 */,
+  ConvertI64x2ToF64x2 = 97 /* _BinaryenConvertSVecI64x2ToVecF64x2 */,
+  ConvertU64x2ToF64x2 = 98 /* _BinaryenConvertUVecI64x2ToVecF64x2 */,
+  WidenLowI8x16ToI16x8 = 99 /* _BinaryenWidenLowSVecI8x16ToVecI16x8 */,
+  WidenHighI8x16ToI16x8 = 100 /* _BinaryenWidenHighSVecI8x16ToVecI16x8 */,
+  WidenLowU8x16ToU16x8 = 101 /* _BinaryenWidenLowUVecI8x16ToVecI16x8 */,
+  WidenHighU8x16ToU16x8 = 102 /* _BinaryenWidenHighUVecI8x16ToVecI16x8 */,
+  WidenLowI16x8ToI32x4 = 103 /* _BinaryenWidenLowSVecI16x8ToVecI32x4 */,
+  WidenHighI16x8ToI32x4 = 104 /* _BinaryenWidenHighSVecI16x8ToVecI32x4 */,
+  WidenLowU16x8ToU32x4 = 105 /* _BinaryenWidenLowUVecI16x8ToVecI32x4 */,
+  WidenHighU16x8ToU32x4 = 106 /* _BinaryenWidenHighUVecI16x8ToVecI32x4 */
 }
 
 export enum BinaryOp {
@@ -993,6 +1002,19 @@ export class Module {
     return binaryen._BinaryenRefFunc(this.ref, cStr);
   }
 
+  // tuples (pseudo instructions)
+
+  tuple_make(operands: ExpressionRef[]): ExpressionRef {
+    var cArr = allocPtrArray(operands);
+    var ret = binaryen._BinaryenTupleMake(this.ref, cArr, operands.length);
+    binaryen._free(cArr);
+    return ret;
+  }
+
+  tuple_extract(tuple: ExpressionRef, index: Index): ExpressionRef {
+    return binaryen._BinaryenTupleExtract(this.ref, tuple, index);
+  }
+
   // globals
 
   addGlobal(
@@ -1055,7 +1077,7 @@ export class Module {
     body: ExpressionRef
   ): FunctionRef {
     var cStr = this.allocStringCached(name);
-    var cArr = allocI32Array(varTypes);
+    var cArr = allocPtrArray(varTypes);
     var ret = binaryen._BinaryenAddFunction(this.ref, cStr, params, results, cArr, varTypes ? varTypes.length : 0, body);
     binaryen._free(cArr);
     return ret;
@@ -1078,7 +1100,7 @@ export class Module {
   addTemporaryFunction(result: NativeType, paramTypes: NativeType[] | null, body: ExpressionRef): FunctionRef {
     this.hasTemporaryFunction = assert(!this.hasTemporaryFunction);
     var tempName = this.allocStringCached("");
-    var cArr = allocI32Array(paramTypes);
+    var cArr = allocPtrArray(paramTypes);
     var ret = binaryen._BinaryenAddFunction(this.ref,
       tempName,
       createType(paramTypes),
@@ -1509,28 +1531,28 @@ export class Module {
 
     switch (binaryen._BinaryenExpressionGetId(expr)) {
       case ExpressionId.Const: {
-        switch (binaryen._BinaryenExpressionGetType(expr)) {
-          case NativeType.I32: {
+        switch (<u32>binaryen._BinaryenExpressionGetType(expr)) {
+          case <u32>NativeType.I32: {
             return this.i32(binaryen._BinaryenConstGetValueI32(expr));
           }
-          case NativeType.I64: {
+          case <u32>NativeType.I64: {
             return this.i64(
               binaryen._BinaryenConstGetValueI64Low(expr),
               binaryen._BinaryenConstGetValueI64High(expr)
             );
           }
-          case NativeType.F32: {
+          case <u32>NativeType.F32: {
             return this.f32(binaryen._BinaryenConstGetValueF32(expr));
           }
-          case NativeType.F64: {
+          case <u32>NativeType.F64: {
             return this.f64(binaryen._BinaryenConstGetValueF64(expr));
           }
-          case NativeType.V128: {
+          case <u32>NativeType.V128: {
             // TODO
             return 0;
           }
           // Not possible to clone an anyref as it is opaque
-          case NativeType.Anyref: {
+          case <u32>NativeType.Anyref: {
             return 0;
           }
           default: {
@@ -1622,7 +1644,7 @@ export function createType(types: NativeType[] | null): NativeType {
     case 0: return NativeType.None;
     case 1: return types[0];
   }
-  var cArr = allocI32Array(types);
+  var cArr = allocPtrArray(types);
   var ret = binaryen._BinaryenTypeCreate(cArr, types.length);
   binaryen._free(cArr);
   return ret;
@@ -1840,7 +1862,7 @@ export function getFunctionName(func: FunctionRef): string | null {
   return readString(binaryen._BinaryenFunctionGetName(func));
 }
 
-export function getFunctionParams(func: FunctionRef): Index {
+export function getFunctionParams(func: FunctionRef): NativeType {
   return binaryen._BinaryenFunctionGetParams(func);
 }
 
@@ -2375,6 +2397,15 @@ export function traverse<T>(expr: ExpressionRef, data: T, visit: (expr: Expressi
     }
     case ExpressionId.BrOnExn: {
       visit(binaryen._BinaryenBrOnExnGetExnref(expr), data);
+      break;
+    }
+    case ExpressionId.TupleMake: {
+      for (let i: Index = 0, n = binaryen._BinaryenTupleMakeGetNumOperands(expr); i < n; ++i) {
+        visit(binaryen._BinaryenTupleMakeGetOperand(expr, i), data);
+      }
+      break;
+    }
+    case ExpressionId.TupleExtract: {
       break;
     }
     default: assert(false);

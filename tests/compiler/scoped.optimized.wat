@@ -3,7 +3,7 @@
  (memory $0 0)
  (export "memory" (memory $0))
  (start $~start)
- (func $~start (; 0 ;)
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   loop $for-loop|0

@@ -37,7 +37,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 556))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -247,7 +247,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 2 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -597,7 +597,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -745,7 +745,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 4 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -899,7 +899,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -928,7 +928,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1111,7 +1111,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/tlsf/growMemory (; 7 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1195,7 +1195,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1290,7 +1290,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1399,7 +1399,7 @@
   call $~lib/rt/tlsf/prepareBlock
   local.get $4
  )
- (func $~lib/rt/tlsf/__alloc (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1407,7 +1407,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/increment (; 11 ;) (param $0 i32)
+ (func $~lib/rt/pure/increment (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1450,7 +1450,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 12 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -1462,7 +1462,7 @@
   end
   local.get $0
  )
- (func $extends-baseaggregate/A1#constructor (; 13 ;) (param $0 i32) (result i32)
+ (func $extends-baseaggregate/A1#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1483,7 +1483,7 @@
   i32.store offset=16
   local.get $0
  )
- (func $extends-baseaggregate/A2#constructor (; 14 ;) (param $0 i32) (result i32)
+ (func $extends-baseaggregate/A2#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1498,7 +1498,7 @@
   local.set $0
   local.get $0
  )
- (func $~lib/rt/tlsf/checkUsedBlock (; 15 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/checkUsedBlock (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 16
@@ -1544,7 +1544,7 @@
   end
   local.get $1
  )
- (func $~lib/util/memory/memcpy (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2568,7 +2568,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2788,7 +2788,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/freeBlock (; 18 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -2802,7 +2802,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/reallocateBlock (; 19 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/reallocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2918,7 +2918,7 @@
   end
   local.get $8
  )
- (func $~lib/rt/tlsf/__realloc (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__realloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   call $~lib/rt/tlsf/checkUsedBlock
@@ -2927,7 +2927,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/memory/memory.fill (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3136,7 +3136,7 @@
    end
   end
  )
- (func $~lib/array/ensureSize (; 22 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3198,7 +3198,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/rt/pure/__release (; 23 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -3209,7 +3209,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/array/Array<extends-baseaggregate/A2>#push (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<extends-baseaggregate/A2>#push (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3245,7 +3245,7 @@
   call $~lib/rt/pure/__release
   local.get $4
  )
- (func $start:extends-baseaggregate (; 25 ;)
+ (func $start:extends-baseaggregate
   (local $0 i32)
   (local $1 i32)
   global.get $extends-baseaggregate/poolA
@@ -3257,10 +3257,10 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~start (; 26 ;)
+ (func $~start
   call $start:extends-baseaggregate
  )
- (func $~lib/rt/pure/markGray (; 27 ;) (param $0 i32)
+ (func $~lib/rt/pure/markGray (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -3287,7 +3287,7 @@
    call $~lib/rt/__visit_members
   end
  )
- (func $~lib/rt/pure/scanBlack (; 28 ;) (param $0 i32)
+ (func $~lib/rt/pure/scanBlack (param $0 i32)
   local.get $0
   local.get $0
   i32.load offset=4
@@ -3304,7 +3304,7 @@
   i32.const 4
   call $~lib/rt/__visit_members
  )
- (func $~lib/rt/pure/scan (; 29 ;) (param $0 i32)
+ (func $~lib/rt/pure/scan (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -3341,7 +3341,7 @@
    end
   end
  )
- (func $~lib/rt/pure/collectWhite (; 30 ;) (param $0 i32)
+ (func $~lib/rt/pure/collectWhite (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -3379,7 +3379,7 @@
    call $~lib/rt/tlsf/freeBlock
   end
  )
- (func $~lib/rt/pure/__collect (; 31 ;)
+ (func $~lib/rt/pure/__collect
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3520,7 +3520,7 @@
   local.get $0
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/__typeinfo (; 32 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/__typeinfo (param $0 i32) (result i32)
   (local $1 i32)
   global.get $~lib/rt/__rtti_base
   local.set $1
@@ -3545,13 +3545,13 @@
   i32.add
   i32.load
  )
- (func $~lib/rt/tlsf/__free (; 33 ;) (param $0 i32)
+ (func $~lib/rt/tlsf/__free (param $0 i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $~lib/rt/pure/growRoots (; 34 ;)
+ (func $~lib/rt/pure/growRoots
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3601,7 +3601,7 @@
   i32.add
   global.set $~lib/rt/pure/END
  )
- (func $~lib/rt/pure/appendRoot (; 35 ;) (param $0 i32)
+ (func $~lib/rt/pure/appendRoot (param $0 i32)
   (local $1 i32)
   global.get $~lib/rt/pure/CUR
   local.set $1
@@ -3621,7 +3621,7 @@
   i32.add
   global.set $~lib/rt/pure/CUR
  )
- (func $~lib/rt/pure/decrement (; 36 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -3723,7 +3723,7 @@
    end
   end
  )
- (func $~lib/rt/pure/__visit (; 37 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -3853,7 +3853,7 @@
    end
   end
  )
- (func $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl (; 38 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<extends-baseaggregate/B1>#__visit_impl (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3896,7 +3896,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl (; 39 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<extends-baseaggregate/A2>#__visit_impl (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3939,7 +3939,7 @@
   local.get $1
   call $~lib/rt/pure/__visit
  )
- (func $~lib/rt/__visit_members (; 40 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$10

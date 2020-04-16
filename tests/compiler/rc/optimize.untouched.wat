@@ -52,19 +52,19 @@
  (export "FinalizeARC.eliminates.unnecessaryStaticRelease" (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRelease))
  (export "FinalizeARC.keeps.dynamicRetain" (func $rc/optimize/FinalizeARC.keeps.dynamicRetain))
  (export "FinalizeARC.keeps.dynamicRelease" (func $rc/optimize/FinalizeARC.keeps.dynamicRelease))
- (func $rc/optimize/eliminated_v (; 5 ;)
+ (func $rc/optimize/eliminated_v
   nop
  )
- (func $rc/optimize/eliminated_vi (; 6 ;) (param $0 i32)
+ (func $rc/optimize/eliminated_vi (param $0 i32)
   nop
  )
- (func $rc/optimize/eliminated_vii (; 7 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/eliminated_vii (param $0 i32) (param $1 i32)
   nop
  )
- (func $rc/optimize/eliminated_viii (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $rc/optimize/eliminated_viii (param $0 i32) (param $1 i32) (param $2 i32)
   nop
  )
- (func $~lib/rt/pure/increment (; 9 ;) (param $0 i32)
+ (func $~lib/rt/pure/increment (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -109,7 +109,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 10 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -121,7 +121,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/removeBlock (; 11 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -331,7 +331,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 12 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -681,7 +681,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -829,7 +829,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 14 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -983,7 +983,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 15 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1012,7 +1012,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1195,7 +1195,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/tlsf/growMemory (; 17 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1279,7 +1279,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1374,7 +1374,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 19 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1485,7 +1485,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $4
  )
- (func $~lib/rt/tlsf/__alloc (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1493,7 +1493,7 @@
   i32.const 16
   i32.add
  )
- (func $rc/optimize/Ref#constructor (; 21 ;) (param $0 i32) (result i32)
+ (func $rc/optimize/Ref#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1505,11 +1505,11 @@
   end
   local.get $0
  )
- (func $rc/optimize/getRef (; 22 ;) (result i32)
+ (func $rc/optimize/getRef (result i32)
   i32.const 0
   call $rc/optimize/Ref#constructor
  )
- (func $~lib/rt/pure/__release (; 23 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -1520,7 +1520,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $rc/optimize/eliminated_rr (; 24 ;) (param $0 i32) (result i32)
+ (func $rc/optimize/eliminated_rr (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1531,14 +1531,14 @@
   call $~lib/rt/pure/__release
   local.get $1
  )
- (func $rc/optimize/OptimizeARC.eliminates.linearArgument (; 25 ;) (param $0 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.linearArgument (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.linearLocal (; 26 ;) (param $0 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.linearLocal (param $0 i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1546,7 +1546,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.linearChain (; 27 ;) (param $0 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.linearChain (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1566,7 +1566,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedReleases (; 28 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedReleases (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1580,7 +1580,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $rc/optimize/OptimizeARC.eliminates.partialReleases (; 29 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.partialReleases (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1591,7 +1591,7 @@
    call $~lib/rt/pure/__release
   end
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedRetains (; 30 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedRetains (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   if
@@ -1613,7 +1613,7 @@
   local.get $3
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedInsideLoop (; 31 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideLoop (param $0 i32) (param $1 i32)
   (local $2 i32)
   loop $while-continue|0
    local.get $1
@@ -1629,7 +1629,7 @@
    end
   end
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedOutsideLoop (; 32 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedOutsideLoop (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1645,7 +1645,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoop (; 33 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoop (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1666,7 +1666,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch (; 34 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.balancedInsideOutsideLoopWithBranch (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1693,7 +1693,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.replace (; 35 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.eliminates.replace (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -1721,7 +1721,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.eliminates.replaceAlreadyRetained (; 36 ;) (param $0 i32) (result i32)
+ (func $rc/optimize/OptimizeARC.eliminates.replaceAlreadyRetained (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
@@ -1734,7 +1734,7 @@
   local.set $0
   local.get $0
  )
- (func $rc/optimize/OptimizeARC.keeps.partialRetains (; 37 ;) (param $0 i32) (param $1 i32)
+ (func $rc/optimize/OptimizeARC.keeps.partialRetains (param $0 i32) (param $1 i32)
   local.get $1
   if
    local.get $0
@@ -1744,7 +1744,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/OptimizeARC.keeps.reachesReturn (; 38 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $rc/optimize/OptimizeARC.keeps.reachesReturn (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -1757,45 +1757,45 @@
   call $~lib/rt/pure/__release
   i32.const 0
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryAllocation (; 39 ;)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryAllocation
   i32.const 1
   i32.const 0
   call $~lib/rt/tlsf/__alloc
   call $~lib/rt/pure/__retain
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryPair (; 40 ;) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryPair (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticPair (; 41 ;)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticPair
   i32.const 192
   call $~lib/rt/pure/__retain
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRetain (; 42 ;)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRetain
   i32.const 192
   call $~lib/rt/pure/__retain
   drop
  )
- (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRelease (; 43 ;)
+ (func $rc/optimize/FinalizeARC.eliminates.unnecessaryStaticRelease
   i32.const 192
   call $~lib/rt/pure/__release
  )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (; 44 ;) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRetain (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
  )
- (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (; 45 ;) (param $0 i32)
+ (func $rc/optimize/FinalizeARC.keeps.dynamicRelease (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/rt/pure/__collect (; 46 ;)
+ (func $~lib/rt/pure/__collect
   return
  )
- (func $~lib/rt/tlsf/freeBlock (; 47 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -1811,7 +1811,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/pure/decrement (; 48 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1888,7 +1888,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 49 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -1912,7 +1912,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 50 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4

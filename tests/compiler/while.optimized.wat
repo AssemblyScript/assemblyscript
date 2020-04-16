@@ -22,7 +22,7 @@
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $while/testNested (; 5 ;)
+ (func $while/testNested
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -110,7 +110,7 @@
   i32.const 1
   global.set $while/ran
  )
- (func $~lib/rt/tlsf/removeBlock (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -272,7 +272,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 7 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -551,7 +551,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -665,7 +665,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 9 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -752,7 +752,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/searchBlock (; 10 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   nop
@@ -810,7 +810,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 11 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -982,7 +982,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $1
  )
- (func $while/Ref#constructor (; 12 ;) (result i32)
+ (func $while/Ref#constructor (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1038,7 +1038,7 @@
   end
   local.get $1
  )
- (func $~lib/rt/pure/__release (; 13 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1216
   i32.gt_u
@@ -1049,7 +1049,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $start:while (; 14 ;)
+ (func $start:while
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1418,7 +1418,7 @@
    unreachable
   end
  )
- (func $~start (; 15 ;)
+ (func $~start
   global.get $~started
   if
    return
@@ -1428,7 +1428,7 @@
   end
   call $start:while
  )
- (func $~lib/rt/pure/decrement (; 16 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

@@ -34,7 +34,6 @@
  (data (i32.const 2640) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
  (data (i32.const 2672) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002")
  (data (i32.const 2704) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $resolve-elementaccess/arr (mut i32) (i32.const 0))
  (global $~lib/util/number/_frc_plus (mut i64) (i64.const 0))
@@ -46,7 +45,7 @@
  (global $resolve-elementaccess/buf (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -130,7 +129,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/memory/memory.fill (; 2 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -288,7 +287,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBufferView#constructor (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBufferView#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 2
   i32.const 1073741808
@@ -343,7 +342,7 @@
   i32.store offset=8
   local.get $0
  )
- (func $~lib/typedarray/Float32Array#__set (; 4 ;) (param $0 i32) (param $1 i32) (param $2 f32)
+ (func $~lib/typedarray/Float32Array#__set (param $0 i32) (param $1 i32) (param $2 f32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -367,7 +366,7 @@
   local.get $2
   f32.store
  )
- (func $~lib/typedarray/Float32Array#__get (; 5 ;) (param $0 i32) (param $1 i32) (result f32)
+ (func $~lib/typedarray/Float32Array#__get (param $0 i32) (param $1 i32) (result f32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -390,7 +389,7 @@
   i32.add
   f32.load
  )
- (func $~lib/util/number/decimalCount32 (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
@@ -432,7 +431,7 @@
   i32.lt_u
   select
  )
- (func $~lib/util/number/genDigits (; 7 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -823,7 +822,7 @@
    local.get $6
   end
  )
- (func $~lib/memory/memory.copy (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -996,7 +995,7 @@
    end
   end
  )
- (func $~lib/util/number/utoa_simple<u32> (; 9 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -1023,7 +1022,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/prettify (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   local.get $2
   i32.eqz
@@ -1268,7 +1267,7 @@
    end
   end
  )
- (func $~lib/util/number/dtoa_core (; 11 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (param $0 i32) (param $1 f64) (result i32)
   (local $2 i64)
   (local $3 i64)
   (local $4 i32)
@@ -1560,7 +1559,7 @@
   local.get $7
   i32.add
  )
- (func $~lib/string/String#get:length (; 12 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -1568,7 +1567,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String#substring (; 13 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String#substring (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1640,7 +1639,7 @@
   call $~lib/memory/memory.copy
   local.get $2
  )
- (func $~lib/util/number/dtoa (; 14 ;) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1730,7 +1729,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~lib/util/string/compareImpl (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -1806,7 +1805,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 16 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -1838,7 +1837,7 @@
   end
   i32.const 0
  )
- (func $~lib/typedarray/Uint8Array#__set (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/typedarray/Uint8Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1858,7 +1857,7 @@
   local.get $2
   i32.store8
  )
- (func $~lib/typedarray/Uint8Array#__get (; 18 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=8
@@ -1877,7 +1876,7 @@
   i32.add
   i32.load8_u
  )
- (func $~lib/number/U8#toString (; 19 ;) (param $0 i32) (result i32)
+ (func $~lib/number/U8#toString (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   block $__inlined_func$~lib/util/number/utoa32
@@ -1905,10 +1904,8 @@
   end
   local.get $0
  )
- (func $start:resolve-elementaccess (; 20 ;)
+ (func $start:resolve-elementaccess
   (local $0 i32)
-  i32.const 2736
-  global.set $~lib/rt/stub/startOffset
   i32.const 2736
   global.set $~lib/rt/stub/offset
   i32.const 12
@@ -2007,14 +2004,13 @@
   i32.const 7
   call $~lib/rt/stub/__alloc
   local.tee $0
-  i32.eqz
-  if
+  if (result i32)
+   local.get $0
+  else
    i32.const 12
    i32.const 8
    call $~lib/rt/stub/__alloc
-   local.set $0
   end
-  local.get $0
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   global.set $resolve-elementaccess/buf
@@ -2102,7 +2098,7 @@
    unreachable
   end
  )
- (func $~start (; 21 ;)
+ (func $~start
   call $start:resolve-elementaccess
  )
 )

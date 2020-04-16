@@ -5,11 +5,10 @@
  (memory $0 1)
  (data (i32.const 1024) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00s\00t\00u\00b\00.\00t\00s")
  (data (i32.const 1072) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00f\00e\00a\00t\00u\00r\00e\00s\00/\00s\00i\00m\00d\00.\00t\00s")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $features/simd/test_v128 (; 1 ;)
+ (func $features/simd/test_v128
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -119,9 +118,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~start (; 2 ;)
-  i32.const 1120
-  global.set $~lib/rt/stub/startOffset
+ (func $~start
   i32.const 1120
   global.set $~lib/rt/stub/offset
   call $features/simd/test_v128

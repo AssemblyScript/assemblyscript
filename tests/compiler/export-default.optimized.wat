@@ -4,7 +4,7 @@
  (export "memory" (memory $0))
  (export "theDefault" (func $export-default/theDefault))
  (export "default" (func $export-default/theDefault))
- (func $export-default/theDefault (; 0 ;)
+ (func $export-default/theDefault
   nop
  )
 )

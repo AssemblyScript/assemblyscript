@@ -49,25 +49,25 @@
  (export "vehicles.Car.getNumTires" (func $exports/vehicles.Car.getNumTires))
  (export "outer.inner.a" (global $exports/outer.inner.a))
  (start $~start)
- (func $exports/add (; 0 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/add (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.add
  )
- (func $exports/subOpt (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $exports/math.sub (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/math.sub (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.sub
  )
- (func $exports/Car.getNumTires (; 3 ;) (result i32)
+ (func $exports/Car.getNumTires (result i32)
   global.get $exports/Car.TIRES
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 4 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -121,7 +121,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -174,10 +174,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/rt/stub/__retain (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $exports/Car#constructor (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -195,31 +195,31 @@
   i32.store
   local.get $0
  )
- (func $exports/Car#get:doors (; 8 ;) (param $0 i32) (result i32)
+ (func $exports/Car#get:doors (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/Car#set:doors (; 9 ;) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:doors (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#get:numDoors (; 10 ;) (param $0 i32) (result i32)
+ (func $exports/Car#get:numDoors (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/Car#set:numDoors (; 11 ;) (param $0 i32) (param $1 i32)
+ (func $exports/Car#set:numDoors (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/Car#openDoors (; 12 ;) (param $0 i32)
+ (func $exports/Car#openDoors (param $0 i32)
   nop
  )
- (func $exports/vehicles.Car.getNumTires (; 13 ;) (result i32)
+ (func $exports/vehicles.Car.getNumTires (result i32)
   global.get $exports/vehicles.Car.TIRES
  )
- (func $exports/vehicles.Car#constructor (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -237,28 +237,28 @@
   i32.store
   local.get $0
  )
- (func $exports/vehicles.Car#get:doors (; 15 ;) (param $0 i32) (result i32)
+ (func $exports/vehicles.Car#get:doors (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/vehicles.Car#set:doors (; 16 ;) (param $0 i32) (param $1 i32)
+ (func $exports/vehicles.Car#set:doors (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/vehicles.Car#get:numDoors (; 17 ;) (param $0 i32) (result i32)
+ (func $exports/vehicles.Car#get:numDoors (param $0 i32) (result i32)
   local.get $0
   i32.load
  )
- (func $exports/vehicles.Car#set:numDoors (; 18 ;) (param $0 i32) (param $1 i32)
+ (func $exports/vehicles.Car#set:numDoors (param $0 i32) (param $1 i32)
   local.get $0
   local.get $1
   i32.store
  )
- (func $exports/vehicles.Car#openDoors (; 19 ;) (param $0 i32)
+ (func $exports/vehicles.Car#openDoors (param $0 i32)
   nop
  )
- (func $~start (; 20 ;)
+ (func $~start
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -270,7 +270,7 @@
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
  )
- (func $exports/subOpt|trampoline (; 21 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt|trampoline (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -288,11 +288,11 @@
   local.get $1
   call $exports/subOpt
  )
- (func $~setArgumentsLength (; 22 ;) (param $0 i32)
+ (func $~setArgumentsLength (param $0 i32)
   local.get $0
   global.set $~argumentsLength
  )
- (func $exports/Car#constructor|trampoline (; 23 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor|trampoline (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -308,7 +308,7 @@
   local.get $1
   call $exports/Car#constructor
  )
- (func $exports/vehicles.Car#constructor|trampoline (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor|trampoline (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange

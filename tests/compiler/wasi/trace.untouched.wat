@@ -34,13 +34,13 @@
  (global $~lib/heap/__heap_base i32 (i32.const 1504))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 3 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/string/String.UTF8.byteLength (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.UTF8.byteLength (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -151,7 +151,7 @@
   call $~lib/rt/stub/__release
   local.get $5
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 5 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -205,7 +205,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -258,7 +258,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/string/String#get:length (; 7 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -266,7 +266,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/string/String.UTF8.encodeUnsafe (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -482,7 +482,7 @@
   local.get $2
   i32.sub
  )
- (func $~lib/util/number/decimalCount32 (; 9 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -537,7 +537,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/genDigits (; 10 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -1040,7 +1040,7 @@
   end
   unreachable
  )
- (func $~lib/util/memory/memcpy (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2064,7 +2064,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2284,7 +2284,7 @@
    end
   end
  )
- (func $~lib/util/number/utoa32_lut (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2424,7 +2424,7 @@
    i32.store16
   end
  )
- (func $~lib/util/number/prettify (; 14 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2741,7 +2741,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/dtoa_core (; 15 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3167,7 +3167,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/util/number/dtoa_stream (; 16 ;) (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
+ (func $~lib/util/number/dtoa_stream (param $0 i32) (param $1 i32) (param $2 f64) (result i32)
   (local $3 i32)
   local.get $0
   local.get $1
@@ -3245,7 +3245,7 @@
   local.get $2
   call $~lib/util/number/dtoa_core
  )
- (func $~lib/wasi/index/abort (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $~lib/wasi/index/abort (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -3411,7 +3411,7 @@
   local.get $1
   call $~lib/rt/stub/__release
  )
- (func $~lib/rt/stub/__free (; 18 ;) (param $0 i32)
+ (func $~lib/rt/stub/__free (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 0
@@ -3461,7 +3461,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~lib/wasi/index/trace (; 19 ;) (param $0 i32) (param $1 i32) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64)
+ (func $~lib/wasi/index/trace (param $0 i32) (param $1 i32) (param $2 f64) (param $3 f64) (param $4 f64) (param $5 f64) (param $6 f64)
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
@@ -3670,7 +3670,7 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $start:wasi/trace (; 20 ;)
+ (func $start:wasi/trace
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -3707,7 +3707,7 @@
   f64.neg
   call $~lib/wasi/index/trace
  )
- (func $~start (; 21 ;)
+ (func $~start
   global.get $~started
   if
    return

@@ -4,14 +4,13 @@
  (type $f32_=>_f32 (func (param f32) (result f32)))
  (type $f64_=>_f64 (func (param f64) (result f64)))
  (memory $0 0)
- (global $binary/b (mut i32) (i32.const 0))
  (global $binary/i (mut i32) (i32.const 0))
  (global $binary/I (mut i64) (i64.const 0))
  (global $binary/f (mut f32) (f32.const 0))
  (global $binary/F (mut f64) (f64.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/math/ipow32 (; 0 ;) (param $0 i32) (result i32)
+ (func $~lib/math/NativeMathf.mod (param $0 f32) (result f32)
   (local $1 i32)
   (local $2 i32)
   i32.const 1
@@ -187,7 +186,7 @@
   local.get $0
   f32.mul
  )
- (func $~lib/math/NativeMath.mod (; 2 ;) (param $0 f64) (result f64)
+ (func $~lib/math/NativeMath.mod (param $0 f64) (result f64)
   (local $1 i64)
   (local $2 i64)
   (local $3 i64)
@@ -338,7 +337,7 @@
   local.get $0
   f64.mul
  )
- (func $start:binary (; 3 ;)
+ (func $start:binary
   global.get $binary/i
   i32.const 1
   i32.rem_s
@@ -346,30 +345,6 @@
   global.get $binary/i
   call $~lib/math/ipow32
   drop
-  global.get $binary/i
-  i32.const 1
-  i32.lt_s
-  global.set $binary/b
-  global.get $binary/i
-  i32.const 1
-  i32.gt_s
-  global.set $binary/b
-  global.get $binary/i
-  i32.const 1
-  i32.le_s
-  global.set $binary/b
-  global.get $binary/i
-  i32.const 1
-  i32.ge_s
-  global.set $binary/b
-  global.get $binary/i
-  i32.const 1
-  i32.eq
-  global.set $binary/b
-  global.get $binary/i
-  i32.const 1
-  i32.eq
-  global.set $binary/b
   global.get $binary/i
   i32.const 1
   i32.add
@@ -449,30 +424,6 @@
   i64.const 1
   i64.rem_s
   drop
-  global.get $binary/I
-  i64.const 1
-  i64.lt_s
-  global.set $binary/b
-  global.get $binary/I
-  i64.const 1
-  i64.gt_s
-  global.set $binary/b
-  global.get $binary/I
-  i64.const 1
-  i64.le_s
-  global.set $binary/b
-  global.get $binary/I
-  i64.const 1
-  i64.ge_s
-  global.set $binary/b
-  global.get $binary/I
-  i64.const 1
-  i64.eq
-  global.set $binary/b
-  global.get $binary/I
-  i64.const 1
-  i64.eq
-  global.set $binary/b
   global.get $binary/I
   i64.const 1
   i64.add
@@ -554,30 +505,6 @@
   drop
   global.get $binary/f
   f32.const 1
-  f32.lt
-  global.set $binary/b
-  global.get $binary/f
-  f32.const 1
-  f32.gt
-  global.set $binary/b
-  global.get $binary/f
-  f32.const 1
-  f32.le
-  global.set $binary/b
-  global.get $binary/f
-  f32.const 1
-  f32.ge
-  global.set $binary/b
-  global.get $binary/f
-  f32.const 1
-  f32.eq
-  global.set $binary/b
-  global.get $binary/f
-  f32.const 1
-  f32.eq
-  global.set $binary/b
-  global.get $binary/f
-  f32.const 1
   f32.add
   global.set $binary/f
   global.get $binary/f
@@ -603,30 +530,6 @@
   drop
   global.get $binary/F
   f64.const 1
-  f64.lt
-  global.set $binary/b
-  global.get $binary/F
-  f64.const 1
-  f64.gt
-  global.set $binary/b
-  global.get $binary/F
-  f64.const 1
-  f64.le
-  global.set $binary/b
-  global.get $binary/F
-  f64.const 1
-  f64.ge
-  global.set $binary/b
-  global.get $binary/F
-  f64.const 1
-  f64.eq
-  global.set $binary/b
-  global.get $binary/F
-  f64.const 1
-  f64.eq
-  global.set $binary/b
-  global.get $binary/F
-  f64.const 1
   f64.add
   global.set $binary/F
   global.get $binary/F
@@ -648,7 +551,7 @@
   call $~lib/math/NativeMath.mod
   global.set $binary/F
  )
- (func $~start (; 4 ;)
+ (func $~start
   call $start:binary
  )
 )

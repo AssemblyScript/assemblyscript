@@ -28,7 +28,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 208))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $while/testSimple (; 5 ;)
+ (func $while/testSimple
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -79,7 +79,7 @@
   i32.const 1
   global.set $while/ran
  )
- (func $while/testNested (; 6 ;)
+ (func $while/testNested
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -186,7 +186,7 @@
   i32.const 1
   global.set $while/ran
  )
- (func $while/testEmpty (; 7 ;)
+ (func $while/testEmpty
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -243,7 +243,7 @@
   i32.const 1
   global.set $while/ran
  )
- (func $while/testAlwaysTrue (; 8 ;)
+ (func $while/testAlwaysTrue
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -282,7 +282,7 @@
   i32.const 1
   global.set $while/ran
  )
- (func $while/testAlwaysTrueNeverBreaks (; 9 ;) (result i32)
+ (func $while/testAlwaysTrueNeverBreaks (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -307,7 +307,7 @@
   end
   unreachable
  )
- (func $while/testAlwaysFalse (; 10 ;)
+ (func $while/testAlwaysFalse
   (local $0 i32)
   i32.const 0
   local.set $0
@@ -326,7 +326,7 @@
   i32.const 1
   global.set $while/ran
  )
- (func $while/testAlwaysBreaks (; 11 ;)
+ (func $while/testAlwaysBreaks
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -359,7 +359,7 @@
   i32.const 1
   global.set $while/ran
  )
- (func $while/testAlwaysReturns (; 12 ;)
+ (func $while/testAlwaysReturns
   (local $0 i32)
   (local $1 i32)
   i32.const 0
@@ -388,7 +388,7 @@
    unreachable
   end
  )
- (func $while/testContinue (; 13 ;)
+ (func $while/testContinue
   (local $0 i32)
   (local $1 i32)
   i32.const 10
@@ -420,7 +420,7 @@
   i32.const 1
   global.set $while/ran
  )
- (func $while/testNestedContinue (; 14 ;)
+ (func $while/testNestedContinue
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -480,7 +480,7 @@
   i32.const 1
   global.set $while/ran
  )
- (func $~lib/rt/tlsf/removeBlock (; 15 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -690,7 +690,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 16 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1040,7 +1040,7 @@
   local.get $7
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1188,7 +1188,7 @@
   call $~lib/rt/tlsf/insertBlock
   i32.const 1
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 18 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1342,7 +1342,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 19 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1371,7 +1371,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 20 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1554,7 +1554,7 @@
   end
   local.get $7
  )
- (func $~lib/rt/tlsf/growMemory (; 21 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/growMemory (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1638,7 +1638,7 @@
   call $~lib/rt/tlsf/addMemory
   drop
  )
- (func $~lib/rt/tlsf/prepareBlock (; 22 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1733,7 +1733,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 23 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   global.get $~lib/rt/tlsf/collectLock
@@ -1844,7 +1844,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $4
  )
- (func $~lib/rt/tlsf/__alloc (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1852,7 +1852,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/increment (; 25 ;) (param $0 i32)
+ (func $~lib/rt/pure/increment (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.load offset=4
@@ -1897,7 +1897,7 @@
    unreachable
   end
  )
- (func $~lib/rt/pure/__retain (; 26 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -1909,7 +1909,7 @@
   end
   local.get $0
  )
- (func $while/Ref#constructor (; 27 ;) (param $0 i32) (result i32)
+ (func $while/Ref#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1921,7 +1921,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/pure/__release (; 28 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.gt_u
@@ -1932,7 +1932,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $while/testRef (; 29 ;)
+ (func $while/testRef
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2009,11 +2009,11 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $while/getRef (; 30 ;) (result i32)
+ (func $while/getRef (result i32)
   i32.const 0
   call $while/Ref#constructor
  )
- (func $while/testRefAutorelease (; 31 ;)
+ (func $while/testRefAutorelease
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -2088,7 +2088,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $start:while (; 32 ;)
+ (func $start:while
   i32.const 0
   global.set $while/ran
   call $while/testSimple
@@ -2245,7 +2245,7 @@
    unreachable
   end
  )
- (func $~start (; 33 ;)
+ (func $~start
   global.get $~started
   if
    return
@@ -2255,10 +2255,10 @@
   end
   call $start:while
  )
- (func $~lib/rt/pure/__collect (; 34 ;)
+ (func $~lib/rt/pure/__collect
   return
  )
- (func $~lib/rt/tlsf/freeBlock (; 35 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $1
   i32.load
@@ -2274,7 +2274,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/pure/decrement (; 36 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -2351,7 +2351,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 37 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/pure/__visit (param $0 i32) (param $1 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
   i32.lt_u
@@ -2375,7 +2375,7 @@
   i32.sub
   call $~lib/rt/pure/decrement
  )
- (func $~lib/rt/__visit_members (; 38 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/__visit_members (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $switch$1$default
    block $switch$1$case$4

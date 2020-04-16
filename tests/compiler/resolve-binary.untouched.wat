@@ -68,7 +68,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 8552))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/number/Bool#toString (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/number/Bool#toString (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    i32.const 32
@@ -76,13 +76,13 @@
    i32.const 64
   end
  )
- (func $~lib/rt/stub/__retain (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 3 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/string/String#get:length (; 4 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -90,7 +90,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -212,7 +212,7 @@
   call $~lib/rt/stub/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -285,7 +285,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/util/number/decimalCount32 (; 7 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -340,7 +340,7 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 8 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -394,7 +394,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -447,7 +447,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/util/number/utoa32_lut (; 10 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -587,7 +587,7 @@
    i32.store16
   end
  )
- (func $~lib/util/number/itoa32 (; 11 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -641,16 +641,16 @@
   local.get $3
   call $~lib/rt/stub/__retain
  )
- (func $~lib/util/number/itoa<i32> (; 12 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<i32> (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa32
   return
  )
- (func $~lib/number/I32#toString (; 13 ;) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa<i32>
  )
- (func $~lib/math/NativeMath.pow (; 14 ;) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -1610,7 +1610,7 @@
   end
   return
  )
- (func $~lib/util/number/genDigits (; 15 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -2113,7 +2113,7 @@
   end
   unreachable
  )
- (func $~lib/util/memory/memcpy (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3137,7 +3137,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 17 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3357,7 +3357,7 @@
    end
   end
  )
- (func $~lib/util/number/prettify (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3674,7 +3674,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/dtoa_core (; 19 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4100,7 +4100,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/string/String#substring (; 20 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4207,7 +4207,7 @@
   local.get $11
   call $~lib/rt/stub/__retain
  )
- (func $~lib/rt/stub/__free (; 21 ;) (param $0 i32)
+ (func $~lib/rt/stub/__free (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 0
@@ -4257,7 +4257,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~lib/util/number/dtoa (; 22 ;) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -4318,212 +4318,11 @@
   call $~lib/rt/stub/__free
   local.get $3
  )
- (func $~lib/number/F64#toString (; 23 ;) (param $0 f64) (param $1 i32) (result i32)
+ (func $~lib/number/F64#toString (param $0 f64) (param $1 i32) (result i32)
   local.get $0
   call $~lib/util/number/dtoa
  )
- (func $~lib/math/ipow32 (; 24 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  i32.const 1
-  local.set $2
-  local.get $1
-  i32.const 0
-  i32.le_s
-  if
-   local.get $0
-   i32.const -1
-   i32.eq
-   if
-    i32.const -1
-    i32.const 1
-    local.get $1
-    i32.const 1
-    i32.and
-    select
-    return
-   end
-   local.get $1
-   i32.const 0
-   i32.eq
-   local.get $0
-   i32.const 1
-   i32.eq
-   i32.or
-   return
-  else
-   local.get $1
-   i32.const 1
-   i32.eq
-   if
-    local.get $0
-    return
-   else
-    local.get $1
-    i32.const 2
-    i32.eq
-    if
-     local.get $0
-     local.get $0
-     i32.mul
-     return
-    else
-     local.get $1
-     i32.const 32
-     i32.lt_s
-     if
-      i32.const 32
-      local.get $1
-      i32.clz
-      i32.sub
-      local.set $3
-      block $break|0
-       block $case4|0
-        block $case3|0
-         block $case2|0
-          block $case1|0
-           block $case0|0
-            local.get $3
-            local.set $4
-            local.get $4
-            i32.const 5
-            i32.eq
-            br_if $case0|0
-            local.get $4
-            i32.const 4
-            i32.eq
-            br_if $case1|0
-            local.get $4
-            i32.const 3
-            i32.eq
-            br_if $case2|0
-            local.get $4
-            i32.const 2
-            i32.eq
-            br_if $case3|0
-            local.get $4
-            i32.const 1
-            i32.eq
-            br_if $case4|0
-            br $break|0
-           end
-           local.get $1
-           i32.const 1
-           i32.and
-           if
-            local.get $2
-            local.get $0
-            i32.mul
-            local.set $2
-           end
-           local.get $1
-           i32.const 1
-           i32.shr_u
-           local.set $1
-           local.get $0
-           local.get $0
-           i32.mul
-           local.set $0
-          end
-          local.get $1
-          i32.const 1
-          i32.and
-          if
-           local.get $2
-           local.get $0
-           i32.mul
-           local.set $2
-          end
-          local.get $1
-          i32.const 1
-          i32.shr_u
-          local.set $1
-          local.get $0
-          local.get $0
-          i32.mul
-          local.set $0
-         end
-         local.get $1
-         i32.const 1
-         i32.and
-         if
-          local.get $2
-          local.get $0
-          i32.mul
-          local.set $2
-         end
-         local.get $1
-         i32.const 1
-         i32.shr_u
-         local.set $1
-         local.get $0
-         local.get $0
-         i32.mul
-         local.set $0
-        end
-        local.get $1
-        i32.const 1
-        i32.and
-        if
-         local.get $2
-         local.get $0
-         i32.mul
-         local.set $2
-        end
-        local.get $1
-        i32.const 1
-        i32.shr_u
-        local.set $1
-        local.get $0
-        local.get $0
-        i32.mul
-        local.set $0
-       end
-       local.get $1
-       i32.const 1
-       i32.and
-       if
-        local.get $2
-        local.get $0
-        i32.mul
-        local.set $2
-       end
-      end
-      local.get $2
-      return
-     end
-    end
-   end
-  end
-  loop $while-continue|1
-   local.get $1
-   local.set $3
-   local.get $3
-   if
-    local.get $1
-    i32.const 1
-    i32.and
-    if
-     local.get $2
-     local.get $0
-     i32.mul
-     local.set $2
-    end
-    local.get $1
-    i32.const 1
-    i32.shr_u
-    local.set $1
-    local.get $0
-    local.get $0
-    i32.mul
-    local.set $0
-    br $while-continue|1
-   end
-  end
-  local.get $2
- )
- (func $resolve-binary/Foo#constructor (; 25 ;) (param $0 i32) (result i32)
+ (func $resolve-binary/Foo#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -4535,7 +4334,7 @@
   end
   local.get $0
  )
- (func $resolve-binary/Foo#lt (; 26 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#lt (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4546,11 +4345,11 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/string/String#toString (; 27 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#toString (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $resolve-binary/Foo#gt (; 28 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#gt (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4561,7 +4360,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#le (; 29 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#le (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4572,7 +4371,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#ge (; 30 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#ge (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4583,7 +4382,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#eq (; 31 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4594,7 +4393,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#ne (; 32 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#ne (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4605,7 +4404,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#add (; 33 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#add (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4616,7 +4415,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo.sub (; 34 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo.sub (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -4632,7 +4431,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#mul (; 35 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#mul (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4643,7 +4442,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#div (; 36 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#div (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4654,7 +4453,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#rem (; 37 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#rem (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4665,7 +4464,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Foo#pow (; 38 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Foo#pow (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   call $~lib/rt/stub/__retain
@@ -4676,7 +4475,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $resolve-binary/Bar#constructor (; 39 ;) (param $0 i32) (result i32)
+ (func $resolve-binary/Bar#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -4688,17 +4487,17 @@
   end
   local.get $0
  )
- (func $resolve-binary/Bar#add (; 40 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $resolve-binary/Bar#add (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
   local.get $1
  )
- (func $resolve-binary/Bar#self (; 41 ;) (param $0 i32) (result i32)
+ (func $resolve-binary/Bar#self (param $0 i32) (result i32)
   local.get $0
   call $~lib/rt/stub/__retain
  )
- (func $start:resolve-binary (; 42 ;)
+ (func $start:resolve-binary
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -5731,7 +5530,7 @@
   local.get $62
   call $~lib/rt/stub/__release
  )
- (func $~start (; 43 ;)
+ (func $~start
   call $start:resolve-binary
  )
 )

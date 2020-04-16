@@ -7,7 +7,7 @@
  (global $getter-setter/Foo._bar (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~start (; 1 ;)
+ (func $~start
   global.get $getter-setter/Foo._bar
   if
    i32.const 0

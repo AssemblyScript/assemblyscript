@@ -1084,13 +1084,13 @@ export class Compiler extends DiagnosticEmitter {
         } else {
           assert(getExpressionId(initExpr) == ExpressionId.Const);
           let exprType = getExpressionType(initExpr);
-          switch (exprType) {
-            case NativeType.I32: {
+          switch (<u32>exprType) {
+            case <u32>NativeType.I32: {
               global.constantValueKind = ConstantValueKind.INTEGER;
               global.constantIntegerValue = i64_new(getConstValueI32(initExpr), 0);
               break;
             }
-            case NativeType.I64: {
+            case <u32>NativeType.I64: {
               global.constantValueKind = ConstantValueKind.INTEGER;
               global.constantIntegerValue = i64_new(
                 getConstValueI64Low(initExpr),
@@ -1098,12 +1098,12 @@ export class Compiler extends DiagnosticEmitter {
               );
               break;
             }
-            case NativeType.F32: {
+            case <u32>NativeType.F32: {
               global.constantValueKind = ConstantValueKind.FLOAT;
               global.constantFloatValue = getConstValueF32(initExpr);
               break;
             }
-            case NativeType.F64: {
+            case <u32>NativeType.F64: {
               global.constantValueKind = ConstantValueKind.FLOAT;
               global.constantFloatValue = getConstValueF64(initExpr);
               break;
@@ -1731,8 +1731,8 @@ export class Compiler extends DiagnosticEmitter {
     program.writeRuntimeHeader(buf, 0, id, byteLength);
     var pos = runtimeHeaderSize;
     var nativeType = elementType.toNativeType();
-    switch (nativeType) {
-      case NativeType.I32: {
+    switch (<u32>nativeType) {
+      case <u32>NativeType.I32: {
         switch (byteSize) {
           case 1: {
             for (let i = 0; i < length; ++i) {
@@ -1768,7 +1768,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case NativeType.I64: {
+      case <u32>NativeType.I64: {
         for (let i = 0; i < length; ++i) {
           let value = values[i];
           assert(getExpressionType(value) == nativeType);
@@ -1778,7 +1778,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case NativeType.F32: {
+      case <u32>NativeType.F32: {
         for (let i = 0; i < length; ++i) {
           let value = values[i];
           assert(getExpressionType(value) == nativeType);
@@ -1788,7 +1788,7 @@ export class Compiler extends DiagnosticEmitter {
         }
         break;
       }
-      case NativeType.F64: {
+      case <u32>NativeType.F64: {
         for (let i = 0; i < length; ++i) {
           let value = values[i];
           assert(getExpressionType(value) == nativeType);
@@ -2913,8 +2913,8 @@ export class Compiler extends DiagnosticEmitter {
           initExpr = module.precomputeExpression(initExpr);
           if (getExpressionId(initExpr) == ExpressionId.Const) {
             let local = new Local(name, -1, type, flow.parentFunction);
-            switch (getExpressionType(initExpr)) {
-              case NativeType.I32: {
+            switch (<u32>getExpressionType(initExpr)) {
+              case <u32>NativeType.I32: {
                 local.setConstantIntegerValue(
                   i64_new(
                     getConstValueI32(initExpr),
@@ -2924,7 +2924,7 @@ export class Compiler extends DiagnosticEmitter {
                 );
                 break;
               }
-              case NativeType.I64: {
+              case <u32>NativeType.I64: {
                 local.setConstantIntegerValue(
                   i64_new(
                     getConstValueI64Low(initExpr),
@@ -2934,11 +2934,11 @@ export class Compiler extends DiagnosticEmitter {
                 );
                 break;
               }
-              case NativeType.F32: {
+              case <u32>NativeType.F32: {
                 local.setConstantFloatValue(<f64>getConstValueF32(initExpr), type);
                 break;
               }
-              case NativeType.F64: {
+              case <u32>NativeType.F64: {
                 local.setConstantFloatValue(getConstValueF64(initExpr), type);
                 break;
               }

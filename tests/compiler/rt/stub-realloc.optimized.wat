@@ -25,7 +25,7 @@
  (export "__collect" (func $~lib/rt/stub/__collect))
  (export "__reset" (func $~lib/rt/stub/__reset))
  (export "__rtti_base" (global $~lib/rt/__rtti_base))
- (func $~lib/rt/stub/maybeGrowMemory (; 1 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -67,7 +67,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -112,20 +112,20 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/rt/stub/__retain (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 4 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/rt/stub/__collect (; 5 ;)
+ (func $~lib/rt/stub/__collect
   nop
  )
- (func $~lib/rt/stub/__reset (; 6 ;)
+ (func $~lib/rt/stub/__reset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/memory/memory.copy (; 7 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -298,7 +298,7 @@
    end
   end
  )
- (func $~lib/rt/stub/__realloc (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__realloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -409,7 +409,7 @@
   i32.store offset=12
   local.get $0
  )
- (func $start:rt/stub-realloc (; 9 ;)
+ (func $start:rt/stub-realloc
   (local $0 i32)
   (local $1 i32)
   i32.const 10
@@ -585,7 +585,7 @@
    unreachable
   end
  )
- (func $~start (; 10 ;)
+ (func $~start
   global.get $~started
   if
    return

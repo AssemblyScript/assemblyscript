@@ -6,7 +6,6 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1024) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/operator-overloading/a1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/a2 (mut i32) (i32.const 0))
@@ -76,7 +75,7 @@
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -142,7 +141,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $std/operator-overloading/Tester#constructor (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 3
   call $~lib/rt/stub/__alloc
@@ -154,8 +153,187 @@
   i32.store offset=4
   local.get $2
  )
- (func $~lib/math/ipow32 (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
-  (local $2 i32)
+ (func $~lib/math/NativeMath.scalbn (param $0 f64) (param $1 i32) (result f64)
+  local.get $1
+  i32.const 1023
+  i32.gt_s
+  if (result f64)
+   local.get $0
+   f64.const 8988465674311579538646525e283
+   f64.mul
+   local.set $0
+   local.get $1
+   i32.const 1023
+   i32.sub
+   local.tee $1
+   i32.const 1023
+   i32.gt_s
+   if (result f64)
+    local.get $1
+    i32.const 1023
+    i32.sub
+    local.tee $1
+    i32.const 1023
+    local.get $1
+    i32.const 1023
+    i32.lt_s
+    select
+    local.set $1
+    local.get $0
+    f64.const 8988465674311579538646525e283
+    f64.mul
+   else
+    local.get $0
+   end
+  else
+   local.get $1
+   i32.const -1022
+   i32.lt_s
+   if (result f64)
+    local.get $0
+    f64.const 2.004168360008973e-292
+    f64.mul
+    local.set $0
+    local.get $1
+    i32.const 969
+    i32.add
+    local.tee $1
+    i32.const -1022
+    i32.lt_s
+    if (result f64)
+     local.get $1
+     i32.const 969
+     i32.add
+     local.tee $1
+     i32.const -1022
+     local.get $1
+     i32.const -1022
+     i32.gt_s
+     select
+     local.set $1
+     local.get $0
+     f64.const 2.004168360008973e-292
+     f64.mul
+    else
+     local.get $0
+    end
+   else
+    local.get $0
+   end
+  end
+  local.get $1
+  i64.extend_i32_s
+  i64.const 1023
+  i64.add
+  i64.const 52
+  i64.shl
+  f64.reinterpret_i64
+  f64.mul
+ )
+ (func $~lib/math/NativeMath.pow (param $0 f64) (param $1 f64) (result f64)
+  (local $2 f64)
+  (local $3 f64)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 f64)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 f64)
+  (local $12 f64)
+  (local $13 f64)
+  (local $14 i64)
+  (local $15 f64)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 f64)
+  (local $19 i32)
+  (local $20 i32)
+  local.get $1
+  f64.abs
+  f64.const 2
+  f64.le
+  if
+   local.get $1
+   f64.const 2
+   f64.eq
+   if
+    local.get $0
+    local.get $0
+    f64.mul
+    return
+   end
+   local.get $1
+   f64.const 0.5
+   f64.eq
+   if
+    local.get $0
+    f64.sqrt
+    f64.abs
+    f64.const inf
+    local.get $0
+    f64.const -inf
+    f64.ne
+    select
+    return
+   end
+   local.get $1
+   f64.const -1
+   f64.eq
+   if
+    f64.const 1
+    local.get $0
+    f64.div
+    return
+   end
+   local.get $1
+   f64.const 1
+   f64.eq
+   if
+    local.get $0
+    return
+   end
+   local.get $1
+   f64.const 0
+   f64.eq
+   if
+    f64.const 1
+    return
+   end
+  end
+  local.get $0
+  i64.reinterpret_f64
+  local.tee $14
+  i32.wrap_i64
+  local.set $19
+  local.get $14
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $16
+  i32.const 2147483647
+  i32.and
+  local.set $4
+  local.get $1
+  i64.reinterpret_f64
+  local.tee $14
+  i64.const 32
+  i64.shr_u
+  i32.wrap_i64
+  local.tee $7
+  i32.const 2147483647
+  i32.and
+  local.tee $8
+  local.get $14
+  i32.wrap_i64
+  local.tee $20
+  i32.or
+  i32.eqz
+  if
+   f64.const 1
+   return
+  end
   i32.const 1
   local.set $2
   loop $while-continue|0
@@ -183,7 +361,7 @@
   end
   local.get $2
  )
- (func $std/operator-overloading/Tester.equals (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.equals (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
@@ -199,7 +377,7 @@
    i32.const 0
   end
  )
- (func $std/operator-overloading/Tester.notEquals (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.notEquals (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
@@ -215,7 +393,7 @@
    i32.const 0
   end
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 4
   call $~lib/rt/stub/__alloc
@@ -227,7 +405,7 @@
   i32.store offset=4
   local.get $2
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 5
   call $~lib/rt/stub/__alloc
@@ -239,11 +417,9 @@
   i32.store offset=4
   local.get $2
  )
- (func $start:std/operator-overloading (; 8 ;)
+ (func $start:std/operator-overloading
   (local $0 i32)
   (local $1 i32)
-  i32.const 1104
-  global.set $~lib/rt/stub/startOffset
   i32.const 1104
   global.set $~lib/rt/stub/offset
   i32.const 1
@@ -1410,7 +1586,7 @@
    unreachable
   end
  )
- (func $~start (; 9 ;)
+ (func $~start
   call $start:std/operator-overloading
  )
 )

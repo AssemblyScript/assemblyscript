@@ -7,10 +7,10 @@
  (global $void/u8Val2 (mut i32) (i32.const 255))
  (export "memory" (memory $0))
  (start $~start)
- (func $void/anInt (; 0 ;) (result i32)
+ (func $void/anInt (result i32)
   i32.const 2
  )
- (func $start:void (; 1 ;)
+ (func $start:void
   i32.const 1
   drop
   call $void/anInt
@@ -20,7 +20,7 @@
   i32.add
   drop
  )
- (func $~start (; 2 ;)
+ (func $~start
   call $start:void
  )
 )

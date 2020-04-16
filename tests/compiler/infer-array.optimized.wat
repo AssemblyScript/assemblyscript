@@ -25,11 +25,10 @@
  (data (i32.const 1568) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\01")
  (data (i32.const 1600) "\04\00\00\00\01\00\00\00\00\00\00\00\04\00\00\00\02")
  (data (i32.const 1632) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -113,7 +112,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/memory/memory.copy (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -286,7 +285,7 @@
    end
   end
  )
- (func $~lib/rt/__allocArray (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/rt/__allocArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
@@ -323,12 +322,10 @@
   i32.store offset=12
   local.get $2
  )
- (func $start:infer-array (; 4 ;)
+ (func $start:infer-array
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  i32.const 1744
-  global.set $~lib/rt/stub/startOffset
   i32.const 1744
   global.set $~lib/rt/stub/offset
   i32.const 3
@@ -502,7 +499,7 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~start (; 5 ;)
+ (func $~start
   call $start:infer-array
  )
 )
