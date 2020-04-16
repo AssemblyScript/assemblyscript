@@ -22,15 +22,13 @@
  (data (i32.const 1456) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00-\00-\00i")
  (data (i32.const 1488) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\00+\00+")
  (data (i32.const 1520) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\00i\00-\00-")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $resolve-unary/a (mut i32) (i32.const 1))
  (global $resolve-unary/b (mut i32) (i32.const 1))
  (global $resolve-unary/foo (mut i32) (i32.const 0))
- (global $resolve-unary/bar (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -114,7 +112,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/util/number/itoa32 (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -217,7 +215,7 @@
   end
   local.get $3
  )
- (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -225,7 +223,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -301,7 +299,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -333,10 +331,8 @@
   end
   i32.const 0
  )
- (func $start:resolve-unary (; 6 ;)
+ (func $start:resolve-unary
   (local $0 i32)
-  i32.const 1552
-  global.set $~lib/rt/stub/startOffset
   i32.const 1552
   global.set $~lib/rt/stub/offset
   i32.const -1
@@ -563,7 +559,7 @@
   i32.const 0
   i32.const 4
   call $~lib/rt/stub/__alloc
-  global.set $resolve-unary/bar
+  drop
   i32.const 1440
   i32.const 1440
   call $~lib/string/String.__eq
@@ -613,7 +609,7 @@
    unreachable
   end
  )
- (func $~start (; 7 ;)
+ (func $~start
   call $start:resolve-unary
  )
 )

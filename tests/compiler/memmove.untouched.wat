@@ -10,7 +10,7 @@
  (global $memmove/dest (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $memmove/memmove (; 1 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $memmove/memmove (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -205,7 +205,7 @@
   end
   local.get $3
  )
- (func $start:memmove (; 2 ;)
+ (func $start:memmove
   global.get $memmove/base
   i64.const 1229782938247303441
   i64.store
@@ -411,7 +411,7 @@
    unreachable
   end
  )
- (func $~start (; 3 ;)
+ (func $~start
   call $start:memmove
  )
 )

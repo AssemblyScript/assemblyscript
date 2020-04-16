@@ -18,7 +18,7 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/object/Object.is<f64> (; 1 ;) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/object/Object.is<f64> (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   f64.eq
@@ -39,7 +39,7 @@
   i32.and
   return
  )
- (func $~lib/object/Object.is<f32> (; 2 ;) (param $0 f32) (param $1 f32) (result i32)
+ (func $~lib/object/Object.is<f32> (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   f32.eq
@@ -60,12 +60,12 @@
   i32.and
   return
  )
- (func $~lib/object/Object.is<i32> (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<i32> (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.eq
  )
- (func $~lib/object/Object.is<bool> (; 4 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<bool> (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -74,13 +74,13 @@
   i32.ne
   i32.eq
  )
- (func $~lib/rt/stub/__retain (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/rt/stub/__release (; 6 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/string/String#get:length (; 7 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -88,7 +88,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -210,7 +210,7 @@
   call $~lib/rt/stub/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 9 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -283,7 +283,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/object/Object.is<~lib/string/String> (; 10 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -301,7 +301,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/object/Object.is<~lib/string/String | null> (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String | null> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   call $~lib/rt/stub/__retain
@@ -319,7 +319,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:std/object (; 12 ;)
+ (func $start:std/object
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -881,7 +881,7 @@
    unreachable
   end
  )
- (func $~start (; 13 ;)
+ (func $~start
   call $start:std/object
  )
 )

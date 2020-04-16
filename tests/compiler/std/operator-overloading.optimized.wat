@@ -8,7 +8,6 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1024) "6\00\00\00\01\00\00\00\01\00\00\006\00\00\00s\00t\00d\00/\00o\00p\00e\00r\00a\00t\00o\00r\00-\00o\00v\00e\00r\00l\00o\00a\00d\00i\00n\00g\00.\00t\00s")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $std/operator-overloading/a1 (mut i32) (i32.const 0))
  (global $std/operator-overloading/a2 (mut i32) (i32.const 0))
@@ -78,7 +77,7 @@
  (global $std/operator-overloading/aii (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -144,7 +143,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $std/operator-overloading/Tester#constructor (; 2 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 3
   call $~lib/rt/stub/__alloc
@@ -156,7 +155,7 @@
   i32.store offset=4
   local.get $2
  )
- (func $~lib/math/NativeMath.scalbn (; 3 ;) (param $0 f64) (param $1 i32) (result f64)
+ (func $~lib/math/NativeMath.scalbn (param $0 f64) (param $1 i32) (result f64)
   local.get $1
   i32.const 1023
   i32.gt_s
@@ -233,7 +232,7 @@
   f64.reinterpret_i64
   f64.mul
  )
- (func $~lib/math/NativeMath.pow (; 4 ;) (param $0 f64) (param $1 f64) (result f64)
+ (func $~lib/math/NativeMath.pow (param $0 f64) (param $1 f64) (result f64)
   (local $2 f64)
   (local $3 f64)
   (local $4 i32)
@@ -1178,7 +1177,7 @@
   f64.const 1e-300
   f64.mul
  )
- (func $std/operator-overloading/Tester.equals (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.equals (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
@@ -1194,7 +1193,7 @@
    i32.const 0
   end
  )
- (func $std/operator-overloading/Tester.notEquals (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/Tester.notEquals (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load
   local.get $1
@@ -1210,7 +1209,7 @@
    i32.const 0
   end
  )
- (func $std/operator-overloading/TesterInlineStatic#constructor (; 7 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineStatic#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 4
   call $~lib/rt/stub/__alloc
@@ -1222,7 +1221,7 @@
   i32.store offset=4
   local.get $2
  )
- (func $std/operator-overloading/TesterInlineInstance#constructor (; 8 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $std/operator-overloading/TesterInlineInstance#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   i32.const 5
   call $~lib/rt/stub/__alloc
@@ -1234,11 +1233,9 @@
   i32.store offset=4
   local.get $2
  )
- (func $start:std/operator-overloading (; 9 ;)
+ (func $start:std/operator-overloading
   (local $0 i32)
   (local $1 i32)
-  i32.const 1104
-  global.set $~lib/rt/stub/startOffset
   i32.const 1104
   global.set $~lib/rt/stub/offset
   i32.const 1
@@ -2411,7 +2408,7 @@
    unreachable
   end
  )
- (func $~start (; 10 ;)
+ (func $~start
   call $start:std/operator-overloading
  )
 )

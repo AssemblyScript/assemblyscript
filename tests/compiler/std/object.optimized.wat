@@ -15,7 +15,7 @@
  (data (i32.const 1172) "\01\00\00\00\01")
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/object/Object.is<f64> (; 1 ;) (param $0 f64) (param $1 f64) (result i32)
+ (func $~lib/object/Object.is<f64> (param $0 f64) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   f64.eq
@@ -35,7 +35,7 @@
   f64.ne
   i32.and
  )
- (func $~lib/object/Object.is<f32> (; 2 ;) (param $0 f32) (param $1 f32) (result i32)
+ (func $~lib/object/Object.is<f32> (param $0 f32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   f32.eq
@@ -55,7 +55,7 @@
   f32.ne
   i32.and
  )
- (func $~lib/object/Object.is<bool> (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<bool> (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.const 0
   i32.ne
@@ -64,7 +64,7 @@
   i32.ne
   i32.eq
  )
- (func $~lib/string/String#get:length (; 4 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -72,7 +72,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 5 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -148,7 +148,7 @@
   end
   i32.const 0
  )
- (func $~lib/object/Object.is<~lib/string/String> (; 6 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/object/Object.is<~lib/string/String> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $__inlined_func$~lib/string/String.__eq (result i32)
    i32.const 1
@@ -181,7 +181,7 @@
    i32.const 0
   end
  )
- (func $start:std/object (; 7 ;)
+ (func $start:std/object
   f64.const 0
   f64.const 0
   call $~lib/object/Object.is<f64>
@@ -631,7 +631,7 @@
    unreachable
   end
  )
- (func $~start (; 8 ;)
+ (func $~start
   call $start:std/object
  )
 )

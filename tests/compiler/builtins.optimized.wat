@@ -31,18 +31,14 @@
  (data (i32.const 1680) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00u\00s\00i\00z\00e")
  (data (i32.const 1712) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00v\00o\00i\00d")
  (data (i32.const 1744) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00o\00m\00e\00 \00v\00a\00l\00u\00e")
- (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
  (global $builtins/f (mut f32) (f32.const 0))
  (global $builtins/F (mut f64) (f64.const 0))
- (global $builtins/u (mut i32) (i32.const 0))
- (global $builtins/U (mut i64) (i64.const 0))
- (global $builtins/s (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test" (func $start:builtins~anonymous|0))
  (start $~start)
- (func $~lib/atomics/Atomics.isLockFree (; 2 ;) (param $0 i32) (result i32)
+ (func $~lib/atomics/Atomics.isLockFree (param $0 i32) (result i32)
   i32.const 1
   local.get $0
   i32.const 4
@@ -57,7 +53,7 @@
   select
   select
  )
- (func $~lib/string/String#get:length (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -65,7 +61,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -141,7 +137,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 5 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -173,10 +169,10 @@
   end
   i32.const 0
  )
- (func $start:builtins~anonymous|0 (; 6 ;)
+ (func $start:builtins~anonymous|0
   nop
  )
- (func $start:builtins (; 7 ;)
+ (func $start:builtins
   i32.const 31
   global.set $builtins/i
   i32.const 0
@@ -231,10 +227,6 @@
   global.set $builtins/f
   f32.const 1
   global.set $builtins/f
-  i32.const 0
-  global.set $builtins/b
-  i32.const 1
-  global.set $builtins/b
   f64.const nan:0x8000000000000
   global.set $builtins/F
   f64.const inf
@@ -257,10 +249,6 @@
   global.set $builtins/F
   f64.const 1
   global.set $builtins/F
-  i32.const 0
-  global.set $builtins/b
-  i32.const 1
-  global.set $builtins/b
   f64.const 0
   global.set $builtins/F
   f32.const 1
@@ -365,22 +353,22 @@
   global.set $builtins/i
   i32.const 8
   i32.load8_u
-  global.set $builtins/u
+  drop
   i32.const 8
   i32.load16_u
-  global.set $builtins/u
+  drop
   i32.const 8
   i32.load
-  global.set $builtins/u
+  drop
   i32.const 8
   i32.load8_s
-  global.set $builtins/u
+  drop
   i32.const 8
   i32.load16_s
-  global.set $builtins/u
+  drop
   i32.const 8
   i32.load
-  global.set $builtins/u
+  drop
   i32.const 8
   i64.load8_s
   global.set $builtins/I
@@ -395,16 +383,16 @@
   global.set $builtins/I
   i32.const 8
   i64.load8_u
-  global.set $builtins/U
+  drop
   i32.const 8
   i64.load16_u
-  global.set $builtins/U
+  drop
   i32.const 8
   i64.load32_u
-  global.set $builtins/U
+  drop
   i32.const 8
   i64.load
-  global.set $builtins/U
+  drop
   i32.const 8
   i32.const 1
   i32.store8
@@ -443,10 +431,10 @@
   memory.grow
   drop
   memory.size
-  global.set $builtins/s
+  drop
   i32.const 1
   memory.grow
-  global.set $builtins/s
+  drop
   i32.const 10
   global.set $builtins/i
   i64.const 200
@@ -849,7 +837,7 @@
    unreachable
   end
  )
- (func $~start (; 8 ;)
+ (func $~start
   call $start:builtins
  )
 )

@@ -9,17 +9,17 @@
  (export "testI32" (func $many-locals/testI32))
  (export "testI8" (func $many-locals/testI8))
  (start $~start)
- (func $many-locals/testI32 (; 1 ;) (param $0 i32) (result i32)
+ (func $many-locals/testI32 (param $0 i32) (result i32)
   local.get $0
  )
- (func $many-locals/testI8 (; 2 ;) (param $0 i32) (result i32)
+ (func $many-locals/testI8 (param $0 i32) (result i32)
   local.get $0
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
  )
- (func $~start (; 3 ;)
+ (func $~start
   i32.const 42
   call $many-locals/testI8
   i32.const 42

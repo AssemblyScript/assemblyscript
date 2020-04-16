@@ -13,10 +13,10 @@
  (export "exportedExported" (func $abi/exportedExported))
  (export "exportedInternal" (func $abi/exportedInternal))
  (start $~start)
- (func $abi/internal (; 1 ;) (result i32)
+ (func $abi/internal (result i32)
   i32.const 128
  )
- (func $start:abi (; 2 ;)
+ (func $start:abi
   (local $0 i32)
   (local $1 i32)
   call $abi/internal
@@ -181,24 +181,24 @@
    unreachable
   end
  )
- (func $abi/exported (; 3 ;) (result i32)
+ (func $abi/exported (result i32)
   i32.const 128
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
  )
- (func $abi/exportedExported (; 4 ;) (result i32)
+ (func $abi/exportedExported (result i32)
   call $abi/exported
  )
- (func $abi/exportedInternal (; 5 ;) (result i32)
+ (func $abi/exportedInternal (result i32)
   call $abi/internal
   i32.const 24
   i32.shl
   i32.const 24
   i32.shr_s
  )
- (func $~start (; 6 ;)
+ (func $~start
   call $start:abi
  )
 )

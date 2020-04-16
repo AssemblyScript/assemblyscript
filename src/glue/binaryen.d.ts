@@ -25,7 +25,7 @@ export declare function __f64_load(ptr: usize): f64;
 
 type BinaryenIndex = u32;
 
-type BinaryenType = i32;
+type BinaryenType = usize;
 
 export declare function _BinaryenTypeNone(): BinaryenType;
 export declare function _BinaryenTypeInt32(): BinaryenType;
@@ -106,6 +106,8 @@ export declare function _BinaryenTryId(): BinaryenExpressionId;
 export declare function _BinaryenThrowId(): BinaryenExpressionId;
 export declare function _BinaryenRethrowId(): BinaryenExpressionId;
 export declare function _BinaryenBrOnExnId(): BinaryenExpressionId;
+export declare function _BinaryenTupleMakeId(): BinaryenExpressionId;
+export declare function _BinaryenTupleExtractId(): BinaryenExpressionId;
 export declare function _BinaryenPushId(): BinaryenExpressionId;
 export declare function _BinaryenPopId(): BinaryenExpressionId;
 
@@ -342,9 +344,11 @@ export declare function _BinaryenOrVec128(): BinaryenOp;
 export declare function _BinaryenXorVec128(): BinaryenOp;
 export declare function _BinaryenAndNotVec128(): BinaryenOp;
 export declare function _BinaryenBitselectVec128(): BinaryenOp;
+export declare function _BinaryenAbsVecI8x16(): BinaryenOp;
 export declare function _BinaryenNegVecI8x16(): BinaryenOp;
 export declare function _BinaryenAnyTrueVecI8x16(): BinaryenOp;
 export declare function _BinaryenAllTrueVecI8x16(): BinaryenOp;
+export declare function _BinaryenBitmaskVecI8x16(): BinaryenOp;
 export declare function _BinaryenShlVecI8x16(): BinaryenOp;
 export declare function _BinaryenShrSVecI8x16(): BinaryenOp;
 export declare function _BinaryenShrUVecI8x16(): BinaryenOp;
@@ -360,9 +364,11 @@ export declare function _BinaryenMinUVecI8x16(): BinaryenOp;
 export declare function _BinaryenMaxSVecI8x16(): BinaryenOp;
 export declare function _BinaryenMaxUVecI8x16(): BinaryenOp;
 export declare function _BinaryenAvgrUVecI8x16(): BinaryenOp;
+export declare function _BinaryenAbsVecI16x8(): BinaryenOp;
 export declare function _BinaryenNegVecI16x8(): BinaryenOp;
 export declare function _BinaryenAnyTrueVecI16x8(): BinaryenOp;
 export declare function _BinaryenAllTrueVecI16x8(): BinaryenOp;
+export declare function _BinaryenBitmaskVecI16x8(): BinaryenOp;
 export declare function _BinaryenShlVecI16x8(): BinaryenOp;
 export declare function _BinaryenShrSVecI16x8(): BinaryenOp;
 export declare function _BinaryenShrUVecI16x8(): BinaryenOp;
@@ -378,9 +384,11 @@ export declare function _BinaryenMinUVecI16x8(): BinaryenOp;
 export declare function _BinaryenMaxSVecI16x8(): BinaryenOp;
 export declare function _BinaryenMaxUVecI16x8(): BinaryenOp;
 export declare function _BinaryenAvgrUVecI16x8(): BinaryenOp;
+export declare function _BinaryenAbsVecI32x4(): BinaryenOp;
 export declare function _BinaryenNegVecI32x4(): BinaryenOp;
 export declare function _BinaryenAnyTrueVecI32x4(): BinaryenOp;
 export declare function _BinaryenAllTrueVecI32x4(): BinaryenOp;
+export declare function _BinaryenBitmaskVecI32x4(): BinaryenOp;
 export declare function _BinaryenShlVecI32x4(): BinaryenOp;
 export declare function _BinaryenShrSVecI32x4(): BinaryenOp;
 export declare function _BinaryenShrUVecI32x4(): BinaryenOp;
@@ -510,6 +518,13 @@ export declare function _BinaryenTry(module: BinaryenModuleRef, body: BinaryenEx
 export declare function _BinaryenThrow(module: BinaryenModuleRef, event: usize, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
 export declare function _BinaryenRethrow(module: BinaryenModuleRef, exnref: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenBrOnExn(module: BinaryenModuleRef, name: usize, eventName: usize, exnref: BinaryenExpressionRef): BinaryenExpressionRef;
+
+export declare function _BinaryenTupleMake(module: BinaryenModuleRef, operands: usize, numOperands: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenTupleMakeGetNumOperands(expr: BinaryenExpressionRef): BinaryenIndex;
+export declare function _BinaryenTupleMakeGetOperand(expr: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenTupleExtract(module: BinaryenModuleRef, tuple: BinaryenExpressionRef, index: BinaryenIndex): BinaryenExpressionRef;
+export declare function _BinaryenTupleExtractGetTuple(expr: BinaryenExpressionRef): BinaryenExpressionRef;
+export declare function _BinaryenTupleExtractGetIndex(expr: BinaryenExpressionRef): BinaryenIndex;
 
 export declare function _BinaryenPush(module: BinaryenModuleRef, value: BinaryenExpressionRef): BinaryenExpressionRef;
 export declare function _BinaryenPop(module: BinaryenModuleRef, type: BinaryenType): BinaryenExpressionRef;

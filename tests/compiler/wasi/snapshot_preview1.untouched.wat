@@ -9,11 +9,11 @@
  (global $wasi/snapshot_preview1/sig (mut i32) (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:wasi/snapshot_preview1 (; 0 ;)
+ (func $start:wasi/snapshot_preview1
   i32.const 9
   global.set $wasi/snapshot_preview1/sig
  )
- (func $~start (; 1 ;)
+ (func $~start
   call $start:wasi/snapshot_preview1
  )
 )

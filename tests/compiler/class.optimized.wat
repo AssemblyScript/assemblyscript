@@ -5,13 +5,12 @@
  (memory $0 1)
  (data (i32.const 1024) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00I\00n\00v\00a\00l\00i\00d\00 \00l\00e\00n\00g\00t\00h")
  (data (i32.const 1072) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "test" (func $class/test))
  (export "testGenericInitializer" (func $class/testGenericInitializer))
  (start $~start)
- (func $class/test (; 0 ;) (param $0 i32) (result i32)
+ (func $class/test (param $0 i32) (result i32)
   local.get $0
   i32.load
   drop
@@ -32,7 +31,7 @@
   i32.store8 offset=6
   local.get $0
  )
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -116,7 +115,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $class/testGenericInitializer (; 2 ;)
+ (func $class/testGenericInitializer
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -160,9 +159,7 @@
   local.get $0
   i32.store
  )
- (func $~start (; 3 ;)
-  i32.const 1120
-  global.set $~lib/rt/stub/startOffset
+ (func $~start
   i32.const 1120
   global.set $~lib/rt/stub/offset
  )

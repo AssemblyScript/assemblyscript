@@ -8,14 +8,14 @@
  (global $scoped/aStartFunctionLocal (mut i32) (i32.const 2))
  (export "memory" (memory $0))
  (start $~start)
- (func $scoped/fn (; 0 ;) (param $0 i32)
+ (func $scoped/fn (param $0 i32)
   (local $1 i32)
   i32.const 0
   local.set $1
   local.get $0
   local.set $1
  )
- (func $start:scoped (; 1 ;)
+ (func $start:scoped
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -63,7 +63,7 @@
   i32.const 42
   call $scoped/fn
  )
- (func $~start (; 2 ;)
+ (func $~start
   call $start:scoped
  )
 )

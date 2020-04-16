@@ -4,7 +4,7 @@
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (export "fib" (func $recursive/fib))
- (func $recursive/fib (; 0 ;) (param $0 i32) (result i32)
+ (func $recursive/fib (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.le_s

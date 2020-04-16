@@ -13,14 +13,13 @@
  (data (i32.const 1056) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e")
  (data (i32.const 1120) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s")
  (data (i32.const 1168) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (export "arrayAccess" (func $resolve-access/arrayAccess))
  (export "fieldAccess" (func $resolve-access/fieldAccess))
  (export "propertyAccess" (func $resolve-access/propertyAccess))
  (start $~start)
- (func $~lib/rt/stub/__alloc (; 1 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -104,7 +103,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/memory/memory.copy (; 2 ;) (param $0 i32)
+ (func $~lib/memory/memory.copy (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -275,7 +274,7 @@
    end
   end
  )
- (func $~lib/util/number/decimalCount32 (; 3 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 10
   i32.ge_u
@@ -317,7 +316,7 @@
   i32.lt_u
   select
  )
- (func $~lib/util/number/utoa_simple<u32> (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -344,7 +343,7 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/utoa64 (; 5 ;) (param $0 i64) (result i32)
+ (func $~lib/util/number/utoa64 (param $0 i64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -454,7 +453,7 @@
   end
   local.get $3
  )
- (func $resolve-access/arrayAccess (; 6 ;) (result i32)
+ (func $resolve-access/arrayAccess (result i32)
   (local $0 i32)
   (local $1 i32)
   i32.const 16
@@ -495,7 +494,7 @@
   i64.load
   call $~lib/util/number/utoa64
  )
- (func $resolve-access/Container#constructor (; 7 ;) (result i32)
+ (func $resolve-access/Container#constructor (result i32)
   (local $0 i32)
   i32.const 8
   i32.const 5
@@ -505,7 +504,7 @@
   i64.store
   local.get $0
  )
- (func $resolve-access/fieldAccess (; 8 ;) (result i32)
+ (func $resolve-access/fieldAccess (result i32)
   (local $0 i32)
   call $resolve-access/Container#constructor
   local.tee $0
@@ -515,7 +514,7 @@
   i64.load
   call $~lib/util/number/utoa64
  )
- (func $resolve-access/propertyAccess (; 9 ;) (result i32)
+ (func $resolve-access/propertyAccess (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -545,9 +544,7 @@
   end
   local.get $0
  )
- (func $~start (; 10 ;)
-  i32.const 1200
-  global.set $~lib/rt/stub/startOffset
+ (func $~start
   i32.const 1200
   global.set $~lib/rt/stub/offset
  )

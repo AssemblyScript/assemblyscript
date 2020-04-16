@@ -14,13 +14,10 @@
  (data (i32.const 1200) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001")
  (data (i32.const 1232) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00s\00t\00r\00i\00n\00g")
  (data (i32.const 1264) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d")
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
- (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $typeof/c (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/string/String#get:length (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -28,7 +25,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 2 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   local.get $0
@@ -104,7 +101,7 @@
   end
   i32.const 0
  )
- (func $~lib/string/String.__eq (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -136,7 +133,7 @@
   end
   i32.const 0
  )
- (func $start:typeof (; 4 ;)
+ (func $start:typeof
   (local $0 i32)
   (local $1 i32)
   i32.const 1072
@@ -355,10 +352,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1312
-  global.set $~lib/rt/stub/startOffset
-  i32.const 1312
-  global.set $~lib/rt/stub/offset
   i32.const 1344
   memory.size
   local.tee $1
@@ -393,8 +386,6 @@
     end
    end
   end
-  i32.const 1344
-  global.set $~lib/rt/stub/offset
   i32.const 1312
   i32.const 16
   i32.store
@@ -407,8 +398,6 @@
   i32.const 1324
   i32.const 0
   i32.store
-  i32.const 1328
-  global.set $typeof/c
   i32.const 1072
   i32.const 1072
   call $~lib/string/String.__eq
@@ -470,7 +459,7 @@
    unreachable
   end
  )
- (func $~start (; 5 ;)
+ (func $~start
   global.get $~started
   if
    return

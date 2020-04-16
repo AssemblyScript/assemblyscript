@@ -56,7 +56,7 @@
  (global $~lib/heap/__heap_base i32 (i32.const 1948))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/util/number/decimalCount32 (; 1 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 100000
   i32.lt_u
@@ -111,7 +111,7 @@
   end
   unreachable
  )
- (func $~lib/rt/stub/maybeGrowMemory (; 2 ;) (param $0 i32)
+ (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -165,7 +165,7 @@
   local.get $0
   global.set $~lib/rt/stub/offset
  )
- (func $~lib/rt/stub/__alloc (; 3 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/stub/__alloc (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -218,7 +218,7 @@
   i32.store offset=12
   local.get $2
  )
- (func $~lib/util/number/utoa32_lut (; 4 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_lut (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -358,10 +358,10 @@
    i32.store16
   end
  )
- (func $~lib/rt/stub/__retain (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/util/number/itoa32 (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa32 (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -415,19 +415,19 @@
   local.get $3
   call $~lib/rt/stub/__retain
  )
- (func $~lib/util/number/itoa<i32> (; 7 ;) (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<i32> (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa32
   return
  )
- (func $~lib/number/I32#toString (; 8 ;) (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (param $0 i32) (result i32)
   local.get $0
   call $~lib/util/number/itoa<i32>
  )
- (func $~lib/rt/stub/__release (; 9 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $~lib/string/String#get:length (; 10 ;) (param $0 i32) (result i32)
+ (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
   i32.const 16
   i32.sub
@@ -435,7 +435,7 @@
   i32.const 1
   i32.shr_u
  )
- (func $~lib/util/string/compareImpl (; 11 ;) (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
+ (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (result i32)
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
@@ -557,7 +557,7 @@
   call $~lib/rt/stub/__release
   local.get $7
  )
- (func $~lib/string/String.__eq (; 12 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -630,7 +630,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/util/number/genDigits (; 13 ;) (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
   (local $7 i32)
   (local $8 i64)
   (local $9 i64)
@@ -1133,7 +1133,7 @@
   end
   unreachable
  )
- (func $~lib/util/memory/memcpy (; 14 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memcpy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2157,7 +2157,7 @@
    i32.store8
   end
  )
- (func $~lib/memory/memory.copy (; 15 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2377,7 +2377,7 @@
    end
   end
  )
- (func $~lib/util/number/prettify (; 16 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/util/number/prettify (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2694,7 +2694,7 @@
   end
   unreachable
  )
- (func $~lib/util/number/dtoa_core (; 17 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/util/number/dtoa_core (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3120,7 +3120,7 @@
   local.get $2
   i32.add
  )
- (func $~lib/string/String#substring (; 18 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/string/String#substring (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3227,7 +3227,7 @@
   local.get $11
   call $~lib/rt/stub/__retain
  )
- (func $~lib/rt/stub/__free (; 19 ;) (param $0 i32)
+ (func $~lib/rt/stub/__free (param $0 i32)
   (local $1 i32)
   local.get $0
   i32.const 0
@@ -3277,7 +3277,7 @@
    global.set $~lib/rt/stub/offset
   end
  )
- (func $~lib/util/number/dtoa (; 20 ;) (param $0 f64) (result i32)
+ (func $~lib/util/number/dtoa (param $0 f64) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3338,11 +3338,11 @@
   call $~lib/rt/stub/__free
   local.get $3
  )
- (func $~lib/number/F64#toString (; 21 ;) (param $0 f64) (param $1 i32) (result i32)
+ (func $~lib/number/F64#toString (param $0 f64) (param $1 i32) (result i32)
   local.get $0
   call $~lib/util/number/dtoa
  )
- (func $~lib/number/Bool#toString (; 22 ;) (param $0 i32) (result i32)
+ (func $~lib/number/Bool#toString (param $0 i32) (result i32)
   local.get $0
   if (result i32)
    i32.const 1904
@@ -3350,7 +3350,7 @@
    i32.const 1936
   end
  )
- (func $~lib/number/F32.isSafeInteger (; 23 ;) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isSafeInteger (param $0 f32) (result i32)
   local.get $0
   f32.abs
   global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
@@ -3364,7 +3364,7 @@
    i32.const 0
   end
  )
- (func $~lib/number/F32.isInteger (; 24 ;) (param $0 f32) (result i32)
+ (func $~lib/number/F32.isInteger (param $0 f32) (result i32)
   local.get $0
   local.get $0
   f32.sub
@@ -3379,7 +3379,7 @@
    i32.const 0
   end
  )
- (func $~lib/number/F64.isSafeInteger (; 25 ;) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isSafeInteger (param $0 f64) (result i32)
   local.get $0
   f64.abs
   global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
@@ -3393,7 +3393,7 @@
    i32.const 0
   end
  )
- (func $~lib/number/F64.isInteger (; 26 ;) (param $0 f64) (result i32)
+ (func $~lib/number/F64.isInteger (param $0 f64) (result i32)
   local.get $0
   local.get $0
   f64.sub
@@ -3408,7 +3408,7 @@
    i32.const 0
   end
  )
- (func $start:number (; 27 ;)
+ (func $start:number
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4174,7 +4174,7 @@
   local.get $10
   call $~lib/rt/stub/__release
  )
- (func $~start (; 28 ;)
+ (func $~start
   call $start:number
  )
 )

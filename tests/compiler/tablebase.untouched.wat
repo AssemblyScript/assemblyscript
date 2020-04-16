@@ -6,7 +6,7 @@
  (global $tablebase/staticFunction i32 (i32.const 32))
  (global $~lib/ASC_TABLE_BASE i32 (i32.const 32))
  (export "memory" (memory $0))
- (func $tablebase/foo (; 0 ;)
+ (func $tablebase/foo
   nop
  )
 )

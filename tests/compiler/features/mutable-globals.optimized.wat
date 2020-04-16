@@ -11,7 +11,7 @@
  (export "memory" (memory $0))
  (export "external" (global $features/mutable-globals/external))
  (export "internal" (global $features/mutable-globals/internal))
- (func $~start (; 1 ;)
+ (func $~start
   global.get $~started
   if
    return

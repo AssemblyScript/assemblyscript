@@ -5,7 +5,7 @@
  (global $ternary/a (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $start:ternary (; 0 ;)
+ (func $start:ternary
   i32.const 1
   drop
   i32.const 1
@@ -19,7 +19,7 @@
   i32.const 1
   global.set $ternary/a
  )
- (func $~start (; 1 ;)
+ (func $~start
   call $start:ternary
  )
 )

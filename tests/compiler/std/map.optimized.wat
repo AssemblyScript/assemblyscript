@@ -44,7 +44,7 @@
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $~lib/rt/tlsf/removeBlock (; 6 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -206,7 +206,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 7 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -485,7 +485,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 8 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -599,7 +599,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 9 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -686,7 +686,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/prepareSize (; 10 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
   i32.const 1073741808
   i32.ge_u
@@ -710,7 +710,7 @@
   i32.gt_u
   select
  )
- (func $~lib/rt/tlsf/searchBlock (; 11 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   local.get $1
   i32.const 256
@@ -839,7 +839,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/prepareBlock (; 12 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/prepareBlock (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $1
@@ -914,7 +914,7 @@
    i32.store
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 13 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1054,7 +1054,7 @@
   call $~lib/rt/rtrace/onalloc
   local.get $3
  )
- (func $~lib/rt/tlsf/__alloc (; 14 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   local.get $0
   local.get $1
@@ -1062,7 +1062,7 @@
   i32.const 16
   i32.add
  )
- (func $~lib/rt/pure/__retain (; 15 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1113,7 +1113,7 @@
   end
   local.get $0
  )
- (func $~lib/memory/memory.fill (; 16 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $~lib/util/memory/memset|inlined.0
    local.get $1
@@ -1271,7 +1271,7 @@
    end
   end
  )
- (func $~lib/arraybuffer/ArrayBuffer#constructor (; 17 ;) (param $0 i32) (result i32)
+ (func $~lib/arraybuffer/ArrayBuffer#constructor (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   i32.const 1073741808
@@ -1293,7 +1293,7 @@
   local.get $1
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/pure/__release (; 18 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1556
   i32.gt_u
@@ -1304,7 +1304,7 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~lib/map/Map<i8,i32>#clear (; 19 ;) (param $0 i32)
+ (func $~lib/map/Map<i8,i32>#clear (param $0 i32)
   (local $1 i32)
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -1337,14 +1337,14 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/util/hash/hash8 (; 20 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash8 (param $0 i32) (result i32)
   local.get $0
   i32.const -2128831035
   i32.xor
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<i8,i32>#find (; 21 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -1387,7 +1387,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i8,i32>#has (; 22 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1400,7 +1400,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i8,i32>#rehash (; 23 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -1535,7 +1535,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i8,i32>#set (; 24 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1629,7 +1629,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i8,i32>#get (; 25 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -1652,7 +1652,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/memory/memory.copy (; 26 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   block $~lib/util/memory/memmove|inlined.0
@@ -1825,7 +1825,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/freeBlock (; 27 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/freeBlock (param $0 i32) (param $1 i32)
   local.get $1
   local.get $1
   i32.load
@@ -1838,7 +1838,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $~lib/rt/tlsf/reallocateBlock (; 28 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/rt/tlsf/reallocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -1941,7 +1941,7 @@
   end
   local.get $3
  )
- (func $~lib/array/ensureSize (; 29 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/ensureSize (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2042,7 +2042,7 @@
    i32.store offset=8
   end
  )
- (func $~lib/array/Array<i8>#__set (; 30 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i8>#__set (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   local.get $0
@@ -2078,7 +2078,7 @@
   local.get $2
   i32.store8
  )
- (func $~lib/array/Array<i8>#set:length (; 31 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i8>#set:length (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=12
   drop
@@ -2090,7 +2090,7 @@
   local.get $1
   i32.store offset=12
  )
- (func $~lib/map/Map<i8,i32>#keys (; 32 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#keys (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2202,7 +2202,7 @@
   call $~lib/array/Array<i8>#set:length
   local.get $0
  )
- (func $~lib/array/Array<i32>#constructor (; 33 ;) (param $0 i32) (result i32)
+ (func $~lib/array/Array<i32>#constructor (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2272,7 +2272,7 @@
   i32.store offset=12
   local.get $3
  )
- (func $~lib/array/Array<i32>#__set (; 34 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i32>#__set (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   local.get $0
@@ -2310,7 +2310,7 @@
   local.get $2
   i32.store
  )
- (func $~lib/array/Array<i32>#set:length (; 35 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i32>#set:length (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=12
   drop
@@ -2322,7 +2322,7 @@
   local.get $1
   i32.store offset=12
  )
- (func $~lib/map/Map<i8,i32>#values (; 36 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i8,i32>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -2374,7 +2374,7 @@
   call $~lib/array/Array<i32>#set:length
   local.get $0
  )
- (func $~lib/map/Map<i8,i8>#clear (; 37 ;) (param $0 i32)
+ (func $~lib/map/Map<i8,i8>#clear (param $0 i32)
   (local $1 i32)
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -2407,7 +2407,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/map/Map<i32,i32>#constructor (; 38 ;) (result i32)
+ (func $~lib/map/Map<i32,i32>#constructor (result i32)
   (local $0 i32)
   i32.const 24
   i32.const 7
@@ -2435,7 +2435,7 @@
   call $~lib/map/Map<i8,i32>#clear
   local.get $0
  )
- (func $~lib/array/Array<i32>#__get (; 39 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -2456,7 +2456,7 @@
   i32.add
   i32.load
  )
- (func $~lib/map/Map<i8,i8>#rehash (; 40 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i8>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2591,7 +2591,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i8,i8>#set (; 41 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i8,i8>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -2724,7 +2724,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/util/hash/hash32 (; 42 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash32 (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
@@ -2755,7 +2755,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<i32,i32>#find (; 43 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -2796,7 +2796,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i32,i32>#rehash (; 44 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -2931,7 +2931,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i32,i32>#set (; 45 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3021,7 +3021,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i8,i32>#delete (; 46 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i8,i32>#delete (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -3084,7 +3084,7 @@
    call $~lib/map/Map<i8,i32>#rehash
   end
  )
- (func $std/map/testNumeric<i8,i32> (; 47 ;)
+ (func $std/map/testNumeric<i8,i32>
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -3607,7 +3607,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u8,i32>#has (; 48 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -3618,7 +3618,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u8,i32>#rehash (; 49 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -3753,7 +3753,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u8,i32>#set (; 50 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -3845,7 +3845,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<u8,i32>#get (; 51 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -3866,7 +3866,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/map/Map<u8,i32>#keys (; 52 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u8,i32>#keys (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -3978,7 +3978,7 @@
   call $~lib/array/Array<i8>#set:length
   local.get $0
  )
- (func $~lib/map/Map<u8,u8>#rehash (; 53 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,u8>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -4113,7 +4113,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u8,u8>#set (; 54 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u8,u8>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -4244,7 +4244,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<u8,i32>#delete (; 55 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u8,i32>#delete (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -4305,7 +4305,7 @@
    call $~lib/map/Map<u8,i32>#rehash
   end
  )
- (func $std/map/testNumeric<u8,i32> (; 56 ;)
+ (func $std/map/testNumeric<u8,i32>
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -4806,7 +4806,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/util/hash/hash16 (; 57 ;) (param $0 i32) (result i32)
+ (func $~lib/util/hash/hash16 (param $0 i32) (result i32)
   local.get $0
   i32.const 255
   i32.and
@@ -4821,7 +4821,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<i16,i32>#find (; 58 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -4864,7 +4864,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i16,i32>#has (; 59 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -4877,7 +4877,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i16,i32>#rehash (; 60 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5012,7 +5012,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i16,i32>#set (; 61 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5106,7 +5106,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i16,i32>#get (; 62 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -5129,7 +5129,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/array/Array<i16>#__set (; 63 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/array/Array<i16>#__set (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   local.get $1
   local.get $0
@@ -5167,7 +5167,7 @@
   local.get $2
   i32.store16
  )
- (func $~lib/array/Array<i16>#set:length (; 64 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i16>#set:length (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=12
   drop
@@ -5179,7 +5179,7 @@
   local.get $1
   i32.store offset=12
  )
- (func $~lib/map/Map<i16,i32>#keys (; 65 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i16,i32>#keys (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -5296,7 +5296,7 @@
   call $~lib/array/Array<i16>#set:length
   local.get $0
  )
- (func $~lib/map/Map<i16,i16>#rehash (; 66 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i16>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -5431,7 +5431,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i16,i16>#set (; 67 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i16,i16>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -5564,7 +5564,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i16,i32>#delete (; 68 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i16,i32>#delete (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -5627,7 +5627,7 @@
    call $~lib/map/Map<i16,i32>#rehash
   end
  )
- (func $std/map/testNumeric<i16,i32> (; 69 ;)
+ (func $std/map/testNumeric<i16,i32>
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -6152,7 +6152,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u16,i32>#has (; 70 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -6163,7 +6163,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<u16,i32>#rehash (; 71 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6298,7 +6298,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u16,i32>#set (; 72 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6390,7 +6390,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<u16,i32>#get (; 73 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -6411,7 +6411,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/map/Map<u16,i32>#keys (; 74 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u16,i32>#keys (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -6528,7 +6528,7 @@
   call $~lib/array/Array<i16>#set:length
   local.get $0
  )
- (func $~lib/map/Map<u16,u16>#rehash (; 75 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,u16>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -6663,7 +6663,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u16,u16>#set (; 76 ;) (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<u16,u16>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -6794,7 +6794,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<u16,i32>#delete (; 77 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<u16,i32>#delete (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -6855,7 +6855,7 @@
    call $~lib/map/Map<u16,i32>#rehash
   end
  )
- (func $std/map/testNumeric<u16,i32> (; 78 ;)
+ (func $std/map/testNumeric<u16,i32>
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -7358,7 +7358,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i32,i32>#has (; 79 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#has (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -7367,7 +7367,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i32,i32>#get (; 80 ;) (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/map/Map<i32,i32>#get (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -7386,7 +7386,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/map/Map<i32,i32>#delete (; 81 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i32,i32>#delete (param $0 i32) (param $1 i32)
   (local $2 i32)
   local.get $0
   local.get $1
@@ -7445,7 +7445,7 @@
    call $~lib/map/Map<i32,i32>#rehash
   end
  )
- (func $std/map/testNumeric<i32,i32> (; 82 ;)
+ (func $std/map/testNumeric<i32,i32>
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -7907,7 +7907,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u32,i32>#keys (; 83 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u32,i32>#keys (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -8024,7 +8024,7 @@
   call $~lib/array/Array<i32>#set:length
   local.get $0
  )
- (func $std/map/testNumeric<u32,i32> (; 84 ;)
+ (func $std/map/testNumeric<u32,i32>
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -8489,7 +8489,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i64,i32>#clear (; 85 ;) (param $0 i32)
+ (func $~lib/map/Map<i64,i32>#clear (param $0 i32)
   (local $1 i32)
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -8522,7 +8522,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/util/hash/hash64 (; 86 ;) (param $0 i64) (result i32)
+ (func $~lib/util/hash/hash64 (param $0 i64) (result i32)
   (local $1 i32)
   local.get $0
   i32.wrap_i64
@@ -8588,7 +8588,7 @@
   i32.const 16777619
   i32.mul
  )
- (func $~lib/map/Map<i64,i32>#find (; 87 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#find (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -8629,7 +8629,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<i64,i32>#has (; 88 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#has (param $0 i32) (param $1 i64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -8638,7 +8638,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<i64,i32>#rehash (; 89 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -8773,7 +8773,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i64,i32>#set (; 90 ;) (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#set (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -8863,7 +8863,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i64,i32>#get (; 91 ;) (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/map/Map<i64,i32>#get (param $0 i32) (param $1 i64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -8882,7 +8882,7 @@
   local.get $0
   i32.load offset=8
  )
- (func $~lib/array/Array<i64>#__set (; 92 ;) (param $0 i32) (param $1 i32) (param $2 i64)
+ (func $~lib/array/Array<i64>#__set (param $0 i32) (param $1 i32) (param $2 i64)
   (local $3 i32)
   local.get $1
   local.get $0
@@ -8920,7 +8920,7 @@
   local.get $2
   i64.store
  )
- (func $~lib/array/Array<i64>#set:length (; 93 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/array/Array<i64>#set:length (param $0 i32) (param $1 i32)
   local.get $0
   i32.load offset=12
   drop
@@ -8932,7 +8932,7 @@
   local.get $1
   i32.store offset=12
  )
- (func $~lib/map/Map<i64,i32>#keys (; 94 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#keys (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9049,7 +9049,7 @@
   call $~lib/array/Array<i64>#set:length
   local.get $0
  )
- (func $~lib/map/Map<i64,i32>#values (; 95 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<i64,i32>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -9101,7 +9101,7 @@
   call $~lib/array/Array<i32>#set:length
   local.get $0
  )
- (func $~lib/map/Map<i64,i64>#clear (; 96 ;) (param $0 i32)
+ (func $~lib/map/Map<i64,i64>#clear (param $0 i32)
   (local $1 i32)
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -9134,7 +9134,7 @@
   i32.const 0
   i32.store offset=20
  )
- (func $~lib/array/Array<i64>#__get (; 97 ;) (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (param $0 i32) (param $1 i32) (result i64)
   local.get $1
   local.get $0
   i32.load offset=12
@@ -9155,7 +9155,7 @@
   i32.add
   i64.load
  )
- (func $~lib/map/Map<i64,i64>#rehash (; 98 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<i64,i64>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -9290,7 +9290,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<i64,i64>#set (; 99 ;) (param $0 i32) (param $1 i64) (param $2 i64) (result i32)
+ (func $~lib/map/Map<i64,i64>#set (param $0 i32) (param $1 i64) (param $2 i64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -9416,7 +9416,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<i64,i32>#delete (; 100 ;) (param $0 i32) (param $1 i64)
+ (func $~lib/map/Map<i64,i32>#delete (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -9476,7 +9476,7 @@
    call $~lib/map/Map<i64,i32>#rehash
   end
  )
- (func $std/map/testNumeric<i64,i32> (; 101 ;)
+ (func $std/map/testNumeric<i64,i32>
   (local $0 i64)
   (local $1 i32)
   (local $2 i32)
@@ -9949,7 +9949,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<u64,i32>#keys (; 102 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<u64,i32>#keys (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -10066,7 +10066,7 @@
   call $~lib/array/Array<i64>#set:length
   local.get $0
  )
- (func $std/map/testNumeric<u64,i32> (; 103 ;)
+ (func $std/map/testNumeric<u64,i32>
   (local $0 i64)
   (local $1 i32)
   (local $2 i32)
@@ -10539,7 +10539,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f32,i32>#find (; 104 ;) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#find (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -10580,7 +10580,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<f32,i32>#has (; 105 ;) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#has (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -10590,7 +10590,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<f32,i32>#rehash (; 106 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,i32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -10726,7 +10726,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f32,i32>#set (; 107 ;) (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#set (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -10817,7 +10817,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<f32,i32>#get (; 108 ;) (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/map/Map<f32,i32>#get (param $0 i32) (param $1 f32) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -10837,7 +10837,7 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/map/Map<f32,i32>#keys (; 109 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f32,i32>#keys (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f32)
@@ -10988,7 +10988,7 @@
   call $~lib/array/Array<i32>#set:length
   local.get $0
  )
- (func $~lib/map/Map<f32,f32>#rehash (; 110 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f32,f32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11124,7 +11124,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f32,f32>#set (; 111 ;) (param $0 i32) (param $1 f32) (param $2 f32) (result i32)
+ (func $~lib/map/Map<f32,f32>#set (param $0 i32) (param $1 f32) (param $2 f32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -11215,7 +11215,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<f32,i32>#delete (; 112 ;) (param $0 i32) (param $1 f32)
+ (func $~lib/map/Map<f32,i32>#delete (param $0 i32) (param $1 f32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -11276,7 +11276,7 @@
    call $~lib/map/Map<f32,i32>#rehash
   end
  )
- (func $std/map/testNumeric<f32,i32> (; 113 ;)
+ (func $std/map/testNumeric<f32,i32>
   (local $0 f32)
   (local $1 i32)
   (local $2 i32)
@@ -11765,7 +11765,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f64,i32>#find (; 114 ;) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#find (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   local.get $0
   i32.load
   local.get $2
@@ -11806,7 +11806,7 @@
   end
   i32.const 0
  )
- (func $~lib/map/Map<f64,i32>#has (; 115 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#has (param $0 i32) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -11816,7 +11816,7 @@
   i32.const 0
   i32.ne
  )
- (func $~lib/map/Map<f64,i32>#rehash (; 116 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f64,i32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -11952,7 +11952,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f64,i32>#set (; 117 ;) (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#set (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -12043,7 +12043,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<f64,i32>#get (; 118 ;) (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/map/Map<f64,i32>#get (param $0 i32) (param $1 f64) (result i32)
   local.get $0
   local.get $1
   local.get $1
@@ -12063,7 +12063,7 @@
   local.get $0
   i32.load offset=8
  )
- (func $~lib/map/Map<f64,i32>#keys (; 119 ;) (param $0 i32) (result i32)
+ (func $~lib/map/Map<f64,i32>#keys (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 f64)
@@ -12214,7 +12214,7 @@
   call $~lib/array/Array<i64>#set:length
   local.get $0
  )
- (func $~lib/map/Map<f64,f64>#rehash (; 120 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/map/Map<f64,f64>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -12350,7 +12350,7 @@
   local.get $4
   call $~lib/rt/pure/__release
  )
- (func $~lib/map/Map<f64,f64>#set (; 121 ;) (param $0 i32) (param $1 f64) (param $2 f64) (result i32)
+ (func $~lib/map/Map<f64,f64>#set (param $0 i32) (param $1 f64) (param $2 f64) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
@@ -12477,7 +12477,7 @@
   local.get $0
   call $~lib/rt/pure/__retain
  )
- (func $~lib/map/Map<f64,i32>#delete (; 122 ;) (param $0 i32) (param $1 f64)
+ (func $~lib/map/Map<f64,i32>#delete (param $0 i32) (param $1 f64)
   (local $2 i32)
   (local $3 i32)
   local.get $0
@@ -12538,7 +12538,7 @@
    call $~lib/map/Map<f64,i32>#rehash
   end
  )
- (func $std/map/testNumeric<f64,i32> (; 123 ;)
+ (func $std/map/testNumeric<f64,i32>
   (local $0 f64)
   (local $1 i32)
   (local $2 i32)
@@ -13027,7 +13027,7 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
- (func $~start (; 124 ;)
+ (func $~start
   call $std/map/testNumeric<i8,i32>
   call $std/map/testNumeric<u8,i32>
   call $std/map/testNumeric<i16,i32>
@@ -13039,7 +13039,7 @@
   call $std/map/testNumeric<f32,i32>
   call $std/map/testNumeric<f64,i32>
  )
- (func $~lib/rt/pure/decrement (; 125 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -13140,7 +13140,7 @@
    i32.store offset=4
   end
  )
- (func $~lib/rt/pure/__visit (; 126 ;) (param $0 i32)
+ (func $~lib/rt/pure/__visit (param $0 i32)
   local.get $0
   i32.const 1556
   i32.lt_u

@@ -3,18 +3,15 @@
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
- (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $~start)
- (func $~setArgumentsLength (; 0 ;) (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
+ (func $~setArgumentsLength (param $0 i32)
+  nop
  )
- (func $getter-call/test (; 1 ;) (result i32)
+ (func $getter-call/test (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -78,13 +75,9 @@
   local.get $0
   i32.const 0
   i32.store offset=12
-  i32.const 0
-  global.set $~argumentsLength
   i32.const 42
  )
- (func $~start (; 2 ;)
-  i32.const 1024
-  global.set $~lib/rt/stub/startOffset
+ (func $~start
   i32.const 1024
   global.set $~lib/rt/stub/offset
  )

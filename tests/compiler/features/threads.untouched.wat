@@ -5,7 +5,7 @@
  (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 1))
  (export "memory" (memory $0))
  (start $~start)
- (func $features/threads/testAtomic (; 0 ;)
+ (func $features/threads/testAtomic
   i32.const 0
   i32.atomic.load8_u
   drop
@@ -287,7 +287,7 @@
   i64.atomic.rmw.cmpxchg offset=8
   drop
  )
- (func $features/threads/testAtomicAsm (; 1 ;)
+ (func $features/threads/testAtomicAsm
   i32.const 0
   i32.atomic.load8_u
   drop
@@ -534,11 +534,11 @@
   i64.atomic.rmw.cmpxchg
   drop
  )
- (func $start:features/threads (; 2 ;)
+ (func $start:features/threads
   call $features/threads/testAtomic
   call $features/threads/testAtomicAsm
  )
- (func $~start (; 3 ;)
+ (func $~start
   call $start:features/threads
  )
 )

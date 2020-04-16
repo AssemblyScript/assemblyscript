@@ -14,12 +14,11 @@
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $retain-return/ref (mut i32) (i32.const 0))
- (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
- (func $~lib/rt/tlsf/removeBlock (; 1 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -181,7 +180,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/insertBlock (; 2 ;) (param $0 i32) (param $1 i32)
+ (func $~lib/rt/tlsf/insertBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -460,7 +459,7 @@
   i32.or
   i32.store offset=4
  )
- (func $~lib/rt/tlsf/addMemory (; 3 ;) (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
   local.get $2
@@ -574,7 +573,7 @@
   local.get $1
   call $~lib/rt/tlsf/insertBlock
  )
- (func $~lib/rt/tlsf/maybeInitialize (; 4 ;) (result i32)
+ (func $~lib/rt/tlsf/maybeInitialize (result i32)
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -661,7 +660,7 @@
   end
   local.get $0
  )
- (func $~lib/rt/tlsf/searchBlock (; 5 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   nop
@@ -719,7 +718,7 @@
    end
   end
  )
- (func $~lib/rt/tlsf/allocateBlock (; 6 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -889,7 +888,7 @@
   end
   local.get $1
  )
- (func $~lib/rt/pure/__retain (; 7 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/pure/__retain (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -938,14 +937,14 @@
   end
   local.get $0
  )
- (func $retain-return/Ref#constructor (; 8 ;) (result i32)
+ (func $retain-return/Ref#constructor (result i32)
   call $~lib/rt/tlsf/maybeInitialize
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/pure/__release (; 9 ;) (param $0 i32)
+ (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   i32.const 1184
   i32.gt_u
@@ -956,11 +955,10 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $~setArgumentsLength (; 10 ;) (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
+ (func $~setArgumentsLength (param $0 i32)
+  nop
  )
- (func $~start (; 11 ;)
+ (func $~start
   (local $0 i32)
   global.get $~started
   if
@@ -979,42 +977,18 @@
   call $~lib/rt/pure/__release
   call $retain-return/Ref#constructor
   global.set $retain-return/ref
-  i32.const 0
-  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
-  i32.const 0
-  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 1
-  global.set $~argumentsLength
-  i32.const 0
-  global.set $~argumentsLength
-  i32.const 0
-  global.set $~argumentsLength
-  i32.const 0
-  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
-  i32.const 0
-  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
-  i32.const 0
-  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
-  i32.const 0
-  global.set $~argumentsLength
   call $retain-return/Ref#constructor
   call $~lib/rt/pure/__release
-  i32.const 0
-  global.set $~argumentsLength
-  i32.const 0
-  global.set $~argumentsLength
   global.get $retain-return/ref
   local.tee $0
   if
@@ -1024,7 +998,7 @@
   i32.const 0
   global.set $retain-return/ref
  )
- (func $~lib/rt/pure/decrement (; 12 ;) (param $0 i32)
+ (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0

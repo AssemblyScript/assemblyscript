@@ -7,16 +7,16 @@
  (export "memory" (memory $0))
  (export "test" (func $class-overloading/test))
  (start $~start)
- (func $~lib/rt/stub/__retain (; 0 ;) (param $0 i32) (result i32)
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $class-overloading/Foo#baz (; 1 ;) (param $0 i32)
+ (func $class-overloading/Foo#baz (param $0 i32)
   nop
  )
- (func $~lib/rt/stub/__release (; 2 ;) (param $0 i32)
+ (func $~lib/rt/stub/__release (param $0 i32)
   nop
  )
- (func $class-overloading/test (; 3 ;) (param $0 i32)
+ (func $class-overloading/test (param $0 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -25,11 +25,11 @@
   local.get $0
   call $~lib/rt/stub/__release
  )
- (func $start:class-overloading (; 4 ;)
+ (func $start:class-overloading
   i32.const 0
   call $class-overloading/test
  )
- (func $~start (; 5 ;)
+ (func $~start
   call $start:class-overloading
  )
 )

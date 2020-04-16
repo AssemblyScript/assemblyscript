@@ -8,7 +8,7 @@
  (table $0 1 funcref)
  (export "memory" (memory $0))
  (start $~start)
- (func $switch/doSwitch (; 1 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitch (param $0 i32) (result i32)
   (local $1 i32)
   block $case4|0
    block $case3|0
@@ -46,7 +46,7 @@
   i32.const 23
   return
  )
- (func $switch/doSwitchDefaultOmitted (; 2 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitchDefaultOmitted (param $0 i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case2|0
@@ -77,7 +77,7 @@
   end
   i32.const 0
  )
- (func $switch/doSwitchBreakCase (; 3 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitchBreakCase (param $0 i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case1|0
@@ -97,7 +97,7 @@
   end
   i32.const 1
  )
- (func $switch/doSwitchBreakDefault (; 4 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitchBreakDefault (param $0 i32) (result i32)
   (local $1 i32)
   block $break|0
    block $case1|0
@@ -117,7 +117,7 @@
   end
   i32.const 2
  )
- (func $switch/doSwitchFallThroughCase (; 5 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitchFallThroughCase (param $0 i32) (result i32)
   (local $1 i32)
   block $case1|0
    block $case0|0
@@ -134,7 +134,7 @@
   end
   i32.const 1
  )
- (func $switch/doSwitchFallThroughDefault (; 6 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitchFallThroughDefault (param $0 i32) (result i32)
   (local $1 i32)
   block $case1|0
    block $case0|0
@@ -151,12 +151,12 @@
   end
   i32.const 2
  )
- (func $switch/doSwitchEmpty (; 7 ;) (param $0 i32) (result i32)
+ (func $switch/doSwitchEmpty (param $0 i32) (result i32)
   local.get $0
   drop
   i32.const 2
  )
- (func $start:switch (; 8 ;)
+ (func $start:switch
   i32.const 0
   call $switch/doSwitch
   i32.const 0
@@ -548,7 +548,7 @@
    unreachable
   end
  )
- (func $~start (; 9 ;)
+ (func $~start
   call $start:switch
  )
 )
