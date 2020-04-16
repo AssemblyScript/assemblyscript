@@ -8693,7 +8693,9 @@ export class Compiler extends DiagnosticEmitter {
       console.log('class members', members);
     }
 
-    // Currently iterates through the passed names, should instead iterate through the members
+    // torch2424: Currently iterates through the passed names, should instead iterate through the members
+    
+
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
       if (!member || member.kind != ElementKind.FIELD) {
