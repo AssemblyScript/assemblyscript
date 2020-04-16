@@ -665,7 +665,6 @@
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  nop
   local.get $0
   i32.load offset=4
   i32.const -2
