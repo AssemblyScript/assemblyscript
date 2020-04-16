@@ -795,7 +795,7 @@ exports.main = function main(argv, options, callback) {
         add("simplify-globals-optimizing");
       } else {
         add("simplify-globals");
-        add("vacuum");
+        add("vacuum"); // differs
       }
       // moved from (2)
       // it works better after globals optimizations like simplify-globals, inlining-optimizing and etc
@@ -832,10 +832,10 @@ exports.main = function main(argv, options, callback) {
           add("directize");
           add("dae-optimizing");
           add("precompute-propagate");
+          add("vacuum");
           add("coalesce-locals");
           add("merge-locals");
           add("simplify-locals-nostructure");
-          add("vacuum");
           add("inlining-optimizing");
           add("precompute-propagate");
           add("vacuum");
