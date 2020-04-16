@@ -1,9 +1,9 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -1007,7 +1007,7 @@
   end
   i32.const 0
  )
- (func $~start
+ (func $start:managed-cast
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1016,14 +1016,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  global.get $~started
-  if
-   return
-  else
-   i32.const 1
-   global.set $~started
-  end
   call $managed-cast/Cat#constructor
+  local.set $2
   call $managed-cast/Cat#constructor
   local.tee $3
   i32.eqz
@@ -1054,63 +1048,72 @@
   call $managed-cast/Cat#constructor
   local.tee $1
   local.set $0
-  block $__inlined_func$managed-cast/testUpcastFromNullable
-   block $folding-inner0
-    local.get $1
-    i32.eqz
-    br_if $folding-inner0
-    local.get $0
-    call $~lib/rt/__instanceof
-    i32.eqz
-    br_if $folding-inner0
-    br $__inlined_func$managed-cast/testUpcastFromNullable
+  block $folding-inner0
+   local.get $1
+   i32.eqz
+   br_if $folding-inner0
+   local.get $0
+   call $~lib/rt/__instanceof
+   i32.eqz
+   br_if $folding-inner0
+   call $managed-cast/Cat#constructor
+   local.tee $0
+   call $~lib/rt/__instanceof
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1200
+    i32.const 41
+    i32.const 30
+    call $~lib/builtins/abort
+    unreachable
    end
-   i32.const 0
-   i32.const 1200
-   i32.const 36
-   i32.const 9
-   call $~lib/builtins/abort
-   unreachable
+   call $managed-cast/Cat#constructor
+   local.tee $7
+   call $~lib/rt/__instanceof
+   i32.eqz
+   if
+    i32.const 0
+    i32.const 1200
+    i32.const 47
+    i32.const 30
+    call $~lib/builtins/abort
+    unreachable
+   end
+   local.get $2
+   call $~lib/rt/pure/__release
+   local.get $3
+   call $~lib/rt/pure/__release
+   local.get $4
+   call $~lib/rt/pure/__release
+   local.get $5
+   call $~lib/rt/pure/__release
+   local.get $6
+   call $~lib/rt/pure/__release
+   local.get $1
+   call $~lib/rt/pure/__release
+   local.get $0
+   call $~lib/rt/pure/__release
+   local.get $7
+   call $~lib/rt/pure/__release
+   return
   end
-  call $managed-cast/Cat#constructor
-  local.tee $0
-  call $~lib/rt/__instanceof
-  i32.eqz
+  i32.const 0
+  i32.const 1200
+  i32.const 36
+  i32.const 9
+  call $~lib/builtins/abort
+  unreachable
+ )
+ (func $~start
+  global.get $~started
   if
-   i32.const 0
-   i32.const 1200
-   i32.const 41
-   i32.const 30
-   call $~lib/builtins/abort
-   unreachable
+   return
+  else
+   i32.const 1
+   global.set $~started
   end
-  call $managed-cast/Cat#constructor
-  local.tee $7
-  call $~lib/rt/__instanceof
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 1200
-   i32.const 47
-   i32.const 30
-   call $~lib/builtins/abort
-   unreachable
-  end
-  call $~lib/rt/pure/__release
-  local.get $3
-  call $~lib/rt/pure/__release
-  local.get $4
-  call $~lib/rt/pure/__release
-  local.get $5
-  call $~lib/rt/pure/__release
-  local.get $6
-  call $~lib/rt/pure/__release
-  local.get $1
-  call $~lib/rt/pure/__release
-  local.get $0
-  call $~lib/rt/pure/__release
-  local.get $7
-  call $~lib/rt/pure/__release
+  call $start:managed-cast
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)

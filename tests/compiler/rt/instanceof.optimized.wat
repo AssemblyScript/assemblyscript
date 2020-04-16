@@ -85,23 +85,21 @@
  )
  (func $rt/instanceof/Animal#constructor (param $0 i32) (result i32)
   local.get $0
-  i32.eqz
-  if
+  if (result i32)
+   local.get $0
+  else
    i32.const 3
    call $~lib/rt/stub/__alloc
-   local.set $0
   end
-  local.get $0
  )
  (func $rt/instanceof/Cat#constructor (param $0 i32) (result i32)
   local.get $0
-  i32.eqz
-  if
+  if (result i32)
+   local.get $0
+  else
    i32.const 4
    call $~lib/rt/stub/__alloc
-   local.set $0
   end
-  local.get $0
   call $rt/instanceof/Animal#constructor
  )
  (func $~lib/rt/__instanceof (param $0 i32) (param $1 i32) (result i32)

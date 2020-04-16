@@ -218,7 +218,7 @@
   f64.sub
   f64.const 0
   f64.ne
-  if
+  if (result f64)
    local.get $1
    f64.const 0.5
    f64.mul
@@ -226,11 +226,12 @@
    f64.const 8988465674311579538646525e283
    local.get $0
    f64.copysign
-   local.set $0
+  else
+   local.get $0
   end
-  local.get $0
   local.get $1
   f64.sub
+  i32.const 0
   local.get $1
   i64.reinterpret_f64
   i64.const 52
@@ -239,15 +240,13 @@
   i64.and
   i32.wrap_i64
   local.tee $3
-  i32.eqz
-  if
+  if (result i32)
+   local.get $3
+  else
    local.get $3
    i32.const 1
    i32.add
-   local.set $3
   end
-  i32.const 0
-  local.get $3
   i32.const -1075
   i32.add
   i32.sub
@@ -412,7 +411,7 @@
   f32.sub
   f32.const 0
   f32.ne
-  if
+  if (result f32)
    local.get $1
    f32.const 0.5
    f32.mul
@@ -420,11 +419,12 @@
    f32.const 1701411834604692317316873e14
    local.get $0
    f32.copysign
-   local.set $0
+  else
+   local.get $0
   end
-  local.get $0
   local.get $1
   f32.sub
+  i32.const 0
   local.get $1
   i32.reinterpret_f32
   i32.const 23
@@ -432,15 +432,13 @@
   i32.const 255
   i32.and
   local.tee $3
-  i32.eqz
-  if
+  if (result i32)
+   local.get $3
+  else
    local.get $3
    i32.const 1
    i32.add
-   local.set $3
   end
-  i32.const 0
-  local.get $3
   i32.const -150
   i32.add
   i32.sub

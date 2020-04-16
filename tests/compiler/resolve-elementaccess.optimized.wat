@@ -305,11 +305,11 @@
   i32.const 2
   local.get $1
   i32.shl
-  local.tee $2
+  local.tee $1
   i32.const 0
   call $~lib/rt/stub/__alloc
-  local.tee $1
-  local.get $2
+  local.tee $2
+  local.get $1
   call $~lib/memory/memory.fill
   local.get $0
   i32.eqz
@@ -332,13 +332,13 @@
   i32.load
   drop
   local.get $0
-  local.get $1
+  local.get $2
   i32.store
   local.get $0
-  local.get $1
+  local.get $2
   i32.store offset=4
   local.get $0
-  local.get $2
+  local.get $1
   i32.store offset=8
   local.get $0
  )
@@ -1778,16 +1778,16 @@
    local.set $2
    local.get $3
    if
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $3
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $4
      local.get $3
+     local.get $4
      i32.sub
      return
     end
@@ -1813,28 +1813,30 @@
    i32.const 1
    return
   end
-  block $folding-inner0
-   local.get $1
-   i32.eqz
-   i32.const 1
-   local.get $0
-   select
-   br_if $folding-inner0
-   local.get $0
-   call $~lib/string/String#get:length
-   local.tee $2
-   local.get $1
-   call $~lib/string/String#get:length
-   i32.ne
-   br_if $folding-inner0
-   local.get $0
-   local.get $1
-   local.get $2
-   call $~lib/util/string/compareImpl
-   i32.eqz
+  local.get $1
+  i32.eqz
+  i32.const 1
+  local.get $0
+  select
+  if
+   i32.const 0
    return
   end
-  i32.const 0
+  local.get $0
+  call $~lib/string/String#get:length
+  local.tee $2
+  local.get $1
+  call $~lib/string/String#get:length
+  i32.ne
+  if
+   i32.const 0
+   return
+  end
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/util/string/compareImpl
+  i32.eqz
  )
  (func $~lib/typedarray/Uint8Array#__set (param $0 i32) (param $1 i32) (param $2 i32)
   local.get $1
@@ -1878,30 +1880,28 @@
  (func $~lib/number/U8#toString (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  block $__inlined_func$~lib/util/number/utoa32
+  block $__inlined_func$~lib/util/number/utoa32 (result i32)
+   i32.const 2624
    local.get $0
    i32.const 255
    i32.and
    local.tee $1
    i32.eqz
-   if
-    i32.const 2624
-    local.set $0
-    br $__inlined_func$~lib/util/number/utoa32
-   end
+   br_if $__inlined_func$~lib/util/number/utoa32
+   drop
    local.get $1
    call $~lib/util/number/decimalCount32
-   local.tee $2
+   local.tee $0
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/stub/__alloc
-   local.tee $0
+   local.tee $2
    local.get $1
-   local.get $2
+   local.get $0
    call $~lib/util/number/utoa_simple<u32>
+   local.get $2
   end
-  local.get $0
  )
  (func $start:resolve-elementaccess
   (local $0 i32)

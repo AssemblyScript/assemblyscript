@@ -963,12 +963,13 @@
   i32.const 16
   i32.add
   call $~lib/rt/pure/__retain
-  local.tee $0
+  local.tee $1
   i32.const 1200
   i32.store
-  local.get $0
+  local.get $1
+  local.tee $0
   i32.load
-  local.tee $1
+  local.tee $2
   i32.eqz
   if
    i32.const 0
@@ -978,20 +979,20 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $2
   local.get $0
   i32.load
-  local.tee $2
+  local.tee $1
   i32.ne
   if
-   local.get $1
-   call $~lib/rt/pure/__retain
-   local.set $1
    local.get $2
+   call $~lib/rt/pure/__retain
+   local.set $2
+   local.get $1
    call $~lib/rt/pure/__release
   end
   local.get $0
-  local.get $1
+  local.get $2
   i32.store
   local.get $0
   call $~lib/rt/pure/__release

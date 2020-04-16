@@ -897,10 +897,10 @@
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
-  local.tee $0
+  local.tee $1
   i32.const 123
   i32.store
-  local.get $0
+  local.get $1
   global.set $std/object-literal-unmanaged/foo
   global.get $std/object-literal-unmanaged/foo
   i32.load

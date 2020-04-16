@@ -2634,10 +2634,6 @@
     end
    end
   end
-  local.get $1
-  local.get $5
-  i32.sub
-  local.set $2
   call $~lib/rt/tlsf/maybeInitialize
   local.get $5
   i32.const 16
@@ -2678,7 +2674,9 @@
    unreachable
   end
   local.get $0
-  local.get $2
+  local.get $1
+  local.get $5
+  i32.sub
   call $~lib/rt/tlsf/reallocateBlock
   i32.const 16
   i32.add

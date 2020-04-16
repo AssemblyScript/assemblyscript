@@ -741,6 +741,7 @@ exports.main = function main(argv, options, callback) {
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
       // }
+      add("inlining"); // differs
       if (optimizeLevel >= 3 && shrinkLevel <= 1) { // differs
         add("licm");
       }
