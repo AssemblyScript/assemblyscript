@@ -936,6 +936,48 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 32
+  local.set $0
+  global.get $class-overloading/which
+  call $~lib/rt/stub/__release
+  local.get $0
+  global.set $class-overloading/which
+  global.get $class-overloading/a
+  call $class-overloading/A#get:c|virtual
+  drop
+  global.get $class-overloading/which
+  i32.const 208
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 112
+   i32.const 143
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 32
+  local.set $0
+  global.get $class-overloading/which
+  call $~lib/rt/stub/__release
+  local.get $0
+  global.set $class-overloading/which
+  global.get $class-overloading/a
+  i32.const 1
+  call $class-overloading/A#set:c|virtual
+  global.get $class-overloading/which
+  i32.const 208
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 112
+   i32.const 146
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 0
   call $class-overloading/IB#constructor
   global.set $class-overloading/ia
@@ -954,7 +996,7 @@
   if
    i32.const 0
    i32.const 112
-   i32.const 162
+   i32.const 161
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -1137,19 +1179,11 @@
       i32.eq
       br_if $case0
       local.get $1
-      i32.const 5
-      i32.eq
-      br_if $case0
-      local.get $1
       i32.const 6
       i32.eq
       br_if $case0
       local.get $1
       i32.const 7
-      i32.eq
-      br_if $case0
-      local.get $1
-      i32.const 8
       i32.eq
       br_if $case0
       local.get $1
@@ -1211,19 +1245,11 @@
       i32.eq
       br_if $case0
       local.get $2
-      i32.const 5
-      i32.eq
-      br_if $case0
-      local.get $2
       i32.const 6
       i32.eq
       br_if $case0
       local.get $2
       i32.const 7
-      i32.eq
-      br_if $case0
-      local.get $2
-      i32.const 8
       i32.eq
       br_if $case0
       local.get $2

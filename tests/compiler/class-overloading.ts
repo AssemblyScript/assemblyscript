@@ -138,13 +138,12 @@ assert(which == "F");
 which = "";
 a.b(1);
 assert(which == "F");
-
-// FIXME
-// which = "";
-// a.c;
-// assert(which == "F");
-// a.c = 1;
-// assert(which == "F");
+which = "";
+a.c;
+assert(which == "F");
+which = "";
+a.c = 1;
+assert(which == "F");
 
 interface IA {
   foo(): void;

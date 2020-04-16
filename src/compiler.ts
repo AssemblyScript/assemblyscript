@@ -725,7 +725,11 @@ export class Compiler extends DiagnosticEmitter {
           }
           builder.addCase(classInstance.id, stmts);
           // Also alias each extendee inheriting this exact overload
-          let extendees = classInstance.getAllExtendees(instance.prototype.name);
+          let extendees = classInstance.getAllExtendees(
+            isProperty
+              ? unboundOverloadParent.name
+              : instance.prototype.name
+          );
           for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
             let extendee = _values[a];
             builder.addCase(extendee.id, stmts);

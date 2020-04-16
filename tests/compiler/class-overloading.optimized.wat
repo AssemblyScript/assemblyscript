@@ -299,7 +299,7 @@
   i32.const 1040
   global.set $class-overloading/which
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#b|virtual
   global.get $class-overloading/which
   i32.const 1088
   call $~lib/string/String.__eq
@@ -315,7 +315,7 @@
   i32.const 1040
   global.set $class-overloading/which
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#b|virtual
   global.get $class-overloading/which
   i32.const 1088
   call $~lib/string/String.__eq
@@ -431,7 +431,7 @@
   i32.const 1040
   global.set $class-overloading/which
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#b|virtual
   global.get $class-overloading/which
   i32.const 1088
   call $~lib/string/String.__eq
@@ -445,7 +445,7 @@
    unreachable
   end
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#b|virtual
   global.get $class-overloading/which
   i32.const 1088
   call $~lib/string/String.__eq
@@ -496,7 +496,7 @@
   i32.const 1040
   global.set $class-overloading/which
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#b|virtual
   global.get $class-overloading/which
   i32.const 1088
   call $~lib/string/String.__eq
@@ -510,7 +510,7 @@
    unreachable
   end
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#b|virtual
   global.get $class-overloading/which
   i32.const 1088
   call $~lib/string/String.__eq
@@ -559,6 +559,38 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1040
+  global.set $class-overloading/which
+  global.get $class-overloading/a
+  call $class-overloading/A#b|virtual
+  global.get $class-overloading/which
+  i32.const 1216
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1120
+   i32.const 143
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1040
+  global.set $class-overloading/which
+  global.get $class-overloading/a
+  call $class-overloading/A#b|virtual
+  global.get $class-overloading/which
+  i32.const 1216
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1120
+   i32.const 146
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
   i32.const 10
   call $~lib/rt/stub/__alloc
   global.set $class-overloading/ia
@@ -585,7 +617,7 @@
   if
    i32.const 0
    i32.const 1120
-   i32.const 162
+   i32.const 161
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -663,60 +695,6 @@
        i32.sub
        br_table $case1 $tablify|0 $case0 $case2 $tablify|0
       end
-      br $default
-     end
-     i32.const 1088
-     global.set $class-overloading/which
-     return
-    end
-    i32.const 1184
-    global.set $class-overloading/which
-    return
-   end
-   i32.const 1216
-   global.set $class-overloading/which
-   return
-  end
-  i32.const 1056
-  global.set $class-overloading/which
- )
- (func $class-overloading/A#get:c|virtual (param $0 i32)
-  block $default
-   block $case2
-    block $case1
-     local.get $0
-     i32.const 8
-     i32.sub
-     i32.load
-     local.tee $0
-     i32.const 4
-     i32.eq
-     local.get $0
-     i32.const 5
-     i32.eq
-     i32.or
-     local.get $0
-     i32.const 6
-     i32.eq
-     local.get $0
-     i32.const 7
-     i32.eq
-     i32.or
-     i32.or
-     local.get $0
-     i32.const 8
-     i32.eq
-     i32.or
-     i32.eqz
-     if
-      local.get $0
-      i32.const 5
-      i32.eq
-      br_if $case1
-      local.get $0
-      i32.const 8
-      i32.eq
-      br_if $case2
       br $default
      end
      i32.const 1088

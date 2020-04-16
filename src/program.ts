@@ -4353,6 +4353,11 @@ export function mangleInternalName(name: string, parent: Element, isInstance: bo
       assert(!isInstance);
       return parent.internalName + INNER_DELIMITER + name;
     }
+    case ElementKind.PROPERTY_PROTOTYPE:
+    case ElementKind.PROPERTY: {
+      parent = parent.parent;
+      // fall-through
+    }
     default: {
       return mangleInternalName(parent.name, parent.parent, parent.is(CommonFlags.INSTANCE), asGlobal)
            + (isInstance ? INSTANCE_DELIMITER : STATIC_DELIMITER) + name;
