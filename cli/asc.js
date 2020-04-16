@@ -832,10 +832,10 @@ exports.main = function main(argv, options, callback) {
           add("directize");
           add("dae-optimizing");
           add("precompute-propagate");
-          add("vacuum");
           add("coalesce-locals");
           add("merge-locals");
           add("simplify-locals-nostructure");
+          add("vacuum");
           add("inlining-optimizing");
           add("precompute-propagate");
           add("vacuum");
