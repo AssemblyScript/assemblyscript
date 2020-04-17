@@ -223,6 +223,19 @@ export class Type {
     return cachedNullableType;
   }
 
+  /** Tests if this type equals the specified. */
+  equals(other: Type): bool {
+    if (this.kind != other.kind) return false;
+    if (this.is(TypeFlags.REFERENCE)) {
+      return (
+        this.classReference == other.classReference &&
+        this.signatureReference == other.signatureReference &&
+        this.is(TypeFlags.NULLABLE) == other.is(TypeFlags.NULLABLE)
+      );
+    }
+    return true;
+  }
+
   /** Tests if a value of this type is assignable to the target type incl. implicit conversion. */
   isAssignableTo(target: Type, signednessIsRelevant: bool = false): bool {
     var currentClass: Class | null;
@@ -613,19 +626,40 @@ export class Signature {
       : getDefaultParameterName(index);
   }
 
-  /** Tests if a value of this function type is assignable to a target of the specified function type. */
-  isAssignableTo(target: Signature): bool {
-    // TODO: allow additional optional parameters
-    return this.equals(target);
-  }
-
-  /** Tests to see if a signature equals another signature. */
-  equals(value: Signature): bool {
-    // TODO: maybe cache results?
+  /** Tests if this signature equals the specified. */
+  equals(other: Signature): bool {
 
     // check `this` type
     var thisThisType = this.thisType;
-    var targetThisType = value.thisType;
+    var otherThisType = other.thisType;
+    if (thisThisType !== null) {
+      if (otherThisType === null || !thisThisType.equals(otherThisType)) return false;
+    } else if (otherThisType) {
+      return false;
+    }
+
+    // check rest parameter
+    if (this.hasRest != other.hasRest) return false;
+
+    // check parameter types
+    var thisParameterTypes = this.parameterTypes;
+    var otherParameterTypes = other.parameterTypes;
+    var numParameters = thisParameterTypes.length;
+    if (numParameters != otherParameterTypes.length) return false;
+    for (let i = 0; i < numParameters; ++i) {
+      if (!thisParameterTypes[i].equals(otherParameterTypes[i])) return false;
+    }
+
+    // check return type
+    return this.returnType.equals(other.returnType);
+  }
+
+  /** Tests if a value of this function type is assignable to a target of the specified function type. */
+  isAssignableTo(target: Signature, requireSameSize: bool = false): bool {
+
+    // check `this` type
+    var thisThisType = this.thisType;
+    var targetThisType = target.thisType;
     if (thisThisType !== null) {
       if (targetThisType === null || !thisThisType.isAssignableTo(targetThisType)) return false;
     } else if (targetThisType) {
@@ -633,13 +667,13 @@ export class Signature {
     }
 
     // check rest parameter
-    if (this.hasRest != value.hasRest) return false; // TODO
+    if (this.hasRest != target.hasRest) return false; // TODO
 
     // check parameter types
     var thisParameterTypes = this.parameterTypes;
-    var targetParameterTypes = value.parameterTypes;
+    var targetParameterTypes = target.parameterTypes;
     var numParameters = thisParameterTypes.length;
-    if (numParameters != targetParameterTypes.length) return false;
+    if (numParameters != targetParameterTypes.length) return false; // TODO
     for (let i = 0; i < numParameters; ++i) {
       let thisParameterType = thisParameterTypes[i];
       let targetParameterType = targetParameterTypes[i];
@@ -648,7 +682,7 @@ export class Signature {
 
     // check return type
     var thisReturnType = this.returnType;
-    var targetReturnType = value.returnType;
+    var targetReturnType = target.returnType;
     return thisReturnType == targetReturnType || thisReturnType.isAssignableTo(targetReturnType);
   }
 

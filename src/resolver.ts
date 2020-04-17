@@ -2872,7 +2872,7 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   /** Currently resolving classes. */
-  private resolveClassPending: Class[] = [];
+  private resolveClassPending: Set<Class> = new Set();
 
   /** Resolves a class prototype using the specified concrete type arguments. */
   resolveClass(
@@ -2902,7 +2902,7 @@ export class Resolver extends DiagnosticEmitter {
     }
     prototype.setResolvedInstance(instanceKey, instance);
     var pendingClasses = this.resolveClassPending;
-    pendingClasses.push(instance);
+    pendingClasses.add(instance);
 
     // Insert contextual type arguments for this operation. Internally, this method is always
     // called with matching type parameter / argument counts.
@@ -2919,6 +2919,8 @@ export class Resolver extends DiagnosticEmitter {
       assert(!(typeParameterNodes !== null && typeParameterNodes.length > 0));
     }
     instance.contextualTypeArguments = ctxTypes;
+
+    var anyPending = false;
 
     // Resolve base class if applicable
     var basePrototype = prototype.basePrototype;
@@ -2951,13 +2953,12 @@ export class Resolver extends DiagnosticEmitter {
       // derived classes once the base class's `finishResolveClass` is done.
       // This is guaranteed to never happen at the entry of the recursion, i.e.
       // where `resolveClass` is called from other code.
-      if (pendingClasses.includes(base)) return instance;
+      if (pendingClasses.has(base)) anyPending = true;
     }
 
     // Resolve interfaces if applicable
     var interfacePrototypes = prototype.interfacePrototypes;
     if (interfacePrototypes) {
-      let anyPending = false;
       for (let i = 0, k = interfacePrototypes.length; i < k; ++i) {
         let interfacePrototype = interfacePrototypes[i];
         let current: ClassPrototype | null = interfacePrototype;
@@ -2984,12 +2985,12 @@ export class Resolver extends DiagnosticEmitter {
         if (!iface) return null;
         assert(iface.kind == ElementKind.INTERFACE);
         instance.addInterface(<Interface>iface);
-        if (pendingClasses.includes(iface)) anyPending = true;
-      }
 
-      // Like above, if any implemented interface is still pending, yield
-      if (anyPending) return instance;
+        // Like above, if any implemented interface is still pending, yield
+        if (pendingClasses.has(iface)) anyPending = true;
+      }
     }
+    if (anyPending) return instance;
 
     // We only get here if the base class has been fully resolved already.
     this.finishResolveClass(instance, reportMode);
@@ -3006,7 +3007,7 @@ export class Resolver extends DiagnosticEmitter {
     var instanceMembers = instance.members;
     if (!instanceMembers) instance.members = instanceMembers = new Map();
 
-    var pending = this.resolveClassPending;
+    var pendingClasses = this.resolveClassPending;
     var unimplemented = new Map<string,DeclaredElement>();
 
     // Alias interface members
@@ -3014,7 +3015,7 @@ export class Resolver extends DiagnosticEmitter {
     if (interfaces) {
       for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
         let iface = _values[i];
-        assert(!pending.includes(iface));
+        assert(!pendingClasses.has(iface));
         let ifaceMembers = iface.members;
         if (ifaceMembers) {
           for (let _keys = Map_keys(ifaceMembers), i = 0, k = _keys.length; i < k; ++i) {
@@ -3041,7 +3042,7 @@ export class Resolver extends DiagnosticEmitter {
     var memoryOffset: u32 = 0;
     var base = instance.base;
     if (base) {
-      assert(!pending.includes(base));
+      assert(!pendingClasses.has(base));
       let baseMembers = base.members;
       if (baseMembers) {
         // TODO: for (let [baseMemberName, baseMember] of baseMembers) {
@@ -3293,21 +3294,27 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Remove this class from pending
-    var pendingIndex = pending.indexOf(instance);
-    assert(~pendingIndex); // must be pending
-    pending.splice(pendingIndex, 1);
+    assert(pendingClasses.has(instance)); // must be pending
+    pendingClasses.delete(instance);
 
     // Finish derived classes that we postponed in `resolveClass` due to the
     // base class still being pending, again triggering `finishResolveClass`
     // of any classes derived from those classes, ultimately leading to all
     // pending classes being resolved.
-    var derivedPendingClasses = new Array<Class>();
-    for (let i = 0, k = pending.length; i < k; ++i) {
-      let other = pending[i];
-      if (instance == other.base) derivedPendingClasses.push(other);
-    }
-    for (let i = 0, k = derivedPendingClasses.length; i < k; ++i) {
-      this.finishResolveClass(derivedPendingClasses[i], reportMode);
+    for (let _values = Set_values(pendingClasses), i = 0, k = _values.length; i < k; ++i) {
+      let pending = _values[i];
+      let dependsOnInstance = pending.base === instance;
+      let interfaces = pending.interfaces;
+      if (interfaces) {
+        let anyPending = false;
+        for (let _values2 = Set_values(interfaces), j = 0, l = _values2.length; j < l; ++j) {
+          let iface = _values2[j];
+          if (iface === instance) dependsOnInstance = true;
+          else if (pendingClasses.has(iface)) anyPending = true;
+        }
+        if (anyPending) continue;
+      }
+      if (dependsOnInstance) this.finishResolveClass(pending, reportMode);
     }
   }
 

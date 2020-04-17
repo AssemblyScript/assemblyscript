@@ -1561,11 +1561,11 @@
   local.set $0
   i32.const 0
   local.set $1
-  i32.const 12
+  i32.const 29
   local.set $6
-  i32.const 25
+  i32.const 30
   local.set $7
-  i32.const 25
+  i32.const 30
   local.set $8
   i32.const 128
   i32.const 5
@@ -1605,7 +1605,7 @@
    unreachable
   end
   local.get $6
-  i32.const 12
+  i32.const 29
   i32.eq
   i32.eqz
   if

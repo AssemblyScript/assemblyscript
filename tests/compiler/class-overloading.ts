@@ -145,17 +145,33 @@ which = "";
 a.c = 1;
 assert(which == "F");
 
+// Should work with interfaces
 interface IA {
   foo(): void;
 }
 
-class IB implements IA {
+class CA implements IA {
   foo(): void {
     which = "IB";
   }
 }
 
-var ia: IA = new IB();
+var ia: IA = new CA();
 which = "";
 ia.foo();
 assert(which == "IB");
+
+// Should work with extended interfaces
+interface IC extends IA {
+}
+
+class CC implements IC {
+  foo(): void {
+    which = "IC";
+  }
+}
+
+var ic: IC = new CC();
+which = "";
+ic.foo();
+assert(which == "IC");

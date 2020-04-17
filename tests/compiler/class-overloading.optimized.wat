@@ -14,10 +14,12 @@
  (data (i32.const 1168) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00C")
  (data (i32.const 1200) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\00F")
  (data (i32.const 1232) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00I\00B")
+ (data (i32.const 1264) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\00I\00C")
  (global $class-overloading/which (mut i32) (i32.const 1040))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $class-overloading/a (mut i32) (i32.const 0))
  (global $class-overloading/ia (mut i32) (i32.const 0))
+ (global $class-overloading/ic (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
@@ -261,7 +263,7 @@
   call $class-overloading/D#constructor
  )
  (func $start:class-overloading
-  i32.const 1264
+  i32.const 1296
   global.set $~lib/rt/stub/offset
   i32.const 0
   call $class-overloading/B#constructor
@@ -596,20 +598,8 @@
   global.set $class-overloading/ia
   i32.const 1040
   global.set $class-overloading/which
-  block $__inlined_func$class-overloading/IA#foo|virtual
-   global.get $class-overloading/ia
-   i32.const 8
-   i32.sub
-   i32.load
-   i32.const 10
-   i32.eq
-   if
-    i32.const 1248
-    global.set $class-overloading/which
-    br $__inlined_func$class-overloading/IA#foo|virtual
-   end
-   unreachable
-  end
+  global.get $class-overloading/ia
+  call $class-overloading/IA#foo|virtual
   global.get $class-overloading/which
   i32.const 1248
   call $~lib/string/String.__eq
@@ -617,7 +607,26 @@
   if
    i32.const 0
    i32.const 1120
-   i32.const 161
+   i32.const 162
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 12
+  call $~lib/rt/stub/__alloc
+  global.set $class-overloading/ic
+  i32.const 1040
+  global.set $class-overloading/which
+  global.get $class-overloading/ic
+  call $class-overloading/IA#foo|virtual
+  global.get $class-overloading/which
+  i32.const 1280
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1120
+   i32.const 177
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -711,5 +720,32 @@
   end
   i32.const 1056
   global.set $class-overloading/which
+ )
+ (func $class-overloading/IA#foo|virtual (param $0 i32)
+  block $default
+   block $case1
+    local.get $0
+    i32.const 8
+    i32.sub
+    i32.load
+    local.tee $0
+    i32.const 10
+    i32.ne
+    if
+     local.get $0
+     i32.const 12
+     i32.eq
+     br_if $case1
+     br $default
+    end
+    i32.const 1248
+    global.set $class-overloading/which
+    return
+   end
+   i32.const 1280
+   global.set $class-overloading/which
+   return
+  end
+  unreachable
  )
 )

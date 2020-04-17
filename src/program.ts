@@ -2651,11 +2651,9 @@ export abstract class DeclaredElement extends Element {
   /** Checks if this element is a compatible override of the specified. */
   isCompatibleOverride(base: DeclaredElement): bool {
     var self: DeclaredElement = this; // TS
-    if (self.kind != base.kind) return false;
-    switch (self.kind) {
-      case ElementKind.FUNCTION: {
-        return (<Function>self).signature.equals((<Function>base).signature);
-      }
+    var kind = self.kind;
+    if (kind == base.kind && kind == ElementKind.FUNCTION) {
+      return (<Function>self).signature.isAssignableTo((<Function>base).signature, /* sameSize */ true);
     }
     return false;
   }
@@ -3918,7 +3916,12 @@ export class Class extends TypedElement {
       if (current == target) return true;
       if (target.kind == ElementKind.INTERFACE) {
         let interfaces = current.interfaces;
-        if (interfaces !== null && interfaces.has(<Interface>target)) return true;
+        if (interfaces) {
+          for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
+            let iface = _values[i];
+            if (iface.isAssignableTo(target)) return true;
+          }
+        }
       }
       current = current.base;
     } while (current);
