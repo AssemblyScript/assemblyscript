@@ -1081,22 +1081,21 @@
     block $switch$1$default
      block $switch$1$case$4
       local.get $0
-      i32.const 16
-      i32.add
       local.tee $1
       i32.const 8
-      i32.sub
+      i32.add
       i32.load
       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$default
      end
      local.get $1
-     i32.load
+     i32.load offset=16
      local.tee $1
      if
-      local.get $1
-      i32.const 1204
-      i32.ge_u
-      if
+      block $__inlined_func$~lib/rt/pure/__visit
+       local.get $1
+       i32.const 1204
+       i32.lt_u
+       br_if $__inlined_func$~lib/rt/pure/__visit
        local.get $1
        i32.const 16
        i32.sub
