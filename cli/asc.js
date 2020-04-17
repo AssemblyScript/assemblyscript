@@ -724,6 +724,7 @@ exports.main = function main(argv, options, callback) {
         add("pick-load-signs");
         add("simplify-globals-optimizing"); // differs
       }
+      add("inlining"); // differs
       add("optimize-instructions"); // differs
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
@@ -741,7 +742,6 @@ exports.main = function main(argv, options, callback) {
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
       // }
-      add("inlining"); // differs
       if (optimizeLevel >= 3 && shrinkLevel <= 1) { // differs
         add("licm");
       }

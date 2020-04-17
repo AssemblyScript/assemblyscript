@@ -1568,10 +1568,10 @@
   (local $4 i32)
   local.get $0
   i32.load offset=4
-  local.tee $3
+  local.tee $4
   i32.const 268435455
   i32.and
-  local.set $1
+  local.set $2
   local.get $0
   call $~lib/rt/rtrace/ondecrement
   local.get $0
@@ -1586,7 +1586,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $2
   i32.const 1
   i32.eq
   if
@@ -1613,8 +1613,8 @@
       br $__inlined_func$~lib/rt/__visit_members
      end
      local.get $1
-     local.get $1
      local.tee $2
+     local.get $2
      i32.const 16
      i32.sub
      i32.load offset=12
@@ -1627,9 +1627,9 @@
       if
        local.get $2
        i32.load
-       local.tee $4
+       local.tee $3
        if
-        local.get $4
+        local.get $3
         call $~lib/rt/pure/__visit
        end
        local.get $2
@@ -1643,7 +1643,7 @@
     end
     unreachable
    end
-   local.get $3
+   local.get $4
    i32.const -2147483648
    i32.and
    if
@@ -1666,7 +1666,7 @@
    local.get $0
    call $~lib/rt/rtrace/onfree
   else
-   local.get $1
+   local.get $2
    i32.const 0
    i32.le_u
    if
@@ -1678,10 +1678,10 @@
     unreachable
    end
    local.get $0
-   local.get $1
+   local.get $2
    i32.const 1
    i32.sub
-   local.get $3
+   local.get $4
    i32.const -268435456
    i32.and
    i32.or
