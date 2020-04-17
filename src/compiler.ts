@@ -8682,7 +8682,7 @@ export class Compiler extends DiagnosticEmitter {
     var values = expression.values;
     var members = classReference.members;
     var hasErrors = false;
-    var exprs = new Array<ExpressionRef>(numNames + 2);
+    var exprs = new Array<ExpressionRef>();
     var flow = this.currentFlow;
     var tempLocal = isManaged
       ? flow.getAutoreleaseLocal(classReference.type)
@@ -8700,6 +8700,17 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
+    // Define a function to add a new expression on our Object literal
+    let storeObjectLiteralField = (fieldInstance: Field, fieldType: Type, valueExpr: ExpressionRef) => {
+      exprs.push(this.module.store( // TODO: handle setters as well
+        fieldType.byteSize,
+        this.module.local_get(tempLocal.index, this.options.nativeSizeType),
+        valueExpr,
+        fieldType.toNativeType(),
+        fieldInstance.memoryOffset
+      ));
+    };
+
     // Iterate through the members definted in our expression
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
@@ -8713,54 +8724,103 @@ export class Compiler extends DiagnosticEmitter {
       }
       let fieldInstance = <Field>member;
       let fieldType = fieldInstance.type;
-      exprs[i + 1] = this.module.store( // TODO: handle setters as well
-        fieldType.byteSize,
-        this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-        this.compileExpression(values[i], fieldInstance.type, Constraints.CONV_IMPLICIT),
-        fieldType.toNativeType(),
-        fieldInstance.memoryOffset
+      storeObjectLiteralField(
+        fieldInstance,
+        fieldType,
+        this.compileExpression(values[i], fieldInstance.type, Constraints.CONV_IMPLICIT)
       );
 
       // This member is no longer omitted, so delete from our omitted fields
       omittedClassFieldMembers.delete(member.name);
     }
-
-    // TODO: Iterate through the remaining omittedClassFieldMembers.
-    if (members) {
-      for(let omittedClassFieldMemberKey of omittedClassFieldMembers.keys()) {
-        let member = <Field>members.get(omittedClassFieldMemberKey);
-        
-        if(member) {
-          // TODO: Check if it is a number type, set it to zero
-
-          // TODO: Check if it is a boolean, default to false
-
-          // TODO: Check if it can be null, 
-        }
-
-        // Otherwise, error
-        // torch2424
-        this.error(
-          DiagnosticCode.Object_literals_must_have_all_class_member_fields_explicitly_defined,
-          expression.range, classReference.toString()
-        );
-        return module.unreachable();
-      }
-    }
-
     this.currentType = classReference.type.nonNullableType;
     if (hasErrors) return module.unreachable();
 
+    // Iterate through the remaining omittedClassFieldMembers.
+    if (members) {
+      for(let omittedClassFieldMemberKey of omittedClassFieldMembers.keys()) {
+        let member = members.get(omittedClassFieldMemberKey);
+        
+        if(member) {
+
+          let fieldInstance = <Field>member;
+          let fieldType = fieldInstance.type;
+
+          switch(fieldType.kind) {
+            // i32 Types
+            case TypeKind.I8:
+            case TypeKind.I16:
+            case TypeKind.I32:
+            case TypeKind.U8:
+            case TypeKind.U16:
+            case TypeKind.U32:
+            case TypeKind.USIZE: 
+            case TypeKind.ISIZE:
+            case TypeKind.BOOL: {
+              storeObjectLiteralField(
+                fieldInstance,
+                fieldType,
+                this.module.i32(0)
+              );
+              continue;
+            }
+
+            // i64 Types
+            case TypeKind.I64:
+            case TypeKind.U64: {
+              storeObjectLiteralField(
+                fieldInstance,
+                fieldType,
+                this.module.i64(0)
+              );
+              continue;
+            }
+
+            // f32 Types
+            case TypeKind.F32: {
+              storeObjectLiteralField(
+                fieldInstance,
+                fieldType,
+                this.module.f32(0)
+              );
+              continue;
+            }
+
+            // f64 Types
+            case TypeKind.F64: {
+              storeObjectLiteralField(
+                fieldInstance,
+                fieldType,
+                this.module.f64(0)
+              );
+              continue;
+            }
+            // TODO: Check if it is a class, with a default value (constructor with no params).
+            // TODO: Check if it can be null, and set to null
+            default: {}
+          }
+        }
+
+        // Otherwise, error
+        this.error(
+          DiagnosticCode.Object_literal_is_missing_class_member_fields_that_must_be_defined,
+          expression.range, classReference.toString()
+        );
+        hasErrors = true;
+      }
+    }
+    if (hasErrors) return module.unreachable();
+
     // allocate a new instance first and assign 'this' to the temp. local
-    exprs[0] = module.local_set(
+    exprs.unshift(module.local_set(
       tempLocal.index,
       isManaged
         ? this.makeRetain(this.makeAllocation(classReference))
         : this.makeAllocation(classReference)
-    );
+    ));
 
     // once all field values have been set, return 'this'
-    exprs[exprs.length - 1] = module.local_get(tempLocal.index, this.options.nativeSizeType);
+    exprs.push(module.local_get(tempLocal.index, this.options.nativeSizeType));
 
     if (!isManaged) flow.freeTempLocal(tempLocal);
     this.currentType = classReference.type;

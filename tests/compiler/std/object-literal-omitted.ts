@@ -1,3 +1,56 @@
+class OmittedTypes {
+  int32: i32;
+  uint32: u32;
+  int64: i64;
+  uint64: u64;
+  float32: f32;
+  float64: f64;
+  int8: i8;
+  uint8: u8;
+  int16: i16;
+  uint16: u16;
+  intsize: isize;
+  uintsize: usize;
+  alias: number;
+  isTrue: boolean
+}
+
+function testOmittedTypes(omitted: OmittedTypes): void {
+  assert(omitted.int32 == 0);
+  assert(omitted.uint32 == 0);
+  assert(omitted.int64 == 0);
+  assert(omitted.uint64 == 0);
+  assert(omitted.float32 == 0);
+  assert(omitted.float64 == 0);
+  assert(omitted.int8 == 0);
+  assert(omitted.uint8 == 0);
+  assert(omitted.int16 == 0);
+  assert(omitted.uint16 == 0);
+  assert(omitted.intsize == 0);
+  assert(omitted.uintsize == 0);
+  assert(omitted.alias == 0);
+  assert(omitted.isTrue == false);
+}
+
+testOmittedTypes({});
+
+class MixedOmitted {
+  simpleType: i32;
+  complexType: string;
+  anotherSimpleType: f64;
+}
+
+function testMixedOmitted(omitted: MixedOmitted): void {
+  assert(omitted.simpleType == 0);
+  assert(omitted.complexType == 'test');
+  assert(omitted.anotherSimpleType == 0);
+}
+
+testMixedOmitted({
+  simpleType: 0,
+  complexType: 'test'
+});
+
 // Test omitted fields
 class OmittedFoo {
   bar: string = 'bar';
@@ -12,7 +65,7 @@ class OmittedFoo {
   qux: i32 = -1;
 }
 
-function testOmit(foo: OmittedFoo): void {
+function testOmittedFoo(foo: OmittedFoo): void {
   assert(foo.bar == 'bar');
   assert(foo.baz == 'baz');
   assert(changetype<usize>(foo.baz) == 0);
@@ -27,5 +80,5 @@ function testOmit(foo: OmittedFoo): void {
 }
 
 // TODO: Test this one omitted implementation is complete
-// testOmit({});
+// testOmittedFoo({});
 
