@@ -8701,17 +8701,6 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // Define a function to add a new expression on our Object literal
-    let storeObjectLiteralField = (fieldInstance: Field, fieldType: Type, valueExpr: ExpressionRef) => {
-      exprs.push(this.module.store( // TODO: handle setters as well
-        fieldType.byteSize,
-        this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-        valueExpr,
-        fieldType.toNativeType(),
-        fieldInstance.memoryOffset
-      ));
-    };
-
     // Iterate through the members definted in our expression
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
