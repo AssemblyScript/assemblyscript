@@ -818,10 +818,6 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
-        // rearrange / reduce switch cases again
-        add("remove-unused-brs");
-        add("vacuum");
-
         // move some code after early return which potentially could reduce computations
         // do this after CFG cleanup (originally it was done before)
         // moved from (1)
@@ -843,6 +839,9 @@ exports.main = function main(argv, options, callback) {
           add("precompute-propagate");
           add("vacuum");
         }
+        add("remove-unused-brs");
+        add("remove-unused-names");
+        add("vacuum");
         add("optimize-instructions");
         add("simplify-globals-optimizing");
       }

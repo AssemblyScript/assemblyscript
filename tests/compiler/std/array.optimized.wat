@@ -4356,20 +4356,19 @@
      i32.const 0
      i32.ge_s
      if
-      block $while-break|1
-       local.get $6
-       local.get $0
-       local.get $4
-       i32.const 2
-       i32.shl
-       i32.add
-       i32.load
-       local.tee $5
-       local.get $2
-       call_indirect (type $i32_i32_=>_i32)
-       i32.const 0
-       i32.ge_s
-       br_if $while-break|1
+      local.get $6
+      local.get $0
+      local.get $4
+      i32.const 2
+      i32.shl
+      i32.add
+      i32.load
+      local.tee $5
+      local.get $2
+      call_indirect (type $i32_i32_=>_i32)
+      i32.const 0
+      i32.lt_s
+      if
        local.get $4
        local.tee $3
        i32.const 1

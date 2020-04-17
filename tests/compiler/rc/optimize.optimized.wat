@@ -1091,11 +1091,10 @@
      i32.load offset=16
      local.tee $1
      if
-      block $__inlined_func$~lib/rt/pure/__visit
-       local.get $1
-       i32.const 1204
-       i32.lt_u
-       br_if $__inlined_func$~lib/rt/pure/__visit
+      local.get $1
+      i32.const 1204
+      i32.ge_u
+      if
        local.get $1
        i32.const 16
        i32.sub
