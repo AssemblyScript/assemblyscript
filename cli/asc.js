@@ -720,9 +720,9 @@ exports.main = function main(argv, options, callback) {
       add("dce");
       add("remove-unused-brs");
       add("remove-unused-names");
+      add("optimize-instructions"); // differs
       // add("optimize-instructions"); // differs move 2 lines above
       add("inlining"); // differs
-      add("optimize-instructions"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
         add("simplify-globals-optimizing"); // differs
