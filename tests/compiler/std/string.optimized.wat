@@ -1187,10 +1187,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -4403,10 +4403,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
-    local.get $4
     local.get $5
     i32.const 3
     i32.and
+    local.get $4
     i32.or
     i32.store
     local.get $1
@@ -5301,17 +5301,17 @@
       i32.const 1
       call $~lib/rt/tlsf/__alloc
       local.tee $1
-      local.get $0
       local.get $3
       i32.const 1
       i32.shl
+      local.get $0
       i32.add
       i32.load16_u
       i32.store16
-      local.get $5
       local.get $3
       i32.const 2
       i32.shl
+      local.get $5
       i32.add
       local.get $1
       i32.store
@@ -5355,10 +5355,10 @@
       i32.const 1
       call $~lib/rt/tlsf/__alloc
       local.tee $9
-      local.get $0
       local.get $4
       i32.const 1
       i32.shl
+      local.get $0
       i32.add
       local.get $6
       call $~lib/memory/memory.copy
@@ -5370,11 +5370,11 @@
       i32.const 1280
       call $~lib/array/Array<~lib/string/String>#push
      end
-     local.get $2
      local.get $10
      i32.const 1
      i32.add
      local.tee $10
+     local.get $2
      i32.eq
      if
       local.get $3
@@ -5410,10 +5410,10 @@
     i32.const 1
     call $~lib/rt/tlsf/__alloc
     local.tee $2
-    local.get $0
     local.get $4
     i32.const 1
     i32.shl
+    local.get $0
     i32.add
     local.get $1
     call $~lib/memory/memory.copy

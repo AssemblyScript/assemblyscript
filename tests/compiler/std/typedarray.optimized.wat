@@ -813,10 +813,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -4300,10 +4300,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
-    local.get $4
     local.get $5
     i32.const 3
     i32.and
+    local.get $4
     i32.or
     i32.store
     local.get $1
@@ -7822,8 +7822,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -7833,8 +7833,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -7900,8 +7900,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -7911,8 +7911,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -7941,8 +7941,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -7952,8 +7952,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -8006,11 +8006,11 @@
   end
  )
  (func $std/typedarray/testArrayForEach<~lib/typedarray/Int64Array,i64>~anonymous|0 (param $0 i64) (param $1 i32) (param $2 i32)
+  local.get $0
   i32.const 2704
   local.get $1
   call $~lib/array/Array<i32>#__get
   i64.extend_i32_s
-  local.get $0
   i64.ne
   if
    i32.const 0
@@ -8020,8 +8020,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -8031,8 +8031,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -8099,8 +8099,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -8110,8 +8110,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
@@ -8141,8 +8141,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachCallCount
   local.get $1
+  global.get $std/typedarray/forEachCallCount
   i32.ne
   if
    i32.const 0
@@ -8152,8 +8152,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $std/typedarray/forEachSelf
   local.get $2
+  global.get $std/typedarray/forEachSelf
   i32.ne
   if
    i32.const 0
