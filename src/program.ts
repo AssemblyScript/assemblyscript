@@ -532,7 +532,7 @@ export class Program extends DiagnosticEmitter {
   ) {
     super(diagnostics);
     this.options = options;
-    var nativeSource = new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY_ENTRY);
+    var nativeSource = new Source(LIBRARY_SUBST + ".wasm", "[native code]", SourceKind.LIBRARY_ENTRY);
     this.nativeSource = nativeSource;
     var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;

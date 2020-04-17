@@ -42,6 +42,21 @@ const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
 const binaryen = global.Binaryen || (global.Binaryen = require("binaryen"));
 
+// Sets up an extension with its definition counterpart and relevant regexes.
+function setupExtension(extension) {
+  if (!/\.[0-9a-zA-Z]{1,14}$/.test(extension)) throw Error("invalid extension: " + extension);
+  return {
+    ext: extension,
+    ext_d: ".d" + extension,
+    re: new RegExp("\\" + extension + "$"),
+    re_d: new RegExp("\\.d\\" + extension + "$"),
+    re_except_d: new RegExp("^(?!.*\\.d\\" + extension + "$).*\\" + extension + "$"),
+    re_index: new RegExp("(?:^|[\\\\\\/])index\\" + extension + "$")
+  };
+}
+
+const defaultExtension = setupExtension(".ts");
+
 // Proxy Binaryen's ready event
 Object.defineProperty(exports, "ready", {
   get: function() { return binaryen.ready; }
@@ -99,8 +114,8 @@ exports.defaultShrinkLevel = 1;
 exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if not a bundle
   const libDir = path.join(__dirname, "..", "std", "assembly");
   const bundled = {};
-  find.files(libDir, find.TS_EXCEPT_DTS)
-      .forEach(file => bundled[file.replace(/\.ts$/, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
+  find.files(libDir, defaultExtension.re_except_d)
+      .forEach(file => bundled[file.replace(defaultExtension.re, "")] = fs.readFileSync(path.join(libDir, file), "utf8" ));
   return bundled;
 })();
 
@@ -108,14 +123,14 @@ exports.libraryFiles = exports.isBundle ? BUNDLE_LIBRARY : (() => { // set up if
 exports.definitionFiles = exports.isBundle ? BUNDLE_DEFINITIONS : (() => { // set up if not a bundle
   const stdDir = path.join(__dirname, "..", "std");
   return {
-    "assembly": fs.readFileSync(path.join(stdDir, "assembly", "index.d.ts"), "utf8"),
-    "portable": fs.readFileSync(path.join(stdDir, "portable", "index.d.ts"), "utf8")
+    "assembly": fs.readFileSync(path.join(stdDir, "assembly", "index" + defaultExtension.ext_d), "utf8"),
+    "portable": fs.readFileSync(path.join(stdDir, "portable", "index" + defaultExtension.ext_d), "utf8")
   };
 })();
 
 /** Convenience function that parses and compiles source strings directly. */
 exports.compileString = (sources, options) => {
-  if (typeof sources === "string") sources = { "input.ts": sources };
+  if (typeof sources === "string") sources = { ["input" + defaultExtension.ext]: sources };
   const output = Object.create({
     stdout: createMemoryStream(),
     stderr: createMemoryStream()
@@ -159,6 +174,7 @@ exports.main = function main(argv, options, callback) {
   const writeFile = options.writeFile || writeFileNode;
   const listFiles = options.listFiles || listFilesNode;
   const stats = options.stats || createStats();
+  let extension = defaultExtension;
 
   // Output must be specified if not present in the environment
   if (!stdout) throw Error("'options.stdout' must be specified");
@@ -203,6 +219,11 @@ exports.main = function main(argv, options, callback) {
     return callback(null);
   }
 
+  // Use another extension if requested
+  if (typeof args.extension === "string" && /\.[0-9a-zA-Z]{1,14}$/.test(args.extension)) {
+    extension = setupExtension(args.extension);
+  }
+
   // Print the help message if requested or no source files are provided
   if (args.help || !argv.length) {
     var out = args.help ? stdout : stderr;
@@ -212,9 +233,9 @@ exports.main = function main(argv, options, callback) {
       "  " + color.cyan("asc") + " [entryFile ...] [options]",
       "",
       color.white("EXAMPLES"),
-      "  " + color.cyan("asc") + " hello.ts",
-      "  " + color.cyan("asc") + " hello.ts -b hello.wasm -t hello.wat",
-      "  " + color.cyan("asc") + " hello1.ts hello2.ts -b -O > hello.wasm",
+      "  " + color.cyan("asc") + " hello" + extension.ext,
+      "  " + color.cyan("asc") + " hello" + extension.ext + " -b hello.wasm -t hello.wat",
+      "  " + color.cyan("asc") + " hello1" + extension.ext + " hello2" + extension.ext + " -b -O > hello.wasm",
       "",
       color.white("OPTIONS"),
     ].concat(
@@ -309,7 +330,7 @@ exports.main = function main(argv, options, callback) {
     let transformArgs = args.transform;
     for (let i = 0, k = transformArgs.length; i < k; ++i) {
       let filename = transformArgs[i].trim();
-      if (!tsNodeRegistered && filename.endsWith('.ts')) {
+      if (!tsNodeRegistered && filename.endsWith(".ts")) { // ts-node requires .ts specifically
         require("ts-node").register({ transpileOnly: true, skipProject: true, compilerOptions: { target: "ES2016" } });
         tsNodeRegistered = true;
       }
@@ -353,7 +374,7 @@ exports.main = function main(argv, options, callback) {
     if (libPath.indexOf("/") >= 0) return; // in sub-directory: imported on demand
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(program, exports.libraryFiles[libPath], exports.libraryPrefix + libPath + ".ts", false);
+      assemblyscript.parse(program, exports.libraryFiles[libPath], exports.libraryPrefix + libPath + extension.ext, false);
     });
   });
   const customLibDirs = [];
@@ -364,7 +385,7 @@ exports.main = function main(argv, options, callback) {
     for (let i = 0, k = customLibDirs.length; i < k; ++i) { // custom
       let libDir = customLibDirs[i];
       let libFiles;
-      if (libDir.endsWith(".ts")) {
+      if (libDir.endsWith(extension.ext)) {
         libFiles = [ path.basename(libDir) ];
         libDir = path.dirname(libDir);
       } else {
@@ -375,7 +396,7 @@ exports.main = function main(argv, options, callback) {
         let libText = readFile(libPath, libDir);
         if (libText === null) return callback(Error("Library file '" + libPath + "' not found."));
         stats.parseCount++;
-        exports.libraryFiles[libPath.replace(/\.ts$/, "")] = libText;
+        exports.libraryFiles[libPath.replace(extension.re, "")] = libText;
         stats.parseTime += measure(() => {
           assemblyscript.parse(program, libText, exports.libraryPrefix + libPath, false);
         });
@@ -396,13 +417,13 @@ exports.main = function main(argv, options, callback) {
     const libraryPrefix = exports.libraryPrefix;
     const libraryFiles = exports.libraryFiles;
 
-    // Try file.ts, file/index.ts, file.d.ts
+    // Try file.ext, file/index.ext, file.d.ext
     if (!internalPath.startsWith(libraryPrefix)) {
-      if ((sourceText = readFile(sourcePath = internalPath + ".ts", baseDir)) == null) {
-        if ((sourceText = readFile(sourcePath = internalPath + "/index.ts", baseDir)) == null) {
-          // portable d.ts: uses the .js file next to it in JS or becomes an import in Wasm
-          sourcePath = internalPath + ".ts";
-          sourceText = readFile(internalPath + ".d.ts", baseDir);
+      if ((sourceText = readFile(sourcePath = internalPath + extension.ext, baseDir)) == null) {
+        if ((sourceText = readFile(sourcePath = internalPath + "/index" + extension.ext, baseDir)) == null) {
+          // portable d.ext: uses the .js file next to it in JS or becomes an import in Wasm
+          sourcePath = internalPath + extension.ext;
+          sourceText = readFile(internalPath + extension.ext_d, baseDir);
         }
       }
 
@@ -412,18 +433,18 @@ exports.main = function main(argv, options, callback) {
       const indexName = plainName + "/index";
       if (libraryFiles.hasOwnProperty(plainName)) {
         sourceText = libraryFiles[plainName];
-        sourcePath = libraryPrefix + plainName + ".ts";
+        sourcePath = libraryPrefix + plainName + extension.ext;
       } else if (libraryFiles.hasOwnProperty(indexName)) {
         sourceText = libraryFiles[indexName];
-        sourcePath = libraryPrefix + indexName + ".ts";
+        sourcePath = libraryPrefix + indexName + extension.ext;
       } else { // custom lib dirs
         for (const libDir of customLibDirs) {
-          if ((sourceText = readFile(plainName + ".ts", libDir)) != null) {
-            sourcePath = libraryPrefix + plainName + ".ts";
+          if ((sourceText = readFile(plainName + extension.ext, libDir)) != null) {
+            sourcePath = libraryPrefix + plainName + extension.ext;
             break;
           } else {
-            if ((sourceText = readFile(indexName + ".ts", libDir)) != null) {
-              sourcePath = libraryPrefix + indexName + ".ts";
+            if ((sourceText = readFile(indexName + extension.ext, libDir)) != null) {
+              sourcePath = libraryPrefix + indexName + extension.ext;
               break;
             }
           }
@@ -453,7 +474,7 @@ exports.main = function main(argv, options, callback) {
                   try {
                     let json = JSON.parse(jsonText);
                     if (typeof json.ascMain === "string") {
-                      mainPath = json.ascMain.replace(/[\/\\]index\.ts$/, "");
+                      mainPath = json.ascMain.replace(extension.re_index, "");
                       packageMains.set(packageName, mainPath);
                     }
                   } catch (e) { }
@@ -461,17 +482,17 @@ exports.main = function main(argv, options, callback) {
               }
               const mainDir = path.join(currentPath, packageName, mainPath);
               const plainName = filePath;
-              if ((sourceText = readFile(path.join(mainDir, plainName + ".ts"), baseDir)) != null) {
-                sourcePath = libraryPrefix + packageName + "/" + plainName + ".ts";
-                packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
-                if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + ".ts") + EOL);
+              if ((sourceText = readFile(path.join(mainDir, plainName + extension.ext), baseDir)) != null) {
+                sourcePath = libraryPrefix + packageName + "/" + plainName + extension.ext;
+                packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
+                if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, plainName + extension.ext) + EOL);
                 break;
               } else if (!isPackageRoot) {
                 const indexName = filePath + "/index";
-                if ((sourceText = readFile(path.join(mainDir, indexName + ".ts"), baseDir)) !== null) {
-                  sourcePath = libraryPrefix + packageName + "/" + indexName + ".ts";
-                  packageBases.set(sourcePath.replace(/\.ts$/, ""), path.join(currentPath, packageName));
-                  if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, indexName + ".ts") + EOL);
+                if ((sourceText = readFile(path.join(mainDir, indexName + extension.ext), baseDir)) !== null) {
+                  sourcePath = libraryPrefix + packageName + "/" + indexName + extension.ext;
+                  packageBases.set(sourcePath.replace(extension.re, ""), path.join(currentPath, packageName));
+                  if (args.traceResolution) stderr.write("  -> " + path.join(mainDir, indexName + extension.ext) + EOL);
                   break;
                 }
               }
@@ -509,14 +530,14 @@ exports.main = function main(argv, options, callback) {
     let runtimeText = exports.libraryFiles[runtimePath];
     if (runtimeText == null) {
       runtimePath = runtimeName;
-      runtimeText = readFile(runtimePath + ".ts", baseDir);
+      runtimeText = readFile(runtimePath + extension.ext, baseDir);
       if (runtimeText == null) return callback(Error("Runtime '" + runtimeName + "' not found."));
     } else {
       runtimePath = "~lib/" + runtimePath;
     }
     stats.parseCount++;
     stats.parseTime += measure(() => {
-      assemblyscript.parse(program, runtimeText, runtimePath, true);
+      assemblyscript.parse(program, runtimeText, runtimePath + extension.ext, true);
     });
   }
 
@@ -524,18 +545,19 @@ exports.main = function main(argv, options, callback) {
   for (let i = 0, k = argv.length; i < k; ++i) {
     const filename = argv[i];
 
-    let sourcePath = String(filename).replace(/\\/g, "/").replace(/(\.ts|\/)$/, "");
+    let sourcePath = String(filename).replace(/\\/g, "/").replace(extension.re, "").replace(/[\\\/]$/, "");
+    
     // Setting the path to relative path
     sourcePath = path.isAbsolute(sourcePath) ? path.relative(baseDir, sourcePath) : sourcePath;
 
-    // Try entryPath.ts, then entryPath/index.ts
-    let sourceText = readFile(sourcePath + ".ts", baseDir);
+    // Try entryPath.ext, then entryPath/index.ext
+    let sourceText = readFile(sourcePath + extension.ext, baseDir);
     if (sourceText == null) {
-      sourceText = readFile(sourcePath + "/index.ts", baseDir);
-      if (sourceText == null) return callback(Error("Entry file '" + sourcePath + ".ts' not found."));
-      sourcePath += "/index.ts";
+      sourceText = readFile(sourcePath + "/index" + extension.ext, baseDir);
+      if (sourceText == null) return callback(Error("Entry file '" + sourcePath + extension.ext + "' not found."));
+      sourcePath += "/index" + extension.ext;
     } else {
-      sourcePath += ".ts";
+      sourcePath += extension.ext;
     }
 
     stats.parseCount++;
@@ -920,7 +942,7 @@ exports.main = function main(argv, options, callback) {
           map.sourceRoot = "./" + basename;
           let contents = [];
           map.sources.forEach((name, index) => {
-            let text = assemblyscript.getSource(program, name.replace(/\.ts$/, ""));
+            let text = assemblyscript.getSource(program, name.replace(extension.re, ""));
             if (text == null) return callback(Error("Source of file '" + name + "' not found."));
             contents[index] = text;
           });
@@ -1061,7 +1083,7 @@ exports.main = function main(argv, options, callback) {
     var files;
     try {
       stats.readTime += measure(() => {
-        files = fs.readdirSync(path.join(baseDir, dirname)).filter(file => /^(?!.*\.d\.ts$).*\.ts$/.test(file));
+        files = fs.readdirSync(path.join(baseDir, dirname)).filter(file => extension.re_except_d.test(file))
       });
       return files;
     } catch (e) {
