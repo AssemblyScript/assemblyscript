@@ -771,7 +771,9 @@ exports.main = function main(argv, options, callback) {
       // } else {
       //   add("precompute");
       // }
-      add("optimize-instructions");
+      if (optimizeLevel >= 3) {
+        add("optimize-instructions");
+      }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
       }
