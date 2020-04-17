@@ -709,6 +709,7 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
+        add("vacuum");
       }
       if (hasARC) { // differs
         if (optimizeLevel < 3) {
