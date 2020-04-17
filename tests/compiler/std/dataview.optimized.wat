@@ -1118,33 +1118,33 @@
   i32.const 8
   i32.const 0
   call $~lib/rt/tlsf/__alloc
-  local.tee $2
-  i32.const 0
-  i32.store8
-  local.get $2
-  i32.const 4
-  i32.add
   local.tee $1
   i32.const 0
-  i32.store8 offset=3
-  local.get $2
-  i32.const 0
-  i32.store8 offset=1
-  local.get $2
-  i32.const 0
-  i32.store8 offset=2
-  local.get $1
-  i32.const 0
-  i32.store8 offset=2
-  local.get $1
-  i32.const 0
-  i32.store8 offset=1
-  local.get $2
-  i32.const 0
-  i32.store8 offset=3
-  local.get $1
-  i32.const 0
   i32.store8
+  local.get $1
+  local.tee $2
+  i32.const 4
+  i32.add
+  i32.const 0
+  i32.store8 offset=3
+  local.get $2
+  i32.const 0
+  i32.store8 offset=1
+  local.get $2
+  i32.const 0
+  i32.store8 offset=2
+  local.get $2
+  i32.const 0
+  i32.store8 offset=6
+  local.get $2
+  i32.const 0
+  i32.store8 offset=5
+  local.get $2
+  i32.const 0
+  i32.store8 offset=3
+  local.get $2
+  i32.const 0
+  i32.store8 offset=4
   local.get $0
   i32.eqz
   if
@@ -1163,25 +1163,23 @@
   local.get $0
   i32.const 0
   i32.store offset=8
-  local.get $2
-  local.set $1
-  local.get $2
+  local.get $1
   local.get $0
   i32.load
   local.tee $3
   i32.ne
   if
-   local.get $1
+   local.get $2
    call $~lib/rt/pure/__retain
-   local.set $1
+   local.set $2
    local.get $3
    call $~lib/rt/pure/__release
   end
   local.get $0
-  local.get $1
+  local.get $2
   i32.store
   local.get $0
-  local.get $2
+  local.get $1
   i32.store offset=4
   local.get $0
   i32.const 8

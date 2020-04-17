@@ -732,13 +732,6 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
-      if (module.getLowMemoryUnused()) {
-        if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-          add("optimize-added-constants-propagate");
-        } else {
-          add("optimize-added-constants");
-        }
-      }
       // this will be done later (1)
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
@@ -790,6 +783,13 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("inlining-optimizing");
+      }
+      if (module.getLowMemoryUnused()) {
+        if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+          add("optimize-added-constants-propagate");
+        } else {
+          add("optimize-added-constants");
+        }
       }
       // "duplicate-function-elimination" will better done later
       // add("duplicate-function-elimination");

@@ -6326,9 +6326,9 @@
       i32.const 101
       i32.store16 offset=2
       local.get $0
+      local.tee $1
       i32.const 4
       i32.add
-      local.tee $1
       local.get $3
       i32.const 1
       i32.sub
@@ -6354,7 +6354,7 @@
       i32.const 43
       local.get $2
       select
-      i32.store16
+      i32.store16 offset=4
       local.get $0
       i32.const 2
       i32.add
@@ -6382,9 +6382,9 @@
       i32.const 101
       i32.store16 offset=2
       local.get $0
+      local.tee $2
       i32.const 4
       i32.add
-      local.tee $2
       local.get $3
       i32.const 1
       i32.sub
@@ -6410,7 +6410,7 @@
       i32.const 43
       local.get $3
       select
-      i32.store16
+      i32.store16 offset=4
       local.get $0
       local.get $1
       i32.add
@@ -14287,16 +14287,14 @@
       block $switch$1$case$6
        block $switch$1$case$4
         local.get $0
-        i32.const 16
-        i32.add
         local.tee $1
         i32.const 8
-        i32.sub
+        i32.add
         i32.load
         br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$case$6 $switch$1$case$7 $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$default
        end
        local.get $1
-       i32.load
+       i32.load offset=16
        local.tee $1
        if
         local.get $1
@@ -14305,10 +14303,10 @@
        br $__inlined_func$~lib/rt/__visit_members
       end
       local.get $1
-      i32.load offset=4
+      i32.load offset=20
       local.tee $2
       local.get $1
-      i32.load offset=12
+      i32.load offset=28
       i32.const 2
       i32.shl
       i32.add
@@ -14333,12 +14331,12 @@
        end
       end
       local.get $1
-      i32.load
+      i32.load offset=16
       call $~lib/rt/pure/__visit
       br $__inlined_func$~lib/rt/__visit_members
      end
      local.get $1
-     i32.load
+     i32.load offset=16
      call $~lib/rt/pure/__visit
      br $__inlined_func$~lib/rt/__visit_members
     end
