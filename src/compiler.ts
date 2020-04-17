@@ -8746,6 +8746,19 @@ export class Compiler extends DiagnosticEmitter {
           let fieldInstance = <Field>member;
           let fieldType = fieldInstance.type;
 
+          if (fieldType.classReference) {
+            // TODO: Check if it is a class, with a default value (constructor with no params).
+            // TODO: Check if it can be null, and set to null
+
+            // Otherwise, error
+            this.error(
+              DiagnosticCode.Object_literal_is_missing_class_member_fields_that_must_be_defined,
+              expression.range, classReference.toString()
+            );
+            hasErrors = true;
+            continue;
+          }
+
           switch(fieldType.kind) {
             // i32 Types
             case TypeKind.I8:
@@ -8795,8 +8808,6 @@ export class Compiler extends DiagnosticEmitter {
               );
               continue;
             }
-            // TODO: Check if it is a class, with a default value (constructor with no params).
-            // TODO: Check if it can be null, and set to null
             default: {}
           }
         }
