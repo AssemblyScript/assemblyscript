@@ -182,10 +182,6 @@
     loop $for-loop|1
      local.get $0
      if
-      block $for-continue|1
-       local.get $0
-       br_if $for-continue|1
-      end
       local.get $1
       i32.const 1
       i32.add

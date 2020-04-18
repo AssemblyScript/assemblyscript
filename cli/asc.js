@@ -718,6 +718,9 @@ exports.main = function main(argv, options, callback) {
         add("post-assemblyscript");
       }
       add("dce");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("code-folding");
+      }
       add("remove-unused-brs");
       add("remove-unused-names");
       add("optimize-instructions");
