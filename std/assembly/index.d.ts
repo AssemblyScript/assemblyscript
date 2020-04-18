@@ -1126,6 +1126,8 @@ declare function bswap16<T = i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
 // Standard library
 
+/** Gets a pointer to a static chunk of memory of the given size. */
+declare function memory(size: i32, align?: i32): usize;
 /** Memory operations. */
 declare namespace memory {
   /** Whether the memory managed interface is implemented. */

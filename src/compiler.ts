@@ -187,7 +187,8 @@ import {
   writeI64,
   writeF32,
   writeF64,
-  makeMap
+  makeMap,
+  isPowerOf2
 } from "./util";
 
 /** Compiler options. */
@@ -1683,6 +1684,7 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Adds a static memory segment with the specified data. */
   addMemorySegment(buffer: Uint8Array, alignment: i32 = 16): MemorySegment {
+    assert(isPowerOf2(alignment));
     var memoryOffset = i64_align(this.memoryOffset, alignment);
     var segment = MemorySegment.create(buffer, memoryOffset);
     this.memorySegments.push(segment);
