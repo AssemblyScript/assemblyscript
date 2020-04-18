@@ -145,8 +145,8 @@
    br_if $folding-inner0
    local.get $1
    call $~lib/array/Array<assert-nonnull/Foo | null>#__get
-   local.tee $1
-   local.get $1
+   local.tee $0
+   local.get $0
    i32.eqz
    br_if $folding-inner0
    i32.load
@@ -172,8 +172,8 @@
    br_if $folding-inner0
    local.get $1
    call $~lib/array/Array<assert-nonnull/Foo | null>#__get
-   local.tee $1
-   local.get $1
+   local.tee $0
+   local.get $0
    i32.eqz
    br_if $folding-inner0
    i32.load

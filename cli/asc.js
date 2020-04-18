@@ -711,6 +711,9 @@ exports.main = function main(argv, options, callback) {
         add("rse");
         add("vacuum");
       }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
+        add("code-folding");
+      }
       if (hasARC) { // differs
         if (optimizeLevel < 3) {
           add("flatten");
@@ -718,9 +721,6 @@ exports.main = function main(argv, options, callback) {
         add("post-assemblyscript");
       }
       add("dce");
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("code-folding");
-      }
       add("remove-unused-brs");
       add("remove-unused-names");
       add("optimize-instructions");
