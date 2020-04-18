@@ -703,7 +703,7 @@ exports.main = function main(argv, options, callback) {
         add("flatten"); // differs
         add("simplify-locals-notee-nostructure"); // differs
         add("vacuum"); // differs
-        add("code-folding");
+        add("code-folding"); // differs
         add("flatten");
         add("local-cse");
         add("reorder-locals"); // differs
@@ -711,9 +711,6 @@ exports.main = function main(argv, options, callback) {
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
         add("vacuum");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("code-folding");
       }
       if (hasARC) { // differs
         if (optimizeLevel < 3) {
