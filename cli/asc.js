@@ -775,7 +775,6 @@ exports.main = function main(argv, options, callback) {
       // }
       if (optimizeLevel >= 3) {
         add("optimize-instructions");
-        add("simplify-globals-optimizing");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
@@ -783,6 +782,7 @@ exports.main = function main(argv, options, callback) {
       add("vacuum");
       // PassRunner::addDefaultGlobalOptimizationPostPasses
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("simplify-globals-optimizing"); // differs
         add("dae-optimizing");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
