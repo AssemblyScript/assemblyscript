@@ -127,25 +127,36 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1120
-  global.set $memory/ptr
-  i32.const 1136
-  global.set $memory/ptr
-  i32.const 1144
-  global.set $memory/ptr
-  i32.const 1148
-  global.set $memory/ptr
   global.get $memory/ptr
-  i32.const 2
-  i32.add
-  i32.const 1150
-  global.set $memory/ptr
-  i32.const 1150
+  i32.const 1119
   i32.ne
   if
    i32.const 0
    i32.const 1056
-   i32.const 36
+   i32.const 24
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1136
+  global.set $memory/ptr
+  i32.const 1152
+  global.set $memory/ptr
+  i32.const 1160
+  global.set $memory/ptr
+  i32.const 1164
+  global.set $memory/ptr
+  global.get $memory/ptr
+  i32.const 2
+  i32.add
+  i32.const 1166
+  global.set $memory/ptr
+  i32.const 1166
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 37
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -153,14 +164,25 @@
   global.get $memory/ptr
   i32.const 1
   i32.add
-  i32.const 1151
+  i32.const 1167
   global.set $memory/ptr
-  i32.const 1151
+  i32.const 1167
   i32.ne
   if
    i32.const 0
    i32.const 1056
-   i32.const 37
+   i32.const 38
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.const 1167
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 39
    i32.const 1
    call $~lib/builtins/abort
    unreachable

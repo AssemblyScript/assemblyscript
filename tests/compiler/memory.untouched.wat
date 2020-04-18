@@ -6,18 +6,20 @@
  (memory $0 1)
  (data (i32.const 16) "\00\00\00\00")
  (data (i32.const 32) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s\00")
- (data (i32.const 80) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 80) "\00")
  (data (i32.const 96) "\00")
  (data (i32.const 104) "\00")
  (data (i32.const 108) "\00")
  (data (i32.const 110) "\00")
  (data (i32.const 111) "\00")
- (data (i32.const 112) "\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00")
+ (data (i32.const 112) "\00")
  (data (i32.const 128) "\00")
- (data (i32.const 136) "\00")
- (data (i32.const 140) "\00")
- (data (i32.const 142) "\00")
- (data (i32.const 143) "\00")
+ (data (i32.const 144) "\00")
+ (data (i32.const 152) "\00")
+ (data (i32.const 156) "\00")
+ (data (i32.const 158) "\00")
+ (data (i32.const 159) "\00")
+ (data (i32.const 160) "\00")
  (table $0 1 funcref)
  (global $memory/ptr (mut i32) (i32.const 80))
  (export "memory" (memory $0))
@@ -35,19 +37,19 @@
   local.get $0
  )
  (func $memory/testGeneric<v128> (result i32)
-  i32.const 128
+  i32.const 144
  )
  (func $memory/testGeneric<i64> (result i32)
-  i32.const 136
+  i32.const 152
  )
  (func $memory/testGeneric<i32> (result i32)
-  i32.const 140
+  i32.const 156
  )
  (func $memory/testGeneric<i16> (result i32)
-  i32.const 142
+  i32.const 158
  )
  (func $memory/testGeneric<i8> (result i32)
-  i32.const 143
+  i32.const 159
  )
  (func $start:memory
   call $memory/test
@@ -166,7 +168,21 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $memory/ptr
+  i32.const 1
+  i32.add
   i32.const 112
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 24
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 128
   global.set $memory/ptr
   global.get $memory/ptr
   i32.const 16
@@ -179,7 +195,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 33
+   i32.const 34
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -195,7 +211,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 34
+   i32.const 35
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -211,7 +227,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 35
+   i32.const 36
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -227,7 +243,7 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 36
+   i32.const 37
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -243,7 +259,21 @@
   if
    i32.const 0
    i32.const 48
-   i32.const 37
+   i32.const 38
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.const 1
+  i32.add
+  i32.const 160
+  i32.eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 48
+   i32.const 39
    i32.const 1
    call $~lib/builtins/abort
    unreachable
