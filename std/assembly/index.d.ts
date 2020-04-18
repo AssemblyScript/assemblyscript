@@ -1126,8 +1126,6 @@ declare function bswap16<T = i8 | u8 | i16 | u16 | i32 | u32>(value: T): T;
 
 // Standard library
 
-/** Gets a pointer to a static chunk of memory of the given size. */
-declare function memory(size: i32, align?: i32): usize;
 /** Memory operations. */
 declare namespace memory {
   /** Whether the memory managed interface is implemented. */
@@ -1148,6 +1146,8 @@ declare namespace memory {
   export function drop(segmentIndex: u32): void;
   /** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
   export function compare(vl: usize, vr: usize, n: usize): i32;
+  /** Gets a pointer to a static chunk of memory of the given size. */
+  export function data(size: i32, align?: i32): usize;
 }
 
 /** Garbage collector interface. */

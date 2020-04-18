@@ -1,11 +1,6 @@
 import { memcmp, memmove, memset } from "./util/memory";
 import { E_NOTIMPLEMENTED } from "./util/error";
 
-/** Gets a pointer to a static chunk of memory of the given size. */
-// @ts-ignore: decorator
-@builtin
-export declare function memory(size: i32, align?: i32): usize;
-
 /** Memory manager interface. */
 export namespace memory {
 
@@ -65,4 +60,9 @@ export namespace memory {
   export function compare(vl: usize, vr: usize, n: usize): i32 {
     return memcmp(vl, vr, n);
   }
+
+  /** Gets a pointer to a static chunk of memory of the given size. */
+  // @ts-ignore: decorator
+  @builtin
+  export declare function data(size: i32, align?: i32): usize;
 }

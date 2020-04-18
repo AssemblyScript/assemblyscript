@@ -577,7 +577,6 @@ export namespace BuiltinNames {
   export const INFO = "~lib/diagnostics/INFO";
 
   // std/memory.ts
-  export const memory = "~lib/memory/memory";
   export const memory_size = "~lib/memory/memory.size";
   export const memory_grow = "~lib/memory/memory.grow";
   export const memory_copy = "~lib/memory/memory.copy";
@@ -2476,67 +2475,6 @@ builtins.set(BuiltinNames.unreachable, builtin_unreachable);
 
 // === Memory =================================================================================
 
-// memory(size[, align]) -> usize
-function builtin_memory(ctx: BuiltinContext): ExpressionRef {
-  var compiler = ctx.compiler;
-  var module = compiler.module;
-  compiler.currentType = Type.i32;
-  if (
-    checkTypeAbsent(ctx) |
-    checkArgsOptional(ctx, 1, 2)
-  ) return module.unreachable();
-  var operands = ctx.operands;
-  var numOperands = operands.length;
-  var usizeType = compiler.options.usizeType;
-  var arg0 = compiler.precomputeExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
-  compiler.currentType = usizeType;
-  if (getExpressionId(arg0) != ExpressionId.Const) {
-    compiler.error(
-      DiagnosticCode.Expression_must_be_a_compile_time_constant,
-      operands[0].range
-    );
-    return module.unreachable();
-  }
-  var size = getConstValueI32(arg0);
-  if (size < 1) {
-    compiler.error(
-      DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
-      operands[0].range, "1", i32.MAX_VALUE.toString()
-    );
-    return module.unreachable();
-  }
-  var align = 16;
-  if (numOperands == 2) {
-    align = evaluateImmediateOffset(operands[1], compiler);
-    compiler.currentType = usizeType;
-    if (align < 0) {
-      return module.unreachable();
-    }
-    if (align < 1 || align > 16) {
-      compiler.error(
-        DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
-        operands[1].range, "Alignment", "1", "16"
-      );
-      return module.unreachable();
-    }
-    if (!isPowerOf2(align)) {
-      compiler.error(
-        DiagnosticCode._0_must_be_a_power_of_two,
-        operands[1].range, "Alignment"
-      );
-      return module.unreachable();
-    }
-  }
-  // FIXME: what if recompiles happen? recompiles are bad.
-  var offset = compiler.addMemorySegment(new Uint8Array(size), align).offset;
-  if (usizeType == Type.usize32) {
-    assert(!i64_high(offset));
-    return module.i32(i64_low(offset));
-  }
-  return module.i64(i64_low(offset), i64_high(offset));
-}
-builtins.set(BuiltinNames.memory, builtin_memory);
-
 // memory.size() -> i32
 function builtin_memory_size(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
@@ -2617,6 +2555,67 @@ function builtin_memory_fill(ctx: BuiltinContext): ExpressionRef {
   return module.memory_fill(arg0, arg1, arg2);
 }
 builtins.set(BuiltinNames.memory_fill, builtin_memory_fill);
+
+// memory.data(size[, align]) -> usize
+function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  compiler.currentType = Type.i32;
+  if (
+    checkTypeAbsent(ctx) |
+    checkArgsOptional(ctx, 1, 2)
+  ) return module.unreachable();
+  var operands = ctx.operands;
+  var numOperands = operands.length;
+  var usizeType = compiler.options.usizeType;
+  var arg0 = compiler.precomputeExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
+  compiler.currentType = usizeType;
+  if (getExpressionId(arg0) != ExpressionId.Const) {
+    compiler.error(
+      DiagnosticCode.Expression_must_be_a_compile_time_constant,
+      operands[0].range
+    );
+    return module.unreachable();
+  }
+  var size = getConstValueI32(arg0);
+  if (size < 1) {
+    compiler.error(
+      DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+      operands[0].range, "1", i32.MAX_VALUE.toString()
+    );
+    return module.unreachable();
+  }
+  var align = 16;
+  if (numOperands == 2) {
+    align = evaluateImmediateOffset(operands[1], compiler);
+    compiler.currentType = usizeType;
+    if (align < 0) {
+      return module.unreachable();
+    }
+    if (align < 1 || align > 16) {
+      compiler.error(
+        DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+        operands[1].range, "Alignment", "1", "16"
+      );
+      return module.unreachable();
+    }
+    if (!isPowerOf2(align)) {
+      compiler.error(
+        DiagnosticCode._0_must_be_a_power_of_two,
+        operands[1].range, "Alignment"
+      );
+      return module.unreachable();
+    }
+  }
+  // FIXME: what if recompiles happen? recompiles are bad.
+  var offset = compiler.addMemorySegment(new Uint8Array(size), align).offset;
+  if (usizeType == Type.usize32) {
+    assert(!i64_high(offset));
+    return module.i32(i64_low(offset));
+  }
+  return module.i64(i64_low(offset), i64_high(offset));
+}
+builtins.set(BuiltinNames.memory_data, builtin_memory_data);
 
 // === Helpers ================================================================================
 
