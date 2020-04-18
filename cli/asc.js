@@ -836,7 +836,6 @@ exports.main = function main(argv, options, callback) {
           add("vacuum");
           add("merge-locals");
           add("coalesce-locals");
-          add("merge-locals");
           add("simplify-locals-nostructure");
           add("inlining-optimizing");
           add("precompute-propagate");

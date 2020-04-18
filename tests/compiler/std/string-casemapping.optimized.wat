@@ -2457,11 +2457,11 @@
          block $~lib/util/string/isFinalSigma|inlined.0 (result i32)
           local.get $0
           local.set $4
+          local.get $5
           i32.const 0
           local.set $9
           i32.const 0
           local.get $5
-          local.tee $6
           local.tee $2
           i32.const 30
           i32.sub
@@ -2485,7 +2485,7 @@
              i32.le_s
              br_if $~lib/util/string/codePointBefore|inlined.0
              drop
-             local.get $0
+             local.get $4
              local.get $1
              i32.const 1
              i32.sub
@@ -2505,7 +2505,7 @@
              i32.ge_s
              i32.and
              if
-              local.get $0
+              local.get $4
               local.get $1
               i32.const 2
               i32.sub
@@ -2589,7 +2589,6 @@
           i32.eqz
           br_if $~lib/util/string/isFinalSigma|inlined.0
           drop
-          local.get $6
           i32.const 1
           i32.add
           local.tee $2
@@ -2607,7 +2606,7 @@
            local.get $6
            i32.lt_s
            if
-            local.get $0
+            local.get $4
             local.get $2
             i32.const 1
             i32.shl
@@ -2625,7 +2624,7 @@
             i32.ne
             i32.and
             if
-             local.get $0
+             local.get $4
              local.get $2
              i32.const 1
              i32.shl
