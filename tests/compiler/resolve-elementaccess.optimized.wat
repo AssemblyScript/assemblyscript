@@ -2001,13 +2001,14 @@
   i32.const 7
   call $~lib/rt/stub/__alloc
   local.tee $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    i32.const 12
    i32.const 8
    call $~lib/rt/stub/__alloc
+   local.set $0
   end
+  local.get $0
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   global.set $resolve-elementaccess/buf

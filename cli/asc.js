@@ -775,6 +775,7 @@ exports.main = function main(argv, options, callback) {
       // }
       if (optimizeLevel >= 3) {
         add("optimize-instructions");
+        add("simplify-globals-optimizing");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");

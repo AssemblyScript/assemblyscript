@@ -76,21 +76,10 @@
   global.set $comma/b
   i32.const 2
   global.set $comma/a
-  global.get $comma/a
-  global.set $comma/b
-  global.get $comma/b
-  global.set $comma/a
-  global.get $comma/a
   i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 18
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
+  global.set $comma/b
+  i32.const 2
+  global.set $comma/a
   global.get $comma/b
   i32.const 2
   i32.ne
