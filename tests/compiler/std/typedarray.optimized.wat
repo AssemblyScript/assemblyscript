@@ -32111,13 +32111,12 @@
      block $switch$1$default
       block $switch$1$case$4
        local.get $0
-       local.tee $1
        i32.const 8
        i32.add
        i32.load
        br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $switch$1$case$4 $folding-inner0 $folding-inner0 $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $folding-inner0 $switch$1$default
       end
-      local.get $1
+      local.get $0
       i32.load offset=16
       local.tee $1
       if
@@ -32128,7 +32127,7 @@
      end
      unreachable
     end
-    local.get $1
+    local.get $0
     i32.load offset=16
     call $~lib/rt/pure/__visit
    end

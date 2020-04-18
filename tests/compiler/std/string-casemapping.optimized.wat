@@ -2344,14 +2344,14 @@
   i32.const 2
   i32.shl
   call $~lib/rt/tlsf/__alloc
-  local.set $9
+  local.set $10
   loop $for-loop|0
-   local.get $6
+   local.get $5
    local.get $7
    i32.lt_u
    if
     local.get $0
-    local.get $6
+    local.get $5
     i32.const 1
     i32.shl
     i32.add
@@ -2361,7 +2361,7 @@
     i32.shr_u
     if
      block $for-continue|0
-      local.get $6
+      local.get $5
       local.get $7
       i32.const 1
       i32.sub
@@ -2375,7 +2375,7 @@
       select
       if
        local.get $0
-       local.get $6
+       local.get $5
        i32.const 1
        i32.shl
        i32.add
@@ -2386,10 +2386,10 @@
        i32.const 1025
        i32.lt_u
        if
-        local.get $6
+        local.get $5
         i32.const 1
         i32.add
-        local.set $6
+        local.set $5
         local.get $4
         i32.const 1023
         i32.and
@@ -2406,8 +2406,8 @@
         i32.const 131072
         i32.ge_u
         if
-         local.get $9
-         local.get $8
+         local.get $10
+         local.get $11
          i32.const 1
          i32.shl
          i32.add
@@ -2417,10 +2417,10 @@
          i32.shl
          i32.or
          i32.store
-         local.get $8
+         local.get $11
          i32.const 1
          i32.add
-         local.set $8
+         local.set $11
          br $for-continue|0
         end
        end
@@ -2429,24 +2429,24 @@
       i32.const 304
       i32.eq
       if
-       local.get $9
-       local.get $8
+       local.get $10
+       local.get $11
        i32.const 1
        i32.shl
        i32.add
        i32.const 50790505
        i32.store
-       local.get $8
+       local.get $11
        i32.const 1
        i32.add
-       local.set $8
+       local.set $11
       else
        local.get $2
        i32.const 931
        i32.eq
        if
-        local.get $9
-        local.get $8
+        local.get $10
+        local.get $11
         i32.const 1
         i32.shl
         i32.add
@@ -2457,11 +2457,11 @@
          block $~lib/util/string/isFinalSigma|inlined.0 (result i32)
           local.get $0
           local.set $4
-          local.get $6
           i32.const 0
-          local.set $10
+          local.set $9
           i32.const 0
-          local.get $6
+          local.get $5
+          local.tee $6
           local.tee $2
           i32.const 30
           i32.sub
@@ -2470,10 +2470,10 @@
           local.get $1
           i32.gt_s
           select
-          local.set $11
+          local.set $8
           loop $while-continue|1
            local.get $2
-           local.get $11
+           local.get $8
            i32.gt_s
            if
             block $~lib/util/string/codePointBefore|inlined.0 (result i32)
@@ -2571,7 +2571,7 @@
              br_if $~lib/util/string/isFinalSigma|inlined.0
              drop
              i32.const 1
-             local.set $10
+             local.set $9
             end
             local.get $2
             local.get $1
@@ -2585,10 +2585,11 @@
            end
           end
           i32.const 0
-          local.get $10
+          local.get $9
           i32.eqz
           br_if $~lib/util/string/isFinalSigma|inlined.0
           drop
+          local.get $6
           i32.const 1
           i32.add
           local.tee $2
@@ -2600,10 +2601,10 @@
           local.get $7
           i32.lt_s
           select
-          local.set $5
+          local.set $6
           loop $while-continue|2
            local.get $2
-           local.get $5
+           local.get $6
            i32.lt_s
            if
             local.get $0
@@ -2702,8 +2703,8 @@
         i32.const 25
         i32.le_u
         if
-         local.get $9
-         local.get $8
+         local.get $10
+         local.get $11
          i32.const 1
          i32.shl
          i32.add
@@ -2721,16 +2722,16 @@
          i32.const 65536
          i32.lt_s
          if
-          local.get $9
-          local.get $8
+          local.get $10
+          local.get $11
           i32.const 1
           i32.shl
           i32.add
           local.get $2
           i32.store16
          else
-          local.get $9
-          local.get $8
+          local.get $10
+          local.get $11
           i32.const 1
           i32.shl
           i32.add
@@ -2751,18 +2752,18 @@
           i32.shl
           i32.or
           i32.store
-          local.get $8
+          local.get $11
           i32.const 1
           i32.add
-          local.set $8
+          local.set $11
          end
         end
        end
       end
      end
     else
-     local.get $9
-     local.get $8
+     local.get $10
+     local.get $11
      i32.const 1
      i32.shl
      i32.add
@@ -2779,19 +2780,19 @@
      i32.or
      i32.store16
     end
-    local.get $6
+    local.get $5
     i32.const 1
     i32.add
-    local.set $6
-    local.get $8
+    local.set $5
+    local.get $11
     i32.const 1
     i32.add
-    local.set $8
+    local.set $11
     br $for-loop|0
    end
   end
-  local.get $9
-  local.get $8
+  local.get $10
+  local.get $11
   i32.const 1
   i32.shl
   call $~lib/rt/tlsf/__realloc
@@ -4858,13 +4859,12 @@
     block $switch$1$default
      block $switch$1$case$4
       local.get $0
-      local.tee $1
       i32.const 8
       i32.add
       i32.load
       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$default
      end
-     local.get $1
+     local.get $0
      i32.load offset=16
      local.tee $1
      if
