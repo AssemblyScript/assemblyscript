@@ -143,6 +143,7 @@ export enum DiagnosticCode {
   In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
   _0_is_referenced_directly_or_indirectly_in_its_own_base_expression = 2506,
+  Cannot_create_an_instance_of_an_abstract_class = 2511,
   Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_2 = 2515,
   Object_is_possibly_null = 2531,
   Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
@@ -305,6 +306,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2474: return "In 'const' enum declarations member initializer must be constant expression.";
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
     case 2506: return "'{0}' is referenced directly or indirectly in its own base expression.";
+    case 2511: return "Cannot create an instance of an abstract class.";
     case 2515: return "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from '{2}'.";
     case 2531: return "Object is possibly 'null'.";
     case 2540: return "Cannot assign to '{0}' because it is a constant or a read-only property.";

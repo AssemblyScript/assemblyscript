@@ -1856,7 +1856,7 @@ export class Parser extends DiagnosticEmitter {
     } else {
       flags |= CommonFlags.INSTANCE;
       if (tn.skip(Token.ABSTRACT)) {
-        if (isInterface) {
+        if (isInterface || !parent.is(CommonFlags.ABSTRACT)) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(), "abstract"

@@ -2634,13 +2634,15 @@ export abstract class DeclaredElement extends Element {
     return this.declaration.name;
   }
 
-  /** Gets the signature node, if applicable, otherwise the identifier node. */
-  get signatureOrIdentifierNode(): Node {
+  /** Gets the signature node, if applicable, along the identifier node. */
+  get identifierAndSignatureRange(): Range {
     var declaration = this.declaration;
+    var identifierNode = declaration.name;
     if (declaration.kind == NodeKind.FUNCTIONDECLARATION || declaration.kind == NodeKind.METHODDECLARATION) {
-      return (<FunctionDeclaration>declaration).signature;
+      let signatureNode = (<FunctionDeclaration>declaration).signature;
+      return Range.join(identifierNode.range, signatureNode.range);
     }
-    return declaration.name;
+    return identifierNode.range;
   }
 
   /** Gets the assiciated decorator nodes. */
@@ -2652,8 +2654,35 @@ export abstract class DeclaredElement extends Element {
   isCompatibleOverride(base: DeclaredElement): bool {
     var self: DeclaredElement = this; // TS
     var kind = self.kind;
-    if (kind == base.kind && kind == ElementKind.FUNCTION) {
-      return (<Function>self).signature.isAssignableTo((<Function>base).signature, /* sameSize */ true);
+    if (kind == base.kind) {
+      switch (kind) {
+        case ElementKind.FUNCTION: {
+          return (<Function>self).signature.isAssignableTo((<Function>base).signature, /* sameSize */ true);
+        }
+        case ElementKind.PROPERTY: {
+          let selfProperty = <Property>self;
+          let baseProperty = <Property>base;
+          let selfGetter = selfProperty.getterInstance;
+          let baseGetter = baseProperty.getterInstance;
+          if (selfGetter) {
+            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
+              return false;
+            }
+          } else if (baseGetter) {
+            return false;
+          }
+          let selfSetter = selfProperty.setterInstance;
+          let baseSetter = baseProperty.setterInstance;
+          if (selfSetter) {
+            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
+              return false;
+            }
+          } else if (baseSetter) {
+            return false;
+          }
+          return true;
+        }
+      }
     }
     return false;
   }

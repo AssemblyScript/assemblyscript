@@ -139,6 +139,7 @@
   "In 'const' enum declarations member initializer must be constant expression.": 2474,
   "Export declaration conflicts with exported declaration of '{0}'.": 2484,
   "'{0}' is referenced directly or indirectly in its own base expression.": 2506,
+  "Cannot create an instance of an abstract class.": 2511,
   "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from '{2}'.": 2515,
   "Object is possibly 'null'.": 2531,
   "Cannot assign to '{0}' because it is a constant or a read-only property.": 2540,

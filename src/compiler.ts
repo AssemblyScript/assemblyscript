@@ -8930,6 +8930,13 @@ export class Compiler extends DiagnosticEmitter {
       );
       return this.module.unreachable();
     }
+    if (target.is(CommonFlags.ABSTRACT)) {
+      this.error(
+        DiagnosticCode.Cannot_create_an_instance_of_an_abstract_class,
+        expression.typeName.range
+      );
+      return this.module.unreachable();
+    }
     var classPrototype = <ClassPrototype>target;
     var classInstance: Class | null = null;
     var typeArguments = expression.typeArguments;

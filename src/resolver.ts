@@ -3004,8 +3004,8 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode
   ): void {
-    var instanceMembers = instance.members;
-    if (!instanceMembers) instance.members = instanceMembers = new Map();
+    var members = instance.members;
+    if (!members) instance.members = members = new Map();
 
     var pendingClasses = this.resolveClassPending;
     var unimplemented = new Map<string,DeclaredElement>();
@@ -3021,17 +3021,17 @@ export class Resolver extends DiagnosticEmitter {
           for (let _keys = Map_keys(ifaceMembers), i = 0, k = _keys.length; i < k; ++i) {
             let memberName = unchecked(_keys[i]);
             let member = assert(ifaceMembers.get(memberName));
-            if (instanceMembers.has(memberName)) {
-              let existing = assert(instanceMembers.get(memberName));
+            if (members.has(memberName)) {
+              let existing = assert(members.get(memberName));
               if (!member.isCompatibleOverride(existing)) {
                 this.errorRelated(
                   DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
-                  member.signatureOrIdentifierNode.range, existing.signatureOrIdentifierNode.range
+                  member.identifierAndSignatureRange, existing.identifierAndSignatureRange
                 );
                 continue;
               }
             }
-            instanceMembers.set(memberName, member);
+            members.set(memberName, member);
             unimplemented.set(memberName, member);
           }
         }
@@ -3049,17 +3049,17 @@ export class Resolver extends DiagnosticEmitter {
         for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
           let memberName = unchecked(_keys[i]);
           let member = assert(baseMembers.get(memberName));
-          if (instanceMembers.has(memberName)) {
-            let existing = assert(instanceMembers.get(memberName));
+          if (members.has(memberName)) {
+            let existing = assert(members.get(memberName));
             if (!member.isCompatibleOverride(existing)) {
               this.errorRelated(
                 DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
-                member.signatureOrIdentifierNode.range, existing.signatureOrIdentifierNode.range
+                member.identifierAndSignatureRange, existing.identifierAndSignatureRange
               );
               continue;
             }
           }
-          instanceMembers.set(memberName, member);
+          members.set(memberName, member);
           if (member.is(CommonFlags.ABSTRACT)) {
             unimplemented.set(memberName, member);
           } else {
