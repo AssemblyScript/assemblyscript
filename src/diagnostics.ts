@@ -290,8 +290,8 @@ export abstract class DiagnosticEmitter {
     if (range) message = message.withRange(range);
     if (relatedRange) message.relatedRange = relatedRange;
     this.diagnostics.push(message);
-    console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
-    console.log(<string>new Error("stack").stack);
+    // console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
+    // console.log(<string>new Error("stack").stack);
   }
 
   /** Emits an overly pedantic diagnostic message. */
