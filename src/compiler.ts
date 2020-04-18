@@ -713,13 +713,15 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FUNCTION: {
         let functionInstance = <Function>element;
-        let signature = functionInstance.signature;
-        if (signature.requiredParameters < signature.parameterTypes.length) {
-          // utilize trampoline to fill in omitted arguments
-          functionInstance = this.ensureTrampoline(functionInstance);
-          this.ensureBuiltinArgumentsLength();
+        if (!functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
+          let signature = functionInstance.signature;
+          if (signature.requiredParameters < signature.parameterTypes.length) {
+            // utilize trampoline to fill in omitted arguments
+            functionInstance = this.ensureTrampoline(functionInstance);
+            this.ensureBuiltinArgumentsLength();
+          }
+          if (functionInstance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(functionInstance.internalName, prefix + name);
         }
-        if (functionInstance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(functionInstance.internalName, prefix + name);
         break;
       }
       case ElementKind.PROPERTY: {
