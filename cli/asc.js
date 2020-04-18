@@ -732,6 +732,7 @@ exports.main = function main(argv, options, callback) {
       } else {
         add("precompute");
       }
+      add("vacuum"); // differs
       // this will be done later (1)
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
