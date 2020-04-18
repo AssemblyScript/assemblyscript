@@ -703,6 +703,7 @@ exports.main = function main(argv, options, callback) {
         add("flatten"); // differs
         add("simplify-locals-notee-nostructure"); // differs
         add("vacuum"); // differs
+        add("code-folding");
         add("flatten");
         add("local-cse");
         add("reorder-locals"); // differs

@@ -545,31 +545,29 @@
    i32.const 1
    return
   end
-  local.get $1
-  i32.eqz
-  i32.const 1
-  local.get $0
-  select
-  if
+  block $folding-inner0
+   local.get $1
+   i32.eqz
+   i32.const 1
+   local.get $0
+   select
+   br_if $folding-inner0
+   local.get $0
+   call $~lib/string/String#get:length
+   local.tee $2
+   local.get $1
+   call $~lib/string/String#get:length
+   i32.ne
+   br_if $folding-inner0
+   local.get $0
    i32.const 0
+   local.get $1
+   local.get $2
+   call $~lib/util/string/compareImpl
+   i32.eqz
    return
   end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.tee $2
-  local.get $1
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
   i32.const 0
-  local.get $1
-  local.get $2
-  call $~lib/util/string/compareImpl
-  i32.eqz
  )
  (func $~lib/string/String.__not (param $0 i32) (result i32)
   local.get $0
@@ -4030,96 +4028,92 @@
  (func $~lib/string/String.__gt (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 1
-  local.get $1
-  i32.eqz
-  i32.const 1
-  local.get $0
-  i32.eqz
-  local.get $0
-  local.get $1
-  i32.eq
-  select
-  select
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.tee $2
-  i32.eqz
-  if
-   i32.const 0
-   return
-  end
-  local.get $1
-  call $~lib/string/String#get:length
-  local.tee $3
-  i32.eqz
-  if
+  block $folding-inner0
    i32.const 1
+   local.get $1
+   i32.eqz
+   i32.const 1
+   local.get $0
+   i32.eqz
+   local.get $0
+   local.get $1
+   i32.eq
+   select
+   select
+   br_if $folding-inner0
+   local.get $0
+   call $~lib/string/String#get:length
+   local.tee $2
+   i32.eqz
+   br_if $folding-inner0
+   local.get $1
+   call $~lib/string/String#get:length
+   local.tee $3
+   i32.eqz
+   if
+    i32.const 1
+    return
+   end
+   local.get $0
+   i32.const 0
+   local.get $1
+   local.get $2
+   local.get $3
+   local.get $2
+   local.get $3
+   i32.lt_s
+   select
+   call $~lib/util/string/compareImpl
+   i32.const 0
+   i32.gt_s
    return
   end
-  local.get $0
   i32.const 0
-  local.get $1
-  local.get $2
-  local.get $3
-  local.get $2
-  local.get $3
-  i32.lt_s
-  select
-  call $~lib/util/string/compareImpl
-  i32.const 0
-  i32.gt_s
  )
  (func $~lib/string/String.__lt (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 1
-  local.get $1
-  i32.eqz
-  i32.const 1
-  local.get $0
-  i32.eqz
-  local.get $0
-  local.get $1
-  i32.eq
-  select
-  select
-  if
-   i32.const 0
-   return
-  end
-  local.get $1
-  call $~lib/string/String#get:length
-  local.tee $2
-  i32.eqz
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.tee $3
-  i32.eqz
-  if
+  block $folding-inner0
    i32.const 1
+   local.get $1
+   i32.eqz
+   i32.const 1
+   local.get $0
+   i32.eqz
+   local.get $0
+   local.get $1
+   i32.eq
+   select
+   select
+   br_if $folding-inner0
+   local.get $1
+   call $~lib/string/String#get:length
+   local.tee $2
+   i32.eqz
+   br_if $folding-inner0
+   local.get $0
+   call $~lib/string/String#get:length
+   local.tee $3
+   i32.eqz
+   if
+    i32.const 1
+    return
+   end
+   local.get $0
+   i32.const 0
+   local.get $1
+   local.get $3
+   local.get $2
+   local.get $3
+   local.get $2
+   i32.lt_s
+   select
+   call $~lib/util/string/compareImpl
+   i32.const 0
+   i32.lt_s
    return
   end
-  local.get $0
   i32.const 0
-  local.get $1
-  local.get $3
-  local.get $2
-  local.get $3
-  local.get $2
-  i32.lt_s
-  select
-  call $~lib/util/string/compareImpl
-  i32.const 0
-  i32.lt_s
  )
  (func $~lib/string/String#repeat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

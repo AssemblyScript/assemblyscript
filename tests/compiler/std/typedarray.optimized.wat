@@ -3166,56 +3166,54 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $0
-  i32.load offset=8
-  local.get $1
-  i32.load offset=12
-  i32.ne
-  if
-   i32.const 0
+  block $folding-inner0
+   local.get $0
+   i32.load offset=8
+   local.get $1
+   i32.load offset=12
+   i32.ne
+   br_if $folding-inner0
+   local.get $0
+   i32.load offset=8
+   local.set $3
+   loop $for-loop|0
+    local.get $2
+    local.get $3
+    i32.lt_s
+    if
+     local.get $0
+     local.get $2
+     call $~lib/typedarray/Int8Array#__get
+     local.set $4
+     local.get $2
+     local.get $1
+     i32.load offset=12
+     i32.ge_u
+     if
+      i32.const 1376
+      i32.const 1536
+      i32.const 104
+      i32.const 42
+      call $~lib/builtins/abort
+      unreachable
+     end
+     local.get $1
+     local.get $2
+     call $~lib/array/Array<i8>#__unchecked_get
+     local.get $4
+     i32.ne
+     br_if $folding-inner0
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+     br $for-loop|0
+    end
+   end
+   i32.const 1
    return
   end
-  local.get $0
-  i32.load offset=8
-  local.set $3
-  loop $for-loop|0
-   local.get $2
-   local.get $3
-   i32.lt_s
-   if
-    local.get $0
-    local.get $2
-    call $~lib/typedarray/Int8Array#__get
-    local.set $4
-    local.get $2
-    local.get $1
-    i32.load offset=12
-    i32.ge_u
-    if
-     i32.const 1376
-     i32.const 1536
-     i32.const 104
-     i32.const 42
-     call $~lib/builtins/abort
-     unreachable
-    end
-    local.get $1
-    local.get $2
-    call $~lib/array/Array<i8>#__unchecked_get
-    local.get $4
-    i32.ne
-    if
-     i32.const 0
-     return
-    end
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    br $for-loop|0
-   end
-  end
-  i32.const 1
+  i32.const 0
  )
  (func $~lib/typedarray/Int8Array#subarray (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3405,46 +3403,44 @@
  (func $std/typedarray/isInt32ArrayEqual (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $1
-  i32.load offset=12
-  local.get $0
-  i32.load offset=8
-  i32.const 2
-  i32.shr_u
-  i32.ne
-  if
-   i32.const 0
+  block $folding-inner0
+   local.get $1
+   i32.load offset=12
+   local.get $0
+   i32.load offset=8
+   i32.const 2
+   i32.shr_u
+   i32.ne
+   br_if $folding-inner0
+   local.get $0
+   i32.load offset=8
+   i32.const 2
+   i32.shr_u
+   local.set $3
+   loop $for-loop|0
+    local.get $2
+    local.get $3
+    i32.lt_s
+    if
+     local.get $0
+     local.get $2
+     call $~lib/typedarray/Int32Array#__get
+     local.get $1
+     local.get $2
+     call $~lib/array/Array<i32>#__get
+     i32.ne
+     br_if $folding-inner0
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+     br $for-loop|0
+    end
+   end
+   i32.const 1
    return
   end
-  local.get $0
-  i32.load offset=8
-  i32.const 2
-  i32.shr_u
-  local.set $3
-  loop $for-loop|0
-   local.get $2
-   local.get $3
-   i32.lt_s
-   if
-    local.get $0
-    local.get $2
-    call $~lib/typedarray/Int32Array#__get
-    local.get $1
-    local.get $2
-    call $~lib/array/Array<i32>#__get
-    i32.ne
-    if
-     i32.const 0
-     return
-    end
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    br $for-loop|0
-   end
-  end
-  i32.const 1
+  i32.const 0
  )
  (func $~lib/typedarray/Int32Array#slice (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -16670,30 +16666,28 @@
    i32.const 1
    return
   end
-  local.get $1
-  i32.eqz
-  i32.const 1
-  local.get $0
-  select
-  if
-   i32.const 0
+  block $folding-inner0
+   local.get $1
+   i32.eqz
+   i32.const 1
+   local.get $0
+   select
+   br_if $folding-inner0
+   local.get $0
+   call $~lib/string/String#get:length
+   local.tee $2
+   local.get $1
+   call $~lib/string/String#get:length
+   i32.ne
+   br_if $folding-inner0
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/util/string/compareImpl
+   i32.eqz
    return
   end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.tee $2
-  local.get $1
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/util/string/compareImpl
-  i32.eqz
+  i32.const 0
  )
  (func $~lib/util/number/utoa32 (param $0 i32) (result i32)
   (local $1 i32)

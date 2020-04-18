@@ -1888,47 +1888,45 @@
  (func $std/array/isArraysEqual<u8> (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  local.get $0
-  i32.load offset=12
-  local.tee $3
-  local.get $1
-  i32.load offset=12
-  i32.ne
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  local.get $1
-  i32.eq
-  if
+  block $folding-inner0
+   local.get $0
+   i32.load offset=12
+   local.tee $3
+   local.get $1
+   i32.load offset=12
+   i32.ne
+   br_if $folding-inner0
+   local.get $0
+   local.get $1
+   i32.eq
+   if
+    i32.const 1
+    return
+   end
+   loop $for-loop|0
+    local.get $2
+    local.get $3
+    i32.lt_s
+    if
+     local.get $0
+     local.get $2
+     call $~lib/array/Array<u8>#__get
+     local.get $1
+     local.get $2
+     call $~lib/array/Array<u8>#__get
+     i32.ne
+     br_if $folding-inner0
+     local.get $2
+     i32.const 1
+     i32.add
+     local.set $2
+     br $for-loop|0
+    end
+   end
    i32.const 1
    return
   end
-  loop $for-loop|0
-   local.get $2
-   local.get $3
-   i32.lt_s
-   if
-    local.get $0
-    local.get $2
-    call $~lib/array/Array<u8>#__get
-    local.get $1
-    local.get $2
-    call $~lib/array/Array<u8>#__get
-    i32.ne
-    if
-     i32.const 0
-     return
-    end
-    local.get $2
-    i32.const 1
-    i32.add
-    local.set $2
-    br $for-loop|0
-   end
-  end
-  i32.const 1
+  i32.const 0
  )
  (func $~lib/array/Array<u32>#fill (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -2028,51 +2026,49 @@
  )
  (func $std/array/isArraysEqual<u32> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
-  local.get $2
-  i32.eqz
-  if
-   local.get $0
-   i32.load offset=12
-   local.tee $2
-   local.get $1
-   i32.load offset=12
-   i32.ne
-   if
-    i32.const 0
-    return
-   end
-   local.get $0
-   local.get $1
-   i32.eq
-   if
-    i32.const 1
-    return
-   end
-  end
-  loop $for-loop|0
-   local.get $3
+  block $folding-inner0
    local.get $2
-   i32.lt_s
+   i32.eqz
    if
     local.get $0
-    local.get $3
-    call $~lib/array/Array<u32>#__get
+    i32.load offset=12
+    local.tee $2
     local.get $1
-    local.get $3
-    call $~lib/array/Array<u32>#__get
+    i32.load offset=12
     i32.ne
+    br_if $folding-inner0
+    local.get $0
+    local.get $1
+    i32.eq
     if
-     i32.const 0
+     i32.const 1
      return
     end
-    local.get $3
-    i32.const 1
-    i32.add
-    local.set $3
-    br $for-loop|0
    end
+   loop $for-loop|0
+    local.get $3
+    local.get $2
+    i32.lt_s
+    if
+     local.get $0
+     local.get $3
+     call $~lib/array/Array<u32>#__get
+     local.get $1
+     local.get $3
+     call $~lib/array/Array<u32>#__get
+     i32.ne
+     br_if $folding-inner0
+     local.get $3
+     i32.const 1
+     i32.add
+     local.set $3
+     br $for-loop|0
+    end
+   end
+   i32.const 1
+   return
   end
-  i32.const 1
+  i32.const 0
  )
  (func $std/array/internalCapacity<i32> (param $0 i32) (result i32)
   local.get $0
@@ -5326,56 +5322,54 @@
  (func $~lib/util/sort/COMPARATOR<~lib/string/String | null>~anonymous|0 (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  i32.const 1
-  local.get $1
-  i32.eqz
-  i32.const 1
-  local.get $0
-  i32.eqz
-  local.get $0
-  local.get $1
-  i32.eq
-  select
-  select
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.set $2
-  i32.const 0
-  local.get $1
-  call $~lib/string/String#get:length
-  local.tee $3
-  i32.eqz
-  local.get $2
-  select
-  if
-   i32.const 0
-   return
-  end
-  local.get $2
-  i32.eqz
-  if
-   i32.const -1
-   return
-  end
-  local.get $3
-  i32.eqz
-  if
+  block $folding-inner0
    i32.const 1
+   local.get $1
+   i32.eqz
+   i32.const 1
+   local.get $0
+   i32.eqz
+   local.get $0
+   local.get $1
+   i32.eq
+   select
+   select
+   br_if $folding-inner0
+   local.get $0
+   call $~lib/string/String#get:length
+   local.set $2
+   i32.const 0
+   local.get $1
+   call $~lib/string/String#get:length
+   local.tee $3
+   i32.eqz
+   local.get $2
+   select
+   br_if $folding-inner0
+   local.get $2
+   i32.eqz
+   if
+    i32.const -1
+    return
+   end
+   local.get $3
+   i32.eqz
+   if
+    i32.const 1
+    return
+   end
+   local.get $0
+   local.get $1
+   local.get $2
+   local.get $3
+   local.get $2
+   local.get $3
+   i32.lt_s
+   select
+   call $~lib/util/string/compareImpl
    return
   end
-  local.get $0
-  local.get $1
-  local.get $2
-  local.get $3
-  local.get $2
-  local.get $3
-  i32.lt_s
-  select
-  call $~lib/util/string/compareImpl
+  i32.const 0
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -5386,30 +5380,28 @@
    i32.const 1
    return
   end
-  local.get $1
-  i32.eqz
-  i32.const 1
-  local.get $0
-  select
-  if
-   i32.const 0
+  block $folding-inner0
+   local.get $1
+   i32.eqz
+   i32.const 1
+   local.get $0
+   select
+   br_if $folding-inner0
+   local.get $0
+   call $~lib/string/String#get:length
+   local.tee $2
+   local.get $1
+   call $~lib/string/String#get:length
+   i32.ne
+   br_if $folding-inner0
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/util/string/compareImpl
+   i32.eqz
    return
   end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.tee $2
-  local.get $1
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/util/string/compareImpl
-  i32.eqz
+  i32.const 0
  )
  (func $~lib/string/String.__concat (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -14389,63 +14381,63 @@
    local.set $51
    i32.const 0
    local.set $60
-   i32.const 0
-   local.get $55
-   i32.load offset=12
-   local.tee $1
-   local.get $51
-   i32.load offset=12
-   i32.ne
-   br_if $__inlined_func$std/array/isArraysEqual<f32>
-   drop
-   i32.const 1
-   local.get $51
-   local.get $55
-   i32.eq
-   br_if $__inlined_func$std/array/isArraysEqual<f32>
-   drop
-   loop $for-loop|001
-    local.get $60
-    local.get $1
-    i32.lt_s
-    if
-     local.get $55
+   block $folding-inner0
+    local.get $55
+    i32.load offset=12
+    local.tee $1
+    local.get $51
+    i32.load offset=12
+    i32.ne
+    br_if $folding-inner0
+    i32.const 1
+    local.get $51
+    local.get $55
+    i32.eq
+    br_if $__inlined_func$std/array/isArraysEqual<f32>
+    drop
+    loop $for-loop|001
      local.get $60
-     call $~lib/array/Array<f32>#__get
-     local.tee $47
-     local.get $47
-     f32.ne
-     if (result i32)
-      local.get $51
+     local.get $1
+     i32.lt_s
+     if
+      local.get $55
       local.get $60
       call $~lib/array/Array<f32>#__get
       local.tee $47
       local.get $47
       f32.ne
-     else
-      i32.const 0
-     end
-     i32.eqz
-     if
-      i32.const 0
-      local.get $55
+      if (result i32)
+       local.get $51
+       local.get $60
+       call $~lib/array/Array<f32>#__get
+       local.tee $47
+       local.get $47
+       f32.ne
+      else
+       i32.const 0
+      end
+      i32.eqz
+      if
+       local.get $55
+       local.get $60
+       call $~lib/array/Array<f32>#__get
+       local.get $51
+       local.get $60
+       call $~lib/array/Array<f32>#__get
+       f32.ne
+       br_if $folding-inner0
+      end
       local.get $60
-      call $~lib/array/Array<f32>#__get
-      local.get $51
-      local.get $60
-      call $~lib/array/Array<f32>#__get
-      f32.ne
-      br_if $__inlined_func$std/array/isArraysEqual<f32>
-      drop
+      i32.const 1
+      i32.add
+      local.set $60
+      br $for-loop|001
      end
-     local.get $60
-     i32.const 1
-     i32.add
-     local.set $60
-     br $for-loop|001
     end
+    i32.const 1
+    br $__inlined_func$std/array/isArraysEqual<f32>
    end
-   i32.const 1
+   i32.const 0
   end
   i32.eqz
   if
@@ -14593,63 +14585,63 @@
    local.set $53
    i32.const 0
    local.set $60
-   i32.const 0
-   local.get $54
-   i32.load offset=12
-   local.tee $1
-   local.get $53
-   i32.load offset=12
-   i32.ne
-   br_if $__inlined_func$std/array/isArraysEqual<f64>
-   drop
-   i32.const 1
-   local.get $53
-   local.get $54
-   i32.eq
-   br_if $__inlined_func$std/array/isArraysEqual<f64>
-   drop
-   loop $for-loop|01
-    local.get $60
-    local.get $1
-    i32.lt_s
-    if
-     local.get $54
+   block $folding-inner01
+    local.get $54
+    i32.load offset=12
+    local.tee $1
+    local.get $53
+    i32.load offset=12
+    i32.ne
+    br_if $folding-inner01
+    i32.const 1
+    local.get $53
+    local.get $54
+    i32.eq
+    br_if $__inlined_func$std/array/isArraysEqual<f64>
+    drop
+    loop $for-loop|025
      local.get $60
-     call $~lib/array/Array<f64>#__get
-     local.tee $42
-     local.get $42
-     f64.ne
-     if (result i32)
-      local.get $53
+     local.get $1
+     i32.lt_s
+     if
+      local.get $54
       local.get $60
       call $~lib/array/Array<f64>#__get
       local.tee $42
       local.get $42
       f64.ne
-     else
-      i32.const 0
-     end
-     i32.eqz
-     if
-      i32.const 0
-      local.get $54
+      if (result i32)
+       local.get $53
+       local.get $60
+       call $~lib/array/Array<f64>#__get
+       local.tee $42
+       local.get $42
+       f64.ne
+      else
+       i32.const 0
+      end
+      i32.eqz
+      if
+       local.get $54
+       local.get $60
+       call $~lib/array/Array<f64>#__get
+       local.get $53
+       local.get $60
+       call $~lib/array/Array<f64>#__get
+       f64.ne
+       br_if $folding-inner01
+      end
       local.get $60
-      call $~lib/array/Array<f64>#__get
-      local.get $53
-      local.get $60
-      call $~lib/array/Array<f64>#__get
-      f64.ne
-      br_if $__inlined_func$std/array/isArraysEqual<f64>
-      drop
+      i32.const 1
+      i32.add
+      local.set $60
+      br $for-loop|025
      end
-     local.get $60
-     i32.const 1
-     i32.add
-     local.set $60
-     br $for-loop|01
     end
+    i32.const 1
+    br $__inlined_func$std/array/isArraysEqual<f64>
    end
-   i32.const 1
+   i32.const 0
   end
   i32.eqz
   if
@@ -14997,7 +14989,7 @@
    local.get $58
    i32.load offset=12
    local.set $1
-   loop $for-loop|025
+   loop $for-loop|03
     local.get $60
     local.get $1
     i32.lt_s
@@ -15031,7 +15023,7 @@
      i32.const 1
      i32.add
      local.set $60
-     br $for-loop|025
+     br $for-loop|03
     end
    end
    i32.const 1
@@ -15065,7 +15057,7 @@
    i32.eq
    br_if $__inlined_func$std/array/isArraysEqual<~lib/string/String | null>
    drop
-   loop $for-loop|03
+   loop $for-loop|04
     local.get $60
     local.get $1
     i32.lt_s
@@ -15096,7 +15088,7 @@
      i32.const 1
      i32.add
      local.set $60
-     br $for-loop|03
+     br $for-loop|04
     end
    end
    i32.const 1
