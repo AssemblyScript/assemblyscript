@@ -35,6 +35,7 @@
   "Expression resolves to unusual type '{0}'.": 226,
   "Function '{0}' is virtual and will not be inlined.": 227,
   "Property '{0}' only has a setter and is missing a getter.": 228,
+  "'{0}' keyword cannot be used here.": 229,
 
   "Type '{0}' is cyclic. Module will include deferred garbage collection.": 900,
   "Importing the table disables some indirect call optimizations.": 901,

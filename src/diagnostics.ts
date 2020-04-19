@@ -157,10 +157,13 @@ export class DiagnosticMessage {
         this.message +
         "\" in " +
         source.normalizedPath +
-        ":" +
+        "(" +
         source.lineAt(range.start).toString() +
-        ":" +
-        source.columnAt().toString()
+        "," +
+        source.columnAt().toString() +
+        "+" +
+        (range.end - range.start).toString() +
+        ")"
       );
     }
     return (

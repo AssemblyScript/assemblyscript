@@ -42,6 +42,7 @@ export enum DiagnosticCode {
   Expression_resolves_to_unusual_type_0 = 226,
   Function_0_is_virtual_and_will_not_be_inlined = 227,
   Property_0_only_has_a_setter_and_is_missing_a_getter = 228,
+  _0_keyword_cannot_be_used_here = 229,
   Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -205,6 +206,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 226: return "Expression resolves to unusual type '{0}'.";
     case 227: return "Function '{0}' is virtual and will not be inlined.";
     case 228: return "Property '{0}' only has a setter and is missing a getter.";
+    case 229: return "'{0}' keyword cannot be used here.";
     case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";
