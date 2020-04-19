@@ -694,6 +694,7 @@ exports.main = function main(argv, options, callback) {
 
       // PassRunner::addDefaultGlobalOptimizationPrePasses
       add("duplicate-function-elimination");
+      add("remove-unused-module-elements"); // differs
 
       // PassRunner::addDefaultFunctionOptimizationPasses
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
