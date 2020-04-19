@@ -843,7 +843,6 @@ exports.main = function main(argv, options, callback) {
           add("vacuum");
           add("inlining-optimizing");
           add("precompute-propagate");
-          add("vacuum");
         }
         add("remove-unused-brs");
         add("remove-unused-names");
