@@ -1723,17 +1723,10 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Adds a buffer to static memory and returns the created segment. */
-  addStaticBuffer(elementType: Type, values: ExpressionRef[], id: u32 = this.program.arrayBufferInstance.id): MemorySegment {
-    var program = this.program;
+  /** Writes a series of static values of the specified type to a buffer. */
+  writeStaticBuffer(buf: Uint8Array, pos: i32, elementType: Type, values: ExpressionRef[]): i32 {
     var length = values.length;
     var byteSize = elementType.byteSize;
-    var byteLength = length * byteSize;
-    var runtimeHeaderSize = program.runtimeHeaderSize;
-
-    var buf = new Uint8Array(runtimeHeaderSize + byteLength);
-    program.writeRuntimeHeader(buf, 0, id, byteLength);
-    var pos = runtimeHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (<u32>nativeType) {
       case <u32>NativeType.I32: {
@@ -1804,8 +1797,19 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: assert(false);
     }
-    assert(pos == buf.length);
+    return pos;
+  }
 
+  /** Adds a buffer to static memory and returns the created segment. */
+  addStaticBuffer(elementType: Type, values: ExpressionRef[], id: u32 = this.program.arrayBufferInstance.id): MemorySegment {
+    var program = this.program;
+    var length = values.length;
+    var byteSize = elementType.byteSize;
+    var byteLength = length * byteSize;
+    var runtimeHeaderSize = program.runtimeHeaderSize;
+    var buf = new Uint8Array(runtimeHeaderSize + byteLength);
+    program.writeRuntimeHeader(buf, 0, id, byteLength);
+    assert(this.writeStaticBuffer(buf, runtimeHeaderSize, elementType, values) == buf.length);
     return this.addMemorySegment(buf);
   }
 

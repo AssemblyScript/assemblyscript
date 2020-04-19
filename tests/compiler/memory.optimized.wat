@@ -5,6 +5,14 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1040) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00m\00e\00m\00o\00r\00y\00.\00t\00s")
+ (data (i32.const 1169) "\01\02\03")
+ (data (i32.const 1174) "\c0?\00\00 @\00\00`@")
+ (data (i32.const 1200) "\01")
+ (data (i32.const 1208) "\01")
+ (data (i32.const 1212) "\01")
+ (data (i32.const 1214) "\01")
+ (data (i32.const 1215) "\01")
+ (data (i32.const 1216) "\01")
  (global $memory/ptr (mut i32) (i32.const 1088))
  (export "memory" (memory $0))
  (start $~start)
@@ -183,6 +191,105 @@
    i32.const 0
    i32.const 1056
    i32.const 39
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1169
+  global.set $memory/ptr
+  i32.const 1169
+  i32.load8_u
+  i32.const 1
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 44
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.load8_u offset=1
+  i32.const 2
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 45
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  i32.load8_u offset=2
+  i32.const 3
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 46
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1172
+  global.set $memory/ptr
+  i32.const 1172
+  f32.load
+  f32.const 1.5
+  f32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 49
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  f32.load offset=4
+  f32.const 2.5
+  f32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 50
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  global.get $memory/ptr
+  f32.load offset=8
+  f32.const 3.5
+  f32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 51
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 1184
+  global.set $memory/ptr
+  i32.const 1200
+  global.set $memory/ptr
+  i32.const 1208
+  global.set $memory/ptr
+  i32.const 1212
+  global.set $memory/ptr
+  i32.const 1214
+  global.set $memory/ptr
+  i32.const 1215
+  global.set $memory/ptr
+  global.get $memory/ptr
+  i32.const 1215
+  i32.ne
+  if
+   i32.const 0
+   i32.const 1056
+   i32.const 61
    i32.const 1
    call $~lib/builtins/abort
    unreachable

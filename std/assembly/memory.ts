@@ -64,5 +64,5 @@ export namespace memory {
   /** Gets a pointer to a static chunk of memory of the given size. */
   // @ts-ignore: decorator
   @builtin
-  export declare function data(size: i32, align?: i32): usize;
+  export declare function data<T>(size: T, align?: i32): usize;
 }

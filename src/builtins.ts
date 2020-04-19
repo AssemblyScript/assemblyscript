@@ -38,7 +38,10 @@ import {
   Expression,
   LiteralKind,
   StringLiteralExpression,
-  CallExpression
+  CallExpression,
+  NodeKind,
+  LiteralExpression,
+  ArrayLiteralExpression
 } from "./ast";
 
 import {
@@ -2557,58 +2560,104 @@ function builtin_memory_fill(ctx: BuiltinContext): ExpressionRef {
 builtins.set(BuiltinNames.memory_fill, builtin_memory_fill);
 
 // memory.data(size[, align]) -> usize
+// memory.data<T>(values[, align]) -> usize
 function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
   var compiler = ctx.compiler;
   var module = compiler.module;
   compiler.currentType = Type.i32;
   if (
-    checkTypeAbsent(ctx) |
+    checkTypeOptional(ctx) |
     checkArgsOptional(ctx, 1, 2)
   ) return module.unreachable();
+  var typeArguments = ctx.typeArguments;
   var operands = ctx.operands;
   var numOperands = operands.length;
   var usizeType = compiler.options.usizeType;
-  var arg0 = compiler.precomputeExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
-  compiler.currentType = usizeType;
-  if (getExpressionId(arg0) != ExpressionId.Const) {
-    compiler.error(
-      DiagnosticCode.Expression_must_be_a_compile_time_constant,
-      operands[0].range
-    );
-    return module.unreachable();
-  }
-  var size = getConstValueI32(arg0);
-  if (size < 1) {
-    compiler.error(
-      DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
-      operands[0].range, "1", i32.MAX_VALUE.toString()
-    );
-    return module.unreachable();
-  }
-  var align = 16;
-  if (numOperands == 2) {
-    align = evaluateImmediateOffset(operands[1], compiler);
+  var offset: i64;
+  if (typeArguments) {
     compiler.currentType = usizeType;
-    if (align < 0) {
+    let elementType = typeArguments[0];
+    if (!elementType.is(TypeFlags.VALUE)) {
+      compiler.error(
+        DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+        ctx.reportNode.typeArgumentsRange, "memory.data", elementType.toString()
+      );
       return module.unreachable();
     }
-    if (align < 1 || align > 16) {
+    let nativeElementType = elementType.toNativeType();
+    let valuesOperand = operands[0];
+    if (valuesOperand.kind != NodeKind.LITERAL || (<LiteralExpression>valuesOperand).literalKind != LiteralKind.ARRAY) {
+      compiler.error(
+        DiagnosticCode.Array_literal_expected,
+        operands[0].range
+      );
+      return module.unreachable();
+    }
+    let expressions = (<ArrayLiteralExpression>valuesOperand).elementExpressions;
+    let numElements = expressions.length;
+    let exprs = new Array<ExpressionRef>(numElements);
+    let isStatic = true;
+    for (let i = 0; i < numElements; ++i) {
+      let expression = expressions[i];
+      let expr: ExpressionRef;
+      if (expression) {
+        expr = module.precomputeExpression(
+          compiler.compileExpression(<Expression>expression, elementType,
+            Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
+          )
+        );
+        if (getExpressionId(expr) == ExpressionId.Const) {
+          assert(getExpressionType(expr) == nativeElementType);
+        } else {
+          isStatic = false;
+        }
+      } else {
+        expr = compiler.makeZero(elementType);
+      }
+      exprs[i] = expr;
+    }
+    compiler.currentType = usizeType;
+    if (!isStatic) {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        valuesOperand.range
+      );
+      return module.unreachable();
+    }
+    let align = elementType.byteSize;
+    if (numOperands == 2) {
+      align = evaluateImmediateAlign(operands[1], compiler);
+      if (align < 0) return module.unreachable();
+    }
+    let buf = new Uint8Array(numElements * elementType.byteSize);
+    assert(compiler.writeStaticBuffer(buf, 0, elementType, exprs) == buf.byteLength);
+    offset = compiler.addMemorySegment(buf, align).offset;
+  } else {
+    let arg0 = compiler.precomputeExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
+    compiler.currentType = usizeType;
+    if (getExpressionId(arg0) != ExpressionId.Const) {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        operands[0].range
+      );
+      return module.unreachable();
+    }
+    let size = getConstValueI32(arg0);
+    if (size < 1) {
       compiler.error(
         DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
-        operands[1].range, "Alignment", "1", "16"
+        operands[0].range, "1", i32.MAX_VALUE.toString()
       );
       return module.unreachable();
     }
-    if (!isPowerOf2(align)) {
-      compiler.error(
-        DiagnosticCode._0_must_be_a_power_of_two,
-        operands[1].range, "Alignment"
-      );
-      return module.unreachable();
+    let align = 16;
+    if (numOperands == 2) {
+      align = evaluateImmediateAlign(operands[1], compiler);
+      if (align < 0) return module.unreachable();
     }
+    offset = compiler.addMemorySegment(new Uint8Array(size), align).offset;
   }
   // FIXME: what if recompiles happen? recompiles are bad.
-  var offset = compiler.addMemorySegment(new Uint8Array(size), align).offset;
   if (usizeType == Type.usize32) {
     assert(!i64_high(offset));
     return module.i32(i64_low(offset));
@@ -8256,6 +8305,27 @@ function evaluateImmediateOffset(expression: Expression, compiler: Compiler): i3
     }
   }
   return value;
+}
+
+/** Evaluates a compile-time constant immediate align argument. */
+function evaluateImmediateAlign(expression: Expression, compiler: Compiler): i32 {
+  var align = evaluateImmediateOffset(expression, compiler);
+  if (align < 0) return align;
+  if (align < 1 || align > 16) {
+    compiler.error(
+      DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+      expression.range, "Alignment", "1", "16"
+    );
+    return -1;
+  }
+  if (!isPowerOf2(align)) {
+    compiler.error(
+      DiagnosticCode._0_must_be_a_power_of_two,
+      expression.range, "Alignment"
+    );
+    return -1;
+  }
+  return align;
 }
 
 /** Checks that the specified feature is enabled. */
