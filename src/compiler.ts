@@ -8690,13 +8690,13 @@ export class Compiler extends DiagnosticEmitter {
     assert(numNames == values.length);
 
     // Assume all class fields will be omitted, and add them to our omitted list
-    let omittedClassFieldMembers = new Map<string, string>();
+    let omittedClassFieldMembers = new Set<string>();
     if (members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberKey = _keys[i];
         let member = assert(members.get(memberKey));
         if (member !== null && member.kind == ElementKind.FIELD) {
-          omittedClassFieldMembers.set(member.name, '');
+          omittedClassFieldMembers.add(member.name);
         }
       }
     }
@@ -8714,10 +8714,15 @@ export class Compiler extends DiagnosticEmitter {
       }
       let fieldInstance = <Field>member;
       let fieldType = fieldInstance.type;
+
+      let expr = this.compileExpression(values[i], fieldType, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
+      if (isManaged && fieldType.isManaged && !this.skippedAutoreleases.has(expr)) {
+        expr = this.makeRetain(expr);
+      }
       exprs.push(this.module.store( // TODO: handle setters as well
        fieldType.byteSize,
        this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-       this.compileExpression(values[i], fieldInstance.type, Constraints.CONV_IMPLICIT),
+       expr,
        fieldType.toNativeType(),
        fieldInstance.memoryOffset
       ));
@@ -8730,8 +8735,8 @@ export class Compiler extends DiagnosticEmitter {
 
     // Iterate through the remaining omittedClassFieldMembers.
     if (members) {
-      for(let _keys = Map_keys(omittedClassFieldMembers), i = 0, k = _keys.length; i < k; ++i) {
-        let omittedMemberKey = _keys[i];
+      for(let _values = Set_values(omittedClassFieldMembers), i = 0, v = _values.length; i < v; ++i) {
+        let omittedMemberKey = _values[i];
         let member = assert(members.get(omittedMemberKey));
         
         let fieldInstance = <Field>member;
@@ -8743,15 +8748,15 @@ export class Compiler extends DiagnosticEmitter {
 
           // Otherwise, error
           this.error(
-            DiagnosticCode.Object_literal_is_missing_class_member_fields_that_must_be_defined,
-            expression.range, classReference.toString()
+            DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+            expression.range, "<object>", classReference.toString()
           );
           hasErrors = true;
           continue;
         }
 
         switch(fieldType.kind) {
-          // i32 Types
+          // Number Types (and Number alias types)
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
@@ -8760,48 +8765,15 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.U32:
           case TypeKind.USIZE: 
           case TypeKind.ISIZE:
-          case TypeKind.BOOL: {
-            exprs.push(this.module.store( // TODO: handle setters as well
-             fieldType.byteSize,
-             this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-             this.module.i32(0),
-             fieldType.toNativeType(),
-             fieldInstance.memoryOffset
-            ));
-            continue;
-          }
-
-          // i64 Types
+          case TypeKind.BOOL: 
           case TypeKind.I64:
-          case TypeKind.U64: {
-            exprs.push(this.module.store( // TODO: handle setters as well
-             fieldType.byteSize,
-             this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-             this.module.i64(0),
-             fieldType.toNativeType(),
-             fieldInstance.memoryOffset
-            ));
-            continue;
-          }
-
-          // f32 Types
-          case TypeKind.F32: {
-            exprs.push(this.module.store( // TODO: handle setters as well
-             fieldType.byteSize,
-             this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-             this.module.f32(0),
-             fieldType.toNativeType(),
-             fieldInstance.memoryOffset
-            ));
-            continue;
-          }
-
-          // f64 Types
+          case TypeKind.U64: 
+          case TypeKind.F32: 
           case TypeKind.F64: {
             exprs.push(this.module.store( // TODO: handle setters as well
              fieldType.byteSize,
              this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-             this.module.f64(0),
+             this.makeZero(fieldType),
              fieldType.toNativeType(),
              fieldInstance.memoryOffset
             ));
@@ -8812,8 +8784,8 @@ export class Compiler extends DiagnosticEmitter {
 
         // Otherwise, error
         this.error(
-          DiagnosticCode.Object_literal_is_missing_class_member_fields_that_must_be_defined,
-          expression.range, classReference.toString()
+          DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+          expression.range, "<object>", classReference.toString()
         );
         hasErrors = true;
       }
