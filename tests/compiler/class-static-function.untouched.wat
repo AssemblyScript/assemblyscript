@@ -1,8 +1,9 @@
 (module
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "0\00\00\00\01\00\00\00\01\00\00\000\00\00\00c\00l\00a\00s\00s\00-\00s\00t\00a\00t\00i\00c\00-\00f\00u\00n\00c\00t\00i\00o\00n\00.\00t\00s\00")
@@ -14,11 +15,76 @@
  (func $class-static-function/Example.staticFunc (result i32)
   i32.const 42
  )
- (func $class-static-function/call (param $0 i32) (result i32)
-  i32.const 0
-  global.set $~argumentsLength
+ (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
-  call_indirect (type $none_=>_i32)
+ )
+ (func $~lib/rt/stub/__release (param $0 i32)
+  nop
+ )
+ (func $class-static-function/call (param $0 i32) (result i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  local.get $0
+  local.set $1
+  local.get $1
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $1
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/stub/__retain
+  drop
+  local.get $1
+  local.set $0
+  local.get $0
+  local.set $2
+  local.get $2
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $2
+   i32.const 4
+   i32.shl
+   i32.const 0
+   global.set $~argumentsLength
+   local.get $2
+   i32.const 4
+   i32.shl
+   i32.load
+   call_indirect (type $i32_=>_i32)
+  else
+   i32.const 0
+   global.set $~argumentsLength
+   local.get $2
+   call_indirect (type $none_=>_i32)
+  end
+  local.set $4
+  local.get $0
+  local.set $3
+  local.get $3
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $3
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/stub/__release
+  local.get $4
  )
  (func $start:class-static-function
   i32.const 1

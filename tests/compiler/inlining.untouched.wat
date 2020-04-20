@@ -2,14 +2,14 @@
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\16\00\00\00\01\00\00\00\01\00\00\00\16\00\00\00i\00n\00l\00i\00n\00i\00n\00g\00.\00t\00s\00")
  (table $0 2 funcref)
- (elem (i32.const 1) $inlining/func_fe~anonymous|0)
+ (elem (i32.const 1) $inlining/func_fe~anonymous|0~nonClosure)
  (global $inlining/constantGlobal i32 (i32.const 1))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -23,7 +23,7 @@
   i32.const 2
   i32.add
  )
- (func $inlining/func_fe~anonymous|0 (param $0 i32) (result i32)
+ (func $inlining/func_fe~anonymous|0~nonClosure (param $0 i32) (result i32)
   local.get $0
  )
  (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
@@ -41,6 +41,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   f32.const -1
   local.set $0
   f64.const -2
@@ -161,11 +162,49 @@
   drop
   i32.const 0
   local.set $2
-  i32.const 2
   i32.const 1
-  global.set $~argumentsLength
-  i32.const 1
-  call_indirect (type $i32_=>_i32)
+  local.set $2
+  local.get $2
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $2
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/stub/__retain
+  drop
+  local.get $2
+  local.tee $3
+  local.set $4
+  local.get $4
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $4
+   i32.const 4
+   i32.shl
+   i32.const 2
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $4
+   i32.const 4
+   i32.shl
+   i32.load
+   call_indirect (type $i32_i32_=>_i32)
+  else
+   i32.const 2
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $4
+   call_indirect (type $i32_=>_i32)
+  end
   i32.const 2
   i32.eq
   i32.eqz
@@ -180,9 +219,9 @@
   i32.const 42
   local.set $6
   i32.const 2
-  local.set $2
+  local.set $5
   local.get $6
-  local.get $2
+  local.get $5
   i32.add
   i32.const 44
   i32.eq
@@ -191,14 +230,14 @@
   call $~lib/rt/stub/__retain
   local.set $7
   local.get $7
-  local.set $4
-  i32.const 43
   local.set $5
+  i32.const 43
+  local.set $6
   i32.const 3
-  local.set $2
-  local.get $4
+  local.set $8
+  local.get $5
   call $~lib/rt/stub/__retain
-  local.tee $2
+  local.tee $8
   i32.const 123
   i32.eq
   i32.eqz
@@ -210,7 +249,22 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
+  local.get $3
+  local.set $5
+  local.get $5
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $5
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/stub/__release
+  local.get $8
   call $~lib/rt/stub/__release
   local.get $7
   call $~lib/rt/stub/__release

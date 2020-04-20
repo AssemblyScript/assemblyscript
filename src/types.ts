@@ -7,7 +7,8 @@ import {
   Class,
   FunctionTarget,
   Program,
-  DecoratorFlags
+  DecoratorFlags,
+  Local
 } from "./program";
 
 import {
@@ -95,7 +96,9 @@ export const enum TypeFlags {
   /** Is a vector type. */
   VECTOR = 1 << 10,
   /** Is a host type. */
-  HOST = 1 << 11
+  HOST = 1 << 11,
+  /** Is a closure type. */
+  IN_SCOPE_CLOSURE = 1 << 12
 }
 
 /** Represents a resolved type. */
@@ -113,6 +116,8 @@ export class Type {
   classReference: Class | null;
   /** Underlying signature reference, if a function type. */
   signatureReference: Signature | null;
+  /** closed over locals */
+  locals: Map<string, Local> | null;
   /** Respective non-nullable type, if nullable. */
   nonNullableType: Type;
   /** Cached nullable type, if non-nullable. */
@@ -127,6 +132,7 @@ export class Type {
     this.classReference = null;
     this.signatureReference = null;
     this.nonNullableType = this;
+    this.locals = null;
   }
 
   /** Returns the closest int type representing this type. */
@@ -163,6 +169,7 @@ export class Type {
 
   /** Tests if this is a managed type that needs GC hooks. */
   get isManaged(): bool {
+    if (this.isFunctionIndex) return true;
     if (this.is(TypeFlags.INTEGER | TypeFlags.REFERENCE)) {
       let classReference = this.classReference;
       if (classReference) return !classReference.hasDecorator(DecoratorFlags.UNMANAGED);
@@ -175,6 +182,10 @@ export class Type {
   get isUnmanaged(): bool {
     var classReference = this.classReference;
     return classReference !== null && classReference.hasDecorator(DecoratorFlags.UNMANAGED);
+  }
+
+  get isFunctionIndex(): bool {
+    return this.signatureReference !== null && !this.is(TypeFlags.IN_SCOPE_CLOSURE);
   }
 
   /** Computes the sign-extending shift in the target type. */
@@ -517,6 +528,13 @@ export class Type {
 
   /** Alias of i32 indicating type inference of locals and globals with just an initializer. */
   static readonly auto: Type = new Type(Type.i32.kind, Type.i32.flags, Type.i32.size);
+
+  /** Type of an in-context local */
+  static readonly closure32: Type = new Type(Type.i32.kind,
+    TypeFlags.IN_SCOPE_CLOSURE |
+    TypeFlags.REFERENCE,
+    Type.i32.size
+  );
 }
 
 /** Converts an array of types to an array of native types. */
@@ -626,18 +644,8 @@ export class Signature {
       : getDefaultParameterName(index);
   }
 
-  /** Tests if this signature equals the specified. */
-  equals(other: Signature): bool {
-
-    // check `this` type
-    var thisThisType = this.thisType;
-    var otherThisType = other.thisType;
-    if (thisThisType !== null) {
-      if (otherThisType === null || !thisThisType.equals(otherThisType)) return false;
-    } else if (otherThisType) {
-      return false;
-    }
-
+  // Check to see if this signature is equivalent to the caller, ignoring the this type
+  externalEquals(other: Signature): bool {
     // check rest parameter
     if (this.hasRest != other.hasRest) return false;
 
@@ -652,6 +660,20 @@ export class Signature {
 
     // check return type
     return this.returnType.equals(other.returnType);
+  }
+
+  /** Tests if this signature equals the specified. */
+  equals(other: Signature): bool {
+    // check `this` type
+    var thisThisType = this.thisType;
+    var otherThisType = other.thisType;
+    if (thisThisType !== null) {
+      if (otherThisType === null || !thisThisType.equals(otherThisType)) return false;
+    } else if (otherThisType !== null) {
+      return false;
+    }
+
+    return this.externalEquals(other);
   }
 
   /** Tests if a value of this function type is assignable to a target of the specified function type. */
@@ -720,6 +742,20 @@ export class Signature {
     return sb.join("");
   }
 
+  toClosureSignature(): Signature {
+    var closureSignature = this.clone();
+    closureSignature.thisType = this.program.options.usizeType;
+    return closureSignature;
+  }
+
+  // Reverses toClosureSignature, for when we recompile a function with the context argument
+  // Not convinced this is the right way to go about getting the original unmodified signature, but it works
+  toAnonymousSignature(): Signature {
+    var normalSignature = this.clone();
+    normalSignature.thisType = null;
+    return normalSignature;
+  }
+
   /** Creates a clone of this signature that is safe to modify. */
   clone(): Signature {
     var parameterTypes = this.parameterTypes;
@@ -738,6 +774,7 @@ export class Signature {
       }
       clone.parameterNames = cloneParameterNames;
     }
+    clone.requiredParameters = this.requiredParameters;
     return clone;
   }
 }

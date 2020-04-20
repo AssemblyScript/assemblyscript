@@ -1,8 +1,8 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
@@ -40,7 +40,7 @@
  (data (i32.const 3104) "\06\00\00\00\01\00\00\00\01\00\00\00\06\00\00\001\00.\000\00")
  (data (i32.const 3136) "\03\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
  (table $0 5 funcref)
- (elem (i32.const 1) $start:resolve-ternary~anonymous|0 $start:resolve-ternary~anonymous|1 $resolve-ternary/g1 $resolve-ternary/g2)
+ (elem (i32.const 1) $start:resolve-ternary~anonymous|0~nonClosure $start:resolve-ternary~anonymous|1~nonClosure $resolve-ternary/g1 $resolve-ternary/g2)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
@@ -5087,12 +5087,12 @@
   local.get $0
   call $~lib/util/number/dtoa
  )
- (func $start:resolve-ternary~anonymous|0 (param $0 i32) (result i32)
+ (func $start:resolve-ternary~anonymous|0~nonClosure (param $0 i32) (result i32)
   local.get $0
   i32.const 1
   i32.add
  )
- (func $start:resolve-ternary~anonymous|1 (param $0 i32) (result i32)
+ (func $start:resolve-ternary~anonymous|1~nonClosure (param $0 i32) (result i32)
   local.get $0
   i32.const 2
   i32.add
@@ -5110,6 +5110,24 @@
  (func $start:resolve-ternary
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
   global.get $resolve-ternary/b
   if (result i32)
    i32.const 1
@@ -5150,16 +5168,71 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  global.set $~argumentsLength
   global.get $resolve-ternary/b
   if (result i32)
    global.get $resolve-ternary/f1
+   local.set $2
+   local.get $2
+   i32.const -2147483648
+   i32.and
+   i32.const -2147483648
+   i32.eq
+   if (result i32)
+    local.get $2
+    i32.const 4
+    i32.shl
+   else
+    i32.const 0
+   end
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $2
+   local.tee $3
   else
    global.get $resolve-ternary/f2
+   local.set $4
+   local.get $4
+   i32.const -2147483648
+   i32.and
+   i32.const -2147483648
+   i32.eq
+   if (result i32)
+    local.get $4
+    i32.const 4
+    i32.shl
+   else
+    i32.const 0
+   end
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $4
+   local.tee $5
   end
-  call_indirect (type $i32_=>_i32)
+  local.set $6
+  local.get $6
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $6
+   i32.const 4
+   i32.shl
+   i32.const 1
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $6
+   i32.const 4
+   i32.shl
+   i32.load
+   call_indirect (type $i32_i32_=>_i32)
+  else
+   i32.const 1
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $6
+   call_indirect (type $i32_=>_i32)
+  end
   i32.const 2
   i32.eq
   i32.eqz
@@ -5171,16 +5244,71 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  global.set $~argumentsLength
   global.get $resolve-ternary/b
   if (result i32)
    i32.const 3
+   local.set $7
+   local.get $7
+   i32.const -2147483648
+   i32.and
+   i32.const -2147483648
+   i32.eq
+   if (result i32)
+    local.get $7
+    i32.const 4
+    i32.shl
+   else
+    i32.const 0
+   end
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $7
+   local.tee $8
   else
    i32.const 4
+   local.set $9
+   local.get $9
+   i32.const -2147483648
+   i32.and
+   i32.const -2147483648
+   i32.eq
+   if (result i32)
+    local.get $9
+    i32.const 4
+    i32.shl
+   else
+    i32.const 0
+   end
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $9
+   local.tee $10
   end
-  call_indirect (type $i32_=>_i32)
+  local.set $11
+  local.get $11
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $11
+   i32.const 4
+   i32.shl
+   i32.const 1
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $11
+   i32.const 4
+   i32.shl
+   i32.load
+   call_indirect (type $i32_i32_=>_i32)
+  else
+   i32.const 1
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $11
+   call_indirect (type $i32_=>_i32)
+  end
   i32.const 4
   i32.eq
   i32.eqz
@@ -5192,16 +5320,71 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  i32.const 1
-  global.set $~argumentsLength
   global.get $resolve-ternary/b
   if (result i32)
    global.get $resolve-ternary/f2
+   local.set $12
+   local.get $12
+   i32.const -2147483648
+   i32.and
+   i32.const -2147483648
+   i32.eq
+   if (result i32)
+    local.get $12
+    i32.const 4
+    i32.shl
+   else
+    i32.const 0
+   end
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $12
+   local.tee $13
   else
    i32.const 4
+   local.set $14
+   local.get $14
+   i32.const -2147483648
+   i32.and
+   i32.const -2147483648
+   i32.eq
+   if (result i32)
+    local.get $14
+    i32.const 4
+    i32.shl
+   else
+    i32.const 0
+   end
+   call $~lib/rt/pure/__retain
+   drop
+   local.get $14
+   local.tee $15
   end
-  call_indirect (type $i32_=>_i32)
+  local.set $16
+  local.get $16
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $16
+   i32.const 4
+   i32.shl
+   i32.const 1
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $16
+   i32.const 4
+   i32.shl
+   i32.load
+   call_indirect (type $i32_i32_=>_i32)
+  else
+   i32.const 1
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $16
+   call_indirect (type $i32_=>_i32)
+  end
   i32.const 3
   i32.eq
   i32.eqz
@@ -5216,6 +5399,51 @@
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  call $~lib/rt/pure/__release
+  local.get $5
+  local.set $17
+  local.get $17
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $17
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/pure/__release
+  local.get $10
+  local.set $18
+  local.get $18
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $18
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/pure/__release
+  local.get $15
+  local.set $19
+  local.get $19
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $19
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
   call $~lib/rt/pure/__release
  )
  (func $~start

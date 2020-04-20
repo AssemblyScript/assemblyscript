@@ -1,11 +1,6 @@
 {
   "asc_flags": [
-    "--runtime none"
-  ],
-  "stderr": [
-    "AS100: Not implemented: Closures",
-    "AS100: Not implemented: Closures",
-    "Cannot find name '$local0'.",
-    "EOF"
+    "--runtime full",
+    "--use ASC_RTRACE=1"
   ]
 }

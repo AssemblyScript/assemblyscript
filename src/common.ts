@@ -71,7 +71,7 @@ export enum CommonFlags {
   /** Is a virtual method. */
   VIRTUAL = 1 << 26,
   /** Is (part of) a closure. */
-  CLOSURE = 1 << 27,
+  IN_SCOPE_CLOSURE = 1 << 27,
 
   // Other
 

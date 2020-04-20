@@ -2,8 +2,9 @@
  (type $i32_=>_none (func (param i32)))
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -214,14 +215,52 @@
   end
  )
  (func $retain-release/provideRefIndirect (param $0 i32)
-  global.get $retain-release/REF
+  (local $1 i32)
   local.get $0
-  call_indirect (type $i32_=>_none)
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if
+   local.get $0
+   i32.const 4
+   i32.shl
+   local.tee $0
+   i32.load
+   local.set $1
+   local.get $0
+   global.get $retain-release/REF
+   local.get $1
+   call_indirect (type $i32_i32_=>_none)
+  else
+   global.get $retain-release/REF
+   local.get $0
+   call_indirect (type $i32_=>_none)
+  end
  )
  (func $retain-release/receiveRefIndirect (param $0 i32)
+  (local $1 i32)
   local.get $0
-  call_indirect (type $none_=>_i32)
-  drop
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if
+   local.get $0
+   i32.const 4
+   i32.shl
+   local.tee $0
+   i32.load
+   local.set $1
+   local.get $0
+   local.get $1
+   call_indirect (type $i32_=>_i32)
+   drop
+  else
+   local.get $0
+   call_indirect (type $none_=>_i32)
+   drop
+  end
  )
  (func $~start
   (local $0 i32)

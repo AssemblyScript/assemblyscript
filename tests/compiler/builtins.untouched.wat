@@ -33,7 +33,7 @@
  (data (i32.const 704) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00v\00o\00i\00d\00")
  (data (i32.const 736) "\14\00\00\00\01\00\00\00\01\00\00\00\14\00\00\00s\00o\00m\00e\00 \00v\00a\00l\00u\00e\00")
  (table $0 3 funcref)
- (elem (i32.const 1) $start:builtins~anonymous|0 $start:builtins~anonymous|1)
+ (elem (i32.const 1) $start:builtins~anonymous|0~nonClosure $start:builtins~anonymous|1~nonClosure)
  (global $builtins/b (mut i32) (i32.const 0))
  (global $builtins/i (mut i32) (i32.const 0))
  (global $builtins/I (mut i64) (i64.const 0))
@@ -309,10 +309,10 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:builtins~anonymous|0
+ (func $start:builtins~anonymous|0~nonClosure
   nop
  )
- (func $start:builtins~anonymous|1 (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+ (func $start:builtins~anonymous|1~nonClosure (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
   nop
  )
  (func $start:builtins

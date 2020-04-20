@@ -16,7 +16,7 @@
  (data (i32.const 224) "\0c\00\00\00\01\00\00\00\01\00\00\00\0c\00\00\00s\00t\00r\00i\00n\00g\00")
  (data (i32.const 256) "\12\00\00\00\01\00\00\00\01\00\00\00\12\00\00\00u\00n\00d\00e\00f\00i\00n\00e\00d\00")
  (table $0 2 funcref)
- (elem (i32.const 1) $start:typeof~anonymous|0)
+ (elem (i32.const 1) $start:typeof~anonymous|0~nonClosure)
  (global $typeof/SomeNamespace.a i32 (i32.const 1))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $typeof/b (mut i32) (i32.const 1))
@@ -246,7 +246,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $start:typeof~anonymous|0
+ (func $start:typeof~anonymous|0~nonClosure
   nop
  )
  (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)

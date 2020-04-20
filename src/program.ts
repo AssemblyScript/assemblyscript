@@ -3275,7 +3275,9 @@ export class Local extends VariableLikeElement {
     /** Parent function. */
     parent: Function,
     /** Declaration reference. */
-    declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name)
+    declaration: VariableLikeDeclarationStatement = parent.program.makeNativeVariableDeclaration(name),
+    /** Offset of this variable within closure context, if it's value is held there */
+    public closureContextOffset: usize = 0,
   ) {
     super(
       ElementKind.LOCAL,
@@ -3286,6 +3288,18 @@ export class Local extends VariableLikeElement {
     this.index = index;
     assert(type != Type.void);
     this.setType(type);
+    this.closureContextOffset = closureContextOffset;
+  }
+
+  close(offset: usize): Local {
+    return new Local(
+      this.name,
+      this.index,
+      this.type,
+      <Function>this.parent,
+      <VariableLikeDeclarationStatement>this.declaration,
+      offset
+    );
   }
 }
 
@@ -3354,6 +3368,11 @@ export class FunctionPrototype extends DeclaredElement {
            );
   }
 
+  get hasNestedDefinition(): bool {
+    var parent = this.parent;
+    return parent.kind == ElementKind.FUNCTION;
+  }
+
   /** Creates a clone of this prototype that is bound to a concrete class instead. */
   toBound(classInstance: Class): FunctionPrototype {
     assert(this.is(CommonFlags.INSTANCE));
@@ -3413,6 +3432,12 @@ export class Function extends TypedElement {
   additionalLocals: Type[] = [];
   /** Concrete type arguments. */
   typeArguments: Type[] | null;
+  /** List of all closed locals discovered so far */
+  closedLocals: Map<string, Local> = new Map();
+  /** Next global closure offset to use, assuming that classes are packed as c-structs in the order given */
+  /** This is temporary- once we have a ScopeAnalyzer, then the closure class will be defined before we */
+  /** start compiling, and we can just insert a field access */
+  nextGlobalClosureOffset: u32 = 4;
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> | null;
   /** Default control flow. */
@@ -3466,11 +3491,11 @@ export class Function extends TypedElement {
     this.type = program.options.usizeType.asFunction(signature);
     if (!prototype.is(CommonFlags.AMBIENT)) {
       let localIndex = 0;
-      if (this.is(CommonFlags.INSTANCE)) {
+      if (signature.thisType !== null) {
         let local = new Local(
           CommonNames.this_,
           localIndex++,
-          assert(signature.thisType),
+          signature.thisType!, // asc can't see the !== null above
           this
         );
         this.localsByName.set(CommonNames.this_, local);
@@ -3536,6 +3561,29 @@ export class Function extends TypedElement {
   lookup(name: string): Element | null {
     var locals = this.localsByName;
     if (locals.has(name)) return assert(locals.get(name));
+    if (this.parent.kind == ElementKind.FUNCTION) {
+      var parentFunction = <Function>this.parent;
+      var parentResult = parentFunction.flow.lookup(name);
+      if (parentResult === null) return null;
+      if (parentFunction.closedLocals.size > 0) { //TODO allow nested closure definitions
+        this.program.error(
+          DiagnosticCode.Not_implemented,
+          this.identifierNode.range, this.identifierNode.text
+        );
+        return null;
+      }
+      if (parentResult.kind == ElementKind.LOCAL) {
+        let local = changetype<Local>(parentResult);
+        if (this.closedLocals.has(local.name)) return assert(this.closedLocals.get(local.name));
+        let mask = local.type.byteSize - 1;
+        let memoryOffset = this.nextGlobalClosureOffset;
+        if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
+        var closedLocal = local.close(memoryOffset);
+        this.nextGlobalClosureOffset = memoryOffset + local.type.byteSize;
+        this.closedLocals.set(local.name, closedLocal);
+        return closedLocal;
+      }
+    }
     return this.parent.lookup(name);
   }
 

@@ -3,6 +3,7 @@
  (type $none_=>_none (func))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -773,29 +774,203 @@
   call $~lib/rt/stub/__release
  )
  (func $retain-release/provideRefIndirect (param $0 i32)
-  global.get $retain-release/REF
-  i32.const 1
-  global.set $~argumentsLength
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
-  call_indirect (type $i32_=>_none)
+  local.set $1
+  local.get $1
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $1
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/stub/__retain
+  drop
+  local.get $1
+  local.set $0
+  local.get $0
+  local.set $2
+  local.get $2
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if
+   local.get $2
+   i32.const 4
+   i32.shl
+   global.get $retain-release/REF
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $2
+   i32.const 4
+   i32.shl
+   i32.load
+   call_indirect (type $i32_i32_=>_none)
+  else
+   global.get $retain-release/REF
+   i32.const 1
+   global.set $~argumentsLength
+   local.get $2
+   call_indirect (type $i32_=>_none)
+  end
+  local.get $0
+  local.set $3
+  local.get $3
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $3
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/stub/__release
  )
  (func $retain-release/receiveRefIndirect (param $0 i32)
   (local $1 i32)
-  i32.const 0
-  global.set $~argumentsLength
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   local.get $0
-  call_indirect (type $none_=>_i32)
-  local.tee $1
-  i32.eqz
+  local.set $1
+  local.get $1
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $1
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/stub/__retain
   drop
   local.get $1
+  local.set $0
+  local.get $0
+  local.set $2
+  local.get $2
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $2
+   i32.const 4
+   i32.shl
+   i32.const 0
+   global.set $~argumentsLength
+   local.get $2
+   i32.const 4
+   i32.shl
+   i32.load
+   call_indirect (type $i32_=>_i32)
+   local.tee $3
+  else
+   i32.const 0
+   global.set $~argumentsLength
+   local.get $2
+   call_indirect (type $none_=>_i32)
+   local.tee $4
+  end
+  i32.eqz
+  drop
+  local.get $3
+  call $~lib/rt/stub/__release
+  local.get $4
+  call $~lib/rt/stub/__release
+  local.get $0
+  local.set $5
+  local.get $5
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $5
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
   call $~lib/rt/stub/__release
  )
  (func $retain-release/receiveRefIndirectDrop (param $0 i32)
-  i32.const 0
-  global.set $~argumentsLength
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
   local.get $0
-  call_indirect (type $none_=>_i32)
+  local.set $1
+  local.get $1
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $1
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
+  call $~lib/rt/stub/__retain
+  drop
+  local.get $1
+  local.set $0
+  local.get $0
+  local.set $2
+  local.get $2
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if
+   local.get $2
+   i32.const 4
+   i32.shl
+   i32.const 0
+   global.set $~argumentsLength
+   local.get $2
+   i32.const 4
+   i32.shl
+   i32.load
+   call_indirect (type $i32_=>_i32)
+   call $~lib/rt/stub/__release
+  else
+   i32.const 0
+   global.set $~argumentsLength
+   local.get $2
+   call_indirect (type $none_=>_i32)
+   call $~lib/rt/stub/__release
+  end
+  local.get $0
+  local.set $3
+  local.get $3
+  i32.const -2147483648
+  i32.and
+  i32.const -2147483648
+  i32.eq
+  if (result i32)
+   local.get $3
+   i32.const 4
+   i32.shl
+  else
+   i32.const 0
+  end
   call $~lib/rt/stub/__release
  )
  (func $~start
