@@ -720,10 +720,10 @@ exports.main = function main(argv, options, callback) {
         add("post-assemblyscript");
       }
       add("dce");
+      add("inlining"); // differs
       add("remove-unused-brs");
       add("remove-unused-names");
-      add("optimize-instructions");
-      add("inlining"); // differs
+      add("optimize-instructions"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
         add("simplify-globals-optimizing"); // differs
@@ -743,6 +743,7 @@ exports.main = function main(argv, options, callback) {
       }
       add("simplify-locals-nostructure");
       add("vacuum");
+      add("inlining-optimizing"); // differs
       add("reorder-locals");
       add("remove-unused-brs");
       // if (optimizeLevel >= 3 || shrinkLevel >= 2) { // do it later

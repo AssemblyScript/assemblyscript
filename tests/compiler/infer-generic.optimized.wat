@@ -39,20 +39,20 @@
   (local $3 i32)
   i32.const 1132
   i32.load
-  local.set $2
+  local.set $1
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $1
    i32.const 1132
    i32.load
-   local.tee $3
+   local.tee $2
+   local.get $1
    local.get $2
-   local.get $3
    i32.lt_s
    select
    i32.lt_s
    if
-    local.get $1
+    local.get $3
     i32.const 1124
     i32.load
     local.get $0
@@ -63,7 +63,7 @@
     local.get $0
     i32.const 1120
     call $start:infer-generic~anonymous|0
-    local.set $1
+    local.set $3
     local.get $0
     i32.const 1
     i32.add

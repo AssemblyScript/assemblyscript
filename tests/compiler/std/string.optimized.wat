@@ -1465,9 +1465,9 @@
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/prepareSize
-  local.tee $4
-  call $~lib/rt/tlsf/searchBlock
   local.tee $3
+  call $~lib/rt/tlsf/searchBlock
+  local.tee $4
   i32.eqz
   if
    i32.const 1
@@ -1475,14 +1475,14 @@
    i32.const 0
    global.set $~lib/rt/tlsf/collectLock
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/rt/tlsf/searchBlock
-   local.tee $3
+   local.tee $4
    i32.eqz
    if
     i32.const 16
     memory.size
-    local.tee $3
+    local.tee $4
     i32.const 16
     i32.shl
     i32.const 16
@@ -1491,18 +1491,18 @@
     i32.load offset=1568
     i32.ne
     i32.shl
-    local.get $4
     i32.const 1
     i32.const 27
-    local.get $4
+    local.get $3
     i32.clz
     i32.sub
     i32.shl
     i32.const 1
     i32.sub
+    local.get $3
     i32.add
-    local.get $4
-    local.get $4
+    local.get $3
+    local.get $3
     i32.const 536870904
     i32.lt_u
     select
@@ -1514,9 +1514,9 @@
     i32.const 16
     i32.shr_u
     local.set $5
-    local.get $3
+    local.get $4
     local.get $5
-    local.get $3
+    local.get $4
     local.get $5
     i32.gt_s
     select
@@ -1533,7 +1533,7 @@
      end
     end
     local.get $0
-    local.get $3
+    local.get $4
     i32.const 16
     i32.shl
     memory.size
@@ -1541,9 +1541,9 @@
     i32.shl
     call $~lib/rt/tlsf/addMemory
     local.get $0
-    local.get $4
+    local.get $3
     call $~lib/rt/tlsf/searchBlock
-    local.tee $3
+    local.tee $4
     i32.eqz
     if
      i32.const 0
@@ -1555,11 +1555,11 @@
     end
    end
   end
-  local.get $3
+  local.get $4
   i32.load
   i32.const -4
   i32.and
-  local.get $4
+  local.get $3
   i32.lt_u
   if
    i32.const 0
@@ -1569,25 +1569,25 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
+  local.get $4
   i32.const 0
   i32.store offset=4
-  local.get $3
+  local.get $4
   local.get $2
   i32.store offset=8
-  local.get $3
+  local.get $4
   local.get $1
   i32.store offset=12
   local.get $0
-  local.get $3
+  local.get $4
   call $~lib/rt/tlsf/removeBlock
   local.get $0
-  local.get $3
   local.get $4
+  local.get $3
   call $~lib/rt/tlsf/prepareBlock
-  local.get $3
+  local.get $4
   call $~lib/rt/rtrace/onalloc
-  local.get $3
+  local.get $4
  )
  (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize
@@ -7185,13 +7185,13 @@
   global.get $std/string/str
   local.set $12
   i32.const 1616
-  local.tee $1
+  local.tee $0
   i32.eqz
   if
    i32.const 1616
    call $~lib/rt/pure/__release
    i32.const 1648
-   local.set $1
+   local.set $0
   end
   block $__inlined_func$~lib/string/String#startsWith
    i32.const 0
@@ -7203,30 +7203,30 @@
    i32.lt_s
    select
    local.tee $8
-   local.get $1
+   local.get $0
    call $~lib/string/String#get:length
-   local.tee $0
+   local.tee $1
    i32.add
    local.get $11
    i32.gt_s
    if
-    local.get $1
+    local.get $0
     call $~lib/rt/pure/__release
     i32.const 0
-    local.set $0
+    local.set $1
     br $__inlined_func$~lib/string/String#startsWith
    end
    local.get $12
    local.get $8
-   local.get $1
    local.get $0
+   local.get $1
    call $~lib/util/string/compareImpl
    i32.eqz
-   local.set $0
-   local.get $1
+   local.set $1
+   local.get $0
    call $~lib/rt/pure/__release
   end
-  local.get $0
+  local.get $1
   i32.eqz
   if
    i32.const 0

@@ -968,8 +968,9 @@
   i32.store
   local.get $1
   local.tee $0
-  i32.load
   local.tee $2
+  i32.load
+  local.tee $1
   i32.eqz
   if
    i32.const 0
@@ -980,21 +981,21 @@
    unreachable
   end
   local.get $2
-  local.get $0
   i32.load
-  local.tee $1
+  local.tee $0
+  local.get $1
   i32.ne
   if
-   local.get $2
-   call $~lib/rt/pure/__retain
-   local.set $2
    local.get $1
+   call $~lib/rt/pure/__retain
+   local.set $1
+   local.get $0
    call $~lib/rt/pure/__release
   end
-  local.get $0
   local.get $2
+  local.get $1
   i32.store
-  local.get $0
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/rt/pure/decrement (param $0 i32)

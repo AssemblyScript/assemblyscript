@@ -1718,9 +1718,9 @@
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  local.get $1
   local.get $3
   i32.load
+  local.get $1
   i32.add
   i32.eq
   if
@@ -1875,31 +1875,29 @@
   i32.add
   i32.load8_u
  )
- (func $~lib/number/U8#toString (param $0 i32) (result i32)
+ (func $~lib/util/number/itoa<u8> (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  block $__inlined_func$~lib/util/number/utoa32 (result i32)
-   i32.const 2624
+  i32.const 2624
+  local.set $1
+  local.get $0
+  i32.const 255
+  i32.and
+  local.tee $0
+  if
    local.get $0
-   i32.const 255
-   i32.and
-   local.tee $1
-   i32.eqz
-   br_if $__inlined_func$~lib/util/number/utoa32
-   drop
-   local.get $1
    call $~lib/util/number/decimalCount32
-   local.tee $0
+   local.tee $2
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/stub/__alloc
-   local.tee $2
-   local.get $1
+   local.tee $1
    local.get $0
-   call $~lib/util/number/utoa_simple<u32>
    local.get $2
+   call $~lib/util/number/utoa_simple<u32>
   end
+  local.get $1
  )
  (func $start:resolve-elementaccess
   (local $0 i32)
@@ -2001,14 +1999,13 @@
   i32.const 7
   call $~lib/rt/stub/__alloc
   local.tee $0
-  i32.eqz
-  if
+  if (result i32)
+   local.get $0
+  else
    i32.const 12
    i32.const 8
    call $~lib/rt/stub/__alloc
-   local.set $0
   end
-  local.get $0
   i32.const 0
   call $~lib/arraybuffer/ArrayBufferView#constructor
   global.set $resolve-elementaccess/buf
@@ -2023,7 +2020,7 @@
   global.get $resolve-elementaccess/buf
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
-  call $~lib/number/U8#toString
+  call $~lib/util/number/itoa<u8>
   i32.const 2656
   call $~lib/string/String.__eq
   i32.eqz
@@ -2038,7 +2035,7 @@
   global.get $resolve-elementaccess/buf
   i32.const 1
   call $~lib/typedarray/Uint8Array#__get
-  call $~lib/number/U8#toString
+  call $~lib/util/number/itoa<u8>
   i32.const 2688
   call $~lib/string/String.__eq
   i32.eqz
@@ -2062,7 +2059,7 @@
   local.get $0
   i32.const 0
   call $~lib/typedarray/Uint8Array#__get
-  call $~lib/number/U8#toString
+  call $~lib/util/number/itoa<u8>
   i32.const 2720
   call $~lib/string/String.__eq
   i32.eqz

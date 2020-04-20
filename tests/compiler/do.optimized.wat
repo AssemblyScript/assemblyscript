@@ -1047,6 +1047,7 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   i32.const 0
   global.set $do/ran
   i32.const 10
@@ -1187,14 +1188,14 @@
   global.set $do/ran
   i32.const 0
   local.set $1
-  loop $do-continue|03
+  loop $do-continue|06
    local.get $1
    i32.const 1
    i32.add
    local.tee $1
    i32.const 10
    i32.ne
-   br_if $do-continue|03
+   br_if $do-continue|06
   end
   local.get $1
   i32.const 10
@@ -1215,7 +1216,7 @@
   local.set $0
   i32.const 0
   local.set $1
-  loop $do-continue|04
+  loop $do-continue|03
    local.get $0
    i32.const 1
    i32.add
@@ -1232,7 +1233,7 @@
      i32.rem_s
      br_if $do-continue|1
     end
-    br $do-continue|04
+    br $do-continue|03
    end
   end
   local.get $0
@@ -1263,11 +1264,11 @@
   global.set $do/ran
   call $do/Ref#constructor
   local.set $0
-  loop $do-continue|05
-   local.get $2
+  loop $do-continue|04
+   local.get $3
    i32.const 1
    i32.add
-   local.tee $2
+   local.tee $3
    i32.const 10
    i32.eq
    if
@@ -1286,9 +1287,9 @@
    end
    local.get $1
    local.tee $0
-   br_if $do-continue|05
+   br_if $do-continue|04
   end
-  local.get $2
+  local.get $3
   i32.const 10
   i32.ne
   if
@@ -1324,12 +1325,10 @@
   end
   i32.const 0
   global.set $do/ran
-  i32.const 0
-  local.set $2
   call $do/Ref#constructor
   local.set $0
-  loop $do-continue|06
-   block $do-break|0
+  loop $do-continue|045
+   block $do-break|05
     local.get $2
     i32.const 1
     i32.add
@@ -1344,13 +1343,13 @@
      end
      i32.const 0
      local.set $0
-     br $do-break|0
+     br $do-break|05
     end
     call $do/Ref#constructor
-    local.tee $1
+    local.tee $3
     call $~lib/rt/pure/__release
-    local.get $1
-    br_if $do-continue|06
+    local.get $3
+    br_if $do-continue|045
    end
   end
   local.get $2

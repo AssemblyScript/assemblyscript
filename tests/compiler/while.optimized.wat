@@ -1052,7 +1052,6 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i32)
   i32.const 0
   global.set $while/ran
   i32.const 10
@@ -1153,16 +1152,18 @@
   global.set $while/ran
   i32.const 0
   global.set $while/ran
+  i32.const 0
+  local.set $1
   loop $while-continue|01
-   local.get $3
+   local.get $1
    i32.const 1
    i32.add
-   local.tee $3
+   local.tee $1
    i32.const 10
    i32.ne
    br_if $while-continue|01
   end
-  local.get $3
+  local.get $1
   i32.const 10
   i32.ne
   if
@@ -1176,17 +1177,17 @@
   i32.const 1
   global.set $while/ran
   i32.const 0
-  local.set $3
+  local.set $1
   loop $while-continue|002
-   local.get $3
+   local.get $1
    i32.const 1
    i32.add
-   local.tee $3
+   local.tee $1
    i32.const 10
    i32.ne
    br_if $while-continue|002
   end
-  local.get $3
+  local.get $1
   i32.const 10
   i32.ne
   if
@@ -1212,18 +1213,18 @@
   i32.const 0
   global.set $while/ran
   i32.const 10
-  local.set $3
-  loop $while-continue|02
-   local.get $3
+  local.set $1
+  loop $while-continue|04
+   local.get $1
    if
-    local.get $3
+    local.get $1
     i32.const 1
     i32.sub
-    local.set $3
-    br $while-continue|02
+    local.set $1
+    br $while-continue|04
    end
   end
-  local.get $3
+  local.get $1
   if
    i32.const 0
    i32.const 1040
@@ -1283,16 +1284,16 @@
   i32.const 0
   global.set $while/ran
   i32.const 0
-  local.set $3
+  local.set $2
   call $while/Ref#constructor
   local.set $1
-  loop $while-continue|04
+  loop $while-continue|02
    local.get $1
    if
-    local.get $3
+    local.get $2
     i32.const 1
     i32.add
-    local.tee $3
+    local.tee $2
     i32.const 10
     i32.eq
     if
@@ -1311,10 +1312,10 @@
     end
     local.get $0
     local.set $1
-    br $while-continue|04
+    br $while-continue|02
    end
   end
-  local.get $3
+  local.get $2
   i32.const 10
   i32.ne
   if
@@ -1351,20 +1352,20 @@
   i32.const 0
   global.set $while/ran
   i32.const 0
-  local.set $3
+  local.set $2
   call $while/Ref#constructor
   local.set $1
   loop $while-continue|05
    block $while-break|0
     call $while/Ref#constructor
-    local.tee $2
+    local.tee $0
     call $~lib/rt/pure/__release
-    local.get $2
+    local.get $0
     if
-     local.get $3
+     local.get $2
      i32.const 1
      i32.add
-     local.tee $3
+     local.tee $2
      i32.const 10
      i32.eq
      if
@@ -1381,7 +1382,7 @@
     end
    end
   end
-  local.get $3
+  local.get $2
   i32.const 10
   i32.ne
   if
