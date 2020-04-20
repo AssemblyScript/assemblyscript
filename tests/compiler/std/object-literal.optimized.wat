@@ -1,6 +1,6 @@
 (module
- (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -151,16 +151,16 @@
    local.set $1
    local.get $2
    if
-    local.get $0
+    local.get $3
     i32.load16_u
     local.tee $2
-    local.get $3
+    local.get $0
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $2
      local.get $4
+     local.get $2
      i32.sub
      return
     end
@@ -177,7 +177,7 @@
   end
   i32.const 0
  )
- (func $start:std/object-literal
+ (func $~start
   (local $0 i32)
   (local $1 i32)
   i32.const 1136
@@ -207,7 +207,7 @@
    i32.const 1
    local.get $0
    i32.load offset=4
-   local.tee $0
+   local.tee $1
    i32.const 1040
    i32.eq
    br_if $__inlined_func$~lib/string/String.__eq
@@ -215,18 +215,18 @@
    block $folding-inner0
     i32.const 0
     i32.const 1
-    local.get $0
+    local.get $1
     select
     br_if $folding-inner0
-    local.get $0
+    local.get $1
     call $~lib/string/String#get:length
-    local.tee $1
+    local.tee $0
     i32.const 1040
     call $~lib/string/String#get:length
     i32.ne
     br_if $folding-inner0
-    local.get $0
     local.get $1
+    local.get $0
     call $~lib/util/string/compareImpl
     i32.eqz
     br $__inlined_func$~lib/string/String.__eq
@@ -278,8 +278,5 @@
    call $~lib/builtins/abort
    unreachable
   end
- )
- (func $~start
-  call $start:std/object-literal
  )
 )

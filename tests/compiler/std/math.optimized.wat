@@ -1874,12 +1874,13 @@
   (local $3 f64)
   (local $4 i64)
   local.get $0
+  local.tee $3
   i64.reinterpret_f64
   local.tee $4
   i64.const 9223372036854775807
   i64.and
   f64.reinterpret_i64
-  local.set $3
+  local.set $0
   local.get $4
   i64.const 52
   i64.shr_u
@@ -1889,43 +1890,43 @@
   i64.const 1049
   i64.ge_u
   if
-   local.get $3
+   local.get $0
    call $~lib/math/NativeMath.log
    f64.const 0.6931471805599453
    f64.add
-   local.set $3
+   local.set $0
   else
    local.get $4
    i64.const 1024
    i64.ge_u
    if
     f64.const 2
-    local.get $3
+    local.get $0
     f64.mul
     f64.const 1
-    local.get $3
-    local.get $3
+    local.get $0
+    local.get $0
     f64.mul
     f64.const 1
     f64.add
     f64.sqrt
-    local.get $3
+    local.get $0
     f64.add
     f64.div
     f64.add
     call $~lib/math/NativeMath.log
-    local.set $3
+    local.set $0
    else
     local.get $4
     i64.const 997
     i64.ge_u
     if
-     local.get $3
-     local.get $3
-     local.get $3
+     local.get $0
+     local.get $0
+     local.get $0
      f64.mul
-     local.tee $3
-     local.get $3
+     local.tee $0
+     local.get $0
      f64.const 1
      f64.add
      f64.sqrt
@@ -1934,18 +1935,18 @@
      f64.div
      f64.add
      call $~lib/math/NativeMath.log1p
-     local.set $3
+     local.set $0
     end
    end
   end
-  local.get $3
   local.get $0
+  local.get $3
   f64.copysign
   local.get $1
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   local.get $0
+   local.get $3
    call $~lib/bindings/Math/asinh
    local.get $1
    local.get $2
@@ -1958,53 +1959,54 @@
   (local $3 f32)
   (local $4 i32)
   local.get $0
+  local.tee $3
   i32.reinterpret_f32
   i32.const 2147483647
   i32.and
   local.tee $4
   f32.reinterpret_i32
-  local.set $3
+  local.set $0
   local.get $4
   i32.const 1166016512
   i32.ge_u
   if
-   local.get $3
+   local.get $0
    call $~lib/math/NativeMathf.log
    f32.const 0.6931471824645996
    f32.add
-   local.set $3
+   local.set $0
   else
    local.get $4
    i32.const 1073741824
    i32.ge_u
    if
     f32.const 2
-    local.get $3
+    local.get $0
     f32.mul
     f32.const 1
-    local.get $3
-    local.get $3
+    local.get $0
+    local.get $0
     f32.mul
     f32.const 1
     f32.add
     f32.sqrt
-    local.get $3
+    local.get $0
     f32.add
     f32.div
     f32.add
     call $~lib/math/NativeMathf.log
-    local.set $3
+    local.set $0
    else
     local.get $4
     i32.const 964689920
     i32.ge_u
     if
-     local.get $3
-     local.get $3
-     local.get $3
+     local.get $0
+     local.get $0
+     local.get $0
      f32.mul
-     local.tee $3
-     local.get $3
+     local.tee $0
+     local.get $0
      f32.const 1
      f32.add
      f32.sqrt
@@ -2013,12 +2015,12 @@
      f32.div
      f32.add
      call $~lib/math/NativeMathf.log1p
-     local.set $3
+     local.set $0
     end
    end
   end
-  local.get $3
   local.get $0
+  local.get $3
   f32.copysign
   local.get $1
   local.get $2
@@ -2469,9 +2471,10 @@
   (local $4 i64)
   (local $5 f64)
   local.get $0
+  local.tee $3
   f64.abs
-  local.set $3
-  local.get $0
+  local.set $0
+  local.get $3
   i64.reinterpret_f64
   i64.const 52
   i64.shr_u
@@ -2487,42 +2490,42 @@
    if
     f64.const 0.5
     f64.const 2
-    local.get $3
+    local.get $0
     f64.mul
     local.tee $5
     local.get $5
-    local.get $3
+    local.get $0
     f64.mul
     f64.const 1
-    local.get $3
+    local.get $0
     f64.sub
     f64.div
     f64.add
     call $~lib/math/NativeMath.log1p
     f64.mul
-    local.set $3
+    local.set $0
    end
   else
    f64.const 0.5
    f64.const 2
-   local.get $3
+   local.get $0
    f64.const 1
-   local.get $3
+   local.get $0
    f64.sub
    f64.div
    f64.mul
    call $~lib/math/NativeMath.log1p
    f64.mul
-   local.set $3
+   local.set $0
   end
-  local.get $3
   local.get $0
+  local.get $3
   f64.copysign
   local.get $1
   local.get $2
   call $std/math/check<f64>
   if (result i32)
-   local.get $0
+   local.get $3
    call $~lib/bindings/Math/atanh
    local.get $1
    local.get $2
@@ -2535,9 +2538,10 @@
   (local $3 f32)
   (local $4 i32)
   local.get $0
+  local.tee $3
   f32.abs
-  local.set $3
-  local.get $0
+  local.set $0
+  local.get $3
   i32.reinterpret_f32
   local.tee $4
   i32.const 1056964608
@@ -2549,35 +2553,35 @@
    if
     f32.const 0.5
     f32.const 2
-    local.get $3
+    local.get $0
     f32.mul
     f32.const 1
-    local.get $3
+    local.get $0
     f32.const 1
-    local.get $3
+    local.get $0
     f32.sub
     f32.div
     f32.add
     f32.mul
     call $~lib/math/NativeMathf.log1p
     f32.mul
-    local.set $3
+    local.set $0
    end
   else
    f32.const 0.5
    f32.const 2
-   local.get $3
+   local.get $0
    f32.const 1
-   local.get $3
+   local.get $0
    f32.sub
    f32.div
    f32.mul
    call $~lib/math/NativeMathf.log1p
    f32.mul
-   local.set $3
+   local.set $0
   end
-  local.get $3
   local.get $0
+  local.get $3
   f32.copysign
   local.get $1
   local.get $2
@@ -11226,6 +11230,8 @@
   (local $4 i64)
   (local $5 i32)
   (local $6 i32)
+  (local $7 f64)
+  (local $8 f32)
   f64.const 2.718281828459045
   global.get $~lib/bindings/Math/E
   f64.const 0
@@ -38344,17 +38350,17 @@
     global.get $~lib/math/random_state1_64
     local.tee $4
     global.set $~lib/math/random_state0_64
+    local.get $4
+    local.get $3
     local.get $3
     i64.const 23
     i64.shl
-    local.get $3
     i64.xor
     local.tee $3
     local.get $3
     i64.const 17
     i64.shr_u
     i64.xor
-    local.get $4
     i64.xor
     local.get $4
     i64.const 26

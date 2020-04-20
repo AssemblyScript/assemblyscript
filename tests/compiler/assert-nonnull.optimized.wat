@@ -140,9 +140,10 @@
   (local $1 i32)
   block $folding-inner0
    local.get $0
+   local.tee $1
    i32.eqz
    br_if $folding-inner0
-   local.get $0
+   local.get $1
    call $~lib/array/Array<assert-nonnull/Foo | null>#__get
    local.tee $0
    local.get $0
@@ -166,9 +167,10 @@
   (local $1 i32)
   block $folding-inner0
    local.get $0
+   local.tee $1
    i32.eqz
    br_if $folding-inner0
-   local.get $0
+   local.get $1
    call $~lib/array/Array<assert-nonnull/Foo | null>#__get
    local.tee $0
    local.get $0
@@ -213,8 +215,8 @@
   (local $1 i32)
   local.get $0
   call_indirect (type $none_=>_i32)
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   i32.eqz
   if
    i32.const 0
@@ -235,8 +237,8 @@
   local.get $0
   i32.load offset=4
   call_indirect (type $none_=>_i32)
-  local.tee $0
-  local.get $0
+  local.tee $1
+  local.get $1
   i32.eqz
   if
    i32.const 0

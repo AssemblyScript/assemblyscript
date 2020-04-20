@@ -2075,13 +2075,11 @@
   global.set $std/operator-overloading/excl
   global.get $std/operator-overloading/excl
   local.tee $0
-  local.set $1
-  local.get $0
   i32.load
   if (result i32)
    i32.const 0
   else
-   local.get $1
+   local.get $0
    i32.load offset=4
    i32.eqz
   end

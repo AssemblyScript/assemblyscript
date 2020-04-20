@@ -531,14 +531,12 @@
   end
   global.get $rt/stub-realloc/ptr
   local.tee $0
-  if (result i32)
-   local.get $0
-   i32.const 15
-   i32.and
-   i32.eqz
-  else
-   i32.const 0
-  end
+  i32.const 15
+  i32.and
+  i32.eqz
+  i32.const 0
+  local.get $0
+  select
   i32.eqz
   if
    i32.const 0
@@ -564,9 +562,9 @@
    unreachable
   end
   global.get $~lib/rt/stub/offset
+  local.get $0
   local.get $1
   i32.load
-  local.get $0
   i32.add
   i32.eq
   if

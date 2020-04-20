@@ -127,15 +127,14 @@
   local.get $0
   i32.const 31
   i32.shr_u
-  local.tee $2
+  local.tee $1
   if
    i32.const 0
    local.get $0
    i32.sub
    local.set $0
   end
-  local.get $2
-  local.tee $1
+  local.get $1
   local.get $0
   i32.const 10
   i32.ge_u
@@ -182,26 +181,26 @@
   i32.shl
   i32.const 1
   call $~lib/rt/stub/__alloc
-  local.tee $5
+  local.tee $3
   local.set $4
   loop $do-continue|0
    local.get $0
    i32.const 10
    i32.rem_u
-   local.set $3
+   local.set $5
    local.get $0
    i32.const 10
    i32.div_u
    local.set $0
+   local.get $4
    local.get $2
    i32.const 1
    i32.sub
    local.tee $2
    i32.const 1
    i32.shl
-   local.get $4
    i32.add
-   local.get $3
+   local.get $5
    i32.const 48
    i32.add
    i32.store16
@@ -210,11 +209,11 @@
   end
   local.get $1
   if
-   local.get $5
+   local.get $3
    i32.const 45
    i32.store16
   end
-  local.get $5
+  local.get $3
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0

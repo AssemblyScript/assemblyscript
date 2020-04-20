@@ -319,46 +319,45 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/itoa32 (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   local.get $0
-  i32.eqz
-  if
-   i32.const 1200
-   return
-  end
-  local.get $0
-  i32.const 31
-  i32.shr_u
-  local.tee $1
-  if
-   i32.const 0
+  if (result i32)
    local.get $0
-   i32.sub
-   local.set $0
-  end
-  local.get $0
-  call $~lib/util/number/decimalCount32
-  local.get $1
-  i32.add
-  local.tee $3
-  i32.const 1
-  i32.shl
-  i32.const 1
-  call $~lib/rt/stub/__alloc
-  local.tee $2
-  local.get $0
-  local.get $3
-  call $~lib/util/number/utoa_simple<u32>
-  local.get $1
-  if
+   i32.const 31
+   i32.shr_u
+   local.tee $1
+   if
+    i32.const 0
+    local.get $0
+    i32.sub
+    local.set $0
+   end
+   local.get $0
+   call $~lib/util/number/decimalCount32
+   local.get $1
+   i32.add
+   local.tee $3
+   i32.const 1
+   i32.shl
+   i32.const 1
+   call $~lib/rt/stub/__alloc
+   local.tee $2
+   local.get $0
+   local.get $3
+   call $~lib/util/number/utoa_simple<u32>
+   local.get $1
+   if
+    local.get $2
+    i32.const 45
+    i32.store16
+   end
    local.get $2
-   i32.const 45
-   i32.store16
+  else
+   i32.const 1200
   end
-  local.get $2
  )
  (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
   (local $6 i32)
@@ -1518,7 +1517,7 @@
   i32.const 1
   global.set $resolve-binary/a
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1232
   call $~lib/string/String.__eq
   i32.eqz
@@ -1535,7 +1534,7 @@
   i32.add
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz
@@ -1552,7 +1551,7 @@
   i32.sub
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1232
   call $~lib/string/String.__eq
   i32.eqz
@@ -1569,7 +1568,7 @@
   i32.shl
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz
@@ -1598,7 +1597,7 @@
   i32.const 2
   global.set $resolve-binary/a
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz
@@ -1615,7 +1614,7 @@
   i32.rem_s
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz
@@ -1632,7 +1631,7 @@
   i32.shl
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 2512
   call $~lib/string/String.__eq
   i32.eqz
@@ -1649,7 +1648,7 @@
   i32.shr_s
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz
@@ -1666,7 +1665,7 @@
   i32.shr_u
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1232
   call $~lib/string/String.__eq
   i32.eqz
@@ -1683,7 +1682,7 @@
   i32.and
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1232
   call $~lib/string/String.__eq
   i32.eqz
@@ -1700,7 +1699,7 @@
   i32.or
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 2544
   call $~lib/string/String.__eq
   i32.eqz
@@ -1717,7 +1716,7 @@
   i32.xor
   global.set $resolve-binary/a
   global.get $resolve-binary/a
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1232
   call $~lib/string/String.__eq
   i32.eqz
@@ -1730,7 +1729,7 @@
    unreachable
   end
   i32.const 3
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 2544
   call $~lib/string/String.__eq
   i32.eqz
@@ -1743,7 +1742,7 @@
    unreachable
   end
   i32.const -1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 2576
   call $~lib/string/String.__eq
   i32.eqz
@@ -1756,7 +1755,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz
@@ -1769,7 +1768,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz
@@ -1782,7 +1781,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1232
   call $~lib/string/String.__eq
   i32.eqz
@@ -1807,7 +1806,7 @@
    unreachable
   end
   i32.const 4
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 2512
   call $~lib/string/String.__eq
   i32.eqz
@@ -1820,7 +1819,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1232
   call $~lib/string/String.__eq
   i32.eqz
@@ -1833,7 +1832,7 @@
    unreachable
   end
   i32.const 3
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 2544
   call $~lib/string/String.__eq
   i32.eqz
@@ -1846,7 +1845,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1232
   call $~lib/string/String.__eq
   i32.eqz
@@ -1859,7 +1858,7 @@
    unreachable
   end
   i32.const 3
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 2544
   call $~lib/string/String.__eq
   i32.eqz
@@ -1872,7 +1871,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz
@@ -1885,7 +1884,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz
@@ -1898,7 +1897,7 @@
    unreachable
   end
   i32.const 0
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1200
   call $~lib/string/String.__eq
   i32.eqz
@@ -1911,7 +1910,7 @@
    unreachable
   end
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1232
   call $~lib/string/String.__eq
   i32.eqz
@@ -1924,7 +1923,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1264
   call $~lib/string/String.__eq
   i32.eqz

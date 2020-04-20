@@ -951,15 +951,15 @@
   i32.add
   i32.const -16
   i32.and
-  local.tee $4
+  local.tee $3
   i32.const 16
-  local.get $4
+  local.get $3
   i32.const 16
   i32.gt_u
   select
-  local.tee $3
-  call $~lib/rt/tlsf/searchBlock
   local.tee $4
+  call $~lib/rt/tlsf/searchBlock
+  local.tee $3
   i32.eqz
   if
    i32.const 1
@@ -967,14 +967,14 @@
    i32.const 0
    global.set $~lib/rt/tlsf/collectLock
    local.get $0
-   local.get $3
+   local.get $4
    call $~lib/rt/tlsf/searchBlock
-   local.tee $4
+   local.tee $3
    i32.eqz
    if
     i32.const 16
     memory.size
-    local.tee $5
+    local.tee $3
     i32.const 16
     i32.shl
     i32.const 16
@@ -983,18 +983,18 @@
     i32.load offset=1568
     i32.ne
     i32.shl
+    local.get $4
     i32.const 1
     i32.const 27
-    local.get $3
+    local.get $4
     i32.clz
     i32.sub
     i32.shl
     i32.const 1
     i32.sub
-    local.get $3
     i32.add
-    local.get $3
-    local.get $3
+    local.get $4
+    local.get $4
     i32.const 536870904
     i32.lt_u
     select
@@ -1005,18 +1005,18 @@
     i32.and
     i32.const 16
     i32.shr_u
-    local.set $4
+    local.set $5
+    local.get $3
     local.get $5
-    local.get $4
+    local.get $3
     local.get $5
-    local.get $4
     i32.gt_s
     select
     memory.grow
     i32.const 0
     i32.lt_s
     if
-     local.get $4
+     local.get $5
      memory.grow
      i32.const 0
      i32.lt_s
@@ -1025,7 +1025,7 @@
      end
     end
     local.get $0
-    local.get $5
+    local.get $3
     i32.const 16
     i32.shl
     memory.size
@@ -1033,9 +1033,9 @@
     i32.shl
     call $~lib/rt/tlsf/addMemory
     local.get $0
-    local.get $3
+    local.get $4
     call $~lib/rt/tlsf/searchBlock
-    local.tee $4
+    local.tee $3
     i32.eqz
     if
      i32.const 0
@@ -1047,11 +1047,11 @@
     end
    end
   end
-  local.get $4
+  local.get $3
   i32.load
   i32.const -4
   i32.and
-  local.get $3
+  local.get $4
   i32.lt_u
   if
    i32.const 0
@@ -1061,25 +1061,25 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $3
   i32.const 0
   i32.store offset=4
-  local.get $4
+  local.get $3
   local.get $2
   i32.store offset=8
-  local.get $4
+  local.get $3
   local.get $1
   i32.store offset=12
   local.get $0
-  local.get $4
+  local.get $3
   call $~lib/rt/tlsf/removeBlock
   local.get $0
-  local.get $4
   local.get $3
+  local.get $4
   call $~lib/rt/tlsf/prepareBlock
-  local.get $4
+  local.get $3
   call $~lib/rt/rtrace/onalloc
-  local.get $4
+  local.get $3
  )
  (func $~lib/rt/tlsf/__alloc (param $0 i32) (param $1 i32) (result i32)
   call $~lib/rt/tlsf/maybeInitialize

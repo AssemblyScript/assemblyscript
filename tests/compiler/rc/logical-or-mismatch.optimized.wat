@@ -966,14 +966,15 @@
   global.set $rc/logical-or-mismatch/gloRef
   call $rc/logical-or-mismatch/Ref#constructor
   local.tee $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    local.get $0
    call $~lib/rt/pure/__release
    global.get $rc/logical-or-mismatch/gloRef
    call $~lib/rt/pure/__retain
+   local.set $0
   end
+  local.get $0
   call $~lib/rt/pure/__release
   global.get $rc/logical-or-mismatch/gloRef
   local.tee $0
@@ -986,13 +987,14 @@
   call $~lib/rt/pure/__release
   call $rc/logical-or-mismatch/Ref#constructor
   local.tee $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    local.get $0
    call $~lib/rt/pure/__release
    call $rc/logical-or-mismatch/Ref#constructor
+   local.set $0
   end
+  local.get $0
   call $~lib/rt/pure/__release
   global.get $rc/logical-or-mismatch/gloRef
   call $~lib/rt/pure/__release

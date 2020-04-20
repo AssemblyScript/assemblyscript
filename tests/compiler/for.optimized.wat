@@ -1161,12 +1161,12 @@
   global.set $for/ran
   i32.const 10
   local.set $1
-  loop $for-loop|04
+  loop $for-loop|03
    local.get $1
    i32.const 1
    i32.sub
    local.tee $1
-   br_if $for-loop|04
+   br_if $for-loop|03
   end
   local.get $1
   if
@@ -1183,14 +1183,14 @@
   global.set $for/ran
   i32.const 0
   local.set $1
-  loop $for-loop|06
+  loop $for-loop|05
    local.get $1
    i32.const 1
    i32.add
    local.tee $1
    i32.const 10
    i32.ne
-   br_if $for-loop|06
+   br_if $for-loop|05
   end
   local.get $1
   i32.const 10
@@ -1263,7 +1263,7 @@
   global.set $for/ran
   call $for/Ref#constructor
   local.set $1
-  loop $for-loop|03
+  loop $for-loop|04
    local.get $1
    if
     local.get $3
@@ -1288,7 +1288,7 @@
     end
     local.get $0
     local.set $1
-    br $for-loop|03
+    br $for-loop|04
    end
   end
   local.get $3
@@ -1329,14 +1329,14 @@
   global.set $for/ran
   call $for/Ref#constructor
   call $for/Ref#constructor
-  local.set $1
+  local.set $0
   call $~lib/rt/pure/__release
-  loop $for-loop|05
+  loop $for-loop|06
    block $for-break0
     call $for/Ref#constructor
-    local.tee $0
+    local.tee $1
     call $~lib/rt/pure/__release
-    local.get $0
+    local.get $1
     if
      local.get $2
      i32.const 1
@@ -1345,20 +1345,20 @@
      i32.const 10
      i32.eq
      if
-      local.get $1
+      local.get $0
       if
-       local.get $1
+       local.get $0
        call $~lib/rt/pure/__release
       end
       i32.const 0
-      local.set $1
+      local.set $0
       br $for-break0
      end
      call $for/Ref#constructor
-     local.get $1
+     local.get $0
      call $~lib/rt/pure/__release
-     local.set $1
-     br $for-loop|05
+     local.set $0
+     br $for-loop|06
     end
    end
   end
@@ -1373,7 +1373,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
+  local.get $0
   if
    i32.const 0
    i32.const 1040
@@ -1384,7 +1384,7 @@
   end
   i32.const 1
   global.set $for/ran
-  local.get $1
+  local.get $0
   call $~lib/rt/pure/__release
   global.get $for/ran
   i32.eqz
