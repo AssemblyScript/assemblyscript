@@ -64,7 +64,9 @@ const bin = {
   context: path.join(__dirname, "cli"),
   entry: [ "./asc.js" ],
   externals: [
-    { "../dist/assemblyscript.js": "assemblyscript" }
+    "binaryen",
+    "assemblyscript",
+    "ts-node"
   ],
   node: {
     "buffer": false,

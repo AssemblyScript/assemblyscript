@@ -40,7 +40,7 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
-const binaryen = global.Binaryen || (global.Binaryen = require("binaryen"));
+const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
 
 // Proxy Binaryen's ready event
 Object.defineProperty(exports, "ready", {
@@ -51,28 +51,38 @@ Object.defineProperty(exports, "ready", {
 // useless code fragment on top of an actual error. suppress this:
 if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
 
-// Use distribution files if present, otherwise run the sources directly
-var assemblyscript, isDev = false;
-try { // `asc` on the command line
-  assemblyscript = require("../dist/assemblyscript.js");
-} catch (e) {
-  try { // `asc` on the command line without dist files
-    require("ts-node").register({
-      project: path.join(__dirname, "..", "src", "tsconfig.json"),
-      skipIgnore: true,
-      compilerOptions: { target: "ES2016" }
-    });
-    require("../src/glue/js");
-    assemblyscript = require("../src");
-    isDev = true;
-  } catch (e_ts) {
-    try { // `require("dist/asc.js")` in explicit browser tests
-      assemblyscript = eval("require('./assemblyscript')");
+// Use distribution files if present, otherwise run the sources directly.
+var assemblyscript;
+var isDev = false;
+(function loadAssemblyScript() {
+  try {
+    assemblyscript = require("assemblyscript");
+  } catch (e) {
+    function dynRequire(...args) {
+      return eval("require")(...args);
+    }
+    try { // `asc` on the command line
+    assemblyscript = dynRequire("../dist/assemblyscript.js");
     } catch (e) {
-      throw Error(e_ts.stack + "\n---\n" + e.stack);
+      try { // `asc` on the command line without dist files
+        dynRequire("ts-node").register({
+          project: path.join(__dirname, "..", "src", "tsconfig.json"),
+          skipIgnore: true,
+          compilerOptions: { target: "ES2016" }
+        });
+        dynRequire("../src/glue/js");
+        assemblyscript = dynRequire("../src");
+        isDev = true;
+      } catch (e_ts) {
+        try { // `require("dist/asc.js")` in explicit browser tests
+          assemblyscript = dynRequire("./assemblyscript");
+        } catch (e) {
+          throw Error(e_ts.stack + "\n---\n" + e.stack);
+        }
+      }
     }
   }
-}
+})();
 
 /** Whether this is a webpack bundle or not. */
 exports.isBundle = typeof BUNDLE_VERSION === "string";
