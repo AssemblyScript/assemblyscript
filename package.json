@@ -55,7 +55,7 @@
     "check": "npm run check:config && npm run check:compiler && tsc --noEmit --target ESNEXT --module commonjs --experimentalDecorators tests/require/index",
     "check:config": "tsc --noEmit -p src --diagnostics --listFiles",
     "check:compiler": "tslint -c tslint.json --project src --formatters-dir lib/lint/formatters --format as",
-    "test": "npm run test:parser && npm run test:compiler -- --parallel && npm run test:packages",
+    "test": "npm run test:parser && npm run test:compiler && npm run test:packages",
     "test:parser": "node tests/parser",
     "test:compiler": "node tests/compiler",
     "test:packages": "cd tests/packages && npm run test",
