@@ -51,11 +51,21 @@ jobs:
     - name: Clean distribution files
       run: npm run clean
     - name: Test sources
-      run: npm test
+      run: |
+        if [[ `node bin/asc --version` != *"-dev" ]]; then
+          echo "ERROR: Not testing sources"
+          exit 1
+        fi
+        npm test
     - name: Build distribution files
       run: npm run build
     - name: Test distribution
-      run: npm test
+      run: |
+        if [[ `node bin/asc --version` == *"-dev" ]]; then
+          echo "ERROR: Not testing distribution"
+          exit 1
+        fi
+        npm test
   test-windows:
     name: "Compiler (Windows, node current)"
     runs-on: windows-latest
