@@ -5147,6 +5147,95 @@ declare module "assemblyscript/src/definitions" {
         build(): string;
     }
 }
+declare module "assemblyscript/src/extra/ast" {
+    /**
+     * @fileoverview Abstract Syntax Tree extras.
+     *
+     * Provides serialization of the AssemblyScript AST back to it source form.
+     *
+     * @license Apache-2.0
+     */
+    import { Node, Source, TypeNode, NamedTypeNode, FunctionTypeNode, TypeName, TypeParameterNode, IdentifierExpression, LiteralExpression, FloatLiteralExpression, IntegerLiteralExpression, StringLiteralExpression, RegexpLiteralExpression, ArrayLiteralExpression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, NewExpression, ParenthesizedExpression, PropertyAccessExpression, TernaryExpression, UnaryPostfixExpression, UnaryExpression, UnaryPrefixExpression, ClassExpression, ObjectLiteralExpression, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExportImportStatement, ExportStatement, ExportDefaultStatement, ExpressionStatement, ForStatement, ForOfStatement, IfStatement, ImportStatement, InstanceOfExpression, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, WhileStatement, ClassDeclaration, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, ImportDeclaration, IndexSignatureDeclaration, InterfaceDeclaration, MethodDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, DecoratorNode, ParameterNode, ExportMember, SwitchCase, DeclarationStatement } from "assemblyscript/src/ast";
+    /** An AST builder. */
+    export class ASTBuilder {
+        /** Rebuilds the textual source from the specified AST, as far as possible. */
+        static build(node: Node): string;
+        private sb;
+        private indentLevel;
+        visitNode(node: Node): void;
+        visitSource(source: Source): void;
+        visitTypeNode(node: TypeNode): void;
+        visitTypeName(node: TypeName): void;
+        visitNamedTypeNode(node: NamedTypeNode): void;
+        visitFunctionTypeNode(node: FunctionTypeNode): void;
+        visitTypeParameter(node: TypeParameterNode): void;
+        visitIdentifierExpression(node: IdentifierExpression): void;
+        visitArrayLiteralExpression(node: ArrayLiteralExpression): void;
+        visitObjectLiteralExpression(node: ObjectLiteralExpression): void;
+        visitAssertionExpression(node: AssertionExpression): void;
+        visitBinaryExpression(node: BinaryExpression): void;
+        visitCallExpression(node: CallExpression): void;
+        private visitArguments;
+        visitClassExpression(node: ClassExpression): void;
+        visitCommaExpression(node: CommaExpression): void;
+        visitElementAccessExpression(node: ElementAccessExpression): void;
+        visitFunctionExpression(node: FunctionExpression): void;
+        visitLiteralExpression(node: LiteralExpression): void;
+        visitFloatLiteralExpression(node: FloatLiteralExpression): void;
+        visitInstanceOfExpression(node: InstanceOfExpression): void;
+        visitIntegerLiteralExpression(node: IntegerLiteralExpression): void;
+        visitStringLiteral(str: string, singleQuoted?: boolean): void;
+        visitStringLiteralExpression(node: StringLiteralExpression): void;
+        visitRegexpLiteralExpression(node: RegexpLiteralExpression): void;
+        visitNewExpression(node: NewExpression): void;
+        visitParenthesizedExpression(node: ParenthesizedExpression): void;
+        visitPropertyAccessExpression(node: PropertyAccessExpression): void;
+        visitTernaryExpression(node: TernaryExpression): void;
+        visitUnaryExpression(node: UnaryExpression): void;
+        visitUnaryPostfixExpression(node: UnaryPostfixExpression): void;
+        visitUnaryPrefixExpression(node: UnaryPrefixExpression): void;
+        visitNodeAndTerminate(statement: Statement): void;
+        visitBlockStatement(node: BlockStatement): void;
+        visitBreakStatement(node: BreakStatement): void;
+        visitContinueStatement(node: ContinueStatement): void;
+        visitClassDeclaration(node: ClassDeclaration, isDefault?: boolean): void;
+        visitDoStatement(node: DoStatement): void;
+        visitEmptyStatement(node: EmptyStatement): void;
+        visitEnumDeclaration(node: EnumDeclaration, isDefault?: boolean): void;
+        visitEnumValueDeclaration(node: EnumValueDeclaration): void;
+        visitExportImportStatement(node: ExportImportStatement): void;
+        visitExportMember(node: ExportMember): void;
+        visitExportStatement(node: ExportStatement): void;
+        visitExportDefaultStatement(node: ExportDefaultStatement): void;
+        visitExpressionStatement(node: ExpressionStatement): void;
+        visitFieldDeclaration(node: FieldDeclaration): void;
+        visitForStatement(node: ForStatement): void;
+        visitForOfStatement(node: ForOfStatement): void;
+        visitFunctionDeclaration(node: FunctionDeclaration, isDefault?: boolean): void;
+        visitFunctionCommon(node: FunctionDeclaration): void;
+        visitIfStatement(node: IfStatement): void;
+        visitImportDeclaration(node: ImportDeclaration): void;
+        visitImportStatement(node: ImportStatement): void;
+        visitIndexSignatureDeclaration(node: IndexSignatureDeclaration): void;
+        visitInterfaceDeclaration(node: InterfaceDeclaration, isDefault?: boolean): void;
+        visitMethodDeclaration(node: MethodDeclaration): void;
+        visitNamespaceDeclaration(node: NamespaceDeclaration, isDefault?: boolean): void;
+        visitReturnStatement(node: ReturnStatement): void;
+        visitSwitchCase(node: SwitchCase): void;
+        visitSwitchStatement(node: SwitchStatement): void;
+        visitThrowStatement(node: ThrowStatement): void;
+        visitTryStatement(node: TryStatement): void;
+        visitTypeDeclaration(node: TypeDeclaration): void;
+        visitVariableDeclaration(node: VariableDeclaration): void;
+        visitVariableStatement(node: VariableStatement): void;
+        visitWhileStatement(node: WhileStatement): void;
+        serializeDecorator(node: DecoratorNode): void;
+        serializeParameter(node: ParameterNode): void;
+        serializeExternalModifiers(node: DeclarationStatement): void;
+        serializeAccessModifiers(node: DeclarationStatement): void;
+        finish(): string;
+    }
+}
 declare module "assemblyscript/src/index" {
     /**
      * @license
@@ -5292,98 +5381,10 @@ declare module "assemblyscript/src/index" {
     export * from "assemblyscript/src/resolver";
     export * from "assemblyscript/src/tokenizer";
     export * from "assemblyscript/src/types";
+    export * from "assemblyscript/src/extra/ast";
     import * as util from "assemblyscript/src/util/index";
     export { util };
     export * from "assemblyscript/src/util/index";
-}
-declare module "assemblyscript/src/extra/ast" {
-    /**
-     * @fileoverview Abstract Syntax Tree extras.
-     *
-     * Provides serialization of the AssemblyScript AST back to it source form.
-     *
-     * @license Apache-2.0
-     */
-    import { Node, Source, TypeNode, NamedTypeNode, FunctionTypeNode, TypeName, TypeParameterNode, IdentifierExpression, LiteralExpression, FloatLiteralExpression, IntegerLiteralExpression, StringLiteralExpression, RegexpLiteralExpression, ArrayLiteralExpression, AssertionExpression, BinaryExpression, CallExpression, CommaExpression, ElementAccessExpression, FunctionExpression, NewExpression, ParenthesizedExpression, PropertyAccessExpression, TernaryExpression, UnaryPostfixExpression, UnaryExpression, UnaryPrefixExpression, ClassExpression, ObjectLiteralExpression, Statement, BlockStatement, BreakStatement, ContinueStatement, DoStatement, EmptyStatement, ExportImportStatement, ExportStatement, ExportDefaultStatement, ExpressionStatement, ForStatement, ForOfStatement, IfStatement, ImportStatement, InstanceOfExpression, ReturnStatement, SwitchStatement, ThrowStatement, TryStatement, VariableStatement, WhileStatement, ClassDeclaration, EnumDeclaration, EnumValueDeclaration, FieldDeclaration, FunctionDeclaration, ImportDeclaration, IndexSignatureDeclaration, InterfaceDeclaration, MethodDeclaration, NamespaceDeclaration, TypeDeclaration, VariableDeclaration, DecoratorNode, ParameterNode, ExportMember, SwitchCase, DeclarationStatement } from "assemblyscript/src/ast";
-    /** An AST builder. */
-    export class ASTBuilder {
-        /** Rebuilds the textual source from the specified AST, as far as possible. */
-        static build(node: Node): string;
-        private sb;
-        private indentLevel;
-        visitNode(node: Node): void;
-        visitSource(source: Source): void;
-        visitTypeNode(node: TypeNode): void;
-        visitTypeName(node: TypeName): void;
-        visitNamedTypeNode(node: NamedTypeNode): void;
-        visitFunctionTypeNode(node: FunctionTypeNode): void;
-        visitTypeParameter(node: TypeParameterNode): void;
-        visitIdentifierExpression(node: IdentifierExpression): void;
-        visitArrayLiteralExpression(node: ArrayLiteralExpression): void;
-        visitObjectLiteralExpression(node: ObjectLiteralExpression): void;
-        visitAssertionExpression(node: AssertionExpression): void;
-        visitBinaryExpression(node: BinaryExpression): void;
-        visitCallExpression(node: CallExpression): void;
-        private visitArguments;
-        visitClassExpression(node: ClassExpression): void;
-        visitCommaExpression(node: CommaExpression): void;
-        visitElementAccessExpression(node: ElementAccessExpression): void;
-        visitFunctionExpression(node: FunctionExpression): void;
-        visitLiteralExpression(node: LiteralExpression): void;
-        visitFloatLiteralExpression(node: FloatLiteralExpression): void;
-        visitInstanceOfExpression(node: InstanceOfExpression): void;
-        visitIntegerLiteralExpression(node: IntegerLiteralExpression): void;
-        visitStringLiteral(str: string, singleQuoted?: boolean): void;
-        visitStringLiteralExpression(node: StringLiteralExpression): void;
-        visitRegexpLiteralExpression(node: RegexpLiteralExpression): void;
-        visitNewExpression(node: NewExpression): void;
-        visitParenthesizedExpression(node: ParenthesizedExpression): void;
-        visitPropertyAccessExpression(node: PropertyAccessExpression): void;
-        visitTernaryExpression(node: TernaryExpression): void;
-        visitUnaryExpression(node: UnaryExpression): void;
-        visitUnaryPostfixExpression(node: UnaryPostfixExpression): void;
-        visitUnaryPrefixExpression(node: UnaryPrefixExpression): void;
-        visitNodeAndTerminate(statement: Statement): void;
-        visitBlockStatement(node: BlockStatement): void;
-        visitBreakStatement(node: BreakStatement): void;
-        visitContinueStatement(node: ContinueStatement): void;
-        visitClassDeclaration(node: ClassDeclaration, isDefault?: boolean): void;
-        visitDoStatement(node: DoStatement): void;
-        visitEmptyStatement(node: EmptyStatement): void;
-        visitEnumDeclaration(node: EnumDeclaration, isDefault?: boolean): void;
-        visitEnumValueDeclaration(node: EnumValueDeclaration): void;
-        visitExportImportStatement(node: ExportImportStatement): void;
-        visitExportMember(node: ExportMember): void;
-        visitExportStatement(node: ExportStatement): void;
-        visitExportDefaultStatement(node: ExportDefaultStatement): void;
-        visitExpressionStatement(node: ExpressionStatement): void;
-        visitFieldDeclaration(node: FieldDeclaration): void;
-        visitForStatement(node: ForStatement): void;
-        visitForOfStatement(node: ForOfStatement): void;
-        visitFunctionDeclaration(node: FunctionDeclaration, isDefault?: boolean): void;
-        visitFunctionCommon(node: FunctionDeclaration): void;
-        visitIfStatement(node: IfStatement): void;
-        visitImportDeclaration(node: ImportDeclaration): void;
-        visitImportStatement(node: ImportStatement): void;
-        visitIndexSignatureDeclaration(node: IndexSignatureDeclaration): void;
-        visitInterfaceDeclaration(node: InterfaceDeclaration, isDefault?: boolean): void;
-        visitMethodDeclaration(node: MethodDeclaration): void;
-        visitNamespaceDeclaration(node: NamespaceDeclaration, isDefault?: boolean): void;
-        visitReturnStatement(node: ReturnStatement): void;
-        visitSwitchCase(node: SwitchCase): void;
-        visitSwitchStatement(node: SwitchStatement): void;
-        visitThrowStatement(node: ThrowStatement): void;
-        visitTryStatement(node: TryStatement): void;
-        visitTypeDeclaration(node: TypeDeclaration): void;
-        visitVariableDeclaration(node: VariableDeclaration): void;
-        visitVariableStatement(node: VariableStatement): void;
-        visitWhileStatement(node: WhileStatement): void;
-        serializeDecorator(node: DecoratorNode): void;
-        serializeParameter(node: ParameterNode): void;
-        serializeExternalModifiers(node: DeclarationStatement): void;
-        serializeAccessModifiers(node: DeclarationStatement): void;
-        finish(): string;
-    }
 }
 /**
  * @fileoverview Collections glue code for TypeScript.
