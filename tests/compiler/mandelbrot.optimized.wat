@@ -518,10 +518,10 @@
       br $while-continue|2
      end
     end
-    local.get $2
     local.get $12
     i32.const 1
     i32.shl
+    local.get $2
     i32.add
     local.get $5
     local.get $5

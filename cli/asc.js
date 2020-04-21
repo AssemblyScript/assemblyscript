@@ -694,20 +694,24 @@ exports.main = function main(argv, options, callback) {
 
       // PassRunner::addDefaultGlobalOptimizationPrePasses
       add("duplicate-function-elimination");
+      add("remove-unused-module-elements"); // differs
 
       // PassRunner::addDefaultFunctionOptimizationPasses
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         add("ssa-nomerge");
       }
       if (optimizeLevel >= 3) {
-        add("simplify-locals-nostructure"); // differs
+        add("flatten"); // differs
+        add("simplify-locals-notee-nostructure"); // differs
         add("vacuum"); // differs
-        add("reorder-locals"); // differs
+        add("code-folding"); // differs
         add("flatten");
         add("local-cse");
+        add("reorder-locals"); // differs
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
+        add("vacuum");
       }
       if (hasARC) { // differs
         if (optimizeLevel < 3) {
@@ -715,27 +719,22 @@ exports.main = function main(argv, options, callback) {
         }
         add("post-assemblyscript");
       }
+      add("optimize-instructions"); // differs
+      add("inlining"); // differs
       add("dce");
       add("remove-unused-brs");
       add("remove-unused-names");
-      // add("optimize-instructions"); // differs move 2 lines above
+      add("inlining-optimizing"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
         add("simplify-globals-optimizing"); // differs
       }
-      add("optimize-instructions"); // differs
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         add("precompute-propagate");
       } else {
         add("precompute");
       }
-      if (module.getLowMemoryUnused()) {
-        if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-          add("optimize-added-constants-propagate");
-        } else {
-          add("optimize-added-constants");
-        }
-      }
+      add("vacuum"); // differs
       // this will be done later (1)
       // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
       //   add("code-pushing");
@@ -776,17 +775,27 @@ exports.main = function main(argv, options, callback) {
       // } else {
       //   add("precompute");
       // }
-      add("optimize-instructions");
+      if (optimizeLevel >= 3) {
+        add("optimize-instructions");
+      }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("rse");
       }
       add("vacuum");
       // PassRunner::addDefaultGlobalOptimizationPostPasses
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        add("simplify-globals-optimizing"); // differs
         add("dae-optimizing");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         add("inlining-optimizing");
+      }
+      if (module.getLowMemoryUnused()) {
+        if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+          add("optimize-added-constants-propagate");
+        } else {
+          add("optimize-added-constants");
+        }
       }
       // "duplicate-function-elimination" will better done later
       // add("duplicate-function-elimination");
@@ -795,6 +804,7 @@ exports.main = function main(argv, options, callback) {
         add("simplify-globals-optimizing");
       } else {
         add("simplify-globals");
+        add("vacuum"); // differs
       }
       // moved from (2)
       // it works better after globals optimizations like simplify-globals, inlining-optimizing and etc
@@ -814,10 +824,6 @@ exports.main = function main(argv, options, callback) {
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
-        // rearrange / reduce switch cases again
-        add("remove-unused-brs");
-        add("vacuum");
-
         // move some code after early return which potentially could reduce computations
         // do this after CFG cleanup (originally it was done before)
         // moved from (1)
@@ -825,17 +831,23 @@ exports.main = function main(argv, options, callback) {
         if (optimizeLevel >= 3) {
           // this quite expensive so do this only for highest opt level
           add("simplify-globals");
+          add("vacuum");
           // replace indirect calls with direct and inline if possible again.
+          add("inlining-optimizing");
           add("directize");
           add("dae-optimizing");
           add("precompute-propagate");
-          add("coalesce-locals");
+          add("vacuum");
           add("merge-locals");
+          add("coalesce-locals");
           add("simplify-locals-nostructure");
           add("vacuum");
           add("inlining-optimizing");
           add("precompute-propagate");
         }
+        add("remove-unused-brs");
+        add("remove-unused-names");
+        add("vacuum");
         add("optimize-instructions");
         add("simplify-globals-optimizing");
       }

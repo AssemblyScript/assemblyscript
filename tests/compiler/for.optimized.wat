@@ -708,10 +708,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -747,7 +747,6 @@
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  nop
   local.get $0
   i32.load offset=4
   i32.const -2
@@ -1162,12 +1161,12 @@
   global.set $for/ran
   i32.const 10
   local.set $1
-  loop $for-loop|03
+  loop $for-loop|04
    local.get $1
    i32.const 1
    i32.sub
    local.tee $1
-   br_if $for-loop|03
+   br_if $for-loop|04
   end
   local.get $1
   if
@@ -1184,14 +1183,14 @@
   global.set $for/ran
   i32.const 0
   local.set $1
-  loop $for-loop|04
+  loop $for-loop|06
    local.get $1
    i32.const 1
    i32.add
    local.tee $1
    i32.const 10
    i32.ne
-   br_if $for-loop|04
+   br_if $for-loop|06
   end
   local.get $1
   i32.const 10
@@ -1214,7 +1213,7 @@
   global.set $for/ran
   i32.const 0
   local.set $1
-  loop $for-loop|05
+  loop $for-loop|07
    local.get $1
    i32.const 10
    i32.lt_s
@@ -1223,7 +1222,7 @@
     i32.const 1
     i32.add
     local.set $1
-    br $for-loop|05
+    br $for-loop|07
    end
   end
   local.get $1
@@ -1264,7 +1263,7 @@
   global.set $for/ran
   call $for/Ref#constructor
   local.set $1
-  loop $for-loop|06
+  loop $for-loop|03
    local.get $1
    if
     local.get $3
@@ -1289,7 +1288,7 @@
     end
     local.get $0
     local.set $1
-    br $for-loop|06
+    br $for-loop|03
    end
   end
   local.get $3
@@ -1332,7 +1331,7 @@
   call $for/Ref#constructor
   local.set $0
   call $~lib/rt/pure/__release
-  loop $for-loop|07
+  loop $for-loop|05
    block $for-break0
     call $for/Ref#constructor
     local.tee $1
@@ -1359,7 +1358,7 @@
      local.get $0
      call $~lib/rt/pure/__release
      local.set $0
-     br $for-loop|07
+     br $for-loop|05
     end
    end
   end
@@ -1439,16 +1438,13 @@
     block $switch$1$default
      block $switch$1$case$4
       local.get $0
-      i32.const 16
-      i32.add
-      local.tee $1
       i32.const 8
-      i32.sub
+      i32.add
       i32.load
       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$default
      end
-     local.get $1
-     i32.load
+     local.get $0
+     i32.load offset=16
      local.tee $1
      if
       local.get $1
