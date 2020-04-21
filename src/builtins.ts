@@ -2543,7 +2543,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
   var numOperands = operands.length;
   var usizeType = compiler.options.usizeType;
   var offset: i64;
-  if (typeArguments) {
+  if (typeArguments !== null && typeArguments.length > 0) { // data<T>(values[, align])
     let elementType = typeArguments[0];
     if (!elementType.is(TypeFlags.VALUE)) {
       compiler.error(
@@ -2569,22 +2569,21 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     let isStatic = true;
     for (let i = 0; i < numElements; ++i) {
       let expression = expressions[i];
-      let expr: ExpressionRef;
       if (expression) {
-        expr = module.precomputeExpression(
+        let expr = module.precomputeExpression(
           compiler.compileExpression(<Expression>expression, elementType,
             Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
           )
         );
         if (getExpressionId(expr) == ExpressionId.Const) {
           assert(getExpressionType(expr) == nativeElementType);
+          exprs[i] = expr;
         } else {
           isStatic = false;
         }
       } else {
-        expr = compiler.makeZero(elementType);
+        exprs[i] = compiler.makeZero(elementType);
       }
-      exprs[i] = expr;
     }
     if (!isStatic) {
       compiler.error(
@@ -2605,7 +2604,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     let buf = new Uint8Array(numElements * elementType.byteSize);
     assert(compiler.writeStaticBuffer(buf, 0, elementType, exprs) == buf.byteLength);
     offset = compiler.addMemorySegment(buf, align).offset;
-  } else {
+  } else { // data(size[, align])
     let arg0 = compiler.precomputeExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
     if (getExpressionId(arg0) != ExpressionId.Const) {
       compiler.error(
