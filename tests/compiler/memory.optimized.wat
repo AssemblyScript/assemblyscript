@@ -154,36 +154,10 @@
   global.set $memory/ptr
   i32.const 1164
   global.set $memory/ptr
-  global.get $memory/ptr
-  i32.const 2
-  i32.add
   i32.const 1166
   global.set $memory/ptr
-  i32.const 1166
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 37
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  global.get $memory/ptr
-  i32.const 1
-  i32.add
   i32.const 1167
   global.set $memory/ptr
-  i32.const 1167
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 38
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
   global.get $memory/ptr
   i32.const 1167
   i32.ne
@@ -283,17 +257,6 @@
   global.set $memory/ptr
   i32.const 1215
   global.set $memory/ptr
-  global.get $memory/ptr
-  i32.const 1215
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1056
-   i32.const 61
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
  )
  (func $~start
   call $start:memory

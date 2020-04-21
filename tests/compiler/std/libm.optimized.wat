@@ -9,8 +9,8 @@
  (type $f64_i32_=>_f64 (func (param f64 i32) (result f64)))
  (type $f64_f64_i32_=>_f64 (func (param f64 f64 i32) (result f64)))
  (memory $0 1)
- (data (i32.const 1024) "\c0\00\00\00\01\00\00\00\03\00\00\00\c0\00\00\00n\83\f9\a2\00\00\00\00\d1W\'\fc)\15DN\99\95b\db\c0\dd4\f5\abcQ\feA\90C<:n$\b7a\c5\bb\de\ea.I\06\e0\d2MB\1c\eb\1d\fe\1c\92\d1\t\f55\82\e8>\a7)\b1&p\9c\e9\84D\bb.9\d6\919A~_\b4\8b_\84\9c\f49S\83\ff\97\f8\1f;(\f9\bd\8b\11/\ef\0f\98\05\de\cf~6m\1fm\nZf?FO\b7\t\cb\'\c7\ba\'u-\ea_\9e\f79\07={\f1\e5\eb\b1_\fbk\ea\92R\8aF0\03V\08]\8d\1f \bc\cf\f0\abk{\fca\91\e3\a9\1d6\f4\9a_\85\99e\08\1b\e6^\80\d8\ff\8d@h\a0\14W\15\06\061\'sM")
- (data (i32.const 1232) " \00\00\00\01\00\00\00\03\00\00\00 \00\00\00)\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
+ (data (i32.const 1024) "n\83\f9\a2\00\00\00\00\d1W\'\fc)\15DN\99\95b\db\c0\dd4\f5\abcQ\feA\90C<:n$\b7a\c5\bb\de\ea.I\06\e0\d2MB\1c\eb\1d\fe\1c\92\d1\t\f55\82\e8>\a7)\b1&p\9c\e9\84D\bb.9\d6\919A~_\b4\8b_\84\9c\f49S\83\ff\97\f8\1f;(\f9\bd\8b\11/\ef\0f\98\05\de\cf~6m\1fm\nZf?FO\b7\t\cb\'\c7\ba\'u-\ea_\9e\f79\07={\f1\e5\eb\b1_\fbk\ea\92R\8aF0\03V\08]\8d\1f \bc\cf\f0\abk{\fca\91\e3\a9\1d6\f4\9a_\85\99e\08\1b\e6^\80\d8\ff\8d@h\a0\14W\15\06\061\'sM")
+ (data (i32.const 1216) ")\15DNn\83\f9\a2\c0\dd4\f5\d1W\'\fcA\90C<\99\95b\dba\c5\bb\de\abcQ\fe")
  (global $../../lib/libm/assembly/libm/E f64 (f64.const 2.718281828459045))
  (global $../../lib/libm/assembly/libm/LN10 f64 (f64.const 2.302585092994046))
  (global $../../lib/libm/assembly/libm/LN2 f64 (f64.const 0.6931471805599453))
@@ -1602,7 +1602,7 @@
   i32.wrap_i64
   i32.const 3
   i32.shl
-  i32.const 1040
+  i32.const 1024
   i32.add
   local.tee $7
   i64.load
@@ -6549,7 +6549,7 @@
    i32.shr_s
    i32.const 3
    i32.shl
-   i32.const 1248
+   i32.const 1216
    i32.add
    local.tee $9
    i64.load
@@ -8132,7 +8132,7 @@
    i32.shr_s
    i32.const 3
    i32.shl
-   i32.const 1248
+   i32.const 1216
    i32.add
    local.tee $10
    i64.load
@@ -8495,7 +8495,7 @@
    i32.shr_s
    i32.const 3
    i32.shl
-   i32.const 1248
+   i32.const 1216
    i32.add
    local.tee $10
    i64.load
