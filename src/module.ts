@@ -1422,7 +1422,6 @@ export class Module {
 
   optimize(optimizeLevel: i32, shrinkLevel: i32, debugInfo: bool = false, usesARC: bool = true): void {
     // Implicitly run costly non-LLVM optimizations on -O3 or -Oz
-    // see: https://github.com/WebAssembly/binaryen/pull/1596
     if (optimizeLevel >= 3 || shrinkLevel >= 2) optimizeLevel = 4;
 
     binaryen._BinaryenSetOptimizeLevel(optimizeLevel);
@@ -1448,19 +1447,29 @@ export class Module {
     // see: Binaryen/src/pass.cpp
     if (optimizeLevel > 0 || shrinkLevel > 0) {
       let passes = new Array<string>();
+
+      // --- PassRunner::addDefaultGlobalOptimizationPrePasses ---
+
       passes.push("duplicate-function-elimination");
+      passes.push("remove-unused-module-elements"); // +
+
+      // --- PassRunner::addDefaultFunctionOptimizationPasses ---
+
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("ssa-nomerge");
       }
       if (optimizeLevel >= 3) {
-        passes.push("simplify-locals-nostructure");
+        passes.push("flatten");
+        passes.push("simplify-locals-notee-nostructure");
         passes.push("vacuum");
-        passes.push("reorder-locals");
+        passes.push("code-folding");
         passes.push("flatten");
         passes.push("local-cse");
+        passes.push("reorder-locals");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("rse");
+        passes.push("vacuum");
       }
       if (usesARC) {
         if (optimizeLevel < 3) {
@@ -1468,26 +1477,22 @@ export class Module {
         }
         passes.push("post-assemblyscript");
       }
+      passes.push("optimize-instructions");
+      passes.push("inlining");
       passes.push("dce");
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
+      passes.push("inlining-optimizing");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("pick-load-signs");
         passes.push("simplify-globals-optimizing");
       }
-      passes.push("optimize-instructions");
       if (optimizeLevel >= 3 || shrinkLevel >= 2) {
         passes.push("precompute-propagate");
       } else {
         passes.push("precompute");
       }
-      if (binaryen._BinaryenGetLowMemoryUnused()) {
-        if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-          passes.push("optimize-added-constants-propagate");
-        } else {
-          passes.push("optimize-added-constants");
-        }
-      }
+      passes.push("vacuum");
       if (optimizeLevel >= 3 && shrinkLevel <= 1) {
         passes.push("licm");
       }
@@ -1515,54 +1520,78 @@ export class Module {
       passes.push("remove-unused-brs");
       passes.push("remove-unused-names");
       passes.push("merge-blocks");
-      passes.push("optimize-instructions");
+      if (optimizeLevel >= 3) {
+        passes.push("optimize-instructions");
+      }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("rse");
       }
       passes.push("vacuum");
+
+      // --- PassRunner::addDefaultGlobalOptimizationPostPasses ---
+
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("simplify-globals-optimizing");
         passes.push("dae-optimizing");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         passes.push("inlining-optimizing");
+      }
+      if (binaryen._BinaryenGetLowMemoryUnused()) {
+        if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+          passes.push("optimize-added-constants-propagate");
+        } else {
+          passes.push("optimize-added-constants");
+        }
       }
       passes.push("duplicate-import-elimination");
       if (optimizeLevel >= 2 || shrinkLevel >= 2) {
         passes.push("simplify-globals-optimizing");
       } else {
         passes.push("simplify-globals");
+        passes.push("vacuum");
       }
+      // precompute works best after global optimizations
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("precompute-propagate");
       } else {
         passes.push("precompute");
       }
-      passes.push("directize");
-      passes.push("dae-optimizing");
-      passes.push("inlining-optimizing");
+      passes.push("directize"); // replace indirect with direct calls
+      passes.push("dae-optimizing"); // reduce arity
+      passes.push("inlining-optimizing"); // and inline if possible
       if (usesARC) {
+        // works best after inlining to cover most retains/releases
         passes.push("post-assemblyscript-finalize");
       }
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         passes.push("rse");
-        passes.push("remove-unused-brs");
-        passes.push("vacuum");
+        // move code on early return (after CFG cleanup)
         passes.push("code-pushing");
         if (optimizeLevel >= 3) {
+          // very expensive, so O3 only
           passes.push("simplify-globals");
+          passes.push("vacuum");
+          // replace indirect with direct calls again and inline
+          passes.push("inlining-optimizing");
           passes.push("directize");
           passes.push("dae-optimizing");
           passes.push("precompute-propagate");
-          passes.push("coalesce-locals");
+          passes.push("vacuum");
           passes.push("merge-locals");
+          passes.push("coalesce-locals");
           passes.push("simplify-locals-nostructure");
           passes.push("vacuum");
           passes.push("inlining-optimizing");
           passes.push("precompute-propagate");
         }
+        passes.push("remove-unused-brs");
+        passes.push("remove-unused-names");
+        passes.push("vacuum");
         passes.push("optimize-instructions");
         passes.push("simplify-globals-optimizing");
       }
+      // clean up
       passes.push("duplicate-function-elimination");
       passes.push("remove-unused-nonfunction-module-elements");
       passes.push("memory-packing");

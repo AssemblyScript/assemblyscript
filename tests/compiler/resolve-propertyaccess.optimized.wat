@@ -105,108 +105,108 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/util/number/itoa32 (param $0 i32) (result i32)
+ (func $~lib/number/I32#toString (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  i32.eqz
-  if
-   i32.const 1040
-   return
-  end
-  local.get $0
-  i32.const 31
-  i32.shr_u
-  local.tee $1
-  if
-   i32.const 0
+  block $__inlined_func$~lib/util/number/itoa32
    local.get $0
-   i32.sub
-   local.set $0
-  end
-  local.get $1
-  local.get $0
-  i32.const 10
-  i32.ge_u
-  i32.const 1
-  i32.add
-  local.get $0
-  i32.const 10000
-  i32.ge_u
-  i32.const 3
-  i32.add
-  local.get $0
-  i32.const 1000
-  i32.ge_u
-  i32.add
-  local.get $0
-  i32.const 100
-  i32.lt_u
-  select
-  local.get $0
-  i32.const 1000000
-  i32.ge_u
-  i32.const 6
-  i32.add
-  local.get $0
-  i32.const 1000000000
-  i32.ge_u
-  i32.const 8
-  i32.add
-  local.get $0
-  i32.const 100000000
-  i32.ge_u
-  i32.add
-  local.get $0
-  i32.const 10000000
-  i32.lt_u
-  select
-  local.get $0
-  i32.const 100000
-  i32.lt_u
-  select
-  i32.add
-  local.tee $2
-  i32.const 1
-  i32.shl
-  i32.const 1
-  call $~lib/rt/stub/__alloc
-  local.tee $3
-  local.set $4
-  loop $do-continue|0
+   i32.eqz
+   if
+    i32.const 1040
+    local.set $2
+    br $__inlined_func$~lib/util/number/itoa32
+   end
+   local.get $0
+   i32.const 31
+   i32.shr_u
+   local.tee $3
+   if
+    i32.const 0
+    local.get $0
+    i32.sub
+    local.set $0
+   end
+   local.get $3
    local.get $0
    i32.const 10
-   i32.rem_u
-   local.set $5
-   local.get $0
-   i32.const 10
-   i32.div_u
-   local.set $0
-   local.get $4
-   local.get $2
+   i32.ge_u
    i32.const 1
-   i32.sub
-   local.tee $2
+   i32.add
+   local.get $0
+   i32.const 10000
+   i32.ge_u
+   i32.const 3
+   i32.add
+   local.get $0
+   i32.const 1000
+   i32.ge_u
+   i32.add
+   local.get $0
+   i32.const 100
+   i32.lt_u
+   select
+   local.get $0
+   i32.const 1000000
+   i32.ge_u
+   i32.const 6
+   i32.add
+   local.get $0
+   i32.const 1000000000
+   i32.ge_u
+   i32.const 8
+   i32.add
+   local.get $0
+   i32.const 100000000
+   i32.ge_u
+   i32.add
+   local.get $0
+   i32.const 10000000
+   i32.lt_u
+   select
+   local.get $0
+   i32.const 100000
+   i32.lt_u
+   select
+   i32.add
+   local.tee $4
    i32.const 1
    i32.shl
-   i32.add
-   local.get $5
-   i32.const 48
-   i32.add
-   i32.store16
-   local.get $0
-   br_if $do-continue|0
-  end
-  local.get $1
-  if
+   i32.const 1
+   call $~lib/rt/stub/__alloc
+   local.tee $2
+   local.set $5
+   loop $do-continue|0
+    local.get $0
+    i32.const 10
+    i32.div_u
+    local.get $5
+    local.get $4
+    i32.const 1
+    i32.sub
+    local.tee $4
+    i32.const 1
+    i32.shl
+    i32.add
+    local.get $0
+    i32.const 10
+    i32.rem_u
+    i32.const 48
+    i32.add
+    i32.store16
+    local.tee $0
+    br_if $do-continue|0
+   end
    local.get $3
-   i32.const 45
-   i32.store16
+   if
+    local.get $2
+    i32.const 45
+    i32.store16
+   end
   end
-  local.get $3
+  local.get $2
  )
  (func $~lib/string/String#get:length (param $0 i32) (result i32)
   local.get $0
@@ -266,16 +266,16 @@
    local.set $2
    local.get $3
    if
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $3
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $4
      local.get $3
+     local.get $4
      i32.sub
      return
     end
@@ -329,7 +329,7 @@
   i32.const 1456
   global.set $~lib/rt/stub/offset
   i32.const 1
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1072
   call $~lib/string/String.__eq
   i32.eqz
@@ -342,7 +342,7 @@
    unreachable
   end
   i32.const 11
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1184
   call $~lib/string/String.__eq
   i32.eqz
@@ -355,7 +355,7 @@
    unreachable
   end
   i32.const 2
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1216
   call $~lib/string/String.__eq
   i32.eqz
@@ -368,7 +368,7 @@
    unreachable
   end
   i32.const 22
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1248
   call $~lib/string/String.__eq
   i32.eqz
@@ -381,7 +381,7 @@
    unreachable
   end
   i32.const 3
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1280
   call $~lib/string/String.__eq
   i32.eqz
@@ -394,7 +394,7 @@
    unreachable
   end
   i32.const 33
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1312
   call $~lib/string/String.__eq
   i32.eqz
@@ -407,7 +407,7 @@
    unreachable
   end
   i32.const 4
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1344
   call $~lib/string/String.__eq
   i32.eqz
@@ -420,7 +420,7 @@
    unreachable
   end
   i32.const 5
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1376
   call $~lib/string/String.__eq
   i32.eqz
@@ -433,7 +433,7 @@
    unreachable
   end
   i32.const 55
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1408
   call $~lib/string/String.__eq
   i32.eqz
@@ -453,7 +453,7 @@
   i32.store
   local.get $0
   i32.load
-  call $~lib/util/number/itoa32
+  call $~lib/number/I32#toString
   i32.const 1440
   call $~lib/string/String.__eq
   i32.eqz

@@ -647,10 +647,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -1275,30 +1275,28 @@
    i32.const 1
    return
   end
-  local.get $1
-  i32.eqz
-  i32.const 1
-  local.get $0
-  select
-  if
-   i32.const 0
+  block $folding-inner0
+   local.get $1
+   i32.eqz
+   i32.const 1
+   local.get $0
+   select
+   br_if $folding-inner0
+   local.get $0
+   call $~lib/string/String#get:length
+   local.tee $2
+   local.get $1
+   call $~lib/string/String#get:length
+   i32.ne
+   br_if $folding-inner0
+   local.get $0
+   local.get $1
+   local.get $2
+   call $~lib/util/string/compareImpl
+   i32.eqz
    return
   end
-  local.get $0
-  call $~lib/string/String#get:length
-  local.tee $2
-  local.get $1
-  call $~lib/string/String#get:length
-  i32.ne
-  if
-   i32.const 0
-   return
-  end
-  local.get $0
-  local.get $1
-  local.get $2
-  call $~lib/util/string/compareImpl
-  i32.eqz
+  i32.const 0
  )
  (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (result i32)
   (local $6 i32)
@@ -2011,9 +2009,9 @@
       i32.const 101
       i32.store16 offset=2
       local.get $0
+      local.tee $1
       i32.const 4
       i32.add
-      local.tee $1
       local.get $3
       i32.const 1
       i32.sub
@@ -2039,7 +2037,7 @@
       i32.const 43
       local.get $2
       select
-      i32.store16
+      i32.store16 offset=4
       local.get $0
       i32.const 2
       i32.add
@@ -2067,9 +2065,9 @@
       i32.const 101
       i32.store16 offset=2
       local.get $0
+      local.tee $2
       i32.const 4
       i32.add
-      local.tee $2
       local.get $3
       i32.const 1
       i32.sub
@@ -2095,7 +2093,7 @@
       i32.const 43
       local.get $3
       select
-      i32.store16
+      i32.store16 offset=4
       local.get $0
       local.get $1
       i32.add
@@ -2456,16 +2454,13 @@
     block $switch$1$default
      block $switch$1$case$4
       local.get $0
-      i32.const 16
-      i32.add
-      local.tee $1
       i32.const 8
-      i32.sub
+      i32.add
       i32.load
       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$default
      end
-     local.get $1
-     i32.load
+     local.get $0
+     i32.load offset=16
      local.tee $1
      if
       local.get $1

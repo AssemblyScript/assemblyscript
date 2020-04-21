@@ -1,9 +1,9 @@
 (module
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
@@ -636,10 +636,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -1378,10 +1378,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
-    local.get $4
     local.get $5
     i32.const 3
     i32.and
+    local.get $4
     i32.or
     i32.store
     local.get $1
@@ -1580,14 +1580,89 @@
    end
   end
  )
- (func $start:extends-baseaggregate
-  (local $0 i32)
+ (func $~lib/array/Array<extends-baseaggregate/A2>#push (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
+  i32.const 1116
+  i32.load
+  local.tee $6
+  i32.const 1
+  i32.add
+  local.tee $2
+  local.set $1
+  local.get $2
+  i32.const 1112
+  i32.load
+  local.tee $3
+  i32.const 2
+  i32.shr_u
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 268435452
+   i32.gt_u
+   if
+    i32.const 1296
+    i32.const 1344
+    i32.const 14
+    i32.const 48
+    call $~lib/builtins/abort
+    unreachable
+   end
+   i32.const 1104
+   i32.load
+   local.set $4
+   local.get $3
+   call $~lib/rt/tlsf/maybeInitialize
+   local.get $4
+   call $~lib/rt/tlsf/checkUsedBlock
+   local.get $1
+   i32.const 2
+   i32.shl
+   local.tee $5
+   call $~lib/rt/tlsf/reallocateBlock
+   i32.const 16
+   i32.add
+   local.tee $1
+   i32.add
+   local.get $5
+   local.get $3
+   i32.sub
+   call $~lib/memory/memory.fill
+   local.get $1
+   local.get $4
+   i32.ne
+   if
+    i32.const 1104
+    local.get $1
+    i32.store
+    i32.const 1108
+    local.get $1
+    i32.store
+   end
+   i32.const 1112
+   local.get $5
+   i32.store
+  end
+  i32.const 1108
+  i32.load
+  local.get $6
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $0
+  call $~lib/rt/pure/__retain
+  i32.store
+  i32.const 1116
+  local.get $2
+  i32.store
+ )
+ (func $~start
+  (local $0 i32)
   i32.const 20
   i32.const 6
   call $~lib/rt/tlsf/__alloc
@@ -1610,79 +1685,8 @@
   local.get $0
   i32.const 0
   i32.store offset=16
-  i32.const 1116
-  i32.load
-  local.tee $6
-  i32.const 1
-  i32.add
-  local.tee $3
-  local.set $1
-  local.get $3
-  i32.const 1112
-  i32.load
-  local.tee $4
-  i32.const 2
-  i32.shr_u
-  i32.gt_u
-  if
-   local.get $1
-   i32.const 268435452
-   i32.gt_u
-   if
-    i32.const 1296
-    i32.const 1344
-    i32.const 14
-    i32.const 48
-    call $~lib/builtins/abort
-    unreachable
-   end
-   i32.const 1104
-   i32.load
-   local.set $5
-   local.get $4
-   call $~lib/rt/tlsf/maybeInitialize
-   local.get $5
-   call $~lib/rt/tlsf/checkUsedBlock
-   local.get $1
-   i32.const 2
-   i32.shl
-   local.tee $1
-   call $~lib/rt/tlsf/reallocateBlock
-   i32.const 16
-   i32.add
-   local.tee $2
-   i32.add
-   local.get $1
-   local.get $4
-   i32.sub
-   call $~lib/memory/memory.fill
-   local.get $2
-   local.get $5
-   i32.ne
-   if
-    i32.const 1104
-    local.get $2
-    i32.store
-    i32.const 1108
-    local.get $2
-    i32.store
-   end
-   i32.const 1112
-   local.get $1
-   i32.store
-  end
-  i32.const 1108
-  i32.load
-  local.get $6
-  i32.const 2
-  i32.shl
-  i32.add
   local.get $0
-  call $~lib/rt/pure/__retain
-  i32.store
-  i32.const 1116
-  local.get $3
-  i32.store
+  call $~lib/array/Array<extends-baseaggregate/A2>#push
   local.get $0
   i32.const 1564
   i32.gt_u
@@ -1692,9 +1696,6 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
- )
- (func $~start
-  call $start:extends-baseaggregate
  )
  (func $~lib/rt/pure/markGray (param $0 i32)
   (local $1 i32)
