@@ -525,24 +525,24 @@
   local.get $0
   i64.load
   i32.wrap_i64
-  local.tee $1
+  local.tee $0
   if
-   local.get $1
+   local.get $0
    call $~lib/util/number/decimalCount32
    local.tee $2
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/stub/__alloc
-   local.tee $0
-   local.get $1
+   local.tee $1
+   local.get $0
    local.get $2
    call $~lib/util/number/utoa_simple<u32>
   else
    i32.const 1184
-   local.set $0
+   local.set $1
   end
-  local.get $0
+  local.get $1
  )
  (func $~start
   i32.const 1200

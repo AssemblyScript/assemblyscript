@@ -709,6 +709,7 @@ exports.main = function main(argv, options, callback) {
         add("local-cse");
         add("reorder-locals"); // differs
       }
+      add("optimize-instructions");
       if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
         add("rse");
         add("vacuum");
@@ -719,11 +720,10 @@ exports.main = function main(argv, options, callback) {
         }
         add("post-assemblyscript");
       }
+      add("inlining"); // differs
       add("dce");
       add("remove-unused-brs");
       add("remove-unused-names");
-      add("optimize-instructions");
-      add("inlining"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
         add("simplify-globals-optimizing"); // differs

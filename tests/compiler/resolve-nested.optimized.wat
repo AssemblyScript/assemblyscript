@@ -85,21 +85,23 @@
  )
  (func $resolve-nested/Outer.InnerClass#constructor (param $0 i32) (result i32)
   local.get $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    i32.const 4
    call $~lib/rt/stub/__alloc
+   local.set $0
   end
+  local.get $0
  )
  (func $resolve-nested/Outer.Inner.EvenInnerClass#constructor (param $0 i32) (result i32)
   local.get $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    i32.const 5
    call $~lib/rt/stub/__alloc
+   local.set $0
   end
+  local.get $0
  )
  (func $resolve-nested/Outer.Inner.evenInner (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32)
   nop

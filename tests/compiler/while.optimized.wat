@@ -1213,14 +1213,14 @@
   global.set $while/ran
   i32.const 10
   local.set $3
-  loop $while-continue|02
+  loop $while-continue|04
    local.get $3
    if
     local.get $3
     i32.const 1
     i32.sub
     local.set $3
-    br $while-continue|02
+    br $while-continue|04
    end
   end
   local.get $3
@@ -1286,7 +1286,7 @@
   local.set $3
   call $while/Ref#constructor
   local.set $1
-  loop $while-continue|04
+  loop $while-continue|05
    local.get $1
    if
     local.get $3
@@ -1311,7 +1311,7 @@
     end
     local.get $0
     local.set $1
-    br $while-continue|04
+    br $while-continue|05
    end
   end
   local.get $3
@@ -1354,7 +1354,7 @@
   local.set $3
   call $while/Ref#constructor
   local.set $1
-  loop $while-continue|05
+  loop $while-continue|06
    block $while-break|0
     call $while/Ref#constructor
     local.tee $2
@@ -1377,7 +1377,7 @@
       local.set $1
       br $while-break|0
      end
-     br $while-continue|05
+     br $while-continue|06
     end
    end
   end

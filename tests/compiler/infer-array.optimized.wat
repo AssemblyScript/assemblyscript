@@ -288,6 +288,7 @@
  (func $~lib/rt/__allocArray (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   i32.const 16
   local.get $2
   call $~lib/rt/stub/__alloc
@@ -295,27 +296,26 @@
   local.get $0
   local.get $1
   i32.shl
-  local.tee $1
-  local.set $5
-  local.get $1
+  local.tee $4
+  local.set $6
+  local.get $4
   i32.const 0
   call $~lib/rt/stub/__alloc
-  local.set $4
+  local.set $1
   local.get $3
   if
-   local.get $4
+   local.get $1
    local.get $3
-   local.get $5
+   local.get $6
    call $~lib/memory/memory.copy
   end
-  local.get $4
-  local.tee $3
+  local.get $1
   i32.store
   local.get $2
-  local.get $3
+  local.get $1
   i32.store offset=4
   local.get $2
-  local.get $1
+  local.get $4
   i32.store offset=8
   local.get $2
   local.get $0
@@ -340,18 +340,20 @@
   i32.const 1184
   call $~lib/rt/__allocArray
   drop
+  i32.const 2
+  i32.const 2
+  i32.const 5
+  i32.const 1232
+  call $~lib/rt/__allocArray
+  local.tee $0
+  local.set $1
   block $folding-inner0
    i32.const 1
-   i32.const 2
-   i32.const 2
-   i32.const 5
-   i32.const 1232
-   call $~lib/rt/__allocArray
-   local.tee $0
+   local.get $0
    i32.load offset=12
    i32.ge_u
    br_if $folding-inner0
-   local.get $0
+   local.get $1
    i32.load offset=4
    i32.load offset=4
    i32.const -1
@@ -370,17 +372,17 @@
    i32.const 1312
    call $~lib/rt/__allocArray
    drop
-   i32.const 1
    i32.const 3
    i32.const 2
    i32.const 6
    i32.const 1360
    call $~lib/rt/__allocArray
    local.tee $0
+   i32.const 1
+   local.get $0
    i32.load offset=12
    i32.ge_u
    br_if $folding-inner0
-   local.get $0
    i32.load offset=4
    f32.load offset=4
    drop
