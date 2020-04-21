@@ -1,9 +1,9 @@
 (module
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $none_=>_none (func))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
- (type $none_=>_none (func))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -629,10 +629,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -668,7 +668,6 @@
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  nop
   local.get $0
   i32.load offset=4
   i32.const -2
@@ -1008,7 +1007,7 @@
   end
   i32.const 0
  )
- (func $~start
+ (func $start:managed-cast
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1017,13 +1016,6 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
-  global.get $~started
-  if
-   return
-  else
-   i32.const 1
-   global.set $~started
-  end
   call $managed-cast/Cat#constructor
   call $managed-cast/Cat#constructor
   local.tee $3
@@ -1113,6 +1105,16 @@
   local.get $7
   call $~lib/rt/pure/__release
  )
+ (func $~start
+  global.get $~started
+  if
+   return
+  else
+   i32.const 1
+   global.set $~started
+  end
+  call $start:managed-cast
+ )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1144,16 +1146,13 @@
     block $switch$1$default
      block $switch$1$case$4
       local.get $0
-      i32.const 16
-      i32.add
-      local.tee $1
       i32.const 8
-      i32.sub
+      i32.add
       i32.load
       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$default
      end
-     local.get $1
-     i32.load
+     local.get $0
+     i32.load offset=16
      local.tee $1
      if
       local.get $1

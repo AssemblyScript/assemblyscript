@@ -624,10 +624,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -663,7 +663,6 @@
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  nop
   local.get $0
   i32.load offset=4
   i32.const -2
@@ -898,10 +897,10 @@
   call $~lib/rt/tlsf/allocateBlock
   i32.const 16
   i32.add
-  local.tee $0
+  local.tee $1
   i32.const 123
   i32.store
-  local.get $0
+  local.get $1
   global.set $std/object-literal-unmanaged/foo
   global.get $std/object-literal-unmanaged/foo
   i32.load
