@@ -632,10 +632,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -1418,26 +1418,26 @@
    i32.eq
    br_if $__inlined_func$~lib/string/String.__eq
    drop
+   block $folding-inner0
+    i32.const 0
+    i32.const 1
+    local.get $2
+    select
+    br_if $folding-inner0
+    local.get $2
+    call $~lib/string/String#get:length
+    local.tee $3
+    i32.const 1280
+    call $~lib/string/String#get:length
+    i32.ne
+    br_if $folding-inner0
+    local.get $2
+    local.get $3
+    call $~lib/util/string/compareImpl
+    i32.eqz
+    br $__inlined_func$~lib/string/String.__eq
+   end
    i32.const 0
-   i32.const 0
-   i32.const 1
-   local.get $2
-   select
-   br_if $__inlined_func$~lib/string/String.__eq
-   drop
-   i32.const 0
-   local.get $2
-   call $~lib/string/String#get:length
-   local.tee $3
-   i32.const 1280
-   call $~lib/string/String#get:length
-   i32.ne
-   br_if $__inlined_func$~lib/string/String.__eq
-   drop
-   local.get $2
-   local.get $3
-   call $~lib/util/string/compareImpl
-   i32.eqz
   end
   i32.eqz
   if
@@ -1501,16 +1501,13 @@
      block $switch$1$case$6
       block $switch$1$case$4
        local.get $0
-       i32.const 16
-       i32.add
-       local.tee $1
        i32.const 8
-       i32.sub
+       i32.add
        i32.load
        br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$case$6 $switch$1$default
       end
-      local.get $1
-      i32.load
+      local.get $0
+      i32.load offset=16
       local.tee $1
       if
        local.get $1
@@ -1518,8 +1515,8 @@
       end
       br $__inlined_func$~lib/rt/__visit_members
      end
-     local.get $1
-     i32.load offset=4
+     local.get $0
+     i32.load offset=20
      local.tee $1
      if
       local.get $1
