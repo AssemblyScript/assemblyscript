@@ -29,7 +29,7 @@ export enum DiagnosticCode {
   Duplicate_decorator = 213,
   Type_0_is_illegal_in_this_context = 214,
   Optional_parameter_must_have_an_initializer = 215,
-  Constructor_of_class_0_must_not_require_any_arguments = 216,
+  Class_0_cannot_declare_a_constructor_when_instantiated_from_an_object_literal = 216,
   Function_0_cannot_be_inlined_into_itself = 217,
   Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set = 218,
   Optional_properties_are_not_supported = 219,
@@ -115,6 +115,7 @@ export enum DiagnosticCode {
   _super_can_only_be_referenced_in_a_derived_class = 2335,
   Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors = 2337,
   Property_0_does_not_exist_on_type_1 = 2339,
+  Property_0_is_private_and_only_accessible_within_class_1 = 2341,
   Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
   This_expression_is_not_constructable = 2351,
   A_function_whose_declared_type_is_not_void_must_return_a_value = 2355,
@@ -130,12 +131,14 @@ export enum DiagnosticCode {
   Duplicate_function_implementation = 2393,
   Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
   A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
+  Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses = 2445,
   The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
   Type_0_has_no_property_1 = 2460,
   The_0_operator_cannot_be_applied_to_type_1 = 2469,
   In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
   Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
   _0_is_referenced_directly_or_indirectly_in_its_own_base_expression = 2506,
+  Cannot_create_an_instance_of_an_abstract_class = 2511,
   Object_is_possibly_null = 2531,
   Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
   The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
@@ -184,7 +187,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 213: return "Duplicate decorator.";
     case 214: return "Type '{0}' is illegal in this context.";
     case 215: return "Optional parameter must have an initializer.";
-    case 216: return "Constructor of class '{0}' must not require any arguments.";
+    case 216: return "Class '{0}' cannot declare a constructor when instantiated from an object literal.";
     case 217: return "Function '{0}' cannot be inlined into itself.";
     case 218: return "Cannot access method '{0}' without calling it as it requires 'this' to be set.";
     case 219: return "Optional properties are not supported.";
@@ -270,6 +273,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2335: return "'super' can only be referenced in a derived class.";
     case 2337: return "Super calls are not permitted outside constructors or in nested functions inside constructors.";
     case 2339: return "Property '{0}' does not exist on type '{1}'.";
+    case 2341: return "Property '{0}' is private and only accessible within class '{1}'.";
     case 2349: return "Cannot invoke an expression whose type lacks a call signature. Type '{0}' has no compatible call signatures.";
     case 2351: return "This expression is not constructable.";
     case 2355: return "A function whose declared type is not 'void' must return a value.";
@@ -285,12 +289,14 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2393: return "Duplicate function implementation.";
     case 2395: return "Individual declarations in merged declaration '{0}' must be all exported or all local.";
     case 2434: return "A namespace declaration cannot be located prior to a class or function with which it is merged.";
+    case 2445: return "Property '{0}' is protected and only accessible within class '{1}' and its subclasses.";
     case 2453: return "The type argument for type parameter '{0}' cannot be inferred from the usage. Consider specifying the type arguments explicitly.";
     case 2460: return "Type '{0}' has no property '{1}'.";
     case 2469: return "The '{0}' operator cannot be applied to type '{1}'.";
     case 2474: return "In 'const' enum declarations member initializer must be constant expression.";
     case 2484: return "Export declaration conflicts with exported declaration of '{0}'.";
     case 2506: return "'{0}' is referenced directly or indirectly in its own base expression.";
+    case 2511: return "Cannot create an instance of an abstract class.";
     case 2531: return "Object is possibly 'null'.";
     case 2540: return "Cannot assign to '{0}' because it is a constant or a read-only property.";
     case 2541: return "The target of an assignment must be a variable or a property access.";

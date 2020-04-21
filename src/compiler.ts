@@ -8632,46 +8632,35 @@ export class Compiler extends DiagnosticEmitter {
   private compileObjectLiteral(expression: ObjectLiteralExpression, contextualType: Type): ExpressionRef {
     var module = this.module;
 
-    // contextual type must be a class
+    // Check that contextual type is a class (TODO: hidden class for interfaces?)
     var classReference = contextualType.classReference;
-    if (!classReference || classReference.is(CommonFlags.ABSTRACT)) {
+    if (!contextualType.is(TypeFlags.REFERENCE) || !classReference || classReference.kind != ElementKind.CLASS) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,
         expression.range, "<object>", contextualType.toString()
       );
       return module.unreachable();
     }
-
-    // if present, check that the constructor is compatible with object literals
-    var ctor = classReference.constructorInstance;
-    if (ctor) {
-      // TODO: if the constructor requires parameters, check whether these are given as part of the
-      // object literal and use them to call the ctor while not generating a store.
-      if (ctor.signature.requiredParameters) {
-        this.error(
-          DiagnosticCode.Constructor_of_class_0_must_not_require_any_arguments,
-          expression.range, classReference.toString()
-        );
-        return module.unreachable();
-      }
-      if (ctor.is(CommonFlags.PRIVATE)) {
-        this.error(
-          DiagnosticCode.Constructor_of_class_0_is_private_and_only_accessible_within_the_class_declaration,
-          expression.range, classReference.toString()
-        );
-        return module.unreachable();
-      }
-      if (ctor.is(CommonFlags.PROTECTED)) {
-        this.error(
-          DiagnosticCode.Constructor_of_class_0_is_protected_and_only_accessible_within_the_class_declaration,
-          expression.range, classReference.toString()
-        );
-        return module.unreachable();
-      }
-      if (ctor.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
+    var classType = classReference.type;
+    this.currentType = classType.nonNullableType;
+    if (classReference.is(CommonFlags.ABSTRACT)) {
+      this.error(
+        DiagnosticCode.Cannot_create_an_instance_of_an_abstract_class,
+        expression.range
+      );
+      return module.unreachable();
     }
 
-    var isManaged = classReference.type.isManaged;
+    // Check that the class is compatible with object literals
+    if (classReference.prototype.constructorPrototype) {
+      this.error(
+        DiagnosticCode.Class_0_cannot_declare_a_constructor_when_instantiated_from_an_object_literal,
+        expression.range, classType.toString()
+      );
+      return module.unreachable();
+    }
+
+    var isManaged = classType.isManaged;
     if (!isManaged) {
       this.checkUnsafe(expression, findDecorator(DecoratorKind.UNMANAGED, classReference.decoratorNodes));
     }
@@ -8685,29 +8674,46 @@ export class Compiler extends DiagnosticEmitter {
     var exprs = new Array<ExpressionRef>();
     var flow = this.currentFlow;
     var tempLocal = isManaged
-      ? flow.getAutoreleaseLocal(classReference.type)
-      : flow.getTempLocal(classReference.type);
+      ? flow.getAutoreleaseLocal(classType)
+      : flow.getTempLocal(classType);
     assert(numNames == values.length);
 
     // Assume all class fields will be omitted, and add them to our omitted list
-    let omittedClassFieldMembers = new Set<string>();
+    var omittedFields = new Set<Field>();
     if (members) {
       for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
         let memberKey = _keys[i];
         let member = assert(members.get(memberKey));
         if (member !== null && member.kind == ElementKind.FIELD) {
-          omittedClassFieldMembers.add(member.name);
+          omittedFields.add(<Field>member); // incl. private/protected
         }
       }
     }
 
     // Iterate through the members defined in our expression
     for (let i = 0, k = numNames; i < k; ++i) {
-      let member = members ? members.get(names[i].text) : null;
+      let memberName = names[i].text;
+      let member = members ? members.get(memberName) : null;
       if (!member || member.kind != ElementKind.FIELD) {
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
-          names[i].range, names[i].text, classReference.toString()
+          names[i].range, memberName, classType.toString()
+        );
+        hasErrors = true;
+        continue;
+      }
+      if (member.is(CommonFlags.PRIVATE)) {
+        this.error(
+          DiagnosticCode.Property_0_is_private_and_only_accessible_within_class_1,
+          names[i].range, memberName, classType.toString()
+        );
+        hasErrors = true;
+        continue;
+      }
+      if (member.is(CommonFlags.PROTECTED)) {
+        this.error(
+          DiagnosticCode.Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses,
+          names[i].range, memberName, classType.toString()
         );
         hasErrors = true;
         continue;
@@ -8716,7 +8722,7 @@ export class Compiler extends DiagnosticEmitter {
       let fieldType = fieldInstance.type;
 
       let expr = this.compileExpression(values[i], fieldType, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
-      if (isManaged && fieldType.isManaged && !this.skippedAutoreleases.has(expr)) {
+      if (fieldType.isManaged && !this.skippedAutoreleases.has(expr)) {
         expr = this.makeRetain(expr);
       }
       exprs.push(this.module.store( // TODO: handle setters as well
@@ -8728,47 +8734,48 @@ export class Compiler extends DiagnosticEmitter {
       ));
 
       // This member is no longer omitted, so delete from our omitted fields
-      omittedClassFieldMembers.delete(member.name);
+      omittedFields.delete(fieldInstance);
     }
-    this.currentType = classReference.type.nonNullableType;
+    this.currentType = classType.nonNullableType;
     if (hasErrors) return module.unreachable();
 
     // Iterate through the remaining omittedClassFieldMembers.
     if (members) {
 
-      for (let _values = Set_values(omittedClassFieldMembers), j = 0, l = _values.length; j < l; ++j) {
-        let omittedMemberKey = _values[j];
-        let member = assert(members.get(omittedMemberKey));
-        
-        let fieldInstance = <Field>member;
+      for (let _values = Set_values(omittedFields), j = 0, l = _values.length; j < l; ++j) {
+        let fieldInstance = _values[j];
         let fieldType = fieldInstance.type;
+
+        if (fieldInstance.initializerNode) {
+          continue; // set by default ctor
+        }
 
         if (fieldType.is(TypeFlags.REFERENCE) && fieldType.classReference !== null) {
           // TODO: Check if it is a class, with a default value (constructor with no params).
           if (!fieldType.is(TypeFlags.NULLABLE)) {
             this.error(
               DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-              expression.range, "<object>", classReference.toString()
+              expression.range, fieldInstance.name, "<object>", classType.toString()
             );
             hasErrors = true;
             continue;
           }
         }
 
-        switch(fieldType.kind) {
+        switch (fieldType.kind) {
           // Number Types (and Number alias types)
           case TypeKind.I8:
           case TypeKind.I16:
           case TypeKind.I32:
+          case TypeKind.I64:
+          case TypeKind.ISIZE:
           case TypeKind.U8:
           case TypeKind.U16:
           case TypeKind.U32:
-          case TypeKind.USIZE: 
-          case TypeKind.ISIZE:
-          case TypeKind.BOOL: 
-          case TypeKind.I64:
-          case TypeKind.U64: 
-          case TypeKind.F32: 
+          case TypeKind.U64:
+          case TypeKind.USIZE:
+          case TypeKind.BOOL:
+          case TypeKind.F32:
           case TypeKind.F64: {
             exprs.push(this.module.store( // TODO: handle setters as well
               fieldType.byteSize,
@@ -8784,7 +8791,7 @@ export class Compiler extends DiagnosticEmitter {
         // Otherwise, error
         this.error(
           DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-          expression.range, "<object>", classReference.toString()
+          expression.range, fieldInstance.name, "<object>", classType.toString()
         );
         hasErrors = true;
       }
@@ -8794,16 +8801,14 @@ export class Compiler extends DiagnosticEmitter {
     // allocate a new instance first and assign 'this' to the temp. local
     exprs.unshift(module.local_set(
       tempLocal.index,
-      isManaged
-        ? this.makeRetain(this.makeAllocation(classReference))
-        : this.makeAllocation(classReference)
+      this.compileInstantiate(classReference, [], Constraints.WILL_RETAIN, expression)
     ));
 
     // once all field values have been set, return 'this'
     exprs.push(module.local_get(tempLocal.index, this.options.nativeSizeType));
 
     if (!isManaged) flow.freeTempLocal(tempLocal);
-    this.currentType = classReference.type;
+    this.currentType = classType.nonNullableType;
     return module.flatten(exprs, this.options.nativeSizeType);
   }
 
@@ -8980,7 +8985,7 @@ export class Compiler extends DiagnosticEmitter {
       this.makeZero(this.options.usizeType),
       constraints
     );
-    if (getExpressionType(expr) != NativeType.None) { // possibly IMM_DROPPED
+    if (getExpressionType(expr) != NativeType.None) { // possibly WILL_DROP
       this.currentType = classInstance.type; // important because a super ctor could be called
     }
     return expr;
