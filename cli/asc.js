@@ -40,7 +40,7 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
-const binaryen = global.Binaryen || (global.Binaryen = require("binaryen"));
+const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
 
 // Proxy Binaryen's ready event
 Object.defineProperty(exports, "ready", {
@@ -51,28 +51,38 @@ Object.defineProperty(exports, "ready", {
 // useless code fragment on top of an actual error. suppress this:
 if (process.removeAllListeners) process.removeAllListeners("uncaughtException");
 
-// Use distribution files if present, otherwise run the sources directly
-var assemblyscript, isDev = false;
-try { // `asc` on the command line
-  assemblyscript = require("../dist/assemblyscript.js");
-} catch (e) {
-  try { // `asc` on the command line without dist files
-    require("ts-node").register({
-      project: path.join(__dirname, "..", "src", "tsconfig.json"),
-      skipIgnore: true,
-      compilerOptions: { target: "ES2016" }
-    });
-    require("../src/glue/js");
-    assemblyscript = require("../src");
-    isDev = true;
-  } catch (e_ts) {
-    try { // `require("dist/asc.js")` in explicit browser tests
-      assemblyscript = eval("require('./assemblyscript')");
+// Use distribution files if present, otherwise run the sources directly.
+var assemblyscript;
+var isDev = false;
+(function loadAssemblyScript() {
+  try {
+    assemblyscript = require("assemblyscript");
+  } catch (e) {
+    function dynRequire(...args) {
+      return eval("require")(...args);
+    }
+    try { // `asc` on the command line
+    assemblyscript = dynRequire("../dist/assemblyscript.js");
     } catch (e) {
-      throw Error(e_ts.stack + "\n---\n" + e.stack);
+      try { // `asc` on the command line without dist files
+        dynRequire("ts-node").register({
+          project: path.join(__dirname, "..", "src", "tsconfig.json"),
+          skipIgnore: true,
+          compilerOptions: { target: "ES2016" }
+        });
+        dynRequire("../src/glue/js");
+        assemblyscript = dynRequire("../src");
+        isDev = true;
+      } catch (e_ts) {
+        try { // `require("dist/asc.js")` in explicit browser tests
+          assemblyscript = dynRequire("./assemblyscript");
+        } catch (e) {
+          throw Error(e_ts.stack + "\n---\n" + e.stack);
+        }
+      }
     }
   }
-}
+})();
 
 /** Whether this is a webpack bundle or not. */
 exports.isBundle = typeof BUNDLE_VERSION === "string";
@@ -635,26 +645,22 @@ exports.main = function main(argv, options, callback) {
   if (args.trapMode === "clamp") {
     stats.optimizeCount++;
     stats.optimizeTime += measure(() => {
-      module.runPasses([ "trap-mode-clamp" ]);
+      module.runPass("trap-mode-clamp");
     });
   } else if (args.trapMode === "js") {
     stats.optimizeCount++;
     stats.optimizeTime += measure(() => {
-      module.runPasses([ "trap-mode-js" ]);
+      module.runPass("trap-mode-js");
     });
   } else if (args.trapMode !== "allow") {
     module.dispose();
     return callback(Error("Unsupported trap mode"));
   }
 
-  // Implicitly run costly non-LLVM optimizations on -O3 or -Oz
-  // see: https://github.com/WebAssembly/binaryen/pull/1596
-  if (optimizeLevel >= 3 || shrinkLevel >= 2) optimizeLevel = 4;
-
-  module.setOptimizeLevel(optimizeLevel);
-  module.setShrinkLevel(shrinkLevel);
-  module.setDebugInfo(args.debug);
-
+  // Optimize the module
+  const debugInfo = args.debug;
+  const usesARC = args.runtime == "half" || args.runtime == "full";
+  const converge = args.converge;
   const runPasses = [];
   if (args.runPasses) {
     if (typeof args.runPasses === "string") {
@@ -668,201 +674,16 @@ exports.main = function main(argv, options, callback) {
     }
   }
 
-  function doOptimize() {
-    const hasARC = args.runtime == "half" || args.runtime == "full";
-    const passes = [];
-    function add(pass) { passes.push(pass); }
-
-    if (optimizeLevel >= 2 && shrinkLevel === 0) {
-      // tweak inlining options when speed more preferable than size
-      module.setAlwaysInlineMaxSize(12);
-      module.setFlexibleInlineMaxSize(70);
-      module.setOneCallerInlineMaxSize(200);
-    } else {
-      // tweak inlining options when size matters
-      optimizeLevel === 0 && shrinkLevel >= 0
-        ? module.setAlwaysInlineMaxSize(2)
-        : module.setAlwaysInlineMaxSize(4);  // default:  2
-      module.setFlexibleInlineMaxSize(65);   // default: 20
-      module.setOneCallerInlineMaxSize(80);  // default: 15
-    }
-
-    // Optimize the module if requested
-    if (optimizeLevel > 0 || shrinkLevel > 0) {
-      // Binaryen's default passes with Post-AssemblyScript passes added.
-      // see: Binaryen/src/pass.cpp
-
-      // PassRunner::addDefaultGlobalOptimizationPrePasses
-      add("duplicate-function-elimination");
-
-      // PassRunner::addDefaultFunctionOptimizationPasses
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        add("ssa-nomerge");
-      }
-      if (optimizeLevel >= 3) {
-        add("simplify-locals-nostructure"); // differs
-        add("vacuum"); // differs
-        add("reorder-locals"); // differs
-        add("flatten");
-        add("local-cse");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("rse");
-      }
-      if (hasARC) { // differs
-        if (optimizeLevel < 3) {
-          add("flatten");
-        }
-        add("post-assemblyscript");
-      }
-      add("dce");
-      add("remove-unused-brs");
-      add("remove-unused-names");
-      // add("optimize-instructions"); // differs move 2 lines above
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        add("pick-load-signs");
-        add("simplify-globals-optimizing"); // differs
-      }
-      add("optimize-instructions"); // differs
-      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
-        add("precompute-propagate");
-      } else {
-        add("precompute");
-      }
-      if (module.getLowMemoryUnused()) {
-        if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-          add("optimize-added-constants-propagate");
-        } else {
-          add("optimize-added-constants");
-        }
-      }
-      // this will be done later (1)
-      // if (optimizeLevel >= 2 || shrinkLevel >= 2) {
-      //   add("code-pushing");
-      // }
-      if (optimizeLevel >= 3 && shrinkLevel <= 1) { // differs
-        add("licm");
-      }
-      add("simplify-locals-nostructure");
-      add("vacuum");
-      add("reorder-locals");
-      add("remove-unused-brs");
-      // if (optimizeLevel >= 3 || shrinkLevel >= 2) { // do it later
-      //   add("merge-locals");
-      // }
-      add("coalesce-locals");
-      add("simplify-locals");
-      add("vacuum");
-      add("reorder-locals");
-      add("coalesce-locals");
-      add("reorder-locals");
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs
-        add("merge-locals");
-      }
-      add("vacuum");
-      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
-        add("code-folding");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("simplify-globals-optimizing");
-      }
-      add("merge-blocks");
-      add("remove-unused-brs");
-      add("remove-unused-names");
-      add("merge-blocks");
-      // make this later & move to (2)
-      // if (optimizeLevel >= 3 || shrinkLevel >= 2) {
-      //   add("precompute-propagate");
-      // } else {
-      //   add("precompute");
-      // }
-      add("optimize-instructions");
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        add("rse");
-      }
-      add("vacuum");
-      // PassRunner::addDefaultGlobalOptimizationPostPasses
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
-        add("dae-optimizing");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
-        add("inlining-optimizing");
-      }
-      // "duplicate-function-elimination" will better done later
-      // add("duplicate-function-elimination");
-      add("duplicate-import-elimination");
-      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
-        add("simplify-globals-optimizing");
-      } else {
-        add("simplify-globals");
-      }
-      // moved from (2)
-      // it works better after globals optimizations like simplify-globals, inlining-optimizing and etc
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("precompute-propagate");
-      } else {
-        add("precompute");
-      }
-      // replace indirect calls with direct, reduce arity and
-      // inline this calls if possible
-      add("directize"); // differs
-      add("dae-optimizing"); // differs
-      add("inlining-optimizing"); // differs
-      // ARC finalization should be done exactly after inlining for better release/retain reduction
-      if (hasARC) { // differs
-        add("post-assemblyscript-finalize");
-      }
-      if (optimizeLevel >= 2 || shrinkLevel >= 1) { // differs
-        add("rse");
-        // rearrange / reduce switch cases again
-        add("remove-unused-brs");
-        add("vacuum");
-
-        // move some code after early return which potentially could reduce computations
-        // do this after CFG cleanup (originally it was done before)
-        // moved from (1)
-        add("code-pushing");
-        if (optimizeLevel >= 3) {
-          // this quite expensive so do this only for highest opt level
-          add("simplify-globals");
-          // replace indirect calls with direct and inline if possible again.
-          add("directize");
-          add("dae-optimizing");
-          add("precompute-propagate");
-          add("coalesce-locals");
-          add("merge-locals");
-          add("simplify-locals-nostructure");
-          add("vacuum");
-          add("inlining-optimizing");
-          add("precompute-propagate");
-        }
-        add("optimize-instructions");
-        add("simplify-globals-optimizing");
-      }
-      // remove unused elements of table and pack / reduce memory
-      add("duplicate-function-elimination"); // differs
-      add("remove-unused-nonfunction-module-elements"); // differs
-      add("memory-packing");
-      add("remove-unused-module-elements"); // differs
-      // It seems stack-ir unuseful for our needs.
-      // if (optimizeLevel >= 3 || shrinkLevel >= 1) { // differs. was optimizeLevel >= 2
-      //   add("generate-stack-ir");
-      //   add("optimize-stack-ir");
-      // }
-    }
-
-    // Append additional passes if requested and execute
-    module.runPasses(passes.concat(runPasses));
-  }
-
   stats.optimizeTime += measure(() => {
     stats.optimizeCount++;
-    doOptimize();
-    if (args.converge) {
+    module.optimize(optimizeLevel, shrinkLevel, debugInfo, usesARC);
+    module.runPasses(runPasses);
+    if (converge) {
       let last = module.toBinary();
       do {
         stats.optimizeCount++;
-        doOptimize();
+        module.optimize(optimizeLevel, shrinkLevel, debugInfo, usesARC);
+        module.runPasses(runPasses);
         let next = module.toBinary();
         if (next.output.length >= last.output.length) {
           if (next.output.length > last.output.length) {

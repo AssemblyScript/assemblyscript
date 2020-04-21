@@ -905,7 +905,7 @@ export class ASTBuilder {
       sb.push("class");
     }
     var typeParameters = node.typeParameters;
-    if (typeParameters && typeParameters.length) {
+    if (typeParameters != null && typeParameters.length > 0) {
       sb.push("<");
       this.visitTypeParameter(typeParameters[0]);
       for (let i = 1, k = typeParameters.length; i < k; ++i) {
@@ -1000,9 +1000,10 @@ export class ASTBuilder {
 
   visitEnumValueDeclaration(node: EnumValueDeclaration): void {
     this.visitIdentifierExpression(node.name);
-    if (node.initializer) {
+    var initializer = node.initializer;
+    if (initializer) {
       this.sb.push(" = ");
-      this.visitNode(node.initializer);
+      this.visitNode(initializer);
     }
   }
 
@@ -1028,7 +1029,7 @@ export class ASTBuilder {
       sb.push("declare ");
     }
     var members = node.members;
-    if (members && members.length) {
+    if (members != null && members.length > 0) {
       let numMembers = members.length;
       sb.push("export {\n");
       let indentLevel = ++this.indentLevel;
@@ -1328,7 +1329,7 @@ export class ASTBuilder {
     sb.push("interface ");
     this.visitIdentifierExpression(node.name);
     var typeParameters = node.typeParameters;
-    if (typeParameters && typeParameters.length) {
+    if (typeParameters != null && typeParameters.length > 0) {
       sb.push("<");
       this.visitTypeParameter(typeParameters[0]);
       for (let i = 1, k = typeParameters.length; i < k; ++i) {
