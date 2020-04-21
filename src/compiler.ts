@@ -8701,7 +8701,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // Iterate through the members definted in our expression
+    // Iterate through the members defined in our expression
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
       if (!member || member.kind != ElementKind.FIELD) {
@@ -8720,11 +8720,11 @@ export class Compiler extends DiagnosticEmitter {
         expr = this.makeRetain(expr);
       }
       exprs.push(this.module.store( // TODO: handle setters as well
-       fieldType.byteSize,
-       this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-       expr,
-       fieldType.toNativeType(),
-       fieldInstance.memoryOffset
+        fieldType.byteSize,
+        this.module.local_get(tempLocal.index, this.options.nativeSizeType),
+        expr,
+        fieldType.toNativeType(),
+        fieldInstance.memoryOffset
       ));
 
       // This member is no longer omitted, so delete from our omitted fields
@@ -8735,8 +8735,9 @@ export class Compiler extends DiagnosticEmitter {
 
     // Iterate through the remaining omittedClassFieldMembers.
     if (members) {
-      for(let _values = Set_values(omittedClassFieldMembers), i = 0, v = _values.length; i < v; ++i) {
-        let omittedMemberKey = _values[i];
+
+      for (let _values = Set_values(omittedClassFieldMembers), j = 0, l = _values.length; j < l; ++j) {
+        let omittedMemberKey = _values[j];
         let member = assert(members.get(omittedMemberKey));
         
         let fieldInstance = <Field>member;
@@ -8744,15 +8745,14 @@ export class Compiler extends DiagnosticEmitter {
 
         if (fieldType.is(TypeFlags.REFERENCE) && fieldType.classReference !== null) {
           // TODO: Check if it is a class, with a default value (constructor with no params).
-          // TODO: Check if it can be null, and set to null
-
-          // Otherwise, error
-          this.error(
-            DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-            expression.range, "<object>", classReference.toString()
-          );
-          hasErrors = true;
-          continue;
+          if (!fieldType.is(TypeFlags.NULLABLE)) {
+            this.error(
+              DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+              expression.range, "<object>", classReference.toString()
+            );
+            hasErrors = true;
+            continue;
+          }
         }
 
         switch(fieldType.kind) {
@@ -8771,15 +8771,14 @@ export class Compiler extends DiagnosticEmitter {
           case TypeKind.F32: 
           case TypeKind.F64: {
             exprs.push(this.module.store( // TODO: handle setters as well
-             fieldType.byteSize,
-             this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-             this.makeZero(fieldType),
-             fieldType.toNativeType(),
-             fieldInstance.memoryOffset
+              fieldType.byteSize,
+              this.module.local_get(tempLocal.index, this.options.nativeSizeType),
+              this.makeZero(fieldType),
+              fieldType.toNativeType(),
+              fieldInstance.memoryOffset
             ));
             continue;
           }
-          default: {}
         }
 
         // Otherwise, error
