@@ -8682,12 +8682,26 @@ export class Compiler extends DiagnosticEmitter {
     var values = expression.values;
     var members = classReference.members;
     var hasErrors = false;
-    var exprs = new Array<ExpressionRef>(numNames + 2);
+    var exprs = new Array<ExpressionRef>();
     var flow = this.currentFlow;
     var tempLocal = isManaged
       ? flow.getAutoreleaseLocal(classReference.type)
       : flow.getTempLocal(classReference.type);
     assert(numNames == values.length);
+
+    // Assume all class fields will be omitted, and add them to our omitted list
+    let omittedClassFieldMembers = new Set<string>();
+    if (members) {
+      for (let _keys = Map_keys(members), i = 0, k = _keys.length; i < k; ++i) {
+        let memberKey = _keys[i];
+        let member = assert(members.get(memberKey));
+        if (member !== null && member.kind == ElementKind.FIELD) {
+          omittedClassFieldMembers.add(member.name);
+        }
+      }
+    }
+
+    // Iterate through the members defined in our expression
     for (let i = 0, k = numNames; i < k; ++i) {
       let member = members ? members.get(names[i].text) : null;
       if (!member || member.kind != ElementKind.FIELD) {
@@ -8700,27 +8714,93 @@ export class Compiler extends DiagnosticEmitter {
       }
       let fieldInstance = <Field>member;
       let fieldType = fieldInstance.type;
-      exprs[i + 1] = this.module.store( // TODO: handle setters as well
+
+      let expr = this.compileExpression(values[i], fieldType, Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN);
+      if (isManaged && fieldType.isManaged && !this.skippedAutoreleases.has(expr)) {
+        expr = this.makeRetain(expr);
+      }
+      exprs.push(this.module.store( // TODO: handle setters as well
         fieldType.byteSize,
         this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-        this.compileExpression(values[i], fieldInstance.type, Constraints.CONV_IMPLICIT),
+        expr,
         fieldType.toNativeType(),
         fieldInstance.memoryOffset
-      );
+      ));
+
+      // This member is no longer omitted, so delete from our omitted fields
+      omittedClassFieldMembers.delete(member.name);
     }
     this.currentType = classReference.type.nonNullableType;
     if (hasErrors) return module.unreachable();
 
+    // Iterate through the remaining omittedClassFieldMembers.
+    if (members) {
+
+      for (let _values = Set_values(omittedClassFieldMembers), j = 0, l = _values.length; j < l; ++j) {
+        let omittedMemberKey = _values[j];
+        let member = assert(members.get(omittedMemberKey));
+        
+        let fieldInstance = <Field>member;
+        let fieldType = fieldInstance.type;
+
+        if (fieldType.is(TypeFlags.REFERENCE) && fieldType.classReference !== null) {
+          // TODO: Check if it is a class, with a default value (constructor with no params).
+          if (!fieldType.is(TypeFlags.NULLABLE)) {
+            this.error(
+              DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+              expression.range, "<object>", classReference.toString()
+            );
+            hasErrors = true;
+            continue;
+          }
+        }
+
+        switch(fieldType.kind) {
+          // Number Types (and Number alias types)
+          case TypeKind.I8:
+          case TypeKind.I16:
+          case TypeKind.I32:
+          case TypeKind.U8:
+          case TypeKind.U16:
+          case TypeKind.U32:
+          case TypeKind.USIZE: 
+          case TypeKind.ISIZE:
+          case TypeKind.BOOL: 
+          case TypeKind.I64:
+          case TypeKind.U64: 
+          case TypeKind.F32: 
+          case TypeKind.F64: {
+            exprs.push(this.module.store( // TODO: handle setters as well
+              fieldType.byteSize,
+              this.module.local_get(tempLocal.index, this.options.nativeSizeType),
+              this.makeZero(fieldType),
+              fieldType.toNativeType(),
+              fieldInstance.memoryOffset
+            ));
+            continue;
+          }
+        }
+
+        // Otherwise, error
+        this.error(
+          DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+          expression.range, "<object>", classReference.toString()
+        );
+        hasErrors = true;
+      }
+    }
+    if (hasErrors) return module.unreachable();
+
     // allocate a new instance first and assign 'this' to the temp. local
-    exprs[0] = module.local_set(
+    exprs.unshift(module.local_set(
       tempLocal.index,
       isManaged
         ? this.makeRetain(this.makeAllocation(classReference))
         : this.makeAllocation(classReference)
-    );
+    ));
 
     // once all field values have been set, return 'this'
-    exprs[exprs.length - 1] = module.local_get(tempLocal.index, this.options.nativeSizeType);
+    exprs.push(module.local_get(tempLocal.index, this.options.nativeSizeType));
 
     if (!isManaged) flow.freeTempLocal(tempLocal);
     this.currentType = classReference.type;
