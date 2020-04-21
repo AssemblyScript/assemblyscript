@@ -343,112 +343,112 @@
    br_if $do-continue|0
   end
  )
- (func $~lib/util/number/utoa64 (param $0 i64) (result i32)
-  (local $1 i32)
+ (func $~lib/number/U64#toString (param $0 i64) (result i32)
+  (local $1 i64)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $0
-  i64.eqz
-  if
-   i32.const 1184
-   return
-  end
-  local.get $0
-  i64.const 4294967295
-  i64.le_u
-  if
+  block $__inlined_func$~lib/util/number/utoa64
    local.get $0
-   i32.wrap_i64
-   local.tee $1
-   call $~lib/util/number/decimalCount32
-   local.tee $2
-   i32.const 1
-   i32.shl
-   i32.const 1
-   call $~lib/rt/stub/__alloc
-   local.tee $3
-   local.get $1
-   local.get $2
-   call $~lib/util/number/utoa_simple<u32>
-  else
+   i64.eqz
+   if
+    i32.const 1184
+    local.set $3
+    br $__inlined_func$~lib/util/number/utoa64
+   end
    local.get $0
-   i64.const 100000000000
-   i64.ge_u
-   i32.const 10
-   i32.add
-   local.get $0
-   i64.const 10000000000
-   i64.ge_u
-   i32.add
-   local.get $0
-   i64.const 100000000000000
-   i64.ge_u
-   i32.const 13
-   i32.add
-   local.get $0
-   i64.const 10000000000000
-   i64.ge_u
-   i32.add
-   local.get $0
-   i64.const 1000000000000
-   i64.lt_u
-   select
-   local.get $0
-   i64.const 10000000000000000
-   i64.ge_u
-   i32.const 16
-   i32.add
-   local.get $0
-   i64.const -8446744073709551616
-   i64.ge_u
-   i32.const 18
-   i32.add
-   local.get $0
-   i64.const 1000000000000000000
-   i64.ge_u
-   i32.add
-   local.get $0
-   i64.const 100000000000000000
-   i64.lt_u
-   select
-   local.get $0
-   i64.const 1000000000000000
-   i64.lt_u
-   select
-   local.tee $1
-   i32.const 1
-   i32.shl
-   i32.const 1
-   call $~lib/rt/stub/__alloc
-   local.tee $3
-   local.set $2
-   loop $do-continue|0
+   i64.const 4294967295
+   i64.le_u
+   if
     local.get $0
-    i64.const 10
-    i64.rem_u
     i32.wrap_i64
-    local.set $4
-    local.get $0
-    i64.const 10
-    i64.div_u
-    local.set $0
-    local.get $2
-    local.get $1
-    i32.const 1
-    i32.sub
-    local.tee $1
+    local.tee $2
+    call $~lib/util/number/decimalCount32
+    local.tee $4
     i32.const 1
     i32.shl
-    i32.add
+    i32.const 1
+    call $~lib/rt/stub/__alloc
+    local.tee $3
+    local.get $2
     local.get $4
-    i32.const 48
-    i32.add
-    i32.store16
+    call $~lib/util/number/utoa_simple<u32>
+   else
     local.get $0
-    i64.const 0
-    i64.ne
-    br_if $do-continue|0
+    i64.const 100000000000
+    i64.ge_u
+    i32.const 10
+    i32.add
+    local.get $0
+    i64.const 10000000000
+    i64.ge_u
+    i32.add
+    local.get $0
+    i64.const 100000000000000
+    i64.ge_u
+    i32.const 13
+    i32.add
+    local.get $0
+    i64.const 10000000000000
+    i64.ge_u
+    i32.add
+    local.get $0
+    i64.const 1000000000000
+    i64.lt_u
+    select
+    local.get $0
+    i64.const 10000000000000000
+    i64.ge_u
+    i32.const 16
+    i32.add
+    local.get $0
+    i64.const -8446744073709551616
+    i64.ge_u
+    i32.const 18
+    i32.add
+    local.get $0
+    i64.const 1000000000000000000
+    i64.ge_u
+    i32.add
+    local.get $0
+    i64.const 100000000000000000
+    i64.lt_u
+    select
+    local.get $0
+    i64.const 1000000000000000
+    i64.lt_u
+    select
+    local.tee $2
+    i32.const 1
+    i32.shl
+    i32.const 1
+    call $~lib/rt/stub/__alloc
+    local.tee $3
+    local.set $4
+    loop $do-continue|0
+     local.get $0
+     i64.const 10
+     i64.div_u
+     local.get $4
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.tee $2
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $0
+     i64.const 10
+     i64.rem_u
+     i32.wrap_i64
+     i32.const 48
+     i32.add
+     i32.store16
+     local.tee $0
+     i64.const 0
+     i64.ne
+     br_if $do-continue|0
+    end
    end
   end
   local.get $3
@@ -492,7 +492,7 @@
   local.get $0
   i32.load offset=4
   i64.load
-  call $~lib/util/number/utoa64
+  call $~lib/number/U64#toString
  )
  (func $resolve-access/Container#constructor (result i32)
   (local $0 i32)
@@ -512,7 +512,7 @@
   i64.store
   local.get $0
   i64.load
-  call $~lib/util/number/utoa64
+  call $~lib/number/U64#toString
  )
  (func $resolve-access/propertyAccess (result i32)
   (local $0 i32)
@@ -525,24 +525,25 @@
   local.get $0
   i64.load
   i32.wrap_i64
-  local.tee $0
+  local.tee $1
+  local.set $0
+  i32.const 1184
+  local.set $2
+  local.get $1
   if
    local.get $0
    call $~lib/util/number/decimalCount32
-   local.tee $2
+   local.tee $1
    i32.const 1
    i32.shl
    i32.const 1
    call $~lib/rt/stub/__alloc
-   local.tee $1
+   local.tee $2
    local.get $0
-   local.get $2
+   local.get $1
    call $~lib/util/number/utoa_simple<u32>
-  else
-   i32.const 1184
-   local.set $1
   end
-  local.get $1
+  local.get $2
  )
  (func $~start
   i32.const 1200

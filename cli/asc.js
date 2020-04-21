@@ -724,6 +724,7 @@ exports.main = function main(argv, options, callback) {
       add("dce");
       add("remove-unused-brs");
       add("remove-unused-names");
+      add("inlining-optimizing"); // differs
       if (optimizeLevel >= 2 || shrinkLevel >= 1) {
         add("pick-load-signs");
         add("simplify-globals-optimizing"); // differs
