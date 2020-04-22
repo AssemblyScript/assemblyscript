@@ -3,7 +3,7 @@
  * @license Apache-2.0
  */
 
-const binaryen = global.Binaryen || (global.Binaryen = require("binaryen"));
+const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
 
 module.exports = binaryen;
 

@@ -27,3 +27,4 @@ function bar2(foo: Foo2): void {
 bar2(<Foo2>{ bar: 2 });
 
 (<Foo2>{ bar: 3 }).test();
+
