@@ -44,7 +44,7 @@ const binaryen = global.Binaryen || (global.Binaryen = require("binaryen"));
 
 // Sets up an extension with its definition counterpart and relevant regexes.
 function setupExtension(extension) {
-  if (!/\.[0-9a-zA-Z]{1,14}$/.test(extension)) throw Error("invalid extension: " + extension);
+  if (!extension.startsWith(".")) extension = "." + extension;
   return {
     ext: extension,
     ext_d: ".d" + extension,
@@ -220,8 +220,12 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Use another extension if requested
-  if (typeof args.extension === "string" && /\.[0-9a-zA-Z]{1,14}$/.test(args.extension)) {
-    extension = setupExtension(args.extension);
+  if (typeof args.extension === "string") {
+    if (/^\.?[0-9a-zA-Z]{1,14}$/.test(args.extension)) {
+      extension = setupExtension(args.extension);
+    } else {
+      return callback(Error("Invalid extension: " + args.extension));
+    }
   }
 
   // Print the help message if requested or no source files are provided
