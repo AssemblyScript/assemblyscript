@@ -24,6 +24,6 @@ interface Foo {
 // ERROR 1042: "'protected' modifier cannot be used here." in interface-errors.ts(17,3+9)
 // ERROR 1042: "'public' modifier cannot be used here." in interface-errors.ts(18,3+6)
 // ERROR 1042: "'static' modifier cannot be used here." in interface-errors.ts(19,3+6)
-// ERROR 229: "'constructor' keyword cannot be used here." in interface-errors.ts(20,3+11)
-// ERROR 229: "'constructor' keyword cannot be used here." in interface-errors.ts(21,3+11)
+// ERROR 230: "'constructor' keyword cannot be used here." in interface-errors.ts(20,3+11)
+// ERROR 230: "'constructor' keyword cannot be used here." in interface-errors.ts(21,3+11)
 // ERROR 1110: "Type expected." in interface-errors.ts(21,16+0)
