@@ -1146,6 +1146,10 @@ declare namespace memory {
   export function drop(segmentIndex: u32): void;
   /** Compares two chunks of memory. Returns `0` if equal, otherwise the difference of the first differing bytes. */
   export function compare(vl: usize, vr: usize, n: usize): i32;
+  /** Gets a pointer to a zeroed static chunk of memory of the given size. Alignment defaults to `16`. Arguments must be compile-time constants. */
+  export function data(size: i32, align?: i32): usize;
+  /** Gets a pointer to a pre-initialized static chunk of memory. Alignment defaults to the size of `T`. Arguments must be compile-time constants. */
+  export function data<T>(values: T[], align?: i32): usize;
 }
 
 /** Garbage collector interface. */
