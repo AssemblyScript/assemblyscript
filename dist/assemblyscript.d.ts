@@ -359,6 +359,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Namespace_0_has_no_exported_member_1 = 2694,
         Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
         Duplicate_property_0 = 2718,
+        Property_0_is_missing_in_type_1_but_required_in_type_2 = 2741,
         Type_0_has_no_call_signatures = 2757,
         File_0_not_found = 6054,
         Numeric_separators_are_not_allowed_here = 6188,
@@ -2240,8 +2241,9 @@ declare module "assemblyscript/src/module" {
         setOneCallerInlineMaxSize(size: Index): void;
         getFeatures(): FeatureFlags;
         setFeatures(featureFlags: FeatureFlags): void;
-        optimize(func?: FunctionRef): void;
+        runPass(pass: string, func?: FunctionRef): void;
         runPasses(passes: string[], func?: FunctionRef): void;
+        optimize(optimizeLevel: number, shrinkLevel: number, debugInfo?: boolean, usesARC?: boolean): void;
         private cachedPrecomputeNames;
         precomputeExpression(expr: ExpressionRef): ExpressionRef;
         validate(): boolean;
