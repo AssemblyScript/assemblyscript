@@ -125,6 +125,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -1179,6 +1181,10 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
+   i32.const 0
+   i32.const 1
+   i32.lt_s
+   drop
    local.get $4
    local.get $3
    i32.add
@@ -1204,6 +1210,10 @@
    local.get $4
    i32.lt_u
    if
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1299,6 +1309,10 @@
      end
     end
    else
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1457,6 +1471,8 @@
   local.get $1
   call $~lib/array/Array<u64>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
@@ -1853,7 +1869,8 @@
    return
   end
   local.get $0
-  i64.const 4294967295
+  global.get $~lib/builtins/u32.MAX_VALUE
+  i64.extend_i32_u
   i64.le_u
   if
    local.get $0
@@ -1874,6 +1891,10 @@
    local.set $5
    local.get $3
    local.set $4
+   i32.const 0
+   i32.const 1
+   i32.ge_s
+   drop
    local.get $6
    local.get $5
    local.get $4
@@ -1894,6 +1915,10 @@
    local.set $7
    local.get $3
    local.set $4
+   i32.const 0
+   i32.const 1
+   i32.ge_s
+   drop
    local.get $5
    local.get $7
    local.get $4
@@ -1903,6 +1928,15 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<u64> (param $0 i64) (result i32)
+  i32.const 1
+  i32.eqz
+  drop
+  i32.const 0
+  drop
+  i32.const 8
+  i32.const 4
+  i32.le_u
+  drop
   local.get $0
   call $~lib/util/number/utoa64
   return
@@ -1997,6 +2031,10 @@
   local.set $4
   local.get $1
   local.set $3
+  i32.const 0
+  i32.const 1
+  i32.ge_s
+  drop
   local.get $5
   local.get $4
   local.get $3
@@ -2005,6 +2043,15 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<u32> (param $0 i32) (result i32)
+  i32.const 1
+  i32.eqz
+  drop
+  i32.const 0
+  drop
+  i32.const 4
+  i32.const 4
+  i32.le_u
+  drop
   local.get $0
   call $~lib/util/number/utoa32
   return

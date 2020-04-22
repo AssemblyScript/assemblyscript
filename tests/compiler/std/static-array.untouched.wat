@@ -68,6 +68,8 @@
   local.get $1
   call $~lib/array/Array<i32>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
@@ -166,6 +168,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -1220,6 +1224,10 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
+   i32.const 0
+   i32.const 1
+   i32.lt_s
+   drop
    local.get $4
    local.get $3
    i32.add
@@ -1245,6 +1253,10 @@
    local.get $4
    i32.lt_u
    if
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1340,6 +1352,10 @@
      end
     end
    else
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1455,6 +1471,8 @@
   local.get $2
   i32.load
   local.set $3
+  i32.const 1
+  drop
   local.get $2
   i32.load offset=4
   i32.const 1
@@ -1560,6 +1578,10 @@
    local.set $4
    local.get $2
    local.set $3
+   i32.const 0
+   i32.const 1
+   i32.gt_s
+   drop
    local.get $3
    i32.eqz
    if
@@ -1816,6 +1838,8 @@
   end
  )
  (func $~lib/array/Array<i32>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1890,9 +1914,13 @@
   local.get $1
   call $~lib/array/Array<i64>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/array/Array<i64>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i64)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -1967,9 +1995,13 @@
   local.get $1
   call $~lib/array/Array<f32>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/array/Array<f32>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 f32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2044,9 +2076,13 @@
   local.get $1
   call $~lib/array/Array<f64>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/array/Array<f64>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 f64)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1

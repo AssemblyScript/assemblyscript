@@ -10,6 +10,16 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $start:wasi/snapshot_preview1
+  i32.const 0
+  global.get $~lib/shared/target/Target.WASM32
+  i32.eq
+  drop
+  nop
+  i32.const 0
+  global.get $~lib/shared/target/Target.WASM32
+  i32.eq
+  drop
+  nop
   i32.const 9
   global.set $wasi/snapshot_preview1/sig
  )

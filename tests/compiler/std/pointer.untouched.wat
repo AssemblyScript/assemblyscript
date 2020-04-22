@@ -39,6 +39,10 @@
    local.set $4
    local.get $2
    local.set $3
+   i32.const 0
+   i32.const 1
+   i32.gt_s
+   drop
    local.get $3
    i32.eqz
    if
@@ -1275,6 +1279,10 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
+   i32.const 0
+   i32.const 1
+   i32.lt_s
+   drop
    local.get $4
    local.get $3
    i32.add
@@ -1300,6 +1308,10 @@
    local.get $4
    i32.lt_u
    if
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1395,6 +1407,10 @@
      end
     end
    else
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1531,6 +1547,8 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.0 (result i32)
    global.get $std/pointer/one
    local.set $0
+   i32.const 1
+   drop
    local.get $0
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.0
   end
@@ -1539,6 +1557,8 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1 (result i32)
    global.get $std/pointer/one
    local.set $1
+   i32.const 1
+   drop
    local.get $1
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.1
   end
@@ -1812,10 +1832,16 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6 (result i32)
    global.get $std/pointer/two
    local.set $0
+   i32.const 1
+   drop
    local.get $0
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.6
   end
   local.set $6
+  i32.const 1
+  drop
+  i32.const 0
+  drop
   local.get $6
   i32.const 0
   i32.eq
@@ -2097,6 +2123,8 @@
   local.set $0
   f32.const 1.399999976158142
   local.set $8
+  i32.const 0
+  drop
   local.get $0
   local.get $8
   f32.store

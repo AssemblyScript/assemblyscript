@@ -182,6 +182,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -449,6 +451,10 @@
     return
    end
   end
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
   block $~lib/util/math/pow_lut|inlined.0 (result f64)
    local.get $0
    local.set $3
@@ -473,7 +479,9 @@
    local.get $7
    i64.const 1
    i64.sub
-   i64.const 2046
+   i64.const 2047
+   i64.const 1
+   i64.sub
    i64.ge_u
    if (result i32)
     i32.const 1
@@ -483,7 +491,9 @@
     i64.and
     i64.const 958
     i64.sub
-    i64.const 128
+    i64.const 1086
+    i64.const 958
+    i64.sub
     i64.ge_u
    end
    if
@@ -494,7 +504,9 @@
     i64.shl
     i64.const 1
     i64.sub
-    i64.const -9007199254740993
+    i64.const -9007199254740992
+    i64.const 1
+    i64.sub
     i64.ge_u
     if
      local.get $6
@@ -570,7 +582,9 @@
     i64.shl
     i64.const 1
     i64.sub
-    i64.const -9007199254740993
+    i64.const -9007199254740992
+    i64.const 1
+    i64.sub
     i64.ge_u
     if
      local.get $3
@@ -599,14 +613,18 @@
         br $~lib/util/math/checkint|inlined.0
        end
        local.get $11
-       i64.const 1075
+       i64.const 1023
+       i64.const 52
+       i64.add
        i64.gt_u
        if
         i32.const 2
         br $~lib/util/math/checkint|inlined.0
        end
        i64.const 1
-       i64.const 1075
+       i64.const 1023
+       i64.const 52
+       i64.add
        local.get $11
        i64.sub
        i64.shl
@@ -680,7 +698,9 @@
        br $~lib/util/math/checkint|inlined.1
       end
       local.get $11
-      i64.const 1075
+      i64.const 1023
+      i64.const 52
+      i64.add
       i64.gt_u
       if
        i32.const 2
@@ -751,7 +771,9 @@
     i64.and
     i64.const 958
     i64.sub
-    i64.const 128
+    i64.const 1086
+    i64.const 958
+    i64.sub
     i64.ge_u
     if
      local.get $5

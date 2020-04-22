@@ -475,6 +475,12 @@ export enum SIMDLoadOp {
   LoadU32ToU64x2 = 9 /* _BinaryenLoadExtUVec32x2ToVecI64x2 */
 }
 
+export enum ExpressionRunnerFlags {
+  Default = 0 /* _ExpressionRunnerFlagsDefault */,
+  PreserveSideeffects = 1 /* _ExpressionRunnerFlagsPreserveSideeffects */,
+  TraverseCalls = 2 /* _ExpressionRunnerFlagsTraverseCalls */
+}
+
 export class MemorySegment {
 
   buffer: Uint8Array;
@@ -1795,6 +1801,11 @@ export class Module {
     return 0;
   }
 
+  runExpression(expr: ExpressionRef, flags: ExpressionRunnerFlags, maxDepth: i32 = 50, maxLoopIterations: i32 = 1): ExpressionRef {
+    var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
+    return binaryen._ExpressionRunnerRunAndDispose(runner, expr);
+  }
+
   // source map generation
 
   addDebugInfoFile(name: string): Index {
@@ -2159,7 +2170,7 @@ export enum SideEffects {
   ImplicitTrap = 256 /* _BinaryenSideEffectImplicitTrap */,
   IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
   Throws = 1024 /* _BinaryenSideEffectThrows */,
-  Any = 2047 /* _BinaryenSideEffectAny */,
+  Any = 2047 /* _BinaryenSideEffectAny */
 }
 
 export function getSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): SideEffects {

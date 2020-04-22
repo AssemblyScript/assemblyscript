@@ -412,7 +412,7 @@
   local.set $0
   loop $for-loop|0
    local.get $0
-   i32.const 255
+   global.get $~lib/builtins/u8.MAX_VALUE
    i32.le_s
    local.set $1
    local.get $1
