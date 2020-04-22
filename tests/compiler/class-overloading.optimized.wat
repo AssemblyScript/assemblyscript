@@ -164,16 +164,16 @@
    local.set $2
    local.get $3
    if
-    local.get $1
+    local.get $0
     i32.load16_u
     local.tee $3
-    local.get $0
+    local.get $1
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $4
      local.get $3
+     local.get $4
      i32.sub
      return
     end
@@ -242,24 +242,22 @@
  )
  (func $class-overloading/D#constructor (param $0 i32) (result i32)
   local.get $0
-  i32.eqz
-  if
+  if (result i32)
+   local.get $0
+  else
    i32.const 6
    call $~lib/rt/stub/__alloc
-   local.set $0
   end
-  local.get $0
   call $class-overloading/B#constructor
  )
  (func $class-overloading/E#constructor (param $0 i32) (result i32)
   local.get $0
-  i32.eqz
-  if
+  if (result i32)
+   local.get $0
+  else
    i32.const 7
    call $~lib/rt/stub/__alloc
-   local.set $0
   end
-  local.get $0
   call $class-overloading/D#constructor
  )
  (func $start:class-overloading

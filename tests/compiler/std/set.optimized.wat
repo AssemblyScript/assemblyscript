@@ -647,10 +647,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -1885,10 +1885,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
-    local.get $4
     local.get $5
     i32.const 3
     i32.and
+    local.get $4
     i32.or
     i32.store
     local.get $1
@@ -1940,7 +1940,7 @@
   local.get $1
   local.get $0
   i32.load offset=8
-  local.tee $4
+  local.tee $5
   local.get $2
   i32.shr_u
   i32.gt_u
@@ -1961,16 +1961,11 @@
    local.get $0
    i32.load
    local.set $3
-   local.get $1
-   local.get $2
-   i32.shl
-   local.tee $2
-   local.set $5
    call $~lib/rt/tlsf/maybeInitialize
    local.get $3
    i32.const 16
    i32.sub
-   local.set $1
+   local.set $4
    local.get $3
    i32.const 15
    i32.and
@@ -1979,7 +1974,7 @@
    local.get $3
    select
    if (result i32)
-    local.get $1
+    local.get $4
     i32.load
     i32.const 1
     i32.and
@@ -1988,7 +1983,7 @@
     i32.const 0
    end
    if (result i32)
-    local.get $1
+    local.get $4
     i32.load offset=4
     i32.const -268435456
     i32.and
@@ -2005,16 +2000,19 @@
     call $~lib/builtins/abort
     unreachable
    end
+   local.get $4
    local.get $1
-   local.get $5
+   local.get $2
+   i32.shl
+   local.tee $2
    call $~lib/rt/tlsf/reallocateBlock
    i32.const 16
    i32.add
    local.tee $1
-   local.get $4
+   local.get $5
    i32.add
    local.get $2
-   local.get $4
+   local.get $5
    i32.sub
    call $~lib/memory/memory.fill
    local.get $1
@@ -2062,9 +2060,9 @@
    local.get $3
    i32.store offset=12
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   local.get $2
   i32.store8
@@ -2206,9 +2204,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_s
  )
@@ -2972,9 +2970,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $1
   local.get $0
   i32.load offset=4
+  local.get $1
   i32.add
   i32.load8_u
  )
@@ -9406,16 +9404,13 @@
       block $switch$1$default
        block $switch$1$case$4
         local.get $0
-        i32.const 16
-        i32.add
-        local.tee $1
         i32.const 8
-        i32.sub
+        i32.add
         i32.load
         br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $folding-inner0 $folding-inner1 $switch$1$default
        end
-       local.get $1
-       i32.load
+       local.get $0
+       i32.load offset=16
        local.tee $1
        if
         local.get $1
@@ -9425,16 +9420,16 @@
       end
       unreachable
      end
-     local.get $1
-     i32.load
+     local.get $0
+     i32.load offset=16
      call $~lib/rt/pure/__visit
-     local.get $1
-     i32.load offset=8
+     local.get $0
+     i32.load offset=24
      call $~lib/rt/pure/__visit
      br $__inlined_func$~lib/rt/__visit_members
     end
-    local.get $1
-    i32.load
+    local.get $0
+    i32.load offset=16
     call $~lib/rt/pure/__visit
    end
    local.get $2

@@ -716,10 +716,10 @@
       i32.const 16
       i32.lt_u
       if
-       local.get $2
        local.get $1
        i32.const 4
        i32.shl
+       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -755,7 +755,6 @@
  (func $~lib/rt/tlsf/searchBlock (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
-  nop
   local.get $0
   i32.load offset=4
   i32.const -2
@@ -1053,6 +1052,7 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
+  (local $3 i32)
   i32.const 0
   global.set $while/ran
   i32.const 10
@@ -1153,18 +1153,16 @@
   global.set $while/ran
   i32.const 0
   global.set $while/ran
-  i32.const 0
-  local.set $1
   loop $while-continue|01
-   local.get $1
+   local.get $3
    i32.const 1
    i32.add
-   local.tee $1
+   local.tee $3
    i32.const 10
    i32.ne
    br_if $while-continue|01
   end
-  local.get $1
+  local.get $3
   i32.const 10
   i32.ne
   if
@@ -1178,17 +1176,17 @@
   i32.const 1
   global.set $while/ran
   i32.const 0
-  local.set $1
-  loop $while-continue|02
-   local.get $1
+  local.set $3
+  loop $while-continue|002
+   local.get $3
    i32.const 1
    i32.add
-   local.tee $1
+   local.tee $3
    i32.const 10
    i32.ne
-   br_if $while-continue|02
+   br_if $while-continue|002
   end
-  local.get $1
+  local.get $3
   i32.const 10
   i32.ne
   if
@@ -1214,18 +1212,18 @@
   i32.const 0
   global.set $while/ran
   i32.const 10
-  local.set $1
-  loop $while-continue|03
-   local.get $1
+  local.set $3
+  loop $while-continue|04
+   local.get $3
    if
-    local.get $1
+    local.get $3
     i32.const 1
     i32.sub
-    local.set $1
-    br $while-continue|03
+    local.set $3
+    br $while-continue|04
    end
   end
-  local.get $1
+  local.get $3
   if
    i32.const 0
    i32.const 1040
@@ -1242,7 +1240,7 @@
   local.set $1
   i32.const 10
   local.set $0
-  loop $while-continue|04
+  loop $while-continue|03
    local.get $1
    if
     loop $while-continue|1
@@ -1259,7 +1257,7 @@
     i32.const 1
     i32.sub
     local.set $1
-    br $while-continue|04
+    br $while-continue|03
    end
   end
   local.get $1
@@ -1285,16 +1283,16 @@
   i32.const 0
   global.set $while/ran
   i32.const 0
-  local.set $2
+  local.set $3
   call $while/Ref#constructor
   local.set $1
   loop $while-continue|05
    local.get $1
    if
-    local.get $2
+    local.get $3
     i32.const 1
     i32.add
-    local.tee $2
+    local.tee $3
     i32.const 10
     i32.eq
     if
@@ -1316,7 +1314,7 @@
     br $while-continue|05
    end
   end
-  local.get $2
+  local.get $3
   i32.const 10
   i32.ne
   if
@@ -1353,20 +1351,20 @@
   i32.const 0
   global.set $while/ran
   i32.const 0
-  local.set $2
+  local.set $3
   call $while/Ref#constructor
   local.set $1
   loop $while-continue|06
    block $while-break|0
     call $while/Ref#constructor
-    local.tee $0
+    local.tee $2
     call $~lib/rt/pure/__release
-    local.get $0
+    local.get $2
     if
-     local.get $2
+     local.get $3
      i32.const 1
      i32.add
-     local.tee $2
+     local.tee $3
      i32.const 10
      i32.eq
      if
@@ -1383,7 +1381,7 @@
     end
    end
   end
-  local.get $2
+  local.get $3
   i32.const 10
   i32.ne
   if
@@ -1459,16 +1457,13 @@
     block $switch$1$default
      block $switch$1$case$4
       local.get $0
-      i32.const 16
-      i32.add
-      local.tee $1
       i32.const 8
-      i32.sub
+      i32.add
       i32.load
       br_table $__inlined_func$~lib/rt/__visit_members $__inlined_func$~lib/rt/__visit_members $switch$1$case$4 $__inlined_func$~lib/rt/__visit_members $switch$1$default
      end
-     local.get $1
-     i32.load
+     local.get $0
+     i32.load offset=16
      local.tee $1
      if
       local.get $1

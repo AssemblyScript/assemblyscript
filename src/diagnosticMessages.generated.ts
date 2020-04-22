@@ -40,9 +40,10 @@ export enum DiagnosticCode {
   _0_is_not_a_valid_operator = 224,
   Expression_cannot_be_represented_by_a_type = 225,
   Expression_resolves_to_unusual_type_0 = 226,
-  Function_0_is_virtual_and_will_not_be_inlined = 227,
-  Property_0_only_has_a_setter_and_is_missing_a_getter = 228,
-  _0_keyword_cannot_be_used_here = 229,
+  Array_literal_expected = 227,
+  Function_0_is_virtual_and_will_not_be_inlined = 228,
+  Property_0_only_has_a_setter_and_is_missing_a_getter = 229,
+  _0_keyword_cannot_be_used_here = 230,
   Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -160,6 +161,7 @@ export enum DiagnosticCode {
   Namespace_0_has_no_exported_member_1 = 2694,
   Required_type_parameters_may_not_follow_optional_type_parameters = 2706,
   Duplicate_property_0 = 2718,
+  Property_0_is_missing_in_type_1_but_required_in_type_2 = 2741,
   Type_0_has_no_call_signatures = 2757,
   File_0_not_found = 6054,
   Numeric_separators_are_not_allowed_here = 6188,
@@ -204,9 +206,10 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 224: return "'{0}' is not a valid operator.";
     case 225: return "Expression cannot be represented by a type.";
     case 226: return "Expression resolves to unusual type '{0}'.";
-    case 227: return "Function '{0}' is virtual and will not be inlined.";
-    case 228: return "Property '{0}' only has a setter and is missing a getter.";
-    case 229: return "'{0}' keyword cannot be used here.";
+    case 227: return "Array literal expected.";
+    case 228: return "Function '{0}' is virtual and will not be inlined.";
+    case 229: return "Property '{0}' only has a setter and is missing a getter.";
+    case 230: return "'{0}' keyword cannot be used here.";
     case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";
@@ -324,6 +327,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 2694: return "Namespace '{0}' has no exported member '{1}'.";
     case 2706: return "Required type parameters may not follow optional type parameters.";
     case 2718: return "Duplicate property '{0}'.";
+    case 2741: return "Property '{0}' is missing in type '{1}' but required in type '{2}'.";
     case 2757: return "Type '{0}' has no call signatures.";
     case 6054: return "File '{0}' not found.";
     case 6188: return "Numeric separators are not allowed here.";

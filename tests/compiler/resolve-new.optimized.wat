@@ -4,7 +4,7 @@
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
- (func $resolve-new/Foo#constructor
+ (func $~lib/rt/stub/__alloc
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -72,7 +72,7 @@
  (func $~start
   i32.const 1024
   global.set $~lib/rt/stub/offset
-  call $resolve-new/Foo#constructor
-  call $resolve-new/Foo#constructor
+  call $~lib/rt/stub/__alloc
+  call $~lib/rt/stub/__alloc
  )
 )

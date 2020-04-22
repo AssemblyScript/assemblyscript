@@ -9,18 +9,18 @@
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 16) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000\00")
- (data (i32.const 48) "\90\01\00\00\01\00\00\00\03\00\00\00\90\01\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
- (data (i32.const 464) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001\00")
- (data (i32.const 496) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00p\00r\00o\00p\00e\00r\00t\00y\00a\00c\00c\00e\00s\00s\00.\00t\00s\00")
- (data (i32.const 576) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001\00")
- (data (i32.const 608) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002\00")
- (data (i32.const 640) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\002\002\00")
- (data (i32.const 672) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003\00")
- (data (i32.const 704) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\003\003\00")
- (data (i32.const 736) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004\00")
- (data (i32.const 768) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005\00")
- (data (i32.const 800) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\005\005\00")
- (data (i32.const 832) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006\00")
+ (data (i32.const 36) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
+ (data (i32.const 448) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\001\00")
+ (data (i32.const 480) "2\00\00\00\01\00\00\00\01\00\00\002\00\00\00r\00e\00s\00o\00l\00v\00e\00-\00p\00r\00o\00p\00e\00r\00t\00y\00a\00c\00c\00e\00s\00s\00.\00t\00s\00")
+ (data (i32.const 560) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\001\001\00")
+ (data (i32.const 592) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\002\00")
+ (data (i32.const 624) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\002\002\00")
+ (data (i32.const 656) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\003\00")
+ (data (i32.const 688) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\003\003\00")
+ (data (i32.const 720) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004\00")
+ (data (i32.const 752) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005\00")
+ (data (i32.const 784) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\005\005\00")
+ (data (i32.const 816) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006\00")
  (table $0 1 funcref)
  (global $resolve-propertyaccess/Namespace.member i32 (i32.const 1))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -34,7 +34,7 @@
  (global $resolve-propertyaccess/Enum.VALUE i32 (i32.const 4))
  (global $resolve-propertyaccess/Class.staticField (mut i32) (i32.const 5))
  (global $resolve-propertyaccess/Class.lazyStaticField (mut i32) (i32.const 55))
- (global $~lib/heap/__heap_base i32 (i32.const 852))
+ (global $~lib/heap/__heap_base i32 (i32.const 836))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
@@ -234,14 +234,14 @@
     i32.const 100
     i32.rem_u
     local.set $7
-    i32.const 64
+    i32.const 36
     local.get $6
     i32.const 2
     i32.shl
     i32.add
     i64.load32_u
     local.set $8
-    i32.const 64
+    i32.const 36
     local.get $7
     i32.const 2
     i32.shl
@@ -284,7 +284,7 @@
    i32.const 2
    i32.sub
    local.set $2
-   i32.const 64
+   i32.const 36
    local.get $10
    i32.const 2
    i32.shl
@@ -307,7 +307,7 @@
    i32.const 2
    i32.sub
    local.set $2
-   i32.const 64
+   i32.const 36
    local.get $1
    i32.const 2
    i32.shl
@@ -616,7 +616,7 @@
   i32.eqz
   if
    i32.const 4
-   i32.const 4
+   i32.const 3
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -651,12 +651,12 @@
   i32.const 1
   call $~lib/number/I32#toString
   local.tee $0
-  i32.const 480
+  i32.const 464
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 6
    i32.const 1
    call $~lib/builtins/abort
@@ -665,12 +665,12 @@
   i32.const 11
   call $~lib/number/I32#toString
   local.tee $1
-  i32.const 592
+  i32.const 576
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 12
    i32.const 1
    call $~lib/builtins/abort
@@ -679,12 +679,12 @@
   i32.const 2
   call $~lib/number/I32#toString
   local.tee $2
-  i32.const 624
+  i32.const 608
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 24
    i32.const 1
    call $~lib/builtins/abort
@@ -693,12 +693,12 @@
   i32.const 22
   call $~lib/number/I32#toString
   local.tee $3
-  i32.const 656
+  i32.const 640
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 30
    i32.const 1
    call $~lib/builtins/abort
@@ -707,12 +707,12 @@
   i32.const 3
   call $~lib/number/I32#toString
   local.tee $4
-  i32.const 688
+  i32.const 672
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 42
    i32.const 1
    call $~lib/builtins/abort
@@ -721,12 +721,12 @@
   i32.const 33
   call $~lib/number/I32#toString
   local.tee $5
-  i32.const 720
+  i32.const 704
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 48
    i32.const 1
    call $~lib/builtins/abort
@@ -735,12 +735,12 @@
   i32.const 4
   call $~lib/number/I32#toString
   local.tee $6
-  i32.const 752
+  i32.const 736
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 58
    i32.const 1
    call $~lib/builtins/abort
@@ -749,12 +749,12 @@
   global.get $resolve-propertyaccess/Class.staticField
   call $~lib/number/I32#toString
   local.tee $7
-  i32.const 784
+  i32.const 768
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 70
    i32.const 1
    call $~lib/builtins/abort
@@ -763,12 +763,12 @@
   global.get $resolve-propertyaccess/Class.lazyStaticField
   call $~lib/number/I32#toString
   local.tee $8
-  i32.const 816
+  i32.const 800
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 76
    i32.const 1
    call $~lib/builtins/abort
@@ -781,12 +781,12 @@
   i32.load
   call $~lib/number/I32#toString
   local.tee $10
-  i32.const 848
+  i32.const 832
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
-   i32.const 512
+   i32.const 496
    i32.const 84
    i32.const 3
    call $~lib/builtins/abort

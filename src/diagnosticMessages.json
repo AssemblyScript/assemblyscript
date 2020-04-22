@@ -33,9 +33,10 @@
   "'{0}' is not a valid operator.": 224,
   "Expression cannot be represented by a type.": 225,
   "Expression resolves to unusual type '{0}'.": 226,
-  "Function '{0}' is virtual and will not be inlined.": 227,
-  "Property '{0}' only has a setter and is missing a getter.": 228,
-  "'{0}' keyword cannot be used here.": 229,
+  "Array literal expected.": 227,
+  "Function '{0}' is virtual and will not be inlined.": 228,
+  "Property '{0}' only has a setter and is missing a getter.": 229,
+  "'{0}' keyword cannot be used here.": 230,
 
   "Type '{0}' is cyclic. Module will include deferred garbage collection.": 900,
   "Importing the table disables some indirect call optimizations.": 901,
@@ -156,6 +157,7 @@
   "Namespace '{0}' has no exported member '{1}'.": 2694,
   "Required type parameters may not follow optional type parameters.": 2706,
   "Duplicate property '{0}'.": 2718,
+  "Property '{0}' is missing in type '{1}' but required in type '{2}'.": 2741,
   "Type '{0}' has no call signatures.": 2757,
 
   "File '{0}' not found.": 6054,
