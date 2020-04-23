@@ -5197,7 +5197,7 @@
   call $~lib/math/ipow32
   call $~lib/number/I32#toString
   local.tee $26
-  i32.const 7952
+  i32.const 7984
   call $~lib/string/String.__eq
   i32.eqz
   if
