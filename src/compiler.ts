@@ -187,7 +187,8 @@ import {
   writeI64,
   writeF32,
   writeF64,
-  makeMap
+  makeMap,
+  isPowerOf2
 } from "./util";
 
 /** Compiler options. */
@@ -712,13 +713,15 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FUNCTION: {
         let functionInstance = <Function>element;
-        let signature = functionInstance.signature;
-        if (signature.requiredParameters < signature.parameterTypes.length) {
-          // utilize trampoline to fill in omitted arguments
-          functionInstance = this.ensureTrampoline(functionInstance);
-          this.ensureBuiltinArgumentsLength();
+        if (!functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
+          let signature = functionInstance.signature;
+          if (signature.requiredParameters < signature.parameterTypes.length) {
+            // utilize trampoline to fill in omitted arguments
+            functionInstance = this.ensureTrampoline(functionInstance);
+            this.ensureBuiltinArgumentsLength();
+          }
+          if (functionInstance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(functionInstance.internalName, prefix + name);
         }
-        if (functionInstance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(functionInstance.internalName, prefix + name);
         break;
       }
       case ElementKind.PROPERTY: {
@@ -1683,6 +1686,7 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Adds a static memory segment with the specified data. */
   addMemorySegment(buffer: Uint8Array, alignment: i32 = 16): MemorySegment {
+    assert(isPowerOf2(alignment));
     var memoryOffset = i64_align(this.memoryOffset, alignment);
     var segment = MemorySegment.create(buffer, memoryOffset);
     this.memorySegments.push(segment);
@@ -1719,17 +1723,10 @@ export class Compiler extends DiagnosticEmitter {
     }
   }
 
-  /** Adds a buffer to static memory and returns the created segment. */
-  addStaticBuffer(elementType: Type, values: ExpressionRef[], id: u32 = this.program.arrayBufferInstance.id): MemorySegment {
-    var program = this.program;
+  /** Writes a series of static values of the specified type to a buffer. */
+  writeStaticBuffer(buf: Uint8Array, pos: i32, elementType: Type, values: ExpressionRef[]): i32 {
     var length = values.length;
     var byteSize = elementType.byteSize;
-    var byteLength = length * byteSize;
-    var runtimeHeaderSize = program.runtimeHeaderSize;
-
-    var buf = new Uint8Array(runtimeHeaderSize + byteLength);
-    program.writeRuntimeHeader(buf, 0, id, byteLength);
-    var pos = runtimeHeaderSize;
     var nativeType = elementType.toNativeType();
     switch (<u32>nativeType) {
       case <u32>NativeType.I32: {
@@ -1800,8 +1797,19 @@ export class Compiler extends DiagnosticEmitter {
       }
       default: assert(false);
     }
-    assert(pos == buf.length);
+    return pos;
+  }
 
+  /** Adds a buffer to static memory and returns the created segment. */
+  addStaticBuffer(elementType: Type, values: ExpressionRef[], id: u32 = this.program.arrayBufferInstance.id): MemorySegment {
+    var program = this.program;
+    var length = values.length;
+    var byteSize = elementType.byteSize;
+    var byteLength = length * byteSize;
+    var runtimeHeaderSize = program.runtimeHeaderSize;
+    var buf = new Uint8Array(runtimeHeaderSize + byteLength);
+    program.writeRuntimeHeader(buf, 0, id, byteLength);
+    assert(this.writeStaticBuffer(buf, runtimeHeaderSize, elementType, values) == buf.length);
     return this.addMemorySegment(buf);
   }
 
