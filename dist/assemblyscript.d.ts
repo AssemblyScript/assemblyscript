@@ -249,6 +249,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         _0_is_not_a_valid_operator = 224,
         Expression_cannot_be_represented_by_a_type = 225,
         Expression_resolves_to_unusual_type_0 = 226,
+        Array_literal_expected = 227,
         Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
         Importing_the_table_disables_some_indirect_call_optimizations = 901,
         Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -4289,6 +4290,8 @@ declare module "assemblyscript/src/compiler" {
         addMemorySegment(buffer: Uint8Array, alignment?: number): MemorySegment;
         /** Ensures that a string exists in static memory and returns a pointer to it. Deduplicates. */
         ensureStaticString(stringValue: string): ExpressionRef;
+        /** Writes a series of static values of the specified type to a buffer. */
+        writeStaticBuffer(buf: Uint8Array, pos: number, elementType: Type, values: ExpressionRef[]): number;
         /** Adds a buffer to static memory and returns the created segment. */
         addStaticBuffer(elementType: Type, values: ExpressionRef[], id?: number): MemorySegment;
         /** Adds an array header to static memory and returns the created segment. */
@@ -5028,6 +5031,7 @@ declare module "assemblyscript/src/builtins" {
         const memory_grow = "~lib/memory/memory.grow";
         const memory_copy = "~lib/memory/memory.copy";
         const memory_fill = "~lib/memory/memory.fill";
+        const memory_data = "~lib/memory/memory.data";
         const Int8Array = "~lib/typedarray/Int8Array";
         const Uint8Array = "~lib/typedarray/Uint8Array";
         const Uint8ClampedArray = "~lib/typedarray/Uint8ClampedArray";
