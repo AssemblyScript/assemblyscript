@@ -850,14 +850,18 @@
    local.set $9
    i32.const 2056
    local.get $14
-   i32.const 4
+   i32.const 1
+   i32.const 3
+   i32.add
    i32.shl
    i32.add
    f64.load
    local.set $8
    i32.const 2056
    local.get $14
-   i32.const 4
+   i32.const 1
+   i32.const 3
+   i32.add
    i32.shl
    i32.add
    f64.load offset=8

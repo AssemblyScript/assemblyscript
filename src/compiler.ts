@@ -2910,8 +2910,10 @@ export class Compiler extends DiagnosticEmitter {
       let isStatic = false;
       if (isConst) {
         if (initExpr) {
-          initExpr = module.precomputeExpression(initExpr);
-          if (getExpressionId(initExpr) == ExpressionId.Const) {
+          let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
+          if (precomp) {
+            assert(getExpressionId(precomp) == ExpressionId.Const);
+            initExpr = precomp;
             let local = new Local(name, -1, type, flow.parentFunction);
             switch (<u32>getExpressionType(initExpr)) {
               case <u32>NativeType.I32: {
@@ -8313,19 +8315,21 @@ export class Compiler extends DiagnosticEmitter {
     var nativeElementType = elementType.toNativeType();
     for (let i = 0; i < length; ++i) {
       let expression = expressions[i];
-      let expr = expression
-        ? module.precomputeExpression(
-            this.compileExpression(<Expression>expression, elementType,
-              Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-            )
-          )
-        : this.makeZero(elementType);
-      if (getExpressionId(expr) == ExpressionId.Const) {
-        assert(getExpressionType(expr) == nativeElementType);
+      if (expression) {
+        let expr = this.compileExpression(<Expression>expression, elementType,
+          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
+        );
+        let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+        if (precomp) {
+          assert(getExpressionId(precomp) == ExpressionId.Const);
+          expr = precomp;
+        } else {
+          isStatic = false;
+        }
+        values[i] = expr;
       } else {
-        isStatic = false;
+        values[i] = this.makeZero(elementType);
       }
-      values[i] = expr;
     }
 
     // if the array is static, make a static arraybuffer segment
@@ -8481,22 +8485,21 @@ export class Compiler extends DiagnosticEmitter {
     var isStatic = true;
     for (let i = 0; i < length; ++i) {
       let expression = expressions[i];
-      let expr: ExpressionRef;
       if (expression) {
-        expr = module.precomputeExpression(
-          this.compileExpression(expression, elementType,
-            Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-          )
+        let expr = this.compileExpression(expression, elementType,
+          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
-        if (getExpressionId(expr) == ExpressionId.Const) {
-          assert(getExpressionType(expr) == nativeElementType);
+        let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+        if (precomp) {
+          assert(getExpressionId(precomp) == ExpressionId.Const);
+          expr = precomp;
         } else {
           isStatic = false;
         }
+        values[i] = expr;
       } else {
-        expr = this.makeZero(elementType);
+        values[i] = this.makeZero(elementType);
       }
-      values[i] = expr;
     }
 
     var isWasm64 = this.options.isWasm64;

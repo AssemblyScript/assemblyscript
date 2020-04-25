@@ -2195,11 +2195,6 @@ export function hasSideEffects(expr: ExpressionRef, features: FeatureFlags = Fea
   return getSideEffects(expr, features) != SideEffects.None;
 }
 
-export function hasSideEffectsExceptGets(expr: ExportRef, features: FeatureFlags = FeatureFlags.All): bool {
-  const mask = ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal);
-  return (getSideEffects(expr, features) & mask) != 0;
-}
-
 // helpers
 // can't do stack allocation here: STACKTOP is a global in WASM but a hidden variable in asm.js
 
