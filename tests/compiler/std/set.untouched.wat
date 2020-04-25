@@ -2181,8 +2181,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    i32.store8
    local.get $0
@@ -4785,8 +4783,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    i32.store8
    local.get $0
@@ -5905,8 +5901,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    i32.store16
    local.get $0
@@ -7011,8 +7005,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    i32.store16
    local.get $0
@@ -8155,8 +8147,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    i32.store
    local.get $0
@@ -9247,8 +9237,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    i32.store
    local.get $0
@@ -10441,8 +10429,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    i64.store
    local.get $0
@@ -11553,8 +11539,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    i64.store
    local.get $0
@@ -12632,8 +12616,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    f32.store
    local.get $0
@@ -13712,8 +13694,6 @@
    i32.add
    local.set $4
    local.get $4
-   i32.const 0
-   drop
    local.get $1
    f64.store
    local.get $0

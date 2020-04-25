@@ -18,56 +18,28 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $instanceof/isI32<i32> (param $0 i32) (result i32)
-  local.get $0
+  i32.const 1
   drop
   i32.const 1
-  if
-   i32.const 1
-   return
-  else
-   i32.const 0
-   return
-  end
-  unreachable
+  return
  )
  (func $instanceof/isI32<f64> (param $0 f64) (result i32)
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  else
-   i32.const 0
-   return
-  end
-  unreachable
+  return
  )
  (func $instanceof/isI32<u32> (param $0 i32) (result i32)
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  else
-   i32.const 0
-   return
-  end
-  unreachable
+  return
  )
  (func $instanceof/isI32<u16> (param $0 i32) (result i32)
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  else
-   i32.const 0
-   return
-  end
-  unreachable
+  return
  )
  (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0

@@ -70,7 +70,6 @@ import {
   RelooperBlockRef,
   SIMDLoadOp,
   getLocalGetIndex,
-  hasSideEffects,
   createType
 } from "./module";
 
@@ -1805,12 +1804,7 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32:
       case TypeKind.U64:
       case TypeKind.USIZE: {
-        return hasSideEffects(arg0)
-          ? module.block(null, [
-              module.drop(arg0),
-              module.i32(0)
-            ], NativeType.I32)
-          : module.i32(0);
+        return module.maybeDropCondition(arg0, module.i32(0));
       }
       // (t = arg0) != t
       case TypeKind.F32: {
@@ -1886,12 +1880,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32:
       case TypeKind.U64:
       case TypeKind.USIZE: {
-        return hasSideEffects(arg0)
-          ? module.block(null, [
-              module.drop(arg0),
-              module.i32(1)
-            ], NativeType.I32)
-          : module.i32(1);
+        return module.maybeDropCondition(arg0, module.i32(1));
       }
       // (t = arg0) - t == 0
       case TypeKind.F32: {

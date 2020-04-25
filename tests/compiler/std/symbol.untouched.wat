@@ -1216,14 +1216,10 @@
    i32.add
    local.set $6
    local.get $6
-   i32.const 1
-   drop
    local.get $1
    call $~lib/rt/stub/__retain
    i32.store
    local.get $6
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=4
    local.get $0
@@ -1629,13 +1625,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store
    local.get $5
-   i32.const 1
-   drop
    local.get $2
    call $~lib/rt/stub/__retain
    i32.store offset=4

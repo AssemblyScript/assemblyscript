@@ -3132,138 +3132,30 @@
    local.get $1
    return
   end
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
   i32.const 0
   local.set $1
   local.get $0
@@ -3273,90 +3165,30 @@
  (func $~lib/arraybuffer/ArrayBuffer.isView<usize> (param $0 i32) (result i32)
   i32.const 0
   drop
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   return
-  end
-  local.get $0
   drop
-  i32.const 0
-  if
-   i32.const 1
-   return
-  end
   i32.const 0
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Uint8Array | null> (param $0 i32) (result i32)
@@ -3377,143 +3209,16 @@
    local.get $1
    return
   end
-  local.get $0
-  drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 1
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  i32.const 0
+  i32.const 1
   local.set $1
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  return
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/typedarray/Int32Array | null> (param $0 i32) (result i32)
   (local $1 i32)
@@ -3533,143 +3238,24 @@
    local.get $1
    return
   end
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 1
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  i32.const 0
+  i32.const 1
   local.set $1
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  return
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView | null> (param $0 i32) (result i32)
   (local $1 i32)
@@ -3689,143 +3275,36 @@
    local.get $1
    return
   end
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 1
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  i32.const 0
+  drop
+  i32.const 1
   local.set $1
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  return
  )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -3969,138 +3448,30 @@
   local.set $0
   i32.const 0
   drop
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
   i32.const 0
   local.set $1
   local.get $0
@@ -4114,143 +3485,16 @@
   local.set $0
   i32.const 0
   drop
-  local.get $0
-  drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 1
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  i32.const 0
+  i32.const 1
   local.set $1
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  return
  )
  (func $~lib/typedarray/Int32Array#constructor (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -4275,143 +3519,24 @@
   local.set $0
   i32.const 0
   drop
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 1
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  i32.const 0
+  i32.const 1
   local.set $1
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  return
  )
  (func $~lib/dataview/DataView#constructor (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   (local $4 i32)
@@ -4526,143 +3651,36 @@
   local.set $0
   i32.const 0
   drop
-  local.get $0
+  i32.const 0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
-  drop
-  i32.const 0
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  local.get $0
   drop
   i32.const 1
-  if
-   i32.const 1
-   local.set $1
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   return
-  end
-  i32.const 0
+  drop
+  i32.const 1
   local.set $1
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
+  return
  )
  (func $start:std/arraybuffer
   (local $0 i32)

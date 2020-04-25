@@ -2058,8 +2058,6 @@
   call $~lib/rt/pure/__retain
   local.set $0
   i32.const 1
-  drop
-  i32.const 1
   if (result i32)
    local.get $0
    i32.const 0
@@ -2092,8 +2090,6 @@
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
-  i32.const 1
-  drop
   i32.const 0
   if (result i32)
    local.get $0
@@ -2200,8 +2196,6 @@
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
-  i32.const 1
-  drop
   i32.const 0
   if (result i32)
    local.get $0
@@ -2217,16 +2211,12 @@
  )
  (func $~lib/array/Array.isArray<i32> (param $0 i32) (result i32)
   i32.const 0
-  drop
-  i32.const 0
  )
  (func $~lib/array/Array.isArray<~lib/string/String> (param $0 i32) (result i32)
   (local $1 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
-  i32.const 1
-  drop
   i32.const 0
   if (result i32)
    local.get $0
@@ -2245,8 +2235,6 @@
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
-  i32.const 1
-  drop
   i32.const 1
   if (result i32)
    local.get $0
@@ -4793,8 +4781,6 @@
   i32.const 2
   i32.shl
   i32.add
-  i32.const 0
-  drop
   i32.const 0
   i32.store
   local.get $0

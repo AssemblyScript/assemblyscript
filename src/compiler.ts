@@ -8041,18 +8041,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // instanceof <basic> - must be exact
     if (!expectedType.is(TypeFlags.REFERENCE)) {
-      return module.block(null, [
-        module.drop(expr),
-        module.i32(actualType == expectedType ? 1 : 0)
-      ], NativeType.I32);
+      return module.maybeDropCondition(expr, module.i32(actualType == expectedType ? 1 : 0));
     }
 
     // <basic> instanceof <reference> - always false
     if (!actualType.is(TypeFlags.REFERENCE)) {
-      return module.block(null, [
-        module.drop(expr),
-        module.i32(0)
-      ], NativeType.I32);
+      return module.maybeDropCondition(expr, module.i32(0));
     }
 
     // both LHS and RHS are references now
@@ -8113,10 +8107,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // downcast - check statically
       if (actualType.isAssignableTo(expectedType)) {
-        return module.block(null, [
-          this.convertExpression(expr, actualType, Type.void, false, false, expression.expression),
-          module.i32(1)
-        ], NativeType.I32);
+        return module.maybeDropCondition(expr, module.i32(1));
 
       // upcast - check dynamically
       } else if (expectedType.isAssignableTo(actualType)) {
@@ -8153,10 +8144,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // false
-    return module.block(null, [
-      module.drop(expr),
-      module.i32(0)
-    ], NativeType.I32);
+    return module.maybeDropCondition(expr, module.i32(0));
   }
 
   private makeInstanceofClass(expression: InstanceOfExpression, prototype: ClassPrototype): ExpressionRef {
@@ -8186,10 +8174,7 @@ export class Compiler extends DiagnosticEmitter {
 
         // <nonNullable> is just `true`
         } else {
-          return module.block(null, [
-            module.drop(expr),
-            module.i32(1)
-          ], NativeType.I32);
+          return module.maybeDropCondition(expr, module.i32(1));
         }
 
       // dynamic check against all possible concrete ids
@@ -8200,10 +8185,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // false
-    return module.block(null, [
-      module.drop(expr),
-      module.i32(0)
-    ], NativeType.I32);
+    return module.maybeDropCondition(expr, module.i32(0));
   }
 
   private compileLiteralExpression(
@@ -9108,16 +9090,10 @@ export class Compiler extends DiagnosticEmitter {
     // FIXME: skips common denominator, inconsistently picking branch type
     var condKind = this.evaluateCondition(condExpr);
     if (condKind == ConditionKind.TRUE) {
-      return module.block(null, [
-        module.drop(condExpr),
-        this.compileExpression(ifThen, ctxType)
-      ], this.currentType.toNativeType());
+      return module.maybeDropCondition(condExpr, this.compileExpression(ifThen, ctxType));
     }
     if (condKind == ConditionKind.FALSE) {
-      return module.block(null, [
-        module.drop(condExpr),
-        this.compileExpression(ifElse, ctxType)
-      ], this.currentType.toNativeType());
+      return module.maybeDropCondition(condExpr, this.compileExpression(ifElse, ctxType));
     }
 
     var inheritedConstraints = constraints & Constraints.WILL_RETAIN;

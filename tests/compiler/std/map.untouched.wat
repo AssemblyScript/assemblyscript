@@ -2199,13 +2199,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store8
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=4
    local.get $0
@@ -4724,13 +4720,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store8
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store8 offset=1
    local.get $0
@@ -5118,13 +5110,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=4
    local.get $0
@@ -6164,13 +6152,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store8
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=4
    local.get $0
@@ -6925,13 +6909,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store8
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store8 offset=1
    local.get $0
@@ -7983,13 +7963,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store16
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=4
    local.get $0
@@ -8762,13 +8738,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store16
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store16 offset=2
    local.get $0
@@ -9820,13 +9792,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store16
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=4
    local.get $0
@@ -10593,13 +10561,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store16
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store16 offset=2
    local.get $0
@@ -12402,13 +12366,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=4
    local.get $0
@@ -13181,13 +13141,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i32.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=4
    local.get $0
@@ -14301,13 +14257,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i64.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=8
    local.get $0
@@ -15094,13 +15046,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i64.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i64.store offset=8
    local.get $0
@@ -16139,13 +16087,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i64.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=8
    local.get $0
@@ -16932,13 +16876,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    i64.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i64.store offset=8
    local.get $0
@@ -17944,13 +17884,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    f32.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=4
    local.get $0
@@ -18704,13 +18640,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    f32.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    f32.store offset=4
    local.get $0
@@ -19717,13 +19649,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    f64.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    i32.store offset=8
    local.get $0
@@ -20489,13 +20417,9 @@
    i32.add
    local.set $5
    local.get $5
-   i32.const 0
-   drop
    local.get $1
    f64.store
    local.get $5
-   i32.const 0
-   drop
    local.get $2
    f64.store offset=8
    local.get $0

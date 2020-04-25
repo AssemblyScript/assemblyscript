@@ -760,6 +760,20 @@ export class Module {
     return binaryen._BinaryenDrop(this.ref, expression);
   }
 
+  maybeDropCondition(condition: ExpressionRef, result: ExpressionRef): ExpressionRef {
+    // FIXME: This is necessary because Binaryen's ExpressionRunner bails early
+    // when encountering a local with an unknown value. This helper only drops
+    // the pre-evaluated condition if it has relevant side effects.
+    // see WebAssembly/binaryen#1237
+    if ((getSideEffects(condition) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != 0) {
+      return this.block(null, [
+        this.drop(condition),
+        result
+      ], getExpressionType(result));
+    }
+    return result;
+  }
+
   loop(
     label: string | null,
     body: ExpressionRef
@@ -2179,6 +2193,11 @@ export function getSideEffects(expr: ExpressionRef, features: FeatureFlags = Fea
 
 export function hasSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): bool {
   return getSideEffects(expr, features) != SideEffects.None;
+}
+
+export function hasSideEffectsExceptGets(expr: ExportRef, features: FeatureFlags = FeatureFlags.All): bool {
+  const mask = ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal);
+  return (getSideEffects(expr, features) & mask) != 0;
 }
 
 // helpers
