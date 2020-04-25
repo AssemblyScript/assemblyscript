@@ -1487,7 +1487,9 @@
   drop
   local.get $4
   i32.load
-  i32.const -4
+  i32.const 3
+  i32.const -1
+  i32.xor
   i32.and
   local.get $3
   i32.ge_u
@@ -2807,12 +2809,16 @@
   i32.load offset=4
   local.set $1
   local.get $1
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   local.get $1
   i32.const 1
   i32.add
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   i32.eq
   i32.eqz
@@ -2896,7 +2902,7 @@
  (func $start:std/staticarray
   (local $0 i32)
   (local $1 i32)
-  i32.const 32
+  global.get $std/staticarray/arr1
   i32.const 1
   call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 2
@@ -2910,7 +2916,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 32
+  global.get $std/staticarray/arr1
   call $~lib/staticarray/StaticArray<i32>#get:length
   i32.const 3
   i32.eq
@@ -2927,7 +2933,7 @@
   i32.const 1
   i32.const 4
   call $~lib/staticarray/StaticArray<i32>#__set
-  i32.const 32
+  global.get $std/staticarray/arr1
   i32.const 1
   call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 4
@@ -2941,7 +2947,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 256
+  global.get $std/staticarray/arr2
   i32.const 1
   call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 2
@@ -2955,7 +2961,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 256
+  global.get $std/staticarray/arr2
   call $~lib/staticarray/StaticArray<i32>#get:length
   i32.const 3
   i32.eq
@@ -2972,7 +2978,7 @@
   i32.const 1
   i32.const 4
   call $~lib/staticarray/StaticArray<i32>#__set
-  i32.const 256
+  global.get $std/staticarray/arr2
   i32.const 1
   call $~lib/staticarray/StaticArray<i32>#__get
   i32.const 4

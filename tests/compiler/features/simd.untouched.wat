@@ -182,6 +182,65 @@
  )
  (func $features/simd/test_v128
   (local $0 i32)
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x04030202 0x08070605 0x0c0b0a09 0x100f0e0d
+  i8x16.ne
+  i8x16.any_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x01010101 0x01010101 0x01010101 0x01010101
+  v128.and
+  v128.const i32x4 0x00010001 0x00010001 0x00010001 0x00010001
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x01010101 0x01010101 0x01010101 0x01010101
+  v128.or
+  v128.const i32x4 0x05030301 0x09070705 0x0d0b0b09 0x110f0f0d
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x01010101 0x01010101 0x01010101 0x01010101
+  v128.xor
+  v128.const i32x4 0x05020300 0x09060704 0x0d0a0b08 0x110e0f0c
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.not
+  v128.const i32x4 0xfbfcfdfe 0xf7f8f9fa 0xf3f4f5f6 0xeff0f1f2
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x04030201 0x08070605 0x0c0b0a09 0x100f0e0d
+  v128.const i32x4 0x0d0e0f10 0x090a0b0c 0x05060708 0x01020304
+  v128.const i32x4 0xff00ff00 0xff00ff00 0xff00ff00 0xff00ff00
+  v128.bitselect
+  v128.const i32x4 0x040e0210 0x080a060c 0x0c060a08 0x10020e04
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
   i32.const 64
   i32.const 0
   call $~lib/rt/stub/__alloc
@@ -289,6 +348,51 @@
    call $~lib/builtins/abort
    unreachable
   end
+  v128.const i32x4 0x007f7f00 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00800080 0x00000000 0x00000000 0x00000000
+  i8x16.min_s
+  v128.const i32x4 0x00800080 0x00000000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x007f7f00 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00800080 0x00000000 0x00000000 0x00000000
+  i8x16.min_u
+  v128.const i32x4 0x007f0000 0x00000000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x007f7f00 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00800080 0x00000000 0x00000000 0x00000000
+  i8x16.max_s
+  v128.const i32x4 0x007f7f00 0x00000000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x007f7f00 0x00000000 0x00000000 0x00000000
+  v128.const i32x4 0x00800080 0x00000000 0x00000000 0x00000000
+  i8x16.max_u
+  v128.const i32x4 0x00807f80 0x00000000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x04040201 0x08070605 0x0c0b0a09 0xff800e0d
+  v128.const i32x4 0x04020401 0x08070605 0x0c0b0a09 0xff800e0d
+  i8x16.avgr_u
+  v128.const i32x4 0x04030301 0x08070605 0x0c0b0a09 0xff800e0d
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
   local.get $0
   i8x16.neg
   v128.const i32x4 0xfcfdfeff 0xf8f9fafb 0xf4f5f6f7 0x81f1f2f3
@@ -388,6 +492,98 @@
    call $~lib/builtins/abort
    unreachable
   end
+  v128.const i32x4 0x7f7f7f7e 0x7f7f7f7f 0x7f7f7f7f 0x7f7f7f7f
+  i32.const 2
+  i8x16.splat
+  i8x16.add_saturate_s
+  i32.const 127
+  i8x16.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0xfffffffe 0xffffffff 0xffffffff 0xffffffff
+  i32.const 2
+  i8x16.splat
+  i8x16.add_saturate_u
+  i32.const -1
+  i8x16.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x80808081 0x80808080 0x80808080 0x80808080
+  i32.const 2
+  i8x16.splat
+  i8x16.sub_saturate_s
+  i32.const -128
+  i8x16.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
+  i32.const 2
+  i8x16.splat
+  i8x16.sub_saturate_u
+  i32.const 0
+  i8x16.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i8x16.splat
+  i32.const 1
+  i8x16.shl
+  i32.const 2
+  i8x16.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -2
+  i8x16.splat
+  i32.const 1
+  i8x16.shr_s
+  i32.const -1
+  i8x16.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i8x16.splat
+  i32.const 1
+  i8x16.shr_u
+  i32.const 127
+  i8x16.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
+  i8x16.any_true
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 1
+  i8x16.splat
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  drop
   i32.const 0
   i8x16.splat
   i32.const 1
@@ -573,6 +769,30 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/builtins/i16.MAX_VALUE
+  i16x8.splat
+  global.get $~lib/builtins/i16.MAX_VALUE
+  i16x8.splat
+  i8x16.narrow_i16x8_s
+  global.get $~lib/builtins/i8.MAX_VALUE
+  i8x16.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  global.get $~lib/builtins/i16.MAX_VALUE
+  i16x8.splat
+  global.get $~lib/builtins/i16.MAX_VALUE
+  i16x8.splat
+  i8x16.narrow_i16x8_u
+  global.get $~lib/builtins/u8.MAX_VALUE
+  i8x16.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
  )
  (func $features/simd/test_i16x8
   (local $0 v128)
@@ -670,6 +890,51 @@
    call $~lib/builtins/abort
    unreachable
   end
+  v128.const i32x4 0x7fff0000 0x00007fff 0x00000000 0x00000000
+  v128.const i32x4 0x00008000 0x00008000 0x00000000 0x00000000
+  i16x8.min_s
+  v128.const i32x4 0x00008000 0x00008000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x7fff0000 0x00007fff 0x00000000 0x00000000
+  v128.const i32x4 0x00008000 0x00008000 0x00000000 0x00000000
+  i16x8.min_u
+  v128.const i32x4 0x00000000 0x00007fff 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x7fff0000 0x00007fff 0x00000000 0x00000000
+  v128.const i32x4 0x00008000 0x00008000 0x00000000 0x00000000
+  i16x8.max_s
+  v128.const i32x4 0x7fff0000 0x00007fff 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x7fff0000 0x00007fff 0x00000000 0x00000000
+  v128.const i32x4 0x00008000 0x00008000 0x00000000 0x00000000
+  i16x8.max_u
+  v128.const i32x4 0x7fff8000 0x00008000 0x00000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00020001 0x00040004 0x00060005 0xffff8000
+  v128.const i32x4 0x00040001 0x00040002 0x00060005 0xffff8000
+  i16x8.avgr_u
+  v128.const i32x4 0x00030001 0x00040003 0x00060005 0xffff8000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
   local.get $0
   i16x8.neg
   v128.const i32x4 0xfffeffff 0xfffcfffd 0xfffafffb 0x8001fff9
@@ -769,6 +1034,98 @@
    call $~lib/builtins/abort
    unreachable
   end
+  v128.const i32x4 0x7fff7ffe 0x7fff7fff 0x7fff7fff 0x7fff7fff
+  i32.const 2
+  i16x8.splat
+  i16x8.add_saturate_s
+  i32.const 32767
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0xfffffffe 0xffffffff 0xffffffff 0xffffffff
+  i32.const 2
+  i16x8.splat
+  i16x8.add_saturate_u
+  i32.const -1
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x80008001 0x80008000 0x80008000 0x80008000
+  i32.const 2
+  i16x8.splat
+  i16x8.sub_saturate_s
+  i32.const -32768
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
+  i32.const 2
+  i16x8.splat
+  i16x8.sub_saturate_u
+  i32.const 0
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const 1
+  i16x8.splat
+  i32.const 1
+  i16x8.shl
+  i32.const 2
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -2
+  i16x8.splat
+  i32.const 1
+  i16x8.shr_s
+  i32.const -1
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i16x8.splat
+  i32.const 1
+  i16x8.shr_u
+  i32.const 32767
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
+  i16x8.any_true
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 1
+  i16x8.splat
+  i16x8.all_true
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  drop
   i32.const 0
   i16x8.splat
   i32.const 1
@@ -954,6 +1311,78 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $~lib/builtins/i32.MAX_VALUE
+  i32x4.splat
+  global.get $~lib/builtins/i32.MAX_VALUE
+  i32x4.splat
+  i16x8.narrow_i32x4_s
+  global.get $~lib/builtins/i16.MAX_VALUE
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  global.get $~lib/builtins/i32.MAX_VALUE
+  i32x4.splat
+  global.get $~lib/builtins/i32.MAX_VALUE
+  i32x4.splat
+  i16x8.narrow_i32x4_u
+  global.get $~lib/builtins/u16.MAX_VALUE
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i8x16.splat
+  i32.const 0
+  i8x16.replace_lane 8
+  i16x8.widen_low_i8x16_s
+  i32.const -1
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i8x16.splat
+  i32.const 0
+  i8x16.replace_lane 8
+  i16x8.widen_low_i8x16_u
+  i32.const 255
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i8x16.splat
+  i32.const 0
+  i8x16.replace_lane 0
+  i16x8.widen_high_i8x16_s
+  i32.const -1
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i8x16.splat
+  i32.const 0
+  i8x16.replace_lane 0
+  i16x8.widen_high_i8x16_u
+  i32.const 255
+  i16x8.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
  )
  (func $features/simd/test_i32x4
   (local $0 v128)
@@ -1051,6 +1480,51 @@
    call $~lib/builtins/abort
    unreachable
   end
+  v128.const i32x4 0x00000000 0x7fffffff 0x7fffffff 0x00000000
+  v128.const i32x4 0x80000000 0x00000000 0x80000000 0x00000000
+  i32x4.min_s
+  v128.const i32x4 0x80000000 0x00000000 0x80000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000000 0x7fffffff 0x7fffffff 0x00000000
+  v128.const i32x4 0x80000000 0x00000000 0x80000000 0x00000000
+  i32x4.min_u
+  v128.const i32x4 0x00000000 0x00000000 0x7fffffff 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000000 0x7fffffff 0x7fffffff 0x00000000
+  v128.const i32x4 0x80000000 0x00000000 0x80000000 0x00000000
+  i32x4.max_s
+  v128.const i32x4 0x00000000 0x7fffffff 0x7fffffff 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000000 0x7fffffff 0x7fffffff 0x00000000
+  v128.const i32x4 0x80000000 0x00000000 0x80000000 0x00000000
+  i32x4.max_u
+  v128.const i32x4 0x80000000 0x7fffffff 0x80000000 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00020001 0x00040003 0x0003ffff 0x00000000
+  v128.const i32x4 0x00060005 0x00080007 0xffff0002 0x00000000
+  i32x4.dot_i16x8_s
+  v128.const i32x4 0x00000011 0x00000035 0xfffffffb 0x00000000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
   local.get $0
   i32x4.neg
   v128.const i32x4 0xffffffff 0xfffffffe 0xfffffffd 0x80000001
@@ -1127,6 +1601,54 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  i32x4.splat
+  i32.const 1
+  i32x4.shl
+  i32.const 2
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -2
+  i32x4.splat
+  i32.const 1
+  i32x4.shr_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i32x4.splat
+  i32.const 1
+  i32x4.shr_u
+  i32.const 2147483647
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
+  i32x4.any_true
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 1
+  i32x4.splat
+  i32x4.all_true
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  drop
   i32.const 0
   i32x4.splat
   i32.const 1
@@ -1312,6 +1834,74 @@
    call $~lib/builtins/abort
    unreachable
   end
+  f32.const -1.5
+  f32x4.splat
+  i32x4.trunc_sat_f32x4_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  f32.const -1.5
+  f32x4.splat
+  i32x4.trunc_sat_f32x4_u
+  i32.const 0
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i16x8.splat
+  i32.const 0
+  i16x8.replace_lane 4
+  i32x4.widen_low_i16x8_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i16x8.splat
+  i32.const 0
+  i16x8.replace_lane 4
+  i32x4.widen_low_i16x8_u
+  i32.const 65535
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i16x8.splat
+  i32.const 0
+  i16x8.replace_lane 0
+  i32x4.widen_high_i16x8_s
+  i32.const -1
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i16x8.splat
+  i32.const 0
+  i16x8.replace_lane 0
+  i32x4.widen_high_i16x8_u
+  i32.const 65535
+  i32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
  )
  (func $features/simd/test_i64x2
   (local $0 v128)
@@ -1464,6 +2054,74 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i64.const 1
+  i64x2.splat
+  i32.const 1
+  i64x2.shl
+  i64.const 2
+  i64x2.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i64.const -2
+  i64x2.splat
+  i32.const 1
+  i64x2.shr_s
+  i64.const -1
+  i64x2.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i64.const -1
+  i64x2.splat
+  i32.const 1
+  i64x2.shr_u
+  i64.const 9223372036854775807
+  i64x2.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  v128.const i32x4 0x00000001 0x00000000 0x00000000 0x00000000
+  i64x2.any_true
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  drop
+  i64.const 1
+  i64x2.splat
+  i64x2.all_true
+  i32.const 0
+  i32.ne
+  i32.const 1
+  i32.eq
+  drop
+  f64.const -1.5
+  f64x2.splat
+  i64x2.trunc_sat_f64x2_s
+  i64.const -1
+  i64x2.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  f64.const -1.5
+  f64x2.splat
+  i64x2.trunc_sat_f64x2_u
+  i64.const 0
+  i64x2.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
  )
  (func $features/simd/test_f32x4
   (local $0 v128)
@@ -1842,6 +2500,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  v128.const i32x4 0x40800000 0x41100000 0x41800000 0x41c80000
+  f32x4.sqrt
+  v128.const i32x4 0x40000000 0x40400000 0x40800000 0x40a00000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i32x4.splat
+  f32x4.convert_i32x4_s
+  f32.const -1
+  f32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i32.const -1
+  i32x4.splat
+  f32x4.convert_i32x4_u
+  f32.const 4294967296
+  f32x4.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
  )
  (func $features/simd/test_f64x2
   (local $0 v128)
@@ -2220,6 +2906,34 @@
    call $~lib/builtins/abort
    unreachable
   end
+  v128.const i32x4 0x00000000 0x40100000 0x00000000 0x40220000
+  f64x2.sqrt
+  v128.const i32x4 0x00000000 0x40000000 0x00000000 0x40080000
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i64.const -1
+  i64x2.splat
+  f64x2.convert_i64x2_s
+  f64.const -1
+  f64x2.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
+  i64.const -1
+  i64x2.splat
+  f64x2.convert_i64x2_u
+  f64.const 18446744073709551615
+  f64x2.splat
+  i8x16.eq
+  i8x16.all_true
+  i32.const 0
+  i32.ne
+  drop
  )
  (func $features/simd/test_v8x16
   (local $0 v128)

@@ -442,8 +442,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
-  f64.const -inf
+  f64.const inf
+  f64.neg
+  f64.const inf
+  f64.neg
   call $~lib/object/Object.is<f64>
   i32.const 1
   i32.eq
@@ -457,7 +459,8 @@
    unreachable
   end
   f64.const inf
-  f64.const -inf
+  f64.const inf
+  f64.neg
   call $~lib/object/Object.is<f64>
   i32.const 0
   i32.eq
@@ -470,7 +473,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const inf
   call $~lib/object/Object.is<f64>
   i32.const 0
@@ -624,8 +628,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
-  f32.const -inf
+  f32.const inf
+  f32.neg
+  f32.const inf
+  f32.neg
   call $~lib/object/Object.is<f32>
   i32.const 1
   i32.eq
@@ -639,7 +645,8 @@
    unreachable
   end
   f32.const inf
-  f32.const -inf
+  f32.const inf
+  f32.neg
   call $~lib/object/Object.is<f32>
   i32.const 0
   i32.eq
@@ -652,7 +659,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const inf
   call $~lib/object/Object.is<f32>
   i32.const 0
@@ -709,7 +717,9 @@
    unreachable
   end
   f64.const 0
-  f64.const -1e-309
+  f64.const 0.1
+  f64.const -1e-308
+  f64.mul
   call $~lib/object/Object.is<f64>
   i32.const 0
   i32.eq
@@ -723,7 +733,9 @@
    unreachable
   end
   f64.const -0
-  f64.const -1e-309
+  f64.const 0.1
+  f64.const -1e-308
+  f64.mul
   call $~lib/object/Object.is<f64>
   i32.const 0
   i32.eq

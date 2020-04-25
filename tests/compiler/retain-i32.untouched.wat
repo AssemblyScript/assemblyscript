@@ -335,6 +335,8 @@
   i32.const 0
   i32.load8_s
   local.set $0
+  i32.const 1
+  drop
  )
  (func $start:retain-i32
   (local $0 i32)
@@ -795,6 +797,8 @@
   i32.const 0
   i32.load8_s
   global.set $retain-i32/ri
+  i32.const 1
+  drop
   call $retain-i32/testLocalRetain
  )
  (func $~start

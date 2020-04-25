@@ -4624,6 +4624,8 @@
   (local $62 i32)
   (local $63 i32)
   i32.const 1
+  i32.const 2
+  i32.lt_u
   call $~lib/number/Bool#toString
   local.tee $0
   i32.const 32
@@ -4637,7 +4639,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
+  i32.const 1
+  i32.const 2
+  i32.gt_u
   call $~lib/number/Bool#toString
   local.tee $1
   i32.const 64
@@ -4652,6 +4656,8 @@
    unreachable
   end
   i32.const 1
+  i32.const 2
+  i32.le_u
   call $~lib/number/Bool#toString
   local.tee $2
   i32.const 32
@@ -4665,7 +4671,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
+  i32.const 1
+  i32.const 2
+  i32.ge_u
   call $~lib/number/Bool#toString
   local.tee $3
   i32.const 64
@@ -4679,7 +4687,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
+  i32.const 1
+  i32.const 2
+  i32.eq
   call $~lib/number/Bool#toString
   local.tee $4
   i32.const 64
@@ -4694,6 +4704,8 @@
    unreachable
   end
   i32.const 1
+  i32.const 2
+  i32.ne
   call $~lib/number/Bool#toString
   local.tee $5
   i32.const 32
@@ -4707,7 +4719,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 160
+  i32.const 160
+  i32.eq
   call $~lib/number/Bool#toString
   local.tee $6
   i32.const 32
@@ -4721,7 +4735,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
+  i32.const 160
+  i32.const 160
+  i32.ne
   call $~lib/number/Bool#toString
   local.tee $7
   i32.const 64
@@ -4982,7 +4998,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
+  i32.const 1
+  i32.const 2
+  i32.add
   call $~lib/number/I32#toString
   local.tee $21
   i32.const 8016
@@ -4996,7 +5014,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const -1
+  i32.const 1
+  i32.const 2
+  i32.sub
   call $~lib/number/I32#toString
   local.tee $22
   i32.const 8048
@@ -5010,7 +5030,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
   i32.const 2
+  i32.mul
   call $~lib/number/I32#toString
   local.tee $23
   i32.const 656
@@ -5024,7 +5046,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 4
   i32.const 2
+  i32.div_u
   call $~lib/number/I32#toString
   local.tee $24
   i32.const 656
@@ -5038,7 +5062,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 3
+  i32.const 2
+  i32.rem_u
   call $~lib/number/I32#toString
   local.tee $25
   i32.const 624
@@ -5052,7 +5078,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 2
+  i32.const 2
+  f64.convert_i32_u
   f64.const 2
   call $~lib/math/NativeMath.pow
   i32.const 0
@@ -5069,7 +5096,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 4
+  i32.const 2
+  i32.const 1
+  i32.shl
   call $~lib/number/I32#toString
   local.tee $27
   i32.const 7984
@@ -5083,7 +5112,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 2
   i32.const 1
+  i32.shr_u
   call $~lib/number/I32#toString
   local.tee $28
   i32.const 624
@@ -5097,7 +5128,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
+  i32.const -1
+  i32.const 30
+  i32.shr_u
   call $~lib/number/I32#toString
   local.tee $29
   i32.const 8016
@@ -5111,7 +5144,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 3
   i32.const 1
+  i32.and
   call $~lib/number/I32#toString
   local.tee $30
   i32.const 624
@@ -5125,7 +5160,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
+  i32.const 1
+  i32.const 2
+  i32.or
   call $~lib/number/I32#toString
   local.tee $31
   i32.const 8016
@@ -5139,7 +5176,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
+  i32.const 1
+  i32.const 3
+  i32.xor
   call $~lib/number/I32#toString
   local.tee $32
   i32.const 656
@@ -5153,7 +5192,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
+  i32.const 1
+  if (result i32)
+   i32.const 2
+  else
+   i32.const 1
+  end
   call $~lib/number/I32#toString
   local.tee $33
   i32.const 656
@@ -5168,6 +5212,11 @@
    unreachable
   end
   i32.const 0
+  if (result i32)
+   i32.const 2
+  else
+   i32.const 0
+  end
   call $~lib/number/I32#toString
   local.tee $34
   i32.const 192
@@ -5182,6 +5231,11 @@
    unreachable
   end
   i32.const 1
+  if (result i32)
+   i32.const 1
+  else
+   i32.const 2
+  end
   call $~lib/number/I32#toString
   local.tee $35
   i32.const 624
@@ -5195,7 +5249,12 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
+  i32.const 0
+  if (result i32)
+   i32.const 0
+  else
+   i32.const 2
+  end
   call $~lib/number/I32#toString
   local.tee $36
   i32.const 656

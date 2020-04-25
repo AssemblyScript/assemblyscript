@@ -1059,7 +1059,6 @@ export class Compiler extends DiagnosticEmitter {
           if (getExpressionId(initExpr) != ExpressionId.Const) {
             let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
             if (precomp) {
-              assert(getExpressionId(precomp) == ExpressionId.Const);
               initExpr = precomp;
             } else {
               initializeInStart = true;
@@ -1191,7 +1190,6 @@ export class Compiler extends DiagnosticEmitter {
           if (getExpressionId(initExpr) != ExpressionId.Const) {
             let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
             if (precomp) {
-              assert(getExpressionId(precomp) == ExpressionId.Const);
               initExpr = precomp;
             } else {
               if (element.is(CommonFlags.CONST)) {
@@ -1223,7 +1221,6 @@ export class Compiler extends DiagnosticEmitter {
             );
             let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
             if (precomp) {
-              assert(getExpressionId(precomp) == ExpressionId.Const);
               initExpr = precomp;
             } else {
               if (element.is(CommonFlags.CONST)) {
@@ -2912,7 +2909,6 @@ export class Compiler extends DiagnosticEmitter {
         if (initExpr) {
           let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
           if (precomp) {
-            assert(getExpressionId(precomp) == ExpressionId.Const);
             initExpr = precomp;
             let local = new Local(name, -1, type, flow.parentFunction);
             switch (<u32>getExpressionType(initExpr)) {
@@ -3403,17 +3399,6 @@ export class Compiler extends DiagnosticEmitter {
     // must go through this function, with the respective per-kind functions not being used directly.
     if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
     return expr;
-  }
-
-  /** Compiles and precomputes an expression, possibly yielding a costant value. */
-  precomputeExpression(
-    expression: Expression,
-    contextualType: Type,
-    constraints: Constraints = Constraints.NONE
-  ): ExpressionRef {
-    return this.module.precomputeExpression(
-      this.compileExpression(expression, contextualType, constraints)
-    );
   }
 
   /** Compiles an expression that is about to be returned, taking special care of retaining and setting flow states. */
@@ -8321,7 +8306,6 @@ export class Compiler extends DiagnosticEmitter {
         );
         let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
         if (precomp) {
-          assert(getExpressionId(precomp) == ExpressionId.Const);
           expr = precomp;
         } else {
           isStatic = false;
@@ -8491,7 +8475,6 @@ export class Compiler extends DiagnosticEmitter {
         );
         let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
         if (precomp) {
-          assert(getExpressionId(precomp) == ExpressionId.Const);
           expr = precomp;
         } else {
           isStatic = false;
@@ -9819,21 +9802,23 @@ export class Compiler extends DiagnosticEmitter {
       let element = this.resolver.lookupExpression(operand, this.currentFlow, Type.auto, ReportMode.SWALLOW);
       if (!element) {
         switch (operand.kind) {
+          case NodeKind.IDENTIFIER: break; // ignore error: typeof doesntExist -> undefined
           case NodeKind.PROPERTYACCESS:
           case NodeKind.ELEMENTACCESS: {
             operand = operand.kind == NodeKind.PROPERTYACCESS
               ? (<PropertyAccessExpression>operand).expression
               : (<ElementAccessExpression>operand).expression;
             let targetType = this.resolver.resolveExpression(operand, this.currentFlow, Type.auto, ReportMode.REPORT);
-            if (!targetType) {
+            if (!targetType) { // access on non-object
               this.currentType = stringInstance.type;
               return this.module.unreachable();
             }
-            expr = this.compileExpression(operand, Type.auto); // might have side-effects
-            break;
+            // fall-through
           }
-          case NodeKind.IDENTIFIER: break; // ignore error
-          default: expr = this.compileExpression(operand, Type.auto); // trigger error
+          default: {
+            expr = this.compileExpression(operand, Type.auto); // may trigger an error
+            expr = this.convertExpression(expr, this.currentType, Type.void, true, false, operand);
+          }
         }
         typeString = "undefined";
       } else {
@@ -10021,7 +10006,6 @@ export class Compiler extends DiagnosticEmitter {
     var module = this.module;
     var evaled = module.runExpression(expr, ExpressionRunnerFlags.Default);
     if (evaled) {
-      assert(getExpressionId(evaled) == ExpressionId.Const);
       return getConstValueI32(evaled)
         ? ConditionKind.TRUE
         : ConditionKind.FALSE;

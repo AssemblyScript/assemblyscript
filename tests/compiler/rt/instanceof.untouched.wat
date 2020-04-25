@@ -240,6 +240,8 @@
   i32.const 0
   call $rt/instanceof/BlackCat#constructor
   global.set $rt/instanceof/blackcat
+  i32.const 1
+  drop
   global.get $rt/instanceof/animal
   local.tee $0
   i32.eqz
@@ -280,6 +282,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  drop
   global.get $rt/instanceof/cat
   local.tee $0
   i32.eqz
@@ -319,6 +323,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  drop
   global.get $rt/instanceof/blackcat
   local.tee $0
   i32.eqz

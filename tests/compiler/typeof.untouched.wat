@@ -371,6 +371,12 @@
   local.get $0
  )
  (func $start:typeof
+  i32.const 1
+  drop
+  i32.const 32
+  i32.const 32
+  i32.eq
+  drop
   i32.const 64
   i32.const 64
   call $~lib/string/String.__eq
@@ -431,6 +437,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  drop
   i32.const 176
   i32.const 176
   call $~lib/string/String.__eq
@@ -455,6 +463,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  drop
   i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
@@ -467,6 +477,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  f64.const 1
+  drop
   i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
@@ -479,6 +491,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i64.const 1
+  drop
   i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
@@ -491,6 +505,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 208
+  drop
   i32.const 240
   i32.const 240
   call $~lib/string/String.__eq
@@ -503,6 +519,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $typeof/b
+  drop
   i32.const 176
   i32.const 176
   call $~lib/string/String.__eq
@@ -515,6 +533,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $typeof/i
+  drop
   i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
@@ -527,6 +547,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $typeof/f
+  drop
   i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
@@ -539,6 +561,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $typeof/I
+  drop
   i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
@@ -551,6 +575,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $typeof/F
+  drop
   i32.const 32
   i32.const 32
   call $~lib/string/String.__eq
@@ -563,6 +589,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $typeof/s
+  drop
   i32.const 240
   i32.const 240
   call $~lib/string/String.__eq
@@ -575,6 +603,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $typeof/fn
+  drop
   i32.const 144
   i32.const 144
   call $~lib/string/String.__eq
@@ -600,6 +630,8 @@
   i32.const 0
   call $typeof/SomeClass#constructor
   global.set $typeof/c
+  global.get $typeof/c
+  drop
   i32.const 64
   i32.const 64
   call $~lib/string/String.__eq
@@ -636,6 +668,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $typeof/c
+  drop
   i32.const 272
   i32.const 272
   call $~lib/string/String.__eq
@@ -648,6 +682,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  global.get $typeof/c
+  drop
   i32.const 272
   i32.const 272
   call $~lib/string/String.__eq

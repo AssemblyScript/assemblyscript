@@ -1760,6 +1760,10 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $1
+  i32.const 1
+  drop
+  i32.const 1
+  drop
   local.get $1
   call $~lib/rt/stub/__release
   i32.const 3
@@ -1769,6 +1773,8 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $0
+  i32.const 1
+  drop
   local.get $0
   call $~lib/rt/stub/__release
   i32.const 2
@@ -1778,6 +1784,11 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $1
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   local.get $1
   i32.const 1
   call $~lib/array/Array<u32>#__get
@@ -1801,6 +1812,8 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $0
+  i32.const 1
+  drop
   local.get $0
   call $~lib/rt/stub/__release
   i32.const 3
@@ -1810,6 +1823,8 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $1
+  i32.const 1
+  drop
   local.get $1
   i32.const 1
   call $~lib/array/Array<f32>#__get
@@ -1842,6 +1857,8 @@
   i32.store offset=4
   local.get $3
   local.set $4
+  i32.const 1
+  drop
   local.get $1
   call $~lib/rt/stub/__release
   local.get $0
@@ -1876,6 +1893,8 @@
   i32.store offset=4
   local.get $0
   local.set $1
+  i32.const 1
+  drop
   local.get $3
   call $~lib/rt/stub/__release
   local.get $4
@@ -1907,6 +1926,8 @@
   i32.store offset=4
   local.get $1
   local.set $4
+  i32.const 1
+  drop
   local.get $0
   call $~lib/rt/stub/__release
   local.get $4
@@ -1920,6 +1941,8 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $4
+  i32.const 1
+  drop
   local.get $4
   call $~lib/rt/stub/__release
   local.get $1
@@ -1931,6 +1954,11 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $4
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   i32.const 2
   i32.const 2
   i32.const 10
@@ -1938,6 +1966,11 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $0
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   local.get $4
   call $~lib/rt/stub/__release
   local.get $0
@@ -1949,6 +1982,11 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $4
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   i32.const 2
   i32.const 2
   i32.const 3
@@ -1956,6 +1994,11 @@
   call $~lib/rt/__allocArray
   call $~lib/rt/stub/__retain
   local.set $1
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   local.get $4
   call $~lib/rt/stub/__release
   local.get $1
@@ -1988,6 +2031,11 @@
   i32.store offset=4
   local.get $1
   local.set $4
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   local.get $4
   call $~lib/rt/stub/__release
   local.get $1

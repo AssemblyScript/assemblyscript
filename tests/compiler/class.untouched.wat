@@ -38,6 +38,10 @@
   f32.add
  )
  (func $start:class
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
   global.get $class/Animal.ONE
   drop
   i32.const 1

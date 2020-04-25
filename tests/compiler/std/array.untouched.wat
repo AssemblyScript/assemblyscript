@@ -1644,7 +1644,9 @@
   drop
   local.get $4
   i32.load
-  i32.const -4
+  i32.const 3
+  i32.const -1
+  i32.xor
   i32.and
   local.get $3
   i32.ge_u
@@ -1906,12 +1908,16 @@
   i32.load offset=4
   local.set $1
   local.get $1
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   local.get $1
   i32.const 1
   i32.add
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   i32.eq
   i32.eqz
@@ -4029,7 +4035,9 @@
   if (result i32)
    local.get $1
    i32.load offset=4
-   i32.const -268435456
+   i32.const 268435455
+   i32.const -1
+   i32.xor
    i32.and
    i32.eqz
   else
@@ -18945,6 +18953,18 @@
   (local $63 i32)
   i32.const 0
   i32.const 0
+  i32.eq
+  drop
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
+  i32.const 8
+  i32.const 8
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 0
   call $~lib/array/Array<i32>#constructor
   global.set $std/array/arr
   i32.const 0
@@ -19966,7 +19986,7 @@
   local.get $3
   i32.const 0
   i32.const 3
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   local.tee $2
   i32.const 5
@@ -20001,7 +20021,7 @@
   local.get $3
   i32.const 1
   i32.const 3
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   local.tee $4
   i32.const 5
@@ -20036,7 +20056,7 @@
   local.get $3
   i32.const 1
   i32.const 2
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   local.tee $5
   i32.const 5
@@ -20071,7 +20091,7 @@
   local.get $3
   i32.const 2
   i32.const 2
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   local.tee $6
   i32.const 5
@@ -20211,7 +20231,7 @@
   local.get $3
   i32.const 0
   i32.const -2
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   local.tee $14
   i32.const 5
@@ -20351,7 +20371,7 @@
   local.get $3
   i32.const -4
   i32.const -3
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#copyWithin
   local.tee $22
   i32.const 5
@@ -21363,7 +21383,7 @@
   local.set $25
   local.get $25
   i32.const 0
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
   local.tee $20
   i32.const 5
@@ -21469,7 +21489,7 @@
   local.set $25
   local.get $25
   i32.const 2
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
   local.tee $3
   i32.const 3
@@ -21628,7 +21648,7 @@
   local.set $25
   local.get $25
   i32.const -1
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
   local.tee $4
   i32.const 1
@@ -21681,7 +21701,7 @@
   local.set $25
   local.get $25
   i32.const -2
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/array/Array<i32>#splice
   local.tee $1
   i32.const 2

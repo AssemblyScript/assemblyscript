@@ -197,9 +197,18 @@
   i32.const 0
   call $instanceof-class/Child<i32>#constructor
   global.set $instanceof-class/a
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   i32.const 0
   call $instanceof-class/Child<f32>#constructor
   global.set $instanceof-class/b
+  i32.const 1
+  drop
   global.get $instanceof-class/b
   call $instanceof-class/Child~instanceof
   i32.eqz
@@ -211,6 +220,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  i32.eqz
+  drop
  )
  (func $~start
   call $start:instanceof-class

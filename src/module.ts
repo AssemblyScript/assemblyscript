@@ -1621,41 +1621,6 @@ export class Module {
     }
   }
 
-  private cachedPrecomputeNames: usize = 0;
-
-  precomputeExpression(expr: ExpressionRef): ExpressionRef {
-    // remember the previous optimize levels and set to max instead, to be sure
-    var previousOptimizeLevel = binaryen._BinaryenGetOptimizeLevel();
-    var previousShrinkLevel = binaryen._BinaryenGetShrinkLevel();
-    var previousDebugInfo = binaryen._BinaryenGetDebugInfo();
-    binaryen._BinaryenSetOptimizeLevel(4);
-    binaryen._BinaryenSetShrinkLevel(0);
-    binaryen._BinaryenSetDebugInfo(false);
-
-    // wrap the expression in a temp. function and run the precompute pass on it
-    var type = binaryen._BinaryenExpressionGetType(expr);
-    var func = this.addTemporaryFunction(type, null, expr);
-    var names = this.cachedPrecomputeNames;
-    if (!names) {
-      this.cachedPrecomputeNames = names = allocPtrArray([
-        this.allocStringCached("vacuum"),
-        this.allocStringCached("precompute")
-      ]);
-    }
-    binaryen._BinaryenFunctionRunPasses(func, this.ref, names, 2);
-    expr = binaryen._BinaryenFunctionGetBody(func);
-    if (binaryen._BinaryenExpressionGetId(expr) == ExpressionId.Return) {
-      expr = binaryen._BinaryenReturnGetValue(expr);
-    }
-    this.removeTemporaryFunction();
-
-    // reset optimize levels to previous
-    binaryen._BinaryenSetOptimizeLevel(previousOptimizeLevel);
-    binaryen._BinaryenSetShrinkLevel(previousShrinkLevel);
-    binaryen._BinaryenSetDebugInfo(previousDebugInfo);
-    return expr;
-  }
-
   validate(): bool {
     return binaryen._BinaryenModuleValidate(this.ref) == 1;
   }
@@ -1711,8 +1676,6 @@ export class Module {
     }
     this.cachedStrings = new Map();
     binaryen._free(this.lit);
-    binaryen._free(this.cachedPrecomputeNames);
-    this.cachedPrecomputeNames = 0;
     binaryen._BinaryenModuleDispose(this.ref);
     this.ref = 0;
   }
@@ -1817,7 +1780,12 @@ export class Module {
 
   runExpression(expr: ExpressionRef, flags: ExpressionRunnerFlags, maxDepth: i32 = 50, maxLoopIterations: i32 = 1): ExpressionRef {
     var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
-    return binaryen._ExpressionRunnerRunAndDispose(runner, expr);
+    var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
+    if (precomp) {
+      assert(getExpressionId(precomp) == ExpressionId.Const);
+      assert(getExpressionType(precomp) == getExpressionType(expr));
+    }
+    return precomp;
   }
 
   // source map generation

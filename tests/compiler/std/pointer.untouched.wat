@@ -1567,6 +1567,8 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.2 (result i32)
    global.get $std/pointer/one
    local.set $0
+   i32.const 1
+   drop
    local.get $0
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.2
   end
@@ -1585,6 +1587,8 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3 (result i32)
    global.get $std/pointer/one
    local.set $1
+   i32.const 1
+   drop
    local.get $1
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.3
   end
@@ -1794,6 +1798,8 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4 (result i32)
    global.get $std/pointer/two
    local.set $0
+   i32.const 1
+   drop
    local.get $0
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.4
   end
@@ -1812,6 +1818,8 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5 (result i32)
    global.get $std/pointer/two
    local.set $6
+   i32.const 1
+   drop
    local.get $6
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.5
   end
@@ -1875,6 +1883,8 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7 (result i32)
    global.get $std/pointer/one
    local.set $7
+   i32.const 1
+   drop
    local.get $7
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.7
   end
@@ -1893,6 +1903,8 @@
   block $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8 (result i32)
    global.get $std/pointer/one
    local.set $0
+   i32.const 1
+   drop
    local.get $0
    br $std/pointer/Pointer<std/pointer/Entry>#get:value|inlined.8
   end
@@ -2131,6 +2143,8 @@
   block $std/pointer/Pointer<f32>#get:value|inlined.0 (result f32)
    global.get $std/pointer/buf
    local.set $6
+   i32.const 0
+   drop
    local.get $6
    f32.load
    br $std/pointer/Pointer<f32>#get:value|inlined.0

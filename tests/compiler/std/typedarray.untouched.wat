@@ -1608,7 +1608,9 @@
   drop
   local.get $4
   i32.load
-  i32.const -4
+  i32.const 3
+  i32.const -1
+  i32.xor
   i32.and
   local.get $3
   i32.ge_u
@@ -1870,12 +1872,16 @@
   i32.load offset=4
   local.set $1
   local.get $1
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   local.get $1
   i32.const 1
   i32.add
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   i32.eq
   i32.eqz
@@ -2283,7 +2289,7 @@
   local.get $1
   i32.load offset=8
   local.get $0
-  i32.const 1
+  global.get $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2328,7 +2334,7 @@
   local.get $2
   i32.load offset=8
   local.get $0
-  i32.const 1
+  global.get $~lib/typedarray/Uint8Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2373,7 +2379,7 @@
   local.get $3
   i32.load offset=8
   local.get $0
-  i32.const 1
+  global.get $~lib/typedarray/Uint8Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2418,7 +2424,7 @@
   local.get $4
   i32.load offset=8
   local.get $0
-  i32.const 2
+  global.get $~lib/typedarray/Int16Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2463,7 +2469,7 @@
   local.get $5
   i32.load offset=8
   local.get $0
-  i32.const 2
+  global.get $~lib/typedarray/Uint16Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2508,7 +2514,7 @@
   local.get $6
   i32.load offset=8
   local.get $0
-  i32.const 4
+  global.get $~lib/typedarray/Int32Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2553,7 +2559,7 @@
   local.get $7
   i32.load offset=8
   local.get $0
-  i32.const 4
+  global.get $~lib/typedarray/Uint32Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2598,7 +2604,7 @@
   local.get $8
   i32.load offset=8
   local.get $0
-  i32.const 8
+  global.get $~lib/typedarray/Int64Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2643,7 +2649,7 @@
   local.get $9
   i32.load offset=8
   local.get $0
-  i32.const 8
+  global.get $~lib/typedarray/Uint64Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2688,7 +2694,7 @@
   local.get $10
   i32.load offset=8
   local.get $0
-  i32.const 4
+  global.get $~lib/typedarray/Float32Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -2733,7 +2739,7 @@
   local.get $11
   i32.load offset=8
   local.get $0
-  i32.const 8
+  global.get $~lib/typedarray/Float64Array.BYTES_PER_ELEMENT
   i32.mul
   i32.eq
   i32.eqz
@@ -3189,7 +3195,9 @@
   if (result i32)
    local.get $1
    i32.load offset=4
-   i32.const -268435456
+   i32.const 268435455
+   i32.const -1
+   i32.xor
    i32.and
    i32.eqz
   else
@@ -24602,7 +24610,9 @@
   i32.const 4
   i32.const 0
   call $~lib/typedarray/Int8Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -24617,7 +24627,9 @@
   i32.const 5
   i32.const 0
   call $~lib/typedarray/Int8Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -24677,7 +24689,9 @@
   i32.const 5
   i32.const 1
   call $~lib/typedarray/Int8Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -25285,7 +25299,9 @@
   i32.const 4
   i32.const 0
   call $~lib/typedarray/Uint8Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -25300,7 +25316,9 @@
   i32.const 5
   i32.const 0
   call $~lib/typedarray/Uint8Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -25360,7 +25378,9 @@
   i32.const 5
   i32.const 1
   call $~lib/typedarray/Uint8Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -25968,7 +25988,9 @@
   i32.const 4
   i32.const 0
   call $~lib/typedarray/Uint8ClampedArray#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -25983,7 +26005,9 @@
   i32.const 5
   i32.const 0
   call $~lib/typedarray/Uint8ClampedArray#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -26043,7 +26067,9 @@
   i32.const 5
   i32.const 1
   call $~lib/typedarray/Uint8ClampedArray#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -26657,7 +26683,9 @@
   i32.const 4
   i32.const 0
   call $~lib/typedarray/Int16Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -26672,7 +26700,9 @@
   i32.const 5
   i32.const 0
   call $~lib/typedarray/Int16Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -26732,7 +26762,9 @@
   i32.const 5
   i32.const 1
   call $~lib/typedarray/Int16Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -27340,7 +27372,9 @@
   i32.const 4
   i32.const 0
   call $~lib/typedarray/Uint16Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -27355,7 +27389,9 @@
   i32.const 5
   i32.const 0
   call $~lib/typedarray/Uint16Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -27415,7 +27451,9 @@
   i32.const 5
   i32.const 1
   call $~lib/typedarray/Uint16Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -28017,7 +28055,9 @@
   i32.const 4
   i32.const 0
   call $~lib/typedarray/Int32Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -28032,7 +28072,9 @@
   i32.const 5
   i32.const 0
   call $~lib/typedarray/Int32Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -28092,7 +28134,9 @@
   i32.const 5
   i32.const 1
   call $~lib/typedarray/Int32Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -28694,7 +28738,9 @@
   i32.const 4
   i32.const 0
   call $~lib/typedarray/Uint32Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -28709,7 +28755,9 @@
   i32.const 5
   i32.const 0
   call $~lib/typedarray/Uint32Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -28769,7 +28817,9 @@
   i32.const 5
   i32.const 1
   call $~lib/typedarray/Uint32Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -29372,7 +29422,9 @@
   i64.const 4
   i32.const 0
   call $~lib/typedarray/Int64Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -29387,7 +29439,9 @@
   i64.const 5
   i32.const 0
   call $~lib/typedarray/Int64Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -29447,7 +29501,9 @@
   i64.const 5
   i32.const 1
   call $~lib/typedarray/Int64Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -30050,7 +30106,9 @@
   i64.const 4
   i32.const 0
   call $~lib/typedarray/Uint64Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -30065,7 +30123,9 @@
   i64.const 5
   i32.const 0
   call $~lib/typedarray/Uint64Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -30125,7 +30185,9 @@
   i64.const 5
   i32.const 1
   call $~lib/typedarray/Uint64Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -30728,7 +30790,9 @@
   f32.const 4
   i32.const 0
   call $~lib/typedarray/Float32Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -30743,7 +30807,9 @@
   f32.const 5
   i32.const 0
   call $~lib/typedarray/Float32Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -30803,7 +30869,9 @@
   f32.const 5
   i32.const 1
   call $~lib/typedarray/Float32Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -31406,7 +31474,9 @@
   f64.const 4
   i32.const 0
   call $~lib/typedarray/Float64Array#indexOf
-  i32.const 0
+  i32.const 4
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -31421,7 +31491,9 @@
   f64.const 5
   i32.const 0
   call $~lib/typedarray/Float64Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -31481,7 +31553,9 @@
   f64.const 5
   i32.const 1
   call $~lib/typedarray/Float64Array#indexOf
-  i32.const 1
+  i32.const 5
+  i32.const 4
+  i32.sub
   i32.eq
   i32.eqz
   if
@@ -54014,6 +54088,50 @@
   (local $24 i32)
   (local $25 i32)
   (local $26 i32)
+  global.get $~lib/typedarray/Int8Array.BYTES_PER_ELEMENT
+  i32.const 1
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Uint8Array.BYTES_PER_ELEMENT
+  i32.const 1
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Uint8ClampedArray.BYTES_PER_ELEMENT
+  i32.const 1
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Int16Array.BYTES_PER_ELEMENT
+  i32.const 2
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Uint16Array.BYTES_PER_ELEMENT
+  i32.const 2
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Int32Array.BYTES_PER_ELEMENT
+  i32.const 4
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Uint32Array.BYTES_PER_ELEMENT
+  i32.const 4
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Int64Array.BYTES_PER_ELEMENT
+  i32.const 8
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Uint64Array.BYTES_PER_ELEMENT
+  i32.const 8
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Float32Array.BYTES_PER_ELEMENT
+  i32.const 4
+  i32.eq
+  drop
+  global.get $~lib/typedarray/Float64Array.BYTES_PER_ELEMENT
+  i32.const 8
+  i32.eq
+  drop
   i32.const 0
   call $std/typedarray/testInstantiate
   i32.const 5
@@ -54062,7 +54180,9 @@
   end
   local.get $0
   i32.load offset=8
-  i32.const 12
+  i32.const 3
+  i32.const 4
+  i32.mul
   i32.eq
   i32.eqz
   if
@@ -54139,7 +54259,9 @@
   end
   local.get $0
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.const 1
   i32.const 4
+  i32.mul
   i32.eq
   i32.eqz
   if
@@ -54152,7 +54274,9 @@
   end
   local.get $0
   i32.load offset=8
+  i32.const 1
   i32.const 4
+  i32.mul
   i32.eq
   i32.eqz
   if
@@ -54239,7 +54363,9 @@
   end
   local.get $0
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
-  i32.const 16
+  i32.const 2
+  i32.const 8
+  i32.mul
   i32.eq
   i32.eqz
   if
@@ -54252,7 +54378,9 @@
   end
   local.get $0
   i32.load offset=8
-  i32.const 32
+  i32.const 4
+  i32.const 8
+  i32.mul
   i32.eq
   i32.eqz
   if
@@ -54790,7 +54918,9 @@
   end
   local.get $8
   call $~lib/arraybuffer/ArrayBufferView#get:byteOffset
+  i32.const 1
   i32.const 4
+  i32.mul
   i32.eq
   i32.eqz
   if
@@ -54803,7 +54933,9 @@
   end
   local.get $8
   i32.load offset=8
-  i32.const 12
+  i32.const 3
+  i32.const 4
+  i32.mul
   i32.eq
   i32.eqz
   if
@@ -55110,7 +55242,7 @@
   local.get $3
   i32.const 0
   i32.const 3
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#copyWithin
   local.tee $0
   i32.const 5
@@ -55142,7 +55274,7 @@
   local.get $3
   i32.const 1
   i32.const 3
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#copyWithin
   local.tee $2
   i32.const 5
@@ -55174,7 +55306,7 @@
   local.get $3
   i32.const 1
   i32.const 2
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#copyWithin
   local.tee $9
   i32.const 5
@@ -55206,7 +55338,7 @@
   local.get $3
   i32.const 2
   i32.const 2
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#copyWithin
   local.tee $1
   i32.const 5
@@ -55334,7 +55466,7 @@
   local.get $3
   i32.const 0
   i32.const -2
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#copyWithin
   local.tee $15
   i32.const 5
@@ -55462,7 +55594,7 @@
   local.get $3
   i32.const -4
   i32.const -3
-  i32.const 2147483647
+  global.get $~lib/builtins/i32.MAX_VALUE
   call $~lib/typedarray/Int32Array#copyWithin
   local.tee $23
   i32.const 5

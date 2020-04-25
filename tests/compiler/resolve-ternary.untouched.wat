@@ -1442,7 +1442,9 @@
   drop
   local.get $4
   i32.load
-  i32.const -4
+  i32.const 3
+  i32.const -1
+  i32.xor
   i32.and
   local.get $3
   i32.ge_u
@@ -1489,12 +1491,16 @@
   i32.load offset=4
   local.set $1
   local.get $1
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   local.get $1
   i32.const 1
   i32.add
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   i32.eq
   i32.eqz
@@ -4677,7 +4683,9 @@
   if (result i32)
    local.get $1
    i32.load offset=4
-   i32.const -268435456
+   i32.const 268435455
+   i32.const -1
+   i32.xor
    i32.and
    i32.eqz
   else
@@ -4829,7 +4837,8 @@
   end
   global.get $resolve-ternary/b
   if (result f64)
-   f64.const 1
+   i32.const 1
+   f64.convert_i32_u
   else
    f64.const 2
   end
@@ -4852,9 +4861,9 @@
   i32.const 1
   global.get $resolve-ternary/b
   if (result i32)
-   i32.const 1
+   global.get $resolve-ternary/f1
   else
-   i32.const 2
+   global.get $resolve-ternary/f2
   end
   call_indirect (type $i32_=>_i32)
   i32.const 2
@@ -4894,7 +4903,7 @@
   i32.const 1
   global.get $resolve-ternary/b
   if (result i32)
-   i32.const 2
+   global.get $resolve-ternary/f2
   else
    i32.const 4
   end
