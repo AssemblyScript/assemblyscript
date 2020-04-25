@@ -13,7 +13,7 @@ import { ipow32 } from "../math";
 // size: 3904 bytes
 // @ts-ignore
 @inline @lazy
-const ALPHA_TABLE: StaticArray<u8> = [
+const ALPHA_TABLE = memory.data<u8>([
   18,17,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,17,34,35,36,17,37,38,39,40,
   41,42,43,44,17,45,46,47,16,16,48,16,16,16,16,16,16,16,49,50,51,16,52,53,16,16,
   17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,54,
@@ -190,12 +190,12 @@ const ALPHA_TABLE: StaticArray<u8> = [
   132,234,150,170,150,247,247,94,255,251,255,15,238,251,255,15,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,255,255,255,3,255,255,255,3,255,255,255,3,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,3
-];
+]);
 
 // size: 1568 bytes (compressed to ~1380 bytes after binaryen)
 // @ts-ignore: decorator
 @lazy @inline
-const CASED: StaticArray<u8> = [
+const CASED = memory.data<u8>([
   18,19,20,21,22,23,16,16,16,16,16,16,16,16,16,16,
   24,16,16,25,16,16,16,16,16,16,16,16,26,27,17,28,
   29,30,16,16,31,16,16,16,16,16,16,16,32,33,16,16,
@@ -274,12 +274,12 @@ const CASED: StaticArray<u8> = [
   15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,255,255,255,3,255,255,255,3,255,255,255,3,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0
-];
+]);
 
 // size: 2976 bytes (compressed to ~2050 bytes after binaryen)
 // @ts-ignore: decorator
 @lazy @inline
-const CASE_IGNORABLES: StaticArray<u8> = [
+const CASE_IGNORABLES = memory.data<u8>([
   18,16,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
   33,16,16,34,16,16,16,35,36,37,38,39,40,41,16,42,
   43,16,16,16,16,16,16,16,16,16,16,16,44,45,46,16,
@@ -418,11 +418,11 @@ const CASE_IGNORABLES: StaticArray<u8> = [
   240,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,248
-];
+]);
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOWER127: StaticArray<u8> = [
+const LOWER127 = memory.data<u8>([
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -434,11 +434,11 @@ const LOWER127: StaticArray<u8> = [
   97,98,99,100,101,102,103,104,105,106,107,108,109,
   110,111,112,113,114,115,116,117,118,119,120,121,122,
   123,124,125,126,127
-];
+]);
 
 // @ts-ignore: decorator
 @lazy @inline
-const UPPER127: StaticArray<u8> = [
+const UPPER127 = memory.data<u8>([
   0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
   16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
   32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
@@ -450,16 +450,16 @@ const UPPER127: StaticArray<u8> = [
   65,66,67,68,69,70,71,72,73,74,75,76,77,
   78,79,80,81,82,83,84,85,86,87,88,89,90,
   123,124,125,126,127
-];
+]);
 
 // 23 * 8 = 184 bytes
 // @ts-ignore: decorator
 @lazy @inline
-const POWERS10: StaticArray<f64> = [
+const POWERS10 = memory.data<f64>([
   1e00, 1e01, 1e02, 1e03, 1e04, 1e05, 1e06, 1e07, 1e08, 1e09,
   1e10, 1e11, 1e12, 1e13, 1e14, 1e15, 1e16, 1e17, 1e18, 1e19,
   1e20, 1e21, 1e22
-];
+]);
 
 // @ts-ignore: decorator
 @inline
@@ -536,7 +536,7 @@ export function isAlpha(c: u32): bool {
   if (isAscii(c)) return (c | 32) - CharCode.a < 26;
   if (c < 0x20000) {
     // @ts-ignore: cast
-    return stagedBinaryLookup(changetype<usize>(ALPHA_TABLE), c);
+    return stagedBinaryLookup(ALPHA_TABLE, c);
   }
   return c < 0x2FFFE;
 }
@@ -545,14 +545,14 @@ export function isAlpha(c: u32): bool {
 @inline
 export function isCased(c: u32): bool {
   // @ts-ignore: cast
-  return c < 0x1F18A && stagedBinaryLookup(changetype<usize>(CASED), c);
+  return c < 0x1F18A && stagedBinaryLookup(CASED, c);
 }
 
 // @ts-ignore: decorator
 @inline
 export function isCaseIgnorable(c: u32): bool {
   // @ts-ignore: cast
-  return c < 0xE01F0 && stagedBinaryLookup(changetype<usize>(CASE_IGNORABLES), c);
+  return c < 0xE01F0 && stagedBinaryLookup(CASE_IGNORABLES, c);
 }
 
 // @ts-ignore: decorator
@@ -640,7 +640,7 @@ export function toLower8(c: u32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c | u32(isUpper8(c)) << 5;
   } else {
-    return <u32>load<u8>(changetype<usize>(LOWER127) + c);
+    return <u32>load<u8>(LOWER127 + c);
   }
 }
 
@@ -650,7 +650,7 @@ export function toUpper8(c: u32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c & ~(u32(isLower8(c)) << 5);
   } else {
-    return <u32>load<u8>(changetype<usize>(UPPER127) + c);
+    return <u32>load<u8>(UPPER127 + c);
   }
 }
 
@@ -1133,5 +1133,5 @@ function fixmul(a: u64, b: u32): u64 {
 @inline
 function pow10(n: i32): f64 {
   // argument `n` should bounds in [0, 22] range
-  return load<f64>(changetype<usize>(POWERS10) + (n << alignof<f64>()));
+  return load<f64>(POWERS10 + (n << alignof<f64>()));
 }

@@ -8,7 +8,7 @@ const EXP2F_TABLE_BITS = 5;
 
 // @ts-ignore: decorator
 @lazy @inline
-const EXP2F_DATA_TAB: StaticArray<u64> = [
+const EXP2F_DATA_TAB = memory.data<u64>([
   // exp2f_data_tab[i] = uint(2^(i/N)) - (i << 52-BITS)
   // used for computing 2^(k/N) for an int |k| < 150 N as
   // double(tab[k%N] + (k << 52-BITS))
@@ -20,7 +20,7 @@ const EXP2F_DATA_TAB: StaticArray<u64> = [
   0x3FEEACE5422AA0DB, 0x3FEEB737B0CDC5E5, 0x3FEEC49182A3F090, 0x3FEED503B23E255D,
   0x3FEEE89F995AD3AD, 0x3FEEFF76F2FB5E47, 0x3FEF199BDD85529C, 0x3FEF3720DCEF9069,
   0x3FEF5818DCFBA487, 0x3FEF7C97337B9B5F, 0x3FEFA4AFA2A490DA, 0x3FEFD0765B6E4540
-];
+]);
 
 // ULP error: 0.502 (nearest rounding.)
 // Relative error: 1.69 * 2^-34 in [-1/64, 1/64] (before rounding.)
@@ -57,7 +57,7 @@ export function exp2f_lut(x: f32): f32 {
   var t: u64, y: f64, s: f64;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(changetype<usize>(EXP2F_DATA_TAB) + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t  = load<u64>(EXP2F_DATA_TAB + ((<usize>ki & N_MASK) << alignof<u64>()));
   t += ki << (52 - EXP2F_TABLE_BITS);
   s  = reinterpret<f64>(t);
   y  = C2 * r + 1;
@@ -108,7 +108,7 @@ export function expf_lut(x: f32): f32 {
   var s: f64, y: f64, t: u64;
 
   // exp(x) = 2^(k/N) * 2^(r/N) ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(changetype<usize>(EXP2F_DATA_TAB) + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t  = load<u64>(EXP2F_DATA_TAB + ((<usize>ki & N_MASK) << alignof<u64>()));
   t += ki << (52 - EXP2F_TABLE_BITS);
   s  = reinterpret<f64>(t);
   z  = C0 * r + C1;
@@ -129,7 +129,7 @@ const LOG2F_TABLE_BITS = 4;
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG2F_DATA_TAB: StaticArray<f64> = [
+const LOG2F_DATA_TAB = memory.data<f64>([
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFDEFEC65B963019), // 0x1.661ec79f8f3bep+0, -0x1.efec65b963019p-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFDB0B6832D4FCA4), // 0x1.571ed4aaf883dp+0, -0x1.b0b6832d4fca4p-2,
   reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD7418B0A1FB77B), // 0x1.49539f0f010bp+0 , -0x1.7418b0a1fb77bp-2,
@@ -146,7 +146,7 @@ const LOG2F_DATA_TAB: StaticArray<f64> = [
   reinterpret<f64>(0x3FE9C2D163A1AA2D), reinterpret<f64>(0x3FD40645F0C6651C), // 0x1.9c2d163a1aa2dp-1,  0x1.40645f0c6651cp-2,
   reinterpret<f64>(0x3FE886E6037841ED), reinterpret<f64>(0x3FD88E9C2C1B9FF8), // 0x1.886e6037841edp-1,  0x1.88e9c2c1b9ff8p-2,
   reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FDCE0A44EB17BCC)  // 0x1.767dcf5534862p-1,  0x1.ce0a44eb17bccp-2
-];
+]);
 
 // ULP error: 0.752 (nearest rounding.)
 // Relative error: 1.9 * 2^-26 (before rounding.)
@@ -184,8 +184,8 @@ export function log2f_lut(x: f32): f32 {
   var iz   = ux - top;
   var k    = <i32>tmp >> 23;
 
-  var invc = load<f64>(changetype<usize>(LOG2F_DATA_TAB) + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  var logc = load<f64>(changetype<usize>(LOG2F_DATA_TAB) + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  var invc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
   var z    = <f64>reinterpret<f32>(iz);
 
   // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
@@ -212,7 +212,7 @@ const LOGF_TABLE_BITS = 4;
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOGF_DATA_TAB: StaticArray<f64> = [
+const LOGF_DATA_TAB = memory.data<f64>([
   reinterpret<f64>(0x3FF661EC79F8F3BE), reinterpret<f64>(0xBFD57BF7808CAADE), // 0x1.661ec79f8f3bep+0, -0x1.57bf7808caadep-2,
   reinterpret<f64>(0x3FF571ED4AAF883D), reinterpret<f64>(0xBFD2BEF0A7C06DDB), // 0x1.571ed4aaf883dp+0, -0x1.2bef0a7c06ddbp-2,
   reinterpret<f64>(0x3FF49539F0F010B0), reinterpret<f64>(0xBFD01EAE7F513A67), // 0x1.49539f0f010bp+0 , -0x1.01eae7f513a67p-2,
@@ -229,7 +229,7 @@ const LOGF_DATA_TAB: StaticArray<f64> = [
   reinterpret<f64>(0x3FE9C2D163A1AA2D), reinterpret<f64>(0x3FCBC2860D224770), // 0x1.9c2d163a1aa2dp-1,  0x1.bc2860d22477p-3 ,
   reinterpret<f64>(0x3FE886E6037841ED), reinterpret<f64>(0x3FD1058BC8A07EE1), // 0x1.886e6037841edp-1,  0x1.1058bc8a07ee1p-2,
   reinterpret<f64>(0x3FE767DCF5534862), reinterpret<f64>(0x3FD4043057B6EE09)  // 0x1.767dcf5534862p-1,  0x1.4043057b6ee09p-2
-];
+]);
 
 // ULP error: 0.818 (nearest rounding.)
 // Relative error: 1.957 * 2^-26 (before rounding.)
@@ -266,8 +266,8 @@ export function logf_lut(x: f32): f32 {
   var k   = <i32>tmp >> 23;
   var iz  = ux - (tmp & 0x1FF << 23);
 
-  var invc = load<f64>(changetype<usize>(LOGF_DATA_TAB) + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  var logc = load<f64>(changetype<usize>(LOGF_DATA_TAB) + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  var invc = load<f64>(LOGF_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(LOGF_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
 
   var z = <f64>reinterpret<f32>(iz);
 
@@ -331,8 +331,8 @@ function log2f_inline(ux: u32): f64 {
   var uz   = ux - top;
   var k    = <i32>(<i32>top >> 23);
 
-  var invc = load<f64>(changetype<usize>(LOG2F_DATA_TAB) + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
-  var logc = load<f64>(changetype<usize>(LOG2F_DATA_TAB) + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
+  var invc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 0 << alignof<f64>());
+  var logc = load<f64>(LOG2F_DATA_TAB + (i << (1 + alignof<f64>())), 1 << alignof<f64>());
   var z    = <f64>reinterpret<f32>(uz);
 
   // log2(x) = log1p(z/c-1)/ln2 + log2(c) + k
@@ -374,7 +374,7 @@ function exp2f_inline(xd: f64, signBias: u32): f32 {
   var t: u64, z: f64, y: f64, s: f64;
 
   // exp2(x) = 2^(k/N) * 2^r ~= s * (C0*r^3 + C1*r^2 + C2*r + 1)
-  t  = load<u64>(changetype<usize>(EXP2F_DATA_TAB) + ((<usize>ki & N_MASK) << alignof<u64>()));
+  t  = load<u64>(EXP2F_DATA_TAB + ((<usize>ki & N_MASK) << alignof<u64>()));
   t += (ki + signBias) << (52 - EXP2F_TABLE_BITS);
   s  = reinterpret<f64>(t);
   z  = C0 * r + C1;
@@ -466,7 +466,7 @@ const EXP_TABLE_BITS = 7;
 
 // @ts-ignore: decorator
 @lazy @inline
-const EXP_DATA_TAB: StaticArray<u64> = [
+const EXP_DATA_TAB = memory.data<u64>([
   0x0000000000000000, 0x3FF0000000000000,
   0x3C9B3B4F1A88BF6E, 0x3FEFF63DA9FB3335,
   0xBC7160139CD8DC5D, 0x3FEFEC9A3E778061,
@@ -595,7 +595,7 @@ const EXP_DATA_TAB: StaticArray<u64> = [
   0xBC8E37BAE43BE3ED, 0x3FEFDBFDAD9CBE14,
   0x3C77893B4D91CD9D, 0x3FEFE7C1819E90D8,
   0x3C5305C14160CC89, 0x3FEFF3C22B8F71F1
-];
+]);
 
 // Handle cases that may overflow or underflow when computing the result that
 // is scale*(1+TMP) without intermediate rounding. The bit representation of
@@ -693,9 +693,9 @@ export function exp_lut(x: f64): f64 {
   var idx = <usize>((ki & N_MASK) << 1);
   var top = ki << (52 - EXP_TABLE_BITS);
 
-  var tail = reinterpret<f64>(load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()))); // T[idx]
+  var tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()))); // T[idx]
   // This is only a valid scale when -1023*N < k < 1024*N
-  var sbits = load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
+  var sbits = load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
   // exp(x) = 2^(k/N) * exp(r) ~= scale + scale * (tail + exp(r) - 1).
   // Evaluation is optimized assuming superscalar pipelined execution.
   var r2 = r * r;
@@ -787,9 +787,9 @@ export function exp2_lut(x: f64): f64 {
   var idx = <usize>((ki & N_MASK) << 1);
   var top = ki << (52 - EXP_TABLE_BITS);
 
-  var tail = reinterpret<f64>(load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
+  var tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 0 << alignof<u64>())); // T[idx])
   // This is only a valid scale when -1023*N < k < 1024*N
-  var sbits = load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
+  var sbits = load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) + top; // T[idx + 1]
   // exp2(x) = 2^(k/N) * 2^r ~= scale + scale * (tail + 2^r - 1).
   // Evaluation is optimized assuming superscalar pipelined execution
   var r2 = r * r;
@@ -840,7 +840,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG2_DATA_TAB1: StaticArray<f64> = [
+const LOG2_DATA_TAB1 = memory.data<f64>([
   //            invc                  ,                logc
   reinterpret<f64>(0x3FF724286BB1ACF8), reinterpret<f64>(0xBFE1095FEECDB000),
   reinterpret<f64>(0x3FF6E1F766D2CCA1), reinterpret<f64>(0xBFE08494BD76D000),
@@ -906,11 +906,11 @@ const LOG2_DATA_TAB1: StaticArray<f64> = [
   reinterpret<f64>(0x3FE7F405FFC61022), reinterpret<f64>(0x3FDABE186ED3D000),
   reinterpret<f64>(0x3FE7AD22181415CA), reinterpret<f64>(0x3FDBD0F2AEA0E000),
   reinterpret<f64>(0x3FE767DCF99EFF8C), reinterpret<f64>(0x3FDCE0A43DBF4000)
-];
+]);
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG2_DATA_TAB2: StaticArray<f64> = [
+const LOG2_DATA_TAB2 = memory.data<f64>([
   //              chi                 ,                 clo
   reinterpret<f64>(0x3FE6200012B90A8E), reinterpret<f64>(0x3C8904AB0644B605),
   reinterpret<f64>(0x3FE66000045734A6), reinterpret<f64>(0x3C61FF9BEA62F7A9),
@@ -976,7 +976,7 @@ const LOG2_DATA_TAB2: StaticArray<f64> = [
   reinterpret<f64>(0x3FF55FFFFD87B36F), reinterpret<f64>(0xBC8709E731D02807),
   reinterpret<f64>(0x3FF59FFFF21DF7BA), reinterpret<f64>(0x3C87F79F68727B02),
   reinterpret<f64>(0x3FF5DFFFEBFC3481), reinterpret<f64>(0xBC9180902E30E93E)
-];
+]);
 
 // @ts-ignore: decorator
 @inline
@@ -1053,8 +1053,8 @@ export function log2_lut(x: f64): f64 {
   var k    = <i64>tmp >> 52;
   var iz   = ix - (tmp & 0xFFF0000000000000);
 
-  var invc = load<f64>(changetype<usize>(LOG2_DATA_TAB1)  + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
-  var logc = load<f64>(changetype<usize>(LOG2_DATA_TAB1)  + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
+  var invc = load<f64>(LOG2_DATA_TAB1  + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
+  var logc = load<f64>(LOG2_DATA_TAB1  + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
   var z    = reinterpret<f64>(iz);
   var kd   = <f64>k;
 
@@ -1067,8 +1067,8 @@ export function log2_lut(x: f64): f64 {
 // 	t2 = r * InvLn2lo + __builtin_fma(r, InvLn2hi, -t1);
 // #else
   // rounding error: 0x1p-55/N + 0x1p-65.
-  var chi = load<f64>(changetype<usize>(LOG2_DATA_TAB2) + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].chi;
-  var clo = load<f64>(changetype<usize>(LOG2_DATA_TAB2) + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].clo;
+  var chi = load<f64>(LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].chi;
+  var clo = load<f64>(LOG2_DATA_TAB2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].clo;
 
   var r   = (z - chi - clo) * invc;
   var rhi = reinterpret<f64>(reinterpret<u64>(r) & 0xFFFFFFFF00000000);
@@ -1128,7 +1128,7 @@ that logc + poly(z/c - 1) has small error, however near x == 1 when
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG_DATA_TAB1: StaticArray<f64> = [
+const LOG_DATA_TAB1 = memory.data<f64>([
   //              invc                ,                 logc
   reinterpret<f64>(0x3FF734F0C3E0DE9F), reinterpret<f64>(0xBFD7CC7F79E69000),
   reinterpret<f64>(0x3FF713786A2CE91F), reinterpret<f64>(0xBFD76FEEC20D0000),
@@ -1258,11 +1258,11 @@ const LOG_DATA_TAB1: StaticArray<f64> = [
   reinterpret<f64>(0x3FE79BAA679725C2), reinterpret<f64>(0x3FD377266DEC1800),
   reinterpret<f64>(0x3FE77907F2170657), reinterpret<f64>(0x3FD3D54FFBAF3000),
   reinterpret<f64>(0x3FE756CADBD6130C), reinterpret<f64>(0x3FD432EEE32FE000)
-];
+]);
 
 // @ts-ignore: decorator
 @lazy @inline
-const LOG_DATA_TAB2: StaticArray<f64> = [
+const LOG_DATA_TAB2 = memory.data<f64>([
   //               chi                ,                  clo
   reinterpret<f64>(0x3FE61000014FB66B), reinterpret<f64>(0x3C7E026C91425B3C),
   reinterpret<f64>(0x3FE63000034DB495), reinterpret<f64>(0x3C8DBFEA48005D41),
@@ -1392,7 +1392,7 @@ const LOG_DATA_TAB2: StaticArray<f64> = [
   reinterpret<f64>(0x3FF5B00003C93E92), reinterpret<f64>(0xBC9F41080ABF0CC0),
   reinterpret<f64>(0x3FF5D0001D4919BC), reinterpret<f64>(0xBC98812AFB254729),
   reinterpret<f64>(0x3FF5EFFFE7B87A89), reinterpret<f64>(0xBC947EB780ED6904)
-];
+]);
 
 // @ts-ignore: decorator
 @inline
@@ -1467,8 +1467,8 @@ export function log_lut(x: f64): f64 {
   var k    = <i64>tmp >> 52;
   var iz   = ix - (tmp & (u64(0xFFF) << 52));
 
-  var invc = load<f64>(changetype<usize>(LOG_DATA_TAB1) + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
-  var logc = load<f64>(changetype<usize>(LOG_DATA_TAB1) + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
+  var invc = load<f64>(LOG_DATA_TAB1 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T[i].invc;
+  var logc = load<f64>(LOG_DATA_TAB1 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T[i].logc;
   var z    = reinterpret<f64>(iz);
 
   // log(x) = log1p(z/c-1) + log(c) + k*Ln2.
@@ -1478,8 +1478,8 @@ export function log_lut(x: f64): f64 {
 // 	r = __builtin_fma(z, invc, -1.0);
 // #else
   // rounding error: 0x1p-55/N + 0x1p-66
-  const chi = load<f64>(changetype<usize>(LOG_DATA_TAB2) + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T2[i].chi
-  const clo = load<f64>(changetype<usize>(LOG_DATA_TAB2) + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T2[i].clo
+  const chi = load<f64>(LOG_DATA_TAB2 + (i << (1 + alignof<f64>())), 0 << alignof<f64>()); // T2[i].chi
+  const clo = load<f64>(LOG_DATA_TAB2 + (i << (1 + alignof<f64>())), 1 << alignof<f64>()); // T2[i].clo
   var r = (z - chi - clo) * invc;
 // #endif
   var kd = <f64>k;
@@ -1531,7 +1531,7 @@ is tiny, large cancellation error is avoided in logc + poly(z/c - 1). */
 
 // @ts-ignore: decorator
 @lazy @inline
-const POW_LOG_DATA_TAB: StaticArray<f64> = [
+const POW_LOG_DATA_TAB = memory.data<f64>([
   //             invc                 ,pad,               logc                 ,               logctail
   reinterpret<f64>(0x3FF6A00000000000), 0, reinterpret<f64>(0xBFD62C82F2B9C800), reinterpret<f64>(0x3CFAB42428375680),
   reinterpret<f64>(0x3FF6800000000000), 0, reinterpret<f64>(0xBFD5D1BDBF580800), reinterpret<f64>(0xBD1CA508D8E0F720),
@@ -1661,7 +1661,7 @@ const POW_LOG_DATA_TAB: StaticArray<f64> = [
   reinterpret<f64>(0x3FE7000000000000), 0, reinterpret<f64>(0x3FD522AE0738A000), reinterpret<f64>(0x3D2EBE708164C759),
   reinterpret<f64>(0x3FE6E00000000000), 0, reinterpret<f64>(0x3FD57BF753C8D000), reinterpret<f64>(0x3D1FADEDEE5D40EF),
   reinterpret<f64>(0x3FE6C00000000000), 0, reinterpret<f64>(0x3FD5D5BDDF596000), reinterpret<f64>(0xBD0A0B2A08A465DC)
-];
+]);
 
 // Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
 // the bit representation of a non-zero finite floating-point value.
@@ -1739,9 +1739,9 @@ function log_inline(ix: u64): f64 {
   var kd  = <f64>k;
 
   // log(x) = k*Ln2 + log(c) + log1p(z/c-1).
-  var invc     = load<f64>(changetype<usize>(POW_LOG_DATA_TAB) + (i << (2 + alignof<f64>())), 0 << alignof<f64>()); // tab[i].invc
-  var logc     = load<f64>(changetype<usize>(POW_LOG_DATA_TAB) + (i << (2 + alignof<f64>())), 2 << alignof<f64>()); // tab[i].logc
-  var logctail = load<f64>(changetype<usize>(POW_LOG_DATA_TAB) + (i << (2 + alignof<f64>())), 3 << alignof<f64>()); // tab[i].logctail
+  var invc     = load<f64>(POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())), 0 << alignof<f64>()); // tab[i].invc
+  var logc     = load<f64>(POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())), 2 << alignof<f64>()); // tab[i].logc
+  var logctail = load<f64>(POW_LOG_DATA_TAB + (i << (2 + alignof<f64>())), 3 << alignof<f64>()); // tab[i].logctail
 
   // Note: 1/c is j/N or j/N/2 where j is an integer in [N,2N) and
   // |z/c - 1| < 1/N, so r = z/c - 1 is exactly representible.
@@ -1849,9 +1849,9 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   idx = <usize>((ki & N_MASK) << 1);
   top = (ki + sign_bias) << (52 - EXP_TABLE_BITS);
 
-  tail = reinterpret<f64>(load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>())));
+  tail = reinterpret<f64>(load<u64>(EXP_DATA_TAB + (idx << alignof<u64>())));
   // This is only a valid scale when -1023*N < k < 1024*N
-  sbits = load<u64>(changetype<usize>(EXP_DATA_TAB) + (idx << alignof<u64>()), 1 << alignof<u64>()) + top;
+  sbits = load<u64>(EXP_DATA_TAB + (idx << alignof<u64>()), 1 << alignof<u64>()) + top;
   // exp(x) = 2^(k/N) * exp(r) ~= scale + scale * (tail + exp(r) - 1).
   // Evaluation is optimized assuming superscalar pipelined execution.
   r2 = r * r;
