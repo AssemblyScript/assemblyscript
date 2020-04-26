@@ -2690,29 +2690,29 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
   }
 
   // omit if the assertion can be proven statically
-  var precomp = module.runExpression(arg0, ExpressionRunnerFlags.Default);
-  if (precomp) {
-    switch (<u32>getExpressionType(precomp)) {
+  var evaled = module.runExpression(arg0, ExpressionRunnerFlags.Default);
+  if (evaled) {
+    switch (<u32>getExpressionType(evaled)) {
       case <u32>NativeType.I32: {
-        if (getConstValueI32(precomp)) {
+        if (getConstValueI32(evaled)) {
           return arg0;
         }
         break;
       }
       case <u32>NativeType.I64: {
-        if (getConstValueI64Low(precomp) | getConstValueI64High(precomp)) {
+        if (getConstValueI64Low(evaled) | getConstValueI64High(evaled)) {
           return arg0;
         }
         break;
       }
       case <u32>NativeType.F32: {
-        if (getConstValueF32(precomp)) {
+        if (getConstValueF32(evaled)) {
           return arg0;
         }
         break;
       }
       case <u32>NativeType.F64: {
-        if (getConstValueF64(precomp)) {
+        if (getConstValueF64(evaled)) {
           return arg0;
         }
         break;
