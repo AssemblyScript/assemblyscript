@@ -19,17 +19,25 @@
  (start $~start)
  (func $instanceof/isI32<i32> (param $0 i32) (result i32)
   i32.const 1
+  drop
+  i32.const 1
   return
  )
  (func $instanceof/isI32<f64> (param $0 f64) (result i32)
+  i32.const 0
+  drop
   i32.const 0
   return
  )
  (func $instanceof/isI32<u32> (param $0 i32) (result i32)
   i32.const 0
+  drop
+  i32.const 0
   return
  )
  (func $instanceof/isI32<u16> (param $0 i32) (result i32)
+  i32.const 0
+  drop
   i32.const 0
   return
  )
@@ -42,6 +50,104 @@
  (func $start:instanceof
   (local $0 i32)
   (local $1 i32)
+  i32.const 1
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
   i32.const 0
   call $instanceof/isI32<i32>
   i32.eqz
@@ -103,6 +209,8 @@
    unreachable
   end
   i32.const 1
+  drop
+  i32.const 1
   local.tee $0
   global.get $instanceof/an
   local.tee $1
@@ -128,6 +236,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  drop
  )
  (func $~start
   call $start:instanceof

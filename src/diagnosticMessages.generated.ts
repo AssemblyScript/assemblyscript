@@ -40,6 +40,7 @@ export enum DiagnosticCode {
   _0_is_not_a_valid_operator = 224,
   Expression_cannot_be_represented_by_a_type = 225,
   Expression_resolves_to_unusual_type_0 = 226,
+  Array_literal_expected = 227,
   Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -198,6 +199,7 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 224: return "'{0}' is not a valid operator.";
     case 225: return "Expression cannot be represented by a type.";
     case 226: return "Expression resolves to unusual type '{0}'.";
+    case 227: return "Array literal expected.";
     case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";

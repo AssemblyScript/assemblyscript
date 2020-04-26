@@ -35,7 +35,8 @@
   local.set $0
   local.get $0
   if
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -51,7 +52,8 @@
    call $~lib/rt/stub/__release
    return
   else
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -67,6 +69,8 @@
    call $~lib/rt/stub/__release
    return
   end
+  i32.const 0
+  drop
   local.get $0
   call $~lib/rt/stub/__release
  )
@@ -78,7 +82,8 @@
   i32.const 0
   i32.ne
   if
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -95,7 +100,8 @@
    call $~lib/rt/stub/__release
    return
   else
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -112,6 +118,8 @@
    call $~lib/rt/stub/__release
    return
   end
+  i32.const 0
+  drop
   local.get $0
   call $~lib/rt/stub/__release
  )
@@ -124,7 +132,8 @@
   i32.eq
   i32.eqz
   if
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -142,7 +151,8 @@
    call $~lib/rt/stub/__release
    return
   else
-   nop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -160,6 +170,8 @@
    call $~lib/rt/stub/__release
    return
   end
+  i32.const 0
+  drop
   local.get $0
   call $~lib/rt/stub/__release
  )
@@ -176,6 +188,8 @@
    local.get $1
    if
     i32.const 0
+    drop
+    i32.const 0
     local.tee $2
     local.get $0
     local.tee $3
@@ -189,6 +203,9 @@
     end
     local.get $2
     local.set $0
+    i32.const 1
+    i32.eqz
+    drop
     br $while-continue|0
    end
   end
@@ -210,6 +227,8 @@
    local.set $2
    local.get $2
    if
+    i32.const 0
+    drop
     local.get $1
     local.tee $3
     local.get $0
@@ -224,6 +243,9 @@
     end
     local.get $3
     local.set $0
+    i32.const 1
+    i32.eqz
+    drop
     br $while-continue|0
    end
   end
@@ -247,6 +269,8 @@
    local.set $2
    local.get $2
    if
+    i32.const 0
+    drop
     local.get $1
     if
      local.get $1
@@ -263,6 +287,8 @@
      end
      local.get $3
      local.set $0
+     i32.const 0
+     drop
     end
     br $while-continue|0
    end
@@ -339,9 +365,17 @@
    i32.const 0
   end
   if
-   nop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
   else
-   nop
+   i32.const 1
+   i32.eqz
+   drop
+   i32.const 1
+   i32.eqz
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -364,9 +398,17 @@
    i32.eqz
   end
   if
-   nop
+   i32.const 1
+   i32.eqz
+   drop
+   i32.const 1
+   i32.eqz
+   drop
   else
-   nop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
   end
   local.get $0
   call $~lib/rt/stub/__release
@@ -396,6 +438,8 @@
   end
   local.get $2
   local.set $0
+  i32.const 0
+  drop
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1

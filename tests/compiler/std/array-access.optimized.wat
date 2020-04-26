@@ -37,6 +37,7 @@
   i32.add
   i32.load
   local.tee $0
+  local.get $0
   i32.eqz
   if
    i32.const 1152
@@ -46,7 +47,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
  )
  (func $std/array-access/i32ArrayArrayElementAccess (param $0 i32) (result i32)
   i32.const 1
@@ -135,16 +135,16 @@
    local.set $2
    local.get $0
    if
-    local.get $1
+    local.get $3
     i32.load16_u
     local.tee $0
-    local.get $3
+    local.get $1
     i32.load16_u
     local.tee $4
     i32.ne
     if
-     local.get $0
      local.get $4
+     local.get $0
      i32.sub
      return
     end
@@ -168,24 +168,26 @@
   i32.const 0
   local.get $0
   call $~lib/string/String#get:length
-  local.tee $1
-  i32.const 0
-  local.get $1
-  i32.lt_s
-  select
   local.tee $2
+  i32.lt_s
+  local.set $1
+  i32.const 0
+  local.get $2
+  local.get $1
+  select
+  local.tee $1
   i32.const 1264
   call $~lib/string/String#get:length
   local.tee $3
   i32.add
-  local.get $1
+  local.get $2
   i32.gt_s
   if
    i32.const 0
    return
   end
   local.get $0
-  local.get $2
+  local.get $1
   local.get $3
   call $~lib/util/string/compareImpl
   i32.eqz

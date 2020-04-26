@@ -60,4 +60,9 @@ export namespace memory {
   export function compare(vl: usize, vr: usize, n: usize): i32 {
     return memcmp(vl, vr, n);
   }
+
+  /** Gets a pointer to a static chunk of memory of the given size. */
+  // @ts-ignore: decorator
+  @builtin
+  export declare function data<T>(size: T, align?: i32): usize;
 }

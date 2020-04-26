@@ -159,15 +159,16 @@
  (func $retain-release/assignField
   (local $0 i32)
   (local $1 i32)
-  global.get $retain-release/REF
-  local.tee $0
+  (local $2 i32)
   global.get $retain-release/TARGET
-  local.tee $1
+  local.tee $0
+  global.get $retain-release/REF
+  local.tee $2
+  local.get $0
   i32.load
   i32.ne
   drop
-  local.get $1
-  local.get $0
+  local.get $2
   i32.store
  )
  (func $retain-release/scopeForComplex (param $0 i32)
