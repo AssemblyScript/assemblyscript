@@ -252,6 +252,10 @@
     "type": "s",
     "default": "."
   },
+  "extension": {
+    "description": "Specifies an alternative file extension to use.",
+    "type": "s"
+  },
   "noUnsafe": {
     "description": [
       "Disallows the use of unsafe features in user code.",
