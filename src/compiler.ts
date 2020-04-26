@@ -86,7 +86,8 @@ import {
   PropertyPrototype,
   IndexSignature,
   File,
-  mangleInternalName
+  mangleInternalName,
+  DeclaredElement
 } from "./program";
 
 import {
@@ -8621,10 +8622,11 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Check that the class is compatible with object literals
-    if (classReference.prototype.constructorPrototype) {
-      this.error(
+    var ctorPrototype = classReference.prototype.constructorPrototype;
+    if (ctorPrototype) {
+      this.errorRelated(
         DiagnosticCode.Class_0_cannot_declare_a_constructor_when_instantiated_from_an_object_literal,
-        expression.range, classType.toString()
+        expression.range, ctorPrototype.identifierNode.range, classType.toString()
       );
       return module.unreachable();
     }
@@ -8645,6 +8647,7 @@ export class Compiler extends DiagnosticEmitter {
     var tempLocal = isManaged
       ? flow.getAutoreleaseLocal(classType)
       : flow.getTempLocal(classType);
+    var nativeClassType = classType.toNativeType();
     assert(numNames == values.length);
 
     // Assume all class fields will be omitted, and add them to our omitted list
@@ -8660,10 +8663,10 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // Iterate through the members defined in our expression
-    for (let i = 0, k = numNames; i < k; ++i) {
+    for (let i = 0; i < numNames; ++i) {
       let memberName = names[i].text;
-      let member = members ? members.get(memberName) : null;
-      if (!member || member.kind != ElementKind.FIELD) {
+      let member: DeclaredElement;
+      if (!members || !members.has(memberName) || (member = assert(members.get(memberName))).kind != ElementKind.FIELD) {
         this.error(
           DiagnosticCode.Property_0_does_not_exist_on_type_1,
           names[i].range, memberName, classType.toString()
@@ -8694,13 +8697,15 @@ export class Compiler extends DiagnosticEmitter {
       if (fieldType.isManaged && !this.skippedAutoreleases.has(expr)) {
         expr = this.makeRetain(expr);
       }
-      exprs.push(this.module.store( // TODO: handle setters as well
-        fieldType.byteSize,
-        this.module.local_get(tempLocal.index, this.options.nativeSizeType),
-        expr,
-        fieldType.toNativeType(),
-        fieldInstance.memoryOffset
-      ));
+      exprs.push(
+        module.store( // TODO: handle setters as well
+          fieldType.byteSize,
+          module.local_get(tempLocal.index, nativeClassType),
+          expr,
+          fieldType.toNativeType(),
+          fieldInstance.memoryOffset
+        )
+      );
 
       // This member is no longer omitted, so delete from our omitted fields
       omittedFields.delete(fieldInstance);
@@ -8708,77 +8713,79 @@ export class Compiler extends DiagnosticEmitter {
     this.currentType = classType.nonNullableType;
     if (hasErrors) return module.unreachable();
 
-    // Iterate through the remaining omittedClassFieldMembers.
-    if (members) {
+    // Check remaining omitted fields
+    for (let _values = Set_values(omittedFields), j = 0, l = _values.length; j < l; ++j) {
+      let fieldInstance = _values[j];
+      let fieldType = fieldInstance.type;
 
-      for (let _values = Set_values(omittedFields), j = 0, l = _values.length; j < l; ++j) {
-        let fieldInstance = _values[j];
-        let fieldType = fieldInstance.type;
+      if (fieldInstance.initializerNode) {
+        continue; // set by default ctor
+      }
 
-        if (fieldInstance.initializerNode) {
-          continue; // set by default ctor
+      if (fieldType.is(TypeFlags.REFERENCE) && fieldType.classReference !== null) {
+        // TODO: Check if it is a class, with a default value (constructor with no params).
+        if (!fieldType.is(TypeFlags.NULLABLE)) {
+          this.error(
+            DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+            expression.range, fieldInstance.name, "<object>", classType.toString()
+          );
+          hasErrors = true;
+          continue;
         }
+      }
 
-        if (fieldType.is(TypeFlags.REFERENCE) && fieldType.classReference !== null) {
-          // TODO: Check if it is a class, with a default value (constructor with no params).
-          if (!fieldType.is(TypeFlags.NULLABLE)) {
-            this.error(
-              DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-              expression.range, fieldInstance.name, "<object>", classType.toString()
-            );
-            hasErrors = true;
-            continue;
-          }
-        }
-
-        switch (fieldType.kind) {
-          // Number Types (and Number alias types)
-          case TypeKind.I8:
-          case TypeKind.I16:
-          case TypeKind.I32:
-          case TypeKind.I64:
-          case TypeKind.ISIZE:
-          case TypeKind.U8:
-          case TypeKind.U16:
-          case TypeKind.U32:
-          case TypeKind.U64:
-          case TypeKind.USIZE:
-          case TypeKind.BOOL:
-          case TypeKind.F32:
-          case TypeKind.F64: {
-            exprs.push(this.module.store( // TODO: handle setters as well
+      switch (fieldType.kind) {
+        // Number Types (and Number alias types)
+        case TypeKind.I8:
+        case TypeKind.I16:
+        case TypeKind.I32:
+        case TypeKind.I64:
+        case TypeKind.ISIZE:
+        case TypeKind.U8:
+        case TypeKind.U16:
+        case TypeKind.U32:
+        case TypeKind.U64:
+        case TypeKind.USIZE:
+        case TypeKind.BOOL:
+        case TypeKind.F32:
+        case TypeKind.F64: {
+          exprs.push(
+            module.store( // TODO: handle setters as well
               fieldType.byteSize,
-              this.module.local_get(tempLocal.index, this.options.nativeSizeType),
+              module.local_get(tempLocal.index, nativeClassType),
               this.makeZero(fieldType),
               fieldType.toNativeType(),
               fieldInstance.memoryOffset
-            ));
-            continue;
-          }
+            )
+          );
+          continue;
         }
-
-        // Otherwise, error
-        this.error(
-          DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
-          expression.range, fieldInstance.name, "<object>", classType.toString()
-        );
-        hasErrors = true;
       }
+
+      // Otherwise error
+      this.error(
+        DiagnosticCode.Property_0_is_missing_in_type_1_but_required_in_type_2,
+        expression.range, fieldInstance.name, "<object>", classType.toString()
+      );
+      hasErrors = true;
     }
     if (hasErrors) return module.unreachable();
 
     // allocate a new instance first and assign 'this' to the temp. local
-    exprs.unshift(module.local_set(
-      tempLocal.index,
-      this.compileInstantiate(classReference, [], Constraints.WILL_RETAIN, expression)
-    ));
+    exprs.unshift(
+      module.local_set(tempLocal.index,
+        this.compileInstantiate(classReference, [], Constraints.WILL_RETAIN, expression)
+      )
+    );
 
     // once all field values have been set, return 'this'
-    exprs.push(module.local_get(tempLocal.index, this.options.nativeSizeType));
+    exprs.push(
+      module.local_get(tempLocal.index, nativeClassType)
+    );
 
     if (!isManaged) flow.freeTempLocal(tempLocal);
     this.currentType = classType.nonNullableType;
-    return module.flatten(exprs, this.options.nativeSizeType);
+    return module.flatten(exprs, nativeClassType);
   }
 
   private compileNewExpression(

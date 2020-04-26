@@ -19,7 +19,7 @@
  (data (i32.const 64) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 112) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
  (data (i32.const 176) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
- (data (i32.const 224) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
+ (data (i32.const 224) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s\00")
  (data (i32.const 288) "\00\00\00\00\01\00\00\00\01\00\00\00\00\00\00\00")
  (data (i32.const 304) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00h\00e\00l\00l\00o\00")
  (data (i32.const 336) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00e\00s\00t\00")
@@ -1528,7 +1528,7 @@
   end
   local.get $0
  )
- (func $std/object-literal/Managed#constructor (param $0 i32) (result i32)
+ (func $object-literal/Managed#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -1764,7 +1764,7 @@
   call $~lib/rt/pure/__release
   local.get $2
  )
- (func $std/object-literal/testManaged (param $0 i32)
+ (func $object-literal/testManaged (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -3160,7 +3160,7 @@
   local.get $11
   call $~lib/rt/pure/__retain
  )
- (func $std/object-literal/Unmanaged#constructor (param $0 i32) (result i32)
+ (func $object-literal/Unmanaged#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -3249,7 +3249,7 @@
   call $~lib/rt/tlsf/checkUsedBlock
   call $~lib/rt/tlsf/freeBlock
  )
- (func $std/object-literal/testUnmanaged (param $0 i32)
+ (func $object-literal/testUnmanaged (param $0 i32)
   local.get $0
   i32.load
   i32.const 123
@@ -3282,7 +3282,7 @@
   local.get $0
   call $~lib/rt/tlsf/__free
  )
- (func $std/object-literal/OmittedTypes#constructor (param $0 i32) (result i32)
+ (func $object-literal/OmittedTypes#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -3336,7 +3336,7 @@
   i32.store8 offset=64
   local.get $0
  )
- (func $std/object-literal/testOmittedTypes (param $0 i32)
+ (func $object-literal/testOmittedTypes (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -3527,7 +3527,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $std/object-literal/MixedOmitted#constructor (param $0 i32) (result i32)
+ (func $object-literal/MixedOmitted#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -3548,7 +3548,7 @@
   f64.store offset=8
   local.get $0
  )
- (func $std/object-literal/testMixedOmitted (param $0 i32)
+ (func $object-literal/testMixedOmitted (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -3594,7 +3594,7 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $std/object-literal/OmittedFoo#constructor (param $0 i32) (result i32)
+ (func $object-literal/OmittedFoo#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
   if
@@ -3636,7 +3636,7 @@
   i32.store offset=36
   local.get $0
  )
- (func $std/object-literal/testOmittedFoo (param $0 i32)
+ (func $object-literal/testOmittedFoo (param $0 i32)
   local.get $0
   call $~lib/rt/pure/__retain
   local.set $0
@@ -3773,13 +3773,13 @@
   local.get $0
   call $~lib/rt/pure/__release
  )
- (func $start:std/object-literal
+ (func $start:object-literal
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   i32.const 0
-  call $std/object-literal/Managed#constructor
+  call $object-literal/Managed#constructor
   local.set $0
   local.get $0
   i32.const 123
@@ -3788,9 +3788,9 @@
   i32.const 32
   i32.store offset=4
   local.get $0
-  call $std/object-literal/testManaged
+  call $object-literal/testManaged
   i32.const 0
-  call $std/object-literal/Unmanaged#constructor
+  call $object-literal/Unmanaged#constructor
   local.set $1
   local.get $1
   i32.const 123
@@ -3802,9 +3802,9 @@
   call $~lib/string/String#substring
   i32.store offset=4
   local.get $1
-  call $std/object-literal/testUnmanaged
+  call $object-literal/testUnmanaged
   i32.const 0
-  call $std/object-literal/OmittedTypes#constructor
+  call $object-literal/OmittedTypes#constructor
   local.set $1
   local.get $1
   i32.const 0
@@ -3849,9 +3849,9 @@
   i32.const 0
   i32.store8 offset=64
   local.get $1
-  call $std/object-literal/testOmittedTypes
+  call $object-literal/testOmittedTypes
   i32.const 0
-  call $std/object-literal/MixedOmitted#constructor
+  call $object-literal/MixedOmitted#constructor
   local.set $2
   local.get $2
   i32.const 0
@@ -3863,9 +3863,9 @@
   f64.const 0
   f64.store offset=8
   local.get $2
-  call $std/object-literal/testMixedOmitted
+  call $object-literal/testMixedOmitted
   i32.const 0
-  call $std/object-literal/OmittedFoo#constructor
+  call $object-literal/OmittedFoo#constructor
   local.set $3
   local.get $3
   i32.const 0
@@ -3889,7 +3889,7 @@
   i32.const 0
   i32.store offset=32
   local.get $3
-  call $std/object-literal/testOmittedFoo
+  call $object-literal/testOmittedFoo
   local.get $0
   call $~lib/rt/pure/__release
   local.get $1
@@ -3907,7 +3907,7 @@
    i32.const 1
    global.set $~started
   end
-  call $start:std/object-literal
+  call $start:object-literal
  )
  (func $~lib/rt/pure/__collect
   i32.const 1

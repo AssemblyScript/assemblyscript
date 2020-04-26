@@ -18,7 +18,7 @@
  (data (i32.const 1072) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s")
  (data (i32.const 1120) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e")
  (data (i32.const 1184) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s")
- (data (i32.const 1232) "*\00\00\00\01\00\00\00\01\00\00\00*\00\00\00s\00t\00d\00/\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s")
+ (data (i32.const 1232) "\"\00\00\00\01\00\00\00\01\00\00\00\"\00\00\00o\00b\00j\00e\00c\00t\00-\00l\00i\00t\00e\00r\00a\00l\00.\00t\00s")
  (data (i32.const 1300) "\01\00\00\00\01")
  (data (i32.const 1312) "\n\00\00\00\01\00\00\00\01\00\00\00\n\00\00\00h\00e\00l\00l\00o")
  (data (i32.const 1344) "\08\00\00\00\01\00\00\00\01\00\00\00\08\00\00\00t\00e\00s\00t")
@@ -1407,7 +1407,7 @@
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
- (func $std/object-literal/testUnmanaged (param $0 i32)
+ (func $object-literal/testUnmanaged (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   local.get $0
@@ -1480,7 +1480,7 @@
   local.get $1
   call $~lib/rt/tlsf/freeBlock
  )
- (func $std/object-literal/testOmittedTypes (param $0 i32)
+ (func $object-literal/testOmittedTypes (param $0 i32)
   local.get $0
   i32.load
   if
@@ -1632,7 +1632,7 @@
    unreachable
   end
  )
- (func $std/object-literal/testOmittedFoo (param $0 i32)
+ (func $object-literal/testOmittedFoo (param $0 i32)
   local.get $0
   i32.load
   i32.const 1392
@@ -1760,7 +1760,7 @@
    unreachable
   end
  )
- (func $start:std/object-literal
+ (func $start:object-literal
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -1885,7 +1885,7 @@
   end
   i32.store offset=4
   local.get $2
-  call $std/object-literal/testUnmanaged
+  call $object-literal/testUnmanaged
   i32.const 65
   i32.const 4
   call $~lib/rt/tlsf/__alloc
@@ -1975,7 +1975,7 @@
   i32.const 0
   i32.store8 offset=64
   local.get $0
-  call $std/object-literal/testOmittedTypes
+  call $object-literal/testOmittedTypes
   i32.const 16
   i32.const 5
   call $~lib/rt/tlsf/__alloc
@@ -2089,7 +2089,7 @@
   i32.const 0
   i32.store offset=32
   local.get $1
-  call $std/object-literal/testOmittedFoo
+  call $object-literal/testOmittedFoo
   local.get $3
   call $~lib/rt/pure/__release
   local.get $0
@@ -2107,7 +2107,7 @@
    i32.const 1
    global.set $~started
   end
-  call $start:std/object-literal
+  call $start:object-literal
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
