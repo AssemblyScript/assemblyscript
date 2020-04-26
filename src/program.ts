@@ -1444,7 +1444,10 @@ export class Program extends DiagnosticEmitter {
           if (memberDeclaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
             this.initializeProperty(methodDeclaration, element);
           } else {
-            this.initializeMethod(methodDeclaration, element);
+            let method = this.initializeMethod(methodDeclaration, element);
+            if (method !== null && methodDeclaration.name.kind == NodeKind.CONSTRUCTOR) {
+              element.constructorPrototype = method;
+            }
           }
           break;
         }
@@ -1500,7 +1503,7 @@ export class Program extends DiagnosticEmitter {
     declaration: MethodDeclaration,
     /** Parent class. */
     parent: ClassPrototype
-  ): void {
+  ): FunctionPrototype | null {
     var name = declaration.name.text;
     var isStatic = declaration.is(CommonFlags.STATIC);
     var acceptedFlags = DecoratorFlags.INLINE | DecoratorFlags.UNSAFE;
@@ -1520,11 +1523,12 @@ export class Program extends DiagnosticEmitter {
     );
     if (isStatic) { // global function
       assert(declaration.name.kind != NodeKind.CONSTRUCTOR);
-      if (!parent.add(name, element)) return;
+      if (!parent.add(name, element)) return null;
     } else { // actual instance method
-      if (!parent.addInstance(name, element)) return;
+      if (!parent.addInstance(name, element)) return null;
     }
     this.checkOperatorOverloads(declaration.decorators, element, parent);
+    return element;
   }
 
   /** Checks that operator overloads are generally valid, if present. */

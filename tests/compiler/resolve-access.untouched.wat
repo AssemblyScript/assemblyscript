@@ -17,13 +17,13 @@
  (data (i32.const 48) "$\00\00\00\01\00\00\00\01\00\00\00$\00\00\00I\00n\00d\00e\00x\00 \00o\00u\00t\00 \00o\00f\00 \00r\00a\00n\00g\00e\00")
  (data (i32.const 112) "\1a\00\00\00\01\00\00\00\01\00\00\00\1a\00\00\00~\00l\00i\00b\00/\00a\00r\00r\00a\00y\00.\00t\00s\00")
  (data (i32.const 160) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\000\00")
- (data (i32.const 192) "\90\01\00\00\01\00\00\00\05\00\00\00\90\01\00\000\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
+ (data (i32.const 180) "0\000\000\001\000\002\000\003\000\004\000\005\000\006\000\007\000\008\000\009\001\000\001\001\001\002\001\003\001\004\001\005\001\006\001\007\001\008\001\009\002\000\002\001\002\002\002\003\002\004\002\005\002\006\002\007\002\008\002\009\003\000\003\001\003\002\003\003\003\004\003\005\003\006\003\007\003\008\003\009\004\000\004\001\004\002\004\003\004\004\004\005\004\006\004\007\004\008\004\009\005\000\005\001\005\002\005\003\005\004\005\005\005\006\005\007\005\008\005\009\006\000\006\001\006\002\006\003\006\004\006\005\006\006\006\007\006\008\006\009\007\000\007\001\007\002\007\003\007\004\007\005\007\006\007\007\007\008\007\009\008\000\008\001\008\002\008\003\008\004\008\005\008\006\008\007\008\008\008\009\009\000\009\001\009\002\009\003\009\004\009\005\009\006\009\007\009\008\009\009\00")
  (table $0 1 funcref)
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~lib/builtins/u32.MAX_VALUE i32 (i32.const -1))
- (global $~lib/heap/__heap_base i32 (i32.const 608))
+ (global $~lib/heap/__heap_base i32 (i32.const 580))
  (export "memory" (memory $0))
  (export "arrayAccess" (func $resolve-access/arrayAccess))
  (export "fieldAccess" (func $resolve-access/fieldAccess))
@@ -125,6 +125,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -1179,6 +1181,10 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
+   i32.const 0
+   i32.const 1
+   i32.lt_s
+   drop
    local.get $4
    local.get $3
    i32.add
@@ -1204,6 +1210,10 @@
    local.get $4
    i32.lt_u
    if
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1299,6 +1309,10 @@
      end
     end
    else
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -1457,6 +1471,8 @@
   local.get $1
   call $~lib/array/Array<u64>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
@@ -1549,14 +1565,14 @@
     i32.const 100
     i32.rem_u
     local.set $7
-    i32.const 208
+    i32.const 180
     local.get $6
     i32.const 2
     i32.shl
     i32.add
     i64.load32_u
     local.set $8
-    i32.const 208
+    i32.const 180
     local.get $7
     i32.const 2
     i32.shl
@@ -1599,7 +1615,7 @@
    i32.const 2
    i32.sub
    local.set $2
-   i32.const 208
+   i32.const 180
    local.get $10
    i32.const 2
    i32.shl
@@ -1622,7 +1638,7 @@
    i32.const 2
    i32.sub
    local.set $2
-   i32.const 208
+   i32.const 180
    local.get $1
    i32.const 2
    i32.shl
@@ -1769,14 +1785,14 @@
     i32.const 100
     i32.rem_u
     local.set $11
-    i32.const 208
+    i32.const 180
     local.get $10
     i32.const 2
     i32.shl
     i32.add
     i64.load32_u
     local.set $12
-    i32.const 208
+    i32.const 180
     local.get $11
     i32.const 2
     i32.shl
@@ -1798,14 +1814,14 @@
     i64.shl
     i64.or
     i64.store
-    i32.const 208
+    i32.const 180
     local.get $8
     i32.const 2
     i32.shl
     i32.add
     i64.load32_u
     local.set $12
-    i32.const 208
+    i32.const 180
     local.get $9
     i32.const 2
     i32.shl
@@ -1853,7 +1869,8 @@
    return
   end
   local.get $0
-  i64.const 4294967295
+  global.get $~lib/builtins/u32.MAX_VALUE
+  i64.extend_i32_u
   i64.le_u
   if
    local.get $0
@@ -1874,6 +1891,10 @@
    local.set $5
    local.get $3
    local.set $4
+   i32.const 0
+   i32.const 1
+   i32.ge_s
+   drop
    local.get $6
    local.get $5
    local.get $4
@@ -1894,6 +1915,10 @@
    local.set $7
    local.get $3
    local.set $4
+   i32.const 0
+   i32.const 1
+   i32.ge_s
+   drop
    local.get $5
    local.get $7
    local.get $4
@@ -1903,6 +1928,15 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<u64> (param $0 i64) (result i32)
+  i32.const 1
+  i32.eqz
+  drop
+  i32.const 0
+  drop
+  i32.const 8
+  i32.const 4
+  i32.le_u
+  drop
   local.get $0
   call $~lib/util/number/utoa64
   return
@@ -1938,7 +1972,7 @@
   i32.eqz
   if
    i32.const 8
-   i32.const 6
+   i32.const 5
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
    local.set $0
@@ -1997,6 +2031,10 @@
   local.set $4
   local.get $1
   local.set $3
+  i32.const 0
+  i32.const 1
+  i32.ge_s
+  drop
   local.get $5
   local.get $4
   local.get $3
@@ -2005,6 +2043,15 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<u32> (param $0 i32) (result i32)
+  i32.const 1
+  i32.eqz
+  drop
+  i32.const 0
+  drop
+  i32.const 4
+  i32.const 4
+  i32.le_u
+  drop
   local.get $0
   call $~lib/util/number/utoa32
   return

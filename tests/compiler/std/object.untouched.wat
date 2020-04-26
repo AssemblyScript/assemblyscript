@@ -19,10 +19,16 @@
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/object/Object.is<f64> (param $0 f64) (param $1 f64) (result i32)
+  i32.const 1
+  drop
   local.get $0
   local.get $1
   f64.eq
   if
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $0
    i64.reinterpret_f64
    local.get $1
@@ -40,10 +46,16 @@
   return
  )
  (func $~lib/object/Object.is<f32> (param $0 f32) (param $1 f32) (result i32)
+  i32.const 1
+  drop
   local.get $0
   local.get $1
   f32.eq
   if
+   i32.const 4
+   i32.const 8
+   i32.eq
+   drop
    local.get $0
    i32.reinterpret_f32
    local.get $1
@@ -61,11 +73,15 @@
   return
  )
  (func $~lib/object/Object.is<i32> (param $0 i32) (param $1 i32) (result i32)
+  i32.const 0
+  drop
   local.get $0
   local.get $1
   i32.eq
  )
  (func $~lib/object/Object.is<bool> (param $0 i32) (param $1 i32) (result i32)
+  i32.const 0
+  drop
   local.get $0
   i32.const 0
   i32.ne
@@ -113,6 +129,10 @@
   i32.shl
   i32.add
   local.set $6
+  i32.const 0
+  i32.const 2
+  i32.lt_s
+  drop
   local.get $4
   i32.const 4
   i32.ge_u
@@ -291,6 +311,8 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
+  i32.const 0
+  drop
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
@@ -309,6 +331,8 @@
   local.get $1
   call $~lib/rt/stub/__retain
   local.set $1
+  i32.const 0
+  drop
   local.get $0
   local.get $1
   call $~lib/string/String.__eq
@@ -418,8 +442,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
-  f64.const -inf
+  f64.const inf
+  f64.neg
+  f64.const inf
+  f64.neg
   call $~lib/object/Object.is<f64>
   i32.const 1
   i32.eq
@@ -433,7 +459,8 @@
    unreachable
   end
   f64.const inf
-  f64.const -inf
+  f64.const inf
+  f64.neg
   call $~lib/object/Object.is<f64>
   i32.const 0
   i32.eq
@@ -446,7 +473,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -inf
+  f64.const inf
+  f64.neg
   f64.const inf
   call $~lib/object/Object.is<f64>
   i32.const 0
@@ -600,8 +628,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
-  f32.const -inf
+  f32.const inf
+  f32.neg
+  f32.const inf
+  f32.neg
   call $~lib/object/Object.is<f32>
   i32.const 1
   i32.eq
@@ -615,7 +645,8 @@
    unreachable
   end
   f32.const inf
-  f32.const -inf
+  f32.const inf
+  f32.neg
   call $~lib/object/Object.is<f32>
   i32.const 0
   i32.eq
@@ -628,7 +659,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -inf
+  f32.const inf
+  f32.neg
   f32.const inf
   call $~lib/object/Object.is<f32>
   i32.const 0
@@ -685,7 +717,9 @@
    unreachable
   end
   f64.const 0
-  f64.const -1e-309
+  f64.const 0.1
+  f64.const -1e-308
+  f64.mul
   call $~lib/object/Object.is<f64>
   i32.const 0
   i32.eq
@@ -699,7 +733,9 @@
    unreachable
   end
   f64.const -0
-  f64.const -1e-309
+  f64.const 0.1
+  f64.const -1e-308
+  f64.mul
   call $~lib/object/Object.is<f64>
   i32.const 0
   i32.eq

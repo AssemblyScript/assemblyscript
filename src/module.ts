@@ -475,6 +475,12 @@ export enum SIMDLoadOp {
   LoadU32ToU64x2 = 9 /* _BinaryenLoadExtUVec32x2ToVecI64x2 */
 }
 
+export enum ExpressionRunnerFlags {
+  Default = 0 /* _ExpressionRunnerFlagsDefault */,
+  PreserveSideeffects = 1 /* _ExpressionRunnerFlagsPreserveSideeffects */,
+  TraverseCalls = 2 /* _ExpressionRunnerFlagsTraverseCalls */
+}
+
 export class MemorySegment {
 
   buffer: Uint8Array;
@@ -752,6 +758,20 @@ export class Module {
     expression: ExpressionRef
   ): ExpressionRef {
     return binaryen._BinaryenDrop(this.ref, expression);
+  }
+
+  maybeDropCondition(condition: ExpressionRef, result: ExpressionRef): ExpressionRef {
+    // FIXME: This is necessary because Binaryen's ExpressionRunner bails early
+    // when encountering a local with an unknown value. This helper only drops
+    // the pre-evaluated condition if it has relevant side effects.
+    // see WebAssembly/binaryen#1237
+    if ((getSideEffects(condition) & ~(SideEffects.ReadsLocal | SideEffects.ReadsGlobal)) != 0) {
+      return this.block(null, [
+        this.drop(condition),
+        result
+      ], getExpressionType(result));
+    }
+    return result;
   }
 
   loop(
@@ -1394,63 +1414,211 @@ export class Module {
     binaryen._BinaryenModuleSetFeatures(this.ref, featureFlags);
   }
 
-  optimize(func: FunctionRef = 0): void {
+  runPass(pass: string, func: FunctionRef = 0): void {
+    var cStr = allocString(pass);
     if (func) {
-      binaryen._BinaryenFunctionOptimize(func, this.ref);
+      binaryen._BinaryenFunctionRunPasses(func, this.ref, cStr, 1);
     } else {
-      binaryen._BinaryenModuleOptimize(this.ref);
+      binaryen._BinaryenModuleRunPasses(this.ref, cStr, 1);
     }
+    binaryen._free(cStr);
   }
 
   runPasses(passes: string[], func: FunctionRef = 0): void {
     var numNames = passes.length;
-    var names = new Array<usize>(numNames);
+    var cStrs = new Array<usize>(numNames);
     for (let i = 0; i < numNames; ++i) {
-      names[i] = allocString(passes[i]);
+      cStrs[i] = allocString(passes[i]);
     }
-    var cArr = allocPtrArray(names);
+    var cArr = allocPtrArray(cStrs);
     if (func) {
       binaryen._BinaryenFunctionRunPasses(func, this.ref, cArr, numNames);
     } else {
       binaryen._BinaryenModuleRunPasses(this.ref, cArr, numNames);
     }
     binaryen._free(cArr);
-    for (let i = numNames; i >= 0; --i) binaryen._free(names[i]);
+    for (let i = numNames; i >= 0; --i) binaryen._free(cStrs[i]);
   }
 
-  private cachedPrecomputeNames: usize = 0;
+  optimize(optimizeLevel: i32, shrinkLevel: i32, debugInfo: bool = false, usesARC: bool = true): void {
+    // Implicitly run costly non-LLVM optimizations on -O3 or -Oz
+    if (optimizeLevel >= 3 || shrinkLevel >= 2) optimizeLevel = 4;
 
-  precomputeExpression(expr: ExpressionRef): ExpressionRef {
-    // remember the previous optimize levels and set to max instead, to be sure
-    var previousOptimizeLevel = binaryen._BinaryenGetOptimizeLevel();
-    var previousShrinkLevel = binaryen._BinaryenGetShrinkLevel();
-    var previousDebugInfo = binaryen._BinaryenGetDebugInfo();
-    binaryen._BinaryenSetOptimizeLevel(4);
-    binaryen._BinaryenSetShrinkLevel(0);
-    binaryen._BinaryenSetDebugInfo(false);
+    binaryen._BinaryenSetOptimizeLevel(optimizeLevel);
+    binaryen._BinaryenSetShrinkLevel(shrinkLevel);
+    binaryen._BinaryenSetDebugInfo(debugInfo);
 
-    // wrap the expression in a temp. function and run the precompute pass on it
-    var type = binaryen._BinaryenExpressionGetType(expr);
-    var func = this.addTemporaryFunction(type, null, expr);
-    var names = this.cachedPrecomputeNames;
-    if (!names) {
-      this.cachedPrecomputeNames = names = allocPtrArray([
-        this.allocStringCached("vacuum"),
-        this.allocStringCached("precompute")
-      ]);
+    // Tweak inlining limits based on optimization levels
+    if (optimizeLevel >= 2 && shrinkLevel === 0) {
+      binaryen._BinaryenSetAlwaysInlineMaxSize(12);
+      binaryen._BinaryenSetFlexibleInlineMaxSize(70);
+      binaryen._BinaryenSetOneCallerInlineMaxSize(200);
+    } else {
+      binaryen._BinaryenSetAlwaysInlineMaxSize(
+        optimizeLevel == 0 && shrinkLevel >= 0
+          ? 2
+          : 4
+      );
+      binaryen._BinaryenSetFlexibleInlineMaxSize(65);
+      binaryen._BinaryenSetOneCallerInlineMaxSize(80);
     }
-    binaryen._BinaryenFunctionRunPasses(func, this.ref, names, 2);
-    expr = binaryen._BinaryenFunctionGetBody(func);
-    if (binaryen._BinaryenExpressionGetId(expr) == ExpressionId.Return) {
-      expr = binaryen._BinaryenReturnGetValue(expr);
-    }
-    this.removeTemporaryFunction();
 
-    // reset optimize levels to previous
-    binaryen._BinaryenSetOptimizeLevel(previousOptimizeLevel);
-    binaryen._BinaryenSetShrinkLevel(previousShrinkLevel);
-    binaryen._BinaryenSetDebugInfo(previousDebugInfo);
-    return expr;
+    // Pass order here differs substantially from Binaryen's defaults
+    // see: Binaryen/src/pass.cpp
+    if (optimizeLevel > 0 || shrinkLevel > 0) {
+      let passes = new Array<string>();
+
+      // --- PassRunner::addDefaultGlobalOptimizationPrePasses ---
+
+      passes.push("duplicate-function-elimination");
+      passes.push("remove-unused-module-elements"); // +
+
+      // --- PassRunner::addDefaultFunctionOptimizationPasses ---
+
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        passes.push("ssa-nomerge");
+      }
+      if (optimizeLevel >= 3) {
+        passes.push("flatten");
+        passes.push("simplify-locals-notee-nostructure");
+        passes.push("vacuum");
+        passes.push("code-folding");
+        passes.push("flatten");
+        passes.push("local-cse");
+        passes.push("reorder-locals");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("rse");
+        passes.push("vacuum");
+      }
+      if (usesARC) {
+        if (optimizeLevel < 3) {
+          passes.push("flatten");
+        }
+        passes.push("post-assemblyscript");
+      }
+      passes.push("optimize-instructions");
+      passes.push("inlining");
+      passes.push("dce");
+      passes.push("remove-unused-brs");
+      passes.push("remove-unused-names");
+      passes.push("inlining-optimizing");
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("pick-load-signs");
+        passes.push("simplify-globals-optimizing");
+      }
+      if (optimizeLevel >= 3 || shrinkLevel >= 2) {
+        passes.push("precompute-propagate");
+      } else {
+        passes.push("precompute");
+      }
+      passes.push("vacuum");
+      if (optimizeLevel >= 3 && shrinkLevel <= 1) {
+        passes.push("licm");
+      }
+      passes.push("simplify-locals-nostructure");
+      passes.push("vacuum");
+      passes.push("reorder-locals");
+      passes.push("remove-unused-brs");
+      passes.push("coalesce-locals");
+      passes.push("simplify-locals");
+      passes.push("vacuum");
+      passes.push("reorder-locals");
+      passes.push("coalesce-locals");
+      passes.push("reorder-locals");
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        passes.push("merge-locals");
+      }
+      passes.push("vacuum");
+      if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+        passes.push("code-folding");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("simplify-globals-optimizing");
+      }
+      passes.push("merge-blocks");
+      passes.push("remove-unused-brs");
+      passes.push("remove-unused-names");
+      passes.push("merge-blocks");
+      if (optimizeLevel >= 3) {
+        passes.push("optimize-instructions");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("rse");
+      }
+      passes.push("vacuum");
+
+      // --- PassRunner::addDefaultGlobalOptimizationPostPasses ---
+
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("simplify-globals-optimizing");
+        passes.push("dae-optimizing");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        passes.push("inlining-optimizing");
+      }
+      if (binaryen._BinaryenGetLowMemoryUnused()) {
+        if (optimizeLevel >= 3 || shrinkLevel >= 1) {
+          passes.push("optimize-added-constants-propagate");
+        } else {
+          passes.push("optimize-added-constants");
+        }
+      }
+      passes.push("duplicate-import-elimination");
+      if (optimizeLevel >= 2 || shrinkLevel >= 2) {
+        passes.push("simplify-globals-optimizing");
+      } else {
+        passes.push("simplify-globals");
+        passes.push("vacuum");
+      }
+      // precompute works best after global optimizations
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("precompute-propagate");
+      } else {
+        passes.push("precompute");
+      }
+      passes.push("directize"); // replace indirect with direct calls
+      passes.push("dae-optimizing"); // reduce arity
+      passes.push("inlining-optimizing"); // and inline if possible
+      if (usesARC) {
+        // works best after inlining to cover most retains/releases
+        passes.push("post-assemblyscript-finalize");
+      }
+      if (optimizeLevel >= 2 || shrinkLevel >= 1) {
+        passes.push("rse");
+        // move code on early return (after CFG cleanup)
+        passes.push("code-pushing");
+        if (optimizeLevel >= 3) {
+          // very expensive, so O3 only
+          passes.push("simplify-globals");
+          passes.push("vacuum");
+          // replace indirect with direct calls again and inline
+          passes.push("inlining-optimizing");
+          passes.push("directize");
+          passes.push("dae-optimizing");
+          passes.push("precompute-propagate");
+          passes.push("vacuum");
+          passes.push("merge-locals");
+          passes.push("coalesce-locals");
+          passes.push("simplify-locals-nostructure");
+          passes.push("vacuum");
+          passes.push("inlining-optimizing");
+          passes.push("precompute-propagate");
+        }
+        passes.push("remove-unused-brs");
+        passes.push("remove-unused-names");
+        passes.push("vacuum");
+        passes.push("optimize-instructions");
+        passes.push("simplify-globals-optimizing");
+      }
+      // clean up
+      passes.push("duplicate-function-elimination");
+      passes.push("remove-unused-nonfunction-module-elements");
+      passes.push("memory-packing");
+      passes.push("remove-unused-module-elements");
+
+      this.runPasses(passes);
+    }
   }
 
   validate(): bool {
@@ -1508,8 +1676,6 @@ export class Module {
     }
     this.cachedStrings = new Map();
     binaryen._free(this.lit);
-    binaryen._free(this.cachedPrecomputeNames);
-    this.cachedPrecomputeNames = 0;
     binaryen._BinaryenModuleDispose(this.ref);
     this.ref = 0;
   }
@@ -1610,6 +1776,16 @@ export class Module {
       }
     }
     return 0;
+  }
+
+  runExpression(expr: ExpressionRef, flags: ExpressionRunnerFlags, maxDepth: i32 = 50, maxLoopIterations: i32 = 1): ExpressionRef {
+    var runner = binaryen._ExpressionRunnerCreate(this.ref, flags, maxDepth, maxLoopIterations);
+    var precomp =  binaryen._ExpressionRunnerRunAndDispose(runner, expr);
+    if (precomp) {
+      assert(getExpressionId(precomp) == ExpressionId.Const);
+      assert(getExpressionType(precomp) == getExpressionType(expr));
+    }
+    return precomp;
   }
 
   // source map generation
@@ -1976,7 +2152,7 @@ export enum SideEffects {
   ImplicitTrap = 256 /* _BinaryenSideEffectImplicitTrap */,
   IsAtomic = 512 /* _BinaryenSideEffectIsAtomic */,
   Throws = 1024 /* _BinaryenSideEffectThrows */,
-  Any = 2047 /* _BinaryenSideEffectAny */,
+  Any = 2047 /* _BinaryenSideEffectAny */
 }
 
 export function getSideEffects(expr: ExpressionRef, features: FeatureFlags = FeatureFlags.All): SideEffects {

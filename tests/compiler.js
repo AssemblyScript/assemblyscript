@@ -184,7 +184,7 @@ function runTest(basename) {
       } else {
         console.log("- " + colorsUtil.green("stderr MATCH") + "\n");
       }
-      return;
+      return 1;
     }
 
     if (err)
