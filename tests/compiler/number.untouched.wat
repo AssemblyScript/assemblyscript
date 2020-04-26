@@ -207,6 +207,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -402,6 +404,10 @@
   local.set $5
   local.get $2
   local.set $4
+  i32.const 0
+  i32.const 1
+  i32.ge_s
+  drop
   local.get $6
   local.get $5
   local.get $4
@@ -416,6 +422,15 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<i32> (param $0 i32) (result i32)
+  i32.const 1
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 4
+  i32.const 4
+  i32.le_u
+  drop
   local.get $0
   call $~lib/util/number/itoa32
   return
@@ -460,6 +475,10 @@
   i32.shl
   i32.add
   local.set $6
+  i32.const 0
+  i32.const 2
+  i32.lt_s
+  drop
   local.get $4
   i32.const 4
   i32.ge_u
@@ -2176,6 +2195,10 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
+   i32.const 0
+   i32.const 1
+   i32.lt_s
+   drop
    local.get $4
    local.get $3
    i32.add
@@ -2201,6 +2224,10 @@
    local.get $4
    i32.lt_u
    if
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -2296,6 +2323,10 @@
      end
     end
    else
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -2596,6 +2627,10 @@
       local.set $9
       local.get $7
       local.set $8
+      i32.const 0
+      i32.const 1
+      i32.ge_s
+      drop
       local.get $10
       local.get $9
       local.get $8
@@ -2668,6 +2703,10 @@
       local.set $6
       local.get $5
       local.set $10
+      i32.const 0
+      i32.const 1
+      i32.ge_s
+      drop
       local.get $11
       local.get $6
       local.get $10
@@ -3253,6 +3292,8 @@
   i32.const 16
   i32.sub
   local.set $1
+  i32.const 1
+  drop
   local.get $1
   i32.load offset=4
   i32.const 1
@@ -3539,7 +3580,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
+  i32.const 0
+  i32.eqz
   call $~lib/number/Bool#toString
   local.tee $7
   i32.const 1824
@@ -3553,7 +3595,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
+  i32.const 1
+  i32.eqz
   call $~lib/number/Bool#toString
   local.tee $8
   i32.const 1856
@@ -3605,20 +3648,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const nan:0x400000
+  global.get $~lib/number/F32.NaN
   local.tee $11
   local.get $11
   f32.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 496
-   i32.const 23
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f32.const -16777216
+  drop
+  global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
+  f32.const 1
+  f32.sub
   call $~lib/number/F32.isSafeInteger
   i32.const 0
   i32.eq
@@ -3631,7 +3668,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -16777215
+  global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
   call $~lib/number/F32.isSafeInteger
   i32.const 1
   i32.eq
@@ -3696,7 +3733,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 16777215
+  global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
   call $~lib/number/F32.isSafeInteger
   i32.const 1
   i32.eq
@@ -3709,7 +3746,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 16777216
+  global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
+  f32.const 1
+  f32.add
   call $~lib/number/F32.isSafeInteger
   i32.const 0
   i32.eq
@@ -3787,7 +3826,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 1.1920928955078125e-07
+  global.get $~lib/builtins/f32.EPSILON
   call $~lib/number/F32.isInteger
   i32.const 0
   i32.eq
@@ -3826,7 +3865,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const -16777215
+  global.get $~lib/builtins/f32.MIN_SAFE_INTEGER
   call $~lib/number/F32.isInteger
   i32.const 1
   i32.eq
@@ -3839,7 +3878,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const 16777215
+  global.get $~lib/builtins/f32.MAX_SAFE_INTEGER
   call $~lib/number/F32.isInteger
   i32.const 1
   i32.eq
@@ -3878,20 +3917,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const nan:0x8000000000000
+  global.get $~lib/number/F64.NaN
   local.tee $12
   local.get $12
   f64.ne
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 496
-   i32.const 46
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  f64.const -9007199254740992
+  drop
+  global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
+  f64.const 1
+  f64.sub
   call $~lib/number/F64.isSafeInteger
   i32.const 0
   i32.eq
@@ -3904,7 +3937,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -9007199254740991
+  global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
   call $~lib/number/F64.isSafeInteger
   i32.const 1
   i32.eq
@@ -3969,7 +4002,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 9007199254740991
+  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   call $~lib/number/F64.isSafeInteger
   i32.const 1
   i32.eq
@@ -3982,7 +4015,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 9007199254740992
+  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
+  f64.const 1
+  f64.add
   call $~lib/number/F64.isSafeInteger
   i32.const 0
   i32.eq
@@ -4060,7 +4095,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 2.220446049250313e-16
+  global.get $~lib/builtins/f64.EPSILON
   call $~lib/number/F64.isInteger
   i32.const 0
   i32.eq
@@ -4099,7 +4134,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const -9007199254740991
+  global.get $~lib/builtins/f64.MIN_SAFE_INTEGER
   call $~lib/number/F64.isInteger
   i32.const 1
   i32.eq
@@ -4112,7 +4147,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const 9007199254740991
+  global.get $~lib/builtins/f64.MAX_SAFE_INTEGER
   call $~lib/number/F64.isInteger
   i32.const 1
   i32.eq

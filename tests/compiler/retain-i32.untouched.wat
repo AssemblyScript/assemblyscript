@@ -335,6 +335,8 @@
   i32.const 0
   i32.load8_s
   local.set $0
+  i32.const 1
+  drop
  )
  (func $start:retain-i32
   (local $0 i32)
@@ -412,7 +414,7 @@
   local.set $0
   loop $for-loop|0
    local.get $0
-   i32.const 255
+   global.get $~lib/builtins/u8.MAX_VALUE
    i32.le_s
    local.set $1
    local.get $1
@@ -795,6 +797,8 @@
   i32.const 0
   i32.load8_s
   global.set $retain-i32/ri
+  i32.const 1
+  drop
   call $retain-i32/testLocalRetain
  )
  (func $~start

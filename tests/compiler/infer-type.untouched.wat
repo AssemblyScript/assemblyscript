@@ -94,6 +94,11 @@
     br $for-loop|0
    end
   end
+  i32.const 0
+  i32.eqz
+  drop
+  i32.const 1
+  drop
  )
  (func $~start
   call $start:infer-type

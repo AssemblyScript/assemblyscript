@@ -73,8 +73,8 @@ import {
   RelooperBlockRef,
   SIMDLoadOp,
   getLocalGetIndex,
-  hasSideEffects,
-  createType
+  createType,
+  ExpressionRunnerFlags
 } from "./module";
 
 import {
@@ -1809,12 +1809,7 @@ function builtin_isNaN(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32:
       case TypeKind.U64:
       case TypeKind.USIZE: {
-        return hasSideEffects(arg0)
-          ? module.block(null, [
-              module.drop(arg0),
-              module.i32(0)
-            ], NativeType.I32)
-          : module.i32(0);
+        return module.maybeDropCondition(arg0, module.i32(0));
       }
       // (t = arg0) != t
       case TypeKind.F32: {
@@ -1890,12 +1885,7 @@ function builtin_isFinite(ctx: BuiltinContext): ExpressionRef {
       case TypeKind.U32:
       case TypeKind.U64:
       case TypeKind.USIZE: {
-        return hasSideEffects(arg0)
-          ? module.block(null, [
-              module.drop(arg0),
-              module.i32(1)
-            ], NativeType.I32)
-          : module.i32(1);
+        return module.maybeDropCondition(arg0, module.i32(1));
       }
       // (t = arg0) - t == 0
       case TypeKind.F32: {
@@ -2570,17 +2560,16 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     for (let i = 0; i < numElements; ++i) {
       let expression = expressions[i];
       if (expression) {
-        let expr = module.precomputeExpression(
-          compiler.compileExpression(<Expression>expression, elementType,
-            Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-          )
+        let expr = compiler.compileExpression(expression, elementType,
+          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
-        if (getExpressionId(expr) == ExpressionId.Const) {
-          assert(getExpressionType(expr) == nativeElementType);
-          exprs[i] = expr;
+        let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+        if (precomp) {
+          expr = precomp;
         } else {
           isStatic = false;
         }
+        exprs[i] = expr;
       } else {
         exprs[i] = compiler.makeZero(elementType);
       }
@@ -2605,8 +2594,9 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
     assert(compiler.writeStaticBuffer(buf, 0, elementType, exprs) == buf.byteLength);
     offset = compiler.addMemorySegment(buf, align).offset;
   } else { // data(size[, align])
-    let arg0 = compiler.precomputeExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
-    if (getExpressionId(arg0) != ExpressionId.Const) {
+    let arg0 = compiler.compileExpression(operands[0], Type.i32, Constraints.CONV_IMPLICIT);
+    let precomp = module.runExpression(arg0, ExpressionRunnerFlags.PreserveSideeffects);
+    if (!precomp) {
       compiler.error(
         DiagnosticCode.Expression_must_be_a_compile_time_constant,
         operands[0].range
@@ -2614,7 +2604,7 @@ function builtin_memory_data(ctx: BuiltinContext): ExpressionRef {
       compiler.currentType = usizeType;
       return module.unreachable();
     }
-    let size = getConstValueI32(arg0);
+    let size = getConstValueI32(precomp);
     if (size < 1) {
       compiler.error(
         DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
@@ -2694,59 +2684,40 @@ function builtin_assert(ctx: BuiltinContext): ExpressionRef {
   var type = compiler.currentType;
   compiler.currentType = type.nonNullableType;
 
-  // if the assertion can be proven statically, omit it
-  if (getExpressionId(arg0 = module.precomputeExpression(arg0)) == ExpressionId.Const) {
-    switch (<u32>getExpressionType(arg0)) {
+  // omit if assertions are disabled
+  if (compiler.options.noAssert) {
+    return arg0;
+  }
+
+  // omit if the assertion can be proven statically
+  var evaled = module.runExpression(arg0, ExpressionRunnerFlags.Default);
+  if (evaled) {
+    switch (<u32>getExpressionType(evaled)) {
       case <u32>NativeType.I32: {
-        if (getConstValueI32(arg0) != 0) {
-          if (contextualType == Type.void) {
-            compiler.currentType = Type.void;
-            return module.nop();
-          }
+        if (getConstValueI32(evaled)) {
           return arg0;
         }
         break;
       }
       case <u32>NativeType.I64: {
-        if (getConstValueI64Low(arg0) != 0 || getConstValueI64High(arg0) != 0) {
-          if (contextualType == Type.void) {
-            compiler.currentType = Type.void;
-            return module.nop();
-          }
+        if (getConstValueI64Low(evaled) | getConstValueI64High(evaled)) {
           return arg0;
         }
         break;
       }
       case <u32>NativeType.F32: {
-        if (getConstValueF32(arg0) != 0) {
-          if (contextualType == Type.void) {
-            compiler.currentType = Type.void;
-            return module.nop();
-          }
+        if (getConstValueF32(evaled)) {
           return arg0;
         }
         break;
       }
       case <u32>NativeType.F64: {
-        if (getConstValueF64(arg0) != 0) {
-          if (contextualType == Type.void) {
-            compiler.currentType = Type.void;
-            return module.nop();
-          }
+        if (getConstValueF64(evaled)) {
           return arg0;
         }
         break;
       }
     }
-  }
-
-  // return ifTrueish if assertions are disabled
-  if (compiler.options.noAssert) {
-    if (contextualType == Type.void) { // simplify if dropped anyway
-      compiler.currentType = Type.void;
-      return module.nop();
-    }
-    return arg0;
   }
 
   // otherwise call abort if the assertion is false-ish
@@ -3062,19 +3033,15 @@ function builtin_i8x16(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
   for (let i = 0; i < 16; ++i) {
-    let value = operands[i];
-    if (value) {
-      let expr = compiler.precomputeExpression(value, Type.i8, Constraints.CONV_IMPLICIT);
-      if (getExpressionId(expr) != ExpressionId.Const) {
-        compiler.error(
-          DiagnosticCode.Expression_must_be_a_compile_time_constant,
-          value.range
-        );
-        compiler.currentType = Type.v128;
-        return module.unreachable();
-      }
-      assert(getExpressionType(expr) == NativeType.I32);
-      writeI8(getConstValueI32(expr), bytes, i);
+    let expr = compiler.compileExpression(operands[i], Type.i8, Constraints.CONV_IMPLICIT);
+    let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+    if (precomp) {
+      writeI8(getConstValueI32(precomp), bytes, i);
+    } else {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        operands[i].range
+      );
     }
   }
   compiler.currentType = Type.v128;
@@ -3097,19 +3064,15 @@ function builtin_i16x8(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
   for (let i = 0; i < 8; ++i) {
-    let value = operands[i];
-    if (value) {
-      let expr = compiler.precomputeExpression(value, Type.i16, Constraints.CONV_IMPLICIT);
-      if (getExpressionId(expr) != ExpressionId.Const) {
-        compiler.error(
-          DiagnosticCode.Expression_must_be_a_compile_time_constant,
-          value.range
-        );
-        compiler.currentType = Type.v128;
-        return module.unreachable();
-      }
-      assert(getExpressionType(expr) == NativeType.I32);
-      writeI16(getConstValueI32(expr), bytes, i << 1);
+    let expr = compiler.compileExpression(operands[i], Type.i16, Constraints.CONV_IMPLICIT);
+    let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+    if (precomp) {
+      writeI16(getConstValueI32(precomp), bytes, i << 1);
+    } else {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        operands[i].range
+      );
     }
   }
   compiler.currentType = Type.v128;
@@ -3132,19 +3095,15 @@ function builtin_i32x4(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
   for (let i = 0; i < 4; ++i) {
-    let value = operands[i];
-    if (value) {
-      let expr = compiler.precomputeExpression(value, Type.i32, Constraints.CONV_IMPLICIT);
-      if (getExpressionId(expr) != ExpressionId.Const) {
-        compiler.error(
-          DiagnosticCode.Expression_must_be_a_compile_time_constant,
-          value.range
-        );
-        compiler.currentType = Type.v128;
-        return module.unreachable();
-      }
-      assert(getExpressionType(expr) == NativeType.I32);
-      writeI32(getConstValueI32(expr), bytes, i << 2);
+    let expr = compiler.compileExpression(operands[i], Type.i32, Constraints.CONV_IMPLICIT);
+    let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+    if (precomp) {
+      writeI32(getConstValueI32(precomp), bytes, i << 2);
+    } else {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        operands[i].range
+      );
     }
   }
   compiler.currentType = Type.v128;
@@ -3167,21 +3126,17 @@ function builtin_i64x2(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
   for (let i = 0; i < 2; ++i) {
-    let value = operands[i];
-    if (value) {
-      let expr = compiler.precomputeExpression(value, Type.i64, Constraints.CONV_IMPLICIT);
-      if (getExpressionId(expr) != ExpressionId.Const) {
-        compiler.error(
-          DiagnosticCode.Expression_must_be_a_compile_time_constant,
-          value.range
-        );
-        compiler.currentType = Type.v128;
-        return module.unreachable();
-      }
-      assert(getExpressionType(expr) == NativeType.I64);
+    let expr = compiler.compileExpression(operands[i], Type.i64, Constraints.CONV_IMPLICIT);
+    let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+    if (precomp) {
       let off = i << 3;
-      writeI32(getConstValueI64Low(expr), bytes, off);
-      writeI32(getConstValueI64High(expr), bytes, off + 4);
+      writeI32(getConstValueI64Low(precomp), bytes, off);
+      writeI32(getConstValueI64High(precomp), bytes, off + 4);
+    } else {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        operands[i].range
+      );
     }
   }
   compiler.currentType = Type.v128;
@@ -3204,19 +3159,15 @@ function builtin_f32x4(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
   for (let i = 0; i < 4; ++i) {
-    let value = operands[i];
-    if (value) {
-      let expr = compiler.precomputeExpression(value, Type.f32, Constraints.CONV_IMPLICIT);
-      if (getExpressionId(expr) != ExpressionId.Const) {
-        compiler.error(
-          DiagnosticCode.Expression_must_be_a_compile_time_constant,
-          value.range
-        );
-        compiler.currentType = Type.v128;
-        return module.unreachable();
-      }
-      assert(getExpressionType(expr) == NativeType.F32);
-      writeF32(getConstValueF32(expr), bytes, i << 2);
+    let expr = compiler.compileExpression(operands[i], Type.f32, Constraints.CONV_IMPLICIT);
+    let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+    if (precomp) {
+      writeF32(getConstValueF32(precomp), bytes, i << 2);
+    } else {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        operands[i].range
+      );
     }
   }
   compiler.currentType = Type.v128;
@@ -3239,19 +3190,15 @@ function builtin_f64x2(ctx: BuiltinContext): ExpressionRef {
   var operands = ctx.operands;
   var bytes = new Uint8Array(16);
   for (let i = 0; i < 2; ++i) {
-    let value = operands[i];
-    if (value) {
-      let expr = compiler.precomputeExpression(value, Type.f64, Constraints.CONV_IMPLICIT);
-      if (getExpressionId(expr) != ExpressionId.Const) {
-        compiler.error(
-          DiagnosticCode.Expression_must_be_a_compile_time_constant,
-          value.range
-        );
-        compiler.currentType = Type.v128;
-        return module.unreachable();
-      }
-      assert(getExpressionType(expr) == NativeType.F64);
-      writeF64(getConstValueF64(expr), bytes, i << 3);
+    let expr = compiler.compileExpression(operands[i], Type.f64, Constraints.CONV_IMPLICIT);
+    let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+    if (precomp) {
+      writeF64(getConstValueF64(precomp), bytes, i << 3);
+    } else {
+      compiler.error(
+        DiagnosticCode.Expression_must_be_a_compile_time_constant,
+        operands[i].range
+      );
     }
   }
   compiler.currentType = Type.v128;
@@ -3320,12 +3267,12 @@ function builtin_v128_extract_lane(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  var arg1 = compiler.precomputeExpression(operands[1], Type.u8, Constraints.CONV_IMPLICIT);
+  var arg1 = compiler.compileExpression(operands[1], Type.u8, Constraints.CONV_IMPLICIT);
   compiler.currentType = type;
   var idx = 0;
-  if (getExpressionId(arg1) == ExpressionId.Const) {
-    assert(getExpressionType(arg1) == NativeType.I32);
-    idx = getConstValueI32(arg1);
+  var precomp = module.runExpression(arg1, ExpressionRunnerFlags.PreserveSideeffects);
+  if (precomp) {
+    idx = getConstValueI32(precomp);
   } else {
     compiler.error(
       DiagnosticCode.Expression_must_be_a_compile_time_constant,
@@ -3387,13 +3334,13 @@ function builtin_v128_replace_lane(ctx: BuiltinContext): ExpressionRef {
   var typeArguments = ctx.typeArguments!;
   var type = typeArguments[0];
   var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
-  var arg1 = compiler.precomputeExpression(operands[1], Type.u8, Constraints.CONV_IMPLICIT);
+  var arg1 = compiler.compileExpression(operands[1], Type.u8, Constraints.CONV_IMPLICIT);
   var arg2 = compiler.compileExpression(operands[2], type, Constraints.CONV_IMPLICIT);
   compiler.currentType = Type.v128;
   var idx = 0;
-  if (getExpressionId(arg1) == ExpressionId.Const) {
-    assert(getExpressionType(arg1) == NativeType.I32);
-    idx = getConstValueI32(arg1);
+  var precomp = module.runExpression(arg1, ExpressionRunnerFlags.PreserveSideeffects);
+  if (precomp) {
+    idx = getConstValueI32(precomp);
   } else {
     compiler.error(
       DiagnosticCode.Expression_must_be_a_compile_time_constant,
@@ -3482,24 +3429,23 @@ function builtin_v128_shuffle(ctx: BuiltinContext): ExpressionRef {
         let maxIdx = (laneCount << 1) - 1;
         for (let i = 0; i < laneCount; ++i) {
           let operand = operands[2 + i];
-          let argN = compiler.precomputeExpression(operand, Type.u8, Constraints.CONV_IMPLICIT);
-          if (getExpressionId(argN) != ExpressionId.Const) {
+          let argN = compiler.compileExpression(operand, Type.u8, Constraints.CONV_IMPLICIT);
+          let precomp = module.runExpression(argN, ExpressionRunnerFlags.PreserveSideeffects);
+          let idx = 0;
+          if (precomp) {
+            idx = getConstValueI32(precomp);
+            if (idx < 0 || idx > maxIdx) {
+              compiler.error(
+                DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
+                operand.range, "Lane index", "0", maxIdx.toString()
+              );
+              idx = 0;
+            }
+          } else {
             compiler.error(
               DiagnosticCode.Expression_must_be_a_compile_time_constant,
               operand.range
             );
-            compiler.currentType = Type.v128;
-            return module.unreachable();
-          }
-          assert(getExpressionType(argN) == NativeType.I32);
-          let idx = getConstValueI32(argN);
-          if (idx < 0 || idx > maxIdx) {
-            compiler.error(
-              DiagnosticCode._0_must_be_a_value_between_1_and_2_inclusive,
-              operand.range, "Lane index", "0", maxIdx.toString()
-            );
-            compiler.currentType = Type.v128;
-            return module.unreachable();
           }
           switch (laneWidth) {
             case 1: {
@@ -8224,16 +8170,15 @@ function evaluateConstantType(ctx: BuiltinContext): Type | null {
 
 /** Evaluates a compile-time constant immediate offset argument.*/
 function evaluateImmediateOffset(expression: Expression, compiler: Compiler): i32 {
-  var expr: ExpressionRef;
+  var module = compiler.module;
   var value: i32;
   if (compiler.options.isWasm64) {
-    expr = compiler.precomputeExpression(expression, Type.usize64, Constraints.CONV_IMPLICIT);
-    if (
-      getExpressionId(expr) != ExpressionId.Const ||
-      getExpressionType(expr) != NativeType.I64 ||
-      getConstValueI64High(expr) != 0 ||
-      (value = getConstValueI64Low(expr)) < 0
-    ) {
+    let expr = compiler.compileExpression(expression, Type.usize64, Constraints.CONV_IMPLICIT);
+    let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+    if (precomp) {
+      assert(getConstValueI64High(precomp) == 0); // TODO
+      value = getConstValueI64Low(precomp);
+    } else {
       compiler.error(
         DiagnosticCode.Expression_must_be_a_compile_time_constant,
         expression.range
@@ -8241,12 +8186,11 @@ function evaluateImmediateOffset(expression: Expression, compiler: Compiler): i3
       value = -1;
     }
   } else {
-    expr = compiler.precomputeExpression(expression, Type.usize32, Constraints.CONV_IMPLICIT);
-    if (
-      getExpressionId(expr) != ExpressionId.Const ||
-      getExpressionType(expr) != NativeType.I32 ||
-      (value = getConstValueI32(expr)) < 0
-    ) {
+    let expr = compiler.compileExpression(expression, Type.usize32, Constraints.CONV_IMPLICIT);
+    let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+    if (precomp) {
+      value = getConstValueI32(precomp);
+    } else {
       compiler.error(
         DiagnosticCode.Expression_must_be_a_compile_time_constant,
         expression.range

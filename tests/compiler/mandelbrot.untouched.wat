@@ -30,6 +30,10 @@
   (local $16 i64)
   (local $17 f64)
   (local $18 f64)
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
   block $~lib/util/math/log_lut|inlined.0 (result f64)
    local.get $0
    local.set $1
@@ -39,7 +43,9 @@
    local.get $2
    i64.const 4606619468846596096
    i64.sub
-   i64.const 854320534781952
+   i64.const 4607473789381378048
+   i64.const 4606619468846596096
+   i64.sub
    i64.lt_u
    if
     local.get $1
@@ -149,7 +155,9 @@
    local.get $12
    i32.const 16
    i32.sub
-   i32.const 32736
+   i32.const 32752
+   i32.const 16
+   i32.sub
    i32.ge_u
    if
     local.get $2
@@ -166,7 +174,8 @@
      br $~lib/util/math/log_lut|inlined.0
     end
     local.get $2
-    i64.const 9218868437227405312
+    f64.const inf
+    i64.reinterpret_f64
     i64.eq
     if
      local.get $1
@@ -254,14 +263,18 @@
    local.set $9
    i32.const 2056
    local.get $14
-   i32.const 4
+   i32.const 1
+   i32.const 3
+   i32.add
    i32.shl
    i32.add
    f64.load
    local.set $8
    i32.const 2056
    local.get $14
-   i32.const 4
+   i32.const 1
+   i32.const 3
+   i32.add
    i32.shl
    i32.add
    f64.load offset=8
@@ -353,6 +366,10 @@
   (local $21 f64)
   (local $22 f64)
   (local $23 f64)
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
   block $~lib/util/math/log2_lut|inlined.0 (result f64)
    local.get $0
    local.set $1
@@ -362,7 +379,9 @@
    local.get $2
    i64.const 4606800540372828160
    i64.sub
-   i64.const 581272283906048
+   i64.const 4607381812656734208
+   i64.const 4606800540372828160
+   i64.sub
    i64.lt_u
    if
     local.get $1
@@ -466,7 +485,9 @@
    local.get $12
    i32.const 16
    i32.sub
-   i32.const 32736
+   i32.const 32752
+   i32.const 16
+   i32.sub
    i32.ge_u
    if
     local.get $2

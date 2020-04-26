@@ -48,7 +48,7 @@ import {
   getGlobalGetName,
   isGlobalMutable,
   createType,
-  hasSideEffects
+  ExpressionRunnerFlags
 } from "./module";
 
 import {
@@ -1056,10 +1056,15 @@ export class Compiler extends DiagnosticEmitter {
       // If not a constant, attempt to precompute
       if (getExpressionId(initExpr) != ExpressionId.Const) {
         if (isDeclaredConstant) {
-          let origInitExpr = initExpr;
-          initExpr = module.precomputeExpression(initExpr);
-          if (getExpressionId(initExpr) != ExpressionId.Const) initializeInStart = true;
-          if (this.skippedAutoreleases.has(origInitExpr)) this.skippedAutoreleases.add(initExpr);
+          if (getExpressionId(initExpr) != ExpressionId.Const) {
+            let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
+            if (precomp) {
+              initExpr = precomp;
+            } else {
+              initializeInStart = true;
+            }
+          }
+          if (this.skippedAutoreleases.has(initExpr)) this.skippedAutoreleases.add(initExpr);
         } else {
           initializeInStart = true;
         }
@@ -1183,8 +1188,10 @@ export class Compiler extends DiagnosticEmitter {
             Constraints.CONV_IMPLICIT // autorelease is not applicable in i32 context
           );
           if (getExpressionId(initExpr) != ExpressionId.Const) {
-            initExpr = module.precomputeExpression(initExpr);
-            if (getExpressionId(initExpr) != ExpressionId.Const) {
+            let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
+            if (precomp) {
+              initExpr = precomp;
+            } else {
               if (element.is(CommonFlags.CONST)) {
                 this.error(
                   DiagnosticCode.In_const_enum_declarations_member_initializer_must_be_constant_expression,
@@ -1212,16 +1219,18 @@ export class Compiler extends DiagnosticEmitter {
               module.global_get(previousValue.internalName, NativeType.I32),
               module.i32(1)
             );
-          }
-          initExpr = module.precomputeExpression(initExpr);
-          if (getExpressionId(initExpr) != ExpressionId.Const) {
-            if (element.is(CommonFlags.CONST)) {
-              this.error(
-                DiagnosticCode.In_const_enum_declarations_member_initializer_must_be_constant_expression,
-                member.declaration.range
-              );
+            let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
+            if (precomp) {
+              initExpr = precomp;
+            } else {
+              if (element.is(CommonFlags.CONST)) {
+                this.error(
+                  DiagnosticCode.In_const_enum_declarations_member_initializer_must_be_constant_expression,
+                  member.declaration.range
+                );
+              }
+              initInStart = true;
             }
-            initInStart = true;
           }
         }
         this.currentFlow = previousFlow;
@@ -2219,31 +2228,25 @@ export class Compiler extends DiagnosticEmitter {
 
       let condFlow = flow.fork();
       this.currentFlow = condFlow;
-      let condExpr = module.precomputeExpression(
-        this.makeIsTrueish(
-          this.compileExpression(statement.condition, Type.i32),
-          this.currentType
-        )
+      let condExpr = this.makeIsTrueish(
+        this.compileExpression(statement.condition, Type.i32),
+        this.currentType
       );
-      let condKind = evaluateConditionKind(condExpr);
+      let condKind = this.evaluateCondition(condExpr);
 
       // Shortcut if condition is always false
       if (condKind == ConditionKind.FALSE) {
-        if (hasSideEffects(condExpr)) {
-          bodyStmts.push(
-            module.drop(condExpr)
-          );
-        }
+        bodyStmts.push(
+          module.drop(condExpr)
+        );
         this.performAutoreleases(condFlow, bodyStmts);
         flow.inherit(bodyFlow);
 
       // Terminate if condition is always true and body never breaks
       } else if (condKind == ConditionKind.TRUE && !bodyFlow.isAny(FlowFlags.BREAKS | FlowFlags.CONDITIONALLY_BREAKS)) {
-        if (hasSideEffects(condExpr)) {
-          bodyStmts.push(
-            module.drop(condExpr)
-          );
-        }
+        bodyStmts.push(
+          module.drop(condExpr)
+        );
         this.performAutoreleases(condFlow, bodyStmts);
         bodyStmts.push(
           module.br(continueLabel)
@@ -2369,21 +2372,17 @@ export class Compiler extends DiagnosticEmitter {
     var condKind: ConditionKind;
     var condition = statement.condition;
     if (condition) {
-      condExpr = module.precomputeExpression(
-        this.makeIsTrueish(
-          this.compileExpression(condition, Type.bool),
-          this.currentType
-        )
+      condExpr = this.makeIsTrueish(
+        this.compileExpression(condition, Type.bool),
+        this.currentType
       );
-      condKind = evaluateConditionKind(condExpr);
+      condKind = this.evaluateCondition(condExpr);
 
       // Shortcut if condition is always false (body never runs)
       if (condKind == ConditionKind.FALSE) {
-        if (hasSideEffects(condExpr)) {
-          stmts.push(
-            module.drop(condExpr)
-          );
-        }
+        stmts.push(
+          module.drop(condExpr)
+        );
         this.performAutoreleases(condFlow, stmts);
         condFlow.freeScopedLocals();
         flow.inherit(condFlow);
@@ -2532,37 +2531,27 @@ export class Compiler extends DiagnosticEmitter {
     // [autorelease]               incl. condition
 
     // Precompute the condition (always executes)
-    var condExpr = module.precomputeExpression(
-      this.makeIsTrueish(
-        this.compileExpression(statement.condition, Type.bool),
-        this.currentType
-      )
+    var condExpr = this.makeIsTrueish(
+      this.compileExpression(statement.condition, Type.bool),
+      this.currentType
     );
-    var condKind = evaluateConditionKind(condExpr);
+    var condKind = this.evaluateCondition(condExpr);
 
     // Shortcut if the condition is constant
     switch (condKind) {
       case ConditionKind.TRUE: {
-        if (hasSideEffects(condExpr)) {
-          return module.block(null, [
-            module.drop(condExpr),
-            this.compileStatement(ifTrue)
-          ]);
-        }
-        return this.compileStatement(ifTrue);
+        return module.block(null, [
+          module.drop(condExpr),
+          this.compileStatement(ifTrue)
+        ]);
       }
       case ConditionKind.FALSE: {
-        if (hasSideEffects(condExpr)) {
-          return ifFalse
-            ? module.block(null, [
-                module.drop(condExpr),
-                this.compileStatement(ifFalse)
-              ])
-            : module.drop(condExpr);
-        }
         return ifFalse
-          ? this.compileStatement(ifFalse)
-          : module.nop();
+          ? module.block(null, [
+              module.drop(condExpr),
+              this.compileStatement(ifFalse)
+            ])
+          : module.drop(condExpr);
       }
     }
 
@@ -2918,8 +2907,9 @@ export class Compiler extends DiagnosticEmitter {
       let isStatic = false;
       if (isConst) {
         if (initExpr) {
-          initExpr = module.precomputeExpression(initExpr);
-          if (getExpressionId(initExpr) == ExpressionId.Const) {
+          let precomp = module.runExpression(initExpr, ExpressionRunnerFlags.PreserveSideeffects);
+          if (precomp) {
+            initExpr = precomp;
             let local = new Local(name, -1, type, flow.parentFunction);
             switch (<u32>getExpressionType(initExpr)) {
               case <u32>NativeType.I32: {
@@ -3117,16 +3107,17 @@ export class Compiler extends DiagnosticEmitter {
     // Precompute the condition
     var condFlow = flow.fork();
     this.currentFlow = condFlow;
-    var condExpr = module.precomputeExpression(
-      this.makeIsTrueish(
-        this.compileExpression(statement.condition, Type.bool),
-        this.currentType
-      )
+    var condExpr = this.makeIsTrueish(
+      this.compileExpression(statement.condition, Type.bool),
+      this.currentType
     );
-    var condKind = evaluateConditionKind(condExpr);
+    var condKind = this.evaluateCondition(condExpr);
 
     // Shortcut if condition is always false (body never runs)
     if (condKind == ConditionKind.FALSE) {
+      stmts.push(
+        module.drop(condExpr)
+      );
       this.performAutoreleases(condFlow, stmts);
       assert(!flow.hasScopedLocals);
       outerFlow.popBreakLabel();
@@ -3408,17 +3399,6 @@ export class Compiler extends DiagnosticEmitter {
     // must go through this function, with the respective per-kind functions not being used directly.
     if (this.options.sourceMap) this.addDebugLocation(expr, expression.range);
     return expr;
-  }
-
-  /** Compiles and precomputes an expression, possibly yielding a costant value. */
-  precomputeExpression(
-    expression: Expression,
-    contextualType: Type,
-    constraints: Constraints = Constraints.NONE
-  ): ExpressionRef {
-    return this.module.precomputeExpression(
-      this.compileExpression(expression, contextualType, constraints)
-    );
   }
 
   /** Compiles an expression that is about to be returned, taking special care of retaining and setting flow states. */
@@ -8056,18 +8036,12 @@ export class Compiler extends DiagnosticEmitter {
 
     // instanceof <basic> - must be exact
     if (!expectedType.is(TypeFlags.REFERENCE)) {
-      return module.block(null, [
-        module.drop(expr),
-        module.i32(actualType == expectedType ? 1 : 0)
-      ], NativeType.I32);
+      return module.maybeDropCondition(expr, module.i32(actualType == expectedType ? 1 : 0));
     }
 
     // <basic> instanceof <reference> - always false
     if (!actualType.is(TypeFlags.REFERENCE)) {
-      return module.block(null, [
-        module.drop(expr),
-        module.i32(0)
-      ], NativeType.I32);
+      return module.maybeDropCondition(expr, module.i32(0));
     }
 
     // both LHS and RHS are references now
@@ -8128,10 +8102,7 @@ export class Compiler extends DiagnosticEmitter {
 
       // downcast - check statically
       if (actualType.isAssignableTo(expectedType)) {
-        return module.block(null, [
-          this.convertExpression(expr, actualType, Type.void, false, false, expression.expression),
-          module.i32(1)
-        ], NativeType.I32);
+        return module.maybeDropCondition(expr, module.i32(1));
 
       // upcast - check dynamically
       } else if (expectedType.isAssignableTo(actualType)) {
@@ -8168,10 +8139,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // false
-    return module.block(null, [
-      module.drop(expr),
-      module.i32(0)
-    ], NativeType.I32);
+    return module.maybeDropCondition(expr, module.i32(0));
   }
 
   private makeInstanceofClass(expression: InstanceOfExpression, prototype: ClassPrototype): ExpressionRef {
@@ -8201,10 +8169,7 @@ export class Compiler extends DiagnosticEmitter {
 
         // <nonNullable> is just `true`
         } else {
-          return module.block(null, [
-            module.drop(expr),
-            module.i32(1)
-          ], NativeType.I32);
+          return module.maybeDropCondition(expr, module.i32(1));
         }
 
       // dynamic check against all possible concrete ids
@@ -8215,10 +8180,7 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // false
-    return module.block(null, [
-      module.drop(expr),
-      module.i32(0)
-    ], NativeType.I32);
+    return module.maybeDropCondition(expr, module.i32(0));
   }
 
   private compileLiteralExpression(
@@ -8338,19 +8300,20 @@ export class Compiler extends DiagnosticEmitter {
     var nativeElementType = elementType.toNativeType();
     for (let i = 0; i < length; ++i) {
       let expression = expressions[i];
-      let expr = expression
-        ? module.precomputeExpression(
-            this.compileExpression(<Expression>expression, elementType,
-              Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-            )
-          )
-        : this.makeZero(elementType);
-      if (getExpressionId(expr) == ExpressionId.Const) {
-        assert(getExpressionType(expr) == nativeElementType);
+      if (expression) {
+        let expr = this.compileExpression(<Expression>expression, elementType,
+          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
+        );
+        let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+        if (precomp) {
+          expr = precomp;
+        } else {
+          isStatic = false;
+        }
+        values[i] = expr;
       } else {
-        isStatic = false;
+        values[i] = this.makeZero(elementType);
       }
-      values[i] = expr;
     }
 
     // if the array is static, make a static arraybuffer segment
@@ -8506,22 +8469,20 @@ export class Compiler extends DiagnosticEmitter {
     var isStatic = true;
     for (let i = 0; i < length; ++i) {
       let expression = expressions[i];
-      let expr: ExpressionRef;
       if (expression) {
-        expr = module.precomputeExpression(
-          this.compileExpression(expression, elementType,
-            Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
-          )
+        let expr = this.compileExpression(expression, elementType,
+          Constraints.CONV_IMPLICIT | Constraints.WILL_RETAIN
         );
-        if (getExpressionId(expr) == ExpressionId.Const) {
-          assert(getExpressionType(expr) == nativeElementType);
+        let precomp = module.runExpression(expr, ExpressionRunnerFlags.PreserveSideeffects);
+        if (precomp) {
+          expr = precomp;
         } else {
           isStatic = false;
         }
+        values[i] = expr;
       } else {
-        expr = this.makeZero(elementType);
+        values[i] = this.makeZero(elementType);
       }
-      values[i] = expr;
     }
 
     var isWasm64 = this.options.isWasm64;
@@ -9111,21 +9072,23 @@ export class Compiler extends DiagnosticEmitter {
     ctxType: Type,
     constraints: Constraints
   ): ExpressionRef {
+    var module = this.module;
     var ifThen = expression.ifThen;
     var ifElse = expression.ifElse;
 
-    var condExpr = this.module.precomputeExpression(
-      this.makeIsTrueish(
-        this.compileExpression(expression.condition, Type.bool),
-        this.currentType
-      )
+    var condExpr = this.makeIsTrueish(
+      this.compileExpression(expression.condition, Type.bool),
+      this.currentType
     );
-
     // Try to eliminate unnecesssary branches if the condition is constant
     // FIXME: skips common denominator, inconsistently picking branch type
-    var condKind = evaluateConditionKind(condExpr);
-    if (condKind == ConditionKind.TRUE) return this.compileExpression(ifThen, ctxType);
-    if (condKind == ConditionKind.FALSE) return this.compileExpression(ifElse, ctxType);
+    var condKind = this.evaluateCondition(condExpr);
+    if (condKind == ConditionKind.TRUE) {
+      return module.maybeDropCondition(condExpr, this.compileExpression(ifThen, ctxType));
+    }
+    if (condKind == ConditionKind.FALSE) {
+      return module.maybeDropCondition(condExpr, this.compileExpression(ifElse, ctxType));
+    }
 
     var inheritedConstraints = constraints & Constraints.WILL_RETAIN;
 
@@ -9151,7 +9114,7 @@ export class Compiler extends DiagnosticEmitter {
         ifElse.range, ifElseType.toString(), ifThenType.toString()
       );
       this.currentType = ctxType;
-      return this.module.unreachable();
+      return module.unreachable();
     }
     ifThenExpr = this.convertExpression(
       ifThenExpr,
@@ -9198,7 +9161,7 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = outerFlow;
     outerFlow.inheritMutual(ifThenFlow, ifElseFlow);
 
-    var expr = this.module.if(condExpr, ifThenExpr, ifElseExpr);
+    var expr = module.if(condExpr, ifThenExpr, ifElseExpr);
     assert(ifThenAutoreleaseSkipped == ifElseAutoreleaseSkipped);
     if (ifThenAutoreleaseSkipped) this.skippedAutoreleases.add(expr);
     return expr;
@@ -9839,21 +9802,23 @@ export class Compiler extends DiagnosticEmitter {
       let element = this.resolver.lookupExpression(operand, this.currentFlow, Type.auto, ReportMode.SWALLOW);
       if (!element) {
         switch (operand.kind) {
+          case NodeKind.IDENTIFIER: break; // ignore error: typeof doesntExist -> undefined
           case NodeKind.PROPERTYACCESS:
           case NodeKind.ELEMENTACCESS: {
             operand = operand.kind == NodeKind.PROPERTYACCESS
               ? (<PropertyAccessExpression>operand).expression
               : (<ElementAccessExpression>operand).expression;
             let targetType = this.resolver.resolveExpression(operand, this.currentFlow, Type.auto, ReportMode.REPORT);
-            if (!targetType) {
+            if (!targetType) { // access on non-object
               this.currentType = stringInstance.type;
               return this.module.unreachable();
             }
-            expr = this.compileExpression(operand, Type.auto); // might have side-effects
-            break;
+            // fall-through
           }
-          case NodeKind.IDENTIFIER: break; // ignore error
-          default: expr = this.compileExpression(operand, Type.auto); // trigger error
+          default: {
+            expr = this.compileExpression(operand, Type.auto); // may trigger an error
+            expr = this.convertExpression(expr, this.currentType, Type.void, true, false, operand);
+          }
         }
         typeString = "undefined";
       } else {
@@ -10034,6 +9999,18 @@ export class Compiler extends DiagnosticEmitter {
       supported = false;
     }
     return supported;
+  }
+
+  /** Evaluates a boolean condition, determining whether it is TRUE, FALSE or UNKNOWN. */
+  evaluateCondition(expr: ExpressionRef): ConditionKind {
+    var module = this.module;
+    var evaled = module.runExpression(expr, ExpressionRunnerFlags.Default);
+    if (evaled) {
+      return getConstValueI32(evaled)
+        ? ConditionKind.TRUE
+        : ConditionKind.FALSE;
+    }
+    return ConditionKind.UNKNOWN;
   }
 
   // === Specialized code generation ==============================================================
@@ -10419,14 +10396,3 @@ function mangleImportName(
 
 var mangleImportName_moduleName: string;
 var mangleImportName_elementName: string;
-
-/** Evaluates the kind of a boolean condition from its expression. */
-function evaluateConditionKind(expr: ExpressionRef): ConditionKind {
-  assert(getExpressionType(expr) == NativeType.I32 || getExpressionType(expr) == NativeType.Unreachable);
-  if (getExpressionId(expr) == ExpressionId.Const) {
-    return getConstValueI32(expr)
-      ? ConditionKind.TRUE
-      : ConditionKind.FALSE;
-  }
-  return ConditionKind.UNKNOWN;
-}

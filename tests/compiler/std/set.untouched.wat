@@ -59,6 +59,8 @@
   local.get $1
   i32.load
   local.set $2
+  i32.const 1
+  drop
   local.get $2
   i32.const 1
   i32.and
@@ -77,6 +79,8 @@
   i32.xor
   i32.and
   local.set $3
+  i32.const 1
+  drop
   local.get $3
   i32.const 16
   i32.ge_u
@@ -129,6 +133,8 @@
    i32.sub
    local.set $4
   end
+  i32.const 1
+  drop
   local.get $4
   i32.const 23
   i32.lt_u
@@ -268,6 +274,8 @@
   (local $11 i32)
   (local $12 i32)
   (local $13 i32)
+  i32.const 1
+  drop
   local.get $1
   i32.eqz
   if
@@ -281,6 +289,8 @@
   local.get $1
   i32.load
   local.set $2
+  i32.const 1
+  drop
   local.get $2
   i32.const 1
   i32.and
@@ -374,6 +384,8 @@
    local.get $6
    i32.load
    local.set $3
+   i32.const 1
+   drop
    local.get $3
    i32.const 1
    i32.and
@@ -430,6 +442,8 @@
   i32.xor
   i32.and
   local.set $8
+  i32.const 1
+  drop
   local.get $8
   i32.const 16
   i32.ge_u
@@ -449,6 +463,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  drop
   local.get $1
   i32.const 16
   i32.add
@@ -503,6 +519,8 @@
    i32.sub
    local.set $9
   end
+  i32.const 1
+  drop
   local.get $9
   i32.const 23
   i32.lt_u
@@ -613,6 +631,8 @@
   (local $7 i32)
   (local $8 i32)
   (local $9 i32)
+  i32.const 1
+  drop
   local.get $1
   local.get $2
   i32.le_u
@@ -650,6 +670,8 @@
   local.set $5
   local.get $4
   if
+   i32.const 1
+   drop
    local.get $1
    local.get $4
    i32.const 16
@@ -681,6 +703,8 @@
     nop
    end
   else
+   i32.const 1
+   drop
    local.get $1
    local.get $0
    i32.const 1572
@@ -701,7 +725,11 @@
   i32.sub
   local.set $6
   local.get $6
-  i32.const 48
+  i32.const 16
+  i32.const 16
+  i32.add
+  i32.const 16
+  i32.add
   i32.lt_u
   if
    i32.const 0
@@ -895,6 +923,8 @@
    i32.xor
    i32.and
    local.set $5
+   i32.const 0
+   drop
    local.get $0
    local.get $5
    memory.size
@@ -996,6 +1026,8 @@
    i32.sub
    local.set $2
   end
+  i32.const 1
+  drop
   local.get $2
   i32.const 23
   i32.lt_u
@@ -1068,6 +1100,8 @@
     i32.add
     i32.load offset=4
     local.set $6
+    i32.const 1
+    drop
     local.get $6
     i32.eqz
     if
@@ -1126,6 +1160,8 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  i32.const 0
+  drop
   local.get $1
   i32.const 536870904
   i32.lt_u
@@ -1210,6 +1246,8 @@
   local.get $1
   i32.load
   local.set $3
+  i32.const 1
+  drop
   local.get $2
   i32.const 15
   i32.and
@@ -1232,7 +1270,9 @@
   i32.sub
   local.set $4
   local.get $4
-  i32.const 32
+  i32.const 16
+  i32.const 16
+  i32.add
   i32.ge_u
   if
    local.get $1
@@ -1301,6 +1341,8 @@
  (func $~lib/rt/tlsf/allocateBlock (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
+  i32.const 1
+  drop
   global.get $~lib/rt/tlsf/collectLock
   i32.eqz
   i32.eqz
@@ -1325,8 +1367,12 @@
    global.get $~lib/gc/gc.auto
    if
     i32.const 1
+    drop
+    i32.const 1
     global.set $~lib/rt/tlsf/collectLock
     call $~lib/rt/pure/__collect
+    i32.const 1
+    drop
     i32.const 0
     global.set $~lib/rt/tlsf/collectLock
     local.get $0
@@ -1343,6 +1389,8 @@
      local.get $3
      call $~lib/rt/tlsf/searchBlock
      local.set $4
+     i32.const 1
+     drop
      local.get $4
      i32.eqz
      if
@@ -1362,6 +1410,8 @@
     local.get $3
     call $~lib/rt/tlsf/searchBlock
     local.set $4
+    i32.const 1
+    drop
     local.get $4
     i32.eqz
     if
@@ -1374,9 +1424,13 @@
     end
    end
   end
+  i32.const 1
+  drop
   local.get $4
   i32.load
-  i32.const -4
+  i32.const 3
+  i32.const -1
+  i32.xor
   i32.and
   local.get $3
   i32.ge_u
@@ -1405,6 +1459,8 @@
   local.get $4
   local.get $3
   call $~lib/rt/tlsf/prepareBlock
+  i32.const 1
+  drop
   local.get $4
   call $~lib/rt/rtrace/onalloc
   local.get $4
@@ -1423,12 +1479,16 @@
   i32.load offset=4
   local.set $1
   local.get $1
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   local.get $1
   i32.const 1
   i32.add
-  i32.const -268435456
+  i32.const 268435455
+  i32.const -1
+  i32.xor
   i32.and
   i32.eq
   i32.eqz
@@ -1445,8 +1505,12 @@
   i32.const 1
   i32.add
   i32.store offset=4
+  i32.const 1
+  drop
   local.get $0
   call $~lib/rt/rtrace/onincrement
+  i32.const 1
+  drop
   local.get $0
   i32.load
   i32.const 1
@@ -1490,6 +1554,10 @@
    local.set $4
    local.get $2
    local.set $3
+   i32.const 0
+   i32.const 1
+   i32.gt_s
+   drop
    local.get $3
    i32.eqz
    if
@@ -1856,6 +1924,16 @@
   block $~lib/util/hash/HASH<i8>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   i32.const 1
+   i32.eq
+   drop
    local.get $2
    i32.const 24
    i32.shl
@@ -1940,6 +2018,16 @@
       local.get $10
       i32.load8_s
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 1
+      i32.const 1
+      i32.eq
+      drop
       local.get $12
       call $~lib/util/hash/hash8
       br $~lib/util/hash/HASH<i8>|inlined.2
@@ -2028,6 +2116,16 @@
   block $~lib/util/hash/HASH<i8>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   i32.const 1
+   i32.eq
+   drop
    local.get $2
    i32.const 24
    i32.shl
@@ -2130,6 +2228,8 @@
   (local $6 i32)
   local.get $1
   i32.const 1073741808
+  i32.const 0
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -2229,7 +2329,9 @@
   if (result i32)
    local.get $1
    i32.load offset=4
-   i32.const -268435456
+   i32.const 268435455
+   i32.const -1
+   i32.xor
    i32.and
    i32.eqz
   else
@@ -3289,6 +3391,10 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
+   i32.const 0
+   i32.const 1
+   i32.lt_s
+   drop
    local.get $4
    local.get $3
    i32.add
@@ -3314,6 +3420,10 @@
    local.get $4
    i32.lt_u
    if
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -3409,6 +3519,10 @@
      end
     end
    else
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -3503,6 +3617,8 @@
   local.get $0
   local.get $1
   call $~lib/rt/tlsf/insertBlock
+  i32.const 1
+  drop
   local.get $1
   call $~lib/rt/rtrace/onfree
  )
@@ -3521,7 +3637,9 @@
   local.set $4
   local.get $3
   local.get $4
-  i32.const -4
+  i32.const 3
+  i32.const -1
+  i32.xor
   i32.and
   i32.le_u
   if
@@ -3616,6 +3734,8 @@
   global.get $~lib/heap/__heap_base
   i32.ge_u
   if
+   i32.const 1
+   drop
    local.get $1
    local.get $8
    call $~lib/rt/rtrace/onrealloc
@@ -3697,6 +3817,8 @@
   end
  )
  (func $~lib/array/Array<i8>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3833,6 +3955,8 @@
   local.get $1
   call $~lib/array/Array<i8>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<i8>#delete (param $0 i32) (param $1 i32) (result i32)
@@ -3845,6 +3969,16 @@
   block $~lib/util/hash/HASH<i8>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   i32.const 1
+   i32.eq
+   drop
    local.get $2
    i32.const 24
    i32.shl
@@ -3861,6 +3995,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=4
@@ -4396,6 +4532,16 @@
   block $~lib/util/hash/HASH<u8>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   i32.const 1
+   i32.eq
+   drop
    local.get $2
    i32.const 255
    i32.and
@@ -4478,6 +4624,16 @@
       local.get $10
       i32.load8_u
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 1
+      i32.const 1
+      i32.eq
+      drop
       local.get $12
       call $~lib/util/hash/hash8
       br $~lib/util/hash/HASH<u8>|inlined.2
@@ -4566,6 +4722,16 @@
   block $~lib/util/hash/HASH<u8>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   i32.const 1
+   i32.eq
+   drop
    local.get $2
    i32.const 255
    i32.and
@@ -4666,6 +4832,8 @@
   (local $6 i32)
   local.get $1
   i32.const 1073741808
+  i32.const 0
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -4737,6 +4905,8 @@
   local.get $0
  )
  (func $~lib/array/Array<u8>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -4873,6 +5043,8 @@
   local.get $1
   call $~lib/array/Array<u8>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<u8>#delete (param $0 i32) (param $1 i32) (result i32)
@@ -4885,6 +5057,16 @@
   block $~lib/util/hash/HASH<u8>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   i32.const 1
+   i32.eq
+   drop
    local.get $2
    i32.const 255
    i32.and
@@ -4899,6 +5081,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=4
@@ -5450,6 +5634,20 @@
   block $~lib/util/hash/HASH<i16>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 2
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 2
+   i32.const 2
+   i32.eq
+   drop
    local.get $2
    i32.const 16
    i32.shl
@@ -5534,6 +5732,20 @@
       local.get $10
       i32.load16_s
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 2
+      i32.const 1
+      i32.eq
+      drop
+      i32.const 2
+      i32.const 2
+      i32.eq
+      drop
       local.get $12
       call $~lib/util/hash/hash16
       br $~lib/util/hash/HASH<i16>|inlined.2
@@ -5622,6 +5834,20 @@
   block $~lib/util/hash/HASH<i16>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 2
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 2
+   i32.const 2
+   i32.eq
+   drop
    local.get $2
    i32.const 16
    i32.shl
@@ -5723,7 +5949,9 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 536870904
+  i32.const 1073741808
+  i32.const 1
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -5795,6 +6023,8 @@
   local.get $0
  )
  (func $~lib/array/Array<i16>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -5931,6 +6161,8 @@
   local.get $1
   call $~lib/array/Array<i16>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<i16>#delete (param $0 i32) (param $1 i32) (result i32)
@@ -5943,6 +6175,20 @@
   block $~lib/util/hash/HASH<i16>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 2
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 2
+   i32.const 2
+   i32.eq
+   drop
    local.get $2
    i32.const 16
    i32.shl
@@ -5959,6 +6205,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=4
@@ -6494,6 +6742,20 @@
   block $~lib/util/hash/HASH<u16>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 2
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 2
+   i32.const 2
+   i32.eq
+   drop
    local.get $2
    i32.const 65535
    i32.and
@@ -6576,6 +6838,20 @@
       local.get $10
       i32.load16_u
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 2
+      i32.const 1
+      i32.eq
+      drop
+      i32.const 2
+      i32.const 2
+      i32.eq
+      drop
       local.get $12
       call $~lib/util/hash/hash16
       br $~lib/util/hash/HASH<u16>|inlined.2
@@ -6664,6 +6940,20 @@
   block $~lib/util/hash/HASH<u16>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 2
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 2
+   i32.const 2
+   i32.eq
+   drop
    local.get $2
    i32.const 65535
    i32.and
@@ -6763,7 +7053,9 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 536870904
+  i32.const 1073741808
+  i32.const 1
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -6835,6 +7127,8 @@
   local.get $0
  )
  (func $~lib/array/Array<u16>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -6971,6 +7265,8 @@
   local.get $1
   call $~lib/array/Array<u16>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<u16>#delete (param $0 i32) (param $1 i32) (result i32)
@@ -6983,6 +7279,20 @@
   block $~lib/util/hash/HASH<u16>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 2
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 2
+   i32.const 2
+   i32.eq
+   drop
    local.get $2
    i32.const 65535
    i32.and
@@ -6997,6 +7307,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=4
@@ -7564,6 +7876,24 @@
   block $~lib/util/hash/HASH<i32>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 4
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 4
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<i32>|inlined.0
@@ -7644,6 +7974,24 @@
       local.get $10
       i32.load
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 4
+      i32.const 1
+      i32.eq
+      drop
+      i32.const 4
+      i32.const 2
+      i32.eq
+      drop
+      i32.const 4
+      i32.const 4
+      i32.eq
+      drop
       local.get $12
       call $~lib/util/hash/hash32
       br $~lib/util/hash/HASH<i32>|inlined.2
@@ -7732,6 +8080,24 @@
   block $~lib/util/hash/HASH<i32>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 4
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 4
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<i32>|inlined.1
@@ -7829,7 +8195,9 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 268435452
+  i32.const 1073741808
+  i32.const 2
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -7901,6 +8269,8 @@
   local.get $0
  )
  (func $~lib/array/Array<i32>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -8037,6 +8407,8 @@
   local.get $1
   call $~lib/array/Array<i32>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<i32>#delete (param $0 i32) (param $1 i32) (result i32)
@@ -8049,6 +8421,24 @@
   block $~lib/util/hash/HASH<i32>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 4
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 4
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<i32>|inlined.3
@@ -8061,6 +8451,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=4
@@ -8574,6 +8966,24 @@
   block $~lib/util/hash/HASH<u32>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 4
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 4
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<u32>|inlined.0
@@ -8654,6 +9064,24 @@
       local.get $10
       i32.load
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 4
+      i32.const 1
+      i32.eq
+      drop
+      i32.const 4
+      i32.const 2
+      i32.eq
+      drop
+      i32.const 4
+      i32.const 4
+      i32.eq
+      drop
       local.get $12
       call $~lib/util/hash/hash32
       br $~lib/util/hash/HASH<u32>|inlined.2
@@ -8742,6 +9170,24 @@
   block $~lib/util/hash/HASH<u32>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 4
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 4
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<u32>|inlined.1
@@ -8839,7 +9285,9 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 268435452
+  i32.const 1073741808
+  i32.const 2
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -8911,6 +9359,8 @@
   local.get $0
  )
  (func $~lib/array/Array<u32>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -9047,6 +9497,8 @@
   local.get $1
   call $~lib/array/Array<u32>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<u32>#delete (param $0 i32) (param $1 i32) (result i32)
@@ -9059,6 +9511,24 @@
   block $~lib/util/hash/HASH<u32>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 4
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 4
+   i32.const 4
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash32
    br $~lib/util/hash/HASH<u32>|inlined.3
@@ -9071,6 +9541,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=4
@@ -9672,6 +10144,28 @@
   block $~lib/util/hash/HASH<i64>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 8
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash64
    br $~lib/util/hash/HASH<i64>|inlined.0
@@ -9753,6 +10247,28 @@
       local.get $10
       i64.load
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 8
+      i32.const 1
+      i32.eq
+      drop
+      i32.const 8
+      i32.const 2
+      i32.eq
+      drop
+      i32.const 8
+      i32.const 4
+      i32.eq
+      drop
+      i32.const 8
+      i32.const 8
+      i32.eq
+      drop
       local.get $12
       call $~lib/util/hash/hash64
       br $~lib/util/hash/HASH<i64>|inlined.2
@@ -9842,6 +10358,28 @@
   block $~lib/util/hash/HASH<i64>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 8
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash64
    br $~lib/util/hash/HASH<i64>|inlined.1
@@ -9939,7 +10477,9 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 134217726
+  i32.const 1073741808
+  i32.const 3
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -10011,6 +10551,8 @@
   local.get $0
  )
  (func $~lib/array/Array<i64>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i64)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -10147,6 +10689,8 @@
   local.get $1
   call $~lib/array/Array<i64>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<i64>#delete (param $0 i32) (param $1 i64) (result i32)
@@ -10160,6 +10704,28 @@
   block $~lib/util/hash/HASH<i64>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 8
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash64
    br $~lib/util/hash/HASH<i64>|inlined.3
@@ -10172,6 +10738,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=8
@@ -10686,6 +11254,28 @@
   block $~lib/util/hash/HASH<u64>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 8
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash64
    br $~lib/util/hash/HASH<u64>|inlined.0
@@ -10767,6 +11357,28 @@
       local.get $10
       i64.load
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 8
+      i32.const 1
+      i32.eq
+      drop
+      i32.const 8
+      i32.const 2
+      i32.eq
+      drop
+      i32.const 8
+      i32.const 4
+      i32.eq
+      drop
+      i32.const 8
+      i32.const 8
+      i32.eq
+      drop
       local.get $12
       call $~lib/util/hash/hash64
       br $~lib/util/hash/HASH<u64>|inlined.2
@@ -10856,6 +11468,28 @@
   block $~lib/util/hash/HASH<u64>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 8
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash64
    br $~lib/util/hash/HASH<u64>|inlined.1
@@ -10953,7 +11587,9 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 134217726
+  i32.const 1073741808
+  i32.const 3
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -11025,6 +11661,8 @@
   local.get $0
  )
  (func $~lib/array/Array<u64>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i64)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -11161,6 +11799,8 @@
   local.get $1
   call $~lib/array/Array<u64>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<u64>#delete (param $0 i32) (param $1 i64) (result i32)
@@ -11174,6 +11814,28 @@
   block $~lib/util/hash/HASH<u64>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 8
+   i32.const 1
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 2
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $2
    call $~lib/util/hash/hash64
    br $~lib/util/hash/HASH<u64>|inlined.3
@@ -11186,6 +11848,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=8
@@ -11700,6 +12364,16 @@
   block $~lib/util/hash/HASH<f32>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 4
+   i32.const 4
+   i32.eq
+   drop
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
@@ -11782,6 +12456,16 @@
       local.get $10
       f32.load
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 1
+      drop
+      i32.const 4
+      i32.const 4
+      i32.eq
+      drop
       local.get $12
       i32.reinterpret_f32
       call $~lib/util/hash/hash32
@@ -11872,6 +12556,16 @@
   block $~lib/util/hash/HASH<f32>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 4
+   i32.const 4
+   i32.eq
+   drop
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
@@ -11970,7 +12664,9 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 268435452
+  i32.const 1073741808
+  i32.const 2
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -12042,6 +12738,8 @@
   local.get $0
  )
  (func $~lib/array/Array<f32>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 f32)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -12178,6 +12876,8 @@
   local.get $1
   call $~lib/array/Array<f32>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<f32>#delete (param $0 i32) (param $1 f32) (result i32)
@@ -12191,6 +12891,16 @@
   block $~lib/util/hash/HASH<f32>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 4
+   i32.const 4
+   i32.eq
+   drop
    local.get $2
    i32.reinterpret_f32
    call $~lib/util/hash/hash32
@@ -12204,6 +12914,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=4
@@ -12718,6 +13430,20 @@
   block $~lib/util/hash/HASH<f64>|inlined.0 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $2
    i64.reinterpret_f64
    call $~lib/util/hash/hash64
@@ -12800,6 +13526,20 @@
       local.get $10
       f64.load
       local.set $12
+      i32.const 0
+      drop
+      i32.const 0
+      drop
+      i32.const 1
+      drop
+      i32.const 8
+      i32.const 4
+      i32.eq
+      drop
+      i32.const 8
+      i32.const 8
+      i32.eq
+      drop
       local.get $12
       i64.reinterpret_f64
       call $~lib/util/hash/hash64
@@ -12890,6 +13630,20 @@
   block $~lib/util/hash/HASH<f64>|inlined.1 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $2
    i64.reinterpret_f64
    call $~lib/util/hash/hash64
@@ -12988,7 +13742,9 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 134217726
+  i32.const 1073741808
+  i32.const 3
+  i32.shr_u
   i32.gt_u
   if
    i32.const 192
@@ -13060,6 +13816,8 @@
   local.get $0
  )
  (func $~lib/array/Array<f64>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 f64)
+  i32.const 0
+  drop
   local.get $0
   i32.load offset=4
   local.get $1
@@ -13196,6 +13954,8 @@
   local.get $1
   call $~lib/array/Array<f64>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $~lib/set/Set<f64>#delete (param $0 i32) (param $1 f64) (result i32)
@@ -13209,6 +13969,20 @@
   block $~lib/util/hash/HASH<f64>|inlined.3 (result i32)
    local.get $1
    local.set $2
+   i32.const 0
+   drop
+   i32.const 0
+   drop
+   i32.const 1
+   drop
+   i32.const 8
+   i32.const 4
+   i32.eq
+   drop
+   i32.const 8
+   i32.const 8
+   i32.eq
+   drop
    local.get $2
    i64.reinterpret_f64
    call $~lib/util/hash/hash64
@@ -13222,6 +13996,8 @@
    i32.const 0
    return
   end
+  i32.const 0
+  drop
   local.get $3
   local.get $3
   i32.load offset=8
@@ -13625,6 +14401,8 @@
   call $start:std/set
  )
  (func $~lib/rt/pure/__collect
+  i32.const 1
+  drop
   return
  )
  (func $~lib/rt/pure/decrement (param $0 i32)
@@ -13637,8 +14415,12 @@
   i32.const 268435455
   i32.and
   local.set $2
+  i32.const 1
+  drop
   local.get $0
   call $~lib/rt/rtrace/ondecrement
+  i32.const 1
+  drop
   local.get $0
   i32.load
   i32.const 1
@@ -13662,6 +14444,10 @@
    i32.add
    i32.const 1
    call $~lib/rt/__visit_members
+   i32.const 1
+   drop
+   i32.const 1
+   drop
    local.get $1
    i32.const -2147483648
    i32.and
@@ -13679,6 +14465,8 @@
    local.get $0
    call $~lib/rt/tlsf/freeBlock
   else
+   i32.const 1
+   drop
    local.get $2
    i32.const 0
    i32.gt_u
@@ -13691,6 +14479,8 @@
     call $~lib/builtins/abort
     unreachable
    end
+   i32.const 1
+   drop
    local.get $0
    local.get $1
    i32.const 268435455
@@ -13711,6 +14501,10 @@
   if
    return
   end
+  i32.const 1
+  drop
+  i32.const 1
+  drop
   local.get $1
   i32.const 1
   i32.eq
@@ -13737,11 +14531,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<i8>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
@@ -13756,11 +14554,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<u8>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
@@ -13775,11 +14577,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<i16>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
@@ -13794,11 +14600,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<u16>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
@@ -13813,11 +14623,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<i32>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
@@ -13832,11 +14646,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<u32>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
@@ -13851,11 +14669,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<i64>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
@@ -13870,11 +14692,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<u64>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
@@ -13889,11 +14715,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<f32>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
@@ -13908,11 +14738,15 @@
   local.get $0
   i32.load offset=8
   local.set $2
+  i32.const 0
+  drop
   local.get $2
   local.get $1
   call $~lib/rt/pure/__visit
  )
  (func $~lib/array/Array<f64>#__visit_impl (param $0 i32) (param $1 i32)
+  i32.const 0
+  drop
   local.get $0
   i32.load
   local.get $1
