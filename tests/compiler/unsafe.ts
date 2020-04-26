@@ -38,10 +38,6 @@ class Bar extends Foo {
 
 var bar = new Bar();
 
-// Constructor via object literal
-
-var foo2: Foo = {};
-
 // Constructor via instantiate
 
 var foo3 = instantiate<Foo>();
