@@ -20,7 +20,7 @@
  (export "memory" (memory $0))
  (export "add" (func $exports/add))
  (export "__setArgumentsLength" (func $~setArgumentsLength))
- (export "subOpt" (func $exports/subOpt|trampoline))
+ (export "subOpt" (func $exports/subOpt@varargs))
  (export "math.sub" (func $exports/subOpt))
  (export "Animal.CAT" (global $exports/Animal.CAT))
  (export "Animal.DOG" (global $exports/Animal.DOG))
@@ -29,7 +29,7 @@
  (export "Car" (global $exports/Car))
  (export "Car#get:doors" (func $exports/Car#get:doors))
  (export "Car#set:doors" (func $exports/Car#set:doors))
- (export "Car#constructor" (func $exports/Car#constructor|trampoline))
+ (export "Car#constructor" (func $exports/Car#constructor@varargs))
  (export "Car#get:numDoors" (func $exports/Car#get:doors))
  (export "Car#set:numDoors" (func $exports/Car#set:doors))
  (export "Car#openDoors" (func $exports/Car#openDoors))
@@ -38,7 +38,7 @@
  (export "vehicles.Car" (global $exports/vehicles.Car))
  (export "vehicles.Car#get:doors" (func $exports/Car#get:doors))
  (export "vehicles.Car#set:doors" (func $exports/Car#set:doors))
- (export "vehicles.Car#constructor" (func $exports/vehicles.Car#constructor|trampoline))
+ (export "vehicles.Car#constructor" (func $exports/vehicles.Car#constructor@varargs))
  (export "vehicles.Car#get:numDoors" (func $exports/Car#get:doors))
  (export "vehicles.Car#set:numDoors" (func $exports/Car#set:doors))
  (export "vehicles.Car#openDoors" (func $exports/Car#openDoors))
@@ -141,7 +141,7 @@
   i32.const 1024
   global.set $~lib/rt/stub/offset
  )
- (func $exports/subOpt|trampoline (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/subOpt@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -163,7 +163,7 @@
   local.get $0
   global.set $~argumentsLength
  )
- (func $exports/Car#constructor|trampoline (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -190,7 +190,7 @@
   i32.store
   local.get $0
  )
- (func $exports/vehicles.Car#constructor|trampoline (param $0 i32) (param $1 i32) (result i32)
+ (func $exports/vehicles.Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange

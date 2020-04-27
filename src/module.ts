@@ -2048,14 +2048,13 @@ export function getFunctionResults(func: FunctionRef): NativeType {
   return binaryen._BinaryenFunctionGetResults(func);
 }
 
-export function getFunctionVars(func: FunctionRef): NativeType {
-  // TODO: unify this on Binaryen's side?
+export function getFunctionVars(func: FunctionRef): NativeType[] {
   var count = binaryen._BinaryenFunctionGetNumVars(func);
   var types = new Array<NativeType>(count);
   for (let i: Index = 0; i < count; ++i) {
     types[i] = binaryen._BinaryenFunctionGetVar(func, i);
   }
-  return createType(types);
+  return types;
 }
 
 // globals
@@ -2138,6 +2137,96 @@ export class Relooper {
 
   renderAndDispose(entry: RelooperBlockRef, labelHelper: Index): ExpressionRef {
     return binaryen._RelooperRenderAndDispose(this.ref, entry, labelHelper);
+  }
+}
+
+/** Builds a switch using a sequence of `br_if`s. */
+export class SwitchBuilder {
+  // This is useful because Binaryen understands sequences of `br_if`s and
+  // knows how to make a `br_table` from such a sequence if switched over
+  // values are considered dense enough, respectively a size-efficient sequence
+  // of `if`s if not, depending on optimization levels.
+
+  private module: Module;
+  private condition: ExpressionRef;
+  private values: i32[] = new Array();
+  private indexes: i32[] = new Array();
+  private cases: ExpressionRef[][] = new Array();
+  private defaultIndex: i32 = -1;
+
+  /** Creates a new builder using the specified i32 condition. */
+  constructor(module: Module, condition: ExpressionRef) {
+    this.module = module;
+    this.condition = condition;
+  }
+
+  /** Links a case to the specified branch. */
+  addCase(value: i32, code: ExpressionRef[]): void {
+    var cases = this.cases;
+    var index = cases.indexOf(code);
+    if (index < 0) {
+      index = cases.length;
+      cases.push(code);
+    }
+    this.values.push(value);
+    this.indexes.push(index);
+  }
+
+  /** Links the default branch. */
+  addDefault(code: ExpressionRef[]): void {
+    assert(this.defaultIndex == -1);
+    var cases = this.cases;
+    this.defaultIndex = cases.length;
+    cases.push(code);
+  }
+
+  /** Renders the switch to a block. */
+  render(localIndex: i32, labelPostfix: string = ""): ExpressionRef {
+    var module = this.module;
+    var cases = this.cases;
+    var numCases = cases.length;
+    if (!numCases) {
+      return module.drop(this.condition);
+    }
+    var values = this.values;
+    var numValues = values.length;
+    var indexes = this.indexes;
+    var entry = new Array<ExpressionRef>(1 + numValues + 1);
+    var labels = new Array<string>(numCases);
+    for (let i = 0; i < numCases; ++i) {
+      labels[i] = "case" + i.toString() + labelPostfix;
+    }
+    entry[0] = module.local_set(localIndex, this.condition);
+    for (let i = 0; i < numValues; ++i) {
+      let index = indexes[i];
+      entry[1 + i] = module.br(labels[index],
+        module.binary(BinaryOp.EqI32,
+          module.local_get(localIndex, NativeType.I32),
+          module.i32(values[i])
+        )
+      );
+    }
+    var defaultIndex = this.defaultIndex;
+    var defaultLabel = "default" + labelPostfix;
+    entry[1 + numValues] = module.br(
+      ~defaultIndex
+        ? labels[defaultIndex]
+        : defaultLabel
+    );
+    var current = module.block(labels[0], entry);
+    for (let i = 1; i < numCases; ++i) {
+      let block = cases[i - 1];
+      block.unshift(current);
+      current = module.block(labels[i], block);
+    }
+    var lastCase = cases[numCases - 1];
+    lastCase.unshift(current);
+    return module.block(
+      ~defaultIndex
+        ? null
+        : defaultLabel,
+      lastCase
+    );
   }
 }
 

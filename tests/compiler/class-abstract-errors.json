@@ -1,0 +1,11 @@
+{
+  "asc_flags": [
+    "--runtime none"
+  ],
+  "stderr": [
+    "TS2511: Cannot create an instance of an abstract class.",
+    "TS2515: Non-abstract class 'class-abstract-errors/Baz' does not implement inherited abstract member 'bar'",
+    "TS2515: Non-abstract class 'class-abstract-errors/Baz' does not implement inherited abstract member 'a'",
+    "EOF"
+  ]
+}

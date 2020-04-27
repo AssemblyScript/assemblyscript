@@ -1620,7 +1620,7 @@
   local.get $2
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String.fromCharCode|trampoline (param $0 i32) (result i32)
+ (func $~lib/string/String.fromCharCode@varargs (param $0 i32) (result i32)
   (local $1 i32)
   block $1of1
    block $0of1
@@ -7082,8 +7082,8 @@
   i32.const 1
   global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.fromCharCode|trampoline
-  local.tee $204
+  call $~lib/string/String.fromCharCode@varargs
+  local.tee $41
   i32.const 1296
   call $~lib/string/String.__eq
   i32.eqz
@@ -7098,8 +7098,8 @@
   i32.const 1
   global.set $~argumentsLength
   i32.const 54
-  call $~lib/string/String.fromCharCode|trampoline
-  local.tee $203
+  call $~lib/string/String.fromCharCode@varargs
+  local.tee $42
   i32.const 1472
   call $~lib/string/String.__eq
   i32.eqz
@@ -7114,8 +7114,8 @@
   i32.const 1
   global.set $~argumentsLength
   i32.const 65590
-  call $~lib/string/String.fromCharCode|trampoline
-  local.tee $202
+  call $~lib/string/String.fromCharCode@varargs
+  local.tee $43
   i32.const 1472
   call $~lib/string/String.__eq
   i32.eqz

@@ -4857,8 +4857,8 @@
    unreachable
   end
   i32.const 1
-  global.set $~argumentsLength
   i32.const 1
+  global.set $~argumentsLength
   global.get $resolve-ternary/b
   if (result i32)
    global.get $resolve-ternary/f1
@@ -4878,8 +4878,8 @@
    unreachable
   end
   i32.const 1
-  global.set $~argumentsLength
   i32.const 1
+  global.set $~argumentsLength
   global.get $resolve-ternary/b
   if (result i32)
    i32.const 3
@@ -4899,8 +4899,8 @@
    unreachable
   end
   i32.const 1
-  global.set $~argumentsLength
   i32.const 1
+  global.set $~argumentsLength
   global.get $resolve-ternary/b
   if (result i32)
    global.get $resolve-ternary/f2

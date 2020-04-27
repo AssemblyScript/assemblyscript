@@ -1,7 +1,7 @@
 (module
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
@@ -1759,7 +1759,7 @@
   if
    i32.const 192
    i32.const 240
-   i32.const 54
+   i32.const 49
    i32.const 43
    call $~lib/builtins/abort
    unreachable
@@ -3862,6 +3862,21 @@
   local.get $2
   call $~lib/array/Array<i8>#__unchecked_set
  )
+ (func $~lib/array/Array<i8>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<i8>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -3922,6 +3937,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i8>#set:length
   local.get $3
  )
  (func $~lib/array/Array<i8>#get:length (param $0 i32) (result i32)
@@ -4950,6 +4968,21 @@
   local.get $2
   call $~lib/array/Array<u8>#__unchecked_set
  )
+ (func $~lib/array/Array<u8>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 0
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<u8>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -5010,6 +5043,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<u8>#set:length
   local.get $3
  )
  (func $~lib/array/Array<u8>#get:length (param $0 i32) (result i32)
@@ -6068,6 +6104,21 @@
   local.get $2
   call $~lib/array/Array<i16>#__unchecked_set
  )
+ (func $~lib/array/Array<i16>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 1
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<i16>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -6128,6 +6179,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i16>#set:length
   local.get $3
  )
  (func $~lib/array/Array<i16>#get:length (param $0 i32) (result i32)
@@ -7172,6 +7226,21 @@
   local.get $2
   call $~lib/array/Array<u16>#__unchecked_set
  )
+ (func $~lib/array/Array<u16>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 1
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<u16>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -7232,6 +7301,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<u16>#set:length
   local.get $3
  )
  (func $~lib/array/Array<u16>#get:length (param $0 i32) (result i32)
@@ -8314,6 +8386,21 @@
   local.get $2
   call $~lib/array/Array<i32>#__unchecked_set
  )
+ (func $~lib/array/Array<i32>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<i32>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -8374,6 +8461,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i32>#set:length
   local.get $3
  )
  (func $~lib/array/Array<i32>#get:length (param $0 i32) (result i32)
@@ -9404,6 +9494,21 @@
   local.get $2
   call $~lib/array/Array<u32>#__unchecked_set
  )
+ (func $~lib/array/Array<u32>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<u32>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -9464,6 +9569,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<u32>#set:length
   local.get $3
  )
  (func $~lib/array/Array<u32>#get:length (param $0 i32) (result i32)
@@ -10596,6 +10704,21 @@
   local.get $2
   call $~lib/array/Array<i64>#__unchecked_set
  )
+ (func $~lib/array/Array<i64>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 3
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<i64>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -10656,6 +10779,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<i64>#set:length
   local.get $3
  )
  (func $~lib/array/Array<i64>#get:length (param $0 i32) (result i32)
@@ -11706,6 +11832,21 @@
   local.get $2
   call $~lib/array/Array<u64>#__unchecked_set
  )
+ (func $~lib/array/Array<u64>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 3
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<u64>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -11766,6 +11907,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<u64>#set:length
   local.get $3
  )
  (func $~lib/array/Array<u64>#get:length (param $0 i32) (result i32)
@@ -12783,6 +12927,21 @@
   local.get $2
   call $~lib/array/Array<f32>#__unchecked_set
  )
+ (func $~lib/array/Array<f32>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 2
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<f32>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -12843,6 +13002,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<f32>#set:length
   local.get $3
  )
  (func $~lib/array/Array<f32>#get:length (param $0 i32) (result i32)
@@ -13861,6 +14023,21 @@
   local.get $2
   call $~lib/array/Array<f64>#__unchecked_set
  )
+ (func $~lib/array/Array<f64>#set:length (param $0 i32) (param $1 i32)
+  (local $2 i32)
+  local.get $0
+  i32.load offset=12
+  local.set $2
+  i32.const 0
+  drop
+  local.get $0
+  local.get $1
+  i32.const 3
+  call $~lib/array/ensureSize
+  local.get $0
+  local.get $1
+  i32.store offset=12
+ )
  (func $~lib/set/Set<f64>#values (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
@@ -13921,6 +14098,9 @@
     br $for-loop|0
    end
   end
+  local.get $3
+  local.get $4
+  call $~lib/array/Array<f64>#set:length
   local.get $3
  )
  (func $~lib/array/Array<f64>#get:length (param $0 i32) (result i32)

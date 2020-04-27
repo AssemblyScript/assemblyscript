@@ -88,7 +88,7 @@ export class DiagnosticMessage {
   /** Respective source range, if any. */
   range: Range | null = null;
   /** Related range, if any. */
-  relatedRange: Range | null = null;
+  relatedRange: Range | null = null; // TODO: Make this a related message for chains?
 
   /** Constructs a new diagnostic message. */
   private constructor(code: i32, category: DiagnosticCategory, message: string) {
@@ -110,6 +110,26 @@ export class DiagnosticMessage {
     if (arg1 !== null) message = message.replace("{1}", arg1);
     if (arg2 !== null) message = message.replace("{2}", arg2);
     return new DiagnosticMessage(code, category, message);
+  }
+
+  /** Tests if this message equals the specified. */
+  equals(other: DiagnosticMessage): bool {
+    if (this.code != other.code) return false;
+    var thisRange = this.range;
+    var otherRange = other.range;
+    if (thisRange) {
+      if (!otherRange || !thisRange.equals(otherRange)) return false;
+    } else if (otherRange) {
+      return false;
+    }
+    var thisRelatedRange = this.relatedRange;
+    var otherRelatedRange = other.relatedRange;
+    if (thisRelatedRange) {
+      if (!otherRelatedRange || !thisRelatedRange.equals(otherRelatedRange)) return false;
+    } else if (otherRange) {
+      return false;
+    }
+    return this.message == other.message;
   }
 
   /** Adds a source range to this message. */
@@ -137,10 +157,13 @@ export class DiagnosticMessage {
         this.message +
         "\" in " +
         source.normalizedPath +
-        ":" +
+        "(" +
         source.lineAt(range.start).toString() +
-        ":" +
-        source.columnAt().toString()
+        "," +
+        source.columnAt().toString() +
+        "+" +
+        (range.end - range.start).toString() +
+        ")"
       );
     }
     return (
@@ -248,7 +271,7 @@ export abstract class DiagnosticEmitter {
   /** Diagnostic messages emitted so far. */
   diagnostics: DiagnosticMessage[];
   /** Diagnostic messages already seen, by range. */
-  private seen: Map<Source,Map<i32,i32[]>> = new Map();
+  private seen: Map<Source,Map<i32,DiagnosticMessage[]>> = new Map();
 
   /** Initializes this diagnostic emitter. */
   protected constructor(diagnostics: DiagnosticMessage[] | null = null) {
@@ -265,6 +288,9 @@ export abstract class DiagnosticEmitter {
     arg1: string | null = null,
     arg2: string | null = null
   ): void {
+    var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);
+    if (range) message = message.withRange(range);
+    if (relatedRange) message.relatedRange = relatedRange;
     // It is possible that the same diagnostic is emitted twice, for example
     // when compiling generics with different types or when recompiling a loop
     // because our initial assumptions didn't hold. It is even possible to get
@@ -274,21 +300,20 @@ export abstract class DiagnosticEmitter {
       if (seen.has(range.source)) {
         let seenInSource = assert(seen.get(range.source));
         if (seenInSource.has(range.start)) {
-          let seenCodesAtPos = assert(seenInSource.get(range.start));
-          if (seenCodesAtPos.includes(code)) return;
-          seenCodesAtPos.push(code);
+          let seenMessagesAtPos = assert(seenInSource.get(range.start));
+          for (let i = 0, k = seenMessagesAtPos.length; i < k; ++i) {
+            if (seenMessagesAtPos[i].equals(message)) return;
+          }
+          seenMessagesAtPos.push(message);
         } else {
-          seenInSource.set(range.start, [ code ]);
+          seenInSource.set(range.start, [ message ]);
         }
       } else {
-        let seenInSource = new Map<i32,i32[]>();
-        seenInSource.set(range.start, [ code ]);
+        let seenInSource = new Map<i32,DiagnosticMessage[]>();
+        seenInSource.set(range.start, [ message ]);
         seen.set(range.source, seenInSource);
       }
     }
-    var message = DiagnosticMessage.create(code, category, arg0, arg1, arg2);
-    if (range) message = message.withRange(range);
-    if (relatedRange) message.relatedRange = relatedRange;
     this.diagnostics.push(message);
     // console.log(formatDiagnosticMessage(message, true, true) + "\n"); // temporary
     // console.log(<string>new Error("stack").stack);
