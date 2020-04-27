@@ -2590,8 +2590,8 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  (local $5 i64)
-  (local $6 f64)
+  (local $5 f64)
+  (local $6 i64)
   (local $7 i32)
   (local $8 i32)
   i32.const 1
@@ -2610,24 +2610,25 @@
   end
   local.get $0
   i64.reinterpret_f64
-  local.tee $5
+  local.tee $6
   i64.const 32
   i64.shr_u
+  i32.wrap_i64
+  local.set $4
+  local.get $6
   i32.wrap_i64
   local.set $7
-  local.get $5
-  i32.wrap_i64
   local.get $1
   i64.reinterpret_f64
-  local.tee $5
+  local.tee $6
   i64.const 32
   i64.shr_u
   i32.wrap_i64
-  local.set $8
-  local.get $5
+  local.set $2
+  local.get $6
   i32.wrap_i64
-  local.tee $4
-  local.get $8
+  local.tee $8
+  local.get $2
   i32.const 1072693248
   i32.sub
   i32.or
@@ -2637,24 +2638,25 @@
    call $~lib/math/NativeMath.atan
    return
   end
-  local.get $8
+  local.get $2
   i32.const 30
   i32.shr_u
   i32.const 2
   i32.and
-  local.get $7
+  local.get $4
   i32.const 31
   i32.shr_u
   i32.or
   local.set $3
-  local.get $8
+  local.get $2
   i32.const 2147483647
   i32.and
-  local.set $8
+  local.set $2
+  local.get $4
+  i32.const 2147483647
+  i32.and
+  local.tee $4
   local.get $7
-  i32.const 2147483647
-  i32.and
-  local.tee $7
   i32.or
   i32.eqz
   if
@@ -2663,15 +2665,7 @@
      block $case2|0
       block $case1|0
        local.get $3
-       i32.eqz
-       br_if $case1|0
-       block $tablify|0
-        local.get $3
-        i32.const 1
-        i32.sub
-        br_table $case1|0 $case2|0 $case3|0 $tablify|0
-       end
-       br $break|0
+       br_table $case1|0 $case1|0 $case2|0 $case3|0 $break|0
       end
       local.get $0
       return
@@ -2684,16 +2678,16 @@
    end
   end
   block $folding-inner0
-   local.get $4
+   local.get $2
    local.get $8
    i32.or
    i32.eqz
    br_if $folding-inner0
-   local.get $8
+   local.get $2
    i32.const 2146435072
    i32.eq
    if
-    local.get $7
+    local.get $4
     i32.const 2146435072
     i32.eq
     if
@@ -2703,7 +2697,14 @@
      i32.const 2
      i32.and
      select
-     local.set $0
+     local.tee $0
+     f64.neg
+     local.get $0
+     local.get $3
+     i32.const 1
+     i32.and
+     select
+     return
     else
      f64.const 3.141592653589793
      f64.const 0
@@ -2711,32 +2712,32 @@
      i32.const 2
      i32.and
      select
-     local.set $0
+     local.tee $0
+     f64.neg
+     local.get $0
+     local.get $3
+     i32.const 1
+     i32.and
+     select
+     return
     end
-    local.get $0
-    f64.neg
-    local.get $0
-    local.get $3
-    i32.const 1
-    i32.and
-    select
-    return
+    unreachable
    end
    i32.const 1
-   local.get $7
+   local.get $4
    i32.const 2146435072
    i32.eq
-   local.get $8
+   local.get $2
    i32.const 67108864
    i32.add
-   local.get $7
+   local.get $4
    i32.lt_u
    select
    br_if $folding-inner0
-   local.get $7
+   local.get $4
    i32.const 67108864
    i32.add
-   local.get $8
+   local.get $2
    i32.lt_u
    i32.const 0
    local.get $3
@@ -2750,35 +2751,31 @@
     f64.div
     f64.abs
     call $~lib/math/NativeMath.atan
-    local.set $6
+    local.set $5
    end
    block $break|1
     block $case3|1
      block $case2|1
       block $case1|1
-       local.get $3
-       local.tee $2
-       if
-        local.get $2
-        i32.const 1
-        i32.sub
-        br_table $case1|1 $case2|1 $case3|1 $break|1
+       block $case0|1
+        local.get $3
+        br_table $case0|1 $case1|1 $case2|1 $case3|1 $break|1
        end
-       local.get $6
+       local.get $5
        return
       end
-      local.get $6
+      local.get $5
       f64.neg
       return
      end
      f64.const 3.141592653589793
-     local.get $6
+     local.get $5
      f64.const 1.2246467991473532e-16
      f64.sub
      f64.sub
      return
     end
-    local.get $6
+    local.get $5
     f64.const 1.2246467991473532e-16
     f64.sub
     f64.const 3.141592653589793
@@ -11229,8 +11226,6 @@
   (local $4 i64)
   (local $5 i32)
   (local $6 i32)
-  (local $7 f64)
-  (local $8 f32)
   f64.const 2.718281828459045
   global.get $~lib/bindings/Math/E
   f64.const 0

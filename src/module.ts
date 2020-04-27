@@ -1471,13 +1471,15 @@ export class Module {
       // --- PassRunner::addDefaultGlobalOptimizationPrePasses ---
 
       passes.push("duplicate-function-elimination");
-      passes.push("remove-unused-module-elements"); // +
+      passes.push("remove-unused-module-elements");
+      passes.push("simplify-globals-optimizing");
 
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("ssa-nomerge");
       }
+
       if (optimizeLevel >= 3) {
         passes.push("flatten");
         passes.push("simplify-locals-notee-nostructure");
@@ -1611,6 +1613,7 @@ export class Module {
         passes.push("optimize-instructions");
         passes.push("simplify-globals-optimizing");
       }
+
       // clean up
       passes.push("duplicate-function-elimination");
       passes.push("remove-unused-nonfunction-module-elements");

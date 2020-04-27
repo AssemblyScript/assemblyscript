@@ -596,16 +596,16 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $0
+  local.tee $1
   i32.eqz
   if
    i32.const 1
    memory.size
-   local.tee $0
+   local.tee $1
    i32.gt_s
    if (result i32)
     i32.const 1
-    local.get $0
+    local.get $1
     i32.sub
     memory.grow
     i32.const 0
@@ -617,18 +617,19 @@
     unreachable
    end
    i32.const 1664
-   local.tee $0
+   local.set $1
+   i32.const 1664
    i32.const 0
    i32.store
    i32.const 3232
    i32.const 0
    i32.store
    loop $for-loop|0
-    local.get $1
+    local.get $2
     i32.const 23
     i32.lt_u
     if
-     local.get $1
+     local.get $2
      i32.const 2
      i32.shl
      i32.const 1664
@@ -636,16 +637,16 @@
      i32.const 0
      i32.store offset=4
      i32.const 0
-     local.set $2
+     local.set $0
      loop $for-loop|1
-      local.get $2
+      local.get $0
       i32.const 16
       i32.lt_u
       if
-       local.get $1
+       local.get $0
+       local.get $2
        i32.const 4
        i32.shl
-       local.get $2
        i32.add
        i32.const 2
        i32.shl
@@ -653,17 +654,17 @@
        i32.add
        i32.const 0
        i32.store offset=96
-       local.get $2
+       local.get $0
        i32.const 1
        i32.add
-       local.set $2
+       local.set $0
        br $for-loop|1
       end
      end
-     local.get $1
+     local.get $2
      i32.const 1
      i32.add
-     local.set $1
+     local.set $2
      br $for-loop|0
     end
    end
@@ -676,7 +677,7 @@
    i32.const 1664
    global.set $~lib/rt/tlsf/ROOT
   end
-  local.get $0
+  local.get $1
  )
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
@@ -1559,10 +1560,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
+    local.get $4
     local.get $5
     i32.const 3
     i32.and
-    local.get $4
     i32.or
     i32.store
     local.get $1
@@ -2529,14 +2530,11 @@
      block $case3|0
       block $case2|0
        block $case1|0
-        local.get $1
-        i32.const 1
-        i32.ne
-        if
+        block $case0|0
          local.get $1
-         i32.const 2
+         i32.const 1
          i32.sub
-         br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0
+         br_table $case0|0 $case1|0 $case2|0 $case3|0 $case4|0 $case5|0
         end
         local.get $0
         call $~lib/rt/pure/decrement
