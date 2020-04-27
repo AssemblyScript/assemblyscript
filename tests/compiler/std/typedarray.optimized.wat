@@ -10918,7 +10918,7 @@
   end
   local.get $2
  )
- (func $~lib/typedarray/Int8Array#lastIndexOf|trampoline (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int8Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $1of1
    block $0of1
@@ -11102,7 +11102,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -11115,7 +11115,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -11130,7 +11130,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -11145,7 +11145,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -11520,7 +11520,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -11533,7 +11533,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -11548,7 +11548,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -11563,7 +11563,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -11937,7 +11937,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -11950,7 +11950,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -11965,7 +11965,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -11980,7 +11980,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int8Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int8Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -12320,7 +12320,7 @@
   end
   local.get $2
  )
- (func $~lib/typedarray/Int16Array#lastIndexOf|trampoline (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int16Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $1of1
    block $0of1
@@ -12506,7 +12506,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -12519,7 +12519,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -12534,7 +12534,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -12549,7 +12549,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -12923,7 +12923,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -12936,7 +12936,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -12951,7 +12951,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -12966,7 +12966,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int16Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int16Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -13302,7 +13302,7 @@
   end
   local.get $2
  )
- (func $~lib/typedarray/Int32Array#lastIndexOf|trampoline (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Int32Array#lastIndexOf@varargs (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   block $1of1
    block $0of1
@@ -13484,7 +13484,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int32Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -13497,7 +13497,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int32Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -13512,7 +13512,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int32Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -13527,7 +13527,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int32Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -13900,7 +13900,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int32Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -13913,7 +13913,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 11
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int32Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -13928,7 +13928,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const -1
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int32Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -13943,7 +13943,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 3
-  call $~lib/typedarray/Int32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int32Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -14279,7 +14279,7 @@
   end
   local.get $2
  )
- (func $~lib/typedarray/Int64Array#lastIndexOf|trampoline (param $0 i32) (param $1 i64) (result i32)
+ (func $~lib/typedarray/Int64Array#lastIndexOf@varargs (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   block $1of1
    block $0of1
@@ -14462,7 +14462,7 @@
   global.set $~argumentsLength
   local.get $0
   i64.const 0
-  call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int64Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -14475,7 +14475,7 @@
   global.set $~argumentsLength
   local.get $0
   i64.const 11
-  call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int64Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -14490,7 +14490,7 @@
   global.set $~argumentsLength
   local.get $0
   i64.const -1
-  call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int64Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -14505,7 +14505,7 @@
   global.set $~argumentsLength
   local.get $0
   i64.const 3
-  call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int64Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -14878,7 +14878,7 @@
   global.set $~argumentsLength
   local.get $0
   i64.const 0
-  call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int64Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -14891,7 +14891,7 @@
   global.set $~argumentsLength
   local.get $0
   i64.const 11
-  call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int64Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -14906,7 +14906,7 @@
   global.set $~argumentsLength
   local.get $0
   i64.const -1
-  call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int64Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -14921,7 +14921,7 @@
   global.set $~argumentsLength
   local.get $0
   i64.const 3
-  call $~lib/typedarray/Int64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Int64Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -15257,7 +15257,7 @@
   end
   local.get $2
  )
- (func $~lib/typedarray/Float32Array#lastIndexOf|trampoline (param $0 i32) (param $1 f32) (result i32)
+ (func $~lib/typedarray/Float32Array#lastIndexOf@varargs (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
   block $1of1
    block $0of1
@@ -15440,7 +15440,7 @@
   global.set $~argumentsLength
   local.get $0
   f32.const 0
-  call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Float32Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -15453,7 +15453,7 @@
   global.set $~argumentsLength
   local.get $0
   f32.const 11
-  call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Float32Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -15468,7 +15468,7 @@
   global.set $~argumentsLength
   local.get $0
   f32.const -1
-  call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Float32Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -15483,7 +15483,7 @@
   global.set $~argumentsLength
   local.get $0
   f32.const 3
-  call $~lib/typedarray/Float32Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Float32Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -15819,7 +15819,7 @@
   end
   local.get $2
  )
- (func $~lib/typedarray/Float64Array#lastIndexOf|trampoline (param $0 i32) (param $1 f64) (result i32)
+ (func $~lib/typedarray/Float64Array#lastIndexOf@varargs (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
   block $1of1
    block $0of1
@@ -16002,7 +16002,7 @@
   global.set $~argumentsLength
   local.get $0
   f64.const 0
-  call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Float64Array#lastIndexOf@varargs
   if
    i32.const 0
    i32.const 1312
@@ -16015,7 +16015,7 @@
   global.set $~argumentsLength
   local.get $0
   f64.const 11
-  call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Float64Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -16030,7 +16030,7 @@
   global.set $~argumentsLength
   local.get $0
   f64.const -1
-  call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Float64Array#lastIndexOf@varargs
   i32.const -1
   i32.ne
   if
@@ -16045,7 +16045,7 @@
   global.set $~argumentsLength
   local.get $0
   f64.const 3
-  call $~lib/typedarray/Float64Array#lastIndexOf|trampoline
+  call $~lib/typedarray/Float64Array#lastIndexOf@varargs
   i32.const 3
   i32.ne
   if
@@ -19354,7 +19354,7 @@
   local.get $1
   call $~lib/rt/pure/__retain
  )
- (func $~lib/typedarray/Uint8Array.wrap|trampoline (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/typedarray/Uint8Array.wrap@varargs (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   block $2of2
@@ -19676,7 +19676,7 @@
   global.set $~argumentsLength
   local.get $0
   i32.const 0
-  call $~lib/typedarray/Uint8Array.wrap|trampoline
+  call $~lib/typedarray/Uint8Array.wrap@varargs
   local.set $4
   loop $for-loop|1
    local.get $2
@@ -31653,7 +31653,7 @@
                     global.set $~argumentsLength
                     local.get $1
                     i32.const 0
-                    call $~lib/typedarray/Uint8Array.wrap|trampoline
+                    call $~lib/typedarray/Uint8Array.wrap@varargs
                     local.tee $30
                     i32.load offset=8
                     if
@@ -31673,7 +31673,7 @@
                     global.set $~argumentsLength
                     local.get $0
                     i32.const 2
-                    call $~lib/typedarray/Uint8Array.wrap|trampoline
+                    call $~lib/typedarray/Uint8Array.wrap@varargs
                     local.set $1
                     local.get $30
                     call $~lib/rt/pure/__release

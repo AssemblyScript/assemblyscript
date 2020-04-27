@@ -574,7 +574,7 @@
   global.set $class-overloading/a
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#a<i32>|virtual
+  call $class-overloading/A#a<i32>@virtual
   global.get $class-overloading/which
   i32.const 80
   call $~lib/string/String.__eq
@@ -595,7 +595,7 @@
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#b|virtual
+  call $class-overloading/A#b@virtual
   global.get $class-overloading/which
   i32.const 80
   call $~lib/string/String.__eq
@@ -615,7 +615,7 @@
   local.get $0
   global.set $class-overloading/which
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#get:c@virtual
   drop
   global.get $class-overloading/which
   i32.const 80
@@ -637,7 +637,7 @@
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#set:c|virtual
+  call $class-overloading/A#set:c@virtual
   global.get $class-overloading/which
   i32.const 80
   call $~lib/string/String.__eq
@@ -746,7 +746,7 @@
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#a<i32>|virtual
+  call $class-overloading/A#a<i32>@virtual
   global.get $class-overloading/which
   i32.const 80
   call $~lib/string/String.__eq
@@ -767,7 +767,7 @@
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#b|virtual
+  call $class-overloading/A#b@virtual
   global.get $class-overloading/which
   i32.const 80
   call $~lib/string/String.__eq
@@ -787,7 +787,7 @@
   local.get $0
   global.set $class-overloading/which
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#get:c@virtual
   drop
   global.get $class-overloading/which
   i32.const 80
@@ -803,7 +803,7 @@
   end
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#set:c|virtual
+  call $class-overloading/A#set:c@virtual
   global.get $class-overloading/which
   i32.const 80
   call $~lib/string/String.__eq
@@ -831,7 +831,7 @@
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#a<i32>|virtual
+  call $class-overloading/A#a<i32>@virtual
   global.get $class-overloading/which
   i32.const 80
   call $~lib/string/String.__eq
@@ -852,7 +852,7 @@
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#b|virtual
+  call $class-overloading/A#b@virtual
   global.get $class-overloading/which
   i32.const 80
   call $~lib/string/String.__eq
@@ -872,7 +872,7 @@
   local.get $0
   global.set $class-overloading/which
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#get:c@virtual
   drop
   global.get $class-overloading/which
   i32.const 80
@@ -888,7 +888,7 @@
   end
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#set:c|virtual
+  call $class-overloading/A#set:c@virtual
   global.get $class-overloading/which
   i32.const 80
   call $~lib/string/String.__eq
@@ -916,7 +916,7 @@
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#a<i32>|virtual
+  call $class-overloading/A#a<i32>@virtual
   global.get $class-overloading/which
   i32.const 208
   call $~lib/string/String.__eq
@@ -937,7 +937,7 @@
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#b|virtual
+  call $class-overloading/A#b@virtual
   global.get $class-overloading/which
   i32.const 208
   call $~lib/string/String.__eq
@@ -957,7 +957,7 @@
   local.get $0
   global.set $class-overloading/which
   global.get $class-overloading/a
-  call $class-overloading/A#get:c|virtual
+  call $class-overloading/A#get:c@virtual
   drop
   global.get $class-overloading/which
   i32.const 208
@@ -979,7 +979,7 @@
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
-  call $class-overloading/A#set:c|virtual
+  call $class-overloading/A#set:c@virtual
   global.get $class-overloading/which
   i32.const 208
   call $~lib/string/String.__eq
@@ -1002,7 +1002,7 @@
   local.get $0
   global.set $class-overloading/which
   global.get $class-overloading/ia
-  call $class-overloading/IA#foo|virtual
+  call $class-overloading/IA#foo@virtual
   global.get $class-overloading/which
   i32.const 240
   call $~lib/string/String.__eq
@@ -1025,7 +1025,7 @@
   local.get $0
   global.set $class-overloading/which
   global.get $class-overloading/ic
-  call $class-overloading/IA#foo|virtual
+  call $class-overloading/IA#foo@virtual
   global.get $class-overloading/which
   i32.const 272
   call $~lib/string/String.__eq
@@ -1058,7 +1058,7 @@
   local.get $2
   global.set $class-overloading/which
  )
- (func $class-overloading/A#a<i32>|virtual (param $0 i32) (param $1 i32)
+ (func $class-overloading/A#a<i32>@virtual (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $default
    block $case2
@@ -1128,7 +1128,7 @@
   local.get $2
   global.set $class-overloading/which
  )
- (func $class-overloading/A#b|virtual (param $0 i32) (param $1 i32)
+ (func $class-overloading/A#b@virtual (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $default
    block $case2
@@ -1200,7 +1200,7 @@
   global.set $class-overloading/which
   i32.const 0
  )
- (func $class-overloading/A#get:c|virtual (param $0 i32) (result i32)
+ (func $class-overloading/A#get:c@virtual (param $0 i32) (result i32)
   (local $1 i32)
   block $default
    block $case2
@@ -1266,7 +1266,7 @@
   local.get $2
   global.set $class-overloading/which
  )
- (func $class-overloading/A#set:c|virtual (param $0 i32) (param $1 i32)
+ (func $class-overloading/A#set:c@virtual (param $0 i32) (param $1 i32)
   (local $2 i32)
   block $default
    block $case2
@@ -1336,7 +1336,7 @@
   local.get $1
   global.set $class-overloading/which
  )
- (func $class-overloading/IA#foo|virtual (param $0 i32)
+ (func $class-overloading/IA#foo@virtual (param $0 i32)
   (local $1 i32)
   block $default
    block $case1

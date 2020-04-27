@@ -62,8 +62,9 @@ import {
   STATIC_DELIMITER,
   GETTER_PREFIX,
   SETTER_PREFIX,
-  CommonNames,
+  STUB_DELIMITER,
   INDEX_SUFFIX,
+  CommonNames,
   Feature,
   Target,
   featureToString
@@ -506,13 +507,13 @@ export class Compiler extends DiagnosticEmitter {
       let instance = functionTable[i];
       if (instance.is(CommonFlags.VIRTUAL)) {
         assert(instance.is(CommonFlags.INSTANCE));
-        this.makeVirtual(instance);
+        this.finalizeVirtualStub(instance);
       }
     }
     var virtualCalls = this.virtualCalls;
     for (let _values = Set_values(virtualCalls), i = 0, k = _values.length; i < k; ++i) {
       let instance = unchecked(_values[i]);
-      this.makeVirtual(instance);
+      this.finalizeVirtualStub(instance);
     }
 
     // finalize runtime features
@@ -606,167 +607,6 @@ export class Compiler extends DiagnosticEmitter {
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
     return module;
-  }
-
-  /** Makes a normally compiled function callable virtually. */
-  private makeVirtual(instance: Function): void {
-    if (instance.virtualRef) return;
-
-    // Wouldn't be here if there wasn't at least one overload
-    var overloadPrototypes = assert(instance.prototype.overloads);
-
-    var module = this.module;
-    var usizeType = this.options.usizeType;
-    var nativeSizeType = usizeType.toNativeType();
-    var parameterTypes = instance.signature.parameterTypes;
-    var returnType = instance.signature.returnType;
-    var numParameters = parameterTypes.length;
-    var tempIndex = 1 + parameterTypes.length; // incl. `this`
-
-    // Switch over this's rtId and map it to the respective overload
-    var builder = new SwitchBuilder(this.module,
-      module.load(4, false,
-        module.binary(
-          nativeSizeType == NativeType.I64
-            ? BinaryOp.SubI64
-            : BinaryOp.SubI32,
-          module.local_get(0, nativeSizeType),
-          nativeSizeType == NativeType.I64
-            ? module.i64(8) // rtId offset = -8
-            : module.i32(8)
-        ),
-        NativeType.I32
-      )
-    );
-
-    // A method's `overloads` property contains its unbound overload prototypes
-    // so we first have to find the concrete classes it became bound to, obtain
-    // their bound prototypes and make sure these are resolved and compiled as
-    // we are going to call them conditionally based on this's class id.
-    for (let _values = Set_values(overloadPrototypes), i = 0, k = _values.length; i < k; ++i) {
-      let unboundOverloadPrototype = _values[i];
-      assert(!unboundOverloadPrototype.isBound);
-      let unboundOverloadParent = unboundOverloadPrototype.parent;
-      let isProperty = unboundOverloadParent.kind == ElementKind.PROPERTY_PROTOTYPE;
-      let classInstances: Map<string,Class> | null;
-      if (isProperty) {
-        let propertyParent = (<PropertyPrototype>unboundOverloadParent).parent;
-        assert(propertyParent.kind == ElementKind.CLASS_PROTOTYPE);
-        classInstances = (<ClassPrototype>propertyParent).instances;
-      } else {
-        assert(unboundOverloadParent.kind == ElementKind.CLASS_PROTOTYPE);
-        classInstances = (<ClassPrototype>unboundOverloadParent).instances;
-      }
-      if (classInstances) {
-        for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
-          let classInstance = _values[j];
-          let overloadInstance: Function | null;
-          if (isProperty) {
-            let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
-            assert(boundProperty.kind == ElementKind.PROPERTY);
-            if (instance.is(CommonFlags.GET)) {
-              overloadInstance = (<Property>boundProperty).getterInstance;
-            } else {
-              assert(instance.is(CommonFlags.SET));
-              overloadInstance = (<Property>boundProperty).setterInstance;
-            }
-          } else {
-            let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
-            assert(boundPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-            overloadInstance = this.resolver.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
-          }
-          if (!overloadInstance || !this.compileFunction(overloadInstance)) continue;
-          let overloadType = overloadInstance.type;
-          let originalType = instance.type;
-          if (!overloadType.isAssignableTo(originalType)) {
-            this.error(
-              DiagnosticCode.Type_0_is_not_assignable_to_type_1,
-              overloadInstance.identifierNode.range, overloadType.toString(), originalType.toString()
-            );
-            continue;
-          }
-          // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
-          let overloadSignature = overloadInstance.signature;
-          let overloadParameterTypes = overloadSignature.parameterTypes;
-          let overloadNumParameters = overloadParameterTypes.length;
-          let paramExprs = new Array<ExpressionRef>(1 + overloadNumParameters);
-          paramExprs[0] = module.local_get(0, nativeSizeType); // this
-          for (let n = 0; n < numParameters; ++n) {
-            paramExprs[1 + n] = module.local_get(1 + n, parameterTypes[n].toNativeType());
-          }
-          let needsTrampoline = false;
-          for (let n = numParameters; n < overloadNumParameters; ++n) {
-            // TODO: inline constant initializers and skip trampoline
-            paramExprs[1 + n] = this.makeZero(overloadParameterTypes[n]);
-            needsTrampoline = true;
-          }
-          let calledName = needsTrampoline
-            ? this.ensureTrampoline(overloadInstance).internalName
-            : overloadInstance.internalName;
-          let nativeReturnType = overloadSignature.returnType.toNativeType();
-          let stmts = new Array<ExpressionRef>();
-          if (needsTrampoline) {
-            this.ensureBuiltinArgumentsLength();
-            // Safe to prepend since paramExprs are local.get's
-            stmts.push(module.global_set(BuiltinNames.argumentsLength, module.i32(numParameters)));
-          }
-          if (returnType == Type.void) {
-            stmts.push(
-              module.call(calledName, paramExprs, nativeReturnType)
-            );
-            stmts.push(
-              module.return()
-            );
-          } else {
-            stmts.push(
-              module.return(
-                module.call(calledName, paramExprs, nativeReturnType)
-              )
-            );
-          }
-          builder.addCase(classInstance.id, stmts);
-          // Also alias each extendee inheriting this exact overload
-          let extendees = classInstance.getAllExtendees(
-            isProperty
-              ? unboundOverloadParent.name
-              : instance.prototype.name
-          );
-          for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
-            let extendee = _values[a];
-            builder.addCase(extendee.id, stmts);
-          }
-        }
-      }
-    }
-
-    // Call the original function if no other id matches and the method is not
-    // abstract or part of an interface. Note that doing so will not catch an
-    // invalid id, but can reduce code size significantly since we also don't
-    // have to add branches for extendees inheriting the original function.
-    var body: ExpressionRef;
-    if (instance.prototype.bodyNode) {
-      let paramExprs = new Array<ExpressionRef>(numParameters);
-      paramExprs[0] = module.local_get(0, nativeSizeType); // this
-      for (let i = 0, k = parameterTypes.length; i < k; ++i) {
-        paramExprs[1 + i] = module.local_get(1 + i, parameterTypes[i].toNativeType());
-      }
-      body = module.call(instance.internalName, paramExprs, instance.signature.returnType.toNativeType());
-
-    // Otherwise trap
-    } else {
-      body = module.unreachable();
-    }
-
-    // Make the virtual wrapper
-    var originalRef = instance.ref;
-    instance.virtualRef = module.addFunction(
-      instance.internalName + "|virtual",
-      getFunctionParams(originalRef), getFunctionResults(originalRef), [ NativeType.I32 ],
-      module.block(null, [
-        builder.render(tempIndex),
-        body
-      ], returnType.toNativeType())
-    );
   }
 
   // === Exports ==================================================================================
@@ -867,9 +707,9 @@ export class Compiler extends DiagnosticEmitter {
         if (!functionInstance.hasDecorator(DecoratorFlags.BUILTIN)) {
           let signature = functionInstance.signature;
           if (signature.requiredParameters < signature.parameterTypes.length) {
-            // utilize trampoline to fill in omitted arguments
-            functionInstance = this.ensureTrampoline(functionInstance);
-            this.ensureBuiltinArgumentsLength();
+            // utilize varargs stub to fill in omitted arguments
+            functionInstance = this.ensureVarargsStub(functionInstance);
+            this.ensureArgumentsLength();
           }
           if (functionInstance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(functionInstance.internalName, prefix + name);
         }
@@ -1999,9 +1839,9 @@ export class Compiler extends DiagnosticEmitter {
     var tableBase = this.options.tableBase;
     if (!tableBase) tableBase = 1; // leave first elem blank
     index = tableBase + functionTable.length;
-    if (!instance.is(CommonFlags.TRAMPOLINE) && instance.signature.requiredParameters < instance.signature.parameterTypes.length) {
-      // insert the trampoline if the function has optional parameters
-      instance = this.ensureTrampoline(instance);
+    if (!instance.is(CommonFlags.STUB) && instance.signature.requiredParameters < instance.signature.parameterTypes.length) {
+      // insert the varargs stub if the function has optional parameters
+      instance = this.ensureVarargsStub(instance);
     }
     functionTable.push(instance);
     instance.functionTableIndex = index;
@@ -6852,7 +6692,7 @@ export class Compiler extends DiagnosticEmitter {
 
     // Inline if explicitly requested
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
-      assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
+      assert(!instance.is(CommonFlags.STUB)); // doesn't make sense
       let inlineStack = this.inlineStack;
       if (inlineStack.includes(instance)) {
         this.warning(
@@ -7022,24 +6862,37 @@ export class Compiler extends DiagnosticEmitter {
     return expr;
   }
 
-  /** Gets the trampoline for the specified function. */
-  ensureTrampoline(original: Function): Function {
-    // A trampoline is a function that takes a fixed amount of operands with some of them possibly
-    // being zeroed. It takes one additional argument denoting the number of actual operands
-    // provided to the call, and takes appropriate steps to initialize zeroed operands to their
-    // default values using the optional parameter initializers of the original function. Doing so
-    // allows calls to functions with optional parameters to circumvent the trampoline when all
-    // parameters are provided as a fast route, respectively setting up omitted operands in a proper
-    // context otherwise.
-    var trampoline = original.trampoline;
-    if (trampoline) return trampoline;
+  /** Makes sure that the arguments length helper global is present. */
+  ensureArgumentsLength(): void {
+    if (!this.builtinArgumentsLength) {
+      let module = this.module;
+      this.builtinArgumentsLength = module.addGlobal(BuiltinNames.argumentsLength, NativeType.I32, true, module.i32(0));
+      // TODO: Enable this once mutable globals are the default nearly everywhere.
+      // if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
+      //   module.addGlobalExport(BuiltinNames.argumentsLength, ExportNames.argumentsLength);
+      // } else {
+        module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
+          module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
+        );
+        module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
+      // }
+    }
+  }
+
+  /** Ensures compilation of the varargs stub for the specified function. */
+  ensureVarargsStub(original: Function): Function {
+    // A varargs stub is a function called with omitted arguments being zeroed,
+    // reading the `argumentsLength` helper global to decide which initializers
+    // to inject before calling the original function. It is typically attempted
+    // to circumvent the varargs stub where possible, for example where omitted
+    // arguments are constants and can be inlined into the original call.
+    var stub = original.varargsStub;
+    if (stub) return stub;
 
     var originalSignature = original.signature;
-    var originalName = original.internalName;
     var originalParameterTypes = originalSignature.parameterTypes;
     var originalParameterDeclarations = original.prototype.functionTypeNode.parameters;
     var returnType = originalSignature.returnType;
-    var thisType = originalSignature.thisType;
     var isInstance = original.is(CommonFlags.INSTANCE);
 
     // arguments excl. `this`, operands incl. `this`
@@ -7069,24 +6922,15 @@ export class Compiler extends DiagnosticEmitter {
     }
     assert(operandIndex == minOperands);
 
-    // create the trampoline element
-    var trampolineSignature = new Signature(this.program, originalParameterTypes, returnType, thisType);
-    trampolineSignature.requiredParameters = maxArguments;
-    trampolineSignature.parameterNames = originalSignature.parameterNames;
-    trampoline = new Function(
-      original.name + "|trampoline",
-      original.prototype,
-      original.typeArguments,
-      trampolineSignature,
-      original.contextualTypeArguments
-    );
-    trampoline.set(original.flags | CommonFlags.TRAMPOLINE | CommonFlags.COMPILED);
-    original.trampoline = trampoline;
+    // create the varargs stub
+    stub = original.newStub("varargs");
+    stub.signature.requiredParameters = maxArguments;
+    original.varargsStub = stub;
 
-    // compile initializers of omitted arguments in scope of the trampoline function
-    // this is necessary because initializers might need additional locals and a proper this context
+    // compile initializers of omitted arguments in the scope of the stub,
+    // accounting for additional locals and a proper `this` context.
     var previousFlow = this.currentFlow;
-    var flow = trampoline.flow;
+    var flow = stub.flow;
     this.currentFlow = flow;
 
     // create a br_table switching over the number of optional parameters provided
@@ -7141,7 +6985,7 @@ export class Compiler extends DiagnosticEmitter {
     assert(operandIndex == maxOperands);
 
     var stmts: ExpressionRef[] = [ body ];
-    var theCall = module.call(originalName, forwardedOperands, returnType.toNativeType());
+    var theCall = module.call(original.internalName, forwardedOperands, returnType.toNativeType());
     if (returnType != Type.void) {
       this.performAutoreleasesWithValue(flow, theCall, returnType, stmts);
     } else {
@@ -7152,31 +6996,204 @@ export class Compiler extends DiagnosticEmitter {
     this.currentFlow = previousFlow;
 
     var funcRef = module.addFunction(
-      trampoline.internalName,
-      trampolineSignature.nativeParams,
-      trampolineSignature.nativeResults,
-      typesToNativeTypes(trampoline.additionalLocals),
+      stub.internalName,
+      stub.signature.nativeParams,
+      stub.signature.nativeResults,
+      typesToNativeTypes(stub.additionalLocals),
       module.flatten(stmts, returnType.toNativeType())
     );
-    trampoline.finalize(module, funcRef);
-    return trampoline;
+    stub.set(CommonFlags.COMPILED);
+    stub.finalize(module, funcRef);
+    return stub;
   }
 
-  /** Makes sure that the arguments length helper global is present. */
-  ensureBuiltinArgumentsLength(): void {
-    if (!this.builtinArgumentsLength) {
-      let module = this.module;
-      this.builtinArgumentsLength = module.addGlobal(BuiltinNames.argumentsLength, NativeType.I32, true, module.i32(0));
-      // TODO: Enable this once mutable globals are the default nearly everywhere.
-      // if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-      //   module.addGlobalExport(BuiltinNames.argumentsLength, ExportNames.argumentsLength);
-      // } else {
-        module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
-          module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
-        );
-        module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
-      // }
+  /** Ensures compilation of the virtual stub for the specified function. */
+  ensureVirtualStub(original: Function): Function {
+    // A virtual stub is a function redirecting virtual calls to the actual
+    // overload targeted by the call. It utilizes varargs stubs where necessary
+    // and as such has the same semantics as one. Here, we only make sure that
+    // a placeholder exist, with actual code being generated as a finalization
+    // step once module compilation is otherwise complete.
+    var stub = original.virtualStub;
+    if (stub) return stub;
+    stub = original.newStub("virtual");
+    original.virtualStub = stub;
+    var module = this.module;
+    stub.ref = module.addFunction(
+      stub.internalName,
+      stub.signature.nativeParams,
+      stub.signature.nativeResults,
+      null,
+      module.unreachable()
+    );
+    this.virtualCalls.add(original);
+    return stub;
+  }
+
+  /** Finalizes the virtual stub of the specified function. */
+  private finalizeVirtualStub(instance: Function): void {
+    var stub = this.ensureVirtualStub(instance);
+    if (stub.is(CommonFlags.COMPILED)) return;
+
+    // Wouldn't be here if there wasn't at least one overload
+    var overloadPrototypes = assert(instance.prototype.overloads);
+
+    var module = this.module;
+    var usizeType = this.options.usizeType;
+    var nativeSizeType = usizeType.toNativeType();
+    var parameterTypes = instance.signature.parameterTypes;
+    var returnType = instance.signature.returnType;
+    var numParameters = parameterTypes.length;
+    var tempIndex = 1 + parameterTypes.length; // incl. `this`
+
+    // Switch over this's rtId and map it to the respective overload
+    var builder = new SwitchBuilder(this.module,
+      module.load(4, false,
+        module.binary(
+          nativeSizeType == NativeType.I64
+            ? BinaryOp.SubI64
+            : BinaryOp.SubI32,
+          module.local_get(0, nativeSizeType),
+          nativeSizeType == NativeType.I64
+            ? module.i64(8) // rtId offset = -8
+            : module.i32(8)
+        ),
+        NativeType.I32
+      )
+    );
+
+    // A method's `overloads` property contains its unbound overload prototypes
+    // so we first have to find the concrete classes it became bound to, obtain
+    // their bound prototypes and make sure these are resolved and compiled as
+    // we are going to call them conditionally based on this's class id.
+    for (let _values = Set_values(overloadPrototypes), i = 0, k = _values.length; i < k; ++i) {
+      let unboundOverloadPrototype = _values[i];
+      assert(!unboundOverloadPrototype.isBound);
+      let unboundOverloadParent = unboundOverloadPrototype.parent;
+      let isProperty = unboundOverloadParent.kind == ElementKind.PROPERTY_PROTOTYPE;
+      let classInstances: Map<string,Class> | null;
+      if (isProperty) {
+        let propertyParent = (<PropertyPrototype>unboundOverloadParent).parent;
+        assert(propertyParent.kind == ElementKind.CLASS_PROTOTYPE);
+        classInstances = (<ClassPrototype>propertyParent).instances;
+      } else {
+        assert(unboundOverloadParent.kind == ElementKind.CLASS_PROTOTYPE);
+        classInstances = (<ClassPrototype>unboundOverloadParent).instances;
+      }
+      if (classInstances) {
+        for (let _values = Map_values(classInstances), j = 0, l = _values.length; j < l; ++j) {
+          let classInstance = _values[j];
+          let overloadInstance: Function | null;
+          if (isProperty) {
+            let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
+            assert(boundProperty.kind == ElementKind.PROPERTY);
+            if (instance.is(CommonFlags.GET)) {
+              overloadInstance = (<Property>boundProperty).getterInstance;
+            } else {
+              assert(instance.is(CommonFlags.SET));
+              overloadInstance = (<Property>boundProperty).setterInstance;
+            }
+          } else {
+            let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
+            assert(boundPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+            overloadInstance = this.resolver.resolveFunction(<FunctionPrototype>boundPrototype, instance.typeArguments);
+          }
+          if (!overloadInstance || !this.compileFunction(overloadInstance)) continue;
+          let overloadType = overloadInstance.type;
+          let originalType = instance.type;
+          if (!overloadType.isAssignableTo(originalType)) {
+            this.error(
+              DiagnosticCode.Type_0_is_not_assignable_to_type_1,
+              overloadInstance.identifierNode.range, overloadType.toString(), originalType.toString()
+            );
+            continue;
+          }
+          // TODO: additional optional parameters are not permitted by `isAssignableTo` yet
+          let overloadSignature = overloadInstance.signature;
+          let overloadParameterTypes = overloadSignature.parameterTypes;
+          let overloadNumParameters = overloadParameterTypes.length;
+          let paramExprs = new Array<ExpressionRef>(1 + overloadNumParameters);
+          paramExprs[0] = module.local_get(0, nativeSizeType); // this
+          for (let n = 0; n < numParameters; ++n) {
+            paramExprs[1 + n] = module.local_get(1 + n, parameterTypes[n].toNativeType());
+          }
+          let needsVarargsStub = false;
+          for (let n = numParameters; n < overloadNumParameters; ++n) {
+            // TODO: inline constant initializers and skip varargs stub
+            paramExprs[1 + n] = this.makeZero(overloadParameterTypes[n]);
+            needsVarargsStub = true;
+          }
+          let calledName = needsVarargsStub
+            ? this.ensureVarargsStub(overloadInstance).internalName
+            : overloadInstance.internalName;
+          let nativeReturnType = overloadSignature.returnType.toNativeType();
+          let stmts = new Array<ExpressionRef>();
+          if (needsVarargsStub) {
+            this.ensureArgumentsLength();
+            // Safe to prepend since paramExprs are local.get's
+            stmts.push(module.global_set(BuiltinNames.argumentsLength, module.i32(numParameters)));
+          }
+          if (returnType == Type.void) {
+            stmts.push(
+              module.call(calledName, paramExprs, nativeReturnType)
+            );
+            stmts.push(
+              module.return()
+            );
+          } else {
+            stmts.push(
+              module.return(
+                module.call(calledName, paramExprs, nativeReturnType)
+              )
+            );
+          }
+          builder.addCase(classInstance.id, stmts);
+          // Also alias each extendee inheriting this exact overload
+          let extendees = classInstance.getAllExtendees(
+            isProperty
+              ? unboundOverloadParent.name
+              : instance.prototype.name
+          );
+          for (let _values = Set_values(extendees), a = 0, b = _values.length; a < b; ++a) {
+            let extendee = _values[a];
+            builder.addCase(extendee.id, stmts);
+          }
+        }
+      }
     }
+
+    // Call the original function if no other id matches and the method is not
+    // abstract or part of an interface. Note that doing so will not catch an
+    // invalid id, but can reduce code size significantly since we also don't
+    // have to add branches for extendees inheriting the original function.
+    var body: ExpressionRef;
+    if (instance.prototype.bodyNode) {
+      let paramExprs = new Array<ExpressionRef>(numParameters);
+      paramExprs[0] = module.local_get(0, nativeSizeType); // this
+      for (let i = 0, k = parameterTypes.length; i < k; ++i) {
+        paramExprs[1 + i] = module.local_get(1 + i, parameterTypes[i].toNativeType());
+      }
+      body = module.call(instance.internalName, paramExprs, instance.signature.returnType.toNativeType());
+
+    // Otherwise trap
+    } else {
+      body = module.unreachable();
+    }
+
+    // Create the virtual stub function
+    var ref = stub.ref;
+    if (ref) module.removeFunction(stub.internalName);
+    stub.ref = module.addFunction(
+      stub.internalName,
+      stub.signature.nativeParams,
+      stub.signature.nativeResults,
+      [ NativeType.I32 ],
+      module.block(null, [
+        builder.render(tempIndex),
+        body
+      ], returnType.toNativeType())
+    );
+    stub.set(CommonFlags.COMPILED);
   }
 
   // <reference-counting>
@@ -7487,7 +7504,7 @@ export class Compiler extends DiagnosticEmitter {
   ): ExpressionRef {
     if (instance.hasDecorator(DecoratorFlags.INLINE)) {
       if (!instance.is(CommonFlags.VIRTUAL)) {
-        assert(!instance.is(CommonFlags.TRAMPOLINE)); // doesn't make sense
+        assert(!instance.is(CommonFlags.STUB)); // doesn't make sense
         let inlineStack = this.inlineStack;
         if (inlineStack.includes(instance)) {
           this.warning(
@@ -7588,7 +7605,7 @@ export class Compiler extends DiagnosticEmitter {
       if (!allOptionalsAreConstant) {
         if (!instance.is(CommonFlags.MODULE_IMPORT)) {
           let original = instance;
-          instance = this.ensureTrampoline(instance);
+          instance = this.ensureVarargsStub(instance);
           if (!this.compileFunction(instance)) return module.unreachable();
           instance.flow.flags = original.flow.flags;
           let nativeReturnType = returnType.toNativeType();
@@ -7613,23 +7630,21 @@ export class Compiler extends DiagnosticEmitter {
               this.skippedAutoreleases.add(expr);
             }
           }
-          this.ensureBuiltinArgumentsLength();
+          this.ensureArgumentsLength();
           return expr;
         }
       }
     }
 
     // Call the virtual stub with the vtable if the function has overloads
-    var calledName = instance.internalName;
     if (instance.is(CommonFlags.VIRTUAL) && !reportNode.isCallOnSuper) {
-      calledName += "|virtual";
-      this.virtualCalls.add(instance);
+      instance = this.ensureVirtualStub(instance);
     }
 
     // If the return value is of a reference type it has not yet been released but is in flight
     // which is equivalent to a skipped autorelease. Hence, insert either a release if it is
     // dropped anyway, preserve the skipped autorelease if explicitly requested or autorelease now.
-    var expr = module.call(calledName, operands, returnType.toNativeType());
+    var expr = module.call(instance.internalName, operands, returnType.toNativeType());
     this.currentType = returnType;
     if (returnType.isManaged) {
       if (immediatelyDropped) {
@@ -7718,10 +7733,10 @@ export class Compiler extends DiagnosticEmitter {
       indexArg = module.unary(UnaryOp.WrapI64, indexArg);
     }
 
-    // We might be calling a trampoline here, even if all operands have been
-    // provided, so we must set ~argumentsLength in any case. Inject setting it
+    // We might be calling a varargs stub here, even if all operands have been
+    // provided, so we must set `argumentsLength` in any case. Inject setting it
     // into the index argument, which becomes executed last after any operands.
-    this.ensureBuiltinArgumentsLength();
+    this.ensureArgumentsLength();
     if (getSideEffects(indexArg) & SideEffects.WritesGlobal) {
       let flow = this.currentFlow;
       let temp = flow.getTempLocal(Type.i32, findUsedLocals(indexArg));

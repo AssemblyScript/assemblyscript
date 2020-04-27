@@ -719,6 +719,27 @@ export class Signature {
     sb.push(this.returnType.toString());
     return sb.join("");
   }
+
+  /** Creates a clone of this signature that is safe to modify. */
+  clone(): Signature {
+    var parameterTypes = this.parameterTypes;
+    var numParameterTypes = parameterTypes.length;
+    var cloneParameterTypes = new Array<Type>(numParameterTypes);
+    for (let i = 0; i < numParameterTypes; ++i) {
+      cloneParameterTypes[i] = parameterTypes[i];
+    }
+    var clone = new Signature(this.program, cloneParameterTypes, this.returnType, this.thisType);
+    var parameterNames = this.parameterNames;
+    if (parameterNames) {
+      let numParameterNames = parameterNames.length;
+      let cloneParameterNames = new Array<string>(numParameterNames);
+      for (let i = 0; i < numParameterNames; ++i) {
+        cloneParameterNames[i] = parameterNames[i];
+      }
+      clone.parameterNames = cloneParameterNames;
+    }
+    return clone;
+  }
 }
 
 // helpers

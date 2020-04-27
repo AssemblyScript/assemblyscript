@@ -2647,7 +2647,7 @@
   end
   i64.store
  )
- (func $~lib/dataview/DataView#constructor|trampoline (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -4375,7 +4375,7 @@
   i32.const 1
   global.set $~argumentsLength
   i32.const 0
-  call $~lib/dataview/DataView#constructor|trampoline
+  call $~lib/dataview/DataView#constructor@varargs
   local.set $2
   local.get $1
   call $~lib/rt/pure/__release

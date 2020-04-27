@@ -66,8 +66,8 @@ export enum CommonFlags {
   INLINED = 1 << 23,
   /** Is scoped. */
   SCOPED = 1 << 24,
-  /** Is a trampoline. */
-  TRAMPOLINE = 1 << 25,
+  /** Is a stub. */
+  STUB = 1 << 25,
   /** Is a virtual method. */
   VIRTUAL = 1 << 26,
   /** Is (part of) a closure. */
@@ -99,6 +99,8 @@ export const LIBRARY_SUBST = "~lib";
 export const LIBRARY_PREFIX = LIBRARY_SUBST + PATH_DELIMITER;
 /** Path index suffix. */
 export const INDEX_SUFFIX = PATH_DELIMITER + "index";
+/** Stub function delimiter. */
+export const STUB_DELIMITER = "@";
 
 /** Common names. */
 export namespace CommonNames {

@@ -75,7 +75,7 @@
   local.get $2
   call_indirect (type $i32_i32_=>_i32)
  )
- (func $function-types/makeAndAdd<i32>|trampoline (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $function-types/makeAndAdd<i32>@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -199,7 +199,7 @@
   i32.const 2
   global.set $~argumentsLength
   i32.const 0
-  call $function-types/makeAndAdd<i32>|trampoline
+  call $function-types/makeAndAdd<i32>@varargs
   i32.const 3
   i32.eq
   i32.eqz

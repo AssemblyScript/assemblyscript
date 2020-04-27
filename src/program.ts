@@ -47,6 +47,7 @@ import {
   INNER_DELIMITER,
   LIBRARY_SUBST,
   INDEX_SUFFIX,
+  STUB_DELIMITER,
   CommonNames,
   Feature,
   Target
@@ -3276,12 +3277,12 @@ export class Function extends TypedElement {
   debugLocations: Range[] = [];
   /** Function reference, if compiled. */
   ref: FunctionRef = 0;
-  /** Function reference of the virtual stub, if compiled. */
-  virtualRef: FunctionRef = 0;
   /** Function table index, if any. */
   functionTableIndex: i32 = -1;
-  /** Trampoline function for calling with omitted arguments. */
-  trampoline: Function | null = null;
+  /** Varargs stub for calling with omitted arguments. */
+  varargsStub: Function | null = null;
+  /** Virtual stub for calling overloads. */
+  virtualStub: Function | null = null;
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
@@ -3347,6 +3348,19 @@ export class Function extends TypedElement {
     }
     this.flow = Flow.create(this);
     registerConcreteElement(program, this);
+  }
+
+  /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
+  newStub(postfix: string): Function {
+    var stub = new Function(
+      this.name + STUB_DELIMITER + postfix,
+      this.prototype,
+      this.typeArguments,
+      this.signature.clone(),
+      this.contextualTypeArguments
+    );
+    stub.set(this.flags & ~CommonFlags.COMPILED | CommonFlags.STUB);
+    return stub;
   }
 
   /** Adds a local of the specified type, with an optional name. */
