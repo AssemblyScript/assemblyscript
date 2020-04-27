@@ -500,7 +500,10 @@ export class Compiler extends DiagnosticEmitter {
       let instance = functionTable[i];
       if (instance.is(CommonFlags.VIRTUAL)) {
         assert(instance.is(CommonFlags.INSTANCE));
+        functionTable[i] = this.ensureVirtualStub(instance); // incl. varargs
         this.finalizeVirtualStub(instance);
+      } else if (instance.signature.requiredParameters < instance.signature.parameterTypes.length) {
+        functionTable[i] = this.ensureVarargsStub(instance);
       }
     }
     var virtualCalls = this.virtualCalls;
@@ -1834,17 +1837,13 @@ export class Compiler extends DiagnosticEmitter {
 
   /** Ensures that a table entry exists for the specified function and returns its index. */
   ensureFunctionTableEntry(instance: Function): i32 {
-    assert(instance.is(CommonFlags.COMPILED));
+    assert(instance.is(CommonFlags.COMPILED) && !instance.is(CommonFlags.STUB));
     var index = instance.functionTableIndex;
     if (index >= 0) return index;
     var functionTable = this.functionTable;
     var tableBase = this.options.tableBase;
     if (!tableBase) tableBase = 1; // leave first elem blank
     index = tableBase + functionTable.length;
-    if (!instance.is(CommonFlags.STUB) && instance.signature.requiredParameters < instance.signature.parameterTypes.length) {
-      // insert the varargs stub if the function has optional parameters
-      instance = this.ensureVarargsStub(instance);
-    }
     functionTable.push(instance);
     instance.functionTableIndex = index;
     return index;
@@ -7146,7 +7145,7 @@ export class Compiler extends DiagnosticEmitter {
       for (let i = 0, k = parameterTypes.length; i < k; ++i) {
         paramExprs[1 + i] = module.local_get(1 + i, parameterTypes[i].toNativeType());
       }
-      body = module.call(instance.internalName, paramExprs, instance.signature.returnType.toNativeType());
+      body = module.call(instance.internalName, paramExprs, returnType.toNativeType());
 
     // Otherwise trap
     } else {
