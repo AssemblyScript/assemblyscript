@@ -238,7 +238,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Duplicate_decorator = 213,
         Type_0_is_illegal_in_this_context = 214,
         Optional_parameter_must_have_an_initializer = 215,
-        Constructor_of_class_0_must_not_require_any_arguments = 216,
+        Class_0_cannot_declare_a_constructor_when_instantiated_from_an_object_literal = 216,
         Function_0_cannot_be_inlined_into_itself = 217,
         Cannot_access_method_0_without_calling_it_as_it_requires_this_to_be_set = 218,
         Optional_properties_are_not_supported = 219,
@@ -325,6 +325,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         _super_can_only_be_referenced_in_a_derived_class = 2335,
         Super_calls_are_not_permitted_outside_constructors_or_in_nested_functions_inside_constructors = 2337,
         Property_0_does_not_exist_on_type_1 = 2339,
+        Property_0_is_private_and_only_accessible_within_class_1 = 2341,
         Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures = 2349,
         This_expression_is_not_constructable = 2351,
         A_function_whose_declared_type_is_not_void_must_return_a_value = 2355,
@@ -340,12 +341,14 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Duplicate_function_implementation = 2393,
         Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
         A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
+        Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses = 2445,
         The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
         Type_0_has_no_property_1 = 2460,
         The_0_operator_cannot_be_applied_to_type_1 = 2469,
         In_const_enum_declarations_member_initializer_must_be_constant_expression = 2474,
         Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
         _0_is_referenced_directly_or_indirectly_in_its_own_base_expression = 2506,
+        Cannot_create_an_instance_of_an_abstract_class = 2511,
         Object_is_possibly_null = 2531,
         Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
         The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
@@ -557,6 +560,8 @@ declare module "assemblyscript/src/util/text" {
     export function isDecimalDigit(c: number): boolean;
     /** Tests if the specified character code is a valid octal digit. */
     export function isOctalDigit(c: number): boolean;
+    /** Tests if the specified character code is trivially alphanumeric. */
+    export function isTrivialAlphanum(code: number): boolean;
     /** Tests if the specified character code is a valid start of an identifier. */
     export function isIdentifierStart(c: number): boolean;
     /** Tests if the specified character code is a valid keyword character. */
@@ -2124,6 +2129,11 @@ declare module "assemblyscript/src/module" {
         LoadI32ToI64x2 = 8,
         LoadU32ToU64x2 = 9
     }
+    export enum ExpressionRunnerFlags {
+        Default = 0,
+        PreserveSideeffects = 1,
+        TraverseCalls = 2
+    }
     export class MemorySegment {
         buffer: Uint8Array;
         offset: i64;
@@ -2163,6 +2173,7 @@ declare module "assemblyscript/src/module" {
         flatten(stmts: ExpressionRef[], type?: NativeType): ExpressionRef;
         br(label: string | null, condition?: ExpressionRef, value?: ExpressionRef): ExpressionRef;
         drop(expression: ExpressionRef): ExpressionRef;
+        maybeDropCondition(condition: ExpressionRef, result: ExpressionRef): ExpressionRef;
         loop(label: string | null, body: ExpressionRef): ExpressionRef;
         if(condition: ExpressionRef, ifTrue: ExpressionRef, ifFalse?: ExpressionRef): ExpressionRef;
         nop(): ExpressionRef;
@@ -2245,8 +2256,6 @@ declare module "assemblyscript/src/module" {
         runPass(pass: string, func?: FunctionRef): void;
         runPasses(passes: string[], func?: FunctionRef): void;
         optimize(optimizeLevel: number, shrinkLevel: number, debugInfo?: boolean, usesARC?: boolean): void;
-        private cachedPrecomputeNames;
-        precomputeExpression(expr: ExpressionRef): ExpressionRef;
         validate(): boolean;
         interpret(): void;
         toBinary(sourceMapUrl: string | null): BinaryModule;
@@ -2257,6 +2266,7 @@ declare module "assemblyscript/src/module" {
         dispose(): void;
         createRelooper(): number;
         cloneExpression(expr: ExpressionRef, noSideEffects?: boolean, maxDepth?: number): ExpressionRef;
+        runExpression(expr: ExpressionRef, flags: ExpressionRunnerFlags, maxDepth?: number, maxLoopIterations?: number): ExpressionRef;
         addDebugInfoFile(name: string): Index;
         getDebugInfoFile(index: Index): string | null;
         setDebugLocation(func: FunctionRef, expr: ExpressionRef, fileIndex: Index, lineNumber: Index, columnNumber: Index): void;
@@ -4106,7 +4116,7 @@ declare module "assemblyscript/src/compiler" {
     import { Module, MemorySegment, ExpressionRef, NativeType, GlobalRef } from "assemblyscript/src/module";
     import { Feature, Target } from "assemblyscript/src/common";
     import { Program, ClassPrototype, Class, Element, Enum, Field, Function, Global, Property, VariableLikeElement, File } from "assemblyscript/src/program";
-    import { Flow } from "assemblyscript/src/flow";
+    import { Flow, ConditionKind } from "assemblyscript/src/flow";
     import { Resolver } from "assemblyscript/src/resolver";
     import { Range } from "assemblyscript/src/tokenizer";
     import { Node, FunctionTypeNode, Statement, Expression } from "assemblyscript/src/ast";
@@ -4337,8 +4347,6 @@ declare module "assemblyscript/src/compiler" {
         /** Compiles the value of an inlined constant element. */
         compileInlineConstant(element: VariableLikeElement, contextualType: Type, constraints: Constraints): ExpressionRef;
         compileExpression(expression: Expression, contextualType: Type, constraints?: Constraints): ExpressionRef;
-        /** Compiles and precomputes an expression, possibly yielding a costant value. */
-        precomputeExpression(expression: Expression, contextualType: Type, constraints?: Constraints): ExpressionRef;
         /** Compiles an expression that is about to be returned, taking special care of retaining and setting flow states. */
         private compileReturnedExpression;
         convertExpression(expr: ExpressionRef, 
@@ -4519,6 +4527,8 @@ declare module "assemblyscript/src/compiler" {
         checkTypeSupported(type: Type, reportNode: Node): boolean;
         /** Checks whether a particular function signature is supported. */
         checkSignatureSupported(signature: Signature, reportNode: FunctionTypeNode): boolean;
+        /** Evaluates a boolean condition, determining whether it is TRUE, FALSE or UNKNOWN. */
+        evaluateCondition(expr: ExpressionRef): ConditionKind;
         /** Makes a constant zero of the specified type. */
         makeZero(type: Type): ExpressionRef;
         /** Makes a constant one of the specified type. */
