@@ -8074,10 +8074,10 @@
  )
  (func $~lib/util/number/itoa_stream<u64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
-  local.get $0
   local.get $1
   i32.const 1
   i32.shl
+  local.get $0
   i32.add
   local.set $0
   local.get $2
@@ -8261,10 +8261,10 @@
  )
  (func $~lib/util/number/itoa_stream<i64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
-  local.get $0
   local.get $1
   i32.const 1
   i32.shl
+  local.get $0
   i32.add
   local.set $1
   local.get $2
@@ -8284,10 +8284,10 @@
   i64.const 10
   i64.lt_u
   if
-   local.get $1
    local.get $0
    i32.const 1
    i32.shl
+   local.get $1
    i32.add
    local.get $2
    i64.const 48

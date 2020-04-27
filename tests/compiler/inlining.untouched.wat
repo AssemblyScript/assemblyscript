@@ -71,15 +71,7 @@
   end
   i32.const 1
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 60
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   block $inlining/func_ii|inlined.1 (result i32)
    i32.const 41
    local.set $2
@@ -101,15 +93,7 @@
   end
   i32.const 2
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 61
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   block $inlining/func_ii|inlined.2 (result i32)
    i32.const 43
    local.set $2
@@ -131,47 +115,25 @@
   end
   i32.const 3
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 62
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   i32.const 0
   local.set $2
   local.get $2
   i32.const 0
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 63
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   i32.const 1
   local.set $2
   local.get $2
   i32.const 1
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 64
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   i32.const 2
   local.set $2
   local.get $2
   local.set $3
+  i32.const 1
+  drop
   local.get $3
   local.set $5
   local.get $5
@@ -183,19 +145,13 @@
   local.get $4
   i32.const 3
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 65
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   i32.const 3
   local.set $5
   local.get $5
   local.set $4
+  i32.const 1
+  drop
   local.get $4
   local.set $2
   local.get $2
@@ -207,15 +163,7 @@
   local.get $3
   i32.const 4
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 66
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   i32.const 0
   local.set $2
   i32.const 2
@@ -243,15 +191,7 @@
   i32.add
   i32.const 44
   i32.eq
-  i32.eqz
-  if
-   i32.const 0
-   i32.const 32
-   i32.const 69
-   i32.const 3
-   call $~lib/builtins/abort
-   unreachable
-  end
+  drop
   i32.const 123
   call $~lib/rt/stub/__retain
   local.set $7
@@ -376,6 +316,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4

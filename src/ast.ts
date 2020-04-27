@@ -29,7 +29,8 @@ import {
 import {
   normalizePath,
   resolvePath,
-  CharCode
+  CharCode,
+  isTrivialAlphanum
 } from "./util";
 
 /** Indicates the kind of a node. */
@@ -716,7 +717,7 @@ export abstract class Node {
       } else { // absolute
         if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
       }
-      node.internalPath = mangleInternalPath(normalizedPath);
+      node.internalPath = normalizedPath;
     } else {
       node.internalPath = null;
     }
@@ -804,7 +805,7 @@ export abstract class Node {
     } else { // absolute in library
       if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
     }
-    node.internalPath = mangleInternalPath(normalizedPath);
+    node.internalPath = normalizedPath;
     return node;
   }
 
@@ -825,7 +826,7 @@ export abstract class Node {
     } else {
       if (!normalizedPath.startsWith(LIBRARY_PREFIX)) normalizedPath = LIBRARY_PREFIX + normalizedPath;
     }
-    node.internalPath = mangleInternalPath(normalizedPath);
+    node.internalPath = normalizedPath;
     return node;
   }
 
@@ -2098,7 +2099,19 @@ export function findDecorator(kind: DecoratorKind, decorators: DecoratorNode[] |
 
 /** Mangles an external to an internal path. */
 export function mangleInternalPath(path: string): string {
-  if (path.endsWith(".ts")) path = path.substring(0, path.length - 3);
+  var pos = path.lastIndexOf(".");
+  var len = path.length;
+  if (pos >= 0 && len - pos >= 2) { // at least one char plus dot
+    let cur = pos;
+    while (++cur < len) {
+      if (!isTrivialAlphanum(path.charCodeAt(cur))) {
+        assert(false); // not a valid external path
+        return path;
+      }
+    }
+    return path.substring(0, pos);
+  }
+  assert(false); // not an external path
   return path;
 }
 

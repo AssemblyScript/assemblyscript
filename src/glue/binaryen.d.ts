@@ -809,6 +809,17 @@ export declare function _RelooperAddBlockWithSwitch(relooper: BinaryenRelooperRe
 export declare function _RelooperAddBranchForSwitch(from: BinaryenRelooperBlockRef, to: BinaryenRelooperBlockRef, indexes: usize, numIndexes: BinaryenIndex, code: BinaryenExpressionRef): void;
 export declare function _RelooperRenderAndDispose(relooper: BinaryenRelooperRef, entry: BinaryenRelooperBlockRef, labelHelper: BinaryenIndex): BinaryenExpressionRef;
 
+type BinaryenExpressionRunnerRef = usize;
+type BinaryenExpressionRunnerFlags = u32;
+
+export declare function _ExpressionRunnerFlagsDefault(): BinaryenExpressionRunnerFlags;
+export declare function _ExpressionRunnerFlagsPreserveSideeffects(): BinaryenExpressionRunnerFlags;
+export declare function _ExpressionRunnerFlagsTraverseCalls(): BinaryenExpressionRunnerFlags;
+export declare function _ExpressionRunnerCreate(module: BinaryenModuleRef, flags: BinaryenExpressionRunnerFlags, maxDepth: BinaryenIndex, maxLoopIterations: BinaryenIndex): BinaryenExpressionRunnerRef;
+export declare function _ExpressionRunnerSetLocalValue(runner: BinaryenExpressionRunnerRef, index: BinaryenIndex, value: BinaryenExpressionRef): bool;
+export declare function _ExpressionRunnerSetGlobalValue(runner: BinaryenExpressionRunnerRef, name: usize, value: BinaryenExpressionRef): bool;
+export declare function _ExpressionRunnerRunAndDispose(runner: BinaryenExpressionRunnerRef, expr: BinaryenExpressionRef): BinaryenExpressionRef;
+
 export declare function _BinaryenGetOptimizeLevel(): i32;
 export declare function _BinaryenSetOptimizeLevel(level: i32): void;
 export declare function _BinaryenGetShrinkLevel(): i32;

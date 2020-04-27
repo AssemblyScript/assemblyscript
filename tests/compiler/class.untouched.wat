@@ -38,6 +38,10 @@
   f32.add
  )
  (func $start:class
+  i32.const 4
+  i32.const 4
+  i32.eq
+  drop
   global.get $class/Animal.ONE
   drop
   i32.const 1
@@ -220,6 +224,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -247,6 +253,10 @@
    local.set $4
    local.get $2
    local.set $3
+   i32.const 0
+   i32.const 1
+   i32.gt_s
+   drop
    local.get $3
    i32.eqz
    if
@@ -447,7 +457,9 @@
   (local $5 i32)
   (local $6 i32)
   local.get $1
-  i32.const 268435452
+  i32.const 1073741808
+  i32.const 2
+  i32.shr_u
   i32.gt_u
   if
    i32.const 32

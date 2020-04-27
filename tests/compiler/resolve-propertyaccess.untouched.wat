@@ -188,6 +188,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -383,6 +385,10 @@
   local.set $5
   local.get $2
   local.set $4
+  i32.const 0
+  i32.const 1
+  i32.ge_s
+  drop
   local.get $6
   local.get $5
   local.get $4
@@ -397,6 +403,15 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<i32> (param $0 i32) (result i32)
+  i32.const 1
+  i32.eqz
+  drop
+  i32.const 1
+  drop
+  i32.const 4
+  i32.const 4
+  i32.le_u
+  drop
   local.get $0
   call $~lib/util/number/itoa32
   return
@@ -441,6 +456,10 @@
   i32.shl
   i32.add
   local.set $6
+  i32.const 0
+  i32.const 2
+  i32.lt_s
+  drop
   local.get $4
   i32.const 4
   i32.ge_u
@@ -648,7 +667,7 @@
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
-  i32.const 1
+  global.get $resolve-propertyaccess/Namespace.member
   call $~lib/number/I32#toString
   local.tee $0
   i32.const 464
@@ -662,7 +681,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 11
+  global.get $resolve-propertyaccess/Namespace.lazyMember
   call $~lib/number/I32#toString
   local.tee $1
   i32.const 576
@@ -676,7 +695,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
+  global.get $resolve-propertyaccess/MergedNamespace.member
   call $~lib/number/I32#toString
   local.tee $2
   i32.const 608
@@ -690,7 +709,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 22
+  global.get $resolve-propertyaccess/MergedNamespace.lazyMember
   call $~lib/number/I32#toString
   local.tee $3
   i32.const 640
@@ -704,7 +723,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 3
+  global.get $resolve-propertyaccess/TypedNamespace.member
   call $~lib/number/I32#toString
   local.tee $4
   i32.const 672
@@ -718,7 +737,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 33
+  global.get $resolve-propertyaccess/TypedNamespace.lazyMember
   call $~lib/number/I32#toString
   local.tee $5
   i32.const 704
@@ -732,7 +751,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 4
+  global.get $resolve-propertyaccess/Enum.VALUE
   call $~lib/number/I32#toString
   local.tee $6
   i32.const 736

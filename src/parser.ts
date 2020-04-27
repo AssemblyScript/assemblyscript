@@ -125,7 +125,7 @@ export class Parser extends DiagnosticEmitter {
     /** Whether this is an entry file. */
     isEntry: bool
   ): void {
-    // the frontend gives us paths with .ts endings
+    // the frontend gives us paths with file extensions
     var normalizedPath = normalizePath(path);
     var internalPath = mangleInternalPath(normalizedPath);
     // check if already processed
