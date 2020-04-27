@@ -7083,7 +7083,7 @@
   global.set $~argumentsLength
   i32.const 0
   call $~lib/string/String.fromCharCode@varargs
-  local.tee $41
+  local.tee $204
   i32.const 1296
   call $~lib/string/String.__eq
   i32.eqz
@@ -7099,7 +7099,7 @@
   global.set $~argumentsLength
   i32.const 54
   call $~lib/string/String.fromCharCode@varargs
-  local.tee $42
+  local.tee $203
   i32.const 1472
   call $~lib/string/String.__eq
   i32.eqz
@@ -7115,7 +7115,7 @@
   global.set $~argumentsLength
   i32.const 65590
   call $~lib/string/String.fromCharCode@varargs
-  local.tee $43
+  local.tee $202
   i32.const 1472
   call $~lib/string/String.__eq
   i32.eqz
