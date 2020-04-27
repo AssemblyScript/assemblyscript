@@ -10,13 +10,12 @@
  (start $~start)
  (func $start:comma
   (local $0 i32)
-  (local $1 i32)
   global.get $comma/a
-  local.tee $1
+  local.tee $0
   i32.const 1
   i32.add
   global.set $comma/a
-  local.get $1
+  local.get $0
   global.set $comma/b
   global.get $comma/a
   i32.const 1
@@ -80,6 +79,8 @@
   global.set $comma/b
   i32.const 2
   global.set $comma/a
+  i32.const 0
+  local.set $0
   loop $for-loop|0
    local.get $0
    global.get $comma/a

@@ -1472,14 +1472,13 @@ export class Module {
 
       passes.push("duplicate-function-elimination");
       passes.push("remove-unused-module-elements");
-      passes.push("simplify-globals-optimizing");
 
       // --- PassRunner::addDefaultFunctionOptimizationPasses ---
 
       if (optimizeLevel >= 3 || shrinkLevel >= 1) {
         passes.push("ssa-nomerge");
+        passes.push("simplify-globals-optimizing");
       }
-
       if (optimizeLevel >= 3) {
         passes.push("flatten");
         passes.push("simplify-locals-notee-nostructure");

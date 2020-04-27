@@ -1461,6 +1461,7 @@
  )
  (func $start:std/symbol
   (local $0 i32)
+  (local $1 i32)
   call $~lib/symbol/Symbol
   global.set $std/symbol/sym1
   call $~lib/symbol/Symbol
@@ -1520,6 +1521,7 @@
   global.get $std/symbol/sym3
   call $~lib/symbol/_Symbol.keyFor
   local.tee $0
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -1529,11 +1531,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
   global.set $std/symbol/key3
   global.get $std/symbol/sym4
   call $~lib/symbol/_Symbol.keyFor
   local.tee $0
+  local.get $0
   i32.eqz
   if
    i32.const 0
@@ -1543,7 +1545,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
   global.set $std/symbol/key4
   global.get $std/symbol/key3
   i32.const 1040
