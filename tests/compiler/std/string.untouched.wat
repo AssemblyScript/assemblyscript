@@ -2179,7 +2179,7 @@
   local.get $3
   call $~lib/rt/pure/__retain
  )
- (func $~lib/string/String.fromCharCode|trampoline (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/string/String.fromCharCode@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -11066,11 +11066,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
   i32.const 1
   global.set $~argumentsLength
   i32.const 0
-  i32.const 0
-  call $~lib/string/String.fromCharCode|trampoline
+  call $~lib/string/String.fromCharCode@varargs
   local.tee $0
   i32.const 288
   call $~lib/string/String.__eq
@@ -11083,11 +11083,11 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 54
   i32.const 1
   global.set $~argumentsLength
-  i32.const 54
   i32.const 0
-  call $~lib/string/String.fromCharCode|trampoline
+  call $~lib/string/String.fromCharCode@varargs
   local.tee $1
   i32.const 464
   call $~lib/string/String.__eq
@@ -11100,13 +11100,13 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  global.set $~argumentsLength
   i32.const 65536
   i32.const 54
   i32.add
+  i32.const 1
+  global.set $~argumentsLength
   i32.const 0
-  call $~lib/string/String.fromCharCode|trampoline
+  call $~lib/string/String.fromCharCode@varargs
   local.tee $2
   i32.const 464
   call $~lib/string/String.__eq

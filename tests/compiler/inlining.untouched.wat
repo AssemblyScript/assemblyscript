@@ -166,9 +166,9 @@
   drop
   i32.const 0
   local.set $2
+  i32.const 2
   i32.const 1
   global.set $~argumentsLength
-  i32.const 2
   i32.const 1
   call_indirect (type $i32_=>_i32)
   i32.const 2

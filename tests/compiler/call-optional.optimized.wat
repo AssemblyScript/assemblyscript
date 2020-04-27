@@ -17,7 +17,7 @@
   i32.add
   i32.add
  )
- (func $call-optional/opt|trampoline (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+ (func $call-optional/opt@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -50,7 +50,7 @@
   i32.const 3
   i32.const 0
   i32.const 0
-  call $call-optional/opt|trampoline
+  call $call-optional/opt@varargs
   if
    i32.const 0
    i32.const 1040
@@ -64,7 +64,7 @@
   i32.const 3
   i32.const 4
   i32.const 0
-  call $call-optional/opt|trampoline
+  call $call-optional/opt@varargs
   i32.const 5
   i32.ne
   if
@@ -94,7 +94,7 @@
   i32.const 3
   i32.const 0
   i32.const 0
-  call $call-optional/opt|trampoline
+  call $call-optional/opt@varargs
   if
    i32.const 0
    i32.const 1040
@@ -108,7 +108,7 @@
   i32.const 3
   i32.const 4
   i32.const 0
-  call $call-optional/opt|trampoline
+  call $call-optional/opt@varargs
   i32.const 5
   i32.ne
   if
@@ -124,7 +124,7 @@
   i32.const 3
   i32.const 4
   i32.const 5
-  call $call-optional/opt|trampoline
+  call $call-optional/opt@varargs
   i32.const 12
   i32.ne
   if

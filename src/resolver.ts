@@ -23,6 +23,7 @@ import {
   Element,
   Class,
   ClassPrototype,
+  Interface,
   Function,
   FunctionPrototype,
   VariableLikeElement,
@@ -35,7 +36,9 @@ import {
   TypedElement,
   FunctionTarget,
   IndexSignature,
-  isTypedElement
+  isTypedElement,
+  InterfacePrototype,
+  DeclaredElement
 } from "./program";
 
 import {
@@ -243,8 +246,11 @@ export class Resolver extends DiagnosticEmitter {
         return Type.i32;
       }
 
-      // Handle classes
-      if (element.kind == ElementKind.CLASS_PROTOTYPE) {
+      // Handle classes and interfaces
+      if (
+        element.kind == ElementKind.CLASS_PROTOTYPE ||
+        element.kind == ElementKind.INTERFACE_PROTOTYPE
+      ) {
         let instance = this.resolveClassInclTypeArguments(
           <ClassPrototype>element,
           typeArgumentNodes,
@@ -1408,7 +1414,9 @@ export class Resolver extends DiagnosticEmitter {
     // Look up the member within
     switch (target.kind) {
       case ElementKind.CLASS_PROTOTYPE:
-      case ElementKind.CLASS: {
+      case ElementKind.INTERFACE_PROTOTYPE:
+      case ElementKind.CLASS:
+      case ElementKind.INTERFACE: {
         do {
           let members = target.members;
           if (members !== null && members.has(propertyName)) {
@@ -1417,7 +1425,10 @@ export class Resolver extends DiagnosticEmitter {
             return assert(members.get(propertyName)); // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE...
           }
           // traverse inherited static members on the base prototype if target is a class prototype
-          if (target.kind == ElementKind.CLASS_PROTOTYPE) {
+          if (
+            target.kind == ElementKind.CLASS_PROTOTYPE ||
+            target.kind == ElementKind.INTERFACE_PROTOTYPE
+          ) {
             let classPrototype = <ClassPrototype>target;
             let basePrototype = classPrototype.basePrototype;
             if (basePrototype) {
@@ -1426,7 +1437,10 @@ export class Resolver extends DiagnosticEmitter {
               break;
             }
           // traverse inherited instance members on the base class if target is a class instance
-          } else if (target.kind == ElementKind.CLASS) {
+          } else if (
+            target.kind == ElementKind.CLASS ||
+            target.kind == ElementKind.INTERFACE
+          ) {
             let classInstance = <Class>target;
             let baseInstance = classInstance.base;
             if (baseInstance) {
@@ -2646,7 +2660,7 @@ export class Resolver extends DiagnosticEmitter {
 
     // Instance method prototypes are pre-bound to their concrete class as their parent
     if (prototype.is(CommonFlags.INSTANCE)) {
-      assert(actualParent.kind == ElementKind.CLASS);
+      assert(actualParent.kind == ElementKind.CLASS || actualParent.kind == ElementKind.INTERFACE);
       classInstance = <Class>actualParent;
 
       // check if this exact concrete class and function combination is known already
@@ -2776,6 +2790,7 @@ export class Resolver extends DiagnosticEmitter {
     var instance = new Function(
       nameInclTypeParameters,
       prototype,
+      typeArguments,
       signature,
       ctxTypes
     );
@@ -2857,7 +2872,7 @@ export class Resolver extends DiagnosticEmitter {
   }
 
   /** Currently resolving classes. */
-  private resolveClassPending: Class[] = [];
+  private resolveClassPending: Set<Class> = new Set();
 
   /** Resolves a class prototype using the specified concrete type arguments. */
   resolveClass(
@@ -2880,10 +2895,14 @@ export class Resolver extends DiagnosticEmitter {
     // Otherwise create
     var nameInclTypeParamters = prototype.name;
     if (instanceKey.length) nameInclTypeParamters += "<" + instanceKey + ">";
-    instance = new Class(nameInclTypeParamters, prototype, typeArguments);
+    if (prototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
+      instance = new Interface(nameInclTypeParamters, <InterfacePrototype>prototype, typeArguments);
+    } else {
+      instance = new Class(nameInclTypeParamters, prototype, typeArguments);
+    }
     prototype.setResolvedInstance(instanceKey, instance);
     var pendingClasses = this.resolveClassPending;
-    pendingClasses.push(instance);
+    pendingClasses.add(instance);
 
     // Insert contextual type arguments for this operation. Internally, this method is always
     // called with matching type parameter / argument counts.
@@ -2900,6 +2919,8 @@ export class Resolver extends DiagnosticEmitter {
       assert(!(typeParameterNodes !== null && typeParameterNodes.length > 0));
     }
     instance.contextualTypeArguments = ctxTypes;
+
+    var anyPending = false;
 
     // Resolve base class if applicable
     var basePrototype = prototype.basePrototype;
@@ -2932,8 +2953,44 @@ export class Resolver extends DiagnosticEmitter {
       // derived classes once the base class's `finishResolveClass` is done.
       // This is guaranteed to never happen at the entry of the recursion, i.e.
       // where `resolveClass` is called from other code.
-      if (pendingClasses.includes(base)) return instance;
+      if (pendingClasses.has(base)) anyPending = true;
     }
+
+    // Resolve interfaces if applicable
+    var interfacePrototypes = prototype.interfacePrototypes;
+    if (interfacePrototypes) {
+      for (let i = 0, k = interfacePrototypes.length; i < k; ++i) {
+        let interfacePrototype = interfacePrototypes[i];
+        let current: ClassPrototype | null = interfacePrototype;
+        do {
+          if (current == prototype) {
+            this.error(
+              DiagnosticCode._0_is_referenced_directly_or_indirectly_in_its_own_base_expression,
+              prototype.identifierNode.range,
+              prototype.internalName
+            );
+            return null;
+          }
+          current = current.basePrototype;
+        } while (current);
+        let implementsNode = assert(prototype.implementsNodes![i]);
+        let iface = this.resolveClassInclTypeArguments(
+          interfacePrototype,
+          implementsNode.typeArguments,
+          prototype.parent,
+          makeMap(ctxTypes),
+          implementsNode,
+          reportMode
+        );
+        if (!iface) return null;
+        assert(iface.kind == ElementKind.INTERFACE);
+        instance.addInterface(<Interface>iface);
+
+        // Like above, if any implemented interface is still pending, yield
+        if (pendingClasses.has(iface)) anyPending = true;
+      }
+    }
+    if (anyPending) return instance;
 
     // We only get here if the base class has been fully resolved already.
     this.finishResolveClass(instance, reportMode);
@@ -2947,22 +3004,67 @@ export class Resolver extends DiagnosticEmitter {
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode
   ): void {
-    var instanceMembers = instance.members;
-    if (!instanceMembers) instance.members = instanceMembers = new Map();
+    var members = instance.members;
+    if (!members) instance.members = members = new Map();
+
+    var pendingClasses = this.resolveClassPending;
+    var unimplemented = new Map<string,DeclaredElement>();
+
+    // Alias interface members
+    var interfaces = instance.interfaces;
+    if (interfaces) {
+      for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
+        let iface = _values[i];
+        assert(!pendingClasses.has(iface));
+        let ifaceMembers = iface.members;
+        if (ifaceMembers) {
+          for (let _keys = Map_keys(ifaceMembers), i = 0, k = _keys.length; i < k; ++i) {
+            let memberName = unchecked(_keys[i]);
+            let member = assert(ifaceMembers.get(memberName));
+            if (members.has(memberName)) {
+              let existing = assert(members.get(memberName));
+              if (!member.isCompatibleOverride(existing)) {
+                this.errorRelated(
+                  DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
+                  member.identifierAndSignatureRange, existing.identifierAndSignatureRange
+                );
+                continue;
+              }
+            }
+            members.set(memberName, member);
+            unimplemented.set(memberName, member);
+          }
+        }
+      }
+    }
 
     // Alias base members
-    var pendingClasses = this.resolveClassPending;
     var memoryOffset: u32 = 0;
     var base = instance.base;
     if (base) {
-      assert(!pendingClasses.includes(base));
+      assert(!pendingClasses.has(base));
       let baseMembers = base.members;
       if (baseMembers) {
         // TODO: for (let [baseMemberName, baseMember] of baseMembers) {
         for (let _keys = Map_keys(baseMembers), i = 0, k = _keys.length; i < k; ++i) {
-          let baseMemberName = unchecked(_keys[i]);
-          let baseMember = assert(baseMembers.get(baseMemberName));
-          instanceMembers.set(baseMemberName, baseMember);
+          let memberName = unchecked(_keys[i]);
+          let member = assert(baseMembers.get(memberName));
+          if (members.has(memberName)) {
+            let existing = assert(members.get(memberName));
+            if (!member.isCompatibleOverride(existing)) {
+              this.errorRelated(
+                DiagnosticCode.This_overload_signature_is_not_compatible_with_its_implementation_signature,
+                member.identifierAndSignatureRange, existing.identifierAndSignatureRange
+              );
+              continue;
+            }
+          }
+          members.set(memberName, member);
+          if (member.is(CommonFlags.ABSTRACT)) {
+            unimplemented.set(memberName, member);
+          } else {
+            unimplemented.delete(memberName);
+          }
         }
       }
       memoryOffset = base.nextMemoryOffset;
@@ -2971,10 +3073,12 @@ export class Resolver extends DiagnosticEmitter {
     // Resolve instance members
     var prototype = instance.prototype;
     var instanceMemberPrototypes = prototype.instanceMembers;
+    var properties = new Array<Property>();
     if (instanceMemberPrototypes) {
       // TODO: for (let member of instanceMemberPrototypes.values()) {
       for (let _values = Map_values(instanceMemberPrototypes), i = 0, k = _values.length; i < k; ++i) {
         let member = unchecked(_values[i]);
+        let memberName = member.name;
         switch (member.kind) {
 
           case ElementKind.FIELD_PROTOTYPE: {
@@ -3016,7 +3120,7 @@ export class Resolver extends DiagnosticEmitter {
             if (memoryOffset & mask) memoryOffset = (memoryOffset | mask) + 1;
             fieldInstance.memoryOffset = memoryOffset;
             memoryOffset += fieldType.byteSize;
-            instance.add(member.name, fieldInstance); // reports
+            instance.add(memberName, fieldInstance); // reports
             break;
           }
           case ElementKind.FUNCTION_PROTOTYPE: {
@@ -3027,6 +3131,7 @@ export class Resolver extends DiagnosticEmitter {
           case ElementKind.PROPERTY_PROTOTYPE: {
             let propertyPrototype = <PropertyPrototype>member;
             let propertyInstance = new Property(propertyPrototype, instance);
+            properties.push(propertyInstance);
             let getterPrototype = propertyPrototype.getterPrototype;
             if (getterPrototype) {
               let getterInstance = this.resolveFunction(
@@ -3061,24 +3166,63 @@ export class Resolver extends DiagnosticEmitter {
           }
           default: assert(false);
         }
+        if (!member.is(CommonFlags.ABSTRACT)) {
+          unimplemented.delete(memberName);
+        }
       }
     }
 
-    // Finalize memory offset
-    instance.nextMemoryOffset = memoryOffset;
-
-    // Link _own_ constructor if present
-    {
-      let ctorPrototype = instance.lookupInSelf(CommonNames.constructor);
-      if (ctorPrototype !== null && ctorPrototype.parent === instance) {
-        assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
-        let ctorInstance = this.resolveFunction(
-          <FunctionPrototype>ctorPrototype,
-          null,
-          assert(instance.contextualTypeArguments),
-          reportMode
+    // Check that property getters and setters match
+    for (let i = 0, k = properties.length; i < k; ++i) {
+      let property = properties[i];
+      let propertyGetter = property.getterInstance;
+      if (!propertyGetter) {
+        this.error(
+          DiagnosticCode.Property_0_only_has_a_setter_and_is_missing_a_getter,
+          property.identifierNode.range, property.name
         );
-        if (ctorInstance) instance.constructorInstance = <Function>ctorInstance;
+      } else {
+        let propertySetter = property.setterInstance;
+        if (propertySetter !== null && !propertyGetter.visibilityEquals(propertySetter)) {
+          this.errorRelated(
+            DiagnosticCode.Getter_and_setter_accessors_do_not_agree_in_visibility,
+            propertyGetter.identifierNode.range, propertySetter.identifierNode.range
+          );
+        }
+      }
+    }
+
+    if (instance.kind != ElementKind.INTERFACE) {
+
+      // Check that all required members are implemented
+      if (!instance.is(CommonFlags.ABSTRACT) && unimplemented.size > 0) {
+        for (let _keys = Map_keys(unimplemented), i = 0, k = _keys.length; i < k; ++i) {
+          let memberName = _keys[i];
+          let member = assert(unimplemented.get(memberName));
+          this.errorRelated(
+            DiagnosticCode.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_2,
+            instance.identifierNode.range, member.identifierNode.range,
+            instance.internalName, memberName, member.parent.internalName
+          );
+        }
+      }
+
+      // Finalize memory offset
+      instance.nextMemoryOffset = memoryOffset;
+
+      // Link _own_ constructor if present
+      {
+        let ctorPrototype = instance.lookupInSelf(CommonNames.constructor);
+        if (ctorPrototype !== null && ctorPrototype.parent === instance) {
+          assert(ctorPrototype.kind == ElementKind.FUNCTION_PROTOTYPE);
+          let ctorInstance = this.resolveFunction(
+            <FunctionPrototype>ctorPrototype,
+            null,
+            assert(instance.contextualTypeArguments),
+            reportMode
+          );
+          if (ctorInstance) instance.constructorInstance = <Function>ctorInstance;
+        }
       }
     }
 
@@ -3150,21 +3294,27 @@ export class Resolver extends DiagnosticEmitter {
     }
 
     // Remove this class from pending
-    var pendingIndex = pendingClasses.indexOf(instance);
-    assert(~pendingIndex); // must be pending
-    pendingClasses.splice(pendingIndex, 1);
+    assert(pendingClasses.has(instance)); // must be pending
+    pendingClasses.delete(instance);
 
     // Finish derived classes that we postponed in `resolveClass` due to the
     // base class still being pending, again triggering `finishResolveClass`
     // of any classes derived from those classes, ultimately leading to all
     // pending classes being resolved.
-    var derivedPendingClasses = new Array<Class>();
-    for (let i = 0, k = pendingClasses.length; i < k; ++i) {
-      let pending = pendingClasses[i];
-      if (instance == pending.base) derivedPendingClasses.push(pending);
-    }
-    for (let i = 0, k = derivedPendingClasses.length; i < k; ++i) {
-      this.finishResolveClass(derivedPendingClasses[i], reportMode);
+    for (let _values = Set_values(pendingClasses), i = 0, k = _values.length; i < k; ++i) {
+      let pending = _values[i];
+      let dependsOnInstance = pending.base === instance;
+      let interfaces = pending.interfaces;
+      if (interfaces) {
+        let anyPending = false;
+        for (let _values2 = Set_values(interfaces), j = 0, l = _values2.length; j < l; ++j) {
+          let iface = _values2[j];
+          if (iface === instance) dependsOnInstance = true;
+          else if (pendingClasses.has(iface)) anyPending = true;
+        }
+        if (anyPending) continue;
+      }
+      if (dependsOnInstance) this.finishResolveClass(pending, reportMode);
     }
   }
 

@@ -636,9 +636,9 @@
  )
  (func $start:resolve-function-expression
   (local $0 i32)
+  i32.const 2
   i32.const 1
   global.set $~argumentsLength
-  i32.const 2
   i32.const 1
   call_indirect (type $i32_=>_i32)
   i32.const 42
@@ -653,8 +653,8 @@
    unreachable
   end
   i32.const 1
-  global.set $~argumentsLength
   i32.const 1
+  global.set $~argumentsLength
   i32.const 2
   call_indirect (type $i32_=>_i32)
   i32.const 42
@@ -678,9 +678,9 @@
   global.set $~lib/rt/stub/startOffset
   global.get $~lib/rt/stub/startOffset
   global.set $~lib/rt/stub/offset
+  i32.const 0
   i32.const 1
   global.set $~argumentsLength
-  i32.const 0
   i32.const 3
   call_indirect (type $i32_=>_i32)
   call $~lib/number/I32#toString

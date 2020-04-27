@@ -40,10 +40,10 @@
   i32.add
  )
  (func $function-expression/testOmitted (param $0 i32) (result i32)
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 1
   i32.const 2
+  i32.const 2
+  global.set $~argumentsLength
   local.get $0
   call_indirect (type $i32_i32_=>_i32)
  )
@@ -89,8 +89,8 @@
  )
  (func $start:function-expression
   i32.const 1
-  global.set $~argumentsLength
   i32.const 1
+  global.set $~argumentsLength
   global.get $function-expression/f1
   call_indirect (type $i32_=>_i32)
   i32.const 1
@@ -104,9 +104,9 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 2
   i32.const 1
   global.set $~argumentsLength
-  i32.const 2
   global.get $function-expression/f2
   call_indirect (type $i32_=>_i32)
   i32.const 2
@@ -178,10 +178,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 1
   i32.const 2
+  i32.const 2
+  global.set $~argumentsLength
   call $function-expression/testOmittedReturn1
   call_indirect (type $i32_i32_=>_i32)
   i32.const 3
@@ -195,10 +195,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 1
   i32.const 2
+  i32.const 2
+  global.set $~argumentsLength
   call $function-expression/testOmittedReturn2
   call_indirect (type $i32_i32_=>_i32)
   i32.const 1
@@ -212,10 +212,10 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  global.set $~argumentsLength
   i32.const 1
   i32.const 2
+  i32.const 2
+  global.set $~argumentsLength
   call $function-expression/testOmittedReturn3
   call_indirect (type $i32_i32_=>_i32)
   i32.const 42

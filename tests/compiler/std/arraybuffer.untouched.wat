@@ -1748,7 +1748,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 54
+   i32.const 49
    i32.const 43
    call $~lib/builtins/abort
    unreachable
@@ -3325,7 +3325,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 23
+   i32.const 18
    i32.const 57
    call $~lib/builtins/abort
    unreachable
@@ -3621,7 +3621,7 @@
   call $~lib/rt/pure/__release
   local.get $0
  )
- (func $~lib/dataview/DataView#constructor|trampoline (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
+ (func $~lib/dataview/DataView#constructor@varargs (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (result i32)
   block $2of2
    block $1of2
     block $0of2
@@ -4027,14 +4027,14 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 1
-  global.set $~argumentsLength
   i32.const 0
   local.get $2
   i32.load
   i32.const 0
+  i32.const 1
+  global.set $~argumentsLength
   i32.const 0
-  call $~lib/dataview/DataView#constructor|trampoline
+  call $~lib/dataview/DataView#constructor@varargs
   local.tee $5
   call $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView>
   i32.eqz
