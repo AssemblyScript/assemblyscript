@@ -680,12 +680,11 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Initializes the program and its elements prior to compilation. */
-  initialize(options: Options): void {
-    // Initialize only once
+  initialize(): void {
     if (this.initialized) return;
-
     this.initialized = true;
-    this.options = options;
+
+    var options = this.options;
 
     // register native types
     this.registerNativeType(CommonNames.i8, Type.i8);

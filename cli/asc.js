@@ -375,7 +375,10 @@ exports.main = function main(argv, options, callback) {
       let transform = transforms[i];
       if (typeof transform[name] === "function") {
         try {
-          transform[name](...args);
+          stats.transformCount++;
+          stats.transfromTime += measure(() => {
+            transform[name](...args);
+          });
         } catch (e) {
           return e;
         }
@@ -605,29 +608,11 @@ exports.main = function main(argv, options, callback) {
     return callback(null);
   }
 
-  // Set up optimization levels
-  var optimizeLevel = 0;
-  var shrinkLevel = 0;
-  if (args.optimize) {
-    optimizeLevel = exports.defaultOptimizeLevel;
-    shrinkLevel = exports.defaultShrinkLevel;
-  }
-  if (typeof args.optimizeLevel === "number") {
-    optimizeLevel = args.optimizeLevel;
-  }
-  if (typeof args.shrinkLevel === "number") {
-    shrinkLevel = args.shrinkLevel;
-  }
-  optimizeLevel = Math.min(Math.max(optimizeLevel, 0), 3);
-  shrinkLevel = Math.min(Math.max(shrinkLevel, 0), 2);
-
-  try {
-    stats.compileTime += measure(() => {
-      assemblyscript.initializeProgram(program, compilerOptions);
-    });
-  } catch(e) {
-    return callback(e);
-  }
+  // Pre-emptively initialize the program
+  stats.initializeCount++;
+  stats.initializeTime += measure(() => {
+    assemblyscript.initializeProgram(program);
+  });
 
   // Call afterInitialize transform hook
   {
@@ -637,13 +622,9 @@ exports.main = function main(argv, options, callback) {
 
   var module;
   stats.compileCount++;
-  try {
-    stats.compileTime += measure(() => {
-      module = assemblyscript.compile(program);
-    });
-  } catch (e) {
-    return callback(e);
-  }
+  stats.compileTime += measure(() => {
+    module = assemblyscript.compile(program);
+  });
   var numErrors = checkDiagnostics(program, stderr);
   if (numErrors) {
     if (module) module.dispose();
@@ -907,6 +888,7 @@ exports.main = function main(argv, options, callback) {
   function listFilesNode(dirname, baseDir) {
     var files;
     try {
+      stats.readCount++;
       stats.readTime += measure(() => {
         files = fs.readdirSync(path.join(baseDir, dirname)).filter(file => extension.re_except_d.test(file))
       });
@@ -958,6 +940,8 @@ function createStats() {
     writeCount: 0,
     parseTime: 0,
     parseCount: 0,
+    initializeTime: 0,
+    initializeCount: 0,
     compileTime: 0,
     compileCount: 0,
     emitTime: 0,
@@ -965,7 +949,9 @@ function createStats() {
     validateTime: 0,
     validateCount: 0,
     optimizeTime: 0,
-    optimizeCount: 0
+    optimizeCount: 0,
+    transformTime: 0,
+    transformCount: 0
   };
 }
 
@@ -983,9 +969,14 @@ function measure(fn) {
 
 exports.measure = measure;
 
+function pad(str, len) {
+  while (str.length < len) str = " " + str;
+  return str;
+}
+
 /** Formats a high resolution time to a human readable string. */
 function formatTime(time) {
-  return time ? (time / 1e6).toFixed(3) + " ms" : "N/A";
+  return time ? (time / 1e6).toFixed(3) + " ms" : "n/a";
 }
 
 exports.formatTime = formatTime;
@@ -993,16 +984,18 @@ exports.formatTime = formatTime;
 /** Formats and prints out the contents of a set of stats. */
 function printStats(stats, output) {
   function format(time, count) {
-    return formatTime(time);
+    return pad(formatTime(time), 12) + "  n=" + count;
   }
   (output || process.stdout).write([
-    "I/O Read  : " + format(stats.readTime, stats.readCount),
-    "I/O Write : " + format(stats.writeTime, stats.writeCount),
-    "Parse     : " + format(stats.parseTime, stats.parseCount),
-    "Compile   : " + format(stats.compileTime, stats.compileCount),
-    "Emit      : " + format(stats.emitTime, stats.emitCount),
-    "Validate  : " + format(stats.validateTime, stats.validateCount),
-    "Optimize  : " + format(stats.optimizeTime, stats.optimizeCount)
+    "I/O Read   : " + format(stats.readTime, stats.readCount),
+    "I/O Write  : " + format(stats.writeTime, stats.writeCount),
+    "Parse      : " + format(stats.parseTime, stats.parseCount),
+    "Initialize : " + format(stats.initializeTime, stats.initializeCount),
+    "Compile    : " + format(stats.compileTime, stats.compileCount),
+    "Emit       : " + format(stats.emitTime, stats.emitCount),
+    "Validate   : " + format(stats.validateTime, stats.validateCount),
+    "Optimize   : " + format(stats.optimizeTime, stats.optimizeCount),
+    "Transform  : " + format(stats.transformTime, stats.transformCount)
   ].join(EOL) + EOL);
 }
 

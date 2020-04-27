@@ -392,19 +392,14 @@ export class Compiler extends DiagnosticEmitter {
     module.setFeatures(featureFlags);
   }
 
-  initializeProgram(): void {
-    // initialize lookup maps, built-ins, imports, exports, etc.
-    this.program.initialize(this.options);
-  }
-
   /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
   compile(): Module {
     var options = this.options;
     var module = this.module;
     var program = this.program;
 
-    // check and perform this program initialization if it hasn't been done
-    this.initializeProgram();
+    // initialize lookup maps, built-ins, imports, exports, etc.
+    this.program.initialize();
 
     // set up the main start function
     var startFunctionInstance = program.makeNativeFunction(BuiltinNames.start, new Signature(program, [], Type.void));
