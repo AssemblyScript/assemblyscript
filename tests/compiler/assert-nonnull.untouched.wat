@@ -131,6 +131,11 @@
   local.get $1
   call $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get
   local.set $2
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   local.get $2
   i32.eqz
   if
@@ -197,6 +202,11 @@
   local.get $1
   call $~lib/array/Array<assert-nonnull/Foo | null>#__unchecked_get
   local.set $2
+  i32.const 1
+  drop
+  i32.const 1
+  i32.eqz
+  drop
   local.get $2
  )
  (func $assert-nonnull/testElem (param $0 i32) (result i32)

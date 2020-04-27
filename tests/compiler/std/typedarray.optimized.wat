@@ -17565,10 +17565,10 @@
  )
  (func $~lib/util/number/itoa_stream<i64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
-  local.get $0
   local.get $1
   i32.const 1
   i32.shl
+  local.get $0
   i32.add
   local.set $1
   local.get $2
@@ -17588,10 +17588,10 @@
   i64.const 10
   i64.lt_u
   if
-   local.get $1
    local.get $0
    i32.const 1
    i32.shl
+   local.get $1
    i32.add
    local.get $2
    i64.const 48
@@ -17805,10 +17805,10 @@
  )
  (func $~lib/util/number/itoa_stream<u64> (param $0 i32) (param $1 i32) (param $2 i64) (result i32)
   (local $3 i32)
-  local.get $0
   local.get $1
   i32.const 1
   i32.shl
+  local.get $0
   i32.add
   local.set $0
   local.get $2
@@ -21858,19 +21858,19 @@
   call $~lib/typedarray/Int64Array#__set
   i32.const 4
   call $~lib/typedarray/Uint8Array#constructor
-  local.tee $3
+  local.tee $2
   i32.const 0
   i32.const 100
   call $~lib/typedarray/Uint8Array#__set
-  local.get $3
+  local.get $2
   i32.const 1
   i32.const 101
   call $~lib/typedarray/Uint8Array#__set
-  local.get $3
+  local.get $2
   i32.const 2
   i32.const 102
   call $~lib/typedarray/Uint8Array#__set
-  local.get $3
+  local.get $2
   i32.const 3
   i32.const 103
   call $~lib/typedarray/Uint8Array#__set
@@ -21891,7 +21891,7 @@
   i32.const 10
   call $~lib/typedarray/Uint8ClampedArray#constructor
   local.tee $1
-  local.set $2
+  local.set $3
   block $folding-inner0
    i32.const 4316
    i32.load
@@ -21899,7 +21899,7 @@
    i32.load offset=8
    i32.gt_s
    br_if $folding-inner0
-   local.get $2
+   local.get $3
    i32.load offset=4
    local.set $9
    i32.const 4308
@@ -21922,14 +21922,14 @@
      i32.shl
      i32.add
      i32.load
-     local.tee $2
+     local.tee $3
      i32.const 31
      i32.shr_s
      i32.const -1
      i32.xor
-     local.get $2
+     local.get $3
      i32.const 255
-     local.get $2
+     local.get $3
      i32.sub
      i32.const 31
      i32.shr_s
@@ -22101,9 +22101,19 @@
    call $std/typedarray/valuesEqual<~lib/typedarray/Uint8ClampedArray>
    local.get $0
    call $~lib/rt/pure/__release
+   local.get $2
+   i32.load offset=8
    local.get $1
-   local.get $3
-   call $~lib/typedarray/Int8Array#set<~lib/typedarray/Uint8Array>
+   i32.load offset=8
+   i32.gt_s
+   br_if $folding-inner0
+   local.get $1
+   i32.load offset=4
+   local.get $2
+   i32.load offset=4
+   local.get $2
+   i32.load offset=8
+   call $~lib/memory/memory.copy
    local.get $1
    local.get $8
    i32.const 4
@@ -22141,14 +22151,14 @@
      local.get $10
      i32.add
      i32.load8_s
-     local.tee $2
+     local.tee $3
      i32.const 31
      i32.shr_s
      i32.const -1
      i32.xor
-     local.get $2
+     local.get $3
      i32.const 255
-     local.get $2
+     local.get $3
      i32.sub
      i32.const 31
      i32.shr_s
@@ -22175,7 +22185,7 @@
    call $~lib/rt/pure/__release
    local.get $7
    call $~lib/rt/pure/__release
-   local.get $3
+   local.get $2
    call $~lib/rt/pure/__release
    local.get $8
    call $~lib/rt/pure/__release
@@ -23100,22 +23110,9 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/typedarray/Int32Array#set<~lib/array/Array<i32>> (param $0 i32) (param $1 i32) (param $2 i32)
-  local.get $2
-  i32.const 0
-  i32.lt_s
-  if
-   i32.const 1376
-   i32.const 1440
-   i32.const 1774
-   i32.const 19
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $2
-  local.get $1
-  i32.load offset=12
-  i32.add
+ (func $~lib/typedarray/Int32Array#set<~lib/array/Array<i32>> (param $0 i32)
+  i32.const 4316
+  i32.load
   local.get $0
   i32.load offset=8
   i32.const 2
@@ -23131,14 +23128,10 @@
   end
   local.get $0
   i32.load offset=4
-  local.get $2
-  i32.const 2
-  i32.shl
-  i32.add
-  local.get $1
-  i32.load offset=4
-  local.get $1
-  i32.load offset=8
+  i32.const 4308
+  i32.load
+  i32.const 4312
+  i32.load
   call $~lib/memory/memory.copy
  )
  (func $std/typedarray/valuesEqual<~lib/typedarray/Int32Array> (param $0 i32) (param $1 i32)
@@ -23491,8 +23484,6 @@
   i32.const 10
   call $~lib/typedarray/Int32Array#constructor
   local.tee $0
-  i32.const 4304
-  i32.const 0
   call $~lib/typedarray/Int32Array#set<~lib/array/Array<i32>>
   local.get $0
   i32.const 10
@@ -23816,8 +23807,6 @@
   i32.const 10
   call $~lib/typedarray/Uint32Array#constructor
   local.tee $0
-  i32.const 4304
-  i32.const 0
   call $~lib/typedarray/Int32Array#set<~lib/array/Array<i32>>
   local.get $0
   i32.const 10
@@ -25100,10 +25089,25 @@
    call $~lib/rt/pure/__retain
    local.tee $7
    call $std/typedarray/valuesEqual<~lib/typedarray/Float32Array>
-   local.get $1
-   i32.const 4368
+   i32.const 4380
+   i32.load
    i32.const 3
-   call $~lib/typedarray/Int32Array#set<~lib/array/Array<i32>>
+   i32.add
+   local.get $1
+   i32.load offset=8
+   i32.const 2
+   i32.shr_u
+   i32.gt_s
+   br_if $folding-inner0
+   local.get $1
+   i32.load offset=4
+   i32.const 12
+   i32.add
+   i32.const 4372
+   i32.load
+   i32.const 4376
+   i32.load
+   call $~lib/memory/memory.copy
    local.get $1
    i32.const 10
    i32.const 2

@@ -54,6 +54,11 @@
   local.get $1
   call $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_get
   local.set $2
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   local.get $2
   i32.eqz
   if
@@ -95,6 +100,8 @@
   local.get $1
   call $~lib/array/Array<i32>#__unchecked_get
   local.set $2
+  i32.const 0
+  drop
   local.get $2
  )
  (func $std/array-access/i32ArrayArrayElementAccess (param $0 i32) (result i32)
@@ -144,6 +151,11 @@
   local.get $1
   call $~lib/array/Array<~lib/string/String>#__unchecked_get
   local.set $2
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   local.get $2
   i32.eqz
   if
@@ -209,6 +221,10 @@
   i32.shl
   i32.add
   local.set $6
+  i32.const 0
+  i32.const 2
+  i32.lt_s
+  drop
   local.get $4
   i32.const 4
   i32.ge_u
@@ -429,6 +445,11 @@
   local.get $1
   call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__unchecked_get
   local.set $2
+  i32.const 1
+  drop
+  i32.const 0
+  i32.eqz
+  drop
   local.get $2
   i32.eqz
   if
