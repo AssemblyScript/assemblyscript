@@ -2154,6 +2154,66 @@
   local.get $1
   call $~lib/rt/pure/__release
  )
+ (func $while/testIfImplicitContinueThen
+  (local $0 i32)
+  (local $1 i32)
+  i32.const 0
+  local.set $0
+  block $while-break|0
+   loop $while-continue|0
+    i32.const 1
+    local.set $1
+    local.get $1
+    if
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $0
+     i32.const 1
+     i32.lt_s
+     if
+      nop
+     else
+      br $while-break|0
+     end
+     br $while-continue|0
+    end
+   end
+  end
+  i32.const 1
+  global.set $while/ran
+ )
+ (func $while/testIfImplicitContinueElse
+  (local $0 i32)
+  (local $1 i32)
+  i32.const 0
+  local.set $0
+  block $while-break|0
+   loop $while-continue|0
+    i32.const 1
+    local.set $1
+    local.get $1
+    if
+     local.get $0
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $0
+     i32.const 1
+     i32.ge_s
+     if
+      br $while-break|0
+     else
+      nop
+     end
+     br $while-continue|0
+    end
+   end
+  end
+  i32.const 1
+  global.set $while/ran
+ )
  (func $start:while
   i32.const 0
   global.set $while/ran
@@ -2306,6 +2366,32 @@
    i32.const 0
    i32.const 32
    i32.const 177
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  global.set $while/ran
+  call $while/testIfImplicitContinueThen
+  global.get $while/ran
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 193
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  global.set $while/ran
+  call $while/testIfImplicitContinueElse
+  global.get $while/ran
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 32
+   i32.const 209
    i32.const 1
    call $~lib/builtins/abort
    unreachable
