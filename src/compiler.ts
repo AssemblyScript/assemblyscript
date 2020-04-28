@@ -2581,11 +2581,7 @@ export class Compiler extends DiagnosticEmitter {
       }
       elseFlow.freeScopedLocals();
       this.currentFlow = flow;
-      if (elseTerminates && !thenTerminates) {
-        flow.inherit(thenFlow);
-      } else {
-        flow.inheritMutual(thenFlow, elseFlow);
-      }
+      flow.inheritMutual(thenFlow, elseFlow);
       return module.if(condExpr,
         module.flatten(thenStmts),
         module.flatten(elseStmts)
