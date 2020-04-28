@@ -14,11 +14,6 @@ export abstract class ArrayBufferView {
     return <i32>(this.dataStart - changetype<usize>(this.buffer));
   }
 
-  get length(): i32 {
-    ERROR("missing implementation: subclasses must implement ArrayBufferView#length");
-    return unreachable();
-  }
-
   protected constructor(length: i32, alignLog2: i32) {
     if (<u32>length > <u32>BLOCK_MAXSIZE >>> alignLog2) throw new RangeError(E_INVALIDLENGTH);
     var buffer = __alloc(length = length << alignLog2, idof<ArrayBuffer>());

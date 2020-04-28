@@ -191,6 +191,7 @@ export class Set<T> {
         values[length++] = entry.key;
       }
     }
+    values.length = length;
     return values;
   }
 

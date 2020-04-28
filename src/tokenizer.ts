@@ -418,6 +418,10 @@ export class Range {
     );
   }
 
+  equals(other: Range): bool {
+    return this.source == other.source && this.start == other.start && this.end == other.end;
+  }
+
   get atStart(): Range {
     return new Range(this.source, this.start, this.start);
   }

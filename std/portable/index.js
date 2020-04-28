@@ -299,3 +299,8 @@ Object.defineProperties(globalScope["JSMath"], {
 });
 
 globalScope["unmanaged"] = function() {};
+
+globalScope["trace"] = function(message, n) {
+  if (n) message += Array.prototype.slice.call(arguments, 2, 2 + n);
+  console.error("trace: " + message);
+};
