@@ -60,8 +60,8 @@ declare module "assemblyscript/src/common" {
         INLINED = 8388608,
         /** Is scoped. */
         SCOPED = 16777216,
-        /** Is a trampoline. */
-        TRAMPOLINE = 33554432,
+        /** Is a stub. */
+        STUB = 33554432,
         /** Is a virtual method. */
         VIRTUAL = 67108864,
         /** Is (part of) a closure. */
@@ -89,6 +89,8 @@ declare module "assemblyscript/src/common" {
     export const LIBRARY_PREFIX: string;
     /** Path index suffix. */
     export const INDEX_SUFFIX: string;
+    /** Stub function delimiter. */
+    export const STUB_DELIMITER = "@";
     /** Common names. */
     export namespace CommonNames {
         const EMPTY = "";
@@ -250,6 +252,9 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Expression_cannot_be_represented_by_a_type = 225,
         Expression_resolves_to_unusual_type_0 = 226,
         Array_literal_expected = 227,
+        Function_0_is_virtual_and_will_not_be_inlined = 228,
+        Property_0_only_has_a_setter_and_is_missing_a_getter = 229,
+        _0_keyword_cannot_be_used_here = 230,
         Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
         Importing_the_table_disables_some_indirect_call_optimizations = 901,
         Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -317,6 +322,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Duplicate_identifier_0 = 2300,
         Cannot_find_name_0 = 2304,
         Module_0_has_no_exported_member_1 = 2305,
+        An_interface_can_only_extend_an_interface = 2312,
         Generic_type_0_requires_1_type_argument_s = 2314,
         Type_0_is_not_generic = 2315,
         Type_0_is_not_assignable_to_type_1 = 2322,
@@ -334,12 +340,16 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Operator_0_cannot_be_applied_to_types_1_and_2 = 2365,
         A_super_call_must_be_the_first_statement_in_the_constructor = 2376,
         Constructors_for_derived_classes_must_contain_a_super_call = 2377,
+        Getter_and_setter_accessors_do_not_agree_in_visibility = 2379,
         _get_and_set_accessor_must_have_the_same_type = 2380,
+        Overload_signatures_must_all_be_public_private_or_protected = 2385,
         Constructor_implementation_is_missing = 2390,
         Function_implementation_is_missing_or_not_immediately_following_the_declaration = 2391,
         Multiple_constructor_implementations_are_not_allowed = 2392,
         Duplicate_function_implementation = 2393,
+        This_overload_signature_is_not_compatible_with_its_implementation_signature = 2394,
         Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local = 2395,
+        A_class_can_only_implement_an_interface = 2422,
         A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged = 2434,
         Property_0_is_protected_and_only_accessible_within_class_1_and_its_subclasses = 2445,
         The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly = 2453,
@@ -349,6 +359,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Export_declaration_conflicts_with_exported_declaration_of_0 = 2484,
         _0_is_referenced_directly_or_indirectly_in_its_own_base_expression = 2506,
         Cannot_create_an_instance_of_an_abstract_class = 2511,
+        Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_2 = 2515,
         Object_is_possibly_null = 2531,
         Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property = 2540,
         The_target_of_an_assignment_must_be_a_variable_or_a_property_access = 2541,
@@ -646,6 +657,8 @@ declare module "assemblyscript/src/diagnostics" {
         private constructor();
         /** Creates a new diagnostic message of the specified category. */
         static create(code: DiagnosticCode, category: DiagnosticCategory, arg0?: string | null, arg1?: string | null, arg2?: string | null): DiagnosticMessage;
+        /** Tests if this message equals the specified. */
+        equals(other: DiagnosticMessage): boolean;
         /** Adds a source range to this message. */
         withRange(range: Range): this;
         /** Adds a related source range to this message. */
@@ -839,6 +852,7 @@ declare module "assemblyscript/src/tokenizer" {
         debugInfoRef: number;
         constructor(source: Source, start: number, end: number);
         static join(a: Range, b: Range): Range;
+        equals(other: Range): boolean;
         get atStart(): Range;
         get atEnd(): Range;
         toString(): string;
@@ -1065,6 +1079,8 @@ declare module "assemblyscript/src/ast" {
         get isNumericLiteral(): boolean;
         /** Tests whether this node is guaranteed to compile to a constant value. */
         get compilesToConst(): boolean;
+        /** Checks if this is a call calling a method on super. */
+        get isCallOnSuper(): boolean;
     }
     export abstract class TypeNode extends Node {
         /** Whether nullable or not. */
@@ -2324,7 +2340,7 @@ declare module "assemblyscript/src/module" {
     export function getFunctionName(func: FunctionRef): string | null;
     export function getFunctionParams(func: FunctionRef): NativeType;
     export function getFunctionResults(func: FunctionRef): NativeType;
-    export function getFunctionVars(func: FunctionRef): NativeType;
+    export function getFunctionVars(func: FunctionRef): NativeType[];
     export function getGlobalName(global: GlobalRef): string | null;
     export function getGlobalType(global: GlobalRef): NativeType;
     export function isGlobalMutable(global: GlobalRef): boolean;
@@ -2343,6 +2359,23 @@ declare module "assemblyscript/src/module" {
         addBlockWithSwitch(code: ExpressionRef, condition: ExpressionRef): number;
         addBranchForSwitch(from: number, to: number, indexes: number[], code?: ExpressionRef): void;
         renderAndDispose(entry: number, labelHelper: Index): ExpressionRef;
+    }
+    /** Builds a switch using a sequence of `br_if`s. */
+    export class SwitchBuilder {
+        private module;
+        private condition;
+        private values;
+        private indexes;
+        private cases;
+        private defaultIndex;
+        /** Creates a new builder using the specified i32 condition. */
+        constructor(module: Module, condition: ExpressionRef);
+        /** Links a case to the specified branch. */
+        addCase(value: number, code: ExpressionRef[]): void;
+        /** Links the default branch. */
+        addDefault(code: ExpressionRef[]): void;
+        /** Renders the switch to a block. */
+        render(localIndex: number, labelPostfix?: string): ExpressionRef;
     }
     export enum SideEffects {
         None = 0,
@@ -2488,6 +2521,8 @@ declare module "assemblyscript/src/types" {
         asFunction(signature: Signature): Type;
         /** Composes the respective nullable type of this type. */
         asNullable(): Type;
+        /** Tests if this type equals the specified. */
+        equals(other: Type): boolean;
         /** Tests if a value of this type is assignable to the target type incl. implicit conversion. */
         isAssignableTo(target: Type, signednessIsRelevant?: boolean): boolean;
         /** Tests if a value of this type is assignable to the target type excl. implicit conversion. */
@@ -2572,12 +2607,14 @@ declare module "assemblyscript/src/types" {
         asFunctionTarget(program: Program): FunctionTarget;
         /** Gets the known or, alternatively, generic parameter name at the specified index. */
         getParameterName(index: number): string;
+        /** Tests if this signature equals the specified. */
+        equals(other: Signature): boolean;
         /** Tests if a value of this function type is assignable to a target of the specified function type. */
-        isAssignableTo(target: Signature): boolean;
-        /** Tests to see if a signature equals another signature. */
-        equals(value: Signature): boolean;
+        isAssignableTo(target: Signature, requireSameSize?: boolean): boolean;
         /** Converts this signature to a string. */
         toString(): string;
+        /** Creates a clone of this signature that is safe to modify. */
+        clone(): Signature;
     }
     /** Gets the cached default parameter name for the specified index. */
     export function getDefaultParameterName(index: number): string;
@@ -3373,7 +3410,9 @@ declare module "assemblyscript/src/program" {
         /** Gets the (possibly merged) program element linked to the specified declaration. */
         getElementByDeclaration(declaration: DeclarationStatement): DeclaredElement | null;
         /** Initializes the program and its elements prior to compilation. */
-        initialize(options: Options): void;
+        initialize(): void;
+        /** Marks virtual members in a base class overloaded in this class. */
+        private markVirtuals;
         /** Requires that a global library element of the specified kind is present and returns it. */
         private require;
         /** Requires that a non-generic global class is present and returns it. */
@@ -3435,6 +3474,8 @@ declare module "assemblyscript/src/program" {
         private initializeFunction;
         /** Initializes an interface. */
         private initializeInterface;
+        /** Initializes a field of an interface, as a property. */
+        private initializeFieldAsProperty;
         /** Initializes a namespace. */
         private initializeNamespace;
         /** Initializes a `type` definition. */
@@ -3567,6 +3608,12 @@ declare module "assemblyscript/src/program" {
         abstract lookup(name: string): Element | null;
         /** Adds an element as a member of this one. Reports and returns `false` if a duplicate. */
         add(name: string, element: DeclaredElement, localIdentifierIfImport?: IdentifierExpression | null): boolean;
+        /** Checks if this element is public, explicitly or implicitly. */
+        get isPublic(): boolean;
+        /** Checks if this element is implicitly public, i.e. not explicitly declared to be. */
+        get isImplicitlyPublic(): boolean;
+        /** Checks if the visibility of this element equals the specified. */
+        visibilityEquals(other: Element): boolean;
         /** Returns a string representation of this element. */
         toString(): string;
     }
@@ -3594,8 +3641,12 @@ declare module "assemblyscript/src/program" {
         get isDeclaredInLibrary(): boolean;
         /** Gets the associated identifier node. */
         get identifierNode(): IdentifierExpression;
+        /** Gets the signature node, if applicable, along the identifier node. */
+        get identifierAndSignatureRange(): Range;
         /** Gets the assiciated decorator nodes. */
         get decoratorNodes(): DecoratorNode[] | null;
+        /** Checks if this element is a compatible override of the specified. */
+        isCompatibleOverride(base: DeclaredElement): boolean;
     }
     /** Checks if the specified element kind indicates a typed element. */
     export function isTypedElement(kind: ElementKind): boolean;
@@ -3804,6 +3855,8 @@ declare module "assemblyscript/src/program" {
         operatorKind: OperatorKind;
         /** Already resolved instances. */
         instances: Map<string, Function> | null;
+        /** Methods overloading this one, if any. These are unbound. */
+        overloads: Set<FunctionPrototype> | null;
         /** Clones of this prototype that are bounds to specific classes. */
         private boundPrototypes;
         /** Constructs a new function prototype. */
@@ -3846,6 +3899,8 @@ declare module "assemblyscript/src/program" {
         localsByIndex: Local[];
         /** List of additional non-parameter locals. */
         additionalLocals: Type[];
+        /** Concrete type arguments. */
+        typeArguments: Type[] | null;
         /** Contextual type arguments. */
         contextualTypeArguments: Map<string, Type> | null;
         /** Default control flow. */
@@ -3856,8 +3911,10 @@ declare module "assemblyscript/src/program" {
         ref: FunctionRef;
         /** Function table index, if any. */
         functionTableIndex: number;
-        /** Trampoline function for calling with omitted arguments. */
-        trampoline: Function | null;
+        /** Varargs stub for calling with omitted arguments. */
+        varargsStub: Function | null;
+        /** Virtual stub for calling overloads. */
+        virtualStub: Function | null;
         /** Counting id of inline operations involving this function. */
         nextInlineId: number;
         /** Counting id of anonymous inner functions. */
@@ -3870,10 +3927,14 @@ declare module "assemblyscript/src/program" {
         nameInclTypeParameters: string, 
         /** Respective function prototype. */
         prototype: FunctionPrototype, 
+        /** Concrete type arguments. */
+        typeArguments: Type[] | null, 
         /** Concrete signature. */
         signature: Signature, // pre-resolved
         /** Contextual type arguments inherited from its parent class, if any. */
         contextualTypeArguments?: Map<string, Type> | null);
+        /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
+        newStub(postfix: string): Function;
         /** Adds a local of the specified type, with an optional name. */
         addLocal(type: Type, name?: string | null, declaration?: VariableDeclaration | null): Local;
         lookup(name: string): Element | null;
@@ -3994,9 +4055,11 @@ declare module "assemblyscript/src/program" {
     /** A yet unresolved class prototype. */
     export class ClassPrototype extends DeclaredElement {
         /** Instance member prototypes. */
-        instanceMembers: Map<string, Element> | null;
+        instanceMembers: Map<string, DeclaredElement> | null;
         /** Base class prototype, if applicable. */
         basePrototype: ClassPrototype | null;
+        /** Interface prototypes, if applicable. */
+        interfacePrototypes: InterfacePrototype[] | null;
         /** Constructor prototype. */
         constructorPrototype: FunctionPrototype | null;
         /** Operator overload prototypes. */
@@ -4040,6 +4103,8 @@ declare module "assemblyscript/src/program" {
         typeArguments: Type[] | null;
         /** Base class, if applicable. */
         base: Class | null;
+        /** Implemented interfaces, if applicable. */
+        interfaces: Set<Interface> | null;
         /** Contextual type arguments for fields and methods. */
         contextualTypeArguments: Map<string, Type> | null;
         /** Current member memory offset. */
@@ -4058,6 +4123,10 @@ declare module "assemblyscript/src/program" {
         rttiFlags: number;
         /** Wrapped type, if a wrapper for a basic type. */
         wrappedType: Type | null;
+        /** Classes directly extending this class. */
+        extendees: Set<Class> | null;
+        /** Classes implementing this interface. */
+        implementers: Set<Class> | null;
         /** Gets the unique runtime id of this class. */
         get id(): number;
         /** Tests if this class is of a builtin array type (Array/TypedArray). */
@@ -4074,6 +4143,8 @@ declare module "assemblyscript/src/program" {
         typeArguments?: Type[] | null, _isInterface?: boolean);
         /** Sets the base class. */
         setBase(base: Class): void;
+        /** Adds an interface. */
+        addInterface(iface: Interface): void;
         /** Tests if a value of this class type is assignable to a target of the specified class type. */
         isAssignableTo(target: Class): boolean;
         /** Looks up the operator overload of the specified kind. */
@@ -4093,6 +4164,8 @@ declare module "assemblyscript/src/program" {
         get isAcyclic(): boolean;
         /** Tests if this class potentially forms a reference cycle to another one. */
         private cyclesTo;
+        /** Gets all extendees of this class (that do not have the specified instance member). */
+        getAllExtendees(exceptIfMember?: string | null, out?: Set<Class>): Set<Class>;
     }
     /** A yet unresolved interface. */
     export class InterfacePrototype extends ClassPrototype {
@@ -4102,7 +4175,13 @@ declare module "assemblyscript/src/program" {
     /** A resolved interface. */
     export class Interface extends Class {
         /** Constructs a new interface. */
-        constructor(nameInclTypeParameters: string, prototype: InterfacePrototype, typeArguments?: Type[]);
+        constructor(
+        /** Name incl. type parameters, i.e. `Foo<i32>`. */
+        nameInclTypeParameters: string, 
+        /** The respective class prototype. */
+        prototype: InterfacePrototype, 
+        /** Concrete type arguments, if any. */
+        typeArguments?: Type[] | null);
     }
     /** Mangles the internal name of an element with the specified name that is a child of the given parent. */
     export function mangleInternalName(name: string, parent: Element, isInstance: boolean, asGlobal?: boolean): string;
@@ -4236,7 +4315,7 @@ declare module "assemblyscript/src/compiler" {
         /** Map of already compiled static string segments. */
         stringSegments: Map<string, MemorySegment>;
         /** Function table being compiled. First elem is blank. */
-        functionTable: string[];
+        functionTable: Function[];
         /** Arguments length helper global. */
         builtinArgumentsLength: GlobalRef;
         /** Requires runtime features. */
@@ -4255,10 +4334,8 @@ declare module "assemblyscript/src/compiler" {
         static compile(program: Program): Module;
         /** Constructs a new compiler for a {@link Program} using the specified options. */
         constructor(program: Program);
-        initializeProgram(): void;
         /** Performs compilation of the underlying {@link Program} to a {@link Module}. */
         compile(): Module;
-        private setupVirtualLookupTables;
         /** Applies the respective module exports for the specified file. */
         private ensureModuleExports;
         /** Applies the respective module export(s) for the specified element. */
@@ -4402,10 +4479,14 @@ declare module "assemblyscript/src/compiler" {
         /** Compiles a direct call to a concrete function. */
         compileCallDirect(instance: Function, argumentExpressions: Expression[], reportNode: Node, thisArg?: ExpressionRef, constraints?: Constraints): ExpressionRef;
         makeCallInline(instance: Function, operands: ExpressionRef[] | null, thisArg?: ExpressionRef, immediatelyDropped?: boolean): ExpressionRef;
-        /** Gets the trampoline for the specified function. */
-        ensureTrampoline(original: Function): Function;
         /** Makes sure that the arguments length helper global is present. */
-        ensureBuiltinArgumentsLength(): void;
+        ensureArgumentsLength(): void;
+        /** Ensures compilation of the varargs stub for the specified function. */
+        ensureVarargsStub(original: Function): Function;
+        /** Ensures compilation of the virtual stub for the specified function. */
+        ensureVirtualStub(original: Function): Function;
+        /** Finalizes the virtual stub of the specified function. */
+        private finalizeVirtualStub;
         /** Makes a retain call, retaining the expression's value. */
         makeRetain(expr: ExpressionRef): ExpressionRef;
         /** Makes a release call, releasing the expression's value. Changes the current type to void.*/
@@ -5376,7 +5457,7 @@ declare module "assemblyscript/src/index" {
     /** Obtains the path of the dependee of a given imported file. */
     export function getDependee(program: Program, file: string): string | null;
     /** Initializes the program pre-emptively for transform hooks. */
-    export function initializeProgram(program: Program, options: Options): void;
+    export function initializeProgram(program: Program): void;
     /** Compiles the parsed sources to a module. */
     export function compile(program: Program): Module;
     /** Builds WebIDL definitions for the specified program. */
