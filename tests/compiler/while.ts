@@ -175,3 +175,35 @@ function testRefAutorelease(): void {
 ran = false;
 testRefAutorelease();
 assert(ran);
+
+function testIfImplicitContinueThen(): void {
+  var i = 0;
+  while (true) {
+    i++;
+    if (i < 1) {
+      // continue
+    } else {
+      break;
+    }
+  }
+  ran = true;
+}
+ran = false;
+testIfImplicitContinueThen();
+assert(ran);
+
+function testIfImplicitContinueElse(): void {
+  var i = 0;
+  while (true) {
+    i++;
+    if (i >= 1) {
+      break;
+    } else {
+      // continue
+    }
+  }
+  ran = true;
+}
+ran = false;
+testIfImplicitContinueElse();
+assert(ran);
