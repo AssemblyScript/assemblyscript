@@ -959,8 +959,7 @@ export namespace errno {
 }
 export type errno = u16;
 
-/** An event that occurred. */
-@unmanaged export abstract class event {
+@unmanaged abstract class $event { // size=16/32
   /** User-provided value that got attached to `subscription#userdata`. */
   userdata: userdata;
   /** If non-zero, an error that occurred while processing the subscription request. */
@@ -971,8 +970,14 @@ export type errno = u16;
   private __padding0: u16;
 }
 
+/** An event that occurred. */
+@unmanaged export abstract class event extends $event {
+  private __padding1: u64;
+  private __padding2: u64;
+}
+
 /** An event that occurred when type is `eventtype.FD_READ` or `eventtype.FD_WRITE`. */
-@unmanaged export class event_fd_readwrite extends event {
+@unmanaged export class event_fd_readwrite extends $event {
   /* The number of bytes available for reading or writing. */
   nbytes: filesize;
   /* The state of the file descriptor. */
@@ -1187,14 +1192,18 @@ export namespace preopentype {
 }
 export type preopentype = u8;
 
-/* Information about a pre-opened capability. */
-export abstract class prestat {
+@unmanaged abstract class $prestat { // WASM32: size=1/8, WASM64: size=1/16
   /* The type of the pre-opened capability. */
   type: preopentype;
 }
 
+/* Information about a pre-opened capability. */
+@unmanaged export abstract class prestat extends $prestat {
+  private __padding0: usize;
+}
+
 /** The contents of a $prestat when type is `preopentype.DIR`. */
-export class prestat_dir extends prestat {
+@unmanaged export class prestat_dir extends $prestat {
   /** The length of the directory name for use with `fd_prestat_dir_name`. */
   name_len: usize;
 }
@@ -1491,8 +1500,7 @@ export namespace subclockflags {
 }
 export type subclockflags = u16;
 
-/** Subscription to an event. */
-@unmanaged export abstract class subscription {
+@unmanaged abstract class $subscription { // size=16/48
   /** User-provided value that is attached to the subscription. */
   userdata: userdata;
   /** The type of the event to which to subscribe. */
@@ -1501,8 +1509,16 @@ export type subclockflags = u16;
   private __padding0: u32;
 }
 
+/** Subscription to an event. */
+@unmanaged export abstract class subscription extends $subscription {
+  private __padding1: u64;
+  private __padding2: u64;
+  private __padding3: u64;
+  private __padding4: u64;
+}
+
 /* Subscription to an event of type `eventtype.CLOCK`.**/
-@unmanaged export class subscription_clock extends subscription {
+@unmanaged export class subscription_clock extends $subscription {
   /** The clock against which to compare the timestamp. */
   clock_id: clockid;
   /** The absolute or relative timestamp. */
@@ -1516,9 +1532,13 @@ export type subclockflags = u16;
 }
 
 /* Subscription to an event of type `eventtype.FD_READ` or `eventtype.FD_WRITE`.**/
-@unmanaged export class subscription_fd_readwrite extends subscription {
+@unmanaged export class subscription_fd_readwrite extends $subscription {
   /** The file descriptor on which to wait for it to become ready for reading or writing. */
   file_descriptor: fd;
+
+  private __padding1: u64;
+  private __padding2: u64;
+  private __padding3: u64;
 }
 
 /** Timestamp in nanoseconds. */
