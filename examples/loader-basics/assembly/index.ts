@@ -62,7 +62,7 @@ export function computeSum(a: Int32Array): i32 {
 }
 
 // See the comments in loader-basics/test/index.js "Test for Example 5" for
-// why this is necessary, and how to perform an Array<i32> allocation with it.
+// why this is necessary, and how to perform an Int32Array allocation with it.
 
 export const Int32Array_ID = idof<Int32Array>();
 

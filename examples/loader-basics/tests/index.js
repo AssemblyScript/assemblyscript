@@ -67,7 +67,7 @@ const {
 
   // Allocate a new array in WebAssembly memory and get a view on it. Note that
   // we have specify the runtime id of the array type we want to allocate, so
-  // we export its id (`idof<i32[]>`) from the module to do so.
+  // we export its id (`idof<Int32Array>`) from the module to do so.
   const ptr = __retain(__allocArray(myModule.Int32Array_ID, [ 1, 2, 3 ]));
   const view = __getArrayView(ptr);
   const copy = __getArray(ptr);
