@@ -16225,6 +16225,10 @@
   (local $4 i32)
   i32.const 1
   local.set $2
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
   local.get $1
   i32.const 0
   i32.le_s
@@ -58898,6 +58902,24 @@
    unreachable
   end
   i32.const 1
+  i32.const 0
+  i32.const 0
+  i32.eq
+  i32.const 0
+  select
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 1
+  i32.const 1
+  i32.const 0
+  i32.eq
+  i32.const 0
+  select
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 1
   i32.const 3
   call $~lib/math/ipow32
   i32.const 1
@@ -58995,8 +59017,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
   i32.const 0
   i32.const -1
   call $~lib/math/ipow32
@@ -59011,13 +59031,29 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
   i32.const 1
-  call $~lib/math/ipow32f
-  f32.const inf
-  f32.neg
-  f32.eq
+  i32.const 0
+  i32.const 0
+  i32.eq
+  i32.const 0
+  select
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 1
+  i32.const 1
+  i32.const 0
+  i32.eq
+  i32.const 0
+  select
+  i32.const 0
+  i32.eq
+  drop
+  i32.const 0
+  i32.const 2
+  call $~lib/math/ipow32
+  i32.const 0
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -59027,12 +59063,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f32.const inf
-  f32.neg
-  i32.const 2
-  call $~lib/math/ipow32f
-  f32.const inf
-  f32.eq
+  i32.const 1
+  i32.const -2
+  call $~lib/math/ipow32
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -59056,7 +59091,25 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
+  i32.const 1
+  i32.const 0
+  i32.const 0
+  i32.eq
+  i32.const 1
+  select
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 1
+  i32.const 1
+  i32.const 0
+  i32.eq
+  i32.const 1
+  select
+  i32.const 1
+  i32.eq
+  drop
+  i32.const 1
   i32.const 2
   call $~lib/math/ipow32
   i32.const 1
@@ -59070,11 +59123,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MIN_VALUE
-  i32.const 2
-  call $~lib/math/ipow32f
-  f32.const 0
-  f32.eq
+  i32.const 1
+  i32.const 3
+  call $~lib/math/ipow32
+  i32.const 1
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -59084,11 +59137,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f32.MAX_VALUE
-  i32.const -1
-  call $~lib/math/ipow32f
-  f32.const 2.938735877055719e-39
-  f32.eq
+  i32.const -2
+  i32.const 3
+  call $~lib/math/ipow32
+  i32.const -8
+  i32.eq
   i32.eqz
   if
    i32.const 0
@@ -59224,12 +59277,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  i32.const 0
-  call $~lib/math/ipow64f
-  f64.const 1
-  f64.eq
+  i64.const 61731
+  i64.const 4
+  call $~lib/math/ipow64
+  i64.const -3925184889716469295
+  i64.eq
   i32.eqz
   if
    i32.const 0
@@ -59239,13 +59291,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  i32.const 1
-  call $~lib/math/ipow64f
-  f64.const inf
-  f64.neg
-  f64.eq
+  i64.const 61731
+  i64.const 4
+  call $~lib/math/ipow64
+  i64.const -3925184889716469295
+  i64.eq
   i32.eqz
   if
    i32.const 0
@@ -59255,12 +59305,17 @@
    call $~lib/builtins/abort
    unreachable
   end
-  f64.const inf
-  f64.neg
-  i32.const 2
-  call $~lib/math/ipow64f
-  f64.const inf
-  f64.eq
+  i64.const 57055
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.const 339590
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.add
+  i64.const 340126
+  i64.const 3
+  call $~lib/math/ipow64
+  i64.ne
   i32.eqz
   if
    i32.const 0
@@ -59288,10 +59343,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
-  i32.const 2
-  call $~lib/math/ipow64f
-  f64.const inf
+  i32.const 1
+  f64.convert_i32_u
+  f64.const 0.5
+  call $~lib/math/NativeMath.pow
+  f64.const 1
   f64.eq
   i32.eqz
   if
@@ -59302,10 +59358,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MIN_VALUE
-  i32.const 2
-  call $~lib/math/ipow64f
-  f64.const 0
+  i32.const 0
+  f64.convert_i32_u
   f64.const 0.5
   call $~lib/math/NativeMath.pow
   f64.const 0
@@ -59319,10 +59373,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  global.get $~lib/builtins/f64.MAX_VALUE
-  i32.const -1
-  call $~lib/math/ipow64f
-  f64.const 5.562684646268003e-309
+  i32.const 0
+  f64.convert_i32_u
+  f64.const -1
+  call $~lib/math/NativeMath.pow
+  f64.const inf
   f64.eq
   i32.eqz
   if

@@ -4389,6 +4389,10 @@
   (local $4 i32)
   i32.const 1
   local.set $2
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
   local.get $1
   i32.const 0
   i32.le_s
@@ -5280,11 +5284,9 @@
    unreachable
   end
   i32.const 2
-  f64.convert_i32_u
-  f64.const 2
-  call $~lib/math/NativeMath.pow
-  i32.const 0
-  call $~lib/number/F64#toString
+  i32.const 2
+  call $~lib/math/ipow32
+  call $~lib/number/I32#toString
   local.tee $26
   i32.const 7984
   call $~lib/string/String.__eq

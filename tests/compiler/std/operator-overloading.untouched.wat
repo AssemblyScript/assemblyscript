@@ -356,6 +356,10 @@
   (local $4 i32)
   i32.const 1
   local.set $2
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
   local.get $1
   i32.const 0
   i32.le_s
@@ -387,72 +391,10 @@
    if
     local.get $0
     return
-   end
-   local.get $1
-   f64.const 0
-   f64.eq
-   if
-    f64.const 1
-    return
-   end
-  end
-  i32.const 0
-  i32.const 1
-  i32.lt_s
-  drop
-  block $~lib/util/math/pow_lut|inlined.0 (result f64)
-   local.get $0
-   local.set $3
-   local.get $1
-   local.set $2
-   i32.const 0
-   local.set $4
-   local.get $3
-   i64.reinterpret_f64
-   local.set $5
-   local.get $2
-   i64.reinterpret_f64
-   local.set $6
-   local.get $5
-   i64.const 52
-   i64.shr_u
-   local.set $7
-   local.get $6
-   i64.const 52
-   i64.shr_u
-   local.set $8
-   local.get $7
-   i64.const 1
-   i64.sub
-   i64.const 2047
-   i64.const 1
-   i64.sub
-   i64.ge_u
-   if (result i32)
-    i32.const 1
    else
-    local.get $8
-    i64.const 2047
-    i64.and
-    i64.const 958
-    i64.sub
-    i64.const 1086
-    i64.const 958
-    i64.sub
-    i64.ge_u
-   end
-   if
-    local.get $6
-    local.set $9
-    local.get $9
-    i64.const 1
-    i64.shl
-    i64.const 1
-    i64.sub
-    i64.const -9007199254740992
-    i64.const 1
-    i64.sub
-    i64.ge_u
+    local.get $1
+    i32.const 2
+    i32.eq
     if
      local.get $0
      local.get $0
@@ -463,298 +405,126 @@
      i32.const 32
      i32.lt_s
      if
-      f64.const 1
-      br $~lib/util/math/pow_lut|inlined.0
-     end
-     local.get $5
-     i64.const 4607182418800017408
-     i64.eq
-     if
-      f64.const nan:0x8000000000000
-      br $~lib/util/math/pow_lut|inlined.0
-     end
-     local.get $5
-     i64.const 1
-     i64.shl
-     i64.const -9007199254740992
-     i64.gt_u
-     if (result i32)
-      i32.const 1
-     else
-      local.get $6
-      i64.const 1
-      i64.shl
-      i64.const -9007199254740992
-      i64.gt_u
-     end
-     if
-      local.get $3
-      local.get $2
-      f64.add
-      br $~lib/util/math/pow_lut|inlined.0
-     end
-     local.get $5
-     i64.const 1
-     i64.shl
-     i64.const 9214364837600034816
-     i64.eq
-     if
-      f64.const nan:0x8000000000000
-      br $~lib/util/math/pow_lut|inlined.0
-     end
-     local.get $5
-     i64.const 1
-     i64.shl
-     i64.const 9214364837600034816
-     i64.lt_u
-     local.get $6
-     i64.const 63
-     i64.shr_u
-     i64.const 0
-     i64.ne
-     i32.eqz
-     i32.eq
-     if
-      f64.const 0
-      br $~lib/util/math/pow_lut|inlined.0
-     end
-     local.get $2
-     local.get $2
-     f64.mul
-     br $~lib/util/math/pow_lut|inlined.0
-    end
-    local.get $5
-    local.set $9
-    local.get $9
-    i64.const 1
-    i64.shl
-    i64.const 1
-    i64.sub
-    i64.const -9007199254740992
-    i64.const 1
-    i64.sub
-    i64.ge_u
-    if
-     local.get $3
-     local.get $3
-     f64.mul
-     local.set $10
-     local.get $5
-     i64.const 63
-     i64.shr_u
-     i32.wrap_i64
-     if (result i32)
-      block $~lib/util/math/checkint|inlined.0 (result i32)
-       local.get $6
-       local.set $9
-       local.get $9
-       i64.const 52
-       i64.shr_u
-       i64.const 2047
-       i64.and
-       local.set $11
-       local.get $11
-       i64.const 1023
-       i64.lt_u
-       if
-        i32.const 0
-        br $~lib/util/math/checkint|inlined.0
+      i32.const 32
+      local.get $1
+      i32.clz
+      i32.sub
+      local.set $3
+      block $break|0
+       block $case4|0
+        block $case3|0
+         block $case2|0
+          block $case1|0
+           block $case0|0
+            local.get $3
+            local.set $4
+            local.get $4
+            i32.const 5
+            i32.eq
+            br_if $case0|0
+            local.get $4
+            i32.const 4
+            i32.eq
+            br_if $case1|0
+            local.get $4
+            i32.const 3
+            i32.eq
+            br_if $case2|0
+            local.get $4
+            i32.const 2
+            i32.eq
+            br_if $case3|0
+            local.get $4
+            i32.const 1
+            i32.eq
+            br_if $case4|0
+            br $break|0
+           end
+           local.get $1
+           i32.const 1
+           i32.and
+           if
+            local.get $2
+            local.get $0
+            i32.mul
+            local.set $2
+           end
+           local.get $1
+           i32.const 1
+           i32.shr_u
+           local.set $1
+           local.get $0
+           local.get $0
+           i32.mul
+           local.set $0
+          end
+          local.get $1
+          i32.const 1
+          i32.and
+          if
+           local.get $2
+           local.get $0
+           i32.mul
+           local.set $2
+          end
+          local.get $1
+          i32.const 1
+          i32.shr_u
+          local.set $1
+          local.get $0
+          local.get $0
+          i32.mul
+          local.set $0
+         end
+         local.get $1
+         i32.const 1
+         i32.and
+         if
+          local.get $2
+          local.get $0
+          i32.mul
+          local.set $2
+         end
+         local.get $1
+         i32.const 1
+         i32.shr_u
+         local.set $1
+         local.get $0
+         local.get $0
+         i32.mul
+         local.set $0
+        end
+        local.get $1
+        i32.const 1
+        i32.and
+        if
+         local.get $2
+         local.get $0
+         i32.mul
+         local.set $2
+        end
+        local.get $1
+        i32.const 1
+        i32.shr_u
+        local.set $1
+        local.get $0
+        local.get $0
+        i32.mul
+        local.set $0
        end
-       local.get $11
-       i64.const 1023
-       i64.const 52
-       i64.add
-       i64.gt_u
+       local.get $1
+       i32.const 1
+       i32.and
        if
         local.get $2
         local.get $0
         i32.mul
         local.set $2
        end
-       i64.const 1
-       i64.const 1023
-       i64.const 52
-       i64.add
-       local.get $11
-       i64.sub
-       i64.shl
-       local.set $11
-       local.get $9
-       local.get $11
-       i64.const 1
-       i64.sub
-       i64.and
-       i64.const 0
-       i64.ne
-       if
-        i32.const 0
-        br $~lib/util/math/checkint|inlined.0
-       end
-       local.get $9
-       local.get $11
-       i64.and
-       i64.const 0
-       i64.ne
-       if
-        i32.const 1
-        br $~lib/util/math/checkint|inlined.0
-       end
-       i32.const 2
       end
       local.get $2
       return
      end
-    end
-    local.get $5
-    i64.const 63
-    i64.shr_u
-    i64.const 0
-    i64.ne
-    if
-     block $~lib/util/math/checkint|inlined.1 (result i32)
-      local.get $6
-      local.set $9
-      local.get $9
-      i64.const 52
-      i64.shr_u
-      i64.const 2047
-      i64.and
-      local.set $11
-      local.get $11
-      i64.const 1023
-      i64.lt_u
-      if
-       i32.const 0
-       br $~lib/util/math/checkint|inlined.1
-      end
-      local.get $11
-      i64.const 1023
-      i64.const 52
-      i64.add
-      i64.gt_u
-      if
-       i32.const 2
-       br $~lib/util/math/checkint|inlined.1
-      end
-      i64.const 1
-      i64.const 1023
-      i64.const 52
-      i64.add
-      local.get $11
-      i64.sub
-      i64.shl
-      local.set $11
-      local.get $9
-      local.get $11
-      i64.const 1
-      i64.sub
-      i64.and
-      i64.const 0
-      i64.ne
-      if
-       i32.const 0
-       br $~lib/util/math/checkint|inlined.1
-      end
-      local.get $9
-      local.get $11
-      i64.and
-      i64.const 0
-      i64.ne
-      if
-       i32.const 1
-       br $~lib/util/math/checkint|inlined.1
-      end
-      i32.const 2
-     end
-     local.set $12
-     local.get $12
-     i32.const 0
-     i32.eq
-     if
-      local.get $3
-      local.get $3
-      f64.sub
-      local.get $3
-      local.get $3
-      f64.sub
-      f64.div
-      br $~lib/util/math/pow_lut|inlined.0
-     end
-     local.get $12
-     i32.const 1
-     i32.eq
-     if
-      i32.const 262144
-      local.set $4
-     end
-     local.get $5
-     i64.const 9223372036854775807
-     i64.and
-     local.set $5
-     local.get $7
-     i64.const 2047
-     i64.and
-     local.set $7
-    end
-    local.get $8
-    i64.const 2047
-    i64.and
-    i64.const 958
-    i64.sub
-    i64.const 1086
-    i64.const 958
-    i64.sub
-    i64.ge_u
-    if
-     local.get $5
-     i64.const 4607182418800017408
-     i64.eq
-     if
-      f64.const 1
-      br $~lib/util/math/pow_lut|inlined.0
-     end
-     local.get $8
-     i64.const 2047
-     i64.and
-     i64.const 958
-     i64.lt_u
-     if
-      f64.const 1
-      br $~lib/util/math/pow_lut|inlined.0
-     end
-     local.get $5
-     i64.const 4607182418800017408
-     i64.gt_u
-     local.get $8
-     i64.const 2048
-     i64.lt_u
-     i32.eq
-     if (result f64)
-      f64.const inf
-     else
-      f64.const 0
-     end
-     br $~lib/util/math/pow_lut|inlined.0
-    end
-    local.get $7
-    i64.const 0
-    i64.eq
-    if
-     local.get $3
-     f64.const 4503599627370496
-     f64.mul
-     i64.reinterpret_f64
-     local.set $5
-     local.get $5
-     i64.const 9223372036854775807
-     i64.and
-     local.set $5
-     local.get $5
-     i64.const 52
-     i64.const 52
-     i64.shl
-     i64.sub
-     local.set $5
     end
    end
   end
