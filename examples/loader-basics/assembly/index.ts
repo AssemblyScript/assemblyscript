@@ -67,7 +67,7 @@ export const Int32Array_ID = idof<Int32Array>();
 
 // Example 6: WebAssembly arrays of WebAssembly strings.
 
-// Let's get a little more serious in the last example. We'd like to pass an
+// Let's get a little more serious with a combined example. We'd like to pass an
 // array of strings from JavaScript to WebAssembly, create a new array with all
 // strings converted to upper case, return it to JavaScript and print its contents.
 
@@ -83,3 +83,45 @@ export function capitalize(a: string[]): string[] {
 }
 
 export const ArrayOfStrings_ID = idof<string[]>();
+
+// Example 7: Using custom classes.
+
+// The loader also understands exports of entire classes, and with the knowledge
+// obtained in the previous examples it becomes possible to interface with a
+// more complex program like the following in a nearly natural way.
+
+// see: tests/index.js "Test for Example 7"
+
+export namespace Game {
+  export class Player {
+    name: string;
+    position: Position | null;
+    constructor(name: string) {
+      this.name = name;
+      this.position = new Position();
+    }
+    move(x: i32, y: i32): void {
+      var position = assert(this.position);
+      position.x += x;
+      position.y += y;
+    }
+    kill(): void {
+      this.position = null;
+    }
+    toString(): string {
+      var position = this.position;
+      if (position) {
+        return this.name + " @ " + position.toString();
+      } else {
+        return this.name + " @ AWAITING ASSIGNMENT";
+      }
+    }
+  }
+  export class Position {
+    x: i32 = 0;
+    y: i32 = 0;
+    toString(): string {
+      return this.x.toString() + "/" + this.y.toString();
+    }
+  }
+}

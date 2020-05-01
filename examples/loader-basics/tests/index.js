@@ -108,4 +108,44 @@ const {
   // typically rather avoid the overhead and do this in JavaScript directly.
 }
 
+// Test for Example 7: Using custom classes.
+{
+  console.log("Example 7:");
+
+  // Create a new player. Note that the loader makes a nice object structure
+  // of our exports, here a class `Player` within the `Game` namespace. So
+  // let's call the `Player` constructor (this is also an allocation):
+  let player;
+  {
+    const namePtr = __retain(__allocString("Gordon Freeman"));
+    player = new myModule.Game.Player(namePtr);
+    __release(namePtr);
+  }
+  console.log("  Player (new): " + __getString(player.toString()));
+
+  // Move them and log again
+  player.move(10, 20);
+  console.log("  Player (moved): " + __getString(player.toString()));
+
+  // Obtaining just the position. Note that we can `wrap` any pointer with
+  // the matching class within the object structure made by the loader.
+  {
+    const positionPtr = player.position;
+    const position = myModule.Game.Position.wrap(positionPtr);
+    console.log("  Position (wrapped): " + position.x + "/" + position.y);
+
+    position.x -= 100;
+    position.y += 200;
+    console.log("  Position (moved): " + __getString(position.toString()));
+
+    __release(positionPtr);
+  }
+
+  // Finish 'em
+  player.kill();
+  console.log("  Player (finished): " + __getString(player.toString()));
+
+  __release(player); // a tidy house, a tidy mind.
+}
+
 // Interested in all the details? https://docs.assemblyscript.org/details :)
