@@ -125,7 +125,7 @@ export class Parser extends DiagnosticEmitter {
     /** Whether this is an entry file. */
     isEntry: bool
   ): void {
-    // the frontend gives us paths with .ts endings
+    // the frontend gives us paths with file extensions
     var normalizedPath = normalizePath(path);
     var internalPath = mangleInternalPath(normalizedPath);
     // check if already processed
@@ -256,7 +256,21 @@ export class Parser extends DiagnosticEmitter {
       case Token.ABSTRACT: {
         let state = tn.mark();
         tn.next();
-        if (!tn.skip(Token.CLASS)) {
+        let abstractStart = tn.tokenPos;
+        let abstractEnd = tn.pos;
+        let next = tn.peek(true);
+        if (tn.nextTokenOnNewLine) {
+          tn.reset(state);
+          statement = this.parseStatement(tn, true);
+          break;
+        }
+        if (next != Token.CLASS) {
+          if (next == Token.INTERFACE) {
+            this.error(
+              DiagnosticCode._abstract_modifier_can_only_appear_on_a_class_method_or_property_declaration,
+              tn.range(abstractStart, abstractEnd)
+            );
+          }
           tn.reset(state);
           statement = this.parseStatement(tn, true);
           break;
@@ -1809,33 +1823,36 @@ export class Parser extends DiagnosticEmitter {
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(), "public"
         );
+      } else {
+        flags |= CommonFlags.PUBLIC;
+        accessStart = tn.tokenPos;
+        accessEnd = tn.pos;
       }
-      flags |= CommonFlags.PUBLIC;
-      accessStart = tn.tokenPos;
-      accessEnd = tn.pos;
-      if (!startPos) startPos = accessStart;
+      if (!startPos) startPos = tn.tokenPos;
     } else if (tn.skip(Token.PRIVATE)) {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(), "private"
         );
+      } else {
+        flags |= CommonFlags.PRIVATE;
+        accessStart = tn.tokenPos;
+        accessEnd = tn.pos;
       }
-      flags |= CommonFlags.PRIVATE;
-      accessStart = tn.tokenPos;
-      accessEnd = tn.pos;
-      if (!startPos) startPos = accessStart;
+      if (!startPos) startPos = tn.tokenPos;
     } else if (tn.skip(Token.PROTECTED)) {
       if (isInterface) {
         this.error(
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(), "protected"
         );
+      } else {
+        flags |= CommonFlags.PROTECTED;
+        accessStart = tn.tokenPos;
+        accessEnd = tn.pos;
       }
-      flags |= CommonFlags.PROTECTED;
-      accessStart = tn.tokenPos;
-      accessEnd = tn.pos;
-      if (!startPos) startPos = accessStart;
+      if (!startPos) startPos = tn.tokenPos;
     }
 
     var staticStart = 0;
@@ -1848,24 +1865,26 @@ export class Parser extends DiagnosticEmitter {
           DiagnosticCode._0_modifier_cannot_be_used_here,
           tn.range(), "static"
         );
+      } else {
+        flags |= CommonFlags.STATIC;
+        staticStart = tn.tokenPos;
+        staticEnd = tn.pos;
       }
-      flags |= CommonFlags.STATIC;
-      staticStart = tn.tokenPos;
-      staticEnd = tn.pos;
-      if (!startPos) startPos = staticStart;
+      if (!startPos) startPos = tn.tokenPos;
     } else {
       flags |= CommonFlags.INSTANCE;
       if (tn.skip(Token.ABSTRACT)) {
-        if (isInterface) {
+        if (isInterface || !parent.is(CommonFlags.ABSTRACT)) {
           this.error(
             DiagnosticCode._0_modifier_cannot_be_used_here,
             tn.range(), "abstract"
           );
+        } else {
+          flags |= CommonFlags.ABSTRACT;
+          abstractStart = tn.tokenPos;
+          abstractEnd = tn.pos;
         }
-        flags |= CommonFlags.ABSTRACT;
-        abstractStart = tn.tokenPos;
-        abstractEnd = tn.pos;
-        if (!startPos) startPos = abstractStart;
+        if (!startPos) startPos = tn.tokenPos;
       }
       if (parent.flags & CommonFlags.GENERIC) flags |= CommonFlags.GENERIC_CONTEXT;
     }
@@ -2079,6 +2098,11 @@ export class Parser extends DiagnosticEmitter {
             name.range
           );
         }
+      } else if (name.text == "constructor") {
+        this.error(
+          DiagnosticCode._0_keyword_cannot_be_used_here,
+          name.range, "constructor"
+        );
       }
 
       let returnType: TypeNode | null = null;
@@ -2125,6 +2149,11 @@ export class Parser extends DiagnosticEmitter {
           this.error(
             DiagnosticCode.Method_0_cannot_have_an_implementation_because_it_is_marked_abstract,
             tn.range(), name.text
+          ); // recoverable
+        } else if (isInterface) {
+          this.error(
+            DiagnosticCode._0_expected,
+            tn.range(), ";"
           ); // recoverable
         }
         body = this.parseBlockStatement(tn, false);

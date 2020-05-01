@@ -1,3 +1,42 @@
+// Should work with managed classes
+
+class Managed {
+  bar: i32;
+  baz: string;
+}
+
+function testManaged(managed: Managed): void {
+  assert(managed.bar == 123);
+  assert(managed.baz == "hello world");
+}
+
+testManaged({
+  bar: 123,
+  baz: "hello world"
+});
+
+// Should work with unmanaged classes
+
+@unmanaged
+class Unmanaged {
+  bar: i32;
+  baz: string;
+}
+
+function testUnmanaged(unmanaged: Unmanaged): void {
+  assert(unmanaged.bar == 123);
+  assert(unmanaged.baz == "hello");
+  __release(changetype<usize>(unmanaged.baz));
+  __free(changetype<usize>(unmanaged));
+}
+
+testUnmanaged({
+  bar: 123,
+  baz: "hello world".substring(0, 5)
+});
+
+// Should work with omitted fields
+
 class OmittedTypes {
   int32: i32;
   uint32: u32;
@@ -12,7 +51,7 @@ class OmittedTypes {
   intsize: isize;
   uintsize: usize;
   alias: number;
-  isTrue: boolean
+  isTrue: boolean;
 }
 
 function testOmittedTypes(omitted: OmittedTypes): void {
@@ -42,43 +81,40 @@ class MixedOmitted {
 
 function testMixedOmitted(omitted: MixedOmitted): void {
   assert(omitted.simpleType == 0);
-  assert(omitted.complexType == 'test');
+  assert(omitted.complexType == "test");
   assert(omitted.anotherSimpleType == 0);
 }
 
 testMixedOmitted({
   simpleType: 0,
-  complexType: 'test'
+  complexType: "test"
 });
 
 // Test omitted fields
 class OmittedFoo {
-  bar: string = 'bar';
-  baz: string | null = 'baz';
+  bar: string = "bar";
+  baz: string | null = "baz";
   quux: string | null;
-  quuz: string | null; 
+  quuz: string | null;
   corge: string | null;
   grault: string | null;
-  garply: string | null; 
+  garply: string | null;
   waldo: string | null;
   fred: i32;
   qux: i32 = -1;
 }
 
 function testOmittedFoo(foo: OmittedFoo): void {
-  assert(foo.bar == 'bar');
-  assert(foo.baz == 'baz');
-  assert(changetype<usize>(foo.baz) == 0);
-  assert(changetype<usize>(foo.quux) == 0);
-  assert(changetype<usize>(foo.quuz) == 0);
-  assert(changetype<usize>(foo.corge) == 0);
-  assert(changetype<usize>(foo.grault) == 0);
-  assert(changetype<usize>(foo.garply) == 0);
-  assert(changetype<usize>(foo.waldo) == 0);
+  assert(foo.bar == "bar");
+  assert(foo.baz == "baz");
+  assert(foo.quux == null);
+  assert(foo.quuz == null);
+  assert(foo.corge == null);
+  assert(foo.grault == null);
+  assert(foo.garply == null);
+  assert(foo.waldo == null);
   assert(foo.fred == 0);
   assert(foo.qux == -1);
 }
 
-// TODO: Test this one omitted implementation is complete
-// testOmittedFoo({});
-
+testOmittedFoo({});

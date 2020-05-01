@@ -47,6 +47,7 @@ import {
   INNER_DELIMITER,
   LIBRARY_SUBST,
   INDEX_SUFFIX,
+  STUB_DELIMITER,
   CommonNames,
   Feature,
   Target
@@ -110,7 +111,8 @@ import {
   TypeDeclaration,
   VariableDeclaration,
   VariableLikeDeclarationStatement,
-  VariableStatement
+  VariableStatement,
+  ParameterKind
 } from "./ast";
 
 import {
@@ -532,7 +534,7 @@ export class Program extends DiagnosticEmitter {
   ) {
     super(diagnostics);
     this.options = options;
-    var nativeSource = new Source(LIBRARY_SUBST, "[native code]", SourceKind.LIBRARY_ENTRY);
+    var nativeSource = new Source(LIBRARY_SUBST + ".wasm", "[native code]", SourceKind.LIBRARY_ENTRY);
     this.nativeSource = nativeSource;
     var nativeFile = new File(this, nativeSource);
     this.nativeFile = nativeFile;
@@ -664,6 +666,7 @@ export class Program extends DiagnosticEmitter {
         this.makeNativeFunctionDeclaration(name, flags),
         decoratorFlags
       ),
+      null,
       signature
     );
   }
@@ -677,12 +680,11 @@ export class Program extends DiagnosticEmitter {
   }
 
   /** Initializes the program and its elements prior to compilation. */
-  initialize(options: Options): void {
-    // Initialize only once
+  initialize(): void {
     if (this.initialized) return;
-
     this.initialized = true;
-    this.options = options;
+
+    var options = this.options;
 
     // register native types
     this.registerNativeType(CommonNames.i8, Type.i8);
@@ -815,7 +817,7 @@ export class Program extends DiagnosticEmitter {
             break;
           }
           case NodeKind.INTERFACEDECLARATION: {
-            this.initializeInterface(<InterfaceDeclaration>statement, file);
+            this.initializeInterface(<InterfaceDeclaration>statement, file, queuedExtends);
             break;
           }
           case NodeKind.NAMESPACEDECLARATION: {
@@ -980,36 +982,93 @@ export class Program extends DiagnosticEmitter {
     this.f32ArrayPrototype = <ClassPrototype>this.require(CommonNames.Float32Array, ElementKind.CLASS_PROTOTYPE);
     this.f64ArrayPrototype = <ClassPrototype>this.require(CommonNames.Float64Array, ElementKind.CLASS_PROTOTYPE);
 
-    // resolve base prototypes of derived classes
+    // resolve prototypes of extended classes or interfaces
     var resolver = this.resolver;
     for (let i = 0, k = queuedExtends.length; i < k; ++i) {
       let thisPrototype = queuedExtends[i];
       let extendsNode = assert(thisPrototype.extendsNode); // must be present if in queuedExtends
-      let baseElement = resolver.resolveTypeName(extendsNode.name, thisPrototype.parent); // reports
+      let baseElement = resolver.resolveTypeName(extendsNode.name, thisPrototype.parent);
       if (!baseElement) continue;
-      if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
-        let basePrototype = <ClassPrototype>baseElement;
-        if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
+      if (thisPrototype.kind == ElementKind.CLASS_PROTOTYPE) {
+        if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
+          let basePrototype = <ClassPrototype>baseElement;
+          if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
+            this.error(
+              DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
+              extendsNode.range, basePrototype.identifierNode.text
+            );
+          }
+          if (
+            basePrototype.hasDecorator(DecoratorFlags.UNMANAGED) !=
+            thisPrototype.hasDecorator(DecoratorFlags.UNMANAGED)
+          ) {
+            this.error(
+              DiagnosticCode.Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa,
+              Range.join(thisPrototype.identifierNode.range, extendsNode.range)
+            );
+          }
+          thisPrototype.basePrototype = basePrototype;
+        } else {
           this.error(
-            DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
-            extendsNode.range, basePrototype.identifierNode.text
+            DiagnosticCode.A_class_may_only_extend_another_class,
+            extendsNode.range
           );
         }
-        if (
-          basePrototype.hasDecorator(DecoratorFlags.UNMANAGED) !=
-          thisPrototype.hasDecorator(DecoratorFlags.UNMANAGED)
-        ) {
+      } else if (thisPrototype.kind == ElementKind.INTERFACE_PROTOTYPE) {
+        if (baseElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
+          thisPrototype.basePrototype = <InterfacePrototype>baseElement;
+        } else {
           this.error(
-            DiagnosticCode.Unmanaged_classes_cannot_extend_managed_classes_and_vice_versa,
-            Range.join(thisPrototype.identifierNode.range, extendsNode.range)
+            DiagnosticCode.An_interface_can_only_extend_an_interface,
+            extendsNode.range
           );
         }
-        thisPrototype.basePrototype = basePrototype;
-      } else {
-        this.error(
-          DiagnosticCode.A_class_may_only_extend_another_class,
-          extendsNode.range
-        );
+      }
+    }
+
+    // resolve prototypes of implemented interfaces
+    for (let i = 0, k = queuedImplements.length; i < k; ++i) {
+      let thisPrototype = queuedImplements[i];
+      let implementsNodes = assert(thisPrototype.implementsNodes); // must be present if in queuedImplements
+      for (let j = 0, l = implementsNodes.length; j < l; ++j) {
+        let implementsNode = implementsNodes[j];
+        let interfaceElement = resolver.resolveTypeName(implementsNode.name, thisPrototype.parent);
+        if (!interfaceElement) continue;
+        if (interfaceElement.kind == ElementKind.INTERFACE_PROTOTYPE) {
+          let interfacePrototype = <InterfacePrototype>interfaceElement;
+          let interfacePrototypes = thisPrototype.interfacePrototypes;
+          if (!interfacePrototypes) thisPrototype.interfacePrototypes = interfacePrototypes = new Array();
+          interfacePrototypes.push(interfacePrototype);
+        } else {
+          this.error(
+            DiagnosticCode.A_class_can_only_implement_an_interface,
+            implementsNode.range
+          );
+        }
+      }
+    }
+
+    // check for virtual overloads in extended classes and implemented interfaces
+    for (let i = 0, k = queuedExtends.length; i < k; ++i) {
+      let thisPrototype = queuedExtends[i];
+      let basePrototype = thisPrototype.basePrototype;
+      if (basePrototype) {
+        this.markVirtuals(thisPrototype, basePrototype);
+      }
+    }
+    for (let i = 0, k = queuedImplements.length; i < k; ++i) {
+      let thisPrototype = queuedImplements[i];
+      let basePrototype = thisPrototype.basePrototype;
+      let interfacePrototypes = thisPrototype.interfacePrototypes;
+      if (basePrototype) {
+        assert(!interfacePrototypes);
+        this.markVirtuals(thisPrototype, basePrototype);
+      }
+      if (interfacePrototypes) {
+        assert(!basePrototype);
+        for (let j = 0, l = interfacePrototypes.length; j < l; ++j) {
+          this.markVirtuals(thisPrototype, interfacePrototypes[j]);
+        }
       }
     }
 
@@ -1090,6 +1149,108 @@ export class Program extends DiagnosticEmitter {
       if (file.source.sourceKind == SourceKind.USER_ENTRY) {
         this.markModuleExports(file);
       }
+    }
+  }
+
+  /** Marks virtual members in a base class overloaded in this class. */
+  private markVirtuals(thisPrototype: ClassPrototype, basePrototype: ClassPrototype): void {
+    // TODO: make this work with interfaaces as well
+    var thisInstanceMembers = thisPrototype.instanceMembers;
+    if (thisInstanceMembers) {
+      do {
+        let baseInstanceMembers = basePrototype.instanceMembers;
+        if (baseInstanceMembers) {
+          for (let _values = Map_values(thisInstanceMembers), j = 0, l = _values.length; j < l; ++j) {
+            let thisMember = _values[j];
+            if (
+              !thisMember.isAny(CommonFlags.CONSTRUCTOR | CommonFlags.PRIVATE) &&
+              baseInstanceMembers.has(thisMember.name)
+            ) {
+              let baseMember = assert(baseInstanceMembers.get(thisMember.name));
+              if (
+                thisMember.kind == ElementKind.FUNCTION_PROTOTYPE &&
+                baseMember.kind == ElementKind.FUNCTION_PROTOTYPE
+              ) {
+                let thisMethod = <FunctionPrototype>thisMember;
+                let baseMethod = <FunctionPrototype>baseMember;
+                if (!thisMethod.visibilityEquals(baseMethod)) {
+                  this.errorRelated(
+                    DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+                    thisMethod.identifierNode.range, baseMethod.identifierNode.range
+                  );
+                }
+                baseMember.set(CommonFlags.VIRTUAL);
+                let overloads = baseMethod.overloads;
+                if (!overloads) baseMethod.overloads = overloads = new Set();
+                overloads.add(<FunctionPrototype>thisMember);
+                let baseMethodInstances = baseMethod.instances;
+                if (baseMethodInstances) {
+                  for (let _values = Map_values(baseMethodInstances), a = 0, b = _values.length; a < b; ++a) {
+                    let baseMethodInstance = _values[a];
+                    baseMethodInstance.set(CommonFlags.VIRTUAL);
+                  }
+                }
+              } else if (
+                thisMember.kind == ElementKind.PROPERTY_PROTOTYPE &&
+                baseMember.kind == ElementKind.PROPERTY_PROTOTYPE
+              ) {
+                let thisProperty = <PropertyPrototype>thisMember;
+                let baseProperty = <PropertyPrototype>baseMember;
+                if (!thisProperty.visibilityEquals(baseProperty)) {
+                  this.errorRelated(
+                    DiagnosticCode.Overload_signatures_must_all_be_public_private_or_protected,
+                    thisProperty.identifierNode.range, baseProperty.identifierNode.range
+                  );
+                }
+                baseProperty.set(CommonFlags.VIRTUAL);
+                let baseGetter = baseProperty.getterPrototype;
+                if (baseGetter) {
+                  baseGetter.set(CommonFlags.VIRTUAL);
+                  let thisGetter = thisProperty.getterPrototype;
+                  if (thisGetter) {
+                    let overloads = baseGetter.overloads;
+                    if (!overloads) baseGetter.overloads = overloads = new Set();
+                    overloads.add(thisGetter);
+                  }
+                  let baseGetterInstances = baseGetter.instances;
+                  if (baseGetterInstances) {
+                    for (let _values = Map_values(baseGetterInstances), a = 0, b = _values.length; a < b; ++a) {
+                      let baseGetterInstance = _values[a];
+                      baseGetterInstance.set(CommonFlags.VIRTUAL);
+                    }
+                  }
+                }
+                let baseSetter = baseProperty.setterPrototype;
+                if (baseSetter !== null && thisProperty.setterPrototype !== null) {
+                  baseSetter.set(CommonFlags.VIRTUAL);
+                  let thisSetter = thisProperty.setterPrototype;
+                  if (thisSetter) {
+                    let overloads = baseSetter.overloads;
+                    if (!overloads) baseSetter.overloads = overloads = new Set();
+                    overloads.add(thisSetter);
+                  }
+                  let baseSetterInstances = baseSetter.instances;
+                  if (baseSetterInstances) {
+                    for (let _values = Map_values(baseSetterInstances), a = 0, b = _values.length; a < b; ++a) {
+                      let baseSetterInstance = _values[a];
+                      baseSetterInstance.set(CommonFlags.VIRTUAL);
+                    }
+                  }
+                }
+              } else {
+                this.errorRelated(
+                  DiagnosticCode.Duplicate_identifier_0,
+                  thisMember.identifierNode.range,
+                  baseMember.identifierNode.range
+                );
+              }
+            }
+          }
+        }
+        let nextPrototype = basePrototype.basePrototype;
+        if (!nextPrototype) break;
+        basePrototype = nextPrototype;
+      } while (true);
     }
   }
 
@@ -1402,12 +1563,13 @@ export class Program extends DiagnosticEmitter {
     );
     if (!parent.add(name, element)) return null;
 
+    // remember classes that implement interfaces
     var implementsTypes = declaration.implementsTypes;
     if (implementsTypes) {
       let numImplementsTypes = implementsTypes.length;
-      // cannot implement interfaces when unmanaged
-      if (element.hasDecorator(DecoratorFlags.UNMANAGED)) {
-        if (numImplementsTypes) {
+      if (numImplementsTypes) {
+        // cannot implement interfaces when unmanaged
+        if (element.hasDecorator(DecoratorFlags.UNMANAGED)) {
           this.error(
             DiagnosticCode.Unmanaged_classes_cannot_implement_interfaces,
             Range.join(
@@ -1415,18 +1577,12 @@ export class Program extends DiagnosticEmitter {
               implementsTypes[numImplementsTypes - 1].range
             )
           );
+        } else {
+          queuedImplements.push(element);
         }
-      } else if (numImplementsTypes) {
-        // remember classes that implement interfaces
-        for (let i = 0; i < numImplementsTypes; ++i) {
-          this.warning(
-            DiagnosticCode.Not_implemented,
-            implementsTypes[i].range
-          );
-        }
-        queuedImplements.push(element);
       }
     }
+
     // remember classes that extend another class
     if (declaration.extendsType) queuedExtends.push(element);
 
@@ -1444,7 +1600,10 @@ export class Program extends DiagnosticEmitter {
           if (memberDeclaration.isAny(CommonFlags.GET | CommonFlags.SET)) {
             this.initializeProperty(methodDeclaration, element);
           } else {
-            this.initializeMethod(methodDeclaration, element);
+            let method = this.initializeMethod(methodDeclaration, element);
+            if (method !== null && methodDeclaration.name.kind == NodeKind.CONSTRUCTOR) {
+              element.constructorPrototype = method;
+            }
           }
           break;
         }
@@ -1500,7 +1659,7 @@ export class Program extends DiagnosticEmitter {
     declaration: MethodDeclaration,
     /** Parent class. */
     parent: ClassPrototype
-  ): void {
+  ): FunctionPrototype | null {
     var name = declaration.name.text;
     var isStatic = declaration.is(CommonFlags.STATIC);
     var acceptedFlags = DecoratorFlags.INLINE | DecoratorFlags.UNSAFE;
@@ -1520,11 +1679,12 @@ export class Program extends DiagnosticEmitter {
     );
     if (isStatic) { // global function
       assert(declaration.name.kind != NodeKind.CONSTRUCTOR);
-      if (!parent.add(name, element)) return;
+      if (!parent.add(name, element)) return null;
     } else { // actual instance method
-      if (!parent.addInstance(name, element)) return;
+      if (!parent.addInstance(name, element)) return null;
     }
     this.checkOperatorOverloads(declaration.decorators, element, parent);
+    return element;
   }
 
   /** Checks that operator overloads are generally valid, if present. */
@@ -1825,7 +1985,7 @@ export class Program extends DiagnosticEmitter {
         break;
       }
       case NodeKind.INTERFACEDECLARATION: {
-        element = this.initializeInterface(<InterfaceDeclaration>declaration, parent);
+        element = this.initializeInterface(<InterfaceDeclaration>declaration, parent, queuedExtends);
         break;
       }
       case NodeKind.NAMESPACEDECLARATION: {
@@ -1962,7 +2122,9 @@ export class Program extends DiagnosticEmitter {
     /** The declaration to initialize. */
     declaration: InterfaceDeclaration,
     /** Parent element, usually a file or namespace. */
-    parent: Element
+    parent: Element,
+    /** So far queued `extends` clauses. */
+    queuedExtends: ClassPrototype[],
   ): InterfacePrototype | null {
     var name = declaration.name.text;
     var element = new InterfacePrototype(
@@ -1974,12 +2136,16 @@ export class Program extends DiagnosticEmitter {
       )
     );
     if (!parent.add(name, element)) return null;
+
+    // remember interfaces that extend another interface
+    if (declaration.extendsType) queuedExtends.push(element);
+
     var memberDeclarations = declaration.members;
     for (let i = 0, k = memberDeclarations.length; i < k; ++i) {
       let memberDeclaration = memberDeclarations[i];
       switch (memberDeclaration.kind) {
         case NodeKind.FIELDDECLARATION: {
-          this.initializeField(<FieldDeclaration>memberDeclaration, element);
+          this.initializeFieldAsProperty(<FieldDeclaration>memberDeclaration, element);
           break;
         }
         case NodeKind.METHODDECLARATION: {
@@ -1995,6 +2161,63 @@ export class Program extends DiagnosticEmitter {
       }
     }
     return element;
+  }
+
+  /** Initializes a field of an interface, as a property. */
+  private initializeFieldAsProperty(
+    /** Field declaration. */
+    declaration: FieldDeclaration,
+    /** Parent interface. */
+    parent: InterfacePrototype
+  ): void {
+    var typeNode = declaration.type;
+    if (!typeNode) typeNode = Node.createOmittedType(declaration.name.range.atEnd);
+    this.initializeProperty(
+      Node.createMethodDeclaration(
+        declaration.name,
+        null,
+        Node.createFunctionType(
+          [],
+          typeNode,
+          null,
+          false,
+          declaration.range
+        ),
+        null,
+        declaration.decorators,
+        declaration.flags | CommonFlags.GET,
+        declaration.range
+      ),
+      parent
+    );
+    if (!declaration.is(CommonFlags.READONLY)) {
+      this.initializeProperty(
+        Node.createMethodDeclaration(
+          declaration.name,
+          null,
+          Node.createFunctionType(
+            [
+              Node.createParameter(
+                declaration.name,
+                typeNode,
+                null,
+                ParameterKind.DEFAULT,
+                declaration.name.range
+              )
+            ],
+            Node.createOmittedType(declaration.name.range.atEnd),
+            null,
+            false,
+            declaration.range
+          ),
+          null,
+          declaration.decorators,
+          declaration.flags | CommonFlags.SET,
+          declaration.range
+        ),
+        parent
+      );
+    }
   }
 
   /** Initializes a namespace. */
@@ -2034,7 +2257,7 @@ export class Program extends DiagnosticEmitter {
           break;
         }
         case NodeKind.INTERFACEDECLARATION: {
-          this.initializeInterface(<InterfaceDeclaration>member, original);
+          this.initializeInterface(<InterfaceDeclaration>member, original, queuedExtends);
           break;
         }
         case NodeKind.NAMESPACEDECLARATION: {
@@ -2344,6 +2567,23 @@ export abstract class Element {
     return true;
   }
 
+  /** Checks if this element is public, explicitly or implicitly. */
+  get isPublic(): bool {
+    return !this.isAny(CommonFlags.PRIVATE | CommonFlags.PROTECTED);
+  }
+
+  /** Checks if this element is implicitly public, i.e. not explicitly declared to be. */
+  get isImplicitlyPublic(): bool {
+    return this.isPublic && !this.is(CommonFlags.PUBLIC);
+  }
+
+  /** Checks if the visibility of this element equals the specified. */
+  visibilityEquals(other: Element): bool {
+    if (this.isPublic == other.isPublic) return true;
+    const vis = CommonFlags.PRIVATE | CommonFlags.PROTECTED;
+    return (this.flags & vis) == (other.flags & vis);
+  }
+
   /** Returns a string representation of this element. */
   toString(): string {
     return this.internalName + ", kind=" + this.kind.toString();
@@ -2398,9 +2638,57 @@ export abstract class DeclaredElement extends Element {
     return this.declaration.name;
   }
 
+  /** Gets the signature node, if applicable, along the identifier node. */
+  get identifierAndSignatureRange(): Range {
+    var declaration = this.declaration;
+    var identifierNode = declaration.name;
+    if (declaration.kind == NodeKind.FUNCTIONDECLARATION || declaration.kind == NodeKind.METHODDECLARATION) {
+      let signatureNode = (<FunctionDeclaration>declaration).signature;
+      return Range.join(identifierNode.range, signatureNode.range);
+    }
+    return identifierNode.range;
+  }
+
   /** Gets the assiciated decorator nodes. */
   get decoratorNodes(): DecoratorNode[] | null {
     return this.declaration.decorators;
+  }
+
+  /** Checks if this element is a compatible override of the specified. */
+  isCompatibleOverride(base: DeclaredElement): bool {
+    var self: DeclaredElement = this; // TS
+    var kind = self.kind;
+    if (kind == base.kind) {
+      switch (kind) {
+        case ElementKind.FUNCTION: {
+          return (<Function>self).signature.isAssignableTo((<Function>base).signature, /* sameSize */ true);
+        }
+        case ElementKind.PROPERTY: {
+          let selfProperty = <Property>self;
+          let baseProperty = <Property>base;
+          let selfGetter = selfProperty.getterInstance;
+          let baseGetter = baseProperty.getterInstance;
+          if (selfGetter) {
+            if (!baseGetter || !selfGetter.signature.isAssignableTo(baseGetter.signature, true)) {
+              return false;
+            }
+          } else if (baseGetter) {
+            return false;
+          }
+          let selfSetter = selfProperty.setterInstance;
+          let baseSetter = baseProperty.setterInstance;
+          if (selfSetter) {
+            if (!baseSetter || !selfSetter.signature.isAssignableTo(baseSetter.signature, true)) {
+              return false;
+            }
+          } else if (baseSetter) {
+            return false;
+          }
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }
 
@@ -2870,6 +3158,8 @@ export class FunctionPrototype extends DeclaredElement {
   operatorKind: OperatorKind = OperatorKind.INVALID;
   /** Already resolved instances. */
   instances: Map<string,Function> | null = null;
+  /** Methods overloading this one, if any. These are unbound. */
+  overloads: Set<FunctionPrototype> | null = null;
 
   /** Clones of this prototype that are bounds to specific classes. */
   private boundPrototypes: Map<Class,FunctionPrototype> | null = null;
@@ -2940,6 +3230,7 @@ export class FunctionPrototype extends DeclaredElement {
     );
     bound.flags = this.flags;
     bound.operatorKind = this.operatorKind;
+    bound.overloads = this.overloads;
     // NOTE: this.instances holds instances per bound class / unbound
     boundPrototypes.set(classInstance, bound);
     return bound;
@@ -2979,6 +3270,8 @@ export class Function extends TypedElement {
   localsByIndex: Local[] = [];
   /** List of additional non-parameter locals. */
   additionalLocals: Type[] = [];
+  /** Concrete type arguments. */
+  typeArguments: Type[] | null;
   /** Contextual type arguments. */
   contextualTypeArguments: Map<string,Type> | null;
   /** Default control flow. */
@@ -2989,8 +3282,10 @@ export class Function extends TypedElement {
   ref: FunctionRef = 0;
   /** Function table index, if any. */
   functionTableIndex: i32 = -1;
-  /** Trampoline function for calling with omitted arguments. */
-  trampoline: Function | null = null;
+  /** Varargs stub for calling with omitted arguments. */
+  varargsStub: Function | null = null;
+  /** Virtual stub for calling overloads. */
+  virtualStub: Function | null = null;
 
   /** Counting id of inline operations involving this function. */
   nextInlineId: i32 = 0;
@@ -3005,6 +3300,8 @@ export class Function extends TypedElement {
     nameInclTypeParameters: string,
     /** Respective function prototype. */
     prototype: FunctionPrototype,
+    /** Concrete type arguments. */
+    typeArguments: Type[] | null,
     /** Concrete signature. */
     signature: Signature, // pre-resolved
     /** Contextual type arguments inherited from its parent class, if any. */
@@ -3019,6 +3316,7 @@ export class Function extends TypedElement {
       prototype.declaration
     );
     this.prototype = prototype;
+    this.typeArguments = typeArguments;
     this.signature = signature;
     this.flags = prototype.flags | CommonFlags.RESOLVED;
     this.decoratorFlags = prototype.decoratorFlags;
@@ -3053,6 +3351,19 @@ export class Function extends TypedElement {
     }
     this.flow = Flow.create(this);
     registerConcreteElement(program, this);
+  }
+
+  /** Creates a stub for use with this function, i.e. for varargs or virtual calls. */
+  newStub(postfix: string): Function {
+    var stub = new Function(
+      this.name + STUB_DELIMITER + postfix,
+      this.prototype,
+      this.typeArguments,
+      this.signature.clone(),
+      this.contextualTypeArguments
+    );
+    stub.set(this.flags & ~CommonFlags.COMPILED | CommonFlags.STUB);
+    return stub;
   }
 
   /** Adds a local of the specified type, with an optional name. */
@@ -3308,11 +3619,13 @@ export class Property extends VariableLikeElement {
       ElementKind.PROPERTY,
       prototype.name,
       parent,
-      prototype.program.makeNativeVariableDeclaration(
-        prototype.name,
+      Node.createVariableDeclaration(
+        prototype.identifierNode,
+        null, null, null,
         prototype.is(CommonFlags.INSTANCE)
           ? CommonFlags.INSTANCE
-          : CommonFlags.NONE
+          : CommonFlags.NONE,
+        prototype.identifierNode.range
       )
     );
     this.prototype = prototype;
@@ -3365,9 +3678,11 @@ export class IndexSignature extends TypedElement {
 export class ClassPrototype extends DeclaredElement {
 
   /** Instance member prototypes. */
-  instanceMembers: Map<string,Element> | null = null;
+  instanceMembers: Map<string,DeclaredElement> | null = null;
   /** Base class prototype, if applicable. */
-  basePrototype: ClassPrototype | null = null; // set in Program#initialize
+  basePrototype: ClassPrototype | null = null;
+  /** Interface prototypes, if applicable. */
+  interfacePrototypes: InterfacePrototype[] | null = null;
   /** Constructor prototype. */
   constructorPrototype: FunctionPrototype | null = null;
   /** Operator overload prototypes. */
@@ -3503,6 +3818,8 @@ export class Class extends TypedElement {
   typeArguments: Type[] | null;
   /** Base class, if applicable. */
   base: Class | null = null;
+  /** Implemented interfaces, if applicable. */
+  interfaces: Set<Interface> | null = null;
   /** Contextual type arguments for fields and methods. */
   contextualTypeArguments: Map<string,Type> | null = null;
   /** Current member memory offset. */
@@ -3521,6 +3838,10 @@ export class Class extends TypedElement {
   rttiFlags: u32 = 0;
   /** Wrapped type, if a wrapper for a basic type. */
   wrappedType: Type | null = null;
+  /** Classes directly extending this class. */
+  extendees: Set<Class> | null = null;
+  /** Classes implementing this interface. */
+  implementers: Set<Class> | null = null;
 
   /** Gets the unique runtime id of this class. */
   get id(): u32 {
@@ -3602,30 +3923,9 @@ export class Class extends TypedElement {
   setBase(base: Class): void {
     assert(!this.base);
     this.base = base;
-
-    // Remember extendees and mark overloaded methods virtual
-    var basePrototype: ClassPrototype  = base.prototype;
-    var thisPrototype = this.prototype;
-    assert(basePrototype != thisPrototype);
-    basePrototype.extendees.add(thisPrototype);
-    var thisInstanceMembers = thisPrototype.instanceMembers;
-    if (thisInstanceMembers) {
-      do {
-        let baseInstanceMembers = basePrototype.instanceMembers;
-        if (baseInstanceMembers) {
-          for (let _keys = Map_keys(baseInstanceMembers), i = 0, k = _keys.length; i < k; ++i) {
-            let memberName = _keys[i];
-            let member = assert(baseInstanceMembers.get(memberName));
-            if (thisInstanceMembers.has(memberName)) {
-              member.set(CommonFlags.VIRTUAL);
-            }
-          }
-        }
-        let nextPrototype = basePrototype.basePrototype;
-        if (!nextPrototype) break;
-        basePrototype = nextPrototype;
-      } while (true);
-    }
+    var extendees = base.extendees;
+    if (!extendees) base.extendees = extendees = new Set();
+    extendees.add(this);
 
     // Inherit contextual type arguments from base class
     var inheritedTypeArguments = base.contextualTypeArguments;
@@ -3645,11 +3945,30 @@ export class Class extends TypedElement {
     }
   }
 
+  /** Adds an interface. */
+  addInterface(iface: Interface): void {
+    var interfaces = this.interfaces;
+    if (!interfaces) this.interfaces = interfaces = new Set();
+    interfaces.add(iface);
+    var implementers = iface.implementers;
+    if (!implementers) iface.implementers = implementers = new Set();
+    implementers.add(this);
+  }
+
   /** Tests if a value of this class type is assignable to a target of the specified class type. */
   isAssignableTo(target: Class): bool {
     var current: Class | null = this;
     do {
       if (current == target) return true;
+      if (target.kind == ElementKind.INTERFACE) {
+        let interfaces = current.interfaces;
+        if (interfaces) {
+          for (let _values = Set_values(interfaces), i = 0, k = _values.length; i < k; ++i) {
+            let iface = _values[i];
+            if (iface.isAssignableTo(target)) return true;
+          }
+        }
+      }
       current = current.base;
     } while (current);
     return false;
@@ -3891,10 +4210,27 @@ export class Class extends TypedElement {
     }
     return false;
   }
+
+  /** Gets all extendees of this class (that do not have the specified instance member). */
+  getAllExtendees(exceptIfMember: string | null = null, out: Set<Class> = new Set()): Set<Class> {
+    var extendees = this.extendees;
+    if (extendees) {
+      for (let _values = Set_values(extendees), i = 0, k = _values.length; i < k; ++i) {
+        let extendee = _values[i];
+        if (exceptIfMember) {
+          let instanceMembers = extendee.prototype.instanceMembers;
+          if (instanceMembers !== null && instanceMembers.has(exceptIfMember)) continue;
+        }
+        out.add(extendee);
+        extendee.getAllExtendees(exceptIfMember, out);
+      }
+    }
+    return out;
+  }
 }
 
 /** A yet unresolved interface. */
-export class InterfacePrototype extends ClassPrototype { // FIXME
+export class InterfacePrototype extends ClassPrototype {
 
   /** Constructs a new interface prototype. */
   constructor(
@@ -3918,9 +4254,12 @@ export class Interface extends Class { // FIXME
 
   /** Constructs a new interface. */
   constructor(
+    /** Name incl. type parameters, i.e. `Foo<i32>`. */
     nameInclTypeParameters: string,
+    /** The respective class prototype. */
     prototype: InterfacePrototype,
-    typeArguments: Type[] = []
+    /** Concrete type arguments, if any. */
+    typeArguments: Type[] | null = null,
   ) {
     super(
       nameInclTypeParameters,
@@ -4062,6 +4401,11 @@ export function mangleInternalName(name: string, parent: Element, isInstance: bo
       if (asGlobal) return name;
       assert(!isInstance);
       return parent.internalName + INNER_DELIMITER + name;
+    }
+    case ElementKind.PROPERTY_PROTOTYPE:
+    case ElementKind.PROPERTY: {
+      parent = parent.parent;
+      // fall-through
     }
     default: {
       return mangleInternalName(parent.name, parent.parent, parent.is(CommonFlags.INSTANCE), asGlobal)

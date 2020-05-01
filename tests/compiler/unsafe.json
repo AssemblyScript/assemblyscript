@@ -9,7 +9,6 @@
     "AS101: Operation is unsafe.", "f2();",
     "AS101: Operation is unsafe.", "= new Foo();",
     "AS101: Operation is unsafe.", "super();",
-    "AS101: Operation is unsafe.", ": Foo = {};",
     "AS101: Operation is unsafe.", "= instantiate<Foo>()",
     "AS101: Operation is unsafe.", "Foo.bar();",
     "AS101: Operation is unsafe.", "foo.bar();",

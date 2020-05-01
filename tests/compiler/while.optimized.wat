@@ -1415,6 +1415,36 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  global.set $while/ran
+  i32.const 0
+  local.set $3
+  loop $while-continue|067
+   local.get $3
+   i32.const 1
+   i32.add
+   local.tee $3
+   i32.const 1
+   i32.lt_s
+   br_if $while-continue|067
+  end
+  i32.const 1
+  global.set $while/ran
+  i32.const 0
+  global.set $while/ran
+  i32.const 0
+  local.set $3
+  loop $while-continue|08
+   local.get $3
+   i32.const 1
+   i32.add
+   local.tee $3
+   i32.const 1
+   i32.lt_s
+   br_if $while-continue|08
+  end
+  i32.const 1
+  global.set $while/ran
  )
  (func $~start
   global.get $~started

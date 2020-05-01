@@ -5,18 +5,17 @@ export interface ResultObject {
   instance: WebAssembly.Instance;
 }
 
-type ImportValue = Function | WebAssembly.Global | WebAssembly.Memory | WebAssembly.Table | number;
-
 /** WebAssembly imports with two levels of nesting. */
 export type Imports = {
+  [key: string]: object,
   env?: {
     memory?: WebAssembly.Memory;
     table?: WebAssembly.Table;
     seed?(): number;
     abort?(msg: number, file: number, line: number, column: number): void;
     trace?(msg: number, numArgs?: number, ...args: number[]): void;
-  } & Record<string, ImportValue>;
-} & Record<string, Record<string, ImportValue>>;
+  };
+};
 
 /** Utility mixed in by the loader. */
 export interface ASUtil {

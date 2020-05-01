@@ -10,7 +10,7 @@ var src = fs.readFileSync(srcfile, "utf8");
 binaryen.ready.then(() => {
   src = src.replace(/(?:enum|namespace) (\w+) \{([^}]*)\}/g, function($0) {
     return $0.replace(/(\w+)[ ]+=[ ]+([^,;\n]+)/g, function($0, key, val) {
-      var match = val.match(/\b(_Binaryen\w+)\b/);
+      var match = val.match(/\b(_(?:Binaryen|Relooper|ExpressionRunner)\w+)\b/);
       if (match) {
         let fn = match[1];
         if (typeof binaryen[fn] !== "function") throw Error("API mismatch: Is Binaryen up to date?");

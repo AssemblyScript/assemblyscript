@@ -25,7 +25,7 @@
  (func $call-inferred/bar<f32> (param $0 f32) (result f32)
   local.get $0
  )
- (func $call-inferred/bar<f32>|trampoline (param $0 f32) (result f32)
+ (func $call-inferred/bar<f32>@varargs (param $0 f32) (result f32)
   block $1of1
    block $0of1
     block $outOfRange
@@ -87,7 +87,7 @@
   i32.const 0
   global.set $~argumentsLength
   f32.const 0
-  call $call-inferred/bar<f32>|trampoline
+  call $call-inferred/bar<f32>@varargs
   f32.const 42
   f32.eq
   i32.eqz

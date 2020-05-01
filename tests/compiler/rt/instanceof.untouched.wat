@@ -121,6 +121,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -238,6 +240,8 @@
   i32.const 0
   call $rt/instanceof/BlackCat#constructor
   global.set $rt/instanceof/blackcat
+  i32.const 1
+  drop
   global.get $rt/instanceof/animal
   local.tee $0
   i32.eqz
@@ -278,6 +282,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  drop
   global.get $rt/instanceof/cat
   local.tee $0
   i32.eqz
@@ -317,6 +323,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 1
+  drop
   global.get $rt/instanceof/blackcat
   local.tee $0
   i32.eqz

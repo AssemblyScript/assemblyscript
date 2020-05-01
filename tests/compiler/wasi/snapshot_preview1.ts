@@ -1,12 +1,15 @@
 import {
   dirent,
+  event,
   event_fd_readwrite,
   fdstat,
   filestat,
   iovec,
+  subscription,
   subscription_clock,
   subscription_fd_readwrite,
   signal,
+  prestat,
   prestat_dir
 } from "bindings/wasi";
 
@@ -24,6 +27,8 @@ assert(offsetof<event_fd_readwrite>("type") == 10);
 assert(offsetof<event_fd_readwrite>("nbytes") == 16);
 assert(offsetof<event_fd_readwrite>("flags") == 24);
 assert(offsetof<event_fd_readwrite>() == 32);
+
+assert(offsetof<event>() == 32);
 
 assert(offsetof<fdstat>("filetype") == 0);
 assert(offsetof<fdstat>("flags") == 2);
@@ -63,15 +68,19 @@ assert(offsetof<subscription_clock>() == 48);
 assert(offsetof<subscription_fd_readwrite>("userdata") == 0);
 assert(offsetof<subscription_fd_readwrite>("type") == 8);
 assert(offsetof<subscription_fd_readwrite>("file_descriptor") == 16);
-assert(offsetof<subscription_fd_readwrite>() == 20);
+assert(offsetof<subscription_fd_readwrite>() == 48);
+
+assert(offsetof<subscription>() == 48);
 
 assert(offsetof<prestat_dir>("type") == 0);
 if (ASC_TARGET == Target.WASM32) {
   assert(offsetof<prestat_dir>("name_len") == 4);
   assert(offsetof<prestat_dir>() == 8);
+  assert(offsetof<prestat>() == 8);
 } else if (ASC_TARGET == Target.WASM64) {
   assert(offsetof<prestat_dir>("name_len") == 8);
   assert(offsetof<prestat_dir>() == 16);
+  assert(offsetof<prestat>() == 16);
 } else {
   assert(false);
 }

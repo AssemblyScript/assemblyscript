@@ -1069,7 +1069,9 @@
   call $memcpy/memcpy
   global.set $memcpy/dest
   global.get $memcpy/dest
-  i32.const 9
+  global.get $memcpy/base
+  i32.const 1
+  i32.add
   i32.eq
   i32.eqz
   if
@@ -1080,7 +1082,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
+  global.get $memcpy/base
   i64.load
   i64.const 1229783084848853777
   i64.eq
@@ -1099,7 +1101,7 @@
   call $memcpy/memcpy
   global.set $memcpy/dest
   global.get $memcpy/dest
-  i32.const 8
+  global.get $memcpy/base
   i32.eq
   i32.eqz
   if
@@ -1110,7 +1112,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 8
+  global.get $memcpy/base
   i64.load
   i64.const 1229783084848853777
   i64.eq
@@ -1123,7 +1125,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 16
+  global.get $memcpy/base
+  i32.const 8
+  i32.add
   i64.load
   i64.const 2459565876494606882
   i64.eq
@@ -1136,7 +1140,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 24
+  global.get $memcpy/base
+  i32.const 16
+  i32.add
   i64.load
   i64.const 3689348814741910323
   i64.eq
@@ -1149,7 +1155,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 32
+  global.get $memcpy/base
+  i32.const 24
+  i32.add
   i64.load
   i64.const 4919131752989213764
   i64.eq
@@ -1171,7 +1179,7 @@
   i32.const 3
   call $memcpy/memcpy
   global.set $memcpy/dest
-  i32.const 8
+  global.get $memcpy/base
   i64.load
   i64.const 4919131679688438545
   i64.eq
@@ -1193,7 +1201,7 @@
   i32.const 15
   call $memcpy/memcpy
   global.set $memcpy/dest
-  i32.const 8
+  global.get $memcpy/base
   i64.load
   i64.const 4919131679688438545
   i64.eq
@@ -1206,7 +1214,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 16
+  global.get $memcpy/base
+  i32.const 8
+  i32.add
   i64.load
   i64.const 3689348814741910323
   i64.eq
@@ -1219,7 +1229,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 24
+  global.get $memcpy/base
+  i32.const 16
+  i32.add
   i64.load
   i64.const 3694152654344438852
   i64.eq
@@ -1232,7 +1244,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 32
+  global.get $memcpy/base
+  i32.const 24
+  i32.add
   i64.load
   i64.const 4919131752989213764
   i64.eq

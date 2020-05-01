@@ -148,6 +148,8 @@
   local.get $6
   local.get $5
   i32.store
+  i32.const 1
+  drop
   local.get $6
   i32.const 1
   i32.store offset=4
@@ -175,6 +177,10 @@
    local.set $4
    local.get $2
    local.set $3
+   i32.const 0
+   i32.const 1
+   i32.gt_s
+   drop
    local.get $3
    i32.eqz
    if
@@ -387,7 +393,7 @@
   if
    i32.const 32
    i32.const 80
-   i32.const 23
+   i32.const 18
    i32.const 57
    call $~lib/builtins/abort
    unreachable
@@ -2110,6 +2116,10 @@
    if
     br $~lib/util/memory/memmove|inlined.0
    end
+   i32.const 0
+   i32.const 1
+   i32.lt_s
+   drop
    local.get $4
    local.get $3
    i32.add
@@ -2135,6 +2145,10 @@
    local.get $4
    i32.lt_u
    if
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -2230,6 +2244,10 @@
      end
     end
    else
+    i32.const 0
+    i32.const 2
+    i32.lt_s
+    drop
     local.get $4
     i32.const 7
     i32.and
@@ -2670,6 +2688,10 @@
       local.set $9
       local.get $7
       local.set $8
+      i32.const 0
+      i32.const 1
+      i32.ge_s
+      drop
       local.get $10
       local.get $9
       local.get $8
@@ -2742,6 +2764,10 @@
       local.set $6
       local.get $5
       local.set $10
+      i32.const 0
+      i32.const 1
+      i32.ge_s
+      drop
       local.get $11
       local.get $6
       local.get $10
@@ -3335,6 +3361,8 @@
   i32.const 16
   i32.sub
   local.set $1
+  i32.const 1
+  drop
   local.get $1
   i32.load offset=4
   i32.const 1
@@ -3450,6 +3478,10 @@
   i32.shl
   i32.add
   local.set $6
+  i32.const 0
+  i32.const 2
+  i32.lt_s
+  drop
   local.get $4
   i32.const 4
   i32.ge_u
@@ -3718,6 +3750,10 @@
   local.set $4
   local.get $1
   local.set $3
+  i32.const 0
+  i32.const 1
+  i32.ge_s
+  drop
   local.get $5
   local.get $4
   local.get $3
@@ -3726,6 +3762,15 @@
   call $~lib/rt/stub/__retain
  )
  (func $~lib/util/number/itoa<u8> (param $0 i32) (result i32)
+  i32.const 1
+  i32.eqz
+  drop
+  i32.const 0
+  drop
+  i32.const 1
+  i32.const 4
+  i32.le_u
+  drop
   local.get $0
   i32.const 255
   i32.and

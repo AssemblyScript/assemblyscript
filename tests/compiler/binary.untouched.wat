@@ -316,6 +316,10 @@
     return
    end
   end
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
   block $~lib/util/math/pow_lut|inlined.0 (result f64)
    local.get $0
    local.set $3
@@ -340,7 +344,9 @@
    local.get $7
    i64.const 1
    i64.sub
-   i64.const 2046
+   i64.const 2047
+   i64.const 1
+   i64.sub
    i64.ge_u
    if (result i32)
     i32.const 1
@@ -350,7 +356,9 @@
     i64.and
     i64.const 958
     i64.sub
-    i64.const 128
+    i64.const 1086
+    i64.const 958
+    i64.sub
     i64.ge_u
    end
    if
@@ -361,7 +369,9 @@
     i64.shl
     i64.const 1
     i64.sub
-    i64.const -9007199254740993
+    i64.const -9007199254740992
+    i64.const 1
+    i64.sub
     i64.ge_u
     if
      local.get $6
@@ -437,7 +447,9 @@
     i64.shl
     i64.const 1
     i64.sub
-    i64.const -9007199254740993
+    i64.const -9007199254740992
+    i64.const 1
+    i64.sub
     i64.ge_u
     if
      local.get $3
@@ -466,14 +478,18 @@
         br $~lib/util/math/checkint|inlined.0
        end
        local.get $11
-       i64.const 1075
+       i64.const 1023
+       i64.const 52
+       i64.add
        i64.gt_u
        if
         i32.const 2
         br $~lib/util/math/checkint|inlined.0
        end
        i64.const 1
-       i64.const 1075
+       i64.const 1023
+       i64.const 52
+       i64.add
        local.get $11
        i64.sub
        i64.shl
@@ -547,7 +563,9 @@
        br $~lib/util/math/checkint|inlined.1
       end
       local.get $11
-      i64.const 1075
+      i64.const 1023
+      i64.const 52
+      i64.add
       i64.gt_u
       if
        i32.const 2
@@ -618,7 +636,9 @@
     i64.and
     i64.const 958
     i64.sub
-    i64.const 128
+    i64.const 1086
+    i64.const 958
+    i64.sub
     i64.ge_u
     if
      local.get $5
@@ -1504,6 +1524,10 @@
     return
    end
   end
+  i32.const 0
+  i32.const 1
+  i32.lt_s
+  drop
   block $~lib/util/math/powf_lut|inlined.0 (result f32)
    local.get $0
    local.set $3
@@ -1522,7 +1546,9 @@
    local.get $5
    i32.const 8388608
    i32.sub
-   i32.const 2130706432
+   i32.const 2139095040
+   i32.const 8388608
+   i32.sub
    i32.ge_u
    local.get $6
    local.set $8
@@ -1531,7 +1557,11 @@
    i32.shl
    i32.const 1
    i32.sub
-   i32.const -16777217
+   i32.const 2139095040
+   i32.const 1
+   i32.shl
+   i32.const 1
+   i32.sub
    i32.ge_u
    i32.const 0
    i32.ne
@@ -1559,7 +1589,9 @@
      local.get $5
      i32.const 1
      i32.shl
-     i32.const -16777216
+     i32.const 2139095040
+     i32.const 1
+     i32.shl
      i32.gt_u
      if (result i32)
       i32.const 1
@@ -1567,7 +1599,9 @@
       local.get $6
       i32.const 1
       i32.shl
-      i32.const -16777216
+      i32.const 2139095040
+      i32.const 1
+      i32.shl
       i32.gt_u
      end
      if
@@ -1579,7 +1613,9 @@
      local.get $5
      i32.const 1
      i32.shl
-     i32.const 2130706432
+     i32.const 1065353216
+     i32.const 1
+     i32.shl
      i32.eq
      if
       f32.const nan:0x400000
@@ -1588,7 +1624,9 @@
      local.get $5
      i32.const 1
      i32.shl
-     i32.const 2130706432
+     i32.const 1065353216
+     i32.const 1
+     i32.shl
      i32.lt_u
      local.get $6
      i32.const 31
@@ -1611,7 +1649,11 @@
     i32.shl
     i32.const 1
     i32.sub
-    i32.const -16777217
+    i32.const 2139095040
+    i32.const 1
+    i32.shl
+    i32.const 1
+    i32.sub
     i32.ge_u
     if
      local.get $3
@@ -1639,14 +1681,18 @@
         br $~lib/util/math/checkintf|inlined.0
        end
        local.get $10
-       i32.const 150
+       i32.const 127
+       i32.const 23
+       i32.add
        i32.gt_u
        if
         i32.const 2
         br $~lib/util/math/checkintf|inlined.0
        end
        i32.const 1
-       i32.const 150
+       i32.const 127
+       i32.const 23
+       i32.add
        local.get $10
        i32.sub
        i32.shl
@@ -1712,7 +1758,9 @@
        br $~lib/util/math/checkintf|inlined.1
       end
       local.get $10
-      i32.const 150
+      i32.const 127
+      i32.const 23
+      i32.add
       i32.gt_u
       if
        i32.const 2
