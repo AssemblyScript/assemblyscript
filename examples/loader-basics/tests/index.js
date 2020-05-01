@@ -85,3 +85,27 @@ const {
   __release(ptr); // we are done with our allocated array but
                   // it might still be alive in WebAssembly
 }
+
+// Test for Example 6: WebAssembly arrays of WebAssembly strings.
+{
+  console.log("Example 6:");
+
+  // Allocate a new array, but this time its elements are pointers to strings.
+  // Note: Allocating an array of strings or other objects will automatically
+  // take care of retaining references to its elements, but the array itself
+  // must be dealt with as usual.
+  const inPtr = __retain(__allocArray(myModule.ArrayOfStrings_ID, [ "hello", "world" ].map(__allocString)));
+
+  // Provide our array of lowercase strings to WebAssembly, and obtain the new
+  // array of uppercase strings before printing it.
+  const outPtr = myModule.capitalize(inPtr);
+  console.log("  Uppercased: " + __getArray(outPtr).map(__getString));
+
+  __release(inPtr);  // release our allocation and release
+  __release(outPtr); // the return value. you know the drill!
+
+  // Note that Example 6 is not an especially efficient use case and one would
+  // typically rather avoid the overhead and do this in JavaScript directly.
+}
+
+// Interested in all the details? https://docs.assemblyscript.org/details :)
