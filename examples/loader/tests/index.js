@@ -130,7 +130,7 @@ const {
   // Obtaining just the position. Note that we can `wrap` any pointer with
   // the matching class within the object structure made by the loader.
   {
-    const positionPtr = player.position;
+    const positionPtr = player.position; // calls a getter (implicit `return`)
     const position = myModule.Game.Position.wrap(positionPtr);
     console.log("  Position (wrapped): " + position.x + "/" + position.y);
 
@@ -138,7 +138,7 @@ const {
     position.y += 200;
     console.log("  Position (moved): " + __getString(position.toString()));
 
-    __release(positionPtr);
+    __release(positionPtr); // we are done with the returned object
   }
 
   // Finish 'em
