@@ -1,7 +1,0 @@
-*.wasm
-*.wasm.map
-.rustc_info.*
-/release
-wasm32-unknown-unknown/release/**/*
-!rust_nbody.wasm
-!as_nbody.wasm
