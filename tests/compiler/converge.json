@@ -1,0 +1,6 @@
+{
+  "asc_flags": [
+    "--runtime none",
+    "--converge"
+  ]
+}

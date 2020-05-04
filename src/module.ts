@@ -1629,7 +1629,7 @@ export class Module {
     binaryen._BinaryenModuleInterpret(this.ref);
   }
 
-  toBinary(sourceMapUrl: string | null): BinaryModule {
+  toBinary(sourceMapUrl: string | null = null): BinaryModule {
     var out = this.lit; // safe to reuse as long as..
     assert(binaryen._BinaryenSizeofLiteral() >= 12);
     var cStr = allocString(sourceMapUrl);
@@ -1642,7 +1642,7 @@ export class Module {
     var ret = new BinaryModule();
     ret.output = readBuffer(binaryPtr, binaryLen);
     ret.sourceMap = readString(sourceMapPtr);
-    binaryen._free(cStr);
+    if (cStr) binaryen._free(cStr);
     binaryen._free(binaryPtr);
     if (sourceMapPtr) binaryen._free(sourceMapPtr);
     return ret;
