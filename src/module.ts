@@ -2329,7 +2329,7 @@ function stringLengthUTF8(str: string): usize {
 }
 
 function allocString(str: string | null): usize {
-  if (str == null) return 0;
+  if (str === null) return 0;
   var ptr = binaryen._malloc(stringLengthUTF8(str) + 1);
   // the following is based on Emscripten's stringToUTF8Array
   var idx = ptr;
