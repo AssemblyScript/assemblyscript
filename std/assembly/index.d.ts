@@ -112,7 +112,7 @@ declare function trunc<T = f32 | f64>(value: T): T;
 /** Loads a value of the specified type from memory. Equivalent to dereferncing a pointer in other languages. */
 declare function load<T>(ptr: usize, immOffset?: usize, immAlign?: usize): T;
 /** Stores a value of the specified type to memory. Equivalent to dereferencing a pointer in other languages when assigning a value. */
-declare function store<T>(ptr: usize, value: any, immOffset?: usize, immAlign?: usize): void;
+declare function store<T>(ptr: usize, value: T, immOffset?: usize, immAlign?: usize): void;
 /** Emits an unreachable operation that results in a runtime error when executed. Both a statement and an expression. */
 declare function unreachable(): never;
 
