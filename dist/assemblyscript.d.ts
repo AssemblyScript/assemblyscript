@@ -2274,7 +2274,7 @@ declare module "assemblyscript/src/module" {
         optimize(optimizeLevel: number, shrinkLevel: number, debugInfo?: boolean, usesARC?: boolean): void;
         validate(): boolean;
         interpret(): void;
-        toBinary(sourceMapUrl: string | null): BinaryModule;
+        toBinary(sourceMapUrl?: string | null): BinaryModule;
         toText(): string;
         toAsmjs(): string;
         private cachedStrings;
