@@ -54,8 +54,5 @@ Further resources
 * [Development instructions](https://docs.assemblyscript.org/details/development)<br />
   How to set up a development environment (to submit a pull request).
 
-* [Project governance](https://github.com/AssemblyScript/meta)<br />
-  Meta information related to the AssemblyScript project.
-
-* [Media files](./media)<br />
-  Various media files, like logos etc.
+* [Project governance](https://github.com/AssemblyScript/working-group)<br />
+  Discussions, goals, roadmaps, assets, etc. related to development and project organization.
