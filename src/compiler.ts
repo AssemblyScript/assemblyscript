@@ -1876,7 +1876,9 @@ export class Compiler extends DiagnosticEmitter {
             if (
               !element.is(CommonFlags.AMBIENT) && // delay imports
               !element.hasDecorator(DecoratorFlags.LAZY)
-            ) this.compileGlobal(<Global>element);
+            ) {
+              if (this.compileGlobal(<Global>element)) this.module.unreachable();
+            }
           }
         }
         break;
@@ -7915,9 +7917,6 @@ export class Compiler extends DiagnosticEmitter {
           return module.unreachable();
         }
         let globalType = global.type;
-        if (globalType == Type.void) {
-          return module.unreachable();
-        }
         if (global.is(CommonFlags.INLINED)) {
           return this.compileInlineConstant(global, contextualType, constraints);
         }
