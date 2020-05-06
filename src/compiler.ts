@@ -940,7 +940,6 @@ export class Compiler extends DiagnosticEmitter {
   /** Compiles a global variable. */
   compileGlobal(global: Global): bool {
     if (global.is(CommonFlags.COMPILED)) return true;
-    global.set(CommonFlags.COMPILED);
 
     var module = this.module;
     var initExpr: ExpressionRef = 0;
@@ -995,6 +994,7 @@ export class Compiler extends DiagnosticEmitter {
     if (global.is(CommonFlags.AMBIENT) && global.hasDecorator(DecoratorFlags.BUILTIN)) {
       if (global.internalName == BuiltinNames.heap_base) this.runtimeFeatures |= RuntimeFeatures.HEAP;
       else if (global.internalName == BuiltinNames.rtti_base) this.runtimeFeatures |= RuntimeFeatures.RTTI;
+      global.set(CommonFlags.COMPILED);
       return true;
     }
 
@@ -1140,6 +1140,7 @@ export class Compiler extends DiagnosticEmitter {
     } else if (!isDeclaredInline) { // compile normally
       module.addGlobal(internalName, nativeType, !isDeclaredConstant, initExpr);
     }
+    global.set(CommonFlags.COMPILED);
     return true;
   }
 
