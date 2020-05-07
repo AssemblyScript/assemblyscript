@@ -577,15 +577,19 @@ export class Signature {
 
     var signatureTypes = program.uniqueSignatures;
     var length = signatureTypes.length;
+    var isUnique = true;
     for (let i = 0; i < length; i++) {
       let compare = signatureTypes[i];
       if (this.equals(compare)) {
         this.id = compare.id;
-        return this;
+        isUnique = false;
+        break;
       }
     }
-    program.uniqueSignatures.push(this);
-    this.id = program.nextSignatureId++;
+    if (isUnique) {
+      this.id = program.nextSignatureId++;
+      program.uniqueSignatures.push(this);
+    }
   }
 
   get nativeParams(): NativeType {
