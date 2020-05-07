@@ -1705,7 +1705,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 109
+   i32.const 120
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1730,7 +1730,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 112
+   i32.const 123
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -3989,6 +3989,13 @@
    call $~lib/rt/__visit_members
   end
  )
+ (func $~lib/rt/pure/finalize (param $0 i32)
+  i32.const 0
+  drop
+  global.get $~lib/rt/tlsf/ROOT
+  local.get $0
+  call $~lib/rt/tlsf/freeBlock
+ )
  (func $~lib/rt/pure/scanBlack (param $0 i32)
   local.get $0
   local.get $0
@@ -4076,9 +4083,8 @@
    i32.add
    i32.const 5
    call $~lib/rt/__visit_members
-   global.get $~lib/rt/tlsf/ROOT
    local.get $0
-   call $~lib/rt/tlsf/freeBlock
+   call $~lib/rt/pure/finalize
   end
  )
  (func $~lib/rt/pure/__collect
@@ -4151,9 +4157,8 @@
       i32.const 0
      end
      if
-      global.get $~lib/rt/tlsf/ROOT
       local.get $5
-      call $~lib/rt/tlsf/freeBlock
+      call $~lib/rt/pure/finalize
      else
       local.get $5
       local.get $6
@@ -4362,7 +4367,7 @@
   if
    i32.const 0
    i32.const 240
-   i32.const 122
+   i32.const 133
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -4383,9 +4388,8 @@
    i32.and
    i32.eqz
    if
-    global.get $~lib/rt/tlsf/ROOT
     local.get $0
-    call $~lib/rt/tlsf/freeBlock
+    call $~lib/rt/pure/finalize
    else
     local.get $0
     i32.const -2147483648
@@ -4405,7 +4409,7 @@
    if
     i32.const 0
     i32.const 240
-    i32.const 136
+    i32.const 147
     i32.const 16
     call $~lib/builtins/abort
     unreachable

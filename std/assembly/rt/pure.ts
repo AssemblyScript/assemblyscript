@@ -103,6 +103,17 @@ function __visit(ref: usize, cookie: i32): void {
   }
 }
 
+/** Finalizes the specified block, giving it back to the memory manager. */
+function finalize(s: Block): void {
+  if (isDefined(__finalize)) {
+    let info = s.gcInfo | 1; // pretend RC>=1
+    s.gcInfo = info;
+    __finalize(changetype<usize>(s) + BLOCK_OVERHEAD);
+    assert(s.gcInfo == info);
+  }
+  freeBlock(ROOT, s);
+}
+
 /** Increments the reference count of the specified block by one.*/
 function increment(s: Block): void {
   var info = s.gcInfo;
@@ -124,10 +135,10 @@ function decrement(s: Block): void {
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_DECREMENT);
     if (isDefined(__GC_ALL_ACYCLIC)) {
       if (DEBUG) assert(!(info & BUFFERED_MASK));
-      freeBlock(ROOT, s);
+      finalize(s);
     } else {
       if (!(info & BUFFERED_MASK)) {
-        freeBlock(ROOT, s);
+        finalize(s);
       } else {
         s.gcInfo = BUFFERED_MASK | COLOR_BLACK | 0;
       }
@@ -205,7 +216,7 @@ export function __collect(): void {
       cur += sizeof<usize>();
     } else {
       if ((info & COLOR_MASK) == COLOR_BLACK && !(info & REFCOUNT_MASK)) {
-        freeBlock(ROOT, s);
+        finalize(s);
       } else {
         s.gcInfo = info & ~BUFFERED_MASK;
       }
@@ -261,7 +272,7 @@ function collectWhite(s: Block): void {
   if ((info & COLOR_MASK) == COLOR_WHITE && !(info & BUFFERED_MASK)) {
     s.gcInfo = (info & ~COLOR_MASK) | COLOR_BLACK;
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_COLLECTWHITE);
-    freeBlock(ROOT, s);
+    finalize(s);
   }
 }
 

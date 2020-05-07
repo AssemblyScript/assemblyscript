@@ -1500,7 +1500,7 @@
   if
    i32.const 0
    i32.const 144
-   i32.const 109
+   i32.const 120
    i32.const 3
    call $~lib/builtins/abort
    unreachable
@@ -1525,7 +1525,7 @@
   if
    i32.const 0
    i32.const 144
-   i32.const 112
+   i32.const 123
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -21046,6 +21046,13 @@
   drop
   return
  )
+ (func $~lib/rt/pure/finalize (param $0 i32)
+  i32.const 0
+  drop
+  global.get $~lib/rt/tlsf/ROOT
+  local.get $0
+  call $~lib/rt/tlsf/freeBlock
+ )
  (func $~lib/rt/pure/decrement (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -21071,7 +21078,7 @@
   if
    i32.const 0
    i32.const 144
-   i32.const 122
+   i32.const 133
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -21097,14 +21104,13 @@
    if
     i32.const 0
     i32.const 144
-    i32.const 126
+    i32.const 137
     i32.const 18
     call $~lib/builtins/abort
     unreachable
    end
-   global.get $~lib/rt/tlsf/ROOT
    local.get $0
-   call $~lib/rt/tlsf/freeBlock
+   call $~lib/rt/pure/finalize
   else
    i32.const 1
    drop
@@ -21115,7 +21121,7 @@
    if
     i32.const 0
     i32.const 144
-    i32.const 136
+    i32.const 147
     i32.const 16
     call $~lib/builtins/abort
     unreachable

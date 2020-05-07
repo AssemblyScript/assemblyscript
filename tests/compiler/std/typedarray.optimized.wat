@@ -1422,7 +1422,7 @@
    if
     i32.const 0
     i32.const 1264
-    i32.const 109
+    i32.const 120
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -1441,7 +1441,7 @@
    if
     i32.const 0
     i32.const 1264
-    i32.const 112
+    i32.const 123
     i32.const 14
     call $~lib/builtins/abort
     unreachable
@@ -3155,7 +3155,19 @@
   i32.add
   i32.load8_s
  )
- (func $~lib/array/Array<i8>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i8>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 1376
+   i32.const 1536
+   i32.const 104
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   i32.load offset=4
   local.get $1
@@ -3165,7 +3177,6 @@
  (func $std/typedarray/isInt8ArrayEqual (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   block $folding-inner0
    local.get $0
    i32.load offset=8
@@ -3184,23 +3195,9 @@
      local.get $0
      local.get $2
      call $~lib/typedarray/Int8Array#__get
-     local.set $4
-     local.get $2
-     local.get $1
-     i32.load offset=12
-     i32.ge_u
-     if
-      i32.const 1376
-      i32.const 1536
-      i32.const 104
-      i32.const 42
-      call $~lib/builtins/abort
-      unreachable
-     end
      local.get $1
      local.get $2
-     call $~lib/array/Array<i8>#__unchecked_get
-     local.get $4
+     call $~lib/array/Array<i8>#__get
      i32.ne
      br_if $folding-inner0
      local.get $2
@@ -3374,15 +3371,6 @@
   end
   local.get $5
  )
- (func $~lib/array/Array<i32>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  i32.load offset=4
-  local.get $1
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load
- )
  (func $~lib/array/Array<i32>#__get (param $0 i32) (param $1 i32) (result i32)
   local.get $1
   local.get $0
@@ -3397,8 +3385,12 @@
    unreachable
   end
   local.get $0
+  i32.load offset=4
   local.get $1
-  call $~lib/array/Array<i32>#__unchecked_get
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load
  )
  (func $std/typedarray/isInt32ArrayEqual (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -20883,7 +20875,7 @@
     local.tee $4
     local.get $1
     local.get $2
-    call $~lib/array/Array<i8>#__unchecked_get
+    call $~lib/array/Array<i8>#__get
     local.tee $5
     i32.ne
     if
@@ -21327,7 +21319,19 @@
   call $~lib/builtins/abort
   unreachable
  )
- (func $~lib/array/Array<u8>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<u8>#__get (param $0 i32) (param $1 i32) (result i32)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 1376
+   i32.const 1536
+   i32.const 104
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   i32.load offset=4
   local.get $1
@@ -21364,7 +21368,7 @@
     local.tee $4
     local.get $1
     local.get $2
-    call $~lib/array/Array<u8>#__unchecked_get
+    call $~lib/array/Array<u8>#__get
     local.tee $5
     i32.ne
     if
@@ -21678,7 +21682,7 @@
     local.tee $4
     local.get $1
     local.get $2
-    call $~lib/array/Array<u8>#__unchecked_get
+    call $~lib/array/Array<u8>#__get
     local.tee $5
     i32.ne
     if
@@ -22309,6 +22313,8 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   i32.const 1
@@ -22334,6 +22340,18 @@
     local.get $2
     call $~lib/typedarray/Int16Array#__get
     local.tee $4
+    local.get $2
+    local.get $1
+    i32.load offset=12
+    i32.ge_u
+    if
+     i32.const 1376
+     i32.const 1536
+     i32.const 104
+     i32.const 42
+     call $~lib/builtins/abort
+     unreachable
+    end
     local.get $1
     i32.load offset=4
     local.get $2
@@ -22341,7 +22359,9 @@
     i32.shl
     i32.add
     i32.load16_s
-    local.tee $5
+    local.tee $6
+    local.set $7
+    local.get $6
     i32.ne
     if
      i32.const 5232
@@ -22350,7 +22370,7 @@
      f64.convert_i32_s
      local.get $4
      f64.convert_i32_s
-     local.get $5
+     local.get $7
      f64.convert_i32_s
      f64.const 0
      f64.const 0
@@ -22832,6 +22852,8 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
   local.get $0
   i32.load offset=8
   i32.const 1
@@ -22857,6 +22879,18 @@
     local.get $2
     call $~lib/typedarray/Uint16Array#__get
     local.tee $4
+    local.get $2
+    local.get $1
+    i32.load offset=12
+    i32.ge_u
+    if
+     i32.const 1376
+     i32.const 1536
+     i32.const 104
+     i32.const 42
+     call $~lib/builtins/abort
+     unreachable
+    end
     local.get $1
     i32.load offset=4
     local.get $2
@@ -22864,7 +22898,9 @@
     i32.shl
     i32.add
     i32.load16_u
-    local.tee $5
+    local.tee $6
+    local.set $7
+    local.get $6
     i32.ne
     if
      i32.const 5520
@@ -22873,7 +22909,7 @@
      f64.convert_i32_s
      local.get $4
      f64.convert_i32_u
-     local.get $5
+     local.get $7
      f64.convert_i32_u
      f64.const 0
      f64.const 0
@@ -23211,7 +23247,7 @@
     local.tee $4
     local.get $1
     local.get $2
-    call $~lib/array/Array<i32>#__unchecked_get
+    call $~lib/array/Array<i32>#__get
     local.tee $5
     i32.ne
     if
@@ -23759,7 +23795,7 @@
     local.tee $4
     local.get $1
     local.get $2
-    call $~lib/array/Array<i32>#__unchecked_get
+    call $~lib/array/Array<i32>#__get
     local.tee $5
     i32.ne
     if
@@ -24103,7 +24139,19 @@
    end
   end
  )
- (func $~lib/array/Array<i64>#__unchecked_get (param $0 i32) (param $1 i32) (result i64)
+ (func $~lib/array/Array<i64>#__get (param $0 i32) (param $1 i32) (result i64)
+  local.get $1
+  local.get $0
+  i32.load offset=12
+  i32.ge_u
+  if
+   i32.const 1376
+   i32.const 1536
+   i32.const 104
+   i32.const 42
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   i32.load offset=4
   local.get $1
@@ -24144,7 +24192,7 @@
     local.tee $4
     local.get $1
     local.get $2
-    call $~lib/array/Array<i64>#__unchecked_get
+    call $~lib/array/Array<i64>#__get
     local.tee $5
     i64.ne
     if
@@ -24663,7 +24711,7 @@
     local.tee $4
     local.get $1
     local.get $2
-    call $~lib/array/Array<i64>#__unchecked_get
+    call $~lib/array/Array<i64>#__get
     local.tee $5
     i64.ne
     if
@@ -24960,6 +25008,8 @@
   (local $3 i32)
   (local $4 f32)
   (local $5 f32)
+  (local $6 f32)
+  (local $7 f32)
   local.get $0
   i32.load offset=8
   i32.const 2
@@ -24985,6 +25035,18 @@
     local.get $2
     call $~lib/typedarray/Float32Array#__get
     local.tee $4
+    local.get $2
+    local.get $1
+    i32.load offset=12
+    i32.ge_u
+    if
+     i32.const 1376
+     i32.const 1536
+     i32.const 104
+     i32.const 42
+     call $~lib/builtins/abort
+     unreachable
+    end
     local.get $1
     i32.load offset=4
     local.get $2
@@ -24992,7 +25054,9 @@
     i32.shl
     i32.add
     f32.load
-    local.tee $5
+    local.tee $6
+    local.set $7
+    local.get $6
     f32.ne
     if
      i32.const 7616
@@ -25001,7 +25065,7 @@
      f64.convert_i32_s
      local.get $4
      f64.promote_f32
-     local.get $5
+     local.get $7
      f64.promote_f32
      f64.const 0
      f64.const 0
@@ -25402,6 +25466,8 @@
   (local $3 i32)
   (local $4 f64)
   (local $5 f64)
+  (local $6 f64)
+  (local $7 f64)
   local.get $0
   i32.load offset=8
   i32.const 3
@@ -25427,6 +25493,18 @@
     local.get $2
     call $~lib/typedarray/Float64Array#__get
     local.tee $4
+    local.get $2
+    local.get $1
+    i32.load offset=12
+    i32.ge_u
+    if
+     i32.const 1376
+     i32.const 1536
+     i32.const 104
+     i32.const 42
+     call $~lib/builtins/abort
+     unreachable
+    end
     local.get $1
     i32.load offset=4
     local.get $2
@@ -25434,7 +25512,9 @@
     i32.shl
     i32.add
     f64.load
-    local.tee $5
+    local.tee $6
+    local.set $7
+    local.get $6
     f64.ne
     if
      i32.const 7952
@@ -25442,7 +25522,7 @@
      local.get $2
      f64.convert_i32_s
      local.get $4
-     local.get $5
+     local.get $7
      f64.const 0
      f64.const 0
      call $~lib/builtins/trace
@@ -32162,7 +32242,7 @@
   if
    i32.const 0
    i32.const 1264
-   i32.const 122
+   i32.const 133
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -32202,7 +32282,7 @@
    if
     i32.const 0
     i32.const 1264
-    i32.const 126
+    i32.const 137
     i32.const 18
     call $~lib/builtins/abort
     unreachable
@@ -32217,7 +32297,7 @@
    if
     i32.const 0
     i32.const 1264
-    i32.const 136
+    i32.const 147
     i32.const 16
     call $~lib/builtins/abort
     unreachable
