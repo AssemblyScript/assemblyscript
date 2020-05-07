@@ -1,6 +1,7 @@
 (module
  (type $none_=>_none (func))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_i32_i64_=>_i64 (func (param i32 i32 i32 i32 i64) (result i64)))
  (type $none_=>_f64 (func (result f64)))
  (type $i32_i32_i32_i32_i32_i32_f64_=>_f64 (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
  (import "Date" "UTC" (func $~lib/bindings/Date/UTC (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
@@ -12,6 +13,18 @@
  (global $std/date/date (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/date/Date.UTC (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i64) (result i64)
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  i32.const 0
+  i32.const 0
+  local.get $4
+  f64.convert_i64_s
+  call $~lib/bindings/Date/UTC
+  i64.trunc_f64_s
+ )
  (func $start:std/date
   (local $0 i32)
   (local $1 i32)
@@ -20,11 +33,8 @@
   i32.const 0
   i32.const 1
   i32.const 0
-  i32.const 0
-  i32.const 0
-  f64.const 0
-  call $~lib/bindings/Date/UTC
-  i64.trunc_f64_s
+  i64.const 0
+  call $~lib/date/Date.UTC
   i64.eqz
   i32.eqz
   if
@@ -39,11 +49,8 @@
   i32.const 0
   i32.const 1
   i32.const 0
-  i32.const 0
-  i32.const 0
-  f64.const 0
-  call $~lib/bindings/Date/UTC
-  i64.trunc_f64_s
+  i64.const 0
+  call $~lib/date/Date.UTC
   i64.eqz
   i32.eqz
   if
@@ -58,11 +65,8 @@
   i32.const 10
   i32.const 10
   i32.const 11
-  i32.const 0
-  i32.const 0
-  f64.const 1
-  call $~lib/bindings/Date/UTC
-  i64.trunc_f64_s
+  i64.const 1
+  call $~lib/date/Date.UTC
   global.set $std/date/creationTime
   global.get $std/date/creationTime
   i64.const 1541847600001

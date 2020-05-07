@@ -494,20 +494,14 @@ export const enum CharCode {
   z = 0x7A
 }
 
-// @ts-ignore: decorator
-@inline
 export function isAscii(c: u32): bool {
   return !(c >> 7);
 }
 
-// @ts-ignore: decorator
-@inline
 export function isLower8(c: u32): bool {
   return c - CharCode.a < 26;
 }
 
-// @ts-ignore: decorator
-@inline
 export function isUpper8(c: u32): bool {
   return c - CharCode.A < 26;
 }
@@ -541,22 +535,16 @@ export function isAlpha(c: u32): bool {
   return c < 0x2FFFE;
 }
 
-// @ts-ignore: decorator
-@inline
 export function isCased(c: u32): bool {
   // @ts-ignore: cast
   return c < 0x1F18A && stagedBinaryLookup(CASED, c);
 }
 
-// @ts-ignore: decorator
-@inline
 export function isCaseIgnorable(c: u32): bool {
   // @ts-ignore: cast
   return c < 0xE01F0 && stagedBinaryLookup(CASE_IGNORABLES, c);
 }
 
-// @ts-ignore: decorator
-@inline
 export function isFinalSigma(buffer: usize, index: isize, len: isize): bool {
   const lookaheadLimit = 30; // max lookahead limit
   var found = false;
@@ -592,8 +580,6 @@ export function isFinalSigma(buffer: usize, index: isize, len: isize): bool {
   return true;
 }
 
-// @ts-ignore: decorator
-@inline
 function codePointBefore(buffer: usize, index: isize): i32 {
   if (index <= 0) return -1;
   var c = <u32>load<u16>(buffer + (index - 1 << 1));
@@ -634,8 +620,6 @@ export function compareImpl(str1: string, index1: usize, str2: string, index2: u
   return 0;
 }
 
-// @ts-ignore: decorator
-@inline
 export function toLower8(c: u32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c | u32(isUpper8(c)) << 5;
@@ -644,8 +628,6 @@ export function toLower8(c: u32): u32 {
   }
 }
 
-// @ts-ignore: decorator
-@inline
 export function toUpper8(c: u32): u32 {
   if (ASC_SHRINK_LEVEL > 0) {
     return c & ~(u32(isLower8(c)) << 5);
@@ -1005,8 +987,6 @@ export function joinReferenceArray<T>(dataStart: usize, length: i32, separator: 
   return result;
 }
 
-// @ts-ignore: decorator
-@inline
 function scientific(significand: u64, exp: i32): f64 {
   if (!significand || exp < -342) return 0;
   if (exp > 308) return Infinity;
@@ -1032,8 +1012,6 @@ function scientific(significand: u64, exp: i32): f64 {
 
 // Adopted from metallic lib:
 // https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h
-// @ts-ignore: decorator
-@inline
 function scaledown(significand: u64, exp: i32): f64 {
   const denom: u64 = 6103515625; // 1e14 * 0x1p-14
   const scale = reinterpret<f64>(0x3F06849B86A12B9B); // 1e-14 * 0x1p32
@@ -1061,8 +1039,6 @@ function scaledown(significand: u64, exp: i32): f64 {
 
 // Adopted from metallic lib:
 // https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h
-// @ts-ignore: decorator
-@inline
 function scaleup(significand: u64, exp: i32): f64 {
   const coeff: u32 = 1220703125; // 1e13 * 0x1p-13;
   var shift = ctz(significand);
@@ -1080,8 +1056,6 @@ function scaleup(significand: u64, exp: i32): f64 {
 
 // Adopted from metallic lib:
 // https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h
-// @ts-ignore: decorator
-@inline
 function parseExp(ptr: usize, len: i32): i32 {
   var sign = 1, magnitude = 0;
   var code = <u32>load<u16>(ptr);
@@ -1117,8 +1091,6 @@ var __fixmulShift: u64 = 0;
 
 // Adopted from metallic lib:
 // https://github.com/jdh8/metallic/blob/master/src/stdlib/parse/scientific.h
-// @ts-ignore: decorator
-@inline
 function fixmul(a: u64, b: u32): u64 {
   var low  = (a & 0xFFFFFFFF) * b;
   var high = (a >> 32) * b + (low >> 32);
@@ -1129,8 +1101,6 @@ function fixmul(a: u64, b: u32): u64 {
   return (high << space | (low & 0xFFFFFFFF) >> revspace) + (low << space >> 31 & 1);
 }
 
-// @ts-ignore: decorator
-@inline
 function pow10(n: i32): f64 {
   // argument `n` should bounds in [0, 22] range
   return load<f64>(POWERS10 + (n << alignof<f64>()));

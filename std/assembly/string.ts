@@ -237,12 +237,10 @@ import { Array } from "./array";
     return changetype<String>(out); // retains
   }
 
-  @inline
   trimLeft(): String {
     return this.trimStart();
   }
 
-  @inline
   trimRight(): String {
     return this.trimEnd();
   }

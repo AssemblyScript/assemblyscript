@@ -6,6 +6,7 @@
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
@@ -13,7 +14,6 @@
  (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
- (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_f32_=>_none (func (param i32 f32)))
@@ -44,6 +44,58 @@
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/rt/tlsf/SETSL (param $0 i32) (param $1 i32) (param $2 i32)
+  local.get $0
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $2
+  i32.store offset=4
+ )
+ (func $~lib/rt/tlsf/SETHEAD (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32)
+  local.get $0
+  local.get $2
+  local.get $1
+  i32.const 4
+  i32.shl
+  i32.add
+  i32.const 2
+  i32.shl
+  i32.add
+  local.get $3
+  i32.store offset=96
+ )
+ (func $~lib/rt/tlsf/GETRIGHT (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.add
+  local.get $0
+  i32.load
+  i32.const -4
+  i32.and
+  i32.add
+ )
+ (func $~lib/rt/tlsf/GETHEAD (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
+  local.get $0
+  local.get $2
+  local.get $1
+  i32.const 4
+  i32.shl
+  i32.add
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load offset=96
+ )
+ (func $~lib/rt/tlsf/GETSL (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  local.get $1
+  i32.const 2
+  i32.shl
+  i32.add
+  i32.load offset=4
+ )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -58,7 +110,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 277
+   i32.const 269
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -80,7 +132,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 279
+   i32.const 271
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -99,23 +151,23 @@
    local.get $2
    i32.clz
    i32.sub
-   local.tee $4
+   local.tee $3
    i32.const 4
    i32.sub
    i32.shr_u
    i32.const 16
    i32.xor
    local.set $2
-   local.get $4
+   local.get $3
    i32.const 7
    i32.sub
-   local.set $4
+   local.set $3
   end
   local.get $2
   i32.const 16
   i32.lt_u
   i32.const 0
-  local.get $4
+  local.get $3
   i32.const 23
   i32.lt_u
   select
@@ -123,72 +175,56 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 292
+   i32.const 284
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
   i32.load offset=20
-  local.set $3
+  local.set $4
   local.get $1
   i32.load offset=16
   local.tee $5
   if
    local.get $5
-   local.get $3
+   local.get $4
    i32.store offset=20
   end
-  local.get $3
+  local.get $4
   if
-   local.get $3
+   local.get $4
    local.get $5
    i32.store offset=16
   end
-  local.get $1
   local.get $0
+  local.get $3
   local.get $2
-  local.get $4
-  i32.const 4
-  i32.shl
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load offset=96
+  call $~lib/rt/tlsf/GETHEAD
+  local.get $1
   i32.eq
   if
    local.get $0
+   local.get $3
    local.get $2
    local.get $4
-   i32.const 4
-   i32.shl
-   i32.add
-   i32.const 2
-   i32.shl
-   i32.add
-   local.get $3
-   i32.store offset=96
-   local.get $3
+   call $~lib/rt/tlsf/SETHEAD
+   local.get $4
    i32.eqz
    if
     local.get $0
-    local.get $4
-    i32.const 2
-    i32.shl
-    i32.add
-    local.tee $3
-    i32.load offset=4
+    local.get $3
+    local.get $0
+    local.get $3
+    call $~lib/rt/tlsf/GETSL
     i32.const 1
     local.get $2
     i32.shl
     i32.const -1
     i32.xor
     i32.and
-    local.set $1
-    local.get $3
-    local.get $1
-    i32.store offset=4
+    local.tee $1
+    call $~lib/rt/tlsf/SETSL
     local.get $1
     i32.eqz
     if
@@ -196,7 +232,7 @@
      local.get $0
      i32.load
      i32.const 1
-     local.get $4
+     local.get $3
      i32.shl
      i32.const -1
      i32.xor
@@ -219,7 +255,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 205
+   i32.const 197
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -233,22 +269,16 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 207
+   i32.const 199
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
   local.get $1
-  i32.const 16
-  i32.add
-  local.get $1
-  i32.load
-  i32.const -4
-  i32.and
-  i32.add
-  local.tee $4
-  i32.load
+  call $~lib/rt/tlsf/GETRIGHT
   local.tee $5
+  i32.load
+  local.tee $6
   i32.const 1
   i32.and
   if
@@ -257,7 +287,7 @@
    i32.and
    i32.const 16
    i32.add
-   local.get $5
+   local.get $6
    i32.const -4
    i32.and
    i32.add
@@ -266,7 +296,7 @@
    i32.lt_u
    if
     local.get $0
-    local.get $4
+    local.get $5
     call $~lib/rt/tlsf/removeBlock
     local.get $1
     local.get $2
@@ -277,16 +307,10 @@
     local.tee $3
     i32.store
     local.get $1
-    i32.const 16
-    i32.add
-    local.get $1
+    call $~lib/rt/tlsf/GETRIGHT
+    local.tee $5
     i32.load
-    i32.const -4
-    i32.and
-    i32.add
-    local.tee $4
-    i32.load
-    local.set $5
+    local.set $6
    end
   end
   local.get $3
@@ -306,7 +330,7 @@
    if
     i32.const 0
     i32.const 1040
-    i32.const 228
+    i32.const 220
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -339,8 +363,8 @@
     local.set $1
    end
   end
-  local.get $4
   local.get $5
+  local.get $6
   i32.const 2
   i32.or
   i32.store
@@ -361,7 +385,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 243
+   i32.const 235
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -371,17 +395,17 @@
   i32.const 16
   i32.add
   i32.add
-  local.get $4
+  local.get $5
   i32.ne
   if
    i32.const 0
    i32.const 1040
-   i32.const 244
+   i32.const 236
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $4
+  local.get $5
   i32.const 4
   i32.sub
   local.get $1
@@ -410,13 +434,13 @@
    local.get $3
    i32.const 7
    i32.sub
-   local.set $6
+   local.set $4
   end
   local.get $2
   i32.const 16
   i32.lt_u
   i32.const 0
-  local.get $6
+  local.get $4
   i32.const 23
   i32.lt_u
   select
@@ -424,21 +448,15 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 260
+   i32.const 252
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
+  local.get $4
   local.get $2
-  local.get $6
-  i32.const 4
-  i32.shl
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load offset=96
+  call $~lib/rt/tlsf/GETHEAD
   local.set $3
   local.get $1
   i32.const 0
@@ -453,37 +471,28 @@
    i32.store offset=16
   end
   local.get $0
+  local.get $4
   local.get $2
-  local.get $6
-  i32.const 4
-  i32.shl
-  i32.add
-  i32.const 2
-  i32.shl
-  i32.add
   local.get $1
-  i32.store offset=96
+  call $~lib/rt/tlsf/SETHEAD
   local.get $0
   local.get $0
   i32.load
   i32.const 1
-  local.get $6
+  local.get $4
   i32.shl
   i32.or
   i32.store
   local.get $0
-  local.get $6
-  i32.const 2
-  i32.shl
-  i32.add
-  local.tee $0
+  local.get $4
   local.get $0
-  i32.load offset=4
+  local.get $4
+  call $~lib/rt/tlsf/GETSL
   i32.const 1
   local.get $2
   i32.shl
   i32.or
-  i32.store offset=4
+  call $~lib/rt/tlsf/SETSL
  )
  (func $~lib/rt/tlsf/addMemory (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
@@ -507,7 +516,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 386
+   i32.const 378
    i32.const 5
    call $~lib/builtins/abort
    unreachable
@@ -524,7 +533,7 @@
    if
     i32.const 0
     i32.const 1040
-    i32.const 396
+    i32.const 388
     i32.const 16
     call $~lib/builtins/abort
     unreachable
@@ -552,7 +561,7 @@
    if
     i32.const 0
     i32.const 1040
-    i32.const 408
+    i32.const 400
     i32.const 5
     call $~lib/builtins/abort
     unreachable
@@ -604,7 +613,7 @@
   (local $1 i32)
   (local $2 i32)
   global.get $~lib/rt/tlsf/ROOT
-  local.tee $0
+  local.tee $2
   i32.eqz
   if
    i32.const 1
@@ -625,7 +634,8 @@
     unreachable
    end
    i32.const 1568
-   local.tee $0
+   local.set $2
+   i32.const 1568
    i32.const 0
    i32.store
    i32.const 3136
@@ -636,35 +646,26 @@
     i32.const 23
     i32.lt_u
     if
-     local.get $1
-     i32.const 2
-     i32.shl
      i32.const 1568
-     i32.add
+     local.get $1
      i32.const 0
-     i32.store offset=4
+     call $~lib/rt/tlsf/SETSL
      i32.const 0
-     local.set $2
+     local.set $0
      loop $for-loop|1
-      local.get $2
+      local.get $0
       i32.const 16
       i32.lt_u
       if
-       local.get $1
-       i32.const 4
-       i32.shl
-       local.get $2
-       i32.add
-       i32.const 2
-       i32.shl
        i32.const 1568
-       i32.add
+       local.get $1
+       local.get $0
        i32.const 0
-       i32.store offset=96
-       local.get $2
+       call $~lib/rt/tlsf/SETHEAD
+       local.get $0
        i32.const 1
        i32.add
-       local.set $2
+       local.set $0
        br $for-loop|1
       end
      end
@@ -684,7 +685,7 @@
    i32.const 1568
    global.set $~lib/rt/tlsf/ROOT
   end
-  local.get $0
+  local.get $2
  )
  (func $~lib/rt/tlsf/prepareSize (param $0 i32) (result i32)
   local.get $0
@@ -693,7 +694,7 @@
   if
    i32.const 1088
    i32.const 1040
-   i32.const 461
+   i32.const 453
    i32.const 30
    call $~lib/builtins/abort
    unreachable
@@ -766,17 +767,14 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 338
+   i32.const 330
    i32.const 14
    call $~lib/builtins/abort
    unreachable
   end
   local.get $0
   local.get $2
-  i32.const 2
-  i32.shl
-  i32.add
-  i32.load offset=4
+  call $~lib/rt/tlsf/GETSL
   i32.const -1
   local.get $1
   i32.shl
@@ -784,16 +782,10 @@
   local.tee $1
   if (result i32)
    local.get $0
+   local.get $2
    local.get $1
    i32.ctz
-   local.get $2
-   i32.const 4
-   i32.shl
-   i32.add
-   i32.const 2
-   i32.shl
-   i32.add
-   i32.load offset=96
+   call $~lib/rt/tlsf/GETHEAD
   else
    local.get $0
    i32.load
@@ -809,31 +801,22 @@
     local.get $1
     i32.ctz
     local.tee $1
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load offset=4
+    call $~lib/rt/tlsf/GETSL
     local.tee $2
     i32.eqz
     if
      i32.const 0
      i32.const 1040
-     i32.const 351
+     i32.const 343
      i32.const 18
      call $~lib/builtins/abort
      unreachable
     end
     local.get $0
+    local.get $1
     local.get $2
     i32.ctz
-    local.get $1
-    i32.const 4
-    i32.shl
-    i32.add
-    i32.const 2
-    i32.shl
-    i32.add
-    i32.load offset=96
+    call $~lib/rt/tlsf/GETHEAD
    else
     i32.const 0
    end
@@ -851,7 +834,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 365
+   i32.const 357
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -894,20 +877,9 @@
    i32.and
    i32.store
    local.get $1
-   i32.const 16
-   i32.add
-   local.tee $0
+   call $~lib/rt/tlsf/GETRIGHT
    local.get $1
-   i32.load
-   i32.const -4
-   i32.and
-   i32.add
-   local.get $0
-   local.get $1
-   i32.load
-   i32.const -4
-   i32.and
-   i32.add
+   call $~lib/rt/tlsf/GETRIGHT
    i32.load
    i32.const -3
    i32.and
@@ -922,7 +894,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 501
+   i32.const 493
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -945,15 +917,16 @@
    local.tee $3
    i32.eqz
    if
-    i32.const 16
     memory.size
     local.tee $3
+    i32.const 16
+    local.get $0
+    i32.load offset=1568
+    local.get $3
     i32.const 16
     i32.shl
     i32.const 16
     i32.sub
-    local.get $0
-    i32.load offset=1568
     i32.ne
     i32.shl
     local.get $4
@@ -978,9 +951,7 @@
     i32.and
     i32.const 16
     i32.shr_u
-    local.set $5
-    local.get $3
-    local.get $5
+    local.tee $5
     local.get $3
     local.get $5
     i32.gt_s
@@ -1013,7 +984,7 @@
     if
      i32.const 0
      i32.const 1040
-     i32.const 513
+     i32.const 505
      i32.const 20
      call $~lib/builtins/abort
      unreachable
@@ -1029,7 +1000,7 @@
   if
    i32.const 0
    i32.const 1040
-   i32.const 521
+   i32.const 513
    i32.const 14
    call $~lib/builtins/abort
    unreachable
@@ -1113,161 +1084,171 @@
   end
   local.get $0
  )
- (func $~lib/memory/memory.fill (param $0 i32) (param $1 i32)
+ (func $~lib/util/memory/memset (param $0 i32) (param $1 i32)
   (local $2 i32)
-  block $~lib/util/memory/memset|inlined.0
+  local.get $1
+  i32.eqz
+  if
+   return
+  end
+  local.get $0
+  i32.const 0
+  i32.store8
+  local.get $0
+  local.get $1
+  i32.add
+  i32.const 4
+  i32.sub
+  local.tee $2
+  i32.const 0
+  i32.store8 offset=3
+  local.get $1
+  i32.const 2
+  i32.le_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 0
+  i32.store8 offset=1
+  local.get $0
+  i32.const 0
+  i32.store8 offset=2
+  local.get $2
+  i32.const 0
+  i32.store8 offset=2
+  local.get $2
+  i32.const 0
+  i32.store8 offset=1
+  local.get $1
+  i32.const 6
+  i32.le_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 0
+  i32.store8 offset=3
+  local.get $2
+  i32.const 0
+  i32.store8
+  local.get $1
+  i32.const 8
+  i32.le_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 0
+  local.get $0
+  i32.sub
+  i32.const 3
+  i32.and
+  local.tee $2
+  i32.add
+  local.tee $0
+  i32.const 0
+  i32.store
+  local.get $0
+  local.get $1
+  local.get $2
+  i32.sub
+  i32.const -4
+  i32.and
+  local.tee $2
+  i32.add
+  i32.const 28
+  i32.sub
+  local.tee $1
+  i32.const 0
+  i32.store offset=24
+  local.get $2
+  i32.const 8
+  i32.le_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
+  local.get $1
+  i32.const 0
+  i32.store offset=16
+  local.get $1
+  i32.const 0
+  i32.store offset=20
+  local.get $2
+  i32.const 24
+  i32.le_u
+  if
+   return
+  end
+  local.get $0
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  i32.const 0
+  i32.store offset=16
+  local.get $0
+  i32.const 0
+  i32.store offset=20
+  local.get $0
+  i32.const 0
+  i32.store offset=24
+  local.get $1
+  i32.const 0
+  i32.store
+  local.get $1
+  i32.const 0
+  i32.store offset=4
+  local.get $1
+  i32.const 0
+  i32.store offset=8
+  local.get $1
+  i32.const 0
+  i32.store offset=12
+  local.get $0
+  local.get $0
+  i32.const 4
+  i32.and
+  i32.const 24
+  i32.add
+  local.tee $1
+  i32.add
+  local.set $0
+  local.get $2
+  local.get $1
+  i32.sub
+  local.set $1
+  loop $while-continue|0
    local.get $1
-   i32.eqz
-   br_if $~lib/util/memory/memset|inlined.0
-   local.get $0
-   i32.const 0
-   i32.store8
-   local.get $0
-   local.get $1
-   i32.add
-   i32.const 4
-   i32.sub
-   local.tee $2
-   i32.const 0
-   i32.store8 offset=3
-   local.get $1
-   i32.const 2
-   i32.le_u
-   br_if $~lib/util/memory/memset|inlined.0
-   local.get $0
-   i32.const 0
-   i32.store8 offset=1
-   local.get $0
-   i32.const 0
-   i32.store8 offset=2
-   local.get $2
-   i32.const 0
-   i32.store8 offset=2
-   local.get $2
-   i32.const 0
-   i32.store8 offset=1
-   local.get $1
-   i32.const 6
-   i32.le_u
-   br_if $~lib/util/memory/memset|inlined.0
-   local.get $0
-   i32.const 0
-   i32.store8 offset=3
-   local.get $2
-   i32.const 0
-   i32.store8
-   local.get $1
-   i32.const 8
-   i32.le_u
-   br_if $~lib/util/memory/memset|inlined.0
-   local.get $0
-   i32.const 0
-   local.get $0
-   i32.sub
-   i32.const 3
-   i32.and
-   local.tee $2
-   i32.add
-   local.tee $0
-   i32.const 0
-   i32.store
-   local.get $0
-   local.get $1
-   local.get $2
-   i32.sub
-   i32.const -4
-   i32.and
-   local.tee $2
-   i32.add
-   i32.const 28
-   i32.sub
-   local.tee $1
-   i32.const 0
-   i32.store offset=24
-   local.get $2
-   i32.const 8
-   i32.le_u
-   br_if $~lib/util/memory/memset|inlined.0
-   local.get $0
-   i32.const 0
-   i32.store offset=4
-   local.get $0
-   i32.const 0
-   i32.store offset=8
-   local.get $1
-   i32.const 0
-   i32.store offset=16
-   local.get $1
-   i32.const 0
-   i32.store offset=20
-   local.get $2
-   i32.const 24
-   i32.le_u
-   br_if $~lib/util/memory/memset|inlined.0
-   local.get $0
-   i32.const 0
-   i32.store offset=12
-   local.get $0
-   i32.const 0
-   i32.store offset=16
-   local.get $0
-   i32.const 0
-   i32.store offset=20
-   local.get $0
-   i32.const 0
-   i32.store offset=24
-   local.get $1
-   i32.const 0
-   i32.store
-   local.get $1
-   i32.const 0
-   i32.store offset=4
-   local.get $1
-   i32.const 0
-   i32.store offset=8
-   local.get $1
-   i32.const 0
-   i32.store offset=12
-   local.get $0
-   local.get $0
-   i32.const 4
-   i32.and
-   i32.const 24
-   i32.add
-   local.tee $1
-   i32.add
-   local.set $0
-   local.get $2
-   local.get $1
-   i32.sub
-   local.set $1
-   loop $while-continue|0
+   i32.const 32
+   i32.ge_u
+   if
+    local.get $0
+    i64.const 0
+    i64.store
+    local.get $0
+    i64.const 0
+    i64.store offset=8
+    local.get $0
+    i64.const 0
+    i64.store offset=16
+    local.get $0
+    i64.const 0
+    i64.store offset=24
     local.get $1
     i32.const 32
-    i32.ge_u
-    if
-     local.get $0
-     i64.const 0
-     i64.store
-     local.get $0
-     i64.const 0
-     i64.store offset=8
-     local.get $0
-     i64.const 0
-     i64.store offset=16
-     local.get $0
-     i64.const 0
-     i64.store offset=24
-     local.get $1
-     i32.const 32
-     i32.sub
-     local.set $1
-     local.get $0
-     i32.const 32
-     i32.add
-     local.set $0
-     br $while-continue|0
-    end
+    i32.sub
+    local.set $1
+    local.get $0
+    i32.const 32
+    i32.add
+    local.set $0
+    br $while-continue|0
    end
   end
  )
@@ -1289,7 +1270,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $1
   local.get $0
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   local.get $1
   call $~lib/rt/pure/__retain
  )
@@ -1344,6 +1325,14 @@
   i32.const 16777619
   i32.mul
  )
+ (func $~lib/util/hash/HASH<i8> (param $0 i32) (result i32)
+  local.get $0
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  call $~lib/util/hash/hash8
+ )
  (func $~lib/map/Map<i8,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
@@ -1391,11 +1380,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  call $~lib/util/hash/hash8
+  call $~lib/util/hash/HASH<i8>
   call $~lib/map/Map<i8,i32>#find
   i32.const 0
   i32.ne
@@ -1411,21 +1396,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -1434,49 +1419,48 @@
   i32.const 12
   i32.mul
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load8_s
      i32.store8
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load offset=4
      i32.store offset=4
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i32.load8_s
-     call $~lib/util/hash/hash8
+     call $~lib/util/hash/HASH<i8>
      local.get $1
      i32.and
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=8
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 12
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 12
@@ -1485,54 +1469,51 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i8,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -1542,11 +1523,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  call $~lib/util/hash/hash8
+  call $~lib/util/hash/HASH<i8>
   local.tee $4
   call $~lib/map/Map<i8,i32>#find
   local.tee $3
@@ -1633,18 +1610,14 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  call $~lib/util/hash/hash8
+  call $~lib/util/hash/HASH<i8>
   call $~lib/map/Map<i8,i32>#find
   local.tee $0
   i32.eqz
   if
    i32.const 1360
    i32.const 1424
-   i32.const 111
+   i32.const 109
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -1652,175 +1625,177 @@
   local.get $0
   i32.load offset=4
  )
- (func $~lib/memory/memory.copy (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/memory/memmove (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   (local $4 i32)
-  block $~lib/util/memory/memmove|inlined.0
-   local.get $2
-   local.set $4
-   local.get $0
+  local.get $0
+  local.get $1
+  i32.eq
+  if
+   return
+  end
+  local.get $0
+  local.get $1
+  i32.lt_u
+  if
    local.get $1
+   i32.const 7
+   i32.and
+   local.get $0
+   i32.const 7
+   i32.and
    i32.eq
-   br_if $~lib/util/memory/memmove|inlined.0
-   local.get $0
-   local.get $1
-   i32.lt_u
    if
-    local.get $1
-    i32.const 7
-    i32.and
-    local.get $0
-    i32.const 7
-    i32.and
-    i32.eq
-    if
-     loop $while-continue|0
-      local.get $0
-      i32.const 7
-      i32.and
-      if
-       local.get $4
-       i32.eqz
-       br_if $~lib/util/memory/memmove|inlined.0
-       local.get $4
-       i32.const 1
-       i32.sub
-       local.set $4
-       local.get $0
-       local.tee $2
-       i32.const 1
-       i32.add
-       local.set $0
-       local.get $1
-       local.tee $3
-       i32.const 1
-       i32.add
-       local.set $1
-       local.get $2
-       local.get $3
-       i32.load8_u
-       i32.store8
-       br $while-continue|0
-      end
-     end
-     loop $while-continue|1
-      local.get $4
-      i32.const 8
-      i32.ge_u
-      if
-       local.get $0
-       local.get $1
-       i64.load
-       i64.store
-       local.get $4
-       i32.const 8
-       i32.sub
-       local.set $4
-       local.get $0
-       i32.const 8
-       i32.add
-       local.set $0
-       local.get $1
-       i32.const 8
-       i32.add
-       local.set $1
-       br $while-continue|1
-      end
-     end
-    end
-    loop $while-continue|2
-     local.get $4
+    loop $while-continue|0
+     local.get $0
+     i32.const 7
+     i32.and
      if
+      local.get $2
+      i32.eqz
+      if
+       return
+      end
+      local.get $2
+      i32.const 1
+      i32.sub
+      local.set $2
       local.get $0
-      local.tee $2
+      local.tee $3
       i32.const 1
       i32.add
       local.set $0
       local.get $1
-      local.tee $3
+      local.tee $4
       i32.const 1
       i32.add
       local.set $1
-      local.get $2
       local.get $3
+      local.get $4
       i32.load8_u
       i32.store8
-      local.get $4
-      i32.const 1
-      i32.sub
-      local.set $4
-      br $while-continue|2
+      br $while-continue|0
      end
     end
-   else
-    local.get $1
-    i32.const 7
-    i32.and
-    local.get $0
-    i32.const 7
-    i32.and
-    i32.eq
-    if
-     loop $while-continue|3
-      local.get $0
-      local.get $4
-      i32.add
-      i32.const 7
-      i32.and
-      if
-       local.get $4
-       i32.eqz
-       br_if $~lib/util/memory/memmove|inlined.0
-       local.get $4
-       i32.const 1
-       i32.sub
-       local.tee $4
-       local.get $0
-       i32.add
-       local.get $1
-       local.get $4
-       i32.add
-       i32.load8_u
-       i32.store8
-       br $while-continue|3
-      end
-     end
-     loop $while-continue|4
-      local.get $4
-      i32.const 8
-      i32.ge_u
-      if
-       local.get $4
-       i32.const 8
-       i32.sub
-       local.tee $4
-       local.get $0
-       i32.add
-       local.get $1
-       local.get $4
-       i32.add
-       i64.load
-       i64.store
-       br $while-continue|4
-      end
-     end
-    end
-    loop $while-continue|5
-     local.get $4
+    loop $while-continue|1
+     local.get $2
+     i32.const 8
+     i32.ge_u
      if
-      local.get $4
+      local.get $0
+      local.get $1
+      i64.load
+      i64.store
+      local.get $2
+      i32.const 8
+      i32.sub
+      local.set $2
+      local.get $0
+      i32.const 8
+      i32.add
+      local.set $0
+      local.get $1
+      i32.const 8
+      i32.add
+      local.set $1
+      br $while-continue|1
+     end
+    end
+   end
+   loop $while-continue|2
+    local.get $2
+    if
+     local.get $0
+     local.tee $3
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     local.tee $4
+     i32.const 1
+     i32.add
+     local.set $1
+     local.get $3
+     local.get $4
+     i32.load8_u
+     i32.store8
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.set $2
+     br $while-continue|2
+    end
+   end
+  else
+   local.get $1
+   i32.const 7
+   i32.and
+   local.get $0
+   i32.const 7
+   i32.and
+   i32.eq
+   if
+    loop $while-continue|3
+     local.get $0
+     local.get $2
+     i32.add
+     i32.const 7
+     i32.and
+     if
+      local.get $2
+      i32.eqz
+      if
+       return
+      end
+      local.get $0
+      local.get $2
       i32.const 1
       i32.sub
-      local.tee $4
-      local.get $0
+      local.tee $2
       i32.add
       local.get $1
-      local.get $4
+      local.get $2
       i32.add
       i32.load8_u
       i32.store8
-      br $while-continue|5
+      br $while-continue|3
      end
+    end
+    loop $while-continue|4
+     local.get $2
+     i32.const 8
+     i32.ge_u
+     if
+      local.get $0
+      local.get $2
+      i32.const 8
+      i32.sub
+      local.tee $2
+      i32.add
+      local.get $1
+      local.get $2
+      i32.add
+      i64.load
+      i64.store
+      br $while-continue|4
+     end
+    end
+   end
+   loop $while-continue|5
+    local.get $2
+    if
+     local.get $0
+     local.get $2
+     i32.const 1
+     i32.sub
+     local.tee $2
+     i32.add
+     local.get $1
+     local.get $2
+     i32.add
+     i32.load8_u
+     i32.store8
+     br $while-continue|5
     end
    end
   end
@@ -1864,13 +1839,7 @@
    return
   end
   local.get $1
-  i32.const 16
-  i32.add
-  local.get $1
-  i32.load
-  i32.const -4
-  i32.and
-  i32.add
+  call $~lib/rt/tlsf/GETRIGHT
   local.tee $6
   i32.load
   local.tee $4
@@ -1927,7 +1896,7 @@
   i32.const 16
   i32.add
   local.get $2
-  call $~lib/memory/memory.copy
+  call $~lib/util/memory/memmove
   local.get $1
   i32.const 1556
   i32.ge_u
@@ -2004,7 +1973,7 @@
    if
     i32.const 0
     i32.const 1040
-    i32.const 581
+    i32.const 573
     i32.const 3
     call $~lib/builtins/abort
     unreachable
@@ -2023,7 +1992,7 @@
    local.get $2
    local.get $5
    i32.sub
-   call $~lib/memory/memory.fill
+   call $~lib/util/memory/memset
    local.get $1
    local.get $3
    i32.ne
@@ -2119,7 +2088,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $8
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 4
   call $~lib/rt/tlsf/__alloc
@@ -2225,7 +2194,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $1
   local.get $4
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 5
   call $~lib/rt/tlsf/__alloc
@@ -2465,21 +2434,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 3
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -2488,49 +2457,48 @@
   i32.const 3
   i32.shl
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=4
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load8_s
      i32.store8
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load8_s offset=1
      i32.store8 offset=1
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i32.load8_s
-     call $~lib/util/hash/hash8
+     call $~lib/util/hash/HASH<i8>
      local.get $1
      i32.and
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=4
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 8
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 8
@@ -2539,54 +2507,51 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i8,i8>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -2595,11 +2560,7 @@
   (local $5 i32)
   local.get $1
   local.tee $3
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  call $~lib/util/hash/hash8
+  call $~lib/util/hash/HASH<i8>
   local.set $4
   local.get $0
   i32.load
@@ -2805,21 +2766,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -2828,32 +2789,31 @@
   i32.const 12
   i32.mul
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load
      i32.store
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load offset=4
      i32.store offset=4
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i32.load
      call $~lib/util/hash/hash32
      local.get $1
@@ -2861,16 +2821,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=8
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 12
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 12
@@ -2879,65 +2839,64 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i32,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  local.get $1
   local.get $1
   call $~lib/util/hash/hash32
-  local.tee $4
+  local.tee $3
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $3
   call $~lib/map/Map<i32,i32>#find
   local.tee $3
   if
@@ -3024,11 +2983,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  call $~lib/util/hash/hash8
+  call $~lib/util/hash/HASH<i8>
   call $~lib/map/Map<i8,i32>#find
   local.tee $1
   i32.eqz
@@ -3627,21 +3582,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -3650,32 +3605,31 @@
   i32.const 12
   i32.mul
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load8_u
      i32.store8
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load offset=4
      i32.store offset=4
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i32.load8_u
      call $~lib/util/hash/hash8
      local.get $1
@@ -3683,16 +3637,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=8
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 12
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 12
@@ -3701,67 +3655,66 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u8,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  local.get $1
   local.get $1
   i32.const 255
   i32.and
   call $~lib/util/hash/hash8
-  local.tee $4
+  local.tee $3
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $3
   call $~lib/map/Map<i8,i32>#find
   local.tee $3
   if
@@ -3856,7 +3809,7 @@
   if
    i32.const 1360
    i32.const 1424
-   i32.const 111
+   i32.const 109
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -3895,7 +3848,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $8
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 9
   call $~lib/rt/tlsf/__alloc
@@ -3987,21 +3940,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 3
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -4010,32 +3963,31 @@
   i32.const 3
   i32.shl
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=4
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load8_u
      i32.store8
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load8_u offset=1
      i32.store8 offset=1
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i32.load8_u
      call $~lib/util/hash/hash8
      local.get $1
@@ -4043,16 +3995,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=4
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 8
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 8
@@ -4061,54 +4013,51 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u8,u8>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -4819,6 +4768,14 @@
   i32.const 16777619
   i32.mul
  )
+ (func $~lib/util/hash/HASH<i16> (param $0 i32) (result i32)
+  local.get $0
+  i32.const 16
+  i32.shl
+  i32.const 16
+  i32.shr_s
+  call $~lib/util/hash/hash16
+ )
  (func $~lib/map/Map<i16,i32>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.load
@@ -4866,11 +4823,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<i16>
   call $~lib/map/Map<i16,i32>#find
   i32.const 0
   i32.ne
@@ -4886,21 +4839,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -4909,49 +4862,48 @@
   i32.const 12
   i32.mul
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load16_s
      i32.store16
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load offset=4
      i32.store offset=4
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i32.load16_s
-     call $~lib/util/hash/hash16
+     call $~lib/util/hash/HASH<i16>
      local.get $1
      i32.and
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=8
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 12
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 12
@@ -4960,54 +4912,51 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i16,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -5017,11 +4966,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<i16>
   local.tee $4
   call $~lib/map/Map<i16,i32>#find
   local.tee $3
@@ -5108,18 +5053,14 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<i16>
   call $~lib/map/Map<i16,i32>#find
   local.tee $0
   i32.eqz
   if
    i32.const 1360
    i32.const 1424
-   i32.const 111
+   i32.const 109
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -5213,7 +5154,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $5
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 12
   call $~lib/rt/tlsf/__alloc
@@ -5305,21 +5246,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 3
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -5328,49 +5269,48 @@
   i32.const 3
   i32.shl
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=4
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load16_s
      i32.store16
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load16_s offset=2
      i32.store16 offset=2
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i32.load16_s
-     call $~lib/util/hash/hash16
+     call $~lib/util/hash/HASH<i16>
      local.get $1
      i32.and
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=4
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 8
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 8
@@ -5379,54 +5319,51 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i16,i16>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -5435,11 +5372,7 @@
   (local $5 i32)
   local.get $1
   local.tee $3
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<i16>
   local.set $4
   local.get $0
   i32.load
@@ -5567,11 +5500,7 @@
   local.get $0
   local.get $1
   local.get $1
-  i32.const 16
-  i32.shl
-  i32.const 16
-  i32.shr_s
-  call $~lib/util/hash/hash16
+  call $~lib/util/hash/HASH<i16>
   call $~lib/map/Map<i16,i32>#find
   local.tee $1
   i32.eqz
@@ -6172,21 +6101,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -6195,32 +6124,31 @@
   i32.const 12
   i32.mul
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load16_u
      i32.store16
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load offset=4
      i32.store offset=4
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i32.load16_u
      call $~lib/util/hash/hash16
      local.get $1
@@ -6228,16 +6156,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=8
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 12
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 12
@@ -6246,67 +6174,66 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u16,i32>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  local.get $1
   local.get $1
   i32.const 65535
   i32.and
   call $~lib/util/hash/hash16
-  local.tee $4
+  local.tee $3
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $3
   call $~lib/map/Map<i16,i32>#find
   local.tee $3
   if
@@ -6401,7 +6328,7 @@
   if
    i32.const 1360
    i32.const 1424
-   i32.const 111
+   i32.const 109
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -6445,7 +6372,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $5
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 15
   call $~lib/rt/tlsf/__alloc
@@ -6537,21 +6464,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 3
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -6560,32 +6487,31 @@
   i32.const 3
   i32.shl
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=4
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load16_u
      i32.store16
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load16_u offset=2
      i32.store16 offset=2
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i32.load16_u
      call $~lib/util/hash/hash16
      local.get $1
@@ -6593,16 +6519,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=4
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 8
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 8
@@ -6611,54 +6537,51 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<u16,u16>#set (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -7376,7 +7299,7 @@
   if
    i32.const 1360
    i32.const 1424
-   i32.const 111
+   i32.const 109
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -7618,7 +7541,7 @@
   local.tee $6
   call $~lib/array/Array<i32>#constructor
   local.set $1
-  loop $for-loop|01
+  loop $for-loop|00
    local.get $4
    local.get $6
    i32.lt_s
@@ -7648,7 +7571,7 @@
     i32.const 1
     i32.add
     local.set $4
-    br $for-loop|01
+    br $for-loop|00
    end
   end
   local.get $1
@@ -7941,7 +7864,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $5
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 18
   call $~lib/rt/tlsf/__alloc
@@ -8647,21 +8570,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 4
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -8670,32 +8593,31 @@
   i32.const 4
   i32.shl
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=12
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i64.load
      i64.store
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load offset=8
      i32.store offset=8
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i64.load
      call $~lib/util/hash/hash64
      local.get $1
@@ -8703,16 +8625,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=12
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 16
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 16
@@ -8721,65 +8643,64 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i64,i32>#set (param $0 i32) (param $1 i64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  local.get $1
   local.get $1
   call $~lib/util/hash/hash64
-  local.tee $4
+  local.tee $3
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $3
   call $~lib/map/Map<i64,i32>#find
   local.tee $3
   if
@@ -8872,7 +8793,7 @@
   if
    i32.const 1360
    i32.const 1424
-   i32.const 111
+   i32.const 109
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -8966,7 +8887,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $5
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 21
   call $~lib/rt/tlsf/__alloc
@@ -9164,21 +9085,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 24
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -9187,32 +9108,31 @@
   i32.const 24
   i32.mul
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=16
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i64.load
      i64.store
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i64.load offset=8
      i64.store offset=8
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      i64.load
      call $~lib/util/hash/hash64
      local.get $1
@@ -9220,16 +9140,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=16
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 24
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 24
@@ -9238,54 +9158,51 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<i64,i64>#set (param $0 i32) (param $1 i64) (param $2 i64) (result i32)
@@ -9983,7 +9900,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $5
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 24
   call $~lib/rt/tlsf/__alloc
@@ -10599,21 +10516,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -10622,32 +10539,31 @@
   i32.const 12
   i32.mul
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      f32.load
      f32.store
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load offset=4
      i32.store offset=4
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      f32.load
      i32.reinterpret_f32
      call $~lib/util/hash/hash32
@@ -10656,16 +10572,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=8
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 12
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 12
@@ -10674,66 +10590,65 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<f32,i32>#set (param $0 i32) (param $1 f32) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  local.get $1
   local.get $1
   i32.reinterpret_f32
   call $~lib/util/hash/hash32
-  local.tee $4
+  local.tee $3
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $3
   call $~lib/map/Map<f32,i32>#find
   local.tee $3
   if
@@ -10827,7 +10742,7 @@
   if
    i32.const 1360
    i32.const 1424
-   i32.const 111
+   i32.const 109
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -10872,7 +10787,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $6
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 27
   call $~lib/rt/tlsf/__alloc
@@ -10997,21 +10912,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -11020,32 +10935,31 @@
   i32.const 12
   i32.mul
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      f32.load
      f32.store
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      f32.load offset=4
      f32.store offset=4
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      f32.load
      i32.reinterpret_f32
      call $~lib/util/hash/hash32
@@ -11054,16 +10968,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=8
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 12
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 12
@@ -11072,66 +10986,65 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<f32,f32>#set (param $0 i32) (param $1 f32) (param $2 f32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  local.get $1
   local.get $1
   i32.reinterpret_f32
   call $~lib/util/hash/hash32
-  local.tee $5
+  local.tee $3
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $3
   call $~lib/map/Map<f32,i32>#find
   local.tee $3
   if
@@ -11173,11 +11086,11 @@
    local.get $0
    local.get $0
    i32.load offset=16
-   local.tee $4
+   local.tee $5
    i32.const 1
    i32.add
    i32.store offset=16
-   local.get $4
+   local.get $5
    i32.const 12
    i32.mul
    i32.add
@@ -11196,7 +11109,7 @@
    local.get $3
    local.get $0
    i32.load
-   local.get $5
+   local.get $4
    local.get $0
    i32.load offset=4
    i32.and
@@ -11825,21 +11738,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 4
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -11848,32 +11761,31 @@
   i32.const 4
   i32.shl
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=12
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      f64.load
      f64.store
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      i32.load offset=8
      i32.store offset=8
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      f64.load
      i64.reinterpret_f64
      call $~lib/util/hash/hash64
@@ -11882,16 +11794,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=12
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 16
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 16
@@ -11900,66 +11812,65 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<f64,i32>#set (param $0 i32) (param $1 f64) (param $2 i32) (result i32)
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $0
-  local.get $1
   local.get $1
   i64.reinterpret_f64
   call $~lib/util/hash/hash64
-  local.tee $4
+  local.tee $3
+  local.set $4
+  local.get $0
+  local.get $1
+  local.get $3
   call $~lib/map/Map<f64,i32>#find
   local.tee $3
   if
@@ -12053,7 +11964,7 @@
   if
    i32.const 1360
    i32.const 1424
-   i32.const 111
+   i32.const 109
    i32.const 17
    call $~lib/builtins/abort
    unreachable
@@ -12098,7 +12009,7 @@
   call $~lib/rt/tlsf/__alloc
   local.tee $2
   local.get $6
-  call $~lib/memory/memory.fill
+  call $~lib/util/memory/memset
   i32.const 16
   i32.const 30
   call $~lib/rt/tlsf/__alloc
@@ -12223,21 +12134,21 @@
   local.get $1
   i32.const 1
   i32.add
-  local.tee $4
+  local.tee $3
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $6
-  local.get $4
+  local.set $5
+  local.get $3
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 24
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $4
+  local.set $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -12246,32 +12157,31 @@
   i32.const 24
   i32.mul
   i32.add
-  local.set $8
-  local.get $4
-  local.set $5
+  local.set $7
+  local.get $2
+  local.set $4
   loop $while-continue|0
    local.get $3
-   local.get $8
+   local.get $7
    i32.ne
    if
     local.get $3
-    local.tee $2
     i32.load offset=16
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      f64.load
      f64.store
-     local.get $5
-     local.get $2
+     local.get $4
+     local.get $3
      f64.load offset=8
      f64.store offset=8
+     local.get $4
      local.get $5
-     local.get $6
-     local.get $2
+     local.get $3
      f64.load
      i64.reinterpret_f64
      call $~lib/util/hash/hash64
@@ -12280,16 +12190,16 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $2
+     local.tee $8
      i32.load
      i32.store offset=16
-     local.get $2
-     local.get $5
+     local.get $8
+     local.get $4
      i32.store
-     local.get $5
+     local.get $4
      i32.const 24
      i32.add
-     local.set $5
+     local.set $4
     end
     local.get $3
     i32.const 24
@@ -12298,54 +12208,51 @@
     br $while-continue|0
    end
   end
-  local.get $6
+  local.get $5
   local.tee $3
   local.get $0
-  local.tee $2
   i32.load
-  local.tee $5
+  local.tee $4
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $5
+   local.get $4
    call $~lib/rt/pure/__release
   end
-  local.get $2
+  local.get $0
   local.get $3
   i32.store
-  local.get $2
+  local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.set $1
-  local.get $4
-  local.tee $2
-  local.get $1
+  local.tee $1
+  local.get $0
   i32.load offset=8
   local.tee $3
   i32.ne
   if
-   local.get $2
+   local.get $1
    call $~lib/rt/pure/__retain
-   local.set $2
+   local.set $1
    local.get $3
    call $~lib/rt/pure/__release
   end
+  local.get $0
   local.get $1
-  local.get $2
   i32.store offset=8
-  local.get $1
-  local.get $7
+  local.get $0
+  local.get $6
   i32.store offset=12
-  local.get $1
-  local.get $1
+  local.get $0
+  local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $6
+  local.get $5
   call $~lib/rt/pure/__release
-  local.get $4
+  local.get $2
   call $~lib/rt/pure/__release
  )
  (func $~lib/map/Map<f64,f64>#set (param $0 i32) (param $1 f64) (param $2 f64) (result i32)

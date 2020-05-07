@@ -5,7 +5,9 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
+ (type $none_=>_i64 (func (result i64)))
  (type $i32_=>_i64 (func (param i32) (result i64)))
+ (type $i32_i32_i32_i32_i32_i32_i64_=>_i64 (func (param i32 i32 i32 i32 i32 i32 i64) (result i64)))
  (type $i32_i64_=>_i64 (func (param i32 i64) (result i64)))
  (type $none_=>_f64 (func (result f64)))
  (type $i32_i32_i32_i32_i32_i32_f64_=>_f64 (func (param i32 i32 i32 i32 i32 i32 f64) (result f64)))
@@ -22,6 +24,22 @@
  (global $~lib/heap/__heap_base i32 (i32.const 56))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/date/Date.UTC (param $0 i32) (param $1 i32) (param $2 i32) (param $3 i32) (param $4 i32) (param $5 i32) (param $6 i64) (result i64)
+  local.get $0
+  local.get $1
+  local.get $2
+  local.get $3
+  local.get $4
+  local.get $5
+  local.get $6
+  f64.convert_i64_s
+  call $~lib/bindings/Date/UTC
+  i64.trunc_f64_s
+ )
+ (func $~lib/date/Date.now (result i64)
+  call $~lib/bindings/Date/now
+  i64.trunc_f64_s
+ )
  (func $~lib/rt/stub/maybeGrowMemory (param $0 i32)
   (local $1 i32)
   (local $2 i32)
@@ -163,37 +181,14 @@
   local.get $1
  )
  (func $start:std/date
-  (local $0 i32)
-  (local $1 i32)
-  (local $2 i32)
-  (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i64)
   i32.const 1970
-  local.set $2
   i32.const 0
-  local.set $1
   i32.const 1
-  local.set $0
   i32.const 0
-  local.set $3
   i32.const 0
-  local.set $4
   i32.const 0
-  local.set $5
   i64.const 0
-  local.set $6
-  local.get $2
-  local.get $1
-  local.get $0
-  local.get $3
-  local.get $4
-  local.get $5
-  local.get $6
-  f64.convert_i64_s
-  call $~lib/bindings/Date/UTC
-  i64.trunc_f64_s
+  call $~lib/date/Date.UTC
   i64.const 0
   i64.eq
   i32.eqz
@@ -206,29 +201,13 @@
    unreachable
   end
   i32.const 1970
-  local.set $5
   i32.const 0
-  local.set $4
   i32.const 1
-  local.set $3
   i32.const 0
-  local.set $2
   i32.const 0
-  local.set $1
   i32.const 0
-  local.set $0
   i64.const 0
-  local.set $6
-  local.get $5
-  local.get $4
-  local.get $3
-  local.get $2
-  local.get $1
-  local.get $0
-  local.get $6
-  f64.convert_i64_s
-  call $~lib/bindings/Date/UTC
-  i64.trunc_f64_s
+  call $~lib/date/Date.UTC
   i64.const 0
   i64.eq
   i32.eqz
@@ -241,29 +220,13 @@
    unreachable
   end
   i32.const 2018
-  local.set $5
   i32.const 10
-  local.set $4
   i32.const 10
-  local.set $3
   i32.const 11
-  local.set $2
   i32.const 0
-  local.set $1
   i32.const 0
-  local.set $0
   i64.const 1
-  local.set $6
-  local.get $5
-  local.get $4
-  local.get $3
-  local.get $2
-  local.get $1
-  local.get $0
-  local.get $6
-  f64.convert_i64_s
-  call $~lib/bindings/Date/UTC
-  i64.trunc_f64_s
+  call $~lib/date/Date.UTC
   global.set $std/date/creationTime
   global.get $std/date/creationTime
   i64.const 1541847600001
@@ -277,8 +240,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  call $~lib/bindings/Date/now
-  i64.trunc_f64_s
+  call $~lib/date/Date.now
   global.get $std/date/creationTime
   i64.gt_s
   i32.eqz

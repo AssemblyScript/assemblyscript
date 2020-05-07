@@ -25,8 +25,6 @@ const EXP2F_DATA_TAB = memory.data<u64>([
 // ULP error: 0.502 (nearest rounding.)
 // Relative error: 1.69 * 2^-34 in [-1/64, 1/64] (before rounding.)
 // Wrong count: 168353 (all nearest rounding wrong results with fma.)
-// @ts-ignore: decorator
-@inline
 export function exp2f_lut(x: f32): f32 {
   const
     N      = 1 << EXP2F_TABLE_BITS,
@@ -70,8 +68,6 @@ export function exp2f_lut(x: f32): f32 {
 // ULP error: 0.502 (nearest rounding.)
 // Relative error: 1.69 * 2^-34 in [-ln2/64, ln2/64] (before rounding.)
 // Wrong count: 170635 (all nearest rounding wrong results with fma.)
-// @ts-ignore: decorator
-@inline
 export function expf_lut(x: f32): f32 {
   const
     N        = 1 << EXP2F_TABLE_BITS,
@@ -150,8 +146,6 @@ const LOG2F_DATA_TAB = memory.data<f64>([
 
 // ULP error: 0.752 (nearest rounding.)
 // Relative error: 1.9 * 2^-26 (before rounding.)
-// @ts-ignore: decorator
-@inline
 export function log2f_lut(x: f32): f32 {
   const
     N_MASK  = (1 << LOG2F_TABLE_BITS) - 1,
@@ -233,8 +227,6 @@ const LOGF_DATA_TAB = memory.data<f64>([
 
 // ULP error: 0.818 (nearest rounding.)
 // Relative error: 1.957 * 2^-26 (before rounding.)
-// @ts-ignore: decorator
-@inline
 export function logf_lut(x: f32): f32 {
   const
     N_MASK  = (1 << LOGF_TABLE_BITS) - 1,
@@ -288,16 +280,12 @@ export function logf_lut(x: f32): f32 {
 // Lookup data for powf. See: https://git.musl-libc.org/cgit/musl/tree/src/math/powf.c
 //
 
-// @ts-ignore: decorator
-@inline
 function zeroinfnanf(ux: u32): bool {
   return (ux << 1) - 1 >= (<u32>0x7f800000 << 1) - 1;
 }
 
 // Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
 // the bit representation of a non-zero finite floating-point value.
-// @ts-ignore: decorator
-@inline
 function checkintf(iy: u32): i32 {
   var e = iy >> 23 & 0xFF;
   if (e < 0x7F     ) return 0;
@@ -310,8 +298,6 @@ function checkintf(iy: u32): i32 {
 
 // Subnormal input is normalized so ix has negative biased exponent.
 // Output is multiplied by N (POWF_SCALE) if TOINT_INTRINICS is set.
-// @ts-ignore: decorator
-@inline
 function log2f_inline(ux: u32): f64 {
   const N_MASK = (1 << LOG2F_TABLE_BITS) - 1;
 
@@ -354,8 +340,6 @@ function log2f_inline(ux: u32): f64 {
 // The output of log2 and thus the input of exp2 is either scaled by N
 // (in case of fast toint intrinsics) or not.  The unscaled xd must be
 // in [-1021,1023], sign_bias sets the sign of the result.
-// @ts-ignore: decorator
-@inline
 function exp2f_inline(xd: f64, signBias: u32): f32 {
   const
     N      = 1 << EXP2F_TABLE_BITS,
@@ -384,26 +368,18 @@ function exp2f_inline(xd: f64, signBias: u32): f32 {
   return <f32>y;
 }
 
-// @ts-ignore: decorator
-@inline
 function xflowf(sign: u32, y: f32): f32 {
   return select<f32>(-y, y, sign) * y;
 }
 
-// @ts-ignore: decorator
-@inline
 function oflowf(sign: u32): f32 {
   return xflowf(sign, reinterpret<f32>(0x70000000)); // 0x1p97f
 }
 
-// @ts-ignore: decorator
-@inline
 function uflowf(sign: u32): f32 {
   return xflowf(sign, reinterpret<f32>(0x10000000)); // 0x1p-95f
 }
 
-// @ts-ignore: decorator
-@inline
 export function powf_lut(x: f32, y: f32): f32 {
   const
     Ox1p23f     = reinterpret<f32>(0x4B000000), // 0x1p23f
@@ -604,8 +580,6 @@ const EXP_DATA_TAB = memory.data<u64>([
 // a double.  (int32_t)KI is the k used in the argument reduction and exponent
 // adjustment of scale, positive k here means the result may overflow and
 // negative k means the result may underflow.
-// @ts-ignore: decorator
-@inline
 function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
   const
     Ox1p_1022 = reinterpret<f64>(0x0010000000000000), // 0x1p-1022
@@ -639,8 +613,6 @@ function specialcase(tmp: f64, sbits: u64, ki: u64): f64 {
   return y * Ox1p_1022;
 }
 
-// @ts-ignore: decorator
-@inline
 export function exp_lut(x: f64): f64 {
   const
     N      = 1 << EXP_TABLE_BITS,
@@ -720,8 +692,6 @@ export function exp_lut(x: f64): f64 {
 // a double.  (int32_t)KI is the k used in the argument reduction and exponent
 // adjustment of scale, positive k here means the result may overflow and
 // negative k means the result may underflow.
-// @ts-ignore: decorator
-@inline
 function specialcase2(tmp: f64, sbits: u64, ki: u64): f64 {
   const Ox1p_1022 = reinterpret<f64>(0x10000000000000); // 0x1p-1022
   var scale: f64;
@@ -749,8 +719,6 @@ function specialcase2(tmp: f64, sbits: u64, ki: u64): f64 {
   return y * Ox1p_1022;
 }
 
-// @ts-ignore: decorator
-@inline
 export function exp2_lut(x: f64): f64 {
   const
     N      = 1 << EXP_TABLE_BITS,
@@ -978,8 +946,6 @@ const LOG2_DATA_TAB2 = memory.data<f64>([
   reinterpret<f64>(0x3FF5DFFFEBFC3481), reinterpret<f64>(0xBC9180902E30E93E)
 ]);
 
-// @ts-ignore: decorator
-@inline
 export function log2_lut(x: f64): f64 {
   const N_MASK = (1 << LOG2_TABLE_BITS) - 1;
 
@@ -1394,8 +1360,6 @@ const LOG_DATA_TAB2 = memory.data<f64>([
   reinterpret<f64>(0x3FF5EFFFE7B87A89), reinterpret<f64>(0xBC947EB780ED6904)
 ]);
 
-// @ts-ignore: decorator
-@inline
 export function log_lut(x: f64): f64 {
   const N_MASK = (1 << LOG_TABLE_BITS) - 1;
 
@@ -1665,8 +1629,6 @@ const POW_LOG_DATA_TAB = memory.data<f64>([
 
 // Returns 0 if not int, 1 if odd int, 2 if even int. The argument is
 // the bit representation of a non-zero finite floating-point value.
-// @ts-ignore: decorator
-@inline
 function checkint(iy: u64): i32 {
   var e = iy >> 52 & 0x7FF;
   if (e < 0x3FF     ) return 0;
@@ -1677,27 +1639,19 @@ function checkint(iy: u64): i32 {
   return 2;
 }
 
-// @ts-ignore: decorator
-@inline
 function xflow(sign: u32, y: f64): f64 {
   return select(-y, y, sign) * y;
 }
 
-// @ts-ignore: decorator
-@inline
 function uflow(sign: u32): f64 {
   return xflow(sign, reinterpret<f64>(0x1000000000000000)); // 0x1p-767
 }
 
-// @ts-ignore: decorator
-@inline
 function oflow(sign: u32): f64 {
   return xflow(sign, reinterpret<f64>(0x7000000000000000)); // 0x1p769
 }
 
 // Returns 1 if input is the bit representation of 0, infinity or nan.
-// @ts-ignore: decorator
-@inline
 function zeroinfnan(u: u64): bool {
   return (u << 1) - 1 >= 0xFFE0000000000000 - 1;
 }
@@ -1709,8 +1663,6 @@ var log_tail: f64 = 0;
 // Compute y+TAIL = log(x) where the rounded result is y and TAIL has about
 // additional 15 bits precision. IX is the bit representation of x, but
 // normalized in the subnormal range using the sign bit for the exponent.
-// @ts-ignore: decorator
-@inline
 function log_inline(ix: u64): f64 {
   const N = 1 << POW_LOG_TABLE_BITS;
   const N_MASK = N - 1;
@@ -1784,8 +1736,6 @@ const SIGN_BIAS = 0x800 << EXP_TABLE_BITS;
 
 // Computes sign*exp(x+xtail) where |xtail| < 2^-8/N and |xtail| <= |x|.
 // The sign_bias argument is SIGN_BIAS or 0 and sets the sign to -1 or 1.
-// @ts-ignore: decorator
-@inline
 function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   const N      = 1 << EXP_TABLE_BITS;
   const N_MASK = N - 1;
@@ -1865,8 +1815,6 @@ function exp_inline(x: f64, xtail: f64, sign_bias: u32): f64 {
   return scale + scale * tmp;
 }
 
-// @ts-ignore: decorator
-@inline
 export function pow_lut(x: f64, y: f64): f64 {
   const Ox1p52 = reinterpret<f64>(0x4330000000000000); // 0x1p52
 

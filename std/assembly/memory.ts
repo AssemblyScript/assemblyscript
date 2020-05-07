@@ -55,8 +55,6 @@ export namespace memory {
   }
 
   /** Compares a section of memory to another. */
-  // @ts-ignore: decorator
-  @inline
   export function compare(vl: usize, vr: usize, n: usize): i32 {
     return memcmp(vl, vr, n);
   }

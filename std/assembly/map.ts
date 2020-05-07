@@ -44,7 +44,6 @@ const BUCKET_SIZE = sizeof<usize>();
 
 /** Computes the alignment of an entry. */
 // @ts-ignore: decorator
-@inline
 function ENTRY_ALIGN<K,V>(): usize {
   // can align to 4 instead of 8 if 32-bit and K/V is <= 32-bits
   const maxkv = sizeof<K>() > sizeof<V>() ? sizeof<K>() : sizeof<V>();
@@ -54,7 +53,6 @@ function ENTRY_ALIGN<K,V>(): usize {
 
 /** Computes the aligned size of an entry. */
 // @ts-ignore: decorator
-@inline
 function ENTRY_SIZE<K,V>(): usize {
   const align = ENTRY_ALIGN<K,V>();
   const size = (offsetof<MapEntry<K,V>>() + align) & ~align;

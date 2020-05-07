@@ -1,7 +1,5 @@
 import { compareImpl } from "./string";
 
-// @ts-ignore: decorator
-@inline
 export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   if (isInteger<T>()) {
     if (isSigned<T>() && sizeof<T>() <= 4) {
@@ -42,8 +40,6 @@ export function COMPARATOR<T>(): (a: T, b: T) => i32 {
   }
 }
 
-// @ts-ignore: decorator
-@inline
 export function SORT<T>(
   dataStart: usize,
   length: i32,

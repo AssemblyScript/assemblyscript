@@ -1,5 +1,4 @@
-// @ts-ignore: decorator
-@inline
+
 export function HASH<T>(key: T): u32 {
   if (isString<T>()) {
     return hashStr(changetype<string>(key));

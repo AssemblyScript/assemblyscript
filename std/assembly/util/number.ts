@@ -216,8 +216,6 @@ function utoa_simple<T extends number>(buffer: usize, num: T, offset: usize): vo
   } while (num);
 }
 
-// @ts-ignore: decorator
-@inline
 export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
     utoa_simple(buffer, num, offset);
@@ -226,8 +224,6 @@ export function utoa32_core(buffer: usize, num: u32, offset: u32): void {
   }
 }
 
-// @ts-ignore: decorator
-@inline
 export function utoa64_core(buffer: usize, num: u64, offset: u32): void {
   if (ASC_SHRINK_LEVEL >= 1) {
     utoa_simple(buffer, num, offset);
@@ -343,8 +339,6 @@ var _frc_pow: u64 = 0;
 @lazy
 var _exp_pow: i32 = 0;
 
-// @ts-ignore: decorator
-@inline
 function umul64f(u: u64, v: u64): u64 {
   var u0 = u & 0xFFFFFFFF;
   var v0 = v & 0xFFFFFFFF;
@@ -364,14 +358,10 @@ function umul64f(u: u64, v: u64): u64 {
   return u1 * v1 + t + w;
 }
 
-// @ts-ignore: decorator
-@inline
 function umul64e(e1: i32, e2: i32): i32 {
   return e1 + e2 + 64; // where 64 is significand size
 }
 
-// @ts-ignore: decorator
-@inline
 function normalizedBoundaries(f: u64, e: i32): void {
   var frc = (f << 1) + 1;
   var exp = e - 1;
@@ -386,8 +376,6 @@ function normalizedBoundaries(f: u64, e: i32): void {
   _exp = exp;
 }
 
-// @ts-ignore: decorator
-@inline
 function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u64, wp_w: u64): void {
   var lastp = buffer + ((len - 1) << 1);
   var digit = load<u16>(lastp);
@@ -404,8 +392,6 @@ function grisuRound(buffer: usize, len: i32, delta: u64, rest: u64, ten_kappa: u
   store<u16>(lastp, digit);
 }
 
-// @ts-ignore: decorator
-@inline
 function getCachedPower(minExp: i32): void {
   const c = reinterpret<f64>(0x3FD34413509F79FE); // 1 / lg(10) = 0.30102999566398114
   var dk = (-61 - minExp) * c + 347;	            // dk must be positive, so can do ceiling in positive
@@ -418,8 +404,6 @@ function getCachedPower(minExp: i32): void {
   _exp_pow = load<i16>(EXP_POWERS + (<usize>index << alignof<i16>()));
 }
 
-// @ts-ignore: decorator
-@inline
 function grisu2(value: f64, buffer: usize, sign: i32): i32 {
 
   // frexp routine
@@ -511,8 +495,6 @@ function genDigits(buffer: usize, w_frc: u64, w_exp: i32, mp_frc: u64, mp_exp: i
   }
 }
 
-// @ts-ignore: decorator
-@inline
 function genExponent(buffer: usize, k: i32): i32 {
   var sign = k < 0;
   if (sign) k = -k;

@@ -2,8 +2,8 @@
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -340,6 +340,16 @@
    i32.store16
   end
  )
+ (func $~lib/util/number/utoa32_core (param $0 i32) (param $1 i32) (param $2 i32)
+  i32.const 0
+  i32.const 1
+  i32.ge_s
+  drop
+  local.get $0
+  local.get $1
+  local.get $2
+  call $~lib/util/number/utoa32_lut
+ )
  (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
@@ -347,9 +357,6 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
-  (local $5 i32)
-  (local $6 i32)
   local.get $0
   i32.eqz
   if
@@ -379,19 +386,9 @@
   call $~lib/rt/stub/__alloc
   local.set $3
   local.get $3
-  local.set $6
   local.get $0
-  local.set $5
   local.get $2
-  local.set $4
-  i32.const 0
-  i32.const 1
-  i32.ge_s
-  drop
-  local.get $6
-  local.get $5
-  local.get $4
-  call $~lib/util/number/utoa32_lut
+  call $~lib/util/number/utoa32_core
   local.get $1
   if
    local.get $3

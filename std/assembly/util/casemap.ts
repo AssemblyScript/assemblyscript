@@ -436,8 +436,6 @@ const MT = memory.data<i32>([
 ]);
 
 // Special binary search routine for Special Casing Tables
-// @ts-ignore: decorator
-@inline
 export function bsearch(key: u32, ptr: usize, max: i32): i32 {
   var min = 0;
   while (min <= max) {

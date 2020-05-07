@@ -141,8 +141,6 @@ export function memcpy(dest: usize, src: usize, n: usize): void { // see: musl/s
   }
 }
 
-// @ts-ignore: decorator
-@inline
 export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/src/string/memmove.c
   if (dest === src) return;
   if (ASC_SHRINK_LEVEL < 1) {
@@ -190,8 +188,6 @@ export function memmove(dest: usize, src: usize, n: usize): void { // see: musl/
   }
 }
 
-// @ts-ignore: decorator
-@inline
 export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/string/memset
   if (ASC_SHRINK_LEVEL > 1) {
     while (n) {
@@ -259,8 +255,6 @@ export function memset(dest: usize, c: u8, n: usize): void { // see: musl/src/st
   }
 }
 
-// @ts-ignore: decorator
-@inline
 export function memcmp(vl: usize, vr: usize, n: usize): i32 {
   if (vl == vr) return 0;
   if (ASC_SHRINK_LEVEL < 2) {

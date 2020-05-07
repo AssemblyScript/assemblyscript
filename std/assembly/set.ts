@@ -41,8 +41,6 @@ const EMPTY: usize = 1 << 0;
 const BUCKET_SIZE = sizeof<usize>();
 
 /** Computes the alignment of an entry. */
-// @ts-ignore: decorator
-@inline
 function ENTRY_ALIGN<T>(): usize {
   // can align to 4 instead of 8 if 32-bit and K is <= 32-bits
   const align = (sizeof<T>() > sizeof<usize>() ? sizeof<T>() : sizeof<usize>()) - 1;
@@ -50,8 +48,6 @@ function ENTRY_ALIGN<T>(): usize {
 }
 
 /** Computes the aligned size of an entry. */
-// @ts-ignore: decorator
-@inline
 function ENTRY_SIZE<T>(): usize {
   const align = ENTRY_ALIGN<T>();
   const size = (offsetof<SetEntry<T>>() + align) & ~align;

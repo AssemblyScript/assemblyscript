@@ -90,14 +90,12 @@ import { REFCOUNT_MASK } from "./pure";
 // @inline const BLOCK_MAXSIZE: usize = 1 << (FL_BITS + SB_BITS - 1); // exclusive, lives in common.ts
 
 /** Gets the left block of a block. Only valid if the left block is free. */
-// @ts-ignore: decorator
-@inline function GETFREELEFT(block: Block): Block {
+function GETFREELEFT(block: Block): Block {
   return load<Block>(changetype<usize>(block) - sizeof<usize>());
 }
 
 /** Gets the right block of of a block by advancing to the right by its size. */
-// @ts-ignore: decorator
-@inline function GETRIGHT(block: Block): Block {
+function GETRIGHT(block: Block): Block {
   return changetype<Block>(changetype<usize>(block) + BLOCK_OVERHEAD + (block.mmInfo & ~TAGS_MASK));
 }
 
@@ -144,8 +142,7 @@ import { REFCOUNT_MASK } from "./pure";
 @lazy export var ROOT: Root;
 
 /** Gets the second level map of the specified first level. */
-// @ts-ignore: decorator
-@inline function GETSL(root: Root, fl: usize): u32 {
+function GETSL(root: Root, fl: usize): u32 {
   return load<u32>(
     changetype<usize>(root) + (fl << alignof<u32>()),
     SL_START
@@ -153,8 +150,7 @@ import { REFCOUNT_MASK } from "./pure";
 }
 
 /** Sets the second level map of the specified first level. */
-// @ts-ignore: decorator
-@inline function SETSL(root: Root, fl: usize, slMap: u32): void {
+function SETSL(root: Root, fl: usize, slMap: u32): void {
   store<u32>(
     changetype<usize>(root) + (fl << alignof<u32>()),
     slMap,
@@ -163,8 +159,7 @@ import { REFCOUNT_MASK } from "./pure";
 }
 
 /** Gets the head of the free list for the specified combination of first and second level. */
-// @ts-ignore: decorator
-@inline function GETHEAD(root: Root, fl: usize, sl: u32): Block | null {
+function GETHEAD(root: Root, fl: usize, sl: u32): Block | null {
   return load<Block>(
     changetype<usize>(root) + (((fl << SL_BITS) + <usize>sl) << alignof<usize>()),
     HL_START
@@ -172,8 +167,7 @@ import { REFCOUNT_MASK } from "./pure";
 }
 
 /** Sets the head of the free list for the specified combination of first and second level. */
-// @ts-ignore: decorator
-@inline function SETHEAD(root: Root, fl: usize, sl: u32, head: Block | null): void {
+function SETHEAD(root: Root, fl: usize, sl: u32, head: Block | null): void {
   store<Block>(
     changetype<usize>(root) + (((fl << SL_BITS) + <usize>sl) << alignof<usize>()),
     head,
@@ -182,8 +176,7 @@ import { REFCOUNT_MASK } from "./pure";
 }
 
 /** Gets the tail block.. */
-// @ts-ignore: decorator
-@inline function GETTAIL(root: Root): Block {
+function GETTAIL(root: Root): Block {
   return load<Block>(
     changetype<usize>(root),
     HL_END
@@ -191,8 +184,7 @@ import { REFCOUNT_MASK } from "./pure";
 }
 
 /** Sets the tail block. */
-// @ts-ignore: decorator
-@inline function SETTAIL(root: Root, tail: Block): void {
+function SETTAIL(root: Root, tail: Block): void {
   store<Block>(
     changetype<usize>(root),
     tail,

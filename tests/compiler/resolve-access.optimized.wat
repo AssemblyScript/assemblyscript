@@ -103,86 +103,44 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/memory/memory.copy (param $0 i32)
+ (func $~lib/util/memory/memmove (param $0 i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  i32.const 1040
-  local.set $1
   i32.const 8
   local.set $4
-  block $~lib/util/memory/memmove|inlined.0
+  i32.const 1040
+  local.set $1
+  local.get $0
+  i32.const 1040
+  i32.eq
+  if
+   return
+  end
+  local.get $0
+  i32.const 1040
+  i32.lt_u
+  if
    local.get $0
-   i32.const 1040
-   i32.eq
-   br_if $~lib/util/memory/memmove|inlined.0
-   local.get $0
-   i32.const 1040
-   i32.lt_u
+   i32.const 7
+   i32.and
+   i32.eqz
    if
-    local.get $0
-    i32.const 7
-    i32.and
-    i32.eqz
-    if
-     loop $while-continue|0
-      local.get $0
-      i32.const 7
-      i32.and
-      if
-       local.get $4
-       i32.eqz
-       br_if $~lib/util/memory/memmove|inlined.0
-       local.get $4
-       i32.const 1
-       i32.sub
-       local.set $4
-       local.get $0
-       local.tee $2
-       i32.const 1
-       i32.add
-       local.set $0
-       local.get $1
-       local.tee $3
-       i32.const 1
-       i32.add
-       local.set $1
-       local.get $2
-       local.get $3
-       i32.load8_u
-       i32.store8
-       br $while-continue|0
-      end
-     end
-     loop $while-continue|1
-      local.get $4
-      i32.const 8
-      i32.ge_u
-      if
-       local.get $0
-       local.get $1
-       i64.load
-       i64.store
-       local.get $4
-       i32.const 8
-       i32.sub
-       local.set $4
-       local.get $0
-       i32.const 8
-       i32.add
-       local.set $0
-       local.get $1
-       i32.const 8
-       i32.add
-       local.set $1
-       br $while-continue|1
-      end
-     end
-    end
-    loop $while-continue|2
-     local.get $4
+    loop $while-continue|0
+     local.get $0
+     i32.const 7
+     i32.and
      if
+      local.get $4
+      i32.eqz
+      if
+       return
+      end
+      local.get $4
+      i32.const 1
+      i32.sub
+      local.set $4
       local.get $0
       local.tee $2
       i32.const 1
@@ -197,66 +155,76 @@
       local.get $3
       i32.load8_u
       i32.store8
-      local.get $4
-      i32.const 1
-      i32.sub
-      local.set $4
-      br $while-continue|2
+      br $while-continue|0
      end
     end
-   else
-    local.get $0
-    i32.const 7
-    i32.and
-    i32.eqz
-    if
-     loop $while-continue|3
+    loop $while-continue|1
+     local.get $4
+     i32.const 8
+     i32.ge_u
+     if
       local.get $0
-      local.get $4
-      i32.add
-      i32.const 7
-      i32.and
-      if
-       local.get $4
-       i32.eqz
-       br_if $~lib/util/memory/memmove|inlined.0
-       local.get $0
-       local.get $4
-       i32.const 1
-       i32.sub
-       local.tee $4
-       i32.add
-       local.get $4
-       i32.const 1040
-       i32.add
-       i32.load8_u
-       i32.store8
-       br $while-continue|3
-      end
-     end
-     loop $while-continue|4
+      local.get $1
+      i64.load
+      i64.store
       local.get $4
       i32.const 8
-      i32.ge_u
-      if
-       local.get $0
-       local.get $4
-       i32.const 8
-       i32.sub
-       local.tee $4
-       i32.add
-       local.get $4
-       i32.const 1040
-       i32.add
-       i64.load
-       i64.store
-       br $while-continue|4
-      end
+      i32.sub
+      local.set $4
+      local.get $0
+      i32.const 8
+      i32.add
+      local.set $0
+      local.get $1
+      i32.const 8
+      i32.add
+      local.set $1
+      br $while-continue|1
      end
     end
-    loop $while-continue|5
+   end
+   loop $while-continue|2
+    local.get $4
+    if
+     local.get $0
+     local.tee $2
+     i32.const 1
+     i32.add
+     local.set $0
+     local.get $1
+     local.tee $3
+     i32.const 1
+     i32.add
+     local.set $1
+     local.get $2
+     local.get $3
+     i32.load8_u
+     i32.store8
      local.get $4
+     i32.const 1
+     i32.sub
+     local.set $4
+     br $while-continue|2
+    end
+   end
+  else
+   local.get $0
+   i32.const 7
+   i32.and
+   i32.eqz
+   if
+    loop $while-continue|3
+     local.get $0
+     local.get $4
+     i32.add
+     i32.const 7
+     i32.and
      if
+      local.get $4
+      i32.eqz
+      if
+       return
+      end
       local.get $0
       local.get $4
       i32.const 1
@@ -268,8 +236,44 @@
       i32.add
       i32.load8_u
       i32.store8
-      br $while-continue|5
+      br $while-continue|3
      end
+    end
+    loop $while-continue|4
+     local.get $4
+     i32.const 8
+     i32.ge_u
+     if
+      local.get $0
+      local.get $4
+      i32.const 8
+      i32.sub
+      local.tee $4
+      i32.add
+      local.get $4
+      i32.const 1040
+      i32.add
+      i64.load
+      i64.store
+      br $while-continue|4
+     end
+    end
+   end
+   loop $while-continue|5
+    local.get $4
+    if
+     local.get $0
+     local.get $4
+     i32.const 1
+     i32.sub
+     local.tee $4
+     i32.add
+     local.get $4
+     i32.const 1040
+     i32.add
+     i32.load8_u
+     i32.store8
+     br $while-continue|5
     end
    end
   end
@@ -316,7 +320,7 @@
   i32.lt_u
   select
  )
- (func $~lib/util/number/utoa_simple<u32> (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/util/number/utoa32_core (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
   loop $do-continue|0
    local.get $1
@@ -344,7 +348,7 @@
   end
  )
  (func $~lib/number/U64#toString (param $0 i64) (result i32)
-  (local $1 i64)
+  (local $1 i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
@@ -353,7 +357,7 @@
    i64.eqz
    if
     i32.const 1184
-    local.set $3
+    local.set $2
     br $__inlined_func$~lib/util/number/utoa64
    end
    local.get $0
@@ -362,17 +366,17 @@
    if
     local.get $0
     i32.wrap_i64
-    local.tee $2
+    local.tee $1
     call $~lib/util/number/decimalCount32
-    local.tee $4
+    local.tee $3
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/stub/__alloc
-    local.tee $3
-    local.get $2
-    local.get $4
-    call $~lib/util/number/utoa_simple<u32>
+    local.tee $2
+    local.get $1
+    local.get $3
+    call $~lib/util/number/utoa32_core
    else
     local.get $0
     i64.const 100000000000
@@ -418,40 +422,43 @@
     i64.const 1000000000000000
     i64.lt_u
     select
-    local.tee $2
+    local.tee $1
     i32.const 1
     i32.shl
     i32.const 1
     call $~lib/rt/stub/__alloc
-    local.tee $3
-    local.set $4
+    local.tee $2
+    local.set $3
     loop $do-continue|0
-     local.get $0
-     i64.const 10
-     i64.div_u
-     local.get $4
-     local.get $2
-     i32.const 1
-     i32.sub
-     local.tee $2
-     i32.const 1
-     i32.shl
-     i32.add
      local.get $0
      i64.const 10
      i64.rem_u
      i32.wrap_i64
+     local.set $4
+     local.get $0
+     i64.const 10
+     i64.div_u
+     local.set $0
+     local.get $3
+     local.get $1
+     i32.const 1
+     i32.sub
+     local.tee $1
+     i32.const 1
+     i32.shl
+     i32.add
+     local.get $4
      i32.const 48
      i32.add
      i32.store16
-     local.tee $0
+     local.get $0
      i64.const 0
      i64.ne
      br_if $do-continue|0
     end
    end
   end
-  local.get $3
+  local.get $2
  )
  (func $resolve-access/arrayAccess (result i32)
   (local $0 i32)
@@ -464,7 +471,7 @@
   i32.const 0
   call $~lib/rt/stub/__alloc
   local.tee $1
-  call $~lib/memory/memory.copy
+  call $~lib/util/memory/memmove
   local.get $0
   local.get $1
   i32.store
@@ -541,7 +548,7 @@
    local.tee $2
    local.get $0
    local.get $1
-   call $~lib/util/number/utoa_simple<u32>
+   call $~lib/util/number/utoa32_core
   end
   local.get $2
  )

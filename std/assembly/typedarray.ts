@@ -1412,8 +1412,6 @@ export class Float64Array extends ArrayBufferView {
   }
 }
 
-// @ts-ignore: decorator
-@inline
 function FILL<TArray extends ArrayBufferView, T extends number>(
   array: TArray,
   value: native<T>,
@@ -1434,8 +1432,6 @@ function FILL<TArray extends ArrayBufferView, T extends number>(
   return array;
 }
 
-// @ts-ignore: decorator
-@inline
 function SORT<TArray extends ArrayBufferView, T>(
   array: TArray,
   comparator: (a: T, b: T) => i32
@@ -1456,8 +1452,6 @@ function SORT<TArray extends ArrayBufferView, T>(
   return array;
 }
 
-// @ts-ignore: decorator
-@inline
 function SLICE<TArray extends ArrayBufferView, T>(
   array: TArray,
   start: i32,
@@ -1476,8 +1470,6 @@ function SLICE<TArray extends ArrayBufferView, T>(
   return slice;
 }
 
-// @ts-ignore: decorator
-@inline
 function SUBARRAY<TArray extends ArrayBufferView, T>(
   array: TArray,
   begin: i32,
@@ -1495,8 +1487,6 @@ function SUBARRAY<TArray extends ArrayBufferView, T>(
   return changetype<TArray>(out); // retains
 }
 
-// @ts-ignore: decorator
-@inline
 function COPY_WITHIN<TArray extends ArrayBufferView, T>(
   array: TArray,
   target: i32,
@@ -1520,8 +1510,6 @@ function COPY_WITHIN<TArray extends ArrayBufferView, T>(
   return array;
 }
 
-// @ts-ignore: decorator
-@inline
 function REDUCE<TArray extends ArrayBufferView, T, TRet>(
   array: TArray,
   fn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
@@ -1534,8 +1522,6 @@ function REDUCE<TArray extends ArrayBufferView, T, TRet>(
   return initialValue;
 }
 
-// @ts-ignore: decorator
-@inline
 function REDUCE_RIGHT<TArray extends ArrayBufferView, T, TRet>(
   array: TArray,
   fn: (accumulator: TRet, value: T, index: i32, array: TArray) => TRet,
@@ -1548,8 +1534,6 @@ function REDUCE_RIGHT<TArray extends ArrayBufferView, T, TRet>(
   return initialValue;
 }
 
-// @ts-ignore: decorator
-@inline
 function MAP<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, self: TArray) => T,
@@ -1572,8 +1556,6 @@ function MAP<TArray extends ArrayBufferView, T>(
   return changetype<TArray>(out); // retains
 }
 
-// @ts-ignore: decorator
-@inline
 function FILTER<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, self: TArray) => bool,
@@ -1601,8 +1583,6 @@ function FILTER<TArray extends ArrayBufferView, T>(
   return changetype<TArray>(out); // retains
 }
 
-// @ts-ignore: decorator
-@inline
 function FIND_INDEX<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
@@ -1614,8 +1594,6 @@ function FIND_INDEX<TArray extends ArrayBufferView, T>(
   return -1;
 }
 
-// @ts-ignore: decorator
-@inline
 function INCLUDES<TArray extends ArrayBufferView, T>(
   array: TArray,
   searchElement: T,
@@ -1639,8 +1617,6 @@ function INCLUDES<TArray extends ArrayBufferView, T>(
   }
 }
 
-// @ts-ignore: decorator
-@inline
 function INDEX_OF<TArray extends ArrayBufferView, T>(
   array: TArray,
   searchElement: T,
@@ -1658,8 +1634,6 @@ function INDEX_OF<TArray extends ArrayBufferView, T>(
   return -1;
 }
 
-// @ts-ignore: decorator
-@inline
 function LAST_INDEX_OF<TArray extends ArrayBufferView, T>(
   array: TArray,
   searchElement: T,
@@ -1678,8 +1652,6 @@ function LAST_INDEX_OF<TArray extends ArrayBufferView, T>(
   return -1;
 }
 
-// @ts-ignore: decorator
-@inline
 function SOME<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
@@ -1691,8 +1663,6 @@ function SOME<TArray extends ArrayBufferView, T>(
   return false;
 }
 
-// @ts-ignore: decorator
-@inline
 function EVERY<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => bool,
@@ -1705,8 +1675,6 @@ function EVERY<TArray extends ArrayBufferView, T>(
   return true;
 }
 
-// @ts-ignore: decorator
-@inline
 function FOREACH<TArray extends ArrayBufferView, T>(
   array: TArray,
   fn: (value: T, index: i32, array: TArray) => void,
@@ -1717,8 +1685,6 @@ function FOREACH<TArray extends ArrayBufferView, T>(
   }
 }
 
-// @ts-ignore: decorator
-@inline
 function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
   var dataStart = array.dataStart;
   for (let front: usize = 0, back: usize = array.length - 1; front < back; ++front, --back) {
@@ -1731,8 +1697,6 @@ function REVERSE<TArray extends ArrayBufferView, T>(array: TArray): TArray {
   return array;
 }
 
-// @ts-ignore: decorator
-@inline
 function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset: i32 = 0, length: i32 = -1): TArray {
   var byteLength: i32;
   var bufferByteLength = buffer.byteLength;
@@ -1762,8 +1726,6 @@ function WRAP<TArray extends ArrayBufferView, T>(buffer: ArrayBuffer, byteOffset
   return changetype<TArray>(out); // retains
 }
 
-// @ts-ignore: decorator
-@inline
 function SET<TArray extends ArrayBufferView, T, UArray extends ArrayBufferView, U>(target: TArray, source: UArray, offset: i32 = 0): void {
   // need to assert at compile time that U is not a reference or a function
   if (isReference<U>()) {

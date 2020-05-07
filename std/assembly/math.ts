@@ -65,8 +65,6 @@ function R(z: f64): f64 { // Rational approximation of (asin(x)-x)/x^3
 }
 
 /** @internal */
-// @ts-ignore: decorator
-@inline
 function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
   const                       // see: musl/src/math/__expo2.c
     k    = <u32>2043,
@@ -83,8 +81,6 @@ function expo2(x: f64): f64 { // exp(x)/2 for x >= log(DBL_MAX)
  *
  * Right shift 11 bits to make upper half fit in `double`
  */
-// @ts-ignore: decorator
-@inline
 function pio2_right(q0: u64, q1: u64): u64 { // see: jdh8/metallic/blob/master/src/math/double/rem_pio2.c
   // Bits of π/4
   const p0: u64 = 0xC4C6628B80DC1CD1;
@@ -112,8 +108,6 @@ function pio2_right(q0: u64, q1: u64): u64 { // see: jdh8/metallic/blob/master/s
 }
 
 /** @internal */
-// @ts-ignore: decorator
-@inline
 function umuldi(u: u64, v: u64): u64 {
   var u1: u64 , v1: u64, w0: u64, w1: u64, t: u64;
 
@@ -189,8 +183,6 @@ function pio2_large_quot(x: f64, u: i64): i32 { // see: jdh8/metallic/blob/maste
 }
 
 /** @internal */
-// @ts-ignore: decorator
-@inline
 function rempio2(x: f64, u: u64, sign: i32): i32 {
   const pio2_1  = reinterpret<f64>(0x3FF921FB54400000); // 1.57079632673412561417e+00
   const pio2_1t = reinterpret<f64>(0x3DD0B4611A626331); // 6.07710050650619224932e-11
@@ -269,8 +261,6 @@ function rempio2(x: f64, u: u64, sign: i32): i32 {
 }
 
 /** @internal */
-// @ts-ignore: decorator
-@inline
 function sin_kern(x: f64, y: f64, iy: i32): f64 { // see: musl/tree/src/math/__sin.c
   const S1 = reinterpret<f64>(0xBFC5555555555549); // -1.66666666666666324348e-01
   const S2 = reinterpret<f64>(0x3F8111111110F8A6); //  8.33333333332248946124e-03
@@ -291,8 +281,6 @@ function sin_kern(x: f64, y: f64, iy: i32): f64 { // see: musl/tree/src/math/__s
 }
 
 /** @internal */
-// @ts-ignore: decorator
-@inline
 function cos_kern(x: f64, y: f64): f64 { // see: musl/tree/src/math/__cos.c
   const C1 = reinterpret<f64>(0x3FA555555555554C); //  4.16666666666666019037e-02
   const C2 = reinterpret<f64>(0xBF56C16C16C15177); // -1.38888888888741095749e-03
@@ -462,8 +450,7 @@ export namespace NativeMath {
   @lazy
   export var sincos_cos: f64 = 0;
 
-  // @ts-ignore: decorator
-  @inline export function abs(x: f64): f64 {
+  export function abs(x: f64): f64 {
     return builtin_abs<f64>(x);
   }
 
@@ -714,8 +701,6 @@ export namespace NativeMath {
     return t;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function ceil(x: f64): f64 {
     return builtin_ceil<f64>(x);
   }
@@ -893,14 +878,10 @@ export namespace NativeMath {
     return (x + y) * twopk;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function floor(x: f64): f64 {
     return builtin_floor<f64>(x);
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function fround(x: f64): f64 {
     return <f32>x;
   }
@@ -1165,14 +1146,10 @@ export namespace NativeMath {
     }
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function max(value1: f64, value2: f64): f64 {
     return builtin_max<f64>(value1, value2);
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function min(value1: f64, value2: f64): f64 {
     return builtin_min<f64>(value1, value2);
   }
@@ -1421,14 +1398,10 @@ export namespace NativeMath {
     return reinterpret<f64>(r) - 1;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function round(x: f64): f64 {
     return builtin_copysign<f64>(builtin_floor<f64>(x + 0.5), x);
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function sign(x: f64): f64 {
     if (ASC_SHRINK_LEVEL > 0) {
       return builtin_abs(x) > 0 ? builtin_copysign<f64>(1, x) : x;
@@ -1437,8 +1410,6 @@ export namespace NativeMath {
     }
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function signbit(x: f64): bool {
     // In ECMAScript all NaN values are indistinguishable from each other
     // so we need handle NaN and negative NaN in similar way
@@ -1490,8 +1461,6 @@ export namespace NativeMath {
     return t;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function sqrt(x: f64): f64 {
     return builtin_sqrt<f64>(x);
   }
@@ -1541,8 +1510,6 @@ export namespace NativeMath {
     return builtin_copysign<f64>(t, x);
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function trunc(x: f64): f64 {
     return builtin_trunc<f64>(x);
   }
@@ -1766,8 +1733,6 @@ function Rf(z: f32): f32 { // Rational approximation of (asin(x)-x)/x^3
   return p / q;
 }
 
-// @ts-ignore: decorator
-@inline
 function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   const                                // see: musl/src/math/__expo2f.c
     k    = <u32>235,
@@ -1776,8 +1741,6 @@ function expo2f(x: f32): f32 { // exp(x)/2 for x >= log(DBL_MAX)
   return NativeMathf.exp(x - kln2) * scale * scale;
 }
 
-// @ts-ignore: decorator
-@inline
 function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const coeff = reinterpret<f64>(0x3BF921FB54442D18); // π * 0x1p-65 = 8.51530395021638647334e-20
 
@@ -1806,8 +1769,6 @@ function pio2f_large_quot(x: f32, u: i32): i32 { // see: jdh8/metallic/blob/mast
   return q;
 }
 
-// @ts-ignore: decorator
-@inline
 function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/master/src/math/float/rem_pio2f.c
   const pi2hi = reinterpret<f64>(0x3FF921FB50000000); // 1.57079631090164184570
   const pi2lo = reinterpret<f64>(0x3E5110B4611A6263); // 1.58932547735281966916e-8
@@ -1824,8 +1785,6 @@ function rempio2f(x: f32, u: u32, sign: i32): i32 { // see: jdh8/metallic/blob/m
 }
 
 // |sin(x)/x - s(x)| < 2**-37.5 (~[-4.89e-12, 4.824e-12]).
-// @ts-ignore: decorator
-@inline
 function sin_kernf(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
   const S1 = reinterpret<f64>(0xBFC5555554CBAC77); // -0x15555554cbac77.0p-55
   const S2 = reinterpret<f64>(0x3F811110896EFBB2); //  0x111110896efbb2.0p-59
@@ -1840,8 +1799,6 @@ function sin_kernf(x: f64): f32 { // see: musl/tree/src/math/__sindf.c
 }
 
 // |cos(x) - c(x)| < 2**-34.1 (~[-5.37e-11, 5.295e-11]).
-// @ts-ignore: decorator
-@inline
 function cos_kernf(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
   const C0 = reinterpret<f64>(0xBFDFFFFFFD0C5E81); // -0x1ffffffd0c5e81.0p-54
   const C1 = reinterpret<f64>(0x3FA55553E1053A42); //  0x155553e1053a42.0p-57
@@ -1855,8 +1812,6 @@ function cos_kernf(x: f64): f32 { // see: musl/tree/src/math/__cosdf.c
 }
 
 // |tan(x)/x - t(x)| < 2**-25.5 (~[-2e-08, 2e-08]).
-// @ts-ignore: decorator
-@inline
 function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
 
   const T0 = reinterpret<f64>(0x3FD5554D3418C99F); // 0x15554d3418c99f.0p-54
@@ -1878,8 +1833,6 @@ function tan_kernf(x: f64, odd: i32): f32 { // see: musl/tree/src/math/__tandf.c
 }
 
 // See: jdh8/metallic/src/math/float/log2f.c and jdh8/metallic/src/math/float/kernel/atanh.h
-// @ts-ignore: decorator
-@inline
 function log2f(x: f64): f64 {
   const
     log2e = reinterpret<f64>(0x3FF71547652B82FE), // 1.44269504088896340736
@@ -1898,8 +1851,6 @@ function log2f(x: f64): f64 {
 }
 
 // See: jdh8/metallic/src/math/float/exp2f.h and jdh8/metallic/blob/master/src/math/float/kernel/exp2f.h
-// @ts-ignore: decorator
-@inline
 function exp2f(x: f64): f64 {
   const
     c0 = reinterpret<f64>(0x3FE62E4302FCC24A), // 6.931471880289532425e-1
@@ -1961,8 +1912,6 @@ export namespace NativeMathf {
   @lazy
   export var sincos_cos: f32 = 0;
 
-  // @ts-ignore: decorator
-  @inline
   export function abs(x: f32): f32 {
     return builtin_abs<f32>(x);
   }
@@ -2189,8 +2138,6 @@ export namespace NativeMathf {
     return <f32>t;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function ceil(x: f32): f32 {
     return builtin_ceil<f32>(x);
   }
@@ -2264,8 +2211,6 @@ export namespace NativeMathf {
     return expo2f(x);
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function floor(x: f32): f32 {
     return builtin_floor<f32>(x);
   }
@@ -2384,8 +2329,6 @@ export namespace NativeMathf {
     return (x + y) * twopk;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function fround(x: f32): f32 {
     return x;
   }
@@ -2420,8 +2363,6 @@ export namespace NativeMathf {
     return z * builtin_sqrt<f32>(<f32>(<f64>x * x + <f64>y * y));
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function imul(x: f32, y: f32): f32 {
     /*
      * Wasm (MVP) and JS have different approaches for double->int conversions.
@@ -2604,14 +2545,10 @@ export namespace NativeMathf {
     }
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function max(value1: f32, value2: f32): f32 {
     return builtin_max<f32>(value1, value2);
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function min(value1: f32, value2: f32): f32 {
     return builtin_min<f32>(value1, value2);
   }
@@ -2667,8 +2604,6 @@ export namespace NativeMathf {
     }
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function seedRandom(value: i64): void {
     NativeMath.seedRandom(value);
   }
@@ -2688,14 +2623,10 @@ export namespace NativeMathf {
     return reinterpret<f32>((r >> 9) | (127 << 23)) - 1.0;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function round(x: f32): f32 {
     return builtin_copysign<f32>(builtin_floor<f32>(x + 0.5), x);
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function sign(x: f32): f32 {
     if (ASC_SHRINK_LEVEL > 0) {
       return builtin_abs(x) > 0 ? builtin_copysign<f32>(1, x) : x;
@@ -2704,8 +2635,6 @@ export namespace NativeMathf {
     }
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function signbit(x: f32): bool {
     // @ts-ignore: type
     return <bool>((reinterpret<u32>(x) >>> 31) & (x == x));
@@ -2771,8 +2700,6 @@ export namespace NativeMathf {
     return t;
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function sqrt(x: f32): f32 {
     return builtin_sqrt<f32>(x);
   }
@@ -2841,8 +2768,6 @@ export namespace NativeMathf {
     return builtin_copysign<f32>(t, x);
   }
 
-  // @ts-ignore: decorator
-  @inline
   export function trunc(x: f32): f32 {
     return builtin_trunc<f32>(x);
   }

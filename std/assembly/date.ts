@@ -5,7 +5,7 @@ import {
 
 export class Date {
 
-  @inline static UTC(
+  static UTC(
     year: i32,
     month: i32 = 0,
     day: i32 = 1,
@@ -17,7 +17,7 @@ export class Date {
     return <i64>Date_UTC(year, month, day, hour, minute, second, <f64>millisecond);
   }
 
-  @inline static now(): i64 {
+  static now(): i64 {
     return <i64>Date_now();
   }
 
