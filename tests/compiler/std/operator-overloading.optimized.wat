@@ -2120,12 +2120,10 @@
   global.set $std/operator-overloading/incdec
   global.get $std/operator-overloading/incdec
   local.tee $0
+  local.get $0
   i32.load
   i32.const 1
   i32.add
-  local.set $1
-  local.get $0
-  local.get $1
   i32.store
   local.get $0
   local.get $0
@@ -2158,12 +2156,10 @@
   end
   global.get $std/operator-overloading/incdec
   local.tee $0
+  local.get $0
   i32.load
   i32.const 1
   i32.sub
-  local.set $1
-  local.get $0
-  local.get $1
   i32.store
   local.get $0
   local.get $0

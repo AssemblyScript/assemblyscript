@@ -1,6 +1,5 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
@@ -9,8 +8,9 @@
  (type $i32_i32_i64_i64_i64_i64_=>_none (func (param i32 i32 i64 i64 i64 i64)))
  (type $i32_f64_f64_f64_f64_f64_=>_none (func (param i32 f64 f64 f64 f64 f64)))
  (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32) (result i32)))
- (type $i32_i64_i32_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i32 i64 i32 i64 i32) (result i32)))
+ (type $i32_i64_i64_i32_i64_i32_=>_i32 (func (param i32 i64 i64 i32 i64 i32) (result i32)))
  (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $f64_i32_i32_=>_i32 (func (param f64 i32 i32) (result i32)))
  (type $i64_i64_=>_i64 (func (param i64 i64) (result i64)))
@@ -196,14 +196,6 @@
   local.get $0
   i32.store offset=12
   local.get $3
- )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
  )
  (func $~lib/string/String.UTF8.encodeUnsafe (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -422,13 +414,6 @@
   i64.shr_u
   i64.add
  )
- (func $~lib/util/number/umul64e (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  i32.add
-  i32.const -64
-  i32.sub
- )
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
   local.get $0
   i32.const 10
@@ -527,21 +512,22 @@
   local.get $1
   i32.store16
  )
- (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i32) (param $3 i64) (param $4 i32) (param $5 i64) (param $6 i32) (result i32)
+ (func $~lib/util/number/genDigits (param $0 i32) (param $1 i64) (param $2 i64) (param $3 i32) (param $4 i64) (param $5 i32) (result i32)
+  (local $6 i32)
   (local $7 i32)
   (local $8 i32)
   (local $9 i64)
   (local $10 i64)
   (local $11 i64)
   (local $12 i64)
-  local.get $3
+  local.get $2
   local.get $1
   i64.sub
   local.set $9
-  local.get $3
+  local.get $2
   i64.const 1
   i32.const 0
-  local.get $4
+  local.get $3
   i32.sub
   local.tee $8
   i64.extend_i32_s
@@ -552,16 +538,16 @@
   local.tee $11
   i64.and
   local.set $1
-  local.get $3
+  local.get $2
   local.get $8
   i64.extend_i32_s
   i64.shr_u
   i32.wrap_i64
-  local.tee $2
+  local.tee $6
   call $~lib/util/number/decimalCount32
-  local.set $7
+  local.set $3
   loop $while-continue|0
-   local.get $7
+   local.get $3
    i32.const 0
    i32.gt_s
    if
@@ -576,159 +562,159 @@
             block $case3|1
              block $case2|1
               block $case1|1
-               local.get $7
-               local.tee $4
+               local.get $3
+               local.tee $7
                i32.const 10
                i32.ne
                if
-                local.get $4
+                local.get $7
                 i32.const 1
                 i32.sub
                 br_table $case9|1 $case8|1 $case7|1 $case6|1 $case5|1 $case4|1 $case3|1 $case2|1 $case1|1 $case10|1
                end
-               local.get $2
+               local.get $6
                i32.const 1000000000
                i32.div_u
-               local.set $4
-               local.get $2
+               local.set $3
+               local.get $6
                i32.const 1000000000
                i32.rem_u
-               local.set $2
+               local.set $6
                br $break|1
               end
-              local.get $2
+              local.get $6
               i32.const 100000000
               i32.div_u
-              local.set $4
-              local.get $2
+              local.set $3
+              local.get $6
               i32.const 100000000
               i32.rem_u
-              local.set $2
+              local.set $6
               br $break|1
              end
-             local.get $2
+             local.get $6
              i32.const 10000000
              i32.div_u
-             local.set $4
-             local.get $2
+             local.set $3
+             local.get $6
              i32.const 10000000
              i32.rem_u
-             local.set $2
+             local.set $6
              br $break|1
             end
-            local.get $2
+            local.get $6
             i32.const 1000000
             i32.div_u
-            local.set $4
-            local.get $2
+            local.set $3
+            local.get $6
             i32.const 1000000
             i32.rem_u
-            local.set $2
+            local.set $6
             br $break|1
            end
-           local.get $2
+           local.get $6
            i32.const 100000
            i32.div_u
-           local.set $4
-           local.get $2
+           local.set $3
+           local.get $6
            i32.const 100000
            i32.rem_u
-           local.set $2
+           local.set $6
            br $break|1
           end
-          local.get $2
+          local.get $6
           i32.const 10000
           i32.div_u
-          local.set $4
-          local.get $2
+          local.set $3
+          local.get $6
           i32.const 10000
           i32.rem_u
-          local.set $2
+          local.set $6
           br $break|1
          end
-         local.get $2
+         local.get $6
          i32.const 1000
          i32.div_u
-         local.set $4
-         local.get $2
+         local.set $3
+         local.get $6
          i32.const 1000
          i32.rem_u
-         local.set $2
+         local.set $6
          br $break|1
         end
-        local.get $2
+        local.get $6
         i32.const 100
         i32.div_u
-        local.set $4
-        local.get $2
+        local.set $3
+        local.get $6
         i32.const 100
         i32.rem_u
-        local.set $2
+        local.set $6
         br $break|1
        end
-       local.get $2
+       local.get $6
        i32.const 10
        i32.div_u
-       local.set $4
-       local.get $2
+       local.set $3
+       local.get $6
        i32.const 10
        i32.rem_u
-       local.set $2
+       local.set $6
        br $break|1
       end
-      local.get $2
-      local.set $4
+      local.get $6
+      local.set $3
       i32.const 0
-      local.set $2
+      local.set $6
       br $break|1
      end
      i32.const 0
-     local.set $4
+     local.set $3
     end
-    local.get $4
-    local.get $6
+    local.get $3
+    local.get $5
     i32.or
     if
      local.get $0
-     local.get $6
+     local.get $5
      i32.const 1
      i32.shl
      i32.add
-     local.get $4
+     local.get $3
      i32.const 65535
      i32.and
      i32.const 48
      i32.add
      i32.store16
-     local.get $6
+     local.get $5
      i32.const 1
      i32.add
-     local.set $6
+     local.set $5
     end
     local.get $7
     i32.const 1
     i32.sub
-    local.set $7
+    local.set $3
     local.get $1
-    local.get $2
+    local.get $6
     i64.extend_i32_u
     local.get $8
     i64.extend_i32_s
     i64.shl
     i64.add
-    local.tee $3
-    local.get $5
+    local.tee $2
+    local.get $4
     i64.le_u
     if
-     local.get $7
+     local.get $3
      global.get $~lib/util/number/_K
      i32.add
      global.set $~lib/util/number/_K
      local.get $0
-     local.get $6
      local.get $5
+     local.get $4
+     local.get $2
      local.get $3
-     local.get $7
      i32.const 2
      i32.shl
      i32.const 1936
@@ -739,7 +725,7 @@
      i64.shl
      local.get $9
      call $~lib/util/number/grisuRound
-     local.get $6
+     local.get $5
      return
     end
     br $while-continue|0
@@ -747,28 +733,27 @@
   end
   local.get $8
   i64.extend_i32_s
-  local.set $3
-  loop $while-continue|2 (result i32)
-   local.get $5
+  local.set $2
+  loop $while-continue|2
+   local.get $4
    i64.const 10
    i64.mul
-   local.set $5
+   local.set $4
    local.get $1
    i64.const 10
    i64.mul
    local.tee $1
-   local.get $3
+   local.get $2
    i64.shr_u
    local.tee $12
-   local.get $6
+   local.get $5
    i64.extend_i32_s
    i64.or
    i64.const 0
    i64.ne
    if
     local.get $0
-    local.get $6
-    local.tee $2
+    local.get $5
     i32.const 1
     i32.shl
     i32.add
@@ -779,44 +764,44 @@
     i32.const 48
     i32.add
     i32.store16
-    local.get $2
+    local.get $5
     i32.const 1
     i32.add
-    local.set $6
+    local.set $5
    end
-   local.get $7
+   local.get $3
    i32.const 1
    i32.sub
-   local.set $7
+   local.set $3
    local.get $1
    local.get $11
    i64.and
    local.tee $1
-   local.get $5
+   local.get $4
    i64.ge_u
    br_if $while-continue|2
-   local.get $7
-   global.get $~lib/util/number/_K
-   i32.add
-   global.set $~lib/util/number/_K
-   local.get $0
-   local.get $6
-   local.get $5
-   local.get $1
-   local.get $10
-   local.get $9
-   i32.const 0
-   local.get $7
-   i32.sub
-   i32.const 2
-   i32.shl
-   i32.const 1936
-   i32.add
-   i64.load32_u
-   i64.mul
-   call $~lib/util/number/grisuRound
-   local.get $6
   end
+  local.get $3
+  global.get $~lib/util/number/_K
+  i32.add
+  global.set $~lib/util/number/_K
+  local.get $0
+  local.get $5
+  local.get $4
+  local.get $1
+  local.get $10
+  local.get $9
+  i32.const 0
+  local.get $3
+  i32.sub
+  i32.const 2
+  i32.shl
+  i32.const 1936
+  i32.add
+  i64.load32_u
+  i64.mul
+  call $~lib/util/number/grisuRound
+  local.get $5
  )
  (func $~lib/util/number/grisu2 (param $0 f64) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -935,17 +920,11 @@
   local.get $4
   i64.clz
   i32.wrap_i64
-  local.tee $1
   i64.extend_i32_s
   i64.shl
   global.get $~lib/util/number/_frc_pow
   local.tee $4
   call $~lib/util/number/umul64f
-  local.get $5
-  local.get $1
-  i32.sub
-  local.get $3
-  call $~lib/util/number/umul64e
   global.get $~lib/util/number/_frc_plus
   local.get $4
   call $~lib/util/number/umul64f
@@ -954,7 +933,9 @@
   local.tee $6
   global.get $~lib/util/number/_exp
   local.get $3
-  call $~lib/util/number/umul64e
+  i32.add
+  i32.const -64
+  i32.sub
   local.get $6
   global.get $~lib/util/number/_frc_minus
   local.get $4
@@ -1498,19 +1479,21 @@
   i32.const 544106784
   i32.store
   i32.const 2000
-  i32.const 2000
-  call $~lib/string/String#get:length
+  i32.const 1996
+  i32.load
+  i32.const 1
+  i32.shr_u
   i32.const 23
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.const 23
   i32.add
-  local.tee $3
+  local.tee $2
   i32.const 40
   i32.store8
   local.get $0
   call $~lib/util/number/decimalCount32
   local.tee $4
-  local.get $3
+  local.get $2
   i32.const 1
   i32.add
   i32.add
@@ -1587,76 +1570,73 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
-  (local $9 i32)
   call $~lib/string/String.UTF8.byteLength
-  local.tee $7
-  i32.const 56
-  i32.gt_s
-  local.set $6
-  local.get $7
+  local.tee $6
   i32.const 56
   local.get $6
+  i32.const 56
+  i32.gt_s
   select
   i32.const 13
   i32.add
   call $~lib/rt/stub/__alloc
-  local.tee $7
+  local.tee $6
   i32.const 8
   i32.add
   local.tee $8
   i32.const 4
   i32.add
-  local.set $6
+  local.set $7
+  local.get $6
   local.get $7
-  local.get $6
   i32.store
-  local.get $6
+  local.get $7
   i64.const 9071406388179572
   i64.store
-  local.get $7
+  local.get $6
   i32.const 7
   i32.store offset=4
   i32.const 2
-  local.get $7
+  local.get $6
   i32.const 1
   local.get $8
   call $~lib/bindings/wasi_snapshot_preview1/fd_write
   drop
-  local.get $7
-  i32.const 1040
-  i32.const 1040
-  call $~lib/string/String#get:length
   local.get $6
+  i32.const 1040
+  i32.const 1036
+  i32.load
+  i32.const 1
+  i32.shr_u
+  local.get $7
   call $~lib/string/String.UTF8.encodeUnsafe
   i32.store offset=4
   i32.const 2
-  local.get $7
+  local.get $6
   i32.const 1
   local.get $8
   call $~lib/bindings/wasi_snapshot_preview1/fd_write
   drop
   local.get $0
   if (result i32)
-   local.get $6
+   local.get $7
    i32.const 32
    i32.store8
    local.get $6
+   local.get $7
    i32.const 1
    i32.add
-   local.tee $6
+   local.tee $7
+   local.get $7
    local.get $1
    call $~lib/util/number/dtoa_stream
-   local.set $9
    local.get $7
-   local.get $6
-   local.get $9
-   local.get $6
    call $~lib/string/String.UTF8.encodeUnsafe
    i32.const 1
    i32.add
    i32.store offset=4
    i32.const 2
-   local.get $7
+   local.get $6
    i32.const 1
    local.get $8
    call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1665,18 +1645,18 @@
    i32.const 1
    i32.gt_s
    if
+    local.get $6
     local.get $7
-    local.get $6
-    local.get $6
+    local.get $7
     local.get $2
     call $~lib/util/number/dtoa_stream
-    local.get $6
+    local.get $7
     call $~lib/string/String.UTF8.encodeUnsafe
     i32.const 1
     i32.add
     i32.store offset=4
     i32.const 2
-    local.get $7
+    local.get $6
     i32.const 1
     local.get $8
     call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1685,18 +1665,18 @@
     i32.const 2
     i32.gt_s
     if
+     local.get $6
      local.get $7
-     local.get $6
-     local.get $6
+     local.get $7
      local.get $3
      call $~lib/util/number/dtoa_stream
-     local.get $6
+     local.get $7
      call $~lib/string/String.UTF8.encodeUnsafe
      i32.const 1
      i32.add
      i32.store offset=4
      i32.const 2
-     local.get $7
+     local.get $6
      i32.const 1
      local.get $8
      call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1705,18 +1685,18 @@
      i32.const 3
      i32.gt_s
      if
+      local.get $6
       local.get $7
-      local.get $6
-      local.get $6
+      local.get $7
       local.get $4
       call $~lib/util/number/dtoa_stream
-      local.get $6
+      local.get $7
       call $~lib/string/String.UTF8.encodeUnsafe
       i32.const 1
       i32.add
       i32.store offset=4
       i32.const 2
-      local.get $7
+      local.get $6
       i32.const 1
       local.get $8
       call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1725,18 +1705,18 @@
       i32.const 4
       i32.gt_s
       if
+       local.get $6
        local.get $7
-       local.get $6
-       local.get $6
+       local.get $7
        local.get $5
        call $~lib/util/number/dtoa_stream
-       local.get $6
+       local.get $7
        call $~lib/string/String.UTF8.encodeUnsafe
        i32.const 1
        i32.add
        i32.store offset=4
        i32.const 2
-       local.get $7
+       local.get $6
        i32.const 1
        local.get $8
        call $~lib/bindings/wasi_snapshot_preview1/fd_write
@@ -1745,29 +1725,29 @@
      end
     end
    end
-   local.get $6
+   local.get $7
    i32.const 1
    i32.sub
   else
-   local.get $6
+   local.get $7
   end
   i32.const 10
   i32.store8
-  local.get $7
+  local.get $6
   i32.const 1
   i32.store offset=4
   i32.const 2
-  local.get $7
+  local.get $6
   i32.const 1
   local.get $8
   call $~lib/bindings/wasi_snapshot_preview1/fd_write
   drop
-  local.get $7
+  local.get $6
   i32.const 15
   i32.and
   i32.eqz
   i32.const 0
-  local.get $7
+  local.get $6
   select
   i32.eqz
   if
@@ -1776,7 +1756,7 @@
    call $~lib/wasi/index/abort
    unreachable
   end
-  local.get $7
+  local.get $6
   i32.const 16
   i32.sub
   local.tee $0
@@ -1790,7 +1770,7 @@
    unreachable
   end
   global.get $~lib/rt/stub/offset
-  local.get $7
+  local.get $6
   local.get $0
   i32.load
   i32.add

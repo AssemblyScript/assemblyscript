@@ -2,7 +2,6 @@
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_f32_i32_i32_=>_i32 (func (param i32 f32 i32 i32) (result i32)))
  (type $f32_=>_f32 (func (param f32) (result f32)))
  (memory $0 1)
  (data (i32.const 1024) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00i\00n\00f\00e\00r\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s")
@@ -15,14 +14,6 @@
  (export "test3" (func $infer-generic/test2))
  (export "test4" (func $infer-generic/test2))
  (start $~start)
- (func $start:infer-generic~anonymous|0 (param $0 i32) (param $1 f32) (param $2 i32) (param $3 i32) (result i32)
-  local.get $1
-  f32.const 0
-  f32.ne
-  i32.const 0
-  local.get $0
-  select
- )
  (func $~setArgumentsLength (param $0 i32)
   nop
  )
@@ -39,20 +30,19 @@
   (local $3 i32)
   i32.const 1132
   i32.load
-  local.set $2
+  local.set $1
   loop $for-loop|0
    local.get $0
-   local.get $2
+   local.get $1
    i32.const 1132
    i32.load
-   local.tee $3
+   local.tee $2
+   local.get $1
    local.get $2
-   local.get $3
    i32.lt_s
    select
    i32.lt_s
    if
-    local.get $1
     i32.const 1124
     i32.load
     local.get $0
@@ -60,10 +50,12 @@
     i32.shl
     i32.add
     f32.load
-    local.get $0
-    i32.const 1120
-    call $start:infer-generic~anonymous|0
-    local.set $1
+    f32.const 0
+    f32.ne
+    i32.const 0
+    local.get $3
+    select
+    local.set $3
     local.get $0
     i32.const 1
     i32.add

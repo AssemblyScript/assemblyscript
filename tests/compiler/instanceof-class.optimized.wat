@@ -92,12 +92,13 @@
   i32.const 6
   call $~lib/rt/stub/__alloc
   local.tee $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    i32.const 5
    call $~lib/rt/stub/__alloc
+   local.set $0
   end
+  local.get $0
   global.set $instanceof-class/b
   block $__inlined_func$instanceof-class/Child~instanceof (result i32)
    i32.const 0

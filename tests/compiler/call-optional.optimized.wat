@@ -1,8 +1,8 @@
 (module
  (type $none_=>_none (func))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
  (data (i32.const 1024) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00c\00a\00l\00l\00-\00o\00p\00t\00i\00o\00n\00a\00l\00.\00t\00s")
@@ -10,13 +10,6 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
- (func $call-optional/opt (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
-  local.get $2
-  local.get $0
-  local.get $1
-  i32.add
-  i32.add
- )
  (func $call-optional/opt@varargs (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   block $2of2
    block $1of2
@@ -35,10 +28,11 @@
    i32.const -2
    local.set $2
   end
+  local.get $2
   local.get $0
   local.get $1
-  local.get $2
-  call $call-optional/opt
+  i32.add
+  i32.add
  )
  (func $~setArgumentsLength (param $0 i32)
   local.get $0
@@ -71,20 +65,6 @@
    i32.const 0
    i32.const 1040
    i32.const 5
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 3
-  i32.const 4
-  i32.const 5
-  call $call-optional/opt
-  i32.const 12
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 6
    i32.const 1
    call $~lib/builtins/abort
    unreachable

@@ -1,7 +1,7 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
  (type $i32_=>_none (func (param i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
@@ -98,21 +98,12 @@
    local.set $0
   end
   local.get $0
-  i32.eqz
   if (result i32)
+   local.get $0
+  else
    i32.const 3
    call $~lib/rt/stub/__alloc
-  else
-   local.get $0
   end
- )
- (func $~lib/string/String#get:length (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.const 1
-  i32.shr_u
  )
  (func $~lib/util/string/compareImpl (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)
@@ -207,10 +198,18 @@
    select
    br_if $folding-inner0
    local.get $0
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    local.tee $2
    local.get $1
-   call $~lib/string/String#get:length
+   i32.const 16
+   i32.sub
+   i32.load offset=12
+   i32.const 1
+   i32.shr_u
    i32.ne
    br_if $folding-inner0
    local.get $0
@@ -240,25 +239,23 @@
   i32.const 1184
   global.set $class-overloading/which
  )
- (func $class-overloading/D#constructor (param $0 i32) (result i32)
-  local.get $0
-  if (result i32)
-   local.get $0
-  else
-   i32.const 6
-   call $~lib/rt/stub/__alloc
-  end
-  call $class-overloading/B#constructor
- )
  (func $class-overloading/E#constructor (param $0 i32) (result i32)
   local.get $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    i32.const 7
    call $~lib/rt/stub/__alloc
+   local.set $0
   end
-  call $class-overloading/D#constructor
+  local.get $0
+  i32.eqz
+  if
+   i32.const 6
+   call $~lib/rt/stub/__alloc
+   local.set $0
+  end
+  local.get $0
+  call $class-overloading/B#constructor
  )
  (func $start:class-overloading
   i32.const 1296
@@ -393,8 +390,9 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $class-overloading/D#constructor
+  i32.const 6
+  call $~lib/rt/stub/__alloc
+  call $class-overloading/B#constructor
   global.set $class-overloading/a
   i32.const 1040
   global.set $class-overloading/which
