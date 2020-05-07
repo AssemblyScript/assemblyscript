@@ -44,6 +44,8 @@ export enum DiagnosticCode {
   Function_0_is_virtual_and_will_not_be_inlined = 228,
   Property_0_only_has_a_setter_and_is_missing_a_getter = 229,
   _0_keyword_cannot_be_used_here = 230,
+  An_explicitly_returning_constructor_must_not_access_this = 231,
+  A_class_with_an_explicitly_returning_constructor_must_be_sealed = 232,
   Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
   Importing_the_table_disables_some_indirect_call_optimizations = 901,
   Exporting_the_table_disables_some_indirect_call_optimizations = 902,
@@ -212,6 +214,8 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 228: return "Function '{0}' is virtual and will not be inlined.";
     case 229: return "Property '{0}' only has a setter and is missing a getter.";
     case 230: return "'{0}' keyword cannot be used here.";
+    case 231: return "An explicitly returning constructor must not access 'this'.";
+    case 232: return "A class with an explicitly returning constructor must be sealed.";
     case 900: return "Type '{0}' is cyclic. Module will include deferred garbage collection.";
     case 901: return "Importing the table disables some indirect call optimizations.";
     case 902: return "Exporting the table disables some indirect call optimizations.";

@@ -1,11 +1,11 @@
-// trailing conditional allocate
+// fall-through allocate
 class EmptyCtor {
   constructor() {}
 }
 
 var emptyCtor = new EmptyCtor();
 
-// trailing conditional allocate with field initializer
+// fall-through allocate with field initializer
 class EmptyCtorWithFieldInit {
   a: i32 = 1;
   constructor() {}
@@ -13,13 +13,23 @@ class EmptyCtorWithFieldInit {
 
 var emptyCtorWithFieldInit = new EmptyCtorWithFieldInit();
 
-// trailing conditional allocate with field initialized to zero
+// fall-through allocate with field initialized to zero
 class EmptyCtorWithFieldNoInit {
   a: i32;
   constructor() {}
 }
 
 var emptyCtorWithFieldNoInit = new EmptyCtorWithFieldNoInit();
+
+// fall-through allocate with field access
+class EmptyCtorWithFieldAccess {
+  a: i32;
+  constructor() {
+    this.a = 1;
+  }
+}
+
+var emptyCtorWithFieldAccess = new EmptyCtorWithFieldAccess();
 
 // direct allocate
 class None {
@@ -41,7 +51,8 @@ class JustFieldNoInit {
 
 var justFieldNoInit = new JustFieldNoInit();
 
-// explicit allocation with no extra checks
+// explicit return with no extra checks
+@sealed
 class CtorReturns {
   constructor() {
     return changetype<CtorReturns>(0);
@@ -52,7 +63,8 @@ var ctorReturns = new CtorReturns();
 
 var b: bool = true;
 
-// explicit allocation with a trailing conditional fallback
+// conditional explicit return, otherwise fall-through
+@sealed
 class CtorConditionallyReturns {
   constructor() {
     if (b) {
@@ -62,23 +74,3 @@ class CtorConditionallyReturns {
 }
 
 var ctorConditionallyReturns = new CtorConditionallyReturns();
-
-// implicit allocation with no extra checks
-class CtorAllocates {
-  constructor() {
-    this;
-  }
-}
-
-var ctorAllocates = new CtorAllocates();
-
-// implicit allocation with a trailing conditional fallback
-class CtorConditionallyAllocates {
-  constructor() {
-    if (b) {
-      this;
-    }
-  }
-}
-
-var ctorConditionallyAllocates = new CtorConditionallyAllocates();

@@ -40,7 +40,7 @@ const mkdirp = require("./util/mkdirp");
 const find = require("./util/find");
 const EOL = process.platform === "win32" ? "\r\n" : "\n";
 const SEP = process.platform === "win32" ? "\\" : "/";
-const binaryen = global.binaryen || (global.binaryen = require("binaryen"));
+const binaryen = global.binaryen || (global.binaryen = require("../lib/binaryen"));
 
 // Sets up an extension with its definition counterpart and relevant regexes.
 function setupExtension(extension) {

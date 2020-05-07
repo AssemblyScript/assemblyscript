@@ -1307,7 +1307,13 @@ export class Compiler extends DiagnosticEmitter {
       let index = 0;
       let thisType = signature.thisType;
       if (thisType) {
-        // No need to retain `this` as it can't be reassigned and thus can't become prematurely released
+        // In normal instance functions, `this` is effectively a constant
+        // retained elsewhere so does not need to be retained.
+        if (instance.is(CommonFlags.CONSTRUCTOR)) {
+          // Constructors, however, can allocate their own memory, and as such
+          // must refcount the allocation in case something else is `return`ed.
+          flow.setLocalFlag(index, LocalFlags.RETAINED);
+        }
         ++index;
       }
       let parameterTypes = signature.parameterTypes;
@@ -1343,7 +1349,7 @@ export class Compiler extends DiagnosticEmitter {
         signature.nativeParams,
         signature.nativeResults,
         typesToNativeTypes(instance.additionalLocals),
-        module.flatten(stmts, instance.signature.returnType.toNativeType())
+        body
       );
 
     // imported function
@@ -1392,6 +1398,9 @@ export class Compiler extends DiagnosticEmitter {
     var bodyNode = assert(instance.prototype.bodyNode);
     var returnType = instance.signature.returnType;
     var flow = this.currentFlow;
+    var thisLocal = instance.is(CommonFlags.INSTANCE)
+      ? assert(flow.lookupLocal(CommonNames.this_))
+      : null;
 
     // compile statements
     if (bodyNode.kind == NodeKind.BLOCK) {
@@ -1432,39 +1441,66 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
 
-    // make constructors return their instance pointer
+    // Make constructors return their instance pointer, and prepend a conditional
+    // allocation if any code path accesses `this`.
     if (instance.is(CommonFlags.CONSTRUCTOR)) {
       let nativeSizeType = this.options.nativeSizeType;
       assert(instance.is(CommonFlags.INSTANCE));
+      thisLocal = assert(thisLocal);
       let parent = assert(instance.parent);
       assert(parent.kind == ElementKind.CLASS);
       let classInstance = <Class>parent;
 
-      if (!flow.is(FlowFlags.TERMINATES)) {
-        let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
-
-        // if `this` wasn't accessed before, allocate if necessary and initialize `this`
-        if (!flow.is(FlowFlags.ALLOCATES)) {
-          // {
-          //   if (!this) this = <ALLOC>
-          //   this.a = X
-          //   this.b = Y
-          // }
-          stmts.push(
-            module.if(
-              module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
-                module.local_get(thisLocal.index, nativeSizeType)
-              ),
-              module.local_set(thisLocal.index,
-                this.makeRetain(
-                  this.makeAllocation(classInstance)
-                ),
+      if (flow.isAny(FlowFlags.ACCESSES_THIS | FlowFlags.CONDITIONALLY_ACCESSES_THIS) || !flow.is(FlowFlags.TERMINATES)) {
+        // Allocate `this` if not a super call, and initialize fields
+        let allocStmts = new Array<ExpressionRef>();
+        allocStmts.push(
+          module.if(
+            module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
+              module.local_get(thisLocal.index, nativeSizeType)
+            ),
+            module.local_set(thisLocal.index,
+              this.makeRetain(
+                this.makeAllocation(classInstance)
               )
             )
+          )
+        );
+        this.makeFieldInitializationInConstructor(classInstance, allocStmts);
+        if (flow.isInline) {
+          let firstStmt = stmts[0]; // `this` alias assignment
+          assert(getExpressionId(firstStmt) == ExpressionId.LocalSet);
+          assert(getLocalSetIndex(firstStmt) == thisLocal.index);
+          allocStmts.unshift(firstStmt);
+          stmts[0] = module.flatten(allocStmts, NativeType.None);
+        } else {
+          stmts.unshift(
+            module.flatten(allocStmts, NativeType.None)
           );
-          this.makeFieldInitializationInConstructor(classInstance, stmts);
         }
-        this.performAutoreleases(flow, stmts); // `this` is excluded anyway
+      }
+
+      // Check explicit return conditions if applicable
+      if (flow.isAny(FlowFlags.RETURNS | FlowFlags.CONDITIONALLY_RETURNS)) {
+        if (flow.isAny(FlowFlags.ACCESSES_THIS | FlowFlags.CONDITIONALLY_ACCESSES_THIS)) {
+          this.error(
+            DiagnosticCode.An_explicitly_returning_constructor_must_not_access_this,
+            instance.identifierNode.range
+          );
+        }
+        if (!classInstance.hasDecorator(DecoratorFlags.SEALED)) {
+          this.error(
+            DiagnosticCode.A_class_with_an_explicitly_returning_constructor_must_be_sealed,
+            classInstance.identifierNode.range
+          );
+        }
+      }
+
+      // Implicitly return `this` if the flow falls through
+      if (!flow.is(FlowFlags.TERMINATES)) {
+        assert(flow.isAnyLocalFlag(thisLocal.index, LocalFlags.ANY_RETAINED));
+        flow.unsetLocalFlag(thisLocal.index, LocalFlags.ANY_RETAINED); // undo
+        this.performAutoreleases(flow, stmts);
         this.finishAutoreleases(flow, stmts);
         stmts.push(module.local_get(thisLocal.index, this.options.nativeSizeType));
         flow.set(FlowFlags.RETURNS | FlowFlags.RETURNS_NONNULL | FlowFlags.TERMINATES);
@@ -6322,34 +6358,19 @@ export class Compiler extends DiagnosticEmitter {
       let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
       let nativeSizeType = this.options.nativeSizeType;
 
-      // {
-      //   this = super(this || <ALLOC>, ...args)
-      //   this.a = X
-      //   this.b = Y
-      // }
-      let theCall = this.compileCallDirect(
+      let superCall = this.compileCallDirect(
         this.ensureConstructor(baseClassInstance, expression),
         expression.arguments,
         expression,
-        module.if(
-          module.local_get(thisLocal.index, nativeSizeType),
-          module.local_get(thisLocal.index, nativeSizeType),
-          this.makeRetain(
-            this.makeAllocation(classInstance)
-          )
-        ),
+        module.local_get(thisLocal.index, nativeSizeType),
         Constraints.WILL_RETAIN
       );
-      assert(baseClassInstance.type.isUnmanaged || this.skippedAutoreleases.has(theCall)); // guaranteed
-      let stmts: ExpressionRef[] = [
-        module.local_set(thisLocal.index, theCall)
-      ];
-      this.makeFieldInitializationInConstructor(classInstance, stmts);
+      assert(baseClassInstance.type.isUnmanaged || this.skippedAutoreleases.has(superCall)); // guaranteed
 
       // check that super had been called before accessing `this`
       if (flow.isAny(
-        FlowFlags.ALLOCATES |
-        FlowFlags.CONDITIONALLY_ALLOCATES
+        FlowFlags.ACCESSES_THIS |
+        FlowFlags.CONDITIONALLY_ACCESSES_THIS
       )) {
         this.error(
           DiagnosticCode._super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class,
@@ -6357,9 +6378,9 @@ export class Compiler extends DiagnosticEmitter {
         );
         return module.unreachable();
       }
-      flow.set(FlowFlags.ALLOCATES | FlowFlags.CALLS_SUPER);
+      flow.set(FlowFlags.ACCESSES_THIS | FlowFlags.CALLS_SUPER);
       this.currentType = Type.void;
-      return module.flatten(stmts);
+      return module.local_set(thisLocal.index, superCall);
     }
 
     // otherwise resolve normally
@@ -6774,7 +6795,13 @@ export class Compiler extends DiagnosticEmitter {
       let classInstance = <Class>parent;
       let thisType = assert(instance.signature.thisType);
       let thisLocal = flow.addScopedLocal(CommonNames.this_, thisType, usedLocals);
-      // No need to retain `this` as it can't be reassigned and thus can't become prematurely released
+      // In normal instance functions, `this` is effectively a constant
+      // retained elsewhere so does not need to be retained.
+      if (instance.is(CommonFlags.CONSTRUCTOR)) {
+        // Constructors, however, can allocate their own memory, and as such
+        // must refcount the allocation in case something else is `return`ed.
+        flow.setLocalFlag(thisLocal.index, LocalFlags.RETAINED);
+      }
       body.unshift(
         module.local_set(thisLocal.index, thisArg)
       );
@@ -7986,41 +8013,10 @@ export class Compiler extends DiagnosticEmitter {
       case NodeKind.THIS: {
         if (actualFunction.is(CommonFlags.INSTANCE)) {
           let thisLocal = assert(flow.lookupLocal(CommonNames.this_));
+          let thisType = assert(actualFunction.signature.thisType);
           let parent = assert(actualFunction.parent);
           assert(parent.kind == ElementKind.CLASS);
-          let classInstance = <Class>parent;
-          let nativeSizeType = this.options.nativeSizeType;
-          if (actualFunction.is(CommonFlags.CONSTRUCTOR)) {
-            if (!flow.is(FlowFlags.ALLOCATES)) {
-              flow.set(FlowFlags.ALLOCATES);
-              // {
-              //   if (!this) this = <ALLOC>
-              //   this.a = X
-              //   this.b = Y
-              //   return this
-              // }
-              let stmts: ExpressionRef[] = [
-                module.if(
-                  module.unary(nativeSizeType == NativeType.I64 ? UnaryOp.EqzI64 : UnaryOp.EqzI32,
-                    module.local_get(thisLocal.index, nativeSizeType)
-                  ),
-                  module.local_set(thisLocal.index,
-                    this.makeRetain(
-                      this.makeAllocation(classInstance)
-                    )
-                  )
-                )
-              ];
-              this.makeFieldInitializationInConstructor(classInstance, stmts);
-              stmts.push(
-                module.local_get(thisLocal.index, nativeSizeType)
-              );
-              this.currentType = thisLocal.type;
-              return module.flatten(stmts, nativeSizeType);
-            }
-          }
-          // if not a constructor, `this` type can differ
-          let thisType = assert(actualFunction.signature.thisType);
+          flow.set(FlowFlags.ACCESSES_THIS);
           this.currentType = thisType;
           return module.local_get(thisLocal.index, thisType.toNativeType());
         }

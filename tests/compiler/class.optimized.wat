@@ -122,10 +122,6 @@
   i32.const 4
   i32.const 4
   call $~lib/rt/stub/__alloc
-  i32.const 0
-  i32.const 0
-  call $~lib/rt/stub/__alloc
-  local.set $1
   i32.const 16
   i32.const 5
   call $~lib/rt/stub/__alloc
@@ -141,6 +137,10 @@
   local.get $0
   i32.const 0
   i32.store offset=12
+  i32.const 0
+  i32.const 0
+  call $~lib/rt/stub/__alloc
+  local.set $1
   local.get $0
   i32.load
   drop

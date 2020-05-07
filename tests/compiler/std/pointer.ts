@@ -1,6 +1,6 @@
 // A pointer arithmetic experiment
 
-class Pointer<T> {
+@sealed @unmanaged class Pointer<T> {
 
   @inline constructor(offset: usize = 0) {
     return changetype<Pointer<T>>(offset);

@@ -37,6 +37,8 @@
   "Function '{0}' is virtual and will not be inlined.": 228,
   "Property '{0}' only has a setter and is missing a getter.": 229,
   "'{0}' keyword cannot be used here.": 230,
+  "An explicitly returning constructor must not access 'this'.": 231,
+  "A class with an explicitly returning constructor must be sealed.": 232,
 
   "Type '{0}' is cyclic. Module will include deferred garbage collection.": 900,
   "Importing the table disables some indirect call optimizations.": 901,
