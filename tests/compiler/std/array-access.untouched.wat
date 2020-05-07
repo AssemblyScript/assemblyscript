@@ -23,7 +23,7 @@
  (func $~lib/rt/stub/__retain (param $0 i32) (result i32)
   local.get $0
  )
- (func $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<i32>>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -52,7 +52,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<~lib/array/Array<i32>>#__unchecked_get
+  call $~lib/array/Array<~lib/array/Array<i32>>#__uget
   local.set $2
   i32.const 1
   drop
@@ -73,7 +73,7 @@
   end
   local.get $2
  )
- (func $~lib/array/Array<i32>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -98,7 +98,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<i32>#__unchecked_get
+  call $~lib/array/Array<i32>#__uget
   local.set $2
   i32.const 0
   drop
@@ -123,7 +123,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/array/Array<~lib/string/String>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/string/String>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -149,7 +149,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<~lib/string/String>#__unchecked_get
+  call $~lib/array/Array<~lib/string/String>#__uget
   local.set $2
   i32.const 1
   drop
@@ -417,7 +417,7 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
- (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -443,7 +443,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__unchecked_get
+  call $~lib/array/Array<~lib/array/Array<~lib/string/String>>#__uget
   local.set $2
   i32.const 1
   drop

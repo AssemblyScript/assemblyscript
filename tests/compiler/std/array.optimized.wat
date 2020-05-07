@@ -2787,7 +2787,7 @@
   i32.store offset=12
   local.get $4
  )
- (func $~lib/array/Array<std/array/Ref>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<std/array/Ref>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -2812,7 +2812,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<std/array/Ref>#__unchecked_get
+  call $~lib/array/Array<std/array/Ref>#__uget
   local.tee $0
   i32.eqz
   if
@@ -2920,7 +2920,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<std/array/Ref>#__unchecked_get
+  call $~lib/array/Array<std/array/Ref>#__uget
  )
  (func $~lib/array/Array<i32>#__set (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
