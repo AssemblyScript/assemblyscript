@@ -498,7 +498,7 @@
   i64.load
   call $~lib/util/number/utoa64
  )
- (func $resolve-access/Container#constructor (result i32)
+ (func $resolve-access/fieldAccess (result i32)
   (local $0 i32)
   i32.const 8
   i32.const 5
@@ -507,11 +507,6 @@
   i64.const 0
   i64.store
   local.get $0
- )
- (func $resolve-access/fieldAccess (result i32)
-  (local $0 i32)
-  call $resolve-access/Container#constructor
-  local.tee $0
   i64.const 1
   i64.store
   local.get $0
@@ -522,8 +517,13 @@
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  call $resolve-access/Container#constructor
+  i32.const 8
+  i32.const 5
+  call $~lib/rt/stub/__alloc
   local.tee $0
+  i64.const 0
+  i64.store
+  local.get $0
   i64.const 1
   i64.store
   local.get $0

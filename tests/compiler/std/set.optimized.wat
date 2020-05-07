@@ -8,15 +8,15 @@
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
- (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_i32_i64_=>_none (func (param i32 i32 i64)))
  (type $i32_i64_=>_none (func (param i32 i64)))
  (type $i32_f32_=>_none (func (param i32 f32)))
  (type $i32_f64_=>_none (func (param i32 f64)))
  (type $i32_i64_=>_i32 (func (param i32 i64) (result i32)))
  (type $i32_i64_i32_=>_i32 (func (param i32 i64 i32) (result i32)))
+ (type $i32_f32_=>_i32 (func (param i32 f32) (result i32)))
  (type $i32_f32_i32_=>_i32 (func (param i32 f32 i32) (result i32)))
+ (type $i32_f64_=>_i32 (func (param i32 f64) (result i32)))
  (type $i32_f64_i32_=>_i32 (func (param i32 f64 i32) (result i32)))
  (type $i64_=>_i32 (func (param i64) (result i32)))
  (type $i32_i32_=>_i64 (func (param i32 i32) (result i64)))
@@ -53,16 +53,6 @@
   i32.add
   local.get $3
   i32.store offset=96
- )
- (func $~lib/rt/tlsf/GETRIGHT (param $0 i32) (result i32)
-  local.get $0
-  i32.const 16
-  i32.add
-  local.get $0
-  i32.load
-  i32.const -4
-  i32.and
-  i32.add
  )
  (func $~lib/rt/tlsf/GETHEAD (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
@@ -261,7 +251,13 @@
    unreachable
   end
   local.get $1
-  call $~lib/rt/tlsf/GETRIGHT
+  i32.const 16
+  i32.add
+  local.get $1
+  i32.load
+  i32.const -4
+  i32.and
+  i32.add
   local.tee $5
   i32.load
   local.tee $6
@@ -293,7 +289,13 @@
     local.tee $3
     i32.store
     local.get $1
-    call $~lib/rt/tlsf/GETRIGHT
+    i32.const 16
+    i32.add
+    local.get $1
+    i32.load
+    i32.const -4
+    i32.and
+    i32.add
     local.tee $5
     i32.load
     local.set $6
@@ -880,9 +882,21 @@
    i32.and
    i32.store
    local.get $1
-   call $~lib/rt/tlsf/GETRIGHT
+   i32.const 16
+   i32.add
    local.get $1
-   call $~lib/rt/tlsf/GETRIGHT
+   i32.load
+   i32.const -4
+   i32.and
+   i32.add
+   local.get $1
+   i32.const 16
+   i32.add
+   local.get $1
+   i32.load
+   i32.const -4
+   i32.and
+   i32.add
    i32.load
    i32.const -3
    i32.and
@@ -893,7 +907,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  (local $6 i32)
   global.get $~lib/rt/tlsf/collectLock
   if
    i32.const 0
@@ -921,18 +934,15 @@
    local.tee $3
    i32.eqz
    if
+    i32.const 16
     memory.size
     local.tee $3
     i32.const 16
     i32.shl
-    local.set $5
-    local.get $3
-    i32.const 16
-    local.get $0
-    i32.load offset=1568
-    local.get $5
     i32.const 16
     i32.sub
+    local.get $0
+    i32.load offset=1568
     i32.ne
     i32.shl
     local.get $4
@@ -957,12 +967,12 @@
     i32.and
     i32.const 16
     i32.shr_u
-    local.tee $5
-    i32.gt_s
-    local.set $6
+    local.set $5
     local.get $3
     local.get $5
-    local.get $6
+    local.get $3
+    local.get $5
+    i32.gt_s
     select
     memory.grow
     i32.const 0
@@ -1277,25 +1287,23 @@
   local.get $1
   call $~lib/rt/pure/__retain
  )
- (func $~lib/rt/pure/__release (param $0 i32)
-  local.get $0
-  i32.const 1444
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
  (func $~lib/set/Set<i8>#clear (param $0 i32)
   (local $1 i32)
+  (local $2 i32)
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
   local.get $0
   i32.load
-  call $~lib/rt/pure/__release
+  local.tee $2
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
   local.get $1
   i32.store
@@ -1307,7 +1315,15 @@
   local.set $1
   local.get $0
   i32.load offset=8
-  call $~lib/rt/pure/__release
+  local.tee $2
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
   local.get $1
   i32.store offset=8
@@ -1351,17 +1367,6 @@
   local.get $0
   call $~lib/set/Set<i8>#clear
   local.get $0
- )
- (func $~lib/util/hash/HASH<i8> (param $0 i32) (result i32)
-  local.get $0
-  i32.const 24
-  i32.shl
-  i32.const 24
-  i32.shr_s
-  i32.const -2128831035
-  i32.xor
-  i32.const 16777619
-  i32.mul
  )
  (func $~lib/set/Set<i8>#find (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
@@ -1427,7 +1432,7 @@
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $7
+  local.tee $6
   i32.const 3
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
@@ -1440,11 +1445,11 @@
   i32.const 3
   i32.shl
   i32.add
-  local.set $6
+  local.set $5
   local.get $2
   local.set $3
   loop $while-continue|0
-   local.get $6
+   local.get $5
    local.get $8
    i32.ne
    if
@@ -1460,18 +1465,21 @@
      i32.store8
      local.get $3
      local.get $4
+     local.get $1
      local.get $8
      i32.load8_s
-     call $~lib/util/hash/HASH<i8>
-     local.get $1
+     i32.const -2128831035
+     i32.xor
+     i32.const 16777619
+     i32.mul
      i32.and
      i32.const 2
      i32.shl
      i32.add
-     local.tee $5
+     local.tee $7
      i32.load
      i32.store offset=4
-     local.get $5
+     local.get $7
      local.get $3
      i32.store
      local.get $3
@@ -1490,14 +1498,21 @@
   local.tee $3
   local.get $0
   i32.load
-  local.tee $8
+  local.tee $7
   i32.ne
   if
    local.get $3
    call $~lib/rt/pure/__retain
    local.set $3
-   local.get $8
-   call $~lib/rt/pure/__release
+   local.get $7
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $7
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $3
@@ -1516,32 +1531,62 @@
    call $~lib/rt/pure/__retain
    local.set $1
    local.get $3
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $3
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $1
   i32.store offset=8
   local.get $0
-  local.get $7
+  local.get $6
   i32.store offset=12
   local.get $0
   local.get $0
   i32.load offset=20
   i32.store offset=16
   local.get $4
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<i8>#add (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  local.get $1
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  i32.const -2128831035
+  i32.xor
+  i32.const 16777619
+  i32.mul
+  local.tee $2
+  local.set $3
   local.get $0
   local.get $1
-  local.get $1
-  call $~lib/util/hash/HASH<i8>
-  local.tee $3
+  local.get $2
   call $~lib/set/Set<i8>#find
   i32.eqz
   if
@@ -1672,7 +1717,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $4
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $4
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -1902,8 +1954,16 @@
    return
   end
   local.get $1
-  call $~lib/rt/tlsf/GETRIGHT
-  local.tee $6
+  i32.const 16
+  i32.add
+  local.get $1
+  i32.load
+  i32.const -4
+  i32.and
+  i32.add
+  local.tee $4
+  local.set $6
+  local.get $4
   i32.load
   local.tee $4
   i32.const 1
@@ -1926,10 +1986,10 @@
     local.get $6
     call $~lib/rt/tlsf/removeBlock
     local.get $1
+    local.get $4
     local.get $5
     i32.const 3
     i32.and
-    local.get $4
     i32.or
     i32.store
     local.get $1
@@ -2144,7 +2204,14 @@
   local.get $0
   local.get $1
   local.get $1
-  call $~lib/util/hash/HASH<i8>
+  i32.const 24
+  i32.shl
+  i32.const 24
+  i32.shr_s
+  i32.const -2128831035
+  i32.xor
+  i32.const 16777619
+  i32.mul
   call $~lib/set/Set<i8>#find
   local.tee $1
   i32.eqz
@@ -2221,7 +2288,14 @@
     local.get $0
     local.get $2
     local.get $2
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     call $~lib/set/Set<i8>#find
     if
      i32.const 0
@@ -2234,11 +2308,26 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<i8>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
     local.get $2
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     call $~lib/set/Set<i8>#find
     i32.eqz
     if
@@ -2282,7 +2371,14 @@
     local.get $0
     local.get $2
     local.get $2
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     call $~lib/set/Set<i8>#find
     i32.eqz
     if
@@ -2296,11 +2392,26 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<i8>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
     local.get $2
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     call $~lib/set/Set<i8>#find
     i32.eqz
     if
@@ -2330,6 +2441,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  local.set $3
   local.get $0
   i32.load offset=8
   local.set $5
@@ -2386,7 +2499,14 @@
     local.get $1
     call $~lib/array/Array<i8>#__get
     local.tee $4
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     local.set $5
     local.get $0
     local.get $4
@@ -2406,7 +2526,15 @@
     local.get $1
     call $~lib/array/Array<i8>#__get
     call $~lib/set/Set<i8>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -2441,7 +2569,14 @@
     local.get $0
     local.get $1
     local.get $1
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     call $~lib/set/Set<i8>#find
     i32.eqz
     if
@@ -2458,7 +2593,14 @@
     local.get $0
     local.get $1
     local.get $1
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     call $~lib/set/Set<i8>#find
     if
      i32.const 0
@@ -2501,7 +2643,14 @@
     local.get $0
     local.get $1
     local.get $1
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     call $~lib/set/Set<i8>#find
     if
      i32.const 0
@@ -2514,11 +2663,26 @@
     local.get $0
     local.get $1
     call $~lib/set/Set<i8>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $1
     local.get $1
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     call $~lib/set/Set<i8>#find
     i32.eqz
     if
@@ -2535,7 +2699,14 @@
     local.get $0
     local.get $1
     local.get $1
-    call $~lib/util/hash/HASH<i8>
+    i32.const 24
+    i32.shl
+    i32.const 24
+    i32.shr_s
+    i32.const -2128831035
+    i32.xor
+    i32.const 16777619
+    i32.mul
     call $~lib/set/Set<i8>#find
     if
      i32.const 0
@@ -2577,11 +2748,32 @@
    unreachable
   end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $3
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $3
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<u8>#constructor (result i32)
   (local $0 i32)
@@ -2708,7 +2900,14 @@
    call $~lib/rt/pure/__retain
    local.set $3
    local.get $7
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $7
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $3
@@ -2727,7 +2926,14 @@
    call $~lib/rt/pure/__retain
    local.set $1
    local.get $3
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $3
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $1
@@ -2740,9 +2946,23 @@
   i32.load offset=20
   i32.store offset=16
   local.get $4
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<u8>#add (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -2890,7 +3110,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $4
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $4
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -3028,7 +3255,15 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<u8>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
     local.get $2
@@ -3098,7 +3333,15 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<u8>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
     local.get $2
@@ -3137,6 +3380,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  local.set $3
   local.get $0
   i32.load offset=8
   local.set $5
@@ -3218,7 +3463,15 @@
     local.get $1
     call $~lib/array/Array<u8>#__get
     call $~lib/set/Set<u8>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -3337,7 +3590,15 @@
     local.get $0
     local.get $1
     call $~lib/set/Set<u8>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $1
     local.get $1
@@ -3410,11 +3671,32 @@
    unreachable
   end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $3
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $3
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<i16>#constructor (result i32)
   (local $0 i32)
@@ -3609,7 +3891,14 @@
    call $~lib/rt/pure/__retain
    local.set $3
    local.get $8
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $8
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $3
@@ -3618,7 +3907,8 @@
   local.get $1
   i32.store offset=4
   local.get $2
-  local.tee $1
+  local.set $1
+  local.get $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -3628,7 +3918,14 @@
    call $~lib/rt/pure/__retain
    local.set $1
    local.get $3
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $3
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $1
@@ -3641,9 +3938,23 @@
   i32.load offset=20
   i32.store offset=16
   local.get $4
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<i16>#add (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -3794,7 +4105,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $5
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $5
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -3956,7 +4274,7 @@
   call $~lib/set/Set<i16>#constructor
   local.set $0
   loop $for-loop|1
-   local.get $2
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -3965,7 +4283,7 @@
    i32.lt_s
    if
     local.get $0
-    local.get $2
+    local.get $1
     call $~lib/set/Set<i16>#has
     if
      i32.const 0
@@ -3976,11 +4294,19 @@
      unreachable
     end
     local.get $0
-    local.get $2
+    local.get $1
     call $~lib/set/Set<i16>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
-    local.get $2
+    local.get $1
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -3991,10 +4317,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     br $for-loop|1
    end
   end
@@ -4011,9 +4337,9 @@
    unreachable
   end
   i32.const 50
-  local.set $2
+  local.set $1
   loop $for-loop|3
-   local.get $2
+   local.get $1
    i32.const 16
    i32.shl
    i32.const 16
@@ -4022,7 +4348,7 @@
    i32.lt_s
    if
     local.get $0
-    local.get $2
+    local.get $1
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -4034,11 +4360,19 @@
      unreachable
     end
     local.get $0
-    local.get $2
+    local.get $1
     call $~lib/set/Set<i16>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
-    local.get $2
+    local.get $1
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -4049,10 +4383,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
+    local.get $1
     i32.const 1
     i32.add
-    local.set $2
+    local.set $1
     br $for-loop|3
    end
   end
@@ -4068,6 +4402,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  local.set $3
   local.get $0
   i32.load offset=8
   local.set $5
@@ -4075,7 +4411,7 @@
   i32.load offset=16
   local.tee $6
   call $~lib/array/Array<i16>#constructor
-  local.set $2
+  local.set $1
   loop $for-loop|0
    local.get $4
    local.get $6
@@ -4092,7 +4428,7 @@
     i32.and
     i32.eqz
     if
-     local.get $2
+     local.get $1
      local.get $3
      local.get $7
      i32.load16_s
@@ -4109,20 +4445,20 @@
     br $for-loop|0
    end
   end
-  local.get $2
+  local.get $1
   local.get $3
   call $~lib/array/Array<i16>#set:length
   call $~lib/set/Set<i16>#constructor
   local.set $3
   loop $for-loop|4
-   local.get $1
    local.get $2
+   local.get $1
    i32.load offset=12
    i32.lt_s
    if
     local.get $0
-    local.get $2
     local.get $1
+    local.get $2
     call $~lib/array/Array<i16>#__get
     call $~lib/set/Set<i16>#has
     i32.eqz
@@ -4135,15 +4471,23 @@
      unreachable
     end
     local.get $3
-    local.get $2
     local.get $1
+    local.get $2
     call $~lib/array/Array<i16>#__get
     call $~lib/set/Set<i16>#add
-    call $~lib/rt/pure/__release
-    local.get $1
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $for-loop|4
    end
   end
@@ -4161,9 +4505,9 @@
    unreachable
   end
   i32.const 0
-  local.set $1
+  local.set $2
   loop $for-loop|6
-   local.get $1
+   local.get $2
    i32.const 16
    i32.shl
    i32.const 16
@@ -4172,7 +4516,7 @@
    i32.lt_s
    if
     local.get $0
-    local.get $1
+    local.get $2
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -4184,10 +4528,10 @@
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $2
     call $~lib/set/Set<i16>#delete
     local.get $0
-    local.get $1
+    local.get $2
     call $~lib/set/Set<i16>#has
     if
      i32.const 0
@@ -4197,10 +4541,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $for-loop|6
    end
   end
@@ -4217,9 +4561,9 @@
    unreachable
   end
   i32.const 0
-  local.set $1
+  local.set $2
   loop $for-loop|8
-   local.get $1
+   local.get $2
    i32.const 16
    i32.shl
    i32.const 16
@@ -4228,7 +4572,7 @@
    i32.lt_s
    if
     local.get $0
-    local.get $1
+    local.get $2
     call $~lib/set/Set<i16>#has
     if
      i32.const 0
@@ -4239,11 +4583,19 @@
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $2
     call $~lib/set/Set<i16>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
-    local.get $1
+    local.get $2
     call $~lib/set/Set<i16>#has
     i32.eqz
     if
@@ -4255,10 +4607,10 @@
      unreachable
     end
     local.get $0
-    local.get $1
+    local.get $2
     call $~lib/set/Set<i16>#delete
     local.get $0
-    local.get $1
+    local.get $2
     call $~lib/set/Set<i16>#has
     if
      i32.const 0
@@ -4268,10 +4620,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $for-loop|8
    end
   end
@@ -4299,12 +4651,33 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $2
-  call $~lib/rt/pure/__release
+  local.get $1
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $3
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $3
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<u16>#constructor (result i32)
   (local $0 i32)
@@ -4336,17 +4709,6 @@
   local.get $0
   call $~lib/set/Set<i8>#clear
   local.get $0
- )
- (func $~lib/set/Set<u16>#has (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
-  local.get $1
-  local.get $1
-  i32.const 65535
-  i32.and
-  call $~lib/util/hash/hash16
-  call $~lib/set/Set<i16>#find
-  i32.const 0
-  i32.ne
  )
  (func $~lib/set/Set<u16>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -4439,7 +4801,14 @@
    call $~lib/rt/pure/__retain
    local.set $3
    local.get $8
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $8
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $3
@@ -4448,7 +4817,8 @@
   local.get $1
   i32.store offset=4
   local.get $2
-  local.tee $1
+  local.set $1
+  local.get $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -4458,7 +4828,14 @@
    call $~lib/rt/pure/__retain
    local.set $1
    local.get $3
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $3
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $1
@@ -4471,9 +4848,23 @@
   i32.load offset=20
   i32.store offset=16
   local.get $4
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<u16>#add (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -4622,7 +5013,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $5
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $5
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -4740,7 +5138,11 @@
    if
     local.get $0
     local.get $2
-    call $~lib/set/Set<u16>#has
+    local.get $2
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     if
      i32.const 0
      i32.const 1312
@@ -4752,10 +5154,22 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<u16>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
-    call $~lib/set/Set<u16>#has
+    local.get $2
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     i32.eqz
     if
      i32.const 0
@@ -4795,7 +5209,11 @@
    if
     local.get $0
     local.get $2
-    call $~lib/set/Set<u16>#has
+    local.get $2
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     i32.eqz
     if
      i32.const 0
@@ -4808,10 +5226,22 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<u16>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
-    call $~lib/set/Set<u16>#has
+    local.get $2
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     i32.eqz
     if
      i32.const 0
@@ -4840,6 +5270,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  local.set $3
   local.get $0
   i32.load offset=8
   local.set $5
@@ -4896,7 +5328,12 @@
     local.get $2
     local.get $1
     call $~lib/array/Array<u16>#__get
-    call $~lib/set/Set<u16>#has
+    local.tee $4
+    local.get $4
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     i32.eqz
     if
      i32.const 0
@@ -4911,7 +5348,15 @@
     local.get $1
     call $~lib/array/Array<u16>#__get
     call $~lib/set/Set<u16>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -4943,7 +5388,11 @@
    if
     local.get $0
     local.get $1
-    call $~lib/set/Set<u16>#has
+    local.get $1
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     i32.eqz
     if
      i32.const 0
@@ -4958,7 +5407,11 @@
     call $~lib/set/Set<u16>#delete
     local.get $0
     local.get $1
-    call $~lib/set/Set<u16>#has
+    local.get $1
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     if
      i32.const 0
      i32.const 1312
@@ -4997,7 +5450,11 @@
    if
     local.get $0
     local.get $1
-    call $~lib/set/Set<u16>#has
+    local.get $1
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     if
      i32.const 0
      i32.const 1312
@@ -5009,10 +5466,22 @@
     local.get $0
     local.get $1
     call $~lib/set/Set<u16>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $1
-    call $~lib/set/Set<u16>#has
+    local.get $1
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     i32.eqz
     if
      i32.const 0
@@ -5027,7 +5496,11 @@
     call $~lib/set/Set<u16>#delete
     local.get $0
     local.get $1
-    call $~lib/set/Set<u16>#has
+    local.get $1
+    i32.const 65535
+    i32.and
+    call $~lib/util/hash/hash16
+    call $~lib/set/Set<i16>#find
     if
      i32.const 0
      i32.const 1312
@@ -5068,11 +5541,32 @@
    unreachable
   end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $3
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $3
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<i32>#constructor (result i32)
   (local $0 i32)
@@ -5192,46 +5686,46 @@
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $3
+  local.set $4
   local.get $2
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $8
+  local.tee $7
   i32.const 3
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $2
   local.get $0
   i32.load offset=8
-  local.tee $5
+  local.tee $8
   local.get $0
   i32.load offset=16
   i32.const 3
   i32.shl
   i32.add
-  local.set $7
+  local.set $6
   local.get $2
-  local.set $4
+  local.set $3
   loop $while-continue|0
-   local.get $5
-   local.get $7
+   local.get $6
+   local.get $8
    i32.ne
    if
-    local.get $5
+    local.get $8
     i32.load offset=4
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $4
-     local.get $5
+     local.get $3
+     local.get $8
      i32.load
      i32.store
-     local.get $4
      local.get $3
-     local.get $5
+     local.get $4
+     local.get $8
      i32.load
      call $~lib/util/hash/hash32
      local.get $1
@@ -5239,70 +5733,99 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $6
+     local.tee $5
      i32.load
      i32.store offset=4
-     local.get $6
-     local.get $4
+     local.get $5
+     local.get $3
      i32.store
-     local.get $4
+     local.get $3
      i32.const 8
      i32.add
-     local.set $4
+     local.set $3
     end
-    local.get $5
+    local.get $8
     i32.const 8
     i32.add
-    local.set $5
+    local.set $8
     br $while-continue|0
    end
   end
-  local.get $3
-  local.tee $5
+  local.get $4
+  local.tee $3
   local.get $0
   i32.load
-  local.tee $4
+  local.tee $8
   i32.ne
   if
-   local.get $5
+   local.get $3
    call $~lib/rt/pure/__retain
-   local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
+   local.set $3
+   local.get $8
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $8
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
-  local.get $5
+  local.get $3
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.tee $1
+  local.set $1
+  local.get $2
   local.get $0
   i32.load offset=8
-  local.tee $5
+  local.tee $3
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    local.set $1
-   local.get $5
-   call $~lib/rt/pure/__release
+   local.get $3
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $3
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $1
   i32.store offset=8
   local.get $0
-  local.get $8
+  local.get $7
   i32.store offset=12
   local.get $0
   local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $3
-  call $~lib/rt/pure/__release
+  local.get $4
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<i32>#add (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -5447,7 +5970,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $5
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $5
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -5536,7 +6066,6 @@
  )
  (func $~lib/set/Set<i32>#delete (param $0 i32) (param $1 i32)
   (local $2 i32)
-  (local $3 i32)
   local.get $0
   local.get $1
   local.get $1
@@ -5559,22 +6088,20 @@
   i32.const 1
   i32.sub
   i32.store offset=20
-  i32.const 4
-  local.get $0
-  i32.load offset=20
-  local.tee $1
-  i32.gt_u
-  local.set $2
   local.get $0
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.tee $3
+  local.tee $2
   i32.const 1
   i32.add
   i32.const 4
+  local.get $0
+  i32.load offset=20
+  local.tee $1
+  i32.const 4
   local.get $1
-  local.get $2
+  i32.gt_u
   select
   i32.ge_u
   if (result i32)
@@ -5592,7 +6119,7 @@
   end
   if
    local.get $0
-   local.get $3
+   local.get $2
    call $~lib/set/Set<i32>#rehash
   end
  )
@@ -5628,7 +6155,15 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<i32>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
     local.get $2
@@ -5686,7 +6221,15 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<i32>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
     local.get $2
@@ -5720,6 +6263,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  local.set $3
   local.get $0
   i32.load offset=8
   local.set $5
@@ -5794,7 +6339,15 @@
     local.get $1
     call $~lib/array/Array<i32>#__get
     call $~lib/set/Set<i32>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -5894,7 +6447,15 @@
     local.get $0
     local.get $1
     call $~lib/set/Set<i32>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $1
     local.get $1
@@ -5957,11 +6518,32 @@
    unreachable
   end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $3
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $3
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<u32>#constructor (result i32)
   (local $0 i32)
@@ -6054,7 +6636,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $5
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $5
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -6102,7 +6691,15 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<i32>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
     local.get $2
@@ -6160,7 +6757,15 @@
     local.get $0
     local.get $2
     call $~lib/set/Set<i32>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $2
     local.get $2
@@ -6194,6 +6799,8 @@
    call $~lib/builtins/abort
    unreachable
   end
+  i32.const 0
+  local.set $3
   local.get $0
   i32.load offset=8
   local.set $5
@@ -6268,7 +6875,15 @@
     local.get $1
     call $~lib/array/Array<i32>#__get
     call $~lib/set/Set<i32>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     i32.const 1
     i32.add
@@ -6368,7 +6983,15 @@
     local.get $0
     local.get $1
     call $~lib/set/Set<i32>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $0
     local.get $1
     local.get $1
@@ -6431,20 +7054,50 @@
    unreachable
   end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $3
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $3
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<i64>#clear (param $0 i32)
   (local $1 i32)
+  (local $2 i32)
   i32.const 16
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $1
   local.get $0
   i32.load
-  call $~lib/rt/pure/__release
+  local.tee $2
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
   local.get $1
   i32.store
@@ -6456,7 +7109,15 @@
   local.set $1
   local.get $0
   i32.load offset=8
-  call $~lib/rt/pure/__release
+  local.tee $2
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $0
   local.get $1
   i32.store offset=8
@@ -6623,46 +7284,46 @@
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $3
+  local.set $4
   local.get $2
   i32.const 3
   i32.shl
   i32.const 3
   i32.div_s
-  local.tee $8
+  local.tee $7
   i32.const 4
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
   local.set $2
   local.get $0
   i32.load offset=8
-  local.tee $5
+  local.tee $8
   local.get $0
   i32.load offset=16
   i32.const 4
   i32.shl
   i32.add
-  local.set $7
+  local.set $6
   local.get $2
-  local.set $4
+  local.set $3
   loop $while-continue|0
-   local.get $5
-   local.get $7
+   local.get $6
+   local.get $8
    i32.ne
    if
-    local.get $5
+    local.get $8
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $4
-     local.get $5
+     local.get $3
+     local.get $8
      i64.load
      i64.store
-     local.get $4
      local.get $3
-     local.get $5
+     local.get $4
+     local.get $8
      i64.load
      call $~lib/util/hash/hash64
      local.get $1
@@ -6670,82 +7331,109 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $6
+     local.tee $5
      i32.load
      i32.store offset=8
-     local.get $6
-     local.get $4
+     local.get $5
+     local.get $3
      i32.store
-     local.get $4
+     local.get $3
      i32.const 16
      i32.add
-     local.set $4
+     local.set $3
     end
-    local.get $5
+    local.get $8
     i32.const 16
     i32.add
-    local.set $5
+    local.set $8
     br $while-continue|0
    end
   end
-  local.get $3
-  local.tee $5
+  local.get $4
+  local.tee $3
   local.get $0
   i32.load
-  local.tee $4
+  local.tee $8
   i32.ne
   if
-   local.get $5
+   local.get $3
    call $~lib/rt/pure/__retain
-   local.set $5
-   local.get $4
-   call $~lib/rt/pure/__release
+   local.set $3
+   local.get $8
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $8
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
-  local.get $5
+  local.get $3
   i32.store
   local.get $0
   local.get $1
   i32.store offset=4
   local.get $2
-  local.tee $1
+  local.set $1
+  local.get $2
   local.get $0
   i32.load offset=8
-  local.tee $5
+  local.tee $3
   i32.ne
   if
    local.get $1
    call $~lib/rt/pure/__retain
    local.set $1
-   local.get $5
-   call $~lib/rt/pure/__release
+   local.get $3
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $3
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $1
   i32.store offset=8
   local.get $0
-  local.get $8
+  local.get $7
   i32.store offset=12
   local.get $0
   local.get $0
   i32.load offset=20
   i32.store offset=16
-  local.get $3
-  call $~lib/rt/pure/__release
+  local.get $4
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<i64>#add (param $0 i32) (param $1 i64) (result i32)
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
-  local.get $1
-  call $~lib/util/hash/hash64
-  local.tee $2
-  local.set $3
   local.get $0
   local.get $1
-  local.get $2
+  local.get $1
+  call $~lib/util/hash/hash64
+  local.tee $3
   call $~lib/set/Set<i64>#find
   i32.eqz
   if
@@ -6880,7 +7568,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $5
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $5
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -6970,7 +7665,6 @@
  (func $~lib/set/Set<i64>#delete (param $0 i32) (param $1 i64)
   (local $2 i32)
   (local $3 i32)
-  (local $4 i32)
   local.get $0
   local.get $1
   local.get $1
@@ -6993,22 +7687,20 @@
   i32.const 1
   i32.sub
   i32.store offset=20
-  i32.const 4
-  local.get $0
-  i32.load offset=20
-  local.tee $2
-  i32.gt_u
-  local.set $3
   local.get $0
   i32.load offset=4
   i32.const 1
   i32.shr_u
-  local.tee $4
+  local.tee $3
   i32.const 1
   i32.add
   i32.const 4
+  local.get $0
+  i32.load offset=20
+  local.tee $2
+  i32.const 4
   local.get $2
-  local.get $3
+  i32.gt_u
   select
   i32.ge_u
   if (result i32)
@@ -7026,7 +7718,7 @@
   end
   if
    local.get $0
-   local.get $4
+   local.get $3
    call $~lib/set/Set<i64>#rehash
   end
  )
@@ -7063,7 +7755,15 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#add
-    call $~lib/rt/pure/__release
+    local.tee $2
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $2
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
     local.get $0
@@ -7121,7 +7821,15 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#add
-    call $~lib/rt/pure/__release
+    local.tee $2
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $2
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
     local.get $0
@@ -7162,7 +7870,7 @@
   i32.load offset=16
   local.tee $7
   call $~lib/array/Array<i64>#constructor
-  local.set $3
+  local.set $2
   loop $for-loop|00
    local.get $4
    local.get $7
@@ -7179,15 +7887,15 @@
     i32.and
     i32.eqz
     if
-     local.get $3
      local.get $2
+     local.get $3
      local.get $8
      i64.load
      call $~lib/array/Array<i64>#__set
-     local.get $2
+     local.get $3
      i32.const 1
      i32.add
-     local.set $2
+     local.set $3
     end
     local.get $4
     i32.const 1
@@ -7196,19 +7904,19 @@
     br $for-loop|00
    end
   end
-  local.get $3
   local.get $2
+  local.get $3
   call $~lib/array/Array<i64>#set:length
   call $~lib/set/Set<i64>#constructor
-  local.set $2
+  local.set $3
   loop $for-loop|2
    local.get $5
-   local.get $3
+   local.get $2
    i32.load offset=12
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     local.get $5
     call $~lib/array/Array<i64>#__get
     local.tee $0
@@ -7224,12 +7932,20 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
     local.get $3
+    local.get $2
     local.get $5
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $5
     i32.const 1
     i32.add
@@ -7237,7 +7953,7 @@
     br $for-loop|2
    end
   end
-  local.get $2
+  local.get $3
   i32.load offset=20
   local.get $1
   i32.load offset=20
@@ -7329,7 +8045,15 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
     local.get $0
@@ -7391,12 +8115,33 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
-  call $~lib/rt/pure/__release
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+  local.get $3
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $3
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $1
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<u64>#constructor (result i32)
   (local $0 i32)
@@ -7489,7 +8234,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $5
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $5
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -7538,7 +8290,15 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#add
-    call $~lib/rt/pure/__release
+    local.tee $2
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $2
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
     local.get $0
@@ -7596,7 +8356,15 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#add
-    call $~lib/rt/pure/__release
+    local.tee $2
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $2
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
     local.get $0
@@ -7637,7 +8405,7 @@
   i32.load offset=16
   local.tee $7
   call $~lib/array/Array<u64>#constructor
-  local.set $3
+  local.set $2
   loop $for-loop|00
    local.get $4
    local.get $7
@@ -7654,15 +8422,15 @@
     i32.and
     i32.eqz
     if
-     local.get $3
      local.get $2
+     local.get $3
      local.get $8
      i64.load
      call $~lib/array/Array<i64>#__set
-     local.get $2
+     local.get $3
      i32.const 1
      i32.add
-     local.set $2
+     local.set $3
     end
     local.get $4
     i32.const 1
@@ -7671,19 +8439,19 @@
     br $for-loop|00
    end
   end
-  local.get $3
   local.get $2
+  local.get $3
   call $~lib/array/Array<i64>#set:length
   call $~lib/set/Set<u64>#constructor
-  local.set $2
+  local.set $3
   loop $for-loop|2
    local.get $5
-   local.get $3
+   local.get $2
    i32.load offset=12
    i32.lt_s
    if
     local.get $1
-    local.get $3
+    local.get $2
     local.get $5
     call $~lib/array/Array<i64>#__get
     local.tee $0
@@ -7699,12 +8467,20 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
     local.get $3
+    local.get $2
     local.get $5
     call $~lib/array/Array<i64>#__get
     call $~lib/set/Set<i64>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $5
     i32.const 1
     i32.add
@@ -7712,7 +8488,7 @@
     br $for-loop|2
    end
   end
-  local.get $2
+  local.get $3
   i32.load offset=20
   local.get $1
   i32.load offset=20
@@ -7804,7 +8580,15 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<i64>#add
-    call $~lib/rt/pure/__release
+    local.tee $4
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $4
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
     local.get $0
@@ -7866,12 +8650,33 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $3
-  call $~lib/rt/pure/__release
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+  local.get $3
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $3
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $1
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<f32>#constructor (result i32)
   (local $0 i32)
@@ -7944,16 +8749,6 @@
    end
   end
   i32.const 0
- )
- (func $~lib/set/Set<f32>#has (param $0 i32) (param $1 f32) (result i32)
-  local.get $0
-  local.get $1
-  local.get $1
-  i32.reinterpret_f32
-  call $~lib/util/hash/hash32
-  call $~lib/set/Set<f32>#find
-  i32.const 0
-  i32.ne
  )
  (func $~lib/set/Set<f32>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -8047,7 +8842,14 @@
    call $~lib/rt/pure/__retain
    local.set $3
    local.get $8
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $8
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $3
@@ -8056,7 +8858,8 @@
   local.get $1
   i32.store offset=4
   local.get $2
-  local.tee $1
+  local.set $1
+  local.get $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -8066,7 +8869,14 @@
    call $~lib/rt/pure/__retain
    local.set $1
    local.get $3
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $3
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $1
@@ -8079,9 +8889,23 @@
   i32.load offset=20
   i32.store offset=16
   local.get $4
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<f32>#add (param $0 i32) (param $1 f32) (result i32)
   (local $2 i32)
@@ -8229,7 +9053,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $5
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $5
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -8419,6 +9250,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   call $~lib/set/Set<f32>#constructor
   local.set $1
   loop $for-loop|0
@@ -8428,7 +9260,10 @@
    if
     local.get $1
     local.get $0
-    call $~lib/set/Set<f32>#has
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     if
      i32.const 0
      i32.const 1312
@@ -8440,10 +9275,21 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f32>#add
-    call $~lib/rt/pure/__release
+    local.tee $2
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $2
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
-    call $~lib/set/Set<f32>#has
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     i32.eqz
     if
      i32.const 0
@@ -8481,7 +9327,10 @@
    if
     local.get $1
     local.get $0
-    call $~lib/set/Set<f32>#has
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     i32.eqz
     if
      i32.const 0
@@ -8494,10 +9343,21 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f32>#add
-    call $~lib/rt/pure/__release
+    local.tee $2
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $2
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
-    call $~lib/set/Set<f32>#has
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     i32.eqz
     if
      i32.const 0
@@ -8541,7 +9401,11 @@
     local.get $2
     local.get $3
     call $~lib/array/Array<f32>#__get
-    call $~lib/set/Set<f32>#has
+    local.tee $0
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     i32.eqz
     if
      i32.const 0
@@ -8556,7 +9420,15 @@
     local.get $3
     call $~lib/array/Array<f32>#__get
     call $~lib/set/Set<f32>#add
-    call $~lib/rt/pure/__release
+    local.tee $5
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $5
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $3
     i32.const 1
     i32.add
@@ -8586,7 +9458,10 @@
    if
     local.get $1
     local.get $0
-    call $~lib/set/Set<f32>#has
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     i32.eqz
     if
      i32.const 0
@@ -8601,7 +9476,10 @@
     call $~lib/set/Set<f32>#delete
     local.get $1
     local.get $0
-    call $~lib/set/Set<f32>#has
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     if
      i32.const 0
      i32.const 1312
@@ -8638,7 +9516,10 @@
    if
     local.get $1
     local.get $0
-    call $~lib/set/Set<f32>#has
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     if
      i32.const 0
      i32.const 1312
@@ -8650,10 +9531,21 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f32>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
-    call $~lib/set/Set<f32>#has
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     i32.eqz
     if
      i32.const 0
@@ -8668,7 +9560,10 @@
     call $~lib/set/Set<f32>#delete
     local.get $1
     local.get $0
-    call $~lib/set/Set<f32>#has
+    local.get $0
+    i32.reinterpret_f32
+    call $~lib/util/hash/hash32
+    call $~lib/set/Set<f32>#find
     if
      i32.const 0
      i32.const 1312
@@ -8709,11 +9604,32 @@
    unreachable
   end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $4
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $1
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<f64>#constructor (result i32)
   (local $0 i32)
@@ -8786,16 +9702,6 @@
    end
   end
   i32.const 0
- )
- (func $~lib/set/Set<f64>#has (param $0 i32) (param $1 f64) (result i32)
-  local.get $0
-  local.get $1
-  local.get $1
-  i64.reinterpret_f64
-  call $~lib/util/hash/hash64
-  call $~lib/set/Set<f64>#find
-  i32.const 0
-  i32.ne
  )
  (func $~lib/set/Set<f64>#rehash (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -8889,7 +9795,14 @@
    call $~lib/rt/pure/__retain
    local.set $3
    local.get $8
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $8
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $3
@@ -8898,7 +9811,8 @@
   local.get $1
   i32.store offset=4
   local.get $2
-  local.tee $1
+  local.set $1
+  local.get $2
   local.get $0
   i32.load offset=8
   local.tee $3
@@ -8908,7 +9822,14 @@
    call $~lib/rt/pure/__retain
    local.set $1
    local.get $3
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $3
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $0
   local.get $1
@@ -8921,9 +9842,23 @@
   i32.load offset=20
   i32.store offset=16
   local.get $4
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~lib/set/Set<f64>#add (param $0 i32) (param $1 f64) (result i32)
   (local $2 i32)
@@ -9071,7 +10006,14 @@
    call $~lib/rt/pure/__retain
    local.set $2
    local.get $5
-   call $~lib/rt/pure/__release
+   i32.const 1444
+   i32.gt_u
+   if
+    local.get $5
+    i32.const 16
+    i32.sub
+    call $~lib/rt/pure/decrement
+   end
   end
   local.get $3
   local.get $2
@@ -9261,6 +10203,7 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
   call $~lib/set/Set<f64>#constructor
   local.set $1
   loop $for-loop|0
@@ -9270,7 +10213,10 @@
    if
     local.get $1
     local.get $0
-    call $~lib/set/Set<f64>#has
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     if
      i32.const 0
      i32.const 1312
@@ -9282,10 +10228,21 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f64>#add
-    call $~lib/rt/pure/__release
+    local.tee $2
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $2
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
-    call $~lib/set/Set<f64>#has
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     i32.eqz
     if
      i32.const 0
@@ -9323,7 +10280,10 @@
    if
     local.get $1
     local.get $0
-    call $~lib/set/Set<f64>#has
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     i32.eqz
     if
      i32.const 0
@@ -9336,10 +10296,21 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f64>#add
-    call $~lib/rt/pure/__release
+    local.tee $2
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $2
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
-    call $~lib/set/Set<f64>#has
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     i32.eqz
     if
      i32.const 0
@@ -9383,7 +10354,11 @@
     local.get $2
     local.get $3
     call $~lib/array/Array<f64>#__get
-    call $~lib/set/Set<f64>#has
+    local.tee $0
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     i32.eqz
     if
      i32.const 0
@@ -9398,7 +10373,15 @@
     local.get $3
     call $~lib/array/Array<f64>#__get
     call $~lib/set/Set<f64>#add
-    call $~lib/rt/pure/__release
+    local.tee $5
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $5
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $3
     i32.const 1
     i32.add
@@ -9428,7 +10411,10 @@
    if
     local.get $1
     local.get $0
-    call $~lib/set/Set<f64>#has
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     i32.eqz
     if
      i32.const 0
@@ -9443,7 +10429,10 @@
     call $~lib/set/Set<f64>#delete
     local.get $1
     local.get $0
-    call $~lib/set/Set<f64>#has
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     if
      i32.const 0
      i32.const 1312
@@ -9480,7 +10469,10 @@
    if
     local.get $1
     local.get $0
-    call $~lib/set/Set<f64>#has
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     if
      i32.const 0
      i32.const 1312
@@ -9492,10 +10484,21 @@
     local.get $1
     local.get $0
     call $~lib/set/Set<f64>#add
-    call $~lib/rt/pure/__release
+    local.tee $3
+    i32.const 1444
+    i32.gt_u
+    if
+     local.get $3
+     i32.const 16
+     i32.sub
+     call $~lib/rt/pure/decrement
+    end
     local.get $1
     local.get $0
-    call $~lib/set/Set<f64>#has
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     i32.eqz
     if
      i32.const 0
@@ -9510,7 +10513,10 @@
     call $~lib/set/Set<f64>#delete
     local.get $1
     local.get $0
-    call $~lib/set/Set<f64>#has
+    local.get $0
+    i64.reinterpret_f64
+    call $~lib/util/hash/hash64
+    call $~lib/set/Set<f64>#find
     if
      i32.const 0
      i32.const 1312
@@ -9551,11 +10557,32 @@
    unreachable
   end
   local.get $2
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $2
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $4
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $4
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
   local.get $1
-  call $~lib/rt/pure/__release
+  i32.const 1444
+  i32.gt_u
+  if
+   local.get $1
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
  )
  (func $~start
   call $std/set/testNumeric<i8>

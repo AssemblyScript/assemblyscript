@@ -1457,7 +1457,7 @@ export class Module {
       binaryen._BinaryenSetAlwaysInlineMaxSize(
         optimizeLevel == 0 && shrinkLevel >= 0
           ? 2
-          : 7
+          : 9
       );
       binaryen._BinaryenSetFlexibleInlineMaxSize(65);
       binaryen._BinaryenSetOneCallerInlineMaxSize(80);

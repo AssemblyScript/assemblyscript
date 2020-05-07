@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -59,26 +59,6 @@
    return
   end
   i32.const 0
- )
- (func $switch/doSwitchBreakCase (param $0 i32) (result i32)
-  local.get $0
-  i32.const 1
-  i32.ne
-  if
-   i32.const 2
-   return
-  end
-  i32.const 1
- )
- (func $switch/doSwitchBreakDefault (param $0 i32) (result i32)
-  local.get $0
-  i32.const 1
-  i32.eq
-  if
-   i32.const 1
-   return
-  end
-  i32.const 2
  )
  (func $start:switch
   i32.const 0
@@ -245,150 +225,6 @@
    i32.const 0
    i32.const 1040
    i32.const 42
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $switch/doSwitchBreakCase
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 51
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  call $switch/doSwitchBreakCase
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 52
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  call $switch/doSwitchBreakCase
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 53
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $switch/doSwitchBreakDefault
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 62
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  call $switch/doSwitchBreakDefault
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 63
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  call $switch/doSwitchBreakDefault
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 64
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $switch/doSwitchBreakCase
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 73
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  call $switch/doSwitchBreakCase
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 74
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  call $switch/doSwitchBreakCase
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 75
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 0
-  call $switch/doSwitchBreakDefault
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 84
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 1
-  call $switch/doSwitchBreakDefault
-  i32.const 1
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 85
-   i32.const 1
-   call $~lib/builtins/abort
-   unreachable
-  end
-  i32.const 2
-  call $switch/doSwitchBreakDefault
-  i32.const 2
-  i32.ne
-  if
-   i32.const 0
-   i32.const 1040
-   i32.const 86
    i32.const 1
    call $~lib/builtins/abort
    unreachable

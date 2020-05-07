@@ -851,7 +851,7 @@
   i32.const 2
   i32.shl
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $7
+  local.set $5
   local.get $3
   i32.const 3
   i32.shl
@@ -861,40 +861,40 @@
   i32.const 12
   i32.mul
   call $~lib/arraybuffer/ArrayBuffer#constructor
-  local.set $2
+  local.set $3
   local.get $0
   i32.load offset=8
-  local.tee $8
+  local.tee $4
   local.get $0
   i32.load offset=16
   i32.const 12
   i32.mul
   i32.add
-  local.set $5
-  local.get $2
-  local.set $3
+  local.set $7
+  local.get $3
+  local.set $2
   loop $while-continue|0
-   local.get $5
-   local.get $8
+   local.get $4
+   local.get $7
    i32.ne
    if
-    local.get $8
+    local.get $4
     i32.load offset=8
     i32.const 1
     i32.and
     i32.eqz
     if
-     local.get $3
-     local.get $8
+     local.get $2
+     local.get $4
      i32.load
      i32.store
-     local.get $3
-     local.get $8
+     local.get $2
+     local.get $4
      i32.load offset=4
      i32.store offset=4
-     local.get $3
-     local.get $7
-     local.get $8
+     local.get $2
+     local.get $5
+     local.get $4
      i32.load
      call $~lib/util/hash/hash32
      local.get $1
@@ -902,21 +902,21 @@
      i32.const 2
      i32.shl
      i32.add
-     local.tee $4
+     local.tee $8
      i32.load
      i32.store offset=8
-     local.get $4
-     local.get $3
+     local.get $8
+     local.get $2
      i32.store
-     local.get $3
+     local.get $2
      i32.const 12
      i32.add
-     local.set $3
+     local.set $2
     end
-    local.get $8
+    local.get $4
     i32.const 12
     i32.add
-    local.set $8
+    local.set $4
     br $while-continue|0
    end
   end
@@ -924,7 +924,7 @@
   i32.load
   drop
   local.get $0
-  local.get $7
+  local.get $5
   i32.store
   local.get $0
   local.get $1
@@ -933,7 +933,7 @@
   i32.load offset=8
   drop
   local.get $0
-  local.get $2
+  local.get $3
   i32.store offset=8
   local.get $0
   local.get $6
@@ -1415,15 +1415,8 @@
               if
                local.get $0
                i32.const 2
-               i32.eq
-               br_if $case1|0
-               block $tablify|0
-                local.get $0
-                i32.const 3
-                i32.sub
-                br_table $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $tablify|0
-               end
-               br $case11|0
+               i32.sub
+               br_table $case1|0 $case2|0 $case3|0 $case4|0 $case5|0 $case6|0 $case7|0 $case8|0 $case9|0 $case10|0 $case11|0
               end
               i32.const 1360
               br $break|0
