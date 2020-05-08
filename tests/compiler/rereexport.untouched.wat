@@ -11,6 +11,8 @@
  (export "renamed_a" (global $export/a))
  (export "renamed_b" (global $export/b))
  (export "renamed_renamed_b" (global $export/b))
+ (export "default" (func $export-default/theDefault))
+ (export "renamed_default" (func $export-default/theDefault))
  (start $~start)
  (func $export/add (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -34,6 +36,9 @@
  )
  (func $start:rereexport
   call $start:reexport
+ )
+ (func $export-default/theDefault
+  nop
  )
  (func $~start
   call $start:rereexport
