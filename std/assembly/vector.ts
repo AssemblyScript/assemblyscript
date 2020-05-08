@@ -1,4 +1,4 @@
 /** Vector abstraction. */
-@sealed @unmanaged
+@final @unmanaged
 export abstract class V128 {
 }

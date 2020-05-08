@@ -1489,9 +1489,9 @@ export class Compiler extends DiagnosticEmitter {
       }
 
       // Returning something else than 'this' would break 'super()' calls
-      if (flow.is(FlowFlags.MAY_RETURN_NONTHIS) && !classInstance.hasDecorator(DecoratorFlags.SEALED)) {
+      if (flow.is(FlowFlags.MAY_RETURN_NONTHIS) && !classInstance.hasDecorator(DecoratorFlags.FINAL)) {
         this.error(
-          DiagnosticCode.A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_sealed,
+          DiagnosticCode.A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_final,
           classInstance.identifierNode.range
         );
       }

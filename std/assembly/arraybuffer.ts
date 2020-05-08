@@ -24,7 +24,7 @@ export abstract class ArrayBufferView {
   }
 }
 
-@sealed export class ArrayBuffer {
+@final export class ArrayBuffer {
 
   static isView<T>(value: T): bool {
     if (isNullable<T>()) {

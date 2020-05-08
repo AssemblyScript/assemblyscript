@@ -1422,7 +1422,7 @@ declare class Array<T> {
   toString(): string;
 }
 
-/** Class representing a static (not resizable) sequence of values of type `T`. This class is @sealed. */
+/** Class representing a static (not resizable) sequence of values of type `T`. This class is @final. */
 declare class StaticArray<T> {
   [key: number]: T;
   static fromArray<T>(source: Array<T>): StaticArray<T>;
@@ -1791,8 +1791,8 @@ declare function global(...args: any[]): any;
 /** Annotates a class as being unmanaged with limited capabilities. */
 declare function unmanaged(constructor: Function): void;
 
-/** Annotates a class as being sealed / non-derivable. */
-declare function sealed(constructor: Function): void;
+/** Annotates a class as being final / non-derivable. */
+declare function final(constructor: Function): void;
 
 /** Annotates a method, function or constant global as always inlined. */
 declare function inline(...args: any[]): any;

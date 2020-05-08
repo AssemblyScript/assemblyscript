@@ -6,7 +6,7 @@ import { Array } from "./array";
 import { E_INDEXOUTOFRANGE, E_INVALIDLENGTH, E_HOLEYARRAY } from "./util/error";
 import { joinBooleanArray, joinIntegerArray, joinFloatArray, joinStringArray, joinReferenceArray } from "./util/string";
 
-@sealed
+@final
 export class StaticArray<T> {
   [key: number]: T;
 

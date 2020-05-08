@@ -1304,7 +1304,7 @@ export enum DecoratorKind {
   OPERATOR_PREFIX,
   OPERATOR_POSTFIX,
   UNMANAGED,
-  SEALED,
+  FINAL,
   INLINE,
   EXTERNAL,
   BUILTIN,
@@ -1316,7 +1316,7 @@ export namespace DecoratorKind {
 
   /** Returns the kind of the specified decorator name node. Defaults to {@link DecoratorKind.CUSTOM}. */
   export function fromNode(nameNode: Expression): DecoratorKind {
-    // @global, @inline, @operator, @sealed, @unmanaged
+    // @global, @inline, @operator, @final, @unmanaged
     if (nameNode.kind == NodeKind.IDENTIFIER) {
       let nameStr = (<IdentifierExpression>nameNode).text;
       assert(nameStr.length);
@@ -1327,6 +1327,10 @@ export namespace DecoratorKind {
         }
         case CharCode.e: {
           if (nameStr == "external") return DecoratorKind.EXTERNAL;
+          break;
+        }
+        case CharCode.f: {
+          if (nameStr == "final") return DecoratorKind.FINAL;
           break;
         }
         case CharCode.g: {
@@ -1343,10 +1347,6 @@ export namespace DecoratorKind {
         }
         case CharCode.o: {
           if (nameStr == "operator") return DecoratorKind.OPERATOR;
-          break;
-        }
-        case CharCode.s: {
-          if (nameStr == "sealed") return DecoratorKind.SEALED;
           break;
         }
         case CharCode.u: {

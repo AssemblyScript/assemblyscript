@@ -52,7 +52,7 @@ class JustFieldNoInit {
 var justFieldNoInit = new JustFieldNoInit();
 
 // explicit return with no extra checks
-@sealed
+@final
 class CtorReturns {
   constructor() {
     return changetype<CtorReturns>(0);
@@ -64,7 +64,7 @@ var ctorReturns = new CtorReturns();
 var b: bool = true;
 
 // conditional explicit return, otherwise fall-through
-@sealed
+@final
 class CtorConditionallyReturns {
   constructor() {
     // AS905 due to fall-through needing to prepend a 'this' allocation

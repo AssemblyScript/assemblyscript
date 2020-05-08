@@ -4,7 +4,7 @@
 @operator.prefix("~")
 @operator.postfix("++")
 @unmanaged
-@sealed
+@final
 @inline
 @external("a", "b")
 @custom
