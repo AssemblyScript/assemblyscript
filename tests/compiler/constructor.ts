@@ -67,6 +67,7 @@ var b: bool = true;
 @sealed
 class CtorConditionallyReturns {
   constructor() {
+    // AS905 due to fall-through needing to prepend a 'this' allocation
     if (b) {
       return changetype<CtorConditionallyReturns>(0);
     }
@@ -74,3 +75,14 @@ class CtorConditionallyReturns {
 }
 
 var ctorConditionallyReturns = new CtorConditionallyReturns();
+
+// conditional explicit return 'this', otherwise fall-through
+class CtorConditionallyReturnsThis {
+  constructor() {
+    if (b) {
+      return this;
+    }
+  }
+}
+
+var ctorConditionallyReturnsThis = new CtorConditionallyReturnsThis();

@@ -1478,22 +1478,22 @@ export class Compiler extends DiagnosticEmitter {
             module.flatten(allocStmts, NativeType.None)
           );
         }
-      }
 
-      // Check explicit return conditions if applicable
-      if (flow.isAny(FlowFlags.RETURNS | FlowFlags.CONDITIONALLY_RETURNS)) {
-        if (flow.isAny(FlowFlags.ACCESSES_THIS | FlowFlags.CONDITIONALLY_ACCESSES_THIS)) {
-          this.error(
-            DiagnosticCode.An_explicitly_returning_constructor_must_not_access_this,
+        // Just prepended allocation is dropped when returning non-'this'
+        if (flow.is(FlowFlags.MAY_RETURN_NONTHIS)) {
+          this.pedantic(
+            DiagnosticCode.Explicitly_returning_constructor_drops_this_allocation,
             instance.identifierNode.range
           );
         }
-        if (!classInstance.hasDecorator(DecoratorFlags.SEALED)) {
-          this.error(
-            DiagnosticCode.A_class_with_an_explicitly_returning_constructor_must_be_sealed,
-            classInstance.identifierNode.range
-          );
-        }
+      }
+
+      // Returning something else than 'this' would break 'super()' calls
+      if (flow.is(FlowFlags.MAY_RETURN_NONTHIS) && !classInstance.hasDecorator(DecoratorFlags.SEALED)) {
+        this.error(
+          DiagnosticCode.A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_sealed,
+          classInstance.identifierNode.range
+        );
       }
 
       // Implicitly return `this` if the flow falls through
@@ -2659,6 +2659,9 @@ export class Compiler extends DiagnosticEmitter {
 
       // take special care of properly retaining the returned value
       expr = this.compileReturnedExpression(valueExpression, returnType, constraints);
+      if (flow.actualFunction.is(CommonFlags.CONSTRUCTOR) && valueExpression.kind != NodeKind.THIS) {
+        flow.set(FlowFlags.MAY_RETURN_NONTHIS);
+      }
     } else if (returnType != Type.void) {
       this.error(
         DiagnosticCode.Type_0_is_not_assignable_to_type_1,

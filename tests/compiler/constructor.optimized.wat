@@ -134,5 +134,9 @@
   i32.const 11
   call $~lib/rt/stub/__alloc
   drop
+  i32.const 0
+  i32.const 12
+  call $~lib/rt/stub/__alloc
+  drop
  )
 )

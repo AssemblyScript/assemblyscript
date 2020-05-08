@@ -118,11 +118,13 @@ export const enum FlowFlags {
   CONDITIONALLY_CONTINUES = 1 << 12,
   /** This flow conditionally accesses `this` in a child flow. Constructors only. */
   CONDITIONALLY_ACCESSES_THIS = 1 << 13,
+  /** This flow may return a non-this value. Constructors only. */
+  MAY_RETURN_NONTHIS = 1 << 14,
 
   // other
 
   /** This is a flow with explicitly disabled bounds checking. */
-  UNCHECKED_CONTEXT = 1 << 14,
+  UNCHECKED_CONTEXT = 1 << 15,
 
   // masks
 
@@ -637,6 +639,9 @@ export class Flow {
       newFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
     }
 
+    // may be the case in any
+    newFlags |= (thisFlags | otherFlags) & FlowFlags.MAY_RETURN_NONTHIS;
+
     // must be the case in both
     newFlags |= thisFlags & otherFlags & FlowFlags.CALLS_SUPER;
 
@@ -753,6 +758,8 @@ export class Flow {
     } else {
       newFlags |= (leftFlags | rightFlags) & FlowFlags.CONDITIONALLY_ACCESSES_THIS;
     }
+
+    newFlags |= (leftFlags | rightFlags) & FlowFlags.MAY_RETURN_NONTHIS;
 
     if ((leftFlags & FlowFlags.CALLS_SUPER) && (rightFlags & FlowFlags.CALLS_SUPER)) {
       newFlags |= FlowFlags.CALLS_SUPER;
@@ -1352,6 +1359,7 @@ export class Flow {
     if (this.is(FlowFlags.CONDITIONALLY_BREAKS)) sb.push("CONDITIONALLY_BREAKS");
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
     if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESS_THIS");
+    if (this.is(FlowFlags.MAY_RETURN_NONTHIS)) sb.push("MAY_RETURN_NONTHIS");
     return "Flow(" + this.actualFunction.toString() + ")[" + levels.toString() + "] " + sb.join(" ");
   }
 }

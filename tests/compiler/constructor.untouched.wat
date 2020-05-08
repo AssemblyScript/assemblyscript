@@ -17,6 +17,7 @@
  (global $constructor/ctorReturns (mut i32) (i32.const 0))
  (global $constructor/b (mut i32) (i32.const 1))
  (global $constructor/ctorConditionallyReturns (mut i32) (i32.const 0))
+ (global $constructor/ctorConditionallyReturnsThis (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 8))
  (export "memory" (memory $0))
  (start $~start)
@@ -269,6 +270,23 @@
   end
   local.get $0
  )
+ (func $constructor/CtorConditionallyReturnsThis#constructor (param $0 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 12
+   call $~lib/rt/stub/__alloc
+   call $~lib/rt/stub/__retain
+   local.set $0
+  end
+  global.get $constructor/b
+  if
+   local.get $0
+   return
+  end
+  local.get $0
+ )
  (func $start:constructor
   global.get $~lib/heap/__heap_base
   i32.const 15
@@ -307,6 +325,9 @@
   i32.const 0
   call $constructor/CtorConditionallyReturns#constructor
   global.set $constructor/ctorConditionallyReturns
+  i32.const 0
+  call $constructor/CtorConditionallyReturnsThis#constructor
+  global.set $constructor/ctorConditionallyReturnsThis
  )
  (func $~start
   call $start:constructor
