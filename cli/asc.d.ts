@@ -69,8 +69,6 @@ interface CompilerOptions {
   shrinkLevel?: number;
   /** Re-optimizes until no further improvements can be made. */
   converge?: boolean;
-  /** Validates the module using Binaryen. Exits if invalid. */
-  validate?: boolean;
   /** Specifies the base directory of input and output files. */
   baseDir?: string;
   /** Specifies the output file. File extension indicates format. */
@@ -119,6 +117,8 @@ interface CompilerOptions {
   trapMode?: "allow" | "clamp" | "js";
   /** Specifies additional Binaryen passes to run. */
   runPasses?: string | string[];
+  /** Skips validating the module using Binaryen. */
+  noValidate?: boolean;
   /** Enables WebAssembly features that are disabled by default. */
   enable?: string | string[];
   /** Disables WebAssembly features that are enabled by default. */

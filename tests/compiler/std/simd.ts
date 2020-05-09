@@ -1,4 +1,4 @@
-// hint: asc tests/compiler/std/simd --enable simd --validate
+// hint: asc tests/compiler/std/simd --enable simd
 
 @final
 class I8x16 {
