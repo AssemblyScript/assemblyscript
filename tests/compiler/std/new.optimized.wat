@@ -58,7 +58,7 @@
   i32.const 1044
   f32.const 2
   f32.store
-  i32.const 0
+  i32.const 1040
   i32.const 1040
   i32.load
   i32.const 1

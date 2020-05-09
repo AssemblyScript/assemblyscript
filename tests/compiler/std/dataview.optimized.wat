@@ -35,6 +35,17 @@
  (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
+ (func $~lib/rt/pure/__release (param $0 i32)
+  local.get $0
+  i32.const 1520
+  i32.gt_u
+  if
+   local.get $0
+   i32.const 16
+   i32.sub
+   call $~lib/rt/pure/decrement
+  end
+ )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1100,21 +1111,28 @@
   end
   local.get $0
  )
- (func $~lib/rt/pure/__release (param $0 i32)
-  local.get $0
-  i32.const 1520
-  i32.gt_u
-  if
-   local.get $0
-   i32.const 16
-   i32.sub
-   call $~lib/rt/pure/decrement
-  end
- )
  (func $~lib/arraybuffer/ArrayBufferView#constructor (param $0 i32) (result i32)
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 12
+   i32.const 2
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  i32.const 0
+  i32.store offset=8
   i32.const 8
   i32.const 0
   call $~lib/rt/tlsf/__alloc
@@ -1145,25 +1163,7 @@
   local.get $1
   i32.const 0
   i32.store8 offset=4
-  local.get $0
-  i32.eqz
-  if
-   i32.const 12
-   i32.const 2
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   local.set $0
-  end
-  local.get $0
-  i32.const 0
-  i32.store
-  local.get $0
-  i32.const 0
-  i32.store offset=4
-  local.get $0
-  i32.const 0
-  i32.store offset=8
-  local.get $2
+  local.get $1
   local.get $0
   i32.load
   local.tee $3
@@ -1210,26 +1210,6 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
-  local.get $2
-  i32.const 1073741808
-  i32.gt_u
-  local.get $1
-  local.get $2
-  i32.add
-  local.get $0
-  i32.const 16
-  i32.sub
-  i32.load offset=12
-  i32.gt_u
-  i32.or
-  if
-   i32.const 1040
-   i32.const 1440
-   i32.const 25
-   i32.const 7
-   call $~lib/builtins/abort
-   unreachable
-  end
   i32.const 12
   i32.const 4
   call $~lib/rt/tlsf/__alloc
@@ -1243,6 +1223,28 @@
   local.get $4
   i32.const 0
   i32.store offset=8
+  local.get $2
+  i32.const 1073741808
+  i32.gt_u
+  local.get $1
+  local.get $2
+  i32.add
+  local.get $0
+  i32.const 16
+  i32.sub
+  i32.load offset=12
+  i32.gt_u
+  i32.or
+  if
+   local.get $4
+   call $~lib/rt/pure/__release
+   i32.const 1040
+   i32.const 1440
+   i32.const 25
+   i32.const 7
+   call $~lib/builtins/abort
+   unreachable
+  end
   local.get $0
   local.set $3
   local.get $0

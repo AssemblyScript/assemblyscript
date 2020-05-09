@@ -1,4 +1,4 @@
 /** Host reference abstraction. */
-@sealed @unmanaged
+@final @unmanaged
 export abstract class Anyref {
 }

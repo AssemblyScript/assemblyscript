@@ -992,9 +992,9 @@ export class Program extends DiagnosticEmitter {
       if (thisPrototype.kind == ElementKind.CLASS_PROTOTYPE) {
         if (baseElement.kind == ElementKind.CLASS_PROTOTYPE) {
           let basePrototype = <ClassPrototype>baseElement;
-          if (basePrototype.hasDecorator(DecoratorFlags.SEALED)) {
+          if (basePrototype.hasDecorator(DecoratorFlags.FINAL)) {
             this.error(
-              DiagnosticCode.Class_0_is_sealed_and_cannot_be_extended,
+              DiagnosticCode.Class_0_is_final_and_cannot_be_extended,
               extendsNode.range, basePrototype.identifierNode.text
             );
           }
@@ -1557,7 +1557,7 @@ export class Program extends DiagnosticEmitter {
       declaration,
       this.checkDecorators(declaration.decorators,
         DecoratorFlags.GLOBAL |
-        DecoratorFlags.SEALED |
+        DecoratorFlags.FINAL |
         DecoratorFlags.UNMANAGED
       )
     );
@@ -2419,8 +2419,8 @@ export enum DecoratorFlags {
   OPERATOR_POSTFIX = 1 << 3,
   /** Is an unmanaged class. */
   UNMANAGED = 1 << 4,
-  /** Is a sealed class. */
-  SEALED = 1 << 5,
+  /** Is a final class. */
+  FINAL = 1 << 5,
   /** Is always inlined. */
   INLINE = 1 << 6,
   /** Is using a different external name. */
@@ -2444,7 +2444,7 @@ export namespace DecoratorFlags {
       case DecoratorKind.OPERATOR_PREFIX: return DecoratorFlags.OPERATOR_PREFIX;
       case DecoratorKind.OPERATOR_POSTFIX: return DecoratorFlags.OPERATOR_POSTFIX;
       case DecoratorKind.UNMANAGED: return DecoratorFlags.UNMANAGED;
-      case DecoratorKind.SEALED: return DecoratorFlags.SEALED;
+      case DecoratorKind.FINAL: return DecoratorFlags.FINAL;
       case DecoratorKind.INLINE: return DecoratorFlags.INLINE;
       case DecoratorKind.EXTERNAL: return DecoratorFlags.EXTERNAL;
       case DecoratorKind.BUILTIN: return DecoratorFlags.BUILTIN;

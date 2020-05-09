@@ -17,7 +17,7 @@ export declare function isNaN<T extends number>(value: T): bool;
 @builtin
 export declare function isFinite<T extends number>(value: T): bool;
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class I8 {
 
   // @ts-ignore: decorator
@@ -38,7 +38,7 @@ export abstract class I8 {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class I16 {
 
   // @ts-ignore: decorator
@@ -59,7 +59,7 @@ export abstract class I16 {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class I32 {
 
   // @ts-ignore: decorator
@@ -80,7 +80,7 @@ export abstract class I32 {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class I64 {
 
   // @ts-ignore: decorator
@@ -101,7 +101,7 @@ export abstract class I64 {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class Isize {
 
   // @ts-ignore: decorator
@@ -122,7 +122,7 @@ export abstract class Isize {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class U8 {
 
   // @ts-ignore: decorator
@@ -143,7 +143,7 @@ export abstract class U8 {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class U16 {
 
   // @ts-ignore: decorator
@@ -164,7 +164,7 @@ export abstract class U16 {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class U32 {
 
   // @ts-ignore: decorator
@@ -185,7 +185,7 @@ export abstract class U32 {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class U64 {
 
   // @ts-ignore: decorator
@@ -206,7 +206,7 @@ export abstract class U64 {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class Usize {
 
   // @ts-ignore: decorator
@@ -227,7 +227,7 @@ export abstract class Usize {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class Bool {
 
   // @ts-ignore: decorator
@@ -246,7 +246,7 @@ export abstract class Bool {
 
 export { Bool as Boolean };
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class F32 {
 
   // @ts-ignore: decorator
@@ -311,7 +311,7 @@ export abstract class F32 {
   }
 }
 
-@sealed @unmanaged
+@final @unmanaged
 export abstract class F64 {
 
   // @ts-ignore: decorator

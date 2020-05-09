@@ -1,6 +1,6 @@
 // hint: asc tests/compiler/std/simd --enable simd --validate
 
-@sealed
+@final
 class I8x16 {
 
   @inline static from(vec: v128): I8x16 {

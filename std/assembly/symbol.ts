@@ -12,7 +12,7 @@ var idToString: Map<usize, string>;
 @lazy
 var nextId: usize = 12; // Symbol.unscopables + 1
 
-@unmanaged @sealed abstract class _Symbol {
+@unmanaged @final abstract class _Symbol {
 
   // TODO: all of the following default symbols are unused currently yet add to
   // binary size if #toString becomes compiled. Ultimately we'll most likely want

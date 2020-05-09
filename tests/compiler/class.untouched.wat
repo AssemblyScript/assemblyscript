@@ -456,31 +456,6 @@
   (local $4 i32)
   (local $5 i32)
   (local $6 i32)
-  local.get $1
-  i32.const 1073741808
-  i32.const 2
-  i32.shr_u
-  i32.gt_u
-  if
-   i32.const 32
-   i32.const 80
-   i32.const 57
-   i32.const 60
-   call $~lib/builtins/abort
-   unreachable
-  end
-  local.get $1
-  i32.const 2
-  i32.shl
-  local.set $2
-  local.get $2
-  i32.const 0
-  call $~lib/rt/stub/__alloc
-  local.set $3
-  local.get $3
-  i32.const 0
-  local.get $2
-  call $~lib/memory/memory.fill
   local.get $0
   i32.eqz
   if
@@ -502,6 +477,33 @@
   local.get $0
   i32.const 0
   i32.store offset=12
+  local.get $1
+  i32.const 1073741808
+  i32.const 2
+  i32.shr_u
+  i32.gt_u
+  if
+   local.get $0
+   call $~lib/rt/stub/__release
+   i32.const 32
+   i32.const 80
+   i32.const 57
+   i32.const 60
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $1
+  i32.const 2
+  i32.shl
+  local.set $2
+  local.get $2
+  i32.const 0
+  call $~lib/rt/stub/__alloc
+  local.set $3
+  local.get $3
+  i32.const 0
+  local.get $2
+  call $~lib/memory/memory.fill
   local.get $0
   local.tee $4
   local.get $3

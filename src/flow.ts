@@ -99,9 +99,9 @@ export const enum FlowFlags {
   BREAKS = 1 << 4,
   /** This flow always continues. */
   CONTINUES = 1 << 5,
-  /** This flow always allocates. Constructors only. */
-  ALLOCATES = 1 << 6,
-  /** This flow always calls super. Constructors only. */
+  /** This flow always accesses `this`. Constructors only. */
+  ACCESSES_THIS = 1 << 6,
+  /** This flow always calls `super`. Constructors only. */
   CALLS_SUPER = 1 << 7,
   /** This flow always terminates (returns, throws or continues). */
   TERMINATES = 1 << 8, // Note that this doesn't cover BREAKS, which is separate
@@ -116,8 +116,10 @@ export const enum FlowFlags {
   CONDITIONALLY_BREAKS = 1 << 11,
   /** This flow conditionally continues in a child flow. */
   CONDITIONALLY_CONTINUES = 1 << 12,
-  /** This flow conditionally allocates in a child flow. Constructors only. */
-  CONDITIONALLY_ALLOCATES = 1 << 13,
+  /** This flow conditionally accesses `this` in a child flow. Constructors only. */
+  CONDITIONALLY_ACCESSES_THIS = 1 << 13,
+  /** This flow may return a non-this value. Constructors only. */
+  MAY_RETURN_NONTHIS = 1 << 14,
 
   // other
 
@@ -133,7 +135,7 @@ export const enum FlowFlags {
                   | FlowFlags.THROWS
                   | FlowFlags.BREAKS
                   | FlowFlags.CONTINUES
-                  | FlowFlags.ALLOCATES
+                  | FlowFlags.ACCESSES_THIS
                   | FlowFlags.CALLS_SUPER
                   | FlowFlags.TERMINATES,
 
@@ -142,7 +144,7 @@ export const enum FlowFlags {
                   | FlowFlags.CONDITIONALLY_THROWS
                   | FlowFlags.CONDITIONALLY_BREAKS
                   | FlowFlags.CONDITIONALLY_CONTINUES
-                  | FlowFlags.CONDITIONALLY_ALLOCATES
+                  | FlowFlags.CONDITIONALLY_ACCESSES_THIS
 }
 
 /** Flags indicating the current state of a local. */
@@ -627,15 +629,18 @@ export class Flow {
       newFlags |= thisFlags & FlowFlags.CONDITIONALLY_CONTINUES;
     }
 
-    if (thisFlags & FlowFlags.ALLOCATES) { // can become conditional
-      if (otherFlags & FlowFlags.ALLOCATES) {
-        newFlags |= FlowFlags.ALLOCATES;
+    if (thisFlags & FlowFlags.ACCESSES_THIS) { // can become conditional
+      if (otherFlags & FlowFlags.ACCESSES_THIS) {
+        newFlags |= FlowFlags.ACCESSES_THIS;
       } else {
-        newFlags |= FlowFlags.CONDITIONALLY_ALLOCATES;
+        newFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
       }
-    } else if (otherFlags & FlowFlags.ALLOCATES) {
-      newFlags |= FlowFlags.CONDITIONALLY_ALLOCATES;
+    } else if (otherFlags & FlowFlags.ACCESSES_THIS) {
+      newFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
     }
+
+    // may be the case in any
+    newFlags |= (thisFlags | otherFlags) & FlowFlags.MAY_RETURN_NONTHIS;
 
     // must be the case in both
     newFlags |= thisFlags & otherFlags & FlowFlags.CALLS_SUPER;
@@ -742,17 +747,19 @@ export class Flow {
       newFlags |= (leftFlags | rightFlags) & FlowFlags.CONDITIONALLY_CONTINUES;
     }
 
-    if (leftFlags & FlowFlags.ALLOCATES) {
-      if (rightFlags & FlowFlags.ALLOCATES) {
-        newFlags |= FlowFlags.ALLOCATES;
+    if (leftFlags & FlowFlags.ACCESSES_THIS) {
+      if (rightFlags & FlowFlags.ACCESSES_THIS) {
+        newFlags |= FlowFlags.ACCESSES_THIS;
       } else {
-        newFlags |= FlowFlags.CONDITIONALLY_ALLOCATES;
+        newFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
       }
-    } else if (rightFlags & FlowFlags.ALLOCATES) {
-      newFlags |= FlowFlags.CONDITIONALLY_ALLOCATES;
+    } else if (rightFlags & FlowFlags.ACCESSES_THIS) {
+      newFlags |= FlowFlags.CONDITIONALLY_ACCESSES_THIS;
     } else {
-      newFlags |= (leftFlags | rightFlags) & FlowFlags.CONDITIONALLY_ALLOCATES;
+      newFlags |= (leftFlags | rightFlags) & FlowFlags.CONDITIONALLY_ACCESSES_THIS;
     }
+
+    newFlags |= (leftFlags | rightFlags) & FlowFlags.MAY_RETURN_NONTHIS;
 
     if ((leftFlags & FlowFlags.CALLS_SUPER) && (rightFlags & FlowFlags.CALLS_SUPER)) {
       newFlags |= FlowFlags.CALLS_SUPER;
@@ -1344,14 +1351,15 @@ export class Flow {
     if (this.is(FlowFlags.THROWS)) sb.push("THROWS");
     if (this.is(FlowFlags.BREAKS)) sb.push("BREAKS");
     if (this.is(FlowFlags.CONTINUES)) sb.push("CONTINUES");
-    if (this.is(FlowFlags.ALLOCATES)) sb.push("ALLOCATES");
+    if (this.is(FlowFlags.ACCESSES_THIS)) sb.push("ACCESSES_THIS");
     if (this.is(FlowFlags.CALLS_SUPER)) sb.push("CALLS_SUPER");
     if (this.is(FlowFlags.TERMINATES)) sb.push("TERMINATES");
     if (this.is(FlowFlags.CONDITIONALLY_RETURNS)) sb.push("CONDITIONALLY_RETURNS");
     if (this.is(FlowFlags.CONDITIONALLY_THROWS)) sb.push("CONDITIONALLY_THROWS");
     if (this.is(FlowFlags.CONDITIONALLY_BREAKS)) sb.push("CONDITIONALLY_BREAKS");
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
-    if (this.is(FlowFlags.CONDITIONALLY_ALLOCATES)) sb.push("CONDITIONALLY_ALLOCATES");
+    if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESSES_THIS");
+    if (this.is(FlowFlags.MAY_RETURN_NONTHIS)) sb.push("MAY_RETURN_NONTHIS");
     return "Flow(" + this.actualFunction.toString() + ")[" + levels.toString() + "] " + sb.join(" ");
   }
 }

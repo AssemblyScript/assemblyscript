@@ -1,13 +1,13 @@
 (module
- (type $i32_i32_=>_none (func (param i32 i32)))
  (type $i32_=>_none (func (param i32)))
- (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
- (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
+ (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_none (func))
+ (type $none_=>_i32 (func (result i32)))
+ (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
+ (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
- (type $none_=>_i32 (func (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (import "rtrace" "onalloc" (func $~lib/rt/rtrace/onalloc (param i32)))
  (import "rtrace" "onincrement" (func $~lib/rt/rtrace/onincrement (param i32)))
@@ -17,30 +17,18 @@
  (data (i32.const 16) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00t\00l\00s\00f\00.\00t\00s\00")
  (data (i32.const 64) "(\00\00\00\01\00\00\00\01\00\00\00(\00\00\00a\00l\00l\00o\00c\00a\00t\00i\00o\00n\00 \00t\00o\00o\00 \00l\00a\00r\00g\00e\00")
  (data (i32.const 128) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00~\00l\00i\00b\00/\00r\00t\00/\00p\00u\00r\00e\00.\00t\00s\00")
- (data (i32.const 176) "\05\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00 \00\00\00\00\00\00\00")
+ (data (i32.const 176) "\1c\00\00\00\01\00\00\00\01\00\00\00\1c\00\00\00i\00s\00s\00u\00e\00s\00/\001\002\002\005\00.\00t\00s\00")
  (table $0 1 funcref)
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/ASC_LOW_MEMORY_LIMIT i32 (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $~lib/gc/gc.auto (mut i32) (i32.const 1))
- (global $~lib/rt/__rtti_base i32 (i32.const 176))
+ (global $issues/1225/x (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 220))
- (global $implicit-getter-setter/Basic i32 (i32.const 3))
- (global $implicit-getter-setter/Managed i32 (i32.const 4))
  (export "memory" (memory $0))
- (export "__alloc" (func $~lib/rt/tlsf/__alloc))
- (export "__retain" (func $~lib/rt/pure/__retain))
- (export "__release" (func $~lib/rt/pure/__release))
- (export "__collect" (func $~lib/rt/pure/__collect))
- (export "__rtti_base" (global $~lib/rt/__rtti_base))
- (export "Basic" (global $implicit-getter-setter/Basic))
- (export "Basic#get:val" (func $implicit-getter-setter/Basic#get:val))
- (export "Basic#set:val" (func $implicit-getter-setter/Basic#set:val))
- (export "Basic#constructor" (func $implicit-getter-setter/Basic#constructor))
- (export "Managed" (global $implicit-getter-setter/Managed))
- (export "Managed#get:foo" (func $implicit-getter-setter/Managed#get:foo))
- (export "Managed#set:foo" (func $implicit-getter-setter/Managed#set:foo))
- (export "Managed#constructor" (func $implicit-getter-setter/Managed#constructor))
+ (export "normal" (func $issues/1225/normal))
+ (export "viaThis" (func $issues/1225/viaThis))
+ (start $~start)
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)
   (local $3 i32)
@@ -1534,6 +1522,42 @@
   end
   local.get $0
  )
+ (func $issues/1225/X#constructor (param $0 i32) (param $1 i32) (result i32)
+  local.get $0
+  i32.eqz
+  if
+   i32.const 12
+   i32.const 3
+   call $~lib/rt/tlsf/__alloc
+   call $~lib/rt/pure/__retain
+   local.set $0
+  end
+  local.get $0
+  i32.const 0
+  i32.store
+  local.get $0
+  i32.const 0
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  i32.store offset=8
+  local.get $0
+  local.get $0
+  i32.load offset=8
+  i32.store offset=4
+  local.get $0
+  local.get $1
+  i32.store
+  local.get $0
+ )
+ (func $issues/1225/normal (result i32)
+  global.get $issues/1225/x
+  i32.load
+ )
+ (func $issues/1225/viaThis (result i32)
+  global.get $issues/1225/x
+  i32.load offset=4
+ )
  (func $~lib/rt/pure/__release (param $0 i32)
   local.get $0
   global.get $~lib/heap/__heap_base
@@ -1545,73 +1569,54 @@
    call $~lib/rt/pure/decrement
   end
  )
- (func $implicit-getter-setter/Basic#constructor (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
+ (func $start:issues/1225
+  (local $0 i32)
+  (local $1 i32)
+  i32.const 0
+  i32.const 4
+  call $issues/1225/X#constructor
+  global.set $issues/1225/x
+  call $issues/1225/normal
+  i32.const 4
+  i32.eq
   i32.eqz
   if
-   i32.const 4
-   i32.const 3
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   local.set $0
+   i32.const 0
+   i32.const 192
+   i32.const 18
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
-  local.get $0
-  local.get $1
-  i32.store
-  local.get $0
- )
- (func $implicit-getter-setter/Basic#get:val (param $0 i32) (result i32)
-  local.get $0
-  i32.load
- )
- (func $implicit-getter-setter/Basic#set:val (param $0 i32) (param $1 i32)
-  local.get $0
-  local.get $1
-  i32.store
- )
- (func $implicit-getter-setter/Managed#constructor (param $0 i32) (param $1 i32) (result i32)
-  local.get $0
+  call $issues/1225/viaThis
+  i32.const 4
+  i32.eq
   i32.eqz
   if
-   i32.const 4
-   i32.const 4
-   call $~lib/rt/tlsf/__alloc
-   call $~lib/rt/pure/__retain
-   local.set $0
+   i32.const 0
+   i32.const 192
+   i32.const 19
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
   end
-  local.get $0
-  local.get $1
-  call $~lib/rt/pure/__retain
-  i32.store
-  local.get $1
-  call $~lib/rt/pure/__retain
-  local.set $1
-  local.get $1
-  call $~lib/rt/pure/__release
-  local.get $0
- )
- (func $implicit-getter-setter/Managed#get:foo (param $0 i32) (result i32)
-  local.get $0
-  i32.load
-  call $~lib/rt/pure/__retain
- )
- (func $implicit-getter-setter/Managed#set:foo (param $0 i32) (param $1 i32)
-  (local $2 i32)
-  local.get $0
-  local.get $1
-  local.get $0
-  i32.load
-  local.tee $2
+  i32.const 0
+  local.tee $0
+  global.get $issues/1225/x
+  local.tee $1
   i32.ne
   if
-   local.get $1
+   local.get $0
    call $~lib/rt/pure/__retain
-   drop
-   local.get $2
+   local.set $0
+   local.get $1
    call $~lib/rt/pure/__release
   end
-  local.get $1
-  i32.store
+  local.get $0
+  global.set $issues/1225/x
+ )
+ (func $~start
+  call $start:issues/1225
  )
  (func $~lib/rt/pure/__collect
   i32.const 1
@@ -1762,7 +1767,7 @@
      i32.const 8
      i32.sub
      i32.load
-     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$case$4 $switch$1$default
+     br_table $switch$1$case$2 $switch$1$case$2 $switch$1$case$4 $switch$1$case$2 $switch$1$default
     end
     return
    end
