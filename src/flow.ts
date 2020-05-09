@@ -1351,14 +1351,14 @@ export class Flow {
     if (this.is(FlowFlags.THROWS)) sb.push("THROWS");
     if (this.is(FlowFlags.BREAKS)) sb.push("BREAKS");
     if (this.is(FlowFlags.CONTINUES)) sb.push("CONTINUES");
-    if (this.is(FlowFlags.ACCESSES_THIS)) sb.push("ACCESS_THIS");
+    if (this.is(FlowFlags.ACCESSES_THIS)) sb.push("ACCESSES_THIS");
     if (this.is(FlowFlags.CALLS_SUPER)) sb.push("CALLS_SUPER");
     if (this.is(FlowFlags.TERMINATES)) sb.push("TERMINATES");
     if (this.is(FlowFlags.CONDITIONALLY_RETURNS)) sb.push("CONDITIONALLY_RETURNS");
     if (this.is(FlowFlags.CONDITIONALLY_THROWS)) sb.push("CONDITIONALLY_THROWS");
     if (this.is(FlowFlags.CONDITIONALLY_BREAKS)) sb.push("CONDITIONALLY_BREAKS");
     if (this.is(FlowFlags.CONDITIONALLY_CONTINUES)) sb.push("CONDITIONALLY_CONTINUES");
-    if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESS_THIS");
+    if (this.is(FlowFlags.CONDITIONALLY_ACCESSES_THIS)) sb.push("CONDITIONALLY_ACCESSES_THIS");
     if (this.is(FlowFlags.MAY_RETURN_NONTHIS)) sb.push("MAY_RETURN_NONTHIS");
     return "Flow(" + this.actualFunction.toString() + ")[" + levels.toString() + "] " + sb.join(" ");
   }

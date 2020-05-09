@@ -1316,7 +1316,6 @@ export namespace DecoratorKind {
 
   /** Returns the kind of the specified decorator name node. Defaults to {@link DecoratorKind.CUSTOM}. */
   export function fromNode(nameNode: Expression): DecoratorKind {
-    // @global, @inline, @operator, @final, @unmanaged
     if (nameNode.kind == NodeKind.IDENTIFIER) {
       let nameStr = (<IdentifierExpression>nameNode).text;
       assert(nameStr.length);
@@ -1363,7 +1362,6 @@ export namespace DecoratorKind {
         assert(nameStr.length);
         let propStr = propertyAccessNode.property.text;
         assert(propStr.length);
-        // @operator.binary, @operator.prefix, @operator.postfix
         if (nameStr == "operator") {
           switch (propStr.charCodeAt(0)) {
             case CharCode.b: {
