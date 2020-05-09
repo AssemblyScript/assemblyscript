@@ -5,7 +5,6 @@ let argv = [
   "assembly/index.ts",
   "--noEmit",
   "--runtime", "stub",
-  "--validate",
   "--traceResolution"
 ];
 
