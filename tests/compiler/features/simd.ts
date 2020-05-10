@@ -1,4 +1,4 @@
-// hint: asc tests/compiler/simd --enable simd --validate
+// hint: asc tests/compiler/simd --enable simd
 
 function test_v128(): void {
   // equality and inequality

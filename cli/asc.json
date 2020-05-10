@@ -218,13 +218,6 @@
     "type": "S"
   },
 
-  "validate": {
-    "category": "Binaryen",
-    "description": "Validates the module using Binaryen. Exits if invalid.",
-    "type": "b",
-    "alias": "c",
-    "default": false
-  },
   "trapMode": {
     "category": "Binaryen",
     "description": [
@@ -245,6 +238,13 @@
       "optimizations, if any. See: Binaryen/src/passes/pass.cpp"
     ],
     "type": "s"
+  },
+  "noValidate": {
+    "category": "Binaryen",
+    "description": "Skips validating the module using Binaryen.",
+    "type": "b",
+    "alias": "c",
+    "default": false
   },
 
   "baseDir": {

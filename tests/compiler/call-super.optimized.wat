@@ -100,6 +100,9 @@
   i32.const 3
   call $~lib/rt/stub/__alloc
   local.tee $0
+  i32.const 2
+  i32.store offset=4
+  local.get $0
   i32.eqz
   if
    i32.const 4
@@ -122,9 +125,6 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  i32.const 2
-  i32.store offset=4
   local.get $0
   i32.load
   i32.const 1
@@ -177,6 +177,9 @@
   i32.const 5
   call $~lib/rt/stub/__alloc
   local.tee $0
+  i32.const 2
+  i32.store offset=4
+  local.get $0
   i32.eqz
   if
    i32.const 4
@@ -187,9 +190,6 @@
   local.get $0
   i32.const 1
   i32.store
-  local.get $0
-  i32.const 2
-  i32.store offset=4
   local.get $0
   i32.load
   i32.const 1

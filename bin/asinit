@@ -249,8 +249,8 @@ function ensureGitignore() {
 function ensurePackageJson() {
   console.log("- Making sure that 'package.json' contains the build commands...")
   const entryPath = path.relative(projectDir, entryFile).replace(/\\/g, "/");
-  const buildUntouched = "asc " + entryPath + " -b build/untouched.wasm -t build/untouched.wat --validate --sourceMap --debug";
-  const buildOptimized = "asc " + entryPath + " -b build/optimized.wasm -t build/optimized.wat --validate --sourceMap --optimize";
+  const buildUntouched = "asc " + entryPath + " -b build/untouched.wasm -t build/untouched.wat --sourceMap --debug";
+  const buildOptimized = "asc " + entryPath + " -b build/optimized.wasm -t build/optimized.wat --sourceMap --optimize";
   const buildAll = "npm run asbuild:untouched && npm run asbuild:optimized";
   if (!fs.existsSync(packageFile)) {
     fs.writeFileSync(packageFile, JSON.stringify({

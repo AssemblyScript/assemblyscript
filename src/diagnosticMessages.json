@@ -17,7 +17,7 @@
   "Unmanaged classes cannot implement interfaces.": 208,
   "Invalid regular expression flags.": 209,
   "Expression is never 'null'.": 210,
-  "Class '{0}' is sealed and cannot be extended.": 211,
+  "Class '{0}' is final and cannot be extended.": 211,
   "Decorator '{0}' is not valid here.": 212,
   "Duplicate decorator.": 213,
   "Type '{0}' is illegal in this context.": 214,
@@ -37,12 +37,14 @@
   "Function '{0}' is virtual and will not be inlined.": 228,
   "Property '{0}' only has a setter and is missing a getter.": 229,
   "'{0}' keyword cannot be used here.": 230,
+  "A class with a constructor explicitly returning something else than 'this' must be '@final'.": 231,
 
   "Type '{0}' is cyclic. Module will include deferred garbage collection.": 900,
   "Importing the table disables some indirect call optimizations.": 901,
   "Exporting the table disables some indirect call optimizations.": 902,
   "Expression compiles to a dynamic check at runtime.": 903,
   "Indexed access may involve bounds checking.": 904,
+  "Explicitly returning constructor drops 'this' allocation.": 905,
 
   "Unterminated string literal.": 1002,
   "Identifier expected.": 1003,

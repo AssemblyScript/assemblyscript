@@ -102,7 +102,7 @@ export class Array<T> {
 
   @operator("[]") private __get(index: i32): T {
     if (<u32>index >= <u32>this.length_) throw new RangeError(E_INDEXOUTOFRANGE);
-    var value = this.__unchecked_get(index);
+    var value = this.__uget(index);
     if (isReference<T>()) {
       if (!isNullable<T>()) {
         if (!changetype<usize>(value)) throw new Error(E_HOLEYARRAY);
@@ -111,7 +111,7 @@ export class Array<T> {
     return value;
   }
 
-  @unsafe @operator("{}") private __unchecked_get(index: i32): T {
+  @unsafe @operator("{}") private __uget(index: i32): T {
     return load<T>(this.dataStart + (<usize>index << alignof<T>()));
   }
 
@@ -121,10 +121,10 @@ export class Array<T> {
       ensureSize(changetype<usize>(this), index + 1, alignof<T>());
       this.length_ = index + 1;
     }
-    this.__unchecked_set(index, value);
+    this.__uset(index, value);
   }
 
-  @unsafe @operator("{}=") private __unchecked_set(index: i32, value: T): void {
+  @unsafe @operator("{}=") private __uset(index: i32, value: T): void {
     if (isManaged<T>()) {
       let offset = this.dataStart + (<usize>index << alignof<T>());
       let oldRef = load<usize>(offset);
