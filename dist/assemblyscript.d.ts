@@ -235,7 +235,7 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Unmanaged_classes_cannot_implement_interfaces = 208,
         Invalid_regular_expression_flags = 209,
         Expression_is_never_null = 210,
-        Class_0_is_sealed_and_cannot_be_extended = 211,
+        Class_0_is_final_and_cannot_be_extended = 211,
         Decorator_0_is_not_valid_here = 212,
         Duplicate_decorator = 213,
         Type_0_is_illegal_in_this_context = 214,
@@ -255,11 +255,13 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Function_0_is_virtual_and_will_not_be_inlined = 228,
         Property_0_only_has_a_setter_and_is_missing_a_getter = 229,
         _0_keyword_cannot_be_used_here = 230,
+        A_class_with_a_constructor_explicitly_returning_something_else_than_this_must_be_final = 231,
         Type_0_is_cyclic_Module_will_include_deferred_garbage_collection = 900,
         Importing_the_table_disables_some_indirect_call_optimizations = 901,
         Exporting_the_table_disables_some_indirect_call_optimizations = 902,
         Expression_compiles_to_a_dynamic_check_at_runtime = 903,
         Indexed_access_may_involve_bounds_checking = 904,
+        Explicitly_returning_constructor_drops_this_allocation = 905,
         Unterminated_string_literal = 1002,
         Identifier_expected = 1003,
         _0_expected = 1005,
@@ -1160,7 +1162,7 @@ declare module "assemblyscript/src/ast" {
         OPERATOR_PREFIX = 4,
         OPERATOR_POSTFIX = 5,
         UNMANAGED = 6,
-        SEALED = 7,
+        FINAL = 7,
         INLINE = 8,
         EXTERNAL = 9,
         BUILTIN = 10,
@@ -2656,9 +2658,9 @@ declare module "assemblyscript/src/flow" {
         BREAKS = 16,
         /** This flow always continues. */
         CONTINUES = 32,
-        /** This flow always allocates. Constructors only. */
-        ALLOCATES = 64,
-        /** This flow always calls super. Constructors only. */
+        /** This flow always accesses `this`. Constructors only. */
+        ACCESSES_THIS = 64,
+        /** This flow always calls `super`. Constructors only. */
         CALLS_SUPER = 128,
         /** This flow always terminates (returns, throws or continues). */
         TERMINATES = 256,
@@ -2670,8 +2672,10 @@ declare module "assemblyscript/src/flow" {
         CONDITIONALLY_BREAKS = 2048,
         /** This flow conditionally continues in a child flow. */
         CONDITIONALLY_CONTINUES = 4096,
-        /** This flow conditionally allocates in a child flow. Constructors only. */
-        CONDITIONALLY_ALLOCATES = 8192,
+        /** This flow conditionally accesses `this` in a child flow. Constructors only. */
+        CONDITIONALLY_ACCESSES_THIS = 8192,
+        /** This flow may return a non-this value. Constructors only. */
+        MAY_RETURN_NONTHIS = 16384,
         /** This is a flow with explicitly disabled bounds checking. */
         UNCHECKED_CONTEXT = 32768,
         /** Any categorical flag. */
@@ -3541,8 +3545,8 @@ declare module "assemblyscript/src/program" {
         OPERATOR_POSTFIX = 8,
         /** Is an unmanaged class. */
         UNMANAGED = 16,
-        /** Is a sealed class. */
-        SEALED = 32,
+        /** Is a final class. */
+        FINAL = 32,
         /** Is always inlined. */
         INLINE = 64,
         /** Is using a different external name. */
