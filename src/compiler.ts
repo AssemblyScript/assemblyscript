@@ -664,11 +664,8 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
-        let propertyPrototype = <PropertyPrototype>element;
-        let getterPrototype = propertyPrototype.getterPrototype;
-        if (getterPrototype) this.ensureModuleExport(GETTER_PREFIX + name, getterPrototype, prefix);
-        let setterPrototype = propertyPrototype.setterPrototype;
-        if (setterPrototype) this.ensureModuleExport(SETTER_PREFIX + name, setterPrototype, prefix);
+        let propertyInstance = (<PropertyPrototype>element).instance;
+        if (propertyInstance) this.ensureModuleExport(name, propertyInstance, prefix);
         break;
       }
 
@@ -713,10 +710,10 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.PROPERTY: {
         let propertyInstance = <Property>element;
-        let getter = propertyInstance.getterInstance;
-        if (getter) this.ensureModuleExport(GETTER_PREFIX + name, getter, prefix);
-        let setter = propertyInstance.setterInstance;
-        if (setter) this.ensureModuleExport(SETTER_PREFIX + name, setter, prefix);
+        let getterInstance = propertyInstance.getterInstance;
+        if (getterInstance) this.ensureModuleExport(GETTER_PREFIX + name, getterInstance, prefix);
+        let setterInstance = propertyInstance.setterInstance;
+        if (setterInstance) this.ensureModuleExport(SETTER_PREFIX + name, setterInstance, prefix);
         break;
       }
       case ElementKind.FIELD: {
@@ -796,32 +793,21 @@ export class Compiler extends DiagnosticEmitter {
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
         if (!element.is(CommonFlags.GENERIC)) {
-          let instance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-          if (instance) this.compileFunction(instance);
+          let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+          if (functionInstance) this.compileFunction(functionInstance);
         }
         break;
       }
       case ElementKind.CLASS_PROTOTYPE: {
         if (!element.is(CommonFlags.GENERIC)) {
-          let instance = this.resolver.resolveClass(<ClassPrototype>element, null);
-          if (instance) this.compileClass(instance);
+          let classInstance = this.resolver.resolveClass(<ClassPrototype>element, null);
+          if (classInstance) this.compileClass(classInstance);
         }
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
-        let propertyPrototype = <PropertyPrototype>element;
-        let getterPrototype = propertyPrototype.getterPrototype;
-        if (getterPrototype) {
-          assert(!getterPrototype.is(CommonFlags.GENERIC));
-          let instance = this.resolver.resolveFunction(getterPrototype, null);
-          if (instance) this.compileFunction(instance);
-        }
-        let setterPrototype = propertyPrototype.setterPrototype;
-        if (setterPrototype) {
-          assert(!setterPrototype.is(CommonFlags.GENERIC));
-          let instance = this.resolver.resolveFunction(setterPrototype, null);
-          if (instance) this.compileFunction(instance);
-        }
+        let propertyInstance = this.resolver.resolveStaticProperty(<PropertyPrototype>element);
+        if (propertyInstance) this.compileProperty(propertyInstance);
         break;
       }
       case ElementKind.NAMESPACE:
@@ -1551,19 +1537,8 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case ElementKind.PROPERTY_PROTOTYPE: {
-            let propertyPrototype = <PropertyPrototype>element;
-            let getterPrototype = propertyPrototype.getterPrototype;
-            if (getterPrototype) {
-              assert(!getterPrototype.is(CommonFlags.GENERIC));
-              let instance = this.resolver.resolveFunction(getterPrototype, null);
-              if (instance) this.compileFunction(instance);
-            }
-            let setterPrototype = propertyPrototype.setterPrototype;
-            if (setterPrototype) {
-              assert(!setterPrototype.is(CommonFlags.GENERIC));
-              let instance = this.resolver.resolveFunction(setterPrototype, null);
-              if (instance) this.compileFunction(instance);
-            }
+            let propertyInstance = this.resolver.resolveStaticProperty(<PropertyPrototype>element);
+            if (propertyInstance) this.compileProperty(propertyInstance);
             break;
           }
         }
@@ -4683,8 +4658,8 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.unreachable();
               break;
             }
-            let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
-            if (!prototype) {
+            let namespaceMembers = namespace.members;
+            if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
                 expression.range, "Mathf.pow"
@@ -4692,6 +4667,7 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.unreachable();
               break;
             }
+            let prototype = assert(namespaceMembers.get(CommonNames.pow));
             assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
             this.f32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
           }
@@ -4718,8 +4694,8 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.unreachable();
               break;
             }
-            let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
-            if (!prototype) {
+            let namespaceMembers = namespace.members;
+            if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
               this.error(
                 DiagnosticCode.Cannot_find_name_0,
                 expression.range, "Math.pow"
@@ -4727,6 +4703,7 @@ export class Compiler extends DiagnosticEmitter {
               expr = module.unreachable();
               break;
             }
+            let prototype = assert(namespaceMembers.get(CommonNames.pow));
             assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
             this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
           }
@@ -4966,8 +4943,8 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
-              let prototype = namespace.members ? namespace.members.get(CommonNames.mod) : null;
-              if (!prototype) {
+              let namespaceMembers = namespace.members;
+              if (!namespaceMembers || !namespaceMembers.has(CommonNames.mod)) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
                   expression.range, "Mathf.mod"
@@ -4975,6 +4952,7 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
+              let prototype = assert(namespaceMembers.get(CommonNames.mod));
               assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
               this.f32ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
@@ -4997,8 +4975,8 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
-              let prototype = namespace.members ? namespace.members.get(CommonNames.mod) : null;
-              if (!prototype) {
+              let namespaceMembers = namespace.members;
+              if (!namespaceMembers || !namespaceMembers.has(CommonNames.mod)) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
                   expression.range, "Math.mod"
@@ -5006,6 +4984,7 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
+              let prototype = assert(namespaceMembers.get(CommonNames.mod));
               assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
               this.f64ModInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
@@ -5826,23 +5805,6 @@ export class Compiler extends DiagnosticEmitter {
         if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
-      case ElementKind.PROPERTY_PROTOTYPE: { // static property
-        let propertyPrototype = <PropertyPrototype>target;
-        let setterPrototype = propertyPrototype.setterPrototype;
-        if (!setterPrototype) {
-          this.error(
-            DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-            expression.range, propertyPrototype.internalName
-          );
-          return this.module.unreachable();
-        }
-        let setterInstance = this.resolver.resolveFunction(setterPrototype, null, makeMap<string,Type>(), ReportMode.REPORT);
-        if (!setterInstance) return this.module.unreachable();
-        assert(setterInstance.signature.parameterTypes.length == 1); // parser must guarantee this
-        targetType = setterInstance.signature.parameterTypes[0];
-        if (setterPrototype.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
-        break;
-      }
       case ElementKind.PROPERTY: { // instance property
         let propertyInstance = <Property>target;
         let setterInstance = propertyInstance.setterInstance;
@@ -5980,47 +5942,20 @@ export class Compiler extends DiagnosticEmitter {
           );
           return module.unreachable();
         }
+        let fieldParent = fieldInstance.parent;
+        assert(fieldParent.kind == ElementKind.CLASS);
         return this.makeFieldAssignment(fieldInstance,
           valueExpr,
-          // FIXME: explicit type (currently fails due to missing null checking)
-          this.compileExpression(assert(thisExpression), this.options.usizeType),
+          this.compileExpression(
+            assert(thisExpression),
+            (<Class>fieldParent).type,
+            Constraints.CONV_IMPLICIT
+          ),
           tee
         );
       }
-      case ElementKind.PROPERTY_PROTOTYPE: { // static property
-        let propertyPrototype = <PropertyPrototype>target;
-        let setterPrototype = propertyPrototype.setterPrototype;
-        if (!setterPrototype) {
-          this.error(
-            DiagnosticCode.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property,
-            valueExpression.range, target.internalName
-          );
-          return module.unreachable();
-        }
-        let setterInstance = this.resolver.resolveFunction(setterPrototype, null, makeMap<string,Type>(), ReportMode.REPORT);
-        if (!setterInstance) return module.unreachable();
-        assert(setterInstance.signature.parameterTypes.length == 1);
-        let valueType = setterInstance.signature.parameterTypes[0];
-        if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, valueType, flow); // (*)
-        // call just the setter if the return value isn't of interest
-        if (!tee) return this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression);
-        // otherwise call the setter first, then the getter
-        let getterPrototype = assert(propertyPrototype.getterPrototype); // must be present
-        let getterInstance = this.resolver.resolveFunction(getterPrototype, null, makeMap<string,Type>(), ReportMode.REPORT);
-        if (!getterInstance) return module.unreachable();
-        let returnType = getterInstance.signature.returnType;
-        assert(valueType == returnType);
-        let nativeReturnType = returnType.toNativeType();
-        return module.block(null, [
-          this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression),
-          this.makeCallDirect(getterInstance, null, valueExpression) // sets currentType
-        ], nativeReturnType);
-      }
-      case ElementKind.PROPERTY: { // instance property
+      case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
-        let propertyInstanceParent = propertyInstance.parent;
-        assert(propertyInstanceParent.kind == ElementKind.CLASS || propertyInstanceParent.kind == ElementKind.INTERFACE);
-        let classInstance = <Class>propertyInstanceParent;
         let setterInstance = propertyInstance.setterInstance;
         if (!setterInstance) {
           this.error(
@@ -6032,28 +5967,38 @@ export class Compiler extends DiagnosticEmitter {
         assert(setterInstance.signature.parameterTypes.length == 1);
         let valueType = setterInstance.signature.parameterTypes[0];
         if (this.skippedAutoreleases.has(valueExpr)) valueExpr = this.makeAutorelease(valueExpr, valueType, flow); // (*)
-        // call just the setter if the return value isn't of interest
-        if (!tee) {
-          let thisExpr = this.compileExpression(assert(thisExpression), classInstance.type);
-          return this.makeCallDirect(setterInstance, [ thisExpr, valueExpr ], valueExpression);
+        if (propertyInstance.is(CommonFlags.INSTANCE)) {
+          let thisType = assert(setterInstance.signature.thisType);
+          let thisExpr = this.compileExpression(
+            assert(thisExpression),
+            thisType,
+            Constraints.CONV_IMPLICIT
+          );
+          if (!tee) return this.makeCallDirect(setterInstance, [ thisExpr, valueExpr ], valueExpression);
+          let getterInstance = assert((<Property>target).getterInstance);
+          assert(getterInstance.signature.thisType == thisType);
+          let returnType = getterInstance.signature.returnType;
+          let nativeReturnType = returnType.toNativeType();
+          let tempThis = flow.getTempLocal(returnType);
+          let ret = module.block(null, [
+            this.makeCallDirect(setterInstance, [
+              module.local_tee(tempThis.index, thisExpr),
+              valueExpr
+            ], valueExpression),
+            this.makeCallDirect(getterInstance, [
+              module.local_get(tempThis.index, nativeReturnType)
+            ], valueExpression)
+          ], nativeReturnType);
+          flow.freeTempLocal(tempThis);
+          return ret;
+        } else {
+          if (!tee) return this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression);
+          let getterInstance = assert((<Property>target).getterInstance);
+          return module.block(null, [
+            this.makeCallDirect(setterInstance, [ valueExpr ], valueExpression),
+            this.makeCallDirect(getterInstance, null, valueExpression)
+          ], getterInstance.signature.returnType.toNativeType());
         }
-        // otherwise call the setter first, then the getter
-        let getterInstance = assert((<Property>target).getterInstance); // must be present
-        let returnType = getterInstance.signature.returnType;
-        let nativeReturnType = returnType.toNativeType();
-        let thisExpr = this.compileExpression(assert(thisExpression), this.options.usizeType);
-        let temp = flow.getTempLocal(returnType);
-        let ret = module.block(null, [
-          this.makeCallDirect(setterInstance, [ // set and remember the target
-            module.local_tee(temp.index, thisExpr),
-            valueExpr
-          ], valueExpression),
-          this.makeCallDirect(getterInstance, [ // get from remembered target
-            module.local_get(temp.index, nativeReturnType)
-          ], valueExpression)
-        ], nativeReturnType);
-        flow.freeTempLocal(temp);
-        return ret;
       }
       case ElementKind.INDEXSIGNATURE: {
         let indexSignature = <IndexSignature>target;
@@ -6406,13 +6351,19 @@ export class Compiler extends DiagnosticEmitter {
         let thisExpression = this.resolver.currentThisExpression; // compileCallDirect may reset
         let functionInstance = this.resolver.maybeInferCall(expression, functionPrototype, flow);
         if (!functionInstance) return this.module.unreachable();
+        let thisArg: ExpressionRef = 0;
+        if (functionInstance.is(CommonFlags.INSTANCE)) {
+          thisArg = this.compileExpression(
+            assert(thisExpression),
+            assert(functionInstance.signature.thisType),
+            Constraints.CONV_IMPLICIT
+          );
+        }
         return this.compileCallDirect(
           functionInstance,
           expression.arguments,
           expression,
-          functionInstance.is(CommonFlags.INSTANCE)
-            ? this.compileExpression(assert(thisExpression), this.options.usizeType)
-            : 0,
+          thisArg,
           constraints
         );
       }
@@ -6453,23 +6404,24 @@ export class Compiler extends DiagnosticEmitter {
         let fieldType = fieldInstance.type;
         signature = fieldType.signatureReference;
         if (signature) {
-          let thisExpression = assert(this.resolver.currentThisExpression);
-          let thisExpr = this.compileExpression(thisExpression, this.options.usizeType);
-          indexArg = module.load(
-            4,
-            false,
-            thisExpr,
+          let fieldParent = fieldInstance.parent;
+          assert(fieldParent.kind == ElementKind.CLASS);
+          indexArg = module.load(4, false,
+            this.compileExpression(
+              assert(this.resolver.currentThisExpression),
+              (<Class>fieldParent).type,
+              Constraints.CONV_IMPLICIT
+            ),
             NativeType.I32,
             fieldInstance.memoryOffset
           );
           break;
-        } else {
-          this.error(
-            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, fieldType.toString()
-          );
-          return module.unreachable();
         }
+        this.error(
+          DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
+          expression.range, fieldType.toString()
+        );
+        return module.unreachable();
       }
       case ElementKind.FUNCTION_TARGET: {
         let functionTarget = <FunctionTarget>target;
@@ -6478,28 +6430,18 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
 
-      case ElementKind.PROPERTY_PROTOTYPE: { // static property
-        let propertyPrototype = <PropertyPrototype>target;
-        let getterPrototype = assert(propertyPrototype.getterPrototype);
-        let getterInstance = this.resolver.resolveFunction(getterPrototype, null);
-        if (!getterInstance) return module.unreachable();
-        indexArg = this.compileCallDirect(getterInstance, [], expression.expression);
-        signature = this.currentType.signatureReference;
-        if (!signature) {
-          this.error(
-            DiagnosticCode.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures,
-            expression.range, this.currentType.toString()
-          );
-          return module.unreachable();
-        }
-        break;
-      }
-      case ElementKind.PROPERTY: { // instance property
+      case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
         let getterInstance = assert(propertyInstance.getterInstance);
-        indexArg = this.compileCallDirect(getterInstance, [], expression.expression,
-          this.compileExpression(assert(this.resolver.currentThisExpression), this.options.usizeType)
-        );
+        let thisArg: ExpressionRef = 0;
+        if (propertyInstance.is(CommonFlags.INSTANCE)) {
+          thisArg = this.compileExpression(
+            assert(this.resolver.currentThisExpression),
+            assert(getterInstance.signature.thisType),
+            Constraints.CONV_IMPLICIT
+          );
+        }
+        indexArg = this.compileCallDirect(getterInstance, [], expression.expression, thisArg);
         signature = this.currentType.signatureReference;
         if (!signature) {
           this.error(
@@ -9205,12 +9147,18 @@ export class Compiler extends DiagnosticEmitter {
         assert(enumValue.type == Type.i32);
         return module.global_get(enumValue.internalName, NativeType.I32);
       }
-      case ElementKind.FIELD: { // instance field
+      case ElementKind.FIELD: {
         let fieldInstance = <Field>target;
         let fieldType = fieldInstance.type;
         assert(fieldInstance.memoryOffset >= 0);
+        let fieldParent = fieldInstance.parent;
+        assert(fieldParent.kind == ElementKind.CLASS);
         let thisExpression = assert(this.resolver.currentThisExpression);
-        let thisExpr = this.compileExpression(thisExpression, this.options.usizeType);
+        let thisExpr = this.compileExpression(
+          thisExpression,
+          (<Class>fieldParent).type,
+          Constraints.CONV_IMPLICIT
+        );
         let thisType = this.currentType;
         if (thisType.is(TypeFlags.NULLABLE)) {
           if (!flow.isNonnull(thisExpr, thisType)) {
@@ -9234,21 +9182,18 @@ export class Compiler extends DiagnosticEmitter {
           fieldInstance.memoryOffset
         );
       }
-      case ElementKind.PROPERTY_PROTOTYPE: {// static property
-        let propertyPrototype = <PropertyPrototype>target;
-        let getterPrototype = propertyPrototype.getterPrototype;
-        if (getterPrototype) {
-          let getter = this.resolver.resolveFunction(getterPrototype, null);
-          if (getter) return this.compileCallDirect(getter, [], expression, 0);
-        }
-        return module.unreachable();
-      }
-      case ElementKind.PROPERTY: { // instance property
+      case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
         let getterInstance = assert(propertyInstance.getterInstance);
-        return this.compileCallDirect(getterInstance, [], expression,
-          this.compileExpression(assert(this.resolver.currentThisExpression), this.options.usizeType)
-        );
+        let thisArg: ExpressionRef = 0;
+        if (getterInstance.is(CommonFlags.INSTANCE)) {
+          thisArg = this.compileExpression(
+            assert(this.resolver.currentThisExpression),
+            assert(getterInstance.signature.thisType),
+            Constraints.CONV_IMPLICIT
+          );
+        }
+        return this.compileCallDirect(getterInstance, [], expression, thisArg);
       }
       case ElementKind.FUNCTION_PROTOTYPE: {
         let functionPrototype = <FunctionPrototype>target;

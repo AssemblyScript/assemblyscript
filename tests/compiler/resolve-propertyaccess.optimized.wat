@@ -17,7 +17,9 @@
  (data (i32.const 1328) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004")
  (data (i32.const 1360) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005")
  (data (i32.const 1392) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\005\005")
- (data (i32.const 1424) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006")
+ (data (i32.const 1424) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\007")
+ (data (i32.const 1456) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006")
+ (data (i32.const 1488) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\008")
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
  (export "memory" (memory $0))
  (start $~start)
@@ -326,7 +328,7 @@
  )
  (func $start:resolve-propertyaccess
   (local $0 i32)
-  i32.const 1456
+  i32.const 1520
   global.set $~lib/rt/stub/offset
   i32.const 1
   call $~lib/number/I32#toString
@@ -427,7 +429,7 @@
   if
    i32.const 0
    i32.const 1104
-   i32.const 70
+   i32.const 72
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -440,7 +442,20 @@
   if
    i32.const 0
    i32.const 1104
-   i32.const 76
+   i32.const 78
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 7
+  call $~lib/number/I32#toString
+  i32.const 1440
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1104
+   i32.const 84
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -454,13 +469,26 @@
   local.get $0
   i32.load
   call $~lib/number/I32#toString
-  i32.const 1440
+  i32.const 1472
   call $~lib/string/String.__eq
   i32.eqz
   if
    i32.const 0
    i32.const 1104
-   i32.const 84
+   i32.const 92
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 8
+  call $~lib/number/I32#toString
+  i32.const 1504
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 1104
+   i32.const 97
    i32.const 3
    call $~lib/builtins/abort
    unreachable

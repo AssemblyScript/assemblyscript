@@ -3210,7 +3210,10 @@ export class FunctionPrototype extends DeclaredElement {
   get isBound(): bool {
     var parent = this.parent;
     return parent.kind == ElementKind.CLASS
-        || parent.kind == ElementKind.PROPERTY_PROTOTYPE && parent.parent.kind == ElementKind.CLASS;
+        || parent.kind == ElementKind.PROPERTY_PROTOTYPE && (
+             parent.parent.kind == ElementKind.CLASS ||
+             parent.parent.kind == ElementKind.INTERFACE
+           );
   }
 
   /** Creates a clone of this prototype that is bound to a concrete class instead. */
@@ -3415,8 +3418,9 @@ export class Function extends TypedElement {
   /** Finalizes the function once compiled, releasing no longer needed resources. */
   finalize(module: Module, ref: FunctionRef): void {
     this.ref = ref;
-    assert(!this.breakStack || !this.breakStack.length); // internal error
-    this.breakStack = null;
+    var breakStack = this.breakStack;
+    assert(!breakStack || !breakStack.length); // internal error
+    this.breakStack = breakStack = null;
     this.breakLabel = null;
     this.tempI32s = this.tempI64s = this.tempF32s = this.tempF64s = null;
     if (this.program.options.sourceMap) {
@@ -3571,6 +3575,8 @@ export class PropertyPrototype extends DeclaredElement {
   getterPrototype: FunctionPrototype | null = null;
   /** Setter prototype. */
   setterPrototype: FunctionPrototype | null = null;
+  /** Property instance, if resolved. */
+  instance: Property | null = null;
 
   /** Constructs a new property prototype. */
   constructor(
@@ -3631,7 +3637,9 @@ export class Property extends VariableLikeElement {
     this.prototype = prototype;
     this.flags = prototype.flags;
     this.decoratorFlags = prototype.decoratorFlags;
-    registerConcreteElement(this.program, this);
+    if (this.is(CommonFlags.INSTANCE)) {
+      registerConcreteElement(this.program, this);
+    }
   }
 
   /* @override */
@@ -3908,9 +3916,10 @@ export class Class extends TypedElement {
         throw new Error("type argument count mismatch");
       }
       if (numTypeArguments) {
-        if (!this.contextualTypeArguments) this.contextualTypeArguments = new Map();
+        let contextualTypeArguments = this.contextualTypeArguments;
+        if (!contextualTypeArguments) this.contextualTypeArguments = contextualTypeArguments = new Map();
         for (let i = 0; i < numTypeArguments; ++i) {
-          this.contextualTypeArguments.set(typeParameters[i].name.text, typeArguments[i]);
+          contextualTypeArguments.set(typeParameters[i].name.text, typeArguments[i]);
         }
       }
     } else if (typeParameters !== null && typeParameters.length > 0) {

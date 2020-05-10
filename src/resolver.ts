@@ -1313,32 +1313,10 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: { // SomeClass.prop
-        let propertyPrototype = <PropertyPrototype>target;
-        let getterInstance = this.resolveFunction( // reports
-          assert(propertyPrototype.getterPrototype), // must have a getter
-          null,
-          makeMap<string,Type>(),
-          reportMode
-        );
-        if (!getterInstance) return null;
-        let type = getterInstance.signature.returnType;
-        let classReference = type.classReference;
-        if (!classReference) {
-          let wrapperClasses = this.program.wrapperClasses;
-          if (wrapperClasses.has(type)) {
-            classReference = assert(wrapperClasses.get(type));
-          } else {
-            if (reportMode == ReportMode.REPORT) {
-              this.error(
-                DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                node.property.range, propertyName, type.toString()
-              );
-            }
-            return null;
-          }
-        }
-        target = classReference;
-        break;
+        let propertyInstance = this.resolveStaticProperty(<PropertyPrototype>target);
+        if (!propertyInstance) return null;
+        target = propertyInstance;
+        // fall-through
       }
       case ElementKind.PROPERTY: { // someInstance.prop
         let propertyInstance = <Property>target;
@@ -1420,9 +1398,17 @@ export class Resolver extends DiagnosticEmitter {
         do {
           let members = target.members;
           if (members !== null && members.has(propertyName)) {
-            this.currentThisExpression = targetNode;
-            this.currentElementExpression = null;
-            return assert(members.get(propertyName)); // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE...
+            let member = assert(members.get(propertyName));
+            if (member.kind == ElementKind.PROPERTY_PROTOTYPE) {
+              // static properties have a singleton instance
+              this.currentThisExpression = null;
+              this.currentElementExpression = null;
+              return this.resolveStaticProperty(<PropertyPrototype>member, reportMode);
+            } else {
+              this.currentThisExpression = targetNode;
+              this.currentElementExpression = null;
+              return member; // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE...
+            }
           }
           // traverse inherited static members on the base prototype if target is a class prototype
           if (
@@ -3367,5 +3353,53 @@ export class Resolver extends DiagnosticEmitter {
       ctxTypes,
       reportMode
     );
+  }
+
+  /** Resolves a static property prototype. */
+  resolveStaticProperty(
+    /** The prototype of the property. */
+    prototype: PropertyPrototype,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Property | null {
+    // Static properties have a cached singleton instance, while instance
+    // properties become resolved together with their class, which does not
+    // contain property prototypes anymore (properties are never generic).
+    assert(prototype.is(CommonFlags.STATIC));
+    var instance = prototype.instance;
+    if (instance) return instance;
+    var parent = prototype.parent;
+    assert(parent.kind == ElementKind.CLASS_PROTOTYPE);
+    prototype.instance = instance = new Property(prototype, parent);
+    var getterPrototype = prototype.getterPrototype;
+    if (getterPrototype) {
+      let getterInstance = this.resolveFunction(
+        getterPrototype,
+        null,
+        makeMap<string,Type>(),
+        reportMode
+      );
+      if (getterInstance) {
+        instance.getterInstance = getterInstance;
+        instance.setType(getterInstance.signature.returnType);
+      }
+    }
+    var setterPrototype = prototype.setterPrototype;
+    if (setterPrototype) {
+      let setterInstance = this.resolveFunction(
+        setterPrototype,
+        null,
+        makeMap<string,Type>(),
+        reportMode
+      );
+      if (setterInstance) {
+        instance.setterInstance = setterInstance;
+        if (!instance.is(CommonFlags.RESOLVED)) {
+          assert(setterInstance.signature.parameterTypes.length == 1);
+          instance.setType(setterInstance.signature.parameterTypes[0]);
+        }
+      }
+    }
+    return instance;
   }
 }
