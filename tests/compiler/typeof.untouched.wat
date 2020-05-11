@@ -54,6 +54,9 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -125,33 +128,33 @@
   end
   loop $while-continue|1
    local.get $4
-   local.tee $7
+   local.tee $8
    i32.const 1
    i32.sub
    local.set $4
-   local.get $7
-   local.set $7
-   local.get $7
+   local.get $8
+   local.set $9
+   local.get $9
    if
     local.get $5
     i32.load16_u
-    local.set $8
+    local.set $10
     local.get $6
     i32.load16_u
-    local.set $9
-    local.get $8
-    local.get $9
+    local.set $11
+    local.get $10
+    local.get $11
     i32.ne
     if
-     local.get $8
-     local.get $9
+     local.get $10
+     local.get $11
      i32.sub
-     local.set $10
+     local.set $12
      local.get $0
      call $~lib/rt/stub/__release
      local.get $2
      call $~lib/rt/stub/__release
-     local.get $10
+     local.get $12
      return
     end
     local.get $5
@@ -166,16 +169,19 @@
    end
   end
   i32.const 0
-  local.set $7
+  local.set $13
   local.get $0
   call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release
-  local.get $7
+  local.get $13
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -207,44 +213,44 @@
   end
   if
    i32.const 0
-   local.set $2
+   local.set $3
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $3
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
-   local.set $2
+   local.set $5
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $5
    return
   end
   local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $4
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $2
+  local.set $6
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $6
  )
  (func $start:typeof~anonymous|0
   nop
@@ -255,6 +261,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   memory.size
   local.set $1
   local.get $1
@@ -285,8 +292,8 @@
    local.get $5
    i32.gt_s
    select
-   local.set $4
-   local.get $4
+   local.set $6
+   local.get $6
    memory.grow
    i32.const 0
    i32.lt_s

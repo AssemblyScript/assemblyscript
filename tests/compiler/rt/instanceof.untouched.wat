@@ -31,6 +31,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   memory.size
   local.set $1
   local.get $1
@@ -61,8 +62,8 @@
    local.get $5
    i32.gt_s
    select
-   local.set $4
-   local.get $4
+   local.set $6
+   local.get $6
    memory.grow
    i32.const 0
    i32.lt_s
@@ -221,6 +222,23 @@
  )
  (func $start:rt/instanceof
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -263,12 +281,12 @@
    unreachable
   end
   global.get $rt/instanceof/animal
-  local.tee $0
+  local.tee $1
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $1
    i32.const 5
    call $~lib/rt/__instanceof
   end
@@ -285,12 +303,12 @@
   i32.const 1
   drop
   global.get $rt/instanceof/cat
-  local.tee $0
+  local.tee $2
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $2
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -304,12 +322,12 @@
    unreachable
   end
   global.get $rt/instanceof/cat
-  local.tee $0
+  local.tee $3
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $3
    i32.const 5
    call $~lib/rt/__instanceof
   end
@@ -326,12 +344,12 @@
   i32.const 1
   drop
   global.get $rt/instanceof/blackcat
-  local.tee $0
+  local.tee $4
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $4
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -345,12 +363,12 @@
    unreachable
   end
   global.get $rt/instanceof/blackcat
-  local.tee $0
+  local.tee $5
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $5
    i32.const 5
    call $~lib/rt/__instanceof
   end
@@ -385,12 +403,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullableAnimal
-  local.tee $0
+  local.tee $6
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $6
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -405,12 +423,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullableAnimal
-  local.tee $0
+  local.tee $7
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $7
    i32.const 5
    call $~lib/rt/__instanceof
   end
@@ -437,12 +455,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullableCat
-  local.tee $0
+  local.tee $8
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $8
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -456,12 +474,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullableCat
-  local.tee $0
+  local.tee $9
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $9
    i32.const 5
    call $~lib/rt/__instanceof
   end
@@ -488,12 +506,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullableBlackcat
-  local.tee $0
+  local.tee $10
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $10
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -507,12 +525,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullableBlackcat
-  local.tee $0
+  local.tee $11
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $11
    i32.const 5
    call $~lib/rt/__instanceof
   end
@@ -539,12 +557,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullAnimal
-  local.tee $0
+  local.tee $12
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $12
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -559,12 +577,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullAnimal
-  local.tee $0
+  local.tee $13
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $13
    i32.const 5
    call $~lib/rt/__instanceof
   end
@@ -592,12 +610,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullCat
-  local.tee $0
+  local.tee $14
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $14
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -612,12 +630,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullCat
-  local.tee $0
+  local.tee $15
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $15
    i32.const 5
    call $~lib/rt/__instanceof
   end
@@ -645,12 +663,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullBlackcat
-  local.tee $0
+  local.tee $16
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $16
    i32.const 4
    call $~lib/rt/__instanceof
   end
@@ -665,12 +683,12 @@
    unreachable
   end
   global.get $rt/instanceof/nullBlackcat
-  local.tee $0
+  local.tee $17
   i32.eqz
   if (result i32)
    i32.const 0
   else
-   local.get $0
+   local.get $17
    i32.const 5
    call $~lib/rt/__instanceof
   end

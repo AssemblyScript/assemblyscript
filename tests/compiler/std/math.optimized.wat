@@ -38401,10 +38401,8 @@
   call $~lib/bindings/Math/random
   i64.reinterpret_f64
   call $~lib/math/NativeMath.seedRandom
-  i32.const 0
-  local.set $2
   loop $for-loop|1
-   local.get $2
+   local.get $5
    f64.convert_i32_s
    f64.const 1e6
    f64.lt
@@ -38417,11 +38415,11 @@
      call $~lib/math/NativeMath.seedRandom
     end
     global.get $~lib/math/random_state0_32
-    local.tee $5
+    local.tee $2
     global.get $~lib/math/random_state1_32
     i32.xor
     local.tee $6
-    local.get $5
+    local.get $2
     i32.const 26
     i32.rotl
     i32.xor
@@ -38434,7 +38432,7 @@
     i32.const 13
     i32.rotl
     global.set $~lib/math/random_state1_32
-    local.get $5
+    local.get $2
     i32.const -1640531525
     i32.mul
     i32.const 5
@@ -38465,10 +38463,10 @@
      call $~lib/builtins/abort
      unreachable
     end
-    local.get $2
+    local.get $5
     i32.const 1
     i32.add
-    local.set $2
+    local.set $5
     br $for-loop|1
    end
   end

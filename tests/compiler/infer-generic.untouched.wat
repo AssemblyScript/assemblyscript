@@ -62,6 +62,7 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
   local.get $2
   local.set $3
   i32.const 0
@@ -81,8 +82,8 @@
    i32.lt_s
    select
    i32.lt_s
-   local.set $6
-   local.get $6
+   local.set $8
+   local.get $8
    if
     local.get $3
     local.get $0

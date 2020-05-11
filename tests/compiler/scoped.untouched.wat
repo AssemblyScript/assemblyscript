@@ -10,17 +10,19 @@
  (start $~start)
  (func $scoped/fn (param $0 i32)
   (local $1 i32)
+  (local $2 i32)
   i32.const 0
   local.set $1
   local.get $0
-  local.set $1
+  local.set $2
  )
  (func $start:scoped
   (local $0 i32)
   (local $1 i32)
   (local $2 i32)
-  (local $3 i64)
-  (local $4 f32)
+  (local $3 i32)
+  (local $4 i64)
+  (local $5 f32)
   i32.const 0
   local.set $0
   loop $for-loop|0
@@ -39,27 +41,27 @@
    end
   end
   i32.const 0
-  local.set $1
+  local.set $2
   loop $for-loop|1
-   local.get $1
+   local.get $2
    i32.const 1
    i32.lt_s
-   local.set $2
-   local.get $2
+   local.set $3
+   local.get $3
    if
-    local.get $1
+    local.get $2
     drop
-    local.get $1
+    local.get $2
     i32.const 1
     i32.add
-    local.set $1
+    local.set $2
     br $for-loop|1
    end
   end
   i64.const 5
-  local.set $3
-  f32.const 10
   local.set $4
+  f32.const 10
+  local.set $5
   i32.const 42
   call $scoped/fn
  )

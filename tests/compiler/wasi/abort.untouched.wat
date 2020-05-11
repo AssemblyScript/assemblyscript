@@ -34,6 +34,12 @@
   (local $10 i32)
   (local $11 i32)
   (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
   local.get $0
   local.get $1
   i32.const 1
@@ -109,8 +115,8 @@
       if
        local.get $0
        i32.load16_u offset=2
-       local.set $9
-       local.get $9
+       local.set $10
+       local.get $10
        i32.const 64512
        i32.and
        i32.const 56320
@@ -123,7 +129,7 @@
         i32.const 10
         i32.shl
         i32.add
-        local.get $9
+        local.get $10
         i32.const 1023
         i32.and
         i32.or
@@ -133,7 +139,7 @@
         i32.shr_u
         i32.const 240
         i32.or
-        local.set $8
+        local.set $11
         local.get $7
         i32.const 12
         i32.shr_u
@@ -141,7 +147,7 @@
         i32.and
         i32.const 128
         i32.or
-        local.set $10
+        local.set $12
         local.get $7
         i32.const 6
         i32.shr_u
@@ -149,26 +155,26 @@
         i32.and
         i32.const 128
         i32.or
-        local.set $11
+        local.set $13
         local.get $7
         i32.const 63
         i32.and
         i32.const 128
         i32.or
-        local.set $12
+        local.set $14
         local.get $5
-        local.get $12
+        local.get $14
         i32.const 24
         i32.shl
-        local.get $11
+        local.get $13
         i32.const 16
         i32.shl
         i32.or
-        local.get $10
+        local.get $12
         i32.const 8
         i32.shl
         i32.or
-        local.get $8
+        local.get $11
         i32.or
         i32.store
         local.get $5
@@ -187,7 +193,7 @@
       i32.shr_u
       i32.const 224
       i32.or
-      local.set $9
+      local.set $15
       local.get $7
       i32.const 6
       i32.shr_u
@@ -195,22 +201,22 @@
       i32.and
       i32.const 128
       i32.or
-      local.set $12
+      local.set $16
       local.get $7
       i32.const 63
       i32.and
       i32.const 128
       i32.or
-      local.set $11
+      local.set $17
       local.get $5
-      local.get $12
+      local.get $16
       i32.const 8
       i32.shl
-      local.get $9
+      local.get $15
       i32.or
       i32.store16
       local.get $5
-      local.get $11
+      local.get $17
       i32.store8 offset=2
       local.get $5
       i32.const 3
@@ -228,11 +234,11 @@
   local.get $3
   if
    local.get $5
-   local.tee $6
+   local.tee $18
    i32.const 1
    i32.add
    local.set $5
-   local.get $6
+   local.get $18
    i32.const 0
    i32.store8
   end
@@ -304,6 +310,9 @@
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -376,7 +385,7 @@
    local.get $2
    i32.const 10
    i32.div_u
-   local.set $5
+   local.set $7
    local.get $4
    i32.const 1
    i32.sub
@@ -387,11 +396,11 @@
    i32.rem_u
    i32.add
    i32.store8
-   local.get $5
+   local.get $7
    local.set $2
    local.get $2
-   local.set $7
-   local.get $7
+   local.set $8
+   local.get $8
    br_if $do-continue|0
   end
   local.get $4
@@ -399,11 +408,11 @@
   i32.add
   local.set $4
   local.get $4
-  local.tee $7
+  local.tee $9
   i32.const 1
   i32.add
   local.set $4
-  local.get $7
+  local.get $9
   i32.const 58
   i32.store8
   local.get $3
@@ -417,7 +426,7 @@
    local.get $3
    i32.const 10
    i32.div_u
-   local.set $7
+   local.set $10
    local.get $4
    i32.const 1
    i32.sub
@@ -428,11 +437,11 @@
    i32.rem_u
    i32.add
    i32.store8
-   local.get $7
+   local.get $10
    local.set $3
    local.get $3
-   local.set $8
-   local.get $8
+   local.set $11
+   local.get $11
    br_if $do-continue|1
   end
   local.get $4

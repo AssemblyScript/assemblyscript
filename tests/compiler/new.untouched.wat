@@ -19,6 +19,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   memory.size
   local.set $1
   local.get $1
@@ -49,8 +50,8 @@
    local.get $5
    i32.gt_s
    select
-   local.set $4
-   local.get $4
+   local.set $6
+   local.get $6
    memory.grow
    i32.const 0
    i32.lt_s
@@ -185,6 +186,15 @@
   (local $5 i32)
   (local $6 i32)
   (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -204,43 +214,18 @@
   global.set $new/ref
   i32.const 0
   call $new/Ref#constructor
-  local.set $0
+  local.set $1
   global.get $new/ref
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $1
   global.set $new/ref
   i32.const 0
   call $new/Ref#constructor
-  local.tee $0
+  local.tee $2
   call $new/Ref#get:ref
-  local.tee $1
-  local.tee $2
-  global.get $new/ref
   local.tee $3
-  i32.ne
-  if
-   local.get $2
-   call $~lib/rt/stub/__retain
-   local.set $2
-   local.get $3
-   call $~lib/rt/stub/__release
-  end
-  local.get $2
-  global.set $new/ref
-  i32.const 0
-  call $new/Gen<i32>#constructor
-  local.set $3
-  global.get $new/gen
-  call $~lib/rt/stub/__release
-  local.get $3
-  global.set $new/gen
-  i32.const 0
-  call $new/Gen<i32>#constructor
-  local.tee $3
-  call $new/Gen<i32>#get:gen
-  local.tee $2
   local.tee $4
-  global.get $new/gen
+  global.get $new/ref
   local.tee $5
   i32.ne
   if
@@ -251,50 +236,75 @@
    call $~lib/rt/stub/__release
   end
   local.get $4
+  global.set $new/ref
+  i32.const 0
+  call $new/Gen<i32>#constructor
+  local.set $6
+  global.get $new/gen
+  call $~lib/rt/stub/__release
+  local.get $6
+  global.set $new/gen
+  i32.const 0
+  call $new/Gen<i32>#constructor
+  local.tee $7
+  call $new/Gen<i32>#get:gen
+  local.tee $8
+  local.tee $9
+  global.get $new/gen
+  local.tee $10
+  i32.ne
+  if
+   local.get $9
+   call $~lib/rt/stub/__retain
+   local.set $9
+   local.get $10
+   call $~lib/rt/stub/__release
+  end
+  local.get $9
   global.set $new/gen
   i32.const 0
   call $new/ns.Ref#constructor
-  local.set $5
+  local.set $11
   global.get $new/ref2
   call $~lib/rt/stub/__release
-  local.get $5
+  local.get $11
   global.set $new/ref2
   i32.const 0
   call $new/ns.Ref#constructor
-  local.set $4
+  local.set $12
   global.get $new/ref2
   call $~lib/rt/stub/__release
-  local.get $4
+  local.get $12
   global.set $new/ref2
   i32.const 0
   call $new/ns.Ref#constructor
-  local.tee $4
+  local.tee $13
   call $new/ns.Ref#get:ref
-  local.tee $5
-  local.tee $6
+  local.tee $14
+  local.tee $15
   global.get $new/ref2
-  local.tee $7
+  local.tee $16
   i32.ne
   if
-   local.get $6
+   local.get $15
    call $~lib/rt/stub/__retain
-   local.set $6
-   local.get $7
+   local.set $15
+   local.get $16
    call $~lib/rt/stub/__release
   end
-  local.get $6
+  local.get $15
   global.set $new/ref2
-  local.get $0
-  call $~lib/rt/stub/__release
-  local.get $1
-  call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release
   local.get $3
   call $~lib/rt/stub/__release
-  local.get $4
+  local.get $7
   call $~lib/rt/stub/__release
-  local.get $5
+  local.get $8
+  call $~lib/rt/stub/__release
+  local.get $13
+  call $~lib/rt/stub/__release
+  local.get $14
   call $~lib/rt/stub/__release
  )
  (func $~start

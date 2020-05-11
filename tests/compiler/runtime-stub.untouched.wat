@@ -24,6 +24,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   memory.size
   local.set $1
   local.get $1
@@ -54,8 +55,8 @@
    local.get $5
    i32.gt_s
    select
-   local.set $4
-   local.get $4
+   local.set $6
+   local.get $6
    memory.grow
    i32.const 0
    i32.lt_s

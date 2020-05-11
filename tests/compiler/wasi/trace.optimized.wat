@@ -736,8 +736,6 @@
    global.get $~lib/util/number/_K
    i32.add
    global.set $~lib/util/number/_K
-   local.get $8
-   local.set $1
    local.get $9
    i32.const 0
    local.get $4
@@ -748,7 +746,7 @@
    i32.add
    i64.load32_u
    i64.mul
-   local.set $3
+   local.set $1
    local.get $0
    local.get $6
    i32.const 1
@@ -761,30 +759,30 @@
    local.set $4
    loop $while-continue|6
     i32.const 1
-    local.get $3
     local.get $1
+    local.get $8
     i64.sub
-    local.get $1
+    local.get $8
     local.get $11
     i64.add
-    local.get $3
+    local.get $1
     i64.sub
     i64.gt_u
-    local.get $1
+    local.get $8
     local.get $11
     i64.add
-    local.get $3
+    local.get $1
     i64.lt_u
     select
     i32.const 0
     local.get $5
-    local.get $1
+    local.get $8
     i64.sub
     local.get $11
     i64.ge_u
     i32.const 0
+    local.get $8
     local.get $1
-    local.get $3
     i64.lt_u
     select
     select
@@ -793,10 +791,10 @@
      i32.const 1
      i32.sub
      local.set $4
-     local.get $1
+     local.get $8
      local.get $11
      i64.add
-     local.set $1
+     local.set $8
      br $while-continue|6
     end
    end

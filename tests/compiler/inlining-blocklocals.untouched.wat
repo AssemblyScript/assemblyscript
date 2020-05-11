@@ -16,6 +16,8 @@
   (local $1 i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   i32.const 1
   local.set $0
   local.get $0
@@ -24,24 +26,24 @@
   i32.add
   local.set $0
   local.get $1
-  local.set $3
+  local.set $5
   global.get $inlining-blocklocals/b
-  local.tee $1
+  local.tee $2
   i32.const 1
   i32.add
   global.set $inlining-blocklocals/b
-  local.get $1
-  local.set $2
+  local.get $2
+  local.set $4
   local.get $0
   i32.const 1
   i32.add
   local.tee $0
-  local.set $1
-  local.get $3
+  local.set $3
+  local.get $5
   global.set $inlining-blocklocals/theCall_a
-  local.get $2
+  local.get $4
   global.set $inlining-blocklocals/theCall_b
-  local.get $1
+  local.get $3
   global.set $inlining-blocklocals/theCall_c
   global.get $inlining-blocklocals/theCall_a
   i32.const 1

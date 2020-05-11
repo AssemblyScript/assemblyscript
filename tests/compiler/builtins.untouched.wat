@@ -117,6 +117,9 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -188,33 +191,33 @@
   end
   loop $while-continue|1
    local.get $4
-   local.tee $7
+   local.tee $8
    i32.const 1
    i32.sub
    local.set $4
-   local.get $7
-   local.set $7
-   local.get $7
+   local.get $8
+   local.set $9
+   local.get $9
    if
     local.get $5
     i32.load16_u
-    local.set $8
+    local.set $10
     local.get $6
     i32.load16_u
-    local.set $9
-    local.get $8
-    local.get $9
+    local.set $11
+    local.get $10
+    local.get $11
     i32.ne
     if
-     local.get $8
-     local.get $9
+     local.get $10
+     local.get $11
      i32.sub
-     local.set $10
+     local.set $12
      local.get $0
      call $~lib/rt/stub/__release
      local.get $2
      call $~lib/rt/stub/__release
-     local.get $10
+     local.get $12
      return
     end
     local.get $5
@@ -229,16 +232,19 @@
    end
   end
   i32.const 0
-  local.set $7
+  local.set $13
   local.get $0
   call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release
-  local.get $7
+  local.get $13
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -270,44 +276,44 @@
   end
   if
    i32.const 0
-   local.set $2
+   local.set $3
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $3
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
-   local.set $2
+   local.set $5
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $5
    return
   end
   local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $4
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $2
+  local.set $6
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $6
  )
  (func $start:builtins~anonymous|0
   nop
@@ -318,13 +324,53 @@
  (func $start:builtins
   (local $0 i32)
   (local $1 i32)
-  (local $2 i64)
-  (local $3 i64)
-  (local $4 f32)
-  (local $5 f64)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
   (local $6 i32)
   (local $7 i32)
   (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i64)
+  (local $13 i64)
+  (local $14 i64)
+  (local $15 i64)
+  (local $16 i64)
+  (local $17 i64)
+  (local $18 i64)
+  (local $19 i64)
+  (local $20 f32)
+  (local $21 f32)
+  (local $22 f32)
+  (local $23 f32)
+  (local $24 f32)
+  (local $25 f32)
+  (local $26 f32)
+  (local $27 f32)
+  (local $28 f64)
+  (local $29 f64)
+  (local $30 f64)
+  (local $31 f64)
+  (local $32 f64)
+  (local $33 f64)
+  (local $34 f64)
+  (local $35 f64)
+  (local $36 f32)
+  (local $37 f64)
+  (local $38 f32)
+  (local $39 f32)
+  (local $40 f64)
+  (local $41 f64)
+  (local $42 f32)
+  (local $43 f64)
+  (local $44 i32)
+  (local $45 i32)
+  (local $46 i32)
+  (local $47 i32)
+  (local $48 i32)
   i32.const 1
   drop
   i32.const 0
@@ -445,20 +491,20 @@
   i32.xor
   drop
   i32.const 1
-  local.tee $0
+  local.tee $2
   i32.const 2
-  local.tee $1
-  local.get $0
-  local.get $1
+  local.tee $3
+  local.get $2
+  local.get $3
   i32.gt_s
   select
   drop
   i32.const 1
-  local.tee $0
+  local.tee $4
   i32.const 2
-  local.tee $1
-  local.get $0
-  local.get $1
+  local.tee $5
+  local.get $4
+  local.get $5
   i32.lt_s
   select
   drop
@@ -480,13 +526,13 @@
   i32.rotr
   global.set $builtins/i
   i32.const -42
-  local.tee $0
+  local.tee $6
   i32.const 31
   i32.shr_s
-  local.tee $1
-  local.get $0
+  local.tee $7
+  local.get $6
   i32.add
-  local.get $1
+  local.get $7
   i32.xor
   global.set $builtins/i
   global.get $builtins/i
@@ -502,11 +548,11 @@
    unreachable
   end
   i32.const 1
-  local.tee $0
+  local.tee $8
   i32.const 2
-  local.tee $1
-  local.get $0
-  local.get $1
+  local.tee $9
+  local.get $8
+  local.get $9
   i32.gt_s
   select
   global.set $builtins/i
@@ -523,11 +569,11 @@
    unreachable
   end
   i32.const 1
-  local.tee $0
+  local.tee $10
   i32.const 2
-  local.tee $1
-  local.get $0
-  local.get $1
+  local.tee $11
+  local.get $10
+  local.get $11
   i32.lt_s
   select
   global.set $builtins/i
@@ -561,13 +607,13 @@
   i64.rotr
   drop
   i64.const -42
-  local.tee $2
+  local.tee $12
   i64.const 63
   i64.shr_s
-  local.tee $3
-  local.get $2
+  local.tee $13
+  local.get $12
   i64.add
-  local.get $3
+  local.get $13
   i64.xor
   drop
   i64.const 1
@@ -588,13 +634,13 @@
   i64.rotr
   global.set $builtins/I
   i64.const -42
-  local.tee $2
+  local.tee $14
   i64.const 63
   i64.shr_s
-  local.tee $3
-  local.get $2
+  local.tee $15
+  local.get $14
   i64.add
-  local.get $3
+  local.get $15
   i64.xor
   global.set $builtins/I
   global.get $builtins/I
@@ -610,11 +656,11 @@
    unreachable
   end
   i64.const 1
-  local.tee $2
+  local.tee $16
   i64.const 2
-  local.tee $3
-  local.get $2
-  local.get $3
+  local.tee $17
+  local.get $16
+  local.get $17
   i64.gt_s
   select
   global.set $builtins/I
@@ -631,11 +677,11 @@
    unreachable
   end
   i64.const 1
-  local.tee $2
+  local.tee $18
   i64.const 2
-  local.tee $3
-  local.get $2
-  local.get $3
+  local.tee $19
+  local.get $18
+  local.get $19
   i64.lt_s
   select
   global.set $builtins/I
@@ -686,22 +732,22 @@
   f32.trunc
   drop
   f32.const 1.25
-  local.tee $4
-  local.get $4
+  local.tee $20
+  local.get $20
   f32.ne
   i32.const 0
   i32.eq
   drop
   f32.const nan:0x400000
-  local.tee $4
-  local.get $4
+  local.tee $21
+  local.get $21
   f32.ne
   i32.const 1
   i32.eq
   drop
   f32.const 1.25
-  local.tee $4
-  local.get $4
+  local.tee $22
+  local.get $22
   f32.sub
   f32.const 0
   f32.eq
@@ -709,8 +755,8 @@
   i32.eq
   drop
   f32.const inf
-  local.tee $4
-  local.get $4
+  local.tee $23
+  local.get $23
   f32.sub
   f32.const 0
   f32.eq
@@ -719,8 +765,8 @@
   drop
   f32.const inf
   f32.neg
-  local.tee $4
-  local.get $4
+  local.tee $24
+  local.get $24
   f32.sub
   f32.const 0
   f32.eq
@@ -728,8 +774,8 @@
   i32.eq
   drop
   f32.const nan:0x400000
-  local.tee $4
-  local.get $4
+  local.tee $25
+  local.get $25
   f32.sub
   f32.const 0
   f32.eq
@@ -771,13 +817,13 @@
   f32.trunc
   global.set $builtins/f
   f32.const 1.25
-  local.tee $4
-  local.get $4
+  local.tee $26
+  local.get $26
   f32.ne
   global.set $builtins/b
   f32.const 1.25
-  local.tee $4
-  local.get $4
+  local.tee $27
+  local.get $27
   f32.sub
   f32.const 0
   f32.eq
@@ -821,22 +867,22 @@
   f64.trunc
   drop
   f64.const 1.25
-  local.tee $5
-  local.get $5
+  local.tee $28
+  local.get $28
   f64.ne
   i32.const 0
   i32.eq
   drop
   f64.const nan:0x8000000000000
-  local.tee $5
-  local.get $5
+  local.tee $29
+  local.get $29
   f64.ne
   i32.const 1
   i32.eq
   drop
   f64.const 1.25
-  local.tee $5
-  local.get $5
+  local.tee $30
+  local.get $30
   f64.sub
   f64.const 0
   f64.eq
@@ -844,8 +890,8 @@
   i32.eq
   drop
   f64.const inf
-  local.tee $5
-  local.get $5
+  local.tee $31
+  local.get $31
   f64.sub
   f64.const 0
   f64.eq
@@ -854,8 +900,8 @@
   drop
   f64.const inf
   f64.neg
-  local.tee $5
-  local.get $5
+  local.tee $32
+  local.get $32
   f64.sub
   f64.const 0
   f64.eq
@@ -863,8 +909,8 @@
   i32.eq
   drop
   f64.const nan:0x8000000000000
-  local.tee $5
-  local.get $5
+  local.tee $33
+  local.get $33
   f64.sub
   f64.const 0
   f64.eq
@@ -906,13 +952,13 @@
   f64.trunc
   global.set $builtins/F
   f64.const 1.25
-  local.tee $5
-  local.get $5
+  local.tee $34
+  local.get $34
   f64.ne
   global.set $builtins/b
   f64.const 1.25
-  local.tee $5
-  local.get $5
+  local.tee $35
+  local.get $35
   f64.sub
   f64.const 0
   f64.eq
@@ -1266,57 +1312,57 @@
   f64.ne
   drop
   f32.const nan:0x400000
-  local.tee $4
-  local.get $4
+  local.tee $36
+  local.get $36
   f32.ne
   drop
   f64.const nan:0x8000000000000
-  local.tee $5
-  local.get $5
+  local.tee $37
+  local.get $37
   f64.ne
   drop
   f32.const nan:0x400000
-  local.tee $4
-  local.get $4
+  local.tee $38
+  local.get $38
   f32.sub
   f32.const 0
   f32.eq
   i32.eqz
   drop
   f32.const inf
-  local.tee $4
-  local.get $4
+  local.tee $39
+  local.get $39
   f32.sub
   f32.const 0
   f32.eq
   i32.eqz
   drop
   f64.const nan:0x8000000000000
-  local.tee $5
-  local.get $5
+  local.tee $40
+  local.get $40
   f64.sub
   f64.const 0
   f64.eq
   i32.eqz
   drop
   f64.const inf
-  local.tee $5
-  local.get $5
+  local.tee $41
+  local.get $41
   f64.sub
   f64.const 0
   f64.eq
   i32.eqz
   drop
   f32.const 0
-  local.tee $4
-  local.get $4
+  local.tee $42
+  local.get $42
   f32.sub
   f32.const 0
   f32.eq
   drop
   f64.const 0
-  local.tee $5
-  local.get $5
+  local.tee $43
+  local.get $43
   f64.sub
   f64.const 0
   f64.eq
@@ -1724,30 +1770,30 @@
    unreachable
   end
   i32.const 0
-  local.set $0
+  local.set $44
   i32.const 0
-  local.set $1
+  local.set $45
   i32.const 29
-  local.set $6
+  local.set $46
   i32.const 30
-  local.set $7
+  local.set $47
   i32.const 30
-  local.set $8
+  local.set $48
   i32.const 128
   i32.const 5
-  local.get $0
+  local.get $44
   f64.convert_i32_u
-  local.get $1
+  local.get $45
   f64.convert_i32_u
-  local.get $6
+  local.get $46
   f64.convert_i32_u
-  local.get $7
+  local.get $47
   f64.convert_i32_u
-  local.get $8
+  local.get $48
   f64.convert_i32_u
   call $~lib/builtins/trace
-  local.get $0
-  local.get $1
+  local.get $44
+  local.get $45
   i32.eq
   i32.eqz
   if
@@ -1758,8 +1804,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $0
-  local.get $6
+  local.get $44
+  local.get $46
   i32.ne
   i32.eqz
   if
@@ -1770,7 +1816,7 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $6
+  local.get $46
   i32.const 29
   i32.eq
   i32.eqz
@@ -1782,8 +1828,8 @@
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $7
-  local.get $8
+  local.get $47
+  local.get $48
   i32.eq
   i32.eqz
   if

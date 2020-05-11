@@ -35,6 +35,7 @@
  (func $loop-wrap/testFirstWrapped
   (local $0 i32)
   (local $1 i32)
+  (local $2 i32)
   i32.const 0
   local.set $0
   block $do-break|1
@@ -53,8 +54,8 @@
     local.tee $0
     i32.const 255
     i32.and
-    local.set $1
-    local.get $1
+    local.set $2
+    local.get $2
     br_if $do-continue|1
    end
   end

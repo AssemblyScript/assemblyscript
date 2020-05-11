@@ -40,7 +40,28 @@
  )
  (func $start:logical
   (local $0 f64)
-  (local $1 f32)
+  (local $1 f64)
+  (local $2 f64)
+  (local $3 f64)
+  (local $4 f64)
+  (local $5 f64)
+  (local $6 f64)
+  (local $7 f32)
+  (local $8 f32)
+  (local $9 f64)
+  (local $10 f64)
+  (local $11 f32)
+  (local $12 f32)
+  (local $13 f64)
+  (local $14 f64)
+  (local $15 f32)
+  (local $16 f32)
+  (local $17 f32)
+  (local $18 f32)
+  (local $19 f64)
+  (local $20 f64)
+  (local $21 f64)
+  (local $22 f64)
   i32.const 0
   if (result i32)
    unreachable
@@ -70,11 +91,11 @@
   end
   drop
   f64.const 1
-  local.tee $0
+  local.tee $2
   f64.const 0
   f64.ne
-  local.get $0
-  local.get $0
+  local.get $2
+  local.get $2
   f64.eq
   i32.and
   if (result i32)
@@ -96,11 +117,11 @@
   end
   drop
   f64.const 1
-  local.tee $0
+  local.tee $4
   f64.const 0
   f64.ne
-  local.get $0
-  local.get $0
+  local.get $4
+  local.get $4
   f64.eq
   i32.and
   if (result f64)
@@ -108,11 +129,11 @@
   else
    f64.const 1
   end
-  local.tee $0
+  local.tee $5
   f64.const 0
   f64.ne
-  local.get $0
-  local.get $0
+  local.get $5
+  local.get $5
   f64.eq
   i32.and
   if (result i32)
@@ -202,11 +223,11 @@
    unreachable
   end
   f32.const 1
-  local.tee $1
+  local.tee $7
   f32.const 0
   f32.ne
-  local.get $1
-  local.get $1
+  local.get $7
+  local.get $7
   f32.eq
   i32.and
   if (result f32)
@@ -228,11 +249,11 @@
    unreachable
   end
   f32.const 0
-  local.tee $1
+  local.tee $8
   f32.const 0
   f32.ne
-  local.get $1
-  local.get $1
+  local.get $8
+  local.get $8
   f32.eq
   i32.and
   if (result f32)
@@ -254,11 +275,11 @@
    unreachable
   end
   f64.const 1
-  local.tee $0
+  local.tee $9
   f64.const 0
   f64.ne
-  local.get $0
-  local.get $0
+  local.get $9
+  local.get $9
   f64.eq
   i32.and
   if (result f64)
@@ -280,11 +301,11 @@
    unreachable
   end
   f64.const 0
-  local.tee $0
+  local.tee $10
   f64.const 0
   f64.ne
-  local.get $0
-  local.get $0
+  local.get $10
+  local.get $10
   f64.eq
   i32.and
   if (result f64)
@@ -306,11 +327,11 @@
    unreachable
   end
   f32.const nan:0x400000
-  local.tee $1
+  local.tee $11
   f32.const 0
   f32.ne
-  local.get $1
-  local.get $1
+  local.get $11
+  local.get $11
   f32.eq
   i32.and
   if (result f32)
@@ -332,11 +353,11 @@
    unreachable
   end
   f32.const 1
-  local.tee $1
+  local.tee $12
   f32.const 0
   f32.ne
-  local.get $1
-  local.get $1
+  local.get $12
+  local.get $12
   f32.eq
   i32.and
   if (result f32)
@@ -358,11 +379,11 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  local.tee $0
+  local.tee $13
   f64.const 0
   f64.ne
-  local.get $0
-  local.get $0
+  local.get $13
+  local.get $13
   f64.eq
   i32.and
   if (result f64)
@@ -384,11 +405,11 @@
    unreachable
   end
   f64.const 1
-  local.tee $0
+  local.tee $14
   f64.const 0
   f64.ne
-  local.get $0
-  local.get $0
+  local.get $14
+  local.get $14
   f64.eq
   i32.and
   if (result f64)
@@ -410,11 +431,11 @@
    unreachable
   end
   f32.const 1
-  local.tee $1
+  local.tee $15
   f32.const 0
   f32.ne
-  local.get $1
-  local.get $1
+  local.get $15
+  local.get $15
   f32.eq
   i32.and
   if (result f32)
@@ -424,8 +445,8 @@
   end
   global.set $logical/f
   global.get $logical/f
-  local.tee $1
-  local.get $1
+  local.tee $16
+  local.get $16
   f32.ne
   i32.eqz
   if
@@ -437,11 +458,11 @@
    unreachable
   end
   f32.const nan:0x400000
-  local.tee $1
+  local.tee $17
   f32.const 0
   f32.ne
-  local.get $1
-  local.get $1
+  local.get $17
+  local.get $17
   f32.eq
   i32.and
   if (result f32)
@@ -451,8 +472,8 @@
   end
   global.set $logical/f
   global.get $logical/f
-  local.tee $1
-  local.get $1
+  local.tee $18
+  local.get $18
   f32.ne
   i32.eqz
   if
@@ -464,11 +485,11 @@
    unreachable
   end
   f64.const 1
-  local.tee $0
+  local.tee $19
   f64.const 0
   f64.ne
-  local.get $0
-  local.get $0
+  local.get $19
+  local.get $19
   f64.eq
   i32.and
   if (result f64)
@@ -478,8 +499,8 @@
   end
   global.set $logical/F
   global.get $logical/F
-  local.tee $0
-  local.get $0
+  local.tee $20
+  local.get $20
   f64.ne
   i32.eqz
   if
@@ -491,11 +512,11 @@
    unreachable
   end
   f64.const nan:0x8000000000000
-  local.tee $0
+  local.tee $21
   f64.const 0
   f64.ne
-  local.get $0
-  local.get $0
+  local.get $21
+  local.get $21
   f64.eq
   i32.and
   if (result f64)
@@ -505,8 +526,8 @@
   end
   global.set $logical/F
   global.get $logical/F
-  local.tee $0
-  local.get $0
+  local.tee $22
+  local.get $22
   f64.ne
   i32.eqz
   if

@@ -28,6 +28,7 @@
  (func $start:features/reference-types
   (local $0 anyref)
   (local $1 anyref)
+  (local $2 anyref)
   global.get $features/reference-types/someObject
   global.get $features/reference-types/someKey
   call $~lib/bindings/Reflect/has
@@ -139,7 +140,7 @@
   ref.func $features/reference-types/someFunc
   global.set $features/reference-types/funcGlobal
   ref.func $features/reference-types/someFunc
-  local.set $1
+  local.set $2
  )
  (func $features/reference-types/internal (param $0 anyref) (result anyref)
   (local $1 anyref)

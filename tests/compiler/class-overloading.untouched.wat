@@ -35,6 +35,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   memory.size
   local.set $1
   local.get $1
@@ -65,8 +66,8 @@
    local.get $5
    i32.gt_s
    select
-   local.set $4
-   local.get $4
+   local.set $6
+   local.get $6
    memory.grow
    i32.const 0
    i32.lt_s
@@ -195,6 +196,9 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -266,33 +270,33 @@
   end
   loop $while-continue|1
    local.get $4
-   local.tee $7
+   local.tee $8
    i32.const 1
    i32.sub
    local.set $4
-   local.get $7
-   local.set $7
-   local.get $7
+   local.get $8
+   local.set $9
+   local.get $9
    if
     local.get $5
     i32.load16_u
-    local.set $8
+    local.set $10
     local.get $6
     i32.load16_u
-    local.set $9
-    local.get $8
-    local.get $9
+    local.set $11
+    local.get $10
+    local.get $11
     i32.ne
     if
-     local.get $8
-     local.get $9
+     local.get $10
+     local.get $11
      i32.sub
-     local.set $10
+     local.set $12
      local.get $0
      call $~lib/rt/stub/__release
      local.get $2
      call $~lib/rt/stub/__release
-     local.get $10
+     local.get $12
      return
     end
     local.get $5
@@ -307,16 +311,19 @@
    end
   end
   i32.const 0
-  local.set $7
+  local.set $13
   local.get $0
   call $~lib/rt/stub/__release
   local.get $2
   call $~lib/rt/stub/__release
-  local.get $7
+  local.get $13
  )
  (func $~lib/string/String.__eq (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
   (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   local.get $0
   call $~lib/rt/stub/__retain
   local.set $0
@@ -348,44 +355,44 @@
   end
   if
    i32.const 0
-   local.set $2
+   local.set $3
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $3
    return
   end
   local.get $0
   call $~lib/string/String#get:length
-  local.set $3
-  local.get $3
+  local.set $4
+  local.get $4
   local.get $1
   call $~lib/string/String#get:length
   i32.ne
   if
    i32.const 0
-   local.set $2
+   local.set $5
    local.get $0
    call $~lib/rt/stub/__release
    local.get $1
    call $~lib/rt/stub/__release
-   local.get $2
+   local.get $5
    return
   end
   local.get $0
   i32.const 0
   local.get $1
   i32.const 0
-  local.get $3
+  local.get $4
   call $~lib/util/string/compareImpl
   i32.eqz
-  local.set $2
+  local.set $6
   local.get $0
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
-  local.get $2
+  local.get $6
  )
  (func $class-overloading/A#b (param $0 i32) (param $1 i32)
   (local $2 i32)
@@ -565,6 +572,26 @@
  )
  (func $start:class-overloading
   (local $0 i32)
+  (local $1 i32)
+  (local $2 i32)
+  (local $3 i32)
+  (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
+  (local $7 i32)
+  (local $8 i32)
+  (local $9 i32)
+  (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
+  (local $13 i32)
+  (local $14 i32)
+  (local $15 i32)
+  (local $16 i32)
+  (local $17 i32)
+  (local $18 i32)
+  (local $19 i32)
+  (local $20 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -615,10 +642,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $1
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $1
   global.set $class-overloading/which
   global.get $class-overloading/a
   call $class-overloading/A#get:c@virtual
@@ -636,10 +663,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $2
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $2
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
@@ -660,10 +687,10 @@
   call $class-overloading/C#constructor
   global.set $class-overloading/c
   i32.const 32
-  local.set $0
+  local.set $3
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $3
   global.set $class-overloading/which
   global.get $class-overloading/c
   i32.const 1
@@ -681,10 +708,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $4
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $4
   global.set $class-overloading/which
   global.get $class-overloading/c
   i32.const 1
@@ -702,10 +729,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $5
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $5
   global.set $class-overloading/which
   global.get $class-overloading/c
   call $class-overloading/C#get:c
@@ -739,16 +766,16 @@
   end
   i32.const 0
   call $class-overloading/D#constructor
-  local.set $0
+  local.set $6
   global.get $class-overloading/a
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $6
   global.set $class-overloading/a
   i32.const 32
-  local.set $0
+  local.set $7
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $7
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
@@ -766,10 +793,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $8
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $8
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
@@ -787,10 +814,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $9
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $9
   global.set $class-overloading/which
   global.get $class-overloading/a
   call $class-overloading/A#get:c@virtual
@@ -824,16 +851,16 @@
   end
   i32.const 0
   call $class-overloading/E#constructor
-  local.set $0
+  local.set $10
   global.get $class-overloading/a
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $10
   global.set $class-overloading/a
   i32.const 32
-  local.set $0
+  local.set $11
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $11
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
@@ -851,10 +878,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $12
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $12
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
@@ -872,10 +899,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $13
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $13
   global.set $class-overloading/which
   global.get $class-overloading/a
   call $class-overloading/A#get:c@virtual
@@ -909,16 +936,16 @@
   end
   i32.const 0
   call $class-overloading/F#constructor
-  local.set $0
+  local.set $14
   global.get $class-overloading/a
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $14
   global.set $class-overloading/a
   i32.const 32
-  local.set $0
+  local.set $15
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $15
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
@@ -936,10 +963,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $16
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $16
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
@@ -957,10 +984,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $17
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $17
   global.set $class-overloading/which
   global.get $class-overloading/a
   call $class-overloading/A#get:c@virtual
@@ -978,10 +1005,10 @@
    unreachable
   end
   i32.const 32
-  local.set $0
+  local.set $18
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $18
   global.set $class-overloading/which
   global.get $class-overloading/a
   i32.const 1
@@ -1002,10 +1029,10 @@
   call $class-overloading/CA#constructor
   global.set $class-overloading/ia
   i32.const 32
-  local.set $0
+  local.set $19
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $19
   global.set $class-overloading/which
   global.get $class-overloading/ia
   call $class-overloading/IA#foo@virtual
@@ -1025,10 +1052,10 @@
   call $class-overloading/CC#constructor
   global.set $class-overloading/ic
   i32.const 32
-  local.set $0
+  local.set $20
   global.get $class-overloading/which
   call $~lib/rt/stub/__release
-  local.get $0
+  local.get $20
   global.set $class-overloading/which
   global.get $class-overloading/ic
   call $class-overloading/IA#foo@virtual

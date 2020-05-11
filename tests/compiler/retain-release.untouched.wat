@@ -64,6 +64,7 @@
   (local $3 i32)
   (local $4 i32)
   (local $5 i32)
+  (local $6 i32)
   memory.size
   local.set $1
   local.get $1
@@ -94,8 +95,8 @@
    local.get $5
    i32.gt_s
    select
-   local.set $4
-   local.get $4
+   local.set $6
+   local.get $6
    memory.grow
    i32.const 0
    i32.lt_s
@@ -386,6 +387,8 @@
   (local $2 i32)
   (local $3 i32)
   (local $4 i32)
+  (local $5 i32)
+  (local $6 i32)
   i32.const 0
   local.set $1
   local.get $0
@@ -407,22 +410,22 @@
   end
   global.get $retain-release/REF
   call $~lib/rt/stub/__retain
-  local.set $2
-  local.get $2
-  local.tee $3
+  local.set $4
+  local.get $4
+  local.tee $5
   local.get $1
-  local.tee $4
+  local.tee $6
   i32.ne
   if
-   local.get $3
+   local.get $5
    call $~lib/rt/stub/__retain
-   local.set $3
-   local.get $4
+   local.set $5
+   local.get $6
    call $~lib/rt/stub/__release
   end
-  local.get $3
+  local.get $5
   local.set $1
-  local.get $2
+  local.get $4
   call $~lib/rt/stub/__release
   local.get $1
   call $~lib/rt/stub/__release
@@ -481,6 +484,7 @@
  )
  (func $retain-release/scopeIfElse (param $0 i32)
   (local $1 i32)
+  (local $2 i32)
   local.get $0
   if
    global.get $retain-release/REF
@@ -491,8 +495,8 @@
   else
    global.get $retain-release/REF
    call $~lib/rt/stub/__retain
-   local.set $1
-   local.get $1
+   local.set $2
+   local.get $2
    call $~lib/rt/stub/__release
   end
  )

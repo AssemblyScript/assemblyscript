@@ -338,6 +338,7 @@ export class Flow {
 
   /** Frees the temporary local for reuse. */
   freeTempLocal(local: Local): void {
+    /*
     if (local.is(CommonFlags.INLINED)) return;
     assert(local.index >= 0);
     var parentFunction = this.parentFunction;
@@ -390,6 +391,7 @@ export class Flow {
     }
     assert(local.index >= 0);
     temps.push(local);
+    */
   }
 
   /** Gets the scoped local of the specified name. */
