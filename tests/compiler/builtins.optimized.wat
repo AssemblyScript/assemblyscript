@@ -592,9 +592,9 @@
   i32.const 5
   f64.const 0
   f64.const 0
-  f64.const 29
-  f64.const 30
-  f64.const 30
+  f64.const 23
+  f64.const 24
+  f64.const 24
   call $~lib/builtins/trace
   i32.const 1216
   i32.const 1216

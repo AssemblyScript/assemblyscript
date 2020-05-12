@@ -806,7 +806,7 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
-        let propertyInstance = this.resolver.resolveStaticProperty(<PropertyPrototype>element);
+        let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>element);
         if (propertyInstance) this.compileProperty(propertyInstance);
         break;
       }
@@ -1530,15 +1530,24 @@ export class Compiler extends DiagnosticEmitter {
             break;
           }
           case ElementKind.FUNCTION_PROTOTYPE: {
-            if (!element.is(CommonFlags.GENERIC)) {
-              let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-              if (functionInstance) this.compileFunction(functionInstance);
-            }
+            if (element.is(CommonFlags.GENERIC)) break;
+            let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+            if (!functionInstance) break;
+            element = functionInstance;
+            // fall-through
+          }
+          case ElementKind.FUNCTION: {
+            this.compileFunction(<Function>element);
             break;
           }
           case ElementKind.PROPERTY_PROTOTYPE: {
-            let propertyInstance = this.resolver.resolveStaticProperty(<PropertyPrototype>element);
-            if (propertyInstance) this.compileProperty(propertyInstance);
+            let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>element);
+            if (!propertyInstance) break;
+            element = propertyInstance;
+            // fall-through
+          }
+          case ElementKind.PROPERTY: {
+            this.compileProperty(<Property>element);
             break;
           }
         }
@@ -1552,15 +1561,25 @@ export class Compiler extends DiagnosticEmitter {
         let element = unchecked(_values[i]);
         switch (element.kind) {
           case ElementKind.FUNCTION_PROTOTYPE: {
-            if (!element.is(CommonFlags.GENERIC)) {
-              let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
-              if (functionInstance) this.compileFunction(functionInstance);
-            }
+            if (element.is(CommonFlags.GENERIC)) break;
+            let functionInstance = this.resolver.resolveFunction(<FunctionPrototype>element, null);
+            if (!functionInstance) break;
+            element = functionInstance;
+            // fall-through
+          }
+          case ElementKind.FUNCTION: {
+            this.compileFunction(<Function>element);
             break;
           }
           case ElementKind.FIELD: {
             this.compileField(<Field>element);
             break;
+          }
+          case ElementKind.PROPERTY_PROTOTYPE: {
+            let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>element);
+            if (!propertyInstance) break;
+            element = propertyInstance;
+            // fall-through
           }
           case ElementKind.PROPERTY: {
             this.compileProperty(<Property>element);
@@ -5805,7 +5824,14 @@ export class Compiler extends DiagnosticEmitter {
         if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
         break;
       }
-      case ElementKind.PROPERTY: { // instance property
+      case ElementKind.PROPERTY_PROTOTYPE: {
+        let propertyPrototype = <PropertyPrototype>target;
+        let propertyInstance = resolver.resolveProperty(propertyPrototype);
+        if (!propertyInstance) return this.module.unreachable();
+        target = propertyInstance;
+        // fall-through
+      }
+      case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
         let setterInstance = propertyInstance.setterInstance;
         if (!setterInstance) {
@@ -6334,6 +6360,7 @@ export class Compiler extends DiagnosticEmitter {
     // otherwise resolve normally
     var target = this.resolver.lookupExpression(expression.expression, flow); // reports
     if (!target) return module.unreachable();
+    var thisExpression = this.resolver.currentThisExpression;
 
     var signature: Signature | null;
     var indexArg: ExpressionRef;
@@ -6342,15 +6369,17 @@ export class Compiler extends DiagnosticEmitter {
       // direct call: concrete function
       case ElementKind.FUNCTION_PROTOTYPE: {
         let functionPrototype = <FunctionPrototype>target;
-
-        // builtins handle present respectively omitted type arguments on their own
         if (functionPrototype.hasDecorator(DecoratorFlags.BUILTIN)) {
+          // builtins handle present respectively omitted type arguments on their own
           return this.compileCallExpressionBuiltin(functionPrototype, expression, contextualType);
         }
-
-        let thisExpression = this.resolver.currentThisExpression; // compileCallDirect may reset
         let functionInstance = this.resolver.maybeInferCall(expression, functionPrototype, flow);
         if (!functionInstance) return this.module.unreachable();
+        target = functionInstance;
+        // fall-through
+      }
+      case ElementKind.FUNCTION: {
+        let functionInstance = <Function>target;
         let thisArg: ExpressionRef = 0;
         if (functionInstance.is(CommonFlags.INSTANCE)) {
           thisArg = this.compileExpression(
@@ -6408,7 +6437,7 @@ export class Compiler extends DiagnosticEmitter {
           assert(fieldParent.kind == ElementKind.CLASS);
           indexArg = module.load(4, false,
             this.compileExpression(
-              assert(this.resolver.currentThisExpression),
+              assert(thisExpression),
               (<Class>fieldParent).type,
               Constraints.CONV_IMPLICIT
             ),
@@ -6430,13 +6459,19 @@ export class Compiler extends DiagnosticEmitter {
         break;
       }
 
+      case ElementKind.PROPERTY_PROTOTYPE: {
+        let propertyInstance = this.resolver.resolveProperty(<PropertyPrototype>target);
+        if (!propertyInstance) return module.unreachable();
+        target = propertyInstance;
+        // fall-through
+      }
       case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
         let getterInstance = assert(propertyInstance.getterInstance);
         let thisArg: ExpressionRef = 0;
         if (propertyInstance.is(CommonFlags.INSTANCE)) {
           thisArg = this.compileExpression(
-            assert(this.resolver.currentThisExpression),
+            assert(thisExpression),
             assert(getterInstance.signature.thisType),
             Constraints.CONV_IMPLICIT
           );
@@ -6471,7 +6506,7 @@ export class Compiler extends DiagnosticEmitter {
       }
     }
     return this.compileCallIndirect(
-      assert(signature), // FIXME: asc can't see this yet
+      assert(signature), // FIXME: bootstrap can't see this yet
       indexArg,
       expression.arguments,
       expression,
@@ -7026,12 +7061,14 @@ export class Compiler extends DiagnosticEmitter {
           let overloadInstance: Function | null;
           if (isProperty) {
             let boundProperty = assert(classInstance.members!.get(unboundOverloadParent.name));
-            assert(boundProperty.kind == ElementKind.PROPERTY);
+            assert(boundProperty.kind == ElementKind.PROPERTY_PROTOTYPE);
+            let boundPropertyInstance = this.resolver.resolveProperty(<PropertyPrototype>boundProperty);
+            if (!boundPropertyInstance) continue;
             if (instance.is(CommonFlags.GET)) {
-              overloadInstance = (<Property>boundProperty).getterInstance;
+              overloadInstance = boundPropertyInstance.getterInstance;
             } else {
               assert(instance.is(CommonFlags.SET));
-              overloadInstance = (<Property>boundProperty).setterInstance;
+              overloadInstance = boundPropertyInstance.setterInstance;
             }
           } else {
             let boundPrototype = assert(classInstance.members!.get(unboundOverloadPrototype.name));
@@ -9116,6 +9153,7 @@ export class Compiler extends DiagnosticEmitter {
     var resolver = this.resolver;
     var target = resolver.lookupExpression(expression, flow, ctxType); // reports
     if (!target) return module.unreachable();
+    var thisExpression = resolver.currentThisExpression;
     if (target.hasDecorator(DecoratorFlags.UNSAFE)) this.checkUnsafe(expression);
 
     switch (target.kind) {
@@ -9153,7 +9191,7 @@ export class Compiler extends DiagnosticEmitter {
         assert(fieldInstance.memoryOffset >= 0);
         let fieldParent = fieldInstance.parent;
         assert(fieldParent.kind == ElementKind.CLASS);
-        let thisExpression = assert(this.resolver.currentThisExpression);
+        thisExpression = assert(thisExpression);
         let thisExpr = this.compileExpression(
           thisExpression,
           (<Class>fieldParent).type,
@@ -9182,13 +9220,20 @@ export class Compiler extends DiagnosticEmitter {
           fieldInstance.memoryOffset
         );
       }
+      case ElementKind.PROPERTY_PROTOTYPE: {
+        let propertyPrototype = <PropertyPrototype>target;
+        let propertyInstance = this.resolver.resolveProperty(propertyPrototype);
+        if (!propertyInstance) return module.unreachable();
+        target = propertyInstance;
+        // fall-through
+      }
       case ElementKind.PROPERTY: {
         let propertyInstance = <Property>target;
         let getterInstance = assert(propertyInstance.getterInstance);
         let thisArg: ExpressionRef = 0;
         if (getterInstance.is(CommonFlags.INSTANCE)) {
           thisArg = this.compileExpression(
-            assert(this.resolver.currentThisExpression),
+            assert(thisExpression),
             assert(getterInstance.signature.thisType),
             Constraints.CONV_IMPLICIT
           );

@@ -1313,7 +1313,7 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: { // SomeClass.prop
-        let propertyInstance = this.resolveStaticProperty(<PropertyPrototype>target);
+        let propertyInstance = this.resolveProperty(<PropertyPrototype>target, reportMode);
         if (!propertyInstance) return null;
         target = propertyInstance;
         // fall-through
@@ -1400,15 +1400,19 @@ export class Resolver extends DiagnosticEmitter {
           if (members !== null && members.has(propertyName)) {
             let member = assert(members.get(propertyName));
             if (member.kind == ElementKind.PROPERTY_PROTOTYPE) {
-              // static properties have a singleton instance
-              this.currentThisExpression = null;
-              this.currentElementExpression = null;
-              return this.resolveStaticProperty(<PropertyPrototype>member, reportMode);
+              let propertyInstance = this.resolveProperty(<PropertyPrototype>member, reportMode);
+              if (!propertyInstance) return null;
+              member = propertyInstance;
+              if (propertyInstance.is(CommonFlags.STATIC)) {
+                this.currentThisExpression = null;
+              } else {
+                this.currentThisExpression = targetNode;
+              }
             } else {
               this.currentThisExpression = targetNode;
-              this.currentElementExpression = null;
-              return member; // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE...
             }
+            this.currentElementExpression = null;
+            return member; // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE, PROPERTY...
           }
           // traverse inherited static members on the base prototype if target is a class prototype
           if (
@@ -3115,39 +3119,8 @@ export class Resolver extends DiagnosticEmitter {
             break;
           }
           case ElementKind.PROPERTY_PROTOTYPE: {
-            let propertyPrototype = <PropertyPrototype>member;
-            let propertyInstance = new Property(propertyPrototype, instance);
-            properties.push(propertyInstance);
-            let getterPrototype = propertyPrototype.getterPrototype;
-            if (getterPrototype) {
-              let getterInstance = this.resolveFunction(
-                getterPrototype.toBound(instance),
-                null,
-                makeMap(instance.contextualTypeArguments),
-                reportMode
-              );
-              if (getterInstance) {
-                propertyInstance.getterInstance = getterInstance;
-                propertyInstance.setType(getterInstance.signature.returnType);
-              }
-            }
-            let setterPrototype = propertyPrototype.setterPrototype;
-            if (setterPrototype) {
-              let setterInstance = this.resolveFunction(
-                setterPrototype.toBound(instance),
-                null,
-                makeMap(instance.contextualTypeArguments),
-                reportMode
-              );
-              if (setterInstance) {
-                propertyInstance.setterInstance = setterInstance;
-                if (!propertyInstance.is(CommonFlags.RESOLVED)) {
-                  assert(setterInstance.signature.parameterTypes.length == 1);
-                  propertyInstance.setType(setterInstance.signature.parameterTypes[0]);
-                }
-              }
-            }
-            instance.add(propertyInstance.name, propertyInstance); // reports
+            let boundPrototype = (<PropertyPrototype>member).toBound(instance);
+            instance.add(boundPrototype.name, boundPrototype); // reports
             break;
           }
           default: assert(false);
@@ -3355,22 +3328,16 @@ export class Resolver extends DiagnosticEmitter {
     );
   }
 
-  /** Resolves a static property prototype. */
-  resolveStaticProperty(
+  /** Resolves a property prototype. */
+  resolveProperty(
     /** The prototype of the property. */
     prototype: PropertyPrototype,
     /** How to proceed with eventual diagnostics. */
     reportMode: ReportMode = ReportMode.REPORT
   ): Property | null {
-    // Static properties have a cached singleton instance, while instance
-    // properties become resolved together with their class, which does not
-    // contain property prototypes anymore (properties are never generic).
-    assert(prototype.is(CommonFlags.STATIC));
     var instance = prototype.instance;
     if (instance) return instance;
-    var parent = prototype.parent;
-    assert(parent.kind == ElementKind.CLASS_PROTOTYPE);
-    prototype.instance = instance = new Property(prototype, parent);
+    prototype.instance = instance = new Property(prototype, prototype);
     var getterPrototype = prototype.getterPrototype;
     if (getterPrototype) {
       let getterInstance = this.resolveFunction(
