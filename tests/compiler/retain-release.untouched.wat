@@ -718,8 +718,6 @@
     global.get $retain-release/REF
     call $~lib/rt/stub/__retain
     local.set $2
-    local.get $2
-    call $~lib/rt/stub/__release
     i32.const 32
     i32.const 64
     i32.const 367

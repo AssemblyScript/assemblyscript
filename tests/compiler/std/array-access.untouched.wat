@@ -62,8 +62,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/stub/__release
    i32.const 144
    i32.const 96
    i32.const 108
@@ -159,8 +157,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/stub/__release
    i32.const 144
    i32.const 96
    i32.const 108
@@ -453,8 +449,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/stub/__release
    i32.const 144
    i32.const 96
    i32.const 108

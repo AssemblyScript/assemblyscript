@@ -1487,8 +1487,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 1040
    i32.const 1088
    i32.const 18

@@ -8758,8 +8758,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 12240
    i32.const 12128
    i32.const 108

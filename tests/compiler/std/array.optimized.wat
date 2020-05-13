@@ -1532,8 +1532,6 @@
   i32.const 268435452
   i32.gt_u
   if
-   local.get $3
-   call $~lib/rt/pure/__release
    i32.const 1040
    i32.const 1088
    i32.const 57
@@ -2816,8 +2814,6 @@
   local.tee $0
   i32.eqz
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 4928
    i32.const 1088
    i32.const 108

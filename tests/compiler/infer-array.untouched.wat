@@ -1726,8 +1726,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/stub/__release
    i32.const 640
    i32.const 128
    i32.const 108

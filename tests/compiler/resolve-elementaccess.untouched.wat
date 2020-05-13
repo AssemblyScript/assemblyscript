@@ -409,8 +409,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/stub/__release
    i32.const 32
    i32.const 80
    i32.const 18

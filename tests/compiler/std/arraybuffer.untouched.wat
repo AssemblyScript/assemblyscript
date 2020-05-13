@@ -1758,8 +1758,6 @@
   i32.const 1073741808
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 49
@@ -3348,8 +3346,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 18
@@ -3592,10 +3588,6 @@
   i32.gt_u
   i32.or
   if
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 400
    i32.const 25
