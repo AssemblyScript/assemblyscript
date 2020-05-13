@@ -416,8 +416,6 @@
   i32.const 1073741808
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/stub/__release
    i32.const 112
    i32.const 160
    i32.const 49
@@ -960,8 +958,6 @@
   local.get $4
   i32.eqz
   if
-   local.get $1
-   call $~lib/rt/stub/__release
    i32.const 224
    i32.const 288
    i32.const 111

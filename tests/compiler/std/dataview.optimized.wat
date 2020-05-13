@@ -1236,8 +1236,6 @@
   i32.gt_u
   i32.or
   if
-   local.get $4
-   call $~lib/rt/pure/__release
    i32.const 1040
    i32.const 1440
    i32.const 25

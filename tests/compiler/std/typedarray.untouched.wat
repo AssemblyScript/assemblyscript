@@ -1971,8 +1971,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 18
@@ -37460,8 +37458,6 @@
   i32.const 1073741808
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 49
@@ -37519,8 +37515,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -37540,8 +37534,6 @@
     i32.const 0
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -37554,8 +37546,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -37574,8 +37564,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -37746,8 +37734,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -37767,8 +37753,6 @@
     i32.const 0
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -37781,8 +37765,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -37801,8 +37783,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -38122,8 +38102,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -38143,8 +38121,6 @@
     i32.const 0
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -38157,8 +38133,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -38177,8 +38151,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -38384,8 +38356,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -38405,8 +38375,6 @@
     i32.const 1
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -38419,8 +38387,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -38439,8 +38405,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -38650,8 +38614,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -38671,8 +38633,6 @@
     i32.const 1
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -38685,8 +38645,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -38705,8 +38663,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -38916,8 +38872,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -38937,8 +38891,6 @@
     i32.const 3
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -38951,8 +38903,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -38971,8 +38921,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -39182,8 +39130,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -39203,8 +39149,6 @@
     i32.const 3
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -39217,8 +39161,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -39237,8 +39179,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -39450,8 +39390,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -39471,8 +39409,6 @@
     i32.const 7
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -39485,8 +39421,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -39505,8 +39439,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -39721,8 +39653,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -39742,8 +39672,6 @@
     i32.const 7
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -39756,8 +39684,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -39776,8 +39702,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -39994,8 +39918,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -40015,8 +39937,6 @@
     i32.const 3
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -40029,8 +39949,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -40049,8 +39967,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -40269,8 +40185,6 @@
   i32.and
   i32.or
   if
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1741
@@ -40290,8 +40204,6 @@
     i32.const 7
     i32.and
     if
-     local.get $5
-     call $~lib/rt/pure/__release
      i32.const 32
      i32.const 432
      i32.const 1746
@@ -40304,8 +40216,6 @@
     i32.sub
     local.set $6
    else
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1750
@@ -40324,8 +40234,6 @@
    local.get $7
    i32.gt_s
    if
-    local.get $5
-    call $~lib/rt/pure/__release
     i32.const 32
     i32.const 432
     i32.const 1755
@@ -40543,10 +40451,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -40562,10 +40466,6 @@
   call $~lib/typedarray/Int8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -40782,10 +40682,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -40801,10 +40697,6 @@
   call $~lib/typedarray/Int8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -40930,10 +40822,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -40949,10 +40837,6 @@
   call $~lib/typedarray/Int8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -41079,10 +40963,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -41098,10 +40978,6 @@
   call $~lib/typedarray/Int8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -41222,10 +41098,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -41241,10 +41113,6 @@
   call $~lib/typedarray/Int8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -41318,10 +41186,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -41337,10 +41201,6 @@
   call $~lib/typedarray/Int8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -41457,10 +41317,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -41476,10 +41332,6 @@
   call $~lib/typedarray/Int8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -41720,10 +41572,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -41739,10 +41587,6 @@
   call $~lib/typedarray/Uint8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -41968,10 +41812,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -41987,10 +41827,6 @@
   call $~lib/typedarray/Uint8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -42116,10 +41952,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -42135,10 +41967,6 @@
   call $~lib/typedarray/Uint8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -42261,10 +42089,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -42280,10 +42104,6 @@
   call $~lib/typedarray/Uint8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -42404,10 +42224,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -42423,10 +42239,6 @@
   call $~lib/typedarray/Uint8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -42500,10 +42312,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -42519,10 +42327,6 @@
   call $~lib/typedarray/Uint8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -42639,10 +42443,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -42658,10 +42458,6 @@
   call $~lib/typedarray/Uint8Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -42903,10 +42699,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -42922,10 +42714,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -43145,10 +42933,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -43164,10 +42948,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -43292,10 +43072,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -43311,10 +43087,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -43448,10 +43220,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -43467,10 +43235,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -43589,10 +43353,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -43608,10 +43368,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -43686,10 +43442,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -43705,10 +43457,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -43838,10 +43586,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -43857,10 +43601,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -44156,10 +43896,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -44175,10 +43911,6 @@
   call $~lib/typedarray/Int16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -44406,10 +44138,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -44425,10 +44153,6 @@
   call $~lib/typedarray/Int16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -44554,10 +44278,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -44573,10 +44293,6 @@
   call $~lib/typedarray/Int16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -44699,10 +44415,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -44718,10 +44430,6 @@
   call $~lib/typedarray/Int16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -44847,10 +44555,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -44866,10 +44570,6 @@
   call $~lib/typedarray/Int16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -44986,10 +44686,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -45005,10 +44701,6 @@
   call $~lib/typedarray/Int16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -45082,10 +44774,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -45101,10 +44789,6 @@
   call $~lib/typedarray/Int16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -45393,10 +45077,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -45412,10 +45092,6 @@
   call $~lib/typedarray/Uint16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -45643,10 +45319,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -45662,10 +45334,6 @@
   call $~lib/typedarray/Uint16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -45791,10 +45459,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -45810,10 +45474,6 @@
   call $~lib/typedarray/Uint16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -45936,10 +45596,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -45955,10 +45611,6 @@
   call $~lib/typedarray/Uint16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -46084,10 +45736,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -46103,10 +45751,6 @@
   call $~lib/typedarray/Uint16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -46223,10 +45867,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -46242,10 +45882,6 @@
   call $~lib/typedarray/Uint16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -46319,10 +45955,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -46338,10 +45970,6 @@
   call $~lib/typedarray/Uint16Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -46625,10 +46253,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -46644,10 +46268,6 @@
   call $~lib/typedarray/Int32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -46814,10 +46434,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -46833,10 +46449,6 @@
   call $~lib/typedarray/Int32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -46962,10 +46574,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -46981,10 +46589,6 @@
   call $~lib/typedarray/Int32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -47107,10 +46711,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -47126,10 +46726,6 @@
   call $~lib/typedarray/Int32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -47255,10 +46851,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -47274,10 +46866,6 @@
   call $~lib/typedarray/Int32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -47399,10 +46987,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -47418,10 +47002,6 @@
   call $~lib/typedarray/Int32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -47543,10 +47123,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -47562,10 +47138,6 @@
   call $~lib/typedarray/Int32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -47849,10 +47421,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -47868,10 +47436,6 @@
   call $~lib/typedarray/Uint32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -48051,10 +47615,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -48070,10 +47630,6 @@
   call $~lib/typedarray/Uint32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -48199,10 +47755,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -48218,10 +47770,6 @@
   call $~lib/typedarray/Uint32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -48344,10 +47892,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -48363,10 +47907,6 @@
   call $~lib/typedarray/Uint32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -48492,10 +48032,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -48511,10 +48047,6 @@
   call $~lib/typedarray/Uint32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -48636,10 +48168,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -48655,10 +48183,6 @@
   call $~lib/typedarray/Uint32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -48780,10 +48304,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -48799,10 +48319,6 @@
   call $~lib/typedarray/Uint32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -49091,10 +48607,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -49110,10 +48622,6 @@
   call $~lib/typedarray/Int64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -49341,10 +48849,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -49360,10 +48864,6 @@
   call $~lib/typedarray/Int64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -49484,10 +48984,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -49503,10 +48999,6 @@
   call $~lib/typedarray/Int64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -49581,10 +49073,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -49600,10 +49088,6 @@
   call $~lib/typedarray/Int64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -49729,10 +49213,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -49748,10 +49228,6 @@
   call $~lib/typedarray/Int64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -49873,10 +49349,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -49892,10 +49364,6 @@
   call $~lib/typedarray/Int64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -50017,10 +49485,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -50036,10 +49500,6 @@
   call $~lib/typedarray/Int64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -50328,10 +49788,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -50347,10 +49803,6 @@
   call $~lib/typedarray/Uint64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -50578,10 +50030,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -50597,10 +50045,6 @@
   call $~lib/typedarray/Uint64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -50721,10 +50165,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -50740,10 +50180,6 @@
   call $~lib/typedarray/Uint64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -50818,10 +50254,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -50837,10 +50269,6 @@
   call $~lib/typedarray/Uint64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -50966,10 +50394,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -50985,10 +50409,6 @@
   call $~lib/typedarray/Uint64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -51110,10 +50530,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -51129,10 +50545,6 @@
   call $~lib/typedarray/Uint64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -51254,10 +50666,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -51273,10 +50681,6 @@
   call $~lib/typedarray/Uint64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -51565,10 +50969,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -51584,10 +50984,6 @@
   call $~lib/typedarray/Float32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -51806,10 +51202,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -51825,10 +51217,6 @@
   call $~lib/typedarray/Float32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -51902,10 +51290,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -51921,10 +51305,6 @@
   call $~lib/typedarray/Float32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -52047,10 +51427,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -52066,10 +51442,6 @@
   call $~lib/typedarray/Float32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -52192,10 +51564,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -52211,10 +51579,6 @@
   call $~lib/typedarray/Float32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -52337,10 +51701,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -52356,10 +51716,6 @@
   call $~lib/typedarray/Float32Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -52634,10 +51990,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -52653,10 +52005,6 @@
   call $~lib/typedarray/Float64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -52878,10 +52226,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -52897,10 +52241,6 @@
   call $~lib/typedarray/Float64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -53023,10 +52363,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -53042,10 +52378,6 @@
   call $~lib/typedarray/Float64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -53168,10 +52500,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -53187,10 +52515,6 @@
   call $~lib/typedarray/Float64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -53313,10 +52637,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -53332,10 +52652,6 @@
   call $~lib/typedarray/Float64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -53458,10 +52774,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -53477,10 +52789,6 @@
   call $~lib/typedarray/Float64Array#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -53756,10 +53064,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -53775,10 +53079,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -53903,10 +53203,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -53922,10 +53218,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775
@@ -54057,10 +53349,6 @@
   i32.const 0
   i32.lt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1774
@@ -54076,10 +53364,6 @@
   call $~lib/typedarray/Uint8ClampedArray#get:length
   i32.gt_s
   if
-   local.get $4
-   call $~lib/rt/pure/__release
-   local.get $5
-   call $~lib/rt/pure/__release
    i32.const 368
    i32.const 432
    i32.const 1775

@@ -5434,8 +5434,6 @@
   local.tee $0
   i32.eqz
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 13248
    i32.const 13136
    i32.const 108

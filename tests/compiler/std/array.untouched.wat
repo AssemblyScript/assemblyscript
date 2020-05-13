@@ -2011,8 +2011,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 57
@@ -2140,8 +2138,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 336
    i32.const 18
@@ -4454,8 +4450,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $1
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 229
@@ -5496,8 +5490,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 3920
    i32.const 80
    i32.const 108
@@ -9744,8 +9736,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 57
@@ -9838,8 +9828,6 @@
    i32.const 0
    i32.lt_s
    if
-    local.get $2
-    call $~lib/rt/pure/__release
     i32.const 496
     i32.const 80
     i32.const 120
@@ -10144,8 +10132,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 3920
    i32.const 80
    i32.const 108
@@ -10280,8 +10266,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 57
@@ -10389,8 +10373,6 @@
    i32.const 0
    i32.lt_s
    if
-    local.get $2
-    call $~lib/rt/pure/__release
     i32.const 496
     i32.const 80
     i32.const 120
@@ -10688,8 +10670,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 3920
    i32.const 80
    i32.const 108
@@ -11584,8 +11564,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 57
@@ -11864,8 +11842,6 @@
    i32.const 0
    i32.lt_s
    if
-    local.get $2
-    call $~lib/rt/pure/__release
     i32.const 496
     i32.const 80
     i32.const 120
@@ -12141,8 +12117,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 3920
    i32.const 80
    i32.const 108

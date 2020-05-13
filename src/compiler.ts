@@ -2820,15 +2820,13 @@ export class Compiler extends DiagnosticEmitter {
   private compileThrowStatement(
     statement: ThrowStatement
   ): ExpressionRef {
+    // TODO: requires exception-handling spec.
     var flow = this.currentFlow;
 
     // Remember that this branch throws
     flow.set(FlowFlags.THROWS | FlowFlags.TERMINATES);
 
     var stmts = new Array<ExpressionRef>();
-    this.finishAutoreleases(flow, stmts);
-
-    // TODO: requires exception-handling spec.
     var value = statement.value;
     var message: Expression | null = null;
     if (value.kind == NodeKind.NEW) {
@@ -2838,6 +2836,11 @@ export class Compiler extends DiagnosticEmitter {
     stmts.push(
       this.makeAbort(message, statement)
     );
+    // generates dead code (after unreachable) but still updates state
+    var dropped = new Array<ExpressionRef>();
+    this.performAutoreleases(flow, dropped);
+    this.finishAutoreleases(flow, dropped);
+    flow.freeScopedLocals();
 
     return this.module.flatten(stmts);
   }
