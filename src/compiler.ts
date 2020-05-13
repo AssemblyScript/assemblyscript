@@ -2837,8 +2837,9 @@ export class Compiler extends DiagnosticEmitter {
       this.makeAbort(message, statement)
     );
     // generates dead code (after unreachable) but still updates state
-    this.performAutoreleases(flow, stmts);
-    this.finishAutoreleases(flow, stmts);
+    var dropped = new Array<ExpressionRef>();
+    this.performAutoreleases(flow, dropped);
+    this.finishAutoreleases(flow, dropped);
     flow.freeScopedLocals();
 
     return this.module.flatten(stmts);
