@@ -27,3 +27,6 @@ export { ns as renamed_ns } from "./export";
 
 import * as exportstar from "./exportstar";
 export { exportstar };
+
+export { default } from "./export-default";
+export { default as renamed_default } from "./export-default";

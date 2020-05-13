@@ -584,8 +584,8 @@ export class Signature {
         return this;
       }
     }
-    program.uniqueSignatures.push(this);
     this.id = program.nextSignatureId++;
+    program.uniqueSignatures.push(this);
   }
 
   get nativeParams(): NativeType {

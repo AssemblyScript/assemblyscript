@@ -7,7 +7,7 @@ import { E_INVALIDLENGTH } from "./util/error";
 import { idof } from "./builtins";
 import { Array } from "./array";
 
-@sealed export abstract class String {
+@final export abstract class String {
 
   @lazy static readonly MAX_LENGTH: i32 = <i32>(BLOCK_MAXSIZE >>> alignof<u16>());
 

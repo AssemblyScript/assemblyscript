@@ -5,7 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "asbuild": "asc assembly/index.ts -O3 -b build/index.wasm -t build/index.wat --importMemory --runtime none --sourceMap --validate",
+    "asbuild": "asc assembly/index.ts -O3 -b build/index.wasm -t build/index.wat --importMemory --runtime none --sourceMap",
     "build": "npm run asbuild && webpack --mode production --display-modules",
     "test": "ts-node tests/"
   },

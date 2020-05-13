@@ -103,7 +103,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -129,7 +129,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<assert-nonnull/Foo>#__unchecked_get
+  call $~lib/array/Array<assert-nonnull/Foo>#__uget
   local.set $2
   i32.const 1
   drop
@@ -174,7 +174,7 @@
   call $~lib/rt/stub/__release
   local.get $1
  )
- (func $~lib/array/Array<assert-nonnull/Foo | null>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/array/Array<assert-nonnull/Foo | null>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   i32.load offset=4
   local.get $1
@@ -200,7 +200,7 @@
   end
   local.get $0
   local.get $1
-  call $~lib/array/Array<assert-nonnull/Foo | null>#__unchecked_get
+  call $~lib/array/Array<assert-nonnull/Foo | null>#__uget
   local.set $2
   i32.const 1
   drop

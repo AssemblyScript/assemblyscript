@@ -45,7 +45,7 @@
   i32.const 2
   i32.shr_u
  )
- (func $~lib/staticarray/StaticArray<i32>#__unchecked_get (param $0 i32) (param $1 i32) (result i32)
+ (func $~lib/staticarray/StaticArray<i32>#__uget (param $0 i32) (param $1 i32) (result i32)
   local.get $0
   local.get $1
   i32.const 2
@@ -69,13 +69,13 @@
   end
   local.get $0
   local.get $1
-  call $~lib/staticarray/StaticArray<i32>#__unchecked_get
+  call $~lib/staticarray/StaticArray<i32>#__uget
   local.set $2
   i32.const 0
   drop
   local.get $2
  )
- (func $~lib/staticarray/StaticArray<i32>#__unchecked_set (param $0 i32) (param $1 i32) (param $2 i32)
+ (func $~lib/staticarray/StaticArray<i32>#__uset (param $0 i32) (param $1 i32) (param $2 i32)
   i32.const 0
   drop
   local.get $0
@@ -102,7 +102,7 @@
   local.get $0
   local.get $1
   local.get $2
-  call $~lib/staticarray/StaticArray<i32>#__unchecked_set
+  call $~lib/staticarray/StaticArray<i32>#__uset
  )
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
   (local $2 i32)

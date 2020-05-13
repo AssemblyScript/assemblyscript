@@ -411,10 +411,13 @@
  )
  (func $~lib/arraybuffer/ArrayBuffer#constructor (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
+  (local $3 i32)
   local.get $1
   i32.const 1073741808
   i32.gt_u
   if
+   local.get $0
+   call $~lib/rt/stub/__release
    i32.const 112
    i32.const 160
    i32.const 49
@@ -432,6 +435,10 @@
   call $~lib/memory/memory.fill
   local.get $2
   call $~lib/rt/stub/__retain
+  local.set $3
+  local.get $0
+  call $~lib/rt/stub/__release
+  local.get $3
  )
  (func $~lib/map/Map<~lib/string/String,usize>#clear (param $0 i32)
   (local $1 i32)

@@ -638,7 +638,7 @@ exports.main = function main(argv, options, callback) {
   }
 
   // Validate the module if requested
-  if (args.validate) {
+  if (!args.noValidate) {
     stats.validateCount++;
     stats.validateTime += measure(() => {
       if (!module.validate()) {

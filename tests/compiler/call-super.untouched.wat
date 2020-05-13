@@ -155,19 +155,20 @@
  )
  (func $call-super/B#constructor (param $0 i32) (result i32)
   local.get $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    i32.const 8
    i32.const 3
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
+   local.set $0
   end
-  call $call-super/A#constructor
-  local.set $0
   local.get $0
   i32.const 2
   i32.store offset=4
+  local.get $0
+  call $call-super/A#constructor
+  local.set $0
   local.get $0
   i32.load
   i32.const 1
@@ -250,19 +251,20 @@
  )
  (func $call-super/D#constructor (param $0 i32) (result i32)
   local.get $0
-  if (result i32)
-   local.get $0
-  else
+  i32.eqz
+  if
    i32.const 8
    i32.const 5
    call $~lib/rt/stub/__alloc
    call $~lib/rt/stub/__retain
+   local.set $0
   end
-  call $call-super/C#constructor
-  local.set $0
   local.get $0
   i32.const 2
   i32.store offset=4
+  local.get $0
+  call $call-super/C#constructor
+  local.set $0
   local.get $0
   i32.load
   i32.const 1

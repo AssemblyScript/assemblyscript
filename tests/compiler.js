@@ -145,7 +145,6 @@ function runTest(basename) {
   var cmd = [
     basename + ".ts",
     "--baseDir", basedir,
-    "--validate",
     "--measure",
     "--debug",
     "--pedantic",
@@ -224,7 +223,6 @@ function runTest(basename) {
     var cmd = [
       basename + ".ts",
       "--baseDir", basedir,
-      "--validate",
       "--measure",
       "--pedantic",
       "--binaryFile", // -> stdout
