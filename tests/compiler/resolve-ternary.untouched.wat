@@ -4837,8 +4837,7 @@
   end
   global.get $resolve-ternary/b
   if (result f64)
-   i32.const 1
-   f64.convert_i32_u
+   f64.const 1
   else
    f64.const 2
   end

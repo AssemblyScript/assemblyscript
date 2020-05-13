@@ -243,7 +243,6 @@
     "category": "Binaryen",
     "description": "Skips validating the module using Binaryen.",
     "type": "b",
-    "alias": "c",
     "default": false
   },
 

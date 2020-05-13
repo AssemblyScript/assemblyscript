@@ -5,6 +5,7 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
+ (type $none_=>_i32 (func (result i32)))
  (type $i32_i32_i32_i32_i32_=>_i32 (func (param i32 i32 i32 i32 i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -20,7 +21,9 @@
  (data (i32.const 720) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\004\00")
  (data (i32.const 752) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\005\00")
  (data (i32.const 784) "\04\00\00\00\01\00\00\00\01\00\00\00\04\00\00\005\005\00")
- (data (i32.const 816) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006\00")
+ (data (i32.const 816) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\007\00")
+ (data (i32.const 848) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\006\00")
+ (data (i32.const 880) "\02\00\00\00\01\00\00\00\01\00\00\00\02\00\00\008\00")
  (table $0 1 funcref)
  (global $resolve-propertyaccess/Namespace.member i32 (i32.const 1))
  (global $~lib/rt/stub/startOffset (mut i32) (i32.const 0))
@@ -34,7 +37,7 @@
  (global $resolve-propertyaccess/Enum.VALUE i32 (i32.const 4))
  (global $resolve-propertyaccess/Class.staticField (mut i32) (i32.const 5))
  (global $resolve-propertyaccess/Class.lazyStaticField (mut i32) (i32.const 55))
- (global $~lib/heap/__heap_base i32 (i32.const 836))
+ (global $~lib/heap/__heap_base i32 (i32.const 900))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/util/number/decimalCount32 (param $0 i32) (result i32)
@@ -630,6 +633,9 @@
   call $~lib/rt/stub/__release
   local.get $2
  )
+ (func $resolve-propertyaccess/Class.get:staticProperty (result i32)
+  i32.const 7
+ )
  (func $resolve-propertyaccess/Class#constructor (param $0 i32) (result i32)
   local.get $0
   i32.eqz
@@ -645,6 +651,9 @@
   i32.store
   local.get $0
  )
+ (func $resolve-propertyaccess/Class#get:instanceProperty (param $0 i32) (result i32)
+  i32.const 8
+ )
  (func $start:resolve-propertyaccess
   (local $0 i32)
   (local $1 i32)
@@ -657,6 +666,8 @@
   (local $8 i32)
   (local $9 i32)
   (local $10 i32)
+  (local $11 i32)
+  (local $12 i32)
   global.get $~lib/heap/__heap_base
   i32.const 15
   i32.add
@@ -774,7 +785,7 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 70
+   i32.const 72
    i32.const 1
    call $~lib/builtins/abort
    unreachable
@@ -788,18 +799,14 @@
   if
    i32.const 0
    i32.const 496
-   i32.const 76
+   i32.const 78
    i32.const 1
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 0
-  call $resolve-propertyaccess/Class#constructor
-  local.set $9
-  local.get $9
-  i32.load
+  call $resolve-propertyaccess/Class.get:staticProperty
   call $~lib/number/I32#toString
-  local.tee $10
+  local.tee $9
   i32.const 832
   call $~lib/string/String.__eq
   i32.eqz
@@ -807,13 +814,48 @@
    i32.const 0
    i32.const 496
    i32.const 84
+   i32.const 1
+   call $~lib/builtins/abort
+   unreachable
+  end
+  i32.const 0
+  call $resolve-propertyaccess/Class#constructor
+  local.set $10
+  local.get $10
+  i32.load
+  call $~lib/number/I32#toString
+  local.tee $11
+  i32.const 864
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 496
+   i32.const 92
    i32.const 3
    call $~lib/builtins/abort
    unreachable
   end
-  local.get $9
-  call $~lib/rt/stub/__release
   local.get $10
+  call $resolve-propertyaccess/Class#get:instanceProperty
+  call $~lib/number/I32#toString
+  local.tee $12
+  i32.const 896
+  call $~lib/string/String.__eq
+  i32.eqz
+  if
+   i32.const 0
+   i32.const 496
+   i32.const 97
+   i32.const 3
+   call $~lib/builtins/abort
+   unreachable
+  end
+  local.get $10
+  call $~lib/rt/stub/__release
+  local.get $11
+  call $~lib/rt/stub/__release
+  local.get $12
   call $~lib/rt/stub/__release
   local.get $0
   call $~lib/rt/stub/__release
@@ -832,6 +874,8 @@
   local.get $7
   call $~lib/rt/stub/__release
   local.get $8
+  call $~lib/rt/stub/__release
+  local.get $9
   call $~lib/rt/stub/__release
  )
  (func $~start
