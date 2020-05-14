@@ -13,6 +13,8 @@ export interface OptionDescription {
   value?: { [key: string]: number | string },
   /** Short alias, if any. */
   alias?: string
+  /** The default value, if any. */
+  default?: string | number | boolean | string[] | number[];
 }
 
 /** Configuration object. */
