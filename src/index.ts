@@ -242,38 +242,6 @@ export function buildTSD(program: Program): string {
   return TSDBuilder.build(program);
 }
 
-/** Builds a JSON file of a program's runtime type information. */
-export function buildRTTI(program: Program): string {
-  var sb = new Array<string>();
-  sb.push("{\n  \"names\": [\n");
-  // TODO: for (let cls of program.managedClasses.values()) {
-  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
-    let cls = unchecked(_values[i]);
-    sb.push("    \"");
-    sb.push(cls.internalName);
-    sb.push("\",\n");
-  }
-  sb.push("  ],\n  \"base\": [\n");
-  // TODO: for (let cls of program.managedClasses.values()) {
-  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
-    let cls = unchecked(_values[i]);
-    let base = cls.base;
-    sb.push("    ");
-    sb.push(base ? base.id.toString() : "0");
-    sb.push(",\n");
-  }
-  sb.push("  ],\n  \"flags\": [\n");
-  // TODO: for (let cls of program.managedClasses.values()) {
-  for (let _values = Map_values(program.managedClasses), i = 0, k = _values.length; i < k; ++i) {
-    let cls = unchecked(_values[i]);
-    sb.push("    ");
-    sb.push(cls.rttiFlags.toString());
-    sb.push(",\n");
-  }
-  sb.push("  ]\n}\n");
-  return sb.join("");
-}
-
 // Full API
 export * from "./ast";
 export * from "./common";

@@ -846,9 +846,7 @@ exports.main = function main(argv, options, callback) {
   if (args.measure) {
     printStats(stats, stderr);
   }
-  if (args.printrtti) {
-    printRTTI(program, stderr);
-  }
+
   return callback(null);
 
   function readFileNode(filename, baseDir) {
@@ -1000,15 +998,6 @@ function printStats(stats, output) {
 }
 
 exports.printStats = printStats;
-
-/** Prints runtime type information. */
-function printRTTI(program, output) {
-  if (!output) output = process.stderr;
-  output.write("# Runtime type information (RTTI)\n");
-  output.write(assemblyscript.buildRTTI(program));
-}
-
-exports.printRTTI = printRTTI;
 
 var allocBuffer = typeof global !== "undefined" && global.Buffer
   ? global.Buffer.allocUnsafe || function(len) { return new global.Buffer(len); }
