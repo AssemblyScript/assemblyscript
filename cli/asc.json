@@ -128,11 +128,29 @@
     "type": "b",
     "default": false
   },
-  "sharedMemory": {
+  "noExportMemory": {
     "category": "Features",
-    "description": "Declare memory as shared by settings the max shared memory.",
+    "description": "Does not export the memory as 'memory'.",
+    "type": "b",
+    "default": false
+  },
+  "initialMemory": {
+    "category": "Features",
+    "description": "Sets the initial memory size in pages.",
     "type": "i",
     "default": 0
+  },
+  "maximumMemory": {
+    "category": "Features",
+    "description": "Sets the maximum memory size in pages.",
+    "type": "i",
+    "default": 0
+  },
+  "sharedMemory": {
+    "category": "Features",
+    "description": "Declare memory as shared. Requires maximumMemory.",
+    "type": "b",
+    "default": false
   },
   "importTable": {
     "category": "Features",

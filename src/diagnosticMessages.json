@@ -3,8 +3,11 @@
   "Operation is unsafe.": 101,
   "User-defined: {0}": 102,
   "Feature '{0}' is not enabled.": 103,
-  "Function '{0}' is possibly called virtually, which is not yet supported.": 104,
-  "Low memory limit exceeded by static data: {0} > {1}": 105,
+  "Low memory limit exceeded by static data: {0} > {1}": 104,
+  "Module requires at least '{0}' pages of initial memory.": 105,
+  "Module requires at least '{0}' pages of maximum memory.": 106,
+  "Shared memory requires maximum memory to be defined.": 107,
+  "Shared memory requires feature 'threads' to be enabled.": 108,
 
   "Conversion from type '{0}' to '{1}' requires an explicit cast.": 200,
   "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.": 201,

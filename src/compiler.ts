@@ -202,10 +202,16 @@ export class Options {
   target: Target = Target.WASM32;
   /** If true, replaces assertions with nops. */
   noAssert: bool = false;
+  /** It true, exports the memory to the embedder. */
+  exportMemory: bool = true;
   /** If true, imports the memory provided by the embedder. */
   importMemory: bool = false;
-  /** If greater than zero, declare memory as shared by setting max memory to sharedMemory. */
-  sharedMemory: i32 = 0;
+  /** Initial memory size, in pages. */
+  initialMemory: u32 = 0;
+  /** Maximum memory size, in pages. */
+  maximumMemory: u32 = 0;
+  /** If true, memory is declared as shared. */
+  sharedMemory: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, exports the function table. */
@@ -215,9 +221,9 @@ export class Options {
   /** If true, generates an explicit start function. */
   explicitStart: bool = false;
   /** Static memory start offset. */
-  memoryBase: i32 = 0;
+  memoryBase: u32 = 0;
   /** Static table start offset. */
-  tableBase: i32 = 0;
+  tableBase: u32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
   /** Features to activate by default. These are the finished proposals. */
@@ -227,7 +233,7 @@ export class Options {
   /** If true, enables pedantic diagnostics. */
   pedantic: bool = false;
   /** Indicates a very low (<64k) memory limit. */
-  lowMemoryLimit: i32 = 0;
+  lowMemoryLimit: u32 = 0;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -554,15 +560,56 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up memory
-    var isSharedMemory = options.hasFeature(Feature.THREADS) && options.sharedMemory > 0;
+    var initialPages = this.options.memoryBase /* is specified */ || this.memorySegments.length
+      ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16)))
+      : 0;
+    if (options.initialMemory) {
+      if (options.initialMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_initial_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        initialPages = options.initialMemory;
+      }
+    }
+    var maximumPages = Module.UNLIMITED_MEMORY;
+    if (options.maximumMemory) {
+      if (options.maximumMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_maximum_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        maximumPages = options.maximumMemory;
+      }
+    }
+    var isSharedMemory = false;
+    if (options.sharedMemory) {
+      isSharedMemory = true;
+      if (!options.maximumMemory) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_maximum_memory_to_be_defined,
+          null
+        );
+        isSharedMemory = false;
+      }
+      if (!options.hasFeature(Feature.THREADS)) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_feature_threads_to_be_enabled,
+          null
+        );
+        isSharedMemory = false;
+      }
+    }
     module.setMemory(
-      this.options.memoryBase /* is specified */ || this.memorySegments.length
-        ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16)))
-        : 0,
-      isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
+      initialPages,
+      maximumPages,
       this.memorySegments,
       options.target,
-      ExportNames.memory,
+      options.exportMemory ? ExportNames.memory : null,
       isSharedMemory
     );
 

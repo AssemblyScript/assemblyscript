@@ -57,13 +57,28 @@ export function setNoAssert(options: Options, noAssert: bool): void {
   options.noAssert = noAssert;
 }
 
+/** Sets the `exportMemory` option. */
+export function setExportMemory(options: Options, exportMemory: bool): void {
+  options.exportMemory = exportMemory;
+}
+
 /** Sets the `importMemory` option. */
 export function setImportMemory(options: Options, importMemory: bool): void {
   options.importMemory = importMemory;
 }
 
+/** Sets the `initialMemory` option. */
+export function setInitialMemory(options: Options, initialMemory: u32): void {
+  options.initialMemory = initialMemory;
+}
+
+/** Sets the `maximumMemory` option. */
+export function setMaximumMemory(options: Options, maximumMemory: u32): void {
+  options.maximumMemory = maximumMemory;
+}
+
 /** Sets the `sharedMemory` option. */
-export function setSharedMemory(options: Options, sharedMemory: i32): void {
+export function setSharedMemory(options: Options, sharedMemory: bool): void {
   options.sharedMemory = sharedMemory;
 }
 

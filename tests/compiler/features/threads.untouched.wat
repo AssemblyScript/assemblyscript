@@ -1,6 +1,6 @@
 (module
  (type $none_=>_none (func))
- (memory $0 (shared 1 1))
+ (memory $0 (shared 1 10))
  (table $0 1 funcref)
  (global $~lib/ASC_FEATURE_THREADS i32 (i32.const 1))
  (export "memory" (memory $0))
