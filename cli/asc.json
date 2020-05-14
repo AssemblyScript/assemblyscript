@@ -88,11 +88,11 @@
     "type": "s",
     "alias": "t"
   },
-  "asmjsFile": {
+  "jsFile": {
     "category": "Output",
-    "description": "Specifies the asm.js output file (.js).",
+    "description": "Specifies the JavaScript (via wasm2js) output file (.js).",
     "type": "s",
-    "alias": "a"
+    "alias": "j"
   },
   "idlFile": {
     "category": "Output",

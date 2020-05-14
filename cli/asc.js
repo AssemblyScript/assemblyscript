@@ -714,8 +714,8 @@ exports.main = function main(argv, options, callback) {
     if (args.outFile != null) {
       if (/\.was?t$/.test(args.outFile) && args.textFile == null) {
         args.textFile = args.outFile;
-      } else if (/\.js$/.test(args.outFile) && args.asmjsFile == null) {
-        args.asmjsFile = args.outFile;
+      } else if (/\.js$/.test(args.outFile) && args.jsFile == null) {
+        args.jsFile = args.outFile;
       } else if (args.binaryFile == null) {
         args.binaryFile = args.outFile;
       }
@@ -766,21 +766,21 @@ exports.main = function main(argv, options, callback) {
       }
     }
 
-    // Write asm.js
-    if (args.asmjsFile != null) {
-      let asm;
-      if (args.asmjsFile.length) {
+    // Write JS
+    if (args.jsFile != null) {
+      let js;
+      if (args.jsFile.length) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          asm = module.toAsmjs();
+          js = module.toAsmjs();
         });
-        writeFile(args.asmjsFile, asm, baseDir);
+        writeFile(args.jsFile, js, baseDir);
       } else if (!hasStdout) {
         stats.emitCount++;
         stats.emitTime += measure(() => {
-          asm = module.toAsmjs();
+          js = module.toAsmjs();
         });
-        writeStdout(asm);
+        writeStdout(js);
         hasStdout = true;
       }
       hasOutput = true;
