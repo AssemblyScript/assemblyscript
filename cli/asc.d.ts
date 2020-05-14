@@ -97,8 +97,14 @@ interface CompilerOptions {
   noEmit?: boolean;
   /** Imports the memory provided as 'env.memory'. */
   importMemory?: boolean;
-  /** Declare memory as shared by settings the max shared memory. */
-  sharedMemory?: number;
+  /** Does not export the memory as 'memory'. */
+  noExportMemory?: boolean;
+  /** Sets the initial memory size in pages. */
+  initialMemory?: number;
+  /** Sets the maximum memory size in pages. */
+  maximumMemory?: number;
+  /** Declare memory as shared. Requires maximumMemory. */
+  sharedMemory?: boolean;
   /** Sets the start offset of compiler-generated static memory. */
   memoryBase?: number;
   /** Imports the function table provided as 'env.table'. */

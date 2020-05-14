@@ -272,7 +272,10 @@ exports.main = function main(argv, options, callback) {
   const compilerOptions = assemblyscript.newOptions();
   assemblyscript.setTarget(compilerOptions, 0);
   assemblyscript.setNoAssert(compilerOptions, args.noAssert);
+  assemblyscript.setExportMemory(compilerOptions, !args.noExportMemory);
   assemblyscript.setImportMemory(compilerOptions, args.importMemory);
+  assemblyscript.setInitialMemory(compilerOptions, args.initialMemory >>> 0);
+  assemblyscript.setMaximumMemory(compilerOptions, args.maximumMemory >>> 0);
   assemblyscript.setSharedMemory(compilerOptions, args.sharedMemory);
   assemblyscript.setImportTable(compilerOptions, args.importTable);
   assemblyscript.setExportTable(compilerOptions, args.exportTable);

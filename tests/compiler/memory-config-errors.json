@@ -1,0 +1,10 @@
+{
+  "asc_flags": [
+    "--initialMemory 2",
+    "--maximumMemory 1"
+  ],
+  "stderr": [
+    "AS105: Module requires at least '3' pages of initial memory.",
+    "AS106: Module requires at least '3' pages of maximum memory."
+  ]
+}

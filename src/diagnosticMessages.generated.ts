@@ -11,8 +11,11 @@ export enum DiagnosticCode {
   Operation_is_unsafe = 101,
   User_defined_0 = 102,
   Feature_0_is_not_enabled = 103,
-  Function_0_is_possibly_called_virtually_which_is_not_yet_supported = 104,
-  Low_memory_limit_exceeded_by_static_data_0_1 = 105,
+  Low_memory_limit_exceeded_by_static_data_0_1 = 104,
+  Module_requires_at_least_0_pages_of_initial_memory = 105,
+  Module_requires_at_least_0_pages_of_maximum_memory = 106,
+  Shared_memory_requires_maximum_memory_to_be_defined = 107,
+  Shared_memory_requires_feature_threads_to_be_enabled = 108,
   Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
   Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
   Type_0_cannot_be_changed_to_type_1 = 202,
@@ -181,8 +184,11 @@ export function diagnosticCodeToString(code: DiagnosticCode): string {
     case 101: return "Operation is unsafe.";
     case 102: return "User-defined: {0}";
     case 103: return "Feature '{0}' is not enabled.";
-    case 104: return "Function '{0}' is possibly called virtually, which is not yet supported.";
-    case 105: return "Low memory limit exceeded by static data: {0} > {1}";
+    case 104: return "Low memory limit exceeded by static data: {0} > {1}";
+    case 105: return "Module requires at least '{0}' pages of initial memory.";
+    case 106: return "Module requires at least '{0}' pages of maximum memory.";
+    case 107: return "Shared memory requires maximum memory to be defined.";
+    case 108: return "Shared memory requires feature 'threads' to be enabled.";
     case 200: return "Conversion from type '{0}' to '{1}' requires an explicit cast.";
     case 201: return "Conversion from type '{0}' to '{1}' will require an explicit cast when switching between 32/64-bit.";
     case 202: return "Type '{0}' cannot be changed to type '{1}'.";

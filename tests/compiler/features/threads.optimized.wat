@@ -1,6 +1,6 @@
 (module
  (type $none_=>_none (func))
- (memory $0 (shared 1 1))
+ (memory $0 (shared 1 10))
  (export "memory" (memory $0))
  (start $~start)
  (func $features/threads/testAtomic
