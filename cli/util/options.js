@@ -54,10 +54,13 @@ function parse(argv, config) {
       else { arguments.push(arg); continue; } // argument
     }
     if (option) {
-      provided.add(key);
-      if (option.type == null || option.type === "b") options[key] = true; // flag
-      else {
+      if (option.type == null || option.type === "b") {
+        options[key] = true; // flag
+        provided.add(key);
+      } else {
+        // the argument was provided
         if (i + 1 < argv.length && argv[i + 1].charCodeAt(0) != 45) { // present
+          provided.add(key);
           switch (option.type) {
             case "i": options[key] = parseInt(argv[++i], 10); break;
             case "I": options[key] = (options[key] || []).concat(parseInt(argv[++i], 10)); break;
