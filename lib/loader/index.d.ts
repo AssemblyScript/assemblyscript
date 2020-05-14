@@ -5,13 +5,10 @@ export interface ResultObject {
   instance: WebAssembly.Instance;
 }
 
-/** Helper type for WebAssembly imports that defines two levels of nesting. */
-type ImportsHelper = {
-  [key: string]: any;
-}
 
 /** WebAssembly imports with an optional env object and two levels of nesting. */
-export type Imports = ImportsHelper & {
+export type Imports = {
+  [key: string]: any;
   env?: {
     memory?: WebAssembly.Memory;
     table?: WebAssembly.Table;
