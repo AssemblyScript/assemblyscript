@@ -75,3 +75,18 @@ function testShortcutOr(a: i64, b: i32): bool {
 }
 assert(testShortcutAnd(1, 1));
 assert(testShortcutOr(0, 1));
+
+// Test non-bools on contextual bool
+// see: https://github.com/AssemblyScript/assemblyscript/issues/1136
+
+class Obj {}
+
+function testContextualBoolAnd(someObj: Obj, someInt: i32): bool {
+  return someObj && someInt;
+}
+assert(testContextualBoolAnd(new Obj(), 1));
+
+function testContextualBoolOr(someObj: Obj, someInt: i32): bool {
+  return someObj || someInt;
+}
+assert(testContextualBoolOr(new Obj(), 0));
