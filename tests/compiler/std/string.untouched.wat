@@ -2,8 +2,8 @@
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
  (type $none_=>_none (func))
  (type $i64_=>_i32 (func (param i64) (result i32)))
@@ -403,7 +403,6 @@
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 17304))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
@@ -2196,10 +2195,6 @@
   local.get $0
   local.get $1
   call $~lib/string/String.fromCharCode
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~lib/string/String.fromCodePoint (param $0 i32) (result i32)
   (local $1 i32)

@@ -1,7 +1,6 @@
 (module
  (type $none_=>_none (func))
  (type $none_=>_i32 (func (result i32)))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
@@ -10,15 +9,10 @@
  (table $0 2 funcref)
  (elem (i32.const 1) $class-static-function/Example.staticFunc)
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $class-static-function/Example.staticFunc (result i32)
   i32.const 42
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $class-static-function/call (param $0 i32) (result i32)
   i32.const 0

@@ -18,7 +18,6 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 100))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))
@@ -772,10 +771,6 @@
   global.get $retain-release/REF
   call $~lib/rt/stub/__retain
   call $~lib/rt/stub/__release
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $retain-release/provideRefIndirect (param $0 i32)
   global.get $retain-release/REF

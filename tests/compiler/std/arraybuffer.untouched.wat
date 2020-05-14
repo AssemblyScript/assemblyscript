@@ -31,7 +31,6 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 432))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/pure/__release (param $0 i32)
@@ -3650,10 +3649,6 @@
   local.get $2
   local.get $3
   call $~lib/dataview/DataView#constructor
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~lib/arraybuffer/ArrayBuffer.isView<~lib/dataview/DataView> (param $0 i32) (result i32)
   (local $1 i32)

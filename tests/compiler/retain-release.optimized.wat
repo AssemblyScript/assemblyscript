@@ -14,7 +14,6 @@
  (global $retain-release/REF (mut i32) (i32.const 0))
  (global $retain-release/TARGET (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $retain-release/takeRef))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "returnRef" (func $retain-release/returnRef))

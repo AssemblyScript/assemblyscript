@@ -222,7 +222,6 @@
  (global $std/typedarray/setSource7 (mut i32) (i32.const 3904))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 7724))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/pure/__release (param $0 i32)
@@ -3082,10 +3081,6 @@
   local.get $5
   call $~lib/rt/pure/__release
   local.get $8
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~lib/util/sort/insertionSort<f64> (param $0 i32) (param $1 i32) (param $2 i32)
   (local $3 i32)
