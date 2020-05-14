@@ -412,9 +412,10 @@ export class Flow {
 
   /** Adds a new scoped alias for the specified local. For example `super` aliased to the `this` local. */
   addScopedAlias(name: string, type: Type, index: i32, reportNode: Node | null = null): Local {
-    if (!this.scopedLocals) this.scopedLocals = new Map();
+    var scopedLocals = this.scopedLocals;
+    if (!scopedLocals) this.scopedLocals = scopedLocals = new Map();
     else {
-      let existingLocal = this.scopedLocals.get(name);
+      let existingLocal = scopedLocals.get(name);
       if (existingLocal) {
         if (reportNode) {
           if (!existingLocal.declaration.range.source.isNative) {
@@ -437,7 +438,7 @@ export class Flow {
     assert(index < this.parentFunction.localsByIndex.length);
     var scopedAlias = new Local(name, index, type, this.parentFunction);
     // not flagged as SCOPED as it must not be free'd when the flow is finalized
-    this.scopedLocals.set(name, scopedAlias);
+    scopedLocals.set(name, scopedAlias);
     return scopedAlias;
   }
 

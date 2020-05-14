@@ -65,6 +65,8 @@ class Class {
   static staticField: i32 = 5;
   @lazy static lazyStaticField: i32 = 55;
   instanceField: i32 = 6;
+  static get staticProperty(): i32 { return 7; }
+  get instanceProperty(): i32 { return 8; }
 }
 
 assert(
@@ -79,11 +81,22 @@ assert(
   "55"
 );
 
+assert(
+  (Class.staticProperty).toString()
+  ==
+  "7"
+);
+
 {
   let instance = new Class();
   assert(
     (instance.instanceField).toString()
     ==
     "6"
+  );
+  assert(
+    (instance.instanceProperty).toString()
+    ==
+    "8"
   );
 }

@@ -122,7 +122,10 @@ export abstract class ExportsWalker {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: {
-        this.visitPropertyInstances(name, <PropertyPrototype>element);
+        let propertyInstance = (<PropertyPrototype>element).instance;
+        if (!propertyInstance) break;
+        element = propertyInstance;
+        // fall-through
         break;
       }
       case ElementKind.PROPERTY: {
@@ -162,16 +165,6 @@ export abstract class ExportsWalker {
         if (instance.is(CommonFlags.COMPILED)) this.visitClass(name, instance);
       }
     }
-  }
-
-  private visitPropertyInstances(name: string, element: PropertyPrototype): void {
-    // var instances = element.instances;
-    // if (instances) {
-    //   for (let instance of instances.values()) {
-    //     if (instance.is(CommonFlags.COMPILED)) this.visitProperty(instance);
-    //   }
-    // }
-    assert(false);
   }
 
   abstract visitGlobal(name: string, element: Global): void;
