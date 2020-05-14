@@ -2835,7 +2835,7 @@ declare module "assemblyscript/src/resolver" {
      * @license Apache-2.0
      */
     import { DiagnosticEmitter } from "assemblyscript/src/diagnostics";
-    import { Program, Element, Class, ClassPrototype, Function, FunctionPrototype } from "assemblyscript/src/program";
+    import { Program, Element, Class, ClassPrototype, Function, FunctionPrototype, Property, PropertyPrototype } from "assemblyscript/src/program";
     import { Flow } from "assemblyscript/src/flow";
     import { TypeNode, TypeName, TypeParameterNode, Node, IdentifierExpression, CallExpression, Expression } from "assemblyscript/src/ast";
     import { Type } from "assemblyscript/src/types";
@@ -3058,6 +3058,12 @@ declare module "assemblyscript/src/resolver" {
         reportNode: Node, 
         /** How to proceed with eventual diagnostics. */
         reportMode?: ReportMode): Class | null;
+        /** Resolves a property prototype. */
+        resolveProperty(
+        /** The prototype of the property. */
+        prototype: PropertyPrototype, 
+        /** How to proceed with eventual diagnostics. */
+        reportMode?: ReportMode): Property | null;
     }
 }
 declare module "assemblyscript/src/parser" {
@@ -4018,15 +4024,23 @@ declare module "assemblyscript/src/program" {
         getterPrototype: FunctionPrototype | null;
         /** Setter prototype. */
         setterPrototype: FunctionPrototype | null;
+        /** Property instance, if resolved. */
+        instance: Property | null;
+        /** Clones of this prototype that are bound to specific classes. */
+        private boundPrototypes;
         /** Constructs a new property prototype. */
         constructor(
         /** Simple name. */
         name: string, 
-        /** Parent class. */
-        parent: ClassPrototype, 
+        /** Parent element. Either a class prototype or instance. */
+        parent: Element, 
         /** Declaration of the getter or setter introducing the property. */
         firstDeclaration: FunctionDeclaration);
         lookup(name: string): Element | null;
+        /** Tests if this prototype is bound to a class. */
+        get isBound(): boolean;
+        /** Creates a clone of this prototype that is bound to a concrete class instead. */
+        toBound(classInstance: Class): PropertyPrototype;
     }
     /** A resolved property. */
     export class Property extends VariableLikeElement {
@@ -5199,7 +5213,6 @@ declare module "assemblyscript/src/definitions" {
         visitElement(name: string, element: Element): void;
         private visitFunctionInstances;
         private visitClassInstances;
-        private visitPropertyInstances;
         abstract visitGlobal(name: string, element: Global): void;
         abstract visitEnum(name: string, element: Enum): void;
         abstract visitFunction(name: string, element: Function): void;
