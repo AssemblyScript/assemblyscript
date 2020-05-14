@@ -139,8 +139,6 @@ interface CompilerOptions {
   listFiles?: boolean;
   /** Prints measuring information on I/O and compile times. */
   measure?: boolean;
-  /** Prints the module's runtime type information to stderr. */
-  printrtti?: boolean;
   /** Disables terminal colors. */
   noColors?: boolean;
   /** Specifies an alternative file extension. */

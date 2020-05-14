@@ -321,11 +321,6 @@
     "type": "b",
     "default": false
   },
-  "printrtti": {
-    "description": "Prints the module's runtime type information to stderr.",
-    "type": "b",
-    "default": false
-  },
   " ...": {
     "description": "Specifies node.js options (CLI only). See: node --help"
   },
