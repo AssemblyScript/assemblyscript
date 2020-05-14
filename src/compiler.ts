@@ -5541,11 +5541,11 @@ export class Compiler extends DiagnosticEmitter {
         let rightFlow = flow.fork();
         this.currentFlow = rightFlow;
         rightFlow.inheritNonnullIfTrue(leftExpr);
-        rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
-        rightType = leftType;
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
+          rightType = this.currentType;
           rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
@@ -5557,6 +5557,8 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = Type.bool;
 
         } else {
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
+          rightType = this.currentType;
 
           // references must properly retain and release, with the same outcome independent of the branch taken
           if (leftType.isManaged) {
@@ -5643,11 +5645,11 @@ export class Compiler extends DiagnosticEmitter {
         let rightFlow = flow.fork();
         this.currentFlow = rightFlow;
         rightFlow.inheritNonnullIfFalse(leftExpr);
-        rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
-        rightType = leftType;
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
+          rightType = this.currentType;
           rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, leftType);
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
@@ -5659,6 +5661,8 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = Type.bool;
 
         } else {
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
+          rightType = this.currentType;
 
           // references must properly retain and release, with the same outcome independent of the branch taken
           if (leftType.isManaged) {
