@@ -21,6 +21,7 @@ function parse(argv, config) {
   var unknown = [];
   var arguments = [];
   var trailing = [];
+  var provided = new Set();
 
   // make an alias map and initialize defaults
   var aliases = {};
@@ -53,6 +54,7 @@ function parse(argv, config) {
       else { arguments.push(arg); continue; } // argument
     }
     if (option) {
+      provided.add(key);
       if (option.type == null || option.type === "b") options[key] = true; // flag
       else {
         if (i + 1 < argv.length && argv[i + 1].charCodeAt(0) != 45) { // present
@@ -82,7 +84,7 @@ function parse(argv, config) {
   }
   while (i < k) trailing.push(argv[i++]); // trailing
 
-  return { options, unknown, arguments, trailing };
+  return { options, unknown, arguments, trailing, provided };
 }
 
 exports.parse = parse;

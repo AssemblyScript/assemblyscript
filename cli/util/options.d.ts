@@ -31,7 +31,9 @@ interface Result {
   /** Normal arguments. */
   arguments: string[],
   /** Trailing arguments. */
-  trailing: string[]
+  trailing: string[],
+  /** Provided arguments from the cli. */
+  provided: Set<string>
 }
 
 /** Parses the specified command line arguments according to the given configuration. */
