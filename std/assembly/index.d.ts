@@ -597,6 +597,10 @@ declare namespace v128 {
   export function min<T>(a: v128, b: v128): v128;
   /** Computes the maximum of each lane. */
   export function max<T>(a: v128, b: v128): v128;
+  /** Computes the pseudo-minimum of each lane. */
+  export function pmin<T>(a: v128, b: v128): v128;
+  /** Computes the pseudo-maximum of each lane. */
+  export function pmax<T>(a: v128, b: v128): v128;
   /** Computes the dot product of two lanes each, yielding lanes one size wider than the input. */
   export function dot<T = i16>(a: v128, b: v128): v128;
   /** Computes the average of each lane. */
@@ -933,6 +937,10 @@ declare namespace f32x4 {
   export function min(a: v128, b: v128): v128;
   /** Computes the maximum of each 32-bit float lane. */
   export function max(a: v128, b: v128): v128;
+  /** Computes the pseudo-minimum of each 32-bit float lane. */
+  export function pmin(a: v128, b: v128): v128;
+  /** Computes the pseudo-maximum of each 32-bit float lane. */
+  export function pmax(a: v128, b: v128): v128;
   /** Computes the absolute value of each 32-bit float lane. */
   export function abs(a: v128): v128;
   /** Computes the square root of each 32-bit float lane. */
@@ -981,6 +989,10 @@ declare namespace f64x2 {
   export function min(a: v128, b: v128): v128;
   /** Computes the maximum of each 64-bit float lane. */
   export function max(a: v128, b: v128): v128;
+  /** Computes the pseudo-minimum of each 64-bit float lane. */
+  export function pmin(a: v128, b: v128): v128;
+  /** Computes the pseudo-maximum of each 64-bit float lane. */
+  export function pmax(a: v128, b: v128): v128;
   /** Computes the absolute value of each 64-bit float lane. */
   export function abs(a: v128): v128;
   /** Computes the square root of each 64-bit float lane. */
