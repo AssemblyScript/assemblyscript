@@ -294,7 +294,9 @@ export const enum RuntimeFeatures {
   /** Requires the built-in globals visitor. */
   visitGlobals = 1 << 2,
   /** Requires the built-in members visitor. */
-  visitMembers = 1 << 3
+  visitMembers = 1 << 3,
+  /** Requires the setArgumentsLength export. */
+  setArgumentsLength = 1 << 4
 }
 
 /** Exported names of compiler-generated elements. */
@@ -602,6 +604,14 @@ export class Compiler extends DiagnosticEmitter {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
     }
+
+    // expose the arguments length helper if there are varargs exports
+    if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
+      module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
+        module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
+      );
+      module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
+    }
     return module;
   }
 
@@ -703,6 +713,7 @@ export class Compiler extends DiagnosticEmitter {
             // utilize varargs stub to fill in omitted arguments
             functionInstance = this.ensureVarargsStub(functionInstance);
             this.ensureArgumentsLength();
+            this.runtimeFeatures |= RuntimeFeatures.setArgumentsLength;
           }
           if (functionInstance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(functionInstance.internalName, prefix + name);
         }
@@ -6849,15 +6860,6 @@ export class Compiler extends DiagnosticEmitter {
     if (!this.builtinArgumentsLength) {
       let module = this.module;
       this.builtinArgumentsLength = module.addGlobal(BuiltinNames.argumentsLength, NativeType.I32, true, module.i32(0));
-      // TODO: Enable this once mutable globals are the default nearly everywhere.
-      // if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-      //   module.addGlobalExport(BuiltinNames.argumentsLength, ExportNames.argumentsLength);
-      // } else {
-        module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
-          module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
-        );
-        module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
-      // }
     }
   }
 

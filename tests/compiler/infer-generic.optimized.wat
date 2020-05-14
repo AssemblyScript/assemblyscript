@@ -1,6 +1,5 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_f32_i32_i32_=>_i32 (func (param i32 f32 i32 i32) (result i32)))
  (type $f32_=>_f32 (func (param f32) (result f32)))
@@ -8,7 +7,6 @@
  (data (i32.const 1024) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00i\00n\00f\00e\00r\00-\00g\00e\00n\00e\00r\00i\00c\00.\00t\00s")
  (data (i32.const 1072) "\0c\00\00\00\01\00\00\00\00\00\00\00\0c\00\00\00\00\00\80?\00\00\00@\00\00@@")
  (data (i32.const 1104) "\10\00\00\00\01\00\00\00\03\00\00\00\10\00\00\00@\04\00\00@\04\00\00\0c\00\00\00\03")
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
  (export "test2" (func $infer-generic/test2))
@@ -22,9 +20,6 @@
   i32.const 0
   local.get $0
   select
- )
- (func $~setArgumentsLength (param $0 i32)
-  nop
  )
  (func $infer-generic/test1 (param $0 f32) (result f32)
   local.get $0

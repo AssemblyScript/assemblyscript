@@ -204,7 +204,6 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/pure/__release (param $0 i32)
@@ -2336,10 +2335,6 @@
   i32.store offset=8
   local.get $2
   call $~lib/rt/pure/__retain
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~lib/util/sort/insertionSort<f64> (param $0 i32) (param $1 i32)
   (local $2 i32)
