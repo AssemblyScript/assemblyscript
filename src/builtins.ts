@@ -352,6 +352,8 @@ export namespace BuiltinNames {
   export const v128_bitmask = "~lib/builtins/v128.bitmask";
   export const v128_min = "~lib/builtins/v128.min";
   export const v128_max = "~lib/builtins/v128.max";
+  export const v128_pmin = "~lib/builtins/v128.pmin";
+  export const v128_pmax = "~lib/builtins/v128.pmax";
   export const v128_dot = "~lib/builtins/v128.dot";
   export const v128_avgr = "~lib/builtins/v128.avgr";
   export const v128_abs = "~lib/builtins/v128.abs";
@@ -521,6 +523,8 @@ export namespace BuiltinNames {
   export const f32x4_neg = "~lib/builtins/f32x4.neg";
   export const f32x4_min = "~lib/builtins/f32x4.min";
   export const f32x4_max = "~lib/builtins/f32x4.max";
+  export const f32x4_pmin = "~lib/builtins/f32x4.pmin";
+  export const f32x4_pmax = "~lib/builtins/f32x4.pmax";
   export const f32x4_abs = "~lib/builtins/f32x4.abs";
   export const f32x4_sqrt = "~lib/builtins/f32x4.sqrt";
   export const f32x4_eq = "~lib/builtins/f32x4.eq";
@@ -544,6 +548,8 @@ export namespace BuiltinNames {
   export const f64x2_neg = "~lib/builtins/f64x2.neg";
   export const f64x2_min = "~lib/builtins/f64x2.min";
   export const f64x2_max = "~lib/builtins/f64x2.max";
+  export const f64x2_pmin = "~lib/builtins/f64x2.pmin";
+  export const f64x2_pmax = "~lib/builtins/f64x2.pmax";
   export const f64x2_abs = "~lib/builtins/f64x2.abs";
   export const f64x2_sqrt = "~lib/builtins/f64x2.sqrt";
   export const f64x2_eq = "~lib/builtins/f64x2.eq";
@@ -3968,6 +3974,68 @@ function builtin_v128_max(ctx: BuiltinContext): ExpressionRef {
   return module.unreachable();
 }
 builtins.set(BuiltinNames.v128_max, builtin_v128_max);
+
+// v128.pmin<T!>(a: v128, b: v128) -> v128
+function builtin_v128_pmin(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  if (!type.is(TypeFlags.REFERENCE)) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.binary(BinaryOp.PminF32x4, arg0, arg1);
+      case TypeKind.F64: return module.binary(BinaryOp.PminF64x2, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.pmin", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_pmin, builtin_v128_pmin);
+
+// v128.pmax<T!>(a: v128, b: v128) -> v128
+function builtin_v128_pmax(ctx: BuiltinContext): ExpressionRef {
+  var compiler = ctx.compiler;
+  var module = compiler.module;
+  if (
+    checkFeatureEnabled(ctx, Feature.SIMD) |
+    checkTypeRequired(ctx) |
+    checkArgsRequired(ctx, 2)
+  ) {
+    compiler.currentType = Type.v128;
+    return module.unreachable();
+  }
+  var operands = ctx.operands;
+  var typeArguments = ctx.typeArguments!;
+  var type = typeArguments[0];
+  var arg0 = compiler.compileExpression(operands[0], Type.v128, Constraints.CONV_IMPLICIT);
+  var arg1 = compiler.compileExpression(operands[1], Type.v128, Constraints.CONV_IMPLICIT);
+  if (!type.is(TypeFlags.REFERENCE)) {
+    switch (type.kind) {
+      case TypeKind.F32: return module.binary(BinaryOp.PmaxF32x4, arg0, arg1);
+      case TypeKind.F64: return module.binary(BinaryOp.PmaxF64x2, arg0, arg1);
+    }
+  }
+  compiler.error(
+    DiagnosticCode.Operation_0_cannot_be_applied_to_type_1,
+    ctx.reportNode.typeArgumentsRange, "v128.pmax", type.toString()
+  );
+  return module.unreachable();
+}
+builtins.set(BuiltinNames.v128_pmax, builtin_v128_pmax);
 
 // v128.dot<T!>(a: v128, b: v128) -> v128
 function builtin_v128_dot(ctx: BuiltinContext): ExpressionRef {
@@ -7444,6 +7512,24 @@ function builtin_f32x4_max(ctx: BuiltinContext): ExpressionRef {
 }
 builtins.set(BuiltinNames.f32x4_max, builtin_f32x4_max);
 
+// f32x4.pmin -> v128.pmin<f32>
+function builtin_f32x4_pmin(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_pmin(ctx);
+}
+builtins.set(BuiltinNames.f32x4_pmin, builtin_f32x4_pmin);
+
+// f32x4.pmax -> v128.pmax<f32>
+function builtin_f32x4_pmax(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f32 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_pmax(ctx);
+}
+builtins.set(BuiltinNames.f32x4_pmax, builtin_f32x4_pmax);
+
 // f32x4.abs -> v128.abs<f32>
 function builtin_f32x4_abs(ctx: BuiltinContext): ExpressionRef {
   checkTypeAbsent(ctx);
@@ -7641,6 +7727,24 @@ function builtin_f64x2_max(ctx: BuiltinContext): ExpressionRef {
   return builtin_v128_max(ctx);
 }
 builtins.set(BuiltinNames.f64x2_max, builtin_f64x2_max);
+
+// f64x2.pmin -> v128.pmin<f64>
+function builtin_f64x2_pmin(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_pmin(ctx);
+}
+builtins.set(BuiltinNames.f64x2_pmin, builtin_f64x2_pmin);
+
+// f64x2.pmax -> v128.pmax<f64>
+function builtin_f64x2_pmax(ctx: BuiltinContext): ExpressionRef {
+  checkTypeAbsent(ctx);
+  ctx.typeArguments = [ Type.f64 ];
+  ctx.contextualType = Type.v128;
+  return builtin_v128_pmax(ctx);
+}
+builtins.set(BuiltinNames.f64x2_pmax, builtin_f64x2_pmax);
 
 // f64x2.abs -> v128.abs<f64>
 function builtin_f64x2_abs(ctx: BuiltinContext): ExpressionRef {

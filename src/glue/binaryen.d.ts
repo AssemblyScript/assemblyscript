@@ -532,6 +532,7 @@ export declare function _BinaryenPop(module: BinaryenModuleRef, type: BinaryenTy
 export declare function _BinaryenExpressionGetId(expr: BinaryenExpressionRef): BinaryenExpressionId;
 export declare function _BinaryenExpressionGetType(expr: BinaryenExpressionRef): BinaryenType;
 export declare function _BinaryenExpressionPrint(expr: BinaryenExpressionRef): void;
+export declare function _BinaryenExpressionCopy(expr: BinaryenExpressionRef, module: BinaryenModuleRef): BinaryenExpressionRef;
 
 export declare function _BinaryenBlockGetName(expr: BinaryenExpressionRef): usize;
 export declare function _BinaryenBlockGetNumChildren(expr: BinaryenExpressionRef): BinaryenIndex;
@@ -837,5 +838,3 @@ export declare function _BinaryenGetFlexibleInlineMaxSize(): BinaryenIndex;
 export declare function _BinaryenSetFlexibleInlineMaxSize(size: BinaryenIndex): void;
 export declare function _BinaryenGetOneCallerInlineMaxSize(): BinaryenIndex;
 export declare function _BinaryenSetOneCallerInlineMaxSize(size: BinaryenIndex): void;
-
-export declare function _BinaryenSetAPITracing(on: bool): void;
