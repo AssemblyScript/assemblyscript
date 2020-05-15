@@ -1,5 +1,5 @@
-import { DEBUG, BLOCK_OVERHEAD } from "rt/common";
-import { Block, freeBlock, ROOT } from "rt/tlsf";
+import { DEBUG, BLOCK_OVERHEAD, root } from "rt/common";
+import { Block, freeBlock } from "rt/tlsf";
 import { TypeinfoFlags } from "shared/typeinfo";
 import { onincrement, ondecrement, onfree, onalloc } from "./rtrace";
 
@@ -124,10 +124,10 @@ function decrement(s: Block): void {
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_DECREMENT);
     if (isDefined(__GC_ALL_ACYCLIC)) {
       if (DEBUG) assert(!(info & BUFFERED_MASK));
-      freeBlock(ROOT, s);
+      freeBlock(s);
     } else {
       if (!(info & BUFFERED_MASK)) {
-        freeBlock(ROOT, s);
+        freeBlock(s);
       } else {
         s.gcInfo = BUFFERED_MASK | COLOR_BLACK | 0;
       }
@@ -149,31 +149,25 @@ function decrement(s: Block): void {
   }
 }
 
-/** Buffer of possible roots. */
-// @ts-ignore: decorator
-@lazy var ROOTS: usize;
-/** Current absolute offset into the `ROOTS` buffer. */
-// @ts-ignore: decorator
-@lazy var CUR: usize = 0;
-/** Current absolute end offset into the `ROOTS` buffer. */
-// @ts-ignore: decorator
-@lazy var END: usize = 0;
+// root.data1 : Buffer of possible roots
+// root.data2 : Current absolute offset into the buffer
+// root.data3 : Current absolute end offset into the buffer
 
 /** Appends a block to possible roots. */
 function appendRoot(s: Block): void {
-  var cur = CUR;
-  if (cur >= END) {
+  var cur = root.data2;
+  if (cur >= root.data3) {
     growRoots(); // TBD: either that or pick a default and force collection on overflow
-    cur = CUR;
+    cur = root.data2;
   }
   store<Block>(cur, s);
-  CUR = cur + sizeof<usize>();
+  root.data2 = cur + sizeof<usize>();
 }
 
 /** Grows the roots buffer if it ran full. */
 function growRoots(): void {
-  var oldRoots = ROOTS;
-  var oldSize = CUR - oldRoots;
+  var oldRoots = root.data1;
+  var oldSize = root.data2 - oldRoots;
   var newSize = max(oldSize * 2, 64 << alignof<usize>());
   var newRoots = __alloc(newSize, 0);
   if (isDefined(ASC_RTRACE)) onfree(changetype<Block>(newRoots - BLOCK_OVERHEAD)); // neglect unmanaged
@@ -182,9 +176,9 @@ function growRoots(): void {
     if (isDefined(ASC_RTRACE)) onalloc(changetype<Block>(oldRoots - BLOCK_OVERHEAD)); // neglect unmanaged
     __free(oldRoots);
   }
-  ROOTS = newRoots;
-  CUR = newRoots + oldSize;
-  END = newRoots + newSize;
+  root.data1 = newRoots;
+  root.data2 = newRoots + oldSize;
+  root.data3 = newRoots + newSize;
 }
 
 /** Collects cyclic garbage. */
@@ -194,9 +188,9 @@ export function __collect(): void {
   if (isDefined(__GC_ALL_ACYCLIC)) return;
 
   // markRoots
-  var roots = ROOTS;
+  var roots = root.data1;
   var cur = roots;
-  for (let pos = cur, end = CUR; pos < end; pos += sizeof<usize>()) {
+  for (let pos = cur, end = root.data2; pos < end; pos += sizeof<usize>()) {
     let s = load<Block>(pos);
     let info = s.gcInfo;
     if ((info & COLOR_MASK) == COLOR_PURPLE && (info & REFCOUNT_MASK) > 0) {
@@ -205,13 +199,13 @@ export function __collect(): void {
       cur += sizeof<usize>();
     } else {
       if ((info & COLOR_MASK) == COLOR_BLACK && !(info & REFCOUNT_MASK)) {
-        freeBlock(ROOT, s);
+        freeBlock(s);
       } else {
         s.gcInfo = info & ~BUFFERED_MASK;
       }
     }
   }
-  CUR = cur;
+  root.data2 = cur;
 
   // scanRoots
   for (let pos = roots; pos < cur; pos += sizeof<usize>()) {
@@ -224,7 +218,7 @@ export function __collect(): void {
     s.gcInfo = s.gcInfo & ~BUFFERED_MASK;
     collectWhite(s);
   }
-  CUR = roots;
+  root.data2 = roots;
 }
 
 /** Marks a block as gray (possible member of cycle) during the collection phase. */
@@ -261,7 +255,7 @@ function collectWhite(s: Block): void {
   if ((info & COLOR_MASK) == COLOR_WHITE && !(info & BUFFERED_MASK)) {
     s.gcInfo = (info & ~COLOR_MASK) | COLOR_BLACK;
     __visit_members(changetype<usize>(s) + BLOCK_OVERHEAD, VISIT_COLLECTWHITE);
-    freeBlock(ROOT, s);
+    freeBlock(s);
   }
 }
 
