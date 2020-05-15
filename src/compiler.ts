@@ -4854,8 +4854,8 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
-              let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
-              if (!prototype) {
+              let namespaceMembers = namespace.members;
+              if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
                   expression.range, "Mathf.pow"
@@ -4863,6 +4863,7 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
+              let prototype = assert(namespaceMembers.get(CommonNames.pow));
               assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
               this.f32PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
@@ -4887,8 +4888,8 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
-              let prototype = namespace.members ? namespace.members.get(CommonNames.pow) : null;
-              if (!prototype) {
+              let namespaceMembers = namespace.members;
+              if (!namespaceMembers || !namespaceMembers.has(CommonNames.pow)) {
                 this.error(
                   DiagnosticCode.Cannot_find_name_0,
                   expression.range, "Math.pow"
@@ -4896,6 +4897,7 @@ export class Compiler extends DiagnosticEmitter {
                 expr = module.unreachable();
                 break;
               }
+              let prototype = assert(namespaceMembers.get(CommonNames.pow));
               assert(prototype.kind == ElementKind.FUNCTION_PROTOTYPE);
               this.f64PowInstance = instance = this.resolver.resolveFunction(<FunctionPrototype>prototype, null);
             }
