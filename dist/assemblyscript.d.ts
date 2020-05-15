@@ -222,8 +222,11 @@ declare module "assemblyscript/src/diagnosticMessages.generated" {
         Operation_is_unsafe = 101,
         User_defined_0 = 102,
         Feature_0_is_not_enabled = 103,
-        Function_0_is_possibly_called_virtually_which_is_not_yet_supported = 104,
-        Low_memory_limit_exceeded_by_static_data_0_1 = 105,
+        Low_memory_limit_exceeded_by_static_data_0_1 = 104,
+        Module_requires_at_least_0_pages_of_initial_memory = 105,
+        Module_requires_at_least_0_pages_of_maximum_memory = 106,
+        Shared_memory_requires_maximum_memory_to_be_defined = 107,
+        Shared_memory_requires_feature_threads_to_be_enabled = 108,
         Conversion_from_type_0_to_1_requires_an_explicit_cast = 200,
         Conversion_from_type_0_to_1_will_require_an_explicit_cast_when_switching_between_32_64_bit = 201,
         Type_0_cannot_be_changed_to_type_1 = 202,
@@ -2072,17 +2075,21 @@ declare module "assemblyscript/src/module" {
         DivF32x4 = 159,
         MinF32x4 = 160,
         MaxF32x4 = 161,
-        AddF64x2 = 162,
-        SubF64x2 = 163,
-        MulF64x2 = 164,
-        DivF64x2 = 165,
-        MinF64x2 = 166,
-        MaxF64x2 = 167,
-        NarrowI16x8ToI8x16 = 168,
-        NarrowU16x8ToU8x16 = 169,
-        NarrowI32x4ToI16x8 = 170,
-        NarrowU32x4ToU16x8 = 171,
-        SwizzleV8x16 = 172
+        PminF32x4 = 162,
+        PmaxF32x4 = 163,
+        AddF64x2 = 164,
+        SubF64x2 = 165,
+        MulF64x2 = 166,
+        DivF64x2 = 167,
+        MinF64x2 = 168,
+        MaxF64x2 = 169,
+        PminF64x2 = 170,
+        PmaxF64x2 = 171,
+        NarrowI16x8ToI8x16 = 172,
+        NarrowU16x8ToU8x16 = 173,
+        NarrowI32x4ToI16x8 = 174,
+        NarrowU32x4ToU16x8 = 175,
+        SwizzleV8x16 = 176
     }
     export enum HostOp {
         MemorySize = 0,
@@ -2284,6 +2291,7 @@ declare module "assemblyscript/src/module" {
         dispose(): void;
         createRelooper(): number;
         cloneExpression(expr: ExpressionRef, noSideEffects?: boolean, maxDepth?: number): ExpressionRef;
+        copyExpression(expr: ExpressionRef): ExpressionRef;
         runExpression(expr: ExpressionRef, flags: ExpressionRunnerFlags, maxDepth?: number, maxLoopIterations?: number): ExpressionRef;
         addDebugInfoFile(name: string): Index;
         getDebugInfoFile(index: Index): string | null;
@@ -4224,10 +4232,16 @@ declare module "assemblyscript/src/compiler" {
         target: Target;
         /** If true, replaces assertions with nops. */
         noAssert: boolean;
+        /** It true, exports the memory to the embedder. */
+        exportMemory: boolean;
         /** If true, imports the memory provided by the embedder. */
         importMemory: boolean;
-        /** If greater than zero, declare memory as shared by setting max memory to sharedMemory. */
-        sharedMemory: number;
+        /** Initial memory size, in pages. */
+        initialMemory: number;
+        /** Maximum memory size, in pages. */
+        maximumMemory: number;
+        /** If true, memory is declared as shared. */
+        sharedMemory: boolean;
         /** If true, imports the function table provided by the embedder. */
         importTable: boolean;
         /** If true, exports the function table. */
@@ -4293,7 +4307,9 @@ declare module "assemblyscript/src/compiler" {
         /** Requires the built-in globals visitor. */
         visitGlobals = 4,
         /** Requires the built-in members visitor. */
-        visitMembers = 8
+        visitMembers = 8,
+        /** Requires the setArgumentsLength export. */
+        setArgumentsLength = 16
     }
     /** Exported names of compiler-generated elements. */
     export namespace ExportNames {
@@ -4696,6 +4712,7 @@ declare module "assemblyscript/src/builtins" {
     import { Compiler } from "assemblyscript/src/compiler";
     import { Expression, CallExpression } from "assemblyscript/src/ast";
     import { Type } from "assemblyscript/src/types";
+    import { ExpressionRef } from "assemblyscript/src/module";
     import { FunctionPrototype, ClassPrototype } from "assemblyscript/src/program";
     /** Internal names of various compiler built-ins. */
     export namespace BuiltinNames {
@@ -4924,6 +4941,8 @@ declare module "assemblyscript/src/builtins" {
         const v128_bitmask = "~lib/builtins/v128.bitmask";
         const v128_min = "~lib/builtins/v128.min";
         const v128_max = "~lib/builtins/v128.max";
+        const v128_pmin = "~lib/builtins/v128.pmin";
+        const v128_pmax = "~lib/builtins/v128.pmax";
         const v128_dot = "~lib/builtins/v128.dot";
         const v128_avgr = "~lib/builtins/v128.avgr";
         const v128_abs = "~lib/builtins/v128.abs";
@@ -5087,6 +5106,8 @@ declare module "assemblyscript/src/builtins" {
         const f32x4_neg = "~lib/builtins/f32x4.neg";
         const f32x4_min = "~lib/builtins/f32x4.min";
         const f32x4_max = "~lib/builtins/f32x4.max";
+        const f32x4_pmin = "~lib/builtins/f32x4.pmin";
+        const f32x4_pmax = "~lib/builtins/f32x4.pmax";
         const f32x4_abs = "~lib/builtins/f32x4.abs";
         const f32x4_sqrt = "~lib/builtins/f32x4.sqrt";
         const f32x4_eq = "~lib/builtins/f32x4.eq";
@@ -5109,6 +5130,8 @@ declare module "assemblyscript/src/builtins" {
         const f64x2_neg = "~lib/builtins/f64x2.neg";
         const f64x2_min = "~lib/builtins/f64x2.min";
         const f64x2_max = "~lib/builtins/f64x2.max";
+        const f64x2_pmin = "~lib/builtins/f64x2.pmin";
+        const f64x2_pmax = "~lib/builtins/f64x2.pmax";
         const f64x2_abs = "~lib/builtins/f64x2.abs";
         const f64x2_sqrt = "~lib/builtins/f64x2.sqrt";
         const f64x2_eq = "~lib/builtins/f64x2.eq";
@@ -5174,7 +5197,7 @@ declare module "assemblyscript/src/builtins" {
         contextIsExact: boolean;
     }
     /** Global builtins map. */
-    export const builtins: Map<string, (ctx: BuiltinContext) => number>;
+    export const builtins: Map<string, (ctx: BuiltinContext) => ExpressionRef>;
     /** Compiles the `visit_globals` function. */
     export function compileVisitGlobals(compiler: Compiler): void;
     /** Compiles the `visit_members` function. */
@@ -5395,10 +5418,16 @@ declare module "assemblyscript/src/index" {
     export function setTarget(options: Options, target: Target): void;
     /** Sets the `noAssert` option. */
     export function setNoAssert(options: Options, noAssert: boolean): void;
+    /** Sets the `exportMemory` option. */
+    export function setExportMemory(options: Options, exportMemory: boolean): void;
     /** Sets the `importMemory` option. */
     export function setImportMemory(options: Options, importMemory: boolean): void;
+    /** Sets the `initialMemory` option. */
+    export function setInitialMemory(options: Options, initialMemory: number): void;
+    /** Sets the `maximumMemory` option. */
+    export function setMaximumMemory(options: Options, maximumMemory: number): void;
     /** Sets the `sharedMemory` option. */
-    export function setSharedMemory(options: Options, sharedMemory: number): void;
+    export function setSharedMemory(options: Options, sharedMemory: boolean): void;
     /** Sets the `importTable` option. */
     export function setImportTable(options: Options, importTable: boolean): void;
     /** Sets the `exportTable` option. */
@@ -5481,8 +5510,6 @@ declare module "assemblyscript/src/index" {
     export function buildIDL(program: Program): string;
     /** Builds TypeScript definitions for the specified program. */
     export function buildTSD(program: Program): string;
-    /** Builds a JSON file of a program's runtime type information. */
-    export function buildRTTI(program: Program): string;
     export * from "assemblyscript/src/ast";
     export * from "assemblyscript/src/common";
     export * from "assemblyscript/src/compiler";
