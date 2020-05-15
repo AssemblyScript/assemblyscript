@@ -4830,7 +4830,7 @@
   (local $63 i32)
   i32.const 1
   i32.const 2
-  i32.lt_u
+  i32.lt_s
   call $~lib/number/Bool#toString
   local.tee $0
   i32.const 32
@@ -4846,7 +4846,7 @@
   end
   i32.const 1
   i32.const 2
-  i32.gt_u
+  i32.gt_s
   call $~lib/number/Bool#toString
   local.tee $1
   i32.const 64
@@ -4862,7 +4862,7 @@
   end
   i32.const 1
   i32.const 2
-  i32.le_u
+  i32.le_s
   call $~lib/number/Bool#toString
   local.tee $2
   i32.const 32
@@ -4878,7 +4878,7 @@
   end
   i32.const 1
   i32.const 2
-  i32.ge_u
+  i32.ge_s
   call $~lib/number/Bool#toString
   local.tee $3
   i32.const 64
@@ -5253,7 +5253,7 @@
   end
   i32.const 4
   i32.const 2
-  i32.div_u
+  i32.div_s
   call $~lib/number/I32#toString
   local.tee $24
   i32.const 656
@@ -5269,7 +5269,7 @@
   end
   i32.const 3
   i32.const 2
-  i32.rem_u
+  i32.rem_s
   call $~lib/number/I32#toString
   local.tee $25
   i32.const 624
@@ -5283,10 +5283,11 @@
    call $~lib/builtins/abort
    unreachable
   end
-  i32.const 2
-  i32.const 2
-  call $~lib/math/ipow32
-  call $~lib/number/I32#toString
+  f64.const 2
+  f64.const 2
+  call $~lib/math/NativeMath.pow
+  i32.const 0
+  call $~lib/number/F64#toString
   local.tee $26
   i32.const 7984
   call $~lib/string/String.__eq
@@ -5317,7 +5318,7 @@
   end
   i32.const 2
   i32.const 1
-  i32.shr_u
+  i32.shr_s
   call $~lib/number/I32#toString
   local.tee $28
   i32.const 624

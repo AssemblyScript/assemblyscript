@@ -24,7 +24,6 @@
  (data (i32.const 1392) " \00\00\00\01\00\00\00\01\00\00\00 \00\00\00~\00l\00i\00b\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/pure/__release (param $0 i32)
@@ -1532,8 +1531,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 1040
    i32.const 1088
    i32.const 18
@@ -1573,9 +1570,6 @@
   local.get $3
   i32.store offset=8
   local.get $0
- )
- (func $~setArgumentsLength (param $0 i32)
-  nop
  )
  (func $start:std/arraybuffer
   (local $0 i32)
@@ -1862,8 +1856,6 @@
   i32.gt_u
   i32.or
   if
-   local.get $8
-   call $~lib/rt/pure/__release
    i32.const 1040
    i32.const 1408
    i32.const 25

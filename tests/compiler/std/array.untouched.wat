@@ -258,7 +258,6 @@
  (global $~lib/builtins/i64.MAX_VALUE i64 (i64.const 9223372036854775807))
  (global $~started (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 9136))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/pure/__release (param $0 i32)
@@ -2011,8 +2010,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 57
@@ -2140,8 +2137,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 336
    i32.const 18
@@ -4454,8 +4449,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $1
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 229
@@ -5496,8 +5489,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 3920
    i32.const 80
    i32.const 108
@@ -5712,10 +5703,6 @@
   local.get $2
   call $~lib/rt/pure/__release
   local.get $3
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~lib/array/Array<i32>#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)
@@ -9744,8 +9731,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 57
@@ -9838,8 +9823,6 @@
    i32.const 0
    i32.lt_s
    if
-    local.get $2
-    call $~lib/rt/pure/__release
     i32.const 496
     i32.const 80
     i32.const 120
@@ -10144,8 +10127,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 3920
    i32.const 80
    i32.const 108
@@ -10280,8 +10261,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 57
@@ -10389,8 +10368,6 @@
    i32.const 0
    i32.lt_s
    if
-    local.get $2
-    call $~lib/rt/pure/__release
     i32.const 496
     i32.const 80
     i32.const 120
@@ -10688,8 +10665,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 3920
    i32.const 80
    i32.const 108
@@ -11584,8 +11559,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 57
@@ -11864,8 +11837,6 @@
    i32.const 0
    i32.lt_s
    if
-    local.get $2
-    call $~lib/rt/pure/__release
     i32.const 496
     i32.const 80
     i32.const 120
@@ -12141,8 +12112,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/pure/__release
    i32.const 3920
    i32.const 80
    i32.const 108

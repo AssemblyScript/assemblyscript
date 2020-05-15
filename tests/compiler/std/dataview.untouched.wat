@@ -39,7 +39,6 @@
  (global $~lib/ASC_SHRINK_LEVEL i32 (i32.const 0))
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/heap/__heap_base i32 (i32.const 512))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/pure/__release (param $0 i32)
@@ -1788,8 +1787,6 @@
   i32.shr_u
   i32.gt_u
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 80
    i32.const 18
@@ -1913,10 +1910,6 @@
   i32.gt_u
   i32.or
   if
-   local.get $0
-   call $~lib/rt/pure/__release
-   local.get $1
-   call $~lib/rt/pure/__release
    i32.const 32
    i32.const 432
    i32.const 25
@@ -2804,10 +2797,6 @@
   local.get $2
   local.get $3
   call $~lib/dataview/DataView#constructor
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~lib/dataview/DataView#get:byteOffset (param $0 i32) (result i32)
   local.get $0

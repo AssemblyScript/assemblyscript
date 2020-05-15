@@ -12,7 +12,6 @@
  (data (i32.const 192) "^\00\00\00\01\00\00\00\01\00\00\00^\00\00\00E\00l\00e\00m\00e\00n\00t\00 \00t\00y\00p\00e\00 \00m\00u\00s\00t\00 \00b\00e\00 \00n\00u\00l\00l\00a\00b\00l\00e\00 \00i\00f\00 \00a\00r\00r\00a\00y\00 \00i\00s\00 \00h\00o\00l\00e\00y\00")
  (table $0 1 funcref)
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "testVar" (func $assert-nonnull/testVar))
  (export "testObj" (func $assert-nonnull/testObj))
@@ -139,8 +138,6 @@
   local.get $2
   i32.eqz
   if
-   local.get $2
-   call $~lib/rt/stub/__release
    i32.const 208
    i32.const 160
    i32.const 108
@@ -337,10 +334,6 @@
   local.get $0
   call $~lib/rt/stub/__release
   local.get $2
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $assert-nonnull/testFn (param $0 i32) (result i32)
   (local $1 i32)

@@ -51,7 +51,6 @@
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $~lib/rt/__rtti_base i32 (i32.const 1808))
  (global $~lib/heap/__heap_base i32 (i32.const 1836))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "__alloc" (func $~lib/rt/tlsf/__alloc))
  (export "__retain" (func $~lib/rt/pure/__retain))
@@ -4799,10 +4798,6 @@
   i32.const 2
   i32.add
  )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
- )
  (func $resolve-ternary/g1 (param $0 i32) (result i32)
   local.get $0
   i32.const 3
@@ -4837,8 +4832,7 @@
   end
   global.get $resolve-ternary/b
   if (result f64)
-   i32.const 1
-   f64.convert_i32_u
+   f64.const 1
   else
    f64.const 2
   end

@@ -250,7 +250,6 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/pure/__release (param $0 i32)
@@ -1532,8 +1531,6 @@
   i32.const 268435452
   i32.gt_u
   if
-   local.get $3
-   call $~lib/rt/pure/__release
    i32.const 1040
    i32.const 1088
    i32.const 57
@@ -2816,8 +2813,6 @@
   local.tee $0
   i32.eqz
   if
-   local.get $0
-   call $~lib/rt/pure/__release
    i32.const 4928
    i32.const 1088
    i32.const 108
@@ -2962,9 +2957,6 @@
  (func $start:std/array~anonymous|0 (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   local.get $0
   i32.eqz
- )
- (func $~setArgumentsLength (param $0 i32)
-  nop
  )
  (func $~lib/array/Array<i32>#findIndex (param $0 i32) (param $1 i32) (result i32)
   (local $2 i32)

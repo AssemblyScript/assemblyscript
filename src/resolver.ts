@@ -1313,32 +1313,10 @@ export class Resolver extends DiagnosticEmitter {
         break;
       }
       case ElementKind.PROPERTY_PROTOTYPE: { // SomeClass.prop
-        let propertyPrototype = <PropertyPrototype>target;
-        let getterInstance = this.resolveFunction( // reports
-          assert(propertyPrototype.getterPrototype), // must have a getter
-          null,
-          makeMap<string,Type>(),
-          reportMode
-        );
-        if (!getterInstance) return null;
-        let type = getterInstance.signature.returnType;
-        let classReference = type.classReference;
-        if (!classReference) {
-          let wrapperClasses = this.program.wrapperClasses;
-          if (wrapperClasses.has(type)) {
-            classReference = assert(wrapperClasses.get(type));
-          } else {
-            if (reportMode == ReportMode.REPORT) {
-              this.error(
-                DiagnosticCode.Property_0_does_not_exist_on_type_1,
-                node.property.range, propertyName, type.toString()
-              );
-            }
-            return null;
-          }
-        }
-        target = classReference;
-        break;
+        let propertyInstance = this.resolveProperty(<PropertyPrototype>target, reportMode);
+        if (!propertyInstance) return null;
+        target = propertyInstance;
+        // fall-through
       }
       case ElementKind.PROPERTY: { // someInstance.prop
         let propertyInstance = <Property>target;
@@ -1420,9 +1398,21 @@ export class Resolver extends DiagnosticEmitter {
         do {
           let members = target.members;
           if (members !== null && members.has(propertyName)) {
-            this.currentThisExpression = targetNode;
+            let member = assert(members.get(propertyName));
+            if (member.kind == ElementKind.PROPERTY_PROTOTYPE) {
+              let propertyInstance = this.resolveProperty(<PropertyPrototype>member, reportMode);
+              if (!propertyInstance) return null;
+              member = propertyInstance;
+              if (propertyInstance.is(CommonFlags.STATIC)) {
+                this.currentThisExpression = null;
+              } else {
+                this.currentThisExpression = targetNode;
+              }
+            } else {
+              this.currentThisExpression = targetNode;
+            }
             this.currentElementExpression = null;
-            return assert(members.get(propertyName)); // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE...
+            return member; // instance FIELD, static GLOBAL, FUNCTION_PROTOTYPE, PROPERTY...
           }
           // traverse inherited static members on the base prototype if target is a class prototype
           if (
@@ -3129,39 +3119,8 @@ export class Resolver extends DiagnosticEmitter {
             break;
           }
           case ElementKind.PROPERTY_PROTOTYPE: {
-            let propertyPrototype = <PropertyPrototype>member;
-            let propertyInstance = new Property(propertyPrototype, instance);
-            properties.push(propertyInstance);
-            let getterPrototype = propertyPrototype.getterPrototype;
-            if (getterPrototype) {
-              let getterInstance = this.resolveFunction(
-                getterPrototype.toBound(instance),
-                null,
-                makeMap(instance.contextualTypeArguments),
-                reportMode
-              );
-              if (getterInstance) {
-                propertyInstance.getterInstance = getterInstance;
-                propertyInstance.setType(getterInstance.signature.returnType);
-              }
-            }
-            let setterPrototype = propertyPrototype.setterPrototype;
-            if (setterPrototype) {
-              let setterInstance = this.resolveFunction(
-                setterPrototype.toBound(instance),
-                null,
-                makeMap(instance.contextualTypeArguments),
-                reportMode
-              );
-              if (setterInstance) {
-                propertyInstance.setterInstance = setterInstance;
-                if (!propertyInstance.is(CommonFlags.RESOLVED)) {
-                  assert(setterInstance.signature.parameterTypes.length == 1);
-                  propertyInstance.setType(setterInstance.signature.parameterTypes[0]);
-                }
-              }
-            }
-            instance.add(propertyInstance.name, propertyInstance); // reports
+            let boundPrototype = (<PropertyPrototype>member).toBound(instance);
+            instance.add(boundPrototype.name, boundPrototype); // reports
             break;
           }
           default: assert(false);
@@ -3367,5 +3326,47 @@ export class Resolver extends DiagnosticEmitter {
       ctxTypes,
       reportMode
     );
+  }
+
+  /** Resolves a property prototype. */
+  resolveProperty(
+    /** The prototype of the property. */
+    prototype: PropertyPrototype,
+    /** How to proceed with eventual diagnostics. */
+    reportMode: ReportMode = ReportMode.REPORT
+  ): Property | null {
+    var instance = prototype.instance;
+    if (instance) return instance;
+    prototype.instance = instance = new Property(prototype, prototype);
+    var getterPrototype = prototype.getterPrototype;
+    if (getterPrototype) {
+      let getterInstance = this.resolveFunction(
+        getterPrototype,
+        null,
+        makeMap<string,Type>(),
+        reportMode
+      );
+      if (getterInstance) {
+        instance.getterInstance = getterInstance;
+        instance.setType(getterInstance.signature.returnType);
+      }
+    }
+    var setterPrototype = prototype.setterPrototype;
+    if (setterPrototype) {
+      let setterInstance = this.resolveFunction(
+        setterPrototype,
+        null,
+        makeMap<string,Type>(),
+        reportMode
+      );
+      if (setterInstance) {
+        instance.setterInstance = setterInstance;
+        if (!instance.is(CommonFlags.RESOLVED)) {
+          assert(setterInstance.signature.parameterTypes.length == 1);
+          instance.setType(setterInstance.signature.parameterTypes[0]);
+        }
+      }
+    }
+    return instance;
   }
 }

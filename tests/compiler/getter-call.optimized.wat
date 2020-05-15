@@ -1,16 +1,11 @@
 (module
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $none_=>_i32 (func (result i32)))
  (memory $0 0)
  (global $~lib/rt/stub/offset (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "test" (func $getter-call/test))
  (start $~start)
- (func $~setArgumentsLength (param $0 i32)
-  nop
- )
  (func $getter-call/test (result i32)
   (local $0 i32)
   (local $1 i32)

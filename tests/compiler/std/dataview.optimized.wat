@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_=>_none (func (param i32 i32 i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $i32_i32_=>_i32 (func (param i32 i32) (result i32)))
@@ -32,7 +32,6 @@
  (data (i32.const 1472) "\1e\00\00\00\01\00\00\00\01\00\00\00\1e\00\00\00s\00t\00d\00/\00d\00a\00t\00a\00v\00i\00e\00w\00.\00t\00s")
  (global $~lib/rt/tlsf/ROOT (mut i32) (i32.const 0))
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $~lib/rt/pure/__release (param $0 i32)
@@ -1236,8 +1235,6 @@
   i32.gt_u
   i32.or
   if
-   local.get $4
-   call $~lib/rt/pure/__release
    i32.const 1040
    i32.const 1440
    i32.const 25
@@ -1829,9 +1826,6 @@
    call $~lib/polyfills/bswap<u64>
   end
   i64.store
- )
- (func $~setArgumentsLength (param $0 i32)
-  nop
  )
  (func $start:std/dataview
   (local $0 i32)
