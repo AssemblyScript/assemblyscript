@@ -77,8 +77,8 @@ interface CompilerOptions {
   binaryFile?: string;
   /** Specifies the text output file (.wat). */
   textFile?: string;
-  /** Specifies the asm.js output file (.js). */
-  asmjsFile?: string;
+  /** Specifies the JavaScript (via wasm2js) output file (.js). */
+  jsFile?: string;
   /** Specifies the WebIDL output file (.webidl). */
   idlFile?: string;
   /** Specifies the TypeScript definition output file (.d.ts). */
@@ -97,8 +97,14 @@ interface CompilerOptions {
   noEmit?: boolean;
   /** Imports the memory provided as 'env.memory'. */
   importMemory?: boolean;
-  /** Declare memory as shared by settings the max shared memory. */
-  sharedMemory?: number;
+  /** Does not export the memory as 'memory'. */
+  noExportMemory?: boolean;
+  /** Sets the initial memory size in pages. */
+  initialMemory?: number;
+  /** Sets the maximum memory size in pages. */
+  maximumMemory?: number;
+  /** Declare memory as shared. Requires maximumMemory. */
+  sharedMemory?: boolean;
   /** Sets the start offset of compiler-generated static memory. */
   memoryBase?: number;
   /** Imports the function table provided as 'env.table'. */
@@ -133,8 +139,6 @@ interface CompilerOptions {
   listFiles?: boolean;
   /** Prints measuring information on I/O and compile times. */
   measure?: boolean;
-  /** Prints the module's runtime type information to stderr. */
-  printrtti?: boolean;
   /** Disables terminal colors. */
   noColors?: boolean;
   /** Specifies an alternative file extension. */

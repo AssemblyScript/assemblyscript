@@ -3,7 +3,6 @@
  (type $none_=>_i32 (func (result i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -15,15 +14,10 @@
  (global $function-expression/f2 (mut i32) (i32.const 2))
  (global $function-expression/f3 (mut i32) (i32.const 3))
  (global $function-expression/f4 (mut i32) (i32.const 4))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $start:function-expression~anonymous|0 (param $0 i32) (result i32)
   local.get $0
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $start:function-expression~anonymous|1 (param $0 i32) (result i32)
   local.get $0

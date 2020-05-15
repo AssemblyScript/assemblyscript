@@ -1,6 +1,6 @@
 (module
- (type $i32_=>_none (func (param i32)))
  (type $i32_=>_i32 (func (param i32) (result i32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_=>_none (func (param i32 i32)))
  (type $none_=>_i32 (func (result i32)))
  (type $none_=>_none (func))
@@ -15,7 +15,6 @@
  (global $~lib/rt/tlsf/collectLock (mut i32) (i32.const 0))
  (global $retain-return/ref (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (func $~lib/rt/tlsf/removeBlock (param $0 i32) (param $1 i32)
@@ -953,9 +952,6 @@
    i32.sub
    call $~lib/rt/pure/decrement
   end
- )
- (func $~setArgumentsLength (param $0 i32)
-  nop
  )
  (func $~start
   (local $0 i32)

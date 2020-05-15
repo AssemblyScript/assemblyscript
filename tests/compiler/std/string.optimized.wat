@@ -381,7 +381,6 @@
  (global $~lib/util/number/_frc_pow (mut i64) (i64.const 0))
  (global $~lib/util/number/_exp_pow (mut i32) (i32.const 0))
  (global $~started (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "_start" (func $~start))
  (export "memory" (memory $0))
  (export "getString" (func $std/string/getString))
@@ -1637,10 +1636,6 @@
   local.get $0
   local.get $1
   call $~lib/string/String.fromCharCode
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~lib/string/String.fromCodePoint (param $0 i32) (result i32)
   (local $1 i32)

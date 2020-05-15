@@ -22,7 +22,6 @@
  (global $exports/vehicles.Car i32 (i32.const 4))
  (export "memory" (memory $0))
  (export "add" (func $exports/add))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "subOpt" (func $exports/subOpt@varargs))
  (export "math.sub" (func $exports/math.sub))
  (export "Animal.CAT" (global $exports/Animal.CAT))
@@ -48,6 +47,7 @@
  (export "vehicles.Car.TIRES" (global $exports/vehicles.Car.TIRES))
  (export "vehicles.Car.getNumTires" (func $exports/vehicles.Car.getNumTires))
  (export "outer.inner.a" (global $exports/outer.inner.a))
+ (export "__setArgumentsLength" (func $~setArgumentsLength))
  (start $~start)
  (func $exports/add (param $0 i32) (param $1 i32) (result i32)
   local.get $0
@@ -290,10 +290,6 @@
   local.get $1
   call $exports/subOpt
  )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
- )
  (func $exports/Car#constructor@varargs (param $0 i32) (param $1 i32) (result i32)
   block $1of1
    block $0of1
@@ -325,5 +321,9 @@
   local.get $0
   local.get $1
   call $exports/vehicles.Car#constructor
+ )
+ (func $~setArgumentsLength (param $0 i32)
+  local.get $0
+  global.set $~argumentsLength
  )
 )

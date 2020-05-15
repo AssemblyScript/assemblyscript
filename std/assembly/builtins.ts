@@ -1095,6 +1095,14 @@ export namespace v128 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function pmin<T>(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function pmax<T>(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function dot<T>(a: v128, b: v128): v128; // i16 only
 
   // @ts-ignore: decorator
@@ -1765,6 +1773,14 @@ export namespace f32x4 {
 
   // @ts-ignore: decorator
   @builtin
+  export declare function pmin(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function pmax(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
   export declare function abs(a: v128): v128;
 
   // @ts-ignore: decorator
@@ -1857,6 +1873,14 @@ export namespace f64x2 {
   // @ts-ignore: decorator
   @builtin
   export declare function max(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function pmin(a: v128, b: v128): v128;
+
+  // @ts-ignore: decorator
+  @builtin
+  export declare function pmax(a: v128, b: v128): v128;
 
   // @ts-ignore: decorator
   @builtin

@@ -13,6 +13,8 @@ export interface OptionDescription {
   value?: { [key: string]: number | string },
   /** Short alias, if any. */
   alias?: string
+  /** The default value, if any. */
+  default?: string | number | boolean | string[] | number[];
 }
 
 /** Configuration object. */
@@ -29,7 +31,9 @@ interface Result {
   /** Normal arguments. */
   arguments: string[],
   /** Trailing arguments. */
-  trailing: string[]
+  trailing: string[],
+  /** Provided arguments from the cli. */
+  provided: Set<string>
 }
 
 /** Parses the specified command line arguments according to the given configuration. */

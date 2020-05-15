@@ -1,9 +1,9 @@
 (module
  (type $i32_=>_i32 (func (param i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_f32_i32_i32_=>_i32 (func (param i32 f32 i32 i32) (result i32)))
  (type $f32_=>_f32 (func (param f32) (result f32)))
+ (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $f64_f64_=>_i32 (func (param f64 f64) (result i32)))
@@ -16,7 +16,6 @@
  (elem (i32.const 1) $start:infer-generic~anonymous|0)
  (global $infer-generic/arr i32 (i32.const 112))
  (global $~argumentsLength (mut i32) (i32.const 0))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (export "test1" (func $infer-generic/test1))
  (export "test2" (func $infer-generic/test2))
@@ -51,10 +50,6 @@
   local.get $3
   call $~lib/rt/stub/__release
   local.get $4
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $~lib/array/Array<f32>#reduce<bool> (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
   (local $3 i32)

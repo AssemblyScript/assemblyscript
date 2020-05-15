@@ -1,7 +1,6 @@
 (module
  (type $i32_i32_i32_=>_i32 (func (param i32 i32 i32) (result i32)))
  (type $none_=>_none (func))
- (type $i32_=>_none (func (param i32)))
  (type $i32_i32_i32_i32_=>_none (func (param i32 i32 i32 i32)))
  (import "env" "abort" (func $~lib/builtins/abort (param i32 i32 i32 i32)))
  (memory $0 1)
@@ -10,7 +9,6 @@
  (elem (i32.const 1) $call-optional/opt@varargs)
  (global $~argumentsLength (mut i32) (i32.const 0))
  (global $call-optional/optIndirect (mut i32) (i32.const 1))
- (export "__setArgumentsLength" (func $~setArgumentsLength))
  (export "memory" (memory $0))
  (start $~start)
  (func $call-optional/opt (param $0 i32) (param $1 i32) (param $2 i32) (result i32)
@@ -42,10 +40,6 @@
   local.get $1
   local.get $2
   call $call-optional/opt
- )
- (func $~setArgumentsLength (param $0 i32)
-  local.get $0
-  global.set $~argumentsLength
  )
  (func $start:call-optional
   i32.const 3

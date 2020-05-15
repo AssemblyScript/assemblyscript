@@ -1,0 +1,9 @@
+{
+  "asc_flags": [
+    "--sharedMemory"
+  ],
+  "stderr": [
+    "AS107: Shared memory requires maximum memory to be defined.",
+    "AS108: Shared memory requires feature 'threads' to be enabled."
+  ]
+}

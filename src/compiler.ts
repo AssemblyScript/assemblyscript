@@ -202,10 +202,16 @@ export class Options {
   target: Target = Target.WASM32;
   /** If true, replaces assertions with nops. */
   noAssert: bool = false;
+  /** It true, exports the memory to the embedder. */
+  exportMemory: bool = true;
   /** If true, imports the memory provided by the embedder. */
   importMemory: bool = false;
-  /** If greater than zero, declare memory as shared by setting max memory to sharedMemory. */
-  sharedMemory: i32 = 0;
+  /** Initial memory size, in pages. */
+  initialMemory: u32 = 0;
+  /** Maximum memory size, in pages. */
+  maximumMemory: u32 = 0;
+  /** If true, memory is declared as shared. */
+  sharedMemory: bool = false;
   /** If true, imports the function table provided by the embedder. */
   importTable: bool = false;
   /** If true, exports the function table. */
@@ -215,9 +221,9 @@ export class Options {
   /** If true, generates an explicit start function. */
   explicitStart: bool = false;
   /** Static memory start offset. */
-  memoryBase: i32 = 0;
+  memoryBase: u32 = 0;
   /** Static table start offset. */
-  tableBase: i32 = 0;
+  tableBase: u32 = 0;
   /** Global aliases, mapping alias names as the key to internal names to be aliased as the value. */
   globalAliases: Map<string,string> | null = null;
   /** Features to activate by default. These are the finished proposals. */
@@ -227,7 +233,7 @@ export class Options {
   /** If true, enables pedantic diagnostics. */
   pedantic: bool = false;
   /** Indicates a very low (<64k) memory limit. */
-  lowMemoryLimit: i32 = 0;
+  lowMemoryLimit: u32 = 0;
 
   /** Hinted optimize level. Not applied by the compiler itself. */
   optimizeLevelHint: i32 = 0;
@@ -294,7 +300,9 @@ export const enum RuntimeFeatures {
   /** Requires the built-in globals visitor. */
   visitGlobals = 1 << 2,
   /** Requires the built-in members visitor. */
-  visitMembers = 1 << 3
+  visitMembers = 1 << 3,
+  /** Requires the setArgumentsLength export. */
+  setArgumentsLength = 1 << 4
 }
 
 /** Exported names of compiler-generated elements. */
@@ -552,15 +560,57 @@ export class Compiler extends DiagnosticEmitter {
     }
 
     // set up memory
-    var isSharedMemory = options.hasFeature(Feature.THREADS) && options.sharedMemory > 0;
+    var initialPages: u32 = 0;
+    if (this.options.memoryBase /* is specified */ || this.memorySegments.length) {
+      initialPages = u32(i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16))));
+    }
+    if (options.initialMemory) {
+      if (options.initialMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_initial_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        initialPages = options.initialMemory;
+      }
+    }
+    var maximumPages = Module.UNLIMITED_MEMORY;
+    if (options.maximumMemory) {
+      if (options.maximumMemory < initialPages) {
+        this.error(
+          DiagnosticCode.Module_requires_at_least_0_pages_of_maximum_memory,
+          null,
+          initialPages.toString()
+        );
+      } else {
+        maximumPages = options.maximumMemory;
+      }
+    }
+    var isSharedMemory = false;
+    if (options.sharedMemory) {
+      isSharedMemory = true;
+      if (!options.maximumMemory) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_maximum_memory_to_be_defined,
+          null
+        );
+        isSharedMemory = false;
+      }
+      if (!options.hasFeature(Feature.THREADS)) {
+        this.error(
+          DiagnosticCode.Shared_memory_requires_feature_threads_to_be_enabled,
+          null
+        );
+        isSharedMemory = false;
+      }
+    }
     module.setMemory(
-      this.options.memoryBase /* is specified */ || this.memorySegments.length
-        ? i64_low(i64_shr_u(i64_align(memoryOffset, 0x10000), i64_new(16)))
-        : 0,
-      isSharedMemory ? options.sharedMemory : Module.UNLIMITED_MEMORY,
+      initialPages,
+      maximumPages,
       this.memorySegments,
       options.target,
-      ExportNames.memory,
+      options.exportMemory ? ExportNames.memory : null,
       isSharedMemory
     );
 
@@ -601,6 +651,14 @@ export class Compiler extends DiagnosticEmitter {
     for (let _values = Map_values(this.program.filesByName), i = 0, k = _values.length; i < k; ++i) {
       let file = unchecked(_values[i]);
       if (file.source.sourceKind == SourceKind.USER_ENTRY) this.ensureModuleExports(file);
+    }
+
+    // expose the arguments length helper if there are varargs exports
+    if (this.runtimeFeatures & RuntimeFeatures.setArgumentsLength) {
+      module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
+        module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
+      );
+      module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
     }
     return module;
   }
@@ -703,6 +761,7 @@ export class Compiler extends DiagnosticEmitter {
             // utilize varargs stub to fill in omitted arguments
             functionInstance = this.ensureVarargsStub(functionInstance);
             this.ensureArgumentsLength();
+            this.runtimeFeatures |= RuntimeFeatures.setArgumentsLength;
           }
           if (functionInstance.is(CommonFlags.COMPILED)) this.module.addFunctionExport(functionInstance.internalName, prefix + name);
         }
@@ -5541,11 +5600,11 @@ export class Compiler extends DiagnosticEmitter {
         let rightFlow = flow.fork();
         this.currentFlow = rightFlow;
         rightFlow.inheritNonnullIfTrue(leftExpr);
-        rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
-        rightType = leftType;
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
+          rightType = this.currentType;
           rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, rightType);
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
@@ -5557,6 +5616,8 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = Type.bool;
 
         } else {
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
+          rightType = this.currentType;
 
           // references must properly retain and release, with the same outcome independent of the branch taken
           if (leftType.isManaged) {
@@ -5643,11 +5704,11 @@ export class Compiler extends DiagnosticEmitter {
         let rightFlow = flow.fork();
         this.currentFlow = rightFlow;
         rightFlow.inheritNonnullIfFalse(leftExpr);
-        rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
-        rightType = leftType;
 
         // simplify if only interested in true or false
         if (contextualType == Type.bool || contextualType == Type.void) {
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints);
+          rightType = this.currentType;
           rightExpr = this.performAutoreleasesWithValue(rightFlow, rightExpr, leftType);
           rightFlow.freeScopedLocals();
           this.currentFlow = flow;
@@ -5659,6 +5720,8 @@ export class Compiler extends DiagnosticEmitter {
           this.currentType = Type.bool;
 
         } else {
+          rightExpr = this.compileExpression(right, leftType, inheritedConstraints | Constraints.CONV_IMPLICIT);
+          rightType = this.currentType;
 
           // references must properly retain and release, with the same outcome independent of the branch taken
           if (leftType.isManaged) {
@@ -6845,15 +6908,6 @@ export class Compiler extends DiagnosticEmitter {
     if (!this.builtinArgumentsLength) {
       let module = this.module;
       this.builtinArgumentsLength = module.addGlobal(BuiltinNames.argumentsLength, NativeType.I32, true, module.i32(0));
-      // TODO: Enable this once mutable globals are the default nearly everywhere.
-      // if (this.options.hasFeature(Feature.MUTABLE_GLOBALS)) {
-      //   module.addGlobalExport(BuiltinNames.argumentsLength, ExportNames.argumentsLength);
-      // } else {
-        module.addFunction(BuiltinNames.setArgumentsLength, NativeType.I32, NativeType.None, null,
-          module.global_set(BuiltinNames.argumentsLength, module.local_get(0, NativeType.I32))
-        );
-        module.addFunctionExport(BuiltinNames.setArgumentsLength, ExportNames.setArgumentsLength);
-      // }
     }
   }
 
