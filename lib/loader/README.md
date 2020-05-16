@@ -43,7 +43,7 @@ Besides demangling classes exported from your entry file to a handy object struc
   ```
 
 * **__getString**(ptr: `number`): `string`<br />
-  Copies a string's value from the module's memory.
+  Copies a string's value from the module's memory. `ptr` must not be zero.
 
   ```ts
   var str = module.__getString(ptr);
@@ -51,10 +51,10 @@ Besides demangling classes exported from your entry file to a handy object struc
   ```
 
 * **__getArrayBuffer**(ptr: `number`): `ArrayBuffer`<br />
-  Copies an ArrayBuffer's value from the module's memory.
+  Copies an ArrayBuffer's value from the module's memory. `ptr` must not be zero.
 
 * **__getArray**(ptr: `number`): `number[]`<br />
-  Copies an array's values from the module's memory. Infers the array type from RTTI.
+  Copies an array's values from the module's memory. Infers the array type from RTTI. `ptr` must not be zero.
 
   ```ts
   var arr = module.__getArray(ptr);
@@ -76,7 +76,7 @@ Besides demangling classes exported from your entry file to a handy object struc
   **__getFloat64Array**(ptr: `number`): `Float64Array`
 
 * **__getArrayView**(ptr: `number`): `TypedArray`<br />
-  Gets a live view on the values of an array in the module's memory. Infers the array type from RTTI.
+  Gets a live view on the values of an array in the module's memory. Infers the array type from RTTI. `ptr` must not be zero.
   
   This differs from `__getArray` in that the data isn't copied but remains *live* in both directions. That's faster but also unsafe because if the array grows or becomes released, the view will no longer represent the correct memory region and modifying its values in this state will most likely corrupt memory. Use, but use with care.
 
