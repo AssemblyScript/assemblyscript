@@ -103,17 +103,6 @@ function __visit(ref: usize, cookie: i32): void {
   }
 }
 
-/** Finalizes the specified block, giving it back to the memory manager. */
-function finalize(s: Block): void {
-  if (isDefined(__finalize)) {
-    let info = s.gcInfo | 1; // pretend RC>=1
-    s.gcInfo = info;
-    __finalize(changetype<usize>(s) + BLOCK_OVERHEAD);
-    assert(s.gcInfo == info);
-  }
-  freeBlock(ROOT, s);
-}
-
 /** Increments the reference count of the specified block by one.*/
 function increment(s: Block): void {
   var info = s.gcInfo;
@@ -158,6 +147,14 @@ function decrement(s: Block): void {
       }
     }
   }
+}
+
+/** Finalizes the specified block, giving it back to the memory manager. */
+function finalize(s: Block): void {
+  if (isDefined(__finalize)) {
+    __finalize(changetype<usize>(s) + BLOCK_OVERHEAD);
+  }
+  freeBlock(ROOT, s);
 }
 
 /** Buffer of possible roots. */

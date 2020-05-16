@@ -1,39 +1,34 @@
-class FinalizationRegistry {
-  private map: Map<usize,string> = new Map();
+// Add bookkeeping
 
-  constructor(
-    private fn: (value: string) => void
-  ) {}
+var expected = new StaticArray<usize>(10);
+var expectedWriteIndex = 0;
+var expectedReadIndex = 0;
 
-  register<U>(target: U, value: string): void {
-    if (!isReference<U>()) throw new Error("not an object");
-    this.map.set(changetype<usize>(target), value);
-  }
-
-  @unsafe finalize(ptr: usize): void {
-    var map = this.map;
-    if (map.has(ptr)) {
-      let value = map.get(ptr);
-      this.fn(value);
-      map.delete(ptr);
-    }
-  }
+function expect(ptr: usize): void {
+  assert(expectedWriteIndex < expected.length);
+  expected[expectedWriteIndex++] = ptr;
 }
 
-var registry = new FinalizationRegistry(value => {
-  trace("finalize: " + value);
-});
+// Implement finalization hook
 
+// @ts-ignore
 @global function __finalize(ptr: usize): void {
-  registry.finalize(ptr);
+  trace("finalize", 1, ptr);
+  assert(ptr == unchecked(expected[expectedReadIndex++]));
 }
+
+// Simple test with locals becoming finalized immediately
 
 function testSimple(): void {
   var a = new Array<i32>(0);
-  registry.register(a, "testSimple~a");
+  expect(changetype<usize>(a.buffer));
+  expect(changetype<usize>(a));
 }
-
 testSimple();
+assert(expectedWriteIndex == 2);
+assert(expectedReadIndex == expectedWriteIndex);
+
+// Cyclic test with locals becoming deferred until collected
 
 class Foo {
   bar: Bar;
@@ -47,9 +42,18 @@ function testCyclic(): void {
   var bar = new Bar();
   foo.bar = bar;
   bar.foo = foo;
-  registry.register(foo, "testCyclic~foo");
-  registry.register(bar, "testCyclic~bar");
+  expect(changetype<usize>(bar));
+  expect(changetype<usize>(foo));
 }
 
 testCyclic();
 __collect();
+assert(expectedWriteIndex == 4);
+assert(expectedReadIndex == expectedWriteIndex);
+
+// Unleak bookkeeping, expecting it to become finalized as well
+
+expect(changetype<usize>(expected));
+expected = changetype<StaticArray<usize>>(0);
+assert(expectedWriteIndex == 5);
+assert(expectedReadIndex == expectedWriteIndex);
